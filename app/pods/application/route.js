@@ -98,7 +98,7 @@ export default Route.extend(ApplicationRouteMixin, {
       }
 
       if (
-        this.fileService.get('deleteDocumentWithUndo.isRunning')
+        this.fileService.get('deleteDocumentContainerWithUndo.isRunning')
         && confirm(this.intl.t('leave-page-message'))
       ) {
         transition.abort();

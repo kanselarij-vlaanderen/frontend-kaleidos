@@ -15,16 +15,16 @@ export default class DocumentListForItem extends Component {
     if (!this.agendaitemOrSubcase) {
       return null;
     }
-    if (this.agendaitemOrSubcase.documents) {
-      if (this.agendaitemOrSubcase.documents.length > 20) {
+    if (this.agendaitemOrSubcase.pieces) {
+      if (this.agendaitemOrSubcase.pieces.length > 20) {
         this.moreThan20 = true;
       } else {
         this.moreThan20 = false;
       }
       if (this.isShowingAll) {
-        return this.agendaitemOrSubcase.documents;
+        return this.agendaitemOrSubcase.pieces;
       }
-      return this.agendaitemOrSubcase.documents;
+      return this.agendaitemOrSubcase.pieces;
     }
     return null;
   }

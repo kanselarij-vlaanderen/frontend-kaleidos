@@ -22,8 +22,8 @@ import utils from '../../selectors/utils.selectors';
  */
 function addDocuments(files) {
   cy.log('addDocuments');
-  cy.route('POST', 'document-versions').as('createNewDocumentVersion');
-  cy.route('POST', 'documents').as('createNewDocument');
+  cy.route('POST', 'pieces').as('createNewPiece');
+  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
   cy.route('PATCH', '**').as('patchModel');
 
   cy.contains('Documenten toevoegen').click();
@@ -85,10 +85,10 @@ function addDocuments(files) {
       .click();
   });
 
-  cy.wait('@createNewDocumentVersion', {
+  cy.wait('@createNewPiece', {
     timeout: 24000,
   });
-  cy.wait('@createNewDocument', {
+  cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
   cy.wait('@patchModel', {
@@ -99,16 +99,16 @@ function addDocuments(files) {
 }
 
 /**
- * @description Opens the new document version dialog and adds the file.
- * @name addNewDocumentVersion
+ * @description Opens the new piece dialog and adds the file.
+ * @name addNewPiece
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewDocumentVersion(oldFileName, file, modelToPatch) {
-  cy.log('addNewDocumentVersion');
-  cy.route('POST', 'document-versions').as('createNewDocumentVersion');
+function addNewPiece(oldFileName, file, modelToPatch) {
+  cy.log('addNewPiece');
+  cy.route('POST', 'pieces').as('createNewPiece');
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
@@ -132,7 +132,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
   });
-  cy.get(document.documentUploadNewVersion)
+  cy.get(document.documentUploadNewPiece)
     .should('be.visible')
     .click();
 
@@ -140,14 +140,14 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
+    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
   });
-  cy.wait('@createNewDocumentVersion', {
+  cy.wait('@createNewPiece', {
     timeout: 12000,
   });
 
@@ -175,7 +175,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
       timeout: 12000,
     });
   }
-  cy.log('/addNewDocumentVersion');
+  cy.log('/addNewPiece');
 }
 
 /**
@@ -192,17 +192,17 @@ function addDocumentsToAgenda(files) {
 }
 
 /**
- * @description Add a new documentversion to an meeting.
- * @name addNewDocumentVersionToMeeting
+ * @description Add a new piece to an meeting.
+ * @name addNewPieceToMeeting
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} oldFileName
  * @param {string} file
  */
-function addNewDocumentVersionToMeeting(oldFileName, file) {
-  cy.log('addNewDocumentVersionToMeeting');
+function addNewPieceToMeeting(oldFileName, file) {
+  cy.log('addNewPieceToMeeting');
   cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'meetings');
+  return addNewPiece(oldFileName, file, 'meetings');
 }
 
 /**
@@ -243,32 +243,32 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
 }
 
 /**
- * @description Add a new documentversion to an agendaitem
- * @name addNewDocumentVersionToAgendaitem
+ * @description Add a new piece to an agendaitem
+ * @name addNewPieceToAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} agendaitemTitle
  * @param {string} oldFileName
  * @param {string} file
  */
-function addNewDocumentVersionToAgendaitem(agendaitemTitle, oldFileName, file) {
-  cy.log('addNewDocumentVersionToAgendaitem');
+function addNewPieceToAgendaitem(agendaitemTitle, oldFileName, file) {
+  cy.log('addNewPieceToAgendaitem');
   openAgendaitemDocumentTab(agendaitemTitle, true);
-  return addNewDocumentVersion(oldFileName, file, 'agendaitems');
+  return addNewPiece(oldFileName, file, 'agendaitems');
 }
 
 /**
- * @description Add a new documentversion to a subcase
- * @name addNewDocumentVersionToSubcase
+ * @description Add a new piece to a subcase
+ * @name addNewPieceToSubcase
  * @memberOf Cypress.Chainable#
  * @function
  * @param {string} oldFileName
  * @param {string} file
  */
-function addNewDocumentVersionToSubcase(oldFileName, file) {
-  cy.log('addNewDocumentVersionToSubcase');
+function addNewPieceToSubcase(oldFileName, file) {
+  cy.log('addNewPieceToSubcase');
   cy.clickReverseTab('Documenten');
-  return addNewDocumentVersion(oldFileName, file, 'subcases');
+  return addNewPiece(oldFileName, file, 'subcases');
 }
 
 /**
@@ -355,16 +355,16 @@ function uploadUsersFile(folder, fileName, extension) {
 }
 
 /**
- * @description Opens the new document version dialog and adds the file when it is a signed document.
- * @name addNewDocumentVersionToSignedDocument
+ * @description Opens the new piece dialog and adds the file when it is a signed document.
+ * @name addNewPieceToSignedDocumentContainer
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
  * @param {String} file - The name of the file without the extension
  */
-function addNewDocumentVersionToSignedDocument(oldFileName, file) {
-  cy.log('addNewDocumentVersionToSignedDocument');
-  cy.route('POST', 'document-versions').as('createNewDocumentVersion');
+function addNewPieceToSignedDocumentContainer(oldFileName, file) {
+  cy.log('addNewPieceToSignedDocumentContainer');
+  cy.route('POST', 'pieces').as('createNewPiece');
 
   cy.get('.vlc-document-card__content .vl-title--h6', {
     timeout: 12000,
@@ -378,7 +378,7 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
   });
-  cy.get(document.documentUploadNewVersion)
+  cy.get(document.documentUploadNewPiece)
     .should('be.visible')
     .click();
 
@@ -386,17 +386,17 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
+    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
   });
-  cy.wait('@createNewDocumentVersion', {
+  cy.wait('@createNewPiece', {
     timeout: 12000,
   });
-  cy.log('/addNewDocumentVersionToSignedDocument');
+  cy.log('/addNewPieceToSignedDocumentContainer');
 }
 
 /**
@@ -407,7 +407,7 @@ function addNewDocumentVersionToSignedDocument(oldFileName, file) {
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
 function addLinkedDocumentToAgendaitem(filenames) {
-  cy.route('GET', 'document-versions').as('createNewDocumentVersion');
+  cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocumentToAgendaitem');
   cy.get(document.addLinkedDocuments).click();
   cy.get(document.searchForLinkedDocumentsInput).click();
@@ -425,11 +425,11 @@ function addLinkedDocumentToAgendaitem(filenames) {
 Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
-Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
-Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);
-Cypress.Commands.add('addNewDocumentVersionToAgendaitem', addNewDocumentVersionToAgendaitem);
-Cypress.Commands.add('addNewDocumentVersionToSubcase', addNewDocumentVersionToSubcase);
-Cypress.Commands.add('addNewDocumentVersionToSignedDocument', addNewDocumentVersionToSignedDocument);
+Cypress.Commands.add('addNewPiece', addNewPiece);
+Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
+Cypress.Commands.add('addNewPieceToAgendaitem', addNewPieceToAgendaitem);
+Cypress.Commands.add('addNewPieceToSubcase', addNewPieceToSubcase);
+Cypress.Commands.add('addNewPieceToSignedDocumentContainer', addNewPieceToSignedDocumentContainer);
 Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);

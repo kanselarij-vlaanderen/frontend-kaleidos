@@ -15,14 +15,14 @@ export default Service.extend({
     this.set('objectsToDelete', []);
   },
 
-  convertDocumentVersion(documentVersion) {
+  convertPiece(piece) {
     try {
       ajax({
         headers: {
           Accept: 'application/json',
         },
         method: 'GET',
-        url: `/document-versions/${documentVersion.get('id')}/convert`,
+        url: `/pieces/${piece.get('id')}/convert`,
       })
         .then((result) => result)
         .catch((err) => err);
@@ -32,48 +32,48 @@ export default Service.extend({
     }
   },
 
-  deleteDocumentWithUndo: task(function *(documentToDelete) {
-    this.objectsToDelete.push(documentToDelete);
-    documentToDelete.set('aboutToDelete', true);
+  deleteDocumentContainerWithUndo: task(function *(documentContainerToDelete) {
+    this.objectsToDelete.push(documentContainerToDelete);
+    documentContainerToDelete.set('aboutToDelete', true);
     yield timeout(15000);
-    if (this.findObjectToDelete(documentToDelete.get('id'))) {
-      yield this.deleteDocument(documentToDelete);
+    if (this.findObjectToDelete(documentContainerToDelete.get('id'))) {
+      yield this.deleteDocumentContainer(documentContainerToDelete);
     } else {
-      documentToDelete.set('aboutToDelete', false);
+      documentContainerToDelete.set('aboutToDelete', false);
     }
   }),
 
-  deleteDocumentVersionWithUndo: task(function *(documentVersionToDelete) {
-    this.objectsToDelete.push(documentVersionToDelete);
-    documentVersionToDelete.set('aboutToDelete', true);
+  deletePieceWithUndo: task(function *(pieceToDelete) {
+    this.objectsToDelete.push(pieceToDelete);
+    pieceToDelete.set('aboutToDelete', true);
     yield timeout(15000);
-    if (this.findObjectToDelete(documentVersionToDelete.get('id'))) {
-      yield this.deleteDocumentVersion(documentVersionToDelete);
+    if (this.findObjectToDelete(pieceToDelete.get('id'))) {
+      yield this.deletePiece(pieceToDelete);
     } else {
-      documentVersionToDelete.set('aboutToDelete', false);
+      pieceToDelete.set('aboutToDelete', false);
     }
   }),
 
-  async deleteDocument(document) {
-    const documentToDelete = await document;
-    if (!documentToDelete) {
+  async deleteDocumentContainer(documentContainer) {
+    const documentContainerToDelete = await documentContainer;
+    if (!documentContainerToDelete) {
       return;
     }
-    const documentVersions = await documentToDelete.get('documentVersions');
+    const pieces = await documentContainerToDelete.get('pieces');
     await Promise.all(
-      documentVersions.map(async(documentVersion) => this.deleteDocumentVersion(documentVersion))
+      pieces.map(async(piece) => this.deletePiece(piece))
     );
-    documentToDelete.destroyRecord();
+    documentContainerToDelete.destroyRecord();
   },
 
-  async deleteDocumentVersion(documentVersion) {
-    const documentVersionToDelete = await documentVersion;
-    if (!documentVersionToDelete) {
+  async deletePiece(piece) {
+    const pieceToDelete = await piece;
+    if (!pieceToDelete) {
       return;
     }
-    const file = documentVersionToDelete.get('file');
+    const file = pieceToDelete.get('file');
     await this.deleteFile(file);
-    return documentVersionToDelete.destroyRecord();
+    return pieceToDelete.destroyRecord();
   },
 
   async deleteFile(file) {
@@ -85,17 +85,17 @@ export default Service.extend({
   },
 
   async reverseDelete(id) {
-    const foundDocumentToDelete = this.findObjectToDelete(id);
-    this.objectsToDelete.removeObject(foundDocumentToDelete);
+    const foundObjectToDelete = this.findObjectToDelete(id);
+    this.objectsToDelete.removeObject(foundObjectToDelete);
     const record = await this.store.findRecord(
-      foundDocumentToDelete.get('constructor.modelName'),
+      foundObjectToDelete.get('constructor.modelName'),
       id
     );
     record.set('aboutToDelete', false);
   },
 
   findObjectToDelete(id) {
-    return this.objectsToDelete.find((document) => document.get('id') === id);
+    return this.objectsToDelete.find((object) => object.get('id') === id);
   },
 
   removeFile(id) {

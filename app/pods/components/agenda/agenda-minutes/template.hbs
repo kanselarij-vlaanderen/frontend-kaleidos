@@ -87,7 +87,7 @@
                         (await agendaitem.treatments)
                       as |treatment|
                       }}
-                        {{#if (await treatment.report.lastDocument.name)}}
+                        {{#if (await treatment.report.lastPiece.name)}}
                           <p class="vl-u-text--muted">
                             {{await treatment.treatmentApproval}}
                           </p>

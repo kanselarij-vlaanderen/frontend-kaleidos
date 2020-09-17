@@ -35,19 +35,19 @@ export default Component.extend({
     const showAsRemark = await latestSubcase.get('showAsRemark');
 
     const requestedBy = await latestSubcase.get('requestedBy');
-    const documentVersions = await latestSubcase.get('documentVersions');
+    const pieces = await latestSubcase.get('pieces');
 
     if (copyFullSubcase) {
       const subcaseName = await latestSubcase.get('subcaseName');
-      const linkedDocumentVersions = await latestSubcase.get('linkedDocumentVersions');
+      const linkedPieces = await latestSubcase.get('linkedPieces');
       const accessLevel = await latestSubcase.get('accessLevel');
-      subcase.set('documentVersions', documentVersions);
-      subcase.set('linkedDocumentVersions', linkedDocumentVersions);
+      subcase.set('pieces', pieces);
+      subcase.set('linkedPieces', linkedPieces);
       subcase.set('subcaseName', subcaseName);
       subcase.set('accessLevel', accessLevel);
       subcase.set('showAsRemark', showAsRemark);
     } else {
-      subcase.set('linkedDocumentVersions', documentVersions);
+      subcase.set('linkedPieces', pieces);
     }
 
     subcase.set('mandatees', mandatees);

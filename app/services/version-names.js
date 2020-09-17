@@ -1,8 +1,9 @@
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
+// TODO unused service ?
 export default Service.extend({
-  createVersionName(number) {
+  createPieceName(number) {
     let prefix = '';
     if (number > 1) {
       prefix = ' ';

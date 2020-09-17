@@ -10,7 +10,7 @@ export default Model.extend({
   intl: inject(),
   agendaitem: belongsTo('agendaitem'), // { inverse: null } ?
   subcase: belongsTo('subcase'), // { inverse: null } ?
-  report: belongsTo('document', {
+  report: belongsTo('document-container', {
     inverse: null,
   }),
   newsletterInfo: belongsTo('newsletter-info'),
@@ -19,10 +19,10 @@ export default Model.extend({
   }),
   modified: attr('datetime'),
   created: attr('datetime'),
-  // documentVersions: hasMany('document-version', { inverse: null }),
+  // pieces: hasMany('piece', { inverse: null }),
   treatmentApproval: computed('report', function() {
     return this.intl.t('signed-document-decision', {
-      name: this.get('report.lastDocument.name'),
+      name: this.get('report.lastPiece.name'),
     });
   }),
 });

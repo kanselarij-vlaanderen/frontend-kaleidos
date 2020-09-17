@@ -74,7 +74,7 @@ export default Component.extend({
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
-      documentVersions: [],
+      pieces: [],
       approvals: [],
       isApproval: true,
     });

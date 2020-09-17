@@ -2,35 +2,36 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO this component is no longer used. It was used to link documents to a decision (agendaItemTreatment), might be broken as-is
 export default Component.extend({
   agendaitem: null,
   decision: null,
   store: inject(),
 
-  lastDocumentVersions: computed('agendaitem.documents.@each', 'decision.documentVersions.@each', async function() {
+  lastPieces: computed('agendaitem.pieces.@each', 'decision.pieces.@each', async function() {
     const {
       decision, agendaitem,
     } = this;
-    const documents = await agendaitem.get('documents');
-    const documentVersionsAddedAlready = await decision.get('documentVersions');
+    const pieces = await agendaitem.get('pieces');
+    const piecesAddedAlready = await decision.get('pieces');
 
-    return Promise.all(documents.map(async(document) => {
-      const typeLabel = await document.get('type.label');
-      const lastDocumentVersion = await document.get('lastDocumentVersion');
-      // Document is not updated for the version.
+    return Promise.all(pieces.map(async(piece) => {
+      const typeLabel = await piece.get('type.label');
+      const lastPiece = await piece.get('lastPiece');
+      // Document is not updated for the piece.
       // Set diplay property for the type.
-      lastDocumentVersion.set('typeLabel', typeLabel);
-      const foundDocument = documentVersionsAddedAlready.find((documentVersionToSearch) => documentVersionToSearch.get('id') === lastDocumentVersion.get('id'));
-      if (foundDocument) {
-        lastDocumentVersion.set('selected', true);
+      lastPiece.set('typeLabel', typeLabel);
+      const foundPiece = piecesAddedAlready.find((pieceToSearch) => pieceToSearch.get('id') === lastPiece.get('id'));
+      if (foundPiece) {
+        lastPiece.set('selected', true);
       }
-      return lastDocumentVersion;
+      return lastPiece;
     }));
   }),
 
   actions: {
     async selectForPublication() {
-      this.selectDocument(await this.get('lastDocumentVersions'));
+      this.selectPiece(await this.get('lastPieces')); // TODO selectpiece() ? see comment at line 5
     },
   },
 });

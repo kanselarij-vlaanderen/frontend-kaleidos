@@ -84,8 +84,8 @@ export default Component.extend({
       if (!nota) {
         return;
       }
-      const documentVersion = await nota.get('lastDocumentVersion');
-      window.open(`/document/${documentVersion.get('id')}`);
+      const piece = await nota.get('lastPiece');
+      window.open(`/document/${piece.get('id')}`);
     },
     async handleRdfaEditorInit(editorInterface) {
       const newsletterInfo = await this.get('newsletterInfo');

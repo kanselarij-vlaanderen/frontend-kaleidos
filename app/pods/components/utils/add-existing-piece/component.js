@@ -7,11 +7,11 @@ import {
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class AddExistingDocument extends Component {
+export default class AddExistingPiece extends Component {
   @service store;
   @tracked page = 0;
   @tracked filter = '';
-  @tracked documents = [];
+  @tracked pieces = [];
 
   size = 5;
   sort = ['-created', 'name'];
@@ -35,7 +35,7 @@ export default class AddExistingDocument extends Component {
   }
 
   setSelectedToFalse() {
-    this.documents.map((document) => document.set('selected', false));
+    this.pieces.map((piece) => piece.set('selected', false));
   }
 
   queryOptions() {
@@ -55,29 +55,29 @@ export default class AddExistingDocument extends Component {
 
   @task(function *() {
     yield timeout(300);
-    this.documents = yield this.store.query('document-version', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions());
     yield timeout(100);
     this.setSelectedToFalse();
   })findAll;
 
   @task(function *() {
     yield timeout(300);
-    this.documents = yield this.store.query('document-version', this.queryOptions());
+    this.pieces = yield this.store.query('piece', this.queryOptions());
     this.page = 0;
     yield timeout(100);
   })searchTask;
 
   @action
-  async select(document, event) {
+  async select(piece, event) {
     if (event) {
       event.stopPropagation();
     }
-    if (document.selected) {
-      document.set('selected', false);
-      this.args.delete(document);
+    if (piece.selected) {
+      piece.set('selected', false);
+      this.args.delete(piece);
     } else {
-      document.set('selected', true);
-      this.args.add(document);
+      piece.set('selected', true);
+      this.args.add(piece);
     }
   }
 }

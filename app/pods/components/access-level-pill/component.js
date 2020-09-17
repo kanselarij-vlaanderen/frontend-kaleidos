@@ -19,11 +19,11 @@ export default class AccessLevelPill extends Component {
   classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
 
   loading = false;
-  lastDocumentVersion = null;
+  lastPiece = null;
 
-  @computed('lastDocumentVersion.accessLevel')
+  @computed('lastPiece.accessLevel')
   get accessLevel() {
-    const accessLevel = this.get('lastDocumentVersion.accessLevel');
+    const accessLevel = this.get('lastPiece.accessLevel');
 
     if (!accessLevel) {
       return null;
@@ -34,9 +34,9 @@ export default class AccessLevelPill extends Component {
     });
   }
 
-  @computed('lastDocumentVersion.accessLevel')
+  @computed('lastPiece.accessLevel')
   get originalAccessLevel() {
-    const accessLevel = this.get('lastDocumentVersion.accessLevel');
+    const accessLevel = this.get('lastPiece.accessLevel');
 
     if (!accessLevel) {
       return null;
@@ -95,16 +95,16 @@ export default class AccessLevelPill extends Component {
       return;
     }
 
-    this.lastDocumentVersion.set('confidential', !this.lastDocumentVersion.get('confidential'));
-    this.lastDocumentVersion.save();
+    this.lastPiece.set('confidential', !this.lastPiece.get('confidential'));
+    this.lastPiece.save();
   }
 
   @action
   save() {
     if (this.get('accessLevel')) {
       this.set('loading', true);
-      this.lastDocumentVersion.set('accessLevel', this.accessLevel);
-      this.lastDocumentVersion.save();
+      this.lastPiece.set('accessLevel', this.accessLevel);
+      this.lastPiece.save();
       this.set('loading', false);
       this.set('editing', false);
     }

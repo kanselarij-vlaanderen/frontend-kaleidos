@@ -26,7 +26,7 @@ export default ModelWithModifier.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  documentVersions: hasMany('document-version', {
+  pieces: hasMany('piece', {
     inverse: null,
   }),
   themes: hasMany('themes', {

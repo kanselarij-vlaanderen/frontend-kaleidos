@@ -127,7 +127,7 @@ context('Full test', () => {
     cy.addDocuments([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
-    cy.addNewDocumentVersionToMeeting('test pdf', {
+    cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.clickReverseTab('Overzicht');

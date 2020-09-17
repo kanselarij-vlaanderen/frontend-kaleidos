@@ -18,7 +18,7 @@
   </p>
 </div>
 <ul class="vlc-printable-agenda-list__document-list indented">
-  {{#each this.item.sortedDocumentVersions as |document|}}
-    <li>({{document.name}})</li>
+  {{#each this.item.sortedPieces as |piece|}}
+    <li>({{piece.name}})</li>
   {{/each}}
 </ul>

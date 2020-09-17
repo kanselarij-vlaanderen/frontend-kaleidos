@@ -24,7 +24,7 @@ context('Add files to an agenda', () => {
         });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', {
+    cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -34,7 +34,7 @@ context('Add files to an agenda', () => {
         });
     });
 
-    cy.addNewDocumentVersionToMeeting('test pdf', {
+    cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -107,7 +107,7 @@ context('Add files to an agenda', () => {
     });
   });
 
-  it('should delete documents, document-versions and files', () => {
+  it('should delete documents, pieces and files', () => {
     cy.visit('/vergadering/5EBA8CE1DAB6BB0009000009/agenda/5EBA8CE3DAB6BB000900000A/documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').as('docCards');
@@ -123,8 +123,8 @@ context('Add files to an agenda', () => {
         .click();
     });
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.route('DELETE', 'document-versions/*').as('deleteVersion');
-    cy.route('DELETE', 'documents/*').as('deleteDocument');
+    cy.route('DELETE', 'pieces/*').as('deletePiece');
+    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get('.vl-modal').within(() => {
       cy.get('button').contains('Verwijderen')
@@ -134,10 +134,10 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
-    cy.wait('@deleteVersion', {
+    cy.wait('@deletePiece', {
       timeout: 20000,
     });
-    cy.wait('@deleteDocument', {
+    cy.wait('@deleteDocumentContainer', {
       timeout: 20000,
     });
 
@@ -146,15 +146,15 @@ context('Add files to an agenda', () => {
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/2e/);
         cy.get('.js-vl-accordion > button').click();
-        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-        cy.get('@versions').eq(0)
+        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+        cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();
           });
       });
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.route('DELETE', 'document-versions/*').as('deleteVersion');
-    cy.route('DELETE', 'documents/*').as('deleteDocument');
+    cy.route('DELETE', 'pieces/*').as('deletePiece');
+    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get('.vl-modal').within(() => {
       cy.get('button').contains('Verwijderen')
@@ -164,10 +164,10 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
-    cy.wait('@deleteVersion', {
+    cy.wait('@deletePiece', {
       timeout: 20000,
     });
-    // cy.wait('@deleteDocument', { timeout: 20000 }); // TODO fix the deletion of document in vl-document component
+    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO fix the deletion of document in vl-document component
 
     cy.get('@docCards').should('have.length', 0);
 
