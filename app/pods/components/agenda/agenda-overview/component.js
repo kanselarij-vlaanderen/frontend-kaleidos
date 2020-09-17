@@ -1,8 +1,5 @@
 import Component from '@ember/component';
-import {
-  computed, action
-} from '@ember/object';
-import { alias } from '@ember/object/computed';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
@@ -13,11 +10,7 @@ export default class AgendaOverview extends Component {
 
   @service('current-session') currentSessionService;
 
-  classNames = ['vlc-agenda-items'];
-
-  classNameBindings = ['getClassNames'];
-
-  selectedAgendaitem = alias('sessionService.selectedAgendaitem');
+  classNames = ['vlc-agenda-items', 'vl-u-spacer-extended-l', 'vlc-agenda-items--spaced'];
 
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
@@ -29,14 +22,6 @@ export default class AgendaOverview extends Component {
   isShowingChanges = null;
 
   showLoader = null;
-
-  @computed('selectedAgendaitem')
-  get getClassNames() {
-    if (this.get('selectedAgendaitem')) {
-      return 'vlc-agenda-items--small';
-    }
-    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
-  }
 
   @action
   selectAgendaitemAction(agendaitem) {
