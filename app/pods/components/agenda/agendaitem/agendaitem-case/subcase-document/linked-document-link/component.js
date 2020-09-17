@@ -29,14 +29,14 @@ export default class linkedDocumentLink extends Component {
   }
 
   get setupPieces() {
-    this.mySortedPieces();
+    this.setupMySortedPieces();
     return true;
   }
 
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
   // TODO: DUPLICATE CODE IN edit-piece/component.js
-  mySortedPieces() {
+  setupMySortedPieces() {
     const itemPieceIds = {};
     if (!this.args.agendaitemOrSubcaseOrMeeting && !this.args.documentContainer) {
       return false;
