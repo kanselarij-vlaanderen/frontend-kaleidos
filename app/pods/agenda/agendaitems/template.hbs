@@ -9,14 +9,14 @@
         <Agenda::AgendaOverview
           @announcements={{this.sortedAnnouncements}}
           @agendaitems={{await this.sortedAgendaitems}}
-          @currentAgenda={{await this.model.currentAgenda}}
+          @currentAgenda={{this.agenda}}
           @selectedAgendaitem={{this.selectedAgendaitem}}
         />
       {{else}}
         <Agenda::AgendaDetail::Sidebar
           @announcements={{this.sortedAnnouncements}}
           @agendaitems={{await this.sortedAgendaitems}}
-          @currentAgenda={{await this.model.currentAgenda}}
+          @currentAgenda={{this.agenda}}
         />
       {{/if}}
     </div>
