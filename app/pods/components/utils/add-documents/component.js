@@ -20,7 +20,7 @@ export default Component.extend({
   classNames: ['vl-u-spacer'],
   @tracked isAddingDocument: null,
   @tracked isAddingNewDocument: null,
-  isLoading: null,
+  isLoading: false,
   documentInCreation: null, // When creating new documents
 
   documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
@@ -125,6 +125,9 @@ export default Component.extend({
     async uploadedFile(uploadedFile) {
       const creationDate = moment().utc()
         .toDate();
+      if (!this.defaultAccessLevel) {
+        this.defaultAccessLevel = await this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
+      }
       const newDocument = this.createNewDocument(uploadedFile, null, {
         accessLevel: this.defaultAccessLevel,
       });
