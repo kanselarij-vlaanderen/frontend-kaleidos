@@ -149,6 +149,238 @@ export default class PublicationsRoute extends Route {
       },
     },
     {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
+      case: 'Luchtvervoersovereenkomst Brazilie',
+      inProgress: true,
+      noInternalOVRBReference: '35222',
+      noBelgianOfficialGazette: '51/24720002',
+      type: 'BVR',
+      dateStartPublication: moment().format('DD/MM/YYYY'),
+      datePublicationDeadline: moment()
+        .add(5, 'days')
+        .format('DD/MM/YYY'),
+      translationStatus: {
+        initiated: true,
+        status: 'done',
+        finished: 4,
+        total: 4,
+      },
+      signatureStatus: {
+        initiated: true,
+        status: 'in-progress',
+        finished: 3,
+        total: 4,
+      },
+      printProofStatus: {
+        initiated: true,
+        status: 'not-started',
+        finished: 0,
+        total: 4,
+      },
+    },
+    {
       case: 'Luchtvervoersovereenkomst Senegal',
       inProgress: true,
       noInternalOVRBReference: '35222',

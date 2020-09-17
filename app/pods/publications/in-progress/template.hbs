@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each publicationsInProgress as |publication|}}
+      {{#each publicationsForCurrentPage as |publication|}}
         <tr>
           <td>
             {{publication.case}}
@@ -82,13 +82,13 @@
   <div class="vlc-pagination">
     <ul class="vlc-pagination__list">
       <li class="vlc-pagination__element">
-        <p><strong>1-7</strong> van 142</p>
+        <p><strong>{{pageStart}}-{{pageEnd}}</strong> van {{publicationsInProgress.length}}</p>
       </li>
-      <li class="vlc-pagination__element">
-        <ButtonLink @icon="chevron-left" disabled>Vorige</ButtonLink>
+      <li class="vlc-pagination__element" {{action "handlePrevPage"}}>
+        <ButtonLink @icon="chevron-left" disabled={{prevPageButtonDisabled}}>Vorige</ButtonLink>
       </li>
-      <li class="vlc-pagination__element">
-        <ButtonLink @icon="chevron-right" @layout="icon-right">Volgende</ButtonLink>
+      <li class="vlc-pagination__element" {{action "handleNextPage"}}>
+        <ButtonLink @icon="chevron-right" @layout="icon-right" disabled={{nextPageButtonDisabled}}>Volgende</ButtonLink>
       </li>
     </ul>
   </div>
