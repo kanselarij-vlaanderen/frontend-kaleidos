@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
+import moment from 'moment';
 
 export default Component.extend({
   store: service(),
@@ -30,6 +31,15 @@ export default Component.extend({
   },
 
   actions: {
+
+    meetingNumberChangedAction(meetingNumber) {
+      const meetingYear = moment(this.get('meeting.plannedStart')).year();
+      this.set('meetingNumber', meetingNumber);
+      this.set('formattedMeetingIdentifier', `VR PV ${meetingYear}/${meetingNumber}`);
+      this.set('numberRepresentation', this.get('formattedMeetingIdentifier'));
+      this.set('meeting.numberRepresentation', this.get('formattedMeetingIdentifier'));
+    },
+
     async updateSession() {
       const {
         isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation,
