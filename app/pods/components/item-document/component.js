@@ -16,7 +16,7 @@ export default Component.extend({
     return this.get('lastPiece.name');
   }),
 
-  mySortedPieces: computed('myPieces.@each', 'piece.documentContainer.sortedPieces.@each', function() {
+  mySortedPieces: computed('myPieces.@each', 'documentContainer.sortedPieces.@each', function() {
     return DS.PromiseArray.create({
       promise: (async() => {
         const itemPieceIds = {};

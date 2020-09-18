@@ -27,7 +27,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   async updateSelectedAgenda(meeting, agenda) {
     this.set('agendaService.addedAgendaitems', []);
-    this.set('agendaService.addedDocuments', []);
+    this.set('agendaService.addedPieces', []);
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
     if (previousAgenda) {
       await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));

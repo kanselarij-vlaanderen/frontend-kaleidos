@@ -180,9 +180,9 @@ export default ModelWithModifier.extend({
     return checkAdded || hasAddedPieces;
   }),
 
-  hasAddedPieces: computed('pieces.@each', 'addedPieces.@each', async function() {
-    const pieces = await this.get('pieces');
-    return pieces && pieces.some((piece) => piece.checkAdded);
+  hasAddedPieces: computed('documentContainers.@each', 'addedPieces.@each', async function() {
+    const documentContainers = await this.get('documentContainers');
+    return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
   sortedApprovals: computed('approvals.@each', async function() {
