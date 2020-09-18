@@ -45,6 +45,8 @@ context('Test the KB functionality', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota',
     }]);
 
+    cy.wait(3000);
+
     const case2TitleShort = `${testId}Cypress test dossier 2`;
     const type2 = 'Nota';
     const newSubcase2TitleShort = `${case2TitleShort} procedure`;
@@ -62,6 +64,8 @@ context('Test the KB functionality', () => {
     cy.addDocuments([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 2', fileType: 'Nota',
     }]);
+
+    cy.wait(3000);
 
     cy.createAgenda('Ministerraad', agendaDate, 'Test Kort bestek toevoegen').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
