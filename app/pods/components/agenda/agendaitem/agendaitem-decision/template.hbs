@@ -44,15 +44,15 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.decision.pieces.length}}
+  {{!-- TODO treatment no longer has the relation to pieces --}}
+  {{#if this.treatment.pieces.length}}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
       </h4>
       <div class="vl-u-spacer-extended-top-s">
-        {{!-- TODO treatment no longer has the relation to pieces --}}
         <Utils::PiecesListForItem
-                @item={{this.treatment}}
+                @agendaitemOrSubcase={{this.treatment}}
                 @isClickable={{true}}
         />
       </div>

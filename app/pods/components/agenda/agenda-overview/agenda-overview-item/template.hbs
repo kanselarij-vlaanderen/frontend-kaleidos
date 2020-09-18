@@ -87,7 +87,7 @@
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListForItem
                       @isClickable={{true}}
-                      @item={{@agendaitem}}
+                      @agendaitemOrSubcase={{@agendaitem}}
                     />
                   {{else}}
                     {{#if (await @agendaitem.pieceNames)}}

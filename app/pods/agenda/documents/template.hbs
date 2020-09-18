@@ -7,7 +7,7 @@
       }}
     {{else}}
       {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
-        documentContainers=(await model.meeting.pieces)
+        documentContainers=(await model.meeting.documentContainers)
         agendaitemOrSubcaseOrMeeting=(await model.meeting)
         cancelForm=(action "cancelEditing")
       }}
