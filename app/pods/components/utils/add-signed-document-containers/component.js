@@ -17,7 +17,7 @@ export default Component.extend({
   classNames: ['vl-u-spacer'],
   @tracked isAddingNewDocumentContainer: null,
   isLoading: null,
-  pieceInCreation: A([]), // When creating new documents
+  pieceInCreation: null,
   meetingRecordOrDecision: null,
 
   documentTypeToAssign: computed('modelToAddPieceTo', function() {
@@ -35,7 +35,7 @@ export default Component.extend({
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set('pieceInCreation', A([]));
+    this.set('pieceInCreation', null);
     const accessLevels = await this.store.findAll('access-level');
     try {
       this.set('defaultAccessLevel', accessLevels.find((accesslevel) => accesslevel.id === CONFIG.internRegeringAccessLevelId));
@@ -47,7 +47,7 @@ export default Component.extend({
   },
 
   clearAllDocuments() {
-    set(this, 'pieceInCreation', A([]));
+    set(this, 'pieceInCreation', null);
   },
 
   createNewPiece(uploadedFile, defaults) {
@@ -72,7 +72,7 @@ export default Component.extend({
     container.set('pieces', A([piece]));
     const savedDocumentContainer = await container.save();
 
-    this.get('pieceInCreation').clear();
+    this.set('pieceInCreation', null);
     this.set('isLoading', false);
     return savedDocumentContainer;
   },
@@ -121,7 +121,7 @@ export default Component.extend({
         created: creationDate,
       });
       newPiece.set('documentContainer', newContainer);
-      this.get('pieceInCreation').pushObject(newPiece);
+      this.set('pieceInCreation', newPiece);
     },
   },
 });

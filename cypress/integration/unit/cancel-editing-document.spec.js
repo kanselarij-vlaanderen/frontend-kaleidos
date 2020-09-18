@@ -89,7 +89,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         });
     });
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });

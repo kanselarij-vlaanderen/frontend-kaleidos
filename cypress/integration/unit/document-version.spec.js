@@ -14,7 +14,7 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding more then 20 pieces to agendaitem with subcase should show all', () => {
-    const caseTitleSingle = 'Cypress test: pieces agendaitem - 1589286110';
+    const caseTitleSingle = 'Cypress test: document versions agendaitem - 1589286110';
     const SubcaseTitleShort = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
 
     cy.visit('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten');
@@ -101,7 +101,7 @@ context('Tests for KAS-1076', () => {
     cy.clickReverseTab('Documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card', {
-        timeout: 60000,
+        timeout: 80000,
       }).as('docCards')
         .should('have.length', 22);
     });
@@ -216,7 +216,7 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document or piece to agendaitem on designagenda should reset formally ok and update the subcase', () => {
-    const SubcaseTitleShort = 'Cypress test: new piece on agendaitem - 1589286212';
+    const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - 1589286212';
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
@@ -273,7 +273,7 @@ context('Tests for KAS-1076', () => {
   });
 
   it('Adding new document or piece to subcase should reset formally ok and update the agendaitem on designagendas', () => {
-    const SubcaseTitleShort = 'Cypress test: new piece on procedurestap - 1589286338';
+    const SubcaseTitleShort = 'Cypress test: new document version on procedurestap - 1589286338';
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
