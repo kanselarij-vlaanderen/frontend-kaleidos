@@ -17,7 +17,6 @@ export default Model.extend({
   }),
   modified: attr('datetime'),
   created: attr('datetime'),
-  // documentVersions: hasMany('document-version', { inverse: null }),
   treatmentApproval: computed('report', function() {
     return this.intl.t('signed-document-decision', {
       name: this.get('report.lastDocument.name'),
