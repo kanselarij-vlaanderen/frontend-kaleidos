@@ -5,7 +5,7 @@ export default class PublicationsRoute extends Route {
   mockedPublications = [
     {
       case: 'Luchtvervoersovereenkomst Brazilie',
-      inProgress: true,
+      inProgress: false,
       noInternalOVRBReference: '35222',
       noBelgianOfficialGazette: '51/24720002',
       type: 'BVR',
@@ -34,7 +34,7 @@ export default class PublicationsRoute extends Route {
     },
     {
       case: 'Luchtvervoersovereenkomst Brazilie',
-      inProgress: true,
+      inProgress: false,
       noInternalOVRBReference: '35222',
       noBelgianOfficialGazette: '51/24720002',
       type: 'BVR',
