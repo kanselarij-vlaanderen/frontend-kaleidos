@@ -27,7 +27,7 @@
       </h4>
 
       {{#if (not aboutToDelete)}}
-        {{#if (not selectedAgendaItem)}}
+        {{#if (not selectedAgendaitem)}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
               <pre class="vl-u-text vlc-agenda-items__body-padding">
@@ -38,7 +38,7 @@
         {{/if}}
         {{#if (or renderDetails @isEditingOverview)}}
           <div class="vl-u-display-flex vlc-u-flex-space-between">
-            {{#if (and selectedAgendaItem @isEditingOverview)}}
+            {{#if (and selectedAgendaitem @isEditingOverview)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
               </span>
             {{else}}
@@ -80,14 +80,14 @@
             </div>
           </div>
           {{#if (not aboutToDelete)}}
-            {{#if (not selectedAgendaItem)}}
+            {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
                   {{#if (await @agendaitem.documents)}}
                     <div class="vlc-hr"></div>
                     <Utils::DocumentsListForItem
                       @isClickable={{true}}
-                      @item={{@agendaitem}}
+                      @agendaitemOrSubcase={{@agendaitem}}
                       @document={{@agendaitem.document}}
                     />
                   {{else}}

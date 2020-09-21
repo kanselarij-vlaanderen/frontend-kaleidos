@@ -11,7 +11,7 @@ export default Component.extend({
       if (!nearestMeeting) {
         return this.meetings;
       }
-      return this.meetings.filter((item) => item.get('id') !== nearestMeeting.get('id'));
+      return this.meetings.filter((meeting) => meeting.get('id') !== nearestMeeting.get('id'));
     }
     return this.meetings;
   }),

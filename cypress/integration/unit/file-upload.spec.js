@@ -47,12 +47,6 @@ context('Add files to an agenda', () => {
 
   it('should add several documents that should be sorted', () => {
     cy.visit('/vergadering/5EBA8CCADAB6BB0009000005/agenda/5EBA8CCCDAB6BB0009000006/agendapunten');
-    cy.addDocuments([{
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005-2 - 2e', fileType: 'Nota',
-    }]);
-    cy.addDocuments([{
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-1 - 1e', fileType: 'Nota',
-    }]);
     // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
     cy.addDocuments(
       [
@@ -70,6 +64,12 @@ context('Add files to an agenda', () => {
         },
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-4 - 4e', fileType: 'Nota',
+        },
+        {
+          folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2018 1010 DOC.0005-2 - 2e', fileType: 'Nota',
+        },
+        {
+          folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-1 - 1e', fileType: 'Nota',
         }
       ]
     );

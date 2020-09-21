@@ -80,27 +80,27 @@ export default Service.extend({
   },
 
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
-  async createNewsItemForAgendaItem(agendaItem, inNewsletter = false) {
+  async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
-      const agendaItemTreatment = (await agendaItem.get('treatments')).firstObject;
+      const agendaItemTreatment = (await agendaitem.get('treatments')).firstObject;
       const news = this.store.createRecord('newsletter-info', {
         agendaItemTreatment,
         inNewsletter,
       });
-      if (agendaItem.showAsRemark) {
-        const content = agendaItem.title;
-        news.set('title', agendaItem.shortTitle || content);
+      if (agendaitem.showAsRemark) {
+        const content = agendaitem.title;
+        news.set('title', agendaitem.shortTitle || content);
         news.set('richtext', content);
         news.set('finished', true);
         news.set('inNewsletter', true);
       } else {
-        news.set('title', agendaItem.shortTitle);
-        news.set('subtitle', agendaItem.title);
+        news.set('title', agendaitem.shortTitle);
+        news.set('subtitle', agendaitem.title);
         news.set('finished', false);
         news.set('inNewsletter', false);
         // Use news item "of previous subcase" as a default
         try {
-          const activity = await agendaItem.get('agendaActivity');
+          const activity = await agendaitem.get('agendaActivity');
           const subcase = await activity.get('subcase');
           const _case = await subcase.get('case');
           const previousNewsItem = (await this.store.query('newsletter-info', {

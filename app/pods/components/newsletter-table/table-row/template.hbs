@@ -1,6 +1,6 @@
 <tr class="lt-row">
   <td class="lt-cell align-left">
-    {{@agendaItem.priority}}
+    {{@agendaitem.priority}}
   </td>
   <td class="lt-cell align-left vl-data-table-col-7">
     {{#if this.hasNewsletterInfo}}
@@ -24,7 +24,7 @@
     {{/if}}
   </td>
   <td class="lt-cell align-left">
-    {{#each (await @agendaItem.mandatees) as |mandatee|}}
+    {{#each (await @agendaitem.mandatees) as |mandatee|}}
       {{await mandatee.person.nameToDisplay}}<br>
     {{else}}
       <p class="vl-u-text--muted vl-u-text--italic">
@@ -36,7 +36,7 @@
     <WebComponents::VlCheckbox
       @value={{this.newsletterInfo.inNewsletter}}
       @toggle={{this.setInNewsletter}}
-      @disabled={{not this.hasNewsletterInfo}}
+      @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}
       @single={{true}}
     />
   </td>
@@ -49,7 +49,7 @@
   </td>
   <td class="lt-cell align-left">
     <NewsletterTable::ButtonToolbar
-      @agendaItem={{@agendaItem}}
+      @agendaitem={{@agendaitem}}
       @onEdit={{this.startEditing}}
     />
   </td>
@@ -60,7 +60,7 @@
       <div class="vlc-container-center">
         <NewsItem::EditItem
           @newsletterInfo={{this.newsletterInfo}}
-          @agendaitem={{@agendaItem}}
+          @agendaitem={{@agendaitem}}
           @onCancel={{this.stopEditing}}
           @onSave={{this.stopEditing}}
         />

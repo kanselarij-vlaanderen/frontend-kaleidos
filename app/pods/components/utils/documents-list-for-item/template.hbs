@@ -1,10 +1,11 @@
+
 {{#if (is-pending item.documents)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   <div class="grid-container">
     {{#each (await documents) as |document|}}
       {{item-document
-        item=@item
+        item=@agendaitemOrSubcase
         document=document
         isClickable=@isClickable
         useNewIcons=useNewIcons

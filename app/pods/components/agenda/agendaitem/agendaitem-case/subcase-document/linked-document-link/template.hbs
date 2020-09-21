@@ -1,4 +1,4 @@
-<div class="vlc-document-card">
+<div class="vlc-document-card vl-u-spacer-extended-bottom-s">
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__badge">
       <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
@@ -10,19 +10,21 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline" data-test-linkeddocument-type-label>
-              {{await document.type.label}}
+              {{await @document.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            <AccessLevelPill @item={{lastDocumentVersion}} />
+            {{#if this.setupDocumentVersions}}
+              <AccessLevelPill @lastDocumentVersion={{this.lastDocumentVersion}} />
+            {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
               <button class="vl-button vl-button--link-muted vl-button--icon"
                       type="button"
-                {{action "unlinkDocument" document}}
+                {{action this.unlinkDocument @document}}
               >
                 <i class="vl-icon ki-link-broken vl-u-text--error"
                 ></i>
@@ -32,34 +34,33 @@
         </div>
       </div>
       <h6 class="vl-title vl-title--h6">
-        {{await lastDocumentVersionName}}
+        {{await this.lastDocumentVersion.name}}
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
-        {{moment-format lastDocumentVersion.created}}
+        {{moment-format this.lastDocumentVersion.created}}
         {{t "at"}}
-        {{moment-format lastDocumentVersion.created "HH:mm"}}
+        {{moment-format this.lastDocumentVersion.created "HH:mm"}}
       </div>
     </div>
   </div>
-  {{#if (gt myReverseSortedVersions.length 0)}}
+  {{#if this.mySortedDocuments}}
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{openClass}}">
+      <div class="js-vl-accordion {{this.openClass}}">
         <button class="vl-toggle vl-link vl-link--bold"
                 type="button"
-          {{action "showVersions"}}
+          {{action this.showVersions}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
           {{t "show-versions"}}
         </button>
-        {{#if isShowingVersions}}
+        {{#if this.isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each myReverseSortedVersions as |documentVersion|}}
+              {{#each this.reverseSortedDocumentVersions as |documentVersion|}}
                 {{web-components/vl-document
                   documentVersion=documentVersion
-                  item=item
                 }}
               {{/each}}
             </div>
@@ -69,11 +70,11 @@
     </div>
   {{/if}}
 </div>
-{{#if isVerifyingUnlink}}
+{{#if this.isVerifyingUnlink}}
   <WebComponents::VlModalVerify
     @title={{t "document-unlink"}}
     @message={{t "unlink-document-message"}}
-    @cancel={{action "cancel"}}
-    @verify={{action "verify"}}
+    @cancel={{action this.cancel}}
+    @verify={{action this.verify}}
     @verifyButtonText={{t "unlink"}} />
 {{/if}}

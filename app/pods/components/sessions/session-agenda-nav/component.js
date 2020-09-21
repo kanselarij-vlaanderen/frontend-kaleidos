@@ -9,8 +9,8 @@ export default Component.extend({
   tagName: 'ul',
   classNames: ['vlc-toolbar__item'],
 
-  firstAgendaItemOfAgenda: computed('currentAgenda.firstAgendaItem', function() {
-    return this.get('currentAgenda.firstAgendaItem');
+  firstAgendaitemOfAgenda: computed('currentAgenda.firstAgendaitem', function() {
+    return this.get('currentAgenda.firstAgendaitem');
   }),
 
   selectedAgendaitemClass: computed('routing.currentRouteName', function() {
@@ -59,7 +59,7 @@ export default Component.extend({
     },
 
     goToOverview() {
-      this.clearSelectedAgendaItem();
+      this.clearSelectedAgendaitem();
     },
 
     navigateToDocuments() {

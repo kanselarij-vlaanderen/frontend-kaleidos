@@ -4,7 +4,7 @@ import { hash } from 'rsvp';
 import {
   parseDraftsAndGroupsFromAgendaitems,
   sortByPriority
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Route.extend({
   agendaService: inject(),
@@ -30,13 +30,13 @@ export default Route.extend({
       sort: 'priority',
     });
 
-    const announcements = agendaitems.filter((item) => item.showAsRemark);
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     const {
       draftAgendaitems, groupedAgendaitems,
     } = await parseDraftsAndGroupsFromAgendaitems(agendaitems);
 
-    await this.agendaService.groupAgendaItemsOnGroupName(draftAgendaitems);
+    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
     const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 

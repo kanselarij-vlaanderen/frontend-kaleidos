@@ -130,7 +130,7 @@ export default Component.extend({
       await designAgenda.belongsTo('status').reload();
       const isDesignAgenda = designAgenda.get('isDesignAgenda');
       if (isDesignAgenda) {
-        await this.get('agendaService').createNewAgendaItem(designAgenda, subcase);
+        await this.get('agendaService').createNewAgendaitem(designAgenda, subcase);
       }
       this.toggleAllPropertiesBackToDefault();
     },

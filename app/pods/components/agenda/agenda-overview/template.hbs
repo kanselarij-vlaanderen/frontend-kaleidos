@@ -88,7 +88,7 @@
             @agendaitem={{agendaitem}}
             @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action this.selectAgendaItemAction}}
+            @selectAgendaitem={{action this.selectAgendaitemAction}}
           />
         {{/sortable-item}}
       {{/each}}
@@ -116,7 +116,7 @@
               @agendaitem={{agendaitem}}
               @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action this.selectAgendaItemAction}}
+              @selectAgendaitem={{action this.selectAgendaitemAction}}
             />
           </li>
         {{/if}}
@@ -124,7 +124,7 @@
     </ul>
   {{/if}}
 </div>
-{{#if (not selectedAgendaItem)}}
+{{#if (not selectedAgendaitem)}}
   <div class="vlc-agenda-items-section-header">
     <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
@@ -161,7 +161,7 @@
               @agendaitem={{announcement}}
               @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action this.selectAgendaItemAction}}
+              @selectAgendaitem={{action this.selectAgendaitemAction}}
             />
           {{/sortable-item}}
         {{/each}}
@@ -176,7 +176,7 @@
             @agendaitem={{announcement}}
             @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action this.selectAgendaItemAction}}
+            @selectAgendaitem={{action this.selectAgendaitemAction}}
           />
         </div>
       {{/each}}

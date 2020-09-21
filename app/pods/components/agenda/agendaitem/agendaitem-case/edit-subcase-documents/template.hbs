@@ -4,16 +4,24 @@
       <thead>
         <tr>
           <th class="vl-data-table-col-4">
-            {{web-components/vl-form-label value=(t "document-name")}}
+            {{web-components/vl-form-label
+              value=(t "document-name")
+            }}
           </th>
           <th class="vl-data-table-col-3">
-            {{web-components/vl-form-label value=(t "file-type")}}
+            {{web-components/vl-form-label
+              value=(t "file-type")
+            }}
           </th>
           <th class="vl-data-table-col-3">
-            {{web-components/vl-form-label value=(t "publicity")}}
+            {{web-components/vl-form-label
+              value=(t "publicity")
+            }}
           </th>
           <th class="vl-data-table-col-1">
-            {{web-components/vl-form-label value=(t "confidential")}}
+            {{web-components/vl-form-label
+              value=(t "confidential")
+            }}
           </th>
           <th class="vl-data-table-col-1"></th>
         </tr>
@@ -23,7 +31,10 @@
           {{#if
             (and (not documentContainer.deleted) (await documentContainer.lastDocumentVersion))
           }}
-            {{edit-document-version documentContainer=documentContainer item=item}}
+            {{edit-document-version
+              documentContainer=documentContainer
+              agendaitemOrSubcaseOrMeeting=agendaitemOrSubcaseOrMeeting
+            }}
           {{/if}}
         {{/each}}
       </tbody>

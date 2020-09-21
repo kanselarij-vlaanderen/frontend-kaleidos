@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { cached } from 'fe-redpencil/decorators/cached';
@@ -7,18 +6,16 @@ import { cached } from 'fe-redpencil/decorators/cached';
 export default Component.extend({
   store: inject(),
   mandateeService: inject(),
-  item: computed('mandateeToEdit', function() {
-    return this.get('mandateeToEdit');
-  }),
 
   mandateesUpdated: null,
   @tracked showVerificationPopup: false,
-  startDate: cached('item.start'), // TODO in class syntax use as a decorator instead
-  endDate: cached('item.end'), // TODO in class syntax use as a decorator instead
-  iseCodes: cached('item.iseCodes'), // TODO in class syntax use as a decorator instead
-  title: cached('item.title'), // TODO in class syntax use as a decorator instead
-  shortTitle: cached('item.shortTitle'), // TODO in class syntax use as a decorator instead
-  nickName: cached('item.nickName'), // TODO in class syntax use as a decorator instead
+
+  startDate: cached('mandateeToEdit.start'), // TODO in class syntax use as a decorator instead
+  endDate: cached('mandateeToEdit.end'), // TODO in class syntax use as a decorator instead
+  iseCodes: cached('mandateeToEdit.iseCodes'), // TODO in class syntax use as a decorator instead
+  title: cached('mandateeToEdit.title'), // TODO in class syntax use as a decorator instead
+  shortTitle: cached('mandateeToEdit.shortTitle'), // TODO in class syntax use as a decorator instead
+  nickName: cached('mandateeToEdit.nickName'), // TODO in class syntax use as a decorator instead
 
   async saveChanges() {
     this.set('isLoading', true);
@@ -79,7 +76,7 @@ export default Component.extend({
     },
 
     async triggerPopUp(mandateeToEdit) {
-      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(mandateeToEdit.end, mandateeToEdit.id);
+      this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaitem(mandateeToEdit.end, mandateeToEdit.id);
       if (!this.showVerificationPopup) {
         this.saveChanges();
       }

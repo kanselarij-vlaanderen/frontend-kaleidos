@@ -4,27 +4,29 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if (and currentSession.isEditor (gt (await item.documentsLength) 0))}}
+      {{#if 
+        (and currentSession.isEditor (gt (await @agendaitemOrSubcaseOrMeeting.documentsLength) 0))
+      }}
         <div class="vl-u-spacer-extended-left-s">
-          <a data-test-subcase-documents-edit href="" class="vl-link" {{action "toggleIsEditing"}}>
+          <a data-test-subcase-documents-edit href="" class="vl-link" {{action this.toggleIsEditing}}>
             {{t "edit"}}
           </a>
         </div>
       {{/if}}
     </div>
   </div>
-  {{#if (not isEditing)}}
-    {{#if (is-pending item.documents)}}
+  {{#if (not this.isEditing)}}
+    {{#if (is-pending @agendaitemOrSubcaseOrMeeting.documents)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-    {{else if (not overheidCanViewDocuments)}}
+    {{else if (not governmentCanViewDocuments)}}
       <div class="vl-u-spacer-extended-top-s">
         <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
       </div>
-    {{else if (gt (await item.documentsLength) 0)}}
-      {{#each (await item.documents) as |document|}}
+    {{else if (gt (await @agendaitemOrSubcaseOrMeeting.documentsLength) 0)}}
+      {{#each (await @agendaitemOrSubcaseOrMeeting.documents) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
                 @document={{document}}
-                @item={{item}} />
+                @subcaseAgendaitemMeetingOrDocumentContainer={{@agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">
@@ -33,11 +35,11 @@
     {{/if}}
   {{else}}
     <Agenda::Agendaitem::AgendaitemCase::EditSubcaseDocuments
-            @documents={{await item.documents}}
-            @item={{item}}
-            @cancelForm={{action "cancelEditing"}} />
+            @documents={{await @agendaitemOrSubcaseOrMeeting.documents}}
+            @agendaitemOrSubcaseOrMeeting={{@agendaitemOrSubcaseOrMeeting}}
+            @cancelForm={{action this.cancelEditing}} />
   {{/if}}
-  {{#if (is-pending item.documents)}}
+  {{#if (is-pending @agendaitemOrSubcaseOrMeeting.documents)}}
     <button type="button" class="vl-button vl-button--loading" disabled>
       {{t "please-be-patient"}}
     </button>
@@ -50,7 +52,7 @@
       </button>
     </div>
   {{/if}}
-  {{#if shouldShowLinkedDocuments}}
+  {{#if this.shouldShowLinkedDocuments}}
     <div class="vl-u-spacer">
       <div class="vl-u-display-flex vlc-u-display-flex-align-center">
         <h4 class="vl-title vl-title--h4">
@@ -58,20 +60,20 @@
         </h4>
       </div>
     </div>
-    {{#if (is-pending item.linkedDocuments)}}
+    {{#if (is-pending @agendaitemOrSubcaseOrMeeting.linkedDocuments)}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-    {{else if (gt (await item.linkedDocumentsLength) 0)}}
-      {{#each (await item.linkedDocuments) as |document|}}
+    {{else if (gt (await @agendaitemOrSubcaseOrMeeting.linkedDocumentsLength) 0)}}
+      {{#each (await @agendaitemOrSubcaseOrMeeting.linkedDocuments) as |document|}}
         <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::LinkedDocumentLink
                 @document={{document}}
-                @item={{item}} />
+                @agendaitemOrSubcaseOrMeeting={{@agendaitemOrSubcaseOrMeeting}} />
       {{/each}}
     {{else}}
       <div class="vl-u-spacer-extended-top-s">
         <WebComponents::VlAlert @message={{t "no-linked-documents-yet"}} />
       </div>
     {{/if}}
-    {{#if (is-pending item.linkedDocuments)}}
+    {{#if (is-pending @agendaitemOrSubcaseOrMeeting.linkedDocuments)}}
       <button type="button" class="vl-button vl-button--loading" disabled>
         {{t "please-be-patient"}}
       </button>
@@ -79,7 +81,7 @@
       <div class="vl-u-spacer">
         <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
                 data-test-add-linked-documents
-          {{action "toggleIsLinkingOldDocument"}}>
+          {{on "click" this.toggleIsLinkingOldDocument}}>
           <i class="vl-button__icon vl-button__icon--before ki-add"
           ></i>
           {{t "document-link-old"}}
@@ -88,9 +90,9 @@
     {{/if}}
   {{/if}}
 </div>
-{{#if isAddingNewDocument}}
+{{#if this.isAddingNewDocument}}
   <WebComponents::VlModal
-          @closeModal={{action "deleteAll"}}
+          @closeModal={{action this.deleteAllDocuments}}
           @isOverlay={{true}}
           @large={{true}}
           @title={{t "document-add"}} >
@@ -99,20 +101,20 @@
         <div class="vl-u-align-right vl-u-spacer-extended-s">
           <LinkTo
                   @route="cases.case.subcases.subcase.overview"
-                  @model={{item.id}}
+                  @model={{agendaitemOrSubcaseOrMeeting.id}}
                   @target="_blank">
             {{t "to-subcase"}}
           </LinkTo>
         </div>
       {{/if}}
       {{file-uploader
-        isLoading=isLoading
+        isLoading=this.isLoading
         multipleFiles=true
-        uploadedFileAction=(action "add")
+        uploadedFileAction=(action this.add)
       }}
-      {{#if (not isLoading)}}
+      {{#if (not this.isLoading)}}
         <div class="upload-container">
-          {{#each documentsInCreation as |doc|}}
+          {{#each this.documentsInCreation as |doc|}}
             {{#ember-kaleidos-webuniversum/vl-uploaded-document
               name=doc.file.filename
               extension=doc.file.extension
@@ -123,7 +125,7 @@
                       "?name="
                       doc.file.filename
               )
-              delete=(action "delete" doc)
+              delete=(fn this.delete doc)
             }}
               <div class="metadata-container">
                 <div class="vlc-input-field-block">
@@ -141,7 +143,7 @@
                   }}
                     <Utils::RadioDropdownComboSelect
                       @options={{this.documentTypes}}
-                      @onSelect={{action "chooseDocumentType" doc.documentContainer}}
+                      @onSelect={{fn this.chooseDocumentContainerType doc}}
                       @selected={{get
                         doc.documentContainer.type
                         "content"
@@ -158,31 +160,31 @@
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "document-add"}}
-      @cancelAction={{action "deleteAll"}}
-      @saveAction={{action "saveDocumentContainers"}}
-      @disableSave={{eq model.length 0}} />
+      @cancelAction={{action this.deleteAllDocuments}}
+      @saveAction={{action this.saveDocumentContainers}}
+      @disableSave={{eq this.documentsInCreation.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
-{{#if isLinkingOldDocument}}
+{{#if this.isLinkingOldDocument}}
   <WebComponents::VlModal
-    @closeModal={{action "toggleIsLinkingOldDocument"}}
+    @closeModal={{action this.toggleIsLinkingOldDocument}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
     <div class="vl-modal-dialog__content">
       <Utils::AddExistingDocument
-        @add={{action "link"}}
-        @delete={{action "unlink"}} />
+        @add={{action this.link}}
+        @delete={{action this.unlink}} />
     </div>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "document-link-old"}}
-      @cancelAction={{action "toggleIsLinkingOldDocument"}}
-      @saveAction={{action "linkDocuments"}}
+      @cancelAction={{action this.toggleIsLinkingOldDocument}}
+      @saveAction={{action this.linkDocuments}}
       @disableSave={{eq documentsToLink.length 0}} />
   </WebComponents::VlModal>
 {{/if}}

@@ -7,7 +7,7 @@ import { inject } from '@ember/service';
 import { cached } from 'fe-redpencil/decorators/cached';
 import {
   saveChanges as saveSubcaseDescription, cancelEdit
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 
 export default Component.extend({
   store: inject(),
@@ -40,12 +40,12 @@ export default Component.extend({
     return this.subcase.get('latestAgenda').then((agenda) => agenda.id);
   }),
 
-  latestAgendaItemId: computed('subcase.latestAgendaItem', function() {
-    return this.subcase.get('latestAgendaItem').then((item) => item.id);
+  latestAgendaitemId: computed('subcase.latestAgendaitem', function() {
+    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem.id);
   }),
 
-  isRetracted: computed('subcase.latestAgendaItem', function() {
-    return this.subcase.get('latestAgendaItem').then((item) => item.retracted);
+  isRetracted: computed('subcase.latestAgendaitem', function() {
+    return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem.retracted);
   }),
 
   actions: {
@@ -81,7 +81,7 @@ export default Component.extend({
       const resetFormallyOk = true;
       set(this, 'isLoading', true);
 
-      const propertiesToSetOnAgendaItem = {
+      const propertiesToSetOnAgendaitem = {
         showAsRemark: this.get('showAsRemark'),
       };
 
@@ -90,7 +90,7 @@ export default Component.extend({
         type: this.get('type'),
         showAsRemark: this.get('showAsRemark'),
       };
-      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaItem, propertiesToSetOnSubCase, resetFormallyOk);
+      await saveSubcaseDescription(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubCase, resetFormallyOk);
       set(this, 'isLoading', false);
       this.toggleProperty('isEditing');
     },
