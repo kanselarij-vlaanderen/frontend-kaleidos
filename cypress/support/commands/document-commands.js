@@ -414,6 +414,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
 
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
+    cy.wait(100);
     cy.get(document.searchForLinkedDocumentsButton).click();
     cy.get(document.searchForLinkedDocumentsLoader).should('not.be.visible');
     cy.get(utils.checkboxLabel).click();
