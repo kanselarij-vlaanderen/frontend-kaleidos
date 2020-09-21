@@ -1,17 +1,12 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import {
-  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agendaitem-utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { all } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import config from 'fe-redpencil/utils/config';
-import { addDocumentToAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class DocumentLink extends Component {
   @service store;
@@ -31,10 +26,6 @@ export default class DocumentLink extends Component {
   @tracked defaultAccessLevel;
   @tracked sortedDocuments = [];
 
-  // Component arguments
-  // item [Subcase|Agendaitem|null]: item to which the versions are attached
-  // documentContainer: container to display the relevant versions for
-
   constructor() {
     super(...arguments);
     this.loadData.perform();
@@ -51,24 +42,13 @@ export default class DocumentLink extends Component {
       this.defaultAccessLevel = accessLevels.firstObject;
     }
 
-    if (this.args.agendaitemOrSubcase) {
-      // Construct the intersection of the documents linked to the item (agendaitem/subcase)
-      // and all documents of the documentContainer
-      const allDocuments = yield this.args.agendaitemOrSubcase.documentVersions;
-      const containerDocuments = yield this.args.documentContainer.sortedDocuments;
-      const sortedDocuments = [];
-      if (containerDocuments.length) {
-        for (let document of containerDocuments) {
-          if (allDocuments.find(doc => doc.id == document.id)) {
-            sortedDocuments.push(document);
-          }
-        }
-      }
-      this.sortedDocuments = A(sortedDocuments);
+    // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
+    const documentContainer = yield this.args.documentContainer;
+    const containerDocuments = yield documentContainer.sortedDocuments;
+    if (this.args.lastDocument) {
+      const i = containerDocuments.indexOf(this.args.lastDocument);
+      this.sortedDocuments = A(containerDocuments.slice(0, i+1));
     } else {
-      // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
-      const documentContainer = yield this.args.documentContainer;
-      const containerDocuments = yield documentContainer.sortedDocuments;
       this.sortedDocuments = A(containerDocuments);
     }
   }
@@ -93,7 +73,6 @@ export default class DocumentLink extends Component {
     this.isOpenUploadModal = true;
   }
 
-
   @task
   *uploadDocument(file) {
     // ensure we're working on the most recent state of the document container
@@ -103,7 +82,6 @@ export default class DocumentLink extends Component {
     const previousDocument = yield documentContainer.lastDocument;
     const previousAccessLevel = yield previousDocument.accessLevel;
     const now = moment().utc().toDate();
-    this.uploadedFile = file;
     this.newDocument = this.store.createRecord('document-version', {
       created: now,
       modified: now,
@@ -118,48 +96,11 @@ export default class DocumentLink extends Component {
     this.newDocument.set('name', documentName);
   }
 
-  @task // TODO refactor to DDAU pattern and let wrapping component handle this
+  @task
   *addDocument() {
     try {
-      yield this.newDocument.save(); // links the document to the documentContainer
-
-      if (this.itemType == 'agendaitem') {
-        // Link document to subcase related to the agendaitem
-        const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
-        const subcase = yield agendaActivity.subcase;
-        const currentSubcaseDocuments = yield subcase.hasMany('documentVersions').reload();
-        currentSubcaseDocuments.insertAt(0, this.newDocument);
-        yield subcase.save();
-
-        // Link document to agendaitem
-        setNotYetFormallyOk(this.args.agendaitemOrSubcase);
-        yield this.args.agendaitemOrSubcase.save();
-        yield addDocumentToAgendaitem(this.args.agendaitemOrSubcase, this.newDocument);
-        yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
-      } else if (this.itemType == 'subcase') {
-        // Link document to all agendaitems that are related to the subcase via an agendaActivity
-        // and related to an agenda in the design status
-        const agendaitems = yield this.store.query('agendaitem', {
-          'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
-          'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id
-        });
-        const agendaitemUpdates = agendaitems.map(async (agendaitem) => {
-          await addDocumentToAgendaitem(agendaitem, this.newDocument);
-          await agendaitem.hasMany('documentVersions').reload();
-          setNotYetFormallyOk(agendaitem);
-          await destroyApprovalsOfAgendaitem(agendaitem);
-          await agendaitem.save();
-        });
-        yield all(agendaitemUpdates);
-
-        // Link document to subcase
-        const currentSubcaseDocuments = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
-        // Next line triggers a rerender of the wrapping component, hence needs to be executed as late as possible
-        currentSubcaseDocuments.insertAt(0, this.newDocument);
-        yield this.args.agendaitemOrSubcase.save();
-      }
+      yield this.args.onAddDocument(this.newDocument);
       this.loadData.perform();
-      this.uploadedFile = null;
       this.newDocument = null;
       this.isOpenUploadModal = false;
     } catch (error) {
@@ -171,14 +112,9 @@ export default class DocumentLink extends Component {
 
   @task
   *deleteUploadedDocument() {
-    if (this.uploadedFile && this.uploadedFile.id) {
-      if (this.newDocument) {
-        yield this.fileService.deleteDocumentVersion(this.newDocument);
-      } else {
-        yield this.fileService.deleteFile(this.uploadedFile);
-      }
+    if (this.newDocument) {
+      yield this.fileService.deleteDocumentVersion(this.newDocument);
       this.newDocument = null;
-      this.uploadedFile = null;
     }
   }
 

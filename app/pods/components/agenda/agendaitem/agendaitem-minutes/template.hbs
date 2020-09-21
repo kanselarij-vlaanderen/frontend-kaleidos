@@ -33,7 +33,8 @@
       @title={{t "signed-notes-add"}} />
   {{else}}
     <Documents::DocumentLink
-      @documentContainer={{signedDocument}} />
+      @documentContainer={{agendaitem.meetingRecord.signedDocument}}
+      @onAddDocument={{action "addDocument"}} />
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemMinutesEdit

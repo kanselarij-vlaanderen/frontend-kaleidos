@@ -62,6 +62,7 @@
   {{#if this.treatment.report}}
     <Documents::DocumentLink
       @documentContainer={{this.treatment.report}}
+      @onAddDocument={{this.addDocument}}
     />
   {{else}}
     <Utils::AddSignedDocuments

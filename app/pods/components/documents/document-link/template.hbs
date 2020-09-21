@@ -174,22 +174,14 @@
     @isOverlay={{true}}
     @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
-      {{#if this.uploadedFile}}
+      {{#if this.newDocument}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
           @value={{this.newDocument.name}}
           @width={{4}} />
-        <EmberKaleidosWebuniversum::VlUploadedDocument
-          @name={{this.newDocument.file.filename}}
-          @extension={{this.newDocument.file.extension}}
-          @size={{this.newDocument.file.size}}
-          @downloadName={{this.newDocument.file.filename}}
-          @downloadLink={{concat
-                            this.newDocument.file.downloadLink
-                            "?name="
-                            this.newDocument.file.filename
-                        }}
-          @delete={{perform this.deleteUploadedDocument}} />
+        <Documents::DocumentUpload
+          @document={{this.newDocument}}
+          @onDelete={{perform this.deleteUploadedDocument}} />
       {{else}}
         <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadDocument}}/>
       {{/if}}
@@ -200,7 +192,7 @@
       @isLoading={{this.addDocument.isRunning}}
       @cancelAction={{perform this.cancelUploadDocument}}
       @saveAction={{perform this.addDocument}}
-      @disableSave={{not this.uploadedFile}} />
+      @disableSave={{not this.newDocument}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}
