@@ -51,7 +51,7 @@ context('Add files to an agenda', () => {
     // 1 default item treatment exists
     cy.get(agenda.uploadDecisionFile).click();
 
-    cy.contains('Documenten opladen').click();
+    cy.contains('Document opladen').click();
     cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
     cy.get('@fileUploadDialog').within(() => {
