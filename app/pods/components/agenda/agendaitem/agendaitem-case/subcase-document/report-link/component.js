@@ -99,7 +99,9 @@ export default class ReportLink extends Component {
   async uploadFile(uploadedFile) {
     const creationDate = moment().utc()
       .toDate();
-    await this.args.documentContainer.reload();
+    if (await this.args.documentContainer) {
+      await this.args.documentContainer.reload();
+    }
     await this.args.documentContainer.hasMany('documents').reload();
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
