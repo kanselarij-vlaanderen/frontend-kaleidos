@@ -137,7 +137,7 @@ export default class ReportLink extends Component {
     if (!this.currentSession.isEditor) {
       return;
     }
-    this.nameBuffer = this.treatment.report.name;
+    this.nameBuffer = this.args.treatment.report.get('name');
     this.isEditing = true;
   }
 
@@ -148,10 +148,11 @@ export default class ReportLink extends Component {
   }
 
   @action
-  async saveNameChange(doc) {
-    doc.set('modified', moment().toDate());
-    doc.set('name', this.nameBuffer);
-    await doc.save();
+  async saveNameChange() {
+    const report = await this.args.treatment.get('report');
+    report.set('modified', moment().toDate());
+    report.set('name', this.nameBuffer);
+    await report.save();
     if (!this.isDestroyed) {
       this.isEditing = false;
     }
