@@ -188,5 +188,15 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
+    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
+      .click();
+    cy.get('.vlc-status-timeline > li').eq(0)
+      .contains(/Ingediend voor agendering op/);
+    cy.get('.vlc-status-timeline > li').eq(1)
+      .contains(/Geagendeerd op de agenda van/);
+    cy.get('.vlc-status-timeline > li').eq(2)
+      .contains(/Uitgesteld op de agenda van/);
+    cy.get('.vlc-status-timeline > li').eq(3)
+      .contains(/Er is beslist om dit agendapunt uit te stellen/);
   });
 });
