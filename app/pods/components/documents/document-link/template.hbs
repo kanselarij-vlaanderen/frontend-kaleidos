@@ -152,10 +152,7 @@
           {{#if this.isExpandedVersionHistory}}
             <div class="vl-accordion__content js-vl-accordion__content">
               <div class="vl-accordion__panel">
-                {{#each
-                     this.reverseSortedDocuments
-                     as |documentVersion|
-                }}
+                {{#each this.reverseSortedDocuments as |documentVersion|}}
                   <WebComponents::VlDocument
                     @documentVersion={{documentVersion}} />
                 {{/each}}

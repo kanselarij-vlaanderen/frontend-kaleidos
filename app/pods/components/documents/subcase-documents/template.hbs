@@ -44,9 +44,11 @@
       </h4>
     </div>
   </div>
-  Show linked documents here
-  {{!-- TODO create component <Documents::LinkedDocumentList
-       @documents={{@agendaitemOrSubcase.linkedDocuments}} />  --}}
+  {{#unless this.loadData.isRunning}}
+    <Documents::LinkedDocumentList
+      @documents={{this.linkedDocuments}}
+      @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
+  {{/unless}}
   {{#if this.currentSession.isEditor}}
     <div class="vl-u-spacer">
       <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
@@ -93,21 +95,21 @@
 {{/if}}
 {{#if this.isOpenLinkedDocumentModal}}
   <WebComponents::VlModal
-    @closeModal={{action this.toggleIsLinkingOldDocument}}
+    @closeModal={{fn this.cancelLinkDocuments}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
     <div class="vl-modal-dialog__content">
       <Utils::AddExistingDocument
-        @add={{action this.link}}
-        @delete={{action this.unlink}} />
+        @add={{fn this.linkDocument}}
+        @delete={{fn this.unlinkDocument}} />
     </div>
     <WebComponents::VlModalFooter
-      @isLoading={{this.isLoading}}
+      @isLoading={{this.saveLinkedDocuments.isRunning}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "document-link-old"}}
-      @cancelAction={{action this.toggleIsLinkingOldDocument}}
-      @saveAction={{action this.linkDocuments}}
-      @disableSave={{eq documentsToLink.length 0}} />
+      @cancelAction={{fn this.cancelLinkDocuments}}
+      @saveAction={{perform this.saveLinkedDocuments}}
+      @disableSave={{eq this.newLinkedDocuments.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
