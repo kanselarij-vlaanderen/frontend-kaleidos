@@ -92,17 +92,14 @@ export const compareFunction = function(parameterA, parameterB) {
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date); // Date descending (newest first)
-    } catch (exception) { // Only a parses
-      console.warn('An exception occurred', exception);
+    } catch { // Only a parses
       return -1;
     }
-  } catch (exception) {
-    console.warn('An exception occurred', exception);
+  } catch {
     try { // Only b parses
       parameterB.parseMeta();
       return 1;
-    } catch (ex) { // Both don't parse
-      console.warn('An exception occurred', ex);
+    } catch { // Both don't parse
       return parameterA.name.localeCompare(parameterB.name);
     }
   }
