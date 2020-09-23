@@ -412,12 +412,25 @@
 {{#if isShowingWarningOnClose}}
   <WebComponents::VlModalVerify
       @isOverlay={{true}}
-      @message={{t "agenda-has-nok-agendaitems-warning"}}
-      @title={{t "approve-agenda-error"}}
+      @message={{t "close-agenda-message"}}
+      @title={{t "agenda-lock"}}
       @buttonType="warning"
       @verifyButtonText={{t "continue"}}
-      @cancel={{action "cancelLockAgenda"}}
-      @verify={{action "cancelLockAgenda"}}
-      @closeModal={{action "cancelLockAgenda"}}
+      @cancel={{action "cancelCloseAgenda"}}
+      @verify={{action "closeAgendaAction"}}
+      @closeModal={{action "cancelCloseAgenda"}}
+  />
+{{/if}}
+
+{{#if showCloseWarning}}
+  <WebComponents::VlModalVerify
+          @isOverlay={{true}}
+          @message={{t "agenda-has-nok-agendaitems-warning"}}
+          @title={{t "approve-agenda-error"}}
+          @buttonType="warning"
+          @verifyButtonText={{t "continue"}}
+          @cancel={{action "cancelLockAgenda"}}
+          @verify={{action "removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus"}}
+          @closeModal={{action "cancelLockAgenda"}}
   />
 {{/if}}
