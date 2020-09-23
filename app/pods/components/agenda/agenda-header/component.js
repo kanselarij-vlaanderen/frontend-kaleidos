@@ -196,13 +196,6 @@ export default Component.extend(FileSaverMixin, {
       window.print();
     },
 
-    navigateToNotes() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
     navigateToPressAgenda() {
       const {
         currentSession, currentAgenda,

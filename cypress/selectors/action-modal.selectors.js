@@ -3,7 +3,6 @@ const selectors = {
   navigatetosubcases: '[data-test-agenda-header-navigatetosubcases]',
   navigatetodecisions: '[data-test-agenda-header-navigatetodecisions]',
   navigatetonewsletter: '[data-test-agenda-header-navigatetonewsletter]',
-  navigatetonotes: '[data-test-agenda-header-navigatetonotes]',
   navigatetopressagenda: '[data-test-agenda-header-navigatetopressagenda]',
   toggleeditingsession: '[data-test-agenda-header-toggleeditingsession]',
   selectsignature: '[data-test-agenda-header-selectsignature]',

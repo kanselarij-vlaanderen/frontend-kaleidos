@@ -46,7 +46,6 @@ function openActionModal() {
   cy.get(actionModal.navigatetosubcases).should(BE_VISIBLE);
   cy.get(actionModal.navigatetodecisions).should(BE_VISIBLE);
   cy.get(actionModal.navigatetonewsletter).should(BE_VISIBLE);
-  cy.get(actionModal.navigatetonotes).should(BE_VISIBLE);
   cy.get(actionModal.navigatetopressagenda).should(BE_VISIBLE);
   cy.get(actionModal.toggleeditingsession).should(BE_VISIBLE);
   cy.get(actionModal.selectsignature).should(BE_VISIBLE);

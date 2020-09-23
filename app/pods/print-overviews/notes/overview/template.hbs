@@ -1,9 +1,0 @@
-{{title (await documentTitle) replace=true}}
-<div class="vlc-scroll-wrapper__body">
-  {{agenda/agenda-minutes
-    title=(await title)
-    currentSession=(await model.meeting)
-    definite=definite
-    agendaitemGroups=(await model.groups)
-  }}
-</div>

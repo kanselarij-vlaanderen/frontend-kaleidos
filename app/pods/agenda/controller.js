@@ -33,14 +33,6 @@ export default Controller.extend({
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id);
     },
 
-    navigateToNotes(currentSessionId, currentAgendaId) {
-      this.transitionToRoute(
-        'print-overviews.notes.agendaitems',
-        currentSessionId,
-        currentAgendaId
-      );
-    },
-
     navigateToDecisions(currentSessionId, currentAgendaId) {
       this.transitionToRoute(
         'print-overviews.decisions.agendaitems',
