@@ -37,24 +37,24 @@ export default class DocumentList extends Component {
   @task
   *loadData() {
     const documents = yield this.args.documents;
-    const documentIds = documents.map(document => document.get('id'));
+    const documentIds = documents.map((document) => document.get('id'));
 
     // Get a list of unique document containers of the documents
     const uniqueDocumentContainers = new Set();
-    for (let i = 0; i < documents.length; i = i + batchSize) {
-      const batch = documentIds.slice(i, i + batchSize);
+    for (let idx = 0; idx < documents.length; idx = idx + batchSize) {
+      const batch = documentIds.slice(idx, idx + batchSize);
       const documentContainers = yield this.store.query('document', {
         'filter[documents][id]': batch.join(','),
         include: 'type,documents.access-level,documents.previous-version,documents.next-version',
-        page: { size: batch.length }
+        page: {
+          size: batch.length,
+        },
       });
-      documentContainers.forEach(container => uniqueDocumentContainers.add(container));
+      documentContainers.forEach((container) => uniqueDocumentContainers.add(container));
     }
 
     // For each document container, determine the lastest version to display
-    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => {
-      return this.createDocumentHistory.perform(container, documents);
-    }));
+    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, documents)));
   }
 
   @task
@@ -65,7 +65,7 @@ export default class DocumentList extends Component {
     const containerDocuments = yield documentContainer.documents;
 
     const heads = [];
-    for (let document of containerDocuments.toArray()) {
+    for (const document of containerDocuments.toArray()) {
       const previousDocument = yield document.previousVersion;
       if (!previousDocument) {
         heads.push(document);
@@ -89,8 +89,8 @@ export default class DocumentList extends Component {
     // Loop over the reverse sorted documents and find the latest version that is also included
     // in all documents.
     const reverseSortedContainerDocuments = sortedContainerDocuments.slice(0).reverse();
-    for (let document of reverseSortedContainerDocuments) {
-      const matchingDocument = allDocuments.find(doc => doc.get('id') == document.get('id'));
+    for (const document of reverseSortedContainerDocuments) {
+      const matchingDocument = allDocuments.find((doc) => doc.get('id') === document.get('id'));
       if (matchingDocument) {
         history.lastDocument = matchingDocument;
         break;
@@ -103,7 +103,7 @@ export default class DocumentList extends Component {
 
   @task
   *saveEditDocuments() {
-    const updatePromises = this.documentHistories.map(async (history) => {
+    const updatePromises = this.documentHistories.map(async(history) => {
       if (history.lastDocument.softDeleted) {
         this.fileService.deleteDocument(history.documentContainer);
       } else {
@@ -117,14 +117,14 @@ export default class DocumentList extends Component {
 
   @task
   *cancelEditDocuments() {
-    this.documentHistories.map(async (history) => {
+    const rollbacks = this.documentHistories.map(async(history) => {
       history.lastDocument.set('softDeleted', false);
       history.lastDocument.rollbackAttributes();
       await history.lastDocument.belongsTo('accessLevel').reload();
       history.documentContainer.rollbackAttributes();
       history.documentContainer.belongsTo('type').reload();
     });
+    yield all(rollbacks);
     this.args.onCloseEdit();
   }
-
 }

@@ -29,8 +29,10 @@ export default class MeetingDocuments extends Component {
     this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
     if (!this.defaultAccessLevel) {
       const accessLevels = yield this.store.query('access-level', {
-        page: { size: 1 },
-        'filter[:id:]': config.internRegeringAccessLevelId
+        page: {
+          size: 1,
+        },
+        'filter[:id:]': config.internRegeringAccessLevelId,
       });
       this.defaultAccessLevel = accessLevels.firstObject;
     }
@@ -53,11 +55,12 @@ export default class MeetingDocuments extends Component {
     this.isOpenDocumentUploadModal = true;
   }
 
-  @task
-  *uploadDocument(file) {
-    const now = moment().utc().toDate();
+  @action
+  uploadDocument(file) {
+    const now = moment().utc()
+      .toDate();
     const documentContainer = this.store.createRecord('document', {
-      created: now
+      created: now,
     });
     const document = this.store.createRecord('document-version', {
       created: now,
@@ -66,14 +69,14 @@ export default class MeetingDocuments extends Component {
       accessLevel: this.defaultAccessLevel,
       confidential: false,
       name: file.filenameWithoutExtension,
-      documentContainer: documentContainer
+      documentContainer: documentContainer,
     });
     this.newDocuments = A([document, ...this.newDocuments]);
   }
 
   @task
   *saveDocuments() {
-    const savePromises = this.newDocuments.map(async (document) => {
+    const savePromises = this.newDocuments.map(async(document) => {
       try {
         this.saveDocument.perform(document);
       } catch (error) {
@@ -112,7 +115,7 @@ export default class MeetingDocuments extends Component {
 
   @task
   *cancelUploadDocuments() {
-    const deletePromises = this.newDocuments.map(document => this.deleteDocument.perform(document));
+    const deletePromises = this.newDocuments.map((document) => this.deleteDocument.perform(document));
     yield all(deletePromises);
     this.newDocuments = A();
     this.isOpenDocumentUploadModal = false;

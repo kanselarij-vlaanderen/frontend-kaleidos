@@ -73,7 +73,7 @@
       {{else}}
         <FileUploader
           @multipleFiles={{true}}
-          @uploadedFileAction={{perform this.uploadDocument}} />
+          @uploadedFileAction={{this.uploadDocument}} />
         <div class="upload-container">
           {{#each this.newDocuments as |document|}}
             <Documents::DocumentUpload

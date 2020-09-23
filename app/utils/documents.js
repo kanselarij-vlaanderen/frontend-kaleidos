@@ -47,16 +47,17 @@ export const addDocumentToAgendaitem = async function(agendaitem, document) {
   const body = {
     data: {
       type: 'documents',
-      id: document.get('id')
-    }
+      id: document.get('id'),
+    },
   };
   const response = await fetch(endpoint, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/vnd.api+json'
+      'Content-Type': 'application/vnd.api+json',
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
-  if (!response.ok)
+  if (!response.ok) {
     throw new Error(`Failed to add document ${document.get('id')} to agendaitem ${agendaitem.get('id')}`);
+  }
 };

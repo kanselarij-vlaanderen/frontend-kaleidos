@@ -36,8 +36,10 @@ export default class DocumentLink extends Component {
     this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
     if (!this.defaultAccessLevel) {
       const accessLevels = yield this.store.query('access-level', {
-        page: { size: 1 },
-        'filter[:id:]': config.internRegeringAccessLevelId
+        page: {
+          size: 1,
+        },
+        'filter[:id:]': config.internRegeringAccessLevelId,
       });
       this.defaultAccessLevel = accessLevels.firstObject;
     }
@@ -46,8 +48,8 @@ export default class DocumentLink extends Component {
     const documentContainer = yield this.args.documentContainer;
     const containerDocuments = yield documentContainer.sortedDocuments;
     if (this.args.lastDocument) {
-      const i = containerDocuments.indexOf(this.args.lastDocument);
-      this.sortedDocuments = A(containerDocuments.slice(0, i+1));
+      const idx = containerDocuments.indexOf(this.args.lastDocument);
+      this.sortedDocuments = A(containerDocuments.slice(0, idx + 1));
     } else {
       this.sortedDocuments = A(containerDocuments);
     }
@@ -81,7 +83,8 @@ export default class DocumentLink extends Component {
 
     const previousDocument = yield documentContainer.lastDocument;
     const previousAccessLevel = yield previousDocument.accessLevel;
-    const now = moment().utc().toDate();
+    const now = moment().utc()
+      .toDate();
     this.newDocument = this.store.createRecord('document-version', {
       created: now,
       modified: now,
@@ -89,7 +92,7 @@ export default class DocumentLink extends Component {
       previousVersion: previousDocument,
       confidential: previousDocument.confidential,
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
-      documentContainer: documentContainer
+      documentContainer: documentContainer,
     });
     versions.pushObject(this.newDocument);
     const documentName = new VRDocumentName(previousDocument.name).withOtherVersionSuffix(versions.length);
@@ -188,5 +191,4 @@ export default class DocumentLink extends Component {
     const documentContainer = yield this.args.documentContainer;
     yield this.fileService.deleteDocumentWithUndo.perform(documentContainer);
   }
-
 }

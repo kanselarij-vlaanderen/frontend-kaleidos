@@ -33,5 +33,4 @@ export default class DocumentList extends Component {
   softDelete() {
     this.args.document.set('softDeleted', true);
   }
-
 }

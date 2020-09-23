@@ -20,7 +20,9 @@ export default class DocumentUpload extends Component {
   *loadData() {
     if (!this.documentTypes.length) {
       this.documentTypes = yield this.store.query('document-type', {
-        page: { size: 50 }
+        page: {
+          size: 50,
+        },
       });
     }
 

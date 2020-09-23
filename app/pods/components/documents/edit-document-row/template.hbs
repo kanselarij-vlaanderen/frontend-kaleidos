@@ -11,31 +11,31 @@
   </td>
   <td>
     {{utils/model-selector
-        data-test-document-type
-        modelName="document-type"
-        searchField="label"
-        propertyToShow="label"
-        sortField="priority"
-        selectedItems=this.documentContainer.type
-        selectModel=(fn this.selectDocumentType)
+      data-test-document-type
+      modelName="document-type"
+      searchField="label"
+      propertyToShow="label"
+      sortField="priority"
+      selectedItems=this.documentContainer.type
+      selectModel=(fn this.selectDocumentType)
     }}
   </td>
   <td>
     {{utils/model-selector
-        data-test-document-accesslevel
-        modelName="access-level"
-        searchField="label"
-        allowClear=true
-        propertyToShow="label"
-        readOnly=@document.confidential
-        sortField="label"
-        selectedItems=@document.accessLevel
-        selectModel=(fn this.selectAccessLevel)
+      data-test-document-accesslevel
+      modelName="access-level"
+      searchField="label"
+      allowClear=true
+      propertyToShow="label"
+      readOnly=@document.confidential
+      sortField="label"
+      selectedItems=@document.accessLevel
+      selectModel=(fn this.selectAccessLevel)
     }}
   </td>
   <td>
     {{web-components/vl-toggle
-        value=(mut @document.confidential)
+      value=(mut @document.confidential)
     }}
   </td>
   <td class="vl-u-align-right">

@@ -22,8 +22,8 @@ export default class LinkedDocumentLink extends Component {
   *loadData() {
     const containerDocuments = yield this.args.documentContainer.sortedDocuments;
     if (this.args.lastDocument) {
-      const i = containerDocuments.indexOf(this.args.lastDocument);
-      this.sortedDocuments = A(containerDocuments.slice(0, i+1));
+      const idx = containerDocuments.indexOf(this.args.lastDocument);
+      this.sortedDocuments = A(containerDocuments.slice(0, idx + 1));
     } else {
       this.sortedDocuments = A(containerDocuments);
     }
@@ -57,5 +57,4 @@ export default class LinkedDocumentLink extends Component {
     this.args.onUnlinkDocumentContainer(this.args.documentContainer);
     this.isOpenVerifyDeleteModal = false;
   }
-
 }

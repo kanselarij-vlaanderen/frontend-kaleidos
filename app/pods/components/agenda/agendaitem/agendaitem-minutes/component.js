@@ -47,6 +47,6 @@ export default Component.extend({
 
     async addDocument(document) {
       await document.save();
-    }
+    },
   },
 });
