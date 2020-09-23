@@ -13,7 +13,8 @@ import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
-  getListOfAgendaitemsThatAreNotFormallyOk
+  getListOfAgendaitemsThatAreNotFormallyOk,
+  getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus
 } from 'fe-redpencil/utils/agendaitem-utils';
 import {
   constructArchiveName,
@@ -225,21 +226,13 @@ export default Component.extend(FileSaverMixin, {
   },
   actions: {
     async removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus() {
-      const agendaitemsFromCurrentAgenda = await this.currentAgenda.get('agendaitems').toArray();
-      const agendaitemsToRemoveFromCurrentAgenda = agendaitemsFromCurrentAgenda.filter((agendaitem) => {
-        const formallyOkOption = CONFIG.formallyOkOptions.find((option) => option.label === 'Formeel OK');
-        if (formallyOkOption) {
-          const formallyOkUri = formallyOkOption.uri;
-          if (formallyOkUri !== agendaitem.formallyOk) {
-            return agendaitem;
-          }
+      const agendaitemsToRemoveFromCurrentAgenda = await getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus(this.currentAgenda);
+      if (agendaitemsToRemoveFromCurrentAgenda.length > 0) {
+        for (const agendaitem of agendaitemsToRemoveFromCurrentAgenda) {
+          await this.agendaService.deleteAgendaitem(agendaitem);
         }
-      });
-
-      for (const agendaitem of agendaitemsToRemoveFromCurrentAgenda) {
-        await this.agendaService.deleteAgendaitem(agendaitem);
+        this.set('showCloseWarning', false);
       }
-      this.set('showCloseWarning', false);
       const isClosable = await this.currentAgenda.get('isClosable');
       if (isClosable) {
         this.set('isShowingWarningOnClose', true);
@@ -307,7 +300,8 @@ export default Component.extend(FileSaverMixin, {
       await this.approveAgenda(session);
     },
 
-    async approveAndCloseAgenda(session) {
+    async approveAndCloseAgenda() {
+      const session = this.get('currentSession');
       const isClosable = await this.currentAgenda.get('isClosable');
       if (isClosable) {
         const meetingOfAgenda = await this.currentAgenda.get('createdFor');
@@ -340,8 +334,9 @@ export default Component.extend(FileSaverMixin, {
             this.changeLoading();
             this.set('isApprovingAgenda', false);
           });
+        this.set('showApproveAndCloseWarning', false);
       } else {
-        this.set('isShowingWarningOnClose', true);
+        this.set('showCloseWarning', true);
       }
     },
 
@@ -352,13 +347,23 @@ export default Component.extend(FileSaverMixin, {
       this.set('isShowingWarningOnClose', false);
     },
 
-    lockAgendaAction() {
-      this.set('showCloseWarning', true);
+    async lockAgendaAction() {
+      const isClosable = await this.currentAgenda.get('isClosable');
+      const isApproved = await this.currentAgenda.get('isApproved');
+      if (isClosable) {
+        if (isApproved) {
+          this.set('isShowingWarningOnClose', true);
+        } else {
+          this.set('showApproveAndCloseWarning', true);
+        }
+      } else {
+        this.set('showCloseWarning', true);
+      }
     },
 
     async closeAgendaAction() {
       await this.closeAgenda();
-      this.set('showCloseWarning', false);
+      this.set('isShowingWarningOnClose', false);
     },
 
     showApproveAllAgendaitemsWarning() {

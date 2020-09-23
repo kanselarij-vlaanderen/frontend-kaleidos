@@ -257,4 +257,17 @@ export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgend
   }
 };
 
+export const getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus = async(currentAgenda) => {
+  const agendaitemsFromCurrentAgenda = await currentAgenda.get('agendaitems').toArray();
+  return agendaitemsFromCurrentAgenda.filter((agendaitem) => {
+    const formallyOkOption = CONFIG.formallyOkOptions.find((option) => option.label === 'Formeel OK');
+    if (formallyOkOption) {
+      const formallyOkUri = formallyOkOption.uri;
+      if (formallyOkUri !== agendaitem.formallyOk) {
+        return agendaitem;
+      }
+    }
+  });
+};
+
 

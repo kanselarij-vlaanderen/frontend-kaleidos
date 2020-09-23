@@ -74,7 +74,7 @@
                     <li class="vlc-dropdown-menu__item">
                       <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
                         {{action attacher.hide}}
-                        {{action "approveAndCloseAgenda" currentSession}}
+                        {{action "lockAgendaAction"}}
                       >
                         {{await currentSession.latestAgendaName}} {{t "approve-small-and-close"}}
                       </button>
@@ -432,5 +432,18 @@
           @cancel={{action "cancelLockAgenda"}}
           @verify={{action "removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus"}}
           @closeModal={{action "cancelLockAgenda"}}
+  />
+{{/if}}
+
+{{#if showApproveAndCloseWarning}}
+  <WebComponents::VlModalVerify
+          @isOverlay={{true}}
+          @message={{t "close-agenda-message"}}
+          @title={{t "agenda-lock"}}
+          @buttonType="warning"
+          @verifyButtonText={{t "continue"}}
+          @cancel={{action "cancelCloseAgenda"}}
+          @verify={{action "approveAndCloseAgenda" session}}
+          @closeModal={{action "cancelCloseAgenda"}}
   />
 {{/if}}
