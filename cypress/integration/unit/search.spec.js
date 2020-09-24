@@ -234,12 +234,16 @@ context('Search tests', () => {
       '🔍',
       'Principiële',
       'principiele',
+      'principie',
+      'princ',
       /* 'princi', // TODO stemming less search does not yet fully work here.*/
       'Lāna',
       'lana',
+      'lan',
       'Hawaï',
       'hawaï',
       'hawai',
+      'hawa',
       'search',
       'accénte', // this prefix (autocomplete search) does work - probably also stemming related.
       /* 'accent', // TODO autocomplete search does not yet work here.*/
