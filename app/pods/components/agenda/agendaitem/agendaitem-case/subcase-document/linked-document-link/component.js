@@ -14,7 +14,7 @@ export default class linkedDocumentLink extends Component {
   classNameBindings = ['aboutToDelete'];
 
   @tracked isShowingPieces = false
-  @tracked piecesToDelete = null;
+  @tracked containerToUnlink = null;
   @tracked isVerifyingUnlink = false;
   @tracked lastPiece = null;
   @tracked mySortedPieces;
@@ -68,7 +68,8 @@ export default class linkedDocumentLink extends Component {
   }
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-  async unlinkPieces(pieces, model) {
+  async unlinkPieces(documentContainer, model) {
+    const pieces = await documentContainer.get('pieces');
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
     // TODO linking documents is only possible for agendaitem and subcase, this code is not needed ? to check
@@ -98,7 +99,7 @@ export default class linkedDocumentLink extends Component {
     } else {
       model.set('linkedPieces', A([]));
     }
-    const savedModalPromise = model.save();
+    const savedModalPromise = await model.save();
     return savedModalPromise;
   }
 
@@ -112,24 +113,21 @@ export default class linkedDocumentLink extends Component {
 
   @action
   cancel() {
-    this.piecesToDelete = null;
+    this.containerToUnlink = null;
     this.isVerifyingUnlink = false;
   }
 
   @action
   async verify() {
-    const {
-      pieces,
-    } = this.piecesToDelete;
-    await this.unlinkPieces(pieces, this.args.agendaitemOrSubcaseOrMeeting);
+    await this.unlinkPieces(this.containerToUnlink, this.args.agendaitemOrSubcaseOrMeeting);
     if (!this.isDestroyed) {
       this.isVerifyingUnlink = false;
     }
   }
 
   @action
-  unlinkPiece(document) {
-    this.piecesToDelete = document;
+  unlinkContainer(documentContainer) {
+    this.containerToUnlink = documentContainer;
     this.isVerifyingUnlink = true;
   }
 }
