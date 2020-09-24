@@ -22,11 +22,9 @@ export default ModelWithModifier.extend({
   modified: attr('datetime'),
   shortTitle: attr('string'),
   title: attr('string'),
-  subcaseIdentifier: attr('string'),
   showAsRemark: attr('boolean'),
   confidential: attr('boolean'),
   isArchived: attr('boolean'),
-  concluded: attr('boolean'),
   subcaseName: attr('string'),
 
   consulationRequests: hasMany('consulation-request', {
@@ -36,7 +34,6 @@ export default ModelWithModifier.extend({
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
   }),
-  remarks: hasMany('remark'),
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),

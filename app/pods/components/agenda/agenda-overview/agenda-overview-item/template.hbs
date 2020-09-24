@@ -126,7 +126,18 @@
                 <div class="vlc-agenda-items__icons">
                   <div class="vl-u-display-flex vlc-agenda-items__icons">
                     {{#if (not newsletterInfo.inNewsletter)}}
-                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
+                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter">
+                        {{#attach-tooltip
+                          arrow="true"
+                          animation="shift"
+                          placement="top"
+                          class="ember-attacher-tooltip"
+                        }}
+                          <p>
+                            {{t "not-visible-in-newsletter"}}
+                          </p>
+                        {{/attach-tooltip}}
+                      </i>
                     {{/if}}
                     {{#if (await @agendaitem.checkAdded)}}
                       <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">

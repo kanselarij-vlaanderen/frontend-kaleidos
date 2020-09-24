@@ -88,15 +88,13 @@
                 </li>
               {{/if}}
               <li class="vlc-dropdown-menu__item">
-                {{#if (not await subcase.concluded)}}
-                  <a href=""
-                     class="vl-link vl-link--block"
-                    {{action attacher.hide}}
-                    {{action "triggerMoveSubcaseDialog" }}
-                  >
-                    {{t "move-subcase"}}
-                  </a>
-                {{/if}}
+                <a href=""
+                   class="vl-link vl-link--block"
+                  {{action attacher.hide}}
+                  {{action "triggerMoveSubcaseDialog" }}
+                >
+                  {{t "move-subcase"}}
+                </a>
               </li>
             </ul>
           {{/attach-popover}}
