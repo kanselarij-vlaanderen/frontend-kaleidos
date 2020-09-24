@@ -166,7 +166,7 @@
       as |announcement|
       }}
         {{#if
-          (or (not isShowingChanges) (and isShowingChanges (await agendaitem.hasChanges)))
+          (or (not isShowingChanges) (and isShowingChanges (await announcement.hasChanges)))
         }}
           <div class="vlc-agenda-items__sub-item">
             <Agenda::AgendaOverview::AgendaOverviewItem
