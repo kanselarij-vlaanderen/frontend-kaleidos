@@ -5,6 +5,7 @@ import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
+import { sortDocuments } from 'fe-redpencil/utils/documents';
 
 const batchSize = 20;
 
@@ -31,7 +32,15 @@ export default class DocumentList extends Component {
   }
 
   get sortedDocumentHistories() {
-    return this.documentHistories; // TODO add sorting by document container type
+    const containers = this.documentHistories.map((history) => history.documentContainer);
+    const documents = this.documentHistories.map((history) => history.lastDocument);
+    const sortedContainers = sortDocuments(documents, containers);
+    const sortedHistories = A([]);
+    for (const container of sortedContainers) {
+      const history = this.documentHistories.find((history) => history.documentContainer.get('id') == container.get('id'));
+      sortedHistories.pushObject(history);
+    }
+    return sortedHistories;
   }
 
   @task
