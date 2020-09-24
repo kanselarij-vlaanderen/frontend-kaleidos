@@ -103,7 +103,7 @@ export default class SubcaseDocuments extends Component {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.newDocuments = A([document, ...this.newDocuments]);
+    this.newDocuments.pushObject(document);
   }
 
   @task

@@ -36,7 +36,7 @@ function addDocuments(files) {
       cy.get('.vl-uploaded-document', {
         timeout: 10000,
       }).should('have.length', index + 1)
-        .eq(index)
+        .eq(0)
         .within(() => {
           if (file.newFileName) {
             cy.get('.vlc-input-field-block').eq(0)
@@ -50,7 +50,7 @@ function addDocuments(files) {
 
     if (file.fileType) {
       cy.get('@fileUploadDialog').within(() => {
-        cy.get('.vl-uploaded-document').eq(index)
+        cy.get('.vl-uploaded-document').eq(0)
           .within(() => {
             cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
             cy.get('.vlc-input-field-block').eq(1)
