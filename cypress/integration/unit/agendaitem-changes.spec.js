@@ -39,7 +39,7 @@ context('Agendaitem changes tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
     cy.setFormalOkOnItemWithIndex(2);
     cy.toggleShowChanges(true);
-    cy.get('li.vlc-agenda-items__sub-item').should('have.length', 3)
+    cy.get('.vlc-agenda-items__sub-item').should('have.length', 3)
       .then(() => {
         cy.agendaitemExists(subcaseTitle2);
         cy.setFormalOkOnItemWithIndex(2);
@@ -58,29 +58,6 @@ context('Agendaitem changes tests', () => {
     cy.agendaitemExists(subcaseTitle1);
   });
 
-  it('should check the printable version of the agenda', () => { // TODO KAS-1137 move to last test ?
-    cy.visit(agendaURL);
-    cy.changeSelectedAgenda('Ontwerpagenda');
-    // when navigating to print view, should contain all relevant info
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(agenda.navigateToPrintableAgenda).click();
-    cy.wait(1000);
-    cy.get(agenda.printHeaderTitle, {
-      timeout: 80000,
-    }).should('exist')
-      .should('be.visible');
-    cy.get(agenda.printHeaderTitle).contains('Vergadering van');
-
-    cy.get(agenda.printContainer).should('exist')
-      .should('be.visible');
-
-    // this could fail with more or changed default data, you need at least 1 previous agenda when starting this test
-    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van ');
-    cy.get(agenda.printContainer).contains(subcaseTitle1);
-    cy.get(agenda.printContainer).contains(subcaseTitle2);
-    cy.get(agenda.printContainer).contains('Cypress test voor het testen van toegevoegde documenten');
-    // test
-  });
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
     cy.openCase(caseTitle);
@@ -92,7 +69,7 @@ context('Agendaitem changes tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle3, false);
     cy.setFormalOkOnItemWithIndex(4);
     cy.toggleShowChanges(true);
-    cy.get('li.vlc-agenda-items__sub-item').should('have.length', 2)
+    cy.get('.vlc-agenda-items__sub-item').should('have.length', 2)
       .then(() => {
         cy.agendaitemExists(subcaseTitle3);
         cy.approveDesignAgenda();
@@ -117,6 +94,30 @@ context('Agendaitem changes tests', () => {
     cy.wait(2000);
     cy.approveDesignAgenda();
     cy.toggleShowChanges(true);
-    cy.get('li.vlc-agenda-items__sub-item').should('have.length', 0); // TODO KAS-1137 should not exist or is this ok ?
+    cy.get('.vlc-agenda-items__sub-item').should('have.length', 0);
+  });
+
+  it('should check the printable version of the agenda', () => {
+    cy.visit(agendaURL);
+    cy.changeSelectedAgenda('Ontwerpagenda');
+    // when navigating to print view, should contain all relevant info
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(agenda.navigateToPrintableAgenda).click();
+    cy.wait(1000);
+    cy.get(agenda.printHeaderTitle, {
+      timeout: 80000,
+    }).should('exist')
+      .should('be.visible');
+    cy.get(agenda.printHeaderTitle).contains('Vergadering van');
+
+    cy.get(agenda.printContainer).should('exist')
+      .should('be.visible');
+
+    // TODO check the order of the items is as expected?
+    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van ');
+    cy.get(agenda.printContainer).contains(subcaseTitle1);
+    cy.get(agenda.printContainer).contains('testId=1589276690: Cypress test dossier 1 test stap 1');
+    cy.get(agenda.printContainer).contains(subcaseTitle2);
+    cy.get(agenda.printContainer).contains(subcaseTitle3);
   });
 });
