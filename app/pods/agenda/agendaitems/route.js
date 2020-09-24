@@ -1,61 +1,61 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
-import { ajax } from 'fe-redpencil/utils/ajax';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default Route.extend({
-  sessionService: inject(),
-  agendaService: inject(),
-  queryParams: {
+export default class AgendaItemsAgendaRoute extends Route {
+  queryParams = {
     filter: {
-      refreshModel: true,
+      refreshModel: false,
     },
-  },
+  };
 
-  async model(params) {
+  @service sessionService;
+  @service agendaService;
+
+  async model() {
     const {
       agenda,
     } = this.modelFor('agenda');
-    let agendaitems = await this.store.query('agendaitem', {
+    const agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       include: 'mandatees',
     });
-    if (!isEmpty(params.filter)) {
-      const matchingAgendaitems = await this.getMatchingAgendaitems(params.filter);
-      agendaitems = agendaitems.filter((agendaitem) => matchingAgendaitems[agendaitem.id]);
-    }
 
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     this.set('sessionService.selectedAgendaitem', null);
 
     return hash({
-      currentAgenda: agenda,
+      currentAgenda: agenda, // TODO: figure out where this still gets used and remove. This can be fetched from parent routes' model
       announcements,
       agendaitems,
     });
-  },
+  }
+
+  afterModel(_, transition) { // eslint-disable-line
+    if (!isEmpty(transition.to.queryParams.filter)) {
+      const controller = this.controllerFor('agenda.agendaitems');
+      controller.filterTask.perform();
+    }
+  }
+
+  setupController(controller, model) {
+    super.setupController(...arguments);
+    const {
+      agenda,
+      meeting,
+    } = this.modelFor('agenda');
+    controller.set('meeting', meeting);
+    controller.set('agenda', agenda);
+
+    controller.set('filteredAgendaitems', model.agendaitems);
+    controller.set('filteredAnnouncements', model.announcements);
+  }
 
   @action
   reloadModel() {
     this.refresh();
-  },
-
-  async getMatchingAgendaitems(filter) {
-    if (isEmpty(filter)) {
-      return {};
-    }
-    const meetingId = await this.get('sessionService.currentSession.id');
-    const searchResults = await ajax({
-      method: 'GET',
-      url: `/agendaitems/search?filter[meetingId]=${meetingId}&filter[:sqs:title,shortTitle,data,titlePress,textPress,mandateeName,theme]=${filter}&page[size]=2000`,
-    });
-    const searchMap = {};
-    searchResults.data.map((searchResult) => {
-      searchMap[searchResult.id] = true;
-    });
-    return searchMap;
-  },
-});
+  }
+}
