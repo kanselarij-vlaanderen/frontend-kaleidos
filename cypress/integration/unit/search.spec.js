@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach, afterEach, Cypress */
+/* global context, before, it, cy,beforeEach, afterEach, Cypress, xit */
 // / <reference types="Cypress" />
 import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
@@ -10,6 +10,10 @@ function currentTimestamp() {
 
 context('Search tests', () => {
   const options = [5, 10, 50, 100];
+
+  const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
+    .day(1)
+    .subtract(1, 'day');
 
   before(() => {
     cy.server();
@@ -58,9 +62,6 @@ context('Search tests', () => {
 
     const PLACE = 'Lāna Hawaï eiland';
     const KIND = 'Ministerraad';
-    const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
-      .subtract(1, 'day')
-      .day(1);
     cy.createAgenda(KIND, dateToCreateAgenda, PLACE);
     cy.openAgendaForDate(dateToCreateAgenda);
 
@@ -121,6 +122,19 @@ context('Search tests', () => {
       .click();
   });
 
+  it('Search for non existing searchterm in agendaitems', () => {
+    cy.visit('/zoeken/agendapunten');
+    cy.get('[data-test-searchfield]').clear();
+    cy.get('[data-test-searchfield]').type('nietstezienhier');
+
+    cy.server();
+    cy.route('GET', '/agendaitems/search?**').as('searchCall');
+    cy.get('button[data-test-trigger-search]').click();
+    cy.wait('@searchCall');
+
+    cy.get('[data-table]').should('not.exist');
+  });
+
   it('Search for funky searchterms in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
     const wordsToCheck1 = [
@@ -171,7 +185,7 @@ context('Search tests', () => {
     });
   });
 
-  it('Search for funky searchterms on dossiers ONLY beslissingsfiche', () => {
+  xit('Search for funky searchterms on dossiers ONLY beslissingsfiche', () => {
     cy.visit('/zoeken/dossiers');
     const wordsFromPdf = [
       'krokkettenmaker',
@@ -189,6 +203,59 @@ context('Search tests', () => {
       cy.wait('@decisionsSearchCall');
 
       cy.get('[data-table]').contains('korte titel for batterij');
+    });
+  });
+
+  it('Search for funky searchterms in agenda overview', () => {
+    cy.openAgendaForDate(dateToCreateAgenda);
+
+    cy.get('.vlc-agenda-items').contains('titel for batterij');
+    cy.get('.vlc-agenda-items').contains('titel for search');
+
+    cy.server();
+    cy.route('GET', '/agendaitems/**').as('searchCallOverview');
+
+    cy.get('[data-test-trigger-search-input]').clear();
+    cy.get('[data-test-trigger-search-input]').type('IKBESTANIET');
+    cy.wait(200);
+    cy.wait('@searchCallOverview');
+
+    // Should find nothing.
+    cy.get('.vlc-agenda-items').contains('Er zijn nog geen agendapunten in deze agenda.');
+    cy.get('.vlc-agenda-items').contains('Er zijn nog geen mededelingen in deze agenda.');
+
+    const wordsToCheck1 = [
+      'peerd',
+      /* 'peer', // TODO autocomplete search does not yet work here.*/
+      /* 'batter', // TODO autocomplete search does not yet work here.*/
+      'batterij'
+    ];
+    const wordsToCheck2 = [
+      '🔍',
+      'Principiële',
+      'principiele',
+      /* 'princi', // TODO stemming less search does not yet fully work here.*/
+      'Lāna',
+      'lana',
+      'Hawaï',
+      'hawaï',
+      'hawai',
+      'search',
+      'accénte', // this prefix (autocomplete search) does work - probably also stemming related.
+      /* 'accent', // TODO autocomplete search does not yet work here.*/
+      'accénten'
+    ];
+    wordsToCheck1.forEach((searchTerm) => {
+      cy.get('[data-test-trigger-search-input]').clear();
+      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.wait(200);
+      cy.get('.vlc-agenda-items').contains('korte titel for batterij');
+    });
+    wordsToCheck2.forEach((searchTerm) => {
+      cy.get('[data-test-trigger-search-input]').clear();
+      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.wait(200);
+      cy.get('.vlc-agenda-items').contains('korte titel for search');
     });
   });
 });
