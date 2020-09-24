@@ -113,6 +113,7 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
       cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
+      cy.route('PUT', '/agendaitems/**/document-versions').as('putAgendaitemDocuments');
     } else {
       cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
@@ -158,9 +159,13 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
         timeout: 12000,
       }).wait('@patchAgendaitem', {
         timeout: 12000,
+      }).wait('@putAgendaitemDocuments', {
+        timeout: 12000,
       });
     } else if (modelToPatch === 'subcases') {
-      cy.wait('@patchAgendaitem', {
+      cy.wait('@putAgendaitemDocuments', {
+        timeout: 12000,
+      }).wait('@patchAgendaitem', {
         timeout: 12000,
       }).wait('@patchSubcase', {
         timeout: 12000,
@@ -175,6 +180,8 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
       timeout: 12000,
     });
   }
+  cy.wait(1000); // Cypress is too fast
+
   cy.log('/addNewDocumentVersion');
 }
 

@@ -110,9 +110,9 @@ export default class SubcaseDocuments extends Component {
   *saveDocuments() {
     const savePromises = this.newDocuments.map(async(document) => {
       try {
-        this.saveDocument.perform(document);
+        await this.saveDocument.perform(document);
       } catch (error) {
-        this.deleteDocument.perform(document);
+        await this.deleteDocument.perform(document);
         throw error;
       }
     });
@@ -148,7 +148,8 @@ export default class SubcaseDocuments extends Component {
       const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
       const subcase = yield agendaActivity.subcase;
       const currentSubcaseDocuments = yield subcase.hasMany('documentVersions').reload();
-      currentSubcaseDocuments.pushObjects(documents);
+      const subcaseDocuments = currentSubcaseDocuments.pushObjects(documents);
+      subcase.set('documentVersions', subcaseDocuments);
       yield subcase.save();
 
       // Link document to agendaitem
@@ -157,6 +158,8 @@ export default class SubcaseDocuments extends Component {
       for (const document of documents) {
         yield addDocumentToAgendaitem(this.args.agendaitemOrSubcase, document);
       }
+
+      this.documents = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
     } else if (this.itemType === 'subcase') {
       // Link document to all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status
@@ -177,11 +180,12 @@ export default class SubcaseDocuments extends Component {
 
       // Link document to subcase
       const currentSubcaseDocuments = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
-      currentSubcaseDocuments.pushObjects(documents);
+      const subcaseDocuments = currentSubcaseDocuments.pushObjects(documents);
+      this.args.agendaitemOrSubcase.set('documentVersions', subcaseDocuments);
       yield this.args.agendaitemOrSubcase.save();
-    }
 
-    this.documents = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
+      this.documents = subcaseDocuments;
+    }
   }
 
   @task
@@ -242,7 +246,8 @@ export default class SubcaseDocuments extends Component {
         const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
         const subcase = yield agendaActivity.subcase;
         const currentSubcaseDocuments = yield subcase.hasMany('linkedDocumentVersions').reload();
-        currentSubcaseDocuments.pushObjects(allDocumentsToLink);
+        const subcaseDocuments = currentSubcaseDocuments.pushObjects(allDocumentsToLink);
+        subcase.set('linkedDocumentVersions', subcaseDocuments);
         yield subcase.save();
       } else if (this.itemType === 'subcase') {
         // Link document to all agendaitems that are related to the subcase via an agendaActivity
@@ -253,7 +258,8 @@ export default class SubcaseDocuments extends Component {
         });
         const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
           const currentAgendaitemDocuments = await agendaitem.hasMany('linkedDocumentVersions').reload();
-          currentAgendaitemDocuments.pushObjects(allDocumentsToLink);
+          const agendaitemDocuments = currentAgendaitemDocuments.pushObjects(allDocumentsToLink);
+          agendaitem.set('linkedDocumentVersions', agendaitemDocuments);
           await agendaitem.save();
         });
         yield all(agendaitemUpdates);
@@ -261,7 +267,8 @@ export default class SubcaseDocuments extends Component {
 
       // Link document to subcase/agendaitem
       const currentDocuments = yield this.args.agendaitemOrSubcase.hasMany('linkedDocumentVersions').reload();
-      currentDocuments.pushObjects(allDocumentsToLink);
+      const documents = currentDocuments.pushObjects(allDocumentsToLink);
+      this.args.agendaitemOrSubcase.set('linkedDocumentVersions', documents);
       yield this.args.agendaitemOrSubcase.save();
       this.linkedDocuments = currentDocuments;
     }
@@ -279,7 +286,8 @@ export default class SubcaseDocuments extends Component {
       const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
       const subcase = yield agendaActivity.subcase;
       const currentSubcaseDocuments = yield subcase.hasMany('linkedDocumentVersions').reload();
-      currentSubcaseDocuments.removeObjects(documentsToRemove);
+      const subcaseDocuments = currentSubcaseDocuments.removeObjects(documentsToRemove);
+      subcase.set('linkedDocumentVersions', subcaseDocuments);
       yield subcase.save();
     } else if (this.itemType === 'subcase') {
       // Unlink document from all agendaitems that are related to the subcase via an agendaActivity
@@ -290,16 +298,17 @@ export default class SubcaseDocuments extends Component {
       });
       const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
         const currentAgendaitemDocuments = await agendaitem.hasMany('linkedDocumentVersions').reload();
-        currentAgendaitemDocuments.removeObjects(documentsToRemove);
+        const agendaitemDocuments = currentAgendaitemDocuments.removeObjects(documentsToRemove);
+        agendaitem.set('linkedDocumentVersions', agendaitemDocuments);
         await agendaitem.save();
       });
       yield all(agendaitemUpdates);
     }
 
-    const documentLinks = yield this.args.agendaitemOrSubcase.hasMany('linkedDocumentVersions').reload();
-    documentLinks.removeObjects(documentsToRemove);
-    this.args.agendaitemOrSubcase.linkedDocumentVersions = documentLinks;
+    const currentDocuments = yield this.args.agendaitemOrSubcase.hasMany('linkedDocumentVersions').reload();
+    const documents = currentDocuments.removeObjects(documentsToRemove);
+    this.args.agendaitemOrSubcase.set('linkedDocumentVersions', documents);
     yield this.args.agendaitemOrSubcase.save();
-    this.linkedDocuments = documentLinks;
+    this.linkedDocuments = documents;
   }
 }
