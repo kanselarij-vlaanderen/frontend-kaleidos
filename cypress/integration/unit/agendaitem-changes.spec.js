@@ -13,6 +13,8 @@ context('Agendaitem changes tests', () => {
     cy.login('Admin');
   });
   const agendaURL = '/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/agendapunten';
+  const approvalTitle = 'Goedkeuring van het verslag van de vergadering van vrijdag 22-11-2019.';
+  const agendaitemIndex2 = 'testId=1589276690: Cypress test dossier 1 test stap 1';
   const caseTitle = 'testId=1589266576: Cypress test dossier 1';
   const subcaseTitle1 = `${caseTitle} test stap 1`;
   const subcaseTitle2 = `${caseTitle} test stap 2`;
@@ -88,6 +90,20 @@ context('Agendaitem changes tests', () => {
     cy.agendaitemExists(subcaseTitle3);
   });
 
+  it('should add a document to the approval (verslag) and highlight it as changed', () => {
+    cy.visit(agendaURL);
+    cy.changeSelectedAgenda('Ontwerpagenda');
+    // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
+    cy.openDetailOfAgendaitem(approvalTitle, false);
+    cy.get(agenda.agendaitemDocumentsTab).click();
+    cy.addDocuments(files);
+    cy.wait(waitTime); // Computeds are not reloaded yet , maybe
+    cy.changeSelectedAgenda('Ontwerpagenda');
+    cy.setFormalOkOnItemWithIndex(0);
+    cy.toggleShowChanges(true);
+    cy.agendaitemExists(approvalTitle);
+  });
+
   it('should verify that only changes are shown by approving with no changes', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
@@ -114,9 +130,9 @@ context('Agendaitem changes tests', () => {
       .should('be.visible');
 
     // TODO check the order of the items is as expected?
-    cy.get(agenda.printContainer).contains('Goedkeuring van het verslag van de vergadering van ');
+    cy.get(agenda.printContainer).contains(approvalTitle);
     cy.get(agenda.printContainer).contains(subcaseTitle1);
-    cy.get(agenda.printContainer).contains('testId=1589276690: Cypress test dossier 1 test stap 1');
+    cy.get(agenda.printContainer).contains(agendaitemIndex2);
     cy.get(agenda.printContainer).contains(subcaseTitle2);
     cy.get(agenda.printContainer).contains(subcaseTitle3);
   });
