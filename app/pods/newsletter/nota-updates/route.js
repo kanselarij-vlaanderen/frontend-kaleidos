@@ -18,7 +18,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
 
   @(task(function *() {
     while (true) {
-      yield timeout(0.1 * 60000);
+      yield timeout(3 * 60000);
       this.refresh();
     }
   })) pollModel;
@@ -36,6 +36,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const agendaId = agenda.id;
     const meetingId = meeting.id;
     const agendaitemsForAgenda = await agenda.get('agendaitems');
+    // Omzetten van proxyarray naar default JS array
     const agendaitemsArray = agendaitemsForAgenda.toArray();
     for (const agendaitem of agendaitemsArray) {
       if (agendaitem.showAsRemark) {
