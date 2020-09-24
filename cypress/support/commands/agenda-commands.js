@@ -463,9 +463,14 @@ const approveDesignAgenda = () => {
       timeout: 12000,
     });
 
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
-    verbose: true, timeout: 60000,
-  });
+  cy.get('.vl-loader', {
+    timeout: 60000,
+  }).should('not.exist');
+
+  // TODO this does not work as expected
+  // cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
+  //   verbose: true, timeout: 60000,
+  // });
 };
 
 /**
@@ -493,9 +498,12 @@ const approveAndCloseDesignAgenda = () => {
       timeout: 12000,
     });
 
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
-    verbose: true, timeout: 60000,
-  });
+  cy.get('.vl-loader', {
+    timeout: 60000,
+  }).should('not.exist');
+  // cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
+  //   verbose: true, timeout: 60000,
+  // });
 };
 
 /**
