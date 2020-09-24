@@ -102,7 +102,7 @@
 {{/if}}
 <div class="vl-u-spacer">
   {{#if (gt (await @announcements.length) 0)}}
-    {{#if currentSessionService.isEditor}}
+    {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
       {{#sortable-group
         tagName="ul"
         onChange=(action "reorderItems")
