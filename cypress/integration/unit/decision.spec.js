@@ -1,7 +1,6 @@
 /* global context, before, it, cy,beforeEach, Cypress */
 // / <reference types="Cypress" />
 
-import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
@@ -47,17 +46,7 @@ context('Add files to an agenda', () => {
     // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemDecisionTab).click();
-    // 1 default item treatment exists
-    cy.get(agenda.uploadDecisionFile).click();
-
-    cy.contains('Documenten opladen').click();
-    cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
-
-    cy.get('@fileUploadDialog').within(() => {
-      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    });
-
+    cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(document.modalDocumentVersionDelete).click();
     cy.wait('@deleteFile', {
