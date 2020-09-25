@@ -22,6 +22,9 @@
     @agendaitem={{@agendaitem}}
     @subcase={{await this.subcase}}
   />
+  <Components::Agenda::Agendaitem::AgendaitemCase::AllSubcases
+    @subcases={{await this.subcases}}
+  />
 {{else}}
   {{#if @agendaitem.agendaActivity}}
     <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
@@ -35,6 +38,9 @@
     />
     <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
       @agendaitem={{@agendaitem}}
+    />
+    <Components::Agenda::Agendaitem::AgendaitemCase::AllSubcases
+      @subcases={{this.subcases}}
     />
   {{/if}}
 {{/if}}
