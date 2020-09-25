@@ -1,6 +1,6 @@
 <div class="vlc-u-flex-space-between">
   <button type="button" class="vl-button vl-button--link vl-button--icon">
-    <i class="vl-button__icon vl-vi vl-vi-pencil"></i>
+    <i class="vl-button__icon ki-pencil"></i>
   </button>
   {{#if (not (is-pending (await row.nota)))}}
     {{#if (not (await row.nota))}}
@@ -8,7 +8,7 @@
               style="opacity:0.3;"
         {{action "openDocument" row bubbles=false}}
       >
-        <i class="vl-button__icon vl-vi vl-vi-document"></i>
+        <i class="vl-button__icon ki-document"></i>
         {{#attach-tooltip
           arrow="true"
           animation="shift"
@@ -22,7 +22,7 @@
       <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "openDocument" row bubbles=false}}
       >
-        <i class="vl-button__icon vl-vi vl-vi-document"></i>
+        <i class="vl-button__icon ki-document"></i>
         {{#attach-tooltip
           arrow="true"
           animation="shift"
@@ -55,7 +55,7 @@
     bubbles=false
     class="vl-button vl-button--link vl-button--icon"
   }}
-    <i class="vl-button__icon vl-vi vl-vi-nav-right"></i>
+    <i class="vl-button__icon ki-nav-right"></i>
   {{/link-to}}
 </div>
 
