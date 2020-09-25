@@ -75,6 +75,8 @@ const selectors = {
   agendaHeaderShowAgendaOptions: '[data-test-agenda-header-showAgendaOptions]',
   agendaHeaderApproveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
   deleteAgendaitemButton: '[data-test-delete-agendaitem]',
+  postponeAgendaitemButton: '[data-test-postpone-agendaitem]',
+  revertPostponeAgendaitemButton: '[data-test-revert-postpone-agendaitem]',
   agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
   agendaitemNumber: '[data-test-agendaitem-number]',
 };
