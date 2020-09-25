@@ -42,16 +42,16 @@
                     class="vl-button vl-button--icon-before"
               {{action "showAgendaActions"}}
             >
+              {{t "agendaApproveActions"}}
               {{#if (not isShowingAgendaActions)}}
-                <i class="vl-button__icon vl-button__icon--before ki-chevron-down"
+                <i class="vl-button__icon vl-button__icon--after ki-chevron-down"
                   {{action "showAgendaActions" bubbles=false}}
                 ></i>
               {{else}}
-                <i class="vl-button__icon vl-button__icon--before ki-chevron-up"
+                <i class="vl-button__icon vl-button__icon--after ki-chevron-up"
                   {{action "showAgendaActions" bubbles=false}}
                 ></i>
               {{/if}}
-              {{t "agendaApproveActions"}}
               {{#attach-popover
                 class="ember-attacher-popper vlc-hide-on-print"
                 hideOn="clickout click"
@@ -90,16 +90,16 @@
                   class="vl-button vl-button--icon-before vl-button--secondary"
             {{action "showMultipleOptions"}}
           >
+            {{t "actions"}}
             {{#if (not isShowingOptions)}}
-              <i class="vl-button__icon vl-button__icon--before ki-chevron-down"
+              <i class="vl-button__icon vl-button__icon--after ki-chevron-down"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{else}}
-              <i class="vl-button__icon vl-button__icon--before ki-chevron-up"
+              <i class="vl-button__icon vl-button__icon--after ki-chevron-up"
                 {{action "showMultipleOptions" bubbles=false}}
               ></i>
             {{/if}}
-            {{t "actions"}}
             {{#attach-popover
               class="ember-attacher-popper vlc-hide-on-print"
               hideOn="clickout click"
