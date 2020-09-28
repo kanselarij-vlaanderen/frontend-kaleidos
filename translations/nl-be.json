@@ -604,8 +604,11 @@
   "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitemsNotFormallyOk} agenda items formeel wil goedkeuren",
   "agenda-has-nok-agendaitems-warning": "Deze ontwerpagenda bevat agendapunten die nog niet formeel OK verklaard zijn. U kan geen (ontwerp)agenda afsluiten die formeel NOK-agendapunten bevat. Gelieve deze formeel OK te verklaren of te verwijderen",
   "approve-agenda-error": "(Ontwerp)agenda afsluiten onmogelijk",
-  "publications": "Publicaties",
   "approve-agenda-error": "(Ontwerp)agenda afsluiten onmogelijk",
   "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
+  "publications": "Publicaties",
+  "publications.done": "Behandeld",
+  "publications.in-progress": "In behandeling",
+  "publications.new": "Nieuwe publicatie",
   "no-mandatee-assigned": "Geen toekenning"
 }

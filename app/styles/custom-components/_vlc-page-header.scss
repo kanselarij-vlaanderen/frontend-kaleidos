@@ -3,7 +3,6 @@
   ========================================================================== */
 
 .vlc-page-header {
-
   padding: 1.5rem;
   border-bottom: 1px solid $ghost;
 
@@ -57,4 +56,8 @@
   font-weight: 500;
   margin: 0;
   padding: 0;
+}
+
+.vlc-page-header--condensed {
+  padding: 0 4rem;
 }
