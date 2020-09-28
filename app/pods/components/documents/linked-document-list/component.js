@@ -37,7 +37,7 @@ export default class LinkedDocumentList extends Component {
     const sortedContainers = sortDocuments(documents, containers);
     const sortedHistories = A([]);
     for (const container of sortedContainers) {
-      const history = this.documentHistories.find((history) => history.documentContainer.get('id') == container.get('id'));
+      const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
       sortedHistories.pushObject(history);
     }
     return sortedHistories;

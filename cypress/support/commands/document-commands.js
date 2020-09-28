@@ -158,17 +158,19 @@ function addNewDocumentVersion(oldFileName, file, modelToPatch) {
         timeout: 12000,
       }).wait('@patchAgendaitem', {
         timeout: 12000,
-      }).wait('@putAgendaitemDocuments', {
-        timeout: 12000,
-      });
+      })
+        .wait('@putAgendaitemDocuments', {
+          timeout: 12000,
+        });
     } else if (modelToPatch === 'subcases') {
       cy.wait('@putAgendaitemDocuments', {
         timeout: 12000,
       }).wait('@patchAgendaitem', {
         timeout: 12000,
-      }).wait('@patchSubcase', {
-        timeout: 12000,
-      });
+      })
+        .wait('@patchSubcase', {
+          timeout: 12000,
+        });
     } else {
       cy.wait('@patchSpecificModel', {
         timeout: 12000,
