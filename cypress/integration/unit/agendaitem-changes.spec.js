@@ -136,4 +136,65 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.printContainer).contains(subcaseTitle2);
     cy.get(agenda.printContainer).contains(subcaseTitle3);
   });
+
+  it('should verify that you can compare agendas', () => {
+    cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
+    // compare Agenda B against Agenda C
+    cy.get(agenda.compare.agendaLeft).click();
+    cy.contains('Agenda B').click();
+    cy.get(agenda.compare.agendaRight).click();
+    cy.contains('Agenda C').click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.get(agenda.compare.showChanges).click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 1);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 1);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.contains(subcaseTitle1);
+    cy.contains(subcaseTitle3);
+    cy.contains(approvalTitle).should('not.exist');
+    cy.contains(agendaitemIndex2).should('not.exist');
+    cy.contains(subcaseTitle2).should('not.exist');
+    cy.get(agenda.compare.showChanges).click();
+
+    // compare Agenda C against Agenda D
+    cy.get(agenda.compare.agendaLeft).click();
+    cy.contains('Agenda C').click();
+    cy.get(agenda.compare.agendaRight).click();
+    cy.contains('Agenda D').click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.get(agenda.compare.showChanges).click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 1);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 1);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.contains(approvalTitle);
+    cy.contains(subcaseTitle3);
+    cy.contains(subcaseTitle1).should('not.exist');
+    cy.contains(agendaitemIndex2).should('not.exist');
+    cy.contains(subcaseTitle2).should('not.exist');
+
+    cy.get(agenda.compare.showChanges).click();
+
+    // compare Agenda D against Agenda E
+    cy.get(agenda.compare.agendaLeft).click();
+    cy.contains('Agenda D').click();
+    cy.get(agenda.compare.agendaRight).click();
+    cy.contains('Ontwerpagenda E').click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.get(agenda.compare.showChanges).click();
+    cy.get(agenda.compare.agendaitemLeft).should('have.length', 0);
+    cy.get(agenda.compare.agendaitemRight).should('have.length', 0);
+    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compare.announcementRight).should('have.length', 0);
+  });
 });

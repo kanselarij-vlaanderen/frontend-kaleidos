@@ -26,6 +26,7 @@ export default class CompareAgendaList extends Component {
   currentAgenda = null;
   currentAgendaGroups = null;
   agendaToCompareGroups = null;
+  @tracked isShowingChanges = false;
 
   @tracked agendaOne = null;
   @tracked agendaTwo = null;
