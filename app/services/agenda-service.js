@@ -204,7 +204,7 @@ export default Service.extend({
           return;
         }
         if (mandatees.length === 0) {
-          agendaitem.set('groupName', 'Geen toegekende ministers');
+          agendaitem.set('groupName', this.intl.t('no-mandatee-assigned'));
           return;
         }
         const currentAgendaitemGroupName = mandatees
