@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import ENV from 'fe-redpencil/config/environment';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
@@ -29,6 +30,8 @@ export default Component.extend({
       this.set('environmentClass', 'vlc-environment-pill--prod');
     }
   },
+
+  hasPublicationsEnabled: ENV.APP.ENABLE_PUBLICATIONS_TAB,
 
   showEnvironmentName: computed('environmentName', function() {
     return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
