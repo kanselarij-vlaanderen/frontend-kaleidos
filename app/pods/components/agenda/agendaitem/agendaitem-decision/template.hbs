@@ -43,10 +43,10 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.treatment.report}}
+  {{#if (await @treatment.report)}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::ReportLink
       @documentContainer={{await @treatment.report.documentContainer}}
-      @treatment={{await @treatment}}
+      @treatment={{@treatment}}
     />
   {{else}}
     <Utils::AddDocuments
