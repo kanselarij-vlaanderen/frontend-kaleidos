@@ -71,6 +71,7 @@ Router.map(function() {
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
     this.route('index', { path: '/', });
     this.route('print', { path: '/afdrukken', });
+    this.route('nota-updates');
   });
 
   this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
