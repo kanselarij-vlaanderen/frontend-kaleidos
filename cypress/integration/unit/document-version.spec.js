@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach */
+/* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import document from '../../selectors/document.selectors';
@@ -7,6 +7,10 @@ context('Tests for KAS-1076', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('Adding more then 20 document-versions to agendaitem with subcase should show all', () => {
@@ -84,7 +88,7 @@ context('Tests for KAS-1076', () => {
       }
     ];
 
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, files, false);
+    cy.addDocumentsToAgendaitem(SubcaseTitleShort, files, false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card', {
         timeout: 60000,
@@ -105,7 +109,7 @@ context('Tests for KAS-1076', () => {
     const linkedDocumentsNames = files.slice(9, 14).map((file) => file.newFileName);
     const linkedDocumentTypes = files.slice(9, 14).map((file) => file.fileType);
 
-    cy.addLinkedDocumentToAgendaItem(linkedDocumentsNames);
+    cy.addLinkedDocumentToAgendaitem(linkedDocumentsNames);
     cy.get(document.linkeddocumentTypeLabel).eq(0)
       .contains(linkedDocumentTypes[0]);
     cy.get(document.linkeddocumentTypeLabel).eq(1)
@@ -219,7 +223,7 @@ context('Tests for KAS-1076', () => {
 
     // PART 1, adding new version
     cy.visit('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016');
-    cy.addNewDocumentVersionToAgendaItem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -247,7 +251,7 @@ context('Tests for KAS-1076', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
       .should('have.length', 0);
-    cy.addDocumentsToAgendaItem(SubcaseTitleShort, [file]);
+    cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -288,7 +292,7 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
+    cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
         .within(() => {
@@ -314,7 +318,7 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.openAgendaItemDocumentTab(SubcaseTitleShort, true);
+    cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
         .within(() => {

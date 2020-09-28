@@ -11,7 +11,7 @@ export default class AddExistingDocument extends Component {
   @service store;
   @tracked page = 0;
   @tracked filter = '';
-  @tracked items = [];
+  @tracked documents = [];
 
   size = 5;
   sort = ['-created', 'name'];
@@ -35,7 +35,7 @@ export default class AddExistingDocument extends Component {
   }
 
   setSelectedToFalse() {
-    this.items.map((item) => item.set('selected', false));
+    this.documents.map((document) => document.set('selected', false));
   }
 
   queryOptions() {
@@ -55,14 +55,14 @@ export default class AddExistingDocument extends Component {
 
   @task(function *() {
     yield timeout(300);
-    this.items = yield this.store.query('document-version', this.queryOptions());
+    this.documents = yield this.store.query('document-version', this.queryOptions());
     yield timeout(100);
     this.setSelectedToFalse();
   })findAll;
 
   @task(function *() {
     yield timeout(300);
-    this.items = yield this.store.query('document-version', this.queryOptions());
+    this.documents = yield this.store.query('document-version', this.queryOptions());
     this.page = 0;
     yield timeout(100);
   })searchTask;

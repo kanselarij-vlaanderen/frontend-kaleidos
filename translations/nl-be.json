@@ -551,7 +551,7 @@
   "manage-users-technical-info": "Technische informatie",
   "manage-user": "Gebruiker: {firstName} {lastName}",
   "changes-could-not-be-saved-title": "Je wijzigingen kunnen niet opgeslagen worden.",
-  "changes-could-not-be-saved-message": "{item} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "changes-could-not-be-saved-message": "{modelName} werd {time} aangepast door {firstname} {lastname}. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "nota-changed-message": "Pas op, deze nota werd aangepast op {date} om {time}.",
   "select-minister": "Selecteer een minister",
   "agenda-comment-type-here": "Typ hier jouw opmerking...",
@@ -604,5 +604,7 @@
   "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitemsNotFormallyOk} agenda items formeel wil goedkeuren",
   "agenda-has-nok-agendaitems-warning": "Deze ontwerpagenda bevat agendapunten die nog niet formeel OK verklaard zijn. U kan geen (ontwerp)agenda afsluiten die formeel NOK-agendapunten bevat. Gelieve deze formeel OK te verklaren of te verwijderen",
   "approve-agenda-error": "(Ontwerp)agenda afsluiten onmogelijk",
-  "publications": "Publicaties"
+  "publications": "Publicaties",
+  "approve-agenda-error": "(Ontwerp)agenda afsluiten onmogelijk",
+  "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek"
 }

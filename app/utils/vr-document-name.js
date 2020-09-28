@@ -45,7 +45,7 @@ export default class VRDocumentName {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
     const meta = {
-      date: moment(match[1], 'YYYY DDMM').toDate(),
+      date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       docType: match[2],
       caseNr: parseInt(match[6], 10),
       index: parseInt(match[8], 10),
@@ -58,6 +58,7 @@ export default class VRDocumentName {
     return meta;
   }
 
+  // TODO: Mag misschien weg?
   // Will only be needed by backend renaming service
   // static fromMeta (meta) {
   //   const date = meta.date || Date();
@@ -91,17 +92,14 @@ export const compareFunction = function(parameterA, parameterB) {
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date); // Date descending (newest first)
-    } catch (exception) { // Only a parses
-      console.warn('An exception occurred', exception);
+    } catch { // Only a parses
       return -1;
     }
-  } catch (exception) {
-    console.warn('An exception occurred', exception);
+  } catch {
     try { // Only b parses
       parameterB.parseMeta();
       return 1;
-    } catch (ex) { // Both don't parse
-      console.warn('An exception occurred', ex);
+    } catch { // Both don't parse
       return parameterA.name.localeCompare(parameterB.name);
     }
   }

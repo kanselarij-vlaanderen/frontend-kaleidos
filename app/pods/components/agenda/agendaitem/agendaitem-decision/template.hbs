@@ -44,7 +44,7 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.decision.documentVersions.length}}
+  {{#if this.treatment.documentVersions.length}}
     <div class="vl-u-spacer">
       <h4 class="vl-title vl-title--h6">
         {{t "documents-attached-to"}}
@@ -52,7 +52,7 @@
       <div class="vl-u-spacer-extended-top-s">
         {{!-- TODO KAS-1420 @agendaitem={{@subcase}} ??  --}}
         <Utils::DocumentsListForItem
-                @item={{this.treatment}}
+                @agendaitemOrSubcase={{this.treatment}}
                 @agendaitem={{@subcase}}
                 @isClickable={{true}}
         />
@@ -62,11 +62,11 @@
   {{#if this.treatment.report}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
       @document={{await this.treatment.report}}
-      @item={{await this.treatment.report}}
+      @subcaseAgendaitemMeetingOrDocumentContainer={{await this.treatment.report}}
     />
   {{else}}
     <Utils::AddSignedDocuments
-      @item={{this.treatment}}
+      @meetingRecordOrDecision={{this.treatment}}
       @defaultType={{this.defaultType}}
       @modelToAddDocumentVersionTo="agendaItemTreatment"
       @title={{t "signed-decision-add"}}

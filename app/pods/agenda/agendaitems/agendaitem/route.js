@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class AgendaItemAgendaItemsAgendaRoute extends Route {
+export default class AgendaitemAgendaitemsAgendaRoute extends Route {
   @service sessionService;
 
   model(params) {
@@ -11,7 +11,7 @@ export default class AgendaItemAgendaItemsAgendaRoute extends Route {
   }
 
   afterModel(model) {
-    this.set('sessionService.selectedAgendaItem', model); // TODO: get rid of this global state
+    this.set('sessionService.selectedAgendaitem', model); // TODO: get rid of this global state
   }
 
   setupController(controller, model) {

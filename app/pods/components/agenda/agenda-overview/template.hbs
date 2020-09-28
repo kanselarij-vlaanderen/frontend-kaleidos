@@ -88,7 +88,7 @@
             @agendaitem={{agendaitem}}
             @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action this.selectAgendaItemAction}}
+            @selectAgendaitem={{action this.selectAgendaitemAction}}
           />
         {{/sortable-item}}
       {{/each}}
@@ -116,7 +116,7 @@
               @agendaitem={{agendaitem}}
               @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action this.selectAgendaItemAction}}
+              @selectAgendaitem={{action this.selectAgendaitemAction}}
             />
           </li>
         {{/if}}
@@ -124,19 +124,11 @@
     </ul>
   {{/if}}
 </div>
-{{#if (not selectedAgendaItem)}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
-      {{t "announcements-subtitle"}}
-    </h3>
-  </div>
-{{else}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
-      {{t "announcements-subtitle"}}
-    </h3>
-  </div>
-{{/if}}
+<div class="vlc-agenda-items-section-header">
+  <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+    {{t "announcements-subtitle"}}
+  </h3>
+</div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
     {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
@@ -161,7 +153,7 @@
               @agendaitem={{announcement}}
               @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
               @isEditingOverview={{isEditingOverview}}
-              @selectAgendaItem={{action this.selectAgendaItemAction}}
+              @selectAgendaitem={{action this.selectAgendaitemAction}}
             />
           {{/sortable-item}}
         {{/each}}
@@ -176,7 +168,7 @@
             @agendaitem={{announcement}}
             @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
             @isEditingOverview={{isEditingOverview}}
-            @selectAgendaItem={{action this.selectAgendaItemAction}}
+            @selectAgendaitem={{action this.selectAgendaitemAction}}
           />
         </div>
       {{/each}}

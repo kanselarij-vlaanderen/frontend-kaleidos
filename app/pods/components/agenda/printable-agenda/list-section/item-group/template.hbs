@@ -2,10 +2,10 @@
   mandatees=items.firstObject.sortedMandatees
 }}
 <div class="vlc-printable-agenda-list__item-list">
-  {{#each items as |agendaItem|}}
-    <div value={{agendaItem.priority}}>
+  {{#each items as |agendaitem|}}
+    <div value={{agendaitem.priority}}>
       {{agenda/printable-agenda/list-section/item-group/item
-        item=agendaItem
+        item=agendaitem
       }}
     </div>
   {{/each}}

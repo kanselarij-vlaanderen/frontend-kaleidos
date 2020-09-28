@@ -7,7 +7,7 @@
       placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
-      selectedItems=this.agendaOne
+      selectedAgenda=this.agendaOne
       selectModel=(action this.chooseAgendaOne)
     }}
   </div>
@@ -18,27 +18,27 @@
       placeholder=(t "select-agenda")
       multiSelect=false
       sortField="label"
-      selectedItems=this.agendaTwo
+      selectedAgenda=this.agendaTwo
       selectModel=(action this.chooseAgendaTwo)
     }}
   </div>
 </div>
-{{#if (await this.combinedItems)}}
-  {{#each (await this.combinedItems) as |combinedItem|}}
+{{#if (await this.combinedAgendaitems)}}
+  {{#each (await this.combinedAgendaitems) as |combinedAgendaitem|}}
     <div class="compare-grid-container">
-      {{#if combinedItem.groupName}}
+      {{#if combinedAgendaitem.groupName}}
         <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
           {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
             These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
           {{!-- template-lint-disable no-triple-curlies  --}}
-          {{{combinedItem.groupName}}}
+          {{{combinedAgendaitem.groupName}}}
           {{!-- template-lint-enable no-triple-curlies  --}}
         </div>
         <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
           {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
             These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
           {{!-- template-lint-disable no-triple-curlies  --}}
-          {{{combinedItem.groupName}}}
+          {{{combinedAgendaitem.groupName}}}
           {{!-- template-lint-enable no-triple-curlies  --}}
         </div>
       {{else}}
@@ -46,20 +46,20 @@
         <div></div>
       {{/if}}
       <div class="vlc-agenda-items__sub-item grid-item">
-        {{#if combinedItem.left}}
+        {{#if combinedAgendaitem.left}}
           {{agenda/agenda-overview/agenda-overview-item
             isDocumentClickable=true
             isComparing=true
-            agendaitem=combinedItem.left
+            agendaitem=combinedAgendaitem.left
           }}
         {{/if}}
       </div>
       <div class="vlc-agenda-items__sub-item grid-item">
-        {{#if combinedItem.right}}
+        {{#if combinedAgendaitem.right}}
           {{agenda/agenda-overview/agenda-overview-item
             isDocumentClickable=true
             isComparing=true
-            agendaitem=combinedItem.right
+            agendaitem=combinedAgendaitem.right
           }}
         {{/if}}
       </div>

@@ -17,7 +17,7 @@ export default Component.extend({
 
   async didInsertElement() {
     const today = moment();
-    this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaItem(today, this.mandateeToEdit.id);
+    this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaitem(today, this.mandateeToEdit.id);
   },
 
   actions: {

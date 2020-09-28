@@ -6,7 +6,7 @@
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
     With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
     is set right from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
-  <div class="vl-u-display-flex" {{in-viewport onEnter=( fn conditionallyScrollIntoView ) }}>
+  <div class="vl-u-display-flex" {{did-insert this.conditionallyScrollIntoView}}>
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
@@ -25,7 +25,7 @@
         </pre>
       </h4>
       {{#if (not @agendaitem.aboutToDelete)}}
-        {{#if (not selectedAgendaItem)}}
+        {{#if (not selectedAgendaitem)}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
               <pre class="vl-u-text">
@@ -55,13 +55,25 @@
               {{/if}}
 
               {{#if (not newsletterInfo.inNewsletter)}}
-                <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                <span class="added-tag vlc-agenda-meta__recently-added">
+                  <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                  {{#attach-tooltip
+                    arrow="true"
+                    animation="shift"
+                    placement="top"
+                    class="ember-attacher-tooltip"
+                  }}
+                    <p>
+                      {{t "not-visible-in-newsletter"}}
+                    </p>
+                  {{/attach-tooltip}}
+                </span>
               {{/if}}
 
               {{#if (await subcase.confidential)}}
                 <i
-                   class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                   data-test-icon-agenda-confidentiality-locked
+                 class="vl-icon ki-lock-closed vlc-u-opacity-50"
+                 data-test-icon-agenda-confidentiality-locked
                 ></i>
               {{/if}}
             </div>

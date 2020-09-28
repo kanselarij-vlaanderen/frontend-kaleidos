@@ -1,18 +1,18 @@
-<div class="vlc-document-card">
+<div class="vlc-document-card vl-u-spacer-extended-bottom-s">
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
       <div class="vlc-toolbar vlc-toolbar--auto">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline vlc-document-card__subline">
-              {{await document.type.label}}
+              {{await @document.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
-            {{#if lastDocumentVersion}}
-              <AccessLevelPill @item={{lastDocumentVersion}} />
+            {{#if this.setupDocumentVersions}}
+              <AccessLevelPill @lastDocumentVersion={{this.lastDocumentVersion}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -37,7 +37,7 @@
                          href=""
                          data-test-document-upload-new-version
                         {{action attacher.hide}}
-                        {{action "openUploadDialog" document}}
+                        {{action this.openUploadDialog @document}}
                       >
                         {{t "new-version"}}
                       </a>
@@ -46,7 +46,7 @@
                       <a class="vl-link vl-link--block"
                          href=""
                         {{action attacher.hide}}
-                        {{action "startEditingName"}}
+                        {{action this.startEditingName}}
                       >
                         {{t "document-title-edit"}}
                       </a>
@@ -56,7 +56,7 @@
                       <a class="vl-link vl-link--block vl-u-text--error"
                          href=""
                         {{action attacher.hide}}
-                        {{action "deleteDocument" document}}
+                        {{action this.deleteDocument @document}}
                       >
                         {{t "document-delete"}}
                       </a>
@@ -71,7 +71,7 @@
       <div class="vl-u-display-flex">
         <div class="vlc-document-card__badge
           {{if
-            document.checkAdded
+            @document.checkAdded
             "vlc-document-list__item vlc-document-list__item--active"
           }}"
         >
@@ -82,8 +82,8 @@
         <div class="vl-u-display-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
           {{#if (not isEditing)}}
             <h6 class="vl-title vl-title--h6">
-              <span {{action "startEditingName"}}>
-                {{lastDocumentVersion.name}}
+              <span {{action this.startEditingName}}>
+                {{this.lastDocumentVersion.name}}
               </span>
             </h6>
           {{else}}
@@ -91,12 +91,12 @@
               {{input
                 type="text"
                 class="vl-input-field vl-input-field--block"
-                value=nameBuffer
+                value=this.nameBuffer
               }}
               <button
-                      class="vl-button vl-button--link vl-button--icon"
-                      type="button"
-                {{action "saveNameChange" lastDocumentVersion}}
+                class="vl-button vl-button--link vl-button--icon"
+                type="button"
+                {{action this.saveNameChange this.lastDocumentVersion}}
               >
                 <i
                   class="ki-check vl-button__icon"
@@ -107,9 +107,9 @@
                 </span>
               </button>
               <button
-                      class="vl-button vl-button--link vl-button--icon"
-                      type="button"
-                {{action "cancelEditingName"}}
+                class="vl-button vl-button--link vl-button--icon"
+                type="button"
+                {{action this.cancelEditingName}}
               >
                 <i
                   class="ki-cross vl-button__icon"
@@ -123,15 +123,18 @@
           {{/if}}
           <div class="vlc-document-card-content__meta">
             {{t "uploaded-at"}}
-            {{moment-format (await lastDocumentVersion.created)}}
+            {{moment-format (await this.lastDocumentVersion.created)}}
             {{t "at"}}
-            {{moment-format (await lastDocumentVersion.created) "HH:mm"}}
-            {{#if (await lastDocumentVersion.accessLevelLastModified)}}
+            {{moment-format (await this.lastDocumentVersion.created) "HH:mm"}}
+            {{#if (await this.lastDocumentVersion.accessLevelLastModified)}}
               <div>
                 {{t "access-level-last-modified"}}
-                {{moment-format (await lastDocumentVersion.accessLevelLastModified)}}
+                {{moment-format (await this.lastDocumentVersion.accessLevelLastModified)}}
                 {{t "at"}}
-                {{moment-format (await lastDocumentVersion.accessLevelLastModified) "HH:mm"}}
+                {{moment-format
+                  (await this.lastDocumentVersion.accessLevelLastModified)
+                  "HH:mm"
+                }}
               </div>
             {{/if}}
           </div>
@@ -139,28 +142,27 @@
       </div>
     </div>
   </div>
-  {{#if (gt (await numberOfDocumentVersions) 0)}}
+  {{#if this.mySortedDocuments}}
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{openClass}}">
+      <div class="js-vl-accordion {{this.openClass}}">
         <button
-                class="vl-toggle vl-link vl-link--bold"
-                type="button"
-          {{action "showVersions"}}
+          class="vl-toggle vl-link vl-link--bold"
+          type="button"
+          {{action this.showVersions}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
           {{t "show-versions"}}
         </button>
-        {{#if isShowingVersions}}
+        {{#if this.isShowingVersions}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each
-                (await myReverseSortedVersions)
+                this.reverseSortedDocumentVersions
               as |documentVersion|
               }}
                 <WebComponents::VlDocument
-                        @documentVersion={{documentVersion}}
-                        @item={{item}} />
+                  @documentVersion={{documentVersion}}/>
               {{/each}}
             </div>
           </div>
@@ -169,46 +171,46 @@
     </div>
   {{/if}}
 </div>
-{{#if isUploadingNewVersion}}
+{{#if this.isUploadingNewVersion}}
   <WebComponents::VlModal
-          @closeModal={{action "cancelUploadVersion"}}
-          @isOverlay={{true}}
-          @title={{t "new-document-version"}}>
+    @closeModal={{action this.cancelUploadVersion}}
+    @isOverlay={{true}}
+    @title={{t "new-document-version"}}>
     <div class="vl-modal-dialog__content">
-      {{#if (not uploadedFile)}}
-        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action "add"}}/>
+      {{#if (not this.uploadedFile)}}
+        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action this.add}}/>
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-                @value={{documentContainer.lastDocument.name}}
-                @width={{4}} />
+          @value={{this.documentInCreation.name}}
+          @width={{4}} />
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=documentContainer.lastDocument.file.filename
-          extension=documentContainer.lastDocument.file.extension
-          size=documentContainer.lastDocument.file.size
-          downloadName=documentContainer.lastDocument.file.filename
+          name=this.documentInCreation.file.filename
+          extension=this.documentInCreation.file.extension
+          size=this.documentInCreation.file.size
+          downloadName=this.documentInCreation.file.filename
           downloadLink=(concat
-                        documentContainer.lastDocument.file.downloadLink
-                        "?name="
-                        documentContainer.lastDocument.file.filename
-                )
-          delete=(action "delete" documentContainer.lastDocument)
+                  this.documentInCreation.file.downloadLink
+            "?name="
+                  this.documentInCreation.file.filename
+          )
+          delete=(action this.delete this.documentInCreation)
         }}
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
-            @cancelButtonText={{t "cancel"}}
-            @saveButtonText={{t "add"}}
-            @isLoading={{isLoading}}
-            @cancelAction={{action "cancelUploadVersion"}}
-            @saveAction={{action "saveDocument"}}
-            @disableSave={{not uploadedFile}} />
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "add"}}
+      @isLoading={{this.isLoading}}
+      @cancelAction={{action this.cancelUploadVersion}}
+      @saveAction={{action this.saveDocument}}
+      @disableSave={{not (and this.uploadedFile this.documentInCreation.file.filename)}} />
   </WebComponents::VlModal>
 {{/if}}
-{{#if isVerifyingDelete}}
+{{#if this.isVerifyingDelete}}
   <WebComponents::VlModalVerify
-          @title={{t "document-delete"}}
-          @message={{t "delete-document-message"}}
-          @cancel={{action "cancel"}}
-          @verify={{action "verify"}} />
+    @title={{t "document-delete"}}
+    @message={{t "delete-document-message"}}
+    @cancel={{action this.cancel}}
+    @verify={{action this.verify}} />
 {{/if}}

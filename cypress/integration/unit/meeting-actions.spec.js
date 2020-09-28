@@ -63,7 +63,7 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
+    cy.agendaitemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);

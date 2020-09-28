@@ -13,7 +13,12 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "meeting-number")}}
-      {{web-components/vl-form-input type="number" value=meetingNumber width="4"}}
+      {{web-components/vl-form-input
+        type="number"
+        value=meetingNumber
+        input=(action "meetingNumberChangedAction" meetingNumber)
+        width="4"
+      }}
     </div>
   </div>
   <div class="vl-u-spacer-extended-bottom-s">

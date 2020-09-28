@@ -1,7 +1,7 @@
 {{#if loading}}
   <div class="vl-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  {{#if (not item.confidential)}}
+  {{#if (not lastDocumentVersion.confidential)}}
     {{#if (not editing)}}
       <div class="pill-wrap" data-test-access-level-pill {{action "toggleEdit"}}>
         <span class="vlc-pill {{accessLevelClass}}">
@@ -16,7 +16,7 @@
           @allowClear={{true}}
           @hideSearch={{true}}
           @propertyToShow="label"
-          @readOnly={{item.confidential}}
+          @readOnly={{lastDocumentVersion.confidential}}
           @sortField="priority"
           @selectedItems={{accessLevel}}
           @selectModel={{action "chooseAccessLevel"}} />
@@ -43,7 +43,7 @@
           disabled={{if session.isEditor undefined "true"}}
     {{action "toggleConfidential"}}
   >
-    {{#if item.confidential}}
+    {{#if lastDocumentVersion.confidential}}
       <i class="vl-icon ki-lock-closed vl-u-text--error"
       ></i>
     {{else}}

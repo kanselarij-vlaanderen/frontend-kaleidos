@@ -5,7 +5,7 @@ import {
 } from '@ember/object';
 import {
   saveChanges as saveSubcaseTitles, cancelEdit
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import { trimText } from 'fe-redpencil/utils/trim-util';
 
 export default class SubcaseTitlesEdit extends Component {

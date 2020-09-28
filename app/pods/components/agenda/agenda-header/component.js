@@ -14,7 +14,7 @@ import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
   getListOfAgendaitemsThatAreNotFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
@@ -48,11 +48,11 @@ export default Component.extend(FileSaverMixin, {
   isApprovingAllAgendaitems: false,
   isShowingWarningOnClose: false,
 
-  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
   currentAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'),
-  selectedAgendaItem: alias('sessionService.selectedAgendaItem'),
+  selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
   isLockable: computed('agendas.@each', async function() {
@@ -67,7 +67,7 @@ export default Component.extend(FileSaverMixin, {
     return true;
   }),
 
-  amountOfAgendaitemsNotFormallyOk: computed('currentAgendaItems.@each.formallyOk', async function() {
+  amountOfAgendaitemsNotFormallyOk: computed('currentAgendaitems.@each.formallyOk', async function() {
     const isNotFormallyOk = (agendaitem) => agendaitem.formallyOk !== CONFIG.formallyOk;
     const agendaitems = await this.currentAgenda.get('agendaitems');
     return agendaitems.filter(isNotFormallyOk).length;
@@ -119,7 +119,7 @@ export default Component.extend(FileSaverMixin, {
       .approveAgendaAndCopyToDesignAgenda(session, lastDefiniteAgenda)
       .then((newAgenda) => {
         this.changeLoading();
-        this.reloadRoute(newAgenda.get('id'));
+        this.onApproveAgenda(newAgenda.get('id'));
       });
   },
 
@@ -146,8 +146,8 @@ export default Component.extend(FileSaverMixin, {
     }
   },
 
-  reloadAgendaitemsOfSubcases(agendaItems) {
-    return all(agendaItems.map(async(agendaitem) => {
+  reloadAgendaitemsOfSubcases(agendaitems) {
+    return all(agendaitems.map(async(agendaitem) => {
       const agendaActivity = await agendaitem.get('agendaActivity');
       if (agendaActivity) {
         await agendaActivity.hasMany('agendaitems').reload();
@@ -224,8 +224,8 @@ export default Component.extend(FileSaverMixin, {
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
-    clearSelectedAgendaItem() {
-      this.clearSelectedAgendaItem();
+    clearSelectedAgendaitem() {
+      this.clearSelectedAgendaitem();
     },
 
     cancel() {
@@ -282,7 +282,7 @@ export default Component.extend(FileSaverMixin, {
             await this.lockAgenda(reloadedAgenda);
           })
           .finally(() => {
-            this.set('sessionService.selectedAgendaItem', null);
+            this.set('sessionService.selectedAgendaitem', null);
             this.changeLoading();
             this.set('isApprovingAgenda', false);
           });
@@ -428,11 +428,6 @@ export default Component.extend(FileSaverMixin, {
     async createNewDesignAgenda() {
       await this.createDesignAgenda();
     },
-
-    reloadRoute(id) {
-      this.reloadRoute(id);
-    },
-
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
     },
@@ -491,9 +486,9 @@ export default Component.extend(FileSaverMixin, {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
         .then(async(newAgenda) => {
-          const agendaItems = await agendaToLock.get('agendaitems');
-          const newNotYetOKItems = agendaItems.filter((agendaItem) => agendaItem.get('isAdded') && agendaItem.get('formallyOk') === CONFIG.notYetFormallyOk);
-          await this.reloadAgendaitemsOfSubcases(agendaItems);
+          const agendaitems = await agendaToLock.get('agendaitems');
+          const newNotYetOKItems = agendaitems.filter((agendaitem) => agendaitem.get('isAdded') && agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          await this.reloadAgendaitemsOfSubcases(agendaitems);
           await this.destroyAgendaitemsList(newNotYetOKItems);
           return newAgenda;
         })
@@ -503,7 +498,7 @@ export default Component.extend(FileSaverMixin, {
           }
         })
         .finally(() => {
-          this.set('sessionService.selectedAgendaItem', null);
+          this.set('sessionService.selectedAgendaitem', null);
           this.changeLoading();
           this.set('isApprovingAgenda', false);
         });

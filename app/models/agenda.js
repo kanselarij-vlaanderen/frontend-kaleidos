@@ -56,42 +56,42 @@ export default Model.extend(LoadableModel, {
 
   isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk')));
-      return approvedAgendaItems.get('length') === agendaitems.get('length');
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk')));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
   isClosable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk].includes(agendaitem.get('formallyOk')));
-      return approvedAgendaItems.get('length') === agendaitems.get('length');
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk].includes(agendaitem.get('formallyOk')));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
   isPassable: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaItems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
-      return approvedAgendaItems.get('length') === agendaitems.get('length');
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => this.checkPassable(agendaitem));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
   lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const filteredAgendaitems = agendaitems.filter((item) => !item.showAsRemark);
+      const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
       if (filteredAgendaitems.length === 0) {
         return 0;
       }
-      return Math.max(...filteredAgendaitems.map((item) => item.priority || 0));
+      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.priority || 0));
     });
   }),
 
   lastAnnouncementPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const announcements = agendaitems.filter((item) => item.showAsRemark);
+      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
       if (announcements.length === 0) {
         return 0;
       }
-      return Math.max(...announcements.map((item) => item.priority || 0));
+      return Math.max(...announcements.map((announcement) => announcement.priority || 0));
     });
   }),
 
@@ -102,7 +102,7 @@ export default Model.extend(LoadableModel, {
     );
   },
 
-  firstAgendaItem: computed('agendaitems.@each', function() {
+  firstAgendaitem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });

@@ -27,22 +27,7 @@ export default Component.extend({
 
   async deleteDocumentVersionWithUndo() {
     const documentVersionToDelete = this.get('documentVersionToDelete');
-
-    // TODO somehow this no longer works, document returns null or undefined
-    // const document = await documentVersionToDelete.get('documentContainer');
-    // const documentVersions = await document.get('documents');
-
-    // TODO fix the deletion of document-container when last version is deleted so it doesn't become an orphan
-    // if(documentVersions.length > 1) {
     await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
-    // }else {
-    //   const documentToDelete = document;
-    //   await this.fileService.get('deleteDocumentWithUndo').perform(documentToDelete).then(() => {
-    //     if(!this.item.aboutToDelete && documentVersions) {
-    //       this.item.hasMany('documentVersions').reload();
-    //     }
-    //   });
-    // }
   },
 
   actions: {

@@ -2,7 +2,7 @@
   <h6 class="vl-title vl-title--h6">
     {{await documentVersion.name}}
   </h6>
-  {{access-level-pill item=documentVersion}}
+  {{access-level-pill lastDocumentVersion=documentVersion}}
   {{#if (await documentVersion.file.downloadLink)}}
     <button type="button" class="vl-button vl-button--link vl-button--icon"
       {{action "showDocumentVersionViewer" documentVersion}}

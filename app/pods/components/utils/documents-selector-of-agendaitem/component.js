@@ -3,16 +3,16 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-  item: null,
-  itemWithDocuments: null,
+  agendaitem: null,
+  decision: null,
   store: inject(),
 
-  lastDocumentVersions: computed('item.documents.@each', 'itemWithDocuments.documentVersions.@each', async function() {
+  lastDocumentVersions: computed('agendaitem.documents.@each', 'decision.documentVersions.@each', async function() {
     const {
-      itemWithDocuments, item,
+      decision, agendaitem,
     } = this;
-    const documents = await item.get('documents');
-    const documentVersionsAddedAlready = await itemWithDocuments.get('documentVersions');
+    const documents = await agendaitem.get('documents');
+    const documentVersionsAddedAlready = await decision.get('documentVersions');
 
     return Promise.all(documents.map(async(document) => {
       const typeLabel = await document.get('type.label');

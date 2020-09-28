@@ -6,7 +6,7 @@
   >
     <i class="vl-button__icon ki-pencil"></i>
   </button>
-  {{#if (is-pending (await @agendaItem.nota))}}
+  {{#if (is-pending (await @agendaitem.nota))}}
     <div class="vl-loader" role="alert" aria-busy="true">
       {{#attach-tooltip
         arrow="true"
@@ -21,8 +21,8 @@
     <button
       type="button"
       class="vl-button vl-button--link vl-button--icon"
-      disabled={{not (await @agendaItem.nota)}}
-      style={{if (not (await @agendaItem.nota)) "opacity:0.3;"}}
+      disabled={{not (await @agendaitem.nota)}}
+      style={{if (not (await @agendaitem.nota)) "opacity:0.3;"}}
       {{on "click" this.openNota}}
     >
       <i class="vl-button__icon ki-document"></i>
@@ -32,7 +32,7 @@
         placement="bottom"
         class="ember-attacher-tooltip"
       }}
-        {{if (await @agendaItem.nota) (t "open-note") (t "no-nota")}}
+        {{if (await @agendaitem.nota) (t "open-note") (t "no-nota")}}
       {{/attach-tooltip}}
     </button>
   {{/if}}
@@ -44,7 +44,7 @@
     @models={{array
       (await latestMeetingId)
       (await latestAgendaId)
-      (await latestAgendaItemId)
+      (await latestAgendaitemId)
     }}
   >
     <i class="vl-button__icon ki-nav-right"></i>

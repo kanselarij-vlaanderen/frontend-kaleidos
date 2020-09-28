@@ -5,7 +5,7 @@ import {
 import { inject as service } from '@ember/service';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 
-export default class AgendaItemPress extends Component {
+export default class AgendaitemPress extends Component {
   @service currentSession;
 
   agendaitem = null;

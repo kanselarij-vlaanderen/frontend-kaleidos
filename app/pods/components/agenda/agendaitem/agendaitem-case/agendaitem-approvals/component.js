@@ -10,9 +10,9 @@ export default Component.extend({
   store: inject(),
   currentSession: inject(),
 
-  mandateeApprovals: computed('item.{mandatees.[],approvals.@each.mandatee}', async function() {
-    const mandatees = await get(this, 'item.mandatees');
-    const approvals = await get(this, 'item.approvals');
+  mandateeApprovals: computed('agendaitem.{mandatees.[],approvals.@each.mandatee}', async function() {
+    const mandatees = await get(this, 'agendaitem.mandatees');
+    const approvals = await get(this, 'agendaitem.approvals');
     return mandatees.map((mandatee) => {
       const approvalForMandatee = this.getApprovalForMandatee(mandatee, approvals);
 
@@ -30,7 +30,7 @@ export default Component.extend({
     async saveChanges() {
       this.set('isLoading', true);
 
-      await Promise.all(get(this, 'item.approvals').map(async(approval) => {
+      await Promise.all(get(this, 'agendaitem.approvals').map(async(approval) => {
         const savedApproval = await approval.save();
         return savedApproval;
       }));
@@ -40,7 +40,7 @@ export default Component.extend({
     },
 
     async toggleApproved(mandatee, approval) {
-      const approvals = get(this, 'item.approvals');
+      const approvals = get(this, 'agendaitem.approvals');
 
       if (approval) {
         if (!approval.isDeleted) {
@@ -57,7 +57,7 @@ export default Component.extend({
           mandatee,
           created: moment().utc()
             .toDate(),
-          agendaitem: get(this, 'item'),
+          agendaitem: get(this, 'agendaitem'),
         });
 
         await approvals.addObject(approvalToCreate);
@@ -67,9 +67,9 @@ export default Component.extend({
     async cancelEditing() {
       this.set('isLoading', true);
       const {
-        item,
+        agendaitem,
       } = this;
-      const approvals = await item.get('approvals');
+      const approvals = await agendaitem.get('approvals');
       approvals.map((approval) => {
         approval.rollbackAttributes();
         return approval;

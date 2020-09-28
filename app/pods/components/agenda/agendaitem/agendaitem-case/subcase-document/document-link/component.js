@@ -1,126 +1,63 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import config from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
-import { deprecatingAlias } from '@ember/object/computed';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
-import DS from 'ember-data';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  toaster: service(),
-  fileService: service(),
-  intl: service(),
-  currentSession: service(),
-  classNames: ['vl-u-spacer-extended-bottom-s'],
-  classNameBindings: ['aboutToDelete'],
-  isShowingVersions: false,
-  isUploadingNewVersion: false,
-  uploadedFile: null,
-  isEditing: false,
-  documentContainerToDelete: null,
-  nameBuffer: '',
-  store: service(),
-  documentsInCreation: A([]), // When creating new documents
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?',
-  }),
-  documentContainer: null, // When adding a new version to an existing document
-  defaultAccessLevel: null, // when creating a new document
-  myDocumentVersions: computed.alias('item.documentVersions'),
+export default class DocumentLink extends Component {
+  @service toaster;
+  @service fileService;
+  @service intl;
+  @service currentSession;
+  @service store;
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
-    const sortedVersions = this.get('mySortedDocumentVersions');
-    return sortedVersions.lastObject;
-  }),
+  @tracked isShowingVersions = false;
+  @tracked reverseSortedDocumentVersions = A([]);
+  @tracked isUploadingNewVersion = false;
+  @tracked isEditing = false;
+  @tracked defaultAccessLevel = null;
+  @tracked documentInCreation = null;
+  @tracked uploadedFile = null;
+  @tracked nameBuffer = '';
+  @tracked isVerifyingDelete = false;
+  @tracked lastDocument = null;
+  @tracked mySortedDocuments;
+  @tracked lastDocumentVersion = null;
+  @tracked documentTypes = null;
 
-  // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
-  // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
-  // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
-    return DS.PromiseArray.create({
-      promise: (async() => {
-        const itemVersionIds = {};
-        const versions = await this.get('myDocumentVersions');
-        if (versions) {
-          versions.map((item) => {
-            itemVersionIds[item.get('id')] = true;
-          });
-        }
-        const documentVersions = await this.get('document.sortedDocumentVersions');
-        if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((item) => itemVersionIds[item.id]);
-          return matchingVersions;
-        }
-      })(),
+  classNameBindings = ['aboutToDelete'];
+  documentContainerToDelete = null;
+
+  constructor() {
+    super(...arguments);
+    this.store.query('document-type', {
+      sort: 'priority', 'page[size]': 50,
+    }).then((types) => {
+      this.documentTypes = types;
     });
-  }),
-
-  myReverseSortedVersions: computed('mySortedDocumentVersions.@each', function() {
-    const reversed = [];
-    this.get('mySortedDocumentVersions').map((item) => {
-      reversed.push(item);
-    });
-    reversed.reverse();
-    return reversed;
-  }),
-
-  numberOfDocumentVersions: computed('mySortedDocumentVersions.@each', function() {
-    return this.get('mySortedDocumentVersions').length;
-  }),
-
-  aboutToDelete: computed('document.aboutToDelete', function() {
-    if (this.document) {
-      if (this.document.get('aboutToDelete')) {
-        return 'vlc-document--deleted-state';
-      }
-      return null;
-    }
-    return null;
-  }),
-
-  openClass: computed('isShowingVersions', function() {
-    if (this.get('isShowingVersions')) {
-      return 'js-vl-accordion--open';
-    }
-    return null;
-  }),
-
-  async didInsertElement() {
-    this._super(...arguments);
-    this.set('documentsInCreation', A([]));
-    const accessLevels = await this.store.findAll('access-level');
-    try {
-      this.set('defaultAccessLevel', accessLevels.find((item) => item.id === config.internRegeringAccessLevelId));
-    } catch (exception) {
-      // TODO error during cypress tests:
-      console.warn('An exception occurred', exception);
-      // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
-    }
-  },
+  }
 
   async deleteUploadedDocument() {
-    const uploadedFile = this.get('uploadedFile');
-    if (uploadedFile && uploadedFile.id) {
-      const versionInCreation = await uploadedFile.get('documentVersion');
-      const container = this.get('documentContainer');
-      container.rollbackAttributes();
+    if (this.uploadedFile && this.uploadedFile.id) {
+      const versionInCreation = await this.uploadedFile.documentVersion;
+      this.documentsInCreation = null;
       if (versionInCreation) {
         await this.fileService.deleteDocumentVersion(versionInCreation);
       } else {
-        await this.fileService.deleteFile(uploadedFile);
+        await this.fileService.deleteFile(this.uploadedFile);
       }
 
       if (!this.isDestroyed) {
-        this.set('uploadedFile', null);
+        this.uploadedFile = null;
       }
     }
-  },
+  }
 
   createNewDocument(uploadedFile, previousDocument, defaults) {
     const propsFromPrevious = [
@@ -137,26 +74,24 @@ export default Component.extend({
     newDocument.set('previousVersion', previousDocument);
     newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
     return newDocument;
-  },
+  }
 
   async deleteDocumentContainerWithUndo() {
-    const {
-      item,
-    } = this;
-    const documents = item.get('documentVersions');
-    const itemType = item.get('constructor.modelName');
+    const documents = this.args.subcaseAgendaitemMeetingOrDocumentContainer.documentVersions;
+    const itemType = this.args.subcaseAgendaitemMeetingOrDocumentContainer.constructor.modelName;
     if (itemType === 'document') {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
     } else {
       await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete)
         .then(() => {
-          if (!item.aboutToDelete && documents) {
-            item.hasMany('documentVersions').reload();
+          if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer.aboutToDelete && documents) {
+            this.args.subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
           }
         });
     }
-  },
+  }
 
+  // eslint-disable-next-line class-methods-use-this
   async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
@@ -174,7 +109,7 @@ export default Component.extend({
       model.set(propertyName, documents);
     }
     return model;
-  },
+  }
 
   async addDocumentToAgendaitems(documents, agendaitems) {
     return Promise.all(
@@ -186,178 +121,227 @@ export default Component.extend({
         return await agendaitem.save();
       })
     );
-  },
+  }
+
   async addDocumentToSubcase(documents, subcase) {
     await subcase.hasMany('documentVersions').reload();
     await this.attachDocumentsToModel(documents, subcase);
     return await subcase.save();
-  },
+  }
 
-  async addDocumentToAnyModel(documents, item) {
-    const itemType = item.get('constructor.modelName');
+  async addDocumentToAnyModel(documents, subcaseAgendaitemMeetingOrDocumentContainer) {
+    const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
     }
-    await item.hasMany('documentVersions').reload();
-    await this.attachDocumentsToModel(documents, item);
+    await subcaseAgendaitemMeetingOrDocumentContainer.hasMany('documentVersions').reload();
+    await this.attachDocumentsToModel(documents, subcaseAgendaitemMeetingOrDocumentContainer);
     if (itemType === 'subcase' || itemType === 'agendaitem') {
-      setNotYetFormallyOk(item);
+      setNotYetFormallyOk(subcaseAgendaitemMeetingOrDocumentContainer);
     }
-    return await item.save();
-  },
+    return await subcaseAgendaitemMeetingOrDocumentContainer.save();
+  }
 
-  actions: {
+  get setupDocumentVersions() {
+    return this.mySortedDocumentVersions();
+  }
 
-    async uploadedFile(uploadedFile) {
-      const creationDate = moment().utc()
-        .toDate();
-      if (this.documentContainer) {
-        await this.documentContainer.reload();
-        await this.documentContainer.hasMany('documents').reload();
-      }
-      const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
-      const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
-        accessLevel: this.defaultAccessLevel,
+  mySortedDocumentVersions() {
+    const itemVersionIds = {};
+    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer && !this.args.document) {
+      return false;
+    }
+    const versions = this.args.subcaseAgendaitemMeetingOrDocumentContainer.documentVersions;
+    if (versions) {
+      versions.map((myDocumentVersion) => {
+        itemVersionIds[myDocumentVersion.get('id')] = true;
       });
-      newDocument.set('created', creationDate);
-      newDocument.set('modified', creationDate);
-      if (this.documentContainer) { // Adding new version to existing container
-        const docs = await this.documentContainer.get('documents');
-        docs.pushObject(newDocument);
-        newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
-        const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
-        newDocument.set('name', newName);
-        this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
-      } else { // Adding new version, new container
-        const newContainer = this.store.createRecord('document', {
-          created: creationDate,
-        });
-        newDocument.set('documentContainer', newContainer);
-        this.get('documentsInCreation').pushObject(newDocument);
+    }
+    const documentVersions = this.args.document.sortedDocumentVersions;
+    if (documentVersions) {
+      this.mySortedDocuments = documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
+      if (this.mySortedDocuments) {
+        this.lastDocumentVersion = this.mySortedDocuments.lastObject;
       }
-    },
+    }
+    return true;
+  }
 
-    showVersions() {
-      this.toggleProperty('isShowingVersions');
-    },
+  async getReverseSortedDocumentVersions() {
+    const reversed = [];
+    if (this.mySortedDocuments) {
+      this.mySortedDocuments.map((mySortedDocumentVersion) => {
+        reversed.push(mySortedDocumentVersion);
+      });
+      reversed.reverse();
+      this.reverseSortedDocumentVersions = reversed;
+    }
+  }
 
-    async delete() {
-      this.deleteUploadedDocument();
-    },
+  get openClass() {
+    if (this.isShowingVersions) {
+      return 'js-vl-accordion--open';
+    }
+    return null;
+  }
 
-    startEditingName() {
-      if (!this.currentSession.isEditor) {
-        return;
+  @action
+  async uploadFile(uploadedFile) {
+    const creationDate = moment().utc()
+      .toDate();
+    await this.args.document.reload();
+    await this.args.document.hasMany('documents').reload();
+    if (!this.defaultAccessLevel) {
+      this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
+    }
+
+    const previousVersion = this.args.document ? (await this.args.document.get('lastDocumentVersion')) : null;
+    const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
+      accessLevel: this.defaultAccessLevel,
+    });
+    newDocument.set('created', creationDate);
+    newDocument.set('modified', creationDate);
+    const docs = await this.args.document.get('documents');
+    docs.pushObject(newDocument);
+    newDocument.set('documentContainer', this.args.document); // Explicitly set relation both ways
+    const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
+    newDocument.set('name', newName);
+    this.args.document.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
+    this.documentInCreation = await newDocument;
+  }
+
+  @action
+  showVersions() {
+    this.isShowingVersions = !this.isShowingVersions;
+    if (this.isShowingVersions) {
+      this.getReverseSortedDocumentVersions();
+    }
+  }
+
+  @action
+  async delete() {
+    await this.deleteUploadedDocument();
+  }
+
+  @action
+  startEditingName() {
+    if (!this.currentSession.isEditor) {
+      return;
+    }
+    this.nameBuffer = this.lastDocumentVersion.name;
+    this.isEditing = true;
+  }
+
+  @action
+  cancelEditingName() {
+    this.args.document.rollbackAttributes();
+    this.isEditing = false;
+  }
+
+  @action
+  async saveNameChange(doc) {
+    doc.set('modified', moment().toDate());
+    doc.set('name', this.nameBuffer);
+    await doc.save();
+    if (!this.isDestroyed) {
+      /*
+       * Due to over-eager computed properties, this components gets destroyed after a namechange,
+       * which eliminates the need for changing this flag (Changing properties of destroyed components causes exceptions).
+       * This should get fixed in the future though.
+       */
+      this.isEditing = false;
+    }
+  }
+
+  @action
+  async add(file) {
+    this.uploadedFile = file;
+    await this.uploadFile(file);
+  }
+
+  @action
+  async openUploadDialog() {
+    const itemType = this.args.subcaseAgendaitemMeetingOrDocumentContainer.constructor.modelName;
+    if (itemType === 'agendaitem' || itemType === 'subcase') {
+      await this.args.subcaseAgendaitemMeetingOrDocumentContainer.preEditOrSaveCheck();
+    }
+    this.isUploadingNewVersion = true;
+  }
+
+  @action
+  async cancelUploadVersion() {
+    if (this.uploadedFile) {
+      const document = await this.args.document.lastDocumentVersion;
+      document.rollbackAttributes();
+      const versionInCreation = await this.uploadedFile.get('documentVersion');
+      if (versionInCreation) {
+        await this.fileService.deleteDocumentVersion(versionInCreation);
+      } else {
+        await this.fileService.deleteFile(this.uploadedFile);
       }
-      this.set('nameBuffer', this.get('lastDocumentVersion.name'));
-      this.set('isEditing', true);
-    },
+      this.uploadedFile = null;
+    }
+    this.isUploadingNewVersion = false;
+  }
 
-    cancelEditingName() {
-      this.document.rollbackAttributes();
-      this.set('isEditing', false);
-    },
-
-    async saveNameChange(doc) {
-      doc.set('modified', moment().toDate());
-      doc.set('name', this.get('nameBuffer'));
-      await doc.save();
+  @action
+  async saveDocument() {
+    // TODO this component/method is used for agendaitem, subcase, session (AND for decision/meetingRecord but we pass in document model)
+    // TODO should we seperate this logic to make the addition of a version more generic ?
+    this.isLoading = true;
+    const document = await this.args.document.lastDocument;
+    await document.save();
+    const agendaActivity = await this.args.subcaseAgendaitemMeetingOrDocumentContainer.agendaActivity; // when item = agendaitem
+    const agendaitemsOnDesignAgenda = await this.args.subcaseAgendaitemMeetingOrDocumentContainer.agendaitemsOnDesignAgendaToEdit; // when item = subcase
+    try {
+      if (agendaActivity) {
+        const subcase = await agendaActivity.get('subcase');
+        await this.addDocumentToSubcase([document], subcase);
+      } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
+        await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
+      }
+      await this.addDocumentToAnyModel([document], this.args.subcaseAgendaitemMeetingOrDocumentContainer);
+    } catch (error) {
+      await this.deleteUploadedDocument();
+      throw error;
+    } finally {
       if (!this.isDestroyed) {
-        /*
-         * Due to over-eager computed properties, this components gets destroyed after a namechange,
-         * which eliminates the need for changing this flag (Changing properties of destroyed components causes exceptions).
-         * This should get fixed in the future though.
-         */
-        this.set('isEditing', false);
+        this.uploadedFile = null;
+        this.isLoading = false;
+        this.isUploadingNewVersion = false;
       }
-    },
+    }
+  }
 
-    add(file) {
-      this.set('uploadedFile', file);
-      this.send('uploadedFile', file);
-    },
+  @action
+  cancel() {
+    this.documentContainerToDelete = null;
+    this.isVerifyingDelete = false;
+  }
 
-    async openUploadDialog() {
-      const itemType = this.item.get('constructor.modelName');
-      if (itemType === 'agendaitem' || itemType === 'subcase') {
-        await this.item.preEditOrSaveCheck();
-      }
-      this.toggleProperty('isUploadingNewVersion');
-    },
+  @action
+  verify() {
+    const verificationToast = {
+      type: 'revert-action',
+      title: this.intl.t('warning-title'),
+      message: this.intl.t('document-being-deleted'),
+      options: {
+        timeOut: 15000,
+      },
+    };
+    verificationToast.options.onUndo = () => {
+      this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
+      this.toaster.toasts.removeObject(verificationToast);
+    };
+    this.toaster.displayToast.perform(verificationToast);
+    this.deleteDocumentContainerWithUndo();
+    this.isVerifyingDelete = false;
+  }
 
-    async cancelUploadVersion() {
-      const uploadedFile = this.get('uploadedFile');
-      if (uploadedFile) {
-        const container = this.get('documentContainer');
-        const document = await this.get('documentContainer.lastDocumentVersion');
-        container.rollbackAttributes();
-        document.rollbackAttributes();
-        const versionInCreation = await uploadedFile.get('documentVersion');
-        if (versionInCreation) {
-          await this.fileService.deleteDocumentVersion(versionInCreation);
-        } else {
-          await this.fileService.deleteFile(uploadedFile);
-        }
-        this.set('uploadedFile', null);
-      }
-      this.set('isUploadingNewVersion', false);
-    },
-
-    async saveDocument() {
-      // TODO this component/method is used for agendaitem, subcase, session (AND for decision/meetingRecord but we pass in document model)
-      // TODO should we seperate this logic to make the addition of a version more generic ?
-      this.set('isLoading', true);
-      const document = await this.get('documentContainer.lastDocumentVersion');
-      await document.save();
-      const item = await this.get('item');
-      const agendaActivity = await item.get('agendaActivity'); // when item = agendaitem
-      const agendaitemsOnDesignAgenda = await item.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
-      try {
-        if (agendaActivity) {
-          const subcase = await agendaActivity.get('subcase');
-          await this.addDocumentToSubcase([document], subcase);
-        } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-          await this.addDocumentToAgendaitems([document], agendaitemsOnDesignAgenda);
-        }
-        await this.addDocumentToAnyModel([document], item);
-      } catch (error) {
-        await this.deleteUploadedDocument();
-        throw error;
-      } finally {
-        if (!this.isDestroyed) {
-          this.set('uploadedFile', null);
-          this.set('isLoading', false);
-          this.set('isUploadingNewVersion', false);
-        }
-      }
-    },
-    cancel() {
-      this.set('documentContainerToDelete', null);
-      this.set('isVerifyingDelete', false);
-    },
-
-    verify() {
-      const verificationToast = {
-        type: 'revert-action',
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('document-being-deleted'),
-        options: {
-          timeOut: 15000,
-        },
-      };
-      verificationToast.options.onUndo = () => {
-        this.fileService.reverseDelete(this.documentContainerToDelete.get('id'));
-        this.toaster.toasts.removeObject(verificationToast);
-      };
-      this.toaster.displayToast.perform(verificationToast);
-      this.deleteDocumentContainerWithUndo();
-      this.set('isVerifyingDelete', false);
-    },
-
-    deleteDocument(document) {
-      this.set('documentContainerToDelete', document);
-      this.set('isVerifyingDelete', true);
-    },
-  },
-});
+  @action
+  deleteDocument(document) {
+    this.documentContainerToDelete = document;
+    this.isVerifyingDelete = true;
+  }
+}
