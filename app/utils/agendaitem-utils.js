@@ -88,7 +88,8 @@ export const setNewPropertiesToModel = async(model, propertiesToSet, resetFormal
  */
 export const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
   const agenda = await agendaitem.get('agenda');
-  if (agenda) {
+  const isDesignAgenda = await agenda.asyncCheckIfDesignAgenda();
+  if (agenda && isDesignAgenda) {
     agenda.set('modified', moment().utc()
       .toDate());
     agenda.save();
@@ -123,7 +124,6 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
     await setModifiedOnAgendaOfAgendaitem(item);
   } else {
     await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-
     const agendaitemsOnDesignAgendaToEdit = await item.get('agendaitemsOnDesignAgendaToEdit');
     if (agendaitemsOnDesignAgendaToEdit && agendaitemsOnDesignAgendaToEdit.get('length') > 0) {
       await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {

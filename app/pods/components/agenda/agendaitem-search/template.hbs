@@ -1,24 +1,29 @@
-<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-hide-on-print">
-  <div class="vlc-toolbar vlc-toolbar--auto">
-    <div class="vlc-toolbar__justified">
-      <div class="vlc-toolbar__item vlc-u-box-model-maximize-width">
-        <div class="vl-input-field--inline vl-u-display-flex vl-u-flex-align-center vlc-u-flex-space-between"
-        >
-          {{input
-            value=value
-            placeholder=(t "search-agenda-items")
-            key-up=(action "emptySearchTask" value)
-            key-press=(perform searchTask)
-            class="vl-input-field vl-input-field__input"
-          }}
-          <button type="button" class="vl-input-field__submit vl-button" {{action "search"}}>
-            <i class="ki-search"></i>
-          </button>
+<div class="vlc-scroll-wrapper__header">
+  <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-hide-on-print">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__justified">
+        <div class="vlc-toolbar__item vlc-u-box-model-maximize-width">
+          <div class="vl-input-field--inline vl-u-display-flex vl-u-flex-align-center vlc-u-flex-space-between">
+            <Input
+              class="vl-input-field vl-input-field__input"
+              value={{this.searchText}}
+              @enter={{this.search}}
+              @placeholder={{t "search-agenda-items"}}
+              {{on "input" this.debouncedSearch}}
+            />
+            <button
+              type="button"
+              class="vl-input-field__submit vl-button"
+              {{on "click" this.search}}
+            >
+              <i class="ki-search"></i>
+            </button>
+          </div>
         </div>
+        {{#if this.debouncedSearchTask.isRunning}}
+          <div class="vl-loader" role="alert" aria-busy="true"></div>
+        {{/if}}
       </div>
-      {{#if searchTask.isRunning}}
-        <div class="vl-loader" role="alert" aria-busy="true"></div>
-      {{/if}}
     </div>
   </div>
 </div>
