@@ -115,6 +115,11 @@ Router.map(function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
   });
+
+  this.route('publications', { path: '/publicaties', }, function() {
+    this.route('in-progress', { path: '/in-behandeling', });
+    this.route('done', { path: '/behandeld', });
+  });
 });
 
 export default Router;

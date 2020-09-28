@@ -1,3 +1,8 @@
-<button data-test-go-to-user-detail type="button" onclick={{action "onRowClick"}} class="vlc-link-pointer vl-button vl-button--link vl-button--icon u-padding--left--small vlc-u-flex-justify-flex-end">
-  <li class="vl-button__icon ki-nav-right"></li>
-</button>
+<LinkTo
+    data-test-agenda-overview-sub-item
+    @route="settings.users.user"
+    @model={{await @row.account.user.id}}
+    @class="vl-button vl-button--link vl-button--icon"
+>
+  <i class="vl-button__icon ki-nav-right"></i>
+</LinkTo>
