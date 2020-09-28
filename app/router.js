@@ -71,6 +71,7 @@ Router.map(function() {
   this.route('newsletter', { path: '/vergadering/:meeting_id/kort-bestek', }, function() {
     this.route('index', { path: '/', });
     this.route('print', { path: '/afdrukken', });
+    this.route('nota-updates');
   });
 
   this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
@@ -113,6 +114,11 @@ Router.map(function() {
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
+  });
+
+  this.route('publications', { path: '/publicaties', }, function() {
+    this.route('in-progress', { path: '/in-behandeling', });
+    this.route('done', { path: '/behandeld', });
   });
 });
 
