@@ -29,7 +29,6 @@ context('Full test', () => {
     // #region routes to be reused
     cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/cases').as('createNewCase');
