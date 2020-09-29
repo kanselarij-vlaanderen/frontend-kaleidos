@@ -1,25 +1,24 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
   sortByPriority
 } from 'fe-redpencil/utils/agendaitem-utils';
 
-export default Route.extend({
-  sessionService: inject(),
-  agendaService: inject(),
-
-  type: 'newsletter',
-  allowEmptyGroups: true,
-
-  queryParams: {
+export default class PrintNewsletterRoute extends Route {
+  queryParams = {
     showDraft: {
       refreshModel: true,
       as: 'klad',
     },
-  },
+  }
+
+  @service sessionService;
+  @service agendaService;
+
+  allowEmptyGroups = true;
 
   async model(params) {
     const session = await this.modelFor('newsletter').meeting;
@@ -51,7 +50,7 @@ export default Route.extend({
       announcements: announcements.sortBy('priority'),
       meeting: session,
     });
-  },
+  }
 
   async parseAgendaitems(agendaitems, params) {
     let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
@@ -69,7 +68,7 @@ export default Route.extend({
 
   filterAnnouncements(announcements) {
     return announcements.filter((agendaitem) => agendaitem.showInNewsletter);
-  },
+  }
 
   async filterAgendaitems(agendaitems, params) {
     if (params.showDraft) {
@@ -93,5 +92,5 @@ export default Route.extend({
       return null;
     });
     return filtered;
-  },
-});
+  }
+}
