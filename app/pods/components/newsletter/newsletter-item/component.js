@@ -3,7 +3,6 @@ import Component from '@ember/component';
 export default Component.extend({
   classNames: ['vl-u-spacer-extended-bottom'],
   isEditing: false,
-  agenda: null,
   itemIndex: 0,
   showIndex: false,
   agendaitem: null,

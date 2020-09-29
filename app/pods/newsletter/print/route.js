@@ -55,7 +55,6 @@ export default class PrintNewsletterRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.set('meeting', this.modelFor('newsletter').meeting);
-    controller.set('agenda', this.modelFor('newsletter').agenda);
   }
 
   async filterAgendaitems(agendaitems) {

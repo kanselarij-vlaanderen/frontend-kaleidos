@@ -19,7 +19,6 @@
       {{#each (await model.notas) as |agendaitem index|}}
         {{#let (add index 1) as |humanIndex|}}
           <Newsletter::NewsletterItem
-            @agenda={{this.agenda}}
             @showIndex={{this.showDraft}}
             @allowEditing={{this.showDraft}}
             @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
@@ -34,7 +33,6 @@
         </h2>
         {{#each (await model.notas) as |agendaitem|}}
           <Newsletter::NewsletterItem
-            @agenda={{this.agenda}}
             @showIndex={{this.showDraft}}
             @itemIndex={{agendaitem.number}}
             @allowEditing={{this.showDraft}}

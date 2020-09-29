@@ -32,9 +32,6 @@
         {{agendaitem.title}}
       </p>
     {{/if}}
-    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
-      {{moment-format (await agenda.createdFor.plannedstart) "DD MMMM YYYY"}}
-    </div>
   </div>
 {{else}}
   <div>
