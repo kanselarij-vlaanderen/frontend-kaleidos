@@ -16,13 +16,12 @@
       <h2 class="vl-title vl-title--h2">
         {{t "agendaitems-subtitle"}}
       </h2>
-      {{#each (await model.notas) as |agendaitem|}}
-        {{!-- TODO: eliminate hack setting "itemIndex" on agenda-item --}}
+      {{#each (await model.notas) as |agendaitem index|}}
         <Newsletter::NewsletterItem
           @agenda={{this.agenda}}
           @showIndex={{this.showDraft}}
           @allowEditing={{this.showDraft}}
-          @itemIndex={{agendaitem.itemIndex}}
+          @itemIndex={{if this.showDraft agendaitem.number index}}
           @agendaitem={{agendaitem}}
           @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
         />
@@ -35,6 +34,7 @@
           <Newsletter::NewsletterItem
             @agenda={{this.agenda}}
             @showIndex={{this.showDraft}}
+            @itemIndex={{agendaitem.number}}
             @allowEditing={{this.showDraft}}
             @agendaitem={{announcement}}
             @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
