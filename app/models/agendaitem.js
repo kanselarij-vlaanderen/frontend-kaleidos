@@ -109,7 +109,10 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  number: deprecatingAlias('priority'),
+  number: deprecatingAlias('priority', {
+    id: 'agendaitem-number-deprecated',
+    until: 'unknown',
+  }),
 
   isDesignAgenda: computed('agenda.isDesignAgenda', function() {
     return this.get('agenda.isDesignAgenda');
