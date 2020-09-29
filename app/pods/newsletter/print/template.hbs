@@ -11,7 +11,7 @@
       {{utils/logo-header}}
       {{newsletter/newsletter-meeting
         definite=(not this.showDraft)
-        meeting=(await model.meeting)
+        meeting=this.meeting
       }}
       <h2 class="vl-title vl-title--h2">
         {{t "agendaitems-subtitle"}}
@@ -20,7 +20,7 @@
         {{#each (await model.groups) as |group|}}
           {{#each group.agendaitems as |agendaitem|}}
             {{newsletter/newsletter-item
-              agenda=(await model.agenda)
+              agenda=this.agenda
               itemIndex=agendaitem.itemIndex
               definite=(not this.showDraft)
               agendaitem=agendaitem
@@ -31,7 +31,7 @@
       {{else}}
         {{#each (await model.agendaitems) as |agendaitem|}}
           {{newsletter/newsletter-item
-            agenda=(await model.agenda)
+            agenda=this.agenda
             definite=(not this.showDraft)
             agendaitem=agendaitem
             newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
@@ -44,7 +44,7 @@
         </h2>
         {{#each (await model.announcements) as |announcement|}}
           {{newsletter/newsletter-item
-            agenda=(await model.agenda)
+            agenda=this.agenda
             definite=(not this.showDraft)
             agendaitem=announcement
             newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)

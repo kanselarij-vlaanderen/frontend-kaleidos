@@ -21,7 +21,6 @@ export default class PrintNewsletterRoute extends Route {
   allowEmptyGroups = true;
 
   async model(params) {
-    const session = await this.modelFor('newsletter').meeting;
     const agenda = await this.modelFor('newsletter').agenda;
     const agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
@@ -44,12 +43,16 @@ export default class PrintNewsletterRoute extends Route {
     const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
 
     return hash({
-      currentAgenda: agenda,
       groups: groupsArray,
       agendaitems: draftAgendaitems.sortBy('priority'),
       announcements: announcements.sortBy('priority'),
-      meeting: session,
     });
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.set('meeting', this.modelFor('newsletter').meeting);
+    controller.set('agenda', this.modelFor('newsletter').agenda);
   }
 
   async parseAgendaitems(agendaitems, params) {
