@@ -10,8 +10,6 @@ export default Controller.extend({
       type: 'boolean',
     },
   },
-  page: 0,
-  size: 100,
 
 
 });
