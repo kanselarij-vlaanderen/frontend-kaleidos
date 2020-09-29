@@ -175,7 +175,6 @@ export default Service.extend({
       documentVersions: await subcase.get('documentVersions'),
       linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
       agendaActivity,
-      showInNewsletter: true,
       treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
