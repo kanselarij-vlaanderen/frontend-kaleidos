@@ -17,9 +17,12 @@
         {{t "agendaitems-subtitle"}}
       </h2>
       {{#each (await model.notas) as |agendaitem|}}
+        {{!-- TODO: eliminate hack setting "itemIndex" on agenda-item --}}
         <Newsletter::NewsletterItem
           @agenda={{this.agenda}}
-          @definite={{not this.showDraft}}
+          @showIndex={{this.showDraft}}
+          @allowEditing={{this.showDraft}}
+          @itemIndex={{agendaitem.itemIndex}}
           @agendaitem={{agendaitem}}
           @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
         />
@@ -31,7 +34,8 @@
         {{#each (await model.notas) as |agendaitem|}}
           <Newsletter::NewsletterItem
             @agenda={{this.agenda}}
-            @definite={{not this.showDraft}}
+            @showIndex={{this.showDraft}}
+            @allowEditing={{this.showDraft}}
             @agendaitem={{announcement}}
             @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
           />
