@@ -28,15 +28,13 @@ export default class PrintNewsletterRoute extends Route {
       sort: 'priority',
       'page[size]': 300,
     });
-    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
+    let notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
+    let announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     if (params.showDraft) {
-      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
-      return hash({
-        notas: notas.sortBy('priority'),
-        announcements: announcements.sortBy('priority'),
-      });
-    } else { // eslint-disable-line no-else-return
+      notas = notas.sortBy('priority');
+      announcements = announcements.sortBy('priority');
+    } else {
       const filteredNotas = await this.filterAgendaitems(notas);
 
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
@@ -44,8 +42,14 @@ export default class PrintNewsletterRoute extends Route {
       const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
       await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
 
-      return sortByPriority(groupedAgendaitems, true); // An array of groups
+      const itemGroups = sortByPriority(groupedAgendaitems, true); // An array of groups
+      notas = itemGroups.reduce((agendaItems, group) => agendaItems.push(group.agendaitems));
     }
+
+    return hash({
+      notas,
+      announcements,
+    });
   }
 
   setupController(controller) {

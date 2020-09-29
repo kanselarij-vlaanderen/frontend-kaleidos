@@ -16,39 +16,25 @@
       <h2 class="vl-title vl-title--h2">
         {{t "agendaitems-subtitle"}}
       </h2>
-      {{#if this.showDraft}}
-        {{#each (await model.notas) as |agendaitem|}}
+      {{#each (await model.notas) as |agendaitem|}}
+        {{newsletter/newsletter-item
+          agenda=this.agenda
+          definite=(not this.showDraft)
+          agendaitem=agendaitem
+          newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
+        }}
+      {{/each}}
+      {{#if (await model.announcements.length)}}
+        <h2 class="vl-title vl-title--h2">
+          {{t "announcements-subtitle"}}
+        </h2>
+        {{#each (await model.announcements) as |announcement|}}
           {{newsletter/newsletter-item
             agenda=this.agenda
-            definite=false
-            agendaitem=agendaitem
+            definite=(not this.showDraft)
+            agendaitem=announcement
             newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
           }}
-        {{/each}}
-        {{#if (await model.announcements.length)}}
-          <h2 class="vl-title vl-title--h2">
-            {{t "announcements-subtitle"}}
-          </h2>
-          {{#each (await model.announcements) as |announcement|}}
-            {{newsletter/newsletter-item
-              agenda=this.agenda
-              definite=false
-              agendaitem=announcement
-              newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
-            }}
-          {{/each}}
-        {{/if}}
-      {{else}}
-        {{#each (await model.groups) as |group|}}
-          {{#each group.agendaitems as |agendaitem|}}
-            {{newsletter/newsletter-item
-              agenda=this.agenda
-              itemIndex=agendaitem.itemIndex
-              definite=true
-              agendaitem=agendaitem
-              newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
-            }}
-          {{/each}}
         {{/each}}
       {{/if}}
     </div>
