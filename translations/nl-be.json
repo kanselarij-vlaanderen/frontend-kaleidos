@@ -619,5 +619,7 @@
   "newsletter-update-notas-agendaitem-short-title": "Agendapunt (korte titel)",
   "newsletter-update-notas-documentname": "Documentnaam",
   "newsletter-update-notas-edited-on": "Gewijzigd op",
-  "newsletter-update-notas-edited-text": "Geüpload op {date} om {time}"
+  "newsletter-update-notas-edited-text": "Geüpload op {date} om {time}",
+  "document-not-consultable": "Dit document is niet consulteerbaar voor uw profiel",
+  "document-is-confidential": "Dit document is vertrouwelijk"
 }
