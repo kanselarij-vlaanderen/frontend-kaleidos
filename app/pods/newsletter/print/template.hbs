@@ -17,14 +17,16 @@
         {{t "agendaitems-subtitle"}}
       </h2>
       {{#each (await model.notas) as |agendaitem index|}}
-        <Newsletter::NewsletterItem
-          @agenda={{this.agenda}}
-          @showIndex={{this.showDraft}}
-          @allowEditing={{this.showDraft}}
-          @itemIndex={{if this.showDraft agendaitem.number index}}
-          @agendaitem={{agendaitem}}
-          @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
-        />
+        {{#let (add index 1) as |humanIndex|}}
+          <Newsletter::NewsletterItem
+            @agenda={{this.agenda}}
+            @showIndex={{this.showDraft}}
+            @allowEditing={{this.showDraft}}
+            @itemIndex={{if this.showDraft agendaitem.number humanIndex}}
+            @agendaitem={{agendaitem}}
+            @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
+          />
+        {{/let}}
       {{/each}}
       {{#if (await model.announcements.length)}}
         <h2 class="vl-title vl-title--h2">
