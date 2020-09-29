@@ -15,8 +15,9 @@ export default Route.extend({
   allowEmptyGroups: true,
 
   queryParams: {
-    definite: {
+    showDraft: {
       refreshModel: true,
+      as: 'klad',
     },
   },
 
@@ -25,7 +26,7 @@ export default Route.extend({
     const agenda = await this.modelFor('newsletter').agenda;
     const agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      'filter[show-as-remark]': params.definite ? undefined : false,
+      'filter[show-as-remark]': params.showDraft ? false : undefined,
       'filter[is-approval]': false,
       include: 'mandatees,treatments.newsletter-info',
       sort: 'priority',
@@ -71,7 +72,7 @@ export default Route.extend({
   },
 
   async filterAgendaitems(agendaitems, params) {
-    if (params.definite !== 'true') {
+    if (params.showDraft) {
       return agendaitems;
     }
     const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {

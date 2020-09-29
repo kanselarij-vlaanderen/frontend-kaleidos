@@ -5,7 +5,11 @@ import { inject } from '@ember/service';
 
 export default Controller.extend({
   intl: inject(),
-  queryParams: ['definite'],
+  queryParams: {
+    showDraft: {
+      type: 'boolean',
+    },
+  },
   page: 0,
   size: 100,
 
@@ -30,11 +34,11 @@ export default Controller.extend({
     return this.get('model.amountOfItems');
   }),
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function() {
+  documentTitle: computed('model.currentAgenda.createdFor', 'showDraft', function() {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
 
-    if (this.definite === 'false') {
+    if (this.showDraft) {
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('newsletter-overview-pdf-name')} ${moment(date).format('DD-MM-YYYY')}`;
