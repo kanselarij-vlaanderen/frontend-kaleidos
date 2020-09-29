@@ -147,7 +147,7 @@ export default class DocumentLink extends Component {
 
   setupMySortedPieces() {
     const itemPieceIds = {};
-    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer && !this.args.documentContainer) {
+    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer || !this.args.documentContainer) {
       return false;
     }
     const subcaseAgendaitemMeetingOrDocumentContainerPieces = this.args.subcaseAgendaitemMeetingOrDocumentContainer.pieces;

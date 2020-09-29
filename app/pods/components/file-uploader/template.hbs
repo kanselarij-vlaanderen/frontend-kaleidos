@@ -9,7 +9,11 @@
     <em>
       <i class="ki-paperclip" aria-hidden="true"></i>
       <span>
-        {{t "add-attachements"}}
+        {{#if this.multipleFiles}}
+          {{t "add-attachments"}}
+        {{else}}
+          {{t "add-attachment"}}
+        {{/if}}
       </span>
     </em>
     {{#file-dropzone
@@ -36,7 +40,11 @@
           {{t "uploading"}}
         </div>
       {{else if dropzone.supported}}
-        {{t "dropzone-text"}}
+        {{#if this.multipleFiles}}
+          {{t "dropzone-text-multiple"}}
+        {{else}}
+          {{t "dropzone-text"}}
+        {{/if}}
       {{/if}}
     {{/file-dropzone}}
   {{/file-upload}}

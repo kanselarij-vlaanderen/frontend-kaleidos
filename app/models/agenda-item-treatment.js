@@ -8,18 +8,15 @@ const {
 
 export default Model.extend({
   intl: inject(),
-  agendaitem: belongsTo('agendaitem'), // { inverse: null } ?
-  subcase: belongsTo('subcase'), // { inverse: null } ?
-  report: belongsTo('document-container', {
-    inverse: null,
-  }),
+  agendaitem: belongsTo('agendaitem'),
+  subcase: belongsTo('subcase'),
+  report: belongsTo('piece'),
   newsletterInfo: belongsTo('newsletter-info'),
   decisionResultCode: belongsTo('decision-result-code', {
     inverse: null,
   }),
   modified: attr('datetime'),
   created: attr('datetime'),
-  // pieces: hasMany('piece', { inverse: null }),
   treatmentApproval: computed('report', function() {
     return this.intl.t('signed-document-decision', {
       name: this.get('report.lastPiece.name'),

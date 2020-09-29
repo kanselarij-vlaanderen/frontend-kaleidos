@@ -26,7 +26,7 @@
                     type="button"
                     class="vl-link vl-u-text--error"
                     {{on "click" attacher.hide}}
-                    {{on "click" (fn this.promptDeleteTreatment this.treatment)}}
+                    {{on "click" (fn this.promptDeleteTreatment @treatment)}}
                   >
                     {{t "delete-decision"}}
                   </button>
@@ -37,35 +37,20 @@
         {{/if}}
       {{/if}}
     </div>
-
     <div class="vl-u-spacer-extended-top-s">
-      {{#if this.treatment.decisionResultCode}}
-        <Decision::DecisionResultPill @decisionResultCode={{this.treatment.decisionResultCode}}/>
+      {{#if @treatment.decisionResultCode}}
+        <Decision::DecisionResultPill @decisionResultCode={{@treatment.decisionResultCode}}/>
       {{/if}}
     </div>
   </div>
-  {{!-- TODO treatment no longer has the relation to pieces --}}
-  {{#if this.treatment.pieces.length}}
-    <div class="vl-u-spacer">
-      <h4 class="vl-title vl-title--h6">
-        {{t "documents-attached-to"}}
-      </h4>
-      <div class="vl-u-spacer-extended-top-s">
-        <Utils::PiecesListForItem
-                @agendaitemOrSubcase={{this.treatment}}
-                @isClickable={{true}}
-        />
-      </div>
-    </div>
-  {{/if}}
-  {{#if this.treatment.report}}
-    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @documentContainer={{await this.treatment.report}}
-      @subcaseAgendaitemMeetingOrDocumentContainer={{await this.treatment.report}}
+  {{#if (await @treatment.report)}}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::ReportLink
+      @documentContainer={{await @treatment.report.documentContainer}}
+      @treatment={{@treatment}}
     />
   {{else}}
-    <Utils::AddSignedDocumentContainers
-      @meetingRecordOrDecision={{this.treatment}}
+    <Utils::AddDocuments
+      @meetingRecordOrDecision={{@treatment}}
       @defaultType={{this.defaultType}}
       @modelToAddPieceTo="agendaItemTreatment"
       @title={{t "signed-decision-add"}}
@@ -73,7 +58,7 @@
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemDecisionEdit
-    @agendaItemTreatment={{this.treatment}}
+    @agendaItemTreatment={{@treatment}}
     @onSave={{this.closeEditingWindow}}
     @onCancel={{this.closeEditingWindow}}
     @isTableRow={{@isTableRow}}
