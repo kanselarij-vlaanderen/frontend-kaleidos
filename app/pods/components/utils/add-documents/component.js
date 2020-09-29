@@ -51,19 +51,16 @@ export default Component.extend({
     set(this, 'pieceInCreation', null);
   },
 
-  createNewPiece(uploadedFile, previousPiece, defaults) {
-    const propsFromPrevious = [
+  createNewPiece(uploadedFile, defaults) {
+    const defaultPropsToSet = [
       'accessLevel',
       'confidential'
     ];
     const newPiece = this.store.createRecord('piece', {});
-    propsFromPrevious.forEach(async(key) => {
-      newPiece.set(key, previousPiece
-        ? await previousPiece.getWithDefault(key, defaults[key])
-        : defaults[key]);
+    defaultPropsToSet.forEach(async(key) => {
+      newPiece.set(key, defaults[key]);
     });
     newPiece.set('file', uploadedFile);
-    newPiece.set('previousPiece', previousPiece);
     newPiece.set('name', uploadedFile.get('filenameWithoutExtension'));
     return newPiece;
   },
@@ -73,7 +70,7 @@ export default Component.extend({
     const piece = this.get('pieceInCreation');
     await piece.save();
     const container = await piece.get('documentContainer.content'); // TODO: cannot use .content
-    container.set('documents', A([piece]));
+    container.set('pieces', A([piece]));
     await container.save();
 
     this.set('pieceInCreation', null);
@@ -87,7 +84,7 @@ export default Component.extend({
       this.clearAllDocuments();
     },
 
-    toggleIsAddingNewDocument() {
+    toggleIsAddingNewPiece() {
       this.toggleProperty('isAddingNewPiece');
     },
 
@@ -98,7 +95,7 @@ export default Component.extend({
       const documentType = await this.get('documentTypeToAssign');
       this.send('closeModal');
 
-      const container = await piece.documentContainer;
+      const container = await piece.get('documentContainer');
       if (documentType) {
         container.set('type', documentType);
         await container.save();

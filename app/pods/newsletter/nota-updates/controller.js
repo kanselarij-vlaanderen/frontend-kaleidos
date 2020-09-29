@@ -18,7 +18,7 @@ export default class NewsletterNotaUpdatesController extends Controller {
 
   @action
   // eslint-disable-next-line class-methods-use-this
-  showDocumentVersionViewer(documentId) {
-    window.open(`/document/${documentId}`);
+  showPieceViewer(pieceId) {
+    window.open(`/document/${pieceId}`);
   }
 }
