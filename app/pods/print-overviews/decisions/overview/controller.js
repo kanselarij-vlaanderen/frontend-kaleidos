@@ -2,29 +2,31 @@ import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],
 
-  title: computed('model.currentAgenda.createdFor', function() {
-    const date = this.get('model.currentAgenda.createdFor.plannedStart');
-    const fullProcedure = this.get('model.currentAgenda.createdFor.kindToShow.fullProcedure');
+  meeting: alias('model.currentAgenda.createdFor'),
+  title: computed('meeting', function() {
+    const date = this.get('meeting.plannedStart');
+    const kindLabel = this.get('meeting.kindToShow.altLabel');
     return `${this.intl.t('decisions-of-kind', {
-      kind: fullProcedure,
+      kind: kindLabel,
     })} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'definite', function() {
-    const date = this.get('model.currentAgenda.createdFor.plannedStart');
-    const fullProcedure = this.get('model.currentAgenda.createdFor.kindToShow.fullProcedure');
+  documentTitle: computed('meeting', 'definite', function() {
+    const date = this.get('meeting.plannedStart');
+    const kindLabel = this.get('meeting.kindToShow.altLabel');
     let prefix = '';
 
     if (this.definite === 'false') {
       prefix = 'Klad ';
     }
     return `${prefix}${this.intl.t('decisions-of-kind', {
-      kind: fullProcedure,
+      kind: kindLabel,
     })} ${moment(date).format('DD-MM-YYYY')}`;
   }),
 });

@@ -13,14 +13,6 @@ export default Controller.extend({
   page: 0,
   size: 100,
 
-  title: computed('model.meeting', async function() {
-    const date = await this.get('model.meeting.plannedStart');
-    const fullProcedure = await this.get('model.meeting.kindToShow.fullProcedure');
-
-    return `${this.intl.t(
-      'newsletter-overview-pdf-name'
-    )} - ${fullProcedure} van ${moment(date).format('dddd DD-MM-YYYY')}`;
-  }),
 
   links: computed('model.links', function() {
     return this.get('model.links');
