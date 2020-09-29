@@ -131,6 +131,10 @@ export default class DocumentLink extends Component {
 
   async addDocumentToAnyModel(documents, subcaseAgendaitemMeetingOrDocumentContainer) {
     const itemType = subcaseAgendaitemMeetingOrDocumentContainer.get('constructor.modelName');
+    if (itemType === 'agenda-item-treatment') {
+      // item.set(report documents[0])
+      // return;
+    }
     if (itemType === 'document') {
       // The document is already saved in this case
       return;
@@ -149,7 +153,7 @@ export default class DocumentLink extends Component {
 
   mySortedDocumentVersions() {
     const itemVersionIds = {};
-    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer && !this.args.document) {
+    if (!this.args.subcaseAgendaitemMeetingOrDocumentContainer || !this.args.document) {
       return false;
     }
     const versions = this.args.subcaseAgendaitemMeetingOrDocumentContainer.documentVersions;
@@ -158,7 +162,7 @@ export default class DocumentLink extends Component {
         itemVersionIds[myDocumentVersion.get('id')] = true;
       });
     }
-    const documentVersions = this.args.document.sortedDocumentVersions;
+    const documentVersions = this.args.document.sortedDocuments;
     if (documentVersions) {
       this.mySortedDocuments = documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
       if (this.mySortedDocuments) {

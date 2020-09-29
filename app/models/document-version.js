@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
+
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -42,6 +43,9 @@ export default Model.extend({
     inverse: null,
   }),
   agendaitem: belongsTo('agendaitem', {
+    inverse: null,
+  }),
+  treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
   newsletter: belongsTo('newsletter-info'),

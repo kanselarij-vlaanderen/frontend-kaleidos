@@ -23,7 +23,7 @@
     closeModal=(action "closeModal")
     isOverlay=true
     large=true
-    title=(t "document-add")
+    title=(t "documents-add")
   }}
     <div class="vl-modal-dialog__content">
       {{#if (eq documentsInCreation.length 0)}}
@@ -57,7 +57,7 @@
     {{web-components/vl-modal-footer
       isLoading=isLoading
       cancelButtonText=(t "cancel")
-      saveButtonText=(t "document-add")
+      saveButtonText=(t "documents-add")
       cancelAction=(action "closeModal")
       saveAction=(action "uploadNewDocument")
       disableSave=(eq documentsInCreation.length 0)

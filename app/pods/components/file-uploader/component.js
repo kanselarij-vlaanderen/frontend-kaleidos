@@ -17,7 +17,7 @@ export default class FileUploader extends Component {
 
   @tracked uploadedFileLength = null;
 
-  multipleFiles = true;
+  multipleFiles = this.args.multipleFiles;
 
   @tracked isLoading = null;
 
