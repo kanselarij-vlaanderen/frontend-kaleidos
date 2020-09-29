@@ -89,7 +89,7 @@ export default class SubcaseDocuments extends Component {
   async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
-    if (['meeting-record', 'decision'].includes(modelName)) {
+    if (['decision'].includes(modelName)) {
       return model;
     }
 

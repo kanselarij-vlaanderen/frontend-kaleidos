@@ -71,7 +71,7 @@ export default class linkedDocumentLink extends Component {
   async unlinkDocumentVersions(documentVersions, model) {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
-    if (['meeting-record', 'decision'].includes(modelName)) {
+    if (['decision'].includes(modelName)) {
       return model;
     }
     const agendaActivity = await model.get('agendaActivity'); // when model = agendaitem
