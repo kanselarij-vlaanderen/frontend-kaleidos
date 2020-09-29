@@ -422,8 +422,9 @@ function addLinkedDocumentToAgendaitem(filenames) {
   cy.get(form.formSave).click();
 }
 
-Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
-Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
+Cypress.Commands.add('addDocuments', addDocuments);
+Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
+Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
