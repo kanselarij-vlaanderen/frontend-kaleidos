@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
 export default class PrintNewsletterController extends Controller {
   queryParams = {
@@ -6,4 +7,6 @@ export default class PrintNewsletterController extends Controller {
       type: 'boolean',
     },
   };
+
+  @tracked showDraft = false;
 }
