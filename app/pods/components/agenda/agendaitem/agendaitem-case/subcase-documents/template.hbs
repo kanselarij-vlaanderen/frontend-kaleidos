@@ -4,7 +4,7 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if 
+      {{#if
         (and currentSession.isEditor (gt (await @agendaitemOrSubcaseOrMeeting.documentsLength) 0))
       }}
         <div class="vl-u-spacer-extended-left-s">
@@ -48,7 +48,7 @@
       <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
         {{action "toggleIsAddingNewDocument"}}>
         <i class="vl-button__icon vl-button__icon--before ki-add"></i>
-        {{t "document-add"}}
+        {{t "documents-add"}}
       </button>
     </div>
   {{/if}}
@@ -95,7 +95,7 @@
           @closeModal={{action this.deleteAllDocuments}}
           @isOverlay={{true}}
           @large={{true}}
-          @title={{t "document-add"}} >
+          @title={{t "documents-add"}} >
     <div class="vl-modal-dialog__content">
       {{#if showDetail}}
         <div class="vl-u-align-right vl-u-spacer-extended-s">
@@ -162,7 +162,7 @@
     <WebComponents::VlModalFooter
       @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "document-add"}}
+      @saveButtonText={{t "documents-add"}}
       @cancelAction={{action this.deleteAllDocuments}}
       @saveAction={{action this.saveDocumentContainers}}
       @disableSave={{eq this.documentsInCreation.length 0}} />
