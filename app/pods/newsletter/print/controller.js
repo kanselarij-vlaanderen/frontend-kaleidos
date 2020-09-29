@@ -14,13 +14,4 @@ export default Controller.extend({
   size: 100,
 
 
-  documentTitle: computed('model.currentAgenda.createdFor', 'showDraft', function() {
-    const date = this.get('model.currentAgenda.createdFor.plannedStart');
-    let prefix = '';
-
-    if (this.showDraft) {
-      prefix = 'Klad ';
-    }
-    return `${prefix}${this.intl.t('newsletter-overview-pdf-name')} ${moment(date).format('DD-MM-YYYY')}`;
-  }),
 });
