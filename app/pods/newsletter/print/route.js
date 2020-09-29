@@ -34,7 +34,7 @@ export default class PrintNewsletterRoute extends Route {
     if (params.showDraft) {
       notas = notas.sortBy('priority');
       announcements = announcements.sortBy('priority');
-    } else {
+    } else { // Items need to be ordered by minister protocol order
       const filteredNotas = await this.filterAgendaitems(notas);
 
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
