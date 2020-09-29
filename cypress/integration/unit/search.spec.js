@@ -161,7 +161,6 @@ context('Search tests', () => {
   it('Search for funky searchterms in dossiers', () => {
     cy.visit('/zoeken/dossiers');
     const wordsToCheck2 = [
-      '🔍',
       'Principiële',
       'principiele',
       /* 'princi', // TODO stemming less search does not yet fully work here.*/
@@ -233,7 +232,6 @@ context('Search tests', () => {
       'batterij'
     ];
     const wordsToCheck2 = [
-      '🔍',
       'Principiële',
       'principiele',
       'principie',
