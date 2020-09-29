@@ -8,33 +8,33 @@
 <div class="vlc-scroll-wrapper__body vlc-hide-scrollbar-on-print">
   <div class="vl-u-spacer-extended-l">
     <div class="vlc-container-center">
-      {{utils/logo-header}}
-      {{newsletter/newsletter-meeting
-        definite=(not this.showDraft)
-        meeting=this.meeting
-      }}
+      <Utils::LogoHeader/>
+      <Newsletter::NewsletterMeeting
+        @definite={{not this.showDraft}}
+        @meeting={{this.meeting}}
+      />
       <h2 class="vl-title vl-title--h2">
         {{t "agendaitems-subtitle"}}
       </h2>
       {{#each (await model.notas) as |agendaitem|}}
-        {{newsletter/newsletter-item
-          agenda=this.agenda
-          definite=(not this.showDraft)
-          agendaitem=agendaitem
-          newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
-        }}
+        <Newsletter::NewsletterItem
+          @agenda={{this.agenda}}
+          @definite={{not this.showDraft}}
+          @agendaitem={{agendaitem}}
+          @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
+        />
       {{/each}}
       {{#if (await model.announcements.length)}}
         <h2 class="vl-title vl-title--h2">
           {{t "announcements-subtitle"}}
         </h2>
-        {{#each (await model.announcements) as |announcement|}}
-          {{newsletter/newsletter-item
-            agenda=this.agenda
-            definite=(not this.showDraft)
-            agendaitem=announcement
-            newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
-          }}
+        {{#each (await model.notas) as |agendaitem|}}
+          <Newsletter::NewsletterItem
+            @agenda={{this.agenda}}
+            @definite={{not this.showDraft}}
+            @agendaitem={{announcement}}
+            @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
+          />
         {{/each}}
       {{/if}}
     </div>
