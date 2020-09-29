@@ -72,7 +72,7 @@
             {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
               These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
             {{!-- template-lint-disable no-triple-curlies  --}}
-            {{{agendaitem.groupName}}}
+            <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
             {{!-- template-lint-enable no-triple-curlies  --}}
           </div>
         {{/if}}
@@ -124,19 +124,11 @@
     </ul>
   {{/if}}
 </div>
-{{#if (not selectedAgendaitem)}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
-      {{t "announcements-subtitle"}}
-    </h3>
-  </div>
-{{else}}
-  <div class="vlc-agenda-items-section-header">
-    <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
-      {{t "announcements-subtitle"}}
-    </h3>
-  </div>
-{{/if}}
+<div class="vlc-agenda-items-section-header">
+  <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+    {{t "announcements-subtitle"}}
+  </h3>
+</div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
     {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
