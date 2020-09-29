@@ -1,7 +1,7 @@
 /* ==========================================================================
-  Component: navbar
-  ---
-  A container for navigational elements
+   Component: navbar
+   ---
+   A container for navigational elements
    ========================================================================== */
 
 /* Variables
@@ -22,16 +22,16 @@ $vl-bar-size-large: 9.5rem !default;
   align-items: center;
 }
 
-.vlc-navbar--large {
-  height: $vl-bar-size-large;
-}
-
-.vlc-navbar--no-padding {
-  padding: 0;
+.vlc-navbar > .vlc-toolbar {
+  flex: 1 0 auto;
 }
 
 .vlc-navbar--auto {
   height: auto;
+}
+
+.vlc-navbar--no-padding {
+  padding: 0;
 }
 
 .vlc-navbar--white {
@@ -40,6 +40,10 @@ $vl-bar-size-large: 9.5rem !default;
 
 .vlc-navbar--bg-alt {
   background: $athens-gray;
+}
+
+.vlc-navbar--align-with-m-header {
+  padding-left: 4rem;
 }
 
 /* Bordered equivalents
@@ -62,4 +66,11 @@ $vl-bar-size-large: 9.5rem !default;
 
 .vlc-navbar--tabs-bottom {
   align-items: flex-end;
+}
+
+/* Sizes
+	 ========================================================================== */
+
+.vlc-navbar--large {
+  height: $vl-bar-size-large;
 }
