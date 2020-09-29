@@ -2,7 +2,9 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-space-between">
       <h4>
-        {{await numberToShow}}
+        {{#if this.showIndex}}
+          {{if this.itemIndex this.itemIndex this.agendaitem.number}}.
+        {{/if}}
         {{#if (not newsletterInfo)}}
           {{agendaitem.shortTitle}}
         {{else}}
