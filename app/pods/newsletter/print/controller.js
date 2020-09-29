@@ -14,18 +14,6 @@ export default Controller.extend({
   size: 100,
 
 
-  links: computed('model.links', function() {
-    return this.get('model.links');
-  }),
-
-  nbOfItems: computed('model.amountShowed', function() {
-    return this.get('model.amountShowed');
-  }),
-
-  total: computed('model.amountOfItems', function() {
-    return this.get('model.amountOfItems');
-  }),
-
   documentTitle: computed('model.currentAgenda.createdFor', 'showDraft', function() {
     const date = this.get('model.currentAgenda.createdFor.plannedStart');
     let prefix = '';
