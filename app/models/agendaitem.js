@@ -46,7 +46,6 @@ export default ModelWithModifier.extend({
   treatments: hasMany('agenda-item-treatment', {
     inverse: null,
   }),
-  meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
   remarks: hasMany('remark'),
