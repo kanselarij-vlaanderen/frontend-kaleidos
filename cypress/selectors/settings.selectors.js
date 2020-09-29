@@ -24,7 +24,7 @@ const selectors = {
   deleteUser: '[data-test-delete-user]',
   userSearchInput: '[data-test-user-search-input]',
   userSearchButton: '[data-test-user-search-button]',
-  goToUserDetail: '[data-test-go-to-user-detail]',
+  goToUserDetail: '[data-test-agenda-overview-sub-item]',
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
 };
