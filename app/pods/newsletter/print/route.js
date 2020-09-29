@@ -18,8 +18,6 @@ export default class PrintNewsletterRoute extends Route {
   @service sessionService;
   @service agendaService;
 
-  allowEmptyGroups = true;
-
   async model(params) {
     const agenda = await this.modelFor('newsletter').agenda;
     const agendaitems = await this.store.query('agendaitem', {
@@ -30,23 +28,24 @@ export default class PrintNewsletterRoute extends Route {
       sort: 'priority',
       'page[size]': 300,
     });
-    const announcements = this.filterAnnouncements(agendaitems.filter((agendaitem) => agendaitem.showAsRemark), params);
+    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
 
-    const {
-      draftAgendaitems, groupedAgendaitems,
-    } = await this.parseAgendaitems(
-      agendaitems, params
-    );
+    if (params.showDraft) {
+      const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+      return hash({
+        notas: notas.sortBy('priority'),
+        announcements: announcements.sortBy('priority'),
+      });
+    } else { // eslint-disable-line no-else-return
+      const filteredNotas = await this.filterAgendaitems(notas);
 
-    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
+      // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
+      await setCalculatedGroupPriorities(notas);
+      const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
+      await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
 
-    const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
-
-    return hash({
-      groups: groupsArray,
-      agendaitems: draftAgendaitems.sortBy('priority'),
-      announcements: announcements.sortBy('priority'),
-    });
+      return sortByPriority(groupedAgendaitems, true); // An array of groups
+    }
   }
 
   setupController(controller) {
@@ -55,45 +54,19 @@ export default class PrintNewsletterRoute extends Route {
     controller.set('agenda', this.modelFor('newsletter').agenda);
   }
 
-  async parseAgendaitems(agendaitems, params) {
-    let draftAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isApproval);
-
-    draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
-
-    await setCalculatedGroupPriorities(draftAgendaitems);
-
-    const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
-    return {
-      draftAgendaitems,
-      groupedAgendaitems,
-    };
-  },
-
-  filterAnnouncements(announcements) {
-    return announcements.filter((agendaitem) => agendaitem.showInNewsletter);
-  }
-
-  async filterAgendaitems(agendaitems, params) {
-    if (params.showDraft) {
-      return agendaitems;
-    }
-    const newsLetterByIndex = await Promise.all(agendaitems.map(async(agendaitem) => {
+  async filterAgendaitems(agendaitems) {
+    const filteredAgendaitems = [];
+    for (const agendaItem of agendaitems) {
       try {
-        const agendaItemTreatment = await agendaitem.get('treatments').firstObject;
+        const agendaItemTreatment = await agendaItem.get('treatments').firstObject;
         const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
-        return newsletterInfo.inNewsletter;
+        if (newsletterInfo && newsletterInfo.inNewsletter) {
+          filteredAgendaitems.push(agendaItem);
+        }
       } catch (exception) {
         console.warn('An exception occurred: ', exception);
-        return false;
       }
-    }));
-    const filtered = [];
-    agendaitems.map((agendaitem, index) => {
-      if (newsLetterByIndex[index]) {
-        filtered.push(agendaitem);
-      }
-      return null;
-    });
-    return filtered;
+    }
+    return filteredAgendaitems;
   }
 }
