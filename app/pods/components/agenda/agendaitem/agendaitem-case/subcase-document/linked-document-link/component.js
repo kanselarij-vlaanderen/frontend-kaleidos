@@ -6,130 +6,128 @@ import { tracked } from '@glimmer/tracking';
 
 export default class linkedDocumentLink extends Component {
   // Input
-  // this.args.document
+  // this.args.documentContainer
   // this.args.agendaitemOrSubcaseOrMeeting
 
   @service currentSession;
 
   classNameBindings = ['aboutToDelete'];
 
-  @tracked isShowingVersions = false
-  @tracked documentToDelete = null;
+  @tracked isShowingPieces = false
+  @tracked containerToUnlink = null;
   @tracked isVerifyingUnlink = false;
-  @tracked lastDocumentVersion = null;
-  @tracked mySortedDocuments;
+  @tracked lastPiece = null;
+  @tracked mySortedPieces;
 
   document = null
 
   get openClass() {
-    if (this.isShowingVersions) {
+    if (this.isShowingPieces) {
       return 'js-vl-accordion--open';
     }
     return null;
   }
 
-  get setupDocumentVersions() {
-    this.mySortedDocumentVersions();
+  get setupPieces() {
+    this.setupMySortedPieces();
     return true;
   }
 
   // TODO: DUPLICATE CODE IN agenda/agendaitem/agendaitem-case/subcase-document/document-link/component.js
   // TODO: DUPLICATE CODE IN agendaitem/agendaitem-case/subcase-document/linked-document-link/component.js
-  // TODO: DUPLICATE CODE IN edit-document-version/component.js
-  mySortedDocumentVersions() {
-    const itemVersionIds = {};
-    if (!this.args.agendaitemOrSubcaseOrMeeting && !this.args.document) {
+  // TODO: DUPLICATE CODE IN edit-piece/component.js
+  setupMySortedPieces() {
+    const itemPieceIds = {};
+    if (!this.args.agendaitemOrSubcaseOrMeeting && !this.args.documentContainer) {
       return false;
     }
-    const versions = this.args.agendaitemOrSubcaseOrMeeting.linkedDocumentVersions;
-    if (versions) {
-      versions.map((version) => {
-        itemVersionIds[version.get('id')] = true;
+    const agendaitemOrSubcaseOrMeetingPieces = this.args.agendaitemOrSubcaseOrMeeting.linkedPieces;
+    if (agendaitemOrSubcaseOrMeetingPieces) {
+      agendaitemOrSubcaseOrMeetingPieces.map((piece) => {
+        itemPieceIds[piece.get('id')] = true;
       });
     }
-    const documentVersions = this.args.document.sortedDocumentVersions;
-    if (documentVersions) {
-      this.mySortedDocuments = documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
-      if (this.mySortedDocuments) {
-        this.lastDocumentVersion = this.mySortedDocuments.lastObject;
+    const containerPieces = this.args.documentContainer.sortedPieces;
+    if (containerPieces) {
+      this.mySortedPieces = containerPieces.filter((piece) => itemPieceIds[piece.id]);
+      if (this.mySortedPieces) {
+        this.lastPiece = this.mySortedPieces.lastObject;
       }
     }
   }
 
-  async getReverseSortedDocumentVersions() {
+  async getReverseSortedPieces() {
     const reversed = [];
-    if (this.mySortedDocuments) {
-      this.mySortedDocuments.map((myDocumentVersion) => {
-        reversed.push(myDocumentVersion);
+    if (this.mySortedPieces) {
+      this.mySortedPieces.map((myPiece) => {
+        reversed.push(myPiece);
       });
       reversed.reverse();
-      this.reverseSortedDocumentVersions = reversed;
+      this.reverseSortedPieces = reversed;
     }
   }
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
-  async unlinkDocumentVersions(documentVersions, model) {
+  async unlinkPieces(documentContainer, model) {
+    const pieces = await documentContainer.get('pieces');
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
-    if (['meeting-record', 'decision'].includes(modelName)) {
+    // TODO linking documents is only possible for agendaitem and subcase, this code is not needed ? to check
+    if (['meeting-record', 'agenda-item-treatment'].includes(modelName)) {
       return model;
     }
     const agendaActivity = await model.get('agendaActivity'); // when model = agendaitem
     const agendaitemsOnDesignAgenda = await model.get('agendaitemsOnDesignAgendaToEdit'); // when model = subcase
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
-      await this.unlinkDocumentVersionsFromModel(subcase, documentVersions);
+      await this.unlinkPiecesFromModel(subcase, pieces);
     } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
       await Promise.all(agendaitemsOnDesignAgenda
-        .map((agendaitem) => this.unlinkDocumentVersionsFromModel(agendaitem, documentVersions)));
+        .map((agendaitem) => this.unlinkPiecesFromModel(agendaitem, pieces)));
     }
-    const unlinkDocumentVersionsFromModelPromise = await
-    this.unlinkDocumentVersionsFromModel(model, documentVersions);
-    return unlinkDocumentVersionsFromModelPromise;
+    const unlinkPiecesFromModelPromise = await this.unlinkPiecesFromModel(model, pieces);
+    return unlinkPiecesFromModelPromise;
   }
 
   // TODO: refactor model/code in function of "reeds aangeleverde documenten"
   // eslint-disable-next-line class-methods-use-this
-  async unlinkDocumentVersionsFromModel(model, documentVersions) {
-    const modelDocumentVersions = await model.get('linkedDocumentVersions');
-    if (modelDocumentVersions) {
-      documentVersions
-        .forEach((documentVersion) => modelDocumentVersions.removeObject(documentVersion));
+  async unlinkPiecesFromModel(model, pieces) {
+    const modelPieces = await model.get('linkedPieces');
+    if (modelPieces) {
+      pieces
+        .forEach((piece) => modelPieces.removeObject(piece));
     } else {
-      model.set('linkedDocumentVersions', A([]));
+      model.set('linkedPieces', A([]));
     }
-    const savedModalPromise = model.save();
+    const savedModalPromise = await model.save();
     return savedModalPromise;
   }
 
   @action
-  showVersions() {
-    this.isShowingVersions = !this.isShowingVersions;
-    if (this.isShowingVersions) {
-      this.getReverseSortedDocumentVersions();
+  showPieces() {
+    this.isShowingPieces = !this.isShowingPieces;
+    if (this.isShowingPieces) {
+      this.getReverseSortedPieces();
     }
   }
 
   @action
   cancel() {
-    this.documentToDelete = null;
+    this.containerToUnlink = null;
     this.isVerifyingUnlink = false;
   }
 
   @action
   async verify() {
-    const {
-      documentVersions,
-    } = this.documentToDelete;
-    await this.unlinkDocumentVersions(documentVersions, this.args.agendaitemOrSubcaseOrMeeting);
+    await this.unlinkPieces(this.containerToUnlink, this.args.agendaitemOrSubcaseOrMeeting);
     if (!this.isDestroyed) {
       this.isVerifyingUnlink = false;
     }
   }
 
   @action
-  unlinkDocument(document) {
-    this.documentToDelete = document;
+  unlinkContainer(documentContainer) {
+    this.containerToUnlink = documentContainer;
     this.isVerifyingUnlink = true;
   }
 }

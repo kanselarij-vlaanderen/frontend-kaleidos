@@ -6,37 +6,37 @@ const {
   PromiseObject,
 } = DS;
 
-export const sortDocuments = (documentVersions, containers) => {
+export const sortDocumentContainers = (pieces, containers) => {
   // Sorting is done in the frontend to work around a Virtuoso issue, where
   // FROM-statements for multiple graphs, combined with GROUP BY, ORDER BY results in
   // some items not being returned. By not having a sort parameter, this doesn't occur.
-  const sortedDocVers = A(documentVersions.toArray()).sort((documentVersionA, documentVersionB) => compareFunction(new VRDocumentName(documentVersionA.get('name')), new VRDocumentName(documentVersionB.get('name'))));
+  const sortedPieces = A(pieces.toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   /*
     Code below for compatibility towards mixin consumers.
-    Since names are now on each document(version)
-    we cans sort on the documents themselves instead of on containers
+    Since names are now on each piece
+    we can sort on the pieces themselves instead of on containers
   */
   return A(containers.toArray()).sort((containerA, containerB) => {
-    let matchingdocA = null;
-    let matchingdocB = null;
-    for (let index = 0; index < containerA.get('documents.length'); index++) {
-      const document = containerA.get('documents').objectAt(index);
-      matchingdocA = sortedDocVers.filterBy('id', document.id).sortBy('created').lastObject;
-      if (matchingdocA) {
+    let matchingPieceA = null;
+    let matchingPieceB = null;
+    for (let index = 0; index < containerA.get('pieces.length'); index++) {
+      const piece = containerA.get('pieces').objectAt(index);
+      matchingPieceA = sortedPieces.filterBy('id', piece.id).sortBy('created').lastObject;
+      if (matchingPieceA) {
         break;
       }
     }
-    for (let index = 0; index < containerB.get('documents.length'); index++) {
-      const document = containerB.get('documents').objectAt(index);
-      matchingdocB = sortedDocVers.filterBy('id', document.id).sortBy('created').lastObject;
-      if (matchingdocB) {
+    for (let index = 0; index < containerB.get('pieces.length'); index++) {
+      const piece = containerB.get('pieces').objectAt(index);
+      matchingPieceB = sortedPieces.filterBy('id', piece.id).sortBy('created').lastObject;
+      if (matchingPieceB) {
         break;
       }
     }
-    return sortedDocVers.indexOf(matchingdocA) - sortedDocVers.indexOf(matchingdocB);
+    return sortedPieces.indexOf(matchingPieceA) - sortedPieces.indexOf(matchingPieceB);
   });
 };
 
-export const getDocumentsLength = (model, property) => PromiseObject.create({
-  promise: model.get(property).then((documents) => (documents ? documents.get('length') : 0)),
+export const getPropertyLength = (model, property) => PromiseObject.create({
+  promise: model.get(property).then((property) => (property ? property.get('length') : 0)),
 });

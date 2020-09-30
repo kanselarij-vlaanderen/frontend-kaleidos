@@ -83,26 +83,25 @@
             {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
-                  {{#if (await @agendaitem.documents)}}
+                  {{#if (await @agendaitem.documentContainers)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListForItem
+                    <Utils::PiecesListForItem
                       @isClickable={{true}}
                       @agendaitemOrSubcase={{@agendaitem}}
-                      @document={{@agendaitem.document}}
                     />
                   {{else}}
-                    {{#if (await @agendaitem.documentNames)}}
+                    {{#if (await @agendaitem.pieceNames)}}
                       <div class="vlc-hr"></div>
-                      <Utils::DocumentsListLazyLoaded
-                       @documentNames={{@agendaitem.documentNames}}
+                      <Utils::PiecesListLazyLoaded
+                       @pieceNames={{@agendaitem.pieceNames}}
                       />
                     {{/if}}
                   {{/if}}
                 {{else}}
-                  {{#if (await @agendaitem.documentNames)}}
+                  {{#if (await @agendaitem.pieceNames)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListLazyLoaded
-                            @documentNames={{@agendaitem.documentNames}}
+                    <Utils::PiecesListLazyLoaded
+                            @pieceNames={{@agendaitem.pieceNames}}
                     />
                   {{/if}}
                 {{/if}}

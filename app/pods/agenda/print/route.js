@@ -32,7 +32,7 @@ export default Route.extend({
   ensureDocuments: task(function *(agendaitems) {
     const tasks = [];
     for (const agendaitem of agendaitems) {
-      if (!agendaitem.hasMany('documentVersions').value()) {
+      if (!agendaitem.hasMany('pieces').value()) {
         tasks.push(this.loadDocuments.perform(agendaitem));
       }
     }
@@ -40,7 +40,7 @@ export default Route.extend({
   }),
 
   loadDocuments: task(function *(agendaitem) {
-    yield agendaitem.hasMany('documentVersions').reload({
+    yield agendaitem.hasMany('pieces').reload({
       adapterOptions: {
         namesOnly: true,
       },

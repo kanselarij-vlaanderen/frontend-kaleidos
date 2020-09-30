@@ -1,24 +1,24 @@
-{{#if (await meetingRecordOrDecision.signedDocument)}}
+{{#if (await meetingRecordOrDecision.signedDocumentContainer)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await meetingRecordOrDecision.signedDocument)
-    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.signedDocument)
+    documentContainer=(await meetingRecordOrDecision.signedDocumentContainer)
+    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.signedDocumentContainer)
   }}
 {{else if (await meetingRecordOrDecision.report)}}
   {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await meetingRecordOrDecision.report)
+    documentContainer=(await meetingRecordOrDecision.report)
     subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.report)
   }}
 {{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"
       data-test-upload-decision-file
-      {{action "toggleIsAddingNewDocument"}}
+      {{action "toggleisAddingNewDocumentContainer"}}
     >
       {{title}}
     </button>
   {{/if}}
 {{/if}}
-{{#if isAddingNewDocument}}
+{{#if isAddingNewDocumentContainer}}
   {{#web-components/vl-modal
     closeModal=(action "closeModal")
     isOverlay=true
@@ -26,7 +26,7 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
-      {{#if (eq documentsInCreation.length 0)}}
+      {{#if (not pieceInCreation)}}
         {{file-uploader
           isLoading=isLoading
           multipleFiles=false
@@ -34,22 +34,22 @@
         }}
       {{/if}}
       {{#if (not isLoading)}}
-        <div class="upload-container">
-          {{#each documentsInCreation as |doc|}}
+        {{#if pieceInCreation}}
+          <div class="upload-container">
             {{ember-kaleidos-webuniversum/vl-uploaded-document
-              name=doc.file.filename
-              extension=doc.file.extension
-              size=doc.file.size
-              downloadName=doc.file.filename
+              name=pieceInCreation.file.filename
+              extension=pieceInCreation.file.extension
+              size=pieceInCreation.file.size
+              downloadName=pieceInCreation.file.filename
               downloadLink=(concat
-                      doc.file.downloadLink
+                      pieceInCreation.file.downloadLink
                       "?name="
-                      doc.file.filename
+                      pieceInCreation.file.filename
               )
-              delete=(action "deleteFile" doc.file)
+              delete=(action "deleteFile" pieceInCreation.file)
             }}
-          {{/each}}
-        </div>
+          </div>
+        {{/if}}
       {{else}}
         {{web-components/vl-loader text=(t "documents-uploading-text")}}
       {{/if}}
@@ -59,8 +59,8 @@
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
       cancelAction=(action "closeModal")
-      saveAction=(action "uploadNewDocument")
-      disableSave=(eq documentsInCreation.length 0)
+      saveAction=(action "uploadNewDocumentContainer")
+      disableSave=(not pieceInCreation)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

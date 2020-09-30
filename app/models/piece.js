@@ -1,8 +1,8 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
-import { deprecatingAlias } from '@ember/object/computed';
 import moment from 'moment';
+
 const {
   Model, attr, belongsTo,
 } = DS;
@@ -11,10 +11,6 @@ export default Model.extend({
   name: attr('string'),
   created: attr('datetime'),
   modified: attr('datetime'),
-  chosenFileName: deprecatingAlias('name', {
-    id: 'model-refactor.documents',
-    until: '?',
-  }),
   confidential: attr('boolean'),
   accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
@@ -24,24 +20,23 @@ export default Model.extend({
     inverse: null,
   }),
 
-  documentContainer: belongsTo('document', {
+  documentContainer: belongsTo('document-container', {
     inverse: null,
   }),
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?',
+  nextPiece: belongsTo('piece', {
+    inverse: 'previousPiece',
   }),
-  nextVersion: belongsTo('document-version', {
-    inverse: 'previousVersion',
-  }),
-  previousVersion: belongsTo('document-version', {
-    inverse: 'nextVersion',
+  previousPiece: belongsTo('piece', {
+    inverse: 'nextPiece',
   }),
 
   subcase: belongsTo('subcase', {
     inverse: null,
   }),
   agendaitem: belongsTo('agendaitem', {
+    inverse: null,
+  }),
+  treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
   newsletter: belongsTo('newsletter-info'),

@@ -1,11 +1,21 @@
 <div class="vlc-document-card-item__title">
   <h6 class="vl-title vl-title--h6">
-    {{await documentVersion.name}}
+    {{#if (not (await piece.file.downloadLink))}}
+      {{#attach-tooltip
+        arrow="true"
+        animation="shift"
+        placement="top"
+        class="ember-attacher-tooltip"
+      }}
+        {{t "document-not-consultable"}}
+      {{/attach-tooltip}}
+    {{/if}}
+    {{await piece.name}}
   </h6>
-  {{access-level-pill lastDocumentVersion=documentVersion}}
-  {{#if (await documentVersion.file.downloadLink)}}
+  {{access-level-pill lastPiece=piece}}
+  {{#if (await piece.file.downloadLink)}}
     <button type="button" class="vl-button vl-button--link vl-button--icon"
-      {{action "showDocumentVersionViewer" documentVersion}}
+      {{action "showPieceViewer" piece}}
     >
       <i class="ki-book vl-button__icon" aria-hidden="true"></i>
       <span class="vl-u-visually-hidden">
@@ -14,9 +24,9 @@
     </button>
     <a class="vl-button vl-button--link vl-button--icon"
        href={{concat
-         (await documentVersion.file.downloadLink)
+         (await piece.file.downloadLink)
          "?name="
-         (await documentVersion.downloadFilename)
+         (await piece.downloadFilename)
        }}
       {{!-- download --}}
       {{! 'download' attribute doesn't specify a filename, as this gets overruled by
@@ -33,7 +43,7 @@
 
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
-      {{action "deleteDocumentVersion" documentVersion}}
+      {{action "deletePiece" piece}}
     >
       <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
       <span class="vl-u-visually-hidden">
@@ -45,9 +55,9 @@
 {{#if currentSession.isEditor}}
   <div class="vlc-document-card-item__meta">
     {{t "uploaded-at"}}
-    {{moment-format documentVersion.created "DD.MM.YYYY"}}
+    {{moment-format piece.created "DD.MM.YYYY"}}
     {{t "at"}}
-    {{moment-format documentVersion.created "HH:mm"}}
+    {{moment-format piece.created "HH:mm"}}
   </div>
 {{/if}}
 <div class="vlc-document-card-item__icon">
