@@ -159,11 +159,7 @@ export default ModelWithModifier.extend({
 
   formallyOkToShow: computed('formallyOk', function() {
     const options = CONFIG.formallyOkOptions;
-    const {
-      formallyOk,
-    } = this;
-    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
-
+    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === this.formallyOk);
     return EmberObject.create(foundOption);
   }),
 
