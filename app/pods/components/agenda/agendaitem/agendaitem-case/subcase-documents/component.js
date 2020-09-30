@@ -16,12 +16,13 @@ export default class SubcaseDocuments extends Component {
   @service store;
   @tracked isEditing = false;
   @tracked isLoading = false;
-  @tracked isAddingNewDocument = false;
-  @tracked shouldShowLinkedDocuments = true;
-  @tracked documentsInCreation = A([]); // When creating new documents
+  @tracked showDetail = false;
+  @tracked isAddingNewDocumentContainer = false;
+  @tracked shouldShowLinkedPieces = true;
+  @tracked piecesInCreation = A([]); // When creating new documents
   @tracked defaultAccessLevel = null;
-  @tracked isLinkingOldDocument = false;
-  @tracked documentsToLink = A([]);
+  @tracked isLinkingOldPiece = false;
+  @tracked piecesToLink = A([]);
   @tracked documentTypes = null;
 
   documentContainer = null;
@@ -53,62 +54,62 @@ export default class SubcaseDocuments extends Component {
     return true;
   }
 
-  createNewDocument(uploadedFile, previousDocument, defaults) {
+  // TODO previousPiece is always null in this component
+  createNewPiece(uploadedFile, previousPiece, defaults) {
     const propsFromPrevious = [
       'accessLevel',
       'confidential'
     ];
-    const newDocument = this.store.createRecord('document-version', {});
+    const newPiece = this.store.createRecord('piece', {});
     propsFromPrevious.forEach(async(key) => {
-      newDocument.set(key, previousDocument
-        ? await previousDocument.getWithDefault(key, defaults[key])
+      newPiece.set(key, previousPiece
+        ? await previousPiece.getWithDefault(key, defaults[key])
         : defaults[key]);
     });
-    newDocument.set('file', uploadedFile);
-    newDocument.set('previousVersion', previousDocument);
-    newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
-    return newDocument;
+    newPiece.set('file', uploadedFile);
+    newPiece.set('previousPiece', previousPiece);
+    newPiece.set('name', uploadedFile.get('filenameWithoutExtension'));
+    return newPiece;
   }
 
   async deleteAll() {
     await Promise.all(
-      this.documentsInCreation.map(async(doc) => {
-        const file = await doc.get('file');
+      this.piecesInCreation.map(async(piece) => {
+        const file = await piece.get('file');
         file.destroyRecord();
-        const container = doc.get('documentContainer.content');
+        const container = piece.get('documentContainer.content');
         container.deleteRecord();
-        doc.deleteRecord();
+        piece.deleteRecord();
       })
     );
-    this.documentsInCreation.clear();
-    this.isAddingNewDocument = false;
+    this.piecesInCreation.clear();
+    this.isAddingNewDocumentContainer = false;
   }
 
-  // TODO propertyName = documents when all models have this relation
   // eslint-disable-next-line class-methods-use-this
-  async attachDocumentsToModel(documents, model, propertyName = 'documentVersions') {
+  async attachPiecesToModel(pieces, model, propertyName = 'pieces') {
     const modelName = await model.get('constructor.modelName');
     // Don't do anything for these models
     if (['decision'].includes(modelName)) {
       return model;
     }
 
-    const modelDocuments = await model.get(propertyName);
-    if (modelDocuments) {
+    const modelPieces = await model.get(propertyName);
+    if (modelPieces) {
       model.set(
         propertyName,
-        A(Array.prototype.concat(modelDocuments.toArray(), documents.toArray()))
+        A(Array.prototype.concat(modelPieces.toArray(), pieces.toArray()))
       );
     } else {
-      model.set(propertyName, documents);
+      model.set(propertyName, pieces);
     }
     return model;
   }
 
-  async addDocumentsToAgendaitems(documents, agendaitems) {
+  async addPiecesToAgendaitems(pieces, agendaitems) {
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
-        await this.attachDocumentsToModel(documents, agendaitem);
+        await this.attachPiecesToModel(pieces, agendaitem);
         setNotYetFormallyOk(agendaitem);
         await destroyApprovalsOfAgendaitem(agendaitem);
         return await agendaitem.save();
@@ -116,39 +117,39 @@ export default class SubcaseDocuments extends Component {
     );
   }
 
-  async addDocumentsToSubcase(documents, subcase) {
-    await this.attachDocumentsToModel(documents, subcase);
+  async addPiecesToSubcase(pieces, subcase) {
+    await this.attachPiecesToModel(pieces, subcase);
     setNotYetFormallyOk(subcase);
     return await subcase.save();
   }
 
-  async addDocumentToAgendaitemOrSubcaseOrMeeting(documents, agendaitemOrSubcaseOrMeeting) {
+  async addPiecesToAgendaitemOrSubcaseOrMeeting(pieces, agendaitemOrSubcaseOrMeeting) {
     const itemType = agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
-    await agendaitemOrSubcaseOrMeeting.hasMany('documentVersions').reload();
-    await this.attachDocumentsToModel(documents, agendaitemOrSubcaseOrMeeting);
+    await agendaitemOrSubcaseOrMeeting.hasMany('pieces').reload();
+    await this.attachPiecesToModel(pieces, agendaitemOrSubcaseOrMeeting);
     if (itemType === 'subcase' || itemType === 'agendaitem') {
       setNotYetFormallyOk(agendaitemOrSubcaseOrMeeting);
     }
     return await agendaitemOrSubcaseOrMeeting.save();
   }
 
-  async linkDocumentsToAgendaitems(documents, agendaitems) {
+  async linkPiecesToAgendaitems(pieces, agendaitems) {
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
-        await this.attachDocumentsToModel(documents, agendaitem, 'linkedDocumentVersions');
+        await this.attachPiecesToModel(pieces, agendaitem, 'linkedPieces');
         return await agendaitem.save();
       })
     );
   }
 
-  async linkDocumentsToSubcase(documents, subcase) {
-    await this.attachDocumentsToModel(documents, subcase, 'linkedDocumentVersions');
+  async linkPiecesToSubcase(pieces, subcase) {
+    await this.attachPiecesToModel(pieces, subcase, 'linkedPieces');
     return await subcase.save();
   }
 
   @action
   async uploadedFile(uploadedFile) {
-    const documentsInCreationLocally = this.documentsInCreation;
+    const piecesInCreationLocally = this.piecesInCreation;
 
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
@@ -157,28 +158,28 @@ export default class SubcaseDocuments extends Component {
     const creationDate = moment().utc()
       .toDate();
 
-    const newDocument = this.createNewDocument(uploadedFile, null, {
+    const newPiece = this.createNewPiece(uploadedFile, null, {
       accessLevel: this.defaultAccessLevel,
     });
-    newDocument.set('created', creationDate);
-    newDocument.set('modified', creationDate);
+    newPiece.set('created', creationDate);
+    newPiece.set('modified', creationDate);
 
-    const newContainer = this.store.createRecord('document', {
+    const newContainer = await this.store.createRecord('document-container', {
       created: creationDate,
     });
-    newDocument.set('documentContainer', newContainer);
-    await documentsInCreationLocally.push(newDocument);
-    this.documentsInCreation = documentsInCreationLocally;
+    newPiece.set('documentContainer', newContainer);
+    piecesInCreationLocally.push(newPiece);
+    this.piecesInCreation = piecesInCreationLocally;
   }
 
   @action
-  async delete(doc) {
-    const file = await doc.get('file');
+  async delete(piece) {
+    const file = await piece.get('file');
     file.destroyRecord();
-    this.documentsInCreation.removeObject(doc);
-    const container = doc.get('documentContainer.content');
+    this.piecesInCreation.removeObject(piece);
+    const container = piece.get('documentContainer.content');
     container.deleteRecord();
-    doc.deleteRecord();
+    piece.deleteRecord();
   }
 
   @action
@@ -188,17 +189,17 @@ export default class SubcaseDocuments extends Component {
   }
 
   @action
-  async deleteAllDocuments() {
+  async deleteAllPiecesInCreation() {
     await this.deleteAll();
   }
 
   @action
-  async toggleIsAddingNewDocument() {
+  async toggleisAddingNewDocumentContainer() {
     const itemType = this.args.agendaitemOrSubcaseOrMeeting.get('constructor.modelName');
     if (itemType === 'agendaitem' || itemType === 'subcase') {
       await this.args.agendaitemOrSubcaseOrMeeting.preEditOrSaveCheck();
     }
-    this.isAddingNewDocument = !this.isAddingNewDocument;
+    this.isAddingNewDocumentContainer = !this.isAddingNewDocumentContainer;
   }
 
   @action
@@ -217,51 +218,51 @@ export default class SubcaseDocuments extends Component {
 
   @action
   // eslint-disable-next-line class-methods-use-this
-  chooseDocumentContainerType(document, type) {
-    const documentContainer = document.get('documentContainer.content');
+  chooseDocumentContainerType(piece, type) {
+    const documentContainer = piece.get('documentContainer.content');
     documentContainer.type = type;
   }
 
   @action
   async saveDocumentContainers() {
     this.isLoading = true;
-    const docs = this.documentsInCreation;
+    const pieces = this.piecesInCreation;
 
     const documentContainers = await Promise.all(
-      docs.map(async(doc) => {
-        await doc.save();
-        const container = doc.get('documentContainer.content'); // TODO: cannot use .content
-        container.set('documents', A([doc]));
+      pieces.map(async(piece) => {
+        await piece.save();
+        const container = piece.get('documentContainer.content'); // TODO: cannot use .content
+        container.set('pieces', A([piece]));
         await container.save();
         return container;
       })
     );
 
-    this.documentsInCreation.clear();
+    this.piecesInCreation.clear();
     const agendaActivity = await this.args.agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
     const agendaitemsOnDesignAgenda = await this.args.agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
 
     try {
-      const documentsToAttach = [];
+      const piecesToAttach = [];
       await Promise.all(
         documentContainers.map(async(container) => {
-          const documents = await container.get('documentVersions');
-          documents.map((document) => {
-            documentsToAttach.push(document);
+          const pieces = await container.get('pieces');
+          pieces.map((piece) => {
+            piecesToAttach.push(piece);
           });
         })
       );
-      if (documentsToAttach) {
+      if (piecesToAttach) {
         if (agendaActivity) {
           const subcase = await agendaActivity.get('subcase');
-          await this.addDocumentsToSubcase(documentsToAttach, subcase);
+          await this.addPiecesToSubcase(piecesToAttach, subcase);
         } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-          await this.addDocumentsToAgendaitems(
-            documentsToAttach,
+          await this.addPiecesToAgendaitems(
+            piecesToAttach,
             agendaitemsOnDesignAgenda
           );
         }
-        await this.addDocumentToAgendaitemOrSubcaseOrMeeting(documentsToAttach, this.args.agendaitemOrSubcaseOrMeeting);
+        await this.addPiecesToAgendaitemOrSubcaseOrMeeting(piecesToAttach, this.args.agendaitemOrSubcaseOrMeeting);
         await this.args.agendaitemOrSubcaseOrMeeting.save();
       }
     } catch (error) {
@@ -269,52 +270,52 @@ export default class SubcaseDocuments extends Component {
       throw error;
     } finally {
       this.isLoading = false;
-      this.isAddingNewDocument = false;
+      this.isAddingNewDocumentContainer = false;
     }
   }
 
   @action
-  toggleIsLinkingOldDocument() {
-    this.isLinkingOldDocument = !this.isLinkingOldDocument;
+  toggleisLinkingOldPiece() {
+    this.isLinkingOldPiece = !this.isLinkingOldPiece;
   }
 
   @action
-  link(document) {
-    this.documentsToLink.addObject(document);
+  link(piece) {
+    this.piecesToLink.addObject(piece);
   }
 
   @action
-  unlink(document) {
-    this.documentsToLink.removeObject(document);
+  unlink(piece) {
+    this.piecesToLink.removeObject(piece);
   }
 
   @action
-  async linkDocuments() {
-    const documents = this.documentsToLink;
+  async linkPieces() {
+    const pieces = this.piecesToLink;
     const agendaActivity = this.args.agendaitemOrSubcaseOrMeeting.get('agendaActivity'); // when item = agendaitem
     const agendaitemsOnDesignAgenda = this.args.agendaitemOrSubcaseOrMeeting.get('agendaitemsOnDesignAgendaToEdit'); // when item = subcase
     try {
-      const documentsToAttach = [];
+      const piecesToAttach = [];
       await Promise.all(
-        documents.map(async(document) => {
-          const documentContainer = await document.get('documentContainer');
-          const documentVersionsFromContainer = await documentContainer.get('documentVersions');
-          documentVersionsFromContainer.map((doc) => {
-            documentsToAttach.push(doc);
+        pieces.map(async(piece) => {
+          const documentContainer = await piece.get('documentContainer');
+          const piecesFromContainer = await documentContainer.get('pieces');
+          piecesFromContainer.map((piece) => {
+            piecesToAttach.push(piece);
           });
         })
       );
       if (agendaActivity) {
         const subcase = await agendaActivity.get('subcase');
-        await this.linkDocumentsToSubcase(documentsToAttach, subcase);
+        await this.linkPiecesToSubcase(piecesToAttach, subcase);
       } else if (agendaitemsOnDesignAgenda && agendaitemsOnDesignAgenda.length > 0) {
-        await this.linkDocumentsToAgendaitems(documentsToAttach, agendaitemsOnDesignAgenda);
+        await this.linkPiecesToAgendaitems(piecesToAttach, agendaitemsOnDesignAgenda);
       }
-      await this.attachDocumentsToModel(documentsToAttach, this.args.agendaitemOrSubcaseOrMeeting, 'linkedDocumentVersions');
+      await this.attachPiecesToModel(piecesToAttach, this.args.agendaitemOrSubcaseOrMeeting, 'linkedPieces');
       await this.args.agendaitemOrSubcaseOrMeeting.save();
     } finally {
-      this.isLinkingOldDocument = false;
-      this.documentsToLink = A([]);
+      this.isLinkingOldPiece = false;
+      this.piecesToLink = A([]);
     }
   }
 }

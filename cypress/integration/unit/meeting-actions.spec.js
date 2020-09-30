@@ -101,6 +101,8 @@ context('meeting actions tests', () => {
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,
@@ -108,6 +110,8 @@ context('meeting actions tests', () => {
       .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,

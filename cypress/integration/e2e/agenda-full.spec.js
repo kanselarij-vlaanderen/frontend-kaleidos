@@ -29,7 +29,6 @@ context('Full test', () => {
     // #region routes to be reused
     cy.route('GET', '/subcases?**').as('getSubcases');
     cy.route('GET', '/mandatees?**').as('getMandatees');
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.route('POST', '/meetings').as('createNewMeeting');
     cy.route('POST', '/agendas').as('createNewAgenda');
     cy.route('POST', '/cases').as('createNewCase');
@@ -65,7 +64,7 @@ context('Full test', () => {
     cy.changeSubcaseAccessLevel(false, case1TitleShort, true, 'Intern Overheid');
     cy.addSubcaseMandatee(0, 0, 0);
 
-    cy.addDocuments([{
+    cy.addDocumentsToSubcase([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota',
     }]);
 
@@ -124,10 +123,10 @@ context('Full test', () => {
 
     // cy.approveCoAgendaitem(case_2_TitleShort); // TODO approvals have low prior and need a refactor
 
-    cy.addDocuments([{
+    cy.addDocumentsToAgenda([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
-    cy.addNewDocumentVersionToMeeting('test pdf', {
+    cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.clickReverseTab('Overzicht');

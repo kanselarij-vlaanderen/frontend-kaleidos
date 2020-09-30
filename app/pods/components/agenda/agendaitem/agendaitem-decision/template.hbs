@@ -43,7 +43,7 @@
       {{/if}}
     </div>
   </div>
-  {{#if (await @treatment.report)}}
+  {{#if @treatment.report}} {{!-- awaiting here breaks loading after adding, do not add await --}}
     <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::ReportLink
       @documentContainer={{await @treatment.report.documentContainer}}
       @treatment={{@treatment}}
@@ -52,7 +52,7 @@
     <Utils::AddDocuments
       @meetingRecordOrDecision={{@treatment}}
       @defaultType={{this.defaultType}}
-      @modelToAddDocumentVersionTo="agendaItemTreatment"
+      @modelToAddPieceTo="agendaItemTreatment"
       @title={{t "signed-decision-add"}}
     />
   {{/if}}

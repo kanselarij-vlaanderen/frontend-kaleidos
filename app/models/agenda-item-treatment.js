@@ -10,7 +10,7 @@ export default Model.extend({
   intl: inject(),
   agendaitem: belongsTo('agendaitem'),
   subcase: belongsTo('subcase'),
-  report: belongsTo('document-version'),
+  report: belongsTo('piece'),
   newsletterInfo: belongsTo('newsletter-info'),
   decisionResultCode: belongsTo('decision-result-code', {
     inverse: null,
@@ -19,7 +19,7 @@ export default Model.extend({
   created: attr('datetime'),
   treatmentApproval: computed('report', function() {
     return this.intl.t('signed-document-decision', {
-      name: this.get('report.lastDocument.name'),
+      name: this.get('report.lastPiece.name'),
     });
   }),
 });

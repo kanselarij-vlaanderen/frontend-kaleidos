@@ -12,7 +12,7 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item vl-u-display-flex">
             {{#if @treatment.report}}
-              <AccessLevelPill @lastDocumentVersion={{ await @treatment.report }} />
+              <AccessLevelPill @lastPiece={{await @treatment.report}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -35,7 +35,7 @@
                     <li class="vlc-dropdown-menu__item">
                       <a class="vl-link vl-link--block"
                          href=""
-                         data-test-document-upload-new-version
+                         data-test-document-upload-new-piece
                         {{action attacher.hide}}
                         {{action this.openUploadDialog @documentContainer}}
                       >
@@ -56,7 +56,7 @@
                       <a class="vl-link vl-link--block vl-u-text--error"
                          href=""
                         {{action attacher.hide}}
-                        {{action this.deleteDocument @documentContainer}}
+                        {{action this.deleteDocumentContainer @documentContainer}}
                       >
                         {{t "document-delete"}}
                       </a>
@@ -142,27 +142,27 @@
       </div>
     </div>
   </div>
-  {{#if (await @documentContainer.sortedDocuments)}}
+  {{#if (await @documentContainer.sortedPieces)}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{this.openClass}}">
         <button
           class="vl-toggle vl-link vl-link--bold"
           type="button"
-          {{action this.showVersions}}
+          {{action this.showPieces}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
-          {{t "show-versions"}}
+          {{t "show-pieces"}}
         </button>
-        {{#if this.isShowingVersions}}
+        {{#if this.isShowingPieces}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each
-                @documentContainer.reverseSortedDocumentVersions
-              as |documentVersion|
+                @documentContainer.reverseSortedPieces
+              as |piece|
               }}
                 <WebComponents::VlDocument
-                  @documentVersion={{documentVersion}}/>
+                  @piece={{piece}}/>
               {{/each}}
             </div>
           </div>
@@ -171,30 +171,30 @@
     </div>
   {{/if}}
 </div>
-{{#if this.isUploadingNewVersion}}
+{{#if this.isUploadingNewPiece}}
   <WebComponents::VlModal
-    @closeModal={{action this.cancelUploadVersion}}
+    @closeModal={{action this.cancelUploadPiece}}
     @isOverlay={{true}}
-    @title={{t "new-document-version"}}>
+    @title={{t "new-document-piece"}}>
     <div class="vl-modal-dialog__content">
       {{#if (not this.uploadedFile)}}
         <FileUploader @multipleFiles={{false}} @uploadedFileAction={{action this.add}}/>
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.documentInCreation.name}}
+          @value={{this.pieceInCreation.name}}
           @width={{4}} />
         {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=this.documentInCreation.file.filename
-          extension=this.documentInCreation.file.extension
-          size=this.documentInCreation.file.size
-          downloadName=this.documentInCreation.file.filename
+          name=this.pieceInCreation.file.filename
+          extension=this.pieceInCreation.file.extension
+          size=this.pieceInCreation.file.size
+          downloadName=this.pieceInCreation.file.filename
           downloadLink=(concat
-                  this.documentInCreation.file.downloadLink
+                  this.pieceInCreation.file.downloadLink
             "?name="
-                  this.documentInCreation.file.filename
+                  this.pieceInCreation.file.filename
           )
-          delete=(action this.delete this.documentInCreation)
+          delete=(action this.delete this.pieceInCreation)
         }}
       {{/if}}
     </div>
@@ -202,9 +202,9 @@
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "add"}}
       @isLoading={{this.isLoading}}
-      @cancelAction={{action this.cancelUploadVersion}}
-      @saveAction={{action this.saveDocument}}
-      @disableSave={{not (and this.uploadedFile this.documentInCreation.file.filename)}} />
+      @cancelAction={{action this.cancelUploadPiece}}
+      @saveAction={{action this.savePiece}}
+      @disableSave={{not (and this.uploadedFile this.pieceInCreation.file.filename)}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if this.isVerifyingDelete}}

@@ -14,18 +14,17 @@ export default class ReportLink extends Component {
   @service currentSession;
   @service store;
 
-  @tracked isShowingVersions = false;
-  @tracked reverseSortedDocumentVersions = A([]);
-  @tracked isUploadingNewVersion = false;
+  @tracked isShowingPieces = false;
+  @tracked reverseSortedPieces = A([]);
+  @tracked isUploadingNewPiece = false;
   @tracked isEditing = false;
   @tracked defaultAccessLevel = null;
-  @tracked documentInCreation = null;
+  @tracked pieceInCreation = null;
   @tracked uploadedFile = null;
   @tracked nameBuffer = '';
   @tracked isVerifyingDelete = false;
-  @tracked lastDocument = null;
-  @tracked mySortedDocuments;
-  @tracked lastDocumentVersion = null;
+  @tracked lastPiece = null;
+  @tracked mySortedPieces;
   @tracked documentTypes = null;
 
   classNameBindings = ['aboutToDelete'];
@@ -40,12 +39,12 @@ export default class ReportLink extends Component {
     });
   }
 
-  async deleteUploadedDocument() {
+  async deleteUploadedPiece() {
     if (this.uploadedFile && this.uploadedFile.id) {
-      const versionInCreation = await this.uploadedFile.documentVersion;
-      this.documentsInCreation = null;
-      if (versionInCreation) {
-        await this.fileService.deleteDocumentVersion(versionInCreation);
+      const pieceInCreation = await this.uploadedFile.piece;
+      this.pieceInCreation = null;
+      if (pieceInCreation) {
+        await this.fileService.deletePiece(pieceInCreation);
       } else {
         await this.fileService.deleteFile(this.uploadedFile);
       }
@@ -57,39 +56,39 @@ export default class ReportLink extends Component {
     }
   }
 
-  createNewDocument(uploadedFile, previousDocument, defaults) {
+  createNewPiece(uploadedFile, previousPiece, defaults) {
     const propsFromPrevious = [
       'accessLevel',
       'confidential'
     ];
-    const newDocument = this.store.createRecord('document-version', {});
+    const newPiece = this.store.createRecord('piece', {});
     propsFromPrevious.forEach(async(key) => {
-      newDocument.set(key, previousDocument
-        ? await previousDocument.getWithDefault(key, defaults[key])
+      newPiece.set(key, previousPiece
+        ? await previousPiece.getWithDefault(key, defaults[key])
         : defaults[key]);
     });
-    newDocument.set('file', uploadedFile);
-    newDocument.set('previousVersion', previousDocument);
-    newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
-    return newDocument;
+    newPiece.set('file', uploadedFile);
+    newPiece.set('previousPiece', previousPiece);
+    newPiece.set('name', uploadedFile.get('filenameWithoutExtension'));
+    return newPiece;
   }
 
   async deleteDocumentContainerWithUndo() {
-    await this.fileService.get('deleteDocumentWithUndo').perform(this.documentContainerToDelete);
+    await this.fileService.get('deleteDocumentContainerWithUndo').perform(this.documentContainerToDelete);
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async attachDocumentToTreatment(document, treatment) {
+  async attachPieceToTreatment(piece, treatment) {
     const report = await treatment.get('report');
     if (report) {
-      treatment.set('report', document);
+      treatment.set('report', piece);
       await treatment.save();
     }
     return treatment;
   }
 
   get openClass() {
-    if (this.isShowingVersions) {
+    if (this.isShowingPieces) {
       return 'js-vl-accordion--open';
     }
     return null;
@@ -102,34 +101,34 @@ export default class ReportLink extends Component {
     if (await this.args.documentContainer) {
       await this.args.documentContainer.reload();
     }
-    await this.args.documentContainer.hasMany('documents').reload();
+    await this.args.documentContainer.hasMany('pieces').reload();
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
     }
 
-    const previousVersion = this.args.documentContainer ? (await this.args.documentContainer.get('lastDocumentVersion')) : null;
-    const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
+    const previousPiece = this.args.documentContainer ? (await this.args.documentContainer.get('lastPiece')) : null;
+    const newPiece = this.createNewPiece(uploadedFile, previousPiece, {
       accessLevel: this.defaultAccessLevel,
     });
-    newDocument.set('created', creationDate);
-    newDocument.set('modified', creationDate);
-    const docs = await this.args.documentContainer.get('documents');
-    docs.pushObject(newDocument);
-    newDocument.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
-    const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
-    newDocument.set('name', newName);
-    this.args.documentContainer.notifyPropertyChange('documents');// Why exactly? Ember should handle this?
-    this.documentInCreation = await newDocument;
+    newPiece.set('created', creationDate);
+    newPiece.set('modified', creationDate);
+    const pieces = await this.args.documentContainer.get('pieces');
+    pieces.pushObject(newPiece);
+    newPiece.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
+    const newName = new VRDocumentName(previousPiece.get('name')).withOtherPieceSuffix(pieces.length);
+    newPiece.set('name', newName);
+    this.args.documentContainer.notifyPropertyChange('pieces');// Why exactly? Ember should handle this?
+    this.pieceInCreation = await newPiece;
   }
 
   @action
-  showVersions() {
-    this.isShowingVersions = !this.isShowingVersions;
+  showPieces() {
+    this.isShowingPieces = !this.isShowingPieces;
   }
 
   @action
   async delete() {
-    await this.deleteUploadedDocument();
+    await this.deleteUploadedPiece();
   }
 
   @action
@@ -166,40 +165,40 @@ export default class ReportLink extends Component {
 
   @action
   async openUploadDialog() {
-    this.isUploadingNewVersion = true;
+    this.isUploadingNewPiece = true;
   }
 
   @action
-  async cancelUploadVersion() {
+  async cancelUploadPiece() {
     if (this.uploadedFile) {
-      const document = await this.args.documentContainer.lastDocumentVersion;
-      document.rollbackAttributes();
-      const versionInCreation = await this.uploadedFile.get('documentVersion');
-      if (versionInCreation) {
-        await this.fileService.deleteDocumentVersion(versionInCreation);
+      const piece = await this.args.documentContainer.lastPiece;
+      piece.rollbackAttributes();
+      const pieceInCreation = await this.uploadedFile.get('piece');
+      if (pieceInCreation) {
+        await this.fileService.deletePiece(pieceInCreation);
       } else {
         await this.fileService.deleteFile(this.uploadedFile);
       }
       this.uploadedFile = null;
     }
-    this.isUploadingNewVersion = false;
+    this.isUploadingNewPiece = false;
   }
 
   @action
-  async saveDocument() {
+  async savePiece() {
     this.isLoading = true;
-    const document = await this.args.documentContainer.lastDocument;
-    await document.save();
+    const piece = await this.args.documentContainer.lastPiece;
+    await piece.save();
     try {
-      await this.attachDocumentToTreatment(document, this.args.treatment);
+      await this.attachPieceToTreatment(piece, this.args.treatment);
     } catch (error) {
-      await this.deleteUploadedDocument();
+      await this.deleteUploadedPiece();
       throw error;
     } finally {
       if (!this.isDestroyed) {
         this.uploadedFile = null;
         this.isLoading = false;
-        this.isUploadingNewVersion = false;
+        this.isUploadingNewPiece = false;
       }
     }
   }
@@ -230,8 +229,8 @@ export default class ReportLink extends Component {
   }
 
   @action
-  deleteDocument(document) {
-    this.documentContainerToDelete = document;
+  deleteDocumentContainer(documentContainer) {
+    this.documentContainerToDelete = documentContainer;
     this.isVerifyingDelete = true;
   }
 }

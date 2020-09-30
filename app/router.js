@@ -88,7 +88,7 @@ Router.map(function() {
     this.route('loading', { path: '/laden', });
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
-  this.route('document-viewer', { path: '/document/:document_version_id', });
+  this.route('document-viewer', { path: '/document/:piece_id', });
 
   this.route('not-supported');
   this.route('help');

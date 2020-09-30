@@ -1,4 +1,5 @@
-{{#if (await agendaitem.documents)}}
+{{!-- TODO unused template --}}
+{{#if (await agendaitem.documentContainers)}}
   <div class="vl-u-spacer">
     <h2 class="vl-title vl-title--h3">
       {{title}}
@@ -18,11 +19,11 @@
         </tr>
       </thead>
       <tbody>
-        {{#each (await lastDocumentVersions) as |documentVersion|}}
-          {{#if (not documentVersion.deleted)}}
+        {{#each (await lastPieces) as |piece|}}
+          {{#if (not piece.deleted)}}
             <tr>
               <td class="vl-u-display-flex vlc-document-list__item">
-                <a href="" {{action "downloadFile" documentVersion}}>
+                <a href="" {{action "downloadFile" piece}}>
                   <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
                   >
                     <i class="vl-badge__icon ki-document"
@@ -30,16 +31,16 @@
                     ></i>
                   </div>
                   <p>
-                    {{await documentVersion.name}}
+                    {{await piece.name}}
                   </p>
                 </a>
               </td>
               <td>
-                {{await documentVersion.typeLabel}}
+                {{await piece.typeLabel}}
               </td>
               <td>
                 {{web-components/vl-checkbox
-                  value=documentVersion.selected
+                  value=piece.selected
                   toggle=(action "selectForPublication")
                 }}
               </td>

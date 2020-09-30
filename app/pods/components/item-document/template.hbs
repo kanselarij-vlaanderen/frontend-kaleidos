@@ -1,28 +1,28 @@
 <li class="vlc-document-list__item
 {{if
-  document.checkAdded
+  documentContainer.checkAdded
   "vlc-document-list__item vlc-document-list__item--active"
 }}">
-  {{#if (is-pending lastDocumentVersion)}}
+  {{#if (is-pending lastPiece)}}
     <div class="skeletal-loader" role="alert" aria-busy="true"></div>
   {{else if isClickable}}
-    <a href="" {{action "showDocumentVersionViewer" lastDocumentVersion}}>
+    <a href="" {{action "showPieceViewer" lastPiece}}>
       <i class="vl-badge__icon
       {{if
-        (and (not document.checkAdded) (not lastDocumentVersion.confidential))
+        (and (not documentContainer.checkAdded) (not lastPiece.confidential))
         "ki-document"
       }}
-      {{if document.checkAdded "ki-document-added"}}
-      {{if (await lastDocumentVersion.confidential) "ki-lock-closed"}}">
+      {{if documentContainer.checkAdded "ki-document-added"}}
+      {{if (await lastPiece.confidential) "ki-lock-closed"}}">
       </i>
-      {{await lastDocumentVersionName}}
+      {{await lastPieceName}}
     </a>
   {{else}}
     <span>
       <i class="vl-badge__icon
-        {{if document.checkAdded "ki-document-added" "ki-document"}}">
+        {{if documentContainer.checkAdded "ki-document-added" "ki-document"}}">
       </i>
-      {{await lastDocumentVersionName}}
+      {{await lastPieceName}}
     </span>
   {{/if}}
 </li>

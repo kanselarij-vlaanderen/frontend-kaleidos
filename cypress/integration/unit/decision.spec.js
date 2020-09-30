@@ -59,7 +59,7 @@ context('Add files to an agenda', () => {
     });
 
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.get(document.modalDocumentVersionDelete).click();
+    cy.get(document.modalPieceDelete).click();
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
@@ -70,18 +70,18 @@ context('Add files to an agenda', () => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
-    cy.route('POST', 'document-versions').as('createNewDocumentVersion');
-    cy.route('POST', 'documents').as('createNewDocument');
+    cy.route('POST', 'pieces').as('createNewPiece');
+    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatments');
-    cy.route('DELETE', 'document-versions/*').as('deleteVersion');
-    cy.route('DELETE', 'documents/*').as('deleteDocument');
+    cy.route('DELETE', 'pieces/*').as('deletePiece');
+    cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
     cy.get(form.formSave).click();
 
-    cy.wait('@createNewDocumentVersion', {
+    cy.wait('@createNewPiece', {
       timeout: 12000,
     });
-    cy.wait('@createNewDocument', {
+    cy.wait('@createNewDocumentContainer', {
       timeout: 12000,
     });
     cy.wait('@patchTreatments', {
@@ -94,7 +94,7 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').should('have.length', 1);
 
-    cy.addNewDocumentVersionToSignedDocument('test', {
+    cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
 
@@ -115,10 +115,10 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
-    cy.wait('@deleteVersion', {
+    cy.wait('@deletePiece', {
       timeout: 20000,
     });
-    cy.wait('@deleteDocument', {
+    cy.wait('@deleteDocumentContainer', {
       timeout: 20000,
     });
 
