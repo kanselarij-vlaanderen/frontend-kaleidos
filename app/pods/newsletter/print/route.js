@@ -43,7 +43,7 @@ export default class PrintNewsletterRoute extends Route {
       await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
 
       const itemGroups = sortByPriority(groupedAgendaitems, true); // An array of groups
-      notas = itemGroups.reduce((agendaItems, group) => agendaItems.push(group.agendaitems));
+      notas = itemGroups.reduce((agendaitems, group) => agendaitems.push(group.agendaitems));
     }
 
     return hash({
@@ -59,12 +59,12 @@ export default class PrintNewsletterRoute extends Route {
 
   async filterAgendaitems(agendaitems) {
     const filteredAgendaitems = [];
-    for (const agendaItem of agendaitems) {
+    for (const agendaitem of agendaitems) {
       try {
-        const agendaItemTreatment = await agendaItem.get('treatments').firstObject;
+        const agendaItemTreatment = await agendaitem.get('treatments').firstObject;
         const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
         if (newsletterInfo && newsletterInfo.inNewsletter) {
-          filteredAgendaitems.push(agendaItem);
+          filteredAgendaitems.push(agendaitem);
         }
       } catch (exception) {
         console.warn('An exception occurred: ', exception);
