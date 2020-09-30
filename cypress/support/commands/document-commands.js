@@ -414,7 +414,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
     cy.wait(200);
-    cy.get('.vl-modal .data-table input[data-test-vl-checkbox]').click({
+    cy.get('.vl-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
     cy.get(document.searchForLinkedDocumentsInput).clear();
