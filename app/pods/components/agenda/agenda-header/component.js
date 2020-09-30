@@ -195,10 +195,7 @@ export default Component.extend(FileSaverMixin, {
     const isClosable = await this.currentAgenda.get('isClosable');
     if (isClosable) {
       this.set('isLockingAgenda', true);
-      console.log('Current Agenda, isLockingAgenda:', this.get('isLockingAgenda'));
       const agendas = await this.get('agendas');
-      console.log('Current Agenda, agendas:', agendas);
-
       const designAgenda = agendas
         .filter((agenda) => agenda.get('isDesignAgenda'))
         .sortBy('-serialnumber')
@@ -208,9 +205,7 @@ export default Component.extend(FileSaverMixin, {
         .sortBy('-serialnumber')
         .get('firstObject');
 
-      console.log('Current agenda, lastagenda:', lastAgenda);
       if (lastAgenda) {
-        console.log('Lastagenda', lastAgenda);
         const session = await lastAgenda.get('createdFor');
         session.set('isFinal', true);
         session.set('agenda', lastAgenda);
@@ -221,7 +216,6 @@ export default Component.extend(FileSaverMixin, {
         await lastAgenda.save();
       }
 
-      console.log('Current agenda, designagenda:', designAgenda);
       if (designAgenda) {
         await this.deleteAgenda(designAgenda);
       }
@@ -244,7 +238,6 @@ export default Component.extend(FileSaverMixin, {
       this.currentAgenda.set('isApproved', true);
       const isClosable = await this.currentAgenda.get('isClosable');
       if (isClosable) {
-        console.log(await this.currentAgenda.get('agendaitems').toArray());
         const agendaitems = await this.currentAgenda.get('agendaitems').toArray();
         if (agendaitems.length > 0) {
           this.set('showApproveAndCloseWarning', true);
@@ -352,7 +345,6 @@ export default Component.extend(FileSaverMixin, {
             });
           this.set('showApproveAndCloseWarning', false);
         } else {
-          console.log('ApproveAndClose: ', 'no meeting agenda found ', meetingOfAgenda);
           this.set('showApproveAndCloseWarning', false);
           this.set('showCloseWarning', true);
         }
