@@ -52,7 +52,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();
-    cy.contains('Documenten opladen').click();
+    cy.contains('Document opladen').click();
     cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
     cy.get('@fileUploadDialog').within(() => {

@@ -24,7 +24,7 @@ function resetCache() {
       kaleidosProject + '/docker-compose.override.yml'
   };
 
-  cy.exec('docker-compose kill triplestore file cache resource', { env })
+  cy.exec('docker-compose kill yggdrasil triplestore file cache resource migrations-service', { env })
     .exec(`rm -rf ${kaleidosProject}/testdata/db && rm -rf ${kaleidosProject}/testdata/files`)
     .exec(`unzip -o ${kaleidosProject}/testdata.zip -x "elasticsearch/*" -d ${kaleidosProject}`)
     .exec('docker-compose up -d', { env })

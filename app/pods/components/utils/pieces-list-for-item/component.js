@@ -11,20 +11,20 @@ export default class DocumentListForItem extends Component {
 
   @tracked moreThan20 = null;
 
-  get documents() {
+  get documentContainers() {
     if (!this.agendaitemOrSubcase) {
       return null;
     }
-    if (this.agendaitemOrSubcase.documents) {
-      if (this.agendaitemOrSubcase.documents.length > 20) {
+    if (this.agendaitemOrSubcase.documentContainers) {
+      if (this.agendaitemOrSubcase.documentContainers.length > 20) {
         this.moreThan20 = true;
       } else {
         this.moreThan20 = false;
       }
       if (this.isShowingAll) {
-        return this.agendaitemOrSubcase.documents;
+        return this.agendaitemOrSubcase.documentContainers;
       }
-      return this.agendaitemOrSubcase.documents;
+      return this.agendaitemOrSubcase.documentContainers;
     }
     return null;
   }

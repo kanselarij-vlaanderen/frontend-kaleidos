@@ -4,40 +4,40 @@ import DS from 'ember-data';
 
 export default Component.extend({
   isClickable: null,
-  document: null,
-  myDocumentVersions: computed.alias('item.documentVersions'),
+  documentContainer: null,
+  myPieces: computed.alias('item.pieces'),
 
-  lastDocumentVersion: computed('mySortedDocumentVersions.@each', function() {
-    const sortedVersions = this.get('mySortedDocumentVersions');
-    return sortedVersions.lastObject;
+  lastPiece: computed('mySortedPieces.@each', function() {
+    const sortedPieces = this.get('mySortedPieces');
+    return sortedPieces.lastObject;
   }),
 
-  lastDocumentVersionName: computed('lastDocumentVersion.name', function() {
-    return this.get('lastDocumentVersion.name');
+  lastPieceName: computed('lastPiece.name', function() {
+    return this.get('lastPiece.name');
   }),
 
-  mySortedDocumentVersions: computed('myDocumentVersions.@each', 'document.sortedDocumentVersions.@each', function() {
+  mySortedPieces: computed('myPieces.@each', 'documentContainer.sortedPieces.@each', function() {
     return DS.PromiseArray.create({
       promise: (async() => {
-        const itemVersionIds = {};
-        const versions = await this.get('myDocumentVersions');
-        if (versions) {
-          versions.map((version) => {
-            itemVersionIds[version.get('id')] = true;
+        const itemPieceIds = {};
+        const myPieces = await this.get('myPieces');
+        if (myPieces) {
+          myPieces.map((piece) => {
+            itemPieceIds[piece.get('id')] = true;
           });
         }
-        const documentVersions = await this.get('document.sortedDocumentVersions');
-        if (documentVersions) {
-          const matchingVersions = await documentVersions.filter((documentVersion) => itemVersionIds[documentVersion.id]);
-          return matchingVersions;
+        const containerPieces = await this.get('documentContainer.sortedPieces');
+        if (containerPieces) {
+          const matchingPieces = await containerPieces.filter((piece) => itemPieceIds[piece.id]);
+          return matchingPieces;
         }
       })(),
     });
   }),
 
   actions: {
-    async showDocumentVersionViewer(documentVersion) {
-      window.open(`/document/${(await documentVersion).get('id')}`);
+    async showPieceViewer(piece) {
+      window.open(`/document/${(await piece).get('id')}`);
     },
   },
 });
