@@ -41,7 +41,7 @@ context('Test the KB functionality', () => {
     cy.changeSubcaseAccessLevel(false, case1TitleShort, true, 'Intern Overheid');
     cy.addSubcaseMandatee(0, 0, 0);
 
-    cy.addDocuments([{
+    cy.addDocumentsToSubcase([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota',
     }]);
 
@@ -61,7 +61,7 @@ context('Test the KB functionality', () => {
     cy.changeSubcaseAccessLevel(false, newSubcase2TitleShort, false, 'Intern Overheid');
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
-    cy.addDocuments([{
+    cy.addDocumentsToSubcase([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 2', fileType: 'Nota',
     }]);
 

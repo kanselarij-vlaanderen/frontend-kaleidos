@@ -39,16 +39,49 @@
       </button>
     {{/if}}
   {{/if}}
-  <button type="button" class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
-          disabled={{if session.isEditor undefined "true"}}
-    {{action "toggleConfidential"}}
-  >
-    {{#if lastPiece.confidential}}
-      <i class="vl-icon ki-lock-closed vl-u-text--error"
-      ></i>
-    {{else}}
-      <i class="vl-icon ki-lock-open"></i>
-    {{/if}}
-  </button>
+  {{#if (and session.isEditor undefined "true")}}
+    <button type="button" class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+            disabled={{if session.isEditor undefined "true"}}
+      {{action "toggleConfidential"}}
+    >
+      {{#if lastPiece.confidential}}
+        {{#attach-tooltip
+          arrow="true"
+          animation="shift"
+          placement="top"
+          class="ember-attacher-tooltip"
+        }}
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        {{/attach-tooltip}}
+        <i class="vl-icon ki-lock-closed vl-u-text--error"
+        ></i>
+      {{else}}
+        <i class="vl-icon ki-lock-open"></i>
+      {{/if}}
+    </button>
+  {{else}}
+    <button type="button" class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+      {{action "toggleConfidential"}}
+    >
+      {{#if lastPiece.confidential}}
+        {{#attach-tooltip
+          arrow="true"
+          animation="shift"
+          placement="top"
+          class="ember-attacher-tooltip"
+        }}
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        {{/attach-tooltip}}
+        <i class="vl-icon ki-lock-closed vl-u-text--error"
+        ></i>
+      {{else}}
+        <i class="vl-icon ki-lock-open"></i>
+      {{/if}}
+    </button>
+  {{/if}}
   {{yield}}
 {{/if}}

@@ -93,10 +93,9 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.wait('@getCaseSubcases');
+      cy.wait(1000); // TODO do we need a wait here ?
       cy.get('.vl-tab').as('agendaitemTabs');
       cy.get('@agendaitemTabs').eq(0)
         .should('contain', 'Dossier')

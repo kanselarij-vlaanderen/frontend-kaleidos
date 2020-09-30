@@ -69,11 +69,19 @@
       }}
         {{#if agendaitem.groupName}}
           <div class="vlc-list-section-header">
+            {{#if (eq agendaitem.groupName (t 'no-mandatee-assigned'))}}
             {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
               These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
             {{!-- template-lint-disable no-triple-curlies  --}}
-            <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
+              <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
             {{!-- template-lint-enable no-triple-curlies  --}}
+            {{else}}
+              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+              {{!-- template-lint-disable no-triple-curlies  --}}
+              <span>{{{agendaitem.groupName}}}</span>
+              {{!-- template-lint-enable no-triple-curlies  --}}
+            {{/if}}
           </div>
         {{/if}}
         {{#sortable-item
@@ -131,7 +139,7 @@
 </div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#if 
+    {{#if
       (and currentSessionService.isEditor (not isShowingChanges) currentAgenda.isDesignAgenda)
     }}
       {{#sortable-group

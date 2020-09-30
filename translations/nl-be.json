@@ -614,11 +614,12 @@
   "publications.in-progress": "In behandeling",
   "publications.new": "Nieuwe publicatie",
   "no-mandatee-assigned": "Geen toekenning",
-  "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
   "newsletter-update-notas": "Update nota's",
   "newsletter-update-notas-number": "Nummer",
   "newsletter-update-notas-agendaitem-short-title": "Agendapunt (korte titel)",
   "newsletter-update-notas-documentname": "Documentnaam",
   "newsletter-update-notas-edited-on": "Gewijzigd op",
-  "newsletter-update-notas-edited-text": "Geüpload op {date} om {time}"
+  "newsletter-update-notas-edited-text": "Geüpload op {date} om {time}",
+  "document-not-consultable": "Dit document is niet consulteerbaar voor uw profiel",
+  "document-is-confidential": "Dit document is vertrouwelijk"
 }
