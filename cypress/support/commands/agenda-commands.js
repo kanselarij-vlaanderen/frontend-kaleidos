@@ -484,14 +484,14 @@ const approveAndCloseDesignAgenda = () => {
   cy.get('.vlc-toolbar').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
-  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click()
-    .wait('@patchAgendaAndCloseAgenda', {
-      timeout: 12000,
-    })
-  // .wait('@getAgendaitems', { timeout: 12000 })
-    .wait('@getAgendasInCloseDesignAgenda', {
-      timeout: 12000,
-    });
+  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
+  //   .wait('@patchAgendaAndCloseAgenda', {
+  //     timeout: 12000,
+  //   })
+  // // .wait('@getAgendaitems', { timeout: 12000 })
+  //   .wait('@getAgendasInCloseDesignAgenda', {
+  //     timeout: 12000,
+  //   });
 
   cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
     verbose: true, timeout: 60000,

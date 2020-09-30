@@ -2,8 +2,9 @@ import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import actionModel from '../../selectors/action-modal.selectors';
-
+import agendaOverview from '../../selectors/agenda-overview.selectors';
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
+
 // / <reference types="Cypress" />
 
 function currentTimestamp() {
@@ -198,4 +199,214 @@ context('Agenda tests', () => {
       cy.setAllItemsFormallyOk(3);
     });
   });
+
+  it('Should add agendaitems to an agenda and set all of them to formally OK and close the agenda', () => {
+    const testId = `testId=${currentTimestamp()}: `;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+
+    const case1TitleShort = `${testId}Cypress test dossier 1`;
+    const type1 = 'Nota';
+    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
+    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const subcase1Type = 'In voorbereiding';
+    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.createCase(false, case1TitleShort);
+      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+      cy.createCase(false, case2TitleShort);
+      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+
+      cy.setAllItemsFormallyOk(3);
+      cy.approveDesignAgenda();
+      cy.get(actionModel.showActionOptions).click();
+      cy.get(actionModel.lockAgenda).click();
+
+      cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
+      cy.route('GET', '/agenda-activities/*/subcase').as('agendaActivitiesSubcase');
+      cy.route('GET', '/agenda-item-treatments/*/newsletter-info').as('agendaItemTreatmentsNewsletterInfo');
+      cy.route('PATCH', '/agendas/*').as('patchAgendas');
+
+      cy.get(modal.verify.save).click();
+      cy.wait('@agendasCreatedFor');
+      cy.wait('@agendaActivitiesSubcase');
+      cy.wait('@agendaItemTreatmentsNewsletterInfo');
+      cy.wait('@patchAgendas');
+      cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    });
+  });
+
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
+    const testId = `testId=${currentTimestamp()}: `;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+
+    const case1TitleShort = `${testId}Cypress test dossier 1`;
+    const type1 = 'Nota';
+    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
+    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const subcase1Type = 'In voorbereiding';
+    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.createCase(false, case1TitleShort);
+      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+      cy.createCase(false, case2TitleShort);
+      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
+    });
+    cy.approveAndCloseDesignAgenda();
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+
+    cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
+    cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
+    cy.route('GET', '/agendaitems/*/agenda').as('agenda');
+    cy.route('GET', '/subcases?filter*').as('subcasesFilter');
+    cy.route('PATCH', '/subcases/*').as('patchSubcases');
+    cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
+
+
+    cy.get(modal.verify.save)
+      .click();
+
+    cy.wait('@agendaActivitiesAgendaItems');
+    cy.wait('@agendaitems');
+    cy.wait('@agenda');
+    cy.wait('@subcasesFilter');
+    cy.wait('@patchSubcases');
+    cy.wait('@agendaActivities');
+
+    cy.route('PATCH', '/agendas/**').as('patchAgendas');
+    cy.route('GET', '/agendas/**').as('agendas');
+    cy.route('GET', '/meetings/**/agendas').as('meetings');
+    cy.route('GET', '/agendastatuses/**').as('agendaStatuses');
+
+
+    cy.get(modal.verify.container).get('.vlc-navbar')
+      .contains('Agenda afsluiten')
+      .get(modal.verify.save);
+
+    cy.wait('@patchAgendas');
+    cy.wait('@agendas');
+    cy.wait('@meetings');
+    cy.wait('@agendaStatuses');
+    cy.wait('@patchAgendas');
+
+    cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+  });
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
+    const testId = `testId=${currentTimestamp()}: `;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+
+    const case1TitleShort = `${testId}Cypress test dossier 1`;
+    const type1 = 'Nota';
+    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
+    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const subcase1Type = 'In voorbereiding';
+    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    const case2TitleShort = `${testId}Cypress test dossier 2`;
+    const type2 = 'Nota';
+    const newSubcase2TitleShort = `${testId} korte titel`;
+    const subcase2TitleLong = `${testId} lange titel`;
+    const subcase2Type = 'In voorbereiding';
+    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+
+    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
+      cy.createCase(false, case1TitleShort);
+      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+
+      cy.createCase(false, case2TitleShort);
+      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
+      cy.openSubcase(0);
+      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+
+      cy.setFormalOkOnItemWithIndex(0);
+      cy.setFormalOkOnItemWithIndex(1);
+    });
+
+    cy.approveDesignAgenda();
+
+    cy.route('GET', '/agendaitems/**/agenda-activity').as('agendaActivity');
+    cy.route('GET', '/agendaitems/**/treatments').as('treatmentes');
+
+    cy.get(modal.verify.container).contains('Opgelet!')
+      .get(modal.verify.save)
+      .click();
+
+    cy.wait('@agendaActivityu');
+    cy.wait('@treatments');
+
+    cy.get(actionModel.showActionOptions).click();
+    cy.get(actionModel.lockAgenda).click();
+
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+    cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
+    cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
+    cy.route('GET', '/agendaitems/*/agenda').as('agenda');
+    cy.route('GET', '/subcases?filter*').as('subcasesFilter');
+    cy.route('PATCH', '/subcases/*').as('patchSubcases');
+    cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
+
+
+    cy.get(modal.verify.save)
+      .click();
+
+    cy.wait('@agendaActivitiesAgendaItems');
+    cy.wait('@agendaitems');
+    cy.wait('@agenda');
+    cy.wait('@subcasesFilter');
+    cy.wait('@patchSubcases');
+    cy.wait('@agendaActivities');
+
+    cy.route('PATCH', '/agendas/**').as('patchAgendas');
+    cy.route('GET', '/agendas/**').as('agendas');
+    cy.route('GET', '/meetings/**/agendas').as('meetings');
+    cy.route('GET', '/agendastatuses/**').as('agendaStatuses');
+
+
+    cy.get(modal.verify.container).get('.vlc-navbar')
+      .contains('Agenda afsluiten')
+      .get(modal.verify.save)
+      .click();
+
+    cy.wait('@patchAgendas');
+    cy.wait('@agendas');
+    cy.wait('@meetings');
+    cy.wait('@agendaStatuses');
+    cy.wait('@patchAgendas');
+
+    cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+  });
 });
+
