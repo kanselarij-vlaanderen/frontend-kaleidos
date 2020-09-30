@@ -27,7 +27,7 @@
   {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
     <WebComponents::VlLoader @text={{t "minutes-document-loading-text"}} />
   {{else if (not (await signedDocument))}}
-    <Utils::AddSignedDocuments
+    <Utils::AddDocumentContainer
       @meetingRecordOrDecision={{agendaitem.meetingRecord}}
       @modelToAddDocumentVersionTo="signedMinutes"
       @title={{t "signed-notes-add"}} />

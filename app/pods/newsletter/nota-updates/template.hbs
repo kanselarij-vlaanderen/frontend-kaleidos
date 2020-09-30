@@ -1,0 +1,79 @@
+<div class="vl-u-spacer-extended-l">
+  <div class="vl-u-spacer--large">
+    <div>
+      {{#if this.model.notas.length}}
+        <DataTable
+          @content={{this.model.notas}}
+          @page={{this.page}}
+          @noDataMessage={{t "no-results-found"}}
+          @size={{this.size}}
+          @sort={{this.sort}}
+          @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          @isLoading={{this.isLoadingModel}}
+          as |table|
+        >
+          <table.content as |c|>
+            <c.header>
+              <th class="vl-data-table-col-1 vl-data-table__header-title">
+                {{t "newsletter-update-notas-number"}}
+              </th>
+              <th class="vl-data-table-col-2 vl-data-table__header-title">
+                {{t "newsletter-update-notas-agendaitem-short-title"}}
+              </th>
+              <th class="vl-data-table-col-2 vl-data-table__header-title">
+                {{t "newsletter-update-notas-documentname"}}
+              </th>
+              <ThSortable
+                  @class="vl-data-table-col-2 vl-data-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="modified"
+                  @label={{t "newsletter-update-notas-edited-on"}}
+              />
+              <th class="vl-data-table-col-1"></th>
+            </c.header>
+            <c.body class="tr-hover" as |row|>
+              <td>
+                <p>
+                  {{row.agendaitemPriority}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{row.agendaitemShortTitle}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{row.name}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{t "newsletter-update-notas-edited-text" date=row.date time=row.time}}
+                </p>
+              </td>
+              <td class="vl-u-align-right">
+                <button type="button" class="vl-button vl-button--link vl-button--icon"
+                  {{on "click" (fn this.showDocumentVersionViewer row.documentId)}}
+                >
+                  <i class="ki-book vl-button__icon" aria-hidden="true"></i>
+                </button>
+                <LinkTo
+                  class="vl-button vl-button--link vl-button--icon"
+                  @route="agenda.agendaitems.agendaitem.documents"
+                  @models={{array
+                    (await row.meetingId)
+                    (await row.agendaId)
+                    (await row.agendaitemId)
+                  }}
+                >
+                  <i class="vl-button__icon ki-nav-right"></i>
+                </LinkTo>
+              </td>
+            </c.body>
+          </table.content>
+        </DataTable>
+      {{/if}}
+    </div>
+  </div>
+</div>

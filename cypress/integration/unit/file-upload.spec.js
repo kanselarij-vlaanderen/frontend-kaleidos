@@ -14,7 +14,7 @@ context('Add files to an agenda', () => {
 
   it('should open an agenda and add documents to it', () => {
     cy.visit('/vergadering/5EBA8CB1DAB6BB0009000001/agenda/5EBA8CB2DAB6BB0009000002/agendapunten');
-    cy.addDocuments([{
+    cy.addDocumentsToAgenda([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
@@ -48,7 +48,7 @@ context('Add files to an agenda', () => {
   it('should add several documents that should be sorted', () => {
     cy.visit('/vergadering/5EBA8CCADAB6BB0009000005/agenda/5EBA8CCCDAB6BB0009000006/agendapunten');
     // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
-    cy.addDocuments(
+    cy.addDocumentsToAgenda(
       [
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-6 - 6e', fileType: 'Nota',
