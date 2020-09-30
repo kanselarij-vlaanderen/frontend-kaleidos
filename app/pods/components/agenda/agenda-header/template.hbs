@@ -428,7 +428,7 @@
           @message={{t "agenda-has-nok-agendaitems-warning"}}
           @title={{t "approve-agenda-error"}}
           @buttonType="warning"
-          @verifyButtonText={{t "continue"}}
+          @verifyButtonText={{t "close-agenda"}}
           @cancel={{action "cancelLockAgenda"}}
           @verify={{action "removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus"}}
           @closeModal={{action "cancelLockAgenda"}}
@@ -443,7 +443,7 @@
           @buttonType="warning"
           @verifyButtonText={{t "continue"}}
           @cancel={{action "cancelCloseAgenda"}}
-          @verify={{action "approveAndCloseAgenda" session}}
+          @verify={{action "approveAndCloseAgenda"}}
           @closeModal={{action "cancelCloseAgenda"}}
   />
 {{/if}}
