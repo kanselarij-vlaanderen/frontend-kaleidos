@@ -1,0 +1,95 @@
+{{!-- template-lint-disable  --}}
+<div class="vl-u-spacer-extended-l">
+  <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+    <thead>
+      <tr>
+        <th>Dossier</th>
+        <th>Nr.</th>
+        <th>Werknummer BS</th>
+        <th>Type</th>
+        <th>Start publicatieflow</th>
+        <th>Uiterste publicatie</th>
+        <th>Vertalingen</th>
+        <th>Handtekeningen</th>
+        <th>Drukproef</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each this.publicationsForCurrentPage as |publication|}}
+        <tr>
+          <td>
+            {{publication.case}}
+          </td>
+          <td>
+            {{#if publication.noInternalOVRBReference}}
+              {{publication.noInternalOVRBReference}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.noBelgianOfficialGazette}}
+              {{publication.noBelgianOfficialGazette}}
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>{{publication.type}}</td>
+          <td>
+            {{publication.dateStartPublication}}<br>
+            <span class="u-muted">{{publication.timeStartPublication}}</span>
+          </td>
+          <td>{{publication.datePublicationDeadline}}</td>
+          <td>
+            {{#if publication.translationStatus.initiated}}
+              <Publications::StatusPill @status={{publication.translationStatus.status}}>
+                {{publication.translationStatus.finished}}/{{publication.translationStatus.total}}
+              </Publications::StatusPill>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.signatureStatus.initiated}}
+              <Publications::StatusPill @status={{publication.signatureStatus.status}}>
+                {{publication.signatureStatus.finished}}/{{publication.signatureStatus.total}}
+              </Publications::StatusPill>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            {{#if publication.printProofStatus.initiated}}
+              <Publications::StatusPill @status={{publication.printProofStatus.status}} />
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td>
+            <LinkTo
+              @route="publications.in-progress"
+              class="vl-button vl-button--link vl-button--icon"
+            >
+              <i class="vl-button__icon ki-nav-right" />
+            </LinkTo>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div class="vlc-pagination">
+    <ul class="vlc-pagination__list">
+      <li class="vlc-pagination__element">
+        <p><strong>{{pageStart}}-{{pageEnd}}</strong> van {{args.data.length}}</p>
+      </li>
+      <li class="vlc-pagination__element" {{action "handlePrevPage"}}>
+        <ButtonLink @icon="chevron-left" disabled={{prevPageButtonDisabled}}>Vorige</ButtonLink>
+      </li>
+      <li class="vlc-pagination__element" {{action "handleNextPage"}}>
+        <ButtonLink @icon="chevron-right" @layout="icon-right" disabled={{nextPageButtonDisabled}}>Volgende</ButtonLink>
+      </li>
+    </ul>
+  </div>
+</div>

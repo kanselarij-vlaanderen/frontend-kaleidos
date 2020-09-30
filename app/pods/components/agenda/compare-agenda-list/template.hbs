@@ -2,6 +2,7 @@
 <div class="vl-u-display-flex vlc-u-flex-space-between vl-u-spacer-extended-bottom-s">
   <div class="compare-left-column">
     {{utils/agenda-selector
+      data-test-compare-agenda-left
       searchField="name"
       propertyToShow="agendaName"
       placeholder=(t "select-agenda")
@@ -13,6 +14,7 @@
   </div>
   <div class="compare-right-column">
     {{utils/agenda-selector
+      data-test-compare-agenda-right
       searchField="name"
       propertyToShow="agendaName"
       placeholder=(t "select-agenda")
@@ -23,48 +25,93 @@
     }}
   </div>
 </div>
-{{#if (await this.combinedItems)}}
-  {{#each (await this.combinedItems) as |combinedItem|}}
-    <div class="compare-grid-container">
-      {{#if combinedItem.groupName}}
-        <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
-          {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-            These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-          {{!-- template-lint-disable no-triple-curlies  --}}
-          {{{combinedItem.groupName}}}
-          {{!-- template-lint-enable no-triple-curlies  --}}
-        </div>
-        <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
-          {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-            These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-          {{!-- template-lint-disable no-triple-curlies  --}}
-          {{{combinedItem.groupName}}}
-          {{!-- template-lint-enable no-triple-curlies  --}}
-        </div>
-      {{else}}
-        <div></div>
-        <div></div>
-      {{/if}}
-      <div class="vlc-agenda-items__sub-item grid-item">
-        {{#if combinedItem.left}}
-          {{agenda/agenda-overview/agenda-overview-item
-            isDocumentClickable=true
-            isComparing=true
-            agendaitem=combinedItem.left
-          }}
+{{#if (or (await this.combinedAgendaitems) (await this.combinedAnnouncements))}}
+  {{#each (await this.combinedAgendaitems) as |combinedAgendaitem|}}
+    {{#if
+      (or (not @isShowingChanges) (and @isShowingChanges (await combinedAgendaitem.right.hasChanges)))
+    }}
+      <div class="compare-grid-container">
+        {{#if combinedAgendaitem.groupName}}
+          <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{combinedAgendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </div>
+          <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+            {{!-- template-lint-disable no-triple-curlies  --}}
+            {{{combinedAgendaitem.groupName}}}
+            {{!-- template-lint-enable no-triple-curlies  --}}
+          </div>
+        {{else}}
+          <div></div>
+          <div></div>
         {{/if}}
+        <div class="vlc-agenda-items__sub-item grid-item">
+          {{#if combinedAgendaitem.left}}
+            <div data-test-compare-agendaitem-left>
+              {{agenda/agenda-overview/agenda-overview-item
+                isDocumentClickable=true
+                isComparing=true
+                agendaitem=combinedAgendaitem.left
+              }}
+            </div>
+          {{/if}}
+        </div>
+        <div class="vlc-agenda-items__sub-item grid-item">
+          {{#if combinedAgendaitem.right}}
+            <div data-test-compare-agendaitem-right>
+              {{agenda/agenda-overview/agenda-overview-item
+                isDocumentClickable=true
+                isComparing=true
+                agendaitem=combinedAgendaitem.right
+              }}
+            </div>
+          {{/if}}
+        </div>
       </div>
-      <div class="vlc-agenda-items__sub-item grid-item">
-        {{#if combinedItem.right}}
-          {{agenda/agenda-overview/agenda-overview-item
-            isDocumentClickable=true
-            isComparing=true
-            agendaitem=combinedItem.right
-          }}
-        {{/if}}
-      </div>
-    </div>
+    {{/if}}
   {{/each}}
+  {{#if (await this.combinedAnnouncements)}}
+    <div class="vlc-agenda-items-section-header">
+      <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
+        {{t "announcements-subtitle"}}
+      </h3>
+    </div>
+    {{#each (await this.combinedAnnouncements) as |combinedAnnouncement|}}
+      {{#if
+        (or (not @isShowingChanges) (and @isShowingChanges (await combinedAnnouncement.right.hasChanges)))
+      }}
+        <div class="compare-grid-container">
+          <div class="vlc-agenda-items__sub-item grid-item">
+            {{#if combinedAnnouncement.left}}
+              <div data-test-compare-announcement-left>
+                {{agenda/agenda-overview/agenda-overview-item
+                  isDocumentClickable=true
+                  isComparing=true
+                  agendaitem=combinedAnnouncement.left
+                }}
+              </div>
+            {{/if}}
+          </div>
+          <div class="vlc-agenda-items__sub-item grid-item">
+            {{#if combinedAnnouncement.right}}
+              <div data-test-compare-announcement-right>
+                {{agenda/agenda-overview/agenda-overview-item
+                  isDocumentClickable=true
+                  isComparing=true
+                  agendaitem=combinedAnnouncement.right
+                }}
+              </div>
+            {{/if}}
+          </div>
+        </div>
+      {{/if}}
+    {{/each}}
+  {{/if}}
 {{else if
   (or this.isLoadingAgendaOne this.isLoadingAgendaTwo this.isLoadingComparison)
 }}

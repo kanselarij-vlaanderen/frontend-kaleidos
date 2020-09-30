@@ -7,7 +7,6 @@ import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import utils from '../../selectors/utils.selectors';
 // ***********************************************
 
 // ***********************************************
@@ -414,16 +413,18 @@ function addLinkedDocumentToAgendaitem(filenames) {
 
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
-    cy.get(document.searchForLinkedDocumentsButton).click();
-    cy.get(document.searchForLinkedDocumentsLoader).should('not.be.visible');
-    cy.get(utils.checkboxLabel).click();
+    cy.wait(200);
+    cy.get('.vl-modal .data-table input[data-test-vl-checkbox]').click({
+      force: true,
+    });
     cy.get(document.searchForLinkedDocumentsInput).clear();
   });
   cy.get(form.formSave).click();
 }
 
-Cypress.Commands.add('addDocuments', addDocumentsToAgenda);
-Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda);
+Cypress.Commands.add('addDocuments', addDocuments);
+Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
+Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewDocumentVersion', addNewDocumentVersion);
 Cypress.Commands.add('addNewDocumentVersionToMeeting', addNewDocumentVersionToMeeting);

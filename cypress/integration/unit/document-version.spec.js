@@ -125,7 +125,7 @@ context('Tests for KAS-1076', () => {
   it('Adding more then 20 document-versions to subcase should show all', () => {
     cy.visit('/dossiers/5EBA9528751CF7000800000A/deeldossiers/5EBA953A751CF7000800000C/documenten');
     // This works but takes 300 or more seconds...
-    cy.addDocuments(
+    cy.addDocumentsToSubcase(
       [
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1111 DOC.0001-1', fileType: 'Nota',
@@ -308,7 +308,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
       .should('have.length', 0);
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
-    cy.addDocuments([file]);
+    cy.addDocumentsToSubcase([file]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
         .within(() => {

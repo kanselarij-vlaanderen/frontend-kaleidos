@@ -7,7 +7,7 @@
         </h2>
         <div class="vl-u-display-flex vl-u-flex-end">
           <div class="vl-u-spacer-extended-left-s">
-            <a href="" class="vl-link" {{action "toggleChangesOnly"}}>
+            <a data-test-compare-show-changes href="" class="vl-link" {{action "toggleChangesOnly"}}>
               {{#if (not isShowingChanges)}}
                 {{t "show-changes"}}
               {{else}}

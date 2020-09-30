@@ -23,7 +23,7 @@
 .vlc-dropdown-menu {
   padding: .5rem 0;
   max-height: inherit;
-  overflow-y: auto;
+  overflow-y: unset;
 }
 
 .vlc-dropdown-menu__separator {
@@ -36,6 +36,7 @@
 }
 
 .vlc-dropdown-menu__item {
+  display: flex;
   .vl-link {
     padding: .8rem 1.5rem;
     font-size: 1.5rem;
@@ -46,6 +47,10 @@
     &:focus {
       text-decoration: underline;
     }
+  }
+  span {
+    display:block;
+    white-space: normal;
   }
 }
 

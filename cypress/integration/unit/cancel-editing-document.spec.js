@@ -63,7 +63,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.createCase(false, caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
-    cy.addDocuments(files);
+    cy.addDocumentsToSubcase(files);
     const agendaDate = Cypress.moment().add(1, 'weeks')
       .day(1);
 
@@ -268,7 +268,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.createCase(false, caseTitle);
     cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
-    cy.addDocuments(files);
+    cy.addDocumentsToSubcase(files);
     const agendaDate = Cypress.moment().add(2, 'weeks')
       .day(1); // friday in two weeks
 
