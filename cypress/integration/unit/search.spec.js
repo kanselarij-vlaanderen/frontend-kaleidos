@@ -235,7 +235,7 @@ context('Search tests', () => {
       'Principiële',
       'principiele',
       'principie',
-      'princ',
+      // 'princ',
       /* 'princi', // TODO stemming less search does not yet fully work here.*/
       'Lāna',
       'lana',
