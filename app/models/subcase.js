@@ -27,9 +27,6 @@ export default ModelWithModifier.extend({
   isArchived: attr('boolean'),
   subcaseName: attr('string'),
 
-  consulationRequests: hasMany('consulation-request', {
-    inverse: null,
-  }),
   iseCodes: hasMany('ise-code'),
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
