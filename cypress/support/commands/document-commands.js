@@ -191,6 +191,27 @@ function addDocumentsToAgenda(files) {
 }
 
 /**
+ * @description Add document to agenda.
+ * @name addDocumentToTreatment
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {} file
+ */
+function addDocumentToTreatment(file) {
+  cy.log('addDocumentsToTreatment');
+  cy.get(agenda.agendaitemDecisionTab).click();
+  // 1 default item treatment exists
+  cy.get(agenda.uploadDecisionFile).click();
+
+  cy.contains('Document opladen').click();
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+  });
+}
+
+/**
  * @description Add a new piece to an meeting.
  * @name addNewPieceToMeeting
  * @memberOf Cypress.Chainable#
@@ -425,6 +446,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
 Cypress.Commands.add('addDocuments', addDocuments);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
+Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
