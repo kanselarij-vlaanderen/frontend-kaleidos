@@ -47,17 +47,7 @@ context('Add files to an agenda', () => {
     // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemDecisionTab).click();
-    // 1 default item treatment exists
-    cy.get(agenda.uploadDecisionFile).click();
-
-    cy.contains('Document opladen').click();
-    cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
-
-    cy.get('@fileUploadDialog').within(() => {
-      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    });
-
+    cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(document.modalPieceDelete).click();
     cy.wait('@deleteFile', {
