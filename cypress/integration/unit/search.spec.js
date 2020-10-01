@@ -102,7 +102,7 @@ context('Search tests', () => {
     cy.addDocumentToTreatment(file);
 
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.contains('dit is de korte titel for search 🔍').click();
+    cy.contains('dit is de korte titel for search').click();
     cy.get(agenda.agendaitemTitlesEdit).should('exist')
       .should('be.visible')
       .click();
