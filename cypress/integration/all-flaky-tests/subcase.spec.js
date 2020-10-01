@@ -93,10 +93,9 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.wait('@getCaseSubcases');
+      cy.wait(1000); // TODO do we need a wait here ?
       cy.get('.vl-tab').as('agendaitemTabs');
       cy.get('@agendaitemTabs').eq(0)
         .should('contain', 'Dossier')
@@ -323,11 +322,11 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    // cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    // cy.route('GET', '**/pieces?page*size*=9999').as('pieces');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(agenda.item.news.saveButton).click()
       .wait('@newsletterInfosPatch');
-    // cy.wait('@documentVersions');
+    // cy.wait('@pieces');
 
     // dont open links in new windows.
 

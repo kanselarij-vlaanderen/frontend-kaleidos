@@ -13,7 +13,7 @@ export default DS.Model.extend({
   subcases: hasMany('subcase', {
     inverse: null,
   }),
-  document: hasMany('document', {
+  pieces: hasMany('piece', {
     inverse: null,
   }),
   cases: hasMany('case'),

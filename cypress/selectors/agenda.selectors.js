@@ -79,5 +79,15 @@ const selectors = {
   revertPostponeAgendaitemButton: '[data-test-revert-postpone-agendaitem]',
   agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
   agendaitemNumber: '[data-test-agendaitem-number]',
+
+  compare: {
+    showChanges: '[data-test-compare-show-changes]',
+    agendaLeft: '[data-test-compare-agenda-left]',
+    agendaRight: '[data-test-compare-agenda-right]',
+    agendaitemLeft: '[data-test-compare-agendaitem-left]',
+    agendaitemRight: '[data-test-compare-agendaitem-right]',
+    announcementLeft: '[data-test-compare-announcement-left]',
+    announcementRight: '[data-test-compare-announcement-right]',
+  },
 };
 export default selectors;

@@ -7,12 +7,14 @@
             <Input
               class="vl-input-field vl-input-field__input"
               value={{this.searchText}}
+              data-test-trigger-search-input
               @enter={{this.search}}
               @placeholder={{t "search-agenda-items"}}
               {{on "input" this.debouncedSearch}}
             />
             <button
               type="button"
+              data-test-trigger-search-input-trigger
               class="vl-input-field__submit vl-button"
               {{on "click" this.search}}
             >

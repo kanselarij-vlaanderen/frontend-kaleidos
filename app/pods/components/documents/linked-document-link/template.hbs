@@ -10,14 +10,14 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline" data-test-linkeddocument-type-label>
-              {{@documentContainer.type.label}}
+              {{@documentContainer.type.label}} {{!-- TODO KAS-1388 is awaiting needed ?--}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{#if this.lastDocument}}
-              <AccessLevelPill @lastDocumentVersion={{this.lastDocument}} />
+            {{#if this.lastPiece}}
+              <AccessLevelPill @lastPiece={{this.lastPiece}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -34,17 +34,17 @@
         </div>
       </div>
       <h6 class="vl-title vl-title--h6">
-        {{this.lastDocument.name}}
+        {{this.lastPiece.name}}
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
-        {{moment-format this.lastDocument.created}}
+        {{moment-format this.lastPiece.created}}
         {{t "at"}}
-        {{moment-format this.lastDocument.created "HH:mm"}}
+        {{moment-format this.lastPiece.created "HH:mm"}}
       </div>
     </div>
   </div>
-  {{#if this.reverseSortedDocuments.length}}
+  {{#if this.reverseSortedPieces.length}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
         <button class="vl-toggle vl-link vl-link--bold"
@@ -53,14 +53,14 @@
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
-          {{t "show-versions"}}
+          {{t "show-pieces"}}
         </button>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
-              {{#each this.reverseSortedDocuments as |documentVersion|}}
+              {{#each this.reverseSortedPieces as |piece|}}
                 <WebComponents::VlDocument
-                  @documentVersion={{documentVersion}} />
+                  @piece={{piece}} />
               {{/each}}
             </div>
           </div>

@@ -7,7 +7,7 @@ import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import { A } from '@ember/array';
 import {
-  sortDocuments, getDocumentsLength
+  sortDocumentContainers, getPropertyLength
 } from 'fe-redpencil/utils/documents';
 
 const {
@@ -18,7 +18,7 @@ export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   agendaService: inject(),
   addedAgendaitems: alias('agendaService.addedAgendaitems'),
-  addedDocuments: alias('agendaService.addedDocuments'),
+  addedPieces: alias('agendaService.addedPieces'),
 
   store: inject(),
   priority: attr('number'),
@@ -52,58 +52,58 @@ export default ModelWithModifier.extend({
   remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
-  documentVersions: hasMany('document-version'),
-  linkedDocumentVersions: hasMany('document-version'),
+  pieces: hasMany('piece'),
+  linkedPieces: hasMany('piece'),
 
-  sortedDocumentVersions: computed('documentVersions.@each.name', function() {
-    return A(this.get('documentVersions').toArray()).sort((documentA, documentB) => compareFunction(new VRDocumentName(documentA.get('name')), new VRDocumentName(documentB.get('name'))));
+  sortedPieces: computed('pieces.@each.name', function() {
+    return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  documentsLength: computed('documents', function() {
-    return getDocumentsLength(this, 'documents');
+  documentContainersLength: computed('documentContainers', function() {
+    return getPropertyLength(this, 'documentContainers');
   }),
 
-  linkedDocumentsLength: computed('linkedDocuments', function() {
-    return getDocumentsLength(this, 'linkedDocuments');
+  linkedDocumentContainersLength: computed('linkedDocumentContainers', function() {
+    return getPropertyLength(this, 'linkedDocumentContainers');
   }),
 
-  documents: computed('documentVersions.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
-      promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.mapBy('id').join(',');
-          return this.store.query('document', {
+      promise: this.get('pieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.mapBy('id').join(',');
+          return this.store.query('document-container', {
             filter: {
-              documents: {
-                id: documentVersionIds,
+              pieces: {
+                id: pieceIds,
               },
             },
             page: {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
+              size: pieces.get('length'), // # documentContainers will always be <= # pieces
             },
-            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
+            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
         }
       }),
     });
   }),
 
-  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
+  linkedDocumentContainers: computed('linkedPieces.@each', function() {
     return PromiseArray.create({
-      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.mapBy('id').join(',');
-          return this.store.query('document', {
+      promise: this.get('linkedPieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.mapBy('id').join(',');
+          return this.store.query('document-container', {
             filter: {
-              documents: {
-                id: documentVersionIds,
+              pieces: {
+                id: pieceIds,
               },
             },
             page: {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
+              size: pieces.get('length'), // # documentContainers will always be <= # pieces
             },
-            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => sortDocuments(this.get('linkedDocumentVersions'), containers));
+            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+          }).then((containers) => sortDocumentContainers(this.get('linkedPieces'), containers));
         }
       }),
     });
@@ -123,29 +123,29 @@ export default ModelWithModifier.extend({
     return this.get('agenda.isDesignAgenda');
   }),
 
-  // get document names to show on agendaview when not in the viewport to assist lazy loading
-  documentNames: computed('documentVersions', async function() {
-    const names = await this.agendaService.getDocumentNames(this);
+  // get piece names to show on agendaview when not in the viewport to assist lazy loading
+  pieceNames: computed('pieces', async function() {
+    const names = await this.agendaService.getPieceNames(this);
     return names;
   }),
 
-  nota: computed('documentVersions', function() {
+  nota: computed('pieces', function() {
     return PromiseObject.create({
-      promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.map((documentversion) => documentversion.get('id')).join(',');
+      promise: this.get('pieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.map((piece) => piece.get('id')).join(',');
 
           return this.store
-            .query('document', {
+            .query('document-container', {
               filter: {
-                documents: {
-                  id: documentVersionIds,
+                pieces: {
+                  id: pieceIds,
                 },
                 type: {
                   id: CONFIG.notaID,
                 },
               },
-              include: 'documents,type,documents.access-level',
+              include: 'pieces,type,pieces.access-level',
             })
             .then((notas) => notas.get('firstObject'));
         }
@@ -159,11 +159,7 @@ export default ModelWithModifier.extend({
 
   formallyOkToShow: computed('formallyOk', function() {
     const options = CONFIG.formallyOkOptions;
-    const {
-      formallyOk,
-    } = this;
-    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === formallyOk);
-
+    const foundOption = options.find((formallyOkOption) => formallyOkOption.uri === this.formallyOk);
     return EmberObject.create(foundOption);
   }),
 
@@ -174,15 +170,15 @@ export default ModelWithModifier.extend({
 
   isAdded: alias('checkAdded'),
 
-  hasChanges: computed('checkAdded', 'hasAddedDocuments', async function() {
-    const hasAddedDocuments = await this.hasAddedDocuments;
+  hasChanges: computed('checkAdded', 'hasAddedPieces', async function() {
+    const hasAddedPieces = await this.hasAddedPieces;
     const checkAdded = await this.checkAdded;
-    return checkAdded || hasAddedDocuments;
+    return checkAdded || hasAddedPieces;
   }),
 
-  hasAddedDocuments: computed('documents.@each', 'addedDocuments.@each', async function() {
-    const documents = await this.get('documents');
-    return documents && documents.some((document) => document.checkAdded);
+  hasAddedPieces: computed('documentContainers.@each', 'addedPieces.@each', async function() {
+    const documentContainers = await this.get('documentContainers');
+    return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
   sortedApprovals: computed('approvals.@each', async function() {

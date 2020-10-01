@@ -352,7 +352,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     cy.get(agendaOverview.agendaEditFormallyOkButton).click();
   }
 
-  cy.get('li.vlc-agenda-items__sub-item').as('agendaitems');
+  cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
