@@ -43,11 +43,10 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.treatment.report}} {{!-- awaiting here breaks loading after adding, do not add await --}}
-  {{!-- KAS-1388 report-component bekijken --}}
-    <Documents::DocumentLink
-      @documentContainer={{this.treatment.report.documentContainer}}
-      @onAddPiece={{this.addPiece}}
+  {{#if @treatment.report}} {{!-- awaiting here breaks loading after adding, do not add await --}}
+    <Documents::ReportLink
+      @documentContainer={{await @treatment.report.documentContainer}}
+      @treatment={{@treatment}}
     />
   {{else}}
     <Utils::AddDocuments
