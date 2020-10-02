@@ -152,16 +152,15 @@ export default class SubcaseDocuments extends Component {
         const subcasePieces = currentSubcasePieces.pushObjects(pieces);
         subcase.set('pieces', subcasePieces);
         yield subcase.save();
-
-        // Link piece to agendaitem
-        setNotYetFormallyOk(this.args.agendaitemOrSubcase);
-        yield this.args.agendaitemOrSubcase.save();
-        for (const piece of pieces) {
-          yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
-        }
-
-        this.pieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
       }
+      // Link piece to agendaitem
+      setNotYetFormallyOk(this.args.agendaitemOrSubcase);
+      yield this.args.agendaitemOrSubcase.save();
+      for (const piece of pieces) {
+        yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
+      }
+
+      this.pieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
     } else if (this.itemType === 'subcase') {
       // Link piece to all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status

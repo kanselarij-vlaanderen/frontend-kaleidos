@@ -1,4 +1,4 @@
-<div {{did-update (perform this.loadData) @pieces}}>
+<div {{did-update (perform this.loadData) @linkedPieces}}>
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}

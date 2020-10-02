@@ -54,7 +54,7 @@ export default class LinkedDocumentList extends Component {
       const batch = linkedPieceIds.slice(idx, idx + batchSize);
       const documentContainers = yield this.store.query('document-container', {
         'filter[pieces][id]': batch.join(','),
-        include: 'type,pieces.access-level,pieces.previous-piece,piece.next-piece',
+        include: 'type,pieces.access-level,pieces.previous-piece,pieces.next-piece',
         page: {
           size: batch.length,
         },
