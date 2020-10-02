@@ -1,8 +1,8 @@
 <EmberKaleidosWebuniversum::VlUploadedDocument
-  @name={{@document.file.filename}}
-  @extension={{@document.file.extension}}
-  @size={{@document.file.size}}
-  @downloadName={{@document.file.filename}}
+  @name={{@piece.file.filename}}
+  @extension={{@piece.file.extension}}
+  @size={{@piece.file.size}}
+  @downloadName={{@piece.file.filename}}
   @downloadLink={{this.downloadLink}}
   @delete={{@onDelete}}>
   {{#if @allowDocumentContainerEdit}}
@@ -11,7 +11,7 @@
         <WebComponents::VlFormLabel @value={{t "document-name"}} />
         <WebComponents::VlFormInput
           @width="4"
-          @value={{mut @document.name}} />
+          @value={{mut @piece.name}} />
       </div>
       {{#unless this.loadData.isRunning}}
         <div class="vlc-input-field-block">

@@ -45,8 +45,8 @@ export default Component.extend({
       this.toggleProperty('isEditing');
     },
 
-    async addDocument(document) {
-      await document.save();
+    async addPiece(piece) {
+      await piece.save();
     },
   },
 });

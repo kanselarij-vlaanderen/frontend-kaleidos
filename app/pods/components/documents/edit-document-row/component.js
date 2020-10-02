@@ -16,7 +16,7 @@ export default class DocumentList extends Component {
 
   @task
   *loadData() {
-    this.documentContainer = yield this.args.document.documentContainer;
+    this.documentContainer = yield this.args.piece.documentContainer;
   }
 
   @action
@@ -26,11 +26,11 @@ export default class DocumentList extends Component {
 
   @action
   selectAccessLevel(accessLevel) {
-    this.args.document.set('accessLevel', accessLevel);
+    this.args.piece.set('accessLevel', accessLevel);
   }
 
   @action
   softDelete() {
-    this.args.document.set('softDeleted', true);
+    this.args.piece.set('softDeleted', true);
   }
 }

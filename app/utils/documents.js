@@ -42,12 +42,12 @@ export const getPropertyLength = (model, property) => PromiseObject.create({
   promise: model.get(property).then((property) => (property ? property.get('length') : 0)),
 });
 
-export const addDocumentToAgendaitem = async function(agendaitem, document) {
-  const endpoint = `/agendaitems/${agendaitem.get('id')}/document-versions`;
+export const addPieceToAgendaitem = async function(agendaitem, piece) {
+  const endpoint = `/agendaitems/${agendaitem.get('id')}/pieces`;
   const body = {
     data: {
-      type: 'documents',
-      id: document.get('id'),
+      type: 'pieces',
+      id: piece.get('id'),
     },
   };
   const response = await fetch(endpoint, {
@@ -58,6 +58,6 @@ export const addDocumentToAgendaitem = async function(agendaitem, document) {
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    throw new Error(`Failed to add document ${document.get('id')} to agendaitem ${agendaitem.get('id')}`);
+    throw new Error(`Failed to add document ${piece.get('id')} to agendaitem ${agendaitem.get('id')}`);
   }
 };

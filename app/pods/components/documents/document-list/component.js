@@ -5,7 +5,7 @@ import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
-import { sortDocuments } from 'fe-redpencil/utils/documents';
+import { sortDocumentContainers } from 'fe-redpencil/utils/documents';
 
 const batchSize = 20;
 
@@ -15,9 +15,9 @@ class DocumentHistory {
   */
   @tracked documentContainer
   /**
-   * Document until which the document history of the container should be shown
+   * Piece until which the document history of the container should be shown
   */
-  @tracked lastDocument
+  @tracked lastPiece
 }
 
 export default class DocumentList extends Component {
@@ -33,8 +33,8 @@ export default class DocumentList extends Component {
 
   get sortedDocumentHistories() {
     const containers = this.documentHistories.map((history) => history.documentContainer);
-    const documents = this.documentHistories.map((history) => history.lastDocument);
-    const sortedContainers = sortDocuments(documents, containers);
+    const pieces = this.documentHistories.map((history) => history.lastPiece);
+    const sortedContainers = sortDocumentContainers(pieces, containers);
     const sortedHistories = A([]);
     for (const container of sortedContainers) {
       const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
@@ -45,16 +45,16 @@ export default class DocumentList extends Component {
 
   @task
   *loadData() {
-    const documents = yield this.args.documents;
-    const documentIds = documents.map((document) => document.get('id'));
+    const pieces = yield this.args.pieces;
+    const pieceIds = pieces.map((piece) => piece.get('id'));
 
     // Get a list of unique document containers of the documents
     const uniqueDocumentContainers = new Set();
-    for (let idx = 0; idx < documents.length; idx = idx + batchSize) {
-      const batch = documentIds.slice(idx, idx + batchSize);
-      const documentContainers = yield this.store.query('document', {
-        'filter[documents][id]': batch.join(','),
-        include: 'type,documents.access-level,documents.previous-version,documents.next-version',
+    for (let idx = 0; idx < pieces.length; idx = idx + batchSize) {
+      const batch = pieceIds.slice(idx, idx + batchSize);
+      const documentContainers = yield this.store.query('document-container', {
+        'filter[pieces][id]': batch.join(','),
+        include: 'type,pieces.access-level,pieces.previous-piece,pieces.next-piece',
         page: {
           size: batch.length,
         },
@@ -63,45 +63,47 @@ export default class DocumentList extends Component {
     }
 
     // For each document container, determine the lastest version to display
-    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, documents)));
+    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, pieces)));
   }
 
   @task
-  *createDocumentHistory(documentContainer, allDocuments) {
+  *createDocumentHistory(documentContainer, allPieces) {
     const history = new DocumentHistory();
     history.documentContainer = documentContainer;
 
-    const containerDocuments = yield documentContainer.documents;
+    const containerPieces = yield documentContainer.pieces;
 
+    // TODO KAS-1388 why dont we use documentContainer.sortedPieces ?
+    // or use this code in the model ?
     const heads = [];
-    for (const document of containerDocuments.toArray()) {
-      const previousDocument = yield document.previousVersion;
-      if (!previousDocument) {
-        heads.push(document);
+    for (const piece of containerPieces.toArray()) {
+      const previousPiece = yield piece.previousPiece;
+      if (!previousPiece) {
+        heads.push(piece);
       }
     }
 
-    let sortedContainerDocuments = [];
+    let sortedContainerPieces = [];
     if (heads.length > 1) {
-      warn('More than 1 possible head found for linked list of documents. Falling back to sort by document creation date', {
+      warn('More than 1 possible head found for linked list of pieces. Falling back to sort by document creation date', {
         id: 'multiple-possible-linked-list-heads',
       });
-      sortedContainerDocuments = containerDocuments.sortBy('created');
+      sortedContainerPieces = containerPieces.sortBy('created');
     } else {
       let next = heads[0];
       while (next) {
-        sortedContainerDocuments.push(next);
-        next = yield next.nextVersion;
+        sortedContainerPieces.push(next);
+        next = yield next.nextPiece;
       }
     }
 
-    // Loop over the reverse sorted documents and find the latest version that is also included
-    // in all documents.
-    const reverseSortedContainerDocuments = sortedContainerDocuments.slice(0).reverse();
-    for (const document of reverseSortedContainerDocuments) {
-      const matchingDocument = allDocuments.find((doc) => doc.get('id') === document.get('id'));
-      if (matchingDocument) {
-        history.lastDocument = matchingDocument;
+    // Loop over the reverse sorted pieces and find the latest version that is also included
+    // in all pieces.
+    const reverseSortedContainerPieces = sortedContainerPieces.slice(0).reverse();
+    for (const containerPiece of reverseSortedContainerPieces) {
+      const matchingPiece = allPieces.find((piece) => piece.get('id') === containerPiece.get('id'));
+      if (matchingPiece) {
+        history.lastPiece = matchingPiece;
         break;
       }
     }
@@ -111,12 +113,12 @@ export default class DocumentList extends Component {
 
 
   @task
-  *saveEditDocuments() {
+  *saveEditPieces() {
     const updatePromises = this.documentHistories.map(async(history) => {
-      if (history.lastDocument.softDeleted) {
-        this.fileService.deleteDocument(history.documentContainer);
+      if (history.lastPiece.softDeleted) {
+        this.fileService.deleteDocumentContainer(history.documentContainer);
       } else {
-        await history.lastDocument.save();
+        await history.lastPiece.save();
         await history.documentContainer.save();
       }
     });
@@ -125,11 +127,11 @@ export default class DocumentList extends Component {
   }
 
   @task
-  *cancelEditDocuments() {
+  *cancelEditPieces() {
     const rollbacks = this.documentHistories.map(async(history) => {
-      history.lastDocument.set('softDeleted', false);
-      history.lastDocument.rollbackAttributes();
-      await history.lastDocument.belongsTo('accessLevel').reload();
+      history.lastPiece.set('softDeleted', false);
+      history.lastPiece.rollbackAttributes();
+      await history.lastPiece.belongsTo('accessLevel').reload();
       history.documentContainer.rollbackAttributes();
       history.documentContainer.belongsTo('type').reload();
     });

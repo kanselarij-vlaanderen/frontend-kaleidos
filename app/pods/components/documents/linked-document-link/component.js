@@ -11,7 +11,7 @@ export default class LinkedDocumentLink extends Component {
 
   @tracked isExpandedVersionHistory = false;
   @tracked isOpenVerifyDeleteModal = false;
-  @tracked sortedDocuments = [];
+  @tracked sortedPieces = [];
 
   constructor() {
     super(...arguments);
@@ -20,21 +20,21 @@ export default class LinkedDocumentLink extends Component {
 
   @task
   *loadData() {
-    const containerDocuments = yield this.args.documentContainer.sortedDocuments;
-    if (this.args.lastDocument) {
-      const idx = containerDocuments.indexOf(this.args.lastDocument);
-      this.sortedDocuments = A(containerDocuments.slice(0, idx + 1));
+    const containerPieces = yield this.args.documentContainer.sortedPieces;
+    if (this.args.lastPiece) {
+      const idx = containerPieces.indexOf(this.args.lastPiece);
+      this.sortedPieces = A(containerPieces.slice(0, idx + 1));
     } else {
-      this.sortedDocuments = A(containerDocuments);
+      this.sortedPieces = A(containerPieces);
     }
   }
 
-  get lastDocument() {
-    return this.sortedDocuments.length && this.sortedDocuments.lastObject;
+  get lastPiece() {
+    return this.sortedPieces.length && this.sortedPieces.lastObject;
   }
 
-  get reverseSortedDocuments() {
-    return this.sortedDocuments.slice(0).reverse();
+  get reverseSortedPieces() {
+    return this.sortedPieces.slice(0).reverse();
   }
 
   @action
@@ -43,17 +43,17 @@ export default class LinkedDocumentLink extends Component {
   }
 
   @action
-  deleteDocumentLink() {
+  deletePieceLink() {
     this.isOpenVerifyDeleteModal = true;
   }
 
   @action
-  cancelDeleteDocumentLink() {
+  cancelDeletePieceLink() {
     this.isOpenVerifyDeleteModal = false;
   }
 
   @action
-  verifyDeleteDocumentLink() {
+  verifyDeletePieceLink() {
     this.args.onUnlinkDocumentContainer(this.args.documentContainer);
     this.isOpenVerifyDeleteModal = false;
   }

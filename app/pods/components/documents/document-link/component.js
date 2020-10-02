@@ -18,13 +18,13 @@ export default class DocumentLink extends Component {
   @tracked isExpandedVersionHistory = false;
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
-  @tracked isEditingDocument = false;
+  @tracked isEditingPiece = false;
 
   @tracked uploadedFile;
-  @tracked newDocument;
-  @tracked documentNameBuffer;
+  @tracked newPiece;
+  @tracked pieceNameBuffer;
   @tracked defaultAccessLevel;
-  @tracked sortedDocuments = [];
+  @tracked sortedPieces = [];
 
   constructor() {
     super(...arguments);
@@ -46,21 +46,21 @@ export default class DocumentLink extends Component {
 
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
     const documentContainer = yield this.args.documentContainer;
-    const containerDocuments = yield documentContainer.sortedDocuments;
-    if (this.args.lastDocument) {
-      const idx = containerDocuments.indexOf(this.args.lastDocument);
-      this.sortedDocuments = A(containerDocuments.slice(0, idx + 1));
+    const containerPieces = yield documentContainer.sortedPieces;
+    if (this.args.lastPiece) {
+      const idx = containerPieces.indexOf(this.args.lastPiece);
+      this.sortedPieces = A(containerPieces.slice(0, idx + 1));
     } else {
-      this.sortedDocuments = A(containerDocuments);
+      this.sortedPieces = A(containerPieces);
     }
   }
 
-  get lastDocument() {
-    return this.sortedDocuments.length && this.sortedDocuments.lastObject;
+  get lastPiece() {
+    return this.sortedPieces.length && this.sortedPieces.lastObject;
   }
 
-  get reverseSortedDocuments() {
-    return this.sortedDocuments.slice(0).reverse();
+  get reverseSortedPieces() {
+    return this.sortedPieces.slice(0).reverse();
   }
 
   get itemType() {
@@ -76,79 +76,79 @@ export default class DocumentLink extends Component {
   }
 
   @task
-  *uploadDocument(file) {
+  *uploadPiece(file) {
     // ensure we're working on the most recent state of the document container
     const documentContainer = yield this.args.documentContainer.reload();
-    const versions = yield documentContainer.hasMany('documents').reload();
+    const containerPieces = yield documentContainer.hasMany('pieces').reload();
 
-    const previousDocument = yield documentContainer.lastDocument;
-    const previousAccessLevel = yield previousDocument.accessLevel;
+    const previousPiece = yield documentContainer.lastPiece;
+    const previousAccessLevel = yield previousPiece.accessLevel;
     const now = moment().utc()
       .toDate();
-    this.newDocument = this.store.createRecord('document-version', {
+    this.newPiece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
-      previousVersion: previousDocument,
-      confidential: previousDocument.confidential,
+      previousPiece: previousPiece,
+      confidential: previousPiece.confidential,
       accessLevel: previousAccessLevel || this.defaultAccessLevel,
       documentContainer: documentContainer,
     });
-    versions.pushObject(this.newDocument);
-    const documentName = new VRDocumentName(previousDocument.name).withOtherVersionSuffix(versions.length);
-    this.newDocument.set('name', documentName);
+    containerPieces.pushObject(this.newPiece);
+    const pieceName = new VRDocumentName(previousPiece.name).withOtherPieceSuffix(containerPieces.length);
+    this.newPiece.set('name', pieceName);
   }
 
   @task
-  *addDocument() {
+  *addPiece() {
     try {
-      yield this.args.onAddDocument(this.newDocument);
+      yield this.args.onAddPiece(this.newPiece);
       this.loadData.perform();
-      this.newDocument = null;
+      this.newPiece = null;
       this.isOpenUploadModal = false;
     } catch (error) {
-      yield this.deleteUploadedDocument.perform();
+      yield this.deleteUploadedPiece.perform();
       this.isOpenUploadModal = false;
       throw error;
     }
   }
 
   @task
-  *deleteUploadedDocument() {
-    if (this.newDocument) {
-      yield this.fileService.deleteDocumentVersion(this.newDocument);
-      this.newDocument = null;
+  *deleteUploadedPiece() {
+    if (this.newPiece) {
+      yield this.fileService.deletePiece(this.newPiece);
+      this.newPiece = null;
     }
   }
 
   @task
-  *cancelUploadDocument() {
-    yield this.deleteUploadedDocument.perform();
+  *cancelUploadPiece() {
+    yield this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
   }
 
   @action
-  enableEditDocumentName() {
+  enableEditPieceName() {
     if (this.currentSession.isEditor) {
-      this.documentNameBuffer = this.lastDocument.name;
-      this.isEditingDocument = true;
+      this.pieceNameBuffer = this.lastPiece.name;
+      this.isEditingPiece = true;
     }
   }
 
   @action
-  cancelEditDocumentName() {
-    this.isEditingDocument = false;
-    this.documentNameBuffer = null;
+  cancelEditPieceName() {
+    this.isEditingPiece = false;
+    this.pieceNameBuffer = null;
   }
 
   @task
-  *saveDocumentName() {
+  *savePieceName() {
     const now = moment().toDate();
-    this.lastDocument.set('modified', now);
-    this.lastDocument.set('name', this.documentNameBuffer);
-    yield this.lastDocument.save();
-    this.isEditingDocument = false;
-    this.documentNameBuffer = null;
+    this.lastPiece.set('modified', now);
+    this.lastPiece.set('name', this.pieceNameBuffer);
+    yield this.lastPiece.save();
+    this.isEditingPiece = false;
+    this.pieceNameBuffer = null;
   }
 
   @action
@@ -189,6 +189,6 @@ export default class DocumentLink extends Component {
   *deleteDocumentContainerWithUndo() {
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
     const documentContainer = yield this.args.documentContainer;
-    yield this.fileService.deleteDocumentWithUndo.perform(documentContainer);
+    yield this.fileService.deleteDocumentContainerWithUndo.perform(documentContainer);
   }
 }

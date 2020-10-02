@@ -1,11 +1,11 @@
-<div {{did-update (perform this.loadData) @documents}}>
+<div {{did-update (perform this.loadData) @pieces}}>
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}
     {{#each this.sortedDocumentHistories as |history|}}
       <Documents::LinkedDocumentLink
         @documentContainer={{history.documentContainer}}
-        @lastDocument={{history.lastDocument}}
+        @lastPiece={{history.lastPiece}}
         @onUnlinkDocumentContainer={{@onUnlinkDocumentContainer}} />
     {{else}}
       <div class="vl-u-spacer-extended-top-s">

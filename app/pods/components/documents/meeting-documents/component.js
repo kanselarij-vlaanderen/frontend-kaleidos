@@ -12,12 +12,11 @@ export default class MeetingDocuments extends Component {
   @service currentSession;
   @service store;
 
-  @tracked isEnabledDocumentEdit = false;
-  @tracked isOpenDocumentUploadModal = false;
-  @tracked isOpenLinkedDocumentModal = false;
+  @tracked isEnabledPieceEdit = false;
+  @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
-  @tracked documents = A([]);
-  @tracked newDocuments = A([]);
+  @tracked pieces = A([]);
+  @tracked newPieces = A([]);
 
   constructor() {
     super(...arguments);
@@ -37,32 +36,32 @@ export default class MeetingDocuments extends Component {
       this.defaultAccessLevel = accessLevels.firstObject;
     }
 
-    this.documents = yield this.args.meeting.documentVersions; // TODO replace with query?
+    this.pieces = yield this.args.meeting.pieces; // TODO replace with query?
   }
 
   @action
-  enableDocumentEdit() {
-    this.isEnabledDocumentEdit = true;
+  enablePieceEdit() {
+    this.isEnabledPieceEdit = true;
   }
 
   @action
-  disableDocumentEdit() {
-    this.isEnabledDocumentEdit = false;
+  disablePieceEdit() {
+    this.isEnabledPieceEdit = false;
   }
 
   @action
-  openDocumentUploadModal() {
-    this.isOpenDocumentUploadModal = true;
+  openPieceUploadModal() {
+    this.isOpenPieceUploadModal = true;
   }
 
   @action
-  uploadDocument(file) {
+  uploadPiece(file) {
     const now = moment().utc()
       .toDate();
-    const documentContainer = this.store.createRecord('document', {
+    const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
-    const document = this.store.createRecord('document-version', {
+    const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
@@ -71,63 +70,63 @@ export default class MeetingDocuments extends Component {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.newDocuments.pushObject(document);
+    this.newPieces.pushObject(piece);
   }
 
   @task
-  *saveDocuments() {
-    const savePromises = this.newDocuments.map(async(document) => {
+  *savePieces() {
+    const savePromises = this.newPieces.map(async(piece) => {
       try {
-        this.saveDocument.perform(document);
+        this.savePiece.perform(piece);
       } catch (error) {
-        this.deleteDocument.perform(document);
+        this.deletePiece.perform(piece);
         throw error;
       }
     });
     yield all(savePromises);
-    this.isOpenDocumentUploadModal = false;
-    this.newDocuments = A();
+    this.isOpenPieceUploadModal = false;
+    this.newPieces = A();
   }
 
   /**
-   * Save a new document container and the document it wraps
+   * Save a new document container and the piece it wraps
   */
   @task
-  *saveDocument(document) {
-    const documentContainer = yield document.documentContainer;
+  *savePiece(piece) {
+    const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
-    yield document.save();
-    const documents = yield this.args.meeting.hasMany('documentVersions').reload();
-    documents.pushObject(document);
+    yield piece.save();
+    const pieces = yield this.args.meeting.hasMany('pieces').reload();
+    pieces.pushObject(piece);
     yield this.args.meeting.save();
   }
 
   /**
-   * Add new document to an existing document container
+   * Add new piece to an existing document container
   */
   @task
-  *addDocument(document) {
-    yield document.save();
-    const documents = yield this.args.meeting.hasMany('documentVersions').reload();
-    documents.pushObject(document);
+  *addPiece(piece) {
+    yield piece.save();
+    const pieces = yield this.args.meeting.hasMany('pieces').reload();
+    pieces.pushObject(piece);
     yield this.args.meeting.save();
   }
 
   @task
-  *cancelUploadDocuments() {
-    const deletePromises = this.newDocuments.map((document) => this.deleteDocument.perform(document));
+  *cancelUploadPieces() {
+    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newDocuments = A();
-    this.isOpenDocumentUploadModal = false;
+    this.newPieces = A();
+    this.isOpenPieceUploadModal = false;
   }
 
   @task
-  *deleteDocument(document) {
-    const file = yield document.file;
+  *deletePiece(piece) {
+    const file = yield piece.file;
     yield file.destroyRecord();
-    this.newDocuments.removeObject(document);
-    const documentContainer = yield document.documentContainer;
+    this.newPieces.removeObject(piece);
+    const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
-    yield document.destroyRecord();
+    yield piece.destroyRecord();
   }
 }

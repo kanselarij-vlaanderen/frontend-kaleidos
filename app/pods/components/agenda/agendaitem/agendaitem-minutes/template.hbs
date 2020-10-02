@@ -34,7 +34,7 @@
   {{else}}
     <Documents::DocumentLink
       @documentContainer={{agendaitem.meetingRecord.signedDocumentContainer}}
-      @onAddDocument={{action "addDocument"}} />
+      @onAddPiece={{action "addPiece"}} />
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemMinutesEdit

@@ -10,20 +10,20 @@ import config from 'fe-redpencil/utils/config';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
 } from 'fe-redpencil/utils/agendaitem-utils';
-import { addDocumentToAgendaitem } from 'fe-redpencil/utils/documents';
+import { addPieceToAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class SubcaseDocuments extends Component {
   @service currentSession;
   @service store;
 
-  @tracked isEnabledDocumentEdit = false;
-  @tracked isOpenDocumentUploadModal = false;
-  @tracked isOpenLinkedDocumentModal = false;
+  @tracked isEnabledPieceEdit = false;
+  @tracked isOpenPieceUploadModal = false;
+  @tracked isOpenLinkedPieceModal = false;
   @tracked defaultAccessLevel;
-  @tracked documents = A([]);
-  @tracked linkedDocuments = A([]);
-  @tracked newDocuments = A([]);
-  @tracked newLinkedDocuments = A([]);
+  @tracked pieces = A([]);
+  @tracked linkedPieces = A([]);
+  @tracked newPieces = A([]);
+  @tracked newLinkedPieces = A([]);
 
   constructor() {
     super(...arguments);
@@ -44,8 +44,8 @@ export default class SubcaseDocuments extends Component {
     }
 
     // TODO change to store.query to have control over the page size
-    this.documents = yield this.args.agendaitemOrSubcase.documentVersions;
-    this.linkedDocuments = yield this.args.agendaitemOrSubcase.linkedDocumentVersions;
+    this.pieces = yield this.args.agendaitemOrSubcase.pieces;
+    this.linkedPieces = yield this.args.agendaitemOrSubcase.linkedPieces;
   }
 
   get itemType() {
@@ -71,30 +71,30 @@ export default class SubcaseDocuments extends Component {
   }
 
   @action
-  async enableDocumentEdit() {
+  async enablePieceEdit() {
     await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
-    this.isEnabledDocumentEdit = true;
+    this.isEnabledPieceEdit = true;
   }
 
   @action
-  disableDocumentEdit() {
-    this.isEnabledDocumentEdit = false;
+  disablePieceEdit() {
+    this.isEnabledPieceEdit = false;
   }
 
   @action
-  async openDocumentUploadModal() {
+  async openPieceUploadModal() {
     await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
-    this.isOpenDocumentUploadModal = true;
+    this.isOpenPieceUploadModal = true;
   }
 
   @action
-  uploadDocument(file) {
+  uploadPiece(file) {
     const now = moment().utc()
       .toDate();
-    const documentContainer = this.store.createRecord('document', {
+    const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
-    const document = this.store.createRecord('document-version', {
+    const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
@@ -103,212 +103,219 @@ export default class SubcaseDocuments extends Component {
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.newDocuments.pushObject(document);
+    this.newPieces.pushObject(piece);
   }
 
   @task
-  *saveDocuments() {
-    const savePromises = this.newDocuments.map(async(document) => {
+  *savePieces() {
+    const savePromises = this.newPieces.map(async(piece) => {
       try {
-        await this.saveDocument.perform(document);
+        await this.savePiece.perform(piece);
       } catch (error) {
-        await this.deleteDocument.perform(document);
+        await this.deletePiece.perform(piece);
         throw error;
       }
     });
     yield all(savePromises);
-    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newDocuments);
-    this.isOpenDocumentUploadModal = false;
-    this.newDocuments = A();
+    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    this.isOpenPieceUploadModal = false;
+    this.newPieces = A();
   }
 
   /**
-   * Save a new document container and the document it wraps
+   * Save a new document container and the piece it wraps
   */
   @task
-  *saveDocument(document) {
-    const documentContainer = yield document.documentContainer;
+  *savePiece(piece) {
+    const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
-    yield document.save();
+    yield piece.save();
   }
 
   /**
-   * Add new document to an existing document container
+   * Add new piece to an existing document container
   */
   @task
-  *addDocument(document) {
-    yield document.save();
-    yield this.updateRelatedAgendaitemsAndSubcase.perform([document]);
+  *addPiece(piece) {
+    yield piece.save();
+    yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
   }
 
   @task
-  *updateRelatedAgendaitemsAndSubcase(documents) {
+  *updateRelatedAgendaitemsAndSubcase(pieces) {
     if (this.itemType === 'agendaitem') {
-      // Link documents to subcase related to the agendaitem
+      // Link pieces to subcase related to the agendaitem
       const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
-      const subcase = yield agendaActivity.subcase;
-      const currentSubcaseDocuments = yield subcase.hasMany('documentVersions').reload();
-      const subcaseDocuments = currentSubcaseDocuments.pushObjects(documents);
-      subcase.set('documentVersions', subcaseDocuments);
-      yield subcase.save();
+      if (agendaActivity) {
+        const subcase = yield agendaActivity.subcase;
+        const currentSubcasePieces = yield subcase.hasMany('pieces').reload();
+        const subcasePieces = currentSubcasePieces.pushObjects(pieces);
+        subcase.set('pieces', subcasePieces);
+        yield subcase.save();
 
-      // Link document to agendaitem
-      setNotYetFormallyOk(this.args.agendaitemOrSubcase);
-      yield this.args.agendaitemOrSubcase.save();
-      for (const document of documents) {
-        yield addDocumentToAgendaitem(this.args.agendaitemOrSubcase, document);
+        // Link piece to agendaitem
+        setNotYetFormallyOk(this.args.agendaitemOrSubcase);
+        yield this.args.agendaitemOrSubcase.save();
+        for (const piece of pieces) {
+          yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
+        }
+
+        this.pieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
       }
-
-      this.documents = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
     } else if (this.itemType === 'subcase') {
-      // Link document to all agendaitems that are related to the subcase via an agendaActivity
+      // Link piece to all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status
       const agendaitems = yield this.store.query('agendaitem', {
         'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
         'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
       });
       const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
-        for (const document of documents) {
-          await addDocumentToAgendaitem(agendaitem, document);
+        for (const piece of pieces) {
+          await addPieceToAgendaitem(agendaitem, piece);
         }
-        await agendaitem.hasMany('documentVersions').reload();
+        await agendaitem.hasMany('pieces').reload();
         setNotYetFormallyOk(agendaitem);
         await destroyApprovalsOfAgendaitem(agendaitem);
         await agendaitem.save();
       });
       yield all(agendaitemUpdates);
 
-      // Link document to subcase
-      const currentSubcaseDocuments = yield this.args.agendaitemOrSubcase.hasMany('documentVersions').reload();
-      const subcaseDocuments = currentSubcaseDocuments.pushObjects(documents);
-      this.args.agendaitemOrSubcase.set('documentVersions', subcaseDocuments);
+      // Link piece to subcase
+      const currentSubcasePieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+      const subcasePieces = currentSubcasePieces.pushObjects(pieces);
+      this.args.agendaitemOrSubcase.set('pieces', subcasePieces);
       yield this.args.agendaitemOrSubcase.save();
 
-      this.documents = subcaseDocuments;
+      this.pieces = subcasePieces;
     }
   }
 
   @task
-  *cancelUploadDocuments() {
-    const deletePromises = this.newDocuments.map((document) => this.deleteDocument.perform(document));
+  *cancelUploadPieces() {
+    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newDocuments = A();
-    this.isOpenDocumentUploadModal = false;
+    this.newPieces = A();
+    this.isOpenPieceUploadModal = false;
   }
 
   @task
-  *deleteDocument(document) {
-    const file = yield document.file;
+  *deletePiece(piece) {
+    const file = yield piece.file;
     yield file.destroyRecord();
-    this.newDocuments.removeObject(document);
-    const documentContainer = yield document.documentContainer;
+    this.newPieces.removeObject(piece);
+    const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
-    yield document.destroyRecord();
+    yield piece.destroyRecord();
   }
 
   @action
-  openLinkedDocumentModal() {
-    this.isOpenLinkedDocumentModal = true;
+  openLinkedPieceModal() {
+    this.isOpenLinkedPieceModal = true;
   }
 
   @action
-  cancelLinkDocuments() {
-    this.newLinkedDocuments = A([]);
-    this.isOpenLinkedDocumentModal = false;
+  cancelLinkPieces() {
+    this.newLinkedPieces = A([]);
+    this.isOpenLinkedPieceModal = false;
   }
 
   @action
-  linkDocument(document) {
-    this.newLinkedDocuments.pushObject(document);
+  linkPiece(piece) {
+    this.newLinkedPieces.pushObject(piece);
   }
 
   @action
-  unlinkDocument(document) {
-    this.newLinkedDocuments.removeObject(document);
+  unlinkPiece(piece) {
+    this.newLinkedPieces.removeObject(piece);
   }
 
   @task
-  *saveLinkedDocuments() {
-    let allDocumentsToLink = [];
-    for (const linkedDocument of this.newLinkedDocuments) {
-      const documents = yield this.store.query('document-version', {
-        'filter[document-container][documents][:id:]': linkedDocument.get('id'),
+  *saveLinkedPieces() {
+    let allPiecesToLink = [];
+    for (const linkedPiece of this.newLinkedPieces) {
+      const linkedPieces = yield this.store.query('piece', {
+        'filter[document-container][pieces][:id:]': linkedPiece.get('id'),
         page: {
           size: 300,
         },
       });
-      allDocumentsToLink = [...allDocumentsToLink, ...documents.toArray()];
+      allPiecesToLink = [...allPiecesToLink, ...linkedPieces.toArray()];
     }
 
-    if (allDocumentsToLink.length) {
+    if (allPiecesToLink.length) {
       if (this.itemType === 'agendaitem') {
-        // Link documents to subcase related to the agendaitem
+        // Link pieces to subcase related to the agendaitem
         const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
-        const subcase = yield agendaActivity.subcase;
-        const currentSubcaseDocuments = yield subcase.hasMany('linkedDocumentVersions').reload();
-        const subcaseDocuments = currentSubcaseDocuments.pushObjects(allDocumentsToLink);
-        subcase.set('linkedDocumentVersions', subcaseDocuments);
-        yield subcase.save();
+        if (agendaActivity) {
+          const subcase = yield agendaActivity.subcase;
+          const currentSubcaseLinkedPieces = yield subcase.hasMany('linkedPieces').reload();
+          const subcasePieces = currentSubcaseLinkedPieces.pushObjects(allPiecesToLink);
+          subcase.set('linkedPieces', subcasePieces);
+          yield subcase.save();
+        }
       } else if (this.itemType === 'subcase') {
-        // Link document to all agendaitems that are related to the subcase via an agendaActivity
+        // Link pieces to all agendaitems that are related to the subcase via an agendaActivity
         // and related to an agenda in the design status
         const agendaitems = yield this.store.query('agendaitem', {
           'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
           'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
         });
         const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
-          const currentAgendaitemDocuments = await agendaitem.hasMany('linkedDocumentVersions').reload();
-          const agendaitemDocuments = currentAgendaitemDocuments.pushObjects(allDocumentsToLink);
-          agendaitem.set('linkedDocumentVersions', agendaitemDocuments);
+          const currentAgendaitemLinkedPieces = await agendaitem.hasMany('linkedPieces').reload();
+          const agendaitempieces = currentAgendaitemLinkedPieces.pushObjects(allPiecesToLink);
+          agendaitem.set('linkedPieces', agendaitempieces);
           await agendaitem.save();
         });
         yield all(agendaitemUpdates);
       }
 
-      // Link document to subcase/agendaitem
-      const currentDocuments = yield this.args.agendaitemOrSubcase.hasMany('linkedDocumentVersions').reload();
-      const documents = currentDocuments.pushObjects(allDocumentsToLink);
-      this.args.agendaitemOrSubcase.set('linkedDocumentVersions', documents);
+      // Link pieces to subcase/agendaitem
+      const currentLinkedPieces = yield this.args.agendaitemOrSubcase.hasMany('linkedPieces').reload();
+      const newLinkedpieces = currentLinkedPieces.pushObjects(allPiecesToLink);
+      this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedpieces);
       yield this.args.agendaitemOrSubcase.save();
-      this.linkedDocuments = currentDocuments;
+      this.linkedPieces = newLinkedpieces;
     }
 
-    this.newLinkedDocuments = A([]);
-    this.isOpenLinkedDocumentModal = false;
+    this.newLinkedPieces = A([]);
+    this.isOpenLinkedPieceModal = false;
   }
 
   @task
   *unlinkDocumentContainer(documentContainer) {
-    const documentsToRemove = (yield documentContainer.documents).toArray();
+    const linkedPiecesToRemove = (yield documentContainer.pieces).toArray();
 
     if (this.itemType === 'agendaitem') {
-      // Unlink documents from subcase related to the agendaitem
+      // Unlink pieces from subcase related to the agendaitem
       const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
-      const subcase = yield agendaActivity.subcase;
-      const currentSubcaseDocuments = yield subcase.hasMany('linkedDocumentVersions').reload();
-      const subcaseDocuments = currentSubcaseDocuments.removeObjects(documentsToRemove);
-      subcase.set('linkedDocumentVersions', subcaseDocuments);
-      yield subcase.save();
+      if (agendaActivity) {
+        const subcase = yield agendaActivity.subcase;
+        const currentSubcaseLinkedPieces = yield subcase.hasMany('linkedPieces').reload();
+        const subcasePieces = currentSubcaseLinkedPieces.removeObjects(linkedPiecesToRemove);
+        subcase.set('linkedPieces', subcasePieces);
+        yield subcase.save();
+      }
     } else if (this.itemType === 'subcase') {
-      // Unlink document from all agendaitems that are related to the subcase via an agendaActivity
+      // Unlink pieces from all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status
       const agendaitems = yield this.store.query('agendaitem', {
         'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
         'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
       });
       const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
-        const currentAgendaitemDocuments = await agendaitem.hasMany('linkedDocumentVersions').reload();
-        const agendaitemDocuments = currentAgendaitemDocuments.removeObjects(documentsToRemove);
-        agendaitem.set('linkedDocumentVersions', agendaitemDocuments);
+        const currentAgendaitemLinkedPieces = await agendaitem.hasMany('linkedPieces').reload();
+        const agendaitempieces = currentAgendaitemLinkedPieces.removeObjects(linkedPiecesToRemove);
+        agendaitem.set('linkedPieces', agendaitempieces);
         await agendaitem.save();
       });
       yield all(agendaitemUpdates);
     }
 
-    const currentDocuments = yield this.args.agendaitemOrSubcase.hasMany('linkedDocumentVersions').reload();
-    const documents = currentDocuments.removeObjects(documentsToRemove);
-    this.args.agendaitemOrSubcase.set('linkedDocumentVersions', documents);
+    // Unlink pieces from subcase/agendaitem
+    const currentLinkedPieces = yield this.args.agendaitemOrSubcase.hasMany('linkedPieces').reload();
+    const newLinkedpieces = currentLinkedPieces.removeObjects(linkedPiecesToRemove);
+    this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedpieces);
     yield this.args.agendaitemOrSubcase.save();
-    this.linkedDocuments = documents;
+    this.linkedPieces = newLinkedpieces;
   }
 }

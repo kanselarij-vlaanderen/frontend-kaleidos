@@ -4,10 +4,10 @@
       <h4 class="vl-title vl-title--h4">
         {{t "documents"}}
       </h4>
-      {{#if (and this.currentSession.isEditor this.documents.length)}}
+      {{#if (and this.currentSession.isEditor this.pieces.length)}}
         <div class="vl-u-spacer-extended-left-s">
           <button data-test-subcase-documents-edit class="vl-link" type="button"
-            {{on "click" this.enableDocumentEdit}}>
+            {{on "click" this.enablePieceEdit}}>
             {{t "edit"}}
           </button>
         </div>
@@ -17,10 +17,10 @@
   {{#if this.governmentCanViewDocuments}}
     {{#unless this.loadData.isRunning}}
       <Documents::DocumentList
-        @documents={{this.documents}}
-        @isEnabledDocumentEdit={{this.isEnabledDocumentEdit}}
-        @onAddDocument={{perform this.addDocument}}
-        @onCloseEdit={{this.disableDocumentEdit}}  />
+        @pieces={{this.pieces}}
+        @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
+        @onAddPiece={{perform this.addPiece}}
+        @onCloseEdit={{this.disablePieceEdit}}  />
     {{/unless}}
   {{else}}
     <div class="vl-u-spacer-extended-top-s">
@@ -30,9 +30,9 @@
   {{#if this.currentSession.isEditor}}
     <div class="vl-u-spacer">
       <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
-        {{on "click" this.openDocumentUploadModal}}>
+        {{on "click" this.openPieceUploadModal}}>
         <i class="vl-button__icon vl-button__icon--before ki-add"></i>
-        {{t "document-add"}}
+        {{t "documents-add"}}
       </button>
     </div>
   {{/if}}
@@ -46,14 +46,14 @@
   </div>
   {{#unless this.loadData.isRunning}}
     <Documents::LinkedDocumentList
-      @documents={{this.linkedDocuments}}
+      @linkedPieces={{this.linkedPieces}}
       @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
   {{/unless}}
   {{#if this.currentSession.isEditor}}
     <div class="vl-u-spacer">
       <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
         data-test-add-linked-documents
-        {{on "click" this.openLinkedDocumentModal}}>
+        {{on "click" this.openLinkedPieceModal}}>
         <i class="vl-button__icon vl-button__icon--before ki-add"></i>
         {{t "document-link-old"}}
       </button>
@@ -61,55 +61,55 @@
   {{/if}}
 </div>
 
-{{#if this.isOpenDocumentUploadModal}}
+{{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadDocuments}}
+    @closeModal={{perform this.cancelUploadPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}} >
     <div class="vl-modal-dialog__content">
-      {{#if this.saveDocuments.isRunning}}
+      {{#if this.savePieces.isRunning}}
         <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
       {{else}}
         <FileUploader
           @multipleFiles={{true}}
-          @uploadedFileAction={{this.uploadDocument}} />
+          @uploadedFileAction={{this.uploadPiece}} />
         <div class="upload-container">
-          {{#each this.newDocuments as |document|}}
+          {{#each this.newPieces as |piece|}}
             <Documents::DocumentUpload
-              @document={{document}}
+              @piece={{piece}}
               @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deleteDocument document}} />
+              @onDelete={{perform this.deletePiece piece}} />
           {{/each}}
         </div>
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
-      @isLoading={{this.saveDocuments.isRunning}}
+      @isLoading={{this.savePieces.isRunning}}
       @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "document-add"}}
-      @cancelAction={{perform this.cancelUploadDocuments}}
-      @saveAction={{perform this.saveDocuments}}
-      @disableSave={{eq this.newDocuments.length 0}} />
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
-{{#if this.isOpenLinkedDocumentModal}}
+{{#if this.isOpenLinkedPieceModal}}
   <WebComponents::VlModal
-    @closeModal={{fn this.cancelLinkDocuments}}
+    @closeModal={{fn this.cancelLinkPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
     <div class="vl-modal-dialog__content">
       <Utils::AddExistingDocument
-        @add={{fn this.linkDocument}}
-        @delete={{fn this.unlinkDocument}} />
+        @add={{fn this.linkPiece}}
+        @delete={{fn this.unlinkPiece}} />
     </div>
     <WebComponents::VlModalFooter
-      @isLoading={{this.saveLinkedDocuments.isRunning}}
+      @isLoading={{this.saveLinkedPieces.isRunning}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "document-link-old"}}
-      @cancelAction={{fn this.cancelLinkDocuments}}
-      @saveAction={{perform this.saveLinkedDocuments}}
-      @disableSave={{eq this.newLinkedDocuments.length 0}} />
+      @cancelAction={{fn this.cancelLinkPieces}}
+      @saveAction={{perform this.saveLinkedPieces}}
+      @disableSave={{eq this.newLinkedPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}

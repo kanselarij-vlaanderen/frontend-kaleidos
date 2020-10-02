@@ -26,12 +26,12 @@ export default class DocumentUpload extends Component {
       });
     }
 
-    this.documentContainer = yield this.args.document.documentContainer;
+    this.documentContainer = yield this.args.piece.documentContainer;
     this.selectedDocumentType = yield this.documentContainer.type;
   }
 
   get downloadLink() {
-    const file = this.args.document.file;
+    const file = this.args.piece.file;
     return `${file.get('downloadLink')}?name=${file.get('filename')}`;
   }
 

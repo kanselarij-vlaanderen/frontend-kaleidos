@@ -1,8 +1,8 @@
-<div {{did-update (perform this.loadData) @documents}}>
+<div {{did-update (perform this.loadData) @pieces}}>
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}
-    {{#if @isEnabledDocumentEdit}}
+    {{#if @isEnabledPieceEdit}}
       <div class="vl-form__group vl-u-bg-porcelain">
         <div class="vl-u-spacer">
           <table class="vl-data-table vl-data-table--align-middle">
@@ -33,30 +33,30 @@
             </thead>
             <tbody>
               {{#each this.sortedDocumentHistories as |history|}}
-                {{#unless history.lastDocument.softDeleted}}
+                {{#unless history.lastPiece.softDeleted}}
                   <Documents::EditDocumentRow
-                    @document={{history.lastDocument}} />
+                    @piece={{history.lastPiece}} />
                 {{/unless}}
               {{/each}}
             </tbody>
           </table>
         </div>
         <div class="vl-action-group vl-action-group--align-right">
-          <button type="button" class="vl-link" {{on "click" (perform this.cancelEditDocuments)}}>
+          <button type="button" class="vl-link" {{on "click" (perform this.cancelEditPieces)}}>
             {{t "cancel"}}
           </button>
           <WebComponents::VlSaveButton
             @text={{t "save"}}
-            @isLoading={{this.saveEditDocuments.isRunning}}
-            @saveAction={{perform this.saveEditDocuments}} />
+            @isLoading={{this.saveEditPieces.isRunning}}
+            @saveAction={{perform this.saveEditPieces}} />
         </div>
       </div>
     {{else}}
       {{#each this.sortedDocumentHistories as |history|}}
         <Documents::DocumentLink
           @documentContainer={{history.documentContainer}}
-          @lastDocument={{history.lastDocument}}
-          @onAddDocument={{@onAddDocument}} />
+          @lastPiece={{history.lastPiece}}
+          @onAddPiece={{@onAddPiece}} />
       {{else}}
         <div class="vl-u-spacer-extended-top-s">
           <WebComponents::VlAlert @message={{t "no-documents-yet"}} />

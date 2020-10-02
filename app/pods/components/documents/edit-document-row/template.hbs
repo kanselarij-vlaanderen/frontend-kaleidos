@@ -6,7 +6,7 @@
       ></i>
     </div>
     <p>
-      {{@document.name}}
+      {{@piece.name}}
     </p>
   </td>
   <td>
@@ -27,15 +27,15 @@
       searchField="label"
       allowClear=true
       propertyToShow="label"
-      readOnly=@document.confidential
+      readOnly=@piece.confidential
       sortField="label"
-      selectedItems=@document.accessLevel
+      selectedItems=@piece.accessLevel
       selectModel=(fn this.selectAccessLevel)
     }}
   </td>
   <td>
     {{web-components/vl-toggle
-      value=(mut @document.confidential)
+      value=(mut @piece.confidential)
     }}
   </td>
   <td class="vl-u-align-right">

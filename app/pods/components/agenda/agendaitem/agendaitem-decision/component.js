@@ -42,7 +42,7 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @action
-  async addDocument(document) {
-    await document.save();
+  async addPiece(piece) {
+    await piece.save();
   }
 }

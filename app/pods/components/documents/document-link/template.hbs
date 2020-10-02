@@ -12,8 +12,8 @@
           </div>
           <div class="vlc-toolbar__right">
             <div class="vlc-toolbar__item vl-u-display-flex">
-              {{#if this.lastDocument}}
-                <AccessLevelPill @lastDocumentVersion={{this.lastDocument}} />
+              {{#if this.lastPiece}}
+                <AccessLevelPill @lastPiece={{this.lastPiece}} />
               {{/if}}
             </div>
             <div class="vlc-toolbar__item">
@@ -36,7 +36,7 @@
                     <ul class="vlc-dropdown-menu">
                       <li class="vlc-dropdown-menu__item">
                         <button class="vl-link vl-link--block" type="button"
-                          data-test-document-upload-new-version
+                          data-test-document-upload-new-piece
                           {{on "click" attacher.hide}}
                           {{on "click" (fn this.openUploadModal)}}
                         >
@@ -46,7 +46,7 @@
                       <li class="vlc-dropdown-menu__item">
                         <button class="vl-link vl-link--block" type="button"
                           {{on "click" attacher.hide}}
-                          {{on "click" this.enableEditDocumentName}}
+                          {{on "click" this.enableEditPieceName}}
                         >
                           {{t "document-title-edit"}}
                         </button>
@@ -79,17 +79,17 @@
             </div>
           </div>
           <div class="vl-u-display-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
-            {{#if this.isEditingDocument}}
+            {{#if this.isEditingPiece}}
               <div class="vl-u-display-flex vlc-u-display-flex-align-center">
                 {{input
                   type="text"
                   class="vl-input-field vl-input-field--block"
-                  value=this.documentNameBuffer
+                  value=this.pieceNameBuffer
                 }}
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   type="button"
-                  {{on "click" (perform this.saveDocumentName)}}
+                  {{on "click" (perform this.savePieceName)}}
                 >
                   <i
                     class="ki-check vl-button__icon"
@@ -102,7 +102,7 @@
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   type="button"
-                  {{on "click" this.cancelEditDocumentName}}
+                  {{on "click" this.cancelEditPieceName}}
                 >
                   <i
                     class="ki-cross vl-button__icon"
@@ -115,22 +115,22 @@
               </div>
             {{else}}
               <h6 class="vl-title vl-title--h6">
-                <span {{on "click" this.enableEditDocumentName}}>
-                  {{this.lastDocument.name}}
+                <span {{on "click" this.enableEditPieceName}}>
+                  {{this.lastPiece.name}}
                 </span>
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
               {{t "uploaded-at"}}
-              {{moment-format this.lastDocument.created}}
+              {{moment-format this.lastPiece.created}}
               {{t "at"}}
-              {{moment-format this.lastDocument.created "HH:mm"}}
-              {{#if this.lastDocument.accessLevelLastModified}}
+              {{moment-format this.lastPiece.created "HH:mm"}}
+              {{#if this.lastPiece.accessLevelLastModified}}
                 <div>
                   {{t "access-level-last-modified"}}
-                  {{moment-format this.lastDocument.accessLevelLastModified}}
+                  {{moment-format this.lastPiece.accessLevelLastModified}}
                   {{t "at"}}
-                  {{moment-format this.lastDocument.accessLevelLastModified "HH:mm"}}
+                  {{moment-format this.lastPiece.accessLevelLastModified "HH:mm"}}
                 </div>
               {{/if}}
             </div>
@@ -138,7 +138,7 @@
         </div>
       </div>
     </div>
-    {{#if this.reverseSortedDocuments.length}}
+    {{#if this.reverseSortedPieces.length}}
       <div class="vlc-document-card__more">
         <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
           <button
@@ -148,14 +148,14 @@
           >
             <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
             ></i>
-            {{t "show-versions"}}
+            {{t "show-pieces"}}
           </button>
           {{#if this.isExpandedVersionHistory}}
             <div class="vl-accordion__content js-vl-accordion__content">
               <div class="vl-accordion__panel">
-                {{#each this.reverseSortedDocuments as |documentVersion|}}
+                {{#each this.reverseSortedPieces as |piece|}}
                   <WebComponents::VlDocument
-                    @documentVersion={{documentVersion}} />
+                    @piece={{piece}} />
                 {{/each}}
               </div>
             </div>
@@ -168,29 +168,29 @@
 
 {{#if this.isOpenUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadDocument}}
+    @closeModal={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
-    @title={{t "new-document-version"}}>
+    @title={{t "new-document-piece"}}>
     <div class="vl-modal-dialog__content">
-      {{#if this.newDocument}}
+      {{#if this.newPiece}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.newDocument.name}}
+          @value={{this.newPiece.name}}
           @width={{4}} />
         <Documents::DocumentUpload
-          @document={{this.newDocument}}
-          @onDelete={{perform this.deleteUploadedDocument}} />
+          @piece={{this.newPiece}}
+          @onDelete={{perform this.deleteUploadedPiece}} />
       {{else}}
-        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadDocument}}/>
+        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadPiece}}/>
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "add"}}
-      @isLoading={{this.addDocument.isRunning}}
-      @cancelAction={{perform this.cancelUploadDocument}}
-      @saveAction={{perform this.addDocument}}
-      @disableSave={{not this.newDocument}} />
+      @isLoading={{this.addPiece.isRunning}}
+      @cancelAction={{perform this.cancelUploadPiece}}
+      @saveAction={{perform this.addPiece}}
+      @disableSave={{not this.newPiece}} />
   </WebComponents::VlModal>
 {{/if}}
 {{#if this.isOpenVerifyDeleteModal}}

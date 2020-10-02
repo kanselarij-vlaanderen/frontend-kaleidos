@@ -112,7 +112,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
       cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
-      cy.route('PUT', '/agendaitems/**/document-versions').as('putAgendaitemDocuments');
+      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
       cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
