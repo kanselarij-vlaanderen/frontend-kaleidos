@@ -23,10 +23,10 @@ export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
 
   resetController(controller, isExiting, transition) {
     if (isExiting && transition.targetName !== 'error') {
-      controller.set("searchText", null);
-      controller.set("mandatees", null);
-      controller.set("dateFrom", null);
-      controller.set("dateTo", null);
+      controller.set('searchText', null);
+      controller.set('mandatees', null);
+      controller.set('dateFrom', null);
+      controller.set('dateTo', null);
     }
   }
 
