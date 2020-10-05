@@ -4,7 +4,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-export default class DocumentList extends Component {
+export default class EditDocumentRow extends Component {
   @service store;
 
   @tracked documentContainer;
