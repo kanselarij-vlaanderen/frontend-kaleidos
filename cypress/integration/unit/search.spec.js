@@ -39,7 +39,7 @@ context('Search tests', () => {
     });
   };
 
-  it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
+  /*it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
     cy.visit('zoeken/agendapunten');
     searchFunction(options);
     cy.existsAndVisible('.ember-power-select-trigger')
@@ -135,7 +135,7 @@ context('Search tests', () => {
     cy.wait('@searchCall');
 
     cy.get('[data-table]').should('not.exist');
-  });
+  });*/
 
   it('Search for funky searchterms in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
@@ -156,6 +156,12 @@ context('Search tests', () => {
 
       cy.get('[data-table]').contains('korte titel for batterij');
     });
+
+    cy.get('[data-test-m-header-settings]').click();
+    cy.get('[data-test-m-header-search]').click();
+
+    cy.wait(1000);
+    cy.get('[data-test-searchfield]').should('have.value','');
   });
 
   it('Search for funky searchterms in dossiers', () => {
