@@ -17,21 +17,6 @@
       {{capitalize (t "documents")}}
     </LinkTo>
   </li>
-  {{#if this.currentSession.isEditor}}
-    <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-comment">
-      <LinkTo
-        class="vl-tab__link"
-        @route="agenda.agendaitems.agendaitem.comments"
-        @activeClass="active"
-      >
-        {{capitalize (t "comments")}}
-        {{!-- TODO number of comments pill --}}
-        {{!-- <button class="vl-pill vl-pill--clickable" type="button">
-          0
-        </button> --}}
-      </LinkTo>
-    </li>
-  {{/if}}
   {{#if (not this.agendaitem.isApproval) }}
     {{#if
       (or
