@@ -162,6 +162,7 @@
               as |piece|
               }}
                 <WebComponents::VlDocument
+                  @onDeletePieceFromContainer={{action this.setPreviousPiece}}
                   @piece={{piece}}/>
               {{/each}}
             </div>
