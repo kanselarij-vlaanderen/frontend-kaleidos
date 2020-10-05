@@ -73,8 +73,8 @@ export default class DocumentList extends Component {
 
     const containerPieces = yield documentContainer.pieces;
 
-    // TODO KAS-1388 why dont we use documentContainer.sortedPieces ?
-    // or use this code in the model ?
+    // This code is roughly similar to documentContainer.sortedPieces
+    // The reason for this is to avoid dependency on the computed property
     const heads = [];
     for (const piece of containerPieces.toArray()) {
       const previousPiece = yield piece.previousPiece;
