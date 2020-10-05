@@ -1,0 +1,28 @@
+<EmberKaleidosWebuniversum::VlUploadedDocument
+  @name={{@piece.file.filename}}
+  @extension={{@piece.file.extension}}
+  @size={{@piece.file.size}}
+  @downloadName={{@piece.file.filename}}
+  @downloadLink={{this.downloadLink}}
+  @delete={{@onDelete}}>
+  {{#if @allowDocumentContainerEdit}}
+    <div class="metadata-container">
+      <div class="vlc-input-field-block">
+        <WebComponents::VlFormLabel @value={{t "document-name"}} />
+        <WebComponents::VlFormInput
+          @width="4"
+          @value={{mut @piece.name}} />
+      </div>
+      {{#unless this.loadData.isRunning}}
+        <div class="vlc-input-field-block">
+          <WebComponents::VlFormLabel @value={{t "document-type"}} />
+          <Utils::RadioDropdownComboSelect
+            @options={{this.sortedDocumentTypes}}
+            @onSelect={{this.selectDocumentType}}
+            @selected={{this.selectedDocumentType}}
+          />
+        </div>
+      {{/unless}}
+    </div>
+  {{/if}}
+</EmberKaleidosWebuniversum::VlUploadedDocument>

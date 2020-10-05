@@ -1,13 +1,9 @@
 {{#if (await meetingRecordOrDecision.signedDocumentContainer)}}
-  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    documentContainer=(await meetingRecordOrDecision.signedDocumentContainer)
-    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.signedDocumentContainer)
-  }}
+  <Documents::DocumentLink
+    @documentContainer={{await meetingRecordOrDecision.signedDocumentContainer}} />
 {{else if (await meetingRecordOrDecision.report)}}
-  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    documentContainer=(await meetingRecordOrDecision.report)
-    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.report)
-  }}
+  <Documents::DocumentLink
+    @documentContainer={{await meetingRecordOrDecision.report}} />
 {{else if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"

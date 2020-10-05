@@ -10,21 +10,21 @@
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <p class="vlc-subline" data-test-linkeddocument-type-label>
-              {{await @documentContainer.type.label}}
+              {{@documentContainer.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            {{#if this.setupPieces}}
+            {{#if this.lastPiece}}
               <AccessLevelPill @lastPiece={{this.lastPiece}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
               <button class="vl-button vl-button--link-muted vl-button--icon"
-                      type="button"
-                {{action this.unlinkContainer @documentContainer}}
+                type="button"
+                {{on "click" this.deletePieceLink}}
               >
                 <i class="vl-icon ki-link-broken vl-u-text--error"
                 ></i>
@@ -34,7 +34,7 @@
         </div>
       </div>
       <h6 class="vl-title vl-title--h6">
-        {{await this.lastPiece.name}}
+        {{this.lastPiece.name}}
       </h6>
       <div class="vlc-document-card-content__meta">
         {{t "uploaded-at"}}
@@ -44,24 +44,23 @@
       </div>
     </div>
   </div>
-  {{#if this.mySortedPieces}}
+  {{#if this.reverseSortedPieces.length}}
     <div class="vlc-document-card__more">
-      <div class="js-vl-accordion {{this.openClass}}">
+      <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
         <button class="vl-toggle vl-link vl-link--bold"
-                type="button"
-          {{action this.showPieces}}
+          type="button"
+          {{on "click" this.toggleVersionHistory}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
           ></i>
           {{t "show-pieces"}}
         </button>
-        {{#if this.isShowingPieces}}
+        {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each this.reverseSortedPieces as |piece|}}
-                {{web-components/vl-document
-                  piece=piece
-                }}
+                <WebComponents::VlDocument
+                  @piece={{piece}} />
               {{/each}}
             </div>
           </div>
@@ -70,11 +69,12 @@
     </div>
   {{/if}}
 </div>
-{{#if this.isVerifyingUnlink}}
+
+{{#if this.isOpenVerifyDeleteModal}}
   <WebComponents::VlModalVerify
     @title={{t "document-unlink"}}
     @message={{t "unlink-document-message"}}
-    @cancel={{action this.cancel}}
-    @verify={{action this.verify}}
+    @cancel={{this.cancelDeletePieceLink}}
+    @verify={{this.verifyDeletePieceLink}}
     @verifyButtonText={{t "unlink"}} />
 {{/if}}

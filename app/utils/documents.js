@@ -1,6 +1,7 @@
 import { A } from '@ember/array';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import DS from 'ember-data';
+import fetch from 'fetch';
 
 const {
   PromiseObject,
@@ -40,3 +41,23 @@ export const sortDocumentContainers = (pieces, containers) => {
 export const getPropertyLength = (model, property) => PromiseObject.create({
   promise: model.get(property).then((property) => (property ? property.get('length') : 0)),
 });
+
+export const addPieceToAgendaitem = async function(agendaitem, piece) {
+  const endpoint = `/agendaitems/${agendaitem.get('id')}/pieces`;
+  const body = {
+    data: {
+      type: 'pieces',
+      id: piece.get('id'),
+    },
+  };
+  const response = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to add document ${piece.get('id')} to agendaitem ${agendaitem.get('id')}`);
+  }
+};

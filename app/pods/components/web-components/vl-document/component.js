@@ -54,8 +54,8 @@ export default Component.extend({
       this.set('isVerifyingDelete', false);
     },
 
-    deletePiece(document) {
-      this.set('pieceToDelete', document);
+    deletePiece(piece) {
+      this.set('pieceToDelete', piece);
       this.set('isVerifyingDelete', true);
     },
 

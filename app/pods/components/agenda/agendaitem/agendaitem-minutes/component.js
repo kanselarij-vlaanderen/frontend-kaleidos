@@ -44,5 +44,9 @@ export default Component.extend({
       await recordToSave.save();
       this.toggleProperty('isEditing');
     },
+
+    async addPiece(piece) {
+      await piece.save();
+    },
   },
 });
