@@ -141,8 +141,9 @@ export default class ReportLink extends Component {
   }
 
   @action
-  cancelEditingName() {
-    this.args.treatment.report.rollbackAttributes();
+  async cancelEditingName() {
+    const report = await this.args.treatment.get('report');
+    report.rollbackAttributes();
     this.isEditing = false;
   }
 
