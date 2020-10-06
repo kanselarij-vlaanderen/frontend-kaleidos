@@ -746,7 +746,9 @@ function releaseDecisions() {
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
-  cy.get(actionModel.releaseDecisions).click();
+  cy.get(actionModel.releaseDecisions).click({
+    force: true,
+  });
   cy.get('.vl-modal').within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
