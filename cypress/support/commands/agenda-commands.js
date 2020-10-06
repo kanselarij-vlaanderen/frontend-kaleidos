@@ -537,7 +537,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
             cy.get('.vl-checkbox--switch__label').click();
           });
       }
-      cy.get('.is-loading-data', {
+      cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
 
@@ -570,7 +570,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get('.vl-button').contains('Agendapunt toevoegen')
+      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
         .click();
     });
   cy.wait('@createAgendaActivity', {
