@@ -26,7 +26,7 @@ export default Model.extend({
   releasedDecisions: attr('datetime'),
 
   agendas: hasMany('agenda', {
-    inverse: null, serialize: false,
+    inverse: null,
   }),
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
