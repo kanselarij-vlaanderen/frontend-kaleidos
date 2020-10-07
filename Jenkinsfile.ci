@@ -67,7 +67,8 @@ pipeline {
             steps {
                  // sh "npx cypress run"
                  sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
-                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run cypress/integration/unit/agendaitem-changes.spec.js"
+                 sh "sleep 300"
             }
         }
 
