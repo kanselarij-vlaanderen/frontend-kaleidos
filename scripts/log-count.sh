@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+echo "Usage: log-count -s service -f from -u until -m match -p project"
 
 while [[ $# -gt 0 ]]
 do
