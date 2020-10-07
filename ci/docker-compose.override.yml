@@ -28,6 +28,8 @@ services:
     labels:
       - "logging=true"
   database:
+    environment:
+      LOG_INCOMING_SPARQL_QUERIES: "true"
     labels:
       - "logging=true"
   triplestore:
