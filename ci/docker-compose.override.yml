@@ -16,9 +16,31 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
+    labels:
+      - "logging=true"
+  identifier:
+    labels:
+      - "logging=true"
+  dispatcher:
+    labels:
+      - "logging=true"
+  migrations-service:
+    labels:
+      - "logging=true"
+  database:
+    labels:
+      - "logging=true"
+  triplestore:
+    labels:
+      - "logging=true"
   elasticsearch:
     volumes:
       - /usr/share/elasticsearch/data
+    labels:
+      - "logging=true"
+  deltanotifier:
+    labels:
+      - "logging=true"
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:latest"
     ipc: host
@@ -29,6 +51,9 @@ services:
     volumes:
       - ../cypress:/cypress
       - ../cypress.test.json:/cypress.json
+  mocklogin:
+    labels:
+      - "logging=true"
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -40,6 +65,8 @@ services:
       - resource:backend
     restart: always
     user: ${HOST_UID_GID}
+    labels:
+      - "logging=true"
   resource:
     image: semtech/mu-cl-resources:latest
     links:
@@ -49,6 +76,11 @@ services:
     volumes:
       - ./config/resources:/config
     user: ${HOST_UID_GID}
+    labels:
+      - "logging=true"
+  file:
+    labels:
+      - "logging=true"
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
@@ -57,10 +89,14 @@ services:
     entrypoint: "echo 'service disabled'"
     restart: "no"
     user: ${HOST_UID_GID}
+    labels:
+      - "logging=true"
   musearch:
     user: ${HOST_UID_GID}
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0
+    labels:
+      - "logging=true"
   # The DELTA_TIMEOUT is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
@@ -69,3 +105,47 @@ services:
       NODE_ENV: "development"
       DEBUG: "true"
       DELTA_TIMEOUT: 10000
+    labels:
+      - "logging=true"
+  sink:
+    labels:
+      - "logging=true"
+  file-bundling-service:
+    labels:
+      - "logging=true"
+  file-bundling-job-creation-service:
+    labels:
+      - "logging=true"
+  database-healthcheck:
+    labels:
+      - "logging=true"
+  lazy-loading-service:
+    labels:
+      - "logging=true"
+  mandatee-service:
+    labels:
+      - "logging=true"
+  case-documents-sync:
+    labels:
+      - "logging=true"
+  document-versions-service:
+    labels:
+      - "logging=true"
+  minister-jurisdiction-service:
+    labels:
+      - "logging=true"
+  user-management-service:
+    labels:
+      - "logging=true"
+  agenda-approve-service:
+    labels:
+      - "logging=true"
+  session-number-service:
+    labels:
+      - "logging=true"
+  agenda-sort-service:
+    labels:
+      - "logging=true"
+  custom-subcases-service:
+    labels:
+      - "logging=true"
