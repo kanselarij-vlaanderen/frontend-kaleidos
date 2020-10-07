@@ -3,6 +3,7 @@
 import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
+import toolbar from '../../selectors/toolbar.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -166,17 +167,16 @@ context('Search tests', () => {
 
   it('Searchfield should be empty after revisting search page', () => {
     cy.visit('/zoeken/agendapunten');
-    cy.get('[data-test-searchfield]').clear();
-    cy.get('[data-test-searchfield]').type('TestSearchSet');
+    cy.get(search.searchfield).clear();
+    cy.get(search.searchfield).type('TestSearchSet');
     cy.server();
-    cy.route('GET', '/agendaitems/search?**').as('searchCall');
-    cy.get('button[data-test-trigger-search]').click();
-    cy.wait('@searchCall');
-    cy.get('[data-test-m-header-settings]').click();
+    cy.get(search.searchButtonToClick).click();
     cy.wait(1000);
-    cy.get('[data-test-m-header-search]').click();
+    cy.get(toolbar.settings).click();
     cy.wait(1000);
-    cy.get('[data-test-searchfield]').should('have.value', '');
+    cy.get(search.searchMenuLink).click();
+    cy.wait(1000);
+    cy.get(search.searchfield).should('have.value', '');
   });
 
   it('Search for funky searchterms in dossiers', () => {
