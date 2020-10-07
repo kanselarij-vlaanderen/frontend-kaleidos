@@ -21,6 +21,7 @@ export default Model.extend(LoadableModel, {
   }),
   agendaitems: hasMany('agendaitem', {
     inverse: null,
+    serialize: false,
   }),
   created: attr('datetime'),
   modified: attr('datetime'),
