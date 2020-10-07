@@ -27,7 +27,6 @@ export default Model.extend({
 
   agendas: hasMany('agenda', {
     inverse: null,
-    serialize: false,
   }),
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
