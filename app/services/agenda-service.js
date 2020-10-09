@@ -174,6 +174,7 @@ export default Service.extend({
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async(item) => {
+        let currentAgendaitemGroupName;
         const mandatees = await item.get('sortedMandatees');
         if (item.isApproval) {
           item.set('groupName', null);
@@ -182,11 +183,12 @@ export default Service.extend({
         }
         if (mandatees.length === 0) {
           item.set('groupName', 'Geen toegekende ministers');
-          return;
+          currentAgendaitemGroupName = 'Geen toegekende ministers';
+        } else {
+          currentAgendaitemGroupName = mandatees
+            .map((mandatee) => mandatee.title)
+            .join('<br/>');
         }
-        const currentAgendaitemGroupName = mandatees
-          .map((mandatee) => mandatee.title)
-          .join('<br/>');
 
         if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
