@@ -22,7 +22,9 @@ export default Controller.extend({
     return actualAgendaitems;
   }),
 
-  sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', function() {
+  // Async here is needed to have correct scrolling in sidebar when opening selected announcements
+  // if not async, the agendaitems load after scrolling into position, pushing down the scroll position
+  sortedAnnouncements: computed('announcements.@each.{priority,isDeleted}', async function() {
     const announcements = this.get('announcements');
     if (announcements) {
       return announcements.filter((item) => !item.isDeleted).sortBy('priority');

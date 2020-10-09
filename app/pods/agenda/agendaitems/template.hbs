@@ -8,7 +8,7 @@
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{#if isOverviewWindow }}
         {{agenda/agenda-overview
-          announcements=sortedAnnouncements
+          announcements=(await sortedAnnouncements)
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
           selectedAgendaItem=selectedAgendaItem
@@ -16,7 +16,7 @@
         }}
       {{else}}
         {{agenda/agenda-detail/sidebar
-          announcements=sortedAnnouncements
+          announcements=(await sortedAnnouncements)
           agendaitems=(await sortedAgendaitems)
           currentAgenda=(await model.currentAgenda)
           filteredAgendaItems=filteredAgendaItems
