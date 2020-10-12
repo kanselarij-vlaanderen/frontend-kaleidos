@@ -1,6 +1,6 @@
 const selectors = {
   showActionOptions: '[data-test-agenda-header-showactionoptions]',
-  navigatetosubcases: '[data-test-agenda-header-navigatetosubcases]',
+  addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
   navigatetodecisions: '[data-test-agenda-header-navigatetodecisions]',
   navigatetonewsletter: '[data-test-agenda-header-navigatetonewsletter]',
   navigatetonotes: '[data-test-agenda-header-navigatetonotes]',

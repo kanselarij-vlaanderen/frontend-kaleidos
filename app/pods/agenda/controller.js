@@ -64,10 +64,6 @@ export default Controller.extend({
       );
     },
 
-    navigateToSubCases() {
-      this.transitionToRoute('subcases');
-    },
-
     navigateToAgenda(selectedAgendaId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
     },
