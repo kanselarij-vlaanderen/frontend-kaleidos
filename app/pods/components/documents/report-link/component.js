@@ -234,4 +234,15 @@ export default class ReportLink extends Component {
     this.documentContainerToDelete = documentContainer;
     this.isVerifyingDelete = true;
   }
+
+  @action
+  async setPreviousPiece(documentContainer) {
+    if (documentContainer) {
+      const lastPiece = await documentContainer.get('lastPiece');
+      if (lastPiece) {
+        this.args.treatment.set('report', lastPiece);
+        await this.args.treatment.save();
+      }
+    }
+  }
 }

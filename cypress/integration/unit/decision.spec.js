@@ -91,8 +91,46 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/BIS/);
+      });
+
+    // Delete the TER piece, the BIS should then become the report
+    cy.addNewPieceToSignedDocumentContainer('test', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
+
+    cy.get('@docCards').should('have.length', 1);
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/TER/);
+        cy.get('.js-vl-accordion > button').click();
+        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+        cy.get('@pieces').eq(0)
+          .within(() => {
+            cy.get('.ki-delete').click();
+          });
+      });
+
+    cy.get('.vl-modal').within(() => {
+      cy.get('button').contains('Verwijderen')
+        .click();
+    });
+    cy.wait('@deleteFile', {
+      timeout: 20000,
+    });
+    cy.wait('@deletePiece', {
+      timeout: 20000,
+    });
+    cy.wait('@patchTreatments', {
+      timeout: 12000,
+    });
+
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/BIS/);
         cy.get('.ki-more').click();
       });
+
+    // Delete the document-container + all pieces
     cy.get('.vlc-dropdown-menu').within(() => {
       cy.get('.vl-u-text--error').contains('Document verwijderen')
         .click();

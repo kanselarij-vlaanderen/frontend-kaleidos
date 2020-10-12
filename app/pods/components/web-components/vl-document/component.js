@@ -27,7 +27,13 @@ export default Component.extend({
 
   async deletePieceWithUndo() {
     const pieceToDelete = this.get('pieceToDelete');
+    const documentContainer = await pieceToDelete.get('documentContainer');
     await this.fileService.get('deletePieceWithUndo').perform(pieceToDelete);
+    // when cancelled, the aboutToDelete flag will be false
+    if (this.onDeletePieceFromContainer && pieceToDelete.aboutToDelete) {
+      this.onDeletePieceFromContainer(documentContainer);
+    }
+    // TODO delete orphan container if last piece is deleted
   },
 
   actions: {

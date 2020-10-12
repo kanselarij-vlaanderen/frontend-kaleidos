@@ -539,7 +539,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
             cy.get('.vl-checkbox--switch__label').click();
           });
       }
-      cy.get('.is-loading-data', {
+      cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
 
@@ -573,7 +573,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .get('[type="checkbox"]')
         .should('be.checked');
       cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
-      cy.get('.vl-button').contains('Agendapunt toevoegen')
+      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
         .click();
     });
 
