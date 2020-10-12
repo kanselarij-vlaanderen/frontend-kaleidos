@@ -476,7 +476,6 @@ const approveDesignAgenda = () => {
  */
 const approveAndCloseDesignAgenda = () => {
   cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
-  // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
@@ -485,14 +484,6 @@ const approveAndCloseDesignAgenda = () => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
-  //   .wait('@patchAgendaAndCloseAgenda', {
-  //     timeout: 12000,
-  //   })
-  // // .wait('@getAgendaitems', { timeout: 12000 })
-  //   .wait('@getAgendasInCloseDesignAgenda', {
-  //     timeout: 12000,
-  //   });
-
   cy.get('.vl-loader', {
     timeout: 60000,
   }).should('not.exist');
@@ -540,9 +531,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       cy.get('.is-loading-data', {
         timeout: 12000,
       }).should('not.exist');
-
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFilteredBetter');
 
       if (caseTitle) {
         cy.get('@formGrid').eq(0)
@@ -596,7 +584,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  */
 function toggleShowChanges(refresh) {
   cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
-  // cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
 
   if (refresh) {
     cy.get('.vlc-side-nav-item', {
@@ -617,7 +604,6 @@ function toggleShowChanges(refresh) {
       })
       .click();
     cy.wait(2000); // a lot of data is being reloaded
-    // cy.wait('@getChanges', {timeout: 20000});
   } else {
     cy.clickReverseTab('Overzicht');
   }
