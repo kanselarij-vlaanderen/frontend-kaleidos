@@ -11,39 +11,32 @@ import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import { A } from '@ember/array';
 
-import { deprecatingAlias } from '@ember/object/computed';
-
 export default Component.extend({
   store: inject(),
   fileService: service(),
   currentSession: inject(),
   classNames: ['vl-u-spacer'],
-  @tracked isAddingDocument: null,
-  @tracked isAddingNewDocument: null,
+  @tracked isAddingNewPiece: null,
   isLoading: false,
-  documentInCreation: null, // When creating new documents
+  pieceInCreation: null,
+  meetingRecordOrDecision: null,
 
-  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
+  documentTypeToAssign: computed('modelToAddPieceTo', function() {
     const {
-      modelToAddDocumentVersionTo,
+      modelToAddPieceTo,
     } = this;
-    if (modelToAddDocumentVersionTo === 'signedMinutes') {
+    if (modelToAddPieceTo === 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } else if (modelToAddDocumentVersionTo === 'agendaItemTreatment') {
+    } else if (modelToAddPieceTo === 'agendaItemTreatment') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
     }
     return null;
   }),
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?',
-  }),
-  documentContainer: null, // When adding a new version to an existing document
   defaultAccessLevel: null, // when creating a new document
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set('documentInCreation', null);
+    this.set('pieceInCreation', null);
     const accessLevels = await this.store.findAll('access-level');
     try {
       this.set('defaultAccessLevel', accessLevels.find((item) => item.id === CONFIG.internRegeringAccessLevelId));
@@ -55,69 +48,65 @@ export default Component.extend({
   },
 
   clearAllDocuments() {
-    set(this, 'documentInCreation', null);
+    set(this, 'pieceInCreation', null);
   },
 
-  createNewDocument(uploadedFile, previousDocument, defaults) {
-    const propsFromPrevious = [
+  createNewPiece(uploadedFile, defaults) {
+    const defaultPropsToSet = [
       'accessLevel',
       'confidential'
     ];
-    const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async(key) => {
-      newDocument.set(key, previousDocument
-        ? await previousDocument.getWithDefault(key, defaults[key])
-        : defaults[key]);
+    const newPiece = this.store.createRecord('piece', {});
+    defaultPropsToSet.forEach(async(key) => {
+      newPiece.set(key, defaults[key]);
     });
-    newDocument.set('file', uploadedFile);
-    newDocument.set('previousVersion', previousDocument);
-    newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
-    return newDocument;
+    newPiece.set('file', uploadedFile);
+    newPiece.set('name', uploadedFile.get('filenameWithoutExtension'));
+    return newPiece;
   },
 
-  async saveDocument() {
+  async savePiece() {
     this.set('isLoading', true);
-    let doc = this.get('documentInCreation');
-    doc = await doc.save();
-    const container = await doc.get('documentContainer.content'); // TODO: cannot use .content
-    container.set('documents', A([doc]));
+    const piece = this.get('pieceInCreation');
+    await piece.save();
+    const container = await piece.get('documentContainer.content'); // TODO: cannot use .content
+    container.set('pieces', A([piece]));
     await container.save();
 
-    this.set('documentInCreation', null);
+    this.set('pieceInCreation', null);
     this.set('isLoading', false);
-    return doc;
+    return piece;
   },
 
   actions: {
     closeModal() {
-      set(this, 'isAddingNewDocument', false);
+      set(this, 'isAddingNewPiece', false);
       this.clearAllDocuments();
     },
 
-    toggleIsAddingNewDocument() {
-      this.toggleProperty('isAddingNewDocument');
+    toggleIsAddingNewPiece() {
+      this.toggleProperty('isAddingNewPiece');
     },
 
-    async uploadNewDocument() {
+    async uploadNewPiece() {
       const meetingRecordOrDecision = await this.get('meetingRecordOrDecision');
-      const document = await this.saveDocument();
-      await document.belongsTo('documentContainer').reload();
+      const piece = await this.savePiece();
+      await piece.belongsTo('documentContainer').reload();
       const documentType = await this.get('documentTypeToAssign');
       this.send('closeModal');
 
-      const container = await document.documentContainer;
+      const container = await piece.get('documentContainer');
       if (documentType) {
         container.set('type', documentType);
         await container.save();
       }
 
-      document.set(this.modelToAddDocumentVersionTo, meetingRecordOrDecision);
-      meetingRecordOrDecision.set('report', document);
+      piece.set(this.modelToAddPieceTo, meetingRecordOrDecision);
+      meetingRecordOrDecision.set('report', piece);
       await meetingRecordOrDecision.save();
     },
 
     async deleteFile(file) {
-      // const deleteDocumentID = await document.get('id');
       await this.fileService.deleteFile(file);
       this.clearAllDocuments();
     },
@@ -128,16 +117,16 @@ export default Component.extend({
       if (!this.defaultAccessLevel) {
         this.defaultAccessLevel = await this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
       }
-      const newDocument = this.createNewDocument(uploadedFile, null, {
+      const newPiece = this.createNewPiece(uploadedFile, {
         accessLevel: this.defaultAccessLevel,
       });
-      newDocument.set('created', creationDate);
-      newDocument.set('modified', creationDate);
-      const newContainer = this.store.createRecord('document', {
+      newPiece.set('created', creationDate);
+      newPiece.set('modified', creationDate);
+      const newContainer = this.store.createRecord('document-container', {
         created: creationDate,
       });
-      newDocument.set('documentContainer', newContainer);
-      this.set('documentInCreation', newDocument);
+      newPiece.set('documentContainer', newContainer);
+      this.set('pieceInCreation', newPiece);
     },
   },
 });

@@ -32,12 +32,12 @@ function uploadFileToCancel(file) {
 
   cy.get(modal.baseModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalDocumentVersionUploadedFilename).should('contain', file.fileName);
+    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
     cy.wait(1000);
   });
 }
 
-context('Tests for cancelling CRUD operations on document and document-versions', () => {
+context('Tests for cancelling CRUD operations on document and pieces', () => {
   before(() => {
     cy.server();
     cy.resetCache();
@@ -48,8 +48,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.login('Admin');
   });
 
-  it('Editing of a document or document-version but cancelling should show old data', () => {
-    const caseTitle = `Cypress test: cancel editing document versions - ${currentTimestamp()}`;
+  it('Editing of a document or piece but cancelling should show old data', () => {
+    const caseTitle = `Cypress test: cancel editing pieces - ${currentTimestamp()}`;
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: cancel editing of documents on agendaitem - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het annuleren van editeren van een document aan een agendaitem';
@@ -80,7 +80,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         });
     });
 
-    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -89,8 +89,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         });
     });
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').each(() => {
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').each(() => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
 
@@ -132,8 +132,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
     // Verify nothing changed after cancel
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').each(() => {
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').each(() => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
 
@@ -161,14 +161,14 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       });
     cy.contains('Opslaan').click();
 
-    // Verify only 1 version is affected by change
+    // Verify only 1 piece is affected by change
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').eq(0)
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Overheid');
       });
-    cy.get('@versions').eq(1)
+    cy.get('@pieces').eq(1)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Regering');
       });
@@ -197,14 +197,14 @@ context('Tests for cancelling CRUD operations on document and document-versions'
       cy.get('@documentName').contains(savedName);
     });
 
-    // Verify only 1 version is affected by change
+    // Verify only 1 piece is affected by change
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').eq(0)
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Overheid');
       });
-    cy.get('@versions').eq(1)
+    cy.get('@pieces').eq(1)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Regering');
       });
@@ -238,26 +238,26 @@ context('Tests for cancelling CRUD operations on document and document-versions'
         .click();
     });
 
-    // Verify only 1 version is affected by change
+    // Verify only 1 piece is affected by change
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').eq(0)
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Publiek');
       });
-    cy.get('@versions').eq(1)
+    cy.get('@pieces').eq(1)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Regering');
       });
     cy.get('.js-vl-accordion > button').click();
   });
 
-  it('Cancelling when adding new document-version should not skip a version the next time', () => {
+  it('Cancelling when adding new piece should not skip a piece the next time', () => {
     cy.route('DELETE', '/files/**').as('deleteFile');
-    cy.route('POST', '/document-versions').as('createNewDocumentVersion');
-    const caseTitle = `Cypress test: document versions - ${currentTimestamp()}`;
+    cy.route('POST', '/pieces').as('createNewPiece');
+    const caseTitle = `Cypress test: pieces - ${currentTimestamp()}`;
     const type = 'Nota';
-    const SubcaseTitleShort = `Cypress test: cancelling a new document version - ${currentTimestamp()}`;
+    const SubcaseTitleShort = `Cypress test: cancelling a new piece - ${currentTimestamp()}`;
     const subcaseTitleLong = 'Cypress test voor het annuleren tijdens toevoegen van een nieuwe document versie';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -289,7 +289,7 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.get(form.formCancelButton).click()
       .wait('@deleteFile');
 
-    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
+    cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -300,8 +300,8 @@ context('Tests for cancelling CRUD operations on document and document-versions'
 
     uploadFileToCancel(file);
     cy.get(modal.baseModal.close).click()
-      .wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
-    cy.addNewDocumentVersionToAgendaitem(SubcaseTitleShort, file.newFileName, file);
+      .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
+    cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get('.vlc-document-card').eq(0)
@@ -311,16 +311,16 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     });
 
     uploadFileToCancel(file);
-    cy.get(document.modalDocumentVersionDelete).should('exist')
+    cy.get(document.modalPieceDelete).should('exist')
       .click()
-      .wait('@deleteFile'); // TODO this causes fails sometimes because the version is not deleted fully
+      .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
     cy.get(modal.baseModal.dialogWindow).within(() => {
       cy.get(form.formSave).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
       cy.get(form.formSave).should('not.be.disabled')
         .click();
-      cy.wait('@createNewDocumentVersion', {
+      cy.wait('@createNewPiece', {
         timeout: 12000,
       });
       cy.wait('@patchSubcase', {
@@ -341,20 +341,20 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     // TODO pressing ESC key on the modal should be tested once implemented
 
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').eq(0)
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
       });
-    cy.get('@versions').eq(1)
+    cy.get('@pieces').eq(1)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
       });
-    cy.get('@versions').eq(2)
+    cy.get('@pieces').eq(2)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}BIS`);
       });
-    cy.get('@versions').eq(3)
+    cy.get('@pieces').eq(3)
       .within(() => {
         cy.get('.vl-title--h6').contains(file.newFileName);
       });
@@ -364,20 +364,20 @@ context('Tests for cancelling CRUD operations on document and document-versions'
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
     cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('versions');
-    cy.get('@versions').eq(0)
+    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
       });
-    cy.get('@versions').eq(1)
+    cy.get('@pieces').eq(1)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
       });
-    cy.get('@versions').eq(2)
+    cy.get('@pieces').eq(2)
       .within(() => {
         cy.get('.vl-title--h6 ').contains(`${file.newFileName}BIS`);
       });
-    cy.get('@versions').eq(3)
+    cy.get('@pieces').eq(3)
       .within(() => {
         cy.get('.vl-title--h6').contains(file.newFileName);
       });

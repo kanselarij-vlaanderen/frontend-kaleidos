@@ -4,8 +4,9 @@
     <div class="vlc-box">
       <WebComponents::VlFormLabel @value="Type"/>
       <WebComponents::VlCheckbox
+        data-test-decisions-only-check
         @value={{this.decisionsOnly}}
-        @label="Zoek enkel in beslissingen"
+        @label={{ t "search-in-decisions-only"}}
         @toggle={{this.toggleDesisionsOnly}}
       />
 

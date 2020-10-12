@@ -1,19 +1,14 @@
-{{#if (await meetingRecordOrDecision.report)}}
-  {{agenda/agendaitem/agendaitem-case/subcase-document/document-link
-    document=(await meetingRecordOrDecision.report)
-    subcaseAgendaitemMeetingOrDocumentContainer=(await meetingRecordOrDecision.report)
-  }}
-{{else if (await meetingRecordOrDecision)}}
+{{#if (await meetingRecordOrDecision)}}
   {{#if currentSession.isEditor}}
     <button type="button" class="vl-button vl-button--tertiary"
       data-test-upload-decision-file
-      {{action "toggleIsAddingNewDocument"}}
+      {{action "toggleIsAddingNewPiece"}}
     >
       {{title}}
     </button>
   {{/if}}
 {{/if}}
-{{#if isAddingNewDocument}}
+{{#if isAddingNewPiece}}
   {{#web-components/vl-modal
     closeModal=(action "closeModal")
     isOverlay=true
@@ -21,7 +16,7 @@
     title=(t "document-add")
   }}
     <div class="vl-modal-dialog__content">
-      {{#if (eq documentInCreation null)}}
+      {{#if (not pieceInCreation)}}
         {{file-uploader
           isLoading=isLoading
           multipleFiles=false
@@ -29,19 +24,19 @@
         }}
       {{/if}}
       {{#if (not isLoading)}}
-        {{#if documentInCreation}}
+        {{#if pieceInCreation}}
           <div class="upload-container">
             {{ember-kaleidos-webuniversum/vl-uploaded-document
-              name=documentInCreation.file.filename
-              extension=documentInCreation.file.extension
-              size=documentInCreation.file.size
-              downloadName=documentInCreation.file.filename
+              name=pieceInCreation.file.filename
+              extension=pieceInCreation.file.extension
+              size=pieceInCreation.file.size
+              downloadName=pieceInCreation.file.filename
               downloadLink=(concat
-                      documentInCreation.file.downloadLink
+                      pieceInCreation.file.downloadLink
                       "?name="
-                      documentInCreation.file.filename
+                      pieceInCreation.file.filename
               )
-              delete=(action "deleteFile" documentInCreation.file)
+              delete=(action "deleteFile" pieceInCreation.file)
             }}
           </div>
         {{/if}}
@@ -54,8 +49,8 @@
       cancelButtonText=(t "cancel")
       saveButtonText=(t "document-add")
       cancelAction=(action "closeModal")
-      saveAction=(action "uploadNewDocument")
-      disableSave=(eq documentInCreation null)
+      saveAction=(action "uploadNewPiece")
+      disableSave=(not pieceInCreation)
     }}
   {{/web-components/vl-modal}}
 {{/if}}

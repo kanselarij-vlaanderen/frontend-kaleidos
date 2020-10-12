@@ -9,7 +9,7 @@ export default Model.extend({
   scopeNote: attr('string'),
   priority: attr('number'),
 
-  documents: hasMany('document', {
+  documentContainers: hasMany('document-container', {
     inverse: null,
   }),
   subtypes: hasMany('document-type', {

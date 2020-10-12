@@ -13,10 +13,10 @@ export default Model.extend({
   richtext: attr('string'),
 
   attendees: hasMany('mandatee'),
-  signedDocument: belongsTo('document'),
+  signedDocumentContainer: belongsTo('document-container'),
   agendaitem: belongsTo('agendaitem'),
   meeting: belongsTo('meeting'),
-  documentVersions: hasMany('document-version', {
+  pieces: hasMany('piece', {
     inverse: null,
   }),
 

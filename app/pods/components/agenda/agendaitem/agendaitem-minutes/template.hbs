@@ -24,17 +24,17 @@
     </p>
   </div>
   <div class="vlc-hr"></div>
-  {{#if (is-pending agendaitem.meetingRecord.signedDocument)}}
+  {{#if (is-pending agendaitem.meetingRecord.signedDocumentContainer)}}
     <WebComponents::VlLoader @text={{t "minutes-document-loading-text"}} />
-  {{else if (not (await signedDocument))}}
+  {{else if (not (await agendaitem.meetingRecord.signedDocumentContainer))}}
     <Utils::AddDocumentContainer
       @meetingRecordOrDecision={{agendaitem.meetingRecord}}
-      @modelToAddDocumentVersionTo="signedMinutes"
+      @modelToAddPieceTo="signedMinutes"
       @title={{t "signed-notes-add"}} />
   {{else}}
-    <Agenda::Agendaitem::AgendaitemCase::SubcaseDocument::DocumentLink
-      @document={{await agendaitem.meetingRecord.signedDocument}}
-      @subcaseAgendaitemMeetingOrDocumentContainer={{await agendaitem.meetingRecord.signedDocument}} />
+    <Documents::DocumentLink
+      @documentContainer={{agendaitem.meetingRecord.signedDocumentContainer}}
+      @onAddPiece={{action "addPiece"}} />
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemMinutesEdit

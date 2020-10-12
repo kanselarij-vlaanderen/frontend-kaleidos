@@ -78,13 +78,12 @@ context('Test the KB functionality', () => {
       cy.setFormalOkOnItemWithIndex(2);
 
       cy.visit(`/vergadering/${result.meetingId}/kort-bestek`);
-      cy.route('/document-versions/**').as('getDocumentVersions');
-      cy.route('/document-versions/*/document-container').as('getDocumentContainerOfVersions');
+      cy.route('/pieces/*/document-container').as('getDocumentContainerOfPieces');
       cy.get(newsletter.notaUpdates).click();
-      cy.wait('@getDocumentContainerOfVersions');
+      cy.wait('@getDocumentContainerOfPieces');
       cy.contains(case1TitleShort);
       cy.contains(case2TitleShort);
-      cy.wait('@getDocumentContainerOfVersions');
+      cy.wait('@getDocumentContainerOfPieces');
     });
   });
 });

@@ -14,8 +14,8 @@ export default Component.extend({
 
   currentSession: alias('sessionService.currentSession'),
 
-  signedDocument: computed('agendaitem.meetingRecord.signedDocument', async function() {
-    return await this.get('agendaitem.meetingRecord.signedDocument');
+  signedDocumentContainer: computed('agendaitem.meetingRecord.signedDocumentContainer', async function() {
+    return await this.get('agendaitem.meetingRecord.signedDocumentContainer');
   }),
 
   actions: {
@@ -43,6 +43,10 @@ export default Component.extend({
       const recordToSave = this.store.peekRecord('meeting-record', meetingRecord.get('id'));
       await recordToSave.save();
       this.toggleProperty('isEditing');
+    },
+
+    async addPiece(piece) {
+      await piece.save();
     },
   },
 });

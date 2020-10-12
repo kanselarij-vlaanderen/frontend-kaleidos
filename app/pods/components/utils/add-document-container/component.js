@@ -7,46 +7,35 @@ import {
 } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
-
 import moment from 'moment';
 import { A } from '@ember/array';
-
-import { deprecatingAlias } from '@ember/object/computed';
-import { deprecate } from '@ember/debug';
-import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 
 export default Component.extend({
   store: inject(),
   fileService: service(),
   currentSession: inject(),
   classNames: ['vl-u-spacer'],
-  @tracked isAddingDocument: null,
-  @tracked isAddingNewDocument: null,
+  @tracked isAddingNewDocumentContainer: null,
   isLoading: null,
-  documentsInCreation: A([]), // When creating new documents
+  pieceInCreation: null,
   meetingRecordOrDecision: null,
 
-  documentTypeToAssign: computed('modelToAddDocumentVersionTo', function() {
+  documentTypeToAssign: computed('modelToAddPieceTo', function() {
     const {
-      modelToAddDocumentVersionTo,
+      modelToAddPieceTo,
     } = this;
-    if (modelToAddDocumentVersionTo === 'signedMinutes') {
+    if (modelToAddPieceTo === 'signedMinutes') {
       return this.store.findRecord('document-type', CONFIG.minuteDocumentTypeId);
-    } else if (modelToAddDocumentVersionTo === 'agendaItemTreatment') {
+    } else if (modelToAddPieceTo === 'agendaItemTreatment') {
       return this.store.findRecord('document-type', CONFIG.decisionDocumentTypeId);
     }
     return null;
   }),
-  document: deprecatingAlias('documentContainer', {
-    id: 'model-refactor.documents',
-    until: '?',
-  }),
-  documentContainer: null, // When adding a new version to an existing document
-  defaultAccessLevel: null, // when creating a new document
+  defaultAccessLevel: null, // when creating a new piece
 
   async didInsertElement() {
     this._super(...arguments);
-    this.set('documentsInCreation', A([]));
+    this.set('pieceInCreation', null);
     const accessLevels = await this.store.findAll('access-level');
     try {
       this.set('defaultAccessLevel', accessLevels.find((accesslevel) => accesslevel.id === CONFIG.internRegeringAccessLevelId));
@@ -58,87 +47,64 @@ export default Component.extend({
   },
 
   clearAllDocuments() {
-    set(this, 'documentsInCreation', A([]));
+    set(this, 'pieceInCreation', null);
   },
 
-  createNewDocument(uploadedFile, previousDocument, defaults) {
-    const propsFromPrevious = [
+  createNewPiece(uploadedFile, defaults) {
+    const defaultPropsToSet = [
       'accessLevel',
       'confidential'
     ];
-    const newDocument = this.store.createRecord('document-version', {});
-    propsFromPrevious.forEach(async(key) => {
-      newDocument.set(key, previousDocument
-        ? await previousDocument.getWithDefault(key, defaults[key])
-        : defaults[key]);
+    const newPiece = this.store.createRecord('piece', {});
+    defaultPropsToSet.forEach(async(key) => {
+      newPiece.set(key, defaults[key]);
     });
-    newDocument.set('file', uploadedFile);
-    newDocument.set('previousVersion', previousDocument);
-    newDocument.set('name', uploadedFile.get('filenameWithoutExtension'));
-    return newDocument;
+    newPiece.set('file', uploadedFile);
+    newPiece.set('name', uploadedFile.get('filenameWithoutExtension'));
+    return newPiece;
   },
 
-  async saveDocumentContainers() {
-    if (arguments.length > 0) {
-      deprecate('The function \'saveDocumentContainers\' takes no arguments, \'confidential\' should be set on individual document level', true);
-    }
+  async saveDocumentContainer() {
     this.set('isLoading', true);
-    const docs = this.get('documentsInCreation');
+    const piece = this.get('pieceInCreation');
+    await piece.save();
+    const container = piece.get('documentContainer.content'); // TODO: cannot use .content
+    container.set('pieces', A([piece]));
+    const savedDocumentContainer = await container.save();
 
-    const savedDocuments = await Promise.all(
-      docs.map(async(doc) => {
-        doc = await doc.save();
-        const container = doc.get('documentContainer.content'); // TODO: cannot use .content
-        container.set('documents', A([doc]));
-        await container.save();
-        return container;
-      })
-    );
-
-    this.get('documentsInCreation').clear();
+    this.set('pieceInCreation', null);
     this.set('isLoading', false);
-    return savedDocuments;
-  },
-
-  async saveDocuments() {
-    deprecate('\'saveDocuments\' is deprecated by saveDocumentContainers', true);
-    return this.saveDocumentContainers(...arguments);
+    return savedDocumentContainer;
   },
 
   actions: {
     closeModal() {
-      set(this, 'isAddingNewDocument', false);
+      set(this, 'isAddingNewDocumentContainer', false);
       this.clearAllDocuments();
     },
 
-    toggleIsAddingNewDocument() {
-      this.toggleProperty('isAddingNewDocument');
+    toggleisAddingNewDocumentContainer() {
+      this.toggleProperty('isAddingNewDocumentContainer');
     },
 
-    async uploadNewDocument() {
+    async uploadNewDocumentContainer() {
       const meetingRecordOrDecision = await this.get('meetingRecordOrDecision');
-      const documents = await this.saveDocuments(null);
+      const documentContainer = await this.saveDocumentContainer();
       const documentType = await this.get('documentTypeToAssign');
       this.send('closeModal');
-
-      await Promise.all(
-        documents.map(async(document) => {
-          if (documentType) {
-            document.set('type', documentType);
-          }
-          document.set(this.modelToAddDocumentVersionTo, meetingRecordOrDecision);
-          if (this.modelToAddDocumentVersionTo === 'signedMinutes') {
-            meetingRecordOrDecision.set('signedDocument', document);
-          } else if (this.modelToAddDocumentVersionTo === 'agendaItemTreatment') {
-            meetingRecordOrDecision.set('report', document);
-          }
-        })
-      );
+      if (documentType) {
+        documentContainer.set('type', documentType);
+      }
+      documentContainer.set(this.modelToAddPieceTo, meetingRecordOrDecision);
+      if (this.modelToAddPieceTo === 'signedMinutes') {
+        meetingRecordOrDecision.set('signedDocumentContainer', documentContainer);
+      } else if (this.modelToAddPieceTo === 'agendaItemTreatment') {
+        meetingRecordOrDecision.set('report', documentContainer);
+      }
       await meetingRecordOrDecision.save();
     },
 
     async deleteFile(file) {
-      // const deleteDocumentID = await document.get('id');
       await this.fileService.deleteFile(file);
       this.clearAllDocuments();
     },
@@ -146,30 +112,16 @@ export default Component.extend({
     async uploadedFile(uploadedFile) {
       const creationDate = moment().utc()
         .toDate();
-      if (this.documentContainer) {
-        await this.documentContainer.reload();
-        await this.documentContainer.hasMany('documents').reload();
-      }
-      const previousVersion = this.documentContainer ? (await this.documentContainer.get('lastDocumentVersion')) : null;
-      const newDocument = this.createNewDocument(uploadedFile, previousVersion, {
+      const newPiece = this.createNewPiece(uploadedFile, {
         accessLevel: this.defaultAccessLevel,
       });
-      newDocument.set('created', creationDate);
-      newDocument.set('modified', creationDate);
-      if (this.documentContainer) { // Adding new version to existing container
-        const docs = await this.documentContainer.get('documents');
-        docs.pushObject(newDocument);
-        newDocument.set('documentContainer', this.documentContainer); // Explicitly set relation both ways
-        const newName = new VRDocumentName(previousVersion.get('name')).withOtherVersionSuffix(docs.length);
-        newDocument.set('name', newName);
-        this.documentContainer.notifyPropertyChange('documents'); // Why exactly? Ember should handle this?
-      } else { // Adding new version, new container
-        const newContainer = this.store.createRecord('document', {
-          created: creationDate,
-        });
-        newDocument.set('documentContainer', newContainer);
-        this.get('documentsInCreation').pushObject(newDocument);
-      }
+      newPiece.set('created', creationDate);
+      newPiece.set('modified', creationDate);
+      const newContainer = this.store.createRecord('document-container', {
+        created: creationDate,
+      });
+      newPiece.set('documentContainer', newContainer);
+      this.set('pieceInCreation', newPiece);
     },
   },
 });

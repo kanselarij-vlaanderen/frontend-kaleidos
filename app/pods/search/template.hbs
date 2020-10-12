@@ -91,17 +91,15 @@
         />
       </div>
       <div class="vl-col--1-12">
-        <button
-          class="vl-button vl-button--narrow vl-button--icon-before"
+        <AuButton
+          @skin="primary"
+          @icon="search"
+          data-test-trigger-search
           type="button"
           {{on "click" this.search}}
         >
-          <i
-            class="vl-button__icon vl-button__icon--before ki-search"
-            aria-hidden="true"
-          ></i>
           {{t "search"}}
-        </button>
+        </AuButton>
       </div>
     </div>
 

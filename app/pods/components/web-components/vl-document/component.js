@@ -14,25 +14,25 @@ export default Component.extend({
 
   classNames: ['vlc-document-card-item'],
   classNameBindings: ['aboutToDelete'],
-  documentVersion: null,
+  piece: null,
 
-  aboutToDelete: computed('documentVersion.aboutToDelete', function() {
-    if (this.documentVersion) {
-      if (this.documentVersion.get('aboutToDelete')) {
+  aboutToDelete: computed('piece.aboutToDelete', function() {
+    if (this.piece) {
+      if (this.piece.get('aboutToDelete')) {
         return 'vlc-document--deleted-state';
       }
     }
     return null;
   }),
 
-  async deleteDocumentVersionWithUndo() {
-    const documentVersionToDelete = this.get('documentVersionToDelete');
-    await this.fileService.get('deleteDocumentVersionWithUndo').perform(documentVersionToDelete);
+  async deletePieceWithUndo() {
+    const pieceToDelete = this.get('pieceToDelete');
+    await this.fileService.get('deletePieceWithUndo').perform(pieceToDelete);
   },
 
   actions: {
     cancel() {
-      this.set('documentVersionToDelete', null);
+      this.set('pieceToDelete', null);
       this.set('isVerifyingDelete', false);
     },
 
@@ -46,21 +46,21 @@ export default Component.extend({
         },
       };
       verificationToast.options.onUndo = () => {
-        this.fileService.reverseDelete(this.documentVersionToDelete.get('id'));
+        this.fileService.reverseDelete(this.pieceToDelete.get('id'));
         this.toaster.toasts.removeObject(verificationToast);
       };
       this.toaster.displayToast.perform(verificationToast);
-      this.deleteDocumentVersionWithUndo();
+      this.deletePieceWithUndo();
       this.set('isVerifyingDelete', false);
     },
 
-    deleteDocumentVersion(document) {
-      this.set('documentVersionToDelete', document);
+    deletePiece(piece) {
+      this.set('pieceToDelete', piece);
       this.set('isVerifyingDelete', true);
     },
 
-    async showDocumentVersionViewer(documentVersion) {
-      window.open(`/document/${(await documentVersion).get('id')}`);
+    async showPieceViewer(piece) {
+      window.open(`/document/${(await piece).get('id')}`);
     },
   },
 

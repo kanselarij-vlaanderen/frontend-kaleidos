@@ -21,7 +21,7 @@ async function constructArchiveName(agenda) {
 }
 
 async function fetchArchivingJob(agenda) {
-  const url = `/agendas/${agenda.id}/agendaitems/documents/files/archive`;
+  const url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive`;
   const fetchedJob = await fetch(url, {
     method: 'post',
     headers: {

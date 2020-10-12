@@ -48,11 +48,11 @@ context('Agendaitem changes tests', () => {
         cy.approveDesignAgenda();
       });
   });
-  it('should add a document version to an item and highlight it as changed', () => {
+  it('should add a piece to an item and highlight it as changed', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when toggling show changes  the agendaitem with a new document version should show
-    cy.addNewDocumentVersionToAgendaitem(subcaseTitle1, file.newFileName, file);
+    cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.setFormalOkOnItemWithIndex(1);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
