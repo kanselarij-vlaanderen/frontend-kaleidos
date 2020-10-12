@@ -1,10 +1,10 @@
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("/fonts/kaleidos-icons.eot?1f27a852f8b5ab2e790a329b3854c1e4?#iefix") format("embedded-opentype"),
-url("/fonts/kaleidos-icons.woff2?1f27a852f8b5ab2e790a329b3854c1e4") format("woff2"),
-url("/fonts/kaleidos-icons.woff?1f27a852f8b5ab2e790a329b3854c1e4") format("woff"),
-url("/fonts/kaleidos-icons.ttf?1f27a852f8b5ab2e790a329b3854c1e4") format("truetype"),
-url("/fonts/kaleidos-icons.svg?1f27a852f8b5ab2e790a329b3854c1e4#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?b4c02bf58aabbb85fb61f1c6835f7d11?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?b4c02bf58aabbb85fb61f1c6835f7d11") format("woff2"),
+url("/fonts/kaleidos-icons.woff?b4c02bf58aabbb85fb61f1c6835f7d11") format("woff"),
+url("/fonts/kaleidos-icons.ttf?b4c02bf58aabbb85fb61f1c6835f7d11") format("truetype"),
+url("/fonts/kaleidos-icons.svg?b4c02bf58aabbb85fb61f1c6835f7d11#kaleidos-icons") format("svg");
 }
 
 i[class^="ki-"]:before, i[class*=" ki-"]:before {
@@ -93,117 +93,126 @@ i[class^="ki-"]:before, i[class*=" ki-"]:before {
 .ki-document-added:before {
     content: "\f119";
 }
-.ki-document:before {
+.ki-document-updated:before {
     content: "\f11a";
 }
-.ki-download:before {
+.ki-document:before {
     content: "\f11b";
 }
-.ki-drag-handle-18:before {
+.ki-download:before {
     content: "\f11c";
 }
-.ki-drag-handle-2:before {
+.ki-drag-handle-18:before {
     content: "\f11d";
 }
-.ki-drag-handle:before {
+.ki-drag-handle-2:before {
     content: "\f11e";
 }
-.ki-edit:before {
+.ki-drag-handle:before {
     content: "\f11f";
 }
-.ki-expand-vertical:before {
+.ki-edit:before {
     content: "\f120";
 }
-.ki-external-link:before {
+.ki-expand-vertical:before {
     content: "\f121";
 }
-.ki-file:before {
+.ki-external-link:before {
     content: "\f122";
 }
-.ki-filter:before {
+.ki-file:before {
     content: "\f123";
 }
-.ki-hide:before {
+.ki-filter:before {
     content: "\f124";
 }
-.ki-hierarchical-back:before {
+.ki-hide:before {
     content: "\f125";
 }
-.ki-import:before {
+.ki-hierarchical-back:before {
     content: "\f126";
 }
-.ki-info-circle:before {
+.ki-import:before {
     content: "\f127";
 }
-.ki-link-broken:before {
+.ki-info-circle:before {
     content: "\f128";
 }
-.ki-lock-closed:before {
+.ki-lightbulb:before {
     content: "\f129";
 }
-.ki-lock-open:before {
+.ki-link-broken:before {
     content: "\f12a";
 }
-.ki-more:before {
+.ki-lock-closed:before {
     content: "\f12b";
 }
-.ki-nav-down:before {
+.ki-lock-open:before {
     content: "\f12c";
 }
-.ki-nav-left:before {
+.ki-mail:before {
     content: "\f12d";
 }
-.ki-nav-right:before {
+.ki-more:before {
     content: "\f12e";
 }
-.ki-nav-up:before {
+.ki-nav-down:before {
     content: "\f12f";
 }
-.ki-not-visible:before {
+.ki-nav-left:before {
     content: "\f130";
 }
-.ki-paperclip:before {
+.ki-nav-right:before {
     content: "\f131";
 }
-.ki-pencil:before {
+.ki-nav-up:before {
     content: "\f132";
 }
-.ki-plus:before {
+.ki-not-visible:before {
     content: "\f133";
 }
-.ki-printer-view:before {
+.ki-paperclip:before {
     content: "\f134";
 }
-.ki-question-mark:before {
+.ki-pencil:before {
     content: "\f135";
 }
-.ki-redo:before {
+.ki-plus:before {
     content: "\f136";
 }
-.ki-remove:before {
+.ki-printer-view:before {
     content: "\f137";
 }
-.ki-search:before {
+.ki-question-mark:before {
     content: "\f138";
 }
-.ki-settings:before {
+.ki-redo:before {
     content: "\f139";
 }
-.ki-sitemap:before {
+.ki-remove:before {
     content: "\f13a";
 }
-.ki-synchronize:before {
+.ki-search:before {
     content: "\f13b";
 }
-.ki-timeline:before {
+.ki-settings:before {
     content: "\f13c";
 }
-.ki-upload:before {
+.ki-sitemap:before {
     content: "\f13d";
 }
-.ki-user:before {
+.ki-synchronize:before {
     content: "\f13e";
 }
-.ki-visible:before {
+.ki-timeline:before {
     content: "\f13f";
+}
+.ki-upload:before {
+    content: "\f140";
+}
+.ki-user:before {
+    content: "\f141";
+}
+.ki-visible:before {
+    content: "\f142";
 }
