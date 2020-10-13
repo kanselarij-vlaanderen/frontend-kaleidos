@@ -11,6 +11,10 @@ module.exports = function(environment) {
       allowEmpty: true,
       outputFormat: 'L',
     },
+    piwik: {
+      sid: 1,
+      url: 'https://dev-kaleidos-matomo.redpencil.io',
+    },
     featureFlags: {
       'editor-html-paste': true,
     },
