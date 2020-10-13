@@ -102,6 +102,19 @@ export default class AgendaitemSearchRoute extends Route {
     });
   }
 
+  afterModel(model) {
+    console.log('searching dpne');
+    // eslint-disable-next-line no-undef
+    _paq.push(['trackSiteSearch',
+      // Search keyword searched for
+      this.paramsFor('search.agenda-items').searchText,
+      // Search category selected in your search engine. If you do not need this, set to false
+      'agendaItemsSearch',
+      // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
+      model.get('length')
+    ]);
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
     controller.emptySearch = isEmpty(this.paramsFor('search').searchText);

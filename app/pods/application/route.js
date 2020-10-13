@@ -1,9 +1,12 @@
+import Ember from 'ember';
+import Piwik from 'ember-cli-piwik/mixins/page-view-tracker';
 import Route from '@ember/routing/route';
 import ENV from 'fe-redpencil/config/environment';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
 
-export default Route.extend(ApplicationRouteMixin, {
+export default Route.extend(ApplicationRouteMixin, Piwik, {
+  location: ENV.locationType,
   moment: service(),
   intl: service(),
   currentSession: service(),
@@ -87,6 +90,22 @@ export default Route.extend(ApplicationRouteMixin, {
   },
 
   actions: {
+    didTransition: function() {
+      // eslint-disable-next-line ember/new-module-imports
+      Ember.run.once(this, () => {
+        // eslint-disable-next-line no-undef
+        window._paq = _paq || [];
+        // eslint-disable-next-line no-undef
+        _paq.push(['trackPageView']);
+        // eslint-disable-next-line no-undef
+        _paq.push(['enableLinkTracking']);
+        // eslint-disable-next-line no-undef
+        _paq.push(['setTrackerUrl', 'https://[Piwik server]/piwik.php']);
+        // eslint-disable-next-line no-undef
+        _paq.push(['setSiteId', 1]);
+      });
+    },
+
     // eslint-disable-next-line object-shorthand
     willTransition: async function(transition) {
       const userRoleOfSession = await this.userRoleOfSession();
