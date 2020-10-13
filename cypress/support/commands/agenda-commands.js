@@ -519,12 +519,14 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   }).should('exist')
     .contains('Acties')
     .click();
-  cy.get(actionModel.navigatetosubcases)
+  cy.get(actionModel.addAgendaitems)
     .should('be.visible')
     .click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
+
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.get('.vl-modal-dialog').as('dialog')
     .within(() => {
@@ -537,7 +539,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
             cy.get('.vl-checkbox--switch__label').click();
           });
       }
-      cy.get('.is-loading-data', {
+      cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
 
@@ -570,9 +572,11 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get('.vl-button').contains('Agendapunt toevoegen')
+      cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
+      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
         .click();
     });
+
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   })
@@ -585,6 +589,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
+  cy.wait(`@loadAgendaitemFilter${randomInt}`);
 }
 
 /**

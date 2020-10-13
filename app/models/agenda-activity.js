@@ -11,8 +11,17 @@ export default Model.extend({
   agendaitems: hasMany('agendaitems'),
 
   latestAgendaitem: computed('agendaitems.@each', async function() {
-    const agendaitems = await this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('modified'));
-    return agendaitems.get('lastObject');
+    const subcase = await this.get('subcase');
+    const latestAgenda = await subcase.get('latestAgenda');
+    const agendaitems = await this.get('agendaitems');
+    for (let index = 0; index < agendaitems.length; index++) {
+      const agendaitem = agendaitems.objectAt(index);
+      const agenda = await agendaitem.get('agenda');
+      if (agenda.get('id') === latestAgenda.get('id')) {
+        return agendaitem;
+      }
+    }
+    return null;
   }),
 
 });
