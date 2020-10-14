@@ -204,31 +204,34 @@ context('Agendaitem changes tests', () => {
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
     cy.visit(agendaURL);
-    cy.wait(waitTime); 
     // check if only 'Geen toekenning' is a header
-    cy.get(agenda.agendaOverviewItemHeader).should('have.length', 1);
-    cy.get(agenda.agendaOverviewItemHeader).eq(0).should('contain.text', 'Geen toekenning');
+    cy.get(agenda.agendaOverviewItemHeader)
+      .should('have.length', 1);
 
-    cy.get(agenda.agendaOverviewSubitem).eq(1).should('contain.text', 'Cypress test dossier 1 test stap 1').click();
+    cy.get(agenda.agendaOverviewItemHeader).eq(0)
+      .should('contain.text', 'Geen toekenning');
+
+    cy.get(agenda.agendaOverviewSubitem).eq(1)
+      .should('contain.text', 'Cypress test dossier 1 test stap 1')
+      .click();
+
     cy.get(caseSelectors.editSubcaseMandatees).click();
-    cy.wait(1000);
     cy.get(caseSelectors.addMandateeToSubcaseMandatees).click();
-    cy.wait(1000);
     cy.get(modalSelectors.ministerModalSelector).click();
-    cy.wait(1000);
     cy.get('.ember-power-select-option').should('exist')
-    .then(() => {
-      cy.contains('Minister-president van de Vlaamse Regering').click();
-      cy.wait(3000);
-      cy.get(formSelectors.formSave).click();
-      cy.wait(1000);
-      cy.get(utilsSelectors.saveButton).click();
-      cy.wait(2000);
-      cy.visit(agendaURL);
-      cy.get(agenda.agendaOverviewItemHeader).eq(0).should('contain.text', 'Minister-president van de Vlaamse Regering');
-      cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
-    });
+      .then(() => {
+        cy.contains('Minister-president van de Vlaamse Regering').click();
+        /*cy.get(formSelectors.formSave).click();*/
+        cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+        cy.wait('@getGovernmentFields');
+        cy.get(modalSelectors.modalFooterSaveButton).click();
+        cy.get(utilsSelectors.saveButton).click();
+        cy.route('PATCH', '/agendaitems/**').as('patchAgendaItems');
+        cy.wait('@patchAgendaItems');
+        cy.visit(agendaURL);
+        cy.get(agenda.agendaOverviewItemHeader).eq(0)
+          .should('contain.text', 'Minister-president van de Vlaamse Regering');
+        cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
+      });
   });
-
-
 });
