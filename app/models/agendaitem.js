@@ -49,7 +49,6 @@ export default ModelWithModifier.extend({
   meetingRecord: belongsTo('meeting-record'),
   showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
-  remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   pieces: hasMany('piece'),
