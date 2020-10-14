@@ -22,5 +22,6 @@ const selectors = {
     save: '[data-test-vl-modal-verify-save]',
   },
   modalDialog: '[data-test-vl-modal-dialog]',
+  modal: '[data-test-vl-modal]',
 };
 export default selectors;
