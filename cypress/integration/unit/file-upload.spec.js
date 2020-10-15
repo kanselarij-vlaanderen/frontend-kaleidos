@@ -1,6 +1,8 @@
 /* global context, before, it, cy,beforeEach */
 // / <reference types="Cypress" />
 
+import document from '../../selectors/document.selectors';
+
 context('Add files to an agenda', () => {
   before(() => {
     cy.server();
@@ -145,8 +147,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/2e/);
-        cy.get('.js-vl-accordion > button').click();
-        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+        cy.get(document.showPiecesHistory).click();
+        cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();

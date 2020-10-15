@@ -88,8 +88,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
     });
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
@@ -131,8 +131,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Annuleren').click();
 
     // Verify nothing changed after cancel
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
@@ -162,8 +162,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Opslaan').click();
 
     // Verify only 1 piece is affected by change
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Overheid');
@@ -198,8 +198,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Verify only 1 piece is affected by change
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Overheid');
@@ -239,8 +239,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Verify only 1 piece is affected by change
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vlc-pill').contains('Publiek');
@@ -340,8 +340,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     // TODO pressing ESC key on the modal should be tested once implemented
 
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
@@ -363,8 +363,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openCase(caseTitle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get('.js-vl-accordion > button').click();
-    cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);

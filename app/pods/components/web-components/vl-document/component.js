@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   intl: service(),
+  store: service(),
   toaster: service(),
   fileService: service(),
   currentSession: service(),
@@ -12,7 +13,6 @@ export default Component.extend({
     this._super(...arguments);
   },
 
-  classNames: ['vlc-document-card-item'],
   classNameBindings: ['aboutToDelete'],
   piece: null,
 
@@ -23,6 +23,25 @@ export default Component.extend({
       }
     }
     return null;
+  }),
+
+  isDeletable: computed('piece.agendaitem', async function() {
+    const nextPiece = await this.piece.get('nextPiece');
+    if (nextPiece) {
+      return false;
+    }
+    const agendaitem = await this.piece.get('agendaitem');
+    if (agendaitem) {
+      const agendaitemsFromQuery = await this.store.query('agendaitem', {
+        filter: {
+          pieces: {
+            id: this.piece.id,
+          },
+        },
+      });
+      return agendaitemsFromQuery.length === 1;
+    }
+    return true;
   }),
 
   async deletePieceWithUndo() {
