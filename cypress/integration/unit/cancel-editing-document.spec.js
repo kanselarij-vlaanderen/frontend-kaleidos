@@ -211,7 +211,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.js-vl-accordion > button').click();
 
     // Cancel/save access-level in document card
-    cy.get('.vlc-document-card__content > .vlc-toolbar > .vlc-toolbar__right').as('accessLevelToolbar')
+    cy.get('.vlc-document-card__content > .vlc-toolbar > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
       .within(() => {
         cy.get('.vlc-pill').contains('Intern Overheid')
           .click();
