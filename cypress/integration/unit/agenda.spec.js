@@ -238,14 +238,10 @@ context('Agenda tests', () => {
       cy.get(actionModel.lockAgenda).click();
 
       cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
-      cy.route('GET', '/agenda-activities/*/subcase').as('agendaActivitiesSubcase');
-      cy.route('GET', '/agenda-item-treatments/*/newsletter-info').as('agendaItemTreatmentsNewsletterInfo');
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
 
       cy.get(modal.verify.save).click();
       cy.wait('@agendasCreatedFor');
-      cy.wait('@agendaActivitiesSubcase');
-      cy.wait('@agendaItemTreatmentsNewsletterInfo');
       cy.wait('@patchAgendas');
       cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
     });

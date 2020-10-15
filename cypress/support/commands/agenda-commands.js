@@ -447,7 +447,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
 const approveDesignAgenda = () => {
   // cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
-  cy.route('GET', '/agendas/**').as('getAgendas');
+  // cy.route('GET', '/agendas/**').as('getAgendas');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
@@ -459,9 +459,9 @@ const approveDesignAgenda = () => {
     //   timeout: 12000,
     // })
     // .wait('@getAgendaitems', { timeout: 12000 })
-    .wait('@getAgendas', {
-      timeout: 12000,
-    });
+    // .wait('@getAgendas', {
+    //   timeout: 12000,
+    // });
 
   cy.get('.vl-loader', {
     timeout: 60000,
