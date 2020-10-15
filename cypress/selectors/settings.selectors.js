@@ -27,5 +27,7 @@ const selectors = {
   goToUserDetail: '[data-test-agenda-overview-sub-item]',
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
+  userDetailCreated: '[data-test-user-detail-created]',
+  userDetailLastLogin: '[data-test-user-detail-last-login]',
 };
 export default selectors;

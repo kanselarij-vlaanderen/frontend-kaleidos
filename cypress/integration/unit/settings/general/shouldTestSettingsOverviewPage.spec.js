@@ -189,4 +189,30 @@ context('Settings overview page tests', () => {
       cy.contains('kabinet');
     });
   });
+
+  it('Should see created and lastLogin date as admin in overview', () => {
+    cy.route('GET', '/users?filter=**').as('filterUsers');
+    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+      .click();
+    cy.url().should('include', 'instellingen/gebruikers');
+    cy.get(settings.userSearchInput).should('exist')
+      .should('be.visible')
+      .type('Admin');
+    cy.get(settings.settingsUserTable).should('contain', 'Admin');
+    cy.get(settings.userSearchButton).click()
+      .then(() => {
+        cy.wait('@filterUsers');
+        cy.get(settings.goToUserDetail).should('exist')
+          .should('be.visible')
+          .click();
+      });
+    cy.get(settings.userDetailCreated).within(()=> {
+      cy.contains('Gebruiker aangemaakt');
+      cy.contains('-');
+    });
+    cy.get(settings.userDetailLastLogin).within(()=> {
+      cy.contains('Laatst aangemeld');
+      cy.contains('-');
+    });
+  });
 });

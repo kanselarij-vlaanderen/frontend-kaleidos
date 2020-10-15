@@ -31,6 +31,8 @@
         <pl.Body>
           <KeyValue @layout="horizontal" @key="{{t 'manage-users-void'}}" @value="{{model.account.voId}}"/>
           <KeyValue @layout="horizontal" @key="{{t 'manage-users-ovo'}}" @value="{{if model.organization.identifier model.organization.identifier "-"}}"/>
+          <KeyValue data-test-user-detail-created @layout="horizontal" @key="{{t 'manage-users-created'}}" @value="{{if model.account.created (moment-format model.account.created "DD-MM-YYYY [om] HH:mm") "-"}}"/>
+          <KeyValue data-test-user-detail-last-login @layout="horizontal" @key="{{t 'manage-users-last-login'}}" @value="{{if model.account.lastLogin (moment-format model.account.lastLogin "DD-MM-YYYY [om] HH:mm") "-"}}"/>
         </pl.Body>
       </Panel>
     </div>

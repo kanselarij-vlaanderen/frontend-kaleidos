@@ -551,6 +551,8 @@
   "manage-users-group": "Groep",
   "manage-users-void": "VO-ID",
   "manage-users-ovo": "OVO-code",
+  "manage-users-created": "Gebruiker aangemaakt",
+  "manage-users-last-login": "Laatst aangemeld",
   "manage-users-general-info": "Algemene informatie",
   "manage-users-technical-info": "Technische informatie",
   "manage-user": "Gebruiker: {firstName} {lastName}",
