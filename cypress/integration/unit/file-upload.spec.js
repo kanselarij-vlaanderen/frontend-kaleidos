@@ -1,5 +1,6 @@
 /* global context, before, it, cy,beforeEach */
 // / <reference types="Cypress" />
+import modal from '../../selectors/modal.selectors';
 
 context('Add files to an agenda', () => {
   before(() => {
@@ -126,7 +127,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -156,7 +157,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
