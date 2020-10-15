@@ -445,7 +445,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  * @function
  */
 const approveDesignAgenda = () => {
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+  // cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendas');
 
@@ -455,9 +455,9 @@ const approveDesignAgenda = () => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.approveAgenda).click()
-    .wait('@patchAgenda', {
-      timeout: 12000,
-    })
+    // .wait('@patchAgenda', {
+    //   timeout: 12000,
+    // })
     // .wait('@getAgendaitems', { timeout: 12000 })
     .wait('@getAgendas', {
       timeout: 12000,

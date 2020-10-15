@@ -49,6 +49,7 @@ export default Component.extend(FileSaverMixin, {
   onApproveAgenda: null, // argument. Function to execute after approving an agenda.
   isApprovingAllAgendaitems: false,
   isShowingWarningOnClose: false,
+  showApproveAndCloseWarning: false,
 
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
@@ -357,7 +358,12 @@ export default Component.extend(FileSaverMixin, {
       this.set('showCloseWarning', false);
     },
     cancelCloseAgenda() {
-      this.set('isShowingWarningOnClose', false);
+      if (this.isShowingWarningOnClose) {
+        this.set('isShowingWarningOnClose', false);
+      }
+      if (this.showApproveAndCloseWarning) {
+        this.set('showApproveAndCloseWarning', false);
+      }
     },
 
     async lockAgendaAction() {

@@ -202,7 +202,9 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set all of them to formally OK and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+      .day(1)
+      .subtract(3, 'day');
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
@@ -251,7 +253,9 @@ context('Agenda tests', () => {
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+      .day(1)
+      .subtract(1, 'day');
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
@@ -303,27 +307,18 @@ context('Agenda tests', () => {
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
 
-    cy.route('PATCH', '/agendas/**').as('patchAgendas');
-    cy.route('GET', '/agendas/**').as('agendas');
-    cy.route('GET', '/meetings/**/agendas').as('meetings');
-    cy.route('GET', '/agendastatuses/**').as('agendaStatuses');
-
-
     cy.get(modal.verify.container).get('.vlc-navbar')
       .contains('Agenda afsluiten')
-      .get(modal.verify.save);
-
-    cy.wait('@patchAgendas');
-    cy.wait('@agendas');
-    cy.wait('@meetings');
-    cy.wait('@agendaStatuses');
-    cy.wait('@patchAgendas');
+      .get(modal.verify.save)
+      .click();
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
   });
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+      .day(1)
+      .subtract(2, 'day');
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
@@ -358,13 +353,13 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda();
 
     cy.route('GET', '/agendaitems/**/agenda-activity').as('agendaActivity');
-    cy.route('GET', '/agendaitems/**/treatments').as('treatmentes');
+    cy.route('GET', '/agendaitems/**/treatments').as('treatments');
 
     cy.get(modal.verify.container).contains('Opgelet!')
       .get(modal.verify.save)
       .click();
 
-    cy.wait('@agendaActivityu');
+    cy.wait('@agendaActivity');
     cy.wait('@treatments');
 
     cy.get(actionModel.showActionOptions).click();
@@ -389,22 +384,11 @@ context('Agenda tests', () => {
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
 
-    cy.route('PATCH', '/agendas/**').as('patchAgendas');
-    cy.route('GET', '/agendas/**').as('agendas');
-    cy.route('GET', '/meetings/**/agendas').as('meetings');
-    cy.route('GET', '/agendastatuses/**').as('agendaStatuses');
-
-
     cy.get(modal.verify.container).get('.vlc-navbar')
       .contains('Agenda afsluiten')
       .get(modal.verify.save)
       .click();
 
-    cy.wait('@patchAgendas');
-    cy.wait('@agendas');
-    cy.wait('@meetings');
-    cy.wait('@agendaStatuses');
-    cy.wait('@patchAgendas');
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
   });
