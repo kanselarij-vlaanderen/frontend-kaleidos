@@ -454,14 +454,14 @@ const approveDesignAgenda = () => {
   cy.get('.vlc-toolbar').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
-  cy.get(agenda.approveAgenda).click()
-    // .wait('@patchAgenda', {
-    //   timeout: 12000,
-    // })
-    // .wait('@getAgendaitems', { timeout: 12000 })
-    // .wait('@getAgendas', {
-    //   timeout: 12000,
-    // });
+  cy.get(agenda.approveAgenda).click();
+  // .wait('@patchAgenda', {
+  //   timeout: 12000,
+  // })
+  // .wait('@getAgendaitems', { timeout: 12000 })
+  // .wait('@getAgendas', {
+  //   timeout: 12000,
+  // });
 
   cy.get('.vl-loader', {
     timeout: 60000,
@@ -709,9 +709,6 @@ function closeAgenda() {
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
-  cy.get('.vl-modal', {
-    timeout: 20000,
-  }).should('not.exist');
 }
 
 /**
