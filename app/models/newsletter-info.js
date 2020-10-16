@@ -33,7 +33,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  newsletterProposal: computed('agendaItemTreatment', async function() {
+  newsletterProposal: computed('agendaItemTreatment', 'agendaItemTreatment.subcase.mandatees', async function() {
     const treatment = await this.get('agendaItemTreatment');
     const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');
