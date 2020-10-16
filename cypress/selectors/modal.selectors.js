@@ -24,5 +24,6 @@ const selectors = {
   modalDialog: '[data-test-vl-modal-dialog]',
   ministerModalSelector: '[data-test-mandatee-selector]',
   modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
+  modal: '[data-test-vl-modal]',
 };
 export default selectors;

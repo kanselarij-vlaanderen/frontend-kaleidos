@@ -744,7 +744,7 @@ function releaseDecisions() {
     .contains('Acties')
     .click();
   cy.get(actionModel.releaseDecisions).click();
-  cy.get('.vl-modal').within(() => {
+  cy.get(modal.modal).within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
@@ -764,7 +764,7 @@ function releaseDocuments() {
     .contains('Acties')
     .click();
   cy.get(actionModel.releaseDocuments).click();
-  cy.get('.vl-modal').within(() => {
+  cy.get(modal.modal).within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
