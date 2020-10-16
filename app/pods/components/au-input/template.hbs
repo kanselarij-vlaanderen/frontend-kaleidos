@@ -3,6 +3,14 @@
     <input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
+    @enter={{@enter}}
+    @insert-newline={{@insert-newline}}
+    @escape-press={{@escape-press}}
+    @focus-in={{@focus-in}}
+    @focus-out={{@focus-out}}
+    @key-down={{@key-down}}
+    @key-press={{@key-press}}
+    @key-up={{@key-up}}
     ...attributes
     />
     <Icon @name={{@icon}} />
@@ -12,6 +20,13 @@
   <input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
+    @insert-newline={{@insert-newline}}
+    @escape-press={{@escape-press}}
+    @focus-in={{@focus-in}}
+    @focus-out={{@focus-out}}
+    @key-down={{@key-down}}
+    @key-press={{@key-press}}
+    @key-up={{@key-up}}
     ...attributes
   />
 {{/if}}
