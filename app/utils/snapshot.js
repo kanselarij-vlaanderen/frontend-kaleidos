@@ -1,13 +1,14 @@
 /* eslint-disable */
 /* "stolen" from https://github.com/lblod/frontend-toezicht-abb/blob/04297657e7960b72741f1eaf43c649f84f93c0b9/app/utils/snapshot.js */
 import { compare } from '@ember/utils';
+import { copy } from '@ember/object/internals';
 
 export default class Snapshot {
   base = null;
   future = null;
 
   constructor( base ) {
-    this.base = base;
+    this.base = copy(base, true);
   }
 
   stage( object ) {
@@ -19,7 +20,7 @@ export default class Snapshot {
   }
 
   commit() {
-    this.base = Object.assign( this.future, {} );
+    this.base = copy(this.future, true);
   }
 
   anyFieldChanged(fields) {
