@@ -17,7 +17,7 @@ function uploadFileToCancel(file) {
     .contains(file.fileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -74,7 +74,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName);
         });
@@ -83,7 +83,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -177,7 +177,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     // Cancel/save name in document card
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
-    cy.get('.vlc-document-card').within(() => {
+    cy.get(document.documentCard).within(() => {
       cy.get('.vl-title--h6').as('documentName');
       cy.get('@documentName').contains(fileName)
         .click();
@@ -192,7 +192,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.ki-check').click();
       // TODO patch happens
     });
-    cy.get('.vlc-document-card').within(() => {
+    cy.get(document.documentCard).within(() => {
       // assert new value is set
       cy.get('@documentName').contains(savedName);
     });
@@ -279,7 +279,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(file.newFileName);
         });
@@ -292,7 +292,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -304,7 +304,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}TER`);
         });
@@ -332,7 +332,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}QUATER`);
         });

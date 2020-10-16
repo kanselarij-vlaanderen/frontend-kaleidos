@@ -1,6 +1,6 @@
 // import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
-// import form from '../../selectors/form.selectors';
+import document from '../../selectors/document.selectors';
 // import actionModel from '../../selectors/action-modal.selectors';
 
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
@@ -69,14 +69,14 @@ context('agenda tests', () => {
       cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1BIS', file);
       cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-2', file);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').as('docCards');
+        cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
 
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1TER', 0);
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-2BIS', 0);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').as('docCards');
+        cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
@@ -93,7 +93,7 @@ context('agenda tests', () => {
       cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').as('docCards');
+        cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
@@ -105,7 +105,7 @@ context('agenda tests', () => {
       cy.get(agenda.agendaitemDocumentsTab).click();
 
       cy.get('.vlc-scroll-wrapper__body').within(() => {
-        cy.get('.vlc-document-card').as('docCards');
+        cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
       cy.isPieceDeletable('VR 2020 1212 DOC.0001-1', 0, false);

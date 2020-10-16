@@ -126,7 +126,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -401,7 +401,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -472,7 +472,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -515,7 +515,7 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {

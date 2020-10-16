@@ -6,6 +6,7 @@ const selectors = {
   singlePieceHistory: '[data-test-single-piece-history]',
   deletePieceFromhistory: '[data-test-delete-piece-from-history]',
   documentUploadShowMore: '[data-test-documents-show-more]',
+  documentCard: '[data-test-document-card]',
   addLinkedDocuments: '[data-test-add-linked-documents]',
   searchForLinkedDocumentsInput: '[data-test-search-existing-document]',
   searchForLinkedDocumentsButton: '[data-test-search-existing-document-button]',
