@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
-export default class DocumentListForItem extends Component {
+export default class PiecesListForItem extends Component {
   @tracked isClickable = this.args.isClickable;
 
   @tracked isShowingAll = false;

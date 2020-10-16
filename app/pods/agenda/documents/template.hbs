@@ -1,16 +1,6 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="vl-u-spacer-extended-l">
-    {{#if (not isEditing)}}
-      {{agenda/agendaitem/agendaitem-case/subcase-documents
-        agendaitemOrSubcaseOrMeeting=(await model.meeting)
-        shouldShowLinkedPieces=false
-      }}
-    {{else}}
-      {{agenda/agendaitem/agendaitem-case/edit-subcase-documents
-        documentContainers=(await model.meeting.documentContainers)
-        agendaitemOrSubcaseOrMeeting=(await model.meeting)
-        cancelForm=(action "cancelEditing")
-      }}
-    {{/if}}
+    <Documents::MeetingDocuments
+      @meeting={{this.model}} />
   </div>
 </div>

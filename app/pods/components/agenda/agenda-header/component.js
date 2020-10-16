@@ -351,7 +351,7 @@ export default Component.extend(FileSaverMixin, {
       this.compareAgendas();
     },
 
-    navigateToSubCases() {
+    addAgendaitems() {
       this.set('isAddingAgendaitems', true);
     },
 

@@ -58,7 +58,7 @@ export default Route.extend({
     draftAgendaitems = await this.filterAgendaitems(draftAgendaitems, params);
 
     await setCalculatedGroupPriorities(draftAgendaitems);
-
+    await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
     const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(draftAgendaitems));
     return {
       draftAgendaitems,
