@@ -485,7 +485,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
       });
   });
 
-  cy.get('.vl-modal').within(() => {
+  cy.get(modal.modal).within(() => {
     cy.get('button').contains('Verwijderen')
       .click();
   });

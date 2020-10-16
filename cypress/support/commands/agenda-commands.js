@@ -317,7 +317,7 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
   // });
@@ -728,7 +728,7 @@ function closeAgenda() {
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
@@ -748,7 +748,7 @@ function releaseDecisions() {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
@@ -768,7 +768,7 @@ function releaseDocuments() {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
