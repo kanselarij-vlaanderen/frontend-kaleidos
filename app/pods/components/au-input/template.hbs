@@ -1,9 +1,10 @@
 {{#if @icon}}
   <div class="vlc-input-with-icon">
-    <input
+    <Input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
     @enter={{@enter}}
+    @input={{@input}}
     @insert-newline={{@insert-newline}}
     @escape-press={{@escape-press}}
     @focus-in={{@focus-in}}
@@ -17,9 +18,10 @@
   </div>
 
 {{else}}
-  <input
+  <Input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
+    @input={{@input}}
     @insert-newline={{@insert-newline}}
     @escape-press={{@escape-press}}
     @focus-in={{@focus-in}}
