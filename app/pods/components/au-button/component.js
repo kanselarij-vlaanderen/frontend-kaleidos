@@ -28,4 +28,11 @@ export default class Button extends Component {
     }
     return null;
   }
+
+  get icon() {
+    if (this.args.icon) {
+      return 'au2-button--icon ';
+    }
+    return null;
+  }
 }

@@ -22,6 +22,7 @@ const selectors = {
     save: '[data-test-vl-modal-verify-save]',
   },
   modalDialog: '[data-test-vl-modal-dialog]',
+  modal: '[data-test-vl-modal]',
   ministerModalSelector: '[data-test-mandatee-selector]',
   modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
 };

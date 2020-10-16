@@ -27,9 +27,6 @@ export default ModelWithModifier.extend({
   isArchived: attr('boolean'),
   subcaseName: attr('string'),
 
-  consulationRequests: hasMany('consulation-request', {
-    inverse: null,
-  }),
   iseCodes: hasMany('ise-code'),
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
@@ -200,18 +197,23 @@ export default ModelWithModifier.extend({
     return latestMeeting.plannedStart;
   }),
 
-  approved: computed('treatments', function() {
+  approved: computed('treatments', 'treatments.@each.decisionResultCode', function() {
     return PromiseObject.create({
       promise: this.get('treatments').then((treatments) => {
-        const approvedTreatments = treatments.map(async(treatment) => {
-          const drc = await treatment.get('decisionResultCode');
-          const id = await drc.get('id');
-          return id === '56312c4b-9d2a-4735-b0b1-2ff14bb524fd' || id === 'e7e44027-fbbb-4285-ba3f-0cdb2264d43c' ;
-        });
-        if (approvedTreatments && approvedTreatments.length === 0) {
-          return false;
+        if (treatments && treatments.get('length') > 0) {
+          const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
+          const drcIds = ['56312c4b-9d2a-4735-b0b1-2ff14bb524fd', '9f342a88-9485-4a83-87d9-245ed4b504bf'].join(',');
+          return this.store.query('agenda-item-treatment', {
+            filter: {
+              id: treatmentIds,
+              'decision-result-code': {
+                id: drcIds,
+              },
+            },
+            include: 'decision-result-code',
+          }).then((treatments) => treatments.get('firstObject'));
         }
-        return !approvedTreatments.includes(false);
+        return null;
       }),
     });
   }),
