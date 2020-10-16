@@ -10,7 +10,7 @@ function currentTimestamp() {
   return Cypress.moment().unix();
 }
 
-context('agenda tests', () => {
+context('Tests of pieces on agendaitems', () => {
   before(() => {
     cy.server();
     cy.resetCache();
