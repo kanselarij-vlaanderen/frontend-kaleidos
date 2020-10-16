@@ -11,10 +11,18 @@ module.exports = function(environment) {
       allowEmpty: true,
       outputFormat: 'L',
     },
-    piwik: {
-      sid: 1,
-      url: 'https://dev-kaleidos-matomo.redpencil.io',
-    },
+    metricsAdapters: [
+      {
+        name: 'Matomo',
+        environments: ['development', 'test', 'cypress-test', 'production'],
+        config: {
+          scriptUrl: 'https://dev-kaleidos-matomo.redpencil.io', // Can optionally be CDN-sourced
+          trackerUrl: 'https://dev-kaleidos-matomo.redpencil.io',
+          siteId: '1',
+          disableCookies: true, // <- for GDPR
+        },
+      }
+    ],
     featureFlags: {
       'editor-html-paste': true,
     },

@@ -4,8 +4,10 @@ import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
 import Snapshot from 'fe-redpencil/utils/snapshot';
+import { inject as service } from '@ember/service';
 
 export default class AgendaitemSearchRoute extends Route {
+  @service metrics;
   queryParams = {
     types: {
       refreshModel: true,
@@ -103,16 +105,12 @@ export default class AgendaitemSearchRoute extends Route {
   }
 
   afterModel(model) {
-    console.log('searching dpne');
-    // eslint-disable-next-line no-undef
-    _paq.push(['trackSiteSearch',
-      // Search keyword searched for
-      this.paramsFor('search.agenda-items').searchText,
-      // Search category selected in your search engine. If you do not need this, set to false
-      'agendaItemsSearch',
-      // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
-      model.get('length')
-    ]);
+    const keyword = this.paramsFor('search').searchText;
+    this.metrics.invoke('trackSiteSearch', {
+      keyword,
+      category: 'agendaItemsSearch',
+      searchCount: model.meta.count,
+    });
   }
 
   setupController(controller) {

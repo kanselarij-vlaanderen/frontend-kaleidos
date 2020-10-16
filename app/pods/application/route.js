@@ -1,11 +1,9 @@
-import Ember from 'ember';
-import Piwik from 'ember-cli-piwik/mixins/page-view-tracker';
 import Route from '@ember/routing/route';
 import ENV from 'fe-redpencil/config/environment';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
 
-export default Route.extend(ApplicationRouteMixin, Piwik, {
+export default Route.extend(ApplicationRouteMixin, {
   location: ENV.locationType,
   moment: service(),
   intl: service(),
@@ -13,6 +11,12 @@ export default Route.extend(ApplicationRouteMixin, Piwik, {
   fileService: service(),
   routeAfterAuthentication: 'agendas',
   router: service(),
+  metrics: service(),
+
+  init() {
+    this._super(...arguments);
+    this.setupTracking();
+  },
 
   beforeModel() {
     this._super(...arguments);
@@ -21,6 +25,15 @@ export default Route.extend(ApplicationRouteMixin, Piwik, {
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
     return this._loadCurrentSession();
+  },
+
+  setupTracking() {
+    this.router.on('routeDidChange', () => {
+      this.metrics.trackPage({
+        page: this.router.currentURL,
+        title: this.router.currentRouteName,
+      });
+    });
   },
 
   checkSupportedBrowser() {
@@ -90,22 +103,6 @@ export default Route.extend(ApplicationRouteMixin, Piwik, {
   },
 
   actions: {
-    didTransition: function() {
-      // eslint-disable-next-line ember/new-module-imports
-      Ember.run.once(this, () => {
-        // eslint-disable-next-line no-undef
-        window._paq = _paq || [];
-        // eslint-disable-next-line no-undef
-        _paq.push(['trackPageView']);
-        // eslint-disable-next-line no-undef
-        _paq.push(['enableLinkTracking']);
-        // eslint-disable-next-line no-undef
-        _paq.push(['setTrackerUrl', 'https://[Piwik server]/piwik.php']);
-        // eslint-disable-next-line no-undef
-        _paq.push(['setSiteId', 1]);
-      });
-    },
-
     // eslint-disable-next-line object-shorthand
     willTransition: async function(transition) {
       const userRoleOfSession = await this.userRoleOfSession();
