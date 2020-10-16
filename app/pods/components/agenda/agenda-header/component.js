@@ -37,7 +37,6 @@ export default Component.extend(FileSaverMixin, {
   toaster: service(),
 
   isShowingOptions: false,
-  isPrintingNotes: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
   isDeletingAgenda: false,

@@ -19,7 +19,7 @@ export default Component.extend({
   @tracked isAddingNewPiece: null,
   isLoading: false,
   pieceInCreation: null,
-  meetingRecordOrDecision: null,
+  treatment: null,
 
   documentTypeToAssign: computed('modelToAddPieceTo', function() {
     const {
@@ -87,7 +87,7 @@ export default Component.extend({
     },
 
     async uploadNewPiece() {
-      const meetingRecordOrDecision = await this.get('meetingRecordOrDecision');
+      const treatment = await this.get('treatment');
       const piece = await this.savePiece();
       await piece.belongsTo('documentContainer').reload();
       const documentType = await this.get('documentTypeToAssign');
@@ -99,9 +99,9 @@ export default Component.extend({
         await container.save();
       }
 
-      piece.set(this.modelToAddPieceTo, meetingRecordOrDecision);
-      meetingRecordOrDecision.set('report', piece);
-      await meetingRecordOrDecision.save();
+      piece.set(this.modelToAddPieceTo, treatment);
+      treatment.set('report', piece);
+      await treatment.save();
     },
 
     async deleteFile(file) {
