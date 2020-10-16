@@ -1,4 +1,4 @@
-<div class="vlc-document-card vl-u-spacer-extended-bottom-s">
+<div class="vlc-document-card vl-u-spacer-extended-bottom-s" data-test-document-card>
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
       <div class="vlc-toolbar vlc-toolbar--auto">
@@ -23,19 +23,20 @@
                       type="button"
               >
                 <i class="ki-more"></i>
-                {{#attach-popover
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom"
-                as |attacher|
-                }}
+                <AttachPopover
+                  @renderInPlace={{true}}
+                  @class="ember-attacher-popper"
+                  @hideOn="clickout click"
+                  @showOn="click"
+                  @animation="shift"
+                  @placement="bottom"
+                  as |attacher|
+                >
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
                       <a class="vl-link vl-link--block"
-                         href=""
-                         data-test-document-upload-new-piece
+                        href=""
+                        data-test-document-upload-new-piece
                         {{action attacher.hide}}
                         {{action this.openUploadDialog @documentContainer}}
                       >
@@ -44,7 +45,7 @@
                     </li>
                     <li class="vlc-dropdown-menu__item">
                       <a class="vl-link vl-link--block"
-                         href=""
+                        href=""
                         {{action attacher.hide}}
                         {{action this.startEditingName}}
                       >
@@ -54,7 +55,7 @@
                     <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a class="vl-link vl-link--block vl-u-text--error"
-                         href=""
+                          href=""
                         {{action attacher.hide}}
                         {{action this.deleteDocumentContainer @documentContainer}}
                       >
@@ -62,7 +63,7 @@
                       </a>
                     </li>
                   </ul>
-                {{/attach-popover}}
+                </AttachPopover>
               </button>
             {{/if}}
           </div>
@@ -148,6 +149,7 @@
         <button
           class="vl-toggle vl-link vl-link--bold"
           type="button"
+          data-test-show-pieces-history
           {{action this.showPieces}}
         >
           <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
