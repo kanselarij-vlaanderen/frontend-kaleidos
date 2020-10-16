@@ -10,7 +10,7 @@
                    data-test-trigger-search-input
                    id="defaultInput"
                    @placeholder={{t "search-agenda-items"}}
-                   value={{this.searchText}}
+                   @value={{this.searchText}}
                    {{on "input" this.debouncedSearch}}
                    @enter={{this.search}}
             />
