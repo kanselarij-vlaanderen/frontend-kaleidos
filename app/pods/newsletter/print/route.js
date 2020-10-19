@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
 import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
@@ -39,11 +40,14 @@ export default class PrintNewsletterRoute extends Route {
 
       // TODO: Below is a hacky way of grouping agendaitems for protocol order. Refactor.
       await setCalculatedGroupPriorities(notas);
-      const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
       await this.agendaService.groupAgendaitemsOnGroupName(filteredNotas);
+      const groupedAgendaitems = Object.values(groupAgendaitemsByGroupname(notas));
 
       const itemGroups = sortByPriority(groupedAgendaitems, true); // An array of groups
-      notas = itemGroups.reduce((agendaitems, group) => agendaitems.push(group.agendaitems));
+      notas = A([]);
+      for (const group of itemGroups) {
+        notas.addObjects(group.agendaitems);
+      }
     }
 
     return hash({
