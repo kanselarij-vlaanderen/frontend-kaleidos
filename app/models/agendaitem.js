@@ -55,7 +55,6 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   pieces: hasMany('piece'),
