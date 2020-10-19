@@ -90,7 +90,7 @@ context('Tests for KAS-1076', () => {
 
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, files, false);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card', {
+      cy.get(document.documentCard, {
         timeout: 60000,
       }).as('docCards')
         .should('have.length', 22);
@@ -100,7 +100,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card', {
+      cy.get(document.documentCard, {
         timeout: 80000,
       }).as('docCards')
         .should('have.length', 22);
@@ -196,7 +196,7 @@ context('Tests for KAS-1076', () => {
       ]
     );
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards')
+      cy.get(document.documentCard).as('docCards')
         .should('have.length', 22);
     });
     cy.get('.vlc-backlink').click();
@@ -210,7 +210,7 @@ context('Tests for KAS-1076', () => {
     cy.clickReverseTab('Documenten');
     cy.get('[data-test-vl-loader]');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards')
+      cy.get(document.documentCard).as('docCards')
         .should('have.length', 22);
     });
   });
@@ -227,7 +227,7 @@ context('Tests for KAS-1076', () => {
 
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -240,7 +240,7 @@ context('Tests for KAS-1076', () => {
     // Verify subcase is updated
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -254,7 +254,7 @@ context('Tests for KAS-1076', () => {
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
         });
@@ -265,7 +265,7 @@ context('Tests for KAS-1076', () => {
     // Verify subcase is updated
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
         });
@@ -284,7 +284,7 @@ context('Tests for KAS-1076', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -294,7 +294,7 @@ context('Tests for KAS-1076', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
         });
@@ -310,7 +310,7 @@ context('Tests for KAS-1076', () => {
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
     cy.addDocumentsToSubcase([file]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
         });
@@ -320,7 +320,7 @@ context('Tests for KAS-1076', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
         });

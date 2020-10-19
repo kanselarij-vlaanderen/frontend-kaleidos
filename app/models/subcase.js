@@ -178,7 +178,7 @@ export default ModelWithModifier.extend({
 
   latestMeeting: alias('requestedForMeeting'),
 
-  latestAgenda: computed('latestMeeting', async function() {
+  latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
     const lastMeeting = await this.get('latestMeeting');
     return await lastMeeting.get('latestAgenda');
   }),
@@ -186,8 +186,8 @@ export default ModelWithModifier.extend({
   latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
-      const latestItem = await latestActivity.get('latestAgendaitem');
-      return latestItem;
+      const latestAgendaitem = await latestActivity.get('latestAgendaitem');
+      return latestAgendaitem;
     }
     return null;
   }),

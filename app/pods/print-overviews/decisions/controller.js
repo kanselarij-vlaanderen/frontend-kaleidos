@@ -21,9 +21,9 @@ export default Controller.extend({
 
   titleTranslationParams: computed('model.createdFor', function() {
     const meeting = this.get('model.createdFor');
-    const fullProcedure = meeting.get('kindToShow.fullProcedure');
+    const kindLabel = meeting.get('kindToShow.altLabel');
     return {
-      kind: fullProcedure,
+      kind: kindLabel,
     };
   }),
 

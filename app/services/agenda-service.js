@@ -175,7 +175,6 @@ export default Service.extend({
       pieces: await subcase.get('pieces'),
       linkedPieces: await subcase.get('linkedPieces'),
       agendaActivity,
-      showInNewsletter: true,
       treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
