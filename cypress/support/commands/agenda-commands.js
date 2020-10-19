@@ -714,6 +714,7 @@ function closeAgenda() {
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
+  cy.get(modal.verify.save).click();
   cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
