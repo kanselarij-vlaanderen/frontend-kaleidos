@@ -224,8 +224,8 @@ context('Agendaitem changes tests', () => {
         cy.wait('@getGovernmentFields');
         cy.get(modalSelectors.modalFooterSaveButton).click();
         cy.get(utilsSelectors.saveButton).click();
-        cy.route('PATCH', '/agendaitems/**').as('patchAgendaItems');
-        cy.wait('@patchAgendaItems');
+        cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
+        cy.wait('@patchAgendaitems');
         cy.visit(agendaURL);
         cy.get(agenda.agendaOverviewItemHeader).eq(0)
           .should('contain.text', 'Minister-president van de Vlaamse Regering');
