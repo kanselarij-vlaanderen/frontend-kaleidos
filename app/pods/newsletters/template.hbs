@@ -45,7 +45,7 @@
                 {{else}}
                   {{t
                     "newsletter-for-meeting-of"
-                    kind=(lowercase meeting.kindToShow.fullProcedure)
+                    kind=(lowercase meeting.kindToShow.altLabel)
                   }}
                   {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
                 {{/if}}

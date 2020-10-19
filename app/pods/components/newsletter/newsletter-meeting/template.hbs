@@ -1,6 +1,6 @@
 <div class="vl-u-display-flex vlc-u-flex-space-between">
   <h4 class="vl-title vl-title--h3 vl-u-text--capitalize" data-test-newsletter-meeting-header-title>
-    {{await title}}
+    {{t "newsletter-overview-pdf-name"}} - {{this.meeting.kindToShow.altLabel}} {{t "of"}} {{moment-format this.meeting.plannedStart "dddd DD-MM-YYYY"}}
   </h4>
   {{#if allowEditing}}
     {{#if currentSession.isEditor}}

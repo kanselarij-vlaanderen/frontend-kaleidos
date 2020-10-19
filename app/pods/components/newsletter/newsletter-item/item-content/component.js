@@ -8,24 +8,14 @@ export default Component.extend({
   newsletterService: inject(),
   currentSession: inject(),
   allowEditing: false,
-  definite: false,
   itemIndex: 0,
   isEditing: false,
   agendaitem: null,
   newsletterInfo: null,
+  showIndex: true,
 
   isFlandersArt: computed('allowEditing', function() {
     return !this.allowEditing;
-  }),
-
-  numberToShow: computed('agendaitem.{number,showAsRemark}', 'itemIndex', 'definite', function() {
-    if (this.agendaitem.showAsRemark && this.definite === 'true') {
-      return '';
-    }
-    if (this.itemIndex) {
-      return `${this.itemIndex}.`;
-    }
-    return `${this.agendaitem.get('number')}.`;
   }),
 
   actions: {
