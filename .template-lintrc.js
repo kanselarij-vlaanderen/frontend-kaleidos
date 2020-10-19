@@ -17,6 +17,7 @@ module.exports = {
     'self-closing-void-elements': false,
     'no-invalid-interactive': false,
     'no-negated-condition': false,
+    'simple-unless': false,
   },
 
   ignore: [

@@ -47,17 +47,7 @@ context('Add files to an agenda', () => {
     // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemDecisionTab).click();
-    // 1 default item treatment exists
-    cy.get(agenda.uploadDecisionFile).click();
-
-    cy.contains('Document opladen').click();
-    cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
-
-    cy.get('@fileUploadDialog').within(() => {
-      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    });
-
+    cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.get(document.modalPieceDelete).click();
     cy.wait('@deleteFile', {
@@ -89,7 +79,7 @@ context('Add files to an agenda', () => {
     });
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards');
+      cy.get(document.documentCard).as('docCards');
     });
 
     cy.get('@docCards').should('have.length', 1);
@@ -101,13 +91,51 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/BIS/);
+      });
+
+    // Delete the TER piece, the BIS should then become the report
+    cy.addNewPieceToSignedDocumentContainer('test', {
+      folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    });
+
+    cy.get('@docCards').should('have.length', 1);
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/TER/);
+        cy.get(document.showPiecesHistory).click();
+        cy.get(document.singlePieceHistory).as('pieces');
+        cy.get('@pieces').eq(0)
+          .within(() => {
+            cy.get('.ki-delete').click();
+          });
+      });
+
+    cy.get(modal.modal).within(() => {
+      cy.get('button').contains('Verwijderen')
+        .click();
+    });
+    cy.wait('@deleteFile', {
+      timeout: 20000,
+    });
+    cy.wait('@deletePiece', {
+      timeout: 20000,
+    });
+    cy.wait('@patchTreatments', {
+      timeout: 12000,
+    });
+
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get('.vl-title--h6 > span').contains(/BIS/);
         cy.get('.ki-more').click();
       });
+
+    // Delete the document-container + all pieces
     cy.get('.vlc-dropdown-menu').within(() => {
       cy.get('.vl-u-text--error').contains('Document verwijderen')
         .click();
     });
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });

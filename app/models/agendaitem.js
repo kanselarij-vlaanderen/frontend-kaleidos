@@ -40,6 +40,12 @@ export default ModelWithModifier.extend({
   agenda: belongsTo('agenda', {
     inverse: null,
   }),
+  nextAgendaitem: belongsTo('agendaitem', {
+    inverse: 'previousAgendaitem',
+  }),
+  previousAgendaitem: belongsTo('agendaitem', {
+    inverse: 'nextAgendaitem',
+  }),
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
   }),

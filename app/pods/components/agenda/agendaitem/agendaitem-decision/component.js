@@ -40,4 +40,9 @@ export default class AgendaitemDecisionComponent extends Component {
     this.treatmentToDelete = null;
     this.isVerifyingDelete = false;
   }
+
+  @action
+  async addPiece(piece) {
+    await piece.save();
+  }
 }

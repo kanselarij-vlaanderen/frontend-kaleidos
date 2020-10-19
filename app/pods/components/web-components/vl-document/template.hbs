@@ -1,75 +1,80 @@
-<div class="vlc-document-card-item__title">
-  <h6 class="vl-title vl-title--h6">
-    {{#if (not (await piece.file.downloadLink))}}
-      {{#attach-tooltip
-        arrow="true"
-        animation="shift"
-        placement="top"
-        class="ember-attacher-tooltip"
-      }}
-        {{t "document-not-consultable"}}
-      {{/attach-tooltip}}
+<div class="vlc-document-card-item" data-test-single-piece-history>
+  <div class="vlc-document-card-item__title">
+    <h6 class="vl-title vl-title--h6">
+      {{#if (not (await piece.file.downloadLink))}}
+        {{#attach-tooltip
+          arrow="true"
+          animation="shift"
+          placement="top"
+          class="ember-attacher-tooltip"
+        }}
+          {{t "document-not-consultable"}}
+        {{/attach-tooltip}}
+      {{/if}}
+      {{await piece.name}}
+    </h6>
+    {{access-level-pill lastPiece=piece}}
+    {{#if (await piece.file.downloadLink)}}
+      <button type="button" class="vl-button vl-button--link vl-button--icon"
+        {{action "showPieceViewer" piece}}
+      >
+        <i class="ki-book vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "download"}}
+        </span>
+      </button>
+      <a class="vl-button vl-button--link vl-button--icon"
+        href={{concat
+          (await piece.file.downloadLink)
+          "?name="
+          (await piece.downloadFilename)
+        }}
+        {{!-- download --}}
+        {{! 'download' attribute doesn't specify a filename, as this gets overruled by
+        the filename received in the "Content-Disposition HTTP header" }}
+      >
+        <i class="ki-download vl-button__icon"
+          aria-hidden="true"
+        ></i>
+        <span class="vl-u-visually-hidden">
+          {{t "download"}}
+        </span>
+      </a>
     {{/if}}
-    {{await piece.name}}
-  </h6>
-  {{access-level-pill lastPiece=piece}}
-  {{#if (await piece.file.downloadLink)}}
-    <button type="button" class="vl-button vl-button--link vl-button--icon"
-      {{action "showPieceViewer" piece}}
-    >
-      <i class="ki-book vl-button__icon" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "download"}}
-      </span>
-    </button>
-    <a class="vl-button vl-button--link vl-button--icon"
-       href={{concat
-         (await piece.file.downloadLink)
-         "?name="
-         (await piece.downloadFilename)
-       }}
-      {{!-- download --}}
-      {{! 'download' attribute doesn't specify a filename, as this gets overruled by
-      the filename received in the "Content-Disposition HTTP header" }}
-    >
-      <i class="ki-download vl-button__icon"
-         aria-hidden="true"
-      ></i>
-      <span class="vl-u-visually-hidden">
-        {{t "download"}}
-      </span>
-    </a>
-  {{/if}}
 
+    {{#if (and currentSession.isEditor (await isDeletable))}}
+      <button 
+        type="button" 
+        class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
+        data-test-delete-piece-from-history
+        {{action "deletePiece" piece}}
+      >
+        <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
+        <span class="vl-u-visually-hidden">
+          {{t "delete"}}
+        </span>
+      </button>
+    {{/if}}
+  </div>
   {{#if currentSession.isEditor}}
-    <button type="button" class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
-      {{action "deletePiece" piece}}
-    >
-      <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
-      <span class="vl-u-visually-hidden">
-        {{t "delete"}}
-      </span>
-    </button>
+    <div class="vlc-document-card-item__meta">
+      {{t "uploaded-at"}}
+      {{moment-format piece.created "DD.MM.YYYY"}}
+      {{t "at"}}
+      {{moment-format piece.created "HH:mm"}}
+    </div>
+  {{/if}}
+  <div class="vlc-document-card-item__icon">
+    <i class="vl-icon vl-icon--large ki-timeline"
+          aria-hidden="true"
+    ></i>
+  </div>
+  {{#if isVerifyingDelete}}
+    {{web-components/vl-modal-verify
+      title=(t "document-delete")
+      message=(t "delete-document-message")
+      cancel=(action "cancel")
+      verify=(action "verify")
+    }}
   {{/if}}
 </div>
-{{#if currentSession.isEditor}}
-  <div class="vlc-document-card-item__meta">
-    {{t "uploaded-at"}}
-    {{moment-format piece.created "DD.MM.YYYY"}}
-    {{t "at"}}
-    {{moment-format piece.created "HH:mm"}}
-  </div>
-{{/if}}
-<div class="vlc-document-card-item__icon">
-  <i class="vl-icon vl-icon--large ki-timeline"
-        aria-hidden="true"
-  ></i>
-</div>
-{{#if isVerifyingDelete}}
-  {{web-components/vl-modal-verify
-    title=(t "document-delete")
-    message=(t "delete-document-message")
-    cancel=(action "cancel")
-    verify=(action "verify")
-  }}
-{{/if}}

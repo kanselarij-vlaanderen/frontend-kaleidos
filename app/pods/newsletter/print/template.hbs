@@ -42,7 +42,7 @@
             agenda=(await model.agenda)
             definite=definite
             agendaitem=announcement
-            newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
+            newsletterInfo=(await announcement.treatments.firstObject.newsletterInfo)
           }}
         {{/each}}
       {{/if}}

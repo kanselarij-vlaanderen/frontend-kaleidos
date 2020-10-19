@@ -1,5 +1,8 @@
 /* global context, before, it, cy,beforeEach */
 // / <reference types="Cypress" />
+import modal from '../../selectors/modal.selectors';
+
+import document from '../../selectors/document.selectors';
 
 context('Add files to an agenda', () => {
   before(() => {
@@ -18,7 +21,7 @@ context('Add files to an agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains('test pdf');
         });
@@ -28,7 +31,7 @@ context('Add files to an agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(/BIS/);
         });
@@ -38,7 +41,7 @@ context('Add files to an agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').eq(0)
+      cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(/TER/);
         });
@@ -75,7 +78,7 @@ context('Add files to an agenda', () => {
     );
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards');
+      cy.get(document.documentCard).as('docCards');
       cy.get('@docCards').eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(/1e/);
@@ -110,7 +113,7 @@ context('Add files to an agenda', () => {
   it('should delete documents, pieces and files', () => {
     cy.visit('/vergadering/5EBA8CE1DAB6BB0009000009/agenda/5EBA8CE3DAB6BB000900000A/documenten');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards');
+      cy.get(document.documentCard).as('docCards');
     });
     cy.get('@docCards').should('have.length', 2);
     cy.get('@docCards').eq(0)
@@ -126,7 +129,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -145,8 +148,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/2e/);
-        cy.get('.js-vl-accordion > button').click();
-        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+        cy.get(document.showPiecesHistory).click();
+        cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();
@@ -156,7 +159,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });

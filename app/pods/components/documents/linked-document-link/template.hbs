@@ -1,0 +1,82 @@
+<div class="vlc-document-card vl-u-spacer-extended-bottom-s" data-test-document-card>
+  <div class="vlc-document-card__summary">
+    <div class="vlc-document-card__badge">
+      <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
+        <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="vlc-document-card__content">
+      <div class="vlc-toolbar vlc-toolbar--auto">
+        <div class="vlc-toolbar__left">
+          <div class="vlc-toolbar__item">
+            <p class="vlc-subline" data-test-linkeddocument-type-label>
+              {{@documentContainer.type.label}}
+            </p>
+          </div>
+        </div>
+        <div class="vlc-document-card-toolbar__right">
+          <div class="vlc-toolbar__item">
+            {{#if this.lastPiece}}
+              <AccessLevelPill @lastPiece={{this.lastPiece}} />
+            {{/if}}
+          </div>
+          <div class="vlc-toolbar__item">
+            {{#if currentSession.isEditor}}
+              <button class="vl-button vl-button--link-muted vl-button--icon"
+                type="button"
+                {{on "click" this.deletePieceLink}}
+              >
+                <i class="vl-icon ki-link-broken vl-u-text--error"
+                ></i>
+              </button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <h6 class="vl-title vl-title--h6">
+        {{this.lastPiece.name}}
+      </h6>
+      <div class="vlc-document-card-content__meta">
+        {{t "uploaded-at"}}
+        {{moment-format this.lastPiece.created}}
+        {{t "at"}}
+        {{moment-format this.lastPiece.created "HH:mm"}}
+      </div>
+    </div>
+  </div>
+  {{#if this.reverseSortedPieces.length}}
+    <div class="vlc-document-card__more">
+      <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
+        <button 
+          class="vl-toggle vl-link vl-link--bold"
+          type="button"
+          data-test-show-pieces-history
+          {{on "click" this.toggleVersionHistory}}
+        >
+          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
+          ></i>
+          {{t "show-pieces"}}
+        </button>
+        {{#if this.isExpandedVersionHistory}}
+          <div class="vl-accordion__content js-vl-accordion__content">
+            <div class="vl-accordion__panel">
+              {{#each this.reverseSortedPieces as |piece|}}
+                <WebComponents::VlDocument
+                  @piece={{piece}} />
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+</div>
+
+{{#if this.isOpenVerifyDeleteModal}}
+  <WebComponents::VlModalVerify
+    @title={{t "document-unlink"}}
+    @message={{t "unlink-document-message"}}
+    @cancel={{this.cancelDeletePieceLink}}
+    @verify={{this.verifyDeletePieceLink}}
+    @verifyButtonText={{t "unlink"}} />
+{{/if}}

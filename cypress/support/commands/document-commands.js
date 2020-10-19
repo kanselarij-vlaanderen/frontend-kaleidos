@@ -112,6 +112,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
       cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
+      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
       cy.route('PATCH', `/${modelToPatch}/**`).as('patchSpecificModel');
     }
@@ -125,15 +126,15 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
+    cy.get(document.documentUploadNewPiece)
+      .should('be.visible')
+      .click();
   });
-  cy.get(document.documentUploadNewPiece)
-    .should('be.visible')
-    .click();
 
   cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
@@ -145,10 +146,10 @@ function addNewPiece(oldFileName, file, modelToPatch) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.get(form.formSave).click();
-  });
-  cy.wait('@createNewPiece', {
-    timeout: 12000,
-  });
+  })
+    .wait('@createNewPiece', {
+      timeout: 12000,
+    });
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
@@ -157,13 +158,19 @@ function addNewPiece(oldFileName, file, modelToPatch) {
         timeout: 12000,
       }).wait('@patchAgendaitem', {
         timeout: 12000,
-      });
+      })
+        .wait('@putAgendaitemDocuments', {
+          timeout: 12000,
+        });
     } else if (modelToPatch === 'subcases') {
-      cy.wait('@patchAgendaitem', {
+      cy.wait('@putAgendaitemDocuments', {
         timeout: 12000,
-      }).wait('@patchSubcase', {
+      }).wait('@patchAgendaitem', {
         timeout: 12000,
-      });
+      })
+        .wait('@patchSubcase', {
+          timeout: 12000,
+        });
     } else {
       cy.wait('@patchSpecificModel', {
         timeout: 12000,
@@ -174,6 +181,8 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       timeout: 12000,
     });
   }
+  cy.wait(1000); // Cypress is too fast
+
   cy.log('/addNewPiece');
 }
 
@@ -188,6 +197,27 @@ function addDocumentsToAgenda(files) {
   cy.log('addDocumentsToAgenda');
   cy.clickReverseTab('Documenten');
   return addDocuments(files);
+}
+
+/**
+ * @description Add document to agenda.
+ * @name addDocumentToTreatment
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {} file
+ */
+function addDocumentToTreatment(file) {
+  cy.log('addDocumentsToTreatment');
+  cy.get(agenda.agendaitemDecisionTab).click();
+  // 1 default item treatment exists
+  cy.get(agenda.uploadDecisionFile).click();
+
+  cy.contains('Document opladen').click();
+  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+  });
 }
 
 /**
@@ -371,15 +401,15 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents('.vlc-document-card')
+    .parents(document.documentCard)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
     cy.get(document.documentUploadShowMore).click();
+    cy.get(document.documentUploadNewPiece)
+      .should('be.visible')
+      .click();
   });
-  cy.get(document.documentUploadNewPiece)
-    .should('be.visible')
-    .click();
 
   cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
 
@@ -420,11 +450,93 @@ function addLinkedDocumentToAgendaitem(filenames) {
     cy.get(document.searchForLinkedDocumentsInput).clear();
   });
   cy.get(form.formSave).click();
+  cy.log('/addLinkedDocumentToAgendaitem');
+}
+
+/**
+ * @description delete a piece in the history view of a document-card by using the index
+ * @name deleteSinglePiece
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param String fileName - The exact name of the file (as seen in document-card title)
+ * @param Number indexToDelete - The index of the piece in the list
+ */
+function deleteSinglePiece(fileName, indexToDelete) {
+  cy.route('DELETE', 'pieces/*').as('deletePiece');
+  cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
+  cy.log('deleteSinglePiece');
+
+  cy.get('.vlc-document-card__content .vl-title--h6', {
+    timeout: 12000,
+  })
+    .contains(fileName, {
+      timeout: 12000,
+    })
+    .parents(document.documentCard)
+    .as('documentCard');
+
+  cy.get('@documentCard').within(() => {
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).eq(indexToDelete)
+      .within(() => {
+        cy.get(document.deletePieceFromhistory)
+          .should('be.visible')
+          .click();
+      });
+  });
+
+  cy.get(modal.modal).within(() => {
+    cy.get('button').contains('Verwijderen')
+      .click();
+  });
+  cy.wait('@deletePiece', {
+    timeout: 20000,
+  }).wait('@putRestoreAgendaitems', {
+    timeout: 20000,
+  });
+  cy.log('/deleteSinglePiece');
+}
+
+/**
+ * @description verifies if a piece in the history view of a document-card should be deletable (show icon)
+ * @name isPieceDeletable
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param String fileName - The exact name of the file (as seen in document-card title)
+ * @param Number indexToCheck - The index of the piece in the list
+ * @param Boolean shouldBeDeletable - True if icon should be shown
+ */
+function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
+  cy.log('isPieceDeletable');
+
+  cy.get('.vlc-document-card__content .vl-title--h6', {
+    timeout: 12000,
+  })
+    .contains(fileName, {
+      timeout: 12000,
+    })
+    .parents(document.documentCard)
+    .as('documentCard');
+
+  cy.get('@documentCard').within(() => {
+    cy.get(document.showPiecesHistory).click();
+    cy.get(document.singlePieceHistory).eq(indexToCheck)
+      .within(() => {
+        if (shouldBeDeletable) {
+          cy.get(document.deletePieceFromhistory).should('be.visible');
+        } else {
+          cy.get(document.deletePieceFromhistory).should('not.exist');
+        }
+      });
+  });
+
+  cy.log('/isPieceDeletable');
 }
 
 Cypress.Commands.add('addDocuments', addDocuments);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
+Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);
 Cypress.Commands.add('addNewPiece', addNewPiece);
 Cypress.Commands.add('addNewPieceToMeeting', addNewPieceToMeeting);
@@ -436,3 +548,5 @@ Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocumentToAgendaitem', addLinkedDocumentToAgendaitem);
+Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
+Cypress.Commands.add('isPieceDeletable', isPieceDeletable);
