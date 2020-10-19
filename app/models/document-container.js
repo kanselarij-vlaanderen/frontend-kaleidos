@@ -22,9 +22,6 @@ export default Model.extend({
 
   type: belongsTo('document-type'),
   agendaItemTreatment: belongsTo('agenda-item-treatment'),
-  signedMinutes: belongsTo('meeting-record', {
-    inverse: null,
-  }),
 
   sortedPieces: computed('pieces.@each', function() {
     return PromiseArray.create({

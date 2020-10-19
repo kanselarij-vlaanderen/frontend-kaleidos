@@ -9,7 +9,6 @@ export default class AgendaitemNav extends Component {
 
   @tracked subcaseExists = false;
   @tracked decisionsExist = false;
-  @tracked meetingMinutesExist = false;
   @tracked newsItemExists = false;
   @tracked pressAgendaitemExists = false;
 
@@ -40,7 +39,6 @@ export default class AgendaitemNav extends Component {
       } else {
         this.newsItemExists = false;
       }
-      this.meetingMinutesExist = isPresent(await this.agendaitem.get('meetingRecord'));
       this.pressAgendaitemExists = isPresent((this.agendaitem.titlePress && this.agendaitem.textPress));
     }
   }

@@ -123,8 +123,8 @@ export default Component.extend({
 
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
-      const meetingRecord = await this.store.findRecord('meeting', meeting.get('id'));
-      const designAgenda = await this.store.findRecord('agenda', (await meetingRecord.get('latestAgenda')).get('id'));
+      const meetingFromStore = await this.store.findRecord('meeting', meeting.get('id'));
+      const designAgenda = await this.store.findRecord('agenda', (await meetingFromStore.get('latestAgenda')).get('id'));
       // ensures latest state is pulled
       await designAgenda.reload();
       await designAgenda.belongsTo('status').reload();
