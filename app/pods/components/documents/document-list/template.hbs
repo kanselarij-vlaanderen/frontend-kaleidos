@@ -56,7 +56,8 @@
         <Documents::DocumentLink
           @documentContainer={{history.documentContainer}}
           @lastPiece={{history.lastPiece}}
-          @onAddPiece={{@onAddPiece}} />
+          @onAddPiece={{@onAddPiece}}
+          @agendaitemOrSubcase={{@agendaitemOrSubcase}} />
       {{else}}
         <div class="vl-u-spacer-extended-top-s">
           <WebComponents::VlAlert @message={{t "no-documents-yet"}} />

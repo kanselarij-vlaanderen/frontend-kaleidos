@@ -61,3 +61,23 @@ export const addPieceToAgendaitem = async function(agendaitem, piece) {
     throw new Error(`Failed to add document ${piece.get('id')} to agendaitem ${agendaitem.get('id')}`);
   }
 };
+
+export const restorePiecesFromPreviousAgendaitem = async function(agendaitem, documentContainer) {
+  const endpoint = `/agendaitems/${agendaitem.get('id')}/pieces/restore`;
+  const body = {
+    data: {
+      type: 'pieces',
+      id: documentContainer.get('id'),
+    },
+  };
+  const response = await fetch(endpoint, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to restore pieces from container ${documentContainer.get('id')} to agendaitem ${agendaitem.get('id')}`);
+  }
+};

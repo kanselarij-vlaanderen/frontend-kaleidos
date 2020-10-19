@@ -10,7 +10,7 @@ import search from 'fe-redpencil/utils/mu-search';
 import { task } from 'ember-concurrency';
 import { isEmpty } from '@ember/utils';
 
-export default class AgendaItemsAgendaController extends Controller {
+export default class AgendaitemsAgendaController extends Controller {
   queryParams = ['filter'];
 
   @service('-routing') routing;
@@ -67,7 +67,7 @@ export default class AgendaItemsAgendaController extends Controller {
         meetingId: this.meeting.id,
         agendaId: this.agenda.id,
       };
-      const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaItem) => agendaItem.id);
+      const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
       this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingIds.includes(ai.id));
       this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
     }

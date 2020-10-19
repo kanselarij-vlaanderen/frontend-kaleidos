@@ -112,3 +112,10 @@
   pointer-events: none;
   cursor: none;
 }
+
+.vlc-document-card-toolbar__right {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}

@@ -1,5 +1,5 @@
 {{#if @route}}
-  <LinkTo class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}}" @route={{@route}} ...attributes>
+  <LinkTo class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" @route={{@route}} ...attributes>
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
@@ -7,7 +7,7 @@
 {{/if}}
 
 {{#if @href}}
-  <a class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}}" href="{{@href}}">
+  <a class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" href="{{@href}}">
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
@@ -15,7 +15,7 @@
 {{/if}}
 
 {{#unless (or @href @route)}}
-  <button class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}}" type="button" ...attributes>
+  <button class="au2-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" type="button" ...attributes>
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
