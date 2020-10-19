@@ -88,5 +88,6 @@ const selectors = {
     announcementLeft: '[data-test-compare-announcement-left]',
     announcementRight: '[data-test-compare-announcement-right]',
   },
+  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
 };
 export default selectors;
