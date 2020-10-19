@@ -17,6 +17,7 @@
   {{#if this.governmentCanViewDocuments}}
     {{#unless this.loadData.isRunning}}
       <Documents::DocumentList
+        @agendaitemOrSubcase={{@agendaitemOrSubcase}}
         @pieces={{this.pieces}}
         @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
         @onAddPiece={{perform this.addPiece}}

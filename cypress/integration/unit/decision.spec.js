@@ -79,7 +79,7 @@ context('Add files to an agenda', () => {
     });
 
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards');
+      cy.get(document.documentCard).as('docCards');
     });
 
     cy.get('@docCards').should('have.length', 1);
@@ -102,15 +102,15 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/TER/);
-        cy.get('.js-vl-accordion > button').click();
-        cy.get('.vl-accordion__panel > .vlc-document-card-item').as('pieces');
+        cy.get(document.showPiecesHistory).click();
+        cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();
           });
       });
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -135,7 +135,7 @@ context('Add files to an agenda', () => {
       cy.get('.vl-u-text--error').contains('Document verwijderen')
         .click();
     });
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
