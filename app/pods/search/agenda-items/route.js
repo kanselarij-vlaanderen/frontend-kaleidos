@@ -106,10 +106,16 @@ export default class AgendaitemSearchRoute extends Route {
 
   afterModel(model) {
     const keyword = this.paramsFor('search').searchText;
+    let count;
+    if (model && model.meta && typeof model.meta.count === 'undefined') {
+      count = model.meta.count;
+    } else {
+      count = false;
+    }
     this.metrics.invoke('trackSiteSearch', {
       keyword,
       category: 'agendaItemsSearch',
-      searchCount: model.meta.count,
+      searchCount: count,
     });
   }
 
