@@ -3,12 +3,13 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
+import document from '../../selectors/document.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
 }
 
-context('Agenda tests', () => {
+context('Propagation to other graphs', () => {
   before(() => {
     cy.resetCache();
     cy.server();
@@ -52,7 +53,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemDecisionTab).click();
     cy.get(agenda.addDecision).click();
     cy.get(agenda.uploadDecisionFile).click();
-    cy.contains('Documenten opladen').click();
+    cy.contains('Document opladen').click();
     cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
     cy.get('@fileUploadDialog').within(() => {
@@ -93,13 +94,13 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemDecisionTab).click();
-    cy.get('.vlc-document-card').eq(0)
+    cy.get(document.documentCard).eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(file.fileName);
       });
     cy.get(agenda.agendaitemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards')
+      cy.get(document.documentCard).as('docCards')
         .should('have.length', 0);
     });
     cy.logoutFlow();
@@ -122,7 +123,7 @@ context('Agenda tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {
-      cy.get('.vlc-document-card').as('docCards')
+      cy.get(document.documentCard).as('docCards')
         .should('have.length', 2);
     });
 

@@ -4,8 +4,10 @@ import { isEmpty } from '@ember/utils';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
 import Snapshot from 'fe-redpencil/utils/snapshot';
+import { inject as service } from '@ember/service';
 
 export default class AgendaitemSearchRoute extends Route {
+  @service metrics;
   queryParams = {
     types: {
       refreshModel: true,
@@ -99,6 +101,21 @@ export default class AgendaitemSearchRoute extends Route {
       const entry = agendaitem.attributes;
       entry.id = agendaitem.id;
       return entry;
+    });
+  }
+
+  afterModel(model) {
+    const keyword = this.paramsFor('search').searchText;
+    let count;
+    if (model && model.meta && typeof model.meta.count === 'undefined') {
+      count = model.meta.count;
+    } else {
+      count = false;
+    }
+    this.metrics.invoke('trackSiteSearch', {
+      keyword,
+      category: 'agendaItemsSearch',
+      searchCount: count,
     });
   }
 

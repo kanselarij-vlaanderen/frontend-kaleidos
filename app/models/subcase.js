@@ -5,7 +5,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import {
-  sortDocuments, getDocumentsLength
+  sortDocumentContainers, getPropertyLength
 } from 'fe-redpencil/utils/documents';
 
 const {
@@ -27,15 +27,12 @@ export default ModelWithModifier.extend({
   isArchived: attr('boolean'),
   subcaseName: attr('string'),
 
-  consulationRequests: hasMany('consulation-request', {
-    inverse: null,
-  }),
   iseCodes: hasMany('ise-code'),
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
   }),
-  documentVersions: hasMany('document-version'),
-  linkedDocumentVersions: hasMany('document-version'),
+  pieces: hasMany('piece'),
+  linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),
   treatments: hasMany('agenda-item-treatment', {
     inverse: null,
@@ -71,51 +68,51 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  documentsLength: computed('documents', function() {
-    return getDocumentsLength(this, 'documents');
+  documentContainersLength: computed('documentContainers', function() {
+    return getPropertyLength(this, 'documentContainers');
   }),
 
-  linkedDocumentsLength: computed('linkedDocuments', function() {
-    return getDocumentsLength(this, 'linkedDocuments');
+  linkedDocumentContainersLength: computed('linkedDocumentContainers', function() {
+    return getPropertyLength(this, 'linkedDocumentContainers');
   }),
 
-  documents: computed('documentVersions.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
-      promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.mapBy('id').join(',');
-          return this.store.query('document', {
+      promise: this.get('pieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.mapBy('id').join(',');
+          return this.store.query('document-container', {
             filter: {
-              documents: {
-                id: documentVersionIds,
+              pieces: {
+                id: pieceIds,
               },
             },
             page: {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
+              size: pieces.get('length'), // # documentContainers will always be <= # pieces
             },
-            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
+            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
         }
       }),
     });
   }),
 
-  linkedDocuments: computed('linkedDocumentVersions.@each', function() {
+  linkedDocumentContainers: computed('linkedPieces.@each', function() {
     return PromiseArray.create({
-      promise: this.get('linkedDocumentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.mapBy('id').join(',');
-          return this.store.query('document', {
+      promise: this.get('linkedPieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.mapBy('id').join(',');
+          return this.store.query('document-container', {
             filter: {
-              documents: {
-                id: documentVersionIds,
+              pieces: {
+                id: pieceIds,
               },
             },
             page: {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
+              size: pieces.get('length'), // # documentContainers will always be <= # pieces
             },
-            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => sortDocuments(this.get('linkedDocumentVersions'), containers));
+            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+          }).then((containers) => sortDocumentContainers(this.get('linkedPieces'), containers));
         }
       }),
     });
@@ -135,14 +132,15 @@ export default ModelWithModifier.extend({
     return 'No name found.';
   }),
 
-  async documentNumberOfVersion(version) {
-    const documents = await this.get('documents');
+  // TODO unused method ?
+  async documentNumberOfPiece(piece) {
+    const documentContainers = await this.get('documentContainers');
 
-    const sortedDocuments = documents.sortBy('created');
-    const targetDocument = await version.get('document');
+    const sortedDocumentContainers = documentContainers.sortBy('created');
+    const targetDocumentContainer = await piece.get('documentContainer');
     let foundIndex;
-    sortedDocuments.map((document, index) => {
-      if (document === targetDocument) {
+    sortedDocumentContainers.map((documentContainer, index) => {
+      if (documentContainer === targetDocumentContainer) {
         foundIndex = index;
       }
     });
@@ -180,7 +178,7 @@ export default ModelWithModifier.extend({
 
   latestMeeting: alias('requestedForMeeting'),
 
-  latestAgenda: computed('latestMeeting', async function() {
+  latestAgenda: computed('latestMeeting', 'latestMeeting.latestAgenda', async function() {
     const lastMeeting = await this.get('latestMeeting');
     return await lastMeeting.get('latestAgenda');
   }),
@@ -188,8 +186,8 @@ export default ModelWithModifier.extend({
   latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
-      const latestItem = await latestActivity.get('latestAgendaitem');
-      return latestItem;
+      const latestAgendaitem = await latestActivity.get('latestAgendaitem');
+      return latestAgendaitem;
     }
     return null;
   }),
@@ -199,18 +197,23 @@ export default ModelWithModifier.extend({
     return latestMeeting.plannedStart;
   }),
 
-  approved: computed('treatments', function() {
+  approved: computed('treatments', 'treatments.@each.decisionResultCode', function() {
     return PromiseObject.create({
       promise: this.get('treatments').then((treatments) => {
-        const approvedTreatments = treatments.map(async(treatment) => {
-          const drc = await treatment.get('decisionResultCode');
-          const id = await drc.get('id');
-          return id === '56312c4b-9d2a-4735-b0b1-2ff14bb524fd' || id === 'e7e44027-fbbb-4285-ba3f-0cdb2264d43c' ;
-        });
-        if (approvedTreatments && approvedTreatments.length === 0) {
-          return false;
+        if (treatments && treatments.get('length') > 0) {
+          const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
+          const drcIds = ['56312c4b-9d2a-4735-b0b1-2ff14bb524fd', '9f342a88-9485-4a83-87d9-245ed4b504bf'].join(',');
+          return this.store.query('agenda-item-treatment', {
+            filter: {
+              id: treatmentIds,
+              'decision-result-code': {
+                id: drcIds,
+              },
+            },
+            include: 'decision-result-code',
+          }).then((treatments) => treatments.get('firstObject'));
         }
-        return !approvedTreatments.includes(false);
+        return null;
       }),
     });
   }),
@@ -220,7 +223,7 @@ export default ModelWithModifier.extend({
       //  We want to sort descending on date the subcase was concluded.
       //  In practice, sorting on created will be close
       promise: this.get('case').then((caze) => caze.get('subcases')
-        .then((subcases) => subcases.filter((subcase) => subcase.get('id') !== this.id).sort((documentA, documentB) => documentB.created - documentA.created))),
+        .then((subcases) => subcases.filter((subcase) => subcase.get('id') !== this.id).sort((subcaseA, subcaseB) => subcaseB.created - subcaseA.created))),
     });
   }),
 

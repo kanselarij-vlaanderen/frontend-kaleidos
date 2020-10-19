@@ -10,10 +10,6 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isVerifyingDelete = null;
   @tracked treatmentToDelete = null;
 
-  get treatment() {
-    return this.args.treatment;
-  }
-
   @action
   openEditingWindow() {
     this.isEditing = true;
@@ -43,5 +39,10 @@ export default class AgendaitemDecisionComponent extends Component {
   cancel() {
     this.treatmentToDelete = null;
     this.isVerifyingDelete = false;
+  }
+
+  @action
+  async addPiece(piece) {
+    await piece.save();
   }
 }

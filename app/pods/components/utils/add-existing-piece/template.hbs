@@ -1,0 +1,66 @@
+<div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+  <div class="vl-col--8-12 vl-col--1-1--s">
+    <div class="vlc-toolbar vlc-toolbar--auto">
+      <div class="vlc-toolbar__justified custom-table-search">
+        <div class="vlc-toolbar__item" style="width:100%;">
+          <div class="vl-input-field--inline">
+            <Input
+              data-test-search-existing-document
+              @value={{this.filter}}
+              @id="searchId"
+              @placeholder="Zoeken.."
+              @input={{perform this.searchTask}}
+              @class="vl-input-field vl-input-field__input"
+            />
+            <button type="button"
+                    data-test-search-existing-document-button
+                    class="vl-input-field__submit vl-button"
+                    onclick={{perform this.searchTask}}
+            >
+              <i class="ki-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="vl-col--3-12 vl-col--1-1--s">
+    {{#if this.performSearch.isRunning}}
+      <div data-test-search-loader class="vl-loader" role="alert" aria-busy="true"></div>
+    {{/if}}
+  </div>
+</div>
+{{#data-table
+  content=this.pieces
+  sort=this.sort
+  page=this.pageParam
+  size=size
+  noDataMessage=(t "no-results-found")
+  isLoading=this.findAll.isRunning
+  onClickRow=(action "select")
+as |table|
+}}
+  {{#table.content
+  as |c|
+  }}
+    {{#c.header}}
+      <th></th>
+      <th><span class="">{{t "title-document"}}</span></th>
+      <th><span class="">{{t "created-on"}}</span></th>
+    {{/c.header}}
+    {{#c.body as |row|}}
+      <td class="vl-data-table-col-1">
+        {{web-components/vl-checkbox
+          value=row.selected
+          toggle=(action "select" row)
+        }}
+      </td>
+      <td class="vl-data-table-col-8">
+        {{row.name}}
+      </td>
+      <td class="vl-data-table-col-3">
+        {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+      </td>
+    {{/c.body}}
+  {{/table.content}}
+{{/data-table}}

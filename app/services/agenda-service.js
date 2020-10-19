@@ -15,7 +15,7 @@ export default Service.extend({
   currentSession: service(),
   newsletterService: service(),
 
-  addedDocuments: null,
+  addedPieces: null,
   addedAgendaitems: null,
 
   assignNewSessionNumbers() {
@@ -39,7 +39,7 @@ export default Service.extend({
     }).then((result) => result.body.agendas);
   },
 
-  async getDocumentNames(model) {
+  async getPieceNames(model) {
     return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
@@ -106,7 +106,7 @@ export default Service.extend({
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
       .then(bind(this, (result) => {
-        this.set('addedDocuments', result.addedDocuments);
+        this.set('addedPieces', result.addedDocuments);
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
       }))
@@ -172,8 +172,8 @@ export default Service.extend({
       formallyOk: CONFIG.notYetFormallyOk,
       showAsRemark: isAnnouncement,
       mandatees,
-      documentVersions: await subcase.get('documentVersions'),
-      linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
+      pieces: await subcase.get('pieces'),
+      linkedPieces: await subcase.get('linkedPieces'),
       agendaActivity,
       treatments: A([agendaItemTreatment]),
     });
@@ -196,6 +196,7 @@ export default Service.extend({
     let previousAgendaitemGroupName;
     return Promise.all(
       agendaitems.map(async(agendaitem) => {
+        let currentAgendaitemGroupName;
         const mandatees = await agendaitem.get('sortedMandatees');
         if (agendaitem.isApproval) {
           agendaitem.set('groupName', null);
@@ -204,11 +205,12 @@ export default Service.extend({
         }
         if (mandatees.length === 0) {
           agendaitem.set('groupName', this.intl.t('no-mandatee-assigned'));
-          return;
+          currentAgendaitemGroupName = this.intl.t('no-mandatee-assigned');
+        } else {
+          currentAgendaitemGroupName = mandatees
+            .map((mandatee) => mandatee.title)
+            .join('<br/>');
         }
-        const currentAgendaitemGroupName = mandatees
-          .map((mandatee) => mandatee.title)
-          .join('<br/>');
 
         if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
@@ -258,11 +260,11 @@ export default Service.extend({
     if (!nota) {
       return null;
     }
-    const versions = await nota.get('documentVersions');
-    const hasRevision = versions.length > 1;
+    const pieces = await nota.get('pieces');
+    const hasRevision = pieces.length > 1;
     if (hasRevision) {
-      const lastVersion = await nota.get('lastDocumentVersion');
-      return lastVersion.created;
+      const lastPiece = await nota.get('lastPiece');
+      return lastPiece.created;
     }
     return null;
   },

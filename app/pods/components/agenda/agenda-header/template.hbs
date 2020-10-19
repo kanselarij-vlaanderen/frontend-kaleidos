@@ -116,10 +116,10 @@
                 {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
                   <li class="vlc-dropdown-menu__item">
                     <a href="javascript://"
-                       data-test-agenda-header-navigateToSubCases
+                       data-test-agenda-header-add-agendaitems
                        class="vl-link vl-link--block"
                       {{action attacher.hide}}
-                      {{action "navigateToSubCases"}}
+                      {{action "addAgendaitems"}}
                     >
                       {{t "add-to-agenda"}}
                     </a>
@@ -144,15 +144,6 @@
                     {{action "navigateToNewsletter"}}
                   >
                     {{t "print-newsletter"}}
-                  </a>
-                </li>
-                <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                     data-test-agenda-header-navigateToNotes
-                     class="vl-link vl-link--block"
-                    {{action "navigateToNotes"}}
-                  >
-                    {{t "print-notes"}}
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">

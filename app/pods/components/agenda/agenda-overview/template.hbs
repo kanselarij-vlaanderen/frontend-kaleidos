@@ -69,11 +69,19 @@
       }}
         {{#if agendaitem.groupName}}
           <div class="vlc-list-section-header">
+            {{#if (eq agendaitem.groupName (t 'no-mandatee-assigned'))}}
             {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
               These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
             {{!-- template-lint-disable no-triple-curlies  --}}
-            <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
+              <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
             {{!-- template-lint-enable no-triple-curlies  --}}
+            {{else}}
+              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+              {{!-- template-lint-disable no-triple-curlies  --}}
+              <span>{{{agendaitem.groupName}}}</span>
+              {{!-- template-lint-enable no-triple-curlies  --}}
+            {{/if}}
           </div>
         {{/if}}
         {{#sortable-item
@@ -131,7 +139,9 @@
 </div>
 <div class="vl-u-spacer">
   {{#if (gt (await announcements.length) 0)}}
-    {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+    {{#if
+      (and currentSessionService.isEditor (not isShowingChanges) currentAgenda.isDesignAgenda)
+    }}
       {{#sortable-group
         tagName="ul"
         onChange=(action "reorderItems")
@@ -163,14 +173,18 @@
         (await announcements)
       as |announcement|
       }}
-        <div class="vlc-agenda-items__sub-item">
-          <Agenda::AgendaOverview::AgendaOverviewItem
-            @agendaitem={{announcement}}
-            @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
-            @isEditingOverview={{isEditingOverview}}
-            @selectAgendaitem={{action this.selectAgendaitemAction}}
-          />
-        </div>
+        {{#if
+          (or (not isShowingChanges) (and isShowingChanges (await announcement.hasChanges)))
+        }}
+          <div class="vlc-agenda-items__sub-item">
+            <Agenda::AgendaOverview::AgendaOverviewItem
+              @agendaitem={{announcement}}
+              @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
+              @isEditingOverview={{isEditingOverview}}
+              @selectAgendaitem={{action this.selectAgendaitemAction}}
+            />
+          </div>
+        {{/if}}
       {{/each}}
     {{/if}}
   {{else}}

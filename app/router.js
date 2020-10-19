@@ -19,7 +19,6 @@ Router.map(function() {
         this.route('documents', { path: '/documenten', });
         this.route('comments', { path: '/opmerkingen', });
         this.route('decisions', { path: '/beslissingen', });
-        this.route('minutes', { path: '/notulen', });
         this.route('news-item', { path: '/kort-bestek', });
         this.route('press-agenda', { path: '/persagenda', });
       });
@@ -75,10 +74,6 @@ Router.map(function() {
   });
 
   this.route('print-overviews', { path: '/overzicht/:meeting_id', }, function() {
-    this.route('notes', { path: '/notulen/:agenda_id', }, function() {
-      this.route('overview', { path: '/klad', });
-      this.route('agendaitems', { path: '/agendapunten', });
-    });
     this.route('decisions', { path: '/beslissingen/:agenda_id', }, function() {
       this.route('agendaitems', { path: '/agendapunten', });
     });
@@ -93,7 +88,7 @@ Router.map(function() {
     this.route('loading', { path: '/laden', });
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
-  this.route('document-viewer', { path: '/document/:document_version_id', });
+  this.route('document-viewer', { path: '/document/:piece_id', });
 
   this.route('not-supported');
   this.route('help');

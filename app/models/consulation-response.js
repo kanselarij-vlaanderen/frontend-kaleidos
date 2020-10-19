@@ -10,5 +10,5 @@ export default Model.extend({
   result: belongsTo('consulation-response-code'),
   consulationRequest: belongsTo('consulation-request'),
   remarks: hasMany('remark'),
-  documents: hasMany('document'),
+  documentContainers: hasMany('document-container'),
 });

@@ -8,7 +8,6 @@ import {
   task, timeout
 } from 'ember-concurrency';
 
-
 export default class NewsletterNotaUpdatesRoute extends Route {
   queryParams = {
     sort: {
@@ -47,27 +46,27 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemShortTitle = agendaitem.get('shortTitle');
 
       // Documenten
-      const notasOfAgendaitem = await this.store.query('document-version', {
+      const notasOfAgendaitem = await this.store.query('piece', {
         'filter[agendaitem][:id:]': agendaitemId,
         'filter[document-container][type][:id:]': CONFIG.notaID,
       });
       if (notasOfAgendaitem.length) {
         const lastNotaVersion = notasOfAgendaitem.firstObject;
         const documentContainer = await lastNotaVersion.get('documentContainer');
-        const allNotaVersions = await documentContainer.get('documentVersions');
-        const documentVersionsOfAgendaitemArray = allNotaVersions.toArray();
+        const allNotaPieces = await documentContainer.get('pieces');
+        const piecesOfAgendaitemArray = allNotaPieces.toArray();
 
-        if (documentVersionsOfAgendaitemArray) {
-          for (const documentVersion of documentVersionsOfAgendaitemArray) {
-            const documentVersionData = await NewsletterNotaUpdatesRoute.getDocumentVersionData(documentVersion);
-            if (documentVersionData) {
+        if (piecesOfAgendaitemArray) {
+          for (const piece of piecesOfAgendaitemArray) {
+            const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(piece);
+            if (pieceData) {
               const nota =  {
                 meetingId,
                 agendaId,
                 agendaitemId,
                 agendaitemPriority,
                 agendaitemShortTitle,
-                ...documentVersionData,
+                ...pieceData,
               };
               notas.pushObject(nota);
             }
@@ -91,11 +90,11 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     });
   }
 
-  static async getDocumentVersionData(documentVersion) {
-    const name = documentVersion.get('name');
-    const documentId = documentVersion.get('id');
-    const modified = documentVersion.get('modified');
-    const container = await documentVersion.get('documentContainer');
+  static async getPieceData(piece) {
+    const name = piece.get('name');
+    const documentId = piece.get('id');
+    const modified = piece.get('modified');
+    const container = await piece.get('documentContainer');
     const type = await container.get('type');
     const label = type.get('label');
     if (label === 'Nota') {

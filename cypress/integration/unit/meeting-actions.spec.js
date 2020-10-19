@@ -1,5 +1,6 @@
 /* global context, it, cy,beforeEach */
 // / <reference types="Cypress" />
+import modal from '../../selectors/modal.selectors';
 
 context('meeting actions tests', () => {
   beforeEach(() => {
@@ -81,7 +82,7 @@ context('meeting actions tests', () => {
       });
     });
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('.vl-button').contains('Verwijderen')
         .click();
     });
@@ -97,10 +98,12 @@ context('meeting actions tests', () => {
     cy.wait('@patchSubcase', {
       timeout: 12000,
     });
-    cy.get('.vl-modal').should('not.be.visible');
+    cy.get(modal.modal).should('not.be.visible');
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,
@@ -108,6 +111,8 @@ context('meeting actions tests', () => {
       .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,

@@ -1,17 +1,34 @@
 {{#if @icon}}
   <div class="vlc-input-with-icon">
-    <input
+    <Input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
+    @enter={{@enter}}
+    @value={{@value}}
+    @insert-newline={{@insert-newline}}
+    @escape-press={{@escape-press}}
+    @focus-in={{@focus-in}}
+    @focus-out={{@focus-out}}
+    @key-down={{@key-down}}
+    @key-press={{@key-press}}
+    @key-up={{@key-up}}
     ...attributes
     />
     <Icon @name={{@icon}} />
   </div>
 
 {{else}}
-  <input
+  <Input
     class="vlc-input {{this.error}} {{this.block}}"
     type="text"
+    @value={{@value}}
+    @insert-newline={{@insert-newline}}
+    @escape-press={{@escape-press}}
+    @focus-in={{@focus-in}}
+    @focus-out={{@focus-out}}
+    @key-down={{@key-down}}
+    @key-press={{@key-press}}
+    @key-up={{@key-up}}
     ...attributes
   />
 {{/if}}
