@@ -4,7 +4,6 @@ import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mi
 import { inject as service } from '@ember/service';
 
 export default Route.extend(ApplicationRouteMixin, {
-  location: ENV.locationType,
   moment: service(),
   intl: service(),
   currentSession: service(),
