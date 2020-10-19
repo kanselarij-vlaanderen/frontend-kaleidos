@@ -5,7 +5,6 @@ import actionModal from '../../selectors/action-modal.selectors';
 import caseSelectors from '../../selectors/case.selectors';
 import modalSelectors from '../../selectors/modal.selectors';
 import utilsSelectors from '../../selectors/utils.selectors';
-import formSelectors from '../../selectors/form.selectors';
 
 context('Agendaitem changes tests', () => {
   before(() => {
@@ -221,7 +220,6 @@ context('Agendaitem changes tests', () => {
     cy.get('.ember-power-select-option').should('exist')
       .then(() => {
         cy.contains('Minister-president van de Vlaamse Regering').click();
-        /*cy.get(formSelectors.formSave).click();*/
         cy.route('GET', '/government-fields/**').as('getGovernmentFields');
         cy.wait('@getGovernmentFields');
         cy.get(modalSelectors.modalFooterSaveButton).click();
