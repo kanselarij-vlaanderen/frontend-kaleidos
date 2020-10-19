@@ -31,12 +31,12 @@
         <h2 class="vl-title vl-title--h2">
           {{t "announcements-subtitle"}}
         </h2>
-        {{#each (await model.notas) as |agendaitem|}}
+        {{#each (await model.announcements) as |agendaitem|}}
           <Newsletter::NewsletterItem
             @showIndex={{this.showDraft}}
             @itemIndex={{agendaitem.number}}
             @allowEditing={{this.showDraft}}
-            @agendaitem={{announcement}}
+            @agendaitem={{agendaitem}}
             @newsletterInfo={{await agendaitem.treatments.firstObject.newsletterInfo}}
           />
         {{/each}}
