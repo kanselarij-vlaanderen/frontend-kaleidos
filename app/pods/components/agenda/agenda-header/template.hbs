@@ -319,6 +319,29 @@
                       </a>
                     {{/if}}
                   </li>
+
+
+                  {{#if (not currentSession.isFinal)}}
+                    {{#if (or
+                        (and currentAgenda currentAgenda.isDesignAgenda)
+                        (and currentSessionService.isAdmin (await currentAgendaIsLast))
+                      ) }}
+
+                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                      >
+                                <a href=""
+                           data-test-agenda-header-reopen-previous-version
+                           class="vl-link vl-link--block vl-u-text--error"
+                          {{action "deleteCurrentAgendaForModal" currentAgenda}}
+                          {{action attacher.hide}}
+                        >
+                          {{t "agenda-reopen-previous-version"}}
+                        </a>
+                      </li>
+                    {{/if}}
+                    {{/if}}
+
+                           
                 {{/if}}
               </ul>
             {{/attach-popover}}
@@ -424,4 +447,35 @@
       @verify={{action "cancelLockAgenda"}}
       @closeModal={{action "cancelLockAgenda"}}
   />
+{{/if}}
+
+{{#if isDeleteCurrentAgenda}}
+   {{web-components/vl-modal-verify
+    title=(t "agenda-design-delete")
+    message=(t "agenda-design-delete-message")
+    cancel=(action "cancelDeleteCurrentAgendaForModal")
+    verify=(action "reopenPreviousAgendaForModal")
+  }}
+{{/if}}
+{{#if isReopenAgenda}}
+   {{!-- {{web-components/vl-modal-verify
+    title=(t "agenda-unlock")
+    message=(t "agenda-unlock-message")
+    cancel=(action "cancelReopenAgendaForModal")
+    verify=(action "reopenPreviousAgendaAndDeleteCurrent")
+  }} --}}
+    {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "agenda-unlock")
+    closeModal=(action "cancelReopenAgendaForModal")
+  }}
+  <div>{{t "agenda-unlock-message"}}</div>
+     {{web-components/vl-modal-footer
+    isLoading=isLoading
+    cancelButtonText=(t "cancel")
+    saveButtonText=(t "agenda-unlock")
+    cancelAction=(action "cancelReopenAgendaForModal")
+    saveAction=(action "reopenPreviousAgendaAndDeleteCurrent")
+  }}
+  {{/web-components/vl-modal}}
 {{/if}}
