@@ -2,7 +2,9 @@ import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import { alias, deprecatingAlias } from '@ember/object/computed';
+import {
+  alias, deprecatingAlias
+} from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import { A } from '@ember/array';
