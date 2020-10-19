@@ -294,12 +294,15 @@
                         {{t "agenda-delete"}}
                       </a>
                     {{/if}}
-                    {{#if
-                      (and
-                        (not (await designAgendaPresent))
-                        (not (await currentSession.isFinal))
-                      )
-                    }}
+                  </li>
+                  {{#if
+                    (and
+                      (not (await designAgendaPresent))
+                      (not (await currentSession.isFinal))
+                    )
+                  }}
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                    >
                       <a href=""
                          data-test-agenda-header-createNewDesignAgenda
                          class="vl-link vl-link--block"
@@ -308,8 +311,8 @@
                       >
                         {{t "agenda-add"}}
                       </a>
-                    {{/if}}
-                  </li>
+                    </li>
+                  {{/if}}
                 {{/if}}
               </ul>
             {{/attach-popover}}
