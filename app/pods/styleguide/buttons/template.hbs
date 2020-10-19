@@ -1,12 +1,37 @@
 {{! template-lint-disable no-bare-strings }}
 
-<h1 class="vlc-kitchensink-header">Buttons</h1>
+<h1 class="vlc-kitchensink-header">Buttons (new)</h1>
+
+<div class="vlc-content">
+  <p>Please use buttons in the <code>vlc</code> namespace.</p>
+</div>
 
 <Styleguide::KitchensinkSample
-  @title="Button skins"
+  @title="Button skins (new)"
   @snippet="skins.hbs"
 >
   {{!-- BEGIN-SNIPPET skins --}}
+  <button class="vlc-button vlc-button--primary" type="button">Primary button</button>
+  <button class="vlc-button vlc-button--secondary" type="button">Secondary button</button>
+  <button class="vlc-button vlc-button--tertiary" type="button">Tertiary button</button>
+  <button class="vlc-button vlc-button--borderless" type="button">Borderless button</button>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+
+<hr class="vlc-hr" />
+
+<h1 class="vlc-kitchensink-header">Buttons (legacy)</h1>
+
+<div class="vlc-content">
+  <p>We are moving away from these buttons.</p>
+</div>
+
+<Styleguide::KitchensinkSample
+  @title="Button skins"
+  @snippet="skins-legacy.hbs"
+>
+  {{!-- BEGIN-SNIPPET skins-legacy --}}
   <button class="vl-button" type="button">Primary button</button>
   <button class="vl-button vl-button--secondary" type="button">Secondary button</button>
   <button class="vl-button vl-button--tertiary" type="button">Tertiary button</button>
