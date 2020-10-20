@@ -11,7 +11,6 @@ const selectors = {
   button: 'button',
   overviewTitle: '[data-test-agendas-title]',
   agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
-  agendaitemOpmerkingenTab: '[data-test-agenda-agendaitem-tab="agendaitem-comment"]',
   agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
@@ -89,5 +88,6 @@ const selectors = {
     announcementLeft: '[data-test-compare-announcement-left]',
     announcementRight: '[data-test-compare-announcement-right]',
   },
+  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
 };
 export default selectors;

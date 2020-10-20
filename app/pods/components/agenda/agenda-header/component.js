@@ -37,7 +37,6 @@ export default Component.extend(FileSaverMixin, {
   toaster: service(),
 
   isShowingOptions: false,
-  isPrintingNotes: false,
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
   isDeletingAgenda: false,
@@ -196,13 +195,6 @@ export default Component.extend(FileSaverMixin, {
 
     print() {
       window.print();
-    },
-
-    navigateToNotes() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToNotes(currentSession.get('id'), currentAgenda.get('id'));
     },
 
     navigateToPressAgenda() {

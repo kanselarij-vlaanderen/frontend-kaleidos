@@ -2,6 +2,9 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import actionModal from '../../selectors/action-modal.selectors';
+import caseSelectors from '../../selectors/case.selectors';
+import modalSelectors from '../../selectors/modal.selectors';
+import utilsSelectors from '../../selectors/utils.selectors';
 
 context('Agendaitem changes tests', () => {
   before(() => {
@@ -196,5 +199,37 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.compare.agendaitemRight).should('have.length', 0);
     cy.get(agenda.compare.announcementLeft).should('have.length', 0);
     cy.get(agenda.compare.announcementRight).should('have.length', 0);
+  });
+
+  it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
+    cy.visit(agendaURL);
+    // check if only 'Geen toekenning' is a header
+    cy.get(agenda.agendaOverviewItemHeader)
+      .should('have.length', 1);
+
+    cy.get(agenda.agendaOverviewItemHeader).eq(0)
+      .should('contain.text', 'Geen toekenning');
+
+    cy.get(agenda.agendaOverviewSubitem).eq(1)
+      .should('contain.text', 'Cypress test dossier 1 test stap 1')
+      .click();
+
+    cy.get(caseSelectors.editSubcaseMandatees).click();
+    cy.get(caseSelectors.addMandateeToSubcaseMandatees).click();
+    cy.get(modalSelectors.ministerModalSelector).click();
+    cy.get('.ember-power-select-option').should('exist')
+      .then(() => {
+        cy.contains('Minister-president van de Vlaamse Regering').click();
+        cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+        cy.wait('@getGovernmentFields');
+        cy.get(modalSelectors.modalFooterSaveButton).click();
+        cy.get(utilsSelectors.saveButton).click();
+        cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
+        cy.wait('@patchAgendaitems');
+        cy.visit(agendaURL);
+        cy.get(agenda.agendaOverviewItemHeader).eq(0)
+          .should('contain.text', 'Minister-president van de Vlaamse Regering');
+        cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
+      });
   });
 });

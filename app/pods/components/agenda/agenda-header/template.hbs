@@ -148,15 +148,6 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
-                     data-test-agenda-header-navigateToNotes
-                     class="vl-link vl-link--block"
-                    {{action "navigateToNotes"}}
-                  >
-                    {{t "print-notes"}}
-                  </a>
-                </li>
-                <li class="vlc-dropdown-menu__item">
-                  <a href=""
                      data-test-agenda-header-navigateToPressAgenda
                      class="vl-link vl-link--block"
                     {{action "navigateToPressAgenda"}}
@@ -303,12 +294,15 @@
                         {{t "agenda-delete"}}
                       </a>
                     {{/if}}
-                    {{#if
-                      (and
-                        (not (await designAgendaPresent))
-                        (not (await currentSession.isFinal))
-                      )
-                    }}
+                  </li>
+                  {{#if
+                    (and
+                      (not (await designAgendaPresent))
+                      (not (await currentSession.isFinal))
+                    )
+                  }}
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                    >
                       <a href=""
                          data-test-agenda-header-createNewDesignAgenda
                          class="vl-link vl-link--block"
@@ -317,19 +311,20 @@
                       >
                         {{t "agenda-add"}}
                       </a>
-                    {{/if}}
-                  </li>
+                    </li>
+                  {{/if}}
 
 
                   {{#if (not currentSession.isFinal)}}
-                    {{#if (or
+                    {{#if 
+                      (or
                         (and currentAgenda currentAgenda.isDesignAgenda)
                         (and currentSessionService.isAdmin (await currentAgendaIsLast))
-                      ) }}
-
+                      )
+                    }}
                       <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                       >
-                                <a href=""
+                        <a href=""
                            data-test-agenda-header-reopen-previous-version
                            class="vl-link vl-link--block vl-u-text--error"
                           {{action "deleteCurrentAgendaForModal" currentAgenda}}
@@ -339,9 +334,7 @@
                         </a>
                       </li>
                     {{/if}}
-                    {{/if}}
-
-                           
+                  {{/if}}         
                 {{/if}}
               </ul>
             {{/attach-popover}}
@@ -450,7 +443,7 @@
 {{/if}}
 
 {{#if isDeleteCurrentAgenda}}
-   {{web-components/vl-modal-verify
+  {{web-components/vl-modal-verify
     title=(t "agenda-design-delete")
     message=(t "agenda-design-delete-message")
     cancel=(action "cancelDeleteCurrentAgendaForModal")
@@ -464,18 +457,18 @@
     cancel=(action "cancelReopenAgendaForModal")
     verify=(action "reopenPreviousAgendaAndDeleteCurrent")
   }} --}}
-    {{#web-components/vl-modal
+  {{#web-components/vl-modal
     isOverlay=true
     title=(t "agenda-unlock")
     closeModal=(action "cancelReopenAgendaForModal")
   }}
-  <div>{{t "agenda-unlock-message"}}</div>
-     {{web-components/vl-modal-footer
-    isLoading=isLoading
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "agenda-unlock")
-    cancelAction=(action "cancelReopenAgendaForModal")
-    saveAction=(action "reopenPreviousAgendaAndDeleteCurrent")
-  }}
+    <div>{{t "agenda-unlock-message"}}</div>
+    {{#web-components/vl-modal-footer
+      isLoading=isLoading
+      cancelButtonText=(t "cancel")
+      saveButtonText=(t "agenda-unlock")
+      cancelAction=(action "cancelReopenAgendaForModal")
+      saveAction=(action "reopenPreviousAgendaAndDeleteCurrent")
+    }}
   {{/web-components/vl-modal}}
 {{/if}}

@@ -31,7 +31,6 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
 
-  notes: belongsTo('meeting-record'),
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
