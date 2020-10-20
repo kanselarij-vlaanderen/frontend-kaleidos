@@ -42,6 +42,7 @@ const selectors = {
   approveAgenda: '[data-test-agenda-header-approveAgenda]',
   lockAgenda: '[data-test-agenda-header-lockagenda]',
   agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
+  agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
   addDecision: '[data-test-add-decision]',
   decisionContainer: '[data-test-decision-container]',
   deleteDecision: '[data-test-delete-decision]',

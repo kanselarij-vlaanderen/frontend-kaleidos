@@ -189,6 +189,9 @@ context('Add files to an agenda', () => {
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
 
+    cy.get(agenda.agendaitemPersagendaTab).click();
+    cy.url().should('contain', '/persagenda');
+
     cy.get(agenda.agendaitemDecisionTab).click();
     cy.url().should('contain', '/beslissingen');
 
