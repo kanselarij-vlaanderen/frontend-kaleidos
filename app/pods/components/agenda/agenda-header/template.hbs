@@ -75,7 +75,7 @@
                     <li class="vlc-dropdown-menu__item">
                       <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
                         {{action attacher.hide}}
-                        {{action "approveAndCloseAgenda" currentSession}}
+                        {{action "lockAgendaAction"}}
                       >
                         <span>
                           {{await currentSession.latestAgendaName}} {{t "approve-small-and-close"}}
@@ -410,12 +410,38 @@
 {{#if isShowingWarningOnClose}}
   <WebComponents::VlModalVerify
       @isOverlay={{true}}
-      @message={{t "agenda-has-nok-agendaitems-warning"}}
-      @title={{t "approve-agenda-error"}}
+      @message={{t "close-agenda-message"}}
+      @title={{t "agenda-lock"}}
       @buttonType="warning"
       @verifyButtonText={{t "continue"}}
-      @cancel={{action "cancelLockAgenda"}}
-      @verify={{action "cancelLockAgenda"}}
-      @closeModal={{action "cancelLockAgenda"}}
+      @cancel={{action "cancelCloseAgenda"}}
+      @verify={{action "closeAgendaAction"}}
+      @closeModal={{action "cancelCloseAgenda"}}
+  />
+{{/if}}
+
+{{#if showCloseWarning}}
+  <WebComponents::VlModalVerify
+          @isOverlay={{true}}
+          @message={{t "agenda-has-nok-agendaitems-warning"}}
+          @title={{t "approve-agenda-error"}}
+          @buttonType="warning"
+          @verifyButtonText={{t "close-agenda"}}
+          @cancel={{action "cancelLockAgenda"}}
+          @verify={{action "removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus"}}
+          @closeModal={{action "cancelLockAgenda"}}
+  />
+{{/if}}
+
+{{#if showApproveAndCloseWarning}}
+  <WebComponents::VlModalVerify
+          @isOverlay={{true}}
+          @message={{t "close-agenda-message"}}
+          @title={{t "agenda-lock"}}
+          @buttonType="warning"
+          @verifyButtonText={{t "continue"}}
+          @cancel={{action "cancelCloseAgenda"}}
+          @verify={{action "approveAndCloseAgenda"}}
+          @closeModal={{action "cancelCloseAgenda"}}
   />
 {{/if}}
