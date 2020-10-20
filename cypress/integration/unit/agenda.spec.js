@@ -31,7 +31,7 @@ context('Agenda tests', () => {
     cy.logout();
   });
 
-  it('should create a new agenda and then delete it', () => {
+  it('should create a new agenda, visit persagenda and then delete agenda', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
       .day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
