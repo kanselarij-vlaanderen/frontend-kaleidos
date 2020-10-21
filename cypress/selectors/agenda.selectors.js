@@ -45,6 +45,7 @@ const selectors = {
   deleteAgenda: '[data-test-agenda-header-deleteagenda]',
   createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
   reopenCurrentAgenda: '[data-test-agenda-header-unlockagenda]',
+  agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
   addDecision: '[data-test-add-decision]',
   decisionContainer: '[data-test-decision-container]',
   deleteDecision: '[data-test-delete-decision]',
