@@ -1,0 +1,18 @@
+{{#if @custom}}
+{{yield}}
+{{else}}
+<div class="au2-modal__header au2-modal__header--bordered">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <h2 class="au2-toolbar__title">{{ @title }}</h2>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <AuButton @icon="close" @skin="tertiary" @layout="icon-only"></AuButton>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</div>
+{{/if}}
