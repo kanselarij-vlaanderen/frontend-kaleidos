@@ -1,0 +1,13 @@
+<div>
+  <p class="vlc-pagination__fontsize">
+    {{startItem}}-{{endItem}}{{#if total}} {{t "table-of"}} {{total}}{{/if}}
+    {{#if hasMultiplePages}}
+      {{#if (not isFirstPage)}}
+        <a href="#" {{action "changePage" links.prev}}> {{t "table-previous-with-arrow"}}</a>
+      {{/if}}
+      {{#if (not isLastPage)}}
+        <a href="#" {{action "changePage" links.next}}>{{t "table-next-with-arrow"}}</a>
+      {{/if}}
+    {{/if}}
+  </p>
+</div>

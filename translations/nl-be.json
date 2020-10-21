@@ -605,5 +605,8 @@
   "document-not-consultable": "Dit document is niet consulteerbaar voor uw profiel",
   "document-is-confidential": "Dit document is vertrouwelijk",
   "close-agenda-message": "Bent u zeker dat u de agenda wil afsluiten?",
-  "close-agenda": "Agenda afsluiten"
+  "close-agenda": "Agenda afsluiten",
+  "table-of" : " van ",
+  "table-previous-with-arrow": "< Vorige",
+  "table-next-with-arrow": "< Next"
 }
