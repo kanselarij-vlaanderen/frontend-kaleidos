@@ -183,6 +183,7 @@ export default Service.extend({
     await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.hasMany('agendaActivities').reload();
+    await subcase.hasMany('treatments').reload();
     await subcase.save();
     updateModifiedProperty(selectedAgenda);
 
@@ -230,11 +231,22 @@ export default Service.extend({
     });
     agendaitemToDelete.set('aboutToDelete', true);
     const agendaActivity = await agendaitemToDelete.get('agendaActivity');
+    const treatments = await agendaitemToDelete.get('treatments');
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      if (treatments) {
+        await Promise.all(treatments.map(async(treatment) => {
+          const newsletter = await treatment.get('newsletterInfo');
+          if (newsletter) {
+            await newsletter.destroyRecord();
+          }
+          // TODO DELETE REPORT !
+          await treatment.destroyRecord();
+        }));
+      }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');
         await agendaitem.destroyRecord();
@@ -244,6 +256,7 @@ export default Service.extend({
       await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
+      await subcase.hasMany('treatments').reload();
     } else {
       await agendaitemToDelete.destroyRecord();
     }
