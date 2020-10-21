@@ -1,11 +1,12 @@
-/* global context, before, it, cy,beforeEach */
+/* global context, before, it, cy,beforeEach, Cypress */
 // / <reference types='Cypress' />
 
 import agendaSelector from '../../selectors/agenda.selectors';
 import modalSelector from '../../selectors/modal.selectors';
 
 context('Agenda reopen previous tests', () => {
-  const dateToCreateAgenda = Cypress.moment().add(10, 'weeks').day(3);
+  const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')
+    .day(3);
 
   before(() => {
     cy.resetCache();
@@ -28,7 +29,7 @@ context('Agenda reopen previous tests', () => {
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.setFormalOkOnItemWithIndex(0)
+    cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
     cy.contains(designAgendaBTitle).should('exist');
     cy.contains(designAgendaATitle).should('not.exist');
