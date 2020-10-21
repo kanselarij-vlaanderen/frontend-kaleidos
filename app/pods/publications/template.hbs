@@ -12,7 +12,8 @@
       <Toolbar::Group @position="right">
         <Toolbar::Item>
           <AuButton @icon="add" @skin="primary" {{on "click" (fn this.showNewPublicationModal)}}>
-            {{t "publications.new"}}</AuButton>
+            {{t "publications.new"}}
+          </AuButton>
         </Toolbar::Item>
       </Toolbar::Group>
     </Toolbar>
@@ -31,28 +32,26 @@
       </Toolbar>
     </Navbar>
     {{#if isShowingPublicationModal}}
-    <div>
       <WebComponents::AuModal>
-        <WebComponents::AuModal::Modal::Header @title="Dossier goedkeuren voor co-agendering?" />
+        <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} />
         <WebComponents::AuModal::Modal::Body>
-          <p>Weet je zeker dat je dit dossier wilt goedkeuren voor co-agendering?</p>
+          <p>{{t "publications-new-warning-message"}}</p>
         </WebComponents::AuModal::Modal::Body>
         <WebComponents::AuModal::Modal::Footer>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <AuButton @skin="borderless">Annuleren</AuButton>
+                <AuButton @skin="borderless">{{t "cancel"}}</AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <AuButton @skin="primary">Goedkeuren</AuButton>
+                <AuButton @skin="primary">{{t "publications-new-button-text"}}</AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </WebComponents::AuModal::Modal::Footer>
       </WebComponents::AuModal>
-    </div>
     {{/if}}
     {{outlet}}
   </div>

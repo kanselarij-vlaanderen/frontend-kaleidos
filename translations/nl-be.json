@@ -605,5 +605,11 @@
   "document-not-consultable": "Dit document is niet consulteerbaar voor uw profiel",
   "document-is-confidential": "Dit document is vertrouwelijk",
   "close-agenda-message": "Bent u zeker dat u de agenda wil afsluiten?",
-  "close-agenda": "Agenda afsluiten"
+  "close-agenda": "Agenda afsluiten",
+  "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
+  "publications-new-button-text": "Publicatie aanmaken",
+  "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen",
+  "publications-number-required": "Publicatienummer *",
+  "publications-number": "Publicatienummer",
+  "name-subcase-required": "Korte titel *"
 }
