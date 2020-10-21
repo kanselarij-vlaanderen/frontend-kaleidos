@@ -304,7 +304,7 @@
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                     >
                       <a href=""
-                         data-test-agenda-header-createNewDesignAgenda
+                         data-test-agenda-header-create-new-design
                          class="vl-link vl-link--block"
                         {{action "createNewDesignAgenda" currentSession}}
                         {{action attacher.hide}}
@@ -315,25 +315,25 @@
                   {{/if}}
 
 
-                  {{#if (not currentSession.isFinal)}}
-                    {{#if 
-                      (or
-                        (and currentAgenda currentAgenda.isDesignAgenda)
-                        (and currentSessionService.isAdmin (await currentAgendaIsLast))
+                  {{#if 
+                    (and 
+                      (not currentSession.isFinal)
+                      (and (await isLockable))
+                      (and currentAgenda currentAgenda.isDesignAgenda)
+                      (and currentSessionService.isAdmin (await currentAgendaIsLast))
                       )
-                    }}
-                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                  }}
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                       >
-                        <a href=""
+                      <a href=""
                            data-test-agenda-header-reopen-previous-version
                            class="vl-link vl-link--block vl-u-text--error"
                           {{action "deleteCurrentAgendaForModal" currentAgenda}}
                           {{action attacher.hide}}
                         >
-                          {{t "agenda-reopen-previous-version"}}
-                        </a>
-                      </li>
-                    {{/if}}
+                        {{t "agenda-reopen-previous-version"}}
+                      </a>
+                    </li>
                   {{/if}}         
                 {{/if}}
               </ul>
@@ -445,30 +445,18 @@
 {{#if isDeleteCurrentAgenda}}
   {{web-components/vl-modal-verify
     title=(t "agenda-design-delete")
-    message=(t "agenda-design-delete-message")
+    message=(t "agenda-design-delete-message" agenda=currentAgenda.agendaName)
     cancel=(action "cancelDeleteCurrentAgendaForModal")
     verify=(action "reopenPreviousAgendaForModal")
   }}
 {{/if}}
-{{#if isReopenAgenda}}
-   {{!-- {{web-components/vl-modal-verify
+{{#if isReopenAgenda }}
+  {{web-components/vl-modal-verify
     title=(t "agenda-unlock")
-    message=(t "agenda-unlock-message")
+    message=(t "agenda-unlock-message" agenda=(await lastAgendaName))
     cancel=(action "cancelReopenAgendaForModal")
     verify=(action "reopenPreviousAgendaAndDeleteCurrent")
-  }} --}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "agenda-unlock")
-    closeModal=(action "cancelReopenAgendaForModal")
+    verifyButtonText=(t "agenda-unlock")
+    buttonType="warning"
   }}
-    <div>{{t "agenda-unlock-message"}}</div>
-    {{#web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "agenda-unlock")
-      cancelAction=(action "cancelReopenAgendaForModal")
-      saveAction=(action "reopenPreviousAgendaAndDeleteCurrent")
-    }}
-  {{/web-components/vl-modal}}
 {{/if}}

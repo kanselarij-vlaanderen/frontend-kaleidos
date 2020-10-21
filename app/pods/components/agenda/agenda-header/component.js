@@ -68,6 +68,15 @@ export default Component.extend(FileSaverMixin, {
     return true;
   }),
 
+  lastAgendaName: computed('agendas.@each', async function() {
+    const agendas = await this.get('agendas');
+    const lastAgendaFromList = agendas
+      .filter((agenda) => !agenda.get('isDesignAgenda'))
+      .sortBy('-serialnumber')
+      .get('firstObject');
+    return lastAgendaFromList.agendaName;
+  }),
+
   amountOfAgendaitemsNotFormallyOk: computed('currentAgendaitems.@each.formallyOk', async function() {
     const isNotFormallyOk = (agendaitem) => agendaitem.formallyOk !== CONFIG.formallyOk;
     const agendaitems = await this.currentAgenda.get('agendaitems');
@@ -422,11 +431,11 @@ export default Component.extend(FileSaverMixin, {
     async createNewDesignAgenda() {
       await this.createDesignAgenda();
     },
-    async reopenPreviousAgendaAndDeleteCurrent(){
-      this.toggleProperty('isDeleteCurrentAgenda', false);
-      this.toggleProperty('isReopenAgenda', false);
+    async reopenPreviousAgendaAndDeleteCurrent() {
+      this.set('isDeleteCurrentAgenda', false);
+      this.set('isReopenAgenda', false);
 
-     /* const isClosable = await this.currentAgenda.get('isClosable');
+      const isClosable = await this.currentAgenda.get('isClosable');
       if (isClosable) {
         this.set('isLockingAgenda', true);
         const agendas = await this.get('agendas');
@@ -434,59 +443,43 @@ export default Component.extend(FileSaverMixin, {
           .filter((agenda) => agenda.get('isDesignAgenda'))
           .sortBy('-serialnumber')
           .get('firstObject');
+
         const lastAgenda = agendas
           .filter((agenda) => !agenda.get('isDesignAgenda'))
           .sortBy('-serialnumber')
           .get('firstObject');
 
         const session = await lastAgenda.get('createdFor');
-        session.set('isFinal', true);
         session.set('agenda', lastAgenda);
 
         await session.save();
-        const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id); // Async call
-        lastAgenda.set('status', closed);
+        const designAgendaStatus = await this.store.findRecord('agendastatus', CONFIG.agendaStatusDesignAgenda.id); // Async call
+        lastAgenda.set('status', designAgendaStatus);
         await lastAgenda.save();
 
         if (designAgenda) {
           await this.deleteAgenda(designAgenda);
         }
+
         if (!this.isDestroyed) {
           this.set('isLockingAgenda', false);
         }
       } else {
         this.set('isShowingWarningOnClose', true);
-      }*/
-
+      }
     },
     async deleteCurrentAgendaForModal() {
-      const isClosable = await this.currentAgenda.get('isClosable');
-      const agendas = await this.get('agendas');
-
-      if (isClosable) {
-        const designAgenda = agendas
-        .filter((agenda) => agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
-        .get('firstObject');
-
-        if (designAgenda) {
-          this.toggleProperty('isDeleteCurrentAgenda', true);
-        } else {
-          this.toggleProperty('isReopenAgenda', true);
-        }
-      }
-
-      this.toggleProperty('isDeleteCurrentAgenda', true);
+      this.set('isDeleteCurrentAgenda', true);
     },
     cancelDeleteCurrentAgendaForModal() {
-      this.toggleProperty('isDeleteCurrentAgenda', false);
+      this.set('isDeleteCurrentAgenda', false);
     },
     cancelReopenAgendaForModal() {
-      this.toggleProperty('isReopenAgenda', false);
+      this.set('isReopenAgenda', false);
     },
     reopenPreviousAgendaForModal() {
-      this.toggleProperty('isDeleteCurrentAgenda', false);
-      this.toggleProperty('isReopenAgenda', true);
+      this.set('isDeleteCurrentAgenda', false);
+      this.set('isReopenAgenda', true);
     },
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
