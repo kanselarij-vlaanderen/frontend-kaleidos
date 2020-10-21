@@ -3,6 +3,10 @@ import Component from '@ember/component';
 
 export default Component.extend({
   classNames: ['data-table-pagination'],
+
+  sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
+  size: 20,
+
   currentPage: computed('page', {
     get() {
       return this.get('page') ? parseInt(this.get('page'), 10) + 1 : 1;
@@ -46,6 +50,9 @@ export default Component.extend({
   actions: {
     changePage(link) {
       this.set('page', link.number || 0);
+    },
+    selectSize(size) {
+      this.set('size', size);
     },
   },
 });

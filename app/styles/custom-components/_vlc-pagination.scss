@@ -26,3 +26,17 @@
 .vlc-pagination__fontsize {
   font-size: 1.6rem;
 }
+
+.vlc-pagination-nowrap {
+  white-space: nowrap;
+  margin-right: 1rem;
+  align-self: center;
+}
+
+.vlc-pagination__container {
+  display:flex;
+}
+
+.vlc-pagination__container-spacebetween {
+  justify-content: space-between;
+}
