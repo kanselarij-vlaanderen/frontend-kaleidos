@@ -33,7 +33,7 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  hidePublicationModal() {
+  closePublicationModal() {
     this.isShowingPublicationModal = false;
   }
 

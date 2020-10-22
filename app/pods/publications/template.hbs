@@ -33,7 +33,7 @@
     </Navbar>
     {{#if isShowingPublicationModal}}
       <WebComponents::AuModal>
-        <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} @hideModal={{this.hidePublicationModal}}/>
+        <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} @closeModal={{this.closePublicationModal}}/>
         <WebComponents::AuModal::Modal::Body>
           <WebComponents::AuAlert @message={{t "publications-new-warning-message"}} @icon="ki-circle-info" />
           <div class="au2-form-group-layout au2-form-group-layout--standard">
