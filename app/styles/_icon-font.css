@@ -1,10 +1,10 @@
 @font-face {
     font-family: "kaleidos-icons";
-    src: url("/fonts/kaleidos-icons.eot?d352cec6586a54f733a90381905e738b?#iefix") format("embedded-opentype"),
-url("/fonts/kaleidos-icons.woff2?d352cec6586a54f733a90381905e738b") format("woff2"),
-url("/fonts/kaleidos-icons.woff?d352cec6586a54f733a90381905e738b") format("woff"),
-url("/fonts/kaleidos-icons.ttf?d352cec6586a54f733a90381905e738b") format("truetype"),
-url("/fonts/kaleidos-icons.svg?d352cec6586a54f733a90381905e738b#kaleidos-icons") format("svg");
+    src: url("/fonts/kaleidos-icons.eot?ec9e3f76ec9b2f5fe8cdf1fd14c2028a?#iefix") format("embedded-opentype"),
+url("/fonts/kaleidos-icons.woff2?ec9e3f76ec9b2f5fe8cdf1fd14c2028a") format("woff2"),
+url("/fonts/kaleidos-icons.woff?ec9e3f76ec9b2f5fe8cdf1fd14c2028a") format("woff"),
+url("/fonts/kaleidos-icons.ttf?ec9e3f76ec9b2f5fe8cdf1fd14c2028a") format("truetype"),
+url("/fonts/kaleidos-icons.svg?ec9e3f76ec9b2f5fe8cdf1fd14c2028a#kaleidos-icons") format("svg");
 }
 
 i[class^="ki-"]:before, i[class*=" ki-"]:before {
