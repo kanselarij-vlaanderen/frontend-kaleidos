@@ -2,7 +2,7 @@
   au2-form-group
    ========================================================================== */
 
-   .au2-form-group {
+  .au2-form-group {
     margin: 0 0 1.8rem;
   }
   
@@ -29,3 +29,20 @@
       flex: 1 1 auto;
     }
   }
+
+  .au2-form-group--error {
+    label {
+      color: #DB3434;
+    }
+
+    input, textarea {
+      border-color: #DB3434;
+    }
+  }
+
+  .au2-form-group--input-text-grey {
+    textarea, input, text-area, select {
+      color:#333332;
+    }
+  }
+  
