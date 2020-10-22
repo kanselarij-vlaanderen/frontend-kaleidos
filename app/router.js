@@ -104,6 +104,7 @@ Router.map(function() {
     this.route('typography');
     this.route('selects');
     this.route('brand');
+    this.route('checkbox');
   });
 
   this.route('search', { path: '/zoeken', }, function() {
