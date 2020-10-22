@@ -41,4 +41,11 @@ export default Model.extend({
     }
     return `${this.get('title')}`;
   }),
+
+  /**
+   * sortby('priority') sorts numeric whereas the users expect alphabetical sort.
+   */
+  priorityString: computed('priority', function() {
+    return this.get('priority').toString();
+  }),
 });

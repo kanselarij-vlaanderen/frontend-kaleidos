@@ -37,7 +37,7 @@ export default ModelWithModifier.extend({
     const treatment = await this.get('agendaItemTreatment');
     const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');
-    const sortedMandatees = await mandatees.sortBy('priority');
+    const sortedMandatees = await mandatees.sortBy('priorityString');
     let proposalText = this.intl.t('proposal-text');
     const seperatorComma = ', ';
     const seperatorAnd = ' en ';

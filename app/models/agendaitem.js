@@ -154,7 +154,7 @@ export default ModelWithModifier.extend({
   }),
 
   sortedMandatees: computed('mandatees.@each', function() {
-    return this.get('mandatees').sortBy('priority');
+    return this.get('mandatees').sortBy('priorityString');
   }),
 
   formallyOkToShow: computed('formallyOk', function() {

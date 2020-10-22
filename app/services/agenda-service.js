@@ -119,7 +119,7 @@ export default Service.extend({
     await selectedAgenda.hasMany('agendaitems').reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
-    const sortedMandatees = await mandatees.sortBy('priority');
+    const sortedMandatees = await mandatees.sortBy('priorityString');
     const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
     const isAnnouncement = subcase.get('showAsRemark');
