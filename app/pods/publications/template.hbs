@@ -38,16 +38,16 @@
           <WebComponents::AuAlert @message={{t "publications-new-warning-message"}} @icon="ki-circle-info" />
           <div class="au2-form-group-layout au2-form-group-layout--standard">
             <div class="au2-form-group">
-              <WebComponents::AuLabel for="defaultInput">{{t "publications-number-required"}}</WebComponents::AuLabel>
-              <AuInput type="text" id="publicationNumberInput" class="au2-input--max-width" @block="true"/>
+              <WebComponents::AuLabel for="publicationNumberInput">{{t "publications-number-required"}}</WebComponents::AuLabel>
+              <AuInput type="text" id="publicationNumberInput" class="au2-input--max-width" @block="true" @value={{mut publication.number}}/>
             </div>
             <div class="au2-form-group">
-              <WebComponents::AuLabel for="defaultInput">{{t "name-subcase-required"}}</WebComponents::AuLabel>
-              <WebComponents::AuTextarea @rows="2" />
+              <WebComponents::AuLabel for="shortTitleInput">{{t "name-subcase-required"}}</WebComponents::AuLabel>
+              <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}}/>
             </div>
             <div class="au2-form-group">
-              <WebComponents::AuLabel for="defaultInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-              <WebComponents::AuTextarea @rows="4" />
+              <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+              <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}} />
             </div>
           </div>
         </WebComponents::AuModal::Modal::Body>
@@ -60,7 +60,7 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <AuButton @skin="primary">{{t "publications-new-button-text"}}</AuButton>
+                <AuButton @skin="primary" {{on "click" this.createNewPublication}}>{{t "publications-new-button-text"}}</AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
