@@ -116,6 +116,7 @@
   },
   "dependencies": {
     "ember-in-viewport": "^3.7.5",
+    "ember-inline-svg": "^1.0.0",
     "ember-test-selectors": "^3.0.0"
   }
 }

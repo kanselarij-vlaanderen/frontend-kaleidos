@@ -1,0 +1,51 @@
+/* ==========================================================================
+  au2-badge
+  ========================================================================== */
+
+  .au2-badge {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    svg * {
+      fill: currentColor;
+    }
+  }
+  
+  /* Sizes
+     ========================================================================== */
+  
+  .au2-badge--small {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  /* Skins
+     ========================================================================== */
+  
+  .au2-badge--default {
+    background: $au-gray-200;
+    color: #666;
+  }
+  
+  .au2-badge--white {
+    background: #FFF;
+  }
+  
+  .au2-badge--success {
+    background: $au-green-500;
+    color: #FFF;
+  }
+  
+  .au2-badge--error {
+    background: #DB3434;
+    color: #FFF;
+  }
+  
+  .au2-badge--warning {
+    background: $au-yellow-400;
+    color: #000;
+  }

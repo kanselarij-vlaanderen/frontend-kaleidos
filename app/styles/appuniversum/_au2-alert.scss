@@ -1,0 +1,54 @@
+/* ==========================================================================
+  au2-alert
+  ========================================================================== */
+
+  .au2-alert {
+    padding: 1.6rem;
+    margin: 0 0 1.6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .au2-alert {
+    .au2-badge {
+      flex-shrink: 0;
+    }
+  }
+  
+  .au2-alert__body {
+    display: flex;
+    align-items: center;
+    & > *:not(:last-child) {
+      margin-right: 2rem;
+    }
+  }
+  
+  .au2-alert__text {
+    .au2-alert__title {
+      font-weight: 500;
+      margin-bottom: .2rem;
+    }
+    .au2-alert__message {
+      margin-bottom: 0;
+    }
+  }
+  
+  .au2-alert--default {
+    background: $au-gray-100;
+    .au2-badge--default {
+      background-color: #FFFFFF;
+    }
+  }
+  
+  .au2-alert--success {
+    background: $au-green-100;
+  }
+  
+  .au2-alert--error {
+    background: $au-red-100;
+  }
+  
+  .au2-alert--warning {
+    background: $au-yellow-100;
+  }

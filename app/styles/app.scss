@@ -194,8 +194,14 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 
 //
+@import 'appuniversum/au2-alert';
+@import 'appuniversum/au2-badge';
 @import 'appuniversum/au2-button';
+@import 'appuniversum/au2-form-group';
+@import 'appuniversum/au2-icon';
 @import 'appuniversum/au2-input';
+@import 'appuniversum/au2-label';
 @import 'appuniversum/au2-modal';
+@import 'appuniversum/au2-textarea';
 @import 'appuniversum/au2-toolbar';
 @import 'appuniversum/au2-toolbar-complex';

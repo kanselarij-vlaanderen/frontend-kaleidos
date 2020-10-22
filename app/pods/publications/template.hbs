@@ -33,15 +33,29 @@
     </Navbar>
     {{#if isShowingPublicationModal}}
       <WebComponents::AuModal>
-        <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} />
+        <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} @hideModal={{this.hidePublicationModal}}/>
         <WebComponents::AuModal::Modal::Body>
-          <p>{{t "publications-new-warning-message"}}</p>
+          <WebComponents::AuAlert @message={{t "publications-new-warning-message"}} @icon="ki-circle-info" />
+          <div class="au2-form-group-layout au2-form-group-layout--standard">
+            <div class="au2-form-group">
+              <WebComponents::AuLabel for="defaultInput">{{t "publications-number-required"}}</WebComponents::AuLabel>
+              <AuInput type="text" id="publicationNumberInput" class="au2-input--max-width" @block="true"/>
+            </div>
+            <div class="au2-form-group">
+              <WebComponents::AuLabel for="defaultInput">{{t "name-subcase-required"}}</WebComponents::AuLabel>
+              <WebComponents::AuTextarea @rows="2" />
+            </div>
+            <div class="au2-form-group">
+              <WebComponents::AuLabel for="defaultInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+              <WebComponents::AuTextarea @rows="4" />
+            </div>
+          </div>
         </WebComponents::AuModal::Modal::Body>
         <WebComponents::AuModal::Modal::Footer>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <AuButton @skin="borderless">{{t "cancel"}}</AuButton>
+                <AuButton @skin="borderless" {{on "click" this.hidePublicationModal}}>{{t "cancel"}}</AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">

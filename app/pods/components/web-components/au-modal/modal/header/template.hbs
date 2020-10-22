@@ -10,7 +10,7 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <AuButton @icon="close" @skin="tertiary" @layout="icon-only"></AuButton>
+          <AuButton @icon="close" @skin="tertiary" @layout="icon-only" {{on "click" this.hideModal}}></AuButton>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>

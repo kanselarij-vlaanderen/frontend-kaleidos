@@ -22,10 +22,13 @@ export default class PublicationsController extends Controller {
     return 0;
   }
 
+  @action
+  hidePublicationModal() {
+    this.isShowingPublicationModal = false;
+  }
 
   @action
   showNewPublicationModal() {
-    console.log('showNewPublicationModal');
     this.isShowingPublicationModal = true;
   }
 }
