@@ -117,6 +117,7 @@
   "dependencies": {
     "au2-kaleidos": "^1.0.0",
     "ember-in-viewport": "^3.7.5",
-    "ember-test-selectors": "^3.0.0"
+    "ember-test-selectors": "^3.0.0",
+    "ember-tooltips": "^3.4.5"
   }
 }
