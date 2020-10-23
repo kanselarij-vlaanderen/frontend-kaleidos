@@ -47,7 +47,6 @@ export default class PublicationsController extends Controller {
     return null;
   }
 
-
   @action
   createNewPublication() {
     if (!this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
@@ -63,7 +62,13 @@ export default class PublicationsController extends Controller {
 
   @action
   closePublicationModal() {
+    this.publication = {
+      number: null,
+      shortTitle: null,
+      longTitle: null,
+    };
     this.isShowingPublicationModal = false;
+    this.hasError = false;
   }
 
   @action
