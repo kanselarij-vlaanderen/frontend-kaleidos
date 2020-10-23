@@ -1,0 +1,15 @@
+/* ==========================================================================
+  au2-scroll-wrapper
+   ========================================================================== */
+
+.au2-scroll-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.au2-scroll-wrapper__body {
+  overflow: scroll;
+  flex: 1;
+  height: 100%;
+}

@@ -1,0 +1,32 @@
+/* ==========================================================================
+  au2-status-pill
+   ========================================================================== */
+
+.au2-status-pill {
+  border: .1rem solid $au-gray-300;
+  border-radius: .5rem;
+  padding: .35rem .6rem;
+  white-space: nowrap;
+}
+
+.au2-status-pill__label {
+  padding-left: .4rem;
+}
+
+.au2-status-pill--in-progress {
+  svg path{
+    fill: $au-yellow-400;
+  }
+}
+
+.au2-status-pill--done {
+  svg path{
+    fill: $au-green-500;
+  }
+}
+
+.au2-status-pill--not-started {
+  svg path{
+    fill: $au-gray-800;
+  }
+}

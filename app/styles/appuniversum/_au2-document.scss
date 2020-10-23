@@ -1,0 +1,17 @@
+/* ==========================================================================
+  au2-document
+  ========================================================================== */
+
+.au2-document {
+  display: flex;
+  padding: .8rem 1.2rem .8rem 0;
+
+  .au2-icon--document-updated svg path {
+    fill: $au-green-500;
+  }
+}
+
+.au2-document__name {
+  padding-left: .6rem;
+  color: $au-gray-600;
+}

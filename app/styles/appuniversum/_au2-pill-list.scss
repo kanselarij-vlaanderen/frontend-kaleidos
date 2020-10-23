@@ -1,0 +1,12 @@
+/* ==========================================================================
+  au2-pill-list
+   ========================================================================== */
+
+.au2-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .au2-pill:not(:first-of-type) {
+    margin-left: .5rem;
+  }
+}

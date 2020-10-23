@@ -1,0 +1,18 @@
+/* ==========================================================================
+  au2-empty-state
+  ========================================================================== */
+
+.au2-empty-state {
+  display: flex;
+  align-items: center;
+}
+
+.au2-empty-state {
+  .au2-badge {
+    margin-right: 2rem;
+  }
+}
+
+.au2-empty-state__content {
+  color: $au-gray-600;
+}

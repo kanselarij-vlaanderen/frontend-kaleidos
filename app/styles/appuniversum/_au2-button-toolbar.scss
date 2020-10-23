@@ -1,0 +1,17 @@
+/* ==========================================================================
+  Button toolbar
+   ========================================================================== */
+
+.au2-button-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+.au2-button-toolbar .au2-button {
+  margin-right: 1rem;
+}
+
+.au2-button-toolbar .au2-button:last-child {
+  margin: 0;
+}
+

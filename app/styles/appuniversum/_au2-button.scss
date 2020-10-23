@@ -1,5 +1,5 @@
 /* ==========================================================================
-  c-button
+  au2-button
    ========================================================================== */
 
 /* Mixins
@@ -59,17 +59,17 @@
    ========================================================================== */
 
 .au2-button--primary {
-  background: $au-blue-600;
+  background: $au-blue-700;
   color: #FFF;
   &:hover,
   &:active {
-    background: $au-blue-700;
+    background: $au-blue-600;
   }
 }
 
 .au2-button--secondary {
-  box-shadow: inset 0 0 0 .2rem $au-blue-600;
-  color: $au-blue-600;
+  box-shadow: inset 0 0 0 .2rem $au-blue-700;
+  color: $au-blue-700;
   background: none;
   transition: box-shadow .2s;
   &:hover,
@@ -79,6 +79,16 @@
 }
 
 .au2-button--tertiary {
+  box-shadow: inset 0 0 0 .1rem $au-gray-300;
+  color: $au-blue-700;
+  background: none;
+  &:hover,
+  &:active {
+    color: $au-blue-600;
+  }
+}
+
+.au2-button--borderless {
   border: .1rem solid transparent;
   color: $au-blue-700;
   background: none;

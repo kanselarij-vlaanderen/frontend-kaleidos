@@ -1,0 +1,23 @@
+/* ==========================================================================
+  au2-progress-bar
+   ========================================================================== */
+
+.au2-progress-bar {
+    width: 100%;
+    background-color: $au-gray-300;
+}
+
+.au2-progress-bar__progress {
+    height: .4rem;
+    background-color: $au-blue-600;
+    animation: fill 1s linear 1;
+}
+
+@keyframes fill {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}

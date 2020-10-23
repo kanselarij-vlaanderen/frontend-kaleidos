@@ -1,0 +1,98 @@
+/* ==========================================================================
+  au2-table
+   ========================================================================== */
+
+.au2-table {
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.au2-table td,
+.au2-table th {
+  vertical-align: middle;
+  padding: 1.2rem 0.6rem;
+  border-bottom: .1rem solid $au-gray-300;
+}
+
+.au2-table tr td:first-child,
+.au2-table tr th:first-child {
+  padding-left: 1.2rem;
+}
+
+.au2-table tr td:last-child,
+.au2-table tr th:last-child {
+  padding-right: 1.2rem;
+}
+
+.au2-table th {
+  border-bottom-width: .2rem;
+  text-align: left;
+  font-weight: 500;
+  color: $au-gray-600;
+}
+
+.au2-table--striped tr:nth-child(odd) td {
+  background: $au-gray-100;
+}
+
+.au2-table tr:last-child td {
+  border-bottom-width: 0
+}
+
+.au2-table__header--actions,
+.au2-table__cell--actions {
+  width: 3rem;
+}
+
+.au2-table__cell--actions > button {
+  float: right;
+}
+
+.au2-table {
+  // If button toolbar appears in first column
+  tr td:first-child .au2-button-toolbar {
+      justify-content: flex-start;
+  }
+  .au2-button-toolbar {
+    justify-content: flex-end;
+  }
+}
+
+
+.au2-table code {
+  background-color: #EEE;
+  color: #905;
+  padding: .2rem .4rem;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1.3rem;
+}
+
+.au2-table .au2-table--vertical-align-top {
+  vertical-align: top;
+}
+
+.au2-table--advanced {
+  th {
+    color: $au-gray-900;
+    background-color: $au-gray-200;
+  }
+
+  .au2-table__cell--accent {
+    background-color: $au-gray-100;
+  }
+}
+
+/* Table columns
+   ========================================================================== */
+
+$tableColCount: 12;
+$i: 1;
+
+@while $i < $tableColCount {
+  .au2-table__col--#{$i} {
+    width: #{$i / $tableColCount * 100%};
+  }
+
+  $i: $i + 1;
+}

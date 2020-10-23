@@ -1,5 +1,5 @@
 /* ==========================================================================
-  c-brand
+  au2-brand
    ========================================================================== */
 
 .au2-brand {
@@ -18,8 +18,8 @@
 
 .au2-brand__logo {
   position: relative;
-  width: 4.4rem;
-  height: 4.4rem;
+  width: 4.9rem;
+  height: 4.9rem;
   padding-left: .75rem;
   overflow: hidden;
   background-color: $au-yellow-300;
@@ -61,5 +61,5 @@
   font-weight: 500;
   color: $au-gray-1000;
   margin-left: .6rem;
-  transition: color 125ms cubic-bezier(.19,1,.22,1);
+  transition: color 125ms cubiau2-bezier(.19,1,.22,1);
 }

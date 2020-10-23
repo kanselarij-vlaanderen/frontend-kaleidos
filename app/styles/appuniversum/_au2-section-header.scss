@@ -1,0 +1,21 @@
+.au2-section-header {
+  background-color: $au-yellow-300;
+  padding: 1.5rem 2rem;
+  font-weight: 500;
+  font-size: 1.3rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.au2-section-header__item::after {
+  content: ", ";
+  white-space: pre;
+}
+
+.au2-section-header__item:last-child::after {
+  content:"";
+}
+
+.au2-section-header__item--muted {
+  color: $au-yellow-600;
+}

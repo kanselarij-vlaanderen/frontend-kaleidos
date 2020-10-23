@@ -1,0 +1,24 @@
+/* ==========================================================================
+  au2-pagination
+   ========================================================================== */
+
+.au2-pagination {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.au2-pagination__element {
+  padding: 0 0.5rem;
+}
+
+.au2-pagination__list {
+  display: flex;
+  align-items: center;
+}
+
+.au2-pagination__element-link--active {
+  font-weight: 500;
+}

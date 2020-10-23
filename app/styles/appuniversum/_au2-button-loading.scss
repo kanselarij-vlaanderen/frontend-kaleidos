@@ -1,0 +1,20 @@
+/* ==========================================================================
+  au2-button-loading
+   ========================================================================== */
+
+.au2-button-loading {
+  font-family: "Flanders Art Sans", sans-serif;
+  background: $au-gray-200;
+  font-size: 1.6rem;
+  border: none;
+  appearance: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: top;
+  padding: 1rem 1.2rem;
+}
+
+.au2-button-loading svg path {
+  fill: currentColor;
+}

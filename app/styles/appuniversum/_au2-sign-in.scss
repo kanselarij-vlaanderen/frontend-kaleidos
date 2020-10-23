@@ -1,0 +1,30 @@
+/* ==========================================================================
+  au2-sign-in
+  ---
+  Styles for sign in page
+   ========================================================================== */
+
+.au2-sign-in {
+  padding: 2.4rem;
+}
+
+@media (min-width: 900px) {
+  .au2-sign-in {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0;
+  }
+}
+
+.au2-sign-in__inner {
+  max-width: 50rem;
+  margin: 0 auto;
+}
+
+.au2-sign-in__heading {
+  font-weight: 400;
+  font-family: 'Flanders Art Serif';
+  font-size: 4.8rem;
+  margin: 0 0 1.2rem;
+}

@@ -1,0 +1,24 @@
+/* ==========================================================================
+  au2-list
+  ========================================================================== */
+
+.au2-list .au2-list__item {
+    margin: 1.5rem 0;
+}
+
+.au2-list__item--flex {
+    display: flex;
+    align-items: center;
+}
+
+.au2-list--bordered {
+    .au2-list__item {
+        border-bottom: .1rem solid $au-gray-300;
+        padding: 1.2rem 0;
+        margin: 0;
+
+        &:last-child {
+            border: none;
+        }
+    }
+}

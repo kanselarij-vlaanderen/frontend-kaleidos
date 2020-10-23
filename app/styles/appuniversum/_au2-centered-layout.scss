@@ -1,0 +1,22 @@
+/* ==========================================================================
+  Centered layout
+   ========================================================================== */
+
+.au2-centered-layout {
+  padding: 2.4rem;
+}
+
+@media (min-width: 900px) {
+  .au2-centered-layout {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0;
+  }
+
+  .au2-centered-layout__inner {
+    max-width: 50rem;
+    min-width: 40rem;
+    margin: 0 auto;
+  }
+}

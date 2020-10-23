@@ -1,0 +1,12 @@
+/* ==========================================================================
+  au2-accordion
+  ========================================================================== */
+
+.au2-accordion__content {
+  display: none;
+  transition: max-height 0.3s cubiau2-bezier(0, 1.05, 0, 1), overflow 0s 0s;
+}
+
+.au2-accordion--is-active .au2-accordion__content {
+  display: block;
+}

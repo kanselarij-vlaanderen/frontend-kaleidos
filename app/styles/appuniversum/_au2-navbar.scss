@@ -1,0 +1,55 @@
+/* ==========================================================================
+  Component: navbar
+  ---
+  A container for navigational elements
+  ========================================================================== */
+
+.au2-navbar {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  min-height: 5rem;
+}
+
+.au2-navbar > .au2-toolbar {
+  flex: 1 0 auto;
+}
+
+.au2-navbar--auto {
+  height: auto;
+  min-height: auto;
+}
+
+.au2-navbar--white {
+  background: #FFF;
+}
+
+.au2-navbar--no-pad {
+  padding: 0;
+}
+
+.au2-navbar--gray-100 {
+  background: $au-gray-100;
+}
+
+.au2-navbar--gray-200 {
+  background: $au-gray-200;
+}
+
+/* Bordered equivalents
+  ========================================================================== */
+
+.au2-navbar--bordered-top {
+  border-top: .1rem solid $au-gray-300;
+}
+
+.au2-navbar--bordered-bottom {
+  border-bottom: .1rem solid $au-gray-300;
+}
+
+/* Sizes
+  ========================================================================== */
+
+.au2-navbar--large {
+  min-height: 6rem;
+}

@@ -1,0 +1,64 @@
+/* ==========================================================================
+  au2-panel
+   ========================================================================== */
+
+.au2-panel {
+  background: #FFF;
+  border: .1rem solid #C6CDD3;
+}
+
+.au2-panel__header {
+  padding: 0 2rem;
+  height: 5.5rem;
+  border-bottom: .1rem solid #C6CDD3;
+  display: flex;
+  align-items: center;
+
+  .au2-panel__title {
+    font-weight: 500;
+    font-size: 2rem;
+    margin: 0;
+  }
+}
+
+.au2-panel__body {
+  padding: 2rem;
+
+  > p:only-child {
+    margin: 0;
+  }
+
+  + .au2-panel__body {
+    border-top: .1rem solid #C6CDD3;
+  }
+
+  // Padding for tables inside of panels
+  > .au2-table tr td:first-child,
+  > .au2-table tr th:first-child {
+    padding-left: 2rem;
+  }
+  > .au2-table tr td:last-child,
+  > .au2-table tr th:last-child {
+    padding-right: 2rem;
+  }
+
+  // Border styles for document cards inside of panels
+  .au2-document-card {
+    border: none;
+    &:not(:last-of-type) {
+      border-bottom: .1rem solid $au-gray-300;
+    }
+  }
+}
+
+.au2-panel__body--no-pad {
+  padding: 0;
+}
+
+.au2-panel__footer {
+  padding: 0 2rem;
+  height: 5.5rem;
+  border-top: .1rem solid #C6CDD3;
+  display: flex;
+  align-items: center;
+}
