@@ -305,6 +305,7 @@ context('Agenda tests', () => {
 
     cy.get(modal.verify.container).get('.vlc-navbar')
       .contains('Agenda afsluiten')
+      .wait(1)
       .get(modal.verify.save)
       .click();
 
@@ -382,6 +383,7 @@ context('Agenda tests', () => {
 
     cy.get(modal.verify.container).get('.vlc-navbar')
       .contains('Agenda afsluiten')
+      .wait(1)
       .get(modal.verify.save)
       .click();
 
