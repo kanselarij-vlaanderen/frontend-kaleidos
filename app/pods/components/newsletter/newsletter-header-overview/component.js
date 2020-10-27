@@ -19,7 +19,7 @@ export default Component.extend({
   isVerifying: null,
 
   shouldShowPrintButton: computed('routing.currentRouteName', function() {
-    return this.routing.get('currentRouteName').includes('newsletter.overview');
+    return this.routing.get('currentRouteName').includes('newsletter.print');
   }),
 
   actions: {

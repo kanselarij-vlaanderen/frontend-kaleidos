@@ -445,23 +445,23 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  * @function
  */
 const approveDesignAgenda = () => {
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+  // cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
-  cy.route('GET', '/agendas/**').as('getAgendas');
+  // cy.route('GET', '/agendas/**').as('getAgendas');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
   cy.get('.vlc-toolbar').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
-  cy.get(agenda.approveAgenda).click()
-    .wait('@patchAgenda', {
-      timeout: 12000,
-    })
-    // .wait('@getAgendaitems', { timeout: 12000 })
-    .wait('@getAgendas', {
-      timeout: 12000,
-    });
+  cy.get(agenda.approveAgenda).click();
+  // .wait('@patchAgenda', {
+  //   timeout: 12000,
+  // })
+  // .wait('@getAgendaitems', { timeout: 12000 })
+  // .wait('@getAgendas', {
+  //   timeout: 12000,
+  // });
 
   cy.get('.vl-loader', {
     timeout: 60000,
@@ -476,7 +476,6 @@ const approveDesignAgenda = () => {
  */
 const approveAndCloseDesignAgenda = () => {
   cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
-  // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
@@ -484,15 +483,7 @@ const approveAndCloseDesignAgenda = () => {
   cy.get('.vlc-toolbar').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
-  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click()
-    .wait('@patchAgendaAndCloseAgenda', {
-      timeout: 12000,
-    })
-  // .wait('@getAgendaitems', { timeout: 12000 })
-    .wait('@getAgendasInCloseDesignAgenda', {
-      timeout: 12000,
-    });
-
+  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
   cy.get('.vl-loader', {
     timeout: 60000,
   }).should('not.exist');
@@ -542,9 +533,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
-
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-      // cy.route('GET', `/subcases?filter[:has-no:agendaitems]=yes&filter[:not:is-archived]=true&filter[short-title]=${caseTitle}**`).as('getSubcasesFilteredBetter');
 
       if (caseTitle) {
         cy.get('@formGrid').eq(0)
@@ -601,7 +589,6 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  */
 function toggleShowChanges(refresh) {
   cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
-  // cy.route('GET', '/agenda-sort/agenda-with-changes**').as('getChanges');
 
   if (refresh) {
     cy.get('.vlc-side-nav-item', {
@@ -622,7 +609,6 @@ function toggleShowChanges(refresh) {
       })
       .click();
     cy.wait(2000); // a lot of data is being reloaded
-    // cy.wait('@getChanges', {timeout: 20000});
   } else {
     cy.clickReverseTab('Overzicht');
   }
@@ -728,6 +714,7 @@ function closeAgenda() {
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
+  cy.get(modal.verify.save).click();
   cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');

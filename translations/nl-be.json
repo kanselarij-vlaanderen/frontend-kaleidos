@@ -603,5 +603,7 @@
   "newsletter-update-notas-edited-on": "Gewijzigd op",
   "newsletter-update-notas-edited-text": "Geüpload op {date} om {time}",
   "document-not-consultable": "Dit document is niet consulteerbaar voor uw profiel",
-  "document-is-confidential": "Dit document is vertrouwelijk"
+  "document-is-confidential": "Dit document is vertrouwelijk",
+  "close-agenda-message": "Bent u zeker dat u de agenda wil afsluiten?",
+  "close-agenda": "Agenda afsluiten"
 }
