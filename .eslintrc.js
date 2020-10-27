@@ -49,7 +49,7 @@ module.exports = {
     "template-curly-spacing": ["error", "never"],
     "no-eval": 'error',
     'no-useless-escape': 'error',
-    "func-style": ["warn", "expression", { "allowArrowFunctions": true }],
+    "func-style": ["off", "expression", { "allowArrowFunctions": true }],
     "wrap-iife": "error",
     "no-loop-func": "error",
     "no-new-func": "error",

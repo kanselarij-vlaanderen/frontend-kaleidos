@@ -20,7 +20,9 @@ npx icon-font-generator $PATH_TO_SVG_FILES"/*.svg" \
   --name $FONT_NAME \
   --htmlpath "./tmp/icons-temp.html" \
   --prefix $FONT_PREFIX \
-  --height=1000
+  --height=1000 \
+  --descent 75 \
+  --center
 
 # The two following fixes are performed so that xmllint doesn't argue about broken tags...
 # Fixing broken <br> tags to become <br />
