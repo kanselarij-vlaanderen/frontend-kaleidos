@@ -15,7 +15,7 @@ export default Service.extend({
   currentSession: service(),
   newsletterService: service(),
 
-  addedDocuments: null,
+  addedPieces: null,
   addedAgendaitems: null,
 
   assignNewSessionNumbers() {
@@ -39,7 +39,7 @@ export default Service.extend({
     }).then((result) => result.body.agendas);
   },
 
-  async getDocumentNames(model) {
+  async getPieceNames(model) {
     return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
@@ -66,7 +66,7 @@ export default Service.extend({
     if (!oldAgenda) {
       return oldAgenda;
     }
-    // Use approveagendaService to duoplicate AgendaItems into new agenda.
+    // Use approveagendaService to duoplicate Agendaitems into new agenda.
     const result = await ajax({
       method: 'POST',
       url: '/agenda-approve/approveAgenda',
@@ -106,7 +106,7 @@ export default Service.extend({
       url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
     })
       .then(bind(this, (result) => {
-        this.set('addedDocuments', result.addedDocuments);
+        this.set('addedPieces', result.addedDocuments);
         this.set('addedAgendaitems', result.addedAgendaitems);
         return result;
       }))
@@ -115,7 +115,7 @@ export default Service.extend({
       });
   },
 
-  async createNewAgendaItem(selectedAgenda, subcase, index) {
+  async createNewAgendaitem(selectedAgenda, subcase, index) {
     await selectedAgenda.hasMany('agendaitems').reload();
     let priorityToAssign = 0;
     const mandatees = await subcase.get('mandatees');
@@ -172,8 +172,8 @@ export default Service.extend({
       formallyOk: CONFIG.notYetFormallyOk,
       showAsRemark: isAnnouncement,
       mandatees,
-      documentVersions: await subcase.get('documentVersions'),
-      linkedDocumentVersions: await subcase.get('linkedDocumentVersions'),
+      pieces: await subcase.get('pieces'),
+      linkedPieces: await subcase.get('linkedPieces'),
       agendaActivity,
       showInNewsletter: true,
       treatments: A([agendaItemTreatment]),
@@ -183,30 +183,31 @@ export default Service.extend({
     await selectedAgenda.hasMany('agendaitems').reload();
     subcase.set('requestedForMeeting', meeting);
     await subcase.hasMany('agendaActivities').reload();
+    await subcase.hasMany('treatments').reload();
     await subcase.save();
     updateModifiedProperty(selectedAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
     if (agendaitem.showAsRemark) {
-      const newsItem = await this.newsletterService.createNewsItemForAgendaItem(agendaitem, true);
+      const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
   },
 
-  async groupAgendaItemsOnGroupName(agendaitems) {
+  async groupAgendaitemsOnGroupName(agendaitems) {
     let previousAgendaitemGroupName;
     return Promise.all(
-      agendaitems.map(async(item) => {
+      agendaitems.map(async(agendaitem) => {
         let currentAgendaitemGroupName;
-        const mandatees = await item.get('sortedMandatees');
-        if (item.isApproval) {
-          item.set('groupName', null);
-          item.set('ownGroupName', null);
+        const mandatees = await agendaitem.get('sortedMandatees');
+        if (agendaitem.isApproval) {
+          agendaitem.set('groupName', null);
+          agendaitem.set('ownGroupName', null);
           return;
         }
         if (mandatees.length === 0) {
-          item.set('groupName', 'Geen toegekende ministers');
-          currentAgendaitemGroupName = 'Geen toegekende ministers';
+          agendaitem.set('groupName', this.intl.t('no-mandatee-assigned'));
+          currentAgendaitemGroupName = this.intl.t('no-mandatee-assigned');
         } else {
           currentAgendaitemGroupName = mandatees
             .map((mandatee) => mandatee.title)
@@ -215,26 +216,37 @@ export default Service.extend({
 
         if (currentAgendaitemGroupName !== previousAgendaitemGroupName) {
           previousAgendaitemGroupName = currentAgendaitemGroupName;
-          item.set('groupName', currentAgendaitemGroupName);
+          agendaitem.set('groupName', currentAgendaitemGroupName);
         } else {
-          item.set('groupName', null);
+          agendaitem.set('groupName', null);
         }
-        item.set('ownGroupName', currentAgendaitemGroupName);
+        agendaitem.set('ownGroupName', currentAgendaitemGroupName);
       })
     );
   },
 
   async deleteAgendaitem(agendaitem) {
-    const itemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
+    const agendaitemToDelete = await this.store.findRecord('agendaitem', agendaitem.get('id'), {
       reload: true,
     });
-    itemToDelete.set('aboutToDelete', true);
-    const agendaActivity = await itemToDelete.get('agendaActivity');
+    agendaitemToDelete.set('aboutToDelete', true);
+    const agendaActivity = await agendaitemToDelete.get('agendaActivity');
+    const treatments = await agendaitemToDelete.get('treatments');
 
     if (agendaActivity) {
       const subcase = await agendaActivity.get('subcase');
       await agendaActivity.hasMany('agendaitems').reload();
       const agendaitemsFromActivity = await agendaActivity.get('agendaitems');
+      if (treatments) {
+        await Promise.all(treatments.map(async(treatment) => {
+          const newsletter = await treatment.get('newsletterInfo');
+          if (newsletter) {
+            await newsletter.destroyRecord();
+          }
+          // TODO DELETE REPORT !
+          await treatment.destroyRecord();
+        }));
+      }
       await Promise.all(agendaitemsFromActivity.map(async(agendaitem) => {
         const agenda = await agendaitem.get('agenda');
         await agendaitem.destroyRecord();
@@ -244,8 +256,9 @@ export default Service.extend({
       await subcase.set('requestedForMeeting', null);
       await subcase.save();
       await subcase.hasMany('agendaActivities').reload();
+      await subcase.hasMany('treatments').reload();
     } else {
-      await itemToDelete.destroyRecord();
+      await agendaitemToDelete.destroyRecord();
     }
   },
 
@@ -256,16 +269,16 @@ export default Service.extend({
     this.toaster.error(this.intl.t('action-not-allowed'), this.intl.t('warning-title'));
   },
 
-  async retrieveModifiedDateFromNota(agendaItem) {
-    const nota = await agendaItem.get('nota');
+  async retrieveModifiedDateFromNota(agendaitem) {
+    const nota = await agendaitem.get('nota');
     if (!nota) {
       return null;
     }
-    const versions = await nota.get('documentVersions');
-    const hasRevision = versions.length > 1;
+    const pieces = await nota.get('pieces');
+    const hasRevision = pieces.length > 1;
     if (hasRevision) {
-      const lastVersion = await nota.get('lastDocumentVersion');
-      return lastVersion.created;
+      const lastPiece = await nota.get('lastPiece');
+      return lastPiece.created;
     }
     return null;
   },

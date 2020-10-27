@@ -1,20 +1,21 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
 
   @service store;
 
-  async navigateToNeighbouringItem(agendaItem) {
+  @action
+  async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
-    const previousNumber = agendaItem.priority - 1;
+    const previousNumber = agendaitem.priority - 1;
     const result = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
-      'filter[show-as-remark]': agendaItem.showAsRemark,
+      'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:gte:priority]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
       'page[size]': 1,
     });
@@ -35,9 +36,9 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       .sortBy('priority');
     if (announcements) {
       const actualAnnouncements = announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
-      await setAgendaItemsPriority(actualAnnouncements, isEditor, isDesignAgenda);
+      await setAgendaitemsPriority(actualAnnouncements, isEditor, isDesignAgenda);
     }
-    await setAgendaItemsPriority(actualAgendaitems, isEditor, isDesignAgenda);
+    await setAgendaitemsPriority(actualAgendaitems, isEditor, isDesignAgenda);
   }
 
   @action

@@ -3,13 +3,13 @@ import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaSidebar extends Component {
   @service sessionService;
   @service('current-session') currentSessionService;
   @service agendaService;
-  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
 
   @tracked isShowingChanges = false;
   @tracked isReAssigningPriorities = false;
@@ -18,8 +18,8 @@ export default class AgendaSidebar extends Component {
   dragHandleClass = '.vlc-agenda-detail-sidebar__sub-item';
 
   @action
-  selectAgendaItemAction(agendaitem) {
-    this.args.selectAgendaItem(agendaitem);
+  selectAgendaitemAction(agendaitem) {
+    this.args.selectAgendaitem(agendaitem);
   }
 
   @action
@@ -32,7 +32,7 @@ export default class AgendaSidebar extends Component {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
     this.isReAssigningPriorities = true;
-    await setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
+    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
     this.isReAssigningPriorities = false;
   }
 }

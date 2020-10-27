@@ -57,7 +57,7 @@ export default ModelWithToasts.extend({
       const userDataFields = await userData.json();
       const vals = userDataFields.data.attributes;
       const errorMessage = this.intl.t('changes-could-not-be-saved-message', {
-        item: this.intl.t(this.get('constructor.modelName')),
+        modelName: this.intl.t(this.get('constructor.modelName')),
         firstname: vals['first-name'],
         lastname: vals['last-name'],
         time: oldModelModifiedMoment.locale('nl').fromNow(),

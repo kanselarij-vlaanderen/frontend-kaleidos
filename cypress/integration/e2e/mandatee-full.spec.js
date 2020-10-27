@@ -26,7 +26,7 @@ context('Full test', () => {
 
   it('should Add new minister', () => {
     cy.visit('/');
-    cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaItem');
+    cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaitem'); // not used ..
     const KIND = 'Ministerraad';
 
     const agendaDate = Cypress.moment().add(1, 'weeks')

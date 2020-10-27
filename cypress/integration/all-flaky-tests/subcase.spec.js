@@ -93,10 +93,9 @@ context('Subcase tests', () => {
     });
 
     cy.openAgendaForDate(agendaDate);
-    cy.route('GET', '/cases/**/subcases').as('getCaseSubcases');
     cy.contains(SubcaseTitleShort).click();
     cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.wait('@getCaseSubcases');
+      cy.wait(1000); // TODO do we need a wait here ?
       cy.get('.vl-tab').as('agendaitemTabs');
       cy.get('@agendaitemTabs').eq(0)
         .should('contain', 'Dossier')
@@ -180,10 +179,10 @@ context('Subcase tests', () => {
     // Aanmaken subcase.
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
 
-    // Aanmaken agendaItem
+    // Aanmaken agendaitem
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(shortSubcaseTitle, false);
-    cy.openAgendaItemDossierTab(shortSubcaseTitle);
+    cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
     cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
@@ -197,7 +196,7 @@ context('Subcase tests', () => {
       .wait('@patchAgendaitem');
 
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
-    // "Go to agendaItem
+    // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(agenda.subcase.agendaLink).click();
@@ -237,16 +236,16 @@ context('Subcase tests', () => {
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort); // TODO: doesn't find this item it's looking for in the agenda it just openend
-    cy.route('GET', '**/themes').as('getAgendaItemThemes');
+    cy.openAgendaitemKortBestekTab(SubcaseTitleShort); // TODO: doesn't find this item it's looking for in the agenda it just openend
+    cy.route('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(agenda.item.news.editLink).click();
-    cy.wait('@getAgendaItemThemes');
+    cy.wait('@getAgendaitemThemes');
     cy.contains('Annuleren').click();
 
     // open themes ediging pane.
-    cy.route('GET', '**/themes').as('getAgendaItemThemes');
+    cy.route('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(agenda.item.news.editLink).click();
-    cy.wait('@getAgendaItemThemes');
+    cy.wait('@getAgendaitemThemes');
 
     // Toggle some themes.
     cy.get(agenda.item.news.themesSelector).contains('Wonen')
@@ -282,12 +281,12 @@ context('Subcase tests', () => {
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     // cy.route('GET', '/agendas**').as('getAgendas');
-    cy.route('GET', '/agendaitems**').as('getAgendaItems');
+    cy.route('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     // cy.wait('@getAgendas');
-    cy.wait('@getAgendaItems');
+    cy.wait('@getAgendaitems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
@@ -323,11 +322,11 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    // cy.route('GET', '**/document-versions?page*size*=9999').as('documentVersions');
+    // cy.route('GET', '**/pieces?page*size*=9999').as('pieces');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(agenda.item.news.saveButton).click()
       .wait('@newsletterInfosPatch');
-    // cy.wait('@documentVersions');
+    // cy.wait('@pieces');
 
     // dont open links in new windows.
 
@@ -337,12 +336,12 @@ context('Subcase tests', () => {
       .click();
     cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
       .click();
-    // "Go to agendaItem
+    // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
 
-    cy.openAgendaItemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
 
     cy.get(agenda.item.themes).contains('Sport');
     cy.get(agenda.item.themes).contains('Overheid');

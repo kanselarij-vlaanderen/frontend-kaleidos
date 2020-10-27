@@ -17,7 +17,7 @@ export default class ThemesSelector extends Component {
   // This will load all the themes from the API once invoked
   @task(function *() {
     const themes = yield this.store.query('theme', {}); // Query to make sure you get all themes from the API instead
-    this.themes = themes.sortBy('label').filter((item) => !item.deprecated);
+    this.themes = themes.sortBy('label').filter((theme) => !theme.deprecated);
     this.themeLabels = this.themes.map((theme) => ({
       label: theme.label,
       selected: false,

@@ -4,11 +4,21 @@
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <ul class="vl-tabs vl-u-reset-margin">
+          {{#if hasPublicationsEnabled}}
+            <li class="vl-tab" data-test-m-header-publications>
+              {{#link-to
+                "publications"
+                class="vl-tab__link"
+              }}
+                {{t "publications"}}
+              {{/link-to}}
+            </li>
+          {{/if}}
           <li class="vl-tab" data-test-m-header-agendas>
             {{#link-to
               "agendas.overview"
               class="vl-tab__link"
-              current-when="agendas agenda print-overviews.decisions print-overviews.notes print-overviews.press-agenda"
+              current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
             }}
               {{t "agendas"}}
             {{/link-to}}

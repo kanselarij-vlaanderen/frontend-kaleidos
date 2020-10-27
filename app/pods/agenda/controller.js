@@ -20,25 +20,17 @@ export default Controller.extend({
     return get(this, 'router.currentRouteName') === 'agenda.print';
   }),
 
-  currentAgendaItems: alias('sessionService.currentAgendaItems'),
+  currentAgendaitems: alias('sessionService.currentAgendaitems'),
 
   actions: {
     selectAgenda(agenda) {
-      this.set('sessionService.selectedAgendaItem', null);
+      this.set('sessionService.selectedAgendaitem', null);
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
     },
 
     navigateToOverview() {
-      this.set('sessionService.selectedAgendaItem', null);
+      this.set('sessionService.selectedAgendaitem', null);
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id);
-    },
-
-    navigateToNotes(currentSessionId, currentAgendaId) {
-      this.transitionToRoute(
-        'print-overviews.notes.agendaitems',
-        currentSessionId,
-        currentAgendaId
-      );
     },
 
     navigateToDecisions(currentSessionId, currentAgendaId) {
@@ -62,10 +54,6 @@ export default Controller.extend({
         'newsletter',
         currentSessionId
       );
-    },
-
-    navigateToSubCases() {
-      this.transitionToRoute('subcases');
     },
 
     navigateToAgenda(selectedAgendaId) {

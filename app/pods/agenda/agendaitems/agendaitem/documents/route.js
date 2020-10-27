@@ -4,15 +4,15 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   // TODO: refactor so data is sourced from the route's model hook.
   // model() {
   //   return {
-  //     documents: this.modelFor('agenda.agendaitems.agendaitem').get('documentVersions'),
-  //     linkedDocuments: this.modelFor('agenda.agendaitems.agendaitem').get('linkedDocumentVersions')
+  //     pieces: this.modelFor('agenda.agendaitems.agendaitem').get('pieces'),
+  //     linkedPieces: this.modelFor('agenda.agendaitems.agendaitem').get('linkedPieces')
   //   };
   // }
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
-    controller.set('agendaItem', agendaItem);
+    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    controller.set('agendaitem', agendaitem);
     controller.set('model', model);
   }
 }

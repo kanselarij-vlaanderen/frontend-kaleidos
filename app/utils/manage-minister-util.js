@@ -1,8 +1,8 @@
 import EmberObject from '@ember/object';
 
 export const refreshData = async(mandatee, mandateeRows) => {
-  const iseCodes = (await mandatee.get('iseCodes')).filter((item) => item);
-  const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((item) => item);
+  const iseCodes = (await mandatee.get('iseCodes')).filter((iseCode) => iseCode);
+  const fields = (await Promise.all(iseCodes.map((iseCode) => iseCode.get('field')))).filter((field) => field);
   const domains = await Promise.all(fields.map((field) => field.get('domain')));
 
   const mandateeRow = EmberObject.create({
@@ -24,7 +24,7 @@ export const selectDomain = async(rowToShowFields, domain, value) => {
 };
 
 export const selectField = async(rowToShowDomains, domain, value) => {
-  const foundDomain = rowToShowDomains.find((item) => item.get('id') === domain.get('id'));
+  const foundDomain = rowToShowDomains.find((domainEntry) => domainEntry.get('id') === domain.get('id'));
   const fields = await domain.get('governmentFields');
   const selectedFields = fields.filter((field) => field.selected);
 
@@ -40,11 +40,18 @@ export const getSelectedIseCodesWithFields = async(allIseCodesInApp, selectedFie
   if (foundField) {
     return iseCode;
   }
-}))).filter((item) => item);
+}))).filter((iseCode) => iseCode);
 
-export const prepareMandateeRowAfterEdit = async(selectedMandatee, rowToShow) => {
-  const fields = await rowToShow.get('fields');
-  const domains = await rowToShow.get('domains');
+/**
+ * @name prepareMandateeRowAfterEdit
+ * @description Maak een nieuwe mandateerow op basis van de doorgegeven aanpassingen in selectedMandatee
+ * @param selectedMandatee De aanpassingen die we gedaan hebben in de UI aan de mandatee (nieuwe velden etc..)
+ * @param mandateeRow De mandateerow die we willen aanpassen.
+ * @returns newMandateeRow
+ */
+export const prepareMandateeRowAfterEdit = async(selectedMandatee, mandateeRow) => {
+  const fields = await mandateeRow.get('fields');
+  const domains = await mandateeRow.get('domains');
 
   const selectedDomains = [...new Set(domains.filter((domain) => domain.get('selected')))];
   const selectedFields = fields.filter((field) => field.get('selected'));
@@ -52,7 +59,7 @@ export const prepareMandateeRowAfterEdit = async(selectedMandatee, rowToShow) =>
   const filteredIseCodes = await getSelectedIseCodesWithFields(allIseCodes, selectedFields);
 
   const selectedEmployeePriority = await selectedMandatee.get('priority');
-  const newRow = EmberObject.create({
+  const newMandateeRow = EmberObject.create({
     mandatee: selectedMandatee,
     mandateePriority: selectedEmployeePriority,
     fields: selectedFields,
@@ -60,8 +67,8 @@ export const prepareMandateeRowAfterEdit = async(selectedMandatee, rowToShow) =>
     iseCodes: filteredIseCodes,
   });
 
-  if (rowToShow.get('isSubmitter')) {
-    newRow.set('isSubmitter', true);
+  if (mandateeRow.get('isSubmitter')) {
+    newMandateeRow.set('isSubmitter', true);
   }
-  return newRow;
+  return newMandateeRow;
 };

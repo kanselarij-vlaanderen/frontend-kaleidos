@@ -26,14 +26,14 @@ export default ModelWithModifier.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  documentVersions: hasMany('document-version', {
+  pieces: hasMany('piece', {
     inverse: null,
   }),
   themes: hasMany('themes', {
     inverse: null,
   }),
 
-  newsletterProposal: computed('agendaItemTreatment', async function() {
+  newsletterProposal: computed('agendaItemTreatment', 'agendaItemTreatment.subcase.mandatees', async function() {
     const treatment = await this.get('agendaItemTreatment');
     const subcase = await treatment.get('subcase');
     const mandatees = await subcase.get('mandatees');

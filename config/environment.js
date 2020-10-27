@@ -11,6 +11,18 @@ module.exports = function(environment) {
       allowEmpty: true,
       outputFormat: 'L',
     },
+    metricsAdapters: [
+      {
+        name: 'Matomo',
+        environments: ['development', 'test', 'cypress-test', 'production'],
+        config: {
+          scriptUrl: 'https://dev-kaleidos-matomo.redpencil.io', // Can optionally be CDN-sourced
+          trackerUrl: 'https://dev-kaleidos-matomo.redpencil.io',
+          siteId: '1',
+          disableCookies: true, // <- for GDPR
+        },
+      }
+    ],
     featureFlags: {
       'editor-html-paste': true,
     },
@@ -45,6 +57,7 @@ module.exports = function(environment) {
   };
 
   if (environment === 'development') {
+    ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -55,7 +68,6 @@ module.exports = function(environment) {
   if (environment === 'test') { // Ember framework integrated tests
     // Testem prefers this...
     ENV.locationType = 'none';
-
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
@@ -78,6 +90,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-dev.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
+      ENV.metricsAdapters.config.siteId = 1;
     }
 
     if (process.env.DEPLOY_ENV === 'test') {
@@ -85,6 +98,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
+      ENV.metricsAdapters.config.siteId = 2;
     }
 
     if (process.env.DEPLOY_ENV === 'production') {
@@ -92,6 +106,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie.vlaanderen.be/op/v1/logout';
+      ENV.metricsAdapters.config.siteId = 3;
     }
   }
 

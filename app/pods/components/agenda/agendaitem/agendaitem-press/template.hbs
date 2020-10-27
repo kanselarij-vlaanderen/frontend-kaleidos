@@ -1,0 +1,42 @@
+{{#if (not currentSession.isEditing)}}
+  <div class="vl-u-spacer">
+    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+      <h3 class="vl-title vl-title--h3">
+        {{t "preparation-text"}}
+      </h3>
+      {{#if isEditor}}
+        <div class="vl-u-spacer-extended-left-s">
+          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+            {{t "edit"}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <div class="vl-u-spacer-extended-bottom-s">
+    <h3 class="vl-title vl-title--h6">
+      {{agendaitem.titlePress}}
+    </h3>
+  </div>
+  <div class="vl-typography">
+    <p>
+      {{agendaitem.textPress}}
+    </p>
+  </div>
+  <hr/>
+  <div class="vl-u-spacer-extended-top-s">
+    {{#if agendaitem.forPress}}
+      <div class="vlc-pill vlc-pill--success">
+        {{t "for-press"}}
+      </div>
+    {{else}}
+      <div class="vlc-pill vlc-pill--warning">
+        {{t "not-public-press"}}
+      </div>
+    {{/if}}
+  </div>
+{{else}}
+  <AgendaitemPressEdit
+    @agendaitem={{agendaitem}}
+    @isEditing={{currentSession.isEditing}} />
+{{/if}}

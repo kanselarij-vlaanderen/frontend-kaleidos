@@ -22,7 +22,7 @@ export default class TableRowNewsletterTable extends Component {
   @action
   async startEditing() {
     if (!this.hasNewsletterInfo) {
-      this.newsletterInfo = await this.newsletterService.createNewsItemForAgendaItem(this.args.agendaItem);
+      this.newsletterInfo = await this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
     }
     this.isEditing = true;
   }

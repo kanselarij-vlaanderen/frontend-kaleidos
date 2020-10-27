@@ -1,4 +1,4 @@
-<ul class="vl-tabs vl-u-reset-margin" {{ did-update this.checkExistance this.agendaItem}}>
+<ul class="vl-tabs vl-u-reset-margin" {{ did-update this.checkExistance this.agendaitem}}>
   <li class="vl-tab"  data-test-agenda-agendaitem-tab="agendaitem-case">
     <LinkTo
       class="vl-tab__link"
@@ -32,7 +32,7 @@
       </LinkTo>
     </li>
   {{/if}}
-  {{#if (not this.agendaItem.isApproval) }}
+  {{#if (not this.agendaitem.isApproval) }}
     {{#if
       (or
         this.currentSession.isEditor
@@ -46,21 +46,6 @@
           @activeClass="active"
         >
           {{capitalize (t "decision")}}
-        </LinkTo>
-      </li>
-    {{/if}}
-    {{#if
-      (or
-      this.currentSession.isEditor
-      (and @meetingIsConcluded this.meetingMinutesExist))
-    }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-notes">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.minutes"
-          @activeClass="active"
-        >
-          {{capitalize (t "meeting-minutes")}}
         </LinkTo>
       </li>
     {{/if}}
@@ -82,7 +67,7 @@
     {{#if
       (or
       this.currentSession.isEditor
-      (and @meetingIsConcluded this.pressAgendaItemExists))
+      (and @meetingIsConcluded this.pressAgendaitemExists))
     }}
       <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-press-agenda">
         <LinkTo

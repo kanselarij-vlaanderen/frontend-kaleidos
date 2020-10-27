@@ -1,5 +1,6 @@
 /* global context, it, cy,beforeEach */
 // / <reference types="Cypress" />
+import modal from '../../selectors/modal.selectors';
 
 context('meeting actions tests', () => {
   beforeEach(() => {
@@ -63,7 +64,7 @@ context('meeting actions tests', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.agendaItemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
+    cy.agendaitemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -81,7 +82,7 @@ context('meeting actions tests', () => {
       });
     });
 
-    cy.get('.vl-modal').within(() => {
+    cy.get(modal.modal).within(() => {
       cy.get('.vl-button').contains('Verwijderen')
         .click();
     });
@@ -97,10 +98,12 @@ context('meeting actions tests', () => {
     cy.wait('@patchSubcase', {
       timeout: 12000,
     });
-    cy.get('.vl-modal').should('not.be.visible');
+    cy.get(modal.modal).should('not.be.visible');
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,
@@ -108,6 +111,8 @@ context('meeting actions tests', () => {
       .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
+    cy.clickReverseTab('Overzicht');
+    cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')
       .contains(SubcaseTitleShort, {
         timeout: 2500,

@@ -8,7 +8,7 @@ export default class SidebarItem extends Component {
   /**
    * INFO arguments from parent.
    * @agendaitem={{agendaitem}}
-   * @selectAgendaItem={{action "selectAgendaItemAction"}}
+   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -18,7 +18,7 @@ export default class SidebarItem extends Component {
   @service toaster;
   @service router;
 
-  @alias('sessionService.selectedAgendaItem') selectedAgendaItem;
+  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
@@ -39,8 +39,8 @@ export default class SidebarItem extends Component {
   }
 
   get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaItem) {
-      return this.args.agendaitem.id === this.selectedAgendaItem.id;
+    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
+      return this.args.agendaitem.id === this.selectedAgendaitem.id;
     }
     return null;
   }
@@ -49,7 +49,7 @@ export default class SidebarItem extends Component {
   async openDetailPage() {
     if (!this.isEditingOverview && !this.isComparing) {
       const agendaitem = await this.store.findRecord('agendaitem', this.args.agendaitem.id);
-      this.args.selectAgendaItem(agendaitem);
+      this.args.selectAgendaitem(agendaitem);
     }
   }
 

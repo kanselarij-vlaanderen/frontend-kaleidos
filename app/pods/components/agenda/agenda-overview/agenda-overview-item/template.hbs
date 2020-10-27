@@ -27,7 +27,7 @@
       </h4>
 
       {{#if (not aboutToDelete)}}
-        {{#if (not selectedAgendaItem)}}
+        {{#if (not selectedAgendaitem)}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
               <pre class="vl-u-text vlc-agenda-items__body-padding">
@@ -38,7 +38,7 @@
         {{/if}}
         {{#if (or renderDetails @isEditingOverview)}}
           <div class="vl-u-display-flex vlc-u-flex-space-between">
-            {{#if (and selectedAgendaItem @isEditingOverview)}}
+            {{#if (and selectedAgendaitem @isEditingOverview)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
               </span>
             {{else}}
@@ -80,29 +80,28 @@
             </div>
           </div>
           {{#if (not aboutToDelete)}}
-            {{#if (not selectedAgendaItem)}}
+            {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
-                  {{#if (await @agendaitem.documents)}}
+                  {{#if (await @agendaitem.documentContainers)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListForItem
+                    <Utils::PiecesListForItem
                       @isClickable={{true}}
-                      @item={{@agendaitem}}
-                      @document={{@agendaitem.document}}
+                      @agendaitemOrSubcase={{@agendaitem}}
                     />
                   {{else}}
-                    {{#if (await @agendaitem.documentNames)}}
+                    {{#if (await @agendaitem.pieceNames)}}
                       <div class="vlc-hr"></div>
-                      <Utils::DocumentsListLazyLoaded
-                       @documentNames={{@agendaitem.documentNames}}
+                      <Utils::PiecesListLazyLoaded
+                       @pieceNames={{@agendaitem.pieceNames}}
                       />
                     {{/if}}
                   {{/if}}
                 {{else}}
-                  {{#if (await @agendaitem.documentNames)}}
+                  {{#if (await @agendaitem.pieceNames)}}
                     <div class="vlc-hr"></div>
-                    <Utils::DocumentsListLazyLoaded
-                            @documentNames={{@agendaitem.documentNames}}
+                    <Utils::PiecesListLazyLoaded
+                            @pieceNames={{@agendaitem.pieceNames}}
                     />
                   {{/if}}
                 {{/if}}
@@ -127,7 +126,18 @@
                 <div class="vlc-agenda-items__icons">
                   <div class="vl-u-display-flex vlc-agenda-items__icons">
                     {{#if (not newsletterInfo.inNewsletter)}}
-                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter"></i>
+                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 vl-u-spacer-extended-left-s opacity-lighter">
+                        {{#attach-tooltip
+                          arrow="true"
+                          animation="shift"
+                          placement="top"
+                          class="ember-attacher-tooltip"
+                        }}
+                          <p>
+                            {{t "not-visible-in-newsletter"}}
+                          </p>
+                        {{/attach-tooltip}}
+                      </i>
                     {{/if}}
                     {{#if (await @agendaitem.checkAdded)}}
                       <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">

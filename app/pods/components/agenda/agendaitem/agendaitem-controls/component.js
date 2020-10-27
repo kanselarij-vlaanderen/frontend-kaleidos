@@ -46,9 +46,9 @@ export default Component.extend({
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
-    this.set('sessionService.selectedAgendaItem', null);
-    if (this.onDeleteAgendaItem) {
-      this.onDeleteAgendaItem(agendaitem);
+    this.set('sessionService.selectedAgendaitem', null);
+    if (this.onDeleteAgendaitem) {
+      this.onDeleteAgendaitem(agendaitem);
     }
   },
 
@@ -66,7 +66,7 @@ export default Component.extend({
       this.toggleProperty('showOptions');
     },
 
-    async postponeAgendaItem(agendaitem) {
+    async postponeAgendaitem(agendaitem) {
       this.set('isSavingRetracted', true);
       agendaitem.set('retracted', true);
       // TODO KAS-1420 change property on treatment during model rework

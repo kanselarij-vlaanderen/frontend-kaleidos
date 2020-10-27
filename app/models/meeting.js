@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
 import {
-  sortDocuments, getDocumentsLength
+  sortDocumentContainers, getPropertyLength
 } from 'fe-redpencil/utils/documents';
 
 const {
@@ -29,9 +29,8 @@ export default Model.extend({
     inverse: null, serialize: false,
   }),
   requestedSubcases: hasMany('subcase'),
-  documentVersions: hasMany('document-version'),
+  pieces: hasMany('piece'),
 
-  notes: belongsTo('meeting-record'),
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
@@ -39,26 +38,26 @@ export default Model.extend({
     inverse: null,
   }),
 
-  documentsLength: computed('documents', function() {
-    return getDocumentsLength(this, 'documents');
+  documentContainersLength: computed('documentContainers', function() {
+    return getPropertyLength(this, 'documentContainers');
   }),
 
-  documents: computed('documentVersions.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
-      promise: this.get('documentVersions').then((documentVersions) => {
-        if (documentVersions && documentVersions.get('length') > 0) {
-          const documentVersionIds = documentVersions.mapBy('id').join(',');
-          return this.store.query('document', {
+      promise: this.get('pieces').then((pieces) => {
+        if (pieces && pieces.get('length') > 0) {
+          const pieceIds = pieces.mapBy('id').join(',');
+          return this.store.query('document-container', {
             filter: {
-              documents: {
-                id: documentVersionIds,
+              pieces: {
+                id: pieceIds,
               },
             },
             page: {
-              size: documentVersions.get('length'), // # documents will always be <= # document versions
+              size: pieces.get('length'), // # documentContainers will always be <= # pieces
             },
-            include: 'type,documents,documents.access-level,documents.next-version,documents.previous-version',
-          }).then((containers) => sortDocuments(this.get('documentVersions'), containers));
+            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
+          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
         }
       }),
     });

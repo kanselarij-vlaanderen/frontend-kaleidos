@@ -1,35 +1,40 @@
 {{#if (not isEditing)}}
 {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
-  {{agenda/agendaitem/agendaitem-case/agendaitem-titles
-    agendaitem=agendaitem
-    subcase=(await subcase)
-    shouldShowDetails=(or agendaitem.showAsRemark (await agendaitem.agendaActivity))
-    toggleIsEditing=(action "toggleIsEditing")
-  }}
+  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
+    @agendaitem={{@agendaitem}}
+    @subcase={{await this.subcase}}
+    @shouldShowDetails={{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
+    @newsletterInfo={{await @agendaitem.treatments.firstObject.newsletterInfo}}
+    @toggleIsEditing={{action this.toggleIsEditing}}
+  />
 {{else}}
-  {{agenda/agendaitem/agendaitem-case/agendaitem-titles-edit
-    agendaitem=agendaitem
-    isEditing=isEditing
-    newsletterInfo=(await agendaitem.treatments.firstObject.newsletterInfo)
-    subcase=(await subcase)
-  }}
+  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
+    @agendaitem={{@agendaitem}}
+    @isEditing={{@isEditing}}
+    @subcase= {{await this.subcase}}
+    @newsletterInfo={{await @agendaitem.treatments.firstObject.newsletterInfo}}
+    @toggleIsEditing={{action this.toggleIsEditing}}
+  />
 {{/if}}
-{{#if agendaitem.showAsRemark}}
-  {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
-    agendaitem=agendaitem
-    subcase=(await subcase)
-  }}
-  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+{{#if @agendaitem.showAsRemark}}
+{{!-- TODO refactor mandatees to a glimmer component --}}
+  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+    @agendaitem={{@agendaitem}}
+    @subcase={{await this.subcase}}
+  />
 {{else}}
-  {{#if (await agendaitem.agendaActivity)}}
-    {{agenda/agendaitem/agendaitem-case/agendaitem-mandatees
-      agendaitem=agendaitem
-      subcase=(await subcase)
-    }}
+  {{#if @agendaitem.agendaActivity}}
+    <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+      @agendaitem={{@agendaitem}}
+      @subcase={{await this.subcase}}
+    />
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
-    {{agenda/agendaitem/agendaitem-case/subcase-ise-codes item=agendaitem}}
-    {{agenda/agendaitem/agendaitem-case/agendaitem-approvals item=agendaitem}}
-    {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
+    <Components::Agenda::Agendaitem::AgendaitemCase::SubcaseIseCodes
+      @item={{@agendaitem}}
+    />
+    <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
+      @agendaitem={{@agendaitem}}
+    />
   {{/if}}
 {{/if}}

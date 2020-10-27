@@ -3,16 +3,12 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class AgendaItemDecisionComponent extends Component {
+export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
 
   @tracked isEditing = false;
   @tracked isVerifyingDelete = null;
   @tracked treatmentToDelete = null;
-
-  get treatment() {
-    return this.args.treatment;
-  }
 
   @action
   openEditingWindow() {
@@ -43,5 +39,10 @@ export default class AgendaItemDecisionComponent extends Component {
   cancel() {
     this.treatmentToDelete = null;
     this.isVerifyingDelete = false;
+  }
+
+  @action
+  async addPiece(piece) {
+    await piece.save();
   }
 }

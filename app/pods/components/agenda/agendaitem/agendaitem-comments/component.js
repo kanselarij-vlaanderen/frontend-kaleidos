@@ -15,7 +15,7 @@ export default class AgendaitemComments extends Component {
 
   elementId = 'agendaitem-comments';
 
-  @sort('item.remarks', (remarkA, remarkB) => {
+  @sort('agendaitem.remarks', (remarkA, remarkB) => {
     if (remarkA.created < remarkB.created) {
       return 1;
     } if (remarkA.created > remarkB.created) {
@@ -27,22 +27,22 @@ export default class AgendaitemComments extends Component {
 
   @action
   async addComment(event) {
-    const item = await this.item;
-    const agenda = await this.item.agenda;
+    const agendaitem = await this.agendaitem;
+    const agenda = await this.agendaitem.agenda;
     const user = await this.currentSession.user;
     const comment = this.store.createRecord('remark', {
       text: event,
       created: this.formatter.formatDate(null),
       author: user,
     });
-    const modelName = await item.get('modelName');
+    const modelName = await agendaitem.get('modelName');
     if (modelName === 'newsletter-info') {
-      comment.set('newsletterInfo', item);
+      comment.set('newsletterInfo', agendaitem);
     } else {
-      comment.set(modelName, item);
+      comment.set(modelName, agendaitem);
     }
     comment.save().then(() => {
-      item.hasMany('remarks').reload();
+      agendaitem.hasMany('remarks').reload();
       this.set('text', '');
       if (agenda) {
         updateModifiedProperty(agenda);
@@ -53,7 +53,7 @@ export default class AgendaitemComments extends Component {
   @action
   async addAnswer(comment) {
     const user = await this.currentSession.user;
-    const agenda = await this.item.agenda;
+    const agenda = await this.agendaitem.agenda;
     const newComment = this.store.createRecord('remark', {
       text: comment.get('answer'),
       created: this.formatter.formatDate(null),

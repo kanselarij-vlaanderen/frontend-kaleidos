@@ -8,7 +8,6 @@ export default class SubcaseTitles extends Component {
   classNames = ['vl-u-spacer-extended-bottom-l'];
   @service currentSession;
   subcase = null;
-  shouldShowDetails = false;
 
   @computed('subcase.approved')
   get pillClass() {

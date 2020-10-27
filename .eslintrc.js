@@ -66,7 +66,6 @@ module.exports = {
     "implicit-arrow-linebreak": ["error", "beside"],
     "no-useless-constructor": "error",
     "no-dupe-class-members": "error",
-    "class-methods-use-this": "error",
     "no-duplicate-imports": ["error", { "includeExports": true }],
     "object-curly-newline": ["error", {
       "ObjectExpression": {"multiline": true, "minProperties": 1},

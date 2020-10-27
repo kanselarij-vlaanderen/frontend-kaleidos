@@ -1,0 +1,41 @@
+/* ==========================================================================
+   publications-status-pill
+   ========================================================================== */
+
+.publications-status-pill {
+  display: flex;
+  width: max-content;
+  border: .1rem solid $au-gray-300;
+  border-radius: .5rem;
+  padding: .35rem .6rem;
+}
+
+.publications-status-pill__status-icon {
+  vertical-align: middle;
+  line-height: 1.4rem;
+}
+
+.publications-status-pill__label {
+  margin-left: .4rem;
+  color: $gray-dark;
+  font-size: 1.3rem;
+  line-height: 1.5rem;
+}
+
+.publications-status-pill--in-progress {
+  color: $au-yellow-400;
+}
+
+.publications-status-pill--done {
+  color: $au-green-500;
+}
+
+.publications-status-pill__not-started-symbol {
+  display: block;
+  margin: 0.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+
+  border: 0.15rem solid $au-gray-800;
+  border-radius: 10rem;
+}

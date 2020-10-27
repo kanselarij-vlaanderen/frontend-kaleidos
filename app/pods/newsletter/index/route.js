@@ -17,7 +17,7 @@ export default class IndexNewsletterRoute extends Route.extend(AuthenticatedRout
    */
   async model(params) {
     const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
-    const agendaItems = await this.store
+    const agendaitems = await this.store
       .query('agendaitem', {
         'filter[agenda][:id:]': agenda.id,
         'filter[show-as-remark]': false,
@@ -27,12 +27,12 @@ export default class IndexNewsletterRoute extends Route.extend(AuthenticatedRout
         'page[size]': 300,
       });
 
-    return Promise.all(agendaItems.map(async(agendaItem) => {
-      const agendaItemTreatments = await agendaItem.get('treatments');
+    return Promise.all(agendaitems.map(async(agendaitem) => {
+      const agendaItemTreatments = await agendaitem.get('treatments');
       const agendaItemTreatment = agendaItemTreatments.firstObject;
       const newsletterInfo = await agendaItemTreatment.get('newsletterInfo');
       return {
-        agendaItem,
+        agendaitem,
         newsletterInfo,
       };
     }));

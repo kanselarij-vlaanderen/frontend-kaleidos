@@ -7,7 +7,7 @@ const {
 } = DS;
 
 export default Model.extend({
-  documentVersion: belongsTo('document-version'),
+  piece: belongsTo('piece'),
   signature: belongsTo('signature', {
     inverse: null,
   }),

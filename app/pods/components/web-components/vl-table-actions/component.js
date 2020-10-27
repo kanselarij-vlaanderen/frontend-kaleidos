@@ -21,7 +21,7 @@ export default Component.extend({
     return agenda.id;
   }),
 
-  latestAgendaItemId: computed('row', async function() {
+  latestAgendaitemId: computed('row', async function() {
     return await this.row.get('id');
   }),
 
@@ -31,8 +31,8 @@ export default Component.extend({
       if (!nota) {
         return;
       }
-      const documentVersion = await nota.get('lastDocumentVersion');
-      window.open(`/document/${documentVersion.get('id')}`);
+      const piece = await nota.get('lastPiece');
+      window.open(`/document/${piece.get('id')}`);
     },
   },
 });

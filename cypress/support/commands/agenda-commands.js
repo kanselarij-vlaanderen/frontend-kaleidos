@@ -285,13 +285,13 @@ function openAgendaForDate(agendaDate) {
 /**
  * Create a default agenda
  * @memberOf Cypress.Chainable#
- * @name openAgendaItemKortBestekTab
+ * @name openAgendaitemKortBestekTab
  * @function
- * @param {String} agendaItemTitle - title of the agendaitem
+ * @param {String} agendaitemTitle - title of the agendaitem
  */
-function openAgendaItemKortBestekTab(agendaItemTitle) {
-  cy.openDetailOfAgendaitem(agendaItemTitle);
-  cy.get(agenda.agendaItemKortBestekTab)
+function openAgendaitemKortBestekTab(agendaitemTitle) {
+  cy.openDetailOfAgendaitem(agendaitemTitle);
+  cy.get(agenda.agendaitemKortBestekTab)
     .should('be.visible')
     .click();
 }
@@ -317,7 +317,7 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
   // });
@@ -352,18 +352,18 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     cy.get(agendaOverview.agendaEditFormallyOkButton).click();
   }
 
-  cy.get('li.vlc-agenda-items__sub-item').as('agendaitems');
+  cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
       cy.get('.vl-u-spacer-extended-bottom-s').click();
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('PATCH', '/agendaitems/**').as(`patchAgendaItem_${int}`);
+  cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
   cy.get('.ember-power-select-option')
     .contains(formalityStatus)
     .click();
-  cy.wait(`@patchAgendaItem_${int}`)
+  cy.wait(`@patchAgendaitem_${int}`)
     .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
   // .get('.ember-power-select-option').should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
@@ -463,9 +463,9 @@ const approveDesignAgenda = () => {
       timeout: 12000,
     });
 
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
-    verbose: true, timeout: 60000,
-  });
+  cy.get('.vl-loader', {
+    timeout: 60000,
+  }).should('not.exist');
 };
 
 /**
@@ -493,9 +493,9 @@ const approveAndCloseDesignAgenda = () => {
       timeout: 12000,
     });
 
-  cy.waitUntil(() => cy.get('.vl-loader').should('not.be.visible'), {
-    verbose: true, timeout: 60000,
-  });
+  cy.get('.vl-loader', {
+    timeout: 60000,
+  }).should('not.exist');
 };
 
 /**
@@ -519,12 +519,14 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   }).should('exist')
     .contains('Acties')
     .click();
-  cy.get(actionModel.navigatetosubcases)
+  cy.get(actionModel.addAgendaitems)
     .should('be.visible')
     .click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
+
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.get('.vl-modal-dialog').as('dialog')
     .within(() => {
@@ -537,7 +539,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
             cy.get('.vl-checkbox--switch__label').click();
           });
       }
-      cy.get('.is-loading-data', {
+      cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
 
@@ -570,9 +572,11 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get('.vl-button').contains('Agendapunt toevoegen')
+      cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
+      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
         .click();
     });
+
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   })
@@ -585,6 +589,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
+  cy.wait(`@loadAgendaitemFilter${randomInt}`);
 }
 
 /**
@@ -630,21 +635,21 @@ function toggleShowChanges(refresh) {
 
 /**
  * @description Checks if an agendaitem with a specific name exists on an agenda,
- * if you want to open the agendaitem at the same time, use cy.openDetailOfAgendaitem(agendaItemName)
- * @name agendaItemExists
+ * if you want to open the agendaitem at the same time, use cy.openDetailOfAgendaitem(agendaitemName)
+ * @name agendaitemExists
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - boolean to check if a refresh needs to happen.
+ * @param {string} agendaitemName - boolean to check if a refresh needs to happen.
  */
-function agendaItemExists(agendaItemName) {
-  cy.log('agendaItemExists');
+function agendaitemExists(agendaitemName) {
+  cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
   cy.get('.vlc-tabs-reverse__link--active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
       cy.get(agenda.agendaDetailSidebarSubitem)
-        .contains(agendaItemName, {
+        .contains(agendaitemName, {
           timeout: 12000,
         })
         .should('exist');
@@ -653,13 +658,13 @@ function agendaItemExists(agendaItemName) {
         cy.clickReverseTab('Overzicht');
       }
       cy.get(agenda.agendaOverviewSubitem)
-        .contains(agendaItemName, {
+        .contains(agendaitemName, {
           timeout: 24000,
         })
         .should('exist');
     }
   });
-  cy.log('/agendaItemExists');
+  cy.log('/agendaitemExists');
 }
 
 /**
@@ -667,13 +672,13 @@ function agendaItemExists(agendaItemName) {
  * @name openDetailOfAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaItemName - title of the agendaitem.
+ * @param {string} agendaitemName - title of the agendaitem.
 *  @param {boolean} isAdmin - optional boolean to indicate that we are admin (some profiles can't see the link to subcase)
  */
-function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
+function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
   cy.log('openDetailOfAgendaitem');
-  cy.agendaItemExists(agendaItemName);
-  cy.contains(agendaItemName)
+  cy.agendaitemExists(agendaitemName);
+  cy.contains(agendaitemName)
     .scrollIntoView()
     .click();
   cy.wait(1000);
@@ -682,7 +687,7 @@ function openDetailOfAgendaitem(agendaItemName, isAdmin = true) {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
-      cy.get(agenda.agendaItemDossierTab).click();
+      cy.get(agenda.agendaitemDossierTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
@@ -723,7 +728,7 @@ function closeAgenda() {
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
@@ -738,12 +743,14 @@ function releaseDecisions() {
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
-  cy.get(actionModel.releaseDecisions).click();
-  cy.get('.vl-modal').within(() => {
+  cy.get(actionModel.releaseDecisions).click({
+    force: true,
+  });
+  cy.get(modal.modal).within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
@@ -759,11 +766,11 @@ function releaseDocuments() {
     .contains('Acties')
     .click();
   cy.get(actionModel.releaseDocuments).click();
-  cy.get('.vl-modal').within(() => {
+  cy.get(modal.modal).within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
       .click();
   });
-  cy.get('.vl-modal', {
+  cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
 }
@@ -789,14 +796,14 @@ Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
-Cypress.Commands.add('agendaItemExists', agendaItemExists);
+Cypress.Commands.add('agendaitemExists', agendaitemExists);
 Cypress.Commands.add('openDetailOfAgendaitem', openDetailOfAgendaitem);
 Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
-Cypress.Commands.add('openAgendaItemKortBestekTab', openAgendaItemKortBestekTab);
+Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);

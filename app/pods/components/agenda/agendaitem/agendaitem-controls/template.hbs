@@ -2,13 +2,13 @@
   {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
     {{#if (await isPostPonable)}}
       {{#if agendaitem.retracted}}
-        <button type="button" class="vl-button vl-button--tertiary"
+        <button data-test-revert-postpone-agendaitem type="button" class="vl-button vl-button--tertiary"
           {{action "advanceAgendaitem" agendaitem}}
         >
           {{t "not-postpone"}}
         </button>
       {{else}}
-        <button type="button" class="vl-button vl-button--tertiary" {{action "postponeAgendaItem" agendaitem}}>
+        <button data-test-postpone-agendaitem type="button" class="vl-button vl-button--tertiary" {{action "postponeAgendaitem" agendaitem}}>
           {{t "postpone"}}
         </button>
       {{/if}}

@@ -10,6 +10,12 @@ export default Route.extend(ApplicationRouteMixin, {
   fileService: service(),
   routeAfterAuthentication: 'agendas',
   router: service(),
+  metrics: service(),
+
+  init() {
+    this._super(...arguments);
+    this.setupTracking();
+  },
 
   beforeModel() {
     this._super(...arguments);
@@ -18,6 +24,15 @@ export default Route.extend(ApplicationRouteMixin, {
     this.get('moment').set('allowEmpty', true);
     this.intl.setLocale('nl-be');
     return this._loadCurrentSession();
+  },
+
+  setupTracking() {
+    this.router.on('routeDidChange', () => {
+      this.metrics.trackPage({
+        page: this.router.currentURL,
+        title: this.router.currentRouteName,
+      });
+    });
   },
 
   checkSupportedBrowser() {
@@ -98,7 +113,7 @@ export default Route.extend(ApplicationRouteMixin, {
       }
 
       if (
-        this.fileService.get('deleteDocumentWithUndo.isRunning')
+        this.fileService.get('deleteDocumentContainerWithUndo.isRunning')
         && confirm(this.intl.t('leave-page-message'))
       ) {
         transition.abort();

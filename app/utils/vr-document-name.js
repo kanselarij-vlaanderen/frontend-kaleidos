@@ -8,8 +8,8 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
-        .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for version '0'
+      pieceSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+        .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
   }
 
@@ -20,7 +20,7 @@ export default class VRDocumentName {
 
   static get strictRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
+    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.pieceSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -45,12 +45,12 @@ export default class VRDocumentName {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
     const meta = {
-      date: moment(match[1], 'YYYY DDMM').toDate(),
+      date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       docType: match[2],
       caseNr: parseInt(match[6], 10),
       index: parseInt(match[8], 10),
-      // versionSuffix: TODO
-      // versionNr: TODO
+      // pieceSuffix: TODO
+      // pieceNr: TODO
     };
     if (this.strict) {
       return meta;
@@ -58,28 +58,29 @@ export default class VRDocumentName {
     return meta;
   }
 
+  // TODO: Mag misschien weg?
   // Will only be needed by backend renaming service
   // static fromMeta (meta) {
   //   const date = meta.date || Date();
   //   const docType = meta.docType || 'DOC';
   //   const caseNr = meta.caseNr.padStart(4, '0');
   //   const index = meta.index.toString();
-  //   const versionNr = meta.versionNr || 1;
+  //   const pieceNr = meta.pieceNr || 1;
   //   const formattedDate = moment(date).format('YYYY DDMM');
   //
-  //   return VRDocumentName(`VR ${formattedDate} ${docType}.${caseNr}/${index}${this.versionSuffixes[versionNr]}`);
+  //   return VRDocumentName(`VR ${formattedDate} ${docType}.${caseNr}/${index}${this.pieceSuffixes[pieceNr]}`);
   // }
 
   get isValid() {
     return VRDocumentName.strictRegex.test(this.name);
   }
 
-  get withoutVersionSuffix() {
-    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
+  get withoutPieceSuffix() {
+    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.pieceSuffix}$`, 'ui'), '');
   }
 
-  withOtherVersionSuffix(versionNr) {
-    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[versionNr].toUpperCase()}`;
+  withOtherPieceSuffix(pieceNr) {
+    return `${this.withoutPieceSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
   }
 }
 
@@ -91,17 +92,14 @@ export const compareFunction = function(parameterA, parameterB) {
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date); // Date descending (newest first)
-    } catch (exception) { // Only a parses
-      console.warn('An exception occurred', exception);
+    } catch { // Only a parses
       return -1;
     }
-  } catch (exception) {
-    console.warn('An exception occurred', exception);
+  } catch {
     try { // Only b parses
       parameterB.parseMeta();
       return 1;
-    } catch (ex) { // Both don't parse
-      console.warn('An exception occurred', ex);
+    } catch { // Both don't parse
       return parameterA.name.localeCompare(parameterB.name);
     }
   }

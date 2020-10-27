@@ -1,10 +1,7 @@
 import Component from '@ember/component';
-import {
-  computed, action
-} from '@ember/object';
-import { alias } from '@ember/object/computed';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaItemsPriority } from 'fe-redpencil/utils/agenda-item-utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
@@ -13,11 +10,7 @@ export default class AgendaOverview extends Component {
 
   @service('current-session') currentSessionService;
 
-  classNames = ['vlc-agenda-items'];
-
-  classNameBindings = ['getClassNames'];
-
-  selectedAgendaItem = alias('sessionService.selectedAgendaItem');
+  classNames = ['vlc-agenda-items', 'vl-u-spacer-extended-l', 'vlc-agenda-items--spaced'];
 
   dragHandleClass = '.vlc-agenda-items__sub-item';
 
@@ -30,24 +23,16 @@ export default class AgendaOverview extends Component {
 
   showLoader = null;
 
-  @computed('selectedAgendaItem')
-  get getClassNames() {
-    if (this.get('selectedAgendaItem')) {
-      return 'vlc-agenda-items--small';
-    }
-    return 'vl-u-spacer-extended-l vlc-agenda-items--spaced';
+  @action
+  selectAgendaitemAction(agendaitem) {
+    this.selectAgendaitem(agendaitem);
   }
 
   @action
-  selectAgendaItemAction(agendaitem) {
-    this.selectAgendaItem(agendaitem);
-  }
-
-  @action
-  async setFormallyOkAction(agendaItem, formallyOkUri) {
+  async setFormallyOkAction(agendaitem, formallyOkUri) {
     this.set('showLoader', true);
-    agendaItem.formallyOk = formallyOkUri;
-    await agendaItem
+    agendaitem.formallyOk = formallyOkUri;
+    await agendaitem
       .save()
       .catch(() => {
         this.toaster.error();
@@ -72,7 +57,7 @@ export default class AgendaOverview extends Component {
     const isEditor = this.currentSessionService.isEditor;
     const isDesignAgenda = this.currentAgenda.isDesignAgenda;
     this.set('showLoader', true);
-    await setAgendaItemsPriority(itemModels, isEditor, isDesignAgenda);
+    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
     this.set('showLoader', false);
   }
 }

@@ -1,0 +1,34 @@
+<div class="vlc-panel-layout__main-content">
+  <Navbar @auto="true">
+    <Toolbar @auto="true">
+      <Toolbar::Group>
+        <Toolbar::Item>
+          <Tabs>
+            <Tab @route="publications.in-progress">{{t "publications.in-progress"}} ({{amountInProgress}})</Tab>
+            <Tab @route="publications.done">{{t "publications.done"}} ({{amountDone}})</Tab>
+          </Tabs>
+        </Toolbar::Item>
+      </Toolbar::Group>
+      <Toolbar::Group @position="right">
+        <Toolbar::Item>
+          <AuButton @icon="add" @skin="primary">{{t "publications.new"}}</AuButton>
+        </Toolbar::Item>
+      </Toolbar::Group>
+    </Toolbar>
+  </Navbar>
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <Navbar @size="large" @border="none">
+      <Toolbar>
+        <Toolbar::Group>
+          <AuInput @icon="search" @block="true" placeholder="Zoeken..."></AuInput>
+        </Toolbar::Group>
+        <Toolbar::Group @position="right">
+          <Toolbar::Item>
+            <AuButton @icon="filter">{{t "filter"}}</AuButton>
+          </Toolbar::Item>
+        </Toolbar::Group>
+      </Toolbar>
+    </Navbar>
+    {{outlet}}
+  </div>
+</div>

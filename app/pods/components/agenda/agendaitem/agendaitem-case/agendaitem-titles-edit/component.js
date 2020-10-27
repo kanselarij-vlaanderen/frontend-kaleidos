@@ -1,59 +1,57 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import {
-  action, get, set
+  action, get
 } from '@ember/object';
 import {
   saveChanges as saveSubcaseTitles, cancelEdit
-} from 'fe-redpencil/utils/agenda-item-utils';
+} from 'fe-redpencil/utils/agendaitem-utils';
 import { trimText } from 'fe-redpencil/utils/trim-util';
+import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
+  @tracked isLoading = false;
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
-  subcase = null;
-  newsletterInfo = null;
 
   @action
   async cancelEditing() {
-    cancelEdit(this.agendaitem, get(this, 'propertiesToSet'));
-    if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
-      this.newsletterInfo.rollbackAttributes();
+    cancelEdit(this.args.agendaitem, get(this, 'propertiesToSet'));
+    if (this.args.newsletterInfo && this.args.newsletterInfo.get('hasDirtyAttributes')) {
+      this.args.newsletterInfo.rollbackAttributes();
     }
-    this.toggleProperty('isEditing');
+    this.args.toggleIsEditing();
   }
 
   @action
   async saveChanges() {
-    set(this, 'isLoading', true);
-
-    const shouldResetFormallyOk = this.agendaitem.get('hasDirtyAttributes');
+    this.isLoading = true;
+    const shouldResetFormallyOk = this.args.agendaitem.get('hasDirtyAttributes');
 
     const propertiesToSetOnAgendaitem = {
-      title: trimText(this.agendaitem.title),
-      shortTitle: trimText(this.agendaitem.shortTitle),
+      title: trimText(this.args.agendaitem.title),
+      shortTitle: trimText(this.args.agendaitem.shortTitle),
       // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
     };
-
     const propertiesToSetOnSubcase = {
-      title: trimText(this.agendaitem.title),
-      shortTitle: trimText(this.agendaitem.shortTitle),
+      title: trimText(this.args.agendaitem.title),
+      shortTitle: trimText(this.args.agendaitem.shortTitle),
     };
 
-    if (this.subcase) {
-      propertiesToSetOnSubcase.confidential = await this.subcase.get('confidential');
+    if (this.args.subcase) {
+      propertiesToSetOnSubcase.confidential = await this.args.subcase.get('confidential');
     }
 
     try {
-      await saveSubcaseTitles(this.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
+      await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
         await this.newsletterInfo.save();
       }
-      set(this, 'isLoading', false);
-      this.toggleProperty('isEditing');
+      this.isLoading = false;
+      this.args.toggleIsEditing();
     } catch (exception) {
-      set(this, 'isLoading', false);
+      this.isLoading = false;
       throw (exception);
     }
   }
