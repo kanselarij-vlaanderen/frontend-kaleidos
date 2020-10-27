@@ -158,12 +158,12 @@ export default EmberObject.create({
   LANGUAGE_DE: {
     uri: 'http://kanselarij.vo.data.gift/id/concept/taalkundige-systemen/fe072a38-0ee5-4d2c-b16f-c1ed7a32e985',
   },
-  activityTypeUris: {
+  ACTIVITY_TYPE_URIS: {
     vertalen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
     handtekenen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
     drukproeven: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
   },
-  pubicationTypeUris: {
+  PUBLICATION_TYPE_URIS: {
     vertalen: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
   },
 });
