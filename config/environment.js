@@ -90,7 +90,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-dev.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
-      ENV.metricsAdapters.config.siteId = 1;
+      ENV.metricsAdapters[0].config.siteId = 1;
     }
 
     if (process.env.DEPLOY_ENV === 'test') {
@@ -98,7 +98,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos-test.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie-ti.vlaanderen.be/op/v1/logout';
-      ENV.metricsAdapters.config.siteId = 2;
+      ENV.metricsAdapters[0].config.siteId = 2;
     }
 
     if (process.env.DEPLOY_ENV === 'production') {
@@ -106,7 +106,7 @@ module.exports = function(environment) {
       ENV.torii.providers['acmidm-oauth2'].baseUrl = 'https://authenticatie.vlaanderen.be/op/v1/auth';
       ENV.torii.providers['acmidm-oauth2'].redirectUri = 'https://kaleidos.vlaanderen.be/authorization/callback';
       ENV.torii.providers['acmidm-oauth2'].logoutUrl = 'https://authenticatie.vlaanderen.be/op/v1/logout';
-      ENV.metricsAdapters.config.siteId = 3;
+      ENV.metricsAdapters[0].config.siteId = 3;
     }
   }
 
