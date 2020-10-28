@@ -1,27 +1,15 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
   modelName: 'user',
-  router: service(),
 
-  queryParams: {
-    filter: {
-      refreshModel: true,
-    },
-    size: {
-      refreshModel: true,
-    },
-  },
+  // standard table-related queryParams are handled by the DataTableRouteMixin
 
   mergeQueryOptions(params) {
     const {
       filter,
-    } = params;
-    const {
-      size,
     } = params;
 
     const options = {
@@ -32,9 +20,6 @@ export default Route.extend(AuthenticatedRouteMixin, DataTableRouteMixin, {
       options.filter = filter;
     }
 
-    if (size) {
-      options.size = size;
-    }
     return options;
   },
 
