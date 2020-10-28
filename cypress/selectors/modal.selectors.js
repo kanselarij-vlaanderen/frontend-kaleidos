@@ -21,8 +21,16 @@ const selectors = {
     cancel: '[data-test-vl-modal-verify-cancel]',
     save: '[data-test-vl-modal-verify-save]',
   },
+  publication: {
+    modal: '[data-test-au2-modal-publication-new]',
+    alertInfo: '[data-test-au2-alert-info]',
+    alertError: '[data-test-au2-alert-error]',
+    createButton: '[data-test-publication-button-create-new]',
+    cancelButton: '[data-test-publication-button-cancel]',
+  },
   modalDialog: '[data-test-vl-modal-dialog]',
   modal: '[data-test-vl-modal]',
+  au2Modal: '[data-test-au2-modal]',
   ministerModalSelector: '[data-test-mandatee-selector]',
   modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
 };

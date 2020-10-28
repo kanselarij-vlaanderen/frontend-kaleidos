@@ -613,5 +613,14 @@
   "document-is-confidential": "Dit document is vertrouwelijk",
   "close-agenda-message": "Bent u zeker dat u de agenda wil afsluiten?",
   "close-agenda": "Agenda afsluiten",
+  "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
+  "publications-new-button-text": "Publicatie aanmaken",
+  "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen",
+  "publications-number-required": "Publicatienummer *",
+  "publications-number": "Publicatienummer",
+  "input-error-message": "Dit veld dient ingevuld te worden.",
+  "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
+  "modal-error-alert-title": "Kijk het formulier na",
+  "name-subcase-required": "Korte titel *",
   "logo-flanders": "Logo Vlaanderen"
 }

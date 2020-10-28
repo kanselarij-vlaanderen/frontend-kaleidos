@@ -3,9 +3,10 @@ import Component from '@glimmer/component';
 export default class Alert extends Component {
   get skin() {
     if (this.args.skin) {
-      return `auk-alert--${this.args.skin}`;
+      return `au2-alert--${this.args.skin}`;
     }
-    return 'auk-alert--default';
+
+    return 'au2-alert--default';
   }
 
   get icon() {
@@ -17,9 +18,7 @@ export default class Alert extends Component {
       } else if (this.args.skin === 'warning' || this.args.skin === 'error') {
         return 'alert-triangle';
       }
-    } else {
-      return 'circle-info';
     }
-    return '';
+    return 'circle-info';
   }
 }
