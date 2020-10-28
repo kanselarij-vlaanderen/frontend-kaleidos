@@ -150,13 +150,13 @@ export default EmberObject.create({
     uri: 'http://kanselarij.vo.data.gift/id/concept/publication-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
   },
   LANGUAGE_NL: {
-    uri: 'http://kanselarij.vo.data.gift/id/concept/taalkundige-systemen/98892376-e5ca-47dc-8e98-136db891166b',
+    uri: 'http://publications.europa.eu/resource/authority/language/NLD',
   },
   LANGUAGE_FR: {
-    uri: 'http://kanselarij.vo.data.gift/id/concept/taalkundige-systemen/6f243592-8efd-48ae-a1fc-49cb74f8936e',
+    uri: 'http://publications.europa.eu/resource/authority/language/FRA',
   },
   LANGUAGE_DE: {
-    uri: 'http://kanselarij.vo.data.gift/id/concept/taalkundige-systemen/fe072a38-0ee5-4d2c-b16f-c1ed7a32e985',
+    uri: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
   ACTIVITY_TYPE_URIS: {
     vertalen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
