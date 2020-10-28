@@ -1,6 +1,11 @@
 <div class="auk-alert {{this.skin}}" ...attributes>
   <div class="auk-alert__body">
-    <Badge @icon="{{this.icon}}" @skin={{@skin}}/>
+    {{#unless (eq @skin "loading")}}
+      <WebComponents::AuBadge @icon="{{this.icon}}" @skin={{@skin}}/>
+    {{/unless}}
+    {{#if (eq @skin "loading")}}
+      <AuLoader/>
+    {{/if}}
     <div class="auk-alert__text">
       {{#if @title}}
         <p class="auk-alert__title">{{@title}}</p>
@@ -9,6 +14,6 @@
     </div>
   </div>
   {{#if @isClosable}}
-    <Button @skin="tertiary" @icon="close" @layout="icon-only">{{t "close"}}</Button>
+    <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only">{{t "cancel"}}</WebComponents::AuButton>
   {{/if}}
 </div>
