@@ -1,7 +1,7 @@
 {{#if @icon}}
-  <div class="vlc-input-with-icon">
+  <div class="auk-input-with-icon">
     <Input
-    class="vlc-input {{this.error}} {{this.block}}"
+    class="auk-input {{this.error}} {{this.block}}"
     type="text"
     @enter={{@enter}}
     @value={{@value}}
@@ -14,12 +14,12 @@
     @key-up={{@key-up}}
     ...attributes
     />
-    <Icon @name={{@icon}} />
+    <WebComponents::AuIcon @name={{@icon}} />
   </div>
 
 {{else}}
   <Input
-    class="vlc-input {{this.error}} {{this.block}}"
+    class="auk-input {{this.error}} {{this.block}}"
     type="text"
     @value={{@value}}
     @insert-newline={{@insert-newline}}
