@@ -1,0 +1,19 @@
+<span class="au2-pill {{this.skin}} {{this.layout}}" ...attributes>
+  {{#if @icon}}
+    {{#unless @layout}}
+      <Icon @name={{@icon}}/>
+      {{yield}}
+    {{/unless}}
+
+    {{#if (eq @layout "icon-only")}}
+      <Icon @name={{@icon}} />
+    {{/if}}
+
+    {{#if (eq @layout "icon-right")}}
+      {{yield}}
+      <Icon @name={{@icon}}/>
+    {{/if}}
+  {{else}}
+    {{yield}}
+  {{/if}}
+</span>
