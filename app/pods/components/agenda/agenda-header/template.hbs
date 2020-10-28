@@ -304,7 +304,7 @@
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                     >
                       <a href=""
-                         data-test-agenda-header-createNewDesignAgenda
+                         data-test-agenda-header-create-new-design
                          class="vl-link vl-link--block"
                         {{action "createNewDesignAgenda" currentSession}}
                         {{action attacher.hide}}
@@ -313,6 +313,28 @@
                       </a>
                     </li>
                   {{/if}}
+
+
+                  {{#if 
+                    (and 
+                      (not currentSession.isFinal)
+                      (and (await isLockable))
+                      (and currentAgenda currentAgenda.isDesignAgenda)
+                      (and currentSessionService.isAdmin (await currentAgendaIsLast))
+                      )
+                  }}
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                      >
+                      <a href=""
+                           data-test-agenda-header-reopen-previous-version
+                           class="vl-link vl-link--block vl-u-text--error"
+                          {{action "deleteCurrentAgendaForModal" currentAgenda}}
+                          {{action attacher.hide}}
+                        >
+                        {{t "agenda-reopen-previous-version"}}
+                      </a>
+                    </li>
+                  {{/if}}         
                 {{/if}}
               </ul>
             {{/attach-popover}}
@@ -444,4 +466,23 @@
           @verify={{action "approveAndCloseAgenda"}}
           @closeModal={{action "cancelCloseAgenda"}}
   />
+{{/if}}
+
+{{#if isDeleteCurrentAgenda}}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-design-delete")
+    message=(t "agenda-design-delete-message" agenda=currentAgenda.agendaName)
+    cancel=(action "cancelDeleteCurrentAgendaForModal")
+    verify=(action "reopenPreviousAgendaForModal")
+  }}
+{{/if}}
+{{#if isReopenAgenda }}
+  {{web-components/vl-modal-verify
+    title=(t "agenda-unlock")
+    message=(t "agenda-unlock-message" agenda=(await lastAgendaName))
+    cancel=(action "cancelReopenAgendaForModal")
+    verify=(action "reopenPreviousAgendaAndDeleteCurrent")
+    verifyButtonText=(t "agenda-unlock")
+    buttonType="warning"
+  }}
 {{/if}}
