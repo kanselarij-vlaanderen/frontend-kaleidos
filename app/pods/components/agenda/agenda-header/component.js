@@ -524,7 +524,7 @@ export default Component.extend(FileSaverMixin, {
         this.set('isShowingWarningOnClose', true);
       }
     },
-    async deleteCurrentAgendaForModal() {
+    deleteCurrentAgendaForModal() {
       this.set('isDeleteCurrentAgenda', true);
     },
     cancelDeleteCurrentAgendaForModal() {
