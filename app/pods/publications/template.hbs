@@ -30,30 +30,30 @@
       </Toolbar>
     </Navbar>
     {{#if isShowingPublicationModal}}
-      <WebComponents::AuModal data-test-au2-modal-publication-new>
+      <WebComponents::AuModal data-test-auk-modal-publication-new>
         <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}} @closeModal={{this.closePublicationModal}}/>
         <WebComponents::AuModal::Modal::Body>
           {{#if hasError}}
-            <WebComponents::AuAlert data-test-au2-alert-error @title={{t "modal-error-alert-title"}} @skin="error" @message={{t "modal-error-alert-message"}} @icon="ki-alert-triangle" />
+            <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error" @message={{t "modal-error-alert-message"}} @icon="ki-alert-triangle" />
           {{else}}
-            <WebComponents::AuAlert data-test-au2-alert-info @message={{t "publications-new-warning-message"}} @icon="ki-circle-info" />
+            <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}} @icon="ki-circle-info" />
           {{/if}}
-          <div class="au2-form-group-layout au2-form-group-layout--standard">
-            <div class='au2-form-group {{getClassForGroupNumber}}' >
+          <div class="auk-form-group-layout auk-form-group-layout--standard">
+            <div class='auk-form-group {{getClassForGroupNumber}}' >
               <WebComponents::AuLabel for="publicationNumberInput">{{t "publications-number-required"}}</WebComponents::AuLabel>
-              <WebComponents::AuInput type="text" id="publicationNumberInput" class="au2-input--max-width" @block="true" @value={{mut publication.number}}/>
+              <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width" @block="true" @value={{mut publication.number}}/>
               {{#if getClassForGroupNumber}}
                 <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
               {{/if}}
             </div>
-            <div class='au2-form-group {{getClassForGroupShortTitle}}' >
+            <div class='auk-form-group {{getClassForGroupShortTitle}}' >
               <WebComponents::AuLabel for="shortTitleInput">{{t "name-subcase-required"}}</WebComponents::AuLabel>
               <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}}/>
               {{#if getClassForGroupShortTitle}}
                 <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
               {{/if}}
             </div>
-            <div class="au2-form-group">
+            <div class="auk-form-group">
               <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
               <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}} />
             </div>

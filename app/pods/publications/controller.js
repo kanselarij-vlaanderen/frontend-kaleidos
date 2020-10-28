@@ -35,14 +35,14 @@ export default class PublicationsController extends Controller {
 
   get getClassForGroupNumber() {
     if (this.hasError && (!this.publication.number || this.publication.number < 1)) {
-      return 'au2-form-group--error';
+      return 'auk-form-group--error';
     }
     return null;
   }
 
   get getClassForGroupShortTitle() {
     if (this.hasError && (!this.publication.shortTitle || this.publication.shortTitle < 1)) {
-      return 'au2-form-group--error';
+      return 'auk-form-group--error';
     }
     return null;
   }
