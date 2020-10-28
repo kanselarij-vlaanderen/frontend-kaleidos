@@ -39,7 +39,7 @@
                     <LinkTo
                       @route="newsletter.print"
                       @model={{await agenda.createdFor.id}}
-                      @query={{hash definite=false}}
+                      @query={{hash showDraft=true}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >
                       {{t "design"}}
@@ -49,7 +49,7 @@
                     <LinkTo
                       @route="newsletter.print"
                       @model={{await agenda.createdFor.id}}
-                      @query={{hash definite=true}}
+                      @query={{hash showDraft=false}}
                       class="vlc-tabs-reverse__link"
                       @activeClass="vlc-tabs-reverse__link--active" >
                       {{t "definite"}}

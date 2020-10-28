@@ -72,7 +72,9 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
+    const realmonth = agendaDate.month() + 1; // Js month start at 0.
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+    const dateFormatDotted = `${agendaDate.date()}.${realmonth}.${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
     cy.get('.vlc-status-timeline > li').eq(0)
@@ -87,7 +89,9 @@ context('Subcase tests', () => {
       cy.get('@descriptionValue').eq(2)
         .contains(dateFormat);
       cy.get('@descriptionValue').eq(4)
-        .contains(/Nog niet beslist/);
+        .contains(dateFormatDotted);
+      // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
+      // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
       cy.get('@descriptionValue').eq(5)
         .contains(/Hilde Crevits/);
     });

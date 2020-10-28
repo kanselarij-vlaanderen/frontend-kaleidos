@@ -2,7 +2,9 @@
   <div class="vl-u-spacer-extended-bottom-s">
     <div class="vl-u-display-flex vlc-u-flex-space-between">
       <h4>
-        {{await numberToShow}}
+        {{#if this.showIndex}}
+          {{this.itemIndex}}.
+        {{/if}}
         {{#if (not newsletterInfo)}}
           {{agendaitem.shortTitle}}
         {{else}}
@@ -30,9 +32,6 @@
         {{agendaitem.title}}
       </p>
     {{/if}}
-    <div class="vl-u-text vl-u-text--small vl-u-text--muted">
-      {{moment-format (await agenda.createdFor.plannedstart) "DD MMMM YYYY"}}
-    </div>
   </div>
 {{else}}
   <div>
@@ -95,7 +94,7 @@
       </ul>
     </div>
   </div>
-{{else if allowEditing}}
+{{else if (and allowEditing newsletterInfo.richtext)}}
   <div class="vl-u-spacer-extended-bottom-s">
     <p class="vl-u-text--muted vl-u-text--capitalize">
       {{t "no-themes-agendaitem"}}

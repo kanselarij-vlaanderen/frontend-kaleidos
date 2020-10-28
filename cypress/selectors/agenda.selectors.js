@@ -11,7 +11,6 @@ const selectors = {
   button: 'button',
   overviewTitle: '[data-test-agendas-title]',
   agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
-  agendaitemOpmerkingenTab: '[data-test-agenda-agendaitem-tab="agendaitem-comment"]',
   agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
@@ -41,7 +40,11 @@ const selectors = {
   agendaActions: '[data-test-agenda-header-showActionOptions]',
   approveAgenda: '[data-test-agenda-header-approveAgenda]',
   lockAgenda: '[data-test-agenda-header-lockagenda]',
+  reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
   agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
+  deleteAgenda: '[data-test-agenda-header-deleteagenda]',
+  createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
+  reopenCurrentAgenda: '[data-test-agenda-header-unlockagenda]',
   agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
   addDecision: '[data-test-add-decision]',
   decisionContainer: '[data-test-decision-container]',
@@ -90,5 +93,6 @@ const selectors = {
     announcementLeft: '[data-test-compare-announcement-left]',
     announcementRight: '[data-test-compare-announcement-right]',
   },
+  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
 };
 export default selectors;

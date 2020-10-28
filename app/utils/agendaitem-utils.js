@@ -222,7 +222,6 @@ export const parseDraftsAndGroupsFromAgendaitems = async(agendaitems) => {
  * @return {Array}                        The input set, sorted by priority ASC
  */
 export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
-  let prevIndex = 0;
   let groupsArray = groupedAgendaitems;
   if (!allowEmptyGroups) {
     groupsArray = groupsArray.filter((group) => group.groupName && group.groupname !== 'Geen toegekende ministers');
@@ -230,13 +229,7 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
     groupsArray = groupsArray.filter((group) => group.groupname !== 'Geen toegekende ministers');
   }
 
-  groupsArray = groupsArray.sortBy('groupPriority').map((group) => {
-    group.agendaitems.map((agendaitem, index) => {
-      prevIndex = index + prevIndex + 1;
-      agendaitem.set('itemIndex', prevIndex);
-    });
-    return EmberObject.create(group);
-  });
+  groupsArray = groupsArray.sortBy('groupPriority').map((group) => EmberObject.create(group));
 
   return groupsArray;
 };
@@ -257,4 +250,15 @@ export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgend
   }
 };
 
-
+export const getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus = async(currentAgenda) => {
+  const agendaitemsFromCurrentAgenda = await currentAgenda.get('agendaitems').toArray();
+  return agendaitemsFromCurrentAgenda.filter((agendaitem) => {
+    const formallyOkOption = CONFIG.formallyOkOptions.find((option) => option.label === 'Formeel OK');
+    if (formallyOkOption) {
+      const formallyOkUri = formallyOkOption.uri;
+      if (formallyOkUri !== agendaitem.formallyOk) {
+        return agendaitem;
+      }
+    }
+  });
+};

@@ -107,7 +107,8 @@ function addDocuments(files) {
  */
 function addNewPiece(oldFileName, file, modelToPatch) {
   cy.log('addNewPiece');
-  cy.route('POST', 'pieces').as('createNewPiece');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
@@ -145,11 +146,11 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click();
-  })
-    .wait('@createNewPiece', {
-      timeout: 12000,
-    });
+    cy.get(form.formSave).click()
+      .wait(`@createNewPiece_${randomInt}`, {
+        timeout: 12000,
+      });
+  });
 
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {

@@ -10,6 +10,8 @@ export default Component.extend({
   currentSession: inject(),
   newsletterService: inject(),
 
+  allowEditing: false,
+
   async init() {
     this._super(...arguments);
     const meeting = await this.get('meeting');
@@ -18,10 +20,6 @@ export default Component.extend({
       await this.newsletterService.createNewsItemForMeeting(meeting);
     }
   },
-
-  allowEditing: computed('definite', function() {
-    return this.definite === 'false';
-  }),
 
   editTitle: computed('meeting', function() {
     const date = this.get('meeting.plannedStart');

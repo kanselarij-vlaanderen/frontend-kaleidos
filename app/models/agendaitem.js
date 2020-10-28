@@ -2,7 +2,9 @@ import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-import { alias } from '@ember/object/computed';
+import {
+  alias, deprecatingAlias
+} from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
 import { A } from '@ember/array';
@@ -52,9 +54,7 @@ export default ModelWithModifier.extend({
   treatments: hasMany('agenda-item-treatment', {
     inverse: null,
   }),
-  showInNewsletter: attr('boolean'), // only applies when showAsRemark = true
 
-  remarks: hasMany('remark'),
   mandatees: hasMany('mandatee'),
   approvals: hasMany('approval'),
   pieces: hasMany('piece'),
@@ -114,14 +114,9 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  number: computed('displayPriority', 'priority', function() {
-    const {
-      priority, displayPriority,
-    } = this;
-    if (!priority) {
-      return displayPriority;
-    }
-    return priority;
+  number: deprecatingAlias('priority', {
+    id: 'agendaitem-number-deprecated',
+    until: 'unknown',
   }),
 
   isDesignAgenda: computed('agenda.isDesignAgenda', function() {
