@@ -1,3 +1,6 @@
+// BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/components/number-pagination.js
+// BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/templates/components/number-pagination.hbs
+
 import { computed } from '@ember/object';
 import Component from '@ember/component';
 
