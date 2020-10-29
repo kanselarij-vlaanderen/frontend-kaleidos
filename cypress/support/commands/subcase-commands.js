@@ -323,9 +323,12 @@ function proposeSubcaseForAgenda(agendaDate) {
       .should('exist')
       .click();
   });
+
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
+  cy.contains('Indienen voor agendering')
+    .should('not.exist');
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   })
