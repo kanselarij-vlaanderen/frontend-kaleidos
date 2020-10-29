@@ -553,7 +553,7 @@
   "kaleidos-login-info-gebruikersbeheer-vlaanderen": "gebruikersbeheer Vlaanderen ",
   "kaleidos-login-info-popup-message": "Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.",
   "kaleidos": "Kaleidos",
-  "amount-per-page": "Aantal items per pagina",
+  "amount-per-page": "Aantal zoekresultaten per pagina",
   "document-viewer-message-before-type": "Documenten van het type ",
   "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
   "style-guide-basic": "Basics",
@@ -610,5 +610,8 @@
   "document-is-confidential": "Dit document is vertrouwelijk",
   "close-agenda-message": "Bent u zeker dat u de agenda wil afsluiten?",
   "close-agenda": "Agenda afsluiten",
+  "table-of" : " van ",
+  "table-previous-with-arrow": "< Vorige",
+  "table-next-with-arrow": "Volgende >",
   "publication-flow": "Publicatie"
 }
