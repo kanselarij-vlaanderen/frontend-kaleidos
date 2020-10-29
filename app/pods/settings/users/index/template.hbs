@@ -101,7 +101,7 @@
                       {{if user.email user.email "-"}}
                     </td>
                     <td>
-                      {{user.account.voId}}
+                      {{if user.organization.identifier user.organization.identifier "-"}}
                     </td>
                     <td>
                       {{#if user.group}}
@@ -111,6 +111,7 @@
                       {{/if}}
                     </td>
                     <td>
+                      {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
                       {{web-components/light-table/vlc-user-table-actionbar
                         row=user
                         goToRoute=goToRoute
