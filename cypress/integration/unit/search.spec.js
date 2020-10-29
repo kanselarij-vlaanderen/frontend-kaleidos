@@ -47,7 +47,7 @@ context('Search tests', () => {
     searchFunction(options);
   });
 
-  it.only('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
+  it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
     cy.visit('zoeken/dossiers');
     searchFunction(options);
   });
