@@ -17,21 +17,6 @@ export default class PublicationsController extends Controller {
     longTitle: null,
   };
 
-  get amountInProgress() {
-    if (this.model) {
-      return this.model.filter((publication) => publication.inProgress).length;
-    }
-
-    return 0;
-  }
-
-  get amountDone() {
-    if (this.model) {
-      return this.model.filter((publication) => !publication.inProgress).length;
-    }
-    return 0;
-  }
-
   get getError() {
     return this.hasError;
   }
@@ -61,29 +46,29 @@ export default class PublicationsController extends Controller {
     if (!this.hasError) {
       this.isCreatingPublication = true;
       await this.publicationService.createNewPublication(this.publication.number, this.publication.longTitle, this.publication.shortTitle);
-      this.isShowingPublicationModal = false;
-      this.isCreatingPublication = false;
-      this.publication = { // TODO
-        number: null,
-        shortTitle: null,
-        longTitle: null,
-      };
+      this.closePublicationModal();
+      // TODO: Redirect to new created publication
     }
   }
 
   @action
   closePublicationModal() {
-    this.publication = {
-      number: null,
-      shortTitle: null,
-      longTitle: null,
-    };
     this.isShowingPublicationModal = false;
-    this.hasError = false;
+    this.isCreatingPublication = false;
+    this.resetPublication();
   }
 
   @action
   showNewPublicationModal() {
     this.isShowingPublicationModal = true;
+  }
+
+  resetPublication() {
+    this.publication = {
+      number: null,
+      shortTitle: null,
+      longTitle: null,
+    };
+    this.hasError = false;
   }
 }

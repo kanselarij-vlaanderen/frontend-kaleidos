@@ -120,6 +120,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-printable-agenda-list';
 @import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
+@import 'custom-components/_vlc-publication-overview';
 @import 'custom-components/vlc-publication-status-pill';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-rdfa-editor';
@@ -151,6 +152,8 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/_vlc-kitchensink-page-header';
 @import 'custom-components/_vlc-kitchensink-sample-header';
 @import 'custom-components/_vlc-kitchensink-sample';
+
+
 
 // Imports utilities (loaded from node_modules)
 // @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
@@ -195,4 +198,8 @@ $icon-font-location: '/fonts/';
 
 // Components (from npm package)
 @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
+
+// o-flex
+@import 'custom-utilities/o-flex';
+@import 'custom-utilities/u-spacer';
 

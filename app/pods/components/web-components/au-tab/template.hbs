@@ -1,0 +1,9 @@
+<li class="auk-tabs__tab" ...attributes>
+  <LinkTo @route={{this.route}}>
+    <span class="auk-tabs__tab-inner">
+      <WebComponents::AuTab::Innerlayout @layout={{this.layout}} @icon={{this.icon}} @counter={{this.counter}}>
+        {{yield}}
+      </WebComponents::AuTab::Innerlayout>
+    </span>
+  </LinkTo>
+</li>
