@@ -254,7 +254,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
   it('Cancelling when adding new piece should not skip a piece the next time', () => {
     cy.route('DELETE', '/files/**').as('deleteFile');
-    cy.route('POST', '/pieces').as('createNewPiece');
+
     const caseTitle = `Cypress test: pieces - ${currentTimestamp()}`;
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: cancelling a new piece - ${currentTimestamp()}`;
@@ -285,6 +285,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         });
     });
 
+    cy.log('uploadFileToCancel 1');
     uploadFileToCancel(file);
     cy.get(form.formCancelButton).click()
       .wait('@deleteFile');
@@ -298,6 +299,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         });
     });
 
+    cy.log('uploadFileToCancel 2');
     uploadFileToCancel(file);
     cy.get(modal.baseModal.close).click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
@@ -310,14 +312,18 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         });
     });
 
+    cy.log('uploadFileToCancel 3');
     uploadFileToCancel(file);
     cy.get(document.modalPieceDelete).should('exist')
       .click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
+
+    cy.log('uploadFileToCancel 4');
     cy.get(modal.baseModal.dialogWindow).within(() => {
       cy.get(form.formSave).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
+      cy.route('POST', '/pieces').as('createNewPiece');
       cy.get(form.formSave).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
@@ -330,6 +336,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         timeout: 12000,
       });
     });
+
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
@@ -339,7 +346,6 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // TODO pressing ESC key on the modal should be tested once implemented
-
     cy.get(document.showPiecesHistory).click();
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
