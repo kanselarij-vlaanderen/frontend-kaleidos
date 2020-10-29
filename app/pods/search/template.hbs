@@ -4,7 +4,7 @@
       <div class="vlc-toolbar__item">
         <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-u-padding-bottom-5"
             data-test-agendas-title>
-          {{t "search-agenda-items"}}
+          {{capitalize (t "search")}}
         </h1>
       </div>
     </div>
@@ -41,6 +41,7 @@
           class="vl-input-field vl-input-field--block"
           type="text"
           id="dossierId"
+          @placeholder={{t "search-agenda-items"}}
           @value={{this.searchTextBuffer}}
           @enter={{fn this.search}}
         />
