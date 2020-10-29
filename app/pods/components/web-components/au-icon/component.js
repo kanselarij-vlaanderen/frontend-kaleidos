@@ -7,8 +7,8 @@ export default class Icon extends Component {
 
   get size() {
     if (this.args.size) {
-      return `au2-icon--${this.args.size}`;
+      return `auk-icon--${this.args.size}`;
     }
-    return 'au2-icon--default';
+    return 'auk-icon--default';
   }
 }
