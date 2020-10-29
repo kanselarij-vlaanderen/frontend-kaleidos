@@ -3,10 +3,10 @@ import Component from '@glimmer/component';
 export default class Alert extends Component {
   get skin() {
     if (this.args.skin) {
-      return `au2-alert--${this.args.skin}`;
+      return `auk-alert--${this.args.skin}`;
     }
 
-    return 'au2-alert--default';
+    return 'auk-alert--default';
   }
 
   get icon() {
