@@ -163,7 +163,7 @@ context('Settings overview page tests', () => {
   });
 
   it('Should change the group of the user from the detailpage', () => {
-    cy.route('GET', '/users/**').as('getUsers');
+    cy.route('GET', '/users?**').as('getUsers');
     cy.route('GET', '/users?filter=**').as('filterUsers');
 
     cy.get(settings.manageUsers).contains('Gebruikersbeheer')
