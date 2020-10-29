@@ -193,7 +193,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 
-//
-@import 'appuniversum/au2-button';
-@import 'appuniversum/au2-input';
+// Components (from npm package)
+@import "node_modules/au2-kaleidos-css/au2-kaleidos";
 

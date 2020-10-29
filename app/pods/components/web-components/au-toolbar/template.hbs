@@ -1,0 +1,8 @@
+<div class="au2-toolbar-complex {{if @autoHeight "au2-toolbar-complex--auto"}}" ...attributes>
+  {{yield 
+    ( hash
+      Group = (component 'au-toolbar/group')
+      Item = (component 'au-toolbar/item')
+    )
+  }}
+</div>
