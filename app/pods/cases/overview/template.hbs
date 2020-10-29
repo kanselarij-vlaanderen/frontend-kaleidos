@@ -18,20 +18,6 @@
             {{web-components/vl-toggle value=this.showArchived}}
           </div>
         {{/if}}
-        <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-          <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="dossierId">
-            {{t "amount-showed"}}
-          </label>
-          {{#power-select
-            options=sizeOptions
-            selected=size
-            searchEnabled=false
-            onchange=(action "selectSize")
-          as |sizeValue|
-          }}
-            {{sizeValue}}
-          {{/power-select}}
-        </div>
       </div>
     </div>
     {{#data-table

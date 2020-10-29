@@ -28,20 +28,6 @@
                     <i class="ki-search"></i>
                   </button>
                 </div>
-                <div class="vlc-toolbar__right">
-                  <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap">
-                    {{t "amount-per-page"}}
-                  </label>
-                  {{#power-select
-                    options=sizeOptions
-                    selected=size
-                    searchEnabled=false
-                    onchange=(action "selectSize")
-                  as |sizeValue|
-                  }}
-                    {{sizeValue}}
-                  {{/power-select}}
-                </div>
               </div>
 
             </div>
@@ -101,7 +87,7 @@
                       {{if user.email user.email "-"}}
                     </td>
                     <td>
-                      {{user.account.voId}}
+                      {{if user.organization.identifier user.organization.identifier "-"}}
                     </td>
                     <td>
                       {{#if user.group}}
@@ -111,6 +97,7 @@
                       {{/if}}
                     </td>
                     <td>
+                      {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
                       {{web-components/light-table/vlc-user-table-actionbar
                         row=user
                         goToRoute=goToRoute

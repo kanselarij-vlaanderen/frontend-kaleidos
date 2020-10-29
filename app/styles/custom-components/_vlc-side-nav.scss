@@ -80,12 +80,6 @@
     display: none;
   }
 
-  .vlc-side-nav-toggle{
-    .vl-vi {
-      @include vi-nav-right;
-    }
-  }
-
   .vlc-side-nav-item__meta--small {
     display: block;
     font-size: 1.3rem;

@@ -80,21 +80,6 @@
           <WebComponents::VlAlert @message={{t "no-results-found-modify-term"}}/>
         {{/if}}
       {{/if}}
-      <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center vlc-search__sizeoptions">
-        <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="dossierId">
-          {{t "amount-showed"}}
-        </label>
-        <div class="vlc-search__sizeoptions">
-          <PowerSelect
-                  @options={{this.sizeOptions}}
-                  @selected={{size}}
-                  @searchEnabled={{false}}
-                  @onchange={{this.selectSize}}
-                  as |sizeValue|>
-            {{sizeValue}}
-          </PowerSelect>
-        </div>
-      </div>
     </div>
   </div>
 </div>
