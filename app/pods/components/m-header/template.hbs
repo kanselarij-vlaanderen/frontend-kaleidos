@@ -38,13 +38,14 @@
             {{/link-to}}
           </li>
           <li class="vl-tab" data-test-m-header-search>
-            {{#link-to
-              "search"
+            <LinkTo
               class="vl-tab__link"
-            }}
+              @route="search.index"
+              @current-when="search"
+            >
               {{!-- TODO: magnifying glass icon --}}
               {{capitalize (t "search")}}
-            {{/link-to}}
+            </LinkTo>
           </li>
           {{#if currentSession.isEditor}}
             <li class="vl-tab" data-test-m-header-settings>
