@@ -19,23 +19,27 @@ export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
       refreshModel: true,
       as: 'tot',
     },
-  };
+    page: {
+      as: 'page',
+    },
 
-  resetController(controller, isExiting) {
-    if (isExiting) {
-      controller.set('searchText', null);
-      controller.set('mandatees', null);
-      controller.set('dateFrom', null);
-      controller.set('dateTo', null);
-    }
-  }
+    resetController(controller, isExiting) {
+      if (isExiting) {
+        controller.set('searchText', null);
+        controller.set('mandatees', null);
+        controller.set('dateFrom', null);
+        controller.set('dateTo', null);
+      }
+    },
 
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    const params = this.paramsFor('search');
-    controller.searchTextBuffer = params.searchText;
-    controller.mandateesBuffer = params.mandatees;
-    controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
-    controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    setupController(controller, model) {
+      super.setupController(controller, model);
+      const params = this.paramsFor('search');
+      controller.searchTextBuffer = params.searchText;
+      controller.mandateesBuffer = params.mandatees;
+      controller.page = params.page;
+      controller.dateFromBuffer = controller.deserializeDate(params.dateFrom);
+      controller.dateToBuffer = controller.deserializeDate(params.dateTo);
+    },
   }
 }
