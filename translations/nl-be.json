@@ -612,5 +612,6 @@
   "close-agenda": "Agenda afsluiten",
   "table-of" : " van ",
   "table-previous-with-arrow": "< Vorige",
-  "table-next-with-arrow": "Volgende >"
+  "table-next-with-arrow": "Volgende >",
+  "publication-flow": "Publicatie"
 }
