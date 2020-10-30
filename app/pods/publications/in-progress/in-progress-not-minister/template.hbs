@@ -1,1 +1,77 @@
-<div>{{t "cancel" }}</div>
+<DataTable
+    @content={{this.model}}
+    @page={{this.page}}
+    @noDataMessage={{t "no-results-found"}}
+    @size={{this.size}}
+    @sort={{this.sort}}
+    @isLoading={{this.isLoadingModel}}
+    @class="auk-table auk-table--disable-bottom-border"
+    as |table|
+>
+  <table.content as |c|>
+    <c.header>
+      <th>{{t "agendaitem-case"}}</th>
+      {{th-sortable
+        currentSorting=this.sort
+        field="publicationBefore"
+        label=(t "publication-before")
+      }}
+      <th>{{t "latest-modified"}}</th>
+      <th>{{t "translations"}}</th>
+      <th>{{t "proof"}}</th>
+      <th></th>
+      <th></th>
+    </c.header>
+    <c.body class="tr-hover" as |row|>
+      <td>
+        {{row.case.shortTitle}}<br/>
+        <span class="u-text-small u-muted">
+          {{row.publicationNumber}} 
+          {{t "dash"}}
+        </span>
+      </td>
+      <td> 
+        {{#if row.publicationBefore}}
+          {{moment-format row.publicationBefore "DD-MM-YYYY"}}
+        {{else}}
+          {{t "dash"}}
+        {{/if}}
+      </td>
+      <td>
+        {{moment-format row.modified "DD-MM-YYYY"}}<br/>
+        <span class="u-text-small u-muted">{{moment-format row.modified "HH:ss"}}</span>
+      </td>
+      <td>
+        {{t "dash"}}
+        {{!-- {{#if row.translationStatus.[0].initiated}}
+        <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{row.translationStatus.[0].finished}}/{{row.translationStatus.[0].total}}</WebComponents::AuStatusPill>
+        {{else}}
+        -
+        {{/if}} --}}
+      </td>
+      <td>
+        {{t "dash"}}
+        {{!-- {{#if row.printProofStatus.[0].initiated}}
+        <WebComponents::AuStatusPill @status={{row.printProofStatus.[0].status}}>{{row.printProofStatus.[0].finished}}/{{row.printProofStatus.[0].total}}</WebComponents::AuStatusPill>
+        {{else}}
+        -
+        {{/if}} --}}
+      </td>
+      <td>
+        {{t "dash"}}
+        {{!-- <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment" /> --}}
+        {{!-- {{#if row.internalComment}}
+        <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment" id="comment-{{increment index}}">Hover over mij om de comment te bekijken</WebComponents::AuButton>
+        <EmberTooltip @tooltipClass="auk-tooltip" @targetId="comment-{{increment index}}" @side="left">
+          {{row.internalComment}}
+        </EmberTooltip>
+        {{/if}} --}}
+      </td>
+      <td>
+        <ButtonToolbar>
+          <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="chevron-right" />
+        </ButtonToolbar>
+      </td>
+    </c.body>
+  </table.content>
+</DataTable>

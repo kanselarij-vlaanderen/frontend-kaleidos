@@ -24,6 +24,7 @@ export default class PublicationService extends Service {
       case: caze,
       created: creationDatetime,
       status: toPublishStatus,
+      modified: creationDatetime,
     });
 
     await publicationFlow.save();

@@ -625,5 +625,8 @@
   "name-subcase-required": "Korte titel *",
   "publications-to-in-progress": "Te behandelen",
   "via-cabinet": "Via Ministerraad",
-  "not-via-cabinet": "Niet Via Ministerraad"
+  "not-via-cabinet": "Niet Via Ministerraad",
+  "publication-before": "Uiterste publicatie",
+  "translations": "Vertalingen",
+  "proof": "Drukproof"
 }
