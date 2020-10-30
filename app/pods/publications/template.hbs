@@ -21,7 +21,7 @@
     </WebComponents::AuToolbar>
   </WebComponents::AuNavbar>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    <Navbar @size="large" @border="none">
+    {{!-- <Navbar @size="large" @border="none">
       <Toolbar>
         <Toolbar::Group>
           <WebComponents::AuInput @icon="search" @block="true" placeholder="Zoeken..."></WebComponents::AuInput>
@@ -32,7 +32,7 @@
           </Toolbar::Item>
         </Toolbar::Group>
       </Toolbar>
-    </Navbar>
+    </Navbar> --}}
     {{#if isShowingPublicationModal}}
       <WebComponents::AuModal data-test-auk-modal-publication-new>
         <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}}

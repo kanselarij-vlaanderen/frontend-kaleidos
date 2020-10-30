@@ -1,1 +1,22 @@
-<div>{{t "cancel" }}</div>
+<div class="auk-scroll-wrapper__body">
+  <div class="u-m-4">
+    <div class="u-my-2">
+      <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @noPadding="true">
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group>
+            <WebComponents::AuTabs>
+              <WebComponents::AuTab @route="publications.in-progress.in-progress-minister">{{t "via-cabinet"}}</WebComponents::AuTab>
+              <WebComponents::AuTab @route="publications.in-progress.in-progress-not-minister">{{t "not-via-cabinet"}}</WebComponents::AuTab>
+            </WebComponents::AuTabs>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuInput @icon="search" @block="true" placeholder="Zoeken..." />
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuNavbar>
+    </div>
+    {{outlet}}
+  </div>
+</div>
