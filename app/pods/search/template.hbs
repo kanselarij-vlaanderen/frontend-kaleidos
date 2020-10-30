@@ -41,7 +41,7 @@
           class="vl-input-field vl-input-field--block"
           type="text"
           id="dossierId"
-          @placeholder={{t "search-agenda-items"}}
+          @placeholder={{t "search-placeholder"}}
           @value={{this.searchTextBuffer}}
           @enter={{fn this.search}}
         />
@@ -106,11 +106,16 @@
 
 
     <ul class="vl-tabs">
+      {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
+            to go back and forth between search results for the different types while keeping the
+            page-number. --}}
       <li class="vl-tab">
         <LinkTo
           class="vl-tab__link"
           @route="search.agenda-items"
+          @current-when="search.agenda-items"
           @activeClass="active"
+          @query={{hash page=0}}
         >
           {{t "agendaitems"}}
         </LinkTo>
@@ -119,7 +124,9 @@
         <LinkTo
           class="vl-tab__link"
           @route="search.cases"
+          @current-when="search.cases"
           @activeClass="active"
+          @query={{hash page=0}}
         >
           {{t "cases"}}
         </LinkTo>
