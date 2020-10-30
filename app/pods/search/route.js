@@ -23,12 +23,12 @@ export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
       as: 'page',
     },
 
-  /* There is no reset of query parameters here by means of "resetController".
-   * It is assumed that -unless users explicitly click the main "search" button-
-   * search state (term, page number, ...) should be remembered, expecially with
-   * a trial-and-error search-session in mind, where users navigate to a detail item,
-   * realize it's not what they're looking for and go back in history.
-   */
+    /* There is no reset of query parameters here by means of "resetController".
+     * It is assumed that -unless users explicitly click the main "search" button-
+     * search state (term, page number, ...) should be remembered, expecially with
+     * a trial-and-error search-session in mind, where users navigate to a detail item,
+     * realize it's not what they're looking for and go back in history.
+     */
 
     setupController(controller, model) {
       super.setupController(controller, model);
