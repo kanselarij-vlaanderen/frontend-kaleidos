@@ -5,5 +5,7 @@ const selectors = {
   generalBackButton: '[data-test-general-back-button]',
   saveButton: '[data-test-save-button]',
   navigationWalkUp: '[data-test-navigation-walk-up]',
+  aukInput: '[data-test-auk-input]',
+  aukTextarea: '[data-test-auk-textarea]',
 };
 export default selectors;

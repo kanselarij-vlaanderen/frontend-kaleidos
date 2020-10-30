@@ -2,6 +2,7 @@
   <div class="vlc-input-with-icon">
     <Input
     class="vlc-input {{this.error}} {{this.block}}"
+    data-test-auk-input
     type="text"
     @enter={{@enter}}
     @value={{@value}}
@@ -21,6 +22,7 @@
 {{else}}
   <Input
     class="vlc-input {{this.error}} {{this.block}}"
+    data-test-auk-input
     type="text"
     @value={{@value}}
     @insert-newline={{@insert-newline}}
