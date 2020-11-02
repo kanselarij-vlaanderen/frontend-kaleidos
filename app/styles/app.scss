@@ -89,6 +89,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-agenda-detail-sidebar-section-header';
 @import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
+@import 'custom-components/vlc-auk-panel';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
 @import 'custom-components/vlc-block-link';
@@ -198,4 +199,9 @@ $icon-font-location: '/fonts/';
 
 // Components (from npm package)
 @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
+
+
+// Components to move in npm css package
+@import 'appuniversum/auk-pill';
+@import 'appuniversum/auk-panel';
 

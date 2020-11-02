@@ -1,0 +1,9 @@
+<div class="auk-panel" ...attributes>
+  {{yield 
+    (hash
+      Body = (component 'panel/body')
+      Header = (component 'panel/header')
+      Footer = (component 'panel/footer')
+    )
+  }}
+</div>

@@ -8,6 +8,7 @@
   "add-comment": "Opmerking toevoegen",
   "add-decision": "Voeg beslissing toe",
   "add-minister": "Minister toevoegen",
+  "add-contact": "Contactpersoon toevoegen",
   "add-newsletter": "Voeg kort bestek toe",
   "add-people": "Bevoegde persoon toevoegen",
   "add-to-agenda": "Agendapunt toevoegen",
@@ -135,6 +136,7 @@
   "dropzone-text-multiple": "Sleep je bestanden naar hier of klik hier om bestanden te selecteren.",
   "dropzone-text": "Sleep je bestand naar hier of klik hier om een bestand te selecteren.",
   "edit": "Wijzigen",
+  "edit-2": "Bewerken",
   "edit-case": "Dossier wijzigen",
   "edit-mandatee": "Minister wijzigen",
   "edit-minister": "Minister wijzigen",
@@ -628,5 +630,11 @@
   "not-via-cabinet": "Niet Via Ministerraad",
   "publication-before": "Uiterste publicatie",
   "translations": "Vertalingen",
-  "proof": "Drukproof"
+  "proof": "Drukproef",
+  "proofs": "Drukproeven",
+  "publication-inscription": "Opschrift",
+  "ministers-policy-fields": "Ministers en beleidsvelden",
+  "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
+  "delete-minister": "Verwijderen van minister",
+  "contacts": "Contactpersonen"
 }

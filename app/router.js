@@ -27,7 +27,7 @@ Router.map(function() {
   });
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
-      this.route('publication', { path: '/publicatie/:id', }, function() {
+      this.route('publication', { path: '/publicatie/:publication_id', }, function() {
         this.route('case', { path: '/dossiers', });
         this.route('documents', { path: '/documenten', });
         this.route('translations', { path: '/vertalingen', });

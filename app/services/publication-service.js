@@ -28,5 +28,7 @@ export default class PublicationService extends Service {
     });
 
     await publicationFlow.save();
+
+    return publicationFlow;
   }
 }

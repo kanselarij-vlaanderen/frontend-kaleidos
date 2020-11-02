@@ -45,9 +45,10 @@ export default class PublicationsController extends Controller {
 
     if (!this.hasError) {
       this.isCreatingPublication = true;
-      await this.publicationService.createNewPublication(this.publication.number, this.publication.longTitle, this.publication.shortTitle);
+      const newPublication = await this.publicationService.createNewPublication(this.publication.number, this.publication.longTitle, this.publication.shortTitle);
       this.closePublicationModal();
       // TODO: Redirect to new created publication
+      this.transitionToRoute('cases.case.publication.case', newPublication.get('case').get('id'), newPublication.get('id'));
     }
   }
 

@@ -1,0 +1,65 @@
+/* ==========================================================================
+  auk-panel
+   ========================================================================== */
+
+   .auk-panel {
+    background: #FFF;
+    border: .1rem solid #C6CDD3;
+  }
+  
+  .auk-panel__header {
+    padding: 0 2rem;
+    height: 5.5rem;
+    border-bottom: .1rem solid #C6CDD3;
+    display: flex;
+    align-items: center;
+  
+    .auk-panel__title {
+      font-weight: 500;
+      font-size: 2rem;
+      margin: 0;
+    }
+  }
+  
+  .auk-panel__body {
+    padding: 2rem;
+  
+    > p:only-child {
+      margin: 0;
+    }
+  
+    + .auk-panel__body {
+      border-top: .1rem solid #C6CDD3;
+    }
+  
+    // Padding for tables inside of panels
+    > .auk-table tr td:first-child,
+    > .auk-table tr th:first-child {
+      padding-left: 2rem;
+    }
+    > .auk-table tr td:last-child,
+    > .auk-table tr th:last-child {
+      padding-right: 2rem;
+    }
+  
+    // Border styles for document cards inside of panels
+    .auk-document-card {
+      border: none;
+      &:not(:last-of-type) {
+        border-bottom: .1rem solid $au-gray-300;
+      }
+    }
+  }
+  
+  .auk-panel__body--no-pad {
+    padding: 0;
+  }
+  
+  .auk-panel__footer {
+    padding: 0 2rem;
+    height: 5.5rem;
+    border-top: .1rem solid #C6CDD3;
+    display: flex;
+    align-items: center;
+  }
+  

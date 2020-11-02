@@ -3,30 +3,14 @@
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <div class="o-flex o-flex--vertical u-mt-2">
-          <WebComponents::AuBreadcrumb>{{t "cancel"}}</WebComponents::AuBreadcrumb>
-          <h4 class="auk-toolbar-complex__title">{{t "cancel"}}</h4>
+          <WebComponents::AuBreadcrumb>{{getTitlePublication}}</WebComponents::AuBreadcrumb>
+          <h4 class="auk-toolbar-complex__title">{{getShortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back"></WebComponents::AuTab>
-            <WebComponents::AuTab>{{t "cancel"}}</WebComponents::AuTab>
-            <WebComponents::AuTab>{{t "cancel"}}</WebComponents::AuTab>
-            <WebComponents::AuTab>
-              <div class="o-flex o-flex--center">
-                <span class="u-mr-2">{{t "cancel"}}</span>
-                <WebComponents::AuStatusPill></WebComponents::AuStatusPill>
-              </div>
-            </WebComponents::AuTab>
-            <WebComponents::AuTab>
-              <div class="o-flex o-flex--center">
-                <span class="u-mr-2">{{t "cancel"}}</span>
-                <WebComponents::AuStatusPill></WebComponents::AuStatusPill>
-              </div>
-            </WebComponents::AuTab>
-            <WebComponents::AuTab>
-              <div class="o-flex o-flex--center">
-                <span class="u-mr-2">{{t "cancel"}}</span>
-                <WebComponents::AuStatusPill></WebComponents::AuStatusPill>
-              </div>
-            </WebComponents::AuTab>
+            <WebComponents::AuTab  @route="cases.case.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="cases.case.publication.documents">{{t "documents"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="cases.case.publication.translations">{{t "translations"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="cases.case.publication.publishpreview">{{t "proofs"}}</WebComponents::AuTab>
           </WebComponents::AuTabs>
         </div>
       </WebComponents::AuToolbar::Item>
