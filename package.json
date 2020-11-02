@@ -41,9 +41,11 @@
     "@lblod/ember-rdfa-editor-plugin-system-dispatcher": "^0.5.8",
     "@lblod/ember-vo-webuniversum": "^0.19.12",
     "@lblod/ember-vo-webuniversum-data-table": "git+https://github.com/kanselarij-vlaanderen/ember-vo-webuniversum-data-table.git#abdfb0a93473ee910ebc9223b90b6d9487ed35c9",
+    "@ljharb/eslint-config": "^17.1.0",
+    "@typescript-eslint/parser": "^3.8.0",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
-    "cypress": "^4.5.0",
+    "cypress": "^4.12.1",
     "cypress-file-upload": "^3.5.3",
     "cypress-wait-until": "^1.7.1",
     "ember-ajax": "^3.1.0",
@@ -98,6 +100,11 @@
     "ember-template-lint": "^2.4.0",
     "ember-unused-components": "git+https://github.com/MikiDi/ember-unused-components.git#9163900f1975a7ac03994b8af9ef2f7a2f534d4f",
     "eslint": "^6.8.0",
+    "eslint-config-es": "^3.19.66",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-config-xo": "^0.32.1",
+    "eslint-plugin-ava": "^10.5.0",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-ember": "^7.10.1",
     "eslint-plugin-hbs": "^1.0.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
@@ -109,7 +116,8 @@
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.1.0",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.23.7"
+    "sass": "^1.23.7",
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": "10.* || >= 12"
