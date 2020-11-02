@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
+import SendingOldCampaignError from '../../../../errors/sending-old-campaign-error';
 
 export default Component.extend({
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
@@ -21,6 +22,34 @@ export default Component.extend({
   shouldShowPrintButton: computed('routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes('newsletter.print');
   }),
+
+  async validatedCampaign(campaignId) {
+    console.log('validating', campaignId);
+    const campaign = await this.newsletterService.getMailCampaign(campaignId).catch(() => {
+      this.toaster.error(this.intl.t('error-fetch-newsletter'), this.intl.t('warning-title'));
+      return false;
+    });
+
+    console.info('campaign minutes old', Math.abs(moment(campaign.body.create_time)
+      .diff(moment(Date.now()), 'minutes')));
+
+    const threshold = 60;
+
+    if (
+      Math.abs(moment(campaign.body.create_time)
+        .diff(moment(Date.now()), 'minutes')) > threshold
+    ) {
+      const sendingOldCampaignError = new SendingOldCampaignError();
+      sendingOldCampaignError.message = 'Sending an old campaign.';
+      this.toaster.error(this.intl.t('error-old-newsletter'), this.intl.t('warning-title'),
+        {
+          timeOut: 600000,
+        });
+      throw (sendingOldCampaignError);
+    } else {
+      return true;
+    }
+  },
 
   actions: {
     print() {
@@ -70,6 +99,16 @@ export default Component.extend({
         return;
       }
 
+      let validCampaign = true;
+      await this.validatedCampaign(mailCampaign.campaignId).catch(() => {
+        this.set('isVerifying', false);
+        this.set('isLoading', false);
+        validCampaign = false;
+      });
+      if (!validCampaign) {
+        return false;
+      }
+
       await this.newsletterService.sendCampaign(mailCampaign.campaignId, agenda.id).catch(() => {
         this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       });
@@ -97,7 +136,7 @@ export default Component.extend({
         return;
       }
 
-      const html = await this.newsletterService.getMailCampaign(mailCampaign.campaignId).catch(() => {
+      const html = await this.newsletterService.getMailCampaignContent(mailCampaign.campaignId).catch(() => {
         this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
       });
       this.set('newsletterHTML', html.body);

@@ -66,11 +66,24 @@ export default Service.extend({
     }
   },
 
-  getMailCampaign(id) {
+  getMailCampaignContent(id) {
     try {
       return ajax({
         method: 'GET',
         url: `/newsletter/fetchTestCampaign/${id}`,
+      });
+    } catch (error) {
+      console.warn('An exception ocurred: ', error);
+      this.toaster.error(this.intl.t('error-send-newsletter'), this.intl.t('warning-title'));
+      return null;
+    }
+  },
+
+  getMailCampaign(id) {
+    try {
+      return ajax({
+        method: 'GET',
+        url: `/newsletter/fetchTestCampaignMetaData/${id}`,
       });
     } catch (error) {
       console.warn('An exception ocurred: ', error);
