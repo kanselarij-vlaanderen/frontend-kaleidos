@@ -33,7 +33,7 @@ export default Component.extend({
     console.info('campaign minutes old', Math.abs(moment(campaign.body.create_time)
       .diff(moment(Date.now()), 'minutes')));
 
-    const threshold = 60;
+    const threshold = 10;
 
     if (
       Math.abs(moment(campaign.body.create_time)
