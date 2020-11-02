@@ -27,6 +27,13 @@ Router.map(function() {
   });
   this.route('cases', { path: '/dossiers', }, function() {
     this.route('case', { path: ':id', }, function() {
+      this.route('publication', { path: '/publicatie/:id', }, function() {
+        this.route('case', { path: '/dossiers', });
+        this.route('documents', { path: '/documenten', });
+        this.route('translations', { path: '/vertalingen', });
+        this.route('publishpreview', { path: '/drukproeven', });
+        this.route('signatures', { path: '/handtekeningen', });
+      });
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('overview', { path: '', });
         this.route('subcase', { path: ':subcase_id', }, function() {
