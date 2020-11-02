@@ -153,17 +153,15 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
       return;
     }
     if (mandatees.length === 0) {
-      agendaitem.set('groupPriority', 20000000);
+      agendaitem.set('groupPriority', 'ZZZZZZZZ');
       return;
     }
-    const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
-    const minPrio = Math.min(...mandateePriorities);
-    const minPrioIndex = mandateePriorities.indexOf(minPrio);
-    delete mandateePriorities[minPrioIndex];
-    let calculatedGroupPriority = minPrio;
-    mandateePriorities.forEach((value) => {
-      calculatedGroupPriority += value / 100;
-    });
+    const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
+    let calculatedGroupPriority = '';
+    mandateePriorities.sort(); // should sort on letters A - Z
+    for (let index = 0; index < mandateePriorities.length; index++) {
+      calculatedGroupPriority += mandateePriorities[index];
+    }
     agendaitem.set('groupPriority', calculatedGroupPriority);
   })
 );

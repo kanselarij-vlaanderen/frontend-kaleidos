@@ -613,5 +613,6 @@
   "table-of" : " van ",
   "table-previous-with-arrow": "< Vorige",
   "table-next-with-arrow": "Volgende >",
-  "publication-flow": "Publicatie"
+  "publication-flow": "Publicatie",
+  "mandatee-without-priority-message": "{name} heeft geen geldige prioriteit. Gelieve dit aan te passen in ministerbeheer of contacteer de administrator."
 }
