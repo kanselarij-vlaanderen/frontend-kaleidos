@@ -56,8 +56,8 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/components/_upload';
 
 // Interdependent components (loaded from node_modules)
-// @import "node_modules/@govflanders/vl-ui-select/src/scss/_select";
-// @import "node_modules/@govflanders/vl-ui-select/src/scss/_js-select";
+// @import 'node_modules/@govflanders/vl-ui-select/src/scss/_select';
+// @import 'node_modules/@govflanders/vl-ui-select/src/scss/_js-select';
 
 // Interdependent components - These are source order dependent
 @import 'govflanders/components/_select';
@@ -153,7 +153,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/_vlc-kitchensink-sample';
 
 // Imports utilities (loaded from node_modules)
-// @import "node_modules/@govflanders/vl-ui-util/src/scss/util";
+// @import 'node_modules/@govflanders/vl-ui-util/src/scss/util';
 
 // Utilities (loaded locally to easily read source)
 @import 'govflanders/util/_util';
@@ -193,7 +193,5 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/extra-fonts';
 @import 'custom-application/loader';
 
-//
-@import 'appuniversum/au2-button';
-@import 'appuniversum/au2-input';
-
+// Components (from npm package)
+@import 'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone';

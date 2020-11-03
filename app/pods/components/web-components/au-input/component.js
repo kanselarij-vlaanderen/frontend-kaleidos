@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 export default class AuInput extends Component {
   get block() {
     if (this.args.block) {
-      return 'vlc-input--block';
+      return 'auk-input--block';
     }
 
     return null;
@@ -11,7 +11,7 @@ export default class AuInput extends Component {
 
   get error() {
     if (this.args.error === 'true') {
-      return 'vlc-input--error';
+      return 'auk-input--error';
     }
 
     return null;
