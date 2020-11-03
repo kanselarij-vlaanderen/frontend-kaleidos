@@ -627,5 +627,12 @@
   "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
   "modal-error-alert-title": "Kijk het formulier na",
   "name-subcase-required": "Korte titel *",
+  "publications-to-in-progress": "Te behandelen",
+  "via-cabinet": "Via Ministerraad",
+  "not-via-cabinet": "Niet Via Ministerraad",
+  "publication-before": "Uiterste publicatie",
+  "translations": "Vertalingen",
+  "proof": "Drukproof",
+  "name-subcase-required": "Korte titel *",
   "logo-flanders": "Logo Vlaanderen"
 }

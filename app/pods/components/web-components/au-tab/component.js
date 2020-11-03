@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 
 export default class Tab extends Component {
   get route() {
-    if (this.args.skin) {
-      return this.args.skin;
+    if (this.args.route) {
+      return this.args.route;
     }
     return null;
   }

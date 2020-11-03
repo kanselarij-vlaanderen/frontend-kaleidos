@@ -120,6 +120,7 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-printable-agenda-list';
 @import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
+@import 'custom-components/_vlc-publication-overview';
 @import 'custom-components/vlc-publication-status-pill';
 @import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-rdfa-editor';
@@ -194,4 +195,5 @@ $icon-font-location: '/fonts/';
 @import 'custom-application/loader';
 
 // Components (from npm package)
-@import 'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone';
+@import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
+
