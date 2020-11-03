@@ -29,4 +29,9 @@ export default class PublicationsInProgressNotMinisterController extends Control
   selectSize(size) {
     this.size = size;
   }
+
+  @action
+  navigateToPublication(_publication) {
+    this.transitionToRoute('cases.case.publication.case', _publication.get('case').get('id'), _publication.get('id'));
+  }
 }
