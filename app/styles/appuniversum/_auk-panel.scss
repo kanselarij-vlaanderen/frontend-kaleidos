@@ -54,6 +54,10 @@
   .auk-panel__body--no-pad {
     padding: 0;
   }
+
+  .auk-panel--gray-100 {
+    background-color: $au-gray-100;
+  }
   
   .auk-panel__footer {
     padding: 0 2rem;
@@ -61,5 +65,9 @@
     border-top: .1rem solid #C6CDD3;
     display: flex;
     align-items: center;
+
+    & > .ember-view {
+      width: 100%;
+    }
   }
   

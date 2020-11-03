@@ -1,27 +1,70 @@
 <div class="u-m-4">
   <div class="u-mb-3">
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Header>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only"/>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
-      </WebComponents::AuPanel::Header>
-      <WebComponents::AuPanel::Body>
-        <div class="auk-content">
-          <h4>{{getShortTitle}}</h4>
-          <p>{{getLongTitle}}</p>
-        </div>
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
+    {{#if isInscriptionInEditMode}}
+      <WebComponents::AuPanel class="auk-panel--gray-100">
+        <WebComponents::AuPanel::Header>
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}}/>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{mut inscription.shortTitle}}></WebComponents::AuTextarea>
+          </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{mut inscription.longTitle}}></WebComponents::AuTextarea>
+          </div>
+        </WebComponents::AuPanel::Body>
+        <WebComponents::AuPanel::Footer>
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}}>{{t "cancel"}}</WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}}>{{t "save"}}</WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuPanel::Footer>
+      </WebComponents::AuPanel>
+    {{else}}
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}}/>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
+          <div class="auk-content">
+            <h4>{{getShortTitle}}</h4>
+            <p>{{getLongTitle}}</p>
+          </div>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
+    {{/if}}
+
+
   </div>
   <div class="u-mb-3">
     <WebComponents::AuPanel>

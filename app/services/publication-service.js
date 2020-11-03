@@ -31,4 +31,19 @@ export default class PublicationService extends Service {
 
     return publicationFlow;
   }
+
+  async updateInscription(publicationId, longTitle, shortTitle) {
+    const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
+      include: 'case',
+    });
+
+    const cazeToSave = await publicationFlow.get('case');
+
+    cazeToSave.shortTitle = shortTitle;
+    cazeToSave.title = longTitle;
+
+    await cazeToSave.save();
+
+    return publicationFlow;
+  }
 }
