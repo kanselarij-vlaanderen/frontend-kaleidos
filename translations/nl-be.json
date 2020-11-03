@@ -637,5 +637,7 @@
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
   "delete-minister": "Verwijderen van minister",
   "delete-contact": "Verwijderen van contactpersoon",
-  "contacts": "Contactpersonen"
+  "contacts": "Contactpersonen",
+  "add-contact-persons": "Contactpersonen toevoegen",
+  "organisation": "Organisation"
 }

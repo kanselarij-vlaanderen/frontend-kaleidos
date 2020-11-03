@@ -109,7 +109,7 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" showContactPersonModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -176,5 +176,52 @@
         </DataTable>
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
+
+    {{#if isShowingPersonModal}}
+      <WebComponents::AuModal data-test-auk-modal-contactperson-new>
+        <WebComponents::AuModal::Modal::Header @title={{t "add-contact-persons"}}
+                                               @closeModal={{this.closeContactPersonModal}} />
+        <WebComponents::AuModal::Modal::Body>
+          <div class="auk-form-group-layout auk-form-group-layout--standard">
+            <div class='auk-form-group'>
+              <WebComponents::AuLabel for="nameInput">
+                {{t "name"}}
+              </WebComponents::AuLabel>
+              <WebComponents::AuInput type="text" id="nameInput" class="auk-input" @block="true"
+                                      @value={{mut publication.contact.name}} />
+            </div>
+            <div class='auk-form-group'>
+              <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
+              <WebComponents::AuInput type="text" id="emailInput" class="auk-input" @block="true"
+                                      @value={{mut publication.contact.email}} />
+            </div>
+            <div class="auk-form-group">
+              <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
+              <WebComponents::AuInput type="text" id="organisationInput" class="auk-input" @block="true"
+                                      @value={{mut publication.contact.organisation}} />
+            </div>
+          </div>
+        </WebComponents::AuModal::Modal::Body>
+        <WebComponents::AuModal::Modal::Footer>
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton {{on "click" this.closeContactPersonModal}} @skin="borderless" data-test-publication-button-cancel>
+                  {{t "cancel"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" this.closeContactPersonModal}}>
+                  {{t "publications-new-button-text"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuModal::Modal::Footer>
+      </WebComponents::AuModal>
+    {{/if}}
+
   </div>
 </div>
