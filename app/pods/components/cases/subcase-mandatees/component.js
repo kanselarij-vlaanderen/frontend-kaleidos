@@ -59,7 +59,11 @@ export default Component.extend({
             ...newRow,
           }
         ));
-        this.set('mandateeRows', mandateeRows.sortBy('mandateePriority'));
+        /*
+          There used to be a set('mandateeRows') here, this was causing bugs (KAS-1973)
+          The computed in de parent views (agendaitem-mandatees, subcase-mandatees) was being overridden with this set
+          This prevented the computed from reloading the rows after changing, showing wrong mandatees when changing detail view between agendaitems.
+        */
       }
     },
 
@@ -111,7 +115,7 @@ export default Component.extend({
 
     async valueChanged(changedMandateeRow) {
       const mandateeRows = await this.mandateeRows;
-      const newRows = mandateeRows.map((mandateeRow) => {
+      mandateeRows.map((mandateeRow) => {
         if (mandateeRow === changedMandateeRow) {
           mandateeRow.set('isSubmitter', true);
         } else {
@@ -119,7 +123,6 @@ export default Component.extend({
         }
         return mandateeRow;
       });
-      this.set('mandateeRows', newRows);
     },
   },
 });
