@@ -71,7 +71,6 @@ export default class AgendaitemMandatees extends Component {
     // This could possibly be fixed by adding subcase to the model in the route instead of awaiting in templates
     if (subcase) {
       const iseCodes = await subcase.get('iseCodes');
-      console.log('subcase', iseCodes);
       let mandatees;
       if (this.agendaitem) {
         mandatees = await (await this.get('agendaitem.mandatees')).sortBy('priority');
