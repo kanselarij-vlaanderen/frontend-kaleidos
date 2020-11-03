@@ -121,7 +121,6 @@ export default Component.extend({
         } else {
           mandateeRow.set('isSubmitter', false);
         }
-        return mandateeRow;
       });
     },
   },
