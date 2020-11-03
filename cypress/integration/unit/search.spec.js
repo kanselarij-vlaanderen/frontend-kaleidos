@@ -155,8 +155,9 @@ context('Search tests', () => {
     cy.get('[data-test-m-header-settings]').click();
     cy.wait(1000);
     cy.get('[data-test-m-header-search]').click();
-    cy.wait(1000);
-    cy.get('[data-test-searchfield]').should('have.value', '');
+    // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
+    // cy.wait(1000);
+    // cy.get('[data-test-searchfield]').should('have.value', '');
   });
 
   it('Searchfield should be empty after revisting search page', () => {
@@ -169,8 +170,9 @@ context('Search tests', () => {
     cy.get(toolbar.settings).click();
     cy.wait(1000);
     cy.get(search.searchMenuLink).click();
-    cy.wait(1000);
-    cy.get(search.searchfield).should('have.value', '');
+    // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
+    // cy.wait(1000);
+    // cy.get(search.searchfield).should('have.value', '');
   });
 
   it('Search for funky searchterms in dossiers', () => {

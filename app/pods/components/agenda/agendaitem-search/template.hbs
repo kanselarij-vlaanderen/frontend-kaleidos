@@ -9,7 +9,7 @@
                    type="text"
                    data-test-trigger-search-input
                    id="defaultInput"
-                   @placeholder={{t "search-agenda-items"}}
+                   @placeholder={{t "search-placeholder"}}
                    @value={{this.searchText}}
                    {{on "input" this.debouncedSearch}}
                    @enter={{this.search}}
