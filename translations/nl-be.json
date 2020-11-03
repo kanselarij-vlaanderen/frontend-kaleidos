@@ -638,5 +638,6 @@
   "delete-minister": "Verwijderen van minister",
   "delete-contact": "Verwijderen van contactpersoon",
   "organisation": "Organisatie",
-  "contacts": "Contactpersonen"
+  "contacts": "Contactpersonen",
+  "add-contact-persons": "Contactpersonen toevoegen"
 }

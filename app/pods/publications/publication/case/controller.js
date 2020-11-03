@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class CaseController extends Controller {
-  @tracked showingCreateContactModal = false;
+  @tracked isShowingPersonModal = false;
 
   get getShortTitle() {
     const caze = this.model.get('case');
@@ -16,12 +16,12 @@ export default class CaseController extends Controller {
   }
 
   @action
-  closeCreateContactModal() {
-    this.showingCreateContactModal = false;
+  showContactPersonModal() {
+    this.isShowingPersonModal = true;
   }
 
   @action
-  showCreateContactModal() {
-    this.showingCreateContactModal = true;
+  closeContactPersonModal() {
+    this.isShowingPersonModal = false;
   }
 }

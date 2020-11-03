@@ -6,7 +6,7 @@
           <WebComponents::AuBreadcrumb>{{getTitlePublication}}</WebComponents::AuBreadcrumb>
           <h4 class="auk-toolbar-complex__title">{{getShortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back"></WebComponents::AuTab>
+            <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back" @route="publications.in-progress.in-progress-not-minister"></WebComponents::AuTab>
             <WebComponents::AuTab  @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents">{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations">{{t "translations"}}</WebComponents::AuTab>

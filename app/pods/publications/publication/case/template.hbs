@@ -109,7 +109,7 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showCreateContactModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -178,15 +178,14 @@
     </WebComponents::AuPanel>
   </div>
 </div>
-
-{{#if showingCreateContactModal}}
+{{#if isShowingPersonModal}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
-      @closeModal={{this.closeCreateContactModal}} />
+      @closeModal={{this.closeContactPersonModal}} />
     <WebComponents::AuModal::Modal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group'>
-          <WebComponents::AuLabel for="name">
+          <WebComponents::AuLabel for="nameInput">
             {{t "name"}}
           </WebComponents::AuLabel>
           <WebComponents::AuInput type="text" id="nameInput" @block="true" />
@@ -205,7 +204,7 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeCreateContactModal}}>
+            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
               {{t "cancel"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>

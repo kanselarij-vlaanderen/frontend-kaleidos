@@ -23,25 +23,25 @@
       <th></th>
     </c.header>
     <c.body class="tr-hover" as |row|>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{row.case.shortTitle}}<br/>
         <span class="u-text-small u-muted">
-          {{row.publicationNumber}} 
+          {{row.publicationNumber}}
           {{t "dash"}}
         </span>
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{#if row.publicationBefore}}
           {{moment-format row.publicationBefore "DD-MM-YYYY"}}
         {{else}}
           {{t "dash"}}
         {{/if}}
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{moment-format row.modified "DD-MM-YYYY"}}<br/>
         <span class="u-text-small u-muted">{{moment-format row.modified "HH:ss"}}</span>
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{t "dash"}}
         {{!-- {{#if row.translationStatus.[0].initiated}}
         <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{row.translationStatus.[0].finished}}/{{row.translationStatus.[0].total}}</WebComponents::AuStatusPill>
@@ -49,7 +49,7 @@
         -
         {{/if}} --}}
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{t "dash"}}
         {{!-- {{#if row.printProofStatus.[0].initiated}}
         <WebComponents::AuStatusPill @status={{row.printProofStatus.[0].status}}>{{row.printProofStatus.[0].finished}}/{{row.printProofStatus.[0].total}}</WebComponents::AuStatusPill>
@@ -57,7 +57,7 @@
         -
         {{/if}} --}}
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         {{t "dash"}}
         {{!-- <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment" /> --}}
         {{!-- {{#if row.internalComment}}
@@ -67,9 +67,9 @@
         </EmberTooltip>
         {{/if}} --}}
       </td>
-      <td onclick={{action "navigateToPublication" row}}>
+      <td>
         <ButtonToolbar>
-          <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="chevron-right" />
+          <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" />
         </ButtonToolbar>
       </td>
     </c.body>
