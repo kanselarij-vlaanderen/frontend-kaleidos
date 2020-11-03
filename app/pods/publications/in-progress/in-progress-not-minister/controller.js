@@ -31,7 +31,7 @@ export default class PublicationsInProgressNotMinisterController extends Control
   }
 
   @action
-  navigateToPublication(_publication) {
-    this.transitionToRoute('cases.case.publication.case', _publication.get('case').get('id'), _publication.get('id'));
+  navigateToPublication(publicationFlowRow) {
+    this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
   }
 }
