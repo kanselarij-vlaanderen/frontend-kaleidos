@@ -24,13 +24,3 @@
     }
   }
 }
-
-.js-vl-accordion__toggle,
-.vl-toggle,
-[data-vl-accordion-toggle] {
-  .js-vl-accordion--open & {
-    & > .vl-vi {
-      @include vi-u-90deg;
-    }
-  }
-}

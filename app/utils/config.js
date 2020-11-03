@@ -141,4 +141,29 @@ export default EmberObject.create({
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
+  publicationStatusToPublish: {
+    id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    uri: 'http://kanselarij.vo.data.gift/id/concept/publication-statussen/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+  },
+  publicationStatusPublished: {
+    id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+    uri: 'http://kanselarij.vo.data.gift/id/concept/publication-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+  },
+  LANGUAGE_NL: {
+    uri: 'http://publications.europa.eu/resource/authority/language/NLD',
+  },
+  LANGUAGE_FR: {
+    uri: 'http://publications.europa.eu/resource/authority/language/FRA',
+  },
+  LANGUAGE_DE: {
+    uri: 'http://publications.europa.eu/resource/authority/language/DEU',
+  },
+  ACTIVITY_TYPE_URIS: {
+    vertalen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
+    handtekenen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
+    drukproeven: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
+  },
+  PUBLICATION_TYPE_URIS: {
+    vertalen: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+  },
 });

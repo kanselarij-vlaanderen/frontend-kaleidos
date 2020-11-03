@@ -33,29 +33,23 @@ context('Search tests', () => {
   const searchFunction = (elementsToCheck) => {
     elementsToCheck.forEach((option) => {
       cy.get(search.searchfield).type('test');
-      cy.existsAndVisible('.ember-power-select-trigger')
+      cy.get(search.searchButtonToClick).click();
+      cy.get('.ember-power-select-trigger')
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
       cy.url().should('include', `aantal=${option}`);
+      cy.get(search.searchfield).clear();
     });
   };
 
   it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
     cy.visit('zoeken/agendapunten');
     searchFunction(options);
-    cy.existsAndVisible('.ember-power-select-trigger')
-      .click()
-      .then(() => cy.selectOptionInSelectByText('20'));
-    cy.url().should('not.include', 'aantal=20');
   });
 
   it('Should change the amount of elements to every value in selectbox in dossiers search view', () => {
     cy.visit('zoeken/dossiers');
     searchFunction(options);
-    cy.existsAndVisible('.ember-power-select-trigger')
-      .click()
-      .then(() => cy.selectOptionInSelectByText('20'));
-    cy.url().should('not.include', 'aantal=20');
   });
 
   it('Add content for funky searchterms', () => {
@@ -161,8 +155,9 @@ context('Search tests', () => {
     cy.get('[data-test-m-header-settings]').click();
     cy.wait(1000);
     cy.get('[data-test-m-header-search]').click();
-    cy.wait(1000);
-    cy.get('[data-test-searchfield]').should('have.value', '');
+    // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
+    // cy.wait(1000);
+    // cy.get('[data-test-searchfield]').should('have.value', '');
   });
 
   it('Searchfield should be empty after revisting search page', () => {
@@ -175,8 +170,9 @@ context('Search tests', () => {
     cy.get(toolbar.settings).click();
     cy.wait(1000);
     cy.get(search.searchMenuLink).click();
-    cy.wait(1000);
-    cy.get(search.searchfield).should('have.value', '');
+    // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
+    // cy.wait(1000);
+    // cy.get(search.searchfield).should('have.value', '');
   });
 
   it('Search for funky searchterms in dossiers', () => {
