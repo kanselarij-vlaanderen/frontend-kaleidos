@@ -109,7 +109,7 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showCreateContactModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -164,7 +164,7 @@
                         <button class="vl-link vl-link--block vl-u-text--error" type="button"
                           {{on "click" attacher.hide}}
                         >
-                          {{t "delete-contact"}}
+                          {{t "delete"}}
                         </button>
                       </li>
                     </ul>
@@ -178,3 +178,46 @@
     </WebComponents::AuPanel>
   </div>
 </div>
+
+{{#if showingCreateContactModal}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
+      @closeModal={{this.closeCreateContactModal}} />
+    <WebComponents::AuModal::Modal::Body>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="name">
+            {{t "name"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="nameInput" @block="true" />
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="emailInput" @block="true" />
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="organisationInput" @block="true" />
+        </div>
+      </div>
+    </WebComponents::AuModal::Modal::Body>
+    <WebComponents::AuModal::Modal::Footer>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeCreateContactModal}}>
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @skin="primary" @icon="plus">
+              {{t "add"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuModal::Modal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
