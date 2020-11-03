@@ -157,12 +157,8 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
       return;
     }
     const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
-    let calculatedGroupPriority = '';
     mandateePriorities.sort(); // should sort on letters A - Z
-    for (let index = 0; index < mandateePriorities.length; index++) {
-      calculatedGroupPriority += mandateePriorities[index];
-    }
-    agendaitem.set('groupPriority', calculatedGroupPriority);
+    agendaitem.set('groupPriority', mandateePriorities.join());
   })
 );
 
