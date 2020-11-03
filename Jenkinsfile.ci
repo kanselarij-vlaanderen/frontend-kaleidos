@@ -11,9 +11,18 @@ pipeline {
         appName = "${env.JOB_NAME - ~/\/.*/}"
         version = "${branch}-${env.BUILD_NUMBER}"
         projectName = "${project}--${appName}--${version}"
+        HOME = "${WORKSPACE}"
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
     }
 
     stages {
+        stage('Linting') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                sh "npm install"
+                sh "npx npm-run-all lint:hbs lint:js"
+            }
+        }
         stage('Checkout project') {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
