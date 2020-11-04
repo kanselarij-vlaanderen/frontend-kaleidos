@@ -10,5 +10,8 @@ const selectors = {
   createPersonfirstnameContainer: '[data-test-create-person-lastname]',
   mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
   manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
+  mandateesEditRow: '[data-test-mandatees-edit-row]',
+  mandateesEditRowSubmitter: '[data-test-mandatees-edit-row-submitter]',
+  mandateesEditRowDelete: '[data-test-mandatees-edit-row-delete]',
 };
 export default selectors;
