@@ -19,11 +19,11 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{mut inscription.shortTitle}}></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{mut inscription.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{mut inscription.longTitle}}></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{mut inscription.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
