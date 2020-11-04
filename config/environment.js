@@ -66,6 +66,7 @@ module.exports = function(environment) {
   }
 
   if (environment === 'test') { // Ember framework integrated tests
+    ENV.APP.ENABLE_PUBLICATIONS_TAB = true;
     // Testem prefers this...
     ENV.locationType = 'none';
     // keep test console output quieter
