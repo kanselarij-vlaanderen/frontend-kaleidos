@@ -14,7 +14,7 @@ Cypress.Commands.add('resetSearch', resetSearch);
  */
 function resetCache() {
 
-  // return;
+  return;
 
   const kaleidosProject = Cypress.env('KALEIDOS_PROJECT');
   const env = {
