@@ -114,7 +114,7 @@ export default class SubcaseMandatees extends Component {
 
   @action
   async cancelEditing() {
-    this.set('mandateeRows', await this.constructMandateeRows());
+    this.notifyPropertyChange('mandateeRows');
     this.toggleProperty('isEditing');
   }
 

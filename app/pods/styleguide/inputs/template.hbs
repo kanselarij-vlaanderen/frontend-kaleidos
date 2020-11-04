@@ -1,10 +1,11 @@
 {{! template-lint-disable no-bare-strings }}
 
 <h1 class="vlc-kitchensink-header">{{t "style-guide-inputs"}}</h1>
+<h4 class="vlc-kitchensink-header">Currently used:</h4>
 
 <Styleguide::KitchensinkSample
-  @title="Message"
-  @snippet="message.hbs"
+        @title="Message"
+        @snippet="message.hbs"
 >
   {{!-- BEGIN-SNIPPET message --}}
   <WebComponents::VlFormMessage @message="message example"/>
@@ -12,8 +13,8 @@
 </Styleguide::KitchensinkSample>
 
 <Styleguide::KitchensinkSample
-  @title="Label"
-  @snippet="label.hbs"
+        @title="Label"
+        @snippet="label.hbs"
 >
   {{!-- BEGIN-SNIPPET label --}}
   <WebComponents::VlFormLabel @value="label example"/>
@@ -21,8 +22,8 @@
 </Styleguide::KitchensinkSample>
 
 <Styleguide::KitchensinkSample
-  @title="Input"
-  @snippet="input.hbs"
+        @title="Input"
+        @snippet="input.hbs"
 >
   {{!-- BEGIN-SNIPPET input --}}
   <WebComponents::VlFormInput/>
@@ -30,8 +31,8 @@
 </Styleguide::KitchensinkSample>
 
 <Styleguide::KitchensinkSample
-  @title="Checkbox"
-  @snippet="checkbox.hbs"
+        @title="Checkbox"
+        @snippet="checkbox.hbs"
 >
   {{!-- BEGIN-SNIPPET checkbox --}}
   <WebComponents::VlCheckbox @label="label"/>
@@ -39,19 +40,91 @@
 </Styleguide::KitchensinkSample>
 
 <Styleguide::KitchensinkSample
-  @title="Toggle"
-  @snippet="toggle.hbs"
+        @title="Toggle"
+        @snippet="toggle.hbs"
 >
   {{!-- BEGIN-SNIPPET toggle --}}
-  <WebComponents::VlToggle />
+  <WebComponents::VlToggle/>
   {{!-- END-SNIPPET --}}
 </Styleguide::KitchensinkSample>
 
 <Styleguide::KitchensinkSample
-  @title="Datepicker"
-  @snippet="datepicker.hbs"
+        @title="Datepicker"
+        @snippet="datepicker.hbs"
 >
   {{!-- BEGIN-SNIPPET datepicker --}}
   <WebComponents::VlDatepicker/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<hr/>
+<h4 class="vlc-kitchensink-header">New:</h4>
+<Styleguide::KitchensinkSample
+        @title="Input text"
+        @code='<div class="auk-form-group">
+  <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+  <WebComponents::AuInput type="text" id="defaultInput"/>
+</div>
+
+<div class="auk-form-group">
+  <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+  <WebComponents::AuInput type="text" id="blockInput" @block="true"/>
+</div>'
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="defaultInput"/>
+  </div>
+
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="blockInput" @block="true"/>
+  </div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Input error"
+        @code='<div class="auk-form-group">
+  <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+  <WebComponents::AuInput type="text" id="blockInput" @block="true" @error="true"/>
+</div>'
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="blockInput" @block="true" @error="true"/>
+  </div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Input with icon"
+        @code='<div class="auk-form-group">
+  <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+  <WebComponents::AuInput @icon="search" type="text" id="defaultInput"/>
+</div>'
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput @icon="search" type="text" id="defaultInput"/>
+  </div>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Textarea"
+        @code='<div class="auk-form-group">
+  <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+  <textarea class="auk-textarea"></textarea>
+</div>'
+>
+  {{!-- BEGIN-SNIPPET toggle --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <textarea class="auk-textarea"></textarea>
+  </div>
   {{!-- END-SNIPPET --}}
 </Styleguide::KitchensinkSample>
