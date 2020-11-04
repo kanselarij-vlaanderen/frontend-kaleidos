@@ -133,19 +133,19 @@ export default class CompareAgendaList extends Component {
   }
 
   async createComparisonList(leftAgendaitems, rightAgendaitems) {
-    leftAgendaitems = [].concat(leftAgendaitems.toArray());
-    rightAgendaitems = [].concat(rightAgendaitems.toArray());
+    const initialisedLeftAgendaitems = [].concat(leftAgendaitems.toArray());
+    const initialisedRightAgendaitems = [].concat(rightAgendaitems.toArray());
 
     const combinedAgendaitems = [];
     let currentLeft;
     let currentRight;
 
-    while (leftAgendaitems.length || rightAgendaitems.length) {
+    while (initialisedLeftAgendaitems.length || initialisedRightAgendaitems.length) {
       if (!currentLeft) {
-        currentLeft = leftAgendaitems.shift();
+        currentLeft = initialisedLeftAgendaitems.shift();
       }
       if (!currentRight) {
-        currentRight = rightAgendaitems.shift();
+        currentRight = initialisedRightAgendaitems.shift();
       }
 
       if (!currentLeft || !currentRight || (await this.compareSubcase(currentLeft, currentRight))) {
@@ -165,7 +165,7 @@ export default class CompareAgendaList extends Component {
         currentRight = null;
         continue;
       }
-      const foundLeftAgendaitem = this.findAgendaitemBySubcase(currentLeft, rightAgendaitems);
+      const foundLeftAgendaitem = this.findAgendaitemBySubcase(currentLeft, initialisedRightAgendaitems);
 
       if (!foundLeftAgendaitem) {
         combinedAgendaitems.push(EmberObject.create({
@@ -175,7 +175,7 @@ export default class CompareAgendaList extends Component {
         continue;
       }
 
-      const foundRightAgendaitem = this.findAgendaitemBySubcase(currentRight, leftAgendaitems);
+      const foundRightAgendaitem = this.findAgendaitemBySubcase(currentRight, initialisedLeftAgendaitems);
 
       if (!foundRightAgendaitem) {
         combinedAgendaitems.push(EmberObject.create({
@@ -195,19 +195,19 @@ export default class CompareAgendaList extends Component {
   }
 
   async createComparisonListForAnnouncements(leftAnnouncements, rightAnnouncements) {
-    leftAnnouncements = [].concat(leftAnnouncements.toArray());
-    rightAnnouncements = [].concat(rightAnnouncements.toArray());
+    const initialisedLeftAnnouncements = [].concat(leftAnnouncements.toArray());
+    const initialisedRightAnnouncements = [].concat(rightAnnouncements.toArray());
 
     const combinedAnnouncements = [];
     let currentLeft;
     let currentRight;
 
-    while (leftAnnouncements.length || rightAnnouncements.length) {
+    while (initialisedLeftAnnouncements.length || initialisedRightAnnouncements.length) {
       if (!currentLeft) {
-        currentLeft = leftAnnouncements.shift();
+        currentLeft = initialisedLeftAnnouncements.shift();
       }
       if (!currentRight) {
-        currentRight = rightAnnouncements.shift();
+        currentRight = initialisedRightAnnouncements.shift();
       }
 
       if (!currentLeft || !currentRight || (await this.compareSubcase(currentLeft, currentRight))) {
@@ -227,7 +227,7 @@ export default class CompareAgendaList extends Component {
         currentRight = null;
         continue;
       }
-      const foundLeftAnnouncement = this.findAgendaitemBySubcase(currentLeft, rightAnnouncements);
+      const foundLeftAnnouncement = this.findAgendaitemBySubcase(currentLeft, initialisedRightAnnouncements);
 
       if (!foundLeftAnnouncement) {
         combinedAnnouncements.push(EmberObject.create({
@@ -237,7 +237,7 @@ export default class CompareAgendaList extends Component {
         continue;
       }
 
-      const foundRightAnnouncement = this.findAgendaitemBySubcase(currentRight, leftAnnouncements);
+      const foundRightAnnouncement = this.findAgendaitemBySubcase(currentRight, initialisedLeftAnnouncements);
 
       if (!foundRightAnnouncement) {
         combinedAnnouncements.push(EmberObject.create({
