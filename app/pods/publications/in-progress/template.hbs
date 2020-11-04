@@ -5,8 +5,8 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group>
             <WebComponents::AuTabs>
-              <WebComponents::AuTab @route="publications.in-progress.in-progress-minister">{{t "via-cabinet"}}</WebComponents::AuTab>
-              <WebComponents::AuTab @route="publications.in-progress.in-progress-not-minister">{{t "not-via-cabinet"}}</WebComponents::AuTab>
+              <WebComponents::AuTab @route="publications.in-progress.in-progress-minister" data-test-publication-in-progress-via-minister-tab>{{t "via-cabinet"}}</WebComponents::AuTab>
+              <WebComponents::AuTab @route="publications.in-progress.in-progress-not-minister" data-test-publication-in-progress-not-via-minister-tab>{{t "not-via-cabinet"}}</WebComponents::AuTab>
             </WebComponents::AuTabs>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">

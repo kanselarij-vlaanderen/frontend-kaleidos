@@ -11,7 +11,7 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}}/>
+                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-not-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -30,10 +30,10 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}}>{{t "cancel"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}}>{{t "save"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}} data-test-publication-save-inscription>{{t "save"}}</WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -50,7 +50,7 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}}/>
+                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>

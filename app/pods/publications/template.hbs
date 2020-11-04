@@ -7,9 +7,9 @@
             <div class="o-flex o-flex--vertical u-mt-2">
               <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
               <WebComponents::AuTabs @reversed="true">
-                <WebComponents::AuTab @route="publications.to-treat">{{t "publications-to-in-progress"}}</WebComponents::AuTab>
-                <WebComponents::AuTab @route="publications.in-progress">{{t "publications.in-progress"}}</WebComponents::AuTab>
-                <WebComponents::AuTab @route="publications.done">{{t "publications.done"}}</WebComponents::AuTab>
+                <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>{{t "publications-to-in-progress"}}</WebComponents::AuTab>
+                <WebComponents::AuTab @route="publications.in-progress" data-test-publications-overview-in-progress-tab>{{t "publications.in-progress"}}</WebComponents::AuTab>
+                <WebComponents::AuTab @route="publications.done" data-test-publications-overview-done-tab>{{t "publications.done"}}</WebComponents::AuTab>
               </WebComponents::AuTabs>
             </div>
           </WebComponents::AuToolbar::Item>
@@ -52,21 +52,21 @@
                   {{t "publications-number-required"}}
                 </WebComponents::AuLabel>
                 <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width" @block="true"
-                  @value={{mut publication.number}} />
+                  @value={{mut publication.number}} data-test-create-publication-modal-number-input/>
                 {{#if getClassForGroupNumber}}
                   <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
                 {{/if}}
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
                 <WebComponents::AuLabel for="shortTitleInput">{{t "name-subcase-required"}}</WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}} />
+                <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}} data-test-create-publication-modal-short-title-textarea />
                 {{#if getClassForGroupShortTitle}}
                   <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
                 {{/if}}
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}} />
+                <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}} data-test-create-publication-modal-long-title-textarea />
               </div>
             </div>
           </WebComponents::AuModal::Modal::Body>

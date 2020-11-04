@@ -6,7 +6,7 @@ export default class PublicationController extends Controller {
     return caze.get('shortTitle');
   }
 
-  get getTitlePublication() {
+  get getPublicationNumber() {
     return `PUBLICATIE ${this.model.get('publicationNumber')}`.toString().toUpperCase();
   }
 }

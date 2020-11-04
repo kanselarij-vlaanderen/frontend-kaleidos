@@ -21,8 +21,11 @@ context('Publications tests', () => {
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
   const someText = 'Some text';
+  const publicationNumber = 'CY987';
+  const shortTitle = 'Korte titel cypress test';
+  const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
 
-  it('should render error when required fields are not filled in', () => {
+  it('should render error when required fields are not filled in to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.aukModal).as('publicationModal');
@@ -61,7 +64,7 @@ context('Publications tests', () => {
     }).should('exist');
   });
 
-  it('should clear input data when closing and reopening modal', () => {
+  it('should clear input data when closing and reopening modal to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.aukModal).as('publicationModal');
@@ -80,5 +83,35 @@ context('Publications tests', () => {
     cy.get(modalSelectors.publication.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.contains(someText).should('not.exist');
+  });
+
+  it('should create a publication and redirect to its detail page', () => {
+    cy.visit(publicationOverviewUrl);
+    cy.get(publicationSelectors.newPublicationButton).click();
+    cy.get(modalSelectors.aukModal).as('publicationModal');
+    cy.get('@publicationModal').within(() => {
+      cy.get(modalSelectors.publication.publicationNumberInput).click({
+        force: true,
+      })
+        .clear()
+        .type(publicationNumber);
+      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click({
+        force: true,
+      })
+        .clear()
+        .type(shortTitle);
+      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click({
+        force: true,
+      })
+        .clear()
+        .type(longTitle);
+    });
+
+    cy.route('/publication-flows/*/case').as('getNewPublicationDetail');
+    cy.get(modalSelectors.publication.createButton).click();
+    cy.wait('@getNewPublicationDetail');
+
+    cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', publicationNumber);
   });
 });
