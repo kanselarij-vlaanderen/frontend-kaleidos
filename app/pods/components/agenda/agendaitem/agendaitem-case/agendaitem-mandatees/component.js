@@ -67,28 +67,33 @@ export default class AgendaitemMandatees extends Component {
 
   async constructMandateeRows() {
     const subcase = await this.subcase;
-    const iseCodes = await subcase.get('iseCodes');
-    let mandatees;
-    if (this.agendaitem) {
-      mandatees = await (await this.get('agendaitem.mandatees')).sortBy('priority');
-    } else {
-      mandatees = await (await this.get('subcase.mandatees')).sortBy('priority');
-    }
-    let selectedMandatee = await subcase.get('requestedBy');
-    const mandateeLength = mandatees.get('length');
-    if (mandateeLength === 1) {
-      selectedMandatee = mandatees.get('firstObject');
-    }
-    return Promise.all(mandatees.map(async(mandatee) => {
-      const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
-      const row = await this.createMandateeRow(mandatee, filteredIseCodes);
-      if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
-        row.set('isSubmitter', true);
-      } else if (mandateeLength === 0) {
-        row.set('isSubmitter', true);
+    // we hit this multiple times when loading the component, the first time subcase is null and will throw an error if we don't check ths
+    // This could possibly be fixed by adding subcase to the model in the route instead of awaiting in templates
+    if (subcase) {
+      const iseCodes = await subcase.get('iseCodes');
+      let mandatees;
+      if (this.agendaitem) {
+        mandatees = await (await this.get('agendaitem.mandatees')).sortBy('priority');
+      } else {
+        mandatees = await (await this.get('subcase.mandatees')).sortBy('priority');
       }
-      return row;
-    }));
+      let selectedMandatee = await subcase.get('requestedBy');
+      const mandateeLength = mandatees.get('length');
+      if (mandateeLength === 1) {
+        selectedMandatee = mandatees.get('firstObject');
+      }
+      return Promise.all(mandatees.map(async(mandatee) => {
+        const filteredIseCodes = await this.getIseCodesOfMandatee(iseCodes, mandatee);
+        const row = await this.createMandateeRow(mandatee, filteredIseCodes);
+        if (selectedMandatee && mandatee.get('id') === selectedMandatee.get('id')) {
+          row.set('isSubmitter', true);
+        } else if (mandateeLength === 0) {
+          row.set('isSubmitter', true);
+        }
+        return row;
+      }));
+    }
+    return [];
   }
 
   async parseDomainsAndMandatees() {
@@ -120,7 +125,7 @@ export default class AgendaitemMandatees extends Component {
 
   @action
   async cancelEditing() {
-    this.set('mandateeRows', await this.constructMandateeRows());
+    this.notifyPropertyChange('mandateeRows');
     this.toggleProperty('isEditing');
   }
 
