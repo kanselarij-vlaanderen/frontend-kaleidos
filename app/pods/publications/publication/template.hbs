@@ -3,11 +3,13 @@
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <div class="o-flex o-flex--vertical u-mt-2">
-          <WebComponents::AuBreadcrumb data-test-publication-detail-menu-publication-number>{{getPublicationNumber}}</WebComponents::AuBreadcrumb>
+          <WebComponents::AuBreadcrumb data-test-publication-detail-menu-publication-number>
+            {{getPublicationNumber}}
+          </WebComponents::AuBreadcrumb>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{getShortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back" @route="publications.in-progress.in-progress-not-minister"></WebComponents::AuTab>
-            <WebComponents::AuTab  @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents">{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations">{{t "translations"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.publishpreview">{{t "proofs"}}</WebComponents::AuTab>
@@ -17,4 +19,76 @@
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
 </WebComponents::AuNavbar>
-{{outlet}}
+
+<div style="display:flex; flex-direction: row; justify-content: center">
+  <div class="u-m-4" style="flex-grow:2;">
+    {{outlet}}
+  </div>
+  <div style="flex-grow:0;">
+    <div class="u-mb-3">
+      <WebComponents::AuSidebar style="padding:0">
+        <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+            </WebComponents::AuToolbar::Group>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton @skin="borderless"
+                                         @icon={{if this.collapsed "chevron-left" "chevron-right"}}
+                                         @layout="icon-only" {{on 'click' this.toggleSidebar}}
+                />
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuNavbar>
+        {{#if (not collapsed)}}
+          <WebComponents::AuNavbar @skin="gray-100">
+            <div class="u-m-3">
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
+                <WebComponents::AuInput
+                        type="number"
+                        value={{this.publicationNumber}}
+                        @block="true"
+                  {{on "blur" this.setPublicationNumber}}
+                />
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
+                <WebComponents::AuSelect @block="true">
+                  <option>{{t "to-publish"}}</option>
+                  <option>{{t "published"}}</option>
+                </WebComponents::AuSelect>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
+                <WebComponents::AuDatepicker
+                        @block="true"
+                        value={{this.translationDate}}
+                  {{on "blur" this.setTranslationDate}}/>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
+                <WebComponents::AuDatepicker
+                        @block="true"
+                        value={{this.publicationDate}}
+                  {{on "blur" this.setPublicationDate}}/>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
+                <WebComponents::AuSelect @block="true" {{on "blur" this.setPublicationDate}}>
+                  <option>{{t "publication-extenso"}}</option>
+                  <option>{{t "publication-form-by-excerpt"}}</option>
+                </WebComponents::AuSelect>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t "remark-title"}}</WebComponents::AuLabel>
+                <WebComponents::AuTextarea class="auk-textarea" rows="4"></WebComponents::AuTextarea>
+              </div>
+            </div>
+          </WebComponents::AuNavbar>
+        {{/if}}
+      </WebComponents::AuSidebar>
+    </div>
+  </div>
+</div>

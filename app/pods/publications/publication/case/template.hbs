@@ -1,4 +1,4 @@
-<div class="u-m-4">
+<div class="publication-case">
   <div class="u-mb-3">
     {{#if isInscriptionInEditMode}}
       <WebComponents::AuPanel class="auk-panel--gray-100">
@@ -11,7 +11,9 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-not-edit-inscription-button/>
+                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click"
+                                                                                                this.putInscriptionInNonEditMode}}
+                                         data-test-publication-not-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -19,21 +21,30 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{mut inscription.shortTitle}}></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea class="auk-textarea"
+                                 @rows="2"
+                                 @value={{mut inscription.shortTitle}}>
+            </WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{mut inscription.longTitle}}></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="4"
+                                  @value={{mut inscription.longTitle}}>
+            </WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>
+                  {{t "cancel"}}
+                </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}} data-test-publication-save-inscription>{{t "save"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}} data-test-publication-save-inscription>
+                  {{t "save"}}
+                </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -50,7 +61,9 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click"
+                                                                                                this.putInscriptionInEditMode}}
+                                         data-test-publication-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -94,7 +107,8 @@
           <tbody>
             <tr>
               <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="ki-user" /> <span class="u-mx-2">{{t "cancel"}}</span>
+                <WebComponents::AuBadge @icon="ki-user"/>
+                <span class="u-mx-2">{{t "cancel"}}</span>
               </td>
               <td>
                 <span>{{t "cancel"}}</span>
@@ -102,18 +116,18 @@
               </td>
               <td class="vl-u-align-right">
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  type="button"
+                        class="vl-button vl-button--link vl-button--icon"
+                        type="button"
                 >
                   <i class="ki-more"></i>
                   <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="left"
-                    as |attacher|
+                      @renderInPlace={{true}}
+                      @class="ember-attacher-popper"
+                      @hideOn="clickout click"
+                      @showOn="click"
+                      @animation="shift"
+                      @placement="left"
+                      as |attacher|
                   >
                     <ul class="vlc-dropdown-menu">
                       <li class="vlc-dropdown-menu__item">
@@ -152,18 +166,20 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus">
+                {{t "add-contact"}}
+              </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
         <DataTable
-            @content={{this.model.person}}
-            @noDataMessage={{t "no-results-found"}}
-            @isLoading={{this.isLoadingModel}}
-            @class="auk-table auk-table--disable-bottom-border"
-            as |table|
+                @content={{this.model.person}}
+                @noDataMessage={{t "no-results-found"}}
+                @isLoading={{this.isLoadingModel}}
+                @class="auk-table auk-table--disable-bottom-border"
+                as |table|
         >
           <table.content as |c|>
             <c.header>
@@ -182,18 +198,18 @@
               </td>
               <td class="vl-u-align-right">
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  type="button"
+                        class="vl-button vl-button--link vl-button--icon"
+                        type="button"
                 >
                   <i class="ki-more"></i>
                   <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="left"
-                    as |attacher|
+                          @renderInPlace={{true}}
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="left"
+                          as |attacher|
                   >
                     <ul class="vlc-dropdown-menu">
                       <li class="vlc-dropdown-menu__item">
@@ -220,46 +236,47 @@
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
   </div>
+  {{#if isShowingPersonModal}}
+    <WebComponents::AuModal>
+      <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
+                                             @closeModal={{this.closeContactPersonModal}} />
+      <WebComponents::AuModal::Modal::Body>
+        <div class="auk-form-group-layout auk-form-group-layout--standard">
+          <div class='auk-form-group'>
+            <WebComponents::AuLabel for="nameInput">
+              {{t "name"}}
+            </WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="nameInput" @block="true"/>
+          </div>
+          <div class='auk-form-group'>
+            <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="emailInput" @block="true"/>
+          </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="organisationInput" @block="true"/>
+          </div>
+        </div>
+      </WebComponents::AuModal::Modal::Body>
+      <WebComponents::AuModal::Modal::Footer>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
+                {{t "cancel"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton @skin="primary" @icon="plus">
+                {{t "add"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuModal::Modal::Footer>
+    </WebComponents::AuModal>
+  {{/if}}
 </div>
-{{#if isShowingPersonModal}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
-      @closeModal={{this.closeContactPersonModal}} />
-    <WebComponents::AuModal::Modal::Body>
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="nameInput">
-            {{t "name"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="nameInput" @block="true" />
-        </div>
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="emailInput" @block="true" />
-        </div>
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="organisationInput" @block="true" />
-        </div>
-      </div>
-    </WebComponents::AuModal::Modal::Body>
-    <WebComponents::AuModal::Modal::Footer>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
-              {{t "cancel"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus">
-              {{t "add"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Modal::Footer>
-  </WebComponents::AuModal>
-{{/if}}
+

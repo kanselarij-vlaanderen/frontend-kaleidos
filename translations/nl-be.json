@@ -639,5 +639,14 @@
   "delete-contact": "Verwijderen van contactpersoon",
   "organisation": "Organisatie",
   "contacts": "Contactpersonen",
-  "add-contact-persons": "Contactpersonen toevoegen"
+  "add-contact-persons": "Contactpersonen toevoegen",
+  "contacts": "Contactpersonen",
+  "extreme-translation-date": "Uiterste vertaaldatum",
+  "extreme-publication-date": "Uiterste datum publicatie",
+  "kind-of-publication": "Wijze van publicatie",
+  "to-publish": "te publiceren",
+  "published": "gepubliceerd",
+  "publication-from-extenso": "Extenso",
+  "publication-form-by-excerpt": "Bij uitreksel"
+
 }

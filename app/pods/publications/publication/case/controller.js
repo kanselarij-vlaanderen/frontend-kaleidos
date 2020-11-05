@@ -5,10 +5,10 @@ import { inject as service } from '@ember/service';
 
 export default class CaseController extends Controller {
   @service publicationService;
-
   @tracked isShowingPersonModal = false;
-  @tracked isInscriptionInEditMode= false;
+  @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
+
 
   @tracked
   inscription = {
