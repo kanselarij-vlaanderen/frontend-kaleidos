@@ -16,6 +16,32 @@ export default class CaseController extends Controller {
     longTitle: '',
   };
 
+  @tracked
+  contactPerson = {
+    firstName: '',
+    lastName: '',
+    email: '',
+  };
+
+  @action
+  onFirstNameChanged(event) {
+    this.contactPerson.firstName = event.target.value;
+  }
+
+  @action
+  onLastNameChanged(event) {
+    this.contactPerson.lastName = event.target.value;
+  }
+
+  @action
+  onEmailChanged(event) {
+    this.contactPerson.email = event.target.value;
+  }
+  @action
+  onOrganisationChanged(event) {
+    this.contactPerson.organisationName = event.target.value;
+  }
+
   get getShortTitle() {
     if (this.model) {
       const caze = this.model.get('case');
@@ -74,5 +100,12 @@ export default class CaseController extends Controller {
     };
 
     this.isInscriptionInEditMode = false;
+  }
+
+  @action
+  async addNewContactPerson() {
+    const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
+    await contactPerson.save();
+    await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
   }
 }

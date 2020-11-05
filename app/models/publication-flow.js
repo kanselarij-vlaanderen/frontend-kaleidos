@@ -17,5 +17,5 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-type') type;
 
   @hasMany('subcase') subcases;
-  @hasMany('person') contacts;
+  @hasMany('contact-person') contactPersons;
 }

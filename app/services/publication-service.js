@@ -6,6 +6,9 @@ import moment from 'moment';
 
 export default class PublicationService extends Service {
   @service store;
+  @service toaster;
+  @service intl;
+
 
   async createNewPublication(publicationNumber, title, shortTitle) {
     const creationDatetime = moment().utc()
@@ -45,5 +48,22 @@ export default class PublicationService extends Service {
     await cazeToSave.save();
 
     return publicationFlow;
+  }
+
+  async linkContactPersonToPublication(publicationId, contactPerson) {
+    const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
+      include: 'contact-person',
+    });
+
+    const contactPersonList = await publicationFlow.get('contactPersons').toArray();
+    contactPersonList.push(contactPerson);
+    publicationFlow.set('contactPersons', contactPersonList);
+    publicationFlow.save().then(() => {
+      this.toaster.success(this.intl.t('contact-added-toast-message'), this.intl.t('contact-added-toast-title'));
+    })
+      .catch(() => {
+        // TODO: Functionele logging hier toevoegen
+        this.toaster.error(this.intl.t('contact-added-toast-error-message'), this.intl.t('toast-error-title'));
+      });
   }
 }

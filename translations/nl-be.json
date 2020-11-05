@@ -644,5 +644,9 @@
   "organisation": "Organisatie",
   "contacts": "Contactpersonen",
   "add-contact-persons": "Contactpersonen toevoegen",
-  "logo-flanders": "Logo Vlaanderen"
+  "logo-flanders": "Logo Vlaanderen",
+  "contact-added-toast-title": "Contactpersoon toegevoegd",
+  "contact-added-toast-message": "Uw contactpersoon werd succesvol opgeslagen.",
+  "toast-error-title": "Actie mislukt",
+  "contact-added-toast-error-message": "Uw contactpersoon werd niet succesvol opgeslagen. Contacteer de administrator of probeer het opnieuw."
 }

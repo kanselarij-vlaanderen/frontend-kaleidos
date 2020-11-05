@@ -1,19 +1,17 @@
-import DS from 'ember-data';
+import Model, { attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
-const {
-  Model, attr,
-} = DS;
+export default class ContactPerson extends Model {
+  @attr('string') lastName;
+  @attr('string')firstName;
+  @attr('string') email;
+  @attr('string') organisationName; // TODO: Misschien organisation model?
+  @attr('string') phone;  // TODO: Voorlopig niet in gebuik
 
-export default Model.extend({
-  lastName: attr('string'),
-  firstName: attr('string'),
-  email: attr('string'),
-  phone: attr('string'),
-  nameToDisplay: computed('firstName', 'lastName', function() {
+  nameToDisplay = computed('firstName', 'lastName', function() {
     const {
       firstName, lastName,
     } = this;
     return `${firstName} ${lastName}`;
-  }),
-});
+  });
+}

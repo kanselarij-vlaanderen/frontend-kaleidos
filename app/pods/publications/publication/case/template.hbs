@@ -66,7 +66,7 @@
 
 
   </div>
-  <div class="u-mb-3">
+  <div hidden class="u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -228,18 +228,24 @@
     <WebComponents::AuModal::Modal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group'>
-          <WebComponents::AuLabel for="nameInput">
+          <WebComponents::AuLabel for="firstNameInput">
+            {{t "first-name"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="lastNameInput">
             {{t "name"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="nameInput" @block="true" />
+          <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
         </div>
         <div class='auk-form-group'>
           <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="emailInput" @block="true" />
+          <WebComponents::AuInput {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="organisationInput" @block="true" />
+          <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
         </div>
       </div>
     </WebComponents::AuModal::Modal::Body>
@@ -254,7 +260,7 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus">
+            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}}>
               {{t "add"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
