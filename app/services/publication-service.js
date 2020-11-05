@@ -52,11 +52,11 @@ export default class PublicationService extends Service {
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
-      include: 'contact-person',
+      include: 'contact-persons',
     });
 
-    const contactPersonList = await publicationFlow.get('contactPersons').toArray();
-    contactPersonList.push(contactPerson);
+    const contactPersonList = await publicationFlow.get('contactPersons');
+    contactPersonList.pushObject(contactPerson);
     publicationFlow.set('contactPersons', contactPersonList);
     publicationFlow.save().then(() => {
       this.toaster.success(this.intl.t('contact-added-toast-message'), this.intl.t('contact-added-toast-title'));
