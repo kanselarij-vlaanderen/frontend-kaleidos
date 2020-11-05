@@ -103,6 +103,9 @@ Router.map(function() {
     this.route('pills');
     this.route('typography');
     this.route('selects');
+    this.route('brand');
+    this.route('checkbox');
+    this.route('dropdown');
   });
 
   this.route('search', { path: '/zoeken', }, function() {
@@ -111,7 +114,11 @@ Router.map(function() {
   });
 
   this.route('publications', { path: '/publicaties', }, function() {
-    this.route('in-progress', { path: '/in-behandeling', });
+    this.route('to-treat', { path: '/te-behandelen', });
+    this.route('in-progress', { path: '/in-behandeling', }, function() {
+      this.route('in-progress-minister', { path: '/via-ministerraad', });
+      this.route('in-progress-not-minister', { path: '/niet-via-ministerraad', });
+    });
     this.route('done', { path: '/behandeld', });
   });
 });

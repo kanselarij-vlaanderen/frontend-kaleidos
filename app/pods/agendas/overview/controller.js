@@ -47,8 +47,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
   actions: {
     setDateFilter(date) {
-      date = date.split('/').join('-');
-      const match = this.dateRegex.exec(date);
+      const newDate = date.split('/').join('-');
+      const match = this.dateRegex.exec(newDate);
       if (!match) {
         this.set('from', undefined);
         this.set('to', undefined);

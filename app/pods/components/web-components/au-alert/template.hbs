@@ -1,0 +1,14 @@
+<div class="auk-alert {{this.skin}}" ...attributes>
+  <div class="auk-alert__body">
+    <WebComponents::AuBadge @icon="{{this.icon}}" @skin={{@skin}}/>
+    <div class="auk-alert__text">
+      {{#if @title}}
+        <p class="auk-alert__title">{{@title}}</p>
+      {{/if}}
+      <p class="auk-alert__message">{{@message}}</p>
+    </div>
+  </div>
+  {{#if @isClosable}}
+    <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only">{{t "cancel"}}</WebComponents::AuButton>
+  {{/if}}
+</div>
