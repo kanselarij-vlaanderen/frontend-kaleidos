@@ -45,3 +45,6 @@ lint-html:
 
 icon-font:
 	- ./generate-icon-font.sh
+
+drc-up-d:
+	- docker-compose ${COMPOSE_FILE} up -d

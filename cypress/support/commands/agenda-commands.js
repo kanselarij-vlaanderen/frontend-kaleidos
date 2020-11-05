@@ -85,6 +85,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
           force: true,
         })
           .invoke('val')
+          // eslint-disable-next-line
           .then((sometext) => meetingNumber = sometext);
       }
     });
@@ -104,11 +105,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     cy.get(form.meeting.meetingEditIdentifierButton).click({
       force: true,
     });
+
     cy.get(form.formInput).eq(1)
       .click({
         force: true,
       })
       .invoke('val')
+      // eslint-disable-next-line
       .then((sometext) => meetingNumberVisualRepresentation = sometext);
   }
 

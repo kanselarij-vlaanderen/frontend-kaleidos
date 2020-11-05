@@ -1,7 +1,7 @@
 {{! template-lint-disable no-bare-strings }}
 
 <h1 class="vlc-kitchensink-header">Pills</h1>
-
+<h4 class="vlc-kitchensink-header">Currently used:</h4>
 <Styleguide::KitchensinkSample
   @title="Normal pills"
   @snippet="normal.hbs"
@@ -21,6 +21,48 @@
 >
   {{!-- BEGIN-SNIPPET acceslevel --}}
   <AccessLevelPill/>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+<hr>
+<h4 class="vlc-kitchensink-header">New Pill:</h4>
+<Styleguide::KitchensinkSample
+        @title="Warning"
+        @code='<WebComponents::AuPill @skin="warning">Label</WebComponents::AuPill>'
+>
+  {{!-- BEGIN-SNIPPET acceslevel --}}
+  <WebComponents::AuPill @skin="warning">Label</WebComponents::AuPill>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Succes pill list"
+        @code='<WebComponents::AuPillList>
+  <WebComponents::AuPill @skin="success">Label</WebComponents::AuPill>
+  <WebComponents::AuPill @skin="success" @icon="lock-open">Label</WebComponents::AuPill>
+</WebComponents::AuPillList>'
+>
+  {{!-- BEGIN-SNIPPET acceslevel --}}
+  <WebComponents::AuPillList>
+    <WebComponents::AuPill @skin="success">Label</WebComponents::AuPill>
+    <WebComponents::AuPill @skin="success" @icon="lock-open">Label</WebComponents::AuPill>
+  </WebComponents::AuPillList>
+  {{!-- END-SNIPPET --}}
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Danger pill list"
+        @code='<WebComponents::AuPillList>
+  <WebComponents::AuPill @skin="danger">Label</WebComponents::AuPill>
+  <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
+  <WebComponents::AuPill @skin="danger" @layout="icon-right" @icon="lock-closed">Label</WebComponents::AuPill>
+</WebComponents::AuPillList>'
+>
+  {{!-- BEGIN-SNIPPET acceslevel --}}
+  <WebComponents::AuPillList>
+    <WebComponents::AuPill @skin="danger">Label</WebComponents::AuPill>
+    <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
+    <WebComponents::AuPill @skin="danger" @layout="icon-right" @icon="lock-closed">Label</WebComponents::AuPill>
+  </WebComponents::AuPillList>
   {{!-- END-SNIPPET --}}
 </Styleguide::KitchensinkSample>
 
