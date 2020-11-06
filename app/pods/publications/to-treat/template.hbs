@@ -1,1 +1,58 @@
-<div>{{t "cancel" }}</div>
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>{{t "case-name"}}</th>
+      <th>{{t "documents-amount"}}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each this.model as | meeting |}}
+      <tr>
+        <td>
+          <span class="u-mx-2">{{ await meeting.plannedStart}}</span>
+        </td>
+
+        <td class="vl-u-align-right">
+        </td>
+      </tr>
+      {{#each (await meeting.latestAgenda.getCases)  as | case |}}
+        <tr>
+          <td>
+            {{ case.title }} -
+            {{ case.shortTitle }}
+          </td>
+
+          <td class="vl-u-align-right">
+            <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
+              {{on "click" (fn this.startPublication case) }}
+            >
+              {{t "start-publication"}}
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+    {{/each}}
+  </tbody>
+</table>
+
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+{{#if showLoader }}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @showCloseButton={{false}}
+          @title={{t "loading-text"}}
+  >
+    <WebComponents::VlLoader
+            @text={{concat
+              (t "saving-change-message")
+              " "
+              (t "please-be-patient")
+            }}
+    />
+  </WebComponents::VlModal>
+{{/if}}

@@ -107,4 +107,17 @@ export default Model.extend(LoadableModel, {
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
   }),
+
+  getCases: computed('agendaitems.@each', async function() {
+    const agendaitems = await this.get('agendaitems');
+    const agendaActivities  = agendaitems.map(async(agendaItem) => await agendaItem.get('agendaActivity'));
+    if (agendaActivities) {
+      const activityCases  = agendaActivities.map(async(agendaActivity) => await agendaActivity.get('case'));
+      if (activityCases) {
+        return activityCases;
+      }
+    }
+    return false;
+  }),
+
 });
