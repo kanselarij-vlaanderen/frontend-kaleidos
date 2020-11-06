@@ -12,6 +12,6 @@ export default class IndexInProgressRoute extends Route {
      * of the "search" route, even though the queryParams are marked `refreshModel: true`.
      * As a result "searchTextBuffer" doesn't get cleared.
      */
-    this.transitionTo('publications.in-progress.in-progress-not-minister');
+    this.transitionTo('publications.in-progress.in-progress-minister');
   }
 }
