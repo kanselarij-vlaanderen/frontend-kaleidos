@@ -170,71 +170,66 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        <DataTable
-            @content={{this.model.contactPersons}}
-            @noDataMessage={{t "no-results-found"}}
-            @size={{this.contactPersonsView.size}}
-            @page={{this.contactPersonsView.page}}
-            @sort={{this.contactPersonsView.sort}}
-            @isLoading={{this.isLoadingModel}}
-            @class="auk-table auk-table--disable-bottom-border"
-            as |table|
-        >
-          <table.content as |c|>
-            <c.header>
+
+        <table class="auk-table">
+          <thead>
+            <tr>
               <th>{{t "name"}}</th>
               <th>{{t "email"}}</th>
               <th>{{t "organisation"}}</th>
               <th></th>
-            </c.header>
-            <c.body class="tr-hover" as |row|>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.model.contactPersons as | contactPerson |}}
+              <tr>
+                <td class="o-flex o-flex--vertical-center">
+                  <WebComponents::AuBadge @icon="ki-user"/>
+                  <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
+                </td>
 
-              <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="ki-user"/>
-                <span class="u-mx-2">{{ await row.nameToDisplay}}</span>
-              </td>
+                <td class="">
+                  <span class="u-mx-2">
+                    {{#if contactPerson.email }}
+                      <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                    {{/if}}
+                  </span>
+                </td>
 
-              <td class="">
-                <span class="u-mx-2">
-                  {{#if row.email }}
-                    <a href="mailto:{{row.email}}">{{row.email}}</a>
-                  {{/if}}
-                </span>
-              </td>
+                <td class="">
+                  <span class="u-mx-2">{{contactPerson.organisationName}}</span>
+                </td>
 
-              <td class="">
-                <span class="u-mx-2">{{row.organisationName}}</span>
-              </td>
-
-              <td class="vl-u-align-right">
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  type="button"
-                >
-                  <i class="ki-more"></i>
-                  <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="left"
+                <td class="vl-u-align-right">
+                  <button
+                          class="vl-button vl-button--link vl-button--icon"
+                          type="button"
                   >
-                    <ul class="vlc-dropdown-menu">
-                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                          {{on "click" (fn this.deleteContactPerson row) }}
-                        >
-                          {{t "delete"}}
-                        </button>
-                      </li>
-                    </ul>
-                  </AttachPopover>
-                </button>
-              </td>
-            </c.body>
-          </table.content>
-        </DataTable>
+                    <i class="ki-more"></i>
+                    <AttachPopover
+                            @renderInPlace={{true}}
+                            @class="ember-attacher-popper"
+                            @hideOn="clickout click"
+                            @showOn="click"
+                            @animation="shift"
+                            @placement="left"
+                    >
+                      <ul class="vlc-dropdown-menu">
+                        <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                          <button class="vl-link vl-link--block vl-u-text--error" type="button"
+                            {{on "click" (fn this.deleteContactPerson contactPerson) }}
+                          >
+                            {{t "delete"}}
+                          </button>
+                        </li>
+                      </ul>
+                    </AttachPopover>
+                  </button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
   </div>
