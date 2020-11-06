@@ -120,7 +120,6 @@ export default class CaseController extends Controller {
   @action
   async deleteContactPerson(contactPerson) {
     this.set('showLoader', true);
-    console.log('about to DELETE', contactPerson);
     await contactPerson.destroyRecord();
     this.set('showLoader', false);
   }
