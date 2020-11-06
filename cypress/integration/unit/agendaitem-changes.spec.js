@@ -220,12 +220,17 @@ context('Agendaitem changes tests', () => {
     cy.get('.ember-power-select-option').should('exist')
       .then(() => {
         cy.contains('Minister-president van de Vlaamse Regering').click();
+
         cy.route('GET', '/government-fields/**').as('getGovernmentFields');
-        cy.wait('@getGovernmentFields');
         cy.get(modalSelectors.modalFooterSaveButton).click();
-        cy.get(utilsSelectors.saveButton).click();
+        cy.wait('@getGovernmentFields');
+
+        cy.get(`[data-test-vl-modal-dialogwindow] ${utilsSelectors.saveButton}`).click();
+
         cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
+        cy.get(utilsSelectors.saveButton).click();
         cy.wait('@patchAgendaitems');
+
         cy.visit(agendaURL);
         cy.get(agenda.agendaOverviewItemHeader).eq(0)
           .should('contain.text', 'Minister-president van de Vlaamse Regering');

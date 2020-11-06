@@ -1,0 +1,8 @@
+{{#if @message}}
+  <div class="auk-loader-wrapper">
+    <div class="auk-loader" role="alert" aria-busy="true"></div>
+    <p>{{@message}}</p>
+  </div>
+{{else}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+{{/if}}

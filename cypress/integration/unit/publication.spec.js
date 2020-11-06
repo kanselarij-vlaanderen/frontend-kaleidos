@@ -20,9 +20,11 @@ context('Publications tests', () => {
   });
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
+  const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
   const someText = 'Some text';
   const publicationNumber = 'CY987';
   const shortTitle = 'Korte titel cypress test';
+  const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
 
   it('should render error when required fields are not filled in to create new publication', () => {
@@ -113,5 +115,45 @@ context('Publications tests', () => {
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
     cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', publicationNumber);
+  });
+
+  it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
+    cy.visit(publicationNotViaMinisterOverviewUrl);
+
+    cy.route('/publication-flows/**').as('getNewPublicationDetail');
+    cy.get(publicationSelectors.goToPublication).click();
+    cy.wait('@getNewPublicationDetail');
+
+    cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', publicationNumber);
+  });
+
+  it('should edit inscription and this data must be visible in the overview', () => {
+    cy.visit(publicationNotViaMinisterOverviewUrl);
+
+    cy.route('/publication-flows/**').as('getNewPublicationDetail');
+    cy.get(publicationSelectors.goToPublication).click();
+    cy.wait('@getNewPublicationDetail');
+
+    cy.get(publicationSelectors.editInscriptionButton).click();
+    cy.get(publicationSelectors.inscriptionShortTitleTextarea).click({
+      force: true,
+    })
+      .clear()
+      .type(shortTitle2);
+
+    cy.route('PATCH', '/cases/*').as('patchCaseForPublicationFlow');
+    cy.get(publicationSelectors.inscriptionSaveButton).click();
+    cy.wait('@patchCaseForPublicationFlow');
+    cy.contains(shortTitle2).should('exist');
+
+    // go back in overview
+    cy.route('/publication-flows?**').as('goToPublicationOverview');
+    cy.get(publicationSelectors.goBackToOverviewButton).click();
+    cy.wait('@goToPublicationOverview');
+
+    // check if title has changes
+    cy.contains(shortTitle2).should('exist');
+    cy.contains(longTitle).should('exist');
   });
 });
