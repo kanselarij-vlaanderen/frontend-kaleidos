@@ -21,6 +21,10 @@ export default class InProgressNotRoute extends Route {
   async model() {
     return this.store.query('publication-flow', {
       filter: {
+        ':has:case': 'yes',
+        case: {
+          ':has:subcases': 'yes',
+        },
         status: {
           id: CONFIG.publicationStatusToPublish.id,
         },
