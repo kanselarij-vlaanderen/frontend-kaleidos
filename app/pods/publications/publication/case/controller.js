@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 export default class CaseController extends Controller {
   @service publicationService;
 
+  @tracked showLoader = false;
   @tracked isShowingPersonModal = false;
   @tracked isInscriptionInEditMode= false;
   @tracked isUpdatingInscription = false;
@@ -21,6 +22,13 @@ export default class CaseController extends Controller {
     firstName: '',
     lastName: '',
     email: '',
+  };
+
+  @tracked
+  contactPersonsView = {
+    size: 50,
+    page: 0,
+    sort: '',
   };
 
   @action
@@ -91,21 +99,29 @@ export default class CaseController extends Controller {
   @action
   async saveInscription() {
     const newPublication = await this.publicationService.updateInscription(this.model.get('id'), this.inscription.longTitle, this.inscription.shortTitle);
-
     const caze = await newPublication.get('case');
-
     this.inscription = {
       shortTitle: caze.get('shortTitle'),
       longTitle: caze.get('title'),
     };
-
     this.isInscriptionInEditMode = false;
   }
 
   @action
   async addNewContactPerson() {
+    this.set('showLoader', true);
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
     await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
+    this.isShowingPersonModal = false;
+    this.set('showLoader', false);
+  }
+
+  @action
+  async deleteContactPerson(contactPerson) {
+    this.set('showLoader', true);
+    console.log('about to DELETE', contactPerson);
+    await contactPerson.destroyRecord();
+    this.set('showLoader', false);
   }
 }

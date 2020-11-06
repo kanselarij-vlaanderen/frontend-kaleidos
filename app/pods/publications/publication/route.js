@@ -6,7 +6,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     return await this.store.findRecord('publication-flow', params.publication_id, {
       reload: true,
     }, {
-      include: 'case,person,status',
+      include: 'case,contact-person,status',
     });
   }
 }

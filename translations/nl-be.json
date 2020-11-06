@@ -576,7 +576,7 @@
   "style-guide-label": "Label",
   "option-others": "Andere",
   "saving-agendaitem-title-message": "Aanpassen van agendapunten",
-  "saving-agendaitem-message": "Uw aanpassing wordt opgeslagen.",
+  "saving-change-message": "Uw aanpassing wordt opgeslagen.",
   "saving-retracted-agendaitem-title": "Aanpassen van uitstelling",
   "saving-retracted-agendaitem-message": "Uw aanpassing wordt opgeslagen.",
   "agenda-activity": "Agendering",

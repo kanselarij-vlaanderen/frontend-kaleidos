@@ -1,4 +1,9 @@
 <div class="u-m-4">
+
+
+  {{!--  DOSSIER PANEL  --}}
+
+
   <div class="u-mb-3">
     {{#if isInscriptionInEditMode}}
       <WebComponents::AuPanel class="auk-panel--gray-100">
@@ -63,9 +68,13 @@
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
     {{/if}}
-
-
   </div>
+
+
+
+  {{!--  MINISTER PANEL  --}}
+
+
   <div hidden class="u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
@@ -141,6 +150,9 @@
     </WebComponents::AuPanel>
   </div>
 
+
+  {{!--  CONTACTPERSON PANEL  --}}
+
   <div class="u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
@@ -159,8 +171,11 @@
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
         <DataTable
-            @content={{this.model.person}}
+            @content={{this.model.contactPersons}}
             @noDataMessage={{t "no-results-found"}}
+            @size={{this.contactPersonsView.size}}
+            @page={{this.contactPersonsView.page}}
+            @sort={{this.contactPersonsView.sort}}
             @isLoading={{this.isLoadingModel}}
             @class="auk-table auk-table--disable-bottom-border"
             as |table|
@@ -169,17 +184,28 @@
             <c.header>
               <th>{{t "name"}}</th>
               <th>{{t "email"}}</th>
+              <th>{{t "organisation"}}</th>
               <th></th>
             </c.header>
             <c.body class="tr-hover" as |row|>
+
               <td class="o-flex o-flex--vertical-center">
                 <WebComponents::AuBadge @icon="ki-user"/>
-                <span class="u-mx-2">{{row.nameToDisplay}}</span>
-                <span class="u-mx-2">{{row.mandatee.title}}</span>
+                <span class="u-mx-2">{{ await row.nameToDisplay}}</span>
               </td>
-              <td>
-                {{t "cancel"}}
+
+              <td class="">
+                <span class="u-mx-2">
+                  {{#if row.email }}
+                    <a href="mailto:{{row.email}}">{{row.email}}</a>
+                  {{/if}}
+                </span>
               </td>
+
+              <td class="">
+                <span class="u-mx-2">{{row.organisationName}}</span>
+              </td>
+
               <td class="vl-u-align-right">
                 <button
                   class="vl-button vl-button--link vl-button--icon"
@@ -193,19 +219,11 @@
                     @showOn="click"
                     @animation="shift"
                     @placement="left"
-                    as |attacher|
                   >
                     <ul class="vlc-dropdown-menu">
-                      <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
-                          {{on "click" attacher.hide}}
-                        >
-                          {{t "edit-2"}}
-                        </button>
-                      </li>
                       <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                         <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                          {{on "click" attacher.hide}}
+                          {{on "click" (fn this.deleteContactPerson row) }}
                         >
                           {{t "delete"}}
                         </button>
@@ -221,6 +239,11 @@
     </WebComponents::AuPanel>
   </div>
 </div>
+
+
+{{!-- ADD CONTACTPERSON MODAL --}}
+
+
 {{#if isShowingPersonModal}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
@@ -268,4 +291,24 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Modal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+{{#if showLoader }}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @showCloseButton={{false}}
+          @title={{t "loading-text"}}
+  >
+    <WebComponents::VlLoader
+          @text={{concat
+            (t "saving-change-message")
+            " "
+            (t "please-be-patient")
+          }}
+    />
+  </WebComponents::VlModal>
 {{/if}}
