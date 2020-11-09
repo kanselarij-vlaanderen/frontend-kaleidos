@@ -20,6 +20,15 @@ class Case extends EmberObject {
 }
 
 export default class ToTreatRoute extends Route {
+  queryParams = {
+    page: {
+      refreshModel: true,
+    },
+    size: {
+      refreshModel: true,
+    },
+  };
+
   postProcessDates(_case) {
     const {
       sessionDates,
@@ -34,16 +43,14 @@ export default class ToTreatRoute extends Route {
     }
   }
 
-  async model() {
+  async model(params) {
     // const today = new Date();
     const filter = {};
     // filter[':lte:sessionDates'] = today.toISOString();
 
     const sort = '-session-dates';
-    const size = 50;
-    const page = 0;
     filter[':sqs:title'] = '*'; // search without filter
-    return await search('cases', page, size, sort, filter, (item) => {
+    return await search('cases', params.page, params.size, sort, filter, (item) => {
       const entry = Case.create(item.attributes); // EmberObject for tracking
       entry.id = item.id;
       return entry;
