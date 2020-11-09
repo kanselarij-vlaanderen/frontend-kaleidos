@@ -29,7 +29,11 @@
             </p>
           </td>
           <td>
-            {{ await row.documentsAmount }}
+            {{#if row.loadDocumentsCount.isRunning}}
+              {{t "loading"}}
+            {{else}}
+              {{row.documentsCount}}
+            {{/if}}
           </td>
           <td class="vl-u-align-right">
             {{#if (await row.publication)}}
