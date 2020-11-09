@@ -10,18 +10,21 @@ export default class PublicationService extends Service {
   @service intl;
 
 
-  async createNewPublication(publicationNumber, title, shortTitle) {
+  async createNewPublication(publicationNumber, _case, title, shortTitle) {
     const creationDatetime = moment().utc()
       .toDate();
-    const caze = this.store.createRecord('case', {
-      title,
-      shortTitle,
-      created: creationDatetime,
-    });
-    await caze.save();
-
+    let caze;
+    if (!_case) {
+      caze = this.store.createRecord('case', {
+        title,
+        shortTitle,
+        created: creationDatetime,
+      });
+      await caze.save();
+    } else {
+      caze = _case;
+    }
     const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
-
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
       case: caze,
@@ -29,9 +32,7 @@ export default class PublicationService extends Service {
       status: toPublishStatus,
       modified: creationDatetime,
     });
-
     await publicationFlow.save();
-
     return publicationFlow;
   }
 

@@ -108,16 +108,4 @@ export default Model.extend(LoadableModel, {
     });
   }),
 
-  getCases: computed('agendaitems.@each', async function() {
-    const agendaitems = await this.get('agendaitems');
-    const agendaActivities  = agendaitems.map(async(agendaItem) => await agendaItem.get('agendaActivity'));
-    if (agendaActivities) {
-      const activityCases  = agendaActivities.map(async(agendaActivity) => await agendaActivity.get('case'));
-      if (activityCases) {
-        return activityCases;
-      }
-    }
-    return false;
-  }),
-
 });
