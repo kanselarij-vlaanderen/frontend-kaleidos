@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import EmberObject, { action } from '@ember/object';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 
 class Case extends EmberObject {
