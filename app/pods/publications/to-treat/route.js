@@ -6,14 +6,12 @@ import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 
 class Case extends EmberObject {
-  @service store;
-
   @task({
     maxConcurrency: 2,
     restartable: false,
   })
-  *loadDocumentsCount() {
-    const res = yield this.store.query('piece', {
+  *loadDocumentsCount(store) {
+    const res = yield store.query('piece', { // TODO: How to inject store here?
       'filter[cases][:id:]': this.id,
       'page[size]': 0,
     });
@@ -54,7 +52,7 @@ export default class ToTreatRoute extends Route {
 
   afterModel(model) {
     model.forEach((_case) => {
-      _case.loadDocumentsCount.perform();
+      _case.loadDocumentsCount.perform(this.store);
     });
   }
 
