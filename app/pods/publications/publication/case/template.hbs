@@ -38,7 +38,14 @@
                 <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="primary" {{on "click" this.saveInscription}} data-test-publication-save-inscription>{{t "save"}}</WebComponents::AuButton>
+                <WebComponents::AuButton
+                  data-test-publication-save-inscription
+                  @skin="primary"
+                  @disabled={{this.saveInscription.isRunning}}
+                  {{on "click" (perform this.saveInscription)}}
+                >
+                  {{t "save"}}
+                </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
