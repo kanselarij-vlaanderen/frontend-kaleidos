@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         {{#each mandateeRows as |mandateeRow|}}
-          <tr>
+          <tr data-test-mandatees-edit-row>
             <td>
               {{await mandateeRow.mandatee.person.nameToDisplay}}
             </td>
@@ -30,7 +30,7 @@
             <td>
               {{await mandateeRow.fieldsToShow}}
             </td>
-            <td>
+            <td data-test-mandatees-edit-row-submitter>
               {{web-components/vl-toggle
                 valueChanged=(action "valueChanged" mandateeRow)
                 value=(await mandateeRow.isSubmitter)
@@ -54,7 +54,8 @@
                   </span>
                 </button>
               {{/if}}
-              <button type="button"
+              <button data-test-mandatees-edit-row-delete
+                      type="button"
                       class="vl-button vl-button--link vl-button--icon"
                 {{action "deleteRow" mandateeRow}}>
                 <i class="ki-delete" aria-hidden="true"></i>

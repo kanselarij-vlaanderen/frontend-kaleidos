@@ -6,5 +6,7 @@ const selectors = {
   meetingTitle: '[data-test-newsletter-meeting-header-title]',
   overviewTitle: '[data-test-newsletter-overview-header-title]',
   notaUpdates: '[data-test-nota-updates]',
+  overviewTableRow: '[data-test-newsletter-overview-table-row]',
+  printItemProposal: '[data-test-newsletter-print-item-proposal]',
 };
 export default selectors;

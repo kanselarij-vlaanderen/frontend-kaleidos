@@ -153,18 +153,12 @@ export const setCalculatedGroupPriorities = (agendaitems) => Promise.all(
       return;
     }
     if (mandatees.length === 0) {
-      agendaitem.set('groupPriority', 20000000);
+      agendaitem.set('groupPriority', 'ZZZZZZZZ');
       return;
     }
-    const mandateePriorities = mandatees.map((mandatee) => mandatee.priority);
-    const minPrio = Math.min(...mandateePriorities);
-    const minPrioIndex = mandateePriorities.indexOf(minPrio);
-    delete mandateePriorities[minPrioIndex];
-    let calculatedGroupPriority = minPrio;
-    mandateePriorities.forEach((value) => {
-      calculatedGroupPriority += value / 100;
-    });
-    agendaitem.set('groupPriority', calculatedGroupPriority);
+    const mandateePriorities = mandatees.map((mandatee) => mandatee.priorityAlpha);
+    mandateePriorities.sort(); // should sort on letters A - Z
+    agendaitem.set('groupPriority', mandateePriorities.join());
   })
 );
 

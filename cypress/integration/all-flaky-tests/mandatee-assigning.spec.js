@@ -3,6 +3,12 @@
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from '../../selectors/isecodes/isecodesSelectors';
+import agenda from '../../selectors/agenda.selectors';
+import caze from '../../selectors/case.selectors';
+import utils from '../../selectors/utils.selectors';
+import newsletter from '../../selectors/newsletter.selector';
+import modal from '../../selectors/modal.selectors';
+import actionModal from '../../selectors/action-modal.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -218,5 +224,173 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(isecodes.isecodesList).should('exist');
     cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+  });
+
+  it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.clickReverseTab('Detail');
+
+    cy.log('in non-edit view, check if mandatees are correct');
+    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 2);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 3);
+    cy.get('@agendaitems').eq(3)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+
+    cy.log('when edit is open, check if mandatees are correct (in reverse order)');
+    cy.get(caze.editSubcaseMandatees).click();
+    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get('@editItems').should('have.length', 5);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get('@editItems').should('have.length', 3);
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get('@editItems').should('have.length', 2);
+
+    cy.log('when edit is cancelled, check the non-edit view again');
+    cy.get(caze.cancelEditSubcaseMandatees).click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 2);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 3);
+    cy.get('@agendaitems').eq(3)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+
+    cy.log('changing the submitter and saving, check the non-edit view again (in reverse order)');
+    cy.get(caze.editSubcaseMandatees).click();
+    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get('@editItems').eq(2)
+      .within(() => {
+        cy.get(mandatee.mandateesEditRowSubmitter).click();
+      });
+    cy.get(utils.saveButton).click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 3);
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 2);
+
+    cy.log('adding a mandatee and saving, check the non-edit view again');
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.addAgendaitemMandatee(6, -1, -1);
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 2);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 4);
+    cy.get('@agendaitems').eq(3)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+
+    cy.log('deleting a mandatee and saving, check the non-edit view again');
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(caze.editSubcaseMandatees).click();
+    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get('@editItems').eq(2)
+      .within(() => {
+        cy.get(mandatee.mandateesEditRowDelete).click();
+      });
+    cy.get(utils.saveButton).click();
+
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 2);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 3);
+    cy.get('@agendaitems').eq(3)
+      .click();
+    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get('@listItems').should('have.length', 5);
+  });
+
+  it('should create newsletter-info for the agendaitems to check the sorting', () => {
+    cy.openAgendaForDate(agendaDate);
+    cy.clickReverseTab('Detail');
+    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
+    cy.get('@agendaitems').eq(1)
+      .click();
+    cy.get(agenda.agendaitemKortBestekTab)
+      .should('be.visible')
+      .click();
+
+    cy.get(newsletter.edit).should('be.visible')
+      .click();
+    cy.get(newsletter.editSave).click();
+    cy.wait(2000);
+    cy.get(modal.verify.save).click();
+    cy.wait(3000);
+    cy.get('@agendaitems').eq(2)
+      .click();
+    cy.get(newsletter.edit).should('be.visible')
+      .click();
+    cy.get(newsletter.editSave).click();
+    cy.wait(2000);
+    cy.get(modal.verify.save).click();
+    cy.wait(3000);
+    cy.get('@agendaitems').eq(3)
+      .click();
+    cy.get(newsletter.edit).should('be.visible')
+      .click();
+    cy.get(newsletter.editSave).click();
+    cy.wait(2000);
+    cy.get(modal.verify.save).click();
+    cy.wait(3000);
+
+    cy.get(actionModal.showActionOptions).click();
+    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(newsletter.overviewTableRow).as('newsletterRows');
+    cy.get('@newsletterRows').eq(0)
+      .within(() => {
+        cy.get(utils.checkboxLabel).click();
+        cy.wait(1000);
+      });
+    cy.get('@newsletterRows').eq(1)
+      .within(() => {
+        cy.get(utils.checkboxLabel).click();
+        cy.wait(1000);
+      });
+    cy.get('@newsletterRows').eq(2)
+      .within(() => {
+        cy.get(utils.checkboxLabel).click();
+        cy.wait(1000);
+      });
+
+    cy.clickReverseTab('Definitief');
+    cy.get(newsletter.printItemProposal).as('proposals');
+    cy.get('@proposals').eq(0)
+      .contains('Op voorstel van Minister-president Geert Bourgeois en Vlaams minister Hilde Crevits');
+    cy.get('@proposals').eq(1)
+      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits, Vlaams minister Liesbeth Homans, Vlaams minister Ben Weyts en Vlaams minister Phillipe Muyters');
+    cy.get('@proposals').eq(2)
+      .contains('Op voorstel van Minister-president Geert Bourgeois, Vlaams minister Hilde Crevits en Vlaams minister Sven Gatz');
   });
 });
