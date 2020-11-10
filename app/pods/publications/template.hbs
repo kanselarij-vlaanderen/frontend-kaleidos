@@ -89,10 +89,17 @@
               <WebComponents::AuToolbar>
                 <WebComponents::AuToolbar::Group @position="left">
                   <WebComponents::AuToolbar::Item>
+                    <WebComponents::AuButton @skin="borderless" {{on "click" this.closePublicationModal}} data-test-publication-button-cancel>
+                      {{t "cancel"}}
+                    </WebComponents::AuButton>
+                  </WebComponents::AuToolbar::Item>
+                </WebComponents::AuToolbar::Group>
+                <WebComponents::AuToolbar::Group @position="right">
+                  <WebComponents::AuToolbar::Item>
                     {{#if (not this.isCreatingPublication)}}
-                      <WebComponents::AuButton @skin="borderless" {{on "click" this.closePublicationModal}}
-                                               data-test-publication-button-cancel>
-                        {{t "cancel"}}
+                      <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new
+                        {{on "click" this.createNewPublication}}>
+                        {{t "publications-new-button-text"}}
                       </WebComponents::AuButton>
                     {{else}}
                       <Utils::SimpleSpinner></Utils::SimpleSpinner>
