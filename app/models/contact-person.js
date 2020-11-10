@@ -8,10 +8,11 @@ export default class ContactPerson extends Model {
   @attr('string') organisationName; // TODO: Misschien organisation model?
   @attr('string') phone;  // TODO: Voorlopig niet in gebuik
 
-  nameToDisplay = computed('firstName', 'lastName', function() {
+  @computed('firstName', 'lastName')
+  get nameToDisplay() {
     const {
       firstName, lastName,
     } = this;
     return `${firstName} ${lastName}`;
-  });
+  }
 }

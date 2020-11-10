@@ -1,4 +1,9 @@
-<div class="publication-case">
+<div class="u-m-4">
+
+
+  {{!--  DOSSIER PANEL  --}}
+
+
   <div class="u-mb-3">
     {{#if isInscriptionInEditMode}}
       <WebComponents::AuPanel class="auk-panel--gray-100">
@@ -63,9 +68,13 @@
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
     {{/if}}
-
-
   </div>
+
+
+
+  {{!--  MINISTER PANEL  --}}
+
+
   <div hidden class="u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
@@ -141,6 +150,9 @@
     </WebComponents::AuPanel>
   </div>
 
+
+  {{!--  CONTACTPERSON PANEL  --}}
+
   <div class="u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
@@ -158,69 +170,75 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        <DataTable
-            @content={{this.model.person}}
-            @noDataMessage={{t "no-results-found"}}
-            @isLoading={{this.isLoadingModel}}
-            @class="auk-table auk-table--disable-bottom-border"
-            as |table|
-        >
-          <table.content as |c|>
-            <c.header>
+
+        <table class="auk-table">
+          <thead>
+            <tr>
               <th>{{t "name"}}</th>
               <th>{{t "email"}}</th>
+              <th>{{t "organisation"}}</th>
               <th></th>
-            </c.header>
-            <c.body class="tr-hover" as |row|>
-              <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="ki-user"/>
-                <span class="u-mx-2">{{row.nameToDisplay}}</span>
-                <span class="u-mx-2">{{row.mandatee.title}}</span>
-              </td>
-              <td>
-                {{t "cancel"}}
-              </td>
-              <td class="vl-u-align-right">
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  type="button"
-                >
-                  <i class="ki-more"></i>
-                  <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="left"
-                    as |attacher|
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.model.contactPersons as | contactPerson |}}
+              <tr>
+                <td class="o-flex o-flex--vertical-center">
+                  <WebComponents::AuBadge @icon="ki-user"/>
+                  <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
+                </td>
+
+                <td class="">
+                  <span class="u-mx-2">
+                    {{#if contactPerson.email }}
+                      <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                    {{/if}}
+                  </span>
+                </td>
+
+                <td class="">
+                  <span class="u-mx-2">{{contactPerson.organisationName}}</span>
+                </td>
+
+                <td class="vl-u-align-right">
+                  <button
+                          class="vl-button vl-button--link vl-button--icon"
+                          type="button"
                   >
-                    <ul class="vlc-dropdown-menu">
-                      <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
-                          {{on "click" attacher.hide}}
-                        >
-                          {{t "edit-2"}}
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                          {{on "click" attacher.hide}}
-                        >
-                          {{t "delete"}}
-                        </button>
-                      </li>
-                    </ul>
-                  </AttachPopover>
-                </button>
-              </td>
-            </c.body>
-          </table.content>
-        </DataTable>
+                    <i class="ki-more"></i>
+                    <AttachPopover
+                            @renderInPlace={{true}}
+                            @class="ember-attacher-popper"
+                            @hideOn="clickout click"
+                            @showOn="click"
+                            @animation="shift"
+                            @placement="left"
+                    >
+                      <ul class="vlc-dropdown-menu">
+                        <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                          <button class="vl-link vl-link--block vl-u-text--error" type="button"
+                            {{on "click" (fn this.deleteContactPerson contactPerson) }}
+                          >
+                            {{t "delete"}}
+                          </button>
+                        </li>
+                      </ul>
+                    </AttachPopover>
+                  </button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
   </div>
 </div>
+
+
+{{!-- ADD CONTACTPERSON MODAL --}}
+
+
 {{#if isShowingPersonModal}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
@@ -268,4 +286,24 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Modal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+{{#if showLoader }}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @showCloseButton={{false}}
+          @title={{t "loading-text"}}
+  >
+    <WebComponents::VlLoader
+          @text={{concat
+            (t "saving-change-message")
+            " "
+            (t "please-be-patient")
+          }}
+    />
+  </WebComponents::VlModal>
 {{/if}}

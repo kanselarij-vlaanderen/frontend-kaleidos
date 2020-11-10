@@ -14,4 +14,11 @@ export default class Datepicker extends Component {
     }
     return '';
   }
+
+  get icon() {
+    if (this.args.icon) {
+      return this.args.icon;
+    }
+    return '';
+  }
 }

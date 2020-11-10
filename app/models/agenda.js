@@ -107,4 +107,5 @@ export default Model.extend(LoadableModel, {
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
   }),
+
 });
