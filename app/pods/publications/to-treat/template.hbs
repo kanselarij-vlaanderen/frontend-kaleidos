@@ -30,7 +30,7 @@
           </td>
           <td>
             {{#if row.loadDocumentsCount.isRunning}}
-              {{t "loading"}}
+              {{utils/simple-spinner}}
             {{else}}
               {{row.documentsCount}}
             {{/if}}

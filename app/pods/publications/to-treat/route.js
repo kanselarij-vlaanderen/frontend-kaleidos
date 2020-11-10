@@ -3,7 +3,6 @@ import EmberObject, { action } from '@ember/object';
 import moment from 'moment';
 import search from 'fe-redpencil/utils/mu-search';
 import { task } from 'ember-concurrency-decorators';
-import { inject as service } from '@ember/service';
 
 class Case extends EmberObject {
   @task({
@@ -51,7 +50,7 @@ export default class ToTreatRoute extends Route {
     const sort = '-session-dates';
     filter[':sqs:title'] = '*'; // search without filter
     return await search('cases', params.page, params.size, sort, filter, (item) => {
-      const entry = Case.create(item.attributes); // EmberObject for tracking
+      const entry = Case.create(item.attributes);
       entry.id = item.id;
       return entry;
     });

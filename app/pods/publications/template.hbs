@@ -87,7 +87,7 @@
                       {{t "publications-new-button-text"}}
                     </WebComponents::AuButton>
                   {{else}}
-                    <WebComponents::VlLoader @text=""></WebComponents::VlLoader> {{!-- TODO au-loader ? --}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
                   {{/if}}
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
