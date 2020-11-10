@@ -45,12 +45,12 @@ export default class ToTreatRoute extends Route {
   }
 
   async model(params) {
-    // const today = new Date();
+    const today = new Date();
+    const date = moment(today, 'DD-MM-YYYY').endOf('day');
     const filter = {};
-    // filter[':lte:sessionDates'] = today.toISOString();
-
     const sort = '-session-dates';
     filter[':sqs:title'] = '*'; // search without filter
+    filter[':lte:sessionDates'] = date.utc().toISOString();
     return await search('cases', params.page, params.size, sort, filter, (item) => {
       const entry = Case.create(item.attributes);
       entry.id = item.id;
