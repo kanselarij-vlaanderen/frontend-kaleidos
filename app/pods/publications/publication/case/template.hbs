@@ -5,7 +5,7 @@
 
 
   <div class="u-mb-3">
-    {{#if isInscriptionInEditMode}}
+    {{#if this.isInscriptionInEditMode}}
       <WebComponents::AuPanel class="auk-panel--gray-100">
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
@@ -24,11 +24,11 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{mut inscription.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{mut inscription.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
+            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
@@ -62,8 +62,8 @@
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
           <div class="auk-content">
-            <h4>{{getShortTitle}}</h4>
-            <p>{{getLongTitle}}</p>
+            <h4>{{this.model.shortTitle}}</h4>
+            <p>{{this.model.title}}</p>
           </div>
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
@@ -181,7 +181,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.model.contactPersons as | contactPerson |}}
+            {{#each this.contactPersons as | contactPerson |}}
               <tr>
                 <td class="o-flex o-flex--vertical-center">
                   <WebComponents::AuBadge @icon="ki-user"/>

@@ -12,12 +12,6 @@ export default class CaseController extends Controller {
   @tracked isUpdatingInscription = false;
 
   @tracked
-  inscription = {
-    shortTitle: '',
-    longTitle: '',
-  };
-
-  @tracked
   contactPerson = {
     firstName: '',
     lastName: '',
@@ -52,26 +46,16 @@ export default class CaseController extends Controller {
 
   get getShortTitle() {
     if (this.model) {
-      const caze = this.model.get('case');
-      return caze.get('shortTitle');
+      return this.model.shortTitle;
     }
     return '';
   }
 
   get getLongTitle() {
     if (this.model) {
-      const caze = this.model.get('case');
-      return caze.get('title');
+      return this.model.title;
     }
     return '';
-  }
-
-  @action
-  setValuesInscriptionModal() {
-    this.inscription = {
-      shortTitle: this.getShortTitle,
-      longTitle: this.getLongTitle,
-    };
   }
 
   @action
@@ -86,25 +70,22 @@ export default class CaseController extends Controller {
 
   @action
   putInscriptionInEditMode() {
-    this.setValuesInscriptionModal();
     this.isInscriptionInEditMode = true;
   }
 
   @action
   putInscriptionInNonEditMode() {
     this.isInscriptionInEditMode = false;
-    this.setValuesInscriptionModal();
   }
 
   @action
   async saveInscription() {
-    const newPublication = await this.publicationService.updateInscription(this.model.get('id'), this.inscription.longTitle, this.inscription.shortTitle);
-    const caze = await newPublication.get('case');
-    this.inscription = {
-      shortTitle: caze.get('shortTitle'),
-      longTitle: caze.get('title'),
-    };
-    this.isInscriptionInEditMode = false;
+    try {
+      await this.model.save();
+      this.putInscriptionInNonEditMode();
+    } catch {
+      // Don't exit if save didn't work
+    }
   }
 
   @action
