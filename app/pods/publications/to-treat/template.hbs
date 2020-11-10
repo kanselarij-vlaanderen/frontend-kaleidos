@@ -20,6 +20,9 @@
         </c.header>
         <c.body as |row|>
           <td>
+            {{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}
+          </td>
+          <td>
             <p>
               {{#if row.shortTitle}}
                 {{row.shortTitle}}
