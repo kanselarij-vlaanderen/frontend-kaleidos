@@ -13,7 +13,7 @@ class Case extends EmberObject {
     const res = yield store.query('piece', { // TODO: How to inject store here?
       'filter[cases][:id:]': this.id,
       page: {
-        size: 500,
+        size: 1,
       },
     });
     return this.set('documentsCount', res.meta.count);
