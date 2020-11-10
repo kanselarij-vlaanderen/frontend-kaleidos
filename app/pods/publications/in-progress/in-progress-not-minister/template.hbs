@@ -5,6 +5,7 @@
     @size={{this.size}}
     @sort={{this.sort}}
     @isLoading={{this.isLoadingModel}}
+    @onClickRow={{this.navigateToPublication}}
     @class="auk-table auk-table--disable-bottom-border"
     as |table|
 >
@@ -26,11 +27,11 @@
       <td>
         {{row.case.shortTitle}}<br/>
         <span class="u-text-small u-muted">
-          {{row.publicationNumber}} 
+          {{row.publicationNumber}}
           {{t "dash"}}
         </span>
       </td>
-      <td> 
+      <td>
         {{#if row.publicationBefore}}
           {{moment-format row.publicationBefore "DD-MM-YYYY"}}
         {{else}}
@@ -69,7 +70,7 @@
       </td>
       <td>
         <ButtonToolbar>
-          <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="chevron-right" />
+          <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" data-test-publications-button-go-to-publication/>
         </ButtonToolbar>
       </td>
     </c.body>

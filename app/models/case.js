@@ -29,4 +29,8 @@ export default Model.extend({
     });
   }),
 
+  documentsAmount: computed('subcases.@each', function() {
+    return this.latestSubcase.documentContainersLength();
+  }),
+
 });

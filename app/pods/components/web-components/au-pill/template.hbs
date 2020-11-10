@@ -1,17 +1,17 @@
 <span class="auk-pill {{this.skin}} {{this.layout}}" ...attributes>
   {{#if @icon}}
     {{#unless @layout}}
-      <Icon @name={{@icon}}/>
+      <WebComponents::AuIcon @name={{@icon}}/>
       {{yield}}
     {{/unless}}
 
     {{#if (eq @layout "icon-only")}}
-      <Icon @name={{@icon}} />
+      <WebComponents::AuIcon @name={{@icon}} />
     {{/if}}
 
     {{#if (eq @layout "icon-right")}}
       {{yield}}
-      <Icon @name={{@icon}}/>
+      <WebComponents::AuIcon @name={{@icon}}/>
     {{/if}}
   {{else}}
     {{yield}}

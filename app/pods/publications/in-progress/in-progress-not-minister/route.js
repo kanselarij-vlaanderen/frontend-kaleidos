@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
-// import CONFIG from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class InProgressNotRoute extends Route {
   queryParams = {
@@ -18,19 +18,28 @@ export default class InProgressNotRoute extends Route {
     },
   };
 
-  model() {
+  async model() {
     return this.store.query('publication-flow', {
-      // filter: {
-      //   'publication-flow': {
-      //     'publication-status': CONFIG.publicationStatusToPublish,
-      //   },
-      // },
-      include: 'case',
+      filter: {
+        ':has:case': 'yes',
+        case: {
+          ':has-no:subcases': 'yes',
+        },
+        status: {
+          id: CONFIG.publicationStatusToPublish.id,
+        },
+      },
+      include: 'case,status',
     });
   }
 
   @action
   refreshModel() {
     this.refresh();
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }

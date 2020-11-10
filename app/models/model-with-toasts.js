@@ -10,11 +10,11 @@ export default Model.extend({
   toaster: service(),
 
   checkIfCreatedNotificationShouldBeShown(type) {
-    const modelListToNotShowNotificationFor = ['genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'agenda-activities', 'meetings'];
+    const modelListToNotShowNotificationFor = ['genders', 'formally-oks', 'confidentialities', 'approvals', 'alert-types', 'agenda-activities', 'meetings', 'contact-persons', 'publication-flow'];
     return !(modelListToNotShowNotificationFor.includes(type));
   },
   checkIfUpdatedNotificationShouldBeShown(type) {
-    const modelListToNotShowNotificationFor = ['agendaitem', 'newsletter-info'];
+    const modelListToNotShowNotificationFor = ['agendaitem', 'newsletter-info', 'contact-person', 'publication-flow'];
     return !(modelListToNotShowNotificationFor.includes(type));
   },
   translateAndParseSuccesType(type) {
