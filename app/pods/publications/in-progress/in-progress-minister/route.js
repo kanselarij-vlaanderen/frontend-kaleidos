@@ -29,6 +29,7 @@ export default class InProgressNotRoute extends Route {
           id: CONFIG.publicationStatusToPublish.id,
         },
       },
+      sort: '-created',
       include: 'case,status',
     });
   }

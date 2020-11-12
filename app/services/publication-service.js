@@ -9,12 +9,11 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-
-  async createNewPublication(publicationNumber, _case, title, shortTitle) {
+  async createNewPublication(publicationNumber, _caseId, title, shortTitle) {
     const creationDatetime = moment().utc()
       .toDate();
     let caze;
-    if (!_case) {
+    if (!_caseId) {
       caze = this.store.createRecord('case', {
         title,
         shortTitle,
@@ -22,7 +21,9 @@ export default class PublicationService extends Service {
       });
       await caze.save();
     } else {
-      caze = _case;
+      caze = await this.store.findRecord('case', _caseId, {
+        reload: true,
+      });
     }
     const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
     const publicationFlow = this.store.createRecord('publication-flow', {
@@ -33,6 +34,7 @@ export default class PublicationService extends Service {
       modified: creationDatetime,
     });
     await publicationFlow.save();
+    await caze.belongsTo('publicationFlow').reload();
     return publicationFlow;
   }
 

@@ -39,9 +39,11 @@ export default class ToTreatController extends Controller {
   // eslint-disable-next-line no-unused-vars
   async startPublication(_case) {
     this.set('showLoader', true);
+    console.log(_case);
     // TODO what publication number to start with here?
     // Defaulted to 0.
-    const newPublication = await this.publicationService.createNewPublication(0, _case);
+    const newPublication = await this.publicationService.createNewPublication(0, _case.id);
+
     this.set('showLoader', false);
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
