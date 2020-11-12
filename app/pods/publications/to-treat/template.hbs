@@ -42,11 +42,12 @@
               {{/if}}
             </td>
             <td class="vl-u-align-right">
-              {{#if (await row.publication)}}
+              {{#if (await row.publicationFlow)}}
                 <LinkTo
+                        class=""
                         @route="publications.publication"
-                        @models={{array row.publicationFlow.id }}
-                        class="vl-link" >
+                        @model={{ await row.publicationFlow.id }}
+                >
                   {{t "publications.to" }}
                 </LinkTo>
               {{else}}
