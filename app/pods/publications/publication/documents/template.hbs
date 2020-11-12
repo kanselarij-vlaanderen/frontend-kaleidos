@@ -1,1 +1,57 @@
-<div>{{t "documents"}}</div>
+<div class="u-mb-3">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <h4 class="auk-toolbar-complex__title">{{t "documents"}}</h4>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    {{!-- This should be the way to go (multiple toolbar items, 1 button in each), but the buttons have no padding in between them --}}
+    {{!-- <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down">{{t "requests"}}</WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="primary" @icon="plus">{{t "documents-add"}}</WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group> --}}
+    {{!-- This way (1 toolbar item with multiple buttons), the buttons have padding in between them for some reason --}}
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right">
+          {{t "requests"}}
+          <AttachPopover
+              @renderInPlace={{true}}
+              @class="ember-attacher-popper"
+              @hideOn="clickout click"
+              @showOn="click"
+              @animation="shift"
+              @placement="bottom"
+              as |attacher|
+          >
+            <ul class="vlc-dropdown-menu">
+              <li class="vlc-dropdown-menu__item">
+                <button class="vl-link vl-link--block" type="button"
+                  {{on "click" attacher.hide}}
+                >
+                  {{t "request-translations"}}
+                </button>
+              </li>
+              <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                <button class="vl-link vl-link--block" type="button"
+                  {{on "click" attacher.hide}}
+                >
+                  {{t "request-publish-preview"}}
+                </button>
+              </li>
+            </ul>
+          </AttachPopover>
+
+        </WebComponents::AuButton>
+        {{!-- <WebComponents::AuButton @skin="primary" @icon="plus">{{t "documents-add"}}</WebComponents::AuButton> --}}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</div>
+<div class="u-mb-3">
+  <FileUploader @multipleFiles="true"></FileUploader>
+</div>
