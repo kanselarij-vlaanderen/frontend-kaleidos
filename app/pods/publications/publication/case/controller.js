@@ -9,8 +9,9 @@ export default class CaseController extends Controller {
 
   @tracked showLoader = false;
   @tracked isShowingPersonModal = false;
-  @tracked isInscriptionInEditMode= false;
+  @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
+
 
   @tracked
   contactPerson = {

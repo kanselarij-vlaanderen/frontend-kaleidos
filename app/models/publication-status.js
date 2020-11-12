@@ -9,7 +9,6 @@ export default class PublicationStatus extends Model {
   @attr('number') priority;
   @belongsTo('publication-flow') publicaties;
 
-
   get isToBePublished() {
     return this.uri === CONFIG.publicationStatusToPublish.uri;
   }

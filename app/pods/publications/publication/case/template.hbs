@@ -176,68 +176,68 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      <WebComponents::AuPanel::Body @noPadding="true">
-
-        <table class="auk-table">
-          <thead>
-            <tr>
-              <th>{{t "name"}}</th>
-              <th>{{t "email"}}</th>
-              <th>{{t "organisation"}}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each this.contactPersons as | contactPerson |}}
+      {{#if this.model.contactPersons}}
+        <WebComponents::AuPanel::Body @noPadding="true">
+          <table class="auk-table">
+            <thead>
               <tr>
-                <td class="o-flex o-flex--vertical-center">
-                  <WebComponents::AuBadge @icon="ki-user"/>
-                  <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
-                </td>
-
-                <td class="">
-                  <span class="u-mx-2">
-                    {{#if contactPerson.email }}
-                      <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
-                    {{/if}}
-                  </span>
-                </td>
-
-                <td class="">
-                  <span class="u-mx-2">{{contactPerson.organisationName}}</span>
-                </td>
-
-                <td class="vl-u-align-right">
-                  <button
-                          class="vl-button vl-button--link vl-button--icon"
-                          type="button"
-                  >
-                    <i class="ki-more"></i>
-                    <AttachPopover
-                            @renderInPlace={{true}}
-                            @class="ember-attacher-popper"
-                            @hideOn="clickout click"
-                            @showOn="click"
-                            @animation="shift"
-                            @placement="left"
-                    >
-                      <ul class="vlc-dropdown-menu">
-                        <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                          <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                            {{on "click" (fn this.deleteContactPerson contactPerson) }}
-                          >
-                            {{t "delete"}}
-                          </button>
-                        </li>
-                      </ul>
-                    </AttachPopover>
-                  </button>
-                </td>
+                <th>{{t "name"}}</th>
+                <th>{{t "email"}}</th>
+                <th>{{t "organisation"}}</th>
+                <th></th>
               </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </WebComponents::AuPanel::Body>
+            </thead>
+            <tbody>
+              {{#each this.contactPersons as | contactPerson |}}
+                <tr>
+                  <td class="o-flex o-flex--vertical-center">
+                    <WebComponents::AuBadge @icon="ki-user"/>
+                    <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
+                  </td>
+                  <td class="">
+                    <span class="u-mx-2">
+                      {{#if contactPerson.email }}
+                        <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                      {{/if}}
+                    </span>
+                  </td>
+
+                  <td class="">
+                    <span class="u-mx-2">{{contactPerson.organisationName}}</span>
+                  </td>
+
+                  <td class="vl-u-align-right">
+                    <button
+                            class="vl-button vl-button--link vl-button--icon"
+                            type="button"
+                    >
+                      <i class="ki-more"></i>
+                      <AttachPopover
+                              @renderInPlace={{true}}
+                              @class="ember-attacher-popper"
+                              @hideOn="clickout click"
+                              @showOn="click"
+                              @animation="shift"
+                              @placement="left"
+                      >
+                        <ul class="vlc-dropdown-menu">
+                          <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                            <button class="vl-link vl-link--block vl-u-text--error" type="button"
+                              {{on "click" (fn this.deleteContactPerson contactPerson) }}
+                            >
+                              {{t "delete"}}
+                            </button>
+                          </li>
+                        </ul>
+                      </AttachPopover>
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </WebComponents::AuPanel::Body>
+      {{/if}}
     </WebComponents::AuPanel>
   </div>
 </div>

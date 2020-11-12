@@ -301,6 +301,32 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
 }
 
 /**
+ * Adds a mandatees with field and domain to a sucase when used in the agendaitem detail view (/vergadering/..id../agenda/..id../agendapunten/..id)
+ * Pass the title of the mandatee to get a specific person
+ * @name addAgendaitemMandatee
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Number} mandateeNumber - The list index of the mandatee
+ * @param {Number} fieldNumber - The list index of the field, -1 means no field/domain should be selected
+ * @param {Number} domainNumber - The list index of the domain
+ * @param {String} mandateeSearchText - Search on the minister title (name does not work)
+ */
+function addAgendaitemMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText) {
+  cy.log('addAgendaitemMandatee');
+
+  cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
+  cy.route('PATCH', '/agendas/*').as('patchAgenda');
+
+  cy.addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeSearchText);
+  cy.wait('@patchAgendaitem', {
+    timeout: 40000,
+  }).wait('@patchAgenda', {
+    timeout: 40000,
+  });
+  cy.log('/addAgendaitemMandatee');
+}
+
+/**
  * @name proposeSubcaseForAgenda
  * @memberOf Cypress.Chainable#
  * @function
@@ -375,6 +401,7 @@ Cypress.Commands.add('openSubcase', openSubcase);
 Cypress.Commands.add('changeSubcaseAccessLevel', changeSubcaseAccessLevel);
 Cypress.Commands.add('addSubcaseThemes', addSubcaseThemes);
 Cypress.Commands.add('addSubcaseMandatee', addSubcaseMandatee);
+Cypress.Commands.add('addAgendaitemMandatee', addAgendaitemMandatee);
 Cypress.Commands.add('proposeSubcaseForAgenda', proposeSubcaseForAgenda);
 Cypress.Commands.add('deleteSubcase', deleteSubcase);
 Cypress.Commands.add('getTranslatedMonth', getTranslatedMonth);
