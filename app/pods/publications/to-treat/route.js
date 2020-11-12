@@ -51,7 +51,7 @@ export default class ToTreatRoute extends Route {
     const sort = '-session-dates';
     filter[':sqs:title'] = '*'; // search without filter
     filter[':lte:sessionDates'] = date.utc().toISOString();
-    // filter.meetingAgendaClosed = true;
+    filter.agendaStatus = 'Goedgekeurd';
     return await search('cases', params.page, params.size, sort, filter, (item) => {
       const entry = Case.create(item.attributes);
       if (typeof item.attributes.meetingId === 'string') {
