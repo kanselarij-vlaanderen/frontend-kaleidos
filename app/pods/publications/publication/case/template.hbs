@@ -176,7 +176,11 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      {{#if this.contactPersons}}
+      {{#if (not this.contactPersons) }}
+
+        <i class=" ki-circle-info"/> {{t "no-added-contact-persons"}}
+
+      {{else}}
         <WebComponents::AuPanel::Body @noPadding="true">
           <table class="auk-table">
             <thead>
