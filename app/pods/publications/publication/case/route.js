@@ -2,12 +2,17 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 
 export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
-  async setupController(controller, model) {
+  async model() {
+    const publicationFlow = this.modelFor('publications.publication');
+    const _case = await publicationFlow.get('case');
+    return _case;
+  }
+
+  async setupController(controller) {
     super.setupController(...arguments);
-    // model is publication-flow
-    controller.set('model', model);
-    const publicationFlow = model;
+    const publicationFlow = this.modelFor('publications.publication');
     const contactPersons = await publicationFlow.get('contactPersons');
     controller.set('contactPersons', contactPersons);
+    controller.set('publicationFlow', publicationFlow);
   }
 }

@@ -51,13 +51,23 @@ export default class ToTreatRoute extends Route {
     const sort = '-session-dates';
     filter[':sqs:title'] = '*'; // search without filter
     filter[':lte:sessionDates'] = date.utc().toISOString();
-    // filter.meetingAgendaClosed = true;
-    return await search('cases', params.page, params.size, sort, filter, (item) => {
+    filter.agendaStatus = 'Goedgekeurd';
+    return search('cases', params.page, params.size, sort, filter, (item) => {
+      console.log(item);
       const entry = Case.create(item.attributes);
       if (typeof item.attributes.meetingId === 'string') {
         const meeting = this.store.findRecord('meeting', item.attributes.meetingId);
         entry.meeting = meeting;
       }
+      const pubFlows = this.store.query('publication-flow', {
+        filter: {
+          case: {
+            id: item.id,
+          },
+        },
+        sort: '-created',
+      });
+      entry.publicationFlow = pubFlows;
       entry.id = item.id;
       return entry;
     });
@@ -67,6 +77,20 @@ export default class ToTreatRoute extends Route {
     model.forEach((_case) => {
       _case.loadDocumentsCount.perform(this.store);
     });
+    // const meetingIds = model.map((_case) => {
+    //   return _case.meetingId;
+    // });
+    // const publicationFlows = model.map((_case) => {
+    //   return _case.publicationFlow;
+    // });
+    // TODO
+    // Loop over cases front to back
+    //   If case has agenda that was not added
+    //     add agenda
+    //     remove from list
+    //     add case
+    //   else
+    //    add case
   }
 
   @action

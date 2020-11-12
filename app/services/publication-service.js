@@ -9,12 +9,11 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-
-  async createNewPublication(publicationNumber, _case, title, shortTitle) {
+  async createNewPublication(publicationNumber, _caseId, title, shortTitle) {
     const creationDatetime = moment().utc()
       .toDate();
     let caze;
-    if (!_case) {
+    if (!_caseId) {
       caze = this.store.createRecord('case', {
         title,
         shortTitle,
@@ -22,7 +21,9 @@ export default class PublicationService extends Service {
       });
       await caze.save();
     } else {
-      caze = _case;
+      caze = await this.store.findRecord('case', _caseId, {
+        reload: true,
+      });
     }
     const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
     const publicationFlow = this.store.createRecord('publication-flow', {
@@ -33,21 +34,7 @@ export default class PublicationService extends Service {
       modified: creationDatetime,
     });
     await publicationFlow.save();
-    return publicationFlow;
-  }
-
-  async updateInscription(publicationId, longTitle, shortTitle) {
-    const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
-      include: 'case',
-    });
-
-    const cazeToSave = await publicationFlow.get('case');
-
-    cazeToSave.shortTitle = shortTitle;
-    cazeToSave.title = longTitle;
-
-    await cazeToSave.save();
-
+    await caze.belongsTo('publicationFlow').reload();
     return publicationFlow;
   }
 
@@ -55,12 +42,12 @@ export default class PublicationService extends Service {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
       include: 'contact-persons',
     });
-
     const contactPersonList = await publicationFlow.get('contactPersons');
     contactPersonList.pushObject(contactPerson);
     publicationFlow.set('contactPersons', contactPersonList);
     publicationFlow.save().then(() => {
       this.toaster.success(this.intl.t('contact-added-toast-message'), this.intl.t('contact-added-toast-title'));
+      publicationFlow.hasMany('contactPersons').reload();
     })
       .catch(() => {
         // TODO: Functionele logging hier toevoegen

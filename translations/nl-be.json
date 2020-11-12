@@ -652,6 +652,7 @@
   "organisation": "Organisatie",
   "contacts": "Contactpersonen",
   "add-contact-persons": "Contactpersonen toevoegen",
+  "no-added-contact-persons": "Er zijn nog geen contactpersonen toegevoegd",
   "logo-flanders": "Logo Vlaanderen",
   "contact-added-toast-title": "Contactpersoon toegevoegd",
   "contact-added-toast-message": "Uw contactpersoon werd succesvol opgeslagen.",

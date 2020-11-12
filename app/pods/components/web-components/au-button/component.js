@@ -15,6 +15,13 @@ export default class Button extends Component {
     return null;
   }
 
+  get disabled() {
+    if (this.args.disabled) {
+      return 'auk-button--disabled';
+    }
+    return null;
+  }
+
   get size() {
     if (this.args.size === 'small') {
       return 'auk-button--size-s';

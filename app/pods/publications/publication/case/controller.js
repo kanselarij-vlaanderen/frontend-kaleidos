@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
 
 export default class CaseController extends Controller {
   @service publicationService;
@@ -11,12 +12,6 @@ export default class CaseController extends Controller {
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
 
-
-  @tracked
-  inscription = {
-    shortTitle: '',
-    longTitle: '',
-  };
 
   @tracked
   contactPerson = {
@@ -53,26 +48,16 @@ export default class CaseController extends Controller {
 
   get getShortTitle() {
     if (this.model) {
-      const caze = this.model.get('case');
-      return caze.get('shortTitle');
+      return this.model.shortTitle;
     }
     return '';
   }
 
   get getLongTitle() {
     if (this.model) {
-      const caze = this.model.get('case');
-      return caze.get('title');
+      return this.model.title;
     }
     return '';
-  }
-
-  @action
-  setValuesInscriptionModal() {
-    this.inscription = {
-      shortTitle: this.getShortTitle,
-      longTitle: this.getLongTitle,
-    };
   }
 
   @action
@@ -87,25 +72,22 @@ export default class CaseController extends Controller {
 
   @action
   putInscriptionInEditMode() {
-    this.setValuesInscriptionModal();
     this.isInscriptionInEditMode = true;
   }
 
   @action
   putInscriptionInNonEditMode() {
     this.isInscriptionInEditMode = false;
-    this.setValuesInscriptionModal();
   }
 
-  @action
-  async saveInscription() {
-    const newPublication = await this.publicationService.updateInscription(this.model.get('id'), this.inscription.longTitle, this.inscription.shortTitle);
-    const caze = await newPublication.get('case');
-    this.inscription = {
-      shortTitle: caze.get('shortTitle'),
-      longTitle: caze.get('title'),
-    };
-    this.isInscriptionInEditMode = false;
+  @task
+  *saveInscription() {
+    try {
+      yield this.model.save();
+      this.putInscriptionInNonEditMode();
+    } catch {
+      // Don't exit if save didn't work
+    }
   }
 
   @action
@@ -113,7 +95,7 @@ export default class CaseController extends Controller {
     this.set('showLoader', true);
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
+    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
     this.isShowingPersonModal = false;
     this.set('showLoader', false);
   }

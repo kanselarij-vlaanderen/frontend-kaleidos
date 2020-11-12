@@ -3,7 +3,12 @@
   using both vlc-button and auk-button gave the best result...
 --}}
 {{#if @route}}
-  <LinkTo class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" @route={{@route}} ...attributes>
+  <LinkTo
+    class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}"
+    @route={{@route}}
+    @disabled={{@disabled}}
+    ...attributes
+  >
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
@@ -11,7 +16,7 @@
 {{/if}}
 
 {{#if @href}}
-  <a class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" href="{{@href}}">
+  <a class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}" href="{{@href}}">
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
@@ -19,7 +24,12 @@
 {{/if}}
 
 {{#unless (or @href @route)}}
-  <button class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.block}} {{this.icon}}" type="button" ...attributes>
+  <button
+    class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}"
+    type="button"
+    disabled={{@disabled}}
+    ...attributes
+  >
     <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
       {{yield}}
     </Button::InnerLayout>
