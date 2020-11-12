@@ -13,5 +13,6 @@ export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
     const publicationFlow = this.modelFor('publications.publication');
     const contactPersons = await publicationFlow.get('contactPersons');
     controller.set('contactPersons', contactPersons);
+    controller.set('publicationFlow', publicationFlow);
   }
 }

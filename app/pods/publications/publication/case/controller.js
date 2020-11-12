@@ -95,7 +95,7 @@ export default class CaseController extends Controller {
     this.set('showLoader', true);
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
+    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
     this.isShowingPersonModal = false;
     this.set('showLoader', false);
   }

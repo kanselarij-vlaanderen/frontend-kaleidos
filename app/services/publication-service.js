@@ -42,12 +42,12 @@ export default class PublicationService extends Service {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
       include: 'contact-persons',
     });
-
     const contactPersonList = await publicationFlow.get('contactPersons');
     contactPersonList.pushObject(contactPerson);
     publicationFlow.set('contactPersons', contactPersonList);
     publicationFlow.save().then(() => {
       this.toaster.success(this.intl.t('contact-added-toast-message'), this.intl.t('contact-added-toast-title'));
+      publicationFlow.hasMany('contactPersons').reload();
     })
       .catch(() => {
         // TODO: Functionele logging hier toevoegen
