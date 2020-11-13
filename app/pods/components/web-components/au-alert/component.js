@@ -1,11 +1,18 @@
 import Component from '@glimmer/component';
 
 export default class Alert extends Component {
+  /**
+   * skin can be:
+   * (empty, default)
+   * succes
+   * warning
+   * error
+   * loading (not yet implemented in our code below)
+   */
   get skin() {
     if (this.args.skin) {
       return `auk-alert--${this.args.skin}`;
     }
-
     return 'auk-alert--default';
   }
 

@@ -69,9 +69,9 @@
         {{/if}} --}}
       </td>
       <td>
-        <ButtonToolbar>
+        <WebComponents::AuButtonToolbar>
           <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" data-test-publications-button-go-to-publication/>
-        </ButtonToolbar>
+        </WebComponents::AuButtonToolbar>
       </td>
     </c.body>
   </table.content>

@@ -37,4 +37,11 @@ export default class Navbar extends Component {
     }
     return '';
   }
+
+  get noPadding() {
+    if (this.args.noPadding) {
+      return 'auk-navbar--no-pad';
+    }
+    return '';
+  }
 }

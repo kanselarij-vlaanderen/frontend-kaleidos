@@ -1,17 +1,11 @@
 {{#if @route}}
   <LinkTo class="auk-button-link {{this.skin}} {{this.block}} {{this.padded}}" type="button" @route={{@route}} ...attributes>
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</Button::InnerLayout>
+    <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</WebComponents::AuButton::InnerLayout>
   </LinkTo>
 {{/if}}
 
 {{#if @href}}
   <a href="{{@href}}" class="auk-button-link {{this.skin}} {{this.block}} {{this.padded}}" ...attributes>
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</Button::InnerLayout>
+    <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</WebComponents::AuButton::InnerLayout>
   </a>
 {{/if}}
-
-{{#unless (or @href @route)}}
-  <button class="auk-button-link {{this.skin}} {{this.block}} {{this.padded}}" type="button" ...attributes>
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</Button::InnerLayout>
-  </button>
-{{/unless}}

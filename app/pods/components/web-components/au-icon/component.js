@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 
+/**
+ * Important, @name should be the icon name without prefix
+ */
 export default class Icon extends Component {
-  get getIcon() {
-    return `${this.args.name}`;
-  }
-
   get size() {
     if (this.args.size) {
       return `auk-icon--${this.args.size}`;
