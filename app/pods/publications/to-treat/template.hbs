@@ -20,10 +20,11 @@
         </c.header>
         <c.body as |row|>
           {{#if row.isAgendaRow }}
-            <td>
+            <td class="agendaRow" style="background-color:darkgray;">
               {{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}
             </td>
-            <td></td>
+            <td class="agendaRow" style="background-color:darkgray;"></td>
+            <td class="agendaRow" style="background-color:darkgray;"></td>
           {{else}}
             <td>
               <p>

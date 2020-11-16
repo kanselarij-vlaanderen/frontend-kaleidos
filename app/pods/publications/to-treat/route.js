@@ -52,11 +52,19 @@ export default class ToTreatRoute extends Route {
     filter[':sqs:title'] = '*'; // search without filter
     filter[':lte:sessionDates'] = date.utc().toISOString();
     filter.agendaStatus = 'Goedgekeurd';
-    return search('cases', params.page, params.size, sort, filter, (item) => {
+    const cases = search('cases', params.page, params.size, sort, filter, (item) => {
       console.log(item);
       const entry = Case.create(item.attributes);
       if (typeof item.attributes.meetingId === 'string') {
         const meeting = this.store.findRecord('meeting', item.attributes.meetingId);
+        entry.meeting = meeting;
+      } else {
+        // TODO check this with Mikidi.
+        const meeting = this.store.query('meeting', {
+          filter: {
+            id: item.attributes.meetingId,
+          },
+        });
         entry.meeting = meeting;
       }
       const pubFlows = this.store.query('publication-flow', {
@@ -71,26 +79,46 @@ export default class ToTreatRoute extends Route {
       entry.id = item.id;
       return entry;
     });
+
+    const outputCases = [];
+    const addedAgendas = [];
+    await cases.then((cases) => {
+      const casesArray = cases.map((_case) => _case);
+      for (let index = 0; index < casesArray.length; index++) {
+        const currentCase = casesArray[index];
+        // If agenda not already added?
+        if (!addedAgendas.includes(currentCase.meetingId)) {
+          // Add agenda
+          if (Array.isArray(currentCase.meetingId)) {
+            addedAgendas.concat(currentCase.meetingId);
+            // currentCase.meetingId.forEach((agendaId) => {
+            //   outputCases.push({
+            //     isAgendaRow: true,
+            //     // meeting: 'agenda title ' + agendaId,
+            //   });
+            // });
+          } else {
+            addedAgendas.push(currentCase.meetingId);
+            outputCases.push({
+              isAgendaRow: true,
+              meeting: currentCase.meeting,
+            });
+          }
+        } else {
+          // The agenda was already added.
+        }
+        outputCases.push(casesArray[index]);
+      }
+    });
+    return outputCases;
   }
 
   afterModel(model) {
     model.forEach((_case) => {
-      _case.loadDocumentsCount.perform(this.store);
+      if (_case.loadDocumentsCount) {
+        _case.loadDocumentsCount.perform(this.store);
+      }
     });
-    // const meetingIds = model.map((_case) => {
-    //   return _case.meetingId;
-    // });
-    // const publicationFlows = model.map((_case) => {
-    //   return _case.publicationFlow;
-    // });
-    // TODO
-    // Loop over cases front to back
-    //   If case has agenda that was not added
-    //     add agenda
-    //     remove from list
-    //     add case
-    //   else
-    //    add case
   }
 
   @action
