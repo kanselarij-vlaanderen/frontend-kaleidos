@@ -1,8 +1,3 @@
-<div class="auk-toolbar-complex {{if @autoHeight "auk-toolbar-complex--auto"}}" ...attributes>
-  {{yield 
-    ( hash
-      Group = (component 'au-toolbar/group')
-      Item = (component 'au-toolbar/item')
-    )
-  }}
+<div class="auk-toolbar-complex {{this.auto}}" ...attributes>
+  {{yield}}
 </div>

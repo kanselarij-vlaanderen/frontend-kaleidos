@@ -7,4 +7,12 @@ export default class Radio extends Component {
     }
     return false;
   }
+
+  get name() {
+    if (!this.args.name) {
+      console.error('radio items should have names');
+      return 'radio-buttons';
+    }
+    return this.args.name;
+  }
 }

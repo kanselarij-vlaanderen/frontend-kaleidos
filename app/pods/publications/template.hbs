@@ -34,16 +34,16 @@
       </WebComponents::AuNavbar>
       <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
         {{!-- <Navbar @size="large" @border="none">
-            <Toolbar>
-              <Toolbar::Group>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group>
                 <WebComponents::AuInput @icon="search" @block="true" placeholder="Zoeken..."></WebComponents::AuInput>
-              </Toolbar::Group>
-              <Toolbar::Group @position="right">
-                <Toolbar::Item>
+              </WebComponents::AuToolbar::Group>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
                   <WebComponents::AuButton @icon="filter">{{t "filter"}}</WebComponents::AuButton>
-                </Toolbar::Item>
-              </Toolbar::Group>
-            </Toolbar>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
           </Navbar> --}}
         {{#if isShowingPublicationModal}}
           <WebComponents::AuModal data-test-auk-modal-publication-new>
