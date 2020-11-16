@@ -52,21 +52,26 @@ export default class ToTreatRoute extends Route {
     filter[':sqs:title'] = '*'; // search without filter
     filter[':lte:sessionDates'] = date.utc().toISOString();
     filter.agendaStatus = 'Goedgekeurd';
+
+    // Fetch dossiers from search api.
     const cases = search('cases', params.page, params.size, sort, filter, (item) => {
-      console.log(item);
+      // Create case object from search_result data.
       const entry = Case.create(item.attributes);
+
       if (typeof item.attributes.meetingId === 'string') {
-        const meeting = this.store.findRecord('meeting', item.attributes.meetingId);
-        entry.meeting = meeting;
+        // if dossier only linked to 1 meeting
+        // newer data is structured this way.
+        entry.meeting = this.store.findRecord('meeting', item.attributes.meetingId);
       } else {
-        // TODO check this with Mikidi.
-        const meeting = this.store.query('meeting', {
+        // older data sometimes has this.
+        entry.meeting = this.store.query('meeting', {
           filter: {
             id: item.attributes.meetingId,
           },
         });
-        entry.meeting = meeting;
       }
+
+      // Fetch all publication flows linked to this dossier.
       const pubFlows = this.store.query('publication-flow', {
         filter: {
           case: {
@@ -80,33 +85,32 @@ export default class ToTreatRoute extends Route {
       return entry;
     });
 
+    // We receive the cases sorted by agenda.
+    // We need to add in the meeting data for this to visualise in the ember data table.
+    // Only shows the meeting header once for all dossiers.
     const outputCases = [];
     const addedAgendas = [];
     await cases.then((cases) => {
       const casesArray = cases.map((_case) => _case);
       for (let index = 0; index < casesArray.length; index++) {
         const currentCase = casesArray[index];
-        // If agenda not already added?
+        // If meeting not already added?
         if (!addedAgendas.includes(currentCase.meetingId)) {
           // Add agenda
-          if (Array.isArray(currentCase.meetingId)) {
-            addedAgendas.concat(currentCase.meetingId);
-            // currentCase.meetingId.forEach((agendaId) => {
-            //   outputCases.push({
-            //     isAgendaRow: true,
-            //     // meeting: 'agenda title ' + agendaId,
-            //   });
-            // });
-          } else {
+          if (!Array.isArray(currentCase.meetingId)) {
             addedAgendas.push(currentCase.meetingId);
             outputCases.push({
               isAgendaRow: true,
               meeting: currentCase.meeting,
             });
+          } else {
+            // This should only happen with old data.
+            addedAgendas.concat(currentCase.meetingId);
           }
         } else {
           // The agenda was already added.
         }
+        // Add the cases also to the output list.
         outputCases.push(casesArray[index]);
       }
     });
