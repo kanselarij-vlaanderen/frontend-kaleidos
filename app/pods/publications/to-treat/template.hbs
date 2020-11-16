@@ -20,11 +20,11 @@
         </c.header>
         <c.body as |row|>
           {{#if row.isAgendaRow }}
-            <td class="agendaRow" style="background-color:darkgray;">
-              {{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}
+            <td class="auk-table__cell--accent">
+              <h4 class="auk-h4 u-m-0">{{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}</h4>
             </td>
-            <td class="agendaRow" style="background-color:darkgray;"></td>
-            <td class="agendaRow" style="background-color:darkgray;"></td>
+            <td class="auk-table__cell--accent"></td>
+            <td class="auk-table__cell--accent"></td>
           {{else}}
             <td>
               <p>
