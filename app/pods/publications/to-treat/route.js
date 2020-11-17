@@ -71,16 +71,12 @@ export default class ToTreatRoute extends Route {
         });
       }
 
-      // Fetch all publication flows linked to this dossier.
-      const pubFlows = this.store.query('publication-flow', {
-        filter: {
-          case: {
-            id: item.id,
-          },
-        },
-        sort: '-created',
-      });
-      entry.publicationFlow = pubFlows;
+      if (item.attributes.publicationFlowId) {
+        entry.publicationFlow = this.store.findRecord('case', item.attributes.publicationFlowId, {
+          reload: true,
+        });
+      }
+
       entry.id = item.id;
       return entry;
     });
