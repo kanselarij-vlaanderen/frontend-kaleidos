@@ -119,19 +119,3 @@
     </div>
   {{/if}}
 </div>
-
-{{#if (await isReAssigningPriorities)}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @showCloseButton={{false}}
-    @title={{t "saving-agendaitem-title-message"}}
-  >
-    <WebComponents::VlLoader
-      @text={{concat
-        (t "saving-change-message")
-        " "
-        (t "please-be-patient")
-      }}
-    />
-  </WebComponents::VlModal>
-{{/if}}

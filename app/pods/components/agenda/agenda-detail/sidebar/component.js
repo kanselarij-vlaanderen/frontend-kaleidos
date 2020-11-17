@@ -11,7 +11,6 @@ export default class AgendaSidebar extends Component {
   @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
 
   @tracked isShowingChanges = false;
-  @tracked isReAssigningPriorities = false;
 
   classNames = ['vlc-agenda-items'];
 
