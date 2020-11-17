@@ -22,6 +22,10 @@ class Case extends EmberObject {
 
 export default class ToTreatRoute extends Route {
   queryParams = {
+    searchText: {
+      refreshModel: true,
+      as: 'zoekterm',
+    },
     page: {
       refreshModel: true,
     },
@@ -45,11 +49,17 @@ export default class ToTreatRoute extends Route {
   }
 
   async model(params) {
+    console.log(params.searchtext);
     const today = new Date();
     const date = moment(today, 'DD-MM-YYYY').endOf('day');
     const filter = {};
     const sort = '-session-dates';
-    filter[':sqs:title'] = '*'; // search without filter
+    if (typeof params.searchtext === 'string') {
+      filter[':sqs:title'] = '*'; // search without filter
+    } else {
+      filter[':sqs:title'] = '*'; // search without filter
+    }
+
     filter[':lte:sessionDates'] = date.utc().toISOString();
     filter.agendaStatus = 'Goedgekeurd';
 

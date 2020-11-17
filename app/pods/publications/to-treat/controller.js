@@ -11,10 +11,14 @@ export default class ToTreatController extends Controller {
     size: {
       type: 'number',
     },
+    searchText: {
+      type: 'number',
+    },
   }];
 
   @service publicationService;
-
+  @tracked searchText = '';
+  @tracked searchTextBuffer = '';
   @tracked page = 0;
   @tracked size = 20;
 
@@ -33,6 +37,12 @@ export default class ToTreatController extends Controller {
   @action
   caseGetPublicationId() {
     return 1;
+  }
+
+  @action
+  search() {
+    console.log('SEARCH');
+    this.searchText = this.searchTextBuffer;
   }
 
   @action
