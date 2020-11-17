@@ -666,5 +666,8 @@
   "publication-from-extenso": "Extenso",
   "publication-form-by-except": "Bij uitreksel",
   "publication-form-publication-date": "PublicatieDatum BS",
-  "publication-form-numac-nummer": "Numac nummer BS"
+  "publication-form-numac-nummer": "Numac nummer BS",
+  "requests":"Aanvragen",
+  "request-translations":"Vertaling(en) aanvragen",
+  "request-publish-preview":"Drukproef aanvragen" 
 }
