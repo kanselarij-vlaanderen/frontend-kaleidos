@@ -1,6 +1,15 @@
 import Component from '@glimmer/component';
 
 export default class Button extends Component {
+  /**
+   * skin can be:
+   * primary
+   * secondary (default)
+   * tertiary
+   * borderless
+   * danger-primary
+   * danger-hover
+   */
   get skin() {
     if (this.args.skin) {
       return `auk-button--${this.args.skin}`;

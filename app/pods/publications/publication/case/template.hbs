@@ -24,11 +24,11 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
@@ -110,7 +110,7 @@
           <tbody>
             <tr>
               <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="ki-user" /> <span class="u-mx-2">{{t "cancel"}}</span>
+                <WebComponents::AuBadge @icon="user" /> <span class="u-mx-2">{{t "cancel"}}</span>
               </td>
               <td>
                 <span>{{t "cancel"}}</span>
@@ -195,7 +195,7 @@
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
                   <td class="o-flex o-flex--vertical-center">
-                    <WebComponents::AuBadge @icon="ki-user"/>
+                    <WebComponents::AuBadge @icon="user"/>
                     <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
                   </td>
                   <td class="">
@@ -252,9 +252,9 @@
 
 {{#if isShowingPersonModal}}
   <WebComponents::AuModal>
-    <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
+    <WebComponents::AuModal::Header @title={{t "add-contact"}}
       @closeModal={{this.closeContactPersonModal}} />
-    <WebComponents::AuModal::Modal::Body>
+    <WebComponents::AuModal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group'>
           <WebComponents::AuLabel for="firstNameInput">
@@ -277,8 +277,8 @@
           <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
         </div>
       </div>
-    </WebComponents::AuModal::Modal::Body>
-    <WebComponents::AuModal::Modal::Footer>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -295,7 +295,7 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Modal::Footer>
+    </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
 

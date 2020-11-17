@@ -1,37 +1,10 @@
-{{!-- this should be auk-button, but there is no padding between the button and the icon 
-  replacing with vlc-button class, there was padding, but the font family was wrong.
-  using both vlc-button and auk-button gave the best result...
---}}
-{{#if @route}}
-  <LinkTo
-    class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}"
-    @route={{@route}}
-    @disabled={{@disabled}}
-    ...attributes
-  >
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
-      {{yield}}
-    </Button::InnerLayout>
-  </LinkTo>
-{{/if}}
-
-{{#if @href}}
-  <a class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}" href="{{@href}}">
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
-      {{yield}}
-    </Button::InnerLayout>
-  </a>
-{{/if}}
-
-{{#unless (or @href @route)}}
-  <button
-    class="vlc-button auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}"
-    type="button"
-    disabled={{@disabled}}
-    ...attributes
-  >
-    <Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>
-      {{yield}}
-    </Button::InnerLayout>
-  </button>
-{{/unless}}
+<button
+  class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}} {{this.icon}}"
+  type="button"
+  disabled={{@disabled}}
+  ...attributes
+>
+  <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+    {{yield}}
+  </WebComponents::AuButton::InnerLayout>
+</button>

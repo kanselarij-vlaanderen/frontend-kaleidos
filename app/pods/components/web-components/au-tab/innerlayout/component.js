@@ -9,8 +9,8 @@ export default class InnerLayout extends Component {
   }
   get counter() {
     if (this.args.counter) {
-      return true;
+      return `(${this.args.counter})`;
     }
-    return false;
+    return '';
   }
 }

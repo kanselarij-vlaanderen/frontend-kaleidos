@@ -19,9 +19,9 @@
           <th class="vl-data-table-col-1"></th>
         </c.header>
         <c.body as |row|>
-          {{#if row.isAgendaRow }}
+          {{#if row.isAgendaRow}}
             <td>
-              {{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}
+              {{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}
             </td>
             <td></td>
           {{else}}
@@ -52,7 +52,7 @@
                 </LinkTo>
               {{else}}
                 <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
-                  {{on "click" (fn this.startPublication row) }}
+                  {{on "click" (fn this.startPublication row)}}
                 >
                   {{t "start-publication"}}
                 </button>
