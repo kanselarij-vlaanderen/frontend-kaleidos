@@ -29,37 +29,25 @@
 {{/if}}
 <div class="{{spacerClass}}">
   {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
-    {{#sortable-group
-      tagName="ul"
-      onChange=(action "reorderItems")
-    as |sortableGroup|
+    {{#each
+      @agendaitems
+    as |agendaitem|
     }}
-      {{#each
-        @agendaitems
-      as |agendaitem|
-      }}
-        {{#if agendaitem.groupName}}
-          <div class="vlc-list-section-header">
-            {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-              These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-            {{!-- template-lint-disable no-triple-curlies  --}}
-            {{{agendaitem.groupName}}}
-            {{!-- template-lint-enable no-triple-curlies  --}}
-          </div>
-        {{/if}}
-        {{#sortable-item
-          data-test-agenda-detail-sidebar-sub-item
-          tagName="li"
-          class="vlc-agenda-detail-sidebar__sub-item"
-          model=agendaitem
-          group=sortableGroup
-          distance=30
-          handle=dragHandleClass
-        }}
-          <Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaitem={{action "selectAgendaitemAction"}}  />
-        {{/sortable-item}}
-      {{/each}}
-    {{/sortable-group}}
+      {{#if agendaitem.groupName}}
+        <div class="vlc-list-section-header">
+          {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
+            These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
+          {{!-- template-lint-disable no-triple-curlies  --}}
+          {{{agendaitem.groupName}}}
+          {{!-- template-lint-enable no-triple-curlies  --}}
+        </div>
+      {{/if}}
+      <div
+        data-test-agenda-detail-sidebar-sub-item
+        class="vlc-agenda-detail-sidebar__sub-item">
+        <Agenda::AgendaDetail::SidebarItem @agendaitem={{agendaitem}} @selectAgendaitem={{action "selectAgendaitemAction"}}  />
+      </div>
+    {{/each}}
   {{else}}
     <ul>
       {{#each
