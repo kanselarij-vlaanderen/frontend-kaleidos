@@ -1,1 +1,89 @@
-<div>{{t "documents"}}</div>
+<div class="u-mb-3">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <h4 class="auk-toolbar-complex__title">{{t "documents"}}</h4>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{this.isDisabled}}>
+          {{t "requests"}}
+        </WebComponents::AuButton>
+        {{#if (not this.isDisabled)}}
+          <AttachPopover
+                  @renderInPlace={{true}}
+                  @class="ember-attacher-popper"
+                  @hideOn="clickout click"
+                  @showOn="click"
+                  @animation="shift"
+                  @placement="bottom"
+                  as |attacher|
+              >
+              {{!-- dit moet AuDropdown zijn --}}
+                <ul class="vlc-dropdown-menu">
+                  <li class="vlc-dropdown-menu__item">
+                    <button class="vl-link vl-link--block" type="button"
+                      {{on "click" attacher.hide}}
+                    >
+                      {{t "request-translations"}}
+                    </button>
+                  </li>
+                  <li class="vlc-dropdown-menu__item">
+                    <button class="vl-link vl-link--block" type="button"
+                      {{on "click" attacher.hide}}
+                    >
+                      {{t "request-publish-preview"}}
+                    </button>
+                  </li>
+                </ul>
+          </AttachPopover>
+        {{/if}}
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.openPieceUploadModal}}>{{t "documents-add"}}</WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</div>
+<div class="u-mb-3">
+  <WebComponents::AuAlert @message={{t "no-documents-yet"}}></WebComponents::AuAlert>
+</div>
+
+{{#if this.isOpenPieceUploadModal}}
+  <WebComponents::VlModal
+    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
+    @closeModal={{this.cancelUploadPieces}}
+    @isOverlay={{true}}
+    @large={{true}}
+    @title={{t "documents-add"}} >
+    <div class="vl-modal-dialog__content">
+      {{!-- {{#if this.savePieces.isRunning}} --}}
+      {{#if false}}
+        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      {{else}}
+        <FileUploader
+          @multipleFiles={{true}}
+          {{!-- @uploadedFileAction={{this.uploadPiece}} --}}
+        />
+        {{!-- <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::DocumentUpload
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}} />
+          {{/each}}
+        </div> --}}
+      {{/if}}
+    </div>
+    <WebComponents::VlModalFooter
+      {{!-- @isLoading={{this.savePieces.isRunning}} --}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{this.cancelUploadPieces}}
+      {{!-- @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}} --}}
+      />
+  </WebComponents::VlModal>
+{{/if}}

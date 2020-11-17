@@ -34,28 +34,28 @@
       </WebComponents::AuNavbar>
       <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
         {{!-- <Navbar @size="large" @border="none">
-            <Toolbar>
-              <Toolbar::Group>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group>
                 <WebComponents::AuInput @icon="search" @block="true" placeholder="Zoeken..."></WebComponents::AuInput>
-              </Toolbar::Group>
-              <Toolbar::Group @position="right">
-                <Toolbar::Item>
+              </WebComponents::AuToolbar::Group>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
                   <WebComponents::AuButton @icon="filter">{{t "filter"}}</WebComponents::AuButton>
-                </Toolbar::Item>
-              </Toolbar::Group>
-            </Toolbar>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
           </Navbar> --}}
         {{#if isShowingPublicationModal}}
           <WebComponents::AuModal data-test-auk-modal-publication-new>
-            <WebComponents::AuModal::Modal::Header @title={{t "publications-new-not-minister"}}
+            <WebComponents::AuModal::Header @title={{t "publications-new-not-minister"}}
                                                    @closeModal={{this.closePublicationModal}} />
-            <WebComponents::AuModal::Modal::Body>
+            <WebComponents::AuModal::Body>
               {{#if hasError}}
                 <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
-                                        @message={{t "modal-error-alert-message"}} @icon="ki-alert-triangle"/>
+                                        @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
               {{else}}
                 <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
-                                        @icon="ki-circle-info"/>
+                                        @icon="circle-info"/>
               {{/if}}
               <div class="auk-form-group-layout auk-form-group-layout--standard">
                 <div class='auk-form-group {{getClassForGroupNumber}}'>
@@ -84,8 +84,8 @@
                                              data-test-create-publication-modal-long-title-textarea/>
                 </div>
               </div>
-            </WebComponents::AuModal::Modal::Body>
-            <WebComponents::AuModal::Modal::Footer>
+            </WebComponents::AuModal::Body>
+            <WebComponents::AuModal::Footer>
               <WebComponents::AuToolbar>
                 <WebComponents::AuToolbar::Group @position="left">
                   <WebComponents::AuToolbar::Item>
@@ -107,7 +107,7 @@
                   </WebComponents::AuToolbar::Item>
                 </WebComponents::AuToolbar::Group>
               </WebComponents::AuToolbar>
-            </WebComponents::AuModal::Modal::Footer>
+            </WebComponents::AuModal::Footer>
           </WebComponents::AuModal>
         {{/if}}
         {{outlet}}

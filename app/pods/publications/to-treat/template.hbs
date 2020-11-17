@@ -20,9 +20,9 @@
             <th class="vl-data-table-col-1"></th>
           </c.header>
           <c.body as |row|>
-            {{#if row.isAgendaRow }}
+            {{#if row.isAgendaRow}}
               <td colspan="99" class="auk-table__cell--accent">
-                <h4 class="auk-h4 u-m-0">{{ row.meeting.kindToShow.label}} {{ moment-format row.meeting.plannedStart "DD.MM.YYYY" }}</h4>
+                <h4 class="auk-h4 u-m-0">{{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}</h4>
               </td>
             {{else}}
               <td>

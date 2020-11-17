@@ -6,8 +6,8 @@
           <WebComponents::AuBreadcrumb data-test-publication-detail-menu-publication-number>{{getPublicationNumber}}</WebComponents::AuBreadcrumb>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{getShortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back" @route="publications.in-progress.in-progress-not-minister" data-test-publication-detail-menu-go-back-to-overview></WebComponents::AuTab>
-            <WebComponents::AuTab  @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-detail-menu-go-back-to-overview></WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents">{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations">{{t "translations"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.publishpreview">{{t "proofs"}}</WebComponents::AuTab>
@@ -112,7 +112,7 @@
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "remark-title"}} <WebComponents::AuIcon @name="circle-info"/></WebComponents::AuLabel>
 
-                <WebComponents::AuTextarea class="auk-textarea" rows="4" type="text" value={{this.getRemark}} {{on "blur" this.setRemark}}></WebComponents::AuTextarea>
+                <WebComponents::AuTextarea rows="4" type="text" value={{this.getRemark}} {{on "blur" this.setRemark}}></WebComponents::AuTextarea>
               </div>
             </div>
           </WebComponents::AuNavbar>

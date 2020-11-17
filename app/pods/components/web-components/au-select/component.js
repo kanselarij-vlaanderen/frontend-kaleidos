@@ -9,7 +9,7 @@ export default class Select extends Component {
   }
 
   get error() {
-    if (this.args.error === 'true') {
+    if (this.args.error && this.args.error.toString() === 'true') {
       return 'auk-select--error';
     }
     return '';
