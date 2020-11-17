@@ -1,88 +1,89 @@
-<div>
-  {{#if this.model.length}}
-    <DataTable
-            @content={{await this.model}}
-            @page={{this.page}}
-            @noDataMessage={{t "no-results-found"}}
-            @size={{this.size}}
-            @sort={{this.sort}}
-            @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
-            @isLoading={{this.isLoadingModel}}
-            as |table|
-    >
-      <table.content as |c|>
-        <c.header>
-          <th class="vl-data-table-col-8 vl-data-table__header-title">
-            {{t "case-name-concat"}}
-          </th>
-          <th>{{t "documents-amount"}}</th>
-          <th class="vl-data-table-col-1"></th>
-        </c.header>
-        <c.body as |row|>
-          {{#if row.isAgendaRow}}
-            <td>
-              {{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}
-            </td>
-            <td></td>
-          {{else}}
-            <td>
-              <p>
-                {{#if row.shortTitle}}
-                  {{row.shortTitle}}
+<div class="auk-scroll-wrapper__body">
+  <div class="u-m-4">
+    {{#if this.model.length}}
+      <DataTable
+              @content={{await this.model}}
+              @page={{this.page}}
+              @noDataMessage={{t "no-results-found"}}
+              @size={{this.size}}
+              @sort={{this.sort}}
+              @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+              @isLoading={{this.isLoadingModel}}
+              as |table|
+      >
+        <table.content as |c|>
+          <c.header>
+            <th class="vl-data-table-col-8 vl-data-table__header-title">
+              {{t "case-name-concat"}}
+            </th>
+            <th>{{t "documents-amount"}}</th>
+            <th class="vl-data-table-col-1"></th>
+          </c.header>
+          <c.body as |row|>
+            {{#if row.isAgendaRow}}
+              <td colspan="99" class="auk-table__cell--accent">
+                <h4 class="auk-h4 u-m-0">{{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}</h4>
+              </td>
+            {{else}}
+              <td>
+                <p>
+                  {{#if row.shortTitle}}
+                    {{row.shortTitle}}
+                  {{else}}
+                    {{row.title}}
+                  {{/if}}
+                </p>
+              </td>
+              <td>
+                {{#if row.loadDocumentsCount.isRunning}}
+                  {{utils/simple-spinner}}
                 {{else}}
-                  {{row.title}}
+                  {{row.documentsCount}}
                 {{/if}}
-              </p>
-            </td>
-            <td>
-              {{#if row.loadDocumentsCount.isRunning}}
-                {{utils/simple-spinner}}
-              {{else}}
-                {{row.documentsCount}}
-              {{/if}}
-            </td>
-            <td class="vl-u-align-right">
-              {{#if (await row.publicationFlow)}}
-                <LinkTo
-                        class=""
-                        @route="publications.publication"
-                        @model={{ await row.publicationFlow.id }}
-                >
-                  {{t "publications.to" }}
-                </LinkTo>
-              {{else}}
-                <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
-                  {{on "click" (fn this.startPublication row)}}
-                >
-                  {{t "start-publication"}}
-                </button>
-              {{/if}}
-            </td>
-          {{/if}}
-        </c.body>
-      </table.content>
-    </DataTable>
-  {{else}}
-    {{t "no-results-found"}}
-  {{/if}}
+              </td>
+              <td class="vl-u-align-right">
+                {{#if (await row.publicationFlow)}}
+                  <LinkTo
+                          class=""
+                          @route="publications.publication"
+                          @model={{ await row.publicationFlow.id }}
+                  >
+                    {{t "publications.to" }}
+                  </LinkTo>
+                {{else}}
+                  <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
+                    {{on "click" (fn this.startPublication row) }}
+                  >
+                    {{t "start-publication"}}
+                  </button>
+                {{/if}}
+              </td>
+            {{/if}}
+          </c.body>
+        </table.content>
+      </DataTable>
+    {{else}}
+      {{t "no-results-found"}}
+    {{/if}}
 
 
-  {{!-- FULL PAGE LOADER --}}
+    {{!-- FULL PAGE LOADER --}}
 
 
-  {{#if showLoader }}
-    <WebComponents::VlModal
-            @isOverlay={{true}}
-            @showCloseButton={{false}}
-            @title={{t "loading-text"}}
-    >
-      <WebComponents::VlLoader
-              @text={{concat
-                (t "saving-change-message")
-                " "
-                (t "please-be-patient")
-              }}
-      />
-    </WebComponents::VlModal>
-  {{/if}}
+    {{#if showLoader }}
+      <WebComponents::VlModal
+              @isOverlay={{true}}
+              @showCloseButton={{false}}
+              @title={{t "loading-text"}}
+      >
+        <WebComponents::VlLoader
+                @text={{concat
+                  (t "saving-change-message")
+                  " "
+                  (t "please-be-patient")
+                }}
+        />
+      </WebComponents::VlModal>
+    {{/if}}
+  </div>
 </div>
