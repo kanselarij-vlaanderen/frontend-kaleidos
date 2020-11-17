@@ -9,6 +9,7 @@
 
   {{#if (eq @layout "icon-only")}}
     <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+    {{yield}}
   {{/if}}
 
   {{#if (eq @layout "icon-right")}}
