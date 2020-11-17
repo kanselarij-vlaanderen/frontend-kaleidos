@@ -52,7 +52,8 @@
 
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
-    @closeModal={{perform this.cancelUploadPieces}}
+    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
+    @closeModal={{this.cancelUploadPieces}}
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "documents-add"}} >
@@ -79,8 +80,9 @@
       {{!-- @isLoading={{this.savePieces.isRunning}} --}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "documents-add"}}
-      @cancelAction={{perform this.cancelUploadPieces}}
-      {{!-- @saveAction={{perform this.savePieces}}
+      @cancelAction={{this.cancelUploadPieces}}
+      {{!-- @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
       @disableSave={{eq this.newPieces.length 0}} --}}
       />
   </WebComponents::VlModal>
