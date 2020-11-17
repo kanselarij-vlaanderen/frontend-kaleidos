@@ -91,27 +91,14 @@
 <div class="vl-u-spacer">
   {{#if (gt (await @announcements.length) 0)}}
     {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
-      {{#sortable-group
-        tagName="ul"
-        onChange=(action "reorderItems")
-      as |sortableAnnouncements|
+      {{#each
+        (await @announcements)
+      as |announcement|
       }}
-        {{#each
-          (await @announcements)
-        as |announcement|
-        }}
-          {{#sortable-item
-            tagName="li"
-            class="vlc-agenda-detail-sidebar__sub-item"
-            model=announcement
-            group=sortableAnnouncements
-            distance=30
-            handle=dragHandleClass
-          }}
-            <Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaitem={{action "selectAgendaitemAction"}}/>
-          {{/sortable-item}}
-        {{/each}}
-      {{/sortable-group}}
+        <div class="vlc-agenda-detail-sidebar__sub-item">
+          <Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaitem={{action "selectAgendaitemAction"}}/>
+        </div>
+      {{/each}}
     {{else}}
       {{#each
         (await @announcements)
