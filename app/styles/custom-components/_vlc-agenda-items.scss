@@ -105,7 +105,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 }
 
 .vlc-agenda-items-sub-item__numbering {
-  min-width: 3rem;
+  min-width: 4rem;
 }
 
 /* Agenda items compare view
@@ -245,4 +245,8 @@ $i: 0;
 
 .vlc-agenda-items__text {
   width: 100%;
+}
+
+.vlc-agenda-items__cursor:hover {
+  cursor: grab;
 }

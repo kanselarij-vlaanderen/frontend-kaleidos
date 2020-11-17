@@ -2,6 +2,9 @@
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
       <span class="vlc-agenda-items-sub-item__numbering">
+        <div class="vlc-agenda-items__cursor">
+          <WebComponents::AuIcon @name="drag-handle-2"/>
+        </div>
         {{#if @agendaitem.number}}
           {{@agendaitem.number}}.
         {{else}}
