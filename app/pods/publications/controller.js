@@ -46,18 +46,14 @@ export default class PublicationsController extends Controller {
     const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number);
     if (isPublicationNumberTaken) {
       this.numberIsAlreadyUsed = true;
-      this.hasError = true;
     } else {
       this.numberIsAlreadyUsed = false;
-      this.hasError = false;
     }
   }
 
   @action
   async createNewPublication() {
-    const isPublicationNumberTaken = await this.isPublicationNumberAlreadyTaken();
-
-    if (isPublicationNumberTaken || !this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
+    if (this.numberIsAlreadyUsed || !this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
       this.hasError = true;
     } else {
       this.hasError = false;
