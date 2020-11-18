@@ -669,5 +669,6 @@
   "publication-form-numac-nummer": "Numac nummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
-  "request-publish-preview":"Drukproef aanvragen" 
+  "request-publish-preview":"Drukproef aanvragen",
+  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
 }
