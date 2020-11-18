@@ -295,7 +295,6 @@
   "save": "Opslaan",
   "save-resignation": "Mandataris wijzigen",
   "search": "zoeken",
-  "search-placeholder": "Geef hier uw zoekterm in",
   "select": "Selecteer",
   "select-agenda": "Selecteer een agenda",
   "select-meeting": "Selecteer de vergadering",
@@ -355,7 +354,7 @@
   "undo": "Ongedaan maken",
   "undo-propose": "Niet ingediend",
   "upload-file": "Bestanden uploaden",
-  "uploaded-at": "Geupload op",
+  "uploaded-at": "Geüpload op",
   "sent-at": "verstuurd op",
   "uploading": "opgeladen",
   "loading": "Aan het laden",
@@ -642,6 +641,8 @@
   "not-via-cabinet": "Niet Via Ministerraad",
   "publication-before": "Uiterste publicatie",
   "translations": "Vertalingen",
+  "document": "Document",
+  "signatures": "Handtekeningen",
   "proof": "Drukproef",
   "proofs": "Drukproeven",
   "publication-inscription": "Opschrift",
@@ -669,5 +670,10 @@
   "publication-form-numac-nummer": "Numac nummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
-  "request-publish-preview":"Drukproef aanvragen" 
+  "request-publish-preview":"Drukproef aanvragen",
+  "needed?": "Nodig?",
+  "present?": "Aanwezig?",
+  "upload-docx": "Upload Word versie",
+  "delete-folder": "Map verwijderen",
+  "view-document-details": "Bekijk document details"
 }
