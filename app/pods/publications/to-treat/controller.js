@@ -12,7 +12,7 @@ export default class ToTreatController extends Controller {
       type: 'number',
     },
     searchText: {
-      type: 'number',
+      type: 'string',
     },
   }];
 
@@ -20,14 +20,10 @@ export default class ToTreatController extends Controller {
   @tracked searchText = '';
   @tracked searchTextBuffer = '';
   @tracked page = 0;
-  @tracked size = 20;
+  @tracked size = 25;
 
   @tracked showLoader = false;
-
-  @action
-  documentsAmount() {
-    return '99';
-  }
+  @tracked isLoading = false;
 
   @action
   caseHasPublication() {
@@ -41,8 +37,21 @@ export default class ToTreatController extends Controller {
 
   @action
   search() {
-    console.log('SEARCH');
     this.searchText = this.searchTextBuffer;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+      this.performSearch(this.searchText);
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+    this.performSearch(this.searchText);
   }
 
   @action

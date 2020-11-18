@@ -296,6 +296,7 @@
   "save-resignation": "Mandataris wijzigen",
   "search": "zoeken",
   "search-placeholder": "Geef hier uw zoekterm in",
+  "case-search-placeholder": "Dossier zoeken...",
   "select": "Selecteer",
   "select-agenda": "Selecteer een agenda",
   "select-meeting": "Selecteer de vergadering",
@@ -441,7 +442,6 @@
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
   "find-mandatee-label": "Mandataris",
-  "search-placeholder": "Vul uw zoekterm in...",
   "no-nota": "Geen nota beschikbaar.",
   "nota-loading-text": "De nota wordt geladen..",
   "general-settings": "Algemene instellingen",
@@ -669,5 +669,5 @@
   "publication-form-numac-nummer": "Numac nummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
-  "request-publish-preview":"Drukproef aanvragen" 
+  "request-publish-preview":"Drukproef aanvragen"
 }
