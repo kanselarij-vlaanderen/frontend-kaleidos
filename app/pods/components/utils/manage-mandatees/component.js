@@ -70,15 +70,19 @@ export default Component.extend({
       const domains = await oldMandatee.get('governmentDomains');
       const holds = await oldMandatee.get('holds');
 
-      oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
+      oldMandatee.set('end', this.get('selectedEndDate') || moment().utc()
+        .toDate());
       oldMandatee.save().then(() => {
         if (!selectedPerson) {
           return;
         }
         const newMandatee = this.store.createRecord('mandatee', {
           title: oldMandatee.get('title'),
-          start: this.get('selectedStartDate') || moment().toDate(),
-          end: moment().add(5, 'years')
+          start: this.get('selectedStartDate') || moment().utc()
+            .toDate(),
+          end: moment()
+            .add(5, 'years')
+            .utc()
             .toDate(),
           person: selectedPerson,
           holds,
