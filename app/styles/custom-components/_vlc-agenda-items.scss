@@ -79,7 +79,6 @@ a.vlc-agenda-items__sub-item--active:focus {
   display: flex;
   justify-content: flex-start;
   font-size: 1.4rem;
-  line-height: 1.1;
   margin: 0 0 1rem;
   font-weight: 500;
 }
@@ -247,6 +246,7 @@ $i: 0;
   width: 100%;
 }
 
-.vlc-agenda-items__cursor:hover {
+.vlc-agenda-items__cursor {
   cursor: grab;
+  margin-right: 0.7rem;
 }
