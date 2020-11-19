@@ -9,6 +9,7 @@ export default class PublicationsController extends Controller {
 
   @tracked isShowingPublicationModal = false; // createPublicationModal ? more accurate
   @tracked hasError = false;
+  @tracked numberIsAlreadyUsed = false;
   @tracked isCreatingPublication = false;
 
   @tracked
@@ -23,7 +24,7 @@ export default class PublicationsController extends Controller {
   }
 
   get getClassForGroupNumber() {
-    if (this.hasError && (!this.publication.number || this.publication.number < 1)) {
+    if (this.numberIsAlreadyUsed || (this.hasError && (!this.publication.number || this.publication.number < 1))) {
       return 'auk-form-group--error';
     }
     return null;
@@ -41,8 +42,18 @@ export default class PublicationsController extends Controller {
   }
 
   @action
+  async isPublicationNumberAlreadyTaken() {
+    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number);
+    if (isPublicationNumberTaken) {
+      this.numberIsAlreadyUsed = true;
+    } else {
+      this.numberIsAlreadyUsed = false;
+    }
+  }
+
+  @action
   async createNewPublication() {
-    if (!this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
+    if (this.numberIsAlreadyUsed || !this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
       this.hasError = true;
     } else {
       this.hasError = false;

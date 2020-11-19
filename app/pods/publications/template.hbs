@@ -51,23 +51,32 @@
                                                    @closeModal={{this.closePublicationModal}} />
             <WebComponents::AuModal::Body>
               {{#if hasError}}
-                <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
-                                        @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
+                <WebComponents::AuAlert data-test-auk-alert-error
+                                        @icon="alert-triangle"
+                                        @skin="error"
+                                        @title={{t "modal-error-alert-title"}}
+                                        @message={{t "modal-error-alert-message"}}
+                />
               {{else}}
                 <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
                                         @icon="circle-info"/>
               {{/if}}
               <div class="auk-form-group-layout auk-form-group-layout--standard">
-                <div class='auk-form-group {{getClassForGroupNumber}}'>
+                <div class='auk-form-group {{this.getClassForGroupNumber}}'>
                   <WebComponents::AuLabel for="publicationNumberInput">
                     {{t "publications-number-required"}}
                   </WebComponents::AuLabel>
-                  <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width"
+                  <WebComponents::AuInput @type="number" id="publicationNumberInput" class="auk-input--max-width"
                                           @block="true"
                                           @value={{mut publication.number}}
-                                          data-test-create-publication-modal-number-input/>
-                  {{#if getClassForGroupNumber}}
+                                          data-test-create-publication-modal-number-input
+                                          {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                  />
+                  {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                     <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+                  {{/if}}
+                  {{#if this.numberIsAlreadyUsed}}
+                    <WebComponents::AuLabelError>{{t "publication-number-already-taken"}}</WebComponents::AuLabelError>
                   {{/if}}
                 </div>
                 <div class='auk-form-group {{getClassForGroupShortTitle}}'>

@@ -3,7 +3,7 @@
     <Input
     class="auk-input {{this.error}} {{this.block}}"
     data-test-auk-input
-    type="text"
+    type={{@type}}
     @enter={{@enter}}
     @value={{@value}}
     @insert-newline={{@insert-newline}}
@@ -23,7 +23,7 @@
   <Input
     class="auk-input {{this.error}} {{this.block}}"
     data-test-auk-input
-    type="text"
+    @type={{@type}}
     @value={{@value}}
     @insert-newline={{@insert-newline}}
     @escape-press={{@escape-press}}
