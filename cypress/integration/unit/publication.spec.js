@@ -21,8 +21,8 @@ context('Publications tests', () => {
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
   const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
+  const someNumber = Math.floor(Math.random() * 999);
   const someText = 'Some text';
-  const publicationNumber = 'CY987';
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
@@ -45,16 +45,12 @@ context('Publications tests', () => {
       timeout: 5000,
     }).should('not.exist');
     cy.get('@publicationModal').within(() => {
-      cy.get(utilsSelectors.aukInput).click({
-        force: true,
-      })
+      cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someText);
+        .type(someNumber);
     });
     cy.get(utilsSelectors.aukTextarea).eq(0)
-      .click({
-        force: true,
-      })
+      .click()
       .clear()
       .type(someText);
     cy.get(modalSelectors.publication.createButton).click();
@@ -71,15 +67,11 @@ context('Publications tests', () => {
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.aukModal).as('publicationModal');
     cy.get('@publicationModal').within(() => {
-      cy.get(utilsSelectors.aukInput).click({
-        force: true,
-      })
+      cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someText);
+        .type(someNumber);
       cy.get(utilsSelectors.aukTextarea).eq(0)
-        .click({
-          force: true,
-        })
+        .click()
         .clear();
     });
     cy.get(modalSelectors.publication.cancelButton).click();
@@ -92,19 +84,13 @@ context('Publications tests', () => {
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.aukModal).as('publicationModal');
     cy.get('@publicationModal').within(() => {
-      cy.get(modalSelectors.publication.publicationNumberInput).click({
-        force: true,
-      })
+      cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type(publicationNumber);
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click({
-        force: true,
-      })
+        .type(someNumber);
+      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
-      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click({
-        force: true,
-      })
+      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
     });
@@ -114,31 +100,31 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', publicationNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
     cy.visit(publicationNotViaMinisterOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
-    cy.get(publicationSelectors.goToPublication).click();
+    cy.get(publicationSelectors.goToPublication).first()
+      .click();
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', publicationNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
     cy.visit(publicationNotViaMinisterOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
-    cy.get(publicationSelectors.goToPublication).click();
+    cy.get(publicationSelectors.goToPublication).first()
+      .click();
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.editInscriptionButton).click();
-    cy.get(publicationSelectors.inscriptionShortTitleTextarea).click({
-      force: true,
-    })
+    cy.get(publicationSelectors.inscriptionShortTitleTextarea).click()
       .clear()
       .type(shortTitle2);
 
@@ -154,6 +140,68 @@ context('Publications tests', () => {
 
     // check if title has changes
     cy.contains(shortTitle2).should('exist');
-    cy.contains(longTitle).should('exist');
+  });
+
+
+  it('Add and delete contact person', () => {
+    const contactperson = {
+      fin: 'Donald',
+      lan: 'Trump',
+      eml: 'thedon@whitehouse.gov',
+      org: 'US and A',
+    };
+
+    cy.visit(publicationNotViaMinisterOverviewUrl);
+
+    cy.server();
+    cy.route('/publication-flows/**').as('getNewPublicationDetail');
+    cy.get(publicationSelectors.goToPublication).first()
+      .click();
+    cy.wait('@getNewPublicationDetail');
+
+    // Assert empty.
+    cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
+
+    // Add contactperson.
+    cy.get(publicationSelectors.contactperson.addButton).click();
+    cy.get(modalSelectors.aukModal).should('exist');
+    cy.get(publicationSelectors.contactperson.firstNameInput).clear()
+      .type(contactperson.fin);
+    cy.get(publicationSelectors.contactperson.lastNameInput).clear()
+      .type(contactperson.lan);
+    cy.get(publicationSelectors.contactperson.emailInput).clear()
+      .type(contactperson.eml);
+    cy.get(publicationSelectors.contactperson.organisationInput).clear()
+      .type(contactperson.org);
+
+    // Click submit.
+    cy.server();
+    cy.route('POST', '/contact-persons').as('postContactPerson');
+    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
+    cy.get(publicationSelectors.contactperson.submitButton).click();
+    cy.wait('@postContactPerson');
+    cy.wait('@patchPublicationFlow');
+
+    cy.contains(contactperson.fin).should('exist');
+    cy.contains(contactperson.lan).should('exist');
+    cy.contains(contactperson.eml).should('exist');
+    cy.contains(contactperson.org).should('exist');
+
+    // Open dropdown menu.
+    cy.get(publicationSelectors.contactperson.threedotsButton).click();
+    cy.wait(10);
+
+    // Click Delete
+    cy.server();
+    cy.route('DELETE', '/contact-persons/**').as('postContactPerson');
+    cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
+    cy.wait('@postContactPerson');
+
+    // assert deleted content
+    cy.contains(contactperson.fin).should('not.exist');
+    cy.contains(contactperson.lan).should('not.exist');
+    cy.contains(contactperson.eml).should('not.exist');
+    cy.contains(contactperson.org).should('not.exist');
+    cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
   });
 });
