@@ -150,7 +150,8 @@ export default class ReportLink extends Component {
   @action
   async saveNameChange() {
     const report = await this.args.treatment.get('report');
-    report.set('modified', moment().toDate());
+    report.set('modified', moment().utc()
+      .toDate());
     report.set('name', this.nameBuffer);
     await report.save();
     if (!this.isDestroyed) {
