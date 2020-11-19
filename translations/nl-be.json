@@ -675,5 +675,6 @@
   "present?": "Aanwezig?",
   "upload-docx": "Upload Word versie",
   "delete-folder": "Map verwijderen",
-  "view-document-details": "Bekijk document details"
+  "view-document-details": "Bekijk document details",
+  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
 }

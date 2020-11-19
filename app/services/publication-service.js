@@ -54,4 +54,13 @@ export default class PublicationService extends Service {
         this.toaster.error(this.intl.t('contact-added-toast-error-message'), this.intl.t('toast-error-title'));
       });
   }
+
+  async publicationNumberAlreadyTaken(publicationNumber) {
+    const publicationWithId = await this.store.query('publication-flow', {
+      filter: {
+        ':exact:publication-number': publicationNumber,
+      },
+    });
+    return publicationWithId.toArray().length !== 0;
+  }
 }
