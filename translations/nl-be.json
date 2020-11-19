@@ -560,6 +560,8 @@
   "kaleidos-login-info-gebruikersbeheer-vlaanderen": "gebruikersbeheer Vlaanderen ",
   "kaleidos-login-info-popup-message": "Het aanmelden gebeurt in een pop-up; zorg dat de instellingen van uw browser correct staan indien deze niet verschijnt.",
   "kaleidos": "Kaleidos",
+  "browser-unsupported-short": "Browser niet ondersteund",
+  "browser-unsupported-editor": "Editeren wordt momenteel niet ondersteund in \"{browserName}\". Gelieve een andere browser te gebruiken.",
   "amount-per-page": "Aantal zoekresultaten per pagina",
   "document-viewer-message-before-type": "Documenten van het type ",
   "document-viewer-message-after-type": " worden momenteel niet ondersteund om te bekijken.",
