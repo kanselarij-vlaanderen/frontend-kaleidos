@@ -144,7 +144,8 @@ export default class DocumentLink extends Component {
 
   @task
   *savePieceName() {
-    const now = moment().toDate();
+    const now = moment().utc()
+      .toDate();
     this.lastPiece.set('modified', now);
     this.lastPiece.set('name', this.pieceNameBuffer);
     yield this.lastPiece.save();
