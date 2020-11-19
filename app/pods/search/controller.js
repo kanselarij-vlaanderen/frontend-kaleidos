@@ -33,11 +33,13 @@ export default class SearchController extends Controller {
   @tracked popoverShown; // TODO, this is for a tooltip, this should be handled elsewhere
 
   deserializeDate(date) {
-    return date && moment(date, 'DD-MM-YYYY').toDate();
+    return date && moment(date, 'DD-MM-YYYY').utc()
+      .toDate();
   }
 
   serializeDate(date) {
-    return date && moment(date).format('DD-MM-YYYY');
+    return date && moment(date).utc()
+      .format('DD-MM-YYYY');
   }
 
   @action
