@@ -47,7 +47,11 @@
   </WebComponents::AuToolbar>
 </div>
 <div class="u-mb-3">
-  <WebComponents::AuAlert @message={{t "no-documents-yet"}}></WebComponents::AuAlert>
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Body>
+      <WebComponents::AuEmptyState @message={{t "no-documents-yet"}}/>
+    </WebComponents::AuPanel::Body>
+  </WebComponents::AuPanel>
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
