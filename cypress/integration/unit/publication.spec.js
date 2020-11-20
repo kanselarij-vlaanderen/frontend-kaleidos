@@ -27,6 +27,25 @@ context('Publications tests', () => {
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
 
+  it('publications:urls: should see pages', () => {
+    cy.visit(publicationOverviewUrl);
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties/te-behandelen');
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties');
+    // Should redirect.
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties/in-behandeling');
+    // Should redirect.
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties/behandeld');
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties/in-behandeling/via-ministerraad');
+    cy.get('.div-main').should('exist');
+    cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
+    cy.get('.div-main').should('exist');
+  });
+
   it('should render error when required fields are not filled in to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
@@ -143,7 +162,7 @@ context('Publications tests', () => {
   });
 
 
-  it('Add and delete contact person', () => {
+  it('publications:dossier:Add and delete contact person', () => {
     const contactperson = {
       fin: 'Donald',
       lan: 'Trump',
@@ -203,5 +222,29 @@ context('Publications tests', () => {
     cy.contains(contactperson.eml).should('not.exist');
     cy.contains(contactperson.org).should('not.exist');
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
+  });
+
+  it('publications:dossiers:create publication via ministerraad', () => {
+    // prepare agenda data.
+    cy.server();
+    cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
+    cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
+    cy.wait('@publicationagendapuntentreatments');
+    cy.approveAndCloseDesignAgenda();
+
+    // Approve agenda
+    cy.server();
+    cy.route('PATCH', '/agendas/**').as('publicationPatchMeetings');
+    cy.route('PATCH', '/meetings/**').as('publicationPatchAgendas');
+    cy.get('[data-test-vl-modal-verify-save]').click();
+    cy.wait('@publicationPatchMeetings');
+    cy.wait('@publicationPatchAgendas');
+
+    cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
+    // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
+
+    // Check dossier;
+    cy.visit('/publicaties/te-behandelen');
+    cy.get('.div-main').should('exist');
   });
 });
