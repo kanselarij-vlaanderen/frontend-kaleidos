@@ -173,9 +173,9 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       {{#if (not this.contactPersons) }}
-
-        <i class=" ki-circle-info"/> {{t "no-added-contact-persons"}}
-
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
+        </WebComponents::AuPanel::Body>
       {{else}}
         <WebComponents::AuPanel::Body @noPadding="true">
           <table class="auk-table"  data-test-contact-persons>
