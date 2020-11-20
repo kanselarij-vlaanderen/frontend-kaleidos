@@ -131,6 +131,7 @@ export default class PublicationController extends Controller {
     this.model.save();
   }
 
+  // TODO change this
   @action
   setPublicationStatus(event) {
     if (event.target.value === 'Te publiceren') {
@@ -141,6 +142,9 @@ export default class PublicationController extends Controller {
       this.published = true;
     }
     this.publicationStatus = event.target.value;
+    // CONFIG gebruiken en findRecord('publication-flow, config. ... . id)
+    // Wat er hier gebeurt is een string saven in een relatie
+    // kijk desnoods naar 'formally-ok' manier van werken
     this.model.set('status', this.publicationStatus);
     this.model.save();
   }

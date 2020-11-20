@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-// import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class InProgressNotRoute extends Route {
   queryParams = {
@@ -25,9 +25,9 @@ export default class InProgressNotRoute extends Route {
         case: {
           ':has-no:subcases': 'yes',
         },
-        // status: {
-        //   id: CONFIG.publicationStatusToPublish.id,
-        // },
+        status: {
+          id: CONFIG.publicationStatusToPublish.id,
+        },
       },
       sort: '-created',
       include: 'case,status',
