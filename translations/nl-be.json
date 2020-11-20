@@ -661,8 +661,8 @@
   "extreme-translation-date": "Uiterste vertaaldatum",
   "extreme-publication-date": "Uiterste datum publicatie",
   "kind-of-publication": "Wijze van publicatie",
-  "to-publish": "te publiceren",
-  "published": "gepubliceerd",
+  "to-publish": "Te publiceren",
+  "published": "Gepubliceerd",
   "publication-from-extenso": "Extenso",
   "publication-form-by-except": "Bij uitreksel",
   "publication-form-publication-date": "PublicatieDatum BS",
@@ -670,5 +670,6 @@
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
   "request-publish-preview":"Drukproef aanvragen",
-  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
+  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
+  "date-expired": "Datum verstreken"
 }

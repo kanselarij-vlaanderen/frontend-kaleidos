@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = true;
+  @tracked collapsed = false;
   @tracked publicationNumber;
   @tracked translationDate;
   @tracked publicationBeforeDate;
@@ -17,6 +17,17 @@ export default class PublicationController extends Controller {
   @tracked showToPublish = true;
   @tracked published = false;
 
+  @tracked expiredPublicationBeforeDate = false;
+  @tracked expiredTranslationDate = false;
+  @tracked expiredPublicationDate = false;
+
+
+  checkDate(currentDate) {
+    if (moment(currentDate).isBefore(moment())) {
+      return true;
+    }
+    return false;
+  }
   get getShortTitle() {
     const caze = this.model.get('case');
     return caze.get('shortTitle');
@@ -27,43 +38,51 @@ export default class PublicationController extends Controller {
       .toUpperCase();
   }
 
+  // TODO get status
+  // TODO set selected item from the status value
+
   get getPublicationNumberSidePanel() {
-    console.log('P number', this.model.get('publicationNumber'));
     if (this.model.get('publicationNumber')) {
       this.publicationNumber = this.model.get('publicationNumber');
     }
     return this.publicationNumber;
   }
 
+  get currentDate() {
+    return moment();
+  }
+
   get getTranslationDate() {
-    console.log('P translationDate', this.model.get('translateBefore'));
     if (this.model.get('translateBefore')) {
       const date = this.model.get('translateBefore');
-      this.translationDate = moment(date).format('DD-MM-YYYY');
+      this.translationDate = moment(date)
+        .format('DD-MM-YYYY');
     }
+    this.expiredTranslationDate = this.checkDate(this.translationDate);
     return this.translationDate;
   }
 
   get getPublicationBeforeDate() {
-    console.log('P beforeDate', this.model.get('publishBefore'));
     if (this.model.get('publishBefore')) {
-      const date  = this.model.get('publishBefore');
-      this.publicationBeforeDate = moment(date).format('DD-MM-YYYY');
+      const date = this.model.get('publishBefore');
+      this.publicationBeforeDate = moment(date)
+        .format('DD-MM-YYYY');
     }
+    this.expiredPublicationBeforeDate = this.checkDate(this.publicationBeforeDate);
     return this.publicationBeforeDate;
   }
 
   get getPublicationDate() {
-    console.log('P publication date', this.model.get('publishedAt'));
     if (this.model.get('publishedAt')) {
       const date = this.model.get('publishedAt');
-      this.publicationDate = moment(date).format('DD-MM-YYYY');
+      this.publicationDate = moment(date)
+        .format('DD-MM-YYYY');
     }
+    this.expiredPublicationDate = this.checkDate(this.publicationDate);
     return this.publicationDate;
   }
 
   get getNumacNumber() {
-    console.log('P munac number', this.model.get('numacNumber'));
     if (this.model.get('numacNumber')) {
       this.numacNumber = this.model.get('numacNumber');
     }
@@ -71,7 +90,6 @@ export default class PublicationController extends Controller {
   }
 
   get getRemark() {
-    console.log('P remark', this.model.get('remark'));
     if (this.model.get('remark')) {
       this.remark = this.model.get('remark');
     }
@@ -87,9 +105,8 @@ export default class PublicationController extends Controller {
 
   @action
   setPublicationDate(event) {
-    this.publicationDate = moment(event.target.value).format('DD-MM-YYYY');
-    console.log(this.publicationDate);
-    this.model.set('publicationDate', this.publicationDate);
+    this.publicationDate = new Date(event);
+    this.model.set('publishedAt', this.publicationDate);
     this.model.save();
   }
 
@@ -102,21 +119,21 @@ export default class PublicationController extends Controller {
 
   @action
   setPublicationBeforeDate(event) {
-    this.publicationBeforeDate = new Date(event.target.value);
+    this.publicationBeforeDate = new Date(event);
     this.model.set('publishBefore', this.publicationBeforeDate);
     this.model.save();
   }
 
   @action
   setTranslationDate(event) {
-    this.translationDate = new Date(event.target.value);
+    this.translationDate = new Date(event);
     this.model.set('translateBefore', this.translationDate);
     this.model.save();
   }
 
   @action
   setPublicationStatus(event) {
-    if (event.target.value === 'te publiceren') {
+    if (event.target.value === 'Te publiceren') {
       this.showToPublish = true;
       this.published = false;
     } else {
@@ -150,6 +167,5 @@ export default class PublicationController extends Controller {
   @action
   toggle() {
     this.showPicker = !this.showPicker;
-    console.log('Show Picker', this.showPicker);
   }
 }
