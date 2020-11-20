@@ -9,5 +9,15 @@ const selectors = {
   inscriptionLongTitleTextarea: '[data-test-publication-inscription-long-title-textarea]',
   inscriptionSaveButton: '[data-test-publication-save-inscription]',
   goBackToOverviewButton: '[data-test-publication-detail-menu-go-back-to-overview]',
+  contactperson: {
+    addButton: '[data-test-add-contactperson]',
+    submitButton: '[data-test-add-contactperson-submit-button]',
+    firstNameInput: '#firstNameInput',
+    lastNameInput: '#lastNameInput',
+    emailInput: '#emailInput',
+    organisationInput: '#organisationInput',
+    threedotsButton: '[data-test-contact-persons] button i',
+    deleteContactpersonButton: '[data-test-delete-contactperson]',
+  },
 };
 export default selectors;

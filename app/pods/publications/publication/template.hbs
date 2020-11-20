@@ -3,7 +3,7 @@
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <div class="o-flex o-flex--vertical u-mt-2">
-          <WebComponents::AuBreadcrumb data-test-publication-detail-menu-publication-number>{{getPublicationNumber}}</WebComponents::AuBreadcrumb>
+          <WebComponents::AuBreadcrumb>{{getPublicationNumber}}</WebComponents::AuBreadcrumb>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{getShortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-detail-menu-go-back-to-overview></WebComponents::AuTab>
