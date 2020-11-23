@@ -99,7 +99,7 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        <table class="auk-table">
+        <table class="auk-table" >
           <thead>
             <tr>
               <th>{{t "minister"}}</th>
@@ -120,6 +120,7 @@
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   type="button"
+                  data-test-show-contactperson-popover
                 >
                   <i class="ki-more"></i>
                   <AttachPopover
@@ -171,18 +172,18 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus" data-test-add-contactperson>{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       {{#if (not this.contactPersons) }}
-
-        <i class=" ki-circle-info"/> {{t "no-added-contact-persons"}}
-
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
+        </WebComponents::AuPanel::Body>
       {{else}}
         <WebComponents::AuPanel::Body @noPadding="true">
-          <table class="auk-table">
+          <table class="auk-table"  data-test-contact-persons>
             <thead>
               <tr>
                 <th>{{t "name"}}</th>
@@ -228,6 +229,7 @@
                           <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                             <button class="vl-link vl-link--block vl-u-text--error" type="button"
                               {{on "click" (fn this.deleteContactPerson contactPerson) }}
+                                    data-test-delete-contactperson
                             >
                               {{t "delete"}}
                             </button>
@@ -251,7 +253,7 @@
 
 
 {{#if isShowingPersonModal}}
-  <WebComponents::AuModal>
+  <WebComponents::AuModal data-test-add-contactpersonmodal>
     <WebComponents::AuModal::Header @title={{t "add-contact"}}
       @closeModal={{this.closeContactPersonModal}} />
     <WebComponents::AuModal::Body>
@@ -289,7 +291,7 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}}>
+            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
               {{t "add"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>

@@ -59,14 +59,20 @@
         {{/if}} --}}
       </td>
       <td>
-        {{t "dash"}}
-        {{!-- <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment" /> --}}
-        {{!-- {{#if row.internalComment}}
-        <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment" id="comment-{{increment index}}">Hover over mij om de comment te bekijken</WebComponents::AuButton>
-        <EmberTooltip @tooltipClass="auk-tooltip" @targetId="comment-{{increment index}}" @side="left">
-          {{row.internalComment}}
-        </EmberTooltip>
-        {{/if}} --}}
+        {{#if row.remark}}
+          <WebComponents::AuButton @skin="borderless" @layout="icon-only" @icon="comment">
+            <AttachTooltip
+              @arrow="true"
+              @animation="fade"
+              @placement="left"
+              @class="auk-tooltip"
+            >
+              <p>
+                {{row.remark}}
+              </p>
+            </AttachTooltip>
+          </WebComponents::AuButton>
+        {{/if}}
       </td>
       <td>
         <WebComponents::AuButtonToolbar>

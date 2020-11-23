@@ -52,6 +52,7 @@
 
 a.vlc-agenda-detail-sidebar__sub-item--active,
 a.vlc-agenda-detail-sidebar__sub-item--active:hover,
+a.vlc-agenda-detail-sidebar__sub-item--active:focus,
 a.vlc-agenda-detail-sidebar__sub-item--active:active {
   background: $science-blue;
   border: none;
@@ -127,6 +128,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   text-align: right;
   margin-right: 0.5rem;
   line-height: 140%;
+  color: #333332;
 }
 
 // 'No items available' item
