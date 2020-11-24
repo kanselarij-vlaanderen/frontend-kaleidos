@@ -8,16 +8,7 @@ import moment from 'moment';
 
 export default class PublicationController extends Controller {
   @tracked collapsed = true;
-  @tracked publicationNumber;
-  @tracked translationDate;
-  @tracked publicationBeforeDate;
-  @tracked publicationDate;
-  @tracked numacNumber;
-  @tracked remark;
-  @tracked publicationForm;
 
-  @tracked showToPublish = true;
-  @tracked published = false;
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -37,37 +28,12 @@ export default class PublicationController extends Controller {
     }
   ]
 
-  get getShortTitle() {
-    const caze = this.model.get('case');
-    return caze.get('shortTitle');
-  }
-
-  get getPublicationNumber() {
-    return `PUBLICATIE ${this.model.get('publicationNumber')}`.toString()
-      .toUpperCase();
-  }
-
-  // TODO get status
-  // TODO set selected item from the status value
   get getPublicationStatus() {
-    console.log(this.model);
-    console.log(this.model.get('status'));
-
-    // TODO Fix data error
-    const status =  this.model.get('status').then((status) => this.statusOptions.find((statusOption) => statusOption.id === status.id));
-    // const x = this.statusOptions.find((statusOption) => statusOption.id === this.model.get('status.id'));
-    console.log('STATUS', status);
-    return status;
+    return this.statusOptions.find((statusOption) => statusOption.id === this.model.get('status.id'));
   }
 
   get getPublicationType() {
-    const foundOption = this.typeOptions.find((typeOption) => typeOption.id === this.model.get('type.id'));
-    console.log('TYPE', foundOption);
-    return foundOption;
-  }
-
-  get getPublicationNumberSidePanel() {
-    return this.model.get('publicationNumber');
+    return this.typeOptions.find((typeOption) => typeOption.id === this.model.get('type.id'));
   }
 
   get getTranslationDate() {
@@ -91,10 +57,6 @@ export default class PublicationController extends Controller {
     return this.model.get('publishedAt');
   }
 
-  get getNumacNumber() {
-    return this.model.get('numacNumber');
-  }
-
   get getRemark() {
     return this.model.get('remark');
   }
@@ -114,16 +76,14 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setPublicationNumber(event) {
-    this.publicationNumber = event.target.value;
-    this.model.set('publicationNumber', this.publicationNumber);
+    this.model.set('publicationNumber',  event.target.value);
     yield timeout(1000);
     this.model.save();
   }
 
   @restartableTask
   *setNumacNumber(event) {
-    this.numacNumber = event.target.value;
-    this.model.set('numacNumber', this.numacNumber);
+    this.model.set('numacNumber', event.target.value);
     yield timeout(1000);
     this.model.save();
   }
@@ -149,13 +109,6 @@ export default class PublicationController extends Controller {
   // TODO change this
   @action
   async setPublicationStatus(event) {
-    if (event.label === 'Gepubliceerd') {
-      this.showToPublish = false;
-      this.published = true;
-    } else {
-      this.showToPublish = true;
-      this.published = false;
-    }
     const publicationStatus = await this.store.findRecord('publication-status', event.id);
     this.model.set('status', publicationStatus);
     this.model.save();
@@ -170,17 +123,18 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setRemark(event) {
-    this.remarks = event.target.value;
-    this.model.set('remark', this.remarks);
+    this.model.set('remark', event.target.value);
     yield timeout(1000);
     this.model.save();
   }
+
 
   @action
   toggleSidebar() {
     this.collapsed = !this.collapsed;
   }
 
+  // Overwrite from datepicker cant be renamed
   @action
   toggle() {
     this.showPicker = !this.showPicker;

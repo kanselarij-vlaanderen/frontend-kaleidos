@@ -1,5 +1,5 @@
 import Model, {
-  attr, belongsTo
+  attr, hasMany
 } from '@ember-data/model';
 import CONFIG from 'fe-redpencil/utils/config';
 
@@ -7,7 +7,7 @@ export default class PublicationStatus extends Model {
   @attr('string') uri;
   @attr('string') name;
   @attr('number') priority;
-  @belongsTo('publication-flow') publicaties;
+  @hasMany('publication-flow') publicaties;
 
   get isToBePublished() {
     return this.uri === CONFIG.publicationStatusToPublish.uri;
