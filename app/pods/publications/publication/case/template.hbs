@@ -1,12 +1,7 @@
-<div class="u-m-4">
-
-
-  {{!--  DOSSIER PANEL  --}}
-
-
+ {{!--  DOSSIER PANEL  --}}
   <div class="u-mb-3">
     {{#if this.isInscriptionInEditMode}}
-      <WebComponents::AuPanel class="auk-panel--gray-100">
+      <WebComponents::AuPanel class="auk-panel--editing">
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -24,11 +19,11 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea class="auk-textarea" @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-            <WebComponents::AuTextarea class="auk-textarea" @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
@@ -99,7 +94,7 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        <table class="auk-table">
+        <table class="auk-table" >
           <thead>
             <tr>
               <th>{{t "minister"}}</th>
@@ -110,7 +105,7 @@
           <tbody>
             <tr>
               <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="ki-user" /> <span class="u-mx-2">{{t "cancel"}}</span>
+                <WebComponents::AuBadge @icon="user" /> <span class="u-mx-2">{{t "cancel"}}</span>
               </td>
               <td>
                 <span>{{t "cancel"}}</span>
@@ -120,6 +115,7 @@
                 <button
                   class="vl-button vl-button--link vl-button--icon"
                   type="button"
+                  data-test-show-contactperson-popover
                 >
                   <i class="ki-more"></i>
                   <AttachPopover
@@ -171,18 +167,18 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus">{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus" data-test-add-contactperson>{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       {{#if (not this.contactPersons) }}
-
-        <i class=" ki-circle-info"/> {{t "no-added-contact-persons"}}
-
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
+        </WebComponents::AuPanel::Body>
       {{else}}
         <WebComponents::AuPanel::Body @noPadding="true">
-          <table class="auk-table">
+          <table class="auk-table"  data-test-contact-persons>
             <thead>
               <tr>
                 <th>{{t "name"}}</th>
@@ -195,7 +191,7 @@
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
                   <td class="o-flex o-flex--vertical-center">
-                    <WebComponents::AuBadge @icon="ki-user"/>
+                    <WebComponents::AuBadge @icon="user"/>
                     <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
                   </td>
                   <td class="">
@@ -228,6 +224,7 @@
                           <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                             <button class="vl-link vl-link--block vl-u-text--error" type="button"
                               {{on "click" (fn this.deleteContactPerson contactPerson) }}
+                                    data-test-delete-contactperson
                             >
                               {{t "delete"}}
                             </button>
@@ -244,17 +241,17 @@
       {{/if}}
     </WebComponents::AuPanel>
   </div>
-</div>
+
 
 
 {{!-- ADD CONTACTPERSON MODAL --}}
 
 
 {{#if isShowingPersonModal}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Modal::Header @title={{t "add-contact"}}
+  <WebComponents::AuModal data-test-add-contactpersonmodal>
+    <WebComponents::AuModal::Header @title={{t "add-contact"}}
       @closeModal={{this.closeContactPersonModal}} />
-    <WebComponents::AuModal::Modal::Body>
+    <WebComponents::AuModal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group'>
           <WebComponents::AuLabel for="firstNameInput">
@@ -277,8 +274,8 @@
           <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
         </div>
       </div>
-    </WebComponents::AuModal::Modal::Body>
-    <WebComponents::AuModal::Modal::Footer>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -289,13 +286,13 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}}>
+            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
               {{t "add"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Modal::Footer>
+    </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
 

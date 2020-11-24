@@ -5,12 +5,12 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <h2 class="auk-toolbar__title">{{ @title }}</h2>
+          <h2 class="auk-toolbar__title">{{@title}}</h2>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="close" @skin="tertiary" @layout="icon-only">{{t "close"}}</WebComponents::AuButton>
+          <WebComponents::AuButton @icon="close" @skin="tertiary" @layout="icon-only" {{on "click" @closeModal}}>{{t "close"}}</WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>

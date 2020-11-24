@@ -14,4 +14,5 @@ export default class Sidebar extends Component {
     }
     return 'auk-sidebar--left';
   }
+  // TODO css was missing, check later
 }

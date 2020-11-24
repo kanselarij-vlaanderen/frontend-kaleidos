@@ -85,10 +85,14 @@
         <p><strong>{{pageStart}}-{{pageEnd}}</strong> van {{args.data.length}}</p>
       </li>
       <li class="vlc-pagination__element" {{action "handlePrevPage"}}>
-        <ButtonLink @icon="chevron-left" disabled={{prevPageButtonDisabled}}>Vorige</ButtonLink>
+        <WebComponents::AuButtonLink @icon="chevron-left" disabled={{prevPageButtonDisabled}}>
+          Vorige
+        </WebComponents::AuButtonLink>
       </li>
       <li class="vlc-pagination__element" {{action "handleNextPage"}}>
-        <ButtonLink @icon="chevron-right" @layout="icon-right" disabled={{nextPageButtonDisabled}}>Volgende</ButtonLink>
+        <WebComponents::AuButtonLink @icon="chevron-right" @layout="icon-right" disabled={{nextPageButtonDisabled}}>
+          Volgende
+        </WebComponents::AuButtonLink>
       </li>
     </ul>
   </div>

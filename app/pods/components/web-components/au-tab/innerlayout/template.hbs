@@ -1,11 +1,11 @@
 {{#if @icon}}
   {{#if (eq @layout "icon-right")}}
-    <div class="auk-tabs__label">{{yield}}</div>
-    <Icon @name={{@icon}} />
+    <div class="auk-tabs__label">{{yield}} {{this.counter}}</div>
+    <WebComponents::AuIcon @name={{@icon}}/>
   {{else}}
-    <Icon @name={{@icon}} />
-    <div class="auk-tabs__label">{{yield}} {{#if this.counter}} ({{@counter}}){{/if}}</div>
+    <WebComponents::AuIcon @name={{@icon}}/>
+    <div class="auk-tabs__label">{{yield}} {{this.counter}}</div>
   {{/if}}
 {{else}}
-  {{yield}} {{#if this.counter}}({{@counter}}){{/if}}
+  {{yield}} {{this.counter}}
 {{/if}}

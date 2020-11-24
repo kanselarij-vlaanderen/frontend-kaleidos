@@ -1,20 +1,20 @@
 <span class='auk-status-pill {{this.status}}' ...attributes>
   {{#if @status}}
     {{#if (eq @status 'in-progress')}}
-      <WebComponents::AuIcon @name="ki-clock"/>
+      <WebComponents::AuIcon @name="clock"/>
     {{/if}}
     {{#if (eq @status 'not-started')}}
-      <WebComponents::AuIcon @name="ki-not-started"/>
+      <WebComponents::AuIcon @name="not-started"/>
     {{/if}}
 
     {{#if (eq @status 'done')}}
-      <WebComponents::AuIcon @name="ki-circle-check"/>
+      <WebComponents::AuIcon @name="circle-check"/>
     {{/if}}
     {{#if (eq @status 'error')}}
-      <WebComponents::AuIcon @name="ki-circle-error"/>
+      <WebComponents::AuIcon @name="circle-error"/>
     {{/if}}
   {{else}}
-    <WebComponents::AuIcon @name="ki-clock"/>
+    <WebComponents::AuIcon @name="clock"/>
   {{/if}}
   <span class="auk-status-pill__label">{{yield}}</span>
 </span>
