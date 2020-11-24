@@ -212,9 +212,9 @@ context('Publications tests', () => {
 
     // Click Delete
     cy.server();
-    cy.route('DELETE', '/contact-persons/**').as('postContactPerson');
+    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
-    cy.wait('@postContactPerson');
+    cy.wait('@deleteContactPerson');
 
     // assert deleted content
     cy.contains(contactperson.fin).should('not.exist');
@@ -224,7 +224,7 @@ context('Publications tests', () => {
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
   });
 
-  it('publications:dossiers:create publication via ministerraad', () => {
+  it('publications:dossiers:Create publication via ministerraad', () => {
     // prepare agenda data.
     cy.server();
     cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
@@ -246,5 +246,14 @@ context('Publications tests', () => {
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
     cy.get('.div-main').should('exist');
+    cy.get('.auk-table__cell--accent').should('exist');
+    cy.find('Cypress test dossier 1').first()
+      .should('exist');
+    cy.server();
+    cy.route('POST', '/publication-flows').as('postPublicationFlow');
+    cy.get('[data-test-start-publication]').first()
+      .click();
+    cy.wait('@postPublicationFlow');
+    cy.get('[data-test-publication-flow-title]').should('exist');
   });
 });
