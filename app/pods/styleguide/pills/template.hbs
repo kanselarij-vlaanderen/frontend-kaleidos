@@ -66,3 +66,44 @@
   {{!-- END-SNIPPET --}}
 </Styleguide::KitchensinkSample>
 
+
+
+<Styleguide::KitchensinkSample
+        @title="In Progress"
+        @code='<WebComponents::AuStatusPill>2/4</WebComponents::AuStatusPill>'
+>
+  <WebComponents::AuStatusPill>2/4</WebComponents::AuStatusPill>
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Not started"
+        @code='<WebComponents::AuStatusPill @status="not-started">0/4</WebComponents::AuStatusPill>'
+>
+  <WebComponents::AuStatusPill @status="not-started">0/4</WebComponents::AuStatusPill>
+</Styleguide::KitchensinkSample>
+
+<Styleguide::KitchensinkSample
+        @title="Done"
+        @code='<WebComponents::AuStatusPill @status="done">4/4</WebComponents::AuStatusPill>'
+>
+  <WebComponents::AuStatusPill @status="done">4/4</WebComponents::AuStatusPill>
+</Styleguide::KitchensinkSample>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@status</td>
+      <td>string</td>
+      <td><code>in-progress</code>, <code>not-started</code>, <code>done</code></td>
+      <td>Determines the status of the pill. Unless specified, the default skin is set to in-progress.</td>
+    </tr>
+  </tbody>
+</table>
