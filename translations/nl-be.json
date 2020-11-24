@@ -356,7 +356,7 @@
   "undo": "Ongedaan maken",
   "undo-propose": "Niet ingediend",
   "upload-file": "Bestanden uploaden",
-  "uploaded-at": "Geupload op",
+  "uploaded-at": "Geüpload op",
   "sent-at": "verstuurd op",
   "uploading": "opgeladen",
   "loading": "Aan het laden",
@@ -642,6 +642,8 @@
   "not-via-cabinet": "Niet Via Ministerraad",
   "publication-before": "Uiterste publicatie",
   "translations": "Vertalingen",
+  "document": "Document",
+  "signatures": "Handtekeningen",
   "proof": "Drukproef",
   "proofs": "Drukproeven",
   "publication-inscription": "Opschrift",
@@ -670,5 +672,10 @@
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
   "request-publish-preview":"Drukproef aanvragen",
+  "needed?": "Nodig?",
+  "present?": "Aanwezig?",
+  "upload-docx": "Upload Word versie",
+  "delete-folder": "Map verwijderen",
+  "view-document-details": "Bekijk document details",
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
 }

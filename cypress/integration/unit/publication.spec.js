@@ -91,11 +91,13 @@ context('Publications tests', () => {
         .type(someNumber);
       cy.get(utilsSelectors.aukTextarea).eq(0)
         .click()
-        .clear();
+        .clear(); // Why do a manual clear ?
+      // Why don't we check the long title text area ?
     });
     cy.get(modalSelectors.publication.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.contains(someText).should('not.exist');
+    // make sure all fields are tested
   });
 
   it('should create a publication and redirect to its detail page', () => {
@@ -112,11 +114,11 @@ context('Publications tests', () => {
       cy.get(modalSelectors.publication.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
-    });
 
-    cy.route('/publication-flows/*/case').as('getNewPublicationDetail');
-    cy.get(modalSelectors.publication.createButton).click();
-    cy.wait('@getNewPublicationDetail');
+      cy.route('/publication-flows/*/case').as('getNewPublicationDetail');
+      cy.get(modalSelectors.publication.createButton).click();
+      cy.wait('@getNewPublicationDetail');
+    });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
     cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
@@ -233,12 +235,8 @@ context('Publications tests', () => {
     cy.approveAndCloseDesignAgenda();
 
     // Approve agenda
-    cy.server();
-    cy.route('PATCH', '/agendas/**').as('publicationPatchMeetings');
-    cy.route('PATCH', '/meetings/**').as('publicationPatchAgendas');
-    cy.get('[data-test-vl-modal-verify-save]').click();
-    cy.wait('@publicationPatchMeetings');
-    cy.wait('@publicationPatchAgendas');
+    cy.get(modalSelectors.verify.save).click();
+    cy.wait(2000);
 
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
