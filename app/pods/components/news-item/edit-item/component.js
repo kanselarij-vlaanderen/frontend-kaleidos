@@ -87,12 +87,14 @@ export default Component.extend({
       const piece = await nota.get('lastPiece');
       window.open(`/document/${piece.get('id')}`);
     },
+
     async handleRdfaEditorInit(editorInterface) {
       const newsletterInfo = await this.get('newsletterInfo');
       const newsLetterInfoText = newsletterInfo.get('richtext');
       editorInterface.setHtmlContent(newsLetterInfoText);
       this.set('editorInstance', editorInterface);
     },
+
     descriptionUpdated(val) {
       this.set('initValue', `${this.get('initValue')} ${val}`);
     },
