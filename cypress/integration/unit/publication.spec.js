@@ -214,9 +214,9 @@ context('Publications tests', () => {
 
     // Click Delete
     cy.server();
-    cy.route('DELETE', '/contact-persons/**').as('postContactPerson');
+    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
-    cy.wait('@postContactPerson');
+    cy.wait('@deleteContactPerson');
 
     // assert deleted content
     cy.contains(contactperson.fin).should('not.exist');
