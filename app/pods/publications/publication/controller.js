@@ -1,33 +1,42 @@
 import Controller from '@ember/controller';
+import { restartableTask } from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import CONFIG from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
 import moment from 'moment';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = false;
+  @tracked collapsed = true;
   @tracked publicationNumber;
   @tracked translationDate;
   @tracked publicationBeforeDate;
   @tracked publicationDate;
   @tracked numacNumber;
   @tracked remark;
-  @tracked publicationStatus;
   @tracked publicationForm;
 
   @tracked showToPublish = true;
   @tracked published = false;
 
-  @tracked expiredPublicationBeforeDate = false;
-  @tracked expiredTranslationDate = false;
-  @tracked expiredPublicationDate = false;
+  statusOptions = [{
+    id: CONFIG.publicationStatusToPublish.id,
+    label: 'Te publiceren',
+  }, {
+    id: CONFIG.publicationStatusPublished.id,
+    label: 'Gepubliceerd',
+  }]
 
-
-  checkDate(currentDate) {
-    if (moment(currentDate).isBefore(moment())) {
-      return true;
+  typeOptions = [
+    {
+      id: CONFIG.PUBLICATION_TYPES.extenso.id,
+      label: 'Extenso',
+    }, {
+      id: CONFIG.PUBLICATION_TYPES.bijUitreksel.id,
+      label: 'Bij uitreksel',
     }
-    return false;
-  }
+  ]
+
   get getShortTitle() {
     const caze = this.model.get('case');
     return caze.get('shortTitle');
@@ -40,126 +49,130 @@ export default class PublicationController extends Controller {
 
   // TODO get status
   // TODO set selected item from the status value
+  get getPublicationStatus() {
+    console.log(this.model);
+    console.log(this.model.get('status'));
 
-  get getPublicationNumberSidePanel() {
-    if (this.model.get('publicationNumber')) {
-      this.publicationNumber = this.model.get('publicationNumber');
-    }
-    return this.publicationNumber;
+    // TODO Fix data error
+    const status =  this.model.get('status').then((status) => this.statusOptions.find((statusOption) => statusOption.id === status.id));
+    // const x = this.statusOptions.find((statusOption) => statusOption.id === this.model.get('status.id'));
+    console.log('STATUS', status);
+    return status;
   }
 
-  get currentDate() {
-    return moment();
+  get getPublicationType() {
+    const foundOption = this.typeOptions.find((typeOption) => typeOption.id === this.model.get('type.id'));
+    console.log('TYPE', foundOption);
+    return foundOption;
+  }
+
+  get getPublicationNumberSidePanel() {
+    return this.model.get('publicationNumber');
   }
 
   get getTranslationDate() {
-    if (this.model.get('translateBefore')) {
-      const date = this.model.get('translateBefore');
-      this.translationDate = moment(date)
-        .format('DD-MM-YYYY');
+    if (!this.model.get('translateBefore')) {
+      return null;
     }
-    this.expiredTranslationDate = this.checkDate(this.translationDate);
-    return this.translationDate;
+    return this.model.get('translateBefore');
   }
 
   get getPublicationBeforeDate() {
-    if (this.model.get('publishBefore')) {
-      const date = this.model.get('publishBefore');
-      this.publicationBeforeDate = moment(date)
-        .format('DD-MM-YYYY');
+    if (!this.model.get('publishBefore')) {
+      return null;
     }
-    this.expiredPublicationBeforeDate = this.checkDate(this.publicationBeforeDate);
-    return this.publicationBeforeDate;
+    return this.model.get('publishBefore');
   }
 
   get getPublicationDate() {
-    if (this.model.get('publishedAt')) {
-      const date = this.model.get('publishedAt');
-      this.publicationDate = moment(date)
-        .format('DD-MM-YYYY');
+    if (!this.model.get('publishedAt')) {
+      return null;
     }
-    this.expiredPublicationDate = this.checkDate(this.publicationDate);
-    return this.publicationDate;
+    return this.model.get('publishedAt');
   }
 
   get getNumacNumber() {
-    if (this.model.get('numacNumber')) {
-      this.numacNumber = this.model.get('numacNumber');
-    }
-    return this.numacNumber;
+    return this.model.get('numacNumber');
   }
 
   get getRemark() {
-    if (this.model.get('remark')) {
-      this.remark = this.model.get('remark');
-    }
-    return this.remark;
+    return this.model.get('remark');
   }
 
-  @action
-  setPublicationNumber(event) {
+  get expiredPublicationBeforeDate() {
+    return moment(this.model.get('publishBefore'))
+      .isBefore(moment());
+  }
+  get expiredPublicationDate() {
+    return moment(this.model.get('publishedAt'))
+      .isBefore(moment());
+  }
+  get expiredTranslationDate() {
+    return moment(this.model.get('translateBefore'))
+      .isBefore(moment());
+  }
+
+  @restartableTask
+  *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
     this.model.set('publicationNumber', this.publicationNumber);
+    yield timeout(1000);
     this.model.save();
   }
 
-  @action
-  setPublicationDate(event) {
-    this.publicationDate = new Date(event);
-    this.model.set('publishedAt', this.publicationDate);
-    this.model.save();
-  }
-
-  @action
-  setNumacNumber(event) {
+  @restartableTask
+  *setNumacNumber(event) {
     this.numacNumber = event.target.value;
     this.model.set('numacNumber', this.numacNumber);
+    yield timeout(1000);
     this.model.save();
   }
 
   @action
   setPublicationBeforeDate(event) {
-    this.publicationBeforeDate = new Date(event);
-    this.model.set('publishBefore', this.publicationBeforeDate);
+    this.model.set('publishBefore', new Date(event));
+    this.model.save();
+  }
+
+  @action
+  setPublicationDate(event) {
+    this.model.set('publishedAt', new Date(event));
     this.model.save();
   }
 
   @action
   setTranslationDate(event) {
-    this.translationDate = new Date(event);
-    this.model.set('translateBefore', this.translationDate);
+    this.model.set('translateBefore', new Date(event));
     this.model.save();
   }
 
   // TODO change this
   @action
-  setPublicationStatus(event) {
-    if (event.target.value === 'Te publiceren') {
-      this.showToPublish = true;
-      this.published = false;
-    } else {
+  async setPublicationStatus(event) {
+    if (event.label === 'Gepubliceerd') {
       this.showToPublish = false;
       this.published = true;
+    } else {
+      this.showToPublish = true;
+      this.published = false;
     }
-    this.publicationStatus = event.target.value;
-    // CONFIG gebruiken en findRecord('publication-flow, config. ... . id)
-    // Wat er hier gebeurt is een string saven in een relatie
-    // kijk desnoods naar 'formally-ok' manier van werken
-    this.model.set('status', this.publicationStatus);
+    const publicationStatus = await this.store.findRecord('publication-status', event.id);
+    this.model.set('status', publicationStatus);
     this.model.save();
   }
 
   @action
-  setPublicationForm(event) {
-    this.publicationForm = event.target.value;
-    this.model.set('type', this.publicationStatus);
+  async setPublicationType(event) {
+    const publicationType = await this.store.findRecord('publication-type', event.id);
+    this.model.set('type', publicationType);
     this.model.save();
   }
 
-  @action
-  setRemark(event) {
+  @restartableTask
+  *setRemark(event) {
     this.remarks = event.target.value;
     this.model.set('remark', this.remarks);
+    yield timeout(1000);
     this.model.save();
   }
 
