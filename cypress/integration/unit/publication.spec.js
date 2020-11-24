@@ -235,12 +235,8 @@ context('Publications tests', () => {
     cy.approveAndCloseDesignAgenda();
 
     // Approve agenda
-    cy.server();
-    cy.route('PATCH', '/agendas/**').as('publicationPatchMeetings');
-    cy.route('PATCH', '/meetings/**').as('publicationPatchAgendas');
     cy.get(modalSelectors.verify.save).click();
-    cy.wait('@publicationPatchMeetings');
-    cy.wait('@publicationPatchAgendas');
+    cy.wait(2000);
 
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
