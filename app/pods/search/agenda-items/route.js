@@ -12,6 +12,10 @@ export default class AgendaitemSearchRoute extends Route {
     types: {
       refreshModel: true,
     },
+    latestOnly: {
+      refreshModel: true,
+      as: 'uitsluitend-laatste-versie',
+    },
     page: {
       refreshModel: true,
       as: 'pagina',
@@ -90,6 +94,10 @@ export default class AgendaitemSearchRoute extends Route {
       } else if (params.types.includes('mededeling') && !params.types.includes('nota')) {
         filter.showAsAnnouncement = true;
       }
+    }
+
+    if (params.latestOnly) {
+      filter[':has-no:nextVersionId'] = 'yes';
     }
 
     this.lastParams.commit();

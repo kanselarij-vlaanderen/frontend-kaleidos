@@ -676,5 +676,7 @@
   "upload-docx": "Upload Word versie",
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document details",
-  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
+  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
+  "version": "Versie",
+  "only-most-recent": "Enkel meest recente"
 }
