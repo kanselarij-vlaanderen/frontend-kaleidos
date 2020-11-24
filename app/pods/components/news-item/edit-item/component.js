@@ -24,6 +24,10 @@ export default Component.extend({
     },
   }),
 
+  editorInstanceAvailable: computed('editorInstance', function() {
+    return this.get('editorInstance') ? true : false; // eslint-disable-line
+  }),
+
   hasNota: computed('agendaitem', async function() {
     const nota = await this.agendaitem.get('nota');
     if (nota) {
@@ -35,7 +39,11 @@ export default Component.extend({
   async saveChanges() {
     this.set('isLoading', true);
     const newsletterInfo = await this.get('newsletterInfo');
-    newsletterInfo.set('richtext', this.richtext);
+    try {
+      newsletterInfo.set('richtext', this.richtext);
+    } catch {
+      // pass
+    }
     await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
     });
@@ -45,8 +53,8 @@ export default Component.extend({
   },
 
   richtext: computed('editorInstance.htmlContent', function() {
-    if (!this.editorInstance) {
-      return;
+    if (!this.editorInstanceAvailable) {
+      throw new Error("Can't get rich text since editor-instance isn't available!");
     }
     return this.editorInstance.htmlContent;
   }),
