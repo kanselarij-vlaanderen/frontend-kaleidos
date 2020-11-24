@@ -44,11 +44,11 @@ export default Component.extend({
     }
   },
 
-  richtext: computed('editor.htmlContent', function() {
-    if (!this.editor) {
+  richtext: computed('editorInstance.htmlContent', function() {
+    if (!this.editorInstance) {
       return;
     }
-    return this.editor.htmlContent;
+    return this.editorInstance.htmlContent;
   }),
 
   actions: {
@@ -91,7 +91,7 @@ export default Component.extend({
       const newsletterInfo = await this.get('newsletterInfo');
       const newsLetterInfoText = newsletterInfo.get('richtext');
       editorInterface.setHtmlContent(newsLetterInfoText);
-      this.set('editor', editorInterface);
+      this.set('editorInstance', editorInterface);
     },
     descriptionUpdated(val) {
       this.set('initValue', `${this.get('initValue')} ${val}`);
