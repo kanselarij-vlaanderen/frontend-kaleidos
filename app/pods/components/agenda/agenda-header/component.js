@@ -247,12 +247,13 @@ export default Component.extend(FileSaverMixin, {
         }
         await this.currentAgenda.hasMany('agendaitems').reload();
         const agendaitemsFormallyOk = await this.currentAgenda.get('agendaitems');
-        const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted);
+        const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+          .sortBy('priority');
         const actualAnnouncements = agendaitemsFormallyOk.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
           .sortBy('priority');
         const isEditor = this.currentSessionService.isEditor;
-        setAgendaitemsPriority(actualAgendaitems, isEditor, true);
-        setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+        await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
+        await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
       }
       this.set('showCloseWarning', false);
       this.currentAgenda.set('isApproved', true);
@@ -610,12 +611,13 @@ export default Component.extend(FileSaverMixin, {
           await this.destroyAgendaitemsList(newNotYetOKItems);
           await agendaToLock.hasMany('agendaitems').reload();
           const agendaitemsFormallyOk = await agendaToLock.get('agendaitems');
-          const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted);
+          const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+            .sortBy('priority');
           const actualAnnouncements = agendaitemsFormallyOk.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
             .sortBy('priority');
           const isEditor = this.currentSessionService.isEditor;
-          setAgendaitemsPriority(actualAgendaitems, isEditor, true);
-          setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+          await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
+          await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
           return newAgenda;
         })
         .then((newAgenda) => {
