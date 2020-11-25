@@ -283,7 +283,7 @@ context('Agenda tests', () => {
       cy.setFormalOkOnItemWithIndex(1);
     });
     cy.approveAndCloseDesignAgenda();
-    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
 
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
@@ -362,7 +362,7 @@ context('Agenda tests', () => {
     cy.get(actionModel.showActionOptions).click();
     cy.get(actionModel.lockAgenda).click();
 
-    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
     cy.route('GET', '/agendaitems/*/agenda').as('agenda');

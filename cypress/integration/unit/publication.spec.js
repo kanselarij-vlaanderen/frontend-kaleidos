@@ -26,24 +26,24 @@ context('Publications tests', () => {
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
-
+  const pageClass = '.vlc-panel-layout__main-content';
   it('publications:urls: should see pages', () => {
     cy.visit(publicationOverviewUrl);
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/behandeld');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 
   it('should render error when required fields are not filled in to create new publication', () => {
@@ -243,6 +243,6 @@ context('Publications tests', () => {
 
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 });
