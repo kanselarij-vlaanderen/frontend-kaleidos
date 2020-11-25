@@ -1,6 +1,6 @@
 import EmberError from '@ember/error';
 
-const ModifiedOldDataError = (errors, message = 'This error is result of my custom logic.') => {
+const ModifiedOldDataError = function(errors, message = 'This error is result of my custom logic.') {
   EmberError.call(this, message);
 
   this.errors = errors || [
