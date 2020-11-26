@@ -163,7 +163,14 @@ export default EmberObject.create({
     handtekenen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
     drukproeven: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
   },
-  PUBLICATION_TYPE_URIS: {
-    vertalen: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+  PUBLICATION_TYPES: {
+    extenso: {
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+      id: '5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+    },
+    bijUitreksel: {
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5423c83d-ae5c-4973-8cb7-baefdc3e4949',
+      id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
+    },
   },
 });

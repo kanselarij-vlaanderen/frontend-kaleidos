@@ -602,8 +602,8 @@
   "meeting-number-visual-representation": "Nummer van de vergadering",
   "approve-all-agendaitems": "Alles formeel goedkeuren",
   "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitemsNotFormallyOk} agenda items formeel wil goedkeuren",
-  "agenda-has-nok-agendaitems-warning": "Deze ontwerpagenda bevat agendapunten die nog niet formeel OK verklaard zijn. U kan geen (ontwerp)agenda afsluiten die formeel NOK-agendapunten bevat. Gelieve deze formeel OK te verklaren of te verwijderen",
-  "approve-agenda-error": "(Ontwerp)agenda afsluiten onmogelijk",
+  "agenda-has-nok-agendaitems-warning": "Deze ontwerpagenda bevat agendapunten die nog niet formeel OK verklaard zijn. U kan geen (ontwerp)agenda afsluiten die formeel NOK-agendapunten bevat. Het systeem zal deze terug vrijgeven indien u wenst door te gaan met deze actie.",
+  "approve-agenda-error": "(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.",
   "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
   "publications": "Publicaties",
   "publications.done": "Behandeld",
@@ -662,10 +662,6 @@
   "extreme-translation-date": "Uiterste vertaaldatum",
   "extreme-publication-date": "Uiterste datum publicatie",
   "kind-of-publication": "Wijze van publicatie",
-  "to-publish": "te publiceren",
-  "published": "gepubliceerd",
-  "publication-from-extenso": "Extenso",
-  "publication-form-by-except": "Bij uitreksel",
   "publication-form-publication-date": "PublicatieDatum BS",
   "publication-form-numac-nummer": "Numac nummer BS",
   "requests":"Aanvragen",
@@ -676,5 +672,6 @@
   "upload-docx": "Upload Word versie",
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document details",
-  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik."
+  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
+  "date-expired": "Datum verstreken"
 }

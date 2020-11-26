@@ -26,24 +26,24 @@ context('Publications tests', () => {
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
-
+  const pageClass = '.vlc-panel-layout__main-content';
   it('publications:urls: should see pages', () => {
     cy.visit(publicationOverviewUrl);
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/behandeld');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 
   it('should render error when required fields are not filled in to create new publication', () => {
@@ -214,9 +214,9 @@ context('Publications tests', () => {
 
     // Click Delete
     cy.server();
-    cy.route('DELETE', '/contact-persons/**').as('postContactPerson');
+    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
-    cy.wait('@postContactPerson');
+    cy.wait('@deleteContactPerson');
 
     // assert deleted content
     cy.contains(contactperson.fin).should('not.exist');
@@ -235,18 +235,14 @@ context('Publications tests', () => {
     cy.approveAndCloseDesignAgenda();
 
     // Approve agenda
-    cy.server();
-    cy.route('PATCH', '/agendas/**').as('publicationPatchMeetings');
-    cy.route('PATCH', '/meetings/**').as('publicationPatchAgendas');
     cy.get(modalSelectors.verify.save).click();
-    cy.wait('@publicationPatchMeetings');
-    cy.wait('@publicationPatchAgendas');
+    cy.wait(2000);
 
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 });
