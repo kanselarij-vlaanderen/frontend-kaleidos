@@ -9,22 +9,25 @@ export default class PiecesListForItem extends Component {
   // TODO: Is het echt nodig om hier een @tracked te gebruiker? We visualiseren hier enkel?
   @tracked agendaitemOrSubcase = this.args.agendaitemOrSubcase;
 
-  @tracked moreThan20 = null;
-
-  get documentContainers() {
-    if (!this.agendaitemOrSubcase) {
-      return null;
+  get moreThan20() {
+    if (this.agendaitemOrSubcase) {
+      if (this.agendaitemOrSubcase.documentContainers) {
+        if (this.agendaitemOrSubcase.documentContainers.length > 20) {
+          return true;
+        }
+      }
     }
-    if (this.agendaitemOrSubcase.documentContainers) {
-      if (this.agendaitemOrSubcase.documentContainers.length > 20) {
-        this.moreThan20 = true;
-      } else {
-        this.moreThan20 = false;
+    return false;
+  }
+
+  get documentContainersLimited() {
+    if (this.agendaitemOrSubcase) {
+      if (this.agendaitemOrSubcase.documentContainers) {
+        if (this.agendaitemOrSubcase.documentContainers.length > 20) {
+          const containers = this.agendaitemOrSubcase.documentContainers;
+          return containers.content.splice(0, 20);
+        }
       }
-      if (this.isShowingAll) {
-        return this.agendaitemOrSubcase.documentContainers;
-      }
-      return this.agendaitemOrSubcase.documentContainers;
     }
     return null;
   }
