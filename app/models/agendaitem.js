@@ -111,13 +111,11 @@ export default ModelWithModifier.extend({
     return PromiseObject.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.map((piece) => piece.get('id')).join(',');
-
           return this.store
             .query('document-container', {
               filter: {
-                pieces: {
-                  id: pieceIds,
+                agendaitem: {
+                  id: this.get('id'),
                 },
                 type: {
                   id: CONFIG.notaID,
