@@ -617,13 +617,11 @@ export default Component.extend(FileSaverMixin, {
         })
         .then((newAgenda) => {
           if (this.onApproveAgenda) {
+            this.set('sessionService.selectedAgendaitem', null);
+            this.changeLoading();
+            this.set('isApprovingAgenda', false);
             this.onApproveAgenda(newAgenda.get('id'));
           }
-        })
-        .finally(() => {
-          this.set('sessionService.selectedAgendaitem', null);
-          this.changeLoading();
-          this.set('isApprovingAgenda', false);
         });
     });
   },
