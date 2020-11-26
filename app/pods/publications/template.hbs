@@ -64,9 +64,14 @@
                 <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width"
                                         @block="true"
                                         @value={{mut publication.number}}
-                                        data-test-create-publication-modal-number-input/>
-                {{#if getClassForGroupNumber}}
+                                        data-test-create-publication-modal-number-input
+                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                />
+                {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+                {{/if}}
+                {{#if this.numberIsAlreadyUsed}}
+                  <WebComponents::AuLabelError>{{t "publication-number-already-taken"}}</WebComponents::AuLabelError>
                 {{/if}}
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
