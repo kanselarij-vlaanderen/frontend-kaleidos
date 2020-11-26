@@ -235,3 +235,21 @@
       />
   </WebComponents::VlModal>
 {{/if}}
+
+{{#if this.isOpenDocxUploadModal}}
+  <WebComponents::AuModal @size="full-screen">
+    <WebComponents::AuModal::Header 
+      @title={{t "documents-add"}}
+      @closeModal={{this.cancelUploadDocxFiles}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuUploader @multipleFiles={{true}} @uploadedFileAction={{action this.uploadFile}}>
+
+      </WebComponents::AuUploader>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer>
+
+    </WebComponents::AuModal::Footer>  
+
+  </WebComponents::AuModal>
+{{/if}}

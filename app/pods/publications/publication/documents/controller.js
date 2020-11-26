@@ -10,13 +10,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
   @tracked newPieces = A([]);
+  @tracked newFiles = A([]);
   @tracked isExpandedPieceView = false;
 
 
   @action
   openDocxUploadModal() {
-    alert('Deze functionaliteit heeft nog geen implementatie');
-    // this.isOpenDocxUploadModal = true;
+    // alert('Deze functionaliteit heeft nog geen implementatie');
+    this.isOpenDocxUploadModal = true;
   }
 
   @action
@@ -48,6 +49,12 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
+  cancelUploadDocxFiles() {
+    this.isOpenDocxUploadModal = false;
+    // delete all files in creation
+  }
+
+  @action
   // eslint-disable-next-line class-methods-use-this
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
@@ -56,5 +63,25 @@ export default class PublicationDocumentsController extends Controller {
   @action
   toggleFolderCollapse(piece) {
     piece.set('collapsed', !piece.collapsed);
+  }
+
+  @action
+  uploadFile(file) {
+    // const now = moment().utc()
+    //   .toDate();
+    console.log(file);
+    // const documentContainer = this.store.createRecord('document-container', {
+    //   created: now,
+    // });
+    // const piece = this.store.createRecord('piece', {
+    //   created: now,
+    //   modified: now,
+    //   file: file,
+    //   accessLevel: this.defaultAccessLevel,
+    //   confidential: false,
+    //   name: file.filenameWithoutExtension,
+    //   documentContainer: documentContainer,
+    // });
+    this.newFiles.pushObject(file);
   }
 }
