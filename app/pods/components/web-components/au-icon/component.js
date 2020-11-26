@@ -10,4 +10,11 @@ export default class Icon extends Component {
     }
     return 'auk-icon--default';
   }
+
+  get grab() {
+    if (this.args.grab) {
+      return 'auk-u-cursor-grab';
+    }
+    return null;
+  }
 }
