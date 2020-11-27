@@ -114,8 +114,10 @@ export default ModelWithModifier.extend({
           return this.store
             .query('document-container', {
               filter: {
-                agendaitem: {
-                  id: this.get('id'),
+                pieces: {
+                  agendaitem: {
+                    id: this.get('id'),
+                  },
                 },
                 type: {
                   id: CONFIG.notaID,
