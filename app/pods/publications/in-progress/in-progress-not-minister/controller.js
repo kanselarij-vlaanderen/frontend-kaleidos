@@ -23,6 +23,7 @@ export default class PublicationsInProgressNotMinisterController extends Control
   @tracked
   size = 5;
 
+  @tracked
   sort = '-created';
 
   @action
