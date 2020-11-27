@@ -1,22 +1,22 @@
 
-{{#if (is-pending agendaitemOrSubcase.documentContainers)}}
+{{#if (is-pending @agendaitemOrSubcase.sortedPieces)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   <div class="grid-container">
     {{#if (and this.moreThan20 (not this.isShowingAll))}}
-      {{#each (await this.documentContainersLimited) as |documentContainer|}}
+      {{#each (await this.piecesLimited) as |piece|}}
         {{item-document
           item=@agendaitemOrSubcase
-          documentContainer=documentContainer
+          piece=piece
           isClickable=@isClickable
           useNewIcons=useNewIcons
         }}
       {{/each}}
     {{else}}
-      {{#each (await @agendaitemOrSubcase.documentContainers) as |documentContainer|}}
+      {{#each (await @agendaitemOrSubcase.sortedPieces) as |piece|}}
         {{item-document
           item=@agendaitemOrSubcase
-          documentContainer=documentContainer
+          piece=piece
           isClickable=@isClickable
           useNewIcons=useNewIcons
         }}
