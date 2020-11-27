@@ -118,6 +118,7 @@ export default Service.extend({
           const _case = await subcase.get('case');
           const previousNewsItem = (await this.store.query('newsletter-info', {
             'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
+            'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
             sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
             'page[size]': 1,
           })).firstObject;

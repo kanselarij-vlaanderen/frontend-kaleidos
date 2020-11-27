@@ -43,6 +43,9 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
+  case: belongsTo('case', {
+    inverse: null,
+  }),
 
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;

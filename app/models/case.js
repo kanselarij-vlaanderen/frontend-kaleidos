@@ -18,6 +18,7 @@ export default Model.extend({
   }),
 
   subcases: hasMany('subcase'),
+  pieces: hasMany('piece'),
 
   latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
