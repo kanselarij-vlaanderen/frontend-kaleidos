@@ -13,7 +13,9 @@ export default class PublicationFlow extends Model {
   @attr('datetime') modified;
 
   @belongsTo('case') case;
-  @belongsTo('publication-status') status;
+  @belongsTo('publication-status', {
+    inverse: null,
+  }) status;
   @belongsTo('publication-type') type;
 
   @hasMany('subcase') subcases;
