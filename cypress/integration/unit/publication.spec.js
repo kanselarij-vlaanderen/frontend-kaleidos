@@ -21,12 +21,12 @@ context('Publications tests', () => {
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
   const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
-  const someNumber = Math.floor(Math.random() * 999);
   const someText = 'Some text';
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
   const pageClass = '.vlc-panel-layout__main-content';
+
   it('publications:urls: should see pages', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(pageClass).should('exist');
@@ -66,7 +66,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('1');
     });
     cy.get(utilsSelectors.aukTextarea).eq(0)
       .click()
@@ -88,7 +88,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('2');
       cy.get(utilsSelectors.aukTextarea).eq(0)
         .click()
         .clear(); // Why do a manual clear ?
@@ -107,7 +107,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type(someNumber);
+        .type('3');
       cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
@@ -121,7 +121,7 @@ context('Publications tests', () => {
     });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', '3');
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
@@ -133,7 +133,7 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE 3');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
