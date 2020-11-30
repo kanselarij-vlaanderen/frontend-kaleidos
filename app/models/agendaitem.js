@@ -68,19 +68,17 @@ export default ModelWithModifier.extend({
     return getPropertyLength(this, 'documentContainers');
   }),
 
-  linkedDocumentContainersLength: computed('linkedDocumentContainers', function() {
-    return getPropertyLength(this, 'linkedDocumentContainers');
-  }),
 
   documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.mapBy('id').join(',');
           return this.store.query('document-container', {
             filter: {
               pieces: {
-                id: pieceIds,
+                agendaitem: {
+                  id: this.get('id'),
+                },
               },
             },
             page: {
@@ -93,26 +91,6 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  linkedDocumentContainers: computed('linkedPieces.@each', function() {
-    return PromiseArray.create({
-      promise: this.get('linkedPieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.mapBy('id').join(',');
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                id: pieceIds,
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('linkedPieces'), containers));
-        }
-      }),
-    });
-  }),
 
   number: deprecatingAlias('priority', {
     id: 'agendaitem-number-deprecated',
@@ -133,13 +111,13 @@ export default ModelWithModifier.extend({
     return PromiseObject.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.map((piece) => piece.get('id')).join(',');
-
           return this.store
             .query('document-container', {
               filter: {
                 pieces: {
-                  id: pieceIds,
+                  agendaitem: {
+                    id: this.get('id'),
+                  },
                 },
                 type: {
                   id: CONFIG.notaID,
