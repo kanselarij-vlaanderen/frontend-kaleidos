@@ -7,13 +7,12 @@ import { action } from '@ember/object';
 import moment from 'moment';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = this.get('media.isBigScreen');
+  @tracked collapsed = !this.get('media.isBigScreen');
 
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
     label: 'Te publiceren',
-    icon: 'add',
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',

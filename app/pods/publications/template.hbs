@@ -60,9 +60,8 @@
             {{/if}}
             <div class="auk-form-group-layout auk-form-group-layout--standard">
               <div class='auk-form-group {{getClassForGroupNumber}}'>
-                <WebComponents::AuLabel for="publicationNumberInput">
+                <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
                   {{t "publications-number"}}
-                  <abbr>*</abbr>
                 </WebComponents::AuLabel>
                 <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width"
                                         @block="true"
@@ -73,9 +72,8 @@
                 {{/if}}
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
-                <WebComponents::AuLabel for="shortTitleInput">
+                <WebComponents::AuLabel for="shortTitleInput"  @isRequired={{true}}>
                   {{t "name-subcase"}}
-                  <abbr style="opacity: 0.5">*</abbr>
                 </WebComponents::AuLabel>
                 <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}}
                                            data-test-create-publication-modal-short-title-textarea/>
