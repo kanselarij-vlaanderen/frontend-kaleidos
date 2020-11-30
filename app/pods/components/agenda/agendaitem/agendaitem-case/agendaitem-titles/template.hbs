@@ -99,7 +99,9 @@
     class="pill-container vl-u-display-flex"
     data-test-agenda-subcasehidden-pill
   >
-    {{#if (and currentSession.isEditor @agendaitem.formallyOkToShow)}}
+    {{#if
+      (and @agendaitem.isDesignAgenda (and currentSession.isEditor @agendaitem.formallyOkToShow))
+    }}
       <span
         class="{{@agendaitem.formallyOkToShow.pillClassNames}}
         vl-u-spacer-extended-right-s"

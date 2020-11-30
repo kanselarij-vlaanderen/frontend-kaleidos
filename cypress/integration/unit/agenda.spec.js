@@ -306,7 +306,12 @@ context('Agenda tests', () => {
       .click();
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort).should('not.exist');
   });
+
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
@@ -383,6 +388,16 @@ context('Agenda tests', () => {
 
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(`[${agenda.agendaSidenavElement}="1"]`).click();
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort)
+      .should('not.exist');
   });
 });
 

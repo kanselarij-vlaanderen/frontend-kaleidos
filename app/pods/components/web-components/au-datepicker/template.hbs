@@ -1,9 +1,21 @@
 <div class="auk-input-with-icon">
-  <input
-          class="auk-input {{this.error}} {{this.block}}"
-          type="text"
-          ...attributes
+  <div {{on "click" this.openDatepicker}}>
+    <WebComponents::AuIcon  @name="calendar"/>
+  </div>
+  <EmberFlatpickr
+          class="auk-input auk-input--block"
+          @allowInput={{false}}
+          @clickOpens={{false}}
+          @date={{this.defaultDate}} {{!-- Required Option --}}
+          @dateFormat="d-m-Y"
+          @mode="single"
+          @nextArrow=">"
+          @noCalendar={{false}}
+          @onChange={{@onChange}} {{!-- Required Option --}}
+          @onReady={{this.onReady}}
+          @prevArrow="<"
+          @shorthandCurrentMonth={{true}}
+          placeholder={{this.placeholder}}
   />
-
-  <WebComponents::AuIcon @name={{this.icon}}/>
 </div>
+
