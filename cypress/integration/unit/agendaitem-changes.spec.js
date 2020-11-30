@@ -201,17 +201,15 @@ context('Agendaitem changes tests', () => {
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {
     cy.visit(agendaURL);
+    cy.changeSelectedAgenda('Ontwerpagenda');
     // check if only 'Geen toekenning' is a header
     cy.get(agenda.agendaOverviewItemHeader)
       .should('have.length', 1);
-
     cy.get(agenda.agendaOverviewItemHeader).eq(0)
       .should('contain.text', 'Geen toekenning');
-
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
-
     cy.addAgendaitemMandatee(0, -1, 0, 'Minister-president van de Vlaamse Regering');
-    cy.visit(agendaURL);
+    cy.clickReverseTab('Overzicht');
     cy.get(agenda.agendaOverviewItemHeader).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');
     cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
