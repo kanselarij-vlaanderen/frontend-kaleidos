@@ -364,7 +364,7 @@
   "loading-text-inactive": "Even geduld",
   "please-be-patient": "Even geduld aub...",
   "approve-agenda-warning": "Deze agenda kan niet goedgekeurd worden zolang dat niet alle agendapunten formeel OK verklaard zijn.",
-  "approve-agenda-passable": "Deze agenda bevat nieuwe agendapunten die nog niet formeel OK verklaard zijn. Als u op doorgaan klikt worden de huidige agendapunten overgezet naar de volgende ontwerpagenda.",
+  "approve-agenda-passable": "Deze agenda bevat nieuwe agendapunten die (nog) niet formeel OK verklaard zijn. Als u op doorgaan klikt worden de huidige agendapunten overgezet naar de volgende ontwerpagenda.",
   "warning-text": "Venster sluiten",
   "continue": "Doorgaan",
   "warning-title": "Opgelet!",

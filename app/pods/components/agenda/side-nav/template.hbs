@@ -34,8 +34,8 @@
     </div>
     <div class="vlc-scroll-wrapper__body">
       <ul>
-        {{#each (await agendas) as |agenda|}}
-          <li class="vlc-side-nav-item
+        {{#each (await agendas) as |agenda index|}}
+          <li data-test-agenda-sidenav-element={{index}} class="vlc-side-nav-item
               {{active-class
                 agenda
                 currentAgenda

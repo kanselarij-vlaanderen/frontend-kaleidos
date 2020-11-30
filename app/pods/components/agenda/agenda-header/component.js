@@ -601,9 +601,9 @@ export default Component.extend(FileSaverMixin, {
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
         .then(async(newAgenda) => {
           const agendaitems = await agendaToLock.get('agendaitems');
-          const newNotYetOKItems = agendaitems.filter((agendaitem) => agendaitem.get('isAdded') && agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk);
+          const agendaitemsWithStatusDifferentFromFormallyOk = agendaitems.filter((agendaitem) => agendaitem.get('isAdded') && (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
           await this.reloadAgendaitemsOfSubcases(agendaitems);
-          await this.destroyAgendaitemsList(newNotYetOKItems);
+          await this.destroyAgendaitemsList(agendaitemsWithStatusDifferentFromFormallyOk);
           await agendaToLock.hasMany('agendaitems').reload();
           const agendaitemsFormallyOk = await agendaToLock.get('agendaitems');
           const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
