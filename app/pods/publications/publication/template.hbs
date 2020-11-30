@@ -3,10 +3,10 @@
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <div class="o-flex o-flex--vertical u-mt-2">
-          <WebComponents::AuBreadcrumb
+          <span class="auk-overline auk-u-muted"
                   data-test-publication-detail-menu-publication-number>
             {{uppercase (concat (t "publication-flow") " " this.model.publicationNumber)}}
-          </WebComponents::AuBreadcrumb>
+          </span>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.case.shortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-detail-menu-go-back-to-overview></WebComponents::AuTab>
@@ -47,77 +47,91 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuNavbar>
       {{#if (not collapsed)}}
-        <div class="u-m-3">
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-            <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
-              {{on "input" (perform this.setPublicationNumber)}} />
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
-
-            <PowerSelect
-                         @options={{this.statusOptions}}
-                         @searchEnabled={{false}}
-                         @selected={{this.getPublicationStatus}}
-                         @onchange={{this.setPublicationStatus}} as |status|>
-              {{status.label}}
-            </PowerSelect>
-
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
-            <PowerSelect
-                    @options={{this.typeOptions}}
-                    @searchEnabled={{false}}
-                    @selected={{this.getPublicationType}}
-                    @onchange={{this.setPublicationType}} as |type|>
-              {{type.label}}
-            </PowerSelect>
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-            <WebComponents::AuInput type="number" value={{this.model.numacNumber}} @block="true"
-              {{on "input" (perform this.setNumacNumber)}} />
-          </div>
-          {{#if this.model.status.isToBePublished}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
-
-              {{#if this.expiredPublicationBeforeDate}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
+        <div class="auk-scroll-wrapper">
+          <div class="auk-scroll-wrapper__body">
+            <div class="u-m-3">
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
+                <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
+                  {{on "input" (perform this.setPublicationNumber)}} />
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
+                <PowerSelect
+                        @options={{this.statusOptions}}
+                        @searchEnabled={{false}}
+                        @selected={{this.getPublicationStatus}}
+                        @onchange={{this.setPublicationStatus}} as |status|>
+                  {{status.label}}
+                </PowerSelect>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
+                <PowerSelect
+                        @options={{this.typeOptions}}
+                        @searchEnabled={{false}}
+                        @selected={{this.getPublicationType}}
+                        @onchange={{this.setPublicationType}} as |type|>
+                  {{type.label}}
+                </PowerSelect>
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
+                <WebComponents::AuInput type="number" value={{this.model.numacNumber}} @block="true"
+                  {{on "input" (perform this.setNumacNumber)}} />
+              </div>
+              {{#if this.model.status.isToBePublished}}
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
+                  <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
+                  {{#if this.expiredPublicationBeforeDate}}
+                    <div class="auk-form-help-text auk-form-help-text--warning">
+                      <WebComponents::AuIcon @name="alert-triangle"/>
+                      {{t "date-expired"}}
+                    </div>
+                  {{/if}}
+                </div>
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
+                  <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
+                  {{#if this.expiredTranslationDate}}
+                    <div class="auk-form-help-text auk-form-help-text--warning">
+                      <WebComponents::AuIcon @name="alert-triangle"/>
+                      {{t "date-expired"}}
+                    </div>
+                  {{/if}}
                 </div>
               {{/if}}
-            </div>
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
-              {{#if this.expiredTranslationDate}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
+              {{#if this.model.status.isPublished}}
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
+                  <WebComponents::AuDatepicker @defaultDate={{this.getPublicationDate}} @onChange={{this.setPublicationDate}}/>
+                  {{#if this.expiredPublicationDate}}
+                    <div class="auk-form-help-text auk-form-help-text--warning">
+                      <WebComponents::AuIcon @name="alert-triangle"/>
+                      {{t "date-expired"}}
+                    </div>
+                  {{/if}}
                 </div>
               {{/if}}
+              <div class="auk-form-group">
+                <WebComponents::AuLabel>
+                  {{t "remark-title"}}
+                  <WebComponents::AuIcon @name="circle-info"/>
+                  <AttachTooltip
+                          @arrow="true"
+                          @animation="fade"
+                          @placement="bottom"
+                          @class="auk-tooltip"
+                  >
+                    <p>
+                      {{t "publication-sidebar-tooltip"}}
+                    </p>
+                  </AttachTooltip>
+                </WebComponents::AuLabel>
+                <WebComponents::AuTextarea rows="4" type="text" value={{this.getRemark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
+              </div>
             </div>
-          {{/if}}
-          {{#if this.model.status.isPublished}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker @defaultDate={{this.getPublicationDate}} @onChange={{this.setPublicationDate}}/>
-              {{#if this.expiredPublicationDate}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
-                </div>
-              {{/if}}
-            </div>
-          {{/if}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "remark-title"}} <WebComponents::AuIcon @name="circle-info"/></WebComponents::AuLabel>
-            <WebComponents::AuTextarea rows="4" type="text" value={{this.getRemark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
           </div>
         </div>
       {{/if}}

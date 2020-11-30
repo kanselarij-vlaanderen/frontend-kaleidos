@@ -94,7 +94,7 @@
     "ember-qunit": "^4.6.0",
     "ember-rdfa-helpers": "^0.2.1",
     "ember-resolver": "^7.0.0",
-    "ember-responsive": "^3.0.5",
+    "ember-responsive": "^3.0.6",
     "ember-sortable": "1.12.1",
     "ember-source": "~3.17.0",
     "ember-template-lint": "^2.4.0",
