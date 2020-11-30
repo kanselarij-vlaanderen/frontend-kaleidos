@@ -6,25 +6,26 @@ export default class PiecesListForItem extends Component {
   @tracked isClickable = this.args.isClickable;
 
   @tracked isShowingAll = false;
-  // TODO: Is het echt nodig om hier een @tracked te gebruiker? We visualiseren hier enkel?
-  @tracked agendaitemOrSubcase = this.args.agendaitemOrSubcase;
 
-  @tracked moreThan20 = null;
-
-  get documentContainers() {
-    if (!this.agendaitemOrSubcase) {
-      return null;
+  get moreThan20() {
+    if (this.args.agendaitemOrSubcase) {
+      if (this.args.agendaitemOrSubcase.sortedPieces) {
+        if (this.args.agendaitemOrSubcase.sortedPieces.length > 20) {
+          return true;
+        }
+      }
     }
-    if (this.agendaitemOrSubcase.documentContainers) {
-      if (this.agendaitemOrSubcase.documentContainers.length > 20) {
-        this.moreThan20 = true;
-      } else {
-        this.moreThan20 = false;
+    return false;
+  }
+
+  get piecesLimited() {
+    if (this.args.agendaitemOrSubcase) {
+      if (this.args.agendaitemOrSubcase.sortedPieces) {
+        if (this.args.agendaitemOrSubcase.sortedPieces.length > 20) {
+          const sortedPieces = this.args.agendaitemOrSubcase.sortedPieces;
+          return sortedPieces.slice(0, 20);
+        }
       }
-      if (this.isShowingAll) {
-        return this.agendaitemOrSubcase.documentContainers;
-      }
-      return this.agendaitemOrSubcase.documentContainers;
     }
     return null;
   }

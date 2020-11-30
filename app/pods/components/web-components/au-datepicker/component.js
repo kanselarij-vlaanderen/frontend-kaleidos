@@ -1,24 +1,29 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
 export default class Datepicker extends Component {
-  get block() {
-    if (this.args.block) {
-      return 'auk-input--block';
+  get defaultDate() {
+    if (this.args.defaultDate) {
+      return this.args.defaultDate;
     }
-    return '';
+    return null;
   }
 
-  get error() {
-    if (this.args.error === 'true') {
-      return 'auk-input--error';
+  get placeholder() {
+    if (!this.args.placeholder) {
+      return 'Kies een datum';
     }
-    return '';
+    return this.args.placeholder;
   }
 
-  get icon() {
-    if (this.args.icon) {
-      return this.args.icon;
-    }
-    return '';
+  @action
+  // eslint-disable-next-line no-unused-vars
+  onReady(_selectedDates, _dateStr, instance) {
+    this.flatpickrRef = instance;
+  }
+
+  @action
+  openDatepicker() {
+    this.flatpickrRef.toggle();
   }
 }
