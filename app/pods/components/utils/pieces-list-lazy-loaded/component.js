@@ -7,10 +7,8 @@ export default class PiecesListLazyLoaded extends Component {
 
   get moreThan20() {
     if (this.args.pieceNames) {
-      if (this.args.pieceNames) {
-        if (this.args.pieceNames.length > 20) {
-          return true;
-        }
+      if (this.args.pieceNames.length > 20) {
+        return true;
       }
     }
     return false;
@@ -18,11 +16,9 @@ export default class PiecesListLazyLoaded extends Component {
 
   get pieceNamesLimited() {
     if (this.args.pieceNames) {
-      if (this.args.pieceNames) {
-        if (this.args.pieceNames.length > 20) {
-          const pieceNames = this.args.pieceNames;
-          return pieceNames.slice(0, 20);
-        }
+      if (this.args.pieceNames.length > 20) {
+        const pieceNames = this.args.pieceNames;
+        return pieceNames.slice(0, 20);
       }
     }
     return null;
