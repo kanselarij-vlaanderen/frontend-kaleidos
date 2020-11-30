@@ -6,13 +6,13 @@ export default ApplicationAdapter.extend({
     // Workaround for Ember Data not taking paging into account when fetching a hasMany
     const namesOnly = snapshot.adapterOptions && snapshot.adapterOptions.namesOnly;
     if (relationship.meta.key === 'pieces') {
-      newUrl += '?page[size]=200';
+      newUrl += '?page[size]=500';
       if (namesOnly) {
         newUrl += '&fields[pieces]=name';
       }
     }
     if (relationship.meta.key === 'linkedPieces') {
-      newUrl += '?page[size]=200';
+      newUrl += '?page[size]=500';
     }
     return this._super(store, snapshot, newUrl, relationship);
   },
