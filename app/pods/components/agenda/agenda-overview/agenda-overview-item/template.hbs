@@ -88,7 +88,7 @@
             {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
-                  {{#if (await @agendaitem.documentContainers)}}
+                  {{#if (await @agendaitem.sortedPieces)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListForItem
                       @isClickable={{true}}
@@ -98,7 +98,7 @@
                     {{#if (await @agendaitem.pieceNames)}}
                       <div class="vlc-hr"></div>
                       <Utils::PiecesListLazyLoaded
-                       @pieceNames={{@agendaitem.pieceNames}}
+                       @pieceNames={{await @agendaitem.pieceNames}}
                       />
                     {{/if}}
                   {{/if}}
@@ -106,7 +106,7 @@
                   {{#if (await @agendaitem.pieceNames)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListLazyLoaded
-                            @pieceNames={{@agendaitem.pieceNames}}
+                      @pieceNames={{await @agendaitem.pieceNames}}
                     />
                   {{/if}}
                 {{/if}}

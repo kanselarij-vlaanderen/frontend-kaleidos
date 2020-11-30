@@ -12,7 +12,7 @@ context('Publications tests', () => {
 
   beforeEach(() => {
     cy.server();
-    cy.login('Admin');
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
   });
 
   afterEach(() => {
@@ -174,7 +174,6 @@ context('Publications tests', () => {
 
     cy.visit(publicationNotViaMinisterOverviewUrl);
 
-    cy.server();
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()
       .click();
@@ -196,7 +195,6 @@ context('Publications tests', () => {
       .type(contactperson.org);
 
     // Click submit.
-    cy.server();
     cy.route('POST', '/contact-persons').as('postContactPerson');
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publicationSelectors.contactperson.submitButton).click();
@@ -213,7 +211,6 @@ context('Publications tests', () => {
     cy.wait(10);
 
     // Click Delete
-    cy.server();
     cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
     cy.wait('@deleteContactPerson');
@@ -228,7 +225,8 @@ context('Publications tests', () => {
 
   it('publications:dossiers:create publication via ministerraad', () => {
     // prepare agenda data.
-    cy.server();
+    cy.logoutFlow();
+    cy.login('Admin');
     cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.wait('@publicationagendapuntentreatments');
@@ -243,6 +241,6 @@ context('Publications tests', () => {
 
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
-    cy.get(pageClass).should('exist');
+    cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
   });
 });

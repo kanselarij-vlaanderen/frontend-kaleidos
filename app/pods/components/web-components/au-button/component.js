@@ -44,11 +44,4 @@ export default class Button extends Component {
     }
     return null;
   }
-
-  get icon() {
-    if (this.args.icon) {
-      return 'auk-button--icon ';
-    }
-    return null;
-  }
 }
