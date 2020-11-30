@@ -1,10 +1,34 @@
 <div class="grid-container">
-  {{#each (await pieceNames) as |pieceName|}}
-    <li class="vlc-document-list__item vlc-document-list__item--loading">
-      <span>
-        <i class="vl-badge__icon ki-synchronize"></i>
-        {{pieceName}}
-      </span>
-    </li>
-  {{/each}}
+  {{#if (and this.moreThan20 (not this.isShowingAll))}}
+    {{#each this.pieceNamesLimited as |pieceName|}}
+      <li class="vlc-document-list__item vlc-document-list__item--loading">
+        <span>
+          <i class="vl-badge__icon ki-synchronize"></i>
+          {{pieceName}}
+        </span>
+      </li>
+    {{/each}}
+  {{else}}
+    {{#each (await @pieceNames) as |pieceName|}}
+      <li class="vlc-document-list__item vlc-document-list__item--loading">
+        <span>
+          <i class="vl-badge__icon ki-synchronize"></i>
+          {{pieceName}}
+        </span>
+      </li>
+    {{/each}}
+  {{/if}}
 </div>
+{{#if this.moreThan20}}
+  <button class="vlc-document-show-more-button" type="button" {{action "toggleShowingAll"}}>
+    <i class="{{if this.isShowingAll "ki-remove" "ki-plus"}} vl-icon vlc-document-show-more-button__icon "/>
+    <p  class="vlc-document-show-more-button__text">
+      {{#if this.isShowingAll }}
+        {{t "show-less"}}
+      {{else}}
+        {{t "show-more"}}
+      {{/if}}
+    </p>
+  </button>
+{{/if}}
+

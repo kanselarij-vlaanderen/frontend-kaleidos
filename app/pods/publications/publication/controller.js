@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 import moment from 'moment';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = true;
+  @tracked collapsed = !this.get('media.isBigScreen');
 
 
   statusOptions = [{
@@ -127,7 +127,6 @@ export default class PublicationController extends Controller {
     yield timeout(1000);
     this.model.save();
   }
-
 
   @action
   toggleSidebar() {

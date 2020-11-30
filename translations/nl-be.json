@@ -462,7 +462,7 @@
   "national-number": "VO-ID",
   "last-name": "Achternaam",
   "group": "Groep",
-  "email": "Email",
+  "email": "E-mail",
   "ovo-code": "OVO-code",
   "phone": "Telefoonnummer",
   "mail-campaign": "Email campagne",
@@ -630,12 +630,10 @@
   "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
   "publications-new-button-text": "Publicatie aanmaken",
   "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen",
-  "publications-number-required": "Publicatienummer *",
   "publications-number": "Publicatienummer",
   "input-error-message": "Dit veld dient ingevuld te worden.",
   "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
   "modal-error-alert-title": "Kijk het formulier na",
-  "name-subcase-required": "Korte titel *",
   "publications-to-in-progress": "Te behandelen",
   "via-cabinet": "Via Ministerraad",
   "not-via-cabinet": "Niet Via Ministerraad",
@@ -673,5 +671,6 @@
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document details",
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
-  "date-expired": "Datum verstreken"
+  "date-expired": "Datum verstreken",
+  "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team."
 }
