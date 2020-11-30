@@ -7,12 +7,13 @@ import { action } from '@ember/object';
 import moment from 'moment';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = true;
+  @tracked collapsed = this.get('media.isBigScreen');
 
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
     label: 'Te publiceren',
+    icon: 'add',
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
@@ -127,7 +128,6 @@ export default class PublicationController extends Controller {
     yield timeout(1000);
     this.model.save();
   }
-
 
   @action
   toggleSidebar() {
