@@ -13,9 +13,17 @@ export default class PublicationController extends Controller {
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
     label: 'Te publiceren',
+    icon: {
+      svg: 'clock',
+      color: '#FFC515',
+    },
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
+    icon: {
+      svg: 'circle-check',
+      color: '#8BAE00',
+    },
   }]
 
   typeOptions = [

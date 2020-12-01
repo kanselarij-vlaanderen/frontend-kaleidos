@@ -17,4 +17,11 @@ export default class Icon extends Component {
     }
     return null;
   }
+
+  get color() {
+    if (this.args.color) {
+      return `color:${this.args.color}`.htmlSafe();
+    }
+    return null;
+  }
 }

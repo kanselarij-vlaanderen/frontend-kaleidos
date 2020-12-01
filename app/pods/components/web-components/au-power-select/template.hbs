@@ -1,0 +1,11 @@
+<PowerSelect
+  @options={{this.options}}
+  @searchEnabled={{@isSearchable}}
+  @selected={{@selected}}
+  @placeholder={{this.placeholder}}
+  @onchange={{@onchange}} as |item|>
+  {{#if item.icon}}
+    <WebComponents::AuIcon @name={{item.icon.svg}} @color={{item.icon.color}}/>
+  {{/if}}
+  {{item.label}}
+</PowerSelect>

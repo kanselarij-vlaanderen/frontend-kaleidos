@@ -58,23 +58,19 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
-                <PowerSelect
-                        @options={{this.statusOptions}}
-                        @searchEnabled={{false}}
-                        @selected={{this.getPublicationStatus}}
-                        @onchange={{this.setPublicationStatus}} as |status|>
-                  {{status.label}}
-                </PowerSelect>
+                <WebComponents::AuPowerSelect @options={{this.statusOptions}}
+                                              @isSearchable={{false}}
+                                              @onchange={{this.setPublicationStatus}}
+                                              @selected={{this.getPublicationStatus}}
+                />
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
-                <PowerSelect
-                        @options={{this.typeOptions}}
-                        @searchEnabled={{false}}
-                        @selected={{this.getPublicationType}}
-                        @onchange={{this.setPublicationType}} as |type|>
-                  {{type.label}}
-                </PowerSelect>
+                <WebComponents::AuPowerSelect @options={{this.typeOptions}}
+                                              @isSearchable={{false}}
+                                              @onchange={{this.setPublicationType}}
+                                              @selected={{this.getPublicationType}}
+                />
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
