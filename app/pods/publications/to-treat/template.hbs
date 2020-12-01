@@ -1,5 +1,5 @@
 <div class="auk-scroll-wrapper__body">
-  <div class="u-m-4">
+  <div class="auk-u-m-4">
     {{#if this.model.length}}
       <DataTable
               @content={{await this.model}}
@@ -22,7 +22,7 @@
           <c.body as |row|>
             {{#if row.isAgendaRow}}
               <td colspan="99" class="auk-table__cell--accent">
-                <h4 class="auk-h4 u-m-0">{{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}</h4>
+                <h4 class="auk-h4 auk-u-m-0">{{row.meeting.kindToShow.label}} {{moment-format row.meeting.plannedStart "DD.MM.YYYY"}}</h4>
               </td>
             {{else}}
               <td>
