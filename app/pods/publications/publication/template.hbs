@@ -2,7 +2,7 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <div class="o-flex o-flex--vertical u-mt-2">
+        <div class="o-flex o-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
                   data-test-publication-detail-menu-publication-number>
             {{uppercase (concat (t "publication-flow") " " this.model.publicationNumber)}}
@@ -21,10 +21,11 @@
   </WebComponents::AuToolbar>
 </WebComponents::AuNavbar>
 
+{{!-- Auk css gebruiken, component ? --}}
 <div class="auk-panel-layout auk-panel-layout--responsive">
   <div class="auk-panel-layout__main-content u-maximize-height auk-scroll-wrapper">
     <div class="auk-scroll-wrapper__body">
-      <div class="u-m-4">
+      <div class="auk-u-m-4">
         {{outlet}}
       </div>
     </div>
@@ -49,7 +50,7 @@
       {{#if (not collapsed)}}
         <div class="auk-scroll-wrapper">
           <div class="auk-scroll-wrapper__body">
-            <div class="u-m-3">
+            <div class="auk-u-m-3">
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
                 <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
