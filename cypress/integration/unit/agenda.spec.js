@@ -283,7 +283,7 @@ context('Agenda tests', () => {
       cy.setFormalOkOnItemWithIndex(1);
     });
     cy.approveAndCloseDesignAgenda();
-    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
 
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
@@ -302,15 +302,16 @@ context('Agenda tests', () => {
     cy.wait('@subcasesFilter');
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
-
-    cy.get(modal.verify.container).get('.vlc-navbar')
-      .contains('Agenda afsluiten')
-      .wait(1)
-      .get(modal.verify.save)
+    cy.contains('Doorgaan')
       .click();
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort).should('not.exist');
   });
+
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
@@ -356,13 +357,14 @@ context('Agenda tests', () => {
       .get(modal.verify.save)
       .click();
 
-    cy.wait('@agendaActivity');
-    cy.wait('@treatments');
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
 
     cy.get(actionModel.showActionOptions).click();
     cy.get(actionModel.lockAgenda).click();
 
-    cy.get(modal.verify.container).contains('(Ontwerp)agenda afsluiten onmogelijk');
+    cy.get(modal.verify.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
     cy.route('GET', '/agendaitems/*/agenda').as('agenda');
@@ -381,14 +383,21 @@ context('Agenda tests', () => {
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
 
-    cy.get(modal.verify.container).get('.vlc-navbar')
-      .contains('Agenda afsluiten')
-      .wait(1)
-      .get(modal.verify.save)
+    cy.contains('Doorgaan')
       .click();
 
 
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(`[${agenda.agendaSidenavElement}="1"]`).click();
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+    cy.contains(newSubcase2TitleShort)
+      .should('not.exist');
   });
 });
 

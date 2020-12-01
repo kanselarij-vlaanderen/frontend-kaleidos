@@ -100,7 +100,8 @@ export default Component.extend({
       }
 
       let validCampaign = true;
-      await this.validatedCampaign(mailCampaign.campaignId).catch(() => {
+      await this.validatedCampaign(mailCampaign.campaignId).catch((ex) => {
+        console.error(ex);
         this.set('isVerifying', false);
         this.set('isLoading', false);
         validCampaign = false;

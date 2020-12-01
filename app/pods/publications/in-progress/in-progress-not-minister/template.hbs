@@ -14,7 +14,7 @@
       <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
-        field="publicationBefore"
+        field="publishBefore"
         label=(t "publication-before")
       }}
       <th>{{t "latest-modified"}}</th>
@@ -32,8 +32,8 @@
         </span>
       </td>
       <td>
-        {{#if row.publicationBefore}}
-          {{moment-format row.publicationBefore "DD-MM-YYYY"}}
+        {{#if row.publishBefore}}
+          {{moment-format row.publishBefore "DD-MM-YYYY"}}
         {{else}}
           {{t "dash"}}
         {{/if}}
