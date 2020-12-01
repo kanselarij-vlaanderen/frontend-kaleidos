@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class ToTreatController extends Controller {
-  queryParams =[{
+  queryParams = [{
     page: {
       type: 'number',
     },
@@ -55,13 +55,24 @@ export default class ToTreatController extends Controller {
   }
 
   @action
-  // eslint-disable-next-line no-unused-vars
   async startPublication(_case) {
     this.set('showLoader', true);
-    // TODO what publication number to start with here?
-    // Defaulted to 0.
-    const newPublication = await this.publicationService.createNewPublication(0, _case.id);
-    this.set('showLoader', false);
+    // Test if dossier already had publication (index not up to date).
+    const pubFlows = await this.store.query('publication-flow', {
+      filter: {
+        case: {
+          id: _case.id,
+        },
+      },
+      sort: '-created',
+    });
+    let newPublication;
+    if (pubFlows.content.length > 0) {
+      newPublication = await this.store.findRecord('publication-flow', pubFlows.content[0].id);
+    } else {
+      newPublication = await this.publicationService.createNewPublication(0, _case.id);
+      this.set('showLoader', false);
+    }
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
 }
