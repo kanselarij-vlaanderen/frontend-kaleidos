@@ -1,10 +1,11 @@
 {{#if shouldShowPublicationHeader}}
+{{!-- TODO auk-panel-layout gebruiken, component ? --}}
   <div class="vlc-panel-layout__main-content">
     <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <div class="o-flex o-flex--vertical u-mt-2">
+            <div class="o-flex o-flex--vertical auk-u-mt-2">
               <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
               <WebComponents::AuTabs @reversed="true">
                 <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
