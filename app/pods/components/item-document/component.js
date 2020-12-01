@@ -1,38 +1,29 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
-import DS from 'ember-data';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default Component.extend({
   isClickable: null,
-  documentContainer: null,
-  myPieces: computed.alias('item.pieces'),
+  piece: null,
+  agendaService: inject(),
 
-  lastPiece: computed('mySortedPieces.@each', function() {
-    const sortedPieces = this.get('mySortedPieces');
-    return sortedPieces.lastObject;
-  }),
+  addedPieces: alias('agendaService.addedPieces'),
 
-  lastPieceName: computed('lastPiece.name', function() {
-    return this.get('lastPiece.name');
-  }),
-
-  mySortedPieces: computed('myPieces.@each', 'documentContainer.sortedPieces.@each', function() {
-    return DS.PromiseArray.create({
-      promise: (async() => {
-        const itemPieceIds = {};
-        const myPieces = await this.get('myPieces');
-        if (myPieces) {
-          myPieces.map((piece) => {
-            itemPieceIds[piece.get('id')] = true;
-          });
-        }
-        const containerPieces = await this.get('documentContainer.sortedPieces');
-        if (containerPieces) {
-          const matchingPieces = await containerPieces.filter((piece) => itemPieceIds[piece.id]);
-          return matchingPieces;
-        }
-      })(),
-    });
+  checkAdded: computed('piece', async function() {
+    // TODO this is dependant on documentContainer, ideally we want to get rid of this.
+    // addedPieces is actually addedDocumentContainers..
+    if (this.addedPieces && this.addedPieces.length > 0) {
+      const container = await this.piece.get('documentContainer');
+      try {
+        return this.addedPieces.includes(container.get('uri'));
+        // eslint-disable-next-line no-unused-vars
+      } catch (error) {
+        // We hit his when showing less documents while the container call is pending
+        return null;
+      }
+    }
+    return null;
   }),
 
   actions: {

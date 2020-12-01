@@ -1,6 +1,11 @@
 <div {{ in-viewport onEnter=this.onEnter onExit=this.onExit }} class={{classNameBindings}}>
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
+      <div class="vlc-agenda-items__cursor">
+        <WebComponents::AuButton class="auk-u-p-0" @skin="borderless">
+          <WebComponents::AuIcon @name="drag-handle-2" @grab={{true}}/>
+        </WebComponents::AuButton>
+      </div>
       <span class="vlc-agenda-items-sub-item__numbering">
         {{#if @agendaitem.number}}
           {{@agendaitem.number}}.
@@ -83,7 +88,7 @@
             {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
-                  {{#if (await @agendaitem.documentContainers)}}
+                  {{#if (await @agendaitem.sortedPieces)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListForItem
                       @isClickable={{true}}
@@ -93,7 +98,7 @@
                     {{#if (await @agendaitem.pieceNames)}}
                       <div class="vlc-hr"></div>
                       <Utils::PiecesListLazyLoaded
-                       @pieceNames={{@agendaitem.pieceNames}}
+                       @pieceNames={{await @agendaitem.pieceNames}}
                       />
                     {{/if}}
                   {{/if}}
@@ -101,7 +106,7 @@
                   {{#if (await @agendaitem.pieceNames)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListLazyLoaded
-                            @pieceNames={{@agendaitem.pieceNames}}
+                      @pieceNames={{await @agendaitem.pieceNames}}
                     />
                   {{/if}}
                 {{/if}}

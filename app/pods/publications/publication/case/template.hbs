@@ -1,12 +1,7 @@
-<div class="u-m-4">
-
-
-  {{!--  DOSSIER PANEL  --}}
-
-
+ {{!--  DOSSIER PANEL  --}}
   <div class="u-mb-3">
     {{#if this.isInscriptionInEditMode}}
-      <WebComponents::AuPanel class="auk-panel--gray-100">
+      <WebComponents::AuPanel class="auk-panel--editing">
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -70,7 +65,7 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-content">
             <h4>{{this.model.shortTitle}}</h4>
-            <p>{{this.model.title}}</p>
+            <p class="auk-u-text-prewrap">{{this.model.title}}</p>
           </div>
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
@@ -172,7 +167,7 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="plus" data-test-add-contactperson>{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="add" data-test-add-contactperson>{{t "add-contact"}}</WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -246,7 +241,7 @@
       {{/if}}
     </WebComponents::AuPanel>
   </div>
-</div>
+
 
 
 {{!-- ADD CONTACTPERSON MODAL --}}
@@ -258,17 +253,19 @@
       @closeModal={{this.closeContactPersonModal}} />
     <WebComponents::AuModal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="firstNameInput">
-            {{t "first-name"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
-        </div>
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="lastNameInput">
-            {{t "name"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
+        <div class='auk-form-group auk-form-group--grid'>
+          <div>
+            <WebComponents::AuLabel for="firstNameInput">
+              {{t "first-name"}}
+            </WebComponents::AuLabel>
+            <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
+          </div>
+          <div>
+            <WebComponents::AuLabel for="lastNameInput">
+              {{t "name"}}
+            </WebComponents::AuLabel>
+            <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
+          </div>
         </div>
         <div class='auk-form-group'>
           <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
@@ -291,7 +288,7 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
+            <WebComponents::AuButton @skin="primary" @icon="plus" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
               {{t "add"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>

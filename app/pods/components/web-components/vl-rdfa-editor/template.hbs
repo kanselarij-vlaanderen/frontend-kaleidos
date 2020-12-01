@@ -1,15 +1,23 @@
-{{rdfa/rdfa-editor
-  class="rdfa-editor"
-  rdfaEditorInit=(action "handleRdfaEditorInit")
-  profile="default"
-  editorOptions=(hash
-          showToggleRdfaAnnotations=null
-          showInsertButton=null
-          showRdfa=null
-          showRdfaHighlight=null
-          showRdfaHover=null)
-  toolbarOptions=(hash
-          showTextStyleButtons="true"
-          showListButtons="true"
-          showIndentButtons=null)
-}}
+{{#if this.browserIsSupported}}
+  {{rdfa/rdfa-editor
+    class="rdfa-editor"
+    rdfaEditorInit=(action "handleRdfaEditorInit")
+    profile="default"
+    editorOptions=(hash
+            showToggleRdfaAnnotations=null
+            showInsertButton=null
+            showRdfa=null
+            showRdfaHighlight=null
+            showRdfaHover=null)
+    toolbarOptions=(hash
+            showTextStyleButtons="true"
+            showListButtons="true"
+            showIndentButtons=null)
+  }}
+{{else}}
+  <WebComponents::AuAlert
+    @skin="warning"
+    @title={{t "browser-unsupported-short"}}
+    @message={{t "browser-unsupported-editor" browserName=this.browserName}}
+  />
+{{/if}}

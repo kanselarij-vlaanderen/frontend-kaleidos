@@ -12,7 +12,7 @@ context('Publications tests', () => {
 
   beforeEach(() => {
     cy.server();
-    cy.login('Admin');
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
   });
 
   afterEach(() => {
@@ -21,29 +21,29 @@ context('Publications tests', () => {
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
   const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
-  const someNumber = Math.floor(Math.random() * 999);
   const someText = 'Some text';
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
+  const pageClass = '.vlc-panel-layout__main-content';
 
   it('publications:urls: should see pages', () => {
     cy.visit(publicationOverviewUrl);
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/behandeld');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 
   it('should render error when required fields are not filled in to create new publication', () => {
@@ -66,7 +66,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('1');
     });
     cy.get(utilsSelectors.aukTextarea).eq(0)
       .click()
@@ -88,7 +88,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('2');
       cy.get(utilsSelectors.aukTextarea).eq(0)
         .click()
         .clear(); // Why do a manual clear ?
@@ -107,7 +107,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type(someNumber);
+        .type('3');
       cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
@@ -121,7 +121,7 @@ context('Publications tests', () => {
     });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', '3');
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
@@ -133,7 +133,7 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE 3');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
@@ -174,7 +174,6 @@ context('Publications tests', () => {
 
     cy.visit(publicationNotViaMinisterOverviewUrl);
 
-    cy.server();
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()
       .click();
@@ -196,7 +195,6 @@ context('Publications tests', () => {
       .type(contactperson.org);
 
     // Click submit.
-    cy.server();
     cy.route('POST', '/contact-persons').as('postContactPerson');
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publicationSelectors.contactperson.submitButton).click();
@@ -213,10 +211,9 @@ context('Publications tests', () => {
     cy.wait(10);
 
     // Click Delete
-    cy.server();
-    cy.route('DELETE', '/contact-persons/**').as('postContactPerson');
+    cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
-    cy.wait('@postContactPerson');
+    cy.wait('@deleteContactPerson');
 
     // assert deleted content
     cy.contains(contactperson.fin).should('not.exist');
@@ -228,25 +225,22 @@ context('Publications tests', () => {
 
   it('publications:dossiers:create publication via ministerraad', () => {
     // prepare agenda data.
-    cy.server();
+    cy.logoutFlow();
+    cy.login('Admin');
     cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.wait('@publicationagendapuntentreatments');
     cy.approveAndCloseDesignAgenda();
 
     // Approve agenda
-    cy.server();
-    cy.route('PATCH', '/agendas/**').as('publicationPatchMeetings');
-    cy.route('PATCH', '/meetings/**').as('publicationPatchAgendas');
     cy.get(modalSelectors.verify.save).click();
-    cy.wait('@publicationPatchMeetings');
-    cy.wait('@publicationPatchAgendas');
+    cy.wait(2000);
 
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
   });
 });
