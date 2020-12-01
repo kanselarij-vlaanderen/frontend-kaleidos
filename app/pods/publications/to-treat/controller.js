@@ -16,6 +16,7 @@ export default class ToTreatController extends Controller {
     },
   }];
 
+
   @service publicationService;
   @tracked searchText = '';
   @tracked searchTextBuffer = '';

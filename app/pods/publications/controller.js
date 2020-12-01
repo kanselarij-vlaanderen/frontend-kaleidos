@@ -2,6 +2,11 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import {
+  task,
+  timeout
+} from 'ember-concurrency';
+import search from 'fe-redpencil/utils/mu-search';
 
 export default class PublicationsController extends Controller {
   @service publicationService;
@@ -11,6 +16,9 @@ export default class PublicationsController extends Controller {
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed = false;
   @tracked isCreatingPublication = false;
+  @tracked searchText;
+  @tracked showSearchResults = false;
+  @tracked searchResults;
 
   @tracked
   publication = {
@@ -18,6 +26,38 @@ export default class PublicationsController extends Controller {
     shortTitle: null,
     longTitle: null,
   };
+
+  @(task(function *() {
+    yield timeout(500);
+    yield this.search(this.searchText);
+  }).restartable()) debouncedSearchTask;
+
+  @action
+  debouncedSearch(event) {
+    this.searchText = event.target.value;
+    this.debouncedSearchTask.perform();
+  }
+
+  @action
+  async search() {
+    const filter = {};
+    if (this.searchText.length === 0 || this.searchText === '') {
+      filter[':sqs:title'] = '*'; // search without filter
+      this.showSearchResults = false;
+    } else {
+      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle'];
+      const searchModifier = ':sqs:';
+      const textSearchKey = this.textSearchFields.join(',');
+      filter[`${searchModifier}${textSearchKey}`] = this.searchText;
+      this.showSearchResults = true;
+    }
+
+    this.searchResults = await search('cases', 0, 10, null, filter, (item) => {
+      const entry = item.attributes;
+      entry.id = item.id;
+      return entry;
+    });
+  }
 
   get getError() {
     return this.hasError;
