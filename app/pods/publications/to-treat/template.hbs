@@ -1,16 +1,6 @@
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-4">
 
-    <Input
-      data-test-searchfield
-      class="vl-input-field vl-input-field--block"
-      type="text"
-      id="dossierId"
-      @placeholder={{t "case-search-placeholder"}}
-      @value={{this.searchTextBuffer}}
-      @enter={{fn this.search}}
-    />
-
     {{#if isLoading}}
       <WebComponents::VlLoader @text={{t "please-be-patient"}} />
     {{else}}
@@ -85,7 +75,7 @@
                 @previousAction={{action 'prevPage'}}
                 @total={{this.model.meta.count}} />
       {{else}}
-        {{t "no-results-found"}}
+        <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
       {{/if}}
     {{/if}}
 

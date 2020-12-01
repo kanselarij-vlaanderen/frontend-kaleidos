@@ -54,7 +54,7 @@
                         </LinkTo>
                       </WebComponents::AuDropdown::Item>
                     {{else}}
-                      <WebComponents::AuDropdown::Item>
+                      <WebComponents::AuDropdown::Item {{on "click" (fn this.startPublicationFromCaseId result.id)}}>
                         <div class="auk-key-value-item ">
                           <div class="auk-key-value-item__label">{{ result.subcaseSubTitle }}</div>
                           <div class="auk-key-value-item__value auk-u-muted">
@@ -170,4 +170,22 @@
   </div>
 {{else}}
   {{outlet}}
+{{/if}}
+
+{{!-- FULL PAGE LOADER --}}
+
+{{#if showLoader }}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @showCloseButton={{false}}
+          @title={{t "loading-text"}}
+  >
+    <WebComponents::VlLoader
+            @text={{concat
+              (t "saving-change-message")
+              " "
+              (t "please-be-patient")
+            }}
+    />
+  </WebComponents::VlModal>
 {{/if}}
