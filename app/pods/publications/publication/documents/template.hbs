@@ -130,7 +130,7 @@
           {{#if (not piece.collapsed)}}
             <tr class="auk-table__row auk-table__row--collapsed-content">
               <td>
-                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} @checked={{false}}/>
+                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} @checked={{piece.selected}} />
               </td>
               <td>
                 <span>{{await piece.name}}</span>
@@ -246,14 +246,7 @@
     />
     <WebComponents::AuModal::Body>
 
-      {{#if (eq this.selectedPieces.length 0)}}
-        {{!--  No pieces selected --}}
-        <WebComponents::AuAlert data-test-auk-alert-error
-                                @title={{t "modal-error-alert-title"}}
-                                @skin="error"
-                                @message={{t "modal-error-missing-pieces"}}
-                                @icon="alert-triangle"/>
-      {{else}}
+
         {{!--  Pieces selected --}}
         {{t "request-translation-confirmation" }}
         <WebComponents::AuLabel @isRequired={{true}}>
@@ -273,10 +266,28 @@
         <WebComponents::AuLabel @isRequired={{true}}>
           {{t "attachments" }}
         </WebComponents::AuLabel>
-        {{#each this.selectedPieces as |piece| }}
-          {{await piece.name}}
-        {{/each}}
-      {{/if}}
+
+      {{#each this.model.case.pieces as |loopedPiece| }}
+        {{#if loopedPiece.selected}}
+          <div class="o-flex o-flex--vertical-center">
+            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+            <div class="auk-u-ml-3">
+              <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
+              <br>
+              <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
+            </div>
+          </div>
+        {{/if}}
+      {{/each}}
+
+        {{!--  No pieces selected
+        <WebComponents::AuAlert data-test-auk-alert-error
+                                @title={{t "modal-error-alert-title"}}
+                                @skin="error"
+                                @message={{t "modal-error-missing-pieces"}}
+                                @icon="alert-triangle"/>
+        --}}
+
     </WebComponents::AuModal::Body>
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelTranslationModal}}>

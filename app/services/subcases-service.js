@@ -1,10 +1,29 @@
 import Service, { inject } from '@ember/service';
 import { ajax } from 'fe-redpencil/utils/ajax';
+import { trimText } from 'fe-redpencil/utils/trim-util';
 import moment from 'moment';
 
 export default Service.extend({
   store: inject(),
   intl: inject(),
+
+  createSubcase(_case, type, shortTitle, title) {
+    const creationDatetime = moment().utc()
+      .toDate();
+    return this.store.createRecord('subcase', {
+      type,
+      shortTitle: trimText(shortTitle),
+      title: trimText(title),
+      // TODO: wat moeten we hier in steken?
+      // confidential: confidential || false,
+      // showAsRemark: showAsRemark || false,
+      case: _case,
+      created: creationDatetime,
+      modified: creationDatetime,
+      isArchived: false,
+      agendaActivities: [],
+    });
+  },
 
   getPostPonedSubcaseIds() {
     return ajax(

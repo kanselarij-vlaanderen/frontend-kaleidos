@@ -4,14 +4,18 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
+import CONFIG from 'fe-redpencil/utils/config';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
 
 export default class PublicationDocumentsController extends Controller {
+  @service activityService;
+  @service subcasesService;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
   @tracked newPieces = A([]);
-  @tracked isExpandedPieceView = false;
+  @tracked isExpandedPieceView = false;getPieceFromSelectedPieces
   @tracked isSavingPieces = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
@@ -22,18 +26,23 @@ export default class PublicationDocumentsController extends Controller {
   };
   @tracked selectedPieces = [];
 
+  getPieceFromSelectedPieces(piece) {
+    console.log('getPieceFromSelectedPieces');
+    return this.selectedPieces[piece.id];
+  }
+
   @action
   changePieceSelection(selectedPiece) {
-    const index = this.selectedPieces.map((piece, index) => {
-      if (piece.id === selectedPiece.id) {
-        return index;
-      }
-    });
-    if (index.length > 0) {
-      this.selectedPieces.splice(index[0], 1);
+    console.log('changePieceSelection');
+
+    if (this.selectedPieces[selectedPiece.id]) {
+      delete this.selectedPieces[selectedPiece.id];
+      selectedPiece.selected = false;
     } else {
-      this.selectedPieces.push(selectedPiece);
+      this.selectedPieces[selectedPiece.id] = selectedPiece;
+      selectedPiece.selected = true;
     }
+    console.log(this.selectedPieces);
   }
 
   @action
@@ -142,12 +151,17 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  saveTranslationActivity() {
+  async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
     console.log(this.translateActivity);
-    // Aanmaken subcase type vertaling in publication flow
-    // Create activity
+    // TODO check if type already exists in case?
+    const subcaseTypeVertalen = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
+    const shortTitle = await this.model.case.shortTitle;
+    const title = await this.model.case.title;
+    const subcase = await this.subcasesService.createSubcase(this.model.case, subcaseTypeVertalen, shortTitle, title);
+    await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
+
     this.showLoader = false;
     this.selectedPieces = [];
   }
