@@ -198,15 +198,25 @@
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::AuModal @size="full-screen">
+  <WebComponents::AuModal @resized={{this.isUploadModalResized}} @size="full-screen">
     <WebComponents::AuModal::Header
+      @resizeable={{true}}
       @title={{t "documents-add"}}
+      @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPieces}}
     />
     <WebComponents::AuModal::Body>
-      <WebComponents::AuFileUploader @fullHeight={{true}} @multipleFiles={{true}} @uploadedFileAction={{action this.uploadPiece}}>
-
-      </WebComponents::AuFileUploader>
+      <WebComponents::AuFileUploader @fullHeight={{eq this.newPieces.length 0}} @multipleFiles={{true}} @uploadedFileAction={{action this.uploadPiece}}/>
+      {{!-- TODO vervangen met correct design (nog in flux), au css en componenten --}}
+      {{!-- TODO document types dropdown is hidden by z-index, using custom dropdown requires a lot of new components --}}
+        <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::DocumentUpload
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}} />
+          {{/each}}
+        </div>
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{perform this.cancelUploadPieces}}>
       {{#if this.savePieces.isRunning}}

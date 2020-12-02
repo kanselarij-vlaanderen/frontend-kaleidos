@@ -13,6 +13,12 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
+  @tracked isUploadModalResized = false;
+
+  @action
+  toggleUploadModalSize() {
+    this.isUploadModalResized = !this.isUploadModalResized;
+  }
 
   @action
   openPieceUploadModal() {
