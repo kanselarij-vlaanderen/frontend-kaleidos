@@ -8,7 +8,6 @@ const selectors = {
   inscriptionShortTitleTextarea: '[data-test-publication-inscription-short-title-textarea]',
   inscriptionLongTitleTextarea: '[data-test-publication-inscription-long-title-textarea]',
   inscriptionSaveButton: '[data-test-publication-save-inscription]',
-  goBackToOverviewButton: '[data-test-publication-detail-menu-go-back-to-overview]',
   contactperson: {
     addButton: '[data-test-add-contactperson]',
     submitButton: '[data-test-add-contactperson-submit-button]',
@@ -18,6 +17,22 @@ const selectors = {
     organisationInput: '#organisationInput',
     threedotsButton: '[data-test-contact-persons] button i',
     deleteContactpersonButton: '[data-test-delete-contactperson]',
+  },
+  publicationCase: {
+    // panels
+    casePanel: '[data-test-publication-case-panel-case]',
+    casePanelEditing: '[data-test-publication-case-panel-case-editing]',
+    mandateePanel: '[data-test-publication-case-panel-mandatees]',
+    contantPersonPanel: '[data-test-publication-case-panel-contactperson]',
+    // buttons
+    addDocumentsButton: '[data-test-publication-case-add-documents]',
+  },
+  nav: {
+    goBack: '[data-test-publication-nav-go-back]',
+    case: '[data-test-publication-case-nav-case]',
+    documents: '[data-test-publication-case-nav-documents]',
+    translations: '[data-test-publication-case-nav-translations]',
+    publishpreview: '[data-test-publication-case-nav-publishpreview]',
   },
 };
 export default selectors;

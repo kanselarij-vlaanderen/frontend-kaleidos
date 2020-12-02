@@ -1,7 +1,7 @@
  {{!--  DOSSIER PANEL  --}}
   <div class="auk-u-mb-3">
     {{#if this.isInscriptionInEditMode}}
-      <WebComponents::AuPanel class="auk-panel--editing">
+      <WebComponents::AuPanel data-test-publication-case-panel-case-editing class="auk-panel--editing">
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -47,7 +47,7 @@
         </WebComponents::AuPanel::Footer>
       </WebComponents::AuPanel>
     {{else}}
-      <WebComponents::AuPanel>
+      <WebComponents::AuPanel data-test-publication-case-panel-case>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -77,7 +77,7 @@
   {{!--  MINISTER PANEL  --}}
 
 
-  <div hidden class="auk-u-mb-3">
+  <div hidden class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -157,7 +157,7 @@
 
   {{!--  CONTACTPERSON PANEL  --}}
 
-  <div class="auk-u-mb-3">
+  <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>

@@ -1,5 +1,6 @@
-{{yield}}
-<div class="auk-empty-state">
+{{!-- TODO do we need this yield? is this the correct position? --}}
+{{yield}} 
+<div data-test-au-empty-state class="auk-empty-state">
   <WebComponents::AuBadge @icon="circle-info"/>
-  <p class="auk-empty-state__content">{{@message}}</p>
+  <p data-test-au-empty-state-text class="auk-empty-state__content">{{@message}}</p>
 </div>
