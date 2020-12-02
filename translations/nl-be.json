@@ -637,6 +637,7 @@
   "publications-number": "Publicatienummer",
   "input-error-message": "Dit veld dient ingevuld te worden.",
   "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
+  "modal-error-missing-pieces": "Gelieve eén of meerdere stukken te selecteren.",
   "modal-error-alert-title": "Kijk het formulier na",
   "publications-to-in-progress": "Te behandelen",
   "via-cabinet": "Via Ministerraad",

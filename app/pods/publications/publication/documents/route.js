@@ -1,5 +1,6 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
 
 export default class PublicationDocumentsRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model() {
@@ -9,6 +10,9 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    return caze, publicationFlow;
+    return hash({
+      publicationFlow,
+      case: caze,
+    });
   }
 }

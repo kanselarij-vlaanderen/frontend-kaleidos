@@ -10,10 +10,10 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await @model.pieces)}}>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await @model.case.pieces)}}>
           {{t "requests"}}
         </WebComponents::AuButton>
-        {{#if (await @model.pieces)}}
+        {{#if (await @model.case.pieces)}}
           <AttachPopover
             @renderInPlace={{true}}
             @class="ember-attacher-popper"
@@ -46,7 +46,7 @@
 
 
 <div class="auk-u-mb-3">
-  {{#if (gt (await @model.pieces.length) 0)}}
+  {{#if (gt (await @model.case.pieces.length) 0)}}
     <table class="auk-table">
       <thead>
         <tr>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each @model.pieces as |piece|}}
+        {{#each @model.case.pieces as |piece|}}
           <tr>
             <td>
               <WebComponents::AuButton
@@ -129,7 +129,13 @@
           </tr>
           {{#if (not piece.collapsed)}}
             <tr class="auk-table__row auk-table__row--collapsed-content">
-              <td></td>
+              <td>
+                <WebComponents::VlCheckbox
+                      data-test-decisions-only-check
+                      @value={{false}}
+                      @toggle={{action "changePieceSelection" piece}}
+              />
+              </td>
               <td>
                 <span>{{await piece.name}}</span>
                 <br>
@@ -142,11 +148,13 @@
               </td>
               {{!-- TODO Logic for checkboxes checked --}}
               {{!-- TODO Logic for the checkmark (isPresent), based on activities or just checking for the relevcant pieces? --}}
-              <td><WebComponents::AuCheckbox></WebComponents::AuCheckbox></td>
+
+              <td>
+              </td>
               <td class="auk-table__cell auk-table__cell--success"><WebComponents::AuIcon @name="check"></WebComponents::AuIcon></td>
-              <td><WebComponents::AuCheckbox></WebComponents::AuCheckbox></td>
+              <td></td>
               <td class="auk-table__cell auk-table__cell--success"><WebComponents::AuIcon @name="check"></WebComponents::AuIcon></td>
-              <td><WebComponents::AuCheckbox></WebComponents::AuCheckbox></td>
+              <td></td>
               <td class="auk-table__cell auk-table__cell--warning"><WebComponents::AuIcon @name="clock"></WebComponents::AuIcon></td>
               <td>
                 <WebComponents::AuButtonToolbar>
@@ -235,36 +243,56 @@
 
 
 {{#if this.showTranslationModal}}
-  <WebComponents::VlModal
-    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
-          @closeModal={{this.cancelTranslationModal}}
-          @isOverlay={{true}}
-          @large={{true}}
-          @title={{t "request-translations"}} >
-    <div class="vl-modal-dialog__content">
-
-
-      {{t "request-translation-confirmation" }}
-
-      {{t "extreme-translation-date"}}
-      <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}} @onChange={{this.setTranslateActivityBeforeDate}}/>
-
-      {{t "accompanying-text"}}
-      {{t "attachments" }}
-
-
-    </div>
-    <WebComponents::VlModalFooter
-      {{!-- @isLoading={{this.savePieces.isRunning}} --}}
-            @cancelButtonText={{t "cancel"}}
-            @saveButtonText={{t "request-translations"}}
-            @cancelAction={{this.cancelTranslationModal}}
-      {{!-- @saveAction={{perform this.saveTranslationActivity}} --}}
-            @disableSave={{eq this.newPieces.length 0}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+            @title={{t "request-translations"}}
+            @closeModal={{this.cancelTranslationModal}}
     />
-  </WebComponents::VlModal>
+    <WebComponents::AuModal::Body>
 
+      {{#if (eq this.selectedPieces.length 0)}}
+        {{!--  No pieces selected --}}
+        <WebComponents::AuAlert data-test-auk-alert-error
+                                @title={{t "modal-error-alert-title"}}
+                                @skin="error"
+                                @message={{t "modal-error-missing-pieces"}}
+                                @icon="alert-triangle"/>
+      {{else}}
+        {{!--  Pieces selected --}}
+        {{t "request-translation-confirmation" }}
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "extreme-translation-date"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}} @onChange={{this.setTranslateActivityBeforeDate}}/>
 
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "accompanying-text"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuTextarea
+                id="emailMessage"
+                @rows="7"
+                @value={{mut this.translateActivity.mailContent}}
+                data-test-create-vertaalActivity-modal-email-textarea/>
+
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "attachments" }}
+        </WebComponents::AuLabel>
+        {{#each this.selectedPieces as |piece| }}
+          {{await piece.name}}
+        {{/each}}
+      {{/if}}
+    </WebComponents::AuModal::Body>
+
+    <WebComponents::AuModal::Footer @cancelModal={{this.cancelTranslationModal}}>
+      <WebComponents::AuButton
+              data-test-au-modal-footer-save
+              @skin="primary"
+        {{on "click" this.saveTranslationActivity}}
+      >
+        {{t "request-translations"}}
+      </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
 {{/if}}
 
 

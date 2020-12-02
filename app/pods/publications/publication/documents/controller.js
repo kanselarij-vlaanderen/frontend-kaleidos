@@ -15,17 +15,30 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isSavingPieces = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
+  @tracked translateActivity = {
+    mailContent: '',
+    finalTranslationDate: '',
+    pieces: [],
+  };
+  @tracked selectedPieces = [];
+
+  @action
+  changePieceSelection(selectedPiece) {
+    const index = this.selectedPieces.map((piece, index) => {
+      if (piece.id === selectedPiece.id) {
+        return index;
+      }
+    });
+    if (index.length > 0) {
+      this.selectedPieces.splice(index[0], 1);
+    } else {
+      this.selectedPieces.push(selectedPiece);
+    }
+  }
 
   @action
   openPieceUploadModal() {
     this.isOpenPieceUploadModal = true;
-  }
-
-  @action
-  openTranslationRequestModal() {
-    this.showTranslationModal = true;
-    alert('Deze functionaliteit heeft nog geen implementatie');
-    // this.isOpenTranslationRequestModal = true;
   }
 
   @action
@@ -39,6 +52,7 @@ export default class PublicationDocumentsController extends Controller {
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
+
   @action
   toggleFolderCollapse(piece) {
     piece.set('collapsed', !piece.collapsed);
@@ -79,16 +93,16 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   /**
-    * Save a new document container and the piece it wraps
-  */
+   * Save a new document container and the piece it wraps
+   */
   @task
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     yield piece.save();
-    const pieces = yield this.model.hasMany('pieces').reload();
+    const pieces = yield this.model.case.hasMany('pieces').reload();
     pieces.pushObject(piece);
-    yield this.model.save();
+    yield this.model.case.save();
   }
 
   @task
@@ -109,22 +123,43 @@ export default class PublicationDocumentsController extends Controller {
     yield piece.destroyRecord();
   }
 
+
   /** TRANSLATION ACTIVITIES **/
 
+  @action
+  openTranslationRequestModal() {
+    this.translateActivity.finalTranslationDate = this.model.publicationFlow.translateBefore;
+    this.translateActivity.pieces = this.selectedPieces;
+    this.showTranslationModal = true;
+  }
+
   get getTranslateActivityBeforeDate() {
+    console.log(this.model.publicationFlow.translateBefore);
+    if (this.model.publicationFlow.translateBefore) {
+      return this.model.publicationFlow.translateBefore;
+    }
     return new Date();
   }
 
   @action
   saveTranslationActivity() {
-    alert('save Translation Activity here!');
+    this.showLoader = true;
+    this.showTranslationModal = false;
+    console.log(this.translateActivity);
+    // Aanmaken subcase type vertaling in publication flow
+    // Create activity
+    this.showLoader = false;
+    this.selectedPieces = [];
   }
+
   @action
   cancelTranslationModal() {
     this.showTranslationModal = false;
   }
-  @action
-  setTranslateActivityBeforeDate() {
 
+  @action
+  setTranslateActivityBeforeDate(dates) {
+    console.log(dates);
+    this.translateActivity.finalTranslationDate = dates[0];
   }
 }
