@@ -115,9 +115,9 @@
                   {{!-- as |attacher| --}}
                 >
                   <WebComponents::AuDropdown>
-                    <WebComponents::AuDropdown::Item {{on "click" this.openDocxUploadModal}}>
+                    {{!-- <WebComponents::AuDropdown::Item>
                       {{t "upload-docx"}}
-                    </WebComponents::AuDropdown::Item>
+                    </WebComponents::AuDropdown::Item> --}}
                     {{!-- TODO delete folder ? Intent for this action is unclear and delete rules must be checked --}}
                     {{!-- <WebComponents::AuDropdown::Item @skin="danger" {{on "click" attacher.hide}}>
                       {{t "delete-folder"}}
@@ -198,40 +198,29 @@
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::VlModal
-    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
-    @closeModal={{this.cancelUploadPieces}}
-    @isOverlay={{true}}
-    @large={{true}}
-    @title={{t "documents-add"}} >
-    <div class="vl-modal-dialog__content">
-      {{!-- {{#if this.savePieces.isRunning}} --}}
-      {{#if false}}
-        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+  <WebComponents::AuModal @size="full-screen">
+    <WebComponents::AuModal::Header
+      @title={{t "documents-add"}}
+      @closeModal={{perform this.cancelUploadPieces}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuFileUploader @fullHeight={{true}} @multipleFiles={{true}} @uploadedFileAction={{action this.uploadPiece}}>
+
+      </WebComponents::AuFileUploader>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{perform this.cancelUploadPieces}}>
+      {{#if this.savePieces.isRunning}}
+        <Utils::SimpleSpinner></Utils::SimpleSpinner>
       {{else}}
-        <WebComponents::AuAlert @skin="warning" @message="Gelieve nog geen documenten te uploaden, dit werkt nog niet"></WebComponents::AuAlert>
-        <FileUploader
-          @multipleFiles={{true}}
-          {{!-- @uploadedFileAction={{this.uploadPiece}} --}}
-        />
-        {{!-- <div class="upload-container">
-          {{#each this.newPieces as |piece|}}
-            <Documents::DocumentUpload
-              @piece={{piece}}
-              @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deletePiece piece}} />
-          {{/each}}
-        </div> --}}
+        <WebComponents::AuButton
+          data-test-au-modal-footer-save 
+          @skin="primary" 
+          @disable={{eq this.newPieces.length 0}}
+          {{on "click" (perform this.savePieces)}}
+        >
+          {{t "documents-add"}}
+        </WebComponents::AuButton>
       {{/if}}
-    </div>
-    <WebComponents::VlModalFooter
-      {{!-- @isLoading={{this.savePieces.isRunning}} --}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "documents-add"}}
-      @cancelAction={{this.cancelUploadPieces}}
-      {{!-- @cancelAction={{perform this.cancelUploadPieces}} --}}
-      {{!-- @saveAction={{perform this.savePieces}} --}}
-      @disableSave={{eq this.newPieces.length 0}}
-      />
-  </WebComponents::VlModal>
+    </WebComponents::AuModal::Footer>  
+  </WebComponents::AuModal>
 {{/if}}

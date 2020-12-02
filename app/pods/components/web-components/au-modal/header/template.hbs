@@ -10,7 +10,7 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="close" @skin="tertiary" @layout="icon-only" {{on "click" @closeModal}}>{{t "close"}}</WebComponents::AuButton>
+          <WebComponents::AuButton @icon="close" @skin="borderless" @layout="icon-only" {{on "click" @closeModal}} data-test-au-modal-header-close></WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>

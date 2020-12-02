@@ -1,0 +1,54 @@
+<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{this.fullHeight}}">
+  <FileDropzone
+    @name="files"
+    @class="auk-file-upload__content"
+    @tagName="a"
+    @accept="application/pdf"
+    @action={{action this.uploadFile}}
+  as |dropzone queue|
+  >
+    <FileUpload
+      @name="files"
+      @for="upload-file"
+      @class="auk-file-upload__content--label"
+      @multiple={{this.multipleFiles}}
+      @onfileadd={{action this.uploadFile}}
+    >
+      {{!-- <WebComponents::AuIcon @name="paperclip"></WebComponents::AuIcon> --}}
+      {{!-- Warning: Using AuIcon here does not work, because file-upload is a label and child elements are limited (no div)  --}}
+      <span class="auk-file-upload__link">
+        <span class="auk-icon auk-icon--paperclip auk-icon--default">
+          <i class="ki ki-paperclip" aria-hidden="true">
+            <span>
+              {{#if this.multipleFiles}}
+                {{t "add-attachments"}}
+              {{else}}
+                {{t "add-attachment"}}
+              {{/if}}
+            </span>
+          </i>
+        </span>
+      </span>
+      <span class="auk-file-upload--text">
+        {{#if dropzone.active}}
+          {{#if dropzone.valid}}
+            {{t "drop-text"}}
+          {{else}}
+            {{t "invalid-type"}}
+          {{/if}}
+        {{else if queue.files.length}}
+          {{uploadedFileLength}}
+          {{t "files-of"}}
+          {{fileQueue.files.length}}
+          {{t "uploading"}}
+        {{else if dropzone.supported}}
+          {{#if this.multipleFiles}}
+            {{t "dropzone-text-multiple"}}
+          {{else}}
+            {{t "dropzone-text"}}
+          {{/if}}
+        {{/if}}
+      </span>
+    </FileUpload>
+  </FileDropzone>
+</div>

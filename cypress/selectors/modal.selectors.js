@@ -31,6 +31,11 @@ const selectors = {
     publicationShortTitleTextarea: '[data-test-create-publication-modal-short-title-textarea]',
     publicationLongTitleTextarea: '[data-test-create-publication-modal-long-title-textarea]',
   },
+  auModal: {
+    close: '[data-test-au-modal-header-close]',
+    cancel: '[data-test-au-modal-footer-cancel]',
+    save: '[data-test-au-modal-footer-save]',
+  },
   modalDialog: '[data-test-vl-modal-dialog]',
   modal: '[data-test-vl-modal]',
   aukModal: '[data-test-auk-modal]',
