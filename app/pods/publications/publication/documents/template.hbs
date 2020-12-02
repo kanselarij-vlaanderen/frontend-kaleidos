@@ -75,9 +75,9 @@
         {{#each @model.pieces as |piece|}}
           <tr>
             <td>
-              <WebComponents::AuButton 
-                {{on "click" (fn this.toggleFolderCollapse piece)}} 
-                @skin="borderless" 
+              <WebComponents::AuButton
+                {{on "click" (fn this.toggleFolderCollapse piece)}}
+                @skin="borderless"
                 @icon={{if (not piece.collapsed) "chevron-down" "chevron-right" }}
                 @layout="icon-only">
               </WebComponents::AuButton>
@@ -213,14 +213,78 @@
         <Utils::SimpleSpinner></Utils::SimpleSpinner>
       {{else}}
         <WebComponents::AuButton
-          data-test-au-modal-footer-save 
-          @skin="primary" 
+          data-test-au-modal-footer-save
+          @skin="primary"
           @disable={{eq this.newPieces.length 0}}
           {{on "click" (perform this.savePieces)}}
         >
           {{t "documents-add"}}
         </WebComponents::AuButton>
       {{/if}}
-    </WebComponents::AuModal::Footer>  
+    </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+
+
+
+{{!--      REQUEST TRANSLATION MODAL       --}}
+
+
+
+
+{{#if this.showTranslationModal}}
+  <WebComponents::VlModal
+    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
+          @closeModal={{this.cancelTranslationModal}}
+          @isOverlay={{true}}
+          @large={{true}}
+          @title={{t "request-translations"}} >
+    <div class="vl-modal-dialog__content">
+
+
+      {{t "request-translation-confirmation" }}
+
+      {{t "extreme-translation-date"}}
+      <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}} @onChange={{this.setTranslateActivityBeforeDate}}/>
+
+      {{t "accompanying-text"}}
+      {{t "attachments" }}
+
+
+    </div>
+    <WebComponents::VlModalFooter
+      {{!-- @isLoading={{this.savePieces.isRunning}} --}}
+            @cancelButtonText={{t "cancel"}}
+            @saveButtonText={{t "request-translations"}}
+            @cancelAction={{this.cancelTranslationModal}}
+      {{!-- @saveAction={{perform this.saveTranslationActivity}} --}}
+            @disableSave={{eq this.newPieces.length 0}}
+    />
+  </WebComponents::VlModal>
+
+
+{{/if}}
+
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+
+{{#if showLoader }}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @showCloseButton={{false}}
+          @title={{t "loading-text"}}
+  >
+    <WebComponents::VlLoader
+        @text={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+    />
+  </WebComponents::VlModal>
 {{/if}}

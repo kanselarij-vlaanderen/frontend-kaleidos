@@ -9,6 +9,6 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    return caze;
+    return caze, publicationFlow;
   }
 }

@@ -13,6 +13,8 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
+  @tracked showLoader = false;
+  @tracked showTranslationModal = false;
 
   @action
   openPieceUploadModal() {
@@ -21,6 +23,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   openTranslationRequestModal() {
+    this.showTranslationModal = true;
     alert('Deze functionaliteit heeft nog geen implementatie');
     // this.isOpenTranslationRequestModal = true;
   }
@@ -36,7 +39,6 @@ export default class PublicationDocumentsController extends Controller {
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
-
   @action
   toggleFolderCollapse(piece) {
     piece.set('collapsed', !piece.collapsed);
@@ -105,5 +107,24 @@ export default class PublicationDocumentsController extends Controller {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+  }
+
+  /** TRANSLATION ACTIVITIES **/
+
+  get getTranslateActivityBeforeDate() {
+    return new Date();
+  }
+
+  @action
+  saveTranslationActivity() {
+    alert('save Translation Activity here!');
+  }
+  @action
+  cancelTranslationModal() {
+    this.showTranslationModal = false;
+  }
+  @action
+  setTranslateActivityBeforeDate() {
+
   }
 }
