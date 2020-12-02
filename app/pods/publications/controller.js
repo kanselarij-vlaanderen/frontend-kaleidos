@@ -58,6 +58,9 @@ export default class PublicationsController extends Controller {
       entry.id = item.id;
       return entry;
     });
+    if (this.searchResults.length === 0) {
+      this.searchResults = false;
+    }
   }
 
   get getError() {
