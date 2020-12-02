@@ -212,8 +212,12 @@
       {{#if this.savePieces.isRunning}}
         <Utils::SimpleSpinner></Utils::SimpleSpinner>
       {{else}}
-        <WebComponents::AuButton @skin="primary" @disable={{eq this.newPieces.length 0}}
-          {{on "click" (perform this.savePieces)}}>
+        <WebComponents::AuButton
+          data-test-au-modal-footer-save 
+          @skin="primary" 
+          @disable={{eq this.newPieces.length 0}}
+          {{on "click" (perform this.savePieces)}}
+        >
           {{t "documents-add"}}
         </WebComponents::AuButton>
       {{/if}}

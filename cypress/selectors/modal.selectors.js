@@ -34,6 +34,7 @@ const selectors = {
   auModal: {
     close: '[data-test-au-modal-header-close]',
     cancel: '[data-test-au-modal-footer-cancel]',
+    save: '[data-test-au-modal-footer-save]',
   },
   modalDialog: '[data-test-vl-modal-dialog]',
   modal: '[data-test-vl-modal]',
