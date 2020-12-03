@@ -28,7 +28,7 @@ const selectors = {
     addDocumentsButton: '[data-test-publication-case-add-documents]',
   },
   nav: {
-    goBack: '[data-test-publication-nav-go-back]',
+    goBack: '[data-test-publication-case-nav-go-back]',
     case: '[data-test-publication-case-nav-case]',
     documents: '[data-test-publication-case-nav-documents]',
     translations: '[data-test-publication-case-nav-translations]',
