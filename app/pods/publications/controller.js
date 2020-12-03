@@ -2,10 +2,8 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {
-  task,
-  timeout
-} from 'ember-concurrency';
+import { timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency-decorators';
 import search from 'fe-redpencil/utils/mu-search';
 
 export default class PublicationsController extends Controller {
@@ -28,15 +26,11 @@ export default class PublicationsController extends Controller {
     longTitle: null,
   };
 
-  @(task(function *() {
+  @restartableTask
+  *debouncedSearchTask(event) {
+    this.searchText = event.target.value;
     yield timeout(500);
     yield this.search(this.searchText);
-  }).restartable()) debouncedSearchTask;
-
-  @action
-  debouncedSearch(event) {
-    this.searchText = event.target.value;
-    this.debouncedSearchTask.perform();
   }
 
   @action

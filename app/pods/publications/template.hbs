@@ -32,8 +32,8 @@
                                       id="defaultInput"
                                       @placeholder={{t "search-placeholder"}}
                                       @value={{this.searchText}}
-                {{on "input" this.debouncedSearch}}
-                                      @enter={{this.debouncedSearch}}
+                                      {{on "input" (perform this.debouncedSearchTask)}}
+                                      @enter={{perform this.debouncedSearchTask}}
               />
               {{#if showSearchResults}}
                 <div class="autocomplete-results auk-search-results-list">
@@ -58,7 +58,7 @@
                         {{result.subcaseSubTitle}}
                         <br>
                         <span class="auk-u-muted auk-u-text-small">
-                          {{t "publication.not.started.yet"}}
+                          {{t "publication-not-started-yet"}}
                         </span>
                       </WebComponents::AuDropdown::Item>
                     {{/if}}
@@ -97,10 +97,14 @@
           />
           <WebComponents::AuModal::Body>
             {{#if hasError}}
-              <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
-                                      @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
+              <WebComponents::AuAlert data-test-auk-alert-error
+                                      @title={{t "modal-error-alert-title"}}
+                                      @skin="error"
+                                      @message={{t "modal-error-alert-message"}}
+                                      @icon="alert-triangle"/>
             {{else}}
-              <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
+              <WebComponents::AuAlert data-test-auk-alert-info
+                                      @message={{t "publications-new-warning-message"}}
                                       @icon="circle-info"/>
             {{/if}}
             <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -112,20 +116,27 @@
                                         @block="true"
                                         @value={{mut publication.number}}
                                         data-test-create-publication-modal-number-input
-                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
                 />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
-                  <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+                  <WebComponents::AuLabelError>
+                    {{t "input-error-message"}}
+                  </WebComponents::AuLabelError>
                 {{/if}}
                 {{#if this.numberIsAlreadyUsed}}
-                  <WebComponents::AuLabelError>{{t "publication-number-already-taken"}}</WebComponents::AuLabelError>
+                  <WebComponents::AuLabelError>
+                    {{t "publication-number-already-taken"}}
+                  </WebComponents::AuLabelError>
                 {{/if}}
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
-                <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
+                <WebComponents::AuLabel for="shortTitleInput"
+                                        @isRequired={{true}}>
                   {{t "name-subcase"}}
                 </WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}}
+                <WebComponents::AuTextarea id="shortTitleInput"
+                                           @rows="2"
+                                           @value={{mut publication.shortTitle}}
                                            data-test-create-publication-modal-short-title-textarea/>
                 {{#if getClassForGroupShortTitle}}
                   <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -133,7 +144,9 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}}
+                <WebComponents::AuTextarea id="longTitleInput"
+                                           @rows="4"
+                                           @value={{mut publication.longTitle}}
                                            data-test-create-publication-modal-long-title-textarea/>
               </div>
             </div>
@@ -143,7 +156,8 @@
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="left">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="borderless" {{on "click" this.closePublicationModal}}
+                  <WebComponents::AuButton @skin="borderless"
+                                          {{on "click" this.closePublicationModal}}
                                            data-test-publication-button-cancel>
                     {{t "cancel"}}
                   </WebComponents::AuButton>
@@ -175,17 +189,20 @@
 {{!-- FULL PAGE LOADER --}}
 
 {{#if showLoader }}
-  <WebComponents::VlModal
-          @isOverlay={{true}}
-          @showCloseButton={{false}}
-          @title={{t "loading-text"}}
-  >
-    <WebComponents::VlLoader
-            @text={{concat
-              (t "saving-change-message")
-              " "
-              (t "please-be-patient")
-            }}
-    />
-  </WebComponents::VlModal>
+  <WebComponents::AuModal data-test-add-contactpersonmodal>
+    <WebComponents::AuModal::Header @title={{t "loading-text"}}
+                                    @isOverlay={{true}}
+                                    @showCloseButton={{false}}
+                                    @closeModal={{this.closeContactPersonModal}} />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+              @text={{concat
+                (t "saving-change-message")
+                " "
+                (t "please-be-patient")
+              }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
+
 {{/if}}

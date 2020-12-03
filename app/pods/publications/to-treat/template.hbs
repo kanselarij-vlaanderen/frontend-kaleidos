@@ -2,7 +2,9 @@
   <div class="auk-u-m-4">
 
     {{#if isLoading}}
-      <WebComponents::VlLoader @text={{t "please-be-patient"}} />
+      <WebComponents::AuLoader
+              @text={{t "please-be-patient"}}
+      />
     {{else}}
       {{#if this.model.length}}
         <DataTable
@@ -11,17 +13,17 @@
                 @noDataMessage={{t "no-results-found"}}
                 @size={{this.size}}
                 @sort={{this.sort}}
-                @class="auk-table--advanced vl-data-table vl-data-table--align-middle"
+                @class="auk-table--advanced"
                 @isLoading={{this.isLoadingModel}}
                 as |table|
         >
           <table.content as |c|>
             <c.header>
-              <th class="vl-data-table-col-8 vl-data-table__header-title">
+              <th class="auk-table__col--8">
                 {{t "case-name-concat"}}
               </th>
               <th>{{t "documents-amount"}}</th>
-              <th class="vl-data-table-col-1"></th>
+              <th class="auk-table__col--1"></th>
             </c.header>
             <c.body as |row|>
               {{#if row.isAgendaRow}}
@@ -45,22 +47,26 @@
                     {{row.documentsCount}}
                   {{/if}}
                 </td>
-                <td class="vl-u-align-right">
-                  {{#if (await row.publicationFlow)}}
-                    <LinkTo
-                            class=""
-                            @route="publications.publication"
-                            @model={{await row.publicationFlow.id}}
-                    >
-                      {{t "publications.to" }}
-                    </LinkTo>
-                  {{else}}
-                    <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
-                      {{on "click" (fn this.startPublication row) }} data-test-start-publication
-                    >
-                      {{t "start-publication"}}
-                    </button>
-                  {{/if}}
+                <td class="">
+                  <div class="auk-button-toolbar">
+                    {{#if (await row.publicationFlow)}}
+                      <LinkTo
+                              class=""
+                              @route="publications.publication"
+                              @model={{ await row.publicationFlow.id }}
+                      >
+                        {{t "publications.to" }}
+                      </LinkTo>
+                    {{else}}
+                      <WebComponents::AuButton
+                                               @skin="tertiary"
+                                               @layout="icon-only"
+                                               data-test-start-publication
+                                              {{on "click" (fn this.startPublication row)}}>
+                        {{t "start-publication"}}
+                      </WebComponents::AuButton>
+                    {{/if}}
+                  </div>
                 </td>
               {{/if}}
             </c.body>
@@ -82,21 +88,22 @@
 
     {{!-- FULL PAGE LOADER --}}
 
-
     {{#if showLoader }}
-      <WebComponents::VlModal
-              @isOverlay={{true}}
-              @showCloseButton={{false}}
-              @title={{t "loading-text"}}
-      >
-        <WebComponents::VlLoader
-                @text={{concat
-                  (t "saving-change-message")
-                  " "
-                  (t "please-be-patient")
-                }}
-        />
-      </WebComponents::VlModal>
+      <WebComponents::AuModal data-test-add-contactpersonmodal>
+        <WebComponents::AuModal::Header @title={{t "loading-text"}}
+                                        @isOverlay={{true}}
+                                        @showCloseButton={{false}}
+                                        @closeModal={{this.closeContactPersonModal}} />
+        <WebComponents::AuModal::Body>
+          <WebComponents::AuLoader
+                  @text={{concat
+                    (t "saving-change-message")
+                    " "
+                    (t "please-be-patient")
+                  }}
+          />
+        </WebComponents::AuModal::Body>
+      </WebComponents::AuModal>
     {{/if}}
   </div>
 </div>
