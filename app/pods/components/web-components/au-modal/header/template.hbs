@@ -9,9 +9,11 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="close" @skin="tertiary" @layout="icon-only" {{on "click" @closeModal}}>{{t "close"}}</WebComponents::AuButton>
-        </WebComponents::AuToolbar::Item>
+        {{#if @showCloseButton}}
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @icon="close" @skin="tertiary" @layout="icon-only" {{on "click" @closeModal}}>{{t "close"}}</WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        {{/if}}
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
   </div>
