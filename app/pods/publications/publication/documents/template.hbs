@@ -73,7 +73,7 @@
       </thead>
       <tbody>
         {{#each @model.pieces as |piece|}}
-          <tr>
+          <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton 
                 {{on "click" (fn this.toggleFolderCollapse piece)}} 

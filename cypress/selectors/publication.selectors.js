@@ -26,6 +26,7 @@ const selectors = {
     contantPersonPanel: '[data-test-publication-case-panel-contactperson]',
     // buttons
     addDocumentsButton: '[data-test-publication-case-add-documents]',
+    documentsPieceRow: '[data-test-publication-case-documents-piece-row]',
   },
   nav: {
     goBack: '[data-test-publication-case-nav-go-back]',

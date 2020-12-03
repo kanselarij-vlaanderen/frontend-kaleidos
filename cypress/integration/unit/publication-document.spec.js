@@ -39,5 +39,6 @@ context('Publications tests', () => {
     // TODO modal closes before everything is saved, also in meeting documents
     cy.wait(2000);
     cy.get(auComponentSelectors.auEmptyState).should('not.exist');
+    cy.get(publicationSelectors.publicationCase.documentsPieceRow).should('have.length', 2);
   });
 });
