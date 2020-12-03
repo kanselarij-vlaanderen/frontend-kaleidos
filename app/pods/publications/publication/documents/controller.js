@@ -47,10 +47,6 @@ export default class PublicationDocumentsController extends Controller {
     this.isUploadModalResized = !this.isUploadModalResized;
   }
 
-  getPieceFromSelectedPieces(piece) {
-    return this.selectedPieces[piece.id];
-  }
-
   @action
   changePieceSelection(selectedPiece) {
     if (this.selectedPieces[selectedPiece.id]) {
