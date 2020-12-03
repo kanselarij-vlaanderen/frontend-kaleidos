@@ -49,7 +49,6 @@ export default class ToTreatRoute extends Route {
   }
 
   async model(params) {
-    console.log(params.searchText);
     const today = new Date();
     const date = moment(today, 'DD-MM-YYYY').endOf('day');
     const filter = {};
