@@ -301,13 +301,15 @@
     </WebComponents::AuModal::Body>
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelTranslationModal}}>
-      <WebComponents::AuButton
-              data-test-au-modal-footer-save
-              @skin="primary"
-        {{on "click" this.saveTranslationActivity}}
-      >
-        {{t "request-translations"}}
-      </WebComponents::AuButton>
+      {{#if (gt this.selectedPiecesCount  0) }}
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save
+                @skin="primary"
+          {{on "click" this.saveTranslationActivity}}
+        >
+          {{t "request-translations"}}
+        </WebComponents::AuButton>
+      {{/if}}
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
