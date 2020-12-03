@@ -1,12 +1,12 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
+import EmberObject, { action } from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -154,16 +154,28 @@ export default class PublicationDocumentsController extends Controller {
   async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
-    console.log(this.translateActivity);
-    // TODO check if type already exists in case?
-    const subcaseTypeVertalen = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
+    const vertalenSubCaseType = EmberObject.create({
+      id: CONFIG.SUBCASE_TYPES.vertalen.id,
+      uri: CONFIG.SUBCASE_TYPES.vertalen.url,
+    });
+    console.log(vertalenSubCaseType);
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
-    const subcase = await this.subcasesService.createSubcase(this.model.case, subcaseTypeVertalen, shortTitle, title);
+    const subcase = await this.subcasesService.createSubcase(this.model.case, vertalenSubCaseType, shortTitle, title);
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
     this.showLoader = false;
-    this.selectedPieces = [];
+    this.model.case.pieces.forEach((piece) => {
+      piece.selected = false;
+    });
+
+    // Reset local activity.
+    this.translateActivity = {
+      mailContent: '',
+      finalTranslationDate: '',
+      pieces: [],
+    };
+    console.log(this.model.case.pieces);
   }
 
   @action

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import EmberObject from '@ember/object';
 export default class activityService extends Service {
   @service store;
   @service toaster;
@@ -20,13 +21,16 @@ export default class activityService extends Service {
   async createNewTranslationActivity(finalTranslationDate, mailContent, pieces, subcase) {
     const creationDatetime = moment().utc()
       .toDate();
-    const activityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
+    const vertalenActivityType = EmberObject.create({
+      id: CONFIG.ACTIVITY_TYPES.vertalen.id,
+      uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
+    });
     const translateActivity = this.store.createRecord('activity', {
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
       subcase,
-      activityType,
+      vertalenActivityType,
       usedPieces: pieces,
     });
     await translateActivity.save();

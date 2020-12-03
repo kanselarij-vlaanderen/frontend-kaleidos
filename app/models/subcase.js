@@ -49,6 +49,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   accessLevel: belongsTo('access-level'),
+  activity: belongsTo('activity'),
 
   publicationFlow: belongsTo('publication-flow', {
     inverse: null,

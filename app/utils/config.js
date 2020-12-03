@@ -175,14 +175,14 @@ export default EmberObject.create({
   SUBCASE_TYPES: {
     vertalen: {
       id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
-      url: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/d25ac65a-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/d25ac65a-34a9-11eb-adc1-0242ac120002',
     },
     handtekenen: {
       id: 'e711f906-34a9-11eb-adc1-0242ac120002',
-      url: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/e711f906-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/e711f906-34a9-11eb-adc1-0242ac120002',
     },
     drukproef: {
-      id: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/ef78bb52-34a9-11eb-adc1-0242ac120002',
+      id: 'http://example.com/step/ef78bb52-34a9-11eb-adc1-0242ac120002',
       url: 'ef78bb52-34a9-11eb-adc1-0242ac120002',
     },
     publicatieBS: {
