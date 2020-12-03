@@ -19,7 +19,7 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--8 auk-table__header-title">
+              <th class="auk-table__col--8">
                 {{t "case-name-concat"}}
               </th>
               <th>{{t "documents-amount"}}</th>
@@ -57,11 +57,13 @@
                       {{t "publications.to" }}
                     </LinkTo>
                   {{else}}
-                    <button class="vl-button vl-button--tertiary vl-button--icon-before" type="button"
-                      {{on "click" (fn this.startPublication row) }} data-test-start-publication
-                    >
+                    <WebComponents::AuButton
+                                             @skin="tertiary"
+                                             @layout="icon-only"
+                                             data-test-start-publication
+                                            {{on "click" (fn this.startPublication row)}}>
                       {{t "start-publication"}}
-                    </button>
+                    </WebComponents::AuButton>
                   {{/if}}
                 </td>
               {{/if}}
