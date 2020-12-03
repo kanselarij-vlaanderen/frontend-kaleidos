@@ -10,10 +10,10 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await @model.case.pieces)}}>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await this.currentPieces)}}>
           {{t "requests"}}
         </WebComponents::AuButton>
-        {{#if (await @model.case.pieces)}}
+        {{#if (await this.currentPieces)}}
           <AttachPopover
             @renderInPlace={{true}}
             @class="ember-attacher-popper"
@@ -46,7 +46,7 @@
 
 
 <div class="auk-u-mb-3">
-  {{#if (gt (await @model.case.pieces.length) 0)}}
+  {{#if (gt (await this.currentPieces.length) 0)}}
     <table class="auk-table">
       <thead>
         <tr>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each @model.case.pieces as |piece|}}
+        {{#each this.currentPieces as |piece|}}
           <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton
@@ -278,7 +278,7 @@
           {{t "attachments" }}
         </WebComponents::AuLabel>
 
-      {{#each this.model.case.pieces as |loopedPiece| }}
+      {{#each this.currentPieces as |loopedPiece| }}
         {{#if loopedPiece.selected}}
           <div class="o-flex o-flex--vertical-center">
             <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
