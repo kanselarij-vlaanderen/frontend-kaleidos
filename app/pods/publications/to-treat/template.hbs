@@ -2,7 +2,9 @@
   <div class="auk-u-m-4">
 
     {{#if isLoading}}
-      <WebComponents::VlLoader @text={{t "please-be-patient"}} />
+      <WebComponents::AuLoader
+              @text={{t "please-be-patient"}}
+      />
     {{else}}
       {{#if this.model.length}}
         <DataTable
