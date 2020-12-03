@@ -31,6 +31,7 @@ import './commands/select.commands'
 import './commands/navigation.commands'
 import './commands/authorizationAuthentication.commands'
 import './commands/reset-database.commands'
+import './commands/publication-commands'
 import 'cypress-wait-until';
 
 Cypress.on('uncaught:exception', (err) => {

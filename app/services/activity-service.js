@@ -22,11 +22,15 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
+
     // TranslationType.
     const requestTranslationActivityType = EmberObject.create({
       id: CONFIG.ACTIVITY_TYPES.vertalen.id,
       uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
     });
+
+    const usedPieces = pieces.map((piece) => piece);
+    console.log(usedPieces);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
@@ -35,7 +39,7 @@ export default class activityService extends Service {
       mailContent,
       subcase,
       type: requestTranslationActivityType,
-      usedPieces: pieces,
+      usedPieces: usedPieces,
     });
 
     // Persist to db.

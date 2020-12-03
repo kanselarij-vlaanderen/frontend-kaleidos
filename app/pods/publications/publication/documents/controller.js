@@ -17,6 +17,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
+  @tracked isUploadModalResized = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
   @tracked translateActivity = {
@@ -25,6 +26,11 @@ export default class PublicationDocumentsController extends Controller {
     pieces: [],
   };
   @tracked selectedPieces = [];
+
+  @action
+  toggleUploadModalSize() {
+    this.isUploadModalResized = !this.isUploadModalResized;
+  }
 
   getPieceFromSelectedPieces(piece) {
     console.log('getPieceFromSelectedPieces');
