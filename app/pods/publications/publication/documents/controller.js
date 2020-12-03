@@ -26,6 +26,14 @@ export default class PublicationDocumentsController extends Controller {
     pieces: [],
   };
   @tracked selectedPieces = [];
+  @tracked currentPieces = this.pieces;
+
+  get pieces() {
+    if (this.model.case.pieces) {
+      return this.model.case.pieces.toArray();
+    }
+    return null;
+  }
 
   @action
   toggleUploadModalSize() {
@@ -33,14 +41,12 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   getPieceFromSelectedPieces(piece) {
-    console.log('getPieceFromSelectedPieces');
     return this.selectedPieces[piece.id];
   }
 
   @action
   changePieceSelection(selectedPiece) {
     console.log('changePieceSelection');
-
     if (this.selectedPieces[selectedPiece.id]) {
       delete this.selectedPieces[selectedPiece.id];
       selectedPiece.selected = false;
@@ -48,7 +54,7 @@ export default class PublicationDocumentsController extends Controller {
       this.selectedPieces[selectedPiece.id] = selectedPiece;
       selectedPiece.selected = true;
     }
-    console.log(this.selectedPieces);
+    console.log('piece', this.model.case.pieces.toArray());
   }
 
   @action
@@ -177,9 +183,10 @@ export default class PublicationDocumentsController extends Controller {
 
     // Visual stuff.
     this.showLoader = false;
-    this.model.case.pieces.forEach((piece) => {
+    this.currentPieces.forEach((piece) => {
       piece.selected = false;
     });
+    this.currentPieces = [...this.currentPieces];
 
     // Reset local activity to empty state.
     this.translateActivity = {
