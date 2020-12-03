@@ -30,7 +30,7 @@ export default class activityService extends Service {
     });
 
     const usedPieces = pieces.map((piece) => piece);
-    console.log(usedPieces);
+
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {

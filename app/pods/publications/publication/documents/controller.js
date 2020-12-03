@@ -39,16 +39,7 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   get selectedPiecesCount() {
-    let selectedPiecesAmount = 0;
-    const pieces = this.model.case.pieces.toArray();
-    for (let index = 0; index < pieces.length; index++) {
-      console.log(index);
-      const piece = pieces[index];
-      if (this.selectedPieces[piece.id]) {
-        selectedPiecesAmount ++;
-      }
-    }
-    return selectedPiecesAmount;
+    return this.pieces.filter((piece) => piece.selected === true).length;
   }
 
   @action
@@ -62,7 +53,6 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
-    console.log('changePieceSelection');
     if (this.selectedPieces[selectedPiece.id]) {
       delete this.selectedPieces[selectedPiece.id];
       selectedPiece.selected = false;
@@ -70,7 +60,6 @@ export default class PublicationDocumentsController extends Controller {
       this.selectedPieces[selectedPiece.id] = selectedPiece;
       selectedPiece.selected = true;
     }
-    console.log('piece', this.model.case.pieces.toArray());
   }
 
   @action
@@ -171,7 +160,6 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   get getTranslateActivityBeforeDate() {
-    console.log(this.model.publicationFlow.translateBefore);
     if (this.model.publicationFlow.translateBefore) {
       return this.model.publicationFlow.translateBefore;
     }
