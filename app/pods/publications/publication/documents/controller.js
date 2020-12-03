@@ -15,7 +15,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
   @tracked newPieces = A([]);
-  @tracked isExpandedPieceView = false;getPieceFromSelectedPieces
+  @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
@@ -154,28 +154,33 @@ export default class PublicationDocumentsController extends Controller {
   async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
-    const vertalenSubCaseType = EmberObject.create({
+    const translateSubCaseType = EmberObject.create({
       id: CONFIG.SUBCASE_TYPES.vertalen.id,
       uri: CONFIG.SUBCASE_TYPES.vertalen.url,
     });
-    console.log(vertalenSubCaseType);
+
+    // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
-    const subcase = await this.subcasesService.createSubcase(this.model.case, vertalenSubCaseType, shortTitle, title);
+
+    // Create subase.
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.case, this.model.publicationFlow, translateSubCaseType, shortTitle, title);
+
+    // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
+    // Visual stuff.
     this.showLoader = false;
     this.model.case.pieces.forEach((piece) => {
       piece.selected = false;
     });
 
-    // Reset local activity.
+    // Reset local activity to empty state.
     this.translateActivity = {
       mailContent: '',
       finalTranslationDate: '',
       pieces: [],
     };
-    console.log(this.model.case.pieces);
   }
 
   @action

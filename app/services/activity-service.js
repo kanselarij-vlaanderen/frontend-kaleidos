@@ -21,20 +21,29 @@ export default class activityService extends Service {
   async createNewTranslationActivity(finalTranslationDate, mailContent, pieces, subcase) {
     const creationDatetime = moment().utc()
       .toDate();
-    const vertalenActivityType = EmberObject.create({
+
+    // TranslationType.
+    const requestTranslationActivityType = EmberObject.create({
       id: CONFIG.ACTIVITY_TYPES.vertalen.id,
       uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
     });
+
+    // Create activity.
     const translateActivity = this.store.createRecord('activity', {
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
       subcase,
-      vertalenActivityType,
+      type: requestTranslationActivityType,
       usedPieces: pieces,
     });
+
+    // Persist to db.
     await translateActivity.save();
+
+    // Reload relation.
     await subcase.belongsTo('activity').reload();
+
     return translateActivity;
   }
 }

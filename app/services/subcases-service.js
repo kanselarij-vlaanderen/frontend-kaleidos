@@ -7,22 +7,43 @@ export default Service.extend({
   store: inject(),
   intl: inject(),
 
-  createSubcase(_case, type, shortTitle, title) {
+  /**
+   * Creae a subcase for a publicationFlow
+   *
+   * @param _case
+   * @param _publicationFlow
+   * @param subcaseTypeObject
+   * @param shortTitle
+   * @param title
+   * @returns {Promise<any>}
+   */
+  async createSubcaseForPublicationFlow(_case, _publicationFlow, subcaseTypeObject, shortTitle, title) {
     const creationDatetime = moment().utc()
       .toDate();
-    return this.store.createRecord('subcase', {
-      type,
+
+    // create Subcase.
+    const subcase = await this.store.createRecord('subcase', {
+      type: subcaseTypeObject,
       shortTitle: trimText(shortTitle),
       title: trimText(title),
       // TODO: wat moeten we hier in steken?
       // confidential: confidential || false,
       // showAsRemark: showAsRemark || false,
       case: _case,
+      publicationFlow: _publicationFlow,
       created: creationDatetime,
       modified: creationDatetime,
       isArchived: false,
       agendaActivities: [],
     });
+
+    // Persist to DB.
+    await subcase.save();
+
+    // Reload publication flow relation to subcase.
+    await subcase.belongsTo('publicationFlow').reload();
+
+    return subcase;
   },
 
   getPostPonedSubcaseIds() {

@@ -130,7 +130,9 @@
           {{#if (not piece.collapsed)}}
             <tr class="auk-table__row auk-table__row--collapsed-content">
               <td>
-                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} @checked={{piece.selected}} />
+                <WebComponents::AuCheckbox
+                        @toggle={{fn this.changePieceSelection piece}}
+                        @checked={{piece.selected}} />
               </td>
               <td>
                 <span>{{await piece.name}}</span>
@@ -234,7 +236,6 @@
 
 
 {{!--      REQUEST TRANSLATION MODAL       --}}
-
 
 
 

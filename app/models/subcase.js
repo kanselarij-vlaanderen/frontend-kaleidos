@@ -51,9 +51,7 @@ export default ModelWithModifier.extend({
   accessLevel: belongsTo('access-level'),
   activity: belongsTo('activity'),
 
-  publicationFlow: belongsTo('publication-flow', {
-    inverse: null,
-  }),
+  publicationFlow: belongsTo('publication-flow'),
 
   latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
