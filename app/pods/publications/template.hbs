@@ -32,8 +32,8 @@
                                       id="defaultInput"
                                       @placeholder={{t "search-placeholder"}}
                                       @value={{this.searchText}}
-                {{on "input" this.debouncedSearch}}
-                                      @enter={{this.debouncedSearch}}
+                                      {{on "input" (perform this.debouncedSearchTask)}}
+                                      @enter={{perform this.debouncedSearchTask}}
               />
               {{#if showSearchResults}}
                 <div class="autocomplete-results auk-search-results-list">
