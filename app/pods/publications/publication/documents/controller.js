@@ -38,6 +38,19 @@ export default class PublicationDocumentsController extends Controller {
     return null;
   }
 
+  get selectedPiecesCount() {
+    let selectedPiecesAmount = 0;
+    const pieces = this.model.case.pieces.toArray();
+    for (let index = 0; index < pieces.length; index++) {
+      console.log(index);
+      const piece = pieces[index];
+      if (this.selectedPieces[piece.id]) {
+        selectedPiecesAmount ++;
+      }
+    }
+    return selectedPiecesAmount;
+  }
+
   @action
   toggleUploadModalSize() {
     this.isUploadModalResized = !this.isUploadModalResized;

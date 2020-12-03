@@ -257,7 +257,13 @@
     />
     <WebComponents::AuModal::Body>
 
-
+      {{#if (eq this.selectedPiecesCount 0) }}
+        <WebComponents::AuAlert data-test-auk-alert-error
+                                @title={{t "modal-error-alert-title"}}
+                                @skin="error"
+                                @message={{t "modal-error-missing-pieces"}}
+                                @icon="alert-triangle"/>
+      {{else}}
         {{!--  Pieces selected --}}
         {{t "request-translation-confirmation" }}
         <WebComponents::AuLabel @isRequired={{true}}>
@@ -278,27 +284,19 @@
           {{t "attachments" }}
         </WebComponents::AuLabel>
 
-      {{#each this.currentPieces as |loopedPiece| }}
-        {{#if loopedPiece.selected}}
-          <div class="o-flex o-flex--vertical-center">
-            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
-            <div class="auk-u-ml-3">
-              <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
-              <br>
-              <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
+        {{#each this.currentPieces as |loopedPiece| }}
+          {{#if loopedPiece.selected}}
+            <div class="o-flex o-flex--vertical-center">
+              <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+              <div class="auk-u-ml-3">
+                <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
+                <br>
+                <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
+              </div>
             </div>
-          </div>
-        {{/if}}
-      {{/each}}
-
-
-        {{!--  No pieces selected
-        <WebComponents::AuAlert data-test-auk-alert-error
-                                @title={{t "modal-error-alert-title"}}
-                                @skin="error"
-                                @message={{t "modal-error-missing-pieces"}}
-                                @icon="alert-triangle"/>
-        --}}
+          {{/if}}
+        {{/each}}
+      {{/if}}
 
     </WebComponents::AuModal::Body>
 
