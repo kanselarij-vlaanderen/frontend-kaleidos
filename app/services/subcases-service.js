@@ -8,7 +8,7 @@ export default Service.extend({
   intl: inject(),
 
   /**
-   * Creae a subcase for a publicationFlow
+   * Create a subcase for a publicationFlow
    *
    * @param _case
    * @param _publicationFlow
