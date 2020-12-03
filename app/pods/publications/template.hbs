@@ -116,7 +116,7 @@
                                         @block="true"
                                         @value={{mut publication.number}}
                                         data-test-create-publication-modal-number-input
-                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
                 />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>
