@@ -46,7 +46,8 @@ export default class activityService extends Service {
     await translateActivity.save();
 
     // Reload relation.
-    await subcase.belongsTo('activity').reload();
+    await subcase.hasMany('activity').reload();
+
 
     return translateActivity;
   }
