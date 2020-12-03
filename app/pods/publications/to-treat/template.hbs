@@ -47,24 +47,26 @@
                     {{row.documentsCount}}
                   {{/if}}
                 </td>
-                <td class="vlc-u-align-right">
-                  {{#if (await row.publicationFlow)}}
-                    <LinkTo
-                            class=""
-                            @route="publications.publication"
-                            @model={{ await row.publicationFlow.id }}
-                    >
-                      {{t "publications.to" }}
-                    </LinkTo>
-                  {{else}}
-                    <WebComponents::AuButton
-                                             @skin="tertiary"
-                                             @layout="icon-only"
-                                             data-test-start-publication
-                                            {{on "click" (fn this.startPublication row)}}>
-                      {{t "start-publication"}}
-                    </WebComponents::AuButton>
-                  {{/if}}
+                <td class="">
+                  <div class="auk-button-toolbar">
+                    {{#if (await row.publicationFlow)}}
+                      <LinkTo
+                              class=""
+                              @route="publications.publication"
+                              @model={{ await row.publicationFlow.id }}
+                      >
+                        {{t "publications.to" }}
+                      </LinkTo>
+                    {{else}}
+                      <WebComponents::AuButton
+                                               @skin="tertiary"
+                                               @layout="icon-only"
+                                               data-test-start-publication
+                                              {{on "click" (fn this.startPublication row)}}>
+                        {{t "start-publication"}}
+                      </WebComponents::AuButton>
+                    {{/if}}
+                  </div>
                 </td>
               {{/if}}
             </c.body>
