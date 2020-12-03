@@ -2,10 +2,8 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import {
-  restartableTask,
-  timeout
-} from 'ember-concurrency';
+import { timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency-decorators';
 import search from 'fe-redpencil/utils/mu-search';
 
 export default class PublicationsController extends Controller {
