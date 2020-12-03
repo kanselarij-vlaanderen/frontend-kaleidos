@@ -6,7 +6,10 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import EmberObject, { action } from '@ember/object';
+import EmberObject, {
+  action,
+  set
+} from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -198,12 +201,12 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelTranslationModal() {
+    set(this.translateActivity, 'mailContent', '');
     this.showTranslationModal = false;
   }
 
   @action
   setTranslateActivityBeforeDate(dates) {
-    console.log(dates);
     this.translateActivity.finalTranslationDate = dates[0];
   }
 }
