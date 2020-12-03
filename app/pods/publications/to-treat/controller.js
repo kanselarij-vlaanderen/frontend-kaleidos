@@ -65,7 +65,6 @@ export default class ToTreatController extends Controller {
           id: _case.id,
         },
       },
-      sort: '-created',
     });
     let newPublication;
     if (pubFlows.content.length > 0) {
