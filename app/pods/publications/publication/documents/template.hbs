@@ -198,7 +198,10 @@
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::AuModal @resized={{this.isUploadModalResized}} @size="full-screen">
+  <WebComponents::AuModal
+    @resized={{this.isUploadModalResized}}
+    @size="full-screen"
+  >
     <WebComponents::AuModal::Header
       @resizeable={{true}}
       @title={{t "documents-add"}}
@@ -225,7 +228,7 @@
         <WebComponents::AuButton
           data-test-au-modal-footer-save 
           @skin="primary" 
-          @disable={{eq this.newPieces.length 0}}
+          @disabled={{eq this.newPieces.length 0}}
           {{on "click" (perform this.savePieces)}}
         >
           {{t "documents-add"}}
