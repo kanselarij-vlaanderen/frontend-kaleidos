@@ -1,12 +1,16 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import moment from 'moment';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  title: null,
-  shortTitle: null,
-  confidential: false,
-  store: inject(),
+export default class NewCase extends Component {
+  title = null;
+  shortTitle = null;
+  confidential = false;
+  @service store;
+  @tracked hasError = false;
+  @tracked isLoading = false;
 
   async createCase() {
     const newDate = moment().utc()
@@ -23,19 +27,33 @@ export default Component.extend({
         created: newDate,
       });
     await caze.save();
-    this.set('isLoading', false);
-    return this.close(caze);
-  },
+    this.isLoading = false;
+    return this.args.close(caze);
+  }
 
-  actions: {
-    async createCase($event) {
-      this.set('isLoading', true);
-      $event.preventDefault();
+  get getClassForShortTitle() {
+    if (this.hasError) {
+      return 'auk-form-group--error';
+    }
+    return null;
+  }
+
+  @action
+  async createCaseAction($event) {
+    $event.preventDefault();
+    const {
+      shortTitle,
+    } = this;
+    if (shortTitle < 1) {
+      this.hasError = true;
+    } else {
+      this.isLoading = true;
       await this.createCase();
-    },
+    }
+  }
 
-    close() {
-      this.close();
-    },
-  },
-});
+  @action
+  closeAction() {
+    this.args.close();
+  }
+}
