@@ -48,6 +48,9 @@
           {{/if}}
         {{/if}}
       </span>
+      {{#each queue.files as |file|}}
+        <span>{{file.name}} {{format-float file.progress}}&#37;</span>
+      {{/each}}
     </FileUpload>
   </FileDropzone>
 </div>
