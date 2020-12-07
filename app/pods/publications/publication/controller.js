@@ -13,6 +13,7 @@ export default class PublicationController extends Controller {
   @service publicationService;
   @service toaster;
   @service intl;
+  @service media;
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -20,7 +21,7 @@ export default class PublicationController extends Controller {
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
-  }]
+  }];
 
   typeOptions = [
     {
