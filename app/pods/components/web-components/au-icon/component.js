@@ -18,9 +18,17 @@ export default class Icon extends Component {
     return null;
   }
 
-  get color() {
-    if (this.args.color) {
-      return `color:${this.args.color}`.htmlSafe();
+  /*
+    Skins can be:
+    - muted
+    - warning
+    - primary
+    - success
+    - danger
+   */
+  get iconSkinColor() {
+    if (this.args.iconSkinColor) {
+      return `auk-icon--${this.args.iconSkinColor}`;
     }
     return null;
   }

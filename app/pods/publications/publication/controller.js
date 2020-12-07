@@ -18,14 +18,14 @@ export default class PublicationController extends Controller {
     label: 'Te publiceren',
     icon: {
       svg: 'clock',
-      color: '#FFC515',
+      color: 'warning',
     },
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
     icon: {
       svg: 'circle-check',
-      color: '#8BAE00',
+      color: 'success',
     },
   }];
 
