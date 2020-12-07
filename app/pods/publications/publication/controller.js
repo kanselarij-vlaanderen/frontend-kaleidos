@@ -80,8 +80,6 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setPublicationNumber(event) {
-    const currentActivePublicationNumber = this.model.publicationNumber;
-    console.log('currentActivePublicationNumber', currentActivePublicationNumber);
     this.publicationService.publicationNumberAlreadyTaken(event.target.value).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
