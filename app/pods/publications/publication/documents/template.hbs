@@ -237,3 +237,24 @@
     </WebComponents::AuModal::Footer>  
   </WebComponents::AuModal>
 {{/if}}
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+{{#if showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header 
+      @title={{t "loading-text"}}
+      @showCloseButton={{false}}/>
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
+{{/if}}
