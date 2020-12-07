@@ -3,10 +3,9 @@
     <div>
       {{!-- Indien er geen resultaten gevonden worden, komt dit doordat er geen documenten als type 'nota' bij agendapunten staan --}}
         <DataTable
-          @content={{this.model.notas}}
-          @page={{this.page}}
+          @content={{this.model}}
+          @sizeOptions={{null}}
           @noDataMessage={{t "no-results-found"}}
-          @size={{this.size}}
           @sort={{this.sort}}
           @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle vl-data-table--no-scroll"
           @isLoading={{this.isLoadingModel}}

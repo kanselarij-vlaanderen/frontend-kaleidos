@@ -1,9 +1,6 @@
 import Route from '@ember/routing/route';
-import moment from 'moment';
-import { hash } from 'rsvp';
 import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
-import getPaginationMetadata from 'fe-redpencil/utils/get-pagination-metadata';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -28,68 +25,39 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   }
 
   async model(params) {
-    let notas = A([]);
+    const processedNotas = A([]);
     const newsletterModel = this.modelFor('newsletter');
     const meeting = newsletterModel.meeting;
     const agenda = newsletterModel.agenda;
     const agendaId = agenda.id;
     const meetingId = meeting.id;
-    const agendaitemsForAgenda = await this.store.query('agendaitem', {
-      'filter[agenda][:id:]': agendaId,
-      'filter[show-as-remark]': false,
+    const notas = await this.store.query('piece', {
+      'filter[agendaitem][agenda][:id:]': agendaId,
+      'filter[agendaitem][show-as-remark]': false,
+      'filter[document-container][type][:id:]': CONFIG.notaID,
+      include: 'agendaitem',
+      'fields[agendaitem]': 'id,priority,short-title',
+      'fields[piece]': 'id,name,modified',
       'page[size]': 300,
-      'fields[agendaitems]': 'id,priority,short-title',
+      sort: params.sort,
     });
-    // Omzetten van proxyarray naar default JS array
-    const agendaitemsArray = agendaitemsForAgenda.toArray();
-    for (const agendaitem of agendaitemsArray) {
-      const agendaitemPriority = agendaitem.get('priority');
-      const agendaitemId = agendaitem.get('id');
-      const agendaitemShortTitle = agendaitem.get('shortTitle');
-
-      // Documenten
-      const notasOfAgendaitem = await this.store.query('piece', {
-        'filter[agendaitem][:id:]': agendaitemId,
-        'filter[document-container][type][:id:]': CONFIG.notaID,
-      });
-      if (notasOfAgendaitem.length) {
-        const lastNotaVersion = notasOfAgendaitem.firstObject;
-        const documentContainer = await lastNotaVersion.get('documentContainer');
-        const allNotaPieces = await documentContainer.get('pieces');
-        const piecesOfAgendaitemArray = allNotaPieces.toArray();
-
-        if (piecesOfAgendaitemArray) {
-          for (const piece of piecesOfAgendaitemArray) {
-            const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(piece);
-            if (pieceData) {
-              const nota =  {
-                meetingId,
-                agendaId,
-                agendaitemId,
-                agendaitemPriority,
-                agendaitemShortTitle,
-                ...pieceData,
-              };
-              notas.pushObject(nota);
-            }
-          }
-        }
-      }
+    for (const nota of notas.toArray()) { // proxyarray to native JS array
+      const agendaItem = await nota.get('agendaitem');
+      const agendaitemPriority = agendaItem.get('priority');
+      const agendaitemId = agendaItem.get('id');
+      const agendaitemShortTitle = agendaItem.get('shortTitle');
+      const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(nota);
+      const processedNota =  {
+        meetingId,
+        agendaId,
+        agendaitemId,
+        agendaitemPriority,
+        agendaitemShortTitle,
+        ...pieceData,
+      };
+      processedNotas.pushObject(processedNota);
     }
-    if (params.sort.includes('modified')) {
-      notas = notas.sortBy('modified');
-      if (params.sort.startsWith('-')) {
-        notas.reverseObjects();
-      }
-    }
-    const pagination = getPaginationMetadata(0, notas.length, notas.length);
-    notas.meta = {
-      count: notas.length,
-      pagination: pagination,
-    };
-    return hash({
-      notas: notas,
-    });
+    return processedNotas;
   }
 
   static async getPieceData(piece) {
