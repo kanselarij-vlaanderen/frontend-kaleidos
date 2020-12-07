@@ -34,13 +34,15 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const agenda = newsletterModel.agenda;
     const agendaId = agenda.id;
     const meetingId = meeting.id;
-    const agendaitemsForAgenda = await agenda.get('agendaitems');
+    const agendaitemsForAgenda = await this.store.query('agendaitem', {
+      'filter[agenda][:id:]': agendaId,
+      'filter[show-as-remark]': false,
+      'page[size]': 300,
+      'fields[agendaitems]': 'id,priority,shortTitle',
+    });
     // Omzetten van proxyarray naar default JS array
     const agendaitemsArray = agendaitemsForAgenda.toArray();
     for (const agendaitem of agendaitemsArray) {
-      if (agendaitem.showAsRemark) {
-        continue;
-      }
       const agendaitemPriority = agendaitem.get('priority');
       const agendaitemId = agendaitem.get('id');
       const agendaitemShortTitle = agendaitem.get('shortTitle');
