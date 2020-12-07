@@ -242,14 +242,14 @@ context('Publications tests', () => {
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
     cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
-    cy.get('.auk-table__cell--accent').should('exist');
+    cy.get(publicationSelectors.tableCell).should('exist');
     cy.find('Cypress test dossier 1').first()
       .should('exist');
     cy.server();
     cy.route('POST', '/publication-flows').as('postPublicationFlow');
-    cy.get('[data-test-start-publication]').first()
+    cy.get(publicationSelectors.startPublication).first()
       .click();
     cy.wait('@postPublicationFlow');
-    cy.get('[data-test-publication-flow-title]').should('exist');
+    cy.get(publicationSelectors.flowTitle).should('exist');
   });
 });

@@ -1,4 +1,4 @@
-<div {{ in-viewport onEnter=this.onEnter onExit=this.onExit }} class={{classNameBindings}}>
+<div {{in-viewport onEnter=this.onEnter onExit=this.onExit}} class={{classNameBindings}}>
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
       <div class="vlc-agenda-items__cursor">
@@ -124,7 +124,7 @@
                 <div>
                   {{#if @agendaitem.explanation}}
                     <span class="vl-u-text--bold">
-                      {{ t "remark-title" }}:
+                      {{t "remark-title"}}:
                     </span> {{@agendaitem.explanation}}
                   {{/if}}
                 </div>
