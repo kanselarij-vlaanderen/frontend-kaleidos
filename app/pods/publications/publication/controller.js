@@ -82,11 +82,11 @@ export default class PublicationController extends Controller {
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);
-    this.publicationService.publicationNumberAlreadyTaken(event.target.value).then((isPublicationNumberTaken) => {
+    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
         this.toaster.error(this.intl.t('publication-number-already-taken'), this.intl.t('warning-title'), {
-          timeOut: 10000,
+          timeOut: 5000,
         });
       } else {
         this.model.set('publicationNumber',  event.target.value);
