@@ -188,11 +188,10 @@
 {{!-- FULL PAGE LOADER --}}
 
 {{#if showLoader }}
-  <WebComponents::AuModal data-test-add-contactpersonmodal>
+  <WebComponents::AuModal data-test-add-contactpersonmodal
+                          @size="full-screen">
     <WebComponents::AuModal::Header @title={{t "loading-text"}}
-                                    @isOverlay={{true}}
-                                    @showCloseButton={{false}}
-                                    @closeModal={{this.closeContactPersonModal}} />
+                                    @showCloseButton={{false}}/>
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
               @message={{concat
