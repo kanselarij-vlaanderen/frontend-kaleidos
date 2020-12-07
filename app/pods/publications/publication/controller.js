@@ -7,11 +7,15 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 
-
 export default class PublicationController extends Controller {
+  @tracked numberIsAlreadyUsed = false;
+  @service publicationService;
+  @service toaster;
+  @service intl;
   @service media;
 
   @tracked collapsed = !this.get('media.isBigScreen');
+
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -87,9 +91,19 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setPublicationNumber(event) {
-    this.model.set('publicationNumber',  event.target.value);
     yield timeout(1000);
-    this.model.save();
+    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.id).then((isPublicationNumberTaken) => {
+      if (isPublicationNumberTaken) {
+        this.numberIsAlreadyUsed = true;
+        this.toaster.error(this.intl.t('publication-number-already-taken'), this.intl.t('warning-title'), {
+          timeOut: 5000,
+        });
+      } else {
+        this.model.set('publicationNumber',  event.target.value);
+        this.numberIsAlreadyUsed = false;
+        this.model.save();
+      }
+    });
   }
 
   @restartableTask
@@ -148,5 +162,12 @@ export default class PublicationController extends Controller {
   @action
   toggle() {
     this.showPicker = !this.showPicker;
+  }
+
+  get getClassForPublicationNumber() {
+    if (this.numberIsAlreadyUsed) {
+      return 'auk-form-group--error';
+    }
+    return null;
   }
 }

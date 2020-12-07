@@ -51,10 +51,16 @@
         <div class="auk-scroll-wrapper">
           <div class="auk-scroll-wrapper__body">
             <div class="auk-u-m-3">
-              <div class="auk-form-group">
+              <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
                 <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
                   {{on "input" (perform this.setPublicationNumber)}} />
+                {{#if this.numberIsAlreadyUsed}}
+                  <div class="auk-form-help-text auk-form-help-text--warning">
+                    <WebComponents::AuIcon @name="alert-triangle"/>
+                    {{t "publication-number-already-taken"}}
+                  </div>
+                {{/if}}
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
