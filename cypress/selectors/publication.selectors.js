@@ -35,5 +35,9 @@ const selectors = {
     translations: '[data-test-publication-case-nav-translations]',
     publishpreview: '[data-test-publication-case-nav-publishpreview]',
   },
+  // TODO replace deze bij het maken van publication translation testen
+  tableCell: '.auk-table__cell--accent',
+  startPublication: '[data-test-start-publication]',
+  flowTitle: '[data-test-publication-flow-title]',
 };
 export default selectors;

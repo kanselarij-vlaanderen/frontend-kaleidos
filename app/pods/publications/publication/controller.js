@@ -8,19 +8,29 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = !this.get('media.isBigScreen');
   @tracked numberIsAlreadyUsed = false;
   @service publicationService;
   @service toaster;
   @service intl;
   @service media;
 
+  @tracked collapsed = !this.get('media.isBigScreen');
+
+
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
     label: 'Te publiceren',
+    icon: {
+      svg: 'clock',
+      color: 'warning',
+    },
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
+    icon: {
+      svg: 'circle-check',
+      color: 'success',
+    },
   }];
 
   typeOptions = [

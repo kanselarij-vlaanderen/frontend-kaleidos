@@ -9,15 +9,27 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
-        {{#if @showCloseButton}}
-          <WebComponents::AuToolbar::Item>
-            {{#if @resizeable}}
-              {{!-- TODO this is the wrong icon, the correct icon is not yet available in the package --}}
-              <WebComponents::AuButton @icon="external-link" @skin="borderless" @layout="icon-only" {{on "click" @toggleSize}}></WebComponents::AuButton>
-            {{/if}}
-            <WebComponents::AuButton @icon="close" @skin="borderless" @layout="icon-only" {{on "click" @closeModal}} data-test-au-modal-header-close></WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        {{/if}}
+        <WebComponents::AuToolbar::Item>
+          {{#if @resizeable}}
+            {{!-- TODO this is the wrong icon, the correct icon is not yet available in the package --}}
+            <WebComponents::AuButton
+                    @icon="external-link"
+                    @skin="borderless"
+                    @layout="icon-only"
+                    {{on "click" @toggleSize}}>
+
+            </WebComponents::AuButton>
+          {{/if}}
+          {{#if @showCloseButton}}
+            <WebComponents::AuButton
+                    @icon="close"
+                    @skin="borderless"
+                    @layout="icon-only"
+                    {{on "click" @closeModal}}
+                    data-test-au-modal-header-close>
+            </WebComponents::AuButton>
+          {{/if}}
+        </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
   </div>

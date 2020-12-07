@@ -5,7 +5,7 @@ export default class Item extends Component {
     if (this.args.class) {
       return this.args.class;
     }
-    return '';
+    return null;
   }
   get skin() {
     if (this.args.skin) {
