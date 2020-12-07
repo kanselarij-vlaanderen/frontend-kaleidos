@@ -8,10 +8,22 @@ export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
     return _case;
   }
 
-  async setupController(controller) {
+  async setupController(controller, model) {
     super.setupController(...arguments);
     const publicationFlow = this.modelFor('publications.publication');
     const contactPersons = await publicationFlow.get('contactPersons');
+    const subcasesOnMeeting = await this.store.query('subcase', {
+      filter: {
+        case: {
+          id: model.id,
+        },
+        ':has:agenda-activities': 'yes',
+      },
+      sort: '-created',
+    });
+    if (subcasesOnMeeting) {
+      controller.set('latestSubcaseOnMeeting', subcasesOnMeeting.get('firstObject'));
+    }
     controller.set('contactPersons', contactPersons);
     controller.set('publicationFlow', publicationFlow);
   }

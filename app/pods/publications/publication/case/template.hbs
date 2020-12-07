@@ -96,7 +96,7 @@
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        {{#if (not this.model.latestSubcase.mandatees)}}
+        {{#if (not (await this.latestSubcaseOnMeeting.mandatees))}}
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-mandatees"}}/>
           </WebComponents::AuPanel::Body>
@@ -110,29 +110,25 @@
               </tr>
             </thead>
             <tbody>
-              {{#each (await this.model.latestSubcase.mandatees) as |mandatee|}}
+              {{#each (await this.latestSubcaseOnMeeting.mandatees) as |mandatee|}}
                 <tr>
                   <td>
                     <div class="o-flex o-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
                       <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                     </div>
-                    
-                    {{!-- <div class="auk-empty-state">
-                      <WebComponents::AuBadge @icon="user"/>
-                      <p>{{mandatee.person.nameToDisplay}}</p>
-                    </div> --}}
                   </td>
+                  {{!-- Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
                   {{!-- <td>
-                    {{t "cancel"}}
+                    BeleidsDomein
                     <br>
-                    <span class="auk-u-muted auk-u-text-small">{{t "cancel"}}</span>
+                    <span class="auk-u-muted auk-u-text-small">beleidsveld</span>
                   </td> --}}
                   <td class="vl-u-align-right">
+                    {{!-- Acties in 1 rij / enkel indien niet via MR}}
                     {{!-- <button
                       class="vl-button vl-button--link vl-button--icon"
                       type="button"
-                      data-test-show-contactperson-popover
                     >
                       <i class="ki-more"></i>
                       <AttachPopover
