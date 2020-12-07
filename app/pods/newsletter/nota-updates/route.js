@@ -38,7 +38,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[agenda][:id:]': agendaId,
       'filter[show-as-remark]': false,
       'page[size]': 300,
-      'fields[agendaitems]': 'id,priority,shortTitle',
+      'fields[agendaitems]': 'id,priority,short-title',
     });
     // Omzetten van proxyarray naar default JS array
     const agendaitemsArray = agendaitemsForAgenda.toArray();
