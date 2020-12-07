@@ -38,7 +38,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       include: 'agendaitem',
       'fields[agendaitem]': 'id,priority,short-title',
       'fields[piece]': 'id,name,modified',
-      'page[size]': 300,
+      'page[size]': 50,
       sort: params.sort,
     });
     for (const nota of notas.toArray()) { // proxyarray to native JS array
