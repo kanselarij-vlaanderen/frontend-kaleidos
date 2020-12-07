@@ -75,9 +75,9 @@
         {{#each @model.pieces as |piece|}}
           <tr>
             <td>
-              <WebComponents::AuButton 
-                {{on "click" (fn this.toggleFolderCollapse piece)}} 
-                @skin="borderless" 
+              <WebComponents::AuButton
+                {{on "click" (fn this.toggleFolderCollapse piece)}}
+                @skin="borderless"
                 @icon={{if (not piece.collapsed) "chevron-down" "chevron-right" }}
                 @layout="icon-only">
               </WebComponents::AuButton>
