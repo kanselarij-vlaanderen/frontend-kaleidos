@@ -96,16 +96,10 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const name = piece.get('name');
     const documentId = piece.get('id');
     const modified = piece.get('modified');
-    const container = await piece.get('documentContainer');
-    const type = await container.get('type');
-    const label = type.get('label');
-    if (label === 'Nota') {
-      return {
-        documentId: documentId,
-        name: name,
-        modified: modified,
-      };
-    }
-    return null;
+    return {
+      documentId: documentId,
+      name: name,
+      modified: modified,
+    };
   }
 }
