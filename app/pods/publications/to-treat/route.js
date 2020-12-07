@@ -22,6 +22,10 @@ class Case extends EmberObject {
 
 export default class ToTreatRoute extends Route {
   queryParams = {
+    searchText: {
+      refreshModel: true,
+      as: 'zoekterm',
+    },
     page: {
       refreshModel: true,
     },
@@ -49,7 +53,13 @@ export default class ToTreatRoute extends Route {
     const date = moment(today, 'DD-MM-YYYY').endOf('day');
     const filter = {};
     const sort = '-session-dates';
-    filter[':sqs:title'] = '*'; // search without filter
+
+    if (typeof params.searchText === 'string' && params.searchText !== '') {
+      filter[':sqs:shortTitle'] = params.searchText;
+    } else {
+      filter[':sqs:shortTitle'] = '*'; // search without filter
+    }
+
     filter[':lte:sessionDates'] = date.utc().toISOString();
     filter.agendaStatus = 'Goedgekeurd';
 
@@ -60,13 +70,12 @@ export default class ToTreatRoute extends Route {
 
       if (typeof item.attributes.meetingId === 'string') {
         // if dossier only linked to 1 meeting
-        // newer data is structured this way.
         entry.meeting = this.store.findRecord('meeting', item.attributes.meetingId);
       } else {
         // older data sometimes has this.
         entry.meeting = this.store.query('meeting', {
           filter: {
-            id: item.attributes.meetingId,
+            id: item.attributes.meetingId[0],
           },
         });
       }
