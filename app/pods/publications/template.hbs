@@ -90,7 +90,7 @@
           </WebComponents::AuToolbar>
         </Navbar> --}}
       {{#if isShowingPublicationModal}}
-        <WebComponents::AuModal data-test-auk-modal-publication-new>
+        <WebComponents::AuModal data-test-au-modal-publication-new>
           <WebComponents::AuModal::Header
                   @title={{t "publications-new-not-minister"}}
                   @closeModal={{this.closePublicationModal}}
@@ -151,7 +151,8 @@
               </div>
             </div>
           </WebComponents::AuModal::Body>
-          <WebComponents::AuModal::Footer>
+          {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+          <WebComponents::AuModal::Footer @custom={{true}}>
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="left">
                 <WebComponents::AuToolbar::Item>

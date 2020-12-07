@@ -1,22 +1,24 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-// import { task } from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
+import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
+import moment from 'moment';
 
 export default class PublicationDocumentsController extends Controller {
-  @tracked isOpenDocxUploadModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
-
+  @tracked isSavingPieces = false;
+  @tracked isUploadModalResized = false;
+  @tracked showLoader = false;
 
   @action
-  openDocxUploadModal() {
-    alert('Deze functionaliteit heeft nog geen implementatie');
-    // this.isOpenDocxUploadModal = true;
+  toggleUploadModalSize() {
+    this.isUploadModalResized = !this.isUploadModalResized;
   }
 
   @action
@@ -36,17 +38,6 @@ export default class PublicationDocumentsController extends Controller {
     // this.isOpenPublishPreviewRequestModal = true;
   }
 
-  // TODO use this when actually uploading documents
-  // @task
-  // *cancelUploadPieces() {
-  //   this.isOpenPieceUploadModal = false;
-  // }
-
-  @action
-  cancelUploadPieces() {
-    this.isOpenPieceUploadModal = false;
-  }
-
   @action
   // eslint-disable-next-line class-methods-use-this
   showPieceViewer(pieceId) {
@@ -56,5 +47,72 @@ export default class PublicationDocumentsController extends Controller {
   @action
   toggleFolderCollapse(piece) {
     piece.set('collapsed', !piece.collapsed);
+  }
+
+  @action
+  uploadPiece(file) {
+    const now = moment().utc()
+      .toDate();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      accessLevel: this.defaultAccessLevel,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    this.newPieces.pushObject(piece);
+  }
+
+  @task
+  *savePieces() {
+    const savePromises = this.newPieces.map(async(piece) => {
+      try {
+        await this.savePiece.perform(piece);
+      } catch (error) {
+        await this.deletePiece.perform(piece);
+        throw error;
+      }
+    });
+    this.showLoader = true;
+    this.isOpenPieceUploadModal = false;
+    yield all(savePromises);
+    this.showLoader = false;
+    this.newPieces = A();
+  }
+
+  /**
+    * Save a new document container and the piece it wraps
+  */
+  @task
+  *savePiece(piece) {
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.save();
+    yield piece.save();
+    const pieces = yield this.model.hasMany('pieces').reload();
+    pieces.pushObject(piece);
+    yield this.model.save();
+  }
+
+  @task
+  *cancelUploadPieces() {
+    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
+    yield all(deletePromises);
+    this.newPieces = A();
+    this.isOpenPieceUploadModal = false;
+  }
+
+  @task
+  *deletePiece(piece) {
+    const file = yield piece.file;
+    yield file.destroyRecord();
+    this.newPieces.removeObject(piece);
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.destroyRecord();
+    yield piece.destroyRecord();
   }
 }

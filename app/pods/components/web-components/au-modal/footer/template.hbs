@@ -1,3 +1,20 @@
 <div class="auk-modal__footer auk-modal__footer--bordered">
-  {{yield}}
+  {{#if @custom}}
+    {{yield}}
+  {{else}}
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="borderless" {{on "click" @cancelModal}} data-test-au-modal-footer-cancel>
+            {{t "cancel"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          {{yield}}
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  {{/if}}
 </div>
