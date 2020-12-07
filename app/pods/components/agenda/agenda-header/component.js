@@ -15,7 +15,7 @@ import {
   setAgendaitemFormallyOk,
   getListOfAgendaitemsThatAreNotFormallyOk,
   getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus,
-  setAgendaitemsPriority
+  reorderAgendaitemsOnAgenda
 } from 'fe-redpencil/utils/agendaitem-utils';
 import {
   constructArchiveName,
@@ -245,15 +245,8 @@ export default Component.extend(FileSaverMixin, {
         for (const agendaitem of agendaitemsToRemoveFromCurrentAgenda) {
           await this.agendaService.deleteAgendaitem(agendaitem);
         }
-        await this.currentAgenda.hasMany('agendaitems').reload();
-        const agendaitemsFormallyOk = await this.currentAgenda.get('agendaitems');
-        const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-          .sortBy('priority');
-        const actualAnnouncements = agendaitemsFormallyOk.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
-          .sortBy('priority');
         const isEditor = this.currentSessionService.isEditor;
-        await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
-        await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+        await reorderAgendaitemsOnAgenda(this.currentAgenda, isEditor);
       }
       this.set('showCloseWarning', false);
       this.currentAgenda.set('isApproved', true);
@@ -600,19 +593,22 @@ export default Component.extend(FileSaverMixin, {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
         .then(async(newAgenda) => {
+          const isEditor = this.currentSessionService.isEditor;
+
+          // Oude agenda die we gaan afsluiten
           const agendaitems = await agendaToLock.get('agendaitems');
           const agendaitemsWithStatusDifferentFromFormallyOk = agendaitems.filter((agendaitem) => agendaitem.get('isAdded') && (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
           await this.reloadAgendaitemsOfSubcases(agendaitems);
           await this.destroyAgendaitemsList(agendaitemsWithStatusDifferentFromFormallyOk);
-          await agendaToLock.hasMany('agendaitems').reload();
-          const agendaitemsFormallyOk = await agendaToLock.get('agendaitems');
-          const actualAgendaitems = agendaitemsFormallyOk.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-            .sortBy('priority');
-          const actualAnnouncements = agendaitemsFormallyOk.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
-            .sortBy('priority');
-          const isEditor = this.currentSessionService.isEditor;
-          await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
-          await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+          await reorderAgendaitemsOnAgenda(agendaToLock, isEditor);
+
+          // Sort removed agendaitems at bottom of new agenda
+          const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
+          const agendaitemsWithStatusDifferentFromFormallyOkFromNewAgenda = agendaitemsFromNewAgenda.filter((agendaitem) => agendaitem.get('isAdded') && (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+          agendaitemsWithStatusDifferentFromFormallyOkFromNewAgenda.forEach((agendaitem) => {
+            agendaitem.set('priority', agendaitem.get('priority') + 9999);
+          });
+          await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
           return newAgenda;
         })
         .then((newAgenda) => {
