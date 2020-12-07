@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default class IndexPublicationRoute extends Route {
+export default class IndexPublicationRoute extends Route.extend(AuthenticatedRouteMixin)  {
   beforeModel() {
     /* It is assumed here that explicitly navigating to the index-route
      * expresses a desire to "reset", to "start a new search-session".

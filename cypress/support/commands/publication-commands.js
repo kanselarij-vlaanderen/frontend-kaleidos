@@ -30,8 +30,6 @@ function createPublication(publicationNumber, shortTitle, longTitle) {
 
   cy.get(modalSelectors.auModal.container).as('publicationModal')
     .within(() => {
-      cy.get('.auk-form-group').as('newPublicationForm')
-        .should('have.length', 3);
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
         .type(publicationNumber)

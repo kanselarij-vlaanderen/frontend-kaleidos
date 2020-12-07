@@ -10,10 +10,10 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await this.currentPieces)}}>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await @model.pieces)}}>
           {{t "requests"}}
         </WebComponents::AuButton>
-        {{#if (await this.currentPieces)}}
+        {{#if (await @model.pieces)}}
           <AttachPopover
             @renderInPlace={{true}}
             @class="ember-attacher-popper"
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each this.currentPieces as |piece|}}
+        {{#each @model.pieces as |piece|}}
           <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton
@@ -204,7 +204,10 @@
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::AuModal @resized={{this.isUploadModalResized}} @size="full-screen">
+  <WebComponents::AuModal
+    @resized={{this.isUploadModalResized}}
+    @size="full-screen"
+  >
     <WebComponents::AuModal::Header
       @resizeable={{true}}
       @title={{t "documents-add"}}
@@ -231,7 +234,7 @@
         <WebComponents::AuButton
           data-test-au-modal-footer-save
           @skin="primary"
-          @disable={{eq this.newPieces.length 0}}
+          @disabled={{eq this.newPieces.length 0}}
           {{on "click" (perform this.savePieces)}}
         >
           {{t "documents-add"}}
