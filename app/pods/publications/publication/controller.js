@@ -16,9 +16,17 @@ export default class PublicationController extends Controller {
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
     label: 'Te publiceren',
+    icon: {
+      svg: 'clock',
+      color: 'warning',
+    },
   }, {
     id: CONFIG.publicationStatusPublished.id,
     label: 'Gepubliceerd',
+    icon: {
+      svg: 'circle-check',
+      color: 'success',
+    },
   }];
 
   typeOptions = [
@@ -79,7 +87,6 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setPublicationNumber(event) {
-    console.log(this.get('media'));
     this.model.set('publicationNumber',  event.target.value);
     yield timeout(1000);
     this.model.save();
