@@ -9,28 +9,22 @@ export default class Modal extends Component {
    * small
    */
   get size() {
-    let size;
     if (this.args.size) {
       if (this.args.resized) {
-        // if size is already full-screen, resize to large
+        // if the given size is already full-screen, resize to large instead
         if (this.args.size === 'full-screen') {
-          size = 'auk-modal--large';
-        } else {
-          size = 'auk-modal--full-screen';
+          return 'auk-modal--large';
         }
-      } else {
-        // if not resized, use the size given
-        size = `auk-modal--${this.args.size}`;
+        return 'auk-modal--full-screen';
       }
-    } else {
-      if (this.args.resized) {
-        size = 'auk-modal--full-screen';
-      } else {
-        // default
-        size = 'auk-modal--large';
-      }
+      // if not resized, use the size given
+      return `auk-modal--${this.args.size}`;
     }
-
-    return size;
+    // no size from args
+    if (this.args.resized) {
+      return 'auk-modal--full-screen';
+    }
+    // default
+    return 'auk-modal--large';
   }
 }

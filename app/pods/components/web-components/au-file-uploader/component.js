@@ -2,9 +2,7 @@ import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import {
-  action, get
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
@@ -40,8 +38,8 @@ export default class FileUploader extends Component {
       file.readAsDataURL().then(() => {
       });
       const response = yield file.upload('/files');
-      const fileTest = yield this.store.findRecord('file', response.body.data.id);
-      this.uploadedFileAction(fileTest);
+      const fileFromStore = yield this.store.findRecord('file', response.body.data.id);
+      this.uploadedFileAction(fileFromStore);
       this.uploadedFileLength += 1;
     } catch (exception) {
       this.isLoading = false;
@@ -53,13 +51,13 @@ export default class FileUploader extends Component {
 
   @action
   uploadFile(file) {
-    get(this, 'uploadFileTask').perform(file);
+    this.uploadFileTask.perform(file);
   }
 
   get fullHeight() {
     if (this.args.fullHeight) {
       return 'auk-file-upload--full-height';
     }
-    return '';
+    return null;
   }
 }

@@ -103,14 +103,16 @@ export default class PublicationDocumentsController extends Controller {
   *savePieces() {
     const savePromises = this.newPieces.map(async(piece) => {
       try {
-        this.savePiece.perform(piece);
+        await this.savePiece.perform(piece);
       } catch (error) {
-        this.deletePiece.perform(piece);
+        await this.deletePiece.perform(piece);
         throw error;
       }
     });
-    yield all(savePromises);
+    this.showLoader = true;
     this.isOpenPieceUploadModal = false;
+    yield all(savePromises);
+    this.showLoader = false;
     this.newPieces = A();
   }
 
