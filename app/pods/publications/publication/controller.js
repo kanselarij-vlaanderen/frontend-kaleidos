@@ -5,10 +5,13 @@ import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
 import moment from 'moment';
+import { inject as service } from '@ember/service';
+
 
 export default class PublicationController extends Controller {
-  @tracked collapsed = !this.get('media.isBigScreen');
+  @service media;
 
+  @tracked collapsed = !this.get('media.isBigScreen');
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -24,7 +27,7 @@ export default class PublicationController extends Controller {
       svg: 'circle-check',
       color: '#8BAE00',
     },
-  }]
+  }];
 
   typeOptions = [
     {
@@ -34,7 +37,7 @@ export default class PublicationController extends Controller {
       id: CONFIG.PUBLICATION_TYPES.bijUitreksel.id,
       label: 'Bij uitreksel',
     }
-  ]
+  ];
 
   get getPublicationStatus() {
     return this.statusOptions.find((statusOption) => statusOption.id === this.model.get('status.id'));
