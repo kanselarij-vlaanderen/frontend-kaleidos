@@ -35,7 +35,7 @@
         {{/if}}
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="primary" @icon="plus" {{on "click" this.openPieceUploadModal}}>{{t "documents-add"}}</WebComponents::AuButton>
+        <WebComponents::AuButton data-test-publication-case-add-documents @skin="primary" @icon="plus" {{on "click" this.openPieceUploadModal}}>{{t "documents-add"}}</WebComponents::AuButton>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
@@ -73,7 +73,7 @@
       </thead>
       <tbody>
         {{#each @model.pieces as |piece|}}
-          <tr>
+          <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton
                 {{on "click" (fn this.toggleFolderCollapse piece)}}
@@ -115,9 +115,9 @@
                   {{!-- as |attacher| --}}
                 >
                   <WebComponents::AuDropdown>
-                    <WebComponents::AuDropdown::Item {{on "click" this.openDocxUploadModal}}>
+                    {{!-- <WebComponents::AuDropdown::Item>
                       {{t "upload-docx"}}
-                    </WebComponents::AuDropdown::Item>
+                    </WebComponents::AuDropdown::Item> --}}
                     {{!-- TODO delete folder ? Intent for this action is unclear and delete rules must be checked --}}
                     {{!-- <WebComponents::AuDropdown::Item @skin="danger" {{on "click" attacher.hide}}>
                       {{t "delete-folder"}}
@@ -198,40 +198,63 @@
 </div>
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::VlModal
-    {{!-- @closeModal={{perform this.cancelUploadPieces}} --}}
-    @closeModal={{this.cancelUploadPieces}}
-    @isOverlay={{true}}
-    @large={{true}}
-    @title={{t "documents-add"}} >
-    <div class="vl-modal-dialog__content">
-      {{!-- {{#if this.savePieces.isRunning}} --}}
-      {{#if false}}
-        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-      {{else}}
-        <WebComponents::AuAlert @skin="warning" @message="Gelieve nog geen documenten te uploaden, dit werkt nog niet"></WebComponents::AuAlert>
-        <FileUploader
-          @multipleFiles={{true}}
-          {{!-- @uploadedFileAction={{this.uploadPiece}} --}}
-        />
-        {{!-- <div class="upload-container">
+  <WebComponents::AuModal
+    @resized={{this.isUploadModalResized}}
+    @size="full-screen"
+  >
+    <WebComponents::AuModal::Header
+      @resizeable={{true}}
+      @title={{t "documents-add"}}
+      @toggleSize={{this.toggleUploadModalSize}}
+      @closeModal={{perform this.cancelUploadPieces}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuFileUploader @fullHeight={{eq this.newPieces.length 0}} @multipleFiles={{true}} @uploadedFileAction={{action this.uploadPiece}}/>
+      {{!-- TODO vervangen met correct design (nog in flux), au css en componenten --}}
+      {{!-- TODO document types dropdown is hidden by z-index, using custom dropdown requires a lot of new components --}}
+        <div class="upload-container">
           {{#each this.newPieces as |piece|}}
             <Documents::DocumentUpload
               @piece={{piece}}
               @allowDocumentContainerEdit={{true}}
               @onDelete={{perform this.deletePiece piece}} />
           {{/each}}
-        </div> --}}
+        </div>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{perform this.cancelUploadPieces}}>
+      {{#if this.savePieces.isRunning}}
+        <Utils::SimpleSpinner></Utils::SimpleSpinner>
+      {{else}}
+        <WebComponents::AuButton
+          data-test-au-modal-footer-save 
+          @skin="primary" 
+          @disabled={{eq this.newPieces.length 0}}
+          {{on "click" (perform this.savePieces)}}
+        >
+          {{t "documents-add"}}
+        </WebComponents::AuButton>
       {{/if}}
-    </div>
-    <WebComponents::VlModalFooter
-      {{!-- @isLoading={{this.savePieces.isRunning}} --}}
-      @cancelButtonText={{t "cancel"}}
-      @saveButtonText={{t "documents-add"}}
-      @cancelAction={{this.cancelUploadPieces}}
-      {{!-- @cancelAction={{perform this.cancelUploadPieces}} --}}
-      {{!-- @saveAction={{perform this.savePieces}} --}}
-      @disableSave={{eq this.newPieces.length 0}}
+    </WebComponents::AuModal::Footer>  
+  </WebComponents::AuModal>
+{{/if}}
+
+
+{{!-- FULL PAGE LOADER --}}
+
+
+{{#if showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header 
+      @title={{t "loading-text"}}
+      @showCloseButton={{false}}/>
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
       />
-  </WebComponents::VlModal>
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
 {{/if}}

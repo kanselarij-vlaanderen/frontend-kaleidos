@@ -4,26 +4,27 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class ToTreatController extends Controller {
-  queryParams =[{
+  queryParams = [{
     page: {
       type: 'number',
     },
     size: {
       type: 'number',
     },
+    searchText: {
+      type: 'string',
+    },
   }];
 
-  @service publicationService;
 
+  @service publicationService;
+  @tracked searchText = '';
+  @tracked searchTextBuffer = '';
   @tracked page = 0;
-  @tracked size = 20;
+  @tracked size = 25;
 
   @tracked showLoader = false;
-
-  @action
-  documentsAmount() {
-    return '99';
-  }
+  @tracked isLoading = false;
 
   @action
   caseHasPublication() {
@@ -36,13 +37,42 @@ export default class ToTreatController extends Controller {
   }
 
   @action
-  // eslint-disable-next-line no-unused-vars
+  search() {
+    this.searchText = this.searchTextBuffer;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+      this.performSearch(this.searchText);
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+    this.performSearch(this.searchText);
+  }
+
+  @action
   async startPublication(_case) {
     this.set('showLoader', true);
-    // TODO what publication number to start with here?
-    // Defaulted to 0.
-    const newPublication = await this.publicationService.createNewPublication(0, _case.id);
-    this.set('showLoader', false);
+    // Test if dossier already had publication (index not up to date).
+    const pubFlows = await this.store.query('publication-flow', {
+      filter: {
+        case: {
+          id: _case.id,
+        },
+      },
+    });
+    let newPublication;
+    if (pubFlows.content.length > 0) {
+      newPublication = await this.store.findRecord('publication-flow', pubFlows.content[0].id);
+    } else {
+      newPublication = await this.publicationService.createNewPublication(0, _case.id);
+      this.set('showLoader', false);
+    }
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
 }
