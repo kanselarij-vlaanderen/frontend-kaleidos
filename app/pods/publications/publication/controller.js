@@ -81,6 +81,7 @@ export default class PublicationController extends Controller {
 
   @restartableTask
   *setPublicationNumber(event) {
+    yield timeout(1000);
     this.publicationService.publicationNumberAlreadyTaken(event.target.value).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
@@ -93,7 +94,6 @@ export default class PublicationController extends Controller {
         this.model.save();
       }
     });
-    yield timeout(1000);
   }
 
   @restartableTask
