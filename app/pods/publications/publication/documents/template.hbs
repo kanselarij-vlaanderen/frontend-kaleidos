@@ -1,7 +1,7 @@
 {{!-- TITLE AND TOOLBAR --}}
 
 
-<div class="u-my-2">
+<div class="auk-u-my-2">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -45,7 +45,7 @@
 {{!-- TABLE FOR DOCUMENTS --}}
 
 
-<div class="u-mb-3">
+<div class="auk-u-mb-3">
   {{#if (gt (await @model.pieces.length) 0)}}
     <table class="auk-table">
       <thead>
@@ -75,9 +75,9 @@
         {{#each @model.pieces as |piece|}}
           <tr>
             <td>
-              <WebComponents::AuButton 
-                {{on "click" (fn this.toggleFolderCollapse piece)}} 
-                @skin="borderless" 
+              <WebComponents::AuButton
+                {{on "click" (fn this.toggleFolderCollapse piece)}}
+                @skin="borderless"
                 @icon={{if (not piece.collapsed) "chevron-down" "chevron-right" }}
                 @layout="icon-only">
               </WebComponents::AuButton>
@@ -85,10 +85,10 @@
             <td>
               <div class="o-flex o-flex--vertical-center">
                 <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
-                <div class="u-ml-3">
+                <div class="auk-u-ml-3">
                   <span class="u-text-bold">{{await piece.name}}</span>
                   <br>
-                  <span class="u-muted u text-small">{{await piece.documentContainer.type.label}}</span>
+                  <span class="auk-u-muted  auk-u-text-small">{{await piece.documentContainer.type.label}}</span>
                 </div>
               </div>
 
@@ -96,7 +96,7 @@
             <td>
               {{moment-format piece.created}}
               <br>
-              <span class="u-muted u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+              <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
             </td>
             <td colspan="2"></td>
             <td colspan="2"></td>
@@ -133,12 +133,12 @@
               <td>
                 <span>{{await piece.name}}</span>
                 <br>
-                <span class="u-muted u text-small">{{await piece.file.extension}}</span>
+                <span class="auk-u-muted auk-u-text-small">{{await piece.file.extension}}</span>
               </td>
               <td>
                 {{moment-format piece.created}}
                 <br>
-                <span class="u-muted u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
               </td>
               {{!-- TODO Logic for checkboxes checked --}}
               {{!-- TODO Logic for the checkmark (isPresent), based on activities or just checking for the relevcant pieces? --}}

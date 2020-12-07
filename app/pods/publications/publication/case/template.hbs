@@ -1,5 +1,5 @@
  {{!--  DOSSIER PANEL  --}}
-  <div class="u-mb-3">
+  <div class="auk-u-mb-3">
     {{#if this.isInscriptionInEditMode}}
       <WebComponents::AuPanel class="auk-panel--editing">
         <WebComponents::AuPanel::Header>
@@ -77,7 +77,7 @@
   {{!--  MINISTER PANEL  --}}
 
 
-  <div hidden class="u-mb-3">
+  <div hidden class="auk-u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -105,11 +105,11 @@
           <tbody>
             <tr>
               <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="user" /> <span class="u-mx-2">{{t "cancel"}}</span>
+                <WebComponents::AuBadge @icon="user" /> <span class="auk-u-mx-2">{{t "cancel"}}</span>
               </td>
               <td>
                 <span>{{t "cancel"}}</span>
-                <span class="u-muted">{{t "cancel"}}</span>
+                <span class="auk-u-muted">{{t "cancel"}}</span>
               </td>
               <td class="vl-u-align-right">
                 <button
@@ -156,7 +156,7 @@
 
   {{!--  CONTACTPERSON PANEL  --}}
 
-  <div class="u-mb-3">
+  <div class="auk-u-mb-3">
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -192,10 +192,10 @@
                 <tr>
                   <td class="o-flex o-flex--vertical-center">
                     <WebComponents::AuBadge @icon="user"/>
-                    <span class="u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
+                    <span class="auk-u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
                   </td>
                   <td class="">
-                    <span class="u-mx-2">
+                    <span class="auk-u-mx-2">
                       {{#if contactPerson.email }}
                         <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
                       {{/if}}
@@ -203,7 +203,7 @@
                   </td>
 
                   <td class="">
-                    <span class="u-mx-2">{{contactPerson.organisationName}}</span>
+                    <span class="auk-u-mx-2">{{contactPerson.organisationName}}</span>
                   </td>
 
                   <td class="vl-u-align-right">
