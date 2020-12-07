@@ -49,7 +49,11 @@
               </td>
               <td>
                 <p>
-                  {{t "newsletter-update-notas-edited-text" date=row.date time=row.time}}
+                  {{t
+                    "newsletter-update-notas-edited-text"
+                    date=(moment-format row.modified "DD-MM-YYYY")
+                    time=(moment-format row.modified "HH:mm")
+                  }}
                 </p>
               </td>
               <td class="vl-u-align-right">

@@ -104,8 +104,6 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         documentId: documentId,
         name: name,
         modified: modified,
-        date: moment(modified).format('DD-MM-YYYY'),
-        time: moment(modified).format('HH:mm'),
       };
     }
     return null;
