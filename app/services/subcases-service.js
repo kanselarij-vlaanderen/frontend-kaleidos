@@ -17,7 +17,7 @@ export default Service.extend({
    * @param title
    * @returns {Promise<any>}
    */
-  async createSubcaseForPublicationFlow(_case, _publicationFlow, subcaseTypeObject, shortTitle, title) {
+  async createSubcaseForPublicationFlow(_publicationFlow, subcaseTypeObject, shortTitle, title) {
     const creationDatetime = moment().utc()
       .toDate();
 
@@ -29,7 +29,6 @@ export default Service.extend({
       // TODO: wat moeten we hier in steken?
       // confidential: confidential || false,
       // showAsRemark: showAsRemark || false,
-      case: _case,
       publicationFlow: _publicationFlow,
       created: creationDatetime,
       modified: creationDatetime,

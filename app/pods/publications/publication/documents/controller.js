@@ -178,7 +178,7 @@ export default class PublicationDocumentsController extends Controller {
     const title = await this.model.case.title;
 
     // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.case, this.model.publicationFlow, translateSubCaseType, shortTitle, title);
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
