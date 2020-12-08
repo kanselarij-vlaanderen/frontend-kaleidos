@@ -322,15 +322,13 @@
 
 
 
-{{!-- FULL PAGE LOADER --}}
+{{!-- LOADER --}}
 
-
-
-{{#if showLoader}}
+{{#if this.showLoader}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Header
       @title={{t "loading-text"}}
-      @showCloseButton={{false}}
+      @hideCloseButton={{true}}
     />
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
