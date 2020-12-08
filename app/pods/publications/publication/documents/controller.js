@@ -155,7 +155,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelPublishPreviewRequestModal() {
-    set(this.publishPreviewActivity, 'mailContent', '');
+    set(this.previewActivity, 'mailContent', '');
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -176,7 +176,7 @@ export default class PublicationDocumentsController extends Controller {
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
-    await this.activityService.createNewPublishPreviewActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
+    await this.activityService.createNewPublishPreviewActivity(this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
     // Visual stuff.
     this.currentPieces.forEach((piece) => {
@@ -185,9 +185,8 @@ export default class PublicationDocumentsController extends Controller {
     this.currentPieces = [...this.currentPieces];
 
     // Reset local activity to empty state.
-    this.translateActivity = {
+    this.previewActivity = {
       mailContent: '',
-      finalTranslationDate: '',
       pieces: [],
     };
     this.showLoader = false;
