@@ -679,5 +679,10 @@
   "view-document-details": "Bekijk document details",
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
   "date-expired": "Datum verstreken",
-  "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team."
+  "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
+  "cancel-translation": "Aanvraag intrekken",
+  "requested-on": "Aanvraag op",
+  "request": "Aanvraag",
+  "translation-mail-header": "Begeleidene tekst",
+  "files": "Bijlages"
 }
