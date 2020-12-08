@@ -20,6 +20,7 @@ export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
         ':has:agenda-activities': 'yes',
       },
       sort: '-created',
+      include: 'mandatees',
     });
     if (subcasesOnMeeting) {
       controller.set('latestSubcaseOnMeeting', subcasesOnMeeting.get('firstObject'));
