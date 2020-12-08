@@ -88,11 +88,9 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              {{!-- TODO this is hardcoded false, check for the existence of latestSubcaseOnMeeting? --}}
+              {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
               {{!-- TODO scenario 4 --}}
-              {{#if this.canEditMandatees}}
-                <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-minister"}}</WebComponents::AuButton>
-              {{/if}}
+              {{!-- <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-minister"}}</WebComponents::AuButton> --}}
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -109,7 +107,8 @@
                 <th>{{t "minister"}}</th>
                 {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
                 {{!-- <th>{{t "policy-domain-policy-fields"}}</th> --}}
-                <th></th>
+                {{!-- TODO row actions --}}
+                {{!-- <th></th> --}}
               </tr>
             </thead>
             <tbody>
@@ -127,45 +126,11 @@
                     <br>
                     <span class="auk-u-muted auk-u-text-small">{{t "government-field"}}</span>
                   </td> --}}
-                  <td class="vl-u-align-right">
-                    {{!-- TODO this is hardcoded false, check for the existence of latestSubcaseOnMeeting? --}}
-                    {{!-- TODO AuButton, AuDropdown, scenario 4 --}}
-                    {{!-- Acties in 1 rij / enkel indien niet via MR --}}
-                    {{#if this.canEditMandatees}}
-                      {{!-- <button
-                        class="vl-button vl-button--link vl-button--icon"
-                        type="button"
-                      >
-                        <i class="ki-more"></i>
-                        <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="left"
-                          as |attacher|
-                        >
-                          <ul class="vlc-dropdown-menu">
-                            <li class="vlc-dropdown-menu__item">
-                              <button class="vl-link vl-link--block" type="button"
-                                {{on "click" attacher.hide}}
-                              >
-                                {{t "edit-2"}}
-                              </button>
-                            </li>
-                            <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                              <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                                {{on "click" attacher.hide}}
-                              >
-                                {{t "delete-minister"}}
-                              </button>
-                            </li>
-                          </ul>
-                        </AttachPopover>
-                      </button> --}}
-                    {{/if}}
-                  </td>
+                  {{!-- TODO Acties in 1 rij / enkel indien niet via MR --}}
+                  {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
+                  {{!-- TODO AuButton with AttachPopover, AuDropdown, scenario 4 --}}
+                  {{!-- <td class="vl-u-align-right">
+                  </td> --}}
                 </tr>
               {{/each}}
             </tbody>

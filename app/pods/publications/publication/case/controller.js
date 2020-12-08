@@ -11,7 +11,6 @@ export default class CaseController extends Controller {
   @tracked isShowingPersonModal = false;
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
-  @tracked canEditMandatees = false;
 
 
   @tracked
