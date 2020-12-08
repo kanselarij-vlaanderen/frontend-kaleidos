@@ -1,9 +1,9 @@
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-4">
 
-    {{#if isLoading}}
+    {{#if this.isLoading}}
       <WebComponents::AuLoader
-              @text={{t "please-be-patient"}}
+              @message={{t "please-be-patient"}}
       />
     {{else}}
       {{#if this.model.length}}
