@@ -12,9 +12,9 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       reload: true,
     });
     const activities = await this.store.query('activity', {
-      include: 'type,subcase,used-pieces, subcase.type',
+      include: 'type,subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
-      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
+      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
     });
 
     return hash({
