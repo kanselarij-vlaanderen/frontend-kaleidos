@@ -191,9 +191,11 @@
             <tbody>
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
-                  <td class="o-flex o-flex--vertical-center">
-                    <WebComponents::AuBadge @icon="user"/>
-                    <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
+                  <td>
+                    <div class="o-flex o-flex--vertical-center">
+                      <WebComponents::AuBadge @icon="user"/>
+                      <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
+                    </div>
                   </td>
                   <td class="">
                     <span class="auk-u-mx-2">
