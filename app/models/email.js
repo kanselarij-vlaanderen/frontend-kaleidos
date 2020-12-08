@@ -15,7 +15,7 @@ export default class Email extends Model {
   // @attr('datetime') receivedDate;
   // @attr('datetime') sentDate; Will be set by email-sending-service
 
-  @belongsTo('email-folder') type;
+  @belongsTo('email-folder') folder;
 
-  @hasMany('attachments') file;
+  @hasMany('file') attachments;
 }
