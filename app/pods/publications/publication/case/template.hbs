@@ -11,7 +11,7 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-not-edit-inscription-button/>
+                <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -30,7 +30,7 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButton
@@ -52,12 +52,20 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+                <h4 class="auk-panel__title">
+                  {{t
+                    (if this.latestSubcaseOnMeeting
+                    "subcase-inscription"
+                    "publication-inscription")
+                  }}
+                </h4>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                {{#if (not this.latestSubcaseOnMeeting)}}
+                  <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                {{/if}}
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>

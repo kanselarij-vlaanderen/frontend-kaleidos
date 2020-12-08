@@ -649,6 +649,7 @@
   "proof": "Drukproef",
   "proofs": "Drukproeven",
   "publication-inscription": "Opschrift",
+  "subcase-inscription": "Tekst agendering",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
   "delete-minister": "Verwijderen van minister",
@@ -680,5 +681,5 @@
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
-  "no-mandatees-and-fields-added": "Er zijn nog geen ministers en beleidsvelden toegevoegd."  
+  "no-mandatees-and-fields-added": "Er zijn nog geen ministers en beleidsvelden toegevoegd."
 }
