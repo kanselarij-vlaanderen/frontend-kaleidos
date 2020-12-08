@@ -49,6 +49,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
+    console.log('changePieceSelection');
+
     if (this.selectedPieces[selectedPiece.id]) {
       delete this.selectedPieces[selectedPiece.id];
       selectedPiece.selected = false;
@@ -56,6 +58,7 @@ export default class PublicationDocumentsController extends Controller {
       this.selectedPieces[selectedPiece.id] = selectedPiece;
       selectedPiece.selected = true;
     }
+    console.log(this.selectedPieces);
   }
 
   @action
