@@ -14,6 +14,7 @@ import EmberObject, {
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
   @service subcasesService;
+  @service fileService;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -30,10 +31,12 @@ export default class PublicationDocumentsController extends Controller {
   };
   @tracked selectedPieces = [];
   @tracked currentPieces = this.pieces;
+  @tracked pieceToDelete = null;
+  @tracked isVerifyingDelete = false;
 
   get pieces() {
     if (this.model.case.pieces) {
-      return this.model.case.pieces.toArray();
+      return this.model.case.sortedPieces.toArray();
     }
     return null;
   }
@@ -105,13 +108,15 @@ export default class PublicationDocumentsController extends Controller {
       try {
         await this.savePiece.perform(piece);
       } catch (error) {
-        await this.deletePiece.perform(piece);
+        await this.deleteUploadedPiece.perform(piece);
         throw error;
       }
     });
     this.showLoader = true;
     this.isOpenPieceUploadModal = false;
     yield all(savePromises);
+    yield this.model.case.hasMany('pieces').reload();
+    this.currentPieces = this.pieces;
     this.showLoader = false;
     this.newPieces = A();
   }
@@ -131,14 +136,14 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *cancelUploadPieces() {
-    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
+    const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
     yield all(deletePromises);
     this.newPieces = A();
     this.isOpenPieceUploadModal = false;
   }
 
   @task
-  *deletePiece(piece) {
+  *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
     this.newPieces.removeObject(piece);
@@ -147,6 +152,36 @@ export default class PublicationDocumentsController extends Controller {
     yield piece.destroyRecord();
   }
 
+  @action
+  cancelDeleteExistingPiece() {
+    this.pieceToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  deleteExistingPiece(piece) {
+    this.pieceToDelete = piece;
+    this.isVerifyingDelete = true;
+  }
+
+  @task
+  *verifyDeleteExistingPiece() {
+    const agendaitem = yield this.pieceToDelete.get('agendaitem');
+    if (agendaitem) {
+      // possible unreachable code, failsafe
+      // do we want to show a toast ?
+    } else {
+      // TODO delete with undo ?
+      this.showLoader = true;
+      this.isVerifyingDelete = false;
+      yield this.fileService.deletePiece(this.pieceToDelete);
+      yield this.model.case.hasMany('pieces').reload();
+      this.currentPieces = this.pieces;
+      this.showLoader = false;
+      this.pieceToDelete = null;
+      // TODO delete orphan container if last piece is deleted
+    }
+  }
 
   /** TRANSLATION ACTIVITIES **/
 
