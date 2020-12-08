@@ -55,7 +55,7 @@
                               @route="publications.publication"
                               @model={{ await row.publicationFlow.id }}
                       >
-                        {{t "publications.to" }}
+                        {{t "publications-to" }}
                       </LinkTo>
                     {{else}}
                       <WebComponents::AuButton
@@ -89,14 +89,13 @@
     {{!-- FULL PAGE LOADER --}}
 
     {{#if showLoader }}
-      <WebComponents::AuModal data-test-add-contactpersonmodal>
+      <WebComponents::AuModal data-test-add-contactpersonmodal
+                              @size="full-screen">
         <WebComponents::AuModal::Header @title={{t "loading-text"}}
-                                        @isOverlay={{true}}
-                                        @showCloseButton={{false}}
-                                        @closeModal={{this.closeContactPersonModal}} />
+                                        @showCloseButton={{false}}/>
         <WebComponents::AuModal::Body>
           <WebComponents::AuLoader
-                  @text={{concat
+                  @message={{concat
                     (t "saving-change-message")
                     " "
                     (t "please-be-patient")

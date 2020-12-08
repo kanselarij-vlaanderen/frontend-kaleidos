@@ -106,14 +106,16 @@ export default class PublicationDocumentsController extends Controller {
   *savePieces() {
     const savePromises = this.newPieces.map(async(piece) => {
       try {
-        this.savePiece.perform(piece);
+        await this.savePiece.perform(piece);
       } catch (error) {
-        this.deletePiece.perform(piece);
+        await this.deletePiece.perform(piece);
         throw error;
       }
     });
-    yield all(savePromises);
+    this.showLoader = true;
     this.isOpenPieceUploadModal = false;
+    yield all(savePromises);
+    this.showLoader = false;
     this.newPieces = A();
   }
 
@@ -179,7 +181,7 @@ export default class PublicationDocumentsController extends Controller {
     const title = await this.model.case.title;
 
     // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.case, this.model.publicationFlow, translateSubCaseType, shortTitle, title);
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);

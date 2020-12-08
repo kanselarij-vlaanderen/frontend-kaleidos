@@ -46,7 +46,7 @@
 
 
 <div class="auk-u-mb-3">
-  {{#if (gt (await this.currentPieces.length) 0)}}
+  {{#if (and (gt (await this.currentPieces.length) 0 ) this.pieces)}}
     <table class="auk-table">
       <thead>
         <tr>
@@ -203,6 +203,10 @@
   {{/if}}
 </div>
 
+
+{{!--     UPLOAD PIECE MODAL       --}}
+
+
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::AuModal
     @resized={{this.isUploadModalResized}}
@@ -245,11 +249,7 @@
 {{/if}}
 
 
-
-
-
 {{!--      REQUEST TRANSLATION MODAL       --}}
-
 
 
 {{#if this.showTranslationModal}}
@@ -272,7 +272,8 @@
         <WebComponents::AuLabel @isRequired={{true}}>
           {{t "extreme-translation-date"}}
         </WebComponents::AuLabel>
-        <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}} @onChange={{this.setTranslateActivityBeforeDate}}/>
+        <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}}
+                                     @onChange={{this.setTranslateActivityBeforeDate}}/>
 
         <WebComponents::AuLabel @isRequired={{true}}>
           {{t "accompanying-text"}}
@@ -294,7 +295,9 @@
               <div class="auk-u-ml-3">
                 <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
                 <br>
-                <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
+                <span class="auk-u-muted auk-u-text-small">
+                  {{await loopedPiece.documentContainer.type.label}}
+                </span>
               </div>
             </div>
           {{/if}}
@@ -323,18 +326,20 @@
 
 
 
-{{#if showLoader }}
-  <WebComponents::AuModal
-          @isOverlay={{true}}
-          @showCloseButton={{false}}
-          @title={{t "loading-text"}}
-  >
-    <WebComponents::VlLoader
-        @text={{concat
+{{#if showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @showCloseButton={{false}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
           (t "saving-change-message")
           " "
           (t "please-be-patient")
         }}
-    />
+      />
+    </WebComponents::AuModal::Body>
   </WebComponents::AuModal>
 {{/if}}
