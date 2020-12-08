@@ -1,1 +1,5 @@
 <div>{{t "proofs"}}</div>
+
+{{#each this.activities as |activity|}}
+  <p>{{activity.mailContent}}</p>
+{{/each}}
