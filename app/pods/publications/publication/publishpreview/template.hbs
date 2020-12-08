@@ -1,5 +1,8 @@
 <div>{{t "proofs"}}</div>
 
 {{#each this.activities as |activity|}}
+  <p>{{activity.type}}</p>
+  <p>{{activity.startDate}}</p>
+  <p>{{activity.name}}</p>
   <p>{{activity.mailContent}}</p>
 {{/each}}
