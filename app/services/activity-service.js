@@ -51,4 +51,46 @@ export default class activityService extends Service {
 
     return translateActivity;
   }
+
+  /**
+   * Create a new Translation Activity.
+   *
+   * @param finalTranslationDate
+   * @param mailContent
+   * @param pieces
+   * @param subcase
+   * @returns {Promise<Model|any|Promise>}
+   */
+  async createNewPublishPreviewActivity(mailContent, pieces, subcase) {
+    const creationDatetime = moment().utc()
+      .toDate();
+
+    // TranslationType.
+    const requestPublishPreviewActivityType = EmberObject.create({
+      id: CONFIG.ACTIVITY_TYPES.drukproeven.id,
+      uri: CONFIG.ACTIVITY_TYPES.drukproeven.url,
+    });
+
+    const usedPieces = [];
+    Object.keys(pieces).forEach((key) => {
+      usedPieces.push(pieces[key]);
+    });
+
+    // Create activity.
+    const PublishPreviewActivity = this.store.createRecord('activity', {
+      startDate: creationDatetime,
+      mailContent,
+      subcase,
+      type: requestPublishPreviewActivityType,
+      usedPieces: usedPieces,
+    });
+
+    // Persist to db.
+    await PublishPreviewActivity.save();
+
+    // Reload relation.
+    await subcase.hasMany('activity').reload();
+
+    return PublishPreviewActivity;
+  }
 }

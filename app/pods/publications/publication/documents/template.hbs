@@ -203,6 +203,15 @@
   {{/if}}
 </div>
 
+
+
+
+
+{{!--  UPLOAD PIECES   --}}
+
+
+
+
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::AuModal
     @resized={{this.isUploadModalResized}}
@@ -308,6 +317,73 @@
           {{on "click" this.saveTranslationActivity}}
         >
           {{t "request-translations"}}
+        </WebComponents::AuButton>
+      {{/if}}
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{!--      REQUEST PUBLISH PREVIEW  MODAL       --}}
+
+
+
+{{#if this.isOpenPublishPreviewRequestModal}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+            @title={{t "request-publish-preview"}}
+            @closeModal={{this.cancelPublishPreviewRequestModal}}
+    />
+    <WebComponents::AuModal::Body>
+
+      {{#if (eq this.selectedPiecesCount 0) }}
+        <WebComponents::AuAlert data-test-auk-alert-error
+                                @title={{t "modal-error-alert-title"}}
+                                @skin="error"
+                                @message={{t "modal-error-missing-pieces"}}
+                                @icon="alert-triangle"/>
+      {{else}}
+      {{!--  Pieces selected --}}
+        {{t "request-publishpreview-confirmation" }}
+
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "accompanying-text"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuTextarea
+                id="emailMessage"
+                @rows="7"
+                @value={{mut this.publishPreviewActivity.mailContent}}
+                data-test-create-pulishpreviewActivity-modal-email-textarea/>
+
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "attachments" }}
+        </WebComponents::AuLabel>
+
+        {{#each this.currentPieces as |loopedPiece| }}
+          {{#if loopedPiece.selected}}
+            <div class="o-flex o-flex--vertical-center">
+              <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+              <div class="auk-u-ml-3">
+                <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
+                <br>
+                <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
+              </div>
+            </div>
+          {{/if}}
+        {{/each}}
+      {{/if}}
+
+    </WebComponents::AuModal::Body>
+
+    <WebComponents::AuModal::Footer @cancelModal={{this.cancelPublishPreviewRequestModal}}>
+      {{#if (gt this.selectedPiecesCount  0) }}
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save
+                @skin="primary"
+          {{on "click" this.savePublishPreviewActivity}}
+        >
+          {{t "request-publish-preview"}}
         </WebComponents::AuButton>
       {{/if}}
     </WebComponents::AuModal::Footer>

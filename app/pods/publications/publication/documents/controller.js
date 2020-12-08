@@ -28,6 +28,10 @@ export default class PublicationDocumentsController extends Controller {
     finalTranslationDate: '',
     pieces: [],
   };
+  @tracked previewActivity = {
+    mailContent: '',
+    pieces: [],
+  };
   @tracked selectedPieces = [];
   @tracked currentPieces = this.pieces;
 
@@ -61,12 +65,6 @@ export default class PublicationDocumentsController extends Controller {
   @action
   openPieceUploadModal() {
     this.isOpenPieceUploadModal = true;
-  }
-
-  @action
-  openPublishPreviewRequestModal() {
-    alert('Deze functionaliteit heeft nog geen implementatie');
-    // this.isOpenPublishPreviewRequestModal = true;
   }
 
   @action
@@ -147,6 +145,53 @@ export default class PublicationDocumentsController extends Controller {
     yield piece.destroyRecord();
   }
 
+  /** PUBLISH PREVIEW ACTIVITIES **/
+
+  @action
+  openPublishPreviewRequestModal() {
+    this.isOpenPublishPreviewRequestModal = true;
+    this.translateActivity.pieces = this.selectedPieces;
+  }
+
+  @action
+  cancelPublishPreviewRequestModal() {
+    set(this.publishPreviewActivity, 'mailContent', '');
+    this.isOpenPublishPreviewRequestModal = false;
+  }
+
+  @action
+  async savePublishPreviewActivity() {
+    this.showLoader = true;
+    this.isOpenPublishPreviewRequestModal = false;
+    const publishPreviewSubCaseType = EmberObject.create({
+      id: CONFIG.SUBCASE_TYPES.drukproef.id,
+      uri: CONFIG.SUBCASE_TYPES.drukproef.url,
+    });
+
+    // TODO take from other subcase maybe?
+    const shortTitle = await this.model.case.shortTitle;
+    const title = await this.model.case.title;
+
+    // Create subase.
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
+
+    // Create activity in subcase.
+    await this.activityService.createNewPublishPreviewActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
+
+    // Visual stuff.
+    this.currentPieces.forEach((piece) => {
+      piece.selected = false;
+    });
+    this.currentPieces = [...this.currentPieces];
+
+    // Reset local activity to empty state.
+    this.translateActivity = {
+      mailContent: '',
+      finalTranslationDate: '',
+      pieces: [],
+    };
+    this.showLoader = false;
+  }
 
   /** TRANSLATION ACTIVITIES **/
 
