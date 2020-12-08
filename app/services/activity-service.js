@@ -29,8 +29,9 @@ export default class activityService extends Service {
       uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
     });
 
-    const usedPieces = pieces.map((piece) => piece);
-
+    // Make hash key into array
+    const usedPieces = [];
+    Object.keys(pieces).forEach((keys) => usedPieces.push(pieces[keys]));
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {

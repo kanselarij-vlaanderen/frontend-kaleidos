@@ -10,15 +10,15 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    const subcases = await this.store.query('subcase', {
-      // include: 'activity',
-      'filter[publication-flow][:id:]': publicationFlow.get('id'),
+    const activities = await this.store.query('activity', {
+      include: 'subcase,used-pieces',
+      'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
     });
 
     return hash({
       publicationFlow,
       case: _case,
-      subcases: subcases,
+      activities: activities,
     });
   }
 }
