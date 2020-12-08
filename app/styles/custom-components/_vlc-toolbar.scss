@@ -23,7 +23,7 @@ $c-toolbar-middle-z: 20;
   flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
-  height: $c-toolbar-size-regular;
+  /*min-height: $c-toolbar-size-regular;*/
 }
 
 .vlc-toolbar--medium {

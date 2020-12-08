@@ -23,10 +23,9 @@
   }
 
   .vlc-page-header__title--max-width-title {
-    text-overflow: ellipsis;
-    max-width: 500px;
+    min-width: 500px;
+    max-width: 800px;
     overflow: hidden;
-    white-space: nowrap;
   }
 
   .vlc-page-header__subtitle {
