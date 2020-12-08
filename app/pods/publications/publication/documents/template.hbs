@@ -468,18 +468,20 @@
 
 
 
-{{#if showLoader }}
-  <WebComponents::AuModal
-          @isOverlay={{true}}
-          @showCloseButton={{false}}
-          @title={{t "loading-text"}}
-  >
-    <WebComponents::VlLoader
-            @text={{concat
-              (t "saving-change-message")
-              " "
-              (t "please-be-patient")
-            }}
+{{#if showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header 
+      @title={{t "loading-text"}}
+      @showCloseButton={{false}}
     />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
   </WebComponents::AuModal>
 {{/if}}
