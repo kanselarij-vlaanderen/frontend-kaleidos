@@ -171,6 +171,7 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-sortable-item';
 
 // Custom utilities
+@import 'custom-utilities/_autocomplete';
 @import 'custom-utilities/_box-model';
 @import 'custom-utilities/_cursors';
 @import 'custom-utilities/_extended-spacer';

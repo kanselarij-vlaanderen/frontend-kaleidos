@@ -1,7 +1,7 @@
  {{!--  DOSSIER PANEL  --}}
   <div class="auk-u-mb-3">
     {{#if this.isInscriptionInEditMode}}
-      <WebComponents::AuPanel class="auk-panel--editing">
+      <WebComponents::AuPanel data-test-publication-case-panel-case-editing class="auk-panel--editing">
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -47,7 +47,7 @@
         </WebComponents::AuPanel::Footer>
       </WebComponents::AuPanel>
     {{else}}
-      <WebComponents::AuPanel>
+      <WebComponents::AuPanel data-test-publication-case-panel-case>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -63,7 +63,7 @@
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
-          <div class="auk-content">
+          <div class="auk-content" data-test-publication-flow-title>
             <h4>{{this.model.shortTitle}}</h4>
             <p class="auk-u-text-prewrap">{{this.model.title}}</p>
           </div>
@@ -77,7 +77,7 @@
   {{!--  MINISTER PANEL  --}}
 
 
-  <div class="auk-u-mb-3">
+  <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -171,7 +171,7 @@
 
   {{!--  CONTACTPERSON PANEL  --}}
 
-  <div class="auk-u-mb-3">
+  <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -207,7 +207,7 @@
                 <tr>
                   <td class="o-flex o-flex--vertical-center">
                     <WebComponents::AuBadge @icon="user"/>
-                    <span class="auk-u-mx-2">{{ await contactPerson.nameToDisplay}}</span>
+                    <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                   </td>
                   <td class="">
                     <span class="auk-u-mx-2">
@@ -292,7 +292,8 @@
         </div>
       </div>
     </WebComponents::AuModal::Body>
-    <WebComponents::AuModal::Footer>
+    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+    <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>

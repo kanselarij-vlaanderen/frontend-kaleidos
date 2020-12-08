@@ -22,7 +22,7 @@ const selectors = {
     save: '[data-test-vl-modal-verify-save]',
   },
   publication: {
-    modal: '[data-test-auk-modal-publication-new]',
+    modal: '[data-test-au-modal-publication-new]',
     alertInfo: '[data-test-auk-alert-info]',
     alertError: '[data-test-auk-alert-error]',
     createButton: '[data-test-publication-button-create-new]',
@@ -31,9 +31,14 @@ const selectors = {
     publicationShortTitleTextarea: '[data-test-create-publication-modal-short-title-textarea]',
     publicationLongTitleTextarea: '[data-test-create-publication-modal-long-title-textarea]',
   },
+  auModal: {
+    container: '[data-test-au-modal]',
+    close: '[data-test-au-modal-header-close]',
+    cancel: '[data-test-au-modal-footer-cancel]',
+    save: '[data-test-au-modal-footer-save]',
+  },
   modalDialog: '[data-test-vl-modal-dialog]',
   modal: '[data-test-vl-modal]',
-  aukModal: '[data-test-auk-modal]',
   ministerModalSelector: '[data-test-mandatee-selector]',
   modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
 };
