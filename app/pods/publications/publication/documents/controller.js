@@ -6,7 +6,7 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import EmberObject, {
+import {
   action,
   set
 } from '@ember/object';
@@ -163,10 +163,9 @@ export default class PublicationDocumentsController extends Controller {
   async savePublishPreviewActivity() {
     this.showLoader = true;
     this.isOpenPublishPreviewRequestModal = false;
-    const publishPreviewSubCaseType = EmberObject.create({
-      id: CONFIG.SUBCASE_TYPES.drukproef.id,
-      uri: CONFIG.SUBCASE_TYPES.drukproef.url,
-    });
+
+    // publishPreviewActivityType.
+    const publishPreviewSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
@@ -212,10 +211,11 @@ export default class PublicationDocumentsController extends Controller {
   async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
-    const translateSubCaseType = EmberObject.create({
-      id: CONFIG.SUBCASE_TYPES.vertalen.id,
-      uri: CONFIG.SUBCASE_TYPES.vertalen.url,
-    });
+    // const translateSubCaseType = EmberObject.create({
+    //   id: CONFIG.SUBCASE_TYPES.vertalen.id,
+    //   uri: CONFIG.SUBCASE_TYPES.vertalen.url,
+    // });
+    const translateSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;

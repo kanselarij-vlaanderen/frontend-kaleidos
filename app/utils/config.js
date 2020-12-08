@@ -182,8 +182,8 @@ export default EmberObject.create({
       url: 'http://example.com/step/e711f906-34a9-11eb-adc1-0242ac120002',
     },
     drukproef: {
-      id: 'http://example.com/step/ef78bb52-34a9-11eb-adc1-0242ac120002',
-      url: 'ef78bb52-34a9-11eb-adc1-0242ac120002',
+      id: 'ef78bb52-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/ef78bb52-34a9-11eb-adc1-0242ac120002',
     },
     publicatieBS: {
       id: 'ec5877b7-737b-4051-9b8b-abd177b61236',

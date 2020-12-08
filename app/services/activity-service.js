@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
-import EmberObject from '@ember/object';
 export default class activityService extends Service {
   @service store;
   @service toaster;
@@ -22,12 +21,7 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-
-    // TranslationType.
-    const requestTranslationActivityType = EmberObject.create({
-      id: CONFIG.ACTIVITY_TYPES.vertalen.id,
-      uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
-    });
+    const requestTranslationActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
 
     // Make hash key into array
     const usedPieces = [];
@@ -66,11 +60,8 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-    // TranslationType.
-    const requestPublishPreviewActivityType = EmberObject.create({
-      id: CONFIG.ACTIVITY_TYPES.drukproeven.id,
-      uri: CONFIG.ACTIVITY_TYPES.drukproeven.url,
-    });
+    // publishPreviewActivityType.
+    const requestPublishPreviewActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
 
     const usedPieces = [];
     Object.keys(pieces).forEach((key) => {

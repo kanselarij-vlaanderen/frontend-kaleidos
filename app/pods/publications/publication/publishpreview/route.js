@@ -1,6 +1,6 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-// import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'fe-redpencil/utils/config';
 import { hash } from 'rsvp';
 
 export default class PublicationPublishPreviewRoute extends Route.extend(AuthenticatedRouteMixin) {
@@ -14,7 +14,7 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
     const activities = await this.store.query('activity', {
       include: 'type,subcase,used-pieces, subcase.type',
       'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
-      // 'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
+      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
     });
 
     return hash({
