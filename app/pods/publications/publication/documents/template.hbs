@@ -46,7 +46,7 @@
 
 
 <div class="auk-u-mb-3">
-  {{#if (gt (await this.currentPieces.length) 0)}}
+  {{#if (and (gt (await this.currentPieces.length) 0 ) this.pieces)}}
     <table class="auk-table">
       <thead>
         <tr>
