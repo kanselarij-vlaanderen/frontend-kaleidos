@@ -183,6 +183,21 @@ export default class PublicationDocumentsController extends Controller {
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
+    // Prepare email
+    // TODO: refactor document selection logic before implementing attachments
+    // const attachments = await this.store.query('file', {
+    //   'filter[piece][:id:]': this.translateActivity.pieces.map((piece) => piece.id).join(','),
+    //   // 'filter[format]': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    // });
+    const email = this.store.createRecord('email', {
+      // TODO: link the created mail to an outgoing mail-folder
+      // TODO: establish from/to mailing list mgmt
+      subject: '', // TODO: Template string to be determined
+      content: this.translateActivity.mailContent, // TODO: establish HTML-template and save to property 'html' instead
+      // attachments,
+    });
+    email.save(); // Can go in background
+
     // Visual stuff.
     this.showLoader = false;
     this.currentPieces.forEach((piece) => {
