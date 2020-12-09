@@ -13,4 +13,14 @@ export default class PublicationTranslationController extends Controller {
     const pieces = await activity.usedPieces();
     console.log('PIECES', pieces);
   }
+
+  @action
+  async cancelExistingTranslationActivity() {
+    alert('this action is implemented in another ticket');
+  }
+
+  @action
+  async checkExistingTranslationActivity() {
+    alert('this action is implemented in another ticket');
+  }
 }
