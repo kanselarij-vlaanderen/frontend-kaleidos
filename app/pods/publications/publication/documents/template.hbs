@@ -417,7 +417,7 @@
     />
     <WebComponents::AuModal::Body>
 
-      {{#if (eq this.selectedPiecesCount 0) }}
+      {{#if (eq this.selectedPieces.length 0) }}
         <WebComponents::AuAlert data-test-auk-alert-error
                                 @title={{t "modal-error-alert-title"}}
                                 @skin="error"
