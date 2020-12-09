@@ -44,9 +44,8 @@ export default class activityService extends Service {
   }
 
   /**
-   * Create a new Translation Activity.
+   * Create a new Publish preview Activity.
    *
-   * @param finalTranslationDate
    * @param mailContent
    * @param pieces
    * @param subcase
