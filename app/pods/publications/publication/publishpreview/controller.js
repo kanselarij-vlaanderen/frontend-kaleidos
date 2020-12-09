@@ -3,9 +3,9 @@ import { action } from '@ember/object';
 export default class PublicationPublishPreviewController extends Controller {
   get activities() {
     console.log('MODEL', this.model);
-    const activities = this.model.activities.map((activity) => activity);
-    console.log('ACTIVITIES', activities);
-    return activities;
+    const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
+    console.log('ACTIVITIES', publishPreviewActivities);
+    return publishPreviewActivities;
   }
 
   @action
