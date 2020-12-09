@@ -63,18 +63,13 @@ export default class activityService extends Service {
     // publishPreviewActivityType.
     const requestPublishPreviewActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
 
-    const usedPieces = [];
-    Object.keys(pieces).forEach((key) => {
-      usedPieces.push(pieces[key]);
-    });
-
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
       startDate: creationDatetime,
       mailContent,
       subcase,
       type: requestPublishPreviewActivityType,
-      usedPieces: usedPieces,
+      usedPieces: pieces,
     });
 
     // Persist to db.
