@@ -34,14 +34,14 @@ export default class activityService extends Service {
       mailContent,
       subcase,
       type: requestTranslationActivityType,
-      usedPieces: usedPieces,
+      usedPieces: pieces,
     });
 
     // Persist to db.
     await translateActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('activity').reload();
+    await subcase.hasMany('publicationActivities').reload();
 
 
     return translateActivity;

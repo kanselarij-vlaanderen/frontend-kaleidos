@@ -41,11 +41,11 @@
               <ul class="auk-list auk-list--bordered">
                 {{#each (await activity.usedPieces) as |translationSourcePiece|}}
                   <li class="auk-list__item auk-list__item--flex auk-list__item--gray-100">
-                      <WebComponents::AuBadge @skin="white" @icon="document"/>
-                      <div class="auk-u-mx-2">
-                        <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                        <div class="auk-u-muted auk-u-text-small">Decreet - Word</div>
-                      </div>
+                    <WebComponents::AuBadge @skin="white" @icon="document"/>
+                    <div class="auk-u-mx-2">
+                      <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
+                      <div class="auk-u-muted auk-u-text-small">{{translationSourcePiece.type}}</div>
+                    </div>
                     <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
                   </li>
                 {{/each}}
