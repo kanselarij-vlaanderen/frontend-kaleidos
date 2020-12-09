@@ -10,10 +10,10 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await this.currentPieces)}}>
+        <WebComponents::AuButton @skin="secondary" @icon="chevron-down" @layout="icon-right" @disabled={{not (await this.model.case.pieces)}}>
           {{t "requests"}}
         </WebComponents::AuButton>
-        {{#if (await this.currentPieces)}}
+        {{#if (await this.model.case.pieces)}}
           <AttachPopover
             @renderInPlace={{true}}
             @class="ember-attacher-popper"
@@ -45,8 +45,8 @@
 {{!-- TABLE FOR DOCUMENTS --}}
 
 
-<div class="auk-u-mb-3">
-  {{#if (and (gt (await this.currentPieces.length) 0 ) this.pieces)}}
+<div hidden class="auk-u-mb-3">
+  {{#if (gt (await this.model.case.pieces.length) 0)}}
     <table class="auk-table">
       <thead>
         <tr>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each this.currentPieces as |piece|}}
+        {{#each this.model.case.pieces as |piece|}}
           <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton
@@ -130,9 +130,7 @@
           {{#if (not piece.collapsed)}}
             <tr class="auk-table__row auk-table__row--collapsed-content">
               <td>
-                <WebComponents::AuCheckbox
-                        @toggle={{fn this.changePieceSelection piece}}
-                        @checked={{piece.selected}} />
+                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
               </td>
               <td>
                 <span>{{await piece.name}}</span>
@@ -203,6 +201,94 @@
   {{/if}}
 </div>
 
+{{!-- TABLE FOR DOCUMENTS SIMPLIFIED --}}
+
+<div class="auk-u-mb-3">
+  {{#if (gt (await this.model.case.pieces.length) 0 )}}
+    {{#if this.renderPieces}}
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="auk-table__col--6">{{t "name-document"}}</th>
+            <th colspan="2">{{t "file-extension"}}</th>
+            <th colspan="2">{{t "file-type"}}</th>
+            <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.model.case.pieces as |piece|}}
+            <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
+              <td>
+                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
+              </td>
+              <td>
+                {{#if piece.confidential}}
+                  <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
+                {{/if}}
+                {{await piece.name}}
+              </td>
+              <td colspan="2">
+                {{await piece.file.extension}}
+              </td>
+              <td colspan="2">
+                {{await piece.documentContainer.type.label}}
+              </td>
+              <td>
+                {{moment-format piece.created}}
+                <br>
+                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+              </td>
+              <td>
+                <WebComponents::AuButtonToolbar>
+                  <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
+                  </WebComponents::AuButton>
+                  <AttachPopover
+                    @renderInPlace={{true}}
+                    @class="ember-attacher-popper"
+                    @hideOn="clickout click"
+                    @showOn="click"
+                    @animation="shift"
+                    @placement="bottom"
+                    {{!-- as |attacher| --}}
+                  >
+                    <WebComponents::AuDropdown>
+                      {{!-- TODO opening viewer will only work for pdf files --}}
+                      <WebComponents::AuDropdown::Item {{on "click" (fn this.showPieceViewer piece.id)}}>
+                        {{t "view-document-details"}}
+                      </WebComponents::AuDropdown::Item>
+                      {{!-- TODO do we want this action ? how to upload a new version to a piece with multiple files ?? --}}
+                      {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
+                        {{t "new-version"}}
+                      </WebComponents::AuDropdown::Item> --}}
+                      {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
+                            Offering this as an option should be very restrictive --}}
+                      {{!-- <WebComponents::AuDropdown::Item @skin="danger" {{on "click" attacher.hide}}>
+                        {{t "document-delete"}}
+                      </WebComponents::AuDropdown::Item> --}}
+                    </WebComponents::AuDropdown>
+                  </AttachPopover>
+                </WebComponents::AuButtonToolbar>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <WebComponents::AuLoader 
+        @message={{t "please-be-patient"}}
+      />
+    {{/if}}
+  {{else}}
+    <WebComponents::AuPanel>
+      <WebComponents::AuPanel::Body>
+        <WebComponents::AuEmptyState @message={{t "no-documents-yet"}}/>
+      </WebComponents::AuPanel::Body>
+    </WebComponents::AuPanel>
+  {{/if}}
+</div>
+
 
 {{!--     UPLOAD PIECE MODAL       --}}
 
@@ -260,7 +346,7 @@
     />
     <WebComponents::AuModal::Body>
 
-      {{#if (eq this.selectedPiecesCount 0) }}
+      {{#if (eq this.selectedPieces.length 0) }}
         <WebComponents::AuAlert data-test-auk-alert-error
                                 @title={{t "modal-error-alert-title"}}
                                 @skin="error"
@@ -288,26 +374,24 @@
           {{t "attachments" }}
         </WebComponents::AuLabel>
 
-        {{#each this.currentPieces as |loopedPiece| }}
-          {{#if loopedPiece.selected}}
-            <div class="o-flex o-flex--vertical-center">
-              <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
-              <div class="auk-u-ml-3">
-                <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
-                <br>
-                <span class="auk-u-muted auk-u-text-small">
-                  {{await loopedPiece.documentContainer.type.label}}
-                </span>
-              </div>
+        {{#each this.selectedPieces as |pieceToSend| }}
+          <div class="o-flex o-flex--vertical-center">
+            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+            <div class="auk-u-ml-3">
+              <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
+              <br>
+              <span class="auk-u-muted auk-u-text-small">
+                {{await pieceToSend.documentContainer.type.label}}
+              </span>
             </div>
-          {{/if}}
+          </div>
         {{/each}}
       {{/if}}
 
     </WebComponents::AuModal::Body>
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelTranslationModal}}>
-      {{#if (gt this.selectedPiecesCount  0) }}
+      {{#if (gt this.selectedPieces.length 0) }}
         <WebComponents::AuButton
                 data-test-au-modal-footer-save
                 @skin="primary"
@@ -322,15 +406,13 @@
 
 
 
-{{!-- FULL PAGE LOADER --}}
+{{!-- LOADER --}}
 
-
-
-{{#if showLoader}}
+{{#if this.showLoader}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Header
       @title={{t "loading-text"}}
-      @showCloseButton={{false}}
+      @hideCloseButton={{true}}
     />
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
