@@ -201,10 +201,8 @@ export default class PublicationDocumentsController extends Controller {
   async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
-    // const translateSubCaseType = EmberObject.create({
-    //   id: CONFIG.SUBCASE_TYPES.vertalen.id,
-    //   uri: CONFIG.SUBCASE_TYPES.vertalen.url,
-    // });
+
+    // Fetch the type.
     const translateSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
 
     // TODO take from other subcase maybe?
