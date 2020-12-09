@@ -185,7 +185,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   openTranslationRequestModal() {
-    this.translateActivity.finalTranslationDate = this.model.publicationFlow.translateBefore;
+    this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
     this.showTranslationModal = true;
   }
