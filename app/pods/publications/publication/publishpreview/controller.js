@@ -1,4 +1,16 @@
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+export default class PublicationPublishPreviewController extends Controller {
+  get publishPreviewActivities() {
+    console.log('MODEL', this.model);
+    const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
+    console.log('ACTIVITIES', publishPreviewActivities);
+    return publishPreviewActivities;
+  }
 
-export default class PublicationPublishpreviewController extends Controller {
+  @action
+  async usedPieces(activity) {
+    const pieces = await activity.usedPieces();
+    console.log('PIECES', pieces);
+  }
 }
