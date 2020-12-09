@@ -689,5 +689,7 @@
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",
-  "files": "Bijlages"
+  "files": "Bijlages",
+  "no-translation-requests": "Er zijn nog geen vertalingsaanvragen.",
+  "no-publishpreview-requests": "Er zijn nog geen drukproefaanvragen."
 }
