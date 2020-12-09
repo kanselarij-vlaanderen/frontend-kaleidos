@@ -27,23 +27,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked translateActivity = {
     mailContent: '',
     finalTranslationDate: '',
-    pieces: [],
+    pieces: A([]),
   };
-  @tracked selectedPieces = [];
-  @tracked currentPieces = this.pieces;
+  @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
-  get pieces() {
-    if (this.model.case.pieces) {
-      return this.model.case.sortedPieces.toArray();
-    }
-    return null;
-  }
-
-  get selectedPiecesCount() {
-    return this.pieces.filter((piece) => piece.selected === true).length;
-  }
+  // hacky way to refresh the checkboxes in the view without reloading the route
+  @tracked renderPieces = true;
 
   @action
   toggleUploadModalSize() {
@@ -52,12 +43,11 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
-    if (this.selectedPieces[selectedPiece.id]) {
-      delete this.selectedPieces[selectedPiece.id];
-      selectedPiece.selected = false;
+    const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
+    if (foundPiece) {
+      this.selectedPieces.removeObject(selectedPiece);
     } else {
-      this.selectedPieces[selectedPiece.id] = selectedPiece;
-      selectedPiece.selected = true;
+      this.selectedPieces.pushObject(selectedPiece);
     }
   }
 
@@ -214,16 +204,12 @@ export default class PublicationDocumentsController extends Controller {
 
     // Create subase.
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
-
+    this.renderPieces = false;
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
-
     // Visual stuff.
     this.showLoader = false;
-    this.currentPieces.forEach((piece) => {
-      piece.selected = false;
-    });
-    this.currentPieces = [...this.currentPieces];
+    this.selectedPieces = A([]);
 
     // Reset local activity to empty state.
     this.translateActivity = {
@@ -231,6 +217,8 @@ export default class PublicationDocumentsController extends Controller {
       finalTranslationDate: '',
       pieces: [],
     };
+
+    this.renderPieces = true;
   }
 
   @action

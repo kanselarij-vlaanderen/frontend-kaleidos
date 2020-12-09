@@ -20,7 +20,7 @@
 
             </WebComponents::AuButton>
           {{/if}}
-          {{#if @showCloseButton}}
+          {{#if (not @hideCloseButton)}}
             <WebComponents::AuButton
                     @icon="close"
                     @skin="borderless"

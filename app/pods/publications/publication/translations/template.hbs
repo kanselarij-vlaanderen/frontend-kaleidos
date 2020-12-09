@@ -7,23 +7,26 @@
     {{!--<b>title:</b>--}}
     {{await subcase.title}}
   </div>
-  <div>
-    {{!--<b>finalTranslationDate:</b>--}}
-    <br>
-    {{await subcase.activity.finalTranslationDate}}
-  </div>
-  <div>
-    {{!--<b>Mail content:</b>--}}
-    {{await subcase.activity.mailContent}}
-  </div>
-  <div>
-    {{!-- <b>pieces:</b>--}}
-    <ul>
-      {{#each (await subcase.activiy.usedPieces) as |translationSourcePiece|}}
-        <li>
-          {{await translationSourcePiece.name}}
-        </li>
-      {{/each}}
-    </ul>
-  </div>
+  {{#each subcase.publicationActivities as |activity|}}
+    <div>
+      {{!--<b>finalTranslationDate:</b>--}}
+      <br>
+      {{await activity.finalTranslationDate}}
+    </div>
+    <div>
+      {{!--<b>Mail content:</b>--}}
+      {{await activity.mailContent}}
+    </div>
+    <div>
+      {{!-- <b>pieces:</b>--}}
+      <ul>
+        {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+          <li>
+            {{await translationSourcePiece.name}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/each}}
+
 {{/each}}
