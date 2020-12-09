@@ -6,7 +6,7 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import EmberObject, {
+import {
   action,
   set
 } from '@ember/object';
@@ -34,7 +34,7 @@ export default class PublicationDocumentsController extends Controller {
   };
   @tracked selectedPieces = A([]);
 
-  // hacky way to refresh the checkboxes in the view without reloading the route
+  // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
   @action
@@ -153,6 +153,7 @@ export default class PublicationDocumentsController extends Controller {
   async savePublishPreviewActivity() {
     this.showLoader = true;
     this.isOpenPublishPreviewRequestModal = false;
+    this.previewActivity.pieces = this.selectedPieces;
 
     // publishPreviewActivityType.
     const publishPreviewSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
@@ -168,17 +169,15 @@ export default class PublicationDocumentsController extends Controller {
     await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
 
     // Visual stuff.
-    this.currentPieces.forEach((piece) => {
-      piece.selected = false;
-    });
-    this.currentPieces = [...this.currentPieces];
+    this.selectedPieces = A([]);
 
     // Reset local activity to empty state.
     this.previewActivity = {
       mailContent: '',
-      pieces: [],
+      pieces: A([]),
     };
     this.showLoader = false;
+    this.renderPieces = true;
   }
 
   /** TRANSLATION ACTIVITIES **/
@@ -219,16 +218,15 @@ export default class PublicationDocumentsController extends Controller {
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
     // Visual stuff.
-    this.showLoader = false;
     this.selectedPieces = A([]);
 
     // Reset local activity to empty state.
     this.translateActivity = {
       mailContent: '',
       finalTranslationDate: '',
-      pieces: [],
+      pieces: A([]),
     };
-
+    this.showLoader = false;
     this.renderPieces = true;
   }
 

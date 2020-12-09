@@ -81,7 +81,7 @@ export default class activityService extends Service {
     await PublishPreviewActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('activity').reload();
+    await subcase.hasMany('publicationActivities').reload();
 
     return PublishPreviewActivity;
   }

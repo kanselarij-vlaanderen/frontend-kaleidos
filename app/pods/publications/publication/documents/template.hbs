@@ -433,31 +433,30 @@
         <WebComponents::AuTextarea
                 id="emailMessage"
                 @rows="7"
-                @value={{mut this.publishPreviewActivity.mailContent}}
+                @value={{mut this.previewActivity.mailContent}}
                 data-test-create-pulishpreviewActivity-modal-email-textarea/>
 
         <WebComponents::AuLabel @isRequired={{true}}>
           {{t "attachments" }}
         </WebComponents::AuLabel>
-
-        {{#each this.currentPieces as |loopedPiece| }}
-          {{#if loopedPiece.selected}}
-            <div class="o-flex o-flex--vertical-center">
-              <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
-              <div class="auk-u-ml-3">
-                <span class="auk-u-text-bold">{{await loopedPiece.name}}</span>
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{await loopedPiece.documentContainer.type.label}}</span>
-              </div>
+        {{#each this.selectedPieces as |pieceToSend| }}
+          <div class="o-flex o-flex--vertical-center">
+            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+            <div class="auk-u-ml-3">
+              <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
+              <br>
+              <span class="auk-u-muted auk-u-text-small">
+                {{await pieceToSend.documentContainer.type.label}}
+              </span>
             </div>
-          {{/if}}
+          </div>
         {{/each}}
       {{/if}}
 
     </WebComponents::AuModal::Body>
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelPublishPreviewRequestModal}}>
-      {{#if (gt this.selectedPiecesCount  0) }}
+      {{#if (gt this.selectedPieces.length 0) }}
         <WebComponents::AuButton
                 data-test-au-modal-footer-save
                 @skin="primary"
