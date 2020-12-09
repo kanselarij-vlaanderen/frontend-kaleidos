@@ -1,1 +1,8 @@
 <div>{{t "proofs"}}</div>
+
+{{#each this.publishPreviewActivities as |activity|}}
+  <p>{{activity.type}}</p>
+  <p>{{activity.startDate}}</p>
+  <p>{{activity.name}}</p>
+  <p>{{activity.mailContent}}</p>
+{{/each}}

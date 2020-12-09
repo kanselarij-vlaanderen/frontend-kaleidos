@@ -76,6 +76,12 @@ export default class CaseController extends Controller {
   }
 
   @action
+  cancelEditingInscription() {
+    this.model.rollbackAttributes();
+    this.putInscriptionInNonEditMode();
+  }
+
+  @action
   putInscriptionInNonEditMode() {
     this.isInscriptionInEditMode = false;
   }

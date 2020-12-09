@@ -649,6 +649,7 @@
   "proof": "Drukproef",
   "proofs": "Drukproeven",
   "publication-inscription": "Opschrift",
+  "publication-inscription-subcase": "Tekst agendering",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
   "delete-minister": "Verwijderen van minister",
@@ -670,7 +671,8 @@
   "publication-form-numac-nummer": "Numac nummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
-  "request-translation-confirmation":  "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen??",
+  "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",
+  "request-publishpreview-confirmation": "Bent u zeker dat u de drukproef voor volgende documenten wilt aanvragen?",
   "request-publish-preview":"Drukproef aanvragen",
   "needed?": "Nodig?",
   "present?": "Aanwezig?",
@@ -680,6 +682,12 @@
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
+  "no-mandatees-and-fields-added": "Er zijn nog geen ministers en beleidsvelden toegevoegd.",
   "name-document": "Naam Document",
-  "file-extension": "BestandsType"
+  "file-extension": "BestandsType",
+  "cancel-translation": "Aanvraag intrekken",
+  "requested-on": "Aanvraag op",
+  "request": "Aanvraag",
+  "translation-mail-header": "Begeleidende tekst",
+  "files": "Bijlages"
 }
