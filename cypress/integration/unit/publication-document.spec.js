@@ -4,7 +4,7 @@
 import publicationSelectors from '../../selectors/publication.selectors';
 import auComponentSelectors from '../../selectors/au-component-selectors';
 
-context('Publications tests', () => {
+context('Publications documents tests', () => {
   before(() => {
     cy.resetCache();
   });
