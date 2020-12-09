@@ -15,6 +15,7 @@ export default class PublicationTranslationRoute extends Route.extend(Authentica
       include: 'type,subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
+      sort: '-start-date',
     });
 
     return hash({

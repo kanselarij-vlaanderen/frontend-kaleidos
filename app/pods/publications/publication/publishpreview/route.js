@@ -15,6 +15,7 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       include: 'type,subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
+      sort: '-start-date',
     });
 
     return hash({
