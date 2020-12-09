@@ -276,7 +276,7 @@
         </tbody>
       </table>
     {{else}}
-      <WebComponents::AuLoader 
+      <WebComponents::AuLoader
         @message={{t "please-be-patient"}}
       />
     {{/if}}
@@ -404,6 +404,70 @@
   </WebComponents::AuModal>
 {{/if}}
 
+
+{{!--      REQUEST PUBLISH PREVIEW  MODAL       --}}
+
+
+
+{{#if this.isOpenPublishPreviewRequestModal}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+            @title={{t "request-publish-preview"}}
+            @closeModal={{this.cancelPublishPreviewRequestModal}}
+    />
+    <WebComponents::AuModal::Body>
+
+      {{#if (eq this.selectedPieces.length 0) }}
+        <WebComponents::AuAlert data-test-auk-alert-error
+                                @title={{t "modal-error-alert-title"}}
+                                @skin="error"
+                                @message={{t "modal-error-missing-pieces"}}
+                                @icon="alert-triangle"/>
+      {{else}}
+      {{!--  Pieces selected --}}
+        {{t "request-publishpreview-confirmation" }}
+
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "accompanying-text"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuTextarea
+                id="emailMessage"
+                @rows="7"
+                @value={{mut this.previewActivity.mailContent}}
+                data-test-create-publishpreviewActivity-modal-email-textarea/>
+
+        <WebComponents::AuLabel @isRequired={{true}}>
+          {{t "attachments" }}
+        </WebComponents::AuLabel>
+        {{#each this.selectedPieces as |pieceToSend| }}
+          <div class="o-flex o-flex--vertical-center">
+            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+            <div class="auk-u-ml-3">
+              <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
+              <br>
+              <span class="auk-u-muted auk-u-text-small">
+                {{await pieceToSend.documentContainer.type.label}}
+              </span>
+            </div>
+          </div>
+        {{/each}}
+      {{/if}}
+
+    </WebComponents::AuModal::Body>
+
+    <WebComponents::AuModal::Footer @cancelModal={{this.cancelPublishPreviewRequestModal}}>
+      {{#if (gt this.selectedPieces.length 0) }}
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save
+                @skin="primary"
+          {{on "click" this.savePublishPreviewActivity}}
+        >
+          {{t "request-publish-preview"}}
+        </WebComponents::AuButton>
+      {{/if}}
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
 
 
 {{!-- LOADER --}}
