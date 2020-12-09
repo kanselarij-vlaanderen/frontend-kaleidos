@@ -10,10 +10,17 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="tertiary">{{t "cancel-translation"}}</WebComponents::AuButton>
+            <WebComponents::AuButton
+                    @skin="tertiary"
+                    {{on "click" this.cancelExistingTranslationActivity}}>
+              {{t "cancel-translation"}}
+            </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuCheckbox @label="Afgewerkt"/>
+            <WebComponents::AuCheckbox
+                    @toggle={{fn this.checkExistingTranslationActivity activity}}
+                    {{on "change" checkExistingTranslationActivity}}
+                    @label="Afgewerkt"/>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
