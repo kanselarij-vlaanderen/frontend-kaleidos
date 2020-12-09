@@ -680,6 +680,7 @@
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
+  "no-mandatees-and-fields-added": "Er zijn nog geen ministers en beleidsvelden toegevoegd.",
   "name-document": "Naam Document",
   "file-extension": "BestandsType"
 }
