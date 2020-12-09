@@ -103,8 +103,6 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = true;
     this.isOpenPieceUploadModal = false;
     yield all(savePromises);
-    yield this.model.case.hasMany('pieces').reload();
-    this.currentPieces = this.pieces;
     this.showLoader = false;
     this.newPieces = A();
   }
@@ -164,7 +162,6 @@ export default class PublicationDocumentsController extends Controller {
       this.isVerifyingDelete = false;
       yield this.fileService.deletePiece(this.pieceToDelete);
       yield this.model.case.hasMany('pieces').reload();
-      this.currentPieces = this.pieces;
       this.showLoader = false;
       this.pieceToDelete = null;
       // TODO delete orphan container if last piece is deleted

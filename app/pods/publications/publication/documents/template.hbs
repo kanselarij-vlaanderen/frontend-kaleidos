@@ -46,7 +46,7 @@
 
 
 <div hidden class="auk-u-mb-3">
-  {{#if (gt (await this.model.case.pieces.length) 0)}}
+  {{#if (gt (await this.model.case.sortedPieces.length) 0)}}
     <table class="auk-table">
       <thead>
         <tr>
@@ -72,7 +72,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each this.model.case.pieces as |piece|}}
+        {{#each this.model.case.sortedPieces as |piece|}}
           <tr data-test-publication-case-documents-piece-row>
             <td>
               <WebComponents::AuButton
@@ -206,7 +206,7 @@
 {{!-- TABLE FOR DOCUMENTS SIMPLIFIED --}}
 
 <div class="auk-u-mb-3">
-  {{#if (gt (await this.model.case.pieces.length) 0 )}}
+  {{#if (gt (await this.model.case.sortedPieces.length) 0 )}}
     {{#if this.renderPieces}}
       <table class="auk-table">
         <thead>
@@ -220,7 +220,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.model.case.pieces as |piece|}}
+          {{#each this.model.case.sortedPieces as |piece|}}
             <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
               <td>
                 <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
@@ -266,9 +266,11 @@
                       </WebComponents::AuDropdown::Item> --}}
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
-                      {{!-- <WebComponents::AuDropdown::Item @skin="danger" {{on "click" attacher.hide}}>
-                        {{t "document-delete"}}
-                      </WebComponents::AuDropdown::Item> --}}
+                      {{#if (not (await piece.agendaitem))}}
+                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
+                          {{t "document-delete"}}
+                        </WebComponents::AuDropdown::Item>
+                      {{/if}}
                     </WebComponents::AuDropdown>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
