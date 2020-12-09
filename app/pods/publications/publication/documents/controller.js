@@ -40,9 +40,6 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
-    if (this.selectedPieces[selectedPiece.id]) {
-      delete this.selectedPieces[selectedPiece.id];
-      selectedPiece.selected = false;
     const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
     if (foundPiece) {
       this.selectedPieces.removeObject(selectedPiece);
