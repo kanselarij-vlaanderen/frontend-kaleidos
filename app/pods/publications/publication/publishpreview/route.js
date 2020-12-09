@@ -11,7 +11,7 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    const activities = await this.store.query('activity', {
+    const publishPreviewActivities = await this.store.query('activity', {
       include: 'type,subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
@@ -20,7 +20,7 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
     return hash({
       publicationFlow,
       case: _case,
-      activities: activities,
+      publishPreviewActivities: publishPreviewActivities,
     });
   }
 }

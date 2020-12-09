@@ -166,6 +166,7 @@ export default class PublicationDocumentsController extends Controller {
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
+    this.renderPieces = false;
     await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
 
     // Visual stuff.
