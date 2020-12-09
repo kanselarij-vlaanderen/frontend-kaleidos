@@ -38,7 +38,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  activity: hasMany('activity', {
+  publicationActivities: hasMany('activity', {
     inverse: null,
   }),
 

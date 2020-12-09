@@ -303,21 +303,22 @@
 {{/if}}
 
 
-{{!-- FULL PAGE LOADER --}}
+{{!-- LOADER --}}
 
-{{!-- TODO Auk modal --}}
-{{#if showLoader }}
-  <WebComponents::VlModal
-          @isOverlay={{true}}
-          @showCloseButton={{false}}
-          @title={{t "loading-text"}}
-  >
-    <WebComponents::VlLoader
-          @text={{concat
-            (t "saving-change-message")
-            " "
-            (t "please-be-patient")
-          }}
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @hideCloseButton={{true}}
     />
-  </WebComponents::VlModal>
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
 {{/if}}

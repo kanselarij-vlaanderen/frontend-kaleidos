@@ -81,7 +81,7 @@ export default class PublicationsController extends Controller {
 
   @action
   async startPublicationFromCaseId(_caseId) {
-    this.set('showLoader', true);
+    this.showLoader = true;
     // Test if dossier already had publication (index not up to date).
     const pubFlows = await this.store.query('publication-flow', {
       filter: {
@@ -96,7 +96,7 @@ export default class PublicationsController extends Controller {
       newPublication = await this.store.findRecord('publication-flow', pubFlows.content[0].id);
     } else {
       newPublication = await this.publicationService.createNewPublication(0, _caseId);
-      this.set('showLoader', false);
+      this.showLoader = false;
     }
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }

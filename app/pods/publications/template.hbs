@@ -186,22 +186,22 @@
   {{outlet}}
 {{/if}}
 
-{{!-- FULL PAGE LOADER --}}
+{{!-- LOADER --}}
 
-{{#if showLoader }}
-  <WebComponents::AuModal data-test-add-contactpersonmodal
-                          @size="full-screen">
-    <WebComponents::AuModal::Header @title={{t "loading-text"}}
-                                    @showCloseButton={{false}}/>
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @hideCloseButton={{true}}
+    />
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
-              @message={{concat
-                (t "saving-change-message")
-                " "
-                (t "please-be-patient")
-              }}
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
       />
     </WebComponents::AuModal::Body>
   </WebComponents::AuModal>
-
 {{/if}}
