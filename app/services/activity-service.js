@@ -22,15 +22,11 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-
     // TranslationType.
     const requestTranslationActivityType = EmberObject.create({
       id: CONFIG.ACTIVITY_TYPES.vertalen.id,
       uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
     });
-
-    const usedPieces = pieces.map((piece) => piece);
-
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
@@ -39,14 +35,14 @@ export default class activityService extends Service {
       mailContent,
       subcase,
       type: requestTranslationActivityType,
-      usedPieces: usedPieces,
+      usedPieces: pieces,
     });
 
     // Persist to db.
     await translateActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('activity').reload();
+    await subcase.hasMany('publicationActivities').reload();
 
 
     return translateActivity;

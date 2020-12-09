@@ -1,9 +1,9 @@
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-4">
 
-    {{#if isLoading}}
+    {{#if this.isLoading}}
       <WebComponents::AuLoader
-              @text={{t "please-be-patient"}}
+              @message={{t "please-be-patient"}}
       />
     {{else}}
       {{#if this.model.length}}
@@ -84,25 +84,25 @@
         <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
       {{/if}}
     {{/if}}
-
-
-    {{!-- FULL PAGE LOADER --}}
-
-    {{#if showLoader }}
-      <WebComponents::AuModal data-test-add-contactpersonmodal
-                              @size="full-screen">
-        <WebComponents::AuModal::Header @title={{t "loading-text"}}
-                                        @showCloseButton={{false}}/>
-        <WebComponents::AuModal::Body>
-          <WebComponents::AuLoader
-                  @message={{concat
-                    (t "saving-change-message")
-                    " "
-                    (t "please-be-patient")
-                  }}
-          />
-        </WebComponents::AuModal::Body>
-      </WebComponents::AuModal>
-    {{/if}}
   </div>
 </div>
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @hideCloseButton={{true}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
+{{/if}}

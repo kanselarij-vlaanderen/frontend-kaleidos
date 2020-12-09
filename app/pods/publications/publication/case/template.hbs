@@ -177,9 +177,11 @@
             <tbody>
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
-                  <td class="o-flex o-flex--vertical-center">
-                    <WebComponents::AuBadge @icon="user"/>
-                    <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
+                  <td>
+                    <div class="o-flex o-flex--vertical-center">
+                      <WebComponents::AuBadge @icon="user"/>
+                      <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
+                    </div>
                   </td>
                   <td class="">
                     <span class="auk-u-mx-2">
@@ -287,21 +289,22 @@
 {{/if}}
 
 
-{{!-- FULL PAGE LOADER --}}
+{{!-- LOADER --}}
 
-{{!-- TODO Auk modal --}}
-{{#if showLoader }}
-  <WebComponents::VlModal
-          @isOverlay={{true}}
-          @showCloseButton={{false}}
-          @title={{t "loading-text"}}
-  >
-    <WebComponents::VlLoader
-          @text={{concat
-            (t "saving-change-message")
-            " "
-            (t "please-be-patient")
-          }}
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @hideCloseButton={{true}}
     />
-  </WebComponents::VlModal>
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
 {{/if}}
