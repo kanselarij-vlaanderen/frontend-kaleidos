@@ -140,7 +140,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   openPublishPreviewRequestModal() {
     this.isOpenPublishPreviewRequestModal = true;
-    this.translateActivity.pieces = this.selectedPieces;
+    this.previewActivity.pieces = this.selectedPieces;
   }
 
   @action
