@@ -23,10 +23,6 @@ export default class activityService extends Service {
 
     const requestTranslationActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
 
-    // Make hash key into array
-    const usedPieces = [];
-    Object.keys(pieces).forEach((keys) => usedPieces.push(pieces[keys]));
-
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
       startDate: creationDatetime,
