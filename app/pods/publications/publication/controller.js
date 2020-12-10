@@ -13,7 +13,7 @@ export default class PublicationController extends Controller {
   @service toaster;
   @service intl;
   @service media;
-
+  @tracked publicationNotAfterTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
 
 
@@ -113,10 +113,30 @@ export default class PublicationController extends Controller {
     this.model.save();
   }
 
+  translationDateBeforePublication(fieldname, event) {
+    const date = moment(new Date(event));
+    if (fieldname === 'publishBefore') {
+      const translateBefore = this.model.get('translateBefore');
+      return moment(translateBefore).isBefore(date, 'minutes');
+    }
+    if (fieldname === 'translateBefore') {
+      const publishBefore = this.model.get('publishBefore');
+      return moment(date).isBefore(publishBefore);
+    }
+  }
+
   @action
   setPublicationBeforeDate(event) {
-    this.model.set('publishBefore', new Date(event));
-    this.model.save();
+    if (!this.translationDateBeforePublication('publishBefore', event)) {
+      this.publicationNotAfterTranslation = true;
+      this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+    } else {
+      this.model.set('publishBefore', new Date(event));
+      this.model.save();
+      this.publicationNotAfterTranslation = false;
+    }
   }
 
   @action
@@ -127,8 +147,16 @@ export default class PublicationController extends Controller {
 
   @action
   setTranslationDate(event) {
-    this.model.set('translateBefore', new Date(event));
-    this.model.save();
+    if (!this.translationDateBeforePublication('translateBefore', event)) {
+      this.publicationNotAfterTranslation = true;
+      this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+    } else {
+      this.model.set('translateBefore', new Date(event));
+      this.model.save();
+      this.publicationNotAfterTranslation = false;
+    }
   }
 
   // TODO change this
