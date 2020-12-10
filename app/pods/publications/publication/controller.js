@@ -114,14 +114,6 @@ export default class PublicationController extends Controller {
     this.model.save();
   }
 
-  translationDateBeforePublication(fieldname, event) {
-    const date = moment(new Date(event));
-    if (fieldname === 'translateBefore') {
-      const publishBefore = this.model.get('publishBefore');
-      return moment(date).isBefore(publishBefore);
-    }
-  }
-
   @action
   setPublicationBeforeDate(event) {
     const date = moment(new Date(event));
