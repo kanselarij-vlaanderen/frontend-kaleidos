@@ -86,7 +86,7 @@
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
                   {{#if this.publicationNotAfterTranslationForPublication}}
-                    <div class="auk-form-help-text auk-form-help-text--warning">
+                    <div class="auk-form-help-text auk-form-help-text--danger">
                       <WebComponents::AuIcon @name="alert-triangle"/>
                       {{t "publication-date-after-translation-date"}}
                     </div>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="auk-form-group">
                   {{#if this.publicationNotAfterTranslationForTranslation}}
-                    <div class="auk-form-help-text auk-form-help-text--warning">
+                    <div class="auk-form-help-text auk-form-help-text--danger">
                       <WebComponents::AuIcon @name="alert-triangle"/>
                       {{t "publication-date-after-translation-date"}}
                     </div>
