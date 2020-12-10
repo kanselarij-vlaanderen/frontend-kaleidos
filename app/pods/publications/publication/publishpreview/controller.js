@@ -1,30 +1,63 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action, set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import CONFIG from 'fe-redpencil/utils/config';
+import { A } from '@ember/array';
 
 export default class PublicationPublishPreviewController extends Controller {
   // properties for making the design
   @tracked withdrawn = true;
   @tracked testDate = new Date();
   @tracked panelCollapsed = false;
+  @tracked showLoader = false;
+  @tracked showpublicationModal = false;
   @tracked panelIcon = 'chevron-down'
+  @tracked publicationActivity = {
+    mailContent: '',
+    subjectContent: '',
+    pieces: A([]),
+  };
 
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
   }
 
-  // @action
-  // async usedPieces(activity) {
-  //   const pieces = await activity.usedPieces();
-  //   console.log('PIECES', pieces);
-  // }
-
   @action
   collapsePanel() {
     this.panelCollapsed = !this.panelCollapsed;
     this.panelIcon = ((this.panelIcon === 'chevron-up') ? 'chevron-down' : 'chevron-up');
   }
+
+
+  /** BS PUBLICATION ACTIVITIES **/
+
+  @action
+  async requestPublicationModal(activity) {
+    this.publicationActivity.pieces = activity.usedPieces;
+    const names = this.publicationActivity.pieces.map((piece) => piece.name).join('\n');
+    set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
+    set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
+    this.showpublicationModal = true;
+  }
+
+  @action
+  async cancelPublicationModal() {
+    this.publicationActivity.pieces = A([]);
+    set(this.publicationActivity, 'mailContent', '');
+    set(this.publicationActivity, 'mailSubject', '');
+    this.showpublicationModal = false;
+  }
+
+  @action
+  async createPublicationActivity() {
+    this.showpublicationModal = false;
+    alert('the mails dont work yet. infra is working on it.');
+  }
+
+  /** BS PUBLICATION ACTIVITIES **/
 
   @action
   async cancelExistingTranslationActivity() {
