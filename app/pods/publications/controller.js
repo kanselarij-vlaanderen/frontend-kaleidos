@@ -2,6 +2,9 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency-decorators';
+import search from 'fe-redpencil/utils/mu-search';
 
 export default class PublicationsController extends Controller {
   @service publicationService;
@@ -11,6 +14,10 @@ export default class PublicationsController extends Controller {
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed = false;
   @tracked isCreatingPublication = false;
+  @tracked searchText;
+  @tracked showSearchResults = false;
+  @tracked searchResults;
+  @tracked showLoader = false;
 
   @tracked
   publication = {
@@ -18,6 +25,37 @@ export default class PublicationsController extends Controller {
     shortTitle: null,
     longTitle: null,
   };
+
+  @restartableTask
+  *debouncedSearchTask(event) {
+    this.searchText = event.target.value;
+    yield timeout(500);
+    yield this.search(this.searchText);
+  }
+
+  @action
+  async search() {
+    const filter = {};
+    if (this.searchText.length === 0 || this.searchText === '') {
+      filter[':sqs:title'] = '*'; // search without filter
+      this.showSearchResults = false;
+    } else {
+      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle'];
+      const searchModifier = ':sqs:';
+      const textSearchKey = this.textSearchFields.join(',');
+      filter[`${searchModifier}${textSearchKey}`] = this.searchText;
+      this.showSearchResults = true;
+    }
+
+    this.searchResults = await search('cases', 0, 10, null, filter, (item) => {
+      const entry = item.attributes;
+      entry.id = item.id;
+      return entry;
+    });
+    if (this.searchResults.length === 0) {
+      this.searchResults = false;
+    }
+  }
 
   get getError() {
     return this.hasError;
@@ -39,6 +77,28 @@ export default class PublicationsController extends Controller {
 
   get shouldShowPublicationHeader() {
     return !this.routing.currentRouteName.startsWith('publications.publication');
+  }
+
+  @action
+  async startPublicationFromCaseId(_caseId) {
+    this.showLoader = true;
+    // Test if dossier already had publication (index not up to date).
+    const pubFlows = await this.store.query('publication-flow', {
+      filter: {
+        case: {
+          id: _caseId,
+        },
+      },
+      sort: '-created',
+    });
+    let newPublication;
+    if (pubFlows.content.length > 0) {
+      newPublication = await this.store.findRecord('publication-flow', pubFlows.content[0].id);
+    } else {
+      newPublication = await this.publicationService.createNewPublication(0, _caseId);
+      this.showLoader = false;
+    }
+    this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
 
   @action

@@ -1,0 +1,26 @@
+.autocomplete-results{
+  display: block;
+  position: absolute;
+  background-color: white;
+  margin-top:1em;
+  border:1px solid gray;
+
+  li{
+    position: relative;
+    color:black;
+    text-decoration: none;
+
+    div{
+      display: block;
+    }
+    a{
+      a{
+        padding:0;
+      }
+    }
+  }
+}
+
+.vlc-publication-overview-navbar ul.auk-menu{
+  background-color: transparent !important;
+}

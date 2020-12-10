@@ -38,6 +38,10 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
+  publicationActivities: hasMany('activity', {
+    inverse: null,
+  }),
+
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {
     inverse: null,
@@ -49,6 +53,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   accessLevel: belongsTo('access-level'),
+
 
   publicationFlow: belongsTo('publication-flow', {
     inverse: null,

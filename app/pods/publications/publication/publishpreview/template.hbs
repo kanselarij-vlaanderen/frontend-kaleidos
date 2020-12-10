@@ -1,1 +1,15 @@
-<div>{{t "proofs"}}</div>
+{{#if (gt this.publishPreviewActivities.length 0)}}
+  <div>{{t "proofs"}}</div>
+  {{#each this.publishPreviewActivities as |activity|}}
+    <p>{{activity.type.label}}</p>
+    <p>{{activity.startDate}}</p>
+    <p>{{activity.name}}</p>
+    <p>{{activity.mailContent}}</p>
+  {{/each}}
+{{else}}
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Body>
+      <WebComponents::AuEmptyState @message={{t "no-publishpreview-requests"}}/>
+    </WebComponents::AuPanel::Body>
+  </WebComponents::AuPanel>
+{{/if}}

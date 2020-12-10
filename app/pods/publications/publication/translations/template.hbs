@@ -1,1 +1,75 @@
-<div>{{t "translations"}}</div>
+<div class="auk-u-m-2">
+  {{#if (gt this.activities.length 0)}}
+    {{#each this.activities as |activity|}}
+      <WebComponents::AuNavbar @noPadding="true">
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton
+                      @skin="tertiary"
+                      {{on "click" this.cancelExistingTranslationActivity}}>
+                {{t "cancel-translation"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuCheckbox
+                      @toggle={{fn this.checkExistingTranslationActivity activity}}
+                      @label="Afgewerkt"/>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuNavbar>
+      <div class="auk-u-m-2">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
+            <WebComponents::AuKeyValue @key="Uiterste Vertaaldatum" @value={{moment-format activity.finalTranslationDate "DD-MM-YYYY"}}/>
+          </div>
+          <div class="auk-o-grid-col-bp2-9">
+            <WebComponents::AuPanel>
+              <WebComponents::AuPanel::Header>
+                <h4 class="auk-panel__title">{{t "request"}}</h4>
+              </WebComponents::AuPanel::Header>
+              <WebComponents::AuPanel::Body>
+                <div class="auk-u-mb-4">
+                  <WebComponents::AuLabel>
+                    {{t "translation-mail-header"}}
+                    <p>{{activity.mailContent}}</p>
+                  </WebComponents::AuLabel>
+                </div>
+                <WebComponents::AuLabel>
+                  {{t "files"}}
+                </WebComponents::AuLabel>
+                <ul class="auk-list auk-list--bordered">
+                  {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+                    <li class="auk-list__item auk-list__item--gray-100">
+                      <WebComponents::AuBadge @skin="white" @icon="document"/>
+                      <div class="auk-u-mx-2">
+                        <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
+                        <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.documentContainer.type.label}} - {{await translationSourcePiece.file.extension}}</div>
+                      </div>
+                      <WebComponents::AuButtonToolbar>
+                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                      </WebComponents::AuButtonToolbar>
+
+                    </li>
+                  {{/each}}
+                </ul>
+              </WebComponents::AuPanel::Body>
+            </WebComponents::AuPanel>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <WebComponents::AuPanel>
+      <WebComponents::AuPanel::Body>
+        <WebComponents::AuEmptyState @message={{t "no-translation-requests"}}/>
+      </WebComponents::AuPanel::Body>
+    </WebComponents::AuPanel>
+  {{/if}}
+</div>

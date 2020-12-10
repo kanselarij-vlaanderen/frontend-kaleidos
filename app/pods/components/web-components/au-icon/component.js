@@ -17,4 +17,19 @@ export default class Icon extends Component {
     }
     return null;
   }
+
+  /*
+    Skins can be:
+    - muted
+    - warning
+    - primary
+    - success
+    - danger
+   */
+  get iconSkinColor() {
+    if (this.args.iconSkinColor) {
+      return `auk-icon--${this.args.iconSkinColor}`;
+    }
+    return null;
+  }
 }
