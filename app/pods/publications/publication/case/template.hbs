@@ -64,7 +64,7 @@
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
                 {{#if this.latestSubcaseOnMeeting}}
-                  <WebComponents::AuButtonLink 
+                  <WebComponents::AuButtonLink
                     @route="cases.case.subcases.subcase.overview"
                     @models={{array
                       this.model.id
@@ -84,7 +84,7 @@
           <div class="auk-content" data-test-publication-flow-title>
             {{#if this.latestSubcaseOnMeeting}}
               <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
-              <p class="auk-u-text-prewrap">{{this.latestSubcaseOnMeeting.title}}</p>
+              <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
             {{else}}
               <h4>{{this.model.shortTitle}}</h4>
               <p class="auk-u-text-prewrap">{{this.model.title}}</p>
