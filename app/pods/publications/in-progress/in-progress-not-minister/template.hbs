@@ -22,7 +22,11 @@
         field="publishBefore"
         label=(t "publication-before")
       }}
-      <th>{{t "latest-modified"}}</th>
+      {{th-sortable
+        currentSorting=this.sort
+        field="modified"
+        label=(t "latest-modified")
+      }}
       <th>{{t "translations"}}</th>
       <th>{{t "proof"}}</th>
       <th></th>
