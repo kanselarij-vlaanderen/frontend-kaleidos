@@ -90,7 +90,7 @@ export default class activityService extends Service {
       .toDate();
 
     // publishActivityType.
-    const requestPublishActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren);
+    const requestPublishActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {

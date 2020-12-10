@@ -39,15 +39,15 @@ export default EmberObject.create({
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
-      subject: '[%%kaleidosenvironment] Aanvraag vertaling voor Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag vertaling voor Publicatie %%nummer%%',
     },
     publishPreviewRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
-      subject: '[%%kaleidosenvironment] Aanvraag voor drukproef Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor drukproef Publicatie %%nummer%%',
     },
     publishRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
-      subject: '[%%kaleidosenvironment] Aanvraag voor Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor Publicatie %%nummer%%',
     },
   },
   formallyOkOptions: [

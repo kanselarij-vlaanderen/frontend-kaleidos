@@ -46,11 +46,12 @@ export default class PublicationPublishPreviewController extends Controller {
     set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
     set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showpublicationModal = true;
+    console.log(this.publicationActivity);
   }
 
   @action
   async cancelPublicationModal() {
-    this.publicationActivity.pieces = A([]);
+    set(this.publicationActivity, 'pieces', A([]));
     set(this.publicationActivity, 'mailContent', '');
     set(this.publicationActivity, 'mailSubject', '');
     this.showpublicationModal = false;
@@ -60,7 +61,6 @@ export default class PublicationPublishPreviewController extends Controller {
   async createPublicationActivity() {
     this.showpublicationModal = false;
     this.showLoader = true;
-    this.showTranslationModal = false;
 
     // Fetch the type.
     const publishSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
@@ -73,7 +73,7 @@ export default class PublicationPublishPreviewController extends Controller {
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
-    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieced, subcase);
+    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase);
 
     // Visual stuff.
     this.selectedPieces = A([]);
