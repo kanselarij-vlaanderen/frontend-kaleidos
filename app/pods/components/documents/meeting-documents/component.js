@@ -77,9 +77,9 @@ export default class MeetingDocuments extends Component {
   *savePieces() {
     const savePromises = this.newPieces.map(async(piece) => {
       try {
-        this.savePiece.perform(piece);
+        await this.savePiece.perform(piece);
       } catch (error) {
-        this.deletePiece.perform(piece);
+        await this.deletePiece.perform(piece);
         throw error;
       }
     });

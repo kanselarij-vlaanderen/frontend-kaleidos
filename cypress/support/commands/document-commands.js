@@ -325,7 +325,7 @@ function openAgendaitemDossierTab(agendaitemTitle) {
  * @param {String} fileName - The name of the file without the extension
  * @param {String} extension - The extension of the file
  */
-function uploadFile(folder, fileName, extension) {
+function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   cy.log('uploadFile');
   cy.route('POST', 'files').as('createNewFile');
   cy.route('GET', 'files/**').as('getNewFile');
@@ -333,15 +333,14 @@ function uploadFile(folder, fileName, extension) {
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
   // TODO pdf is uploaded but all pages are blank, encoding issue? Irrelevant for test
-  // let mimeType = 'text/plain';
-  // if(extension == 'pdf'){
-  //   mimeType = 'application/pdf';
-  // }
 
   cy.fixture(filePath).then((fileContent) => {
     cy.get('[type=file]').upload(
       {
-        fileContent, fileName: fileFullName, mimeType: 'application/pdf',
+        fileContent,
+        fileName: fileFullName,
+        mimeType,
+        encoding: 'utf-8',
       },
       {
         uploadType: 'input',

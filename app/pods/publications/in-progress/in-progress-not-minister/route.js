@@ -18,8 +18,8 @@ export default class InProgressNotRoute extends Route {
     },
   };
 
-  async model() {
-    return this.store.query('publication-flow', {
+  async model(params) {
+    return await this.store.query('publication-flow', {
       filter: {
         ':has:case': 'yes',
         case: {
@@ -29,8 +29,12 @@ export default class InProgressNotRoute extends Route {
           id: CONFIG.publicationStatusToPublish.id,
         },
       },
-      sort: '-created',
-      include: 'case,status',
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+      include: 'case',
     });
   }
 

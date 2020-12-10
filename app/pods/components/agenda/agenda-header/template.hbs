@@ -315,8 +315,8 @@
                   {{/if}}
 
 
-                  {{#if 
-                    (and 
+                  {{#if
+                    (and
                       (not currentSession.isFinal)
                       (and (await isLockable))
                       (and currentAgenda currentAgenda.isDesignAgenda)
@@ -334,7 +334,7 @@
                         {{t "agenda-reopen-previous-version"}}
                       </a>
                     </li>
-                  {{/if}}         
+                  {{/if}}
                 {{/if}}
               </ul>
             {{/attach-popover}}
@@ -485,4 +485,12 @@
     verifyButtonText=(t "agenda-unlock")
     buttonType="warning"
   }}
+{{/if}}
+
+{{#if showLoader}}
+  <WebComponents::VlModal
+          @isOverlay={{true}}
+          @title={{t "saving-change-message"}} >
+    <WebComponents::VlLoader @text={{t "please-be-patient"}} />
+  </WebComponents::VlModal>
 {{/if}}

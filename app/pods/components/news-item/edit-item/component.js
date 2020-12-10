@@ -24,6 +24,10 @@ export default Component.extend({
     },
   }),
 
+  editorInstanceAvailable: computed('editorInstance', function() {
+    return this.get('editorInstance') ? true : false; // eslint-disable-line
+  }),
+
   hasNota: computed('agendaitem', async function() {
     const nota = await this.agendaitem.get('nota');
     if (nota) {
@@ -35,7 +39,11 @@ export default Component.extend({
   async saveChanges() {
     this.set('isLoading', true);
     const newsletterInfo = await this.get('newsletterInfo');
-    newsletterInfo.set('richtext', this.richtext);
+    try {
+      newsletterInfo.set('richtext', this.richtext);
+    } catch {
+      // pass
+    }
     await newsletterInfo.save().then(async() => {
       this.set('isLoading', false);
     });
@@ -44,11 +52,11 @@ export default Component.extend({
     }
   },
 
-  richtext: computed('editor.htmlContent', function() {
-    if (!this.editor) {
-      return;
+  richtext: computed('editorInstance.htmlContent', function() {
+    if (!this.editorInstanceAvailable) {
+      throw new Error("Can't get rich text since editor-instance isn't available!");
     }
-    return this.editor.htmlContent;
+    return this.editorInstance.htmlContent;
   }),
 
   actions: {
@@ -87,12 +95,14 @@ export default Component.extend({
       const piece = await nota.get('lastPiece');
       window.open(`/document/${piece.get('id')}`);
     },
+
     async handleRdfaEditorInit(editorInterface) {
       const newsletterInfo = await this.get('newsletterInfo');
       const newsLetterInfoText = newsletterInfo.get('richtext');
       editorInterface.setHtmlContent(newsLetterInfoText);
-      this.set('editor', editorInterface);
+      this.set('editorInstance', editorInterface);
     },
+
     descriptionUpdated(val) {
       this.set('initValue', `${this.get('initValue')} ${val}`);
     },

@@ -256,3 +256,14 @@ export const getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus = async(curren
     }
   });
 };
+
+export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
+  await agenda.hasMany('agendaitems').reload();
+  const agendaitems = await agenda.get('agendaitems');
+  const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+    .sortBy('priority');
+  const actualAnnouncements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark && !agendaitem.isDeleted)
+    .sortBy('priority');
+  await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
+  await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
+};

@@ -76,6 +76,12 @@ export default class CaseController extends Controller {
   }
 
   @action
+  cancelEditingInscription() {
+    this.model.rollbackAttributes();
+    this.putInscriptionInNonEditMode();
+  }
+
+  @action
   putInscriptionInNonEditMode() {
     this.isInscriptionInEditMode = false;
   }
@@ -92,18 +98,18 @@ export default class CaseController extends Controller {
 
   @action
   async addNewContactPerson() {
-    this.set('showLoader', true);
+    this.showLoader = true;
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
     await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
     this.isShowingPersonModal = false;
-    this.set('showLoader', false);
+    this.showLoader = false;
   }
 
   @action
   async deleteContactPerson(contactPerson) {
-    this.set('showLoader', true);
+    this.showLoader = true;
     await contactPerson.destroyRecord();
-    this.set('showLoader', false);
+    this.showLoader = false;
   }
 }

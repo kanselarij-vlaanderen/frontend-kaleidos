@@ -5,7 +5,9 @@ import Model, {
 export default class Activity extends Model {
   @attr('datetime') startDate;
   @attr('datetime') endDate;
+  @attr('datetime') finalTranslationDate;
   @attr('string') name;
+  @attr('string') mailContent;
 
   @belongsTo('subcase') subcase;
   @belongsTo('language') language;

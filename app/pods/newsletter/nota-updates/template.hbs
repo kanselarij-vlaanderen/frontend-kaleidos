@@ -1,14 +1,14 @@
-<div class="vl-u-spacer-extended-l">
+<div class="vl-u-spacer-extended-l--padding vl-u-scroll-scrollable">
   <div class="vl-u-spacer--large">
     <div>
-      {{#if this.model.notas.length}}
+      {{!-- Indien er geen resultaten gevonden worden, komt dit doordat er geen documenten als type 'nota' bij agendapunten staan --}}
         <DataTable
           @content={{this.model.notas}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
-          @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle vl-data-table--no-scroll"
           @isLoading={{this.isLoadingModel}}
           as |table|
         >
@@ -73,7 +73,6 @@
             </c.body>
           </table.content>
         </DataTable>
-      {{/if}}
     </div>
   </div>
 </div>

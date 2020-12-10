@@ -1,4 +1,5 @@
 {{!-- template-lint-disable  --}}
+{{!-- TODO AUK classes gebruiken --}}
 <div class="vl-u-spacer-extended-l">
   <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
     <thead>
@@ -38,7 +39,7 @@
           <td>{{publication.type}}</td>
           <td>
             {{publication.dateStartPublication}}<br>
-            <span class="u-muted">{{publication.timeStartPublication}}</span>
+            <span class="auk-u-muted">{{publication.timeStartPublication}}</span>
           </td>
           <td>{{publication.datePublicationDeadline}}</td>
           <td>
@@ -67,6 +68,7 @@
             {{/if}}
           </td>
           <td>
+            {{!-- TODO AuButtonLink gebruiken --}}
             <LinkTo
               @route="publications.in-progress"
               class="vl-button vl-button--link vl-button--icon"

@@ -12,7 +12,7 @@ context('Publications tests', () => {
 
   beforeEach(() => {
     cy.server();
-    cy.login('Admin');
+    cy.login('Ondersteuning Vlaamse Regering en Betekeningen');
   });
 
   afterEach(() => {
@@ -21,35 +21,35 @@ context('Publications tests', () => {
 
   const publicationOverviewUrl = '/publicaties/in-behandeling';
   const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
-  const someNumber = Math.floor(Math.random() * 999);
   const someText = 'Some text';
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
+  const pageClass = '.vlc-panel-layout__main-content';
 
   it('publications:urls: should see pages', () => {
     cy.visit(publicationOverviewUrl);
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling');
     // Should redirect.
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/behandeld');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
     cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist');
   });
 
   it('should render error when required fields are not filled in to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.aukModal).as('publicationModal');
+    cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get(modalSelectors.publication.alertInfo, {
       timeout: 5000,
     }).should('exist');
@@ -66,7 +66,7 @@ context('Publications tests', () => {
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('1');
     });
     cy.get(utilsSelectors.aukTextarea).eq(0)
       .click()
@@ -84,11 +84,11 @@ context('Publications tests', () => {
   it('should clear input data when closing and reopening modal to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.aukModal).as('publicationModal');
+    cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       cy.get(utilsSelectors.aukInput).click()
         .clear()
-        .type(someNumber);
+        .type('2');
       cy.get(utilsSelectors.aukTextarea).eq(0)
         .click()
         .clear(); // Why do a manual clear ?
@@ -103,11 +103,11 @@ context('Publications tests', () => {
   it('should create a publication and redirect to its detail page', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.aukModal).as('publicationModal');
+    cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type(someNumber);
+        .type('3');
       cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
@@ -121,7 +121,7 @@ context('Publications tests', () => {
     });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', '3');
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
@@ -133,7 +133,7 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', someNumber);
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE 3');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
@@ -156,7 +156,7 @@ context('Publications tests', () => {
 
     // go back in overview
     cy.route('/publication-flows?**').as('goToPublicationOverview');
-    cy.get(publicationSelectors.goBackToOverviewButton).click();
+    cy.get(publicationSelectors.nav.goBack).click();
     cy.wait('@goToPublicationOverview');
 
     // check if title has changes
@@ -174,7 +174,6 @@ context('Publications tests', () => {
 
     cy.visit(publicationNotViaMinisterOverviewUrl);
 
-    cy.server();
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()
       .click();
@@ -185,7 +184,7 @@ context('Publications tests', () => {
 
     // Add contactperson.
     cy.get(publicationSelectors.contactperson.addButton).click();
-    cy.get(modalSelectors.aukModal).should('exist');
+    cy.get(modalSelectors.auModal.container).should('exist');
     cy.get(publicationSelectors.contactperson.firstNameInput).clear()
       .type(contactperson.fin);
     cy.get(publicationSelectors.contactperson.lastNameInput).clear()
@@ -196,7 +195,6 @@ context('Publications tests', () => {
       .type(contactperson.org);
 
     // Click submit.
-    cy.server();
     cy.route('POST', '/contact-persons').as('postContactPerson');
     cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publicationSelectors.contactperson.submitButton).click();
@@ -213,7 +211,6 @@ context('Publications tests', () => {
     cy.wait(10);
 
     // Click Delete
-    cy.server();
     cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
     cy.get(publicationSelectors.contactperson.deleteContactpersonButton).click();
     cy.wait('@deleteContactPerson');
@@ -226,9 +223,10 @@ context('Publications tests', () => {
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
   });
 
-  it('publications:dossiers:create publication via ministerraad', () => {
+  it('publications:dossiers:Create publication via ministerraad', () => {
     // prepare agenda data.
-    cy.server();
+    cy.logoutFlow();
+    cy.login('Admin');
     cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.wait('@publicationagendapuntentreatments');
@@ -241,8 +239,22 @@ context('Publications tests', () => {
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 
+    // make sure the agenda is approved and calls are not cancelled
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
-    cy.get('.div-main').should('exist');
+    cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
+    cy.get(publicationSelectors.tableCell).should('exist');
+    cy.contains('Cypress test dossier 1').eq(0)
+      .should('exist');
+    cy.server();
+    cy.route('POST', '/publication-flows').as('postPublicationFlow');
+    cy.get(publicationSelectors.startPublication).first()
+      .click();
+    cy.wait('@postPublicationFlow');
+    cy.get(publicationSelectors.flowTitle).should('exist');
   });
 });

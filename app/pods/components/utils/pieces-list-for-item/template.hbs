@@ -1,16 +1,27 @@
 
-{{#if (is-pending agendaitemOrSubcase.documentContainers)}}
+{{#if (is-pending @agendaitemOrSubcase.sortedPieces)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   <div class="grid-container">
-    {{#each (await documentContainers) as |documentContainer|}}
-      {{item-document
-        item=@agendaitemOrSubcase
-        documentContainer=documentContainer
-        isClickable=@isClickable
-        useNewIcons=useNewIcons
-      }}
-    {{/each}}
+    {{#if (and this.moreThan20 (not this.isShowingAll))}}
+      {{#each (await this.piecesLimited) as |piece|}}
+        {{item-document
+          item=@agendaitemOrSubcase
+          piece=piece
+          isClickable=@isClickable
+          useNewIcons=useNewIcons
+        }}
+      {{/each}}
+    {{else}}
+      {{#each (await @agendaitemOrSubcase.sortedPieces) as |piece|}}
+        {{item-document
+          item=@agendaitemOrSubcase
+          piece=piece
+          isClickable=@isClickable
+          useNewIcons=useNewIcons
+        }}
+      {{/each}}
+    {{/if}}
   </div>
   {{#if this.moreThan20}}
     <button class="vlc-document-show-more-button" type="button" {{action "toggleShowingAll"}}>

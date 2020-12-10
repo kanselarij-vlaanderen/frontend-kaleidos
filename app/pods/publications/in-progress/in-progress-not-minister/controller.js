@@ -15,15 +15,11 @@ export default class PublicationsInProgressNotMinisterController extends Control
     },
   };
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
 
-  @tracked
-  page = 0;
-
-  @tracked
-  size = 5;
-
-  sort = '-created';
+  @tracked page = 0;
+  @tracked size = 25;
+  @tracked sort = '-created';
 
   @action
   selectSize(size) {

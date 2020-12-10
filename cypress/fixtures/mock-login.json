@@ -112,5 +112,24 @@
       },
       "type": "sessions"
     }
+  },
+  "Ondersteuning Vlaamse Regering en Betekeningen": {
+    "data": {
+      "relationships": {
+        "account": {
+          "data": {
+            "id": "80d93017-b9e5-4973-a8aa-9431dc5fbab7",
+            "type": "accounts"
+          }
+        },
+        "group": {
+          "data": {
+            "id": "600d9d07-3368-4e6b-abbb-f5be5c2531a5",
+            "type": "groups"
+          }
+        }
+      },
+      "type": "sessions"
+    }
   }
 }

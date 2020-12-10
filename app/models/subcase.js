@@ -38,6 +38,10 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
+  publicationActivities: hasMany('activity', {
+    inverse: null,
+  }),
+
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {
     inverse: null,
@@ -49,6 +53,7 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   accessLevel: belongsTo('access-level'),
+
 
   publicationFlow: belongsTo('publication-flow', {
     inverse: null,
@@ -76,19 +81,17 @@ export default ModelWithModifier.extend({
     return getPropertyLength(this, 'documentContainers');
   }),
 
-  linkedDocumentContainersLength: computed('linkedDocumentContainers', function() {
-    return getPropertyLength(this, 'linkedDocumentContainers');
-  }),
 
   documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.mapBy('id').join(',');
           return this.store.query('document-container', {
             filter: {
               pieces: {
-                id: pieceIds,
+                subcase: {
+                  id: this.get('id'),
+                },
               },
             },
             page: {
@@ -101,26 +104,6 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  linkedDocumentContainers: computed('linkedPieces.@each', function() {
-    return PromiseArray.create({
-      promise: this.get('linkedPieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.mapBy('id').join(',');
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                id: pieceIds,
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('linkedPieces'), containers));
-        }
-      }),
-    });
-  }),
 
   nameToShow: computed('subcaseName', function() {
     const {
@@ -135,21 +118,6 @@ export default ModelWithModifier.extend({
     }
     return 'No name found.';
   }),
-
-  // TODO unused method ?
-  async documentNumberOfPiece(piece) {
-    const documentContainers = await this.get('documentContainers');
-
-    const sortedDocumentContainers = documentContainers.sortBy('created');
-    const targetDocumentContainer = await piece.get('documentContainer');
-    let foundIndex;
-    sortedDocumentContainers.map((documentContainer, index) => {
-      if (documentContainer === targetDocumentContainer) {
-        foundIndex = index;
-      }
-    });
-    return foundIndex;
-  },
 
   sortedMandatees: computed('mandatees.@each', function() {
     return this.get('mandatees').sortBy('priority');

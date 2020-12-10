@@ -199,6 +199,12 @@ $pad-tiny: 0.3rem;
     }
   }
 
+  &--no-scroll {
+    .data-table-content {
+      overflow: hidden;
+    }
+  }
+
   .vl-pill {
     vertical-align: middle;
 

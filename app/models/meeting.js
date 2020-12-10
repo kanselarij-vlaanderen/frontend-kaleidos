@@ -42,15 +42,17 @@ export default Model.extend({
     return getPropertyLength(this, 'documentContainers');
   }),
 
+  // This computed does not seem to be used anywhere
   documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
-          const pieceIds = pieces.mapBy('id').join(',');
           return this.store.query('document-container', {
             filter: {
               pieces: {
-                id: pieceIds,
+                meeting: {
+                  id: this.get('id'),
+                },
               },
             },
             page: {
