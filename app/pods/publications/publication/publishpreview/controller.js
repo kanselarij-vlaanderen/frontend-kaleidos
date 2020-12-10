@@ -2,11 +2,16 @@ import Controller from '@ember/controller';
 import {
   action, set
 } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 
 export default class PublicationPublishPreviewController extends Controller {
+  // Services.
+  @service activityService;
+  @service subcasesService;
+
   // properties for making the design
   @tracked withdrawn = true;
   @tracked testDate = new Date();
