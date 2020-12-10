@@ -38,15 +38,15 @@ export default EmberObject.create({
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
-      content: 'Beste,\n\n In bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
       subject: '[%%kaleidosenvironment] Aanvraag vertaling voor Publicatie %%nummer%%',
     },
     publishPreviewRequest: {
-      content: 'Beste,\n\n In bijlage \n\n%%attachments%%\n\nVoor drukproef.',
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
       subject: '[%%kaleidosenvironment] Aanvraag voor drukproef Publicatie %%nummer%%',
     },
     publishRequest: {
-      content: 'Beste,\n\n In bijlage \n\n%%attachments%%\n\nVoor publicatie.',
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
       subject: '[%%kaleidosenvironment] Aanvraag voor Publicatie %%nummer%%',
     },
   },
