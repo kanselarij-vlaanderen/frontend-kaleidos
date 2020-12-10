@@ -60,7 +60,19 @@ export default Service.extend({
       this.set('isEditor', this.checkEditRights());
       this.set('isAdmin', this.checkAdminRights());
       this.set('isOverheid', this.checkGovernmentRights());
+      this.set('isOvrb', this.checkOvrbRights());
     }
+  },
+
+  checkOvrbRights() {
+    const {
+      userRoleId,
+    } = this;
+    const {
+      ovrbId,
+    } = CONFIG;
+    const roles = [ovrbId];
+    return roles.includes(userRoleId);
   },
 
   checkGovernmentRights() {
