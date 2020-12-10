@@ -6,9 +6,10 @@ export default class PublicationPublishPreviewController extends Controller {
   // properties for making the design
   @tracked withdrawn = true;
   @tracked testDate = new Date();
+  @tracked panelCollapsed = false;
+  @tracked panelIcon = 'chevron-down'
 
   get activities() {
-    console.log('Publishing model:', this.model);
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
   }
@@ -18,6 +19,12 @@ export default class PublicationPublishPreviewController extends Controller {
   //   const pieces = await activity.usedPieces();
   //   console.log('PIECES', pieces);
   // }
+
+  @action
+  collapsePanel() {
+    this.panelCollapsed = !this.panelCollapsed;
+    this.panelIcon = ((this.panelIcon === 'chevron-up') ? 'chevron-down' : 'chevron-up');
+  }
 
   @action
   async cancelExistingTranslationActivity() {
