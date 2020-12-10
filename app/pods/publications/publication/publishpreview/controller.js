@@ -85,6 +85,9 @@ export default class PublicationPublishPreviewController extends Controller {
       pieces: A([]),
     };
     this.showLoader = false;
+
+    // TODO Add email hook here.
+
     alert('the mails dont work yet. infra is working on it.');
   }
 
