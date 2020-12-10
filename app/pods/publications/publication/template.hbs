@@ -86,7 +86,9 @@
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getPublicationBeforeDate}}
+                          @onChange={{this.setPublicationBeforeDate}}/>
                   {{#if this.expiredPublicationBeforeDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
@@ -96,7 +98,9 @@
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getTranslationDate}}
+                          @onChange={{this.setTranslationDate}}/>
                   {{#if this.expiredTranslationDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
