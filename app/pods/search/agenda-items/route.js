@@ -97,7 +97,7 @@ export default class AgendaitemSearchRoute extends Route {
     }
 
     if (params.latestOnly) {
-      filter[':has-no:nextVersionId'] = 'yes';
+      filter[':has-no:nextVersionId'] = 't';
     }
 
     this.lastParams.commit();
