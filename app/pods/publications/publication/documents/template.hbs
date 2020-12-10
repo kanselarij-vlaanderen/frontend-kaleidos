@@ -73,7 +73,7 @@
       </thead>
       <tbody>
         {{#each this.model.case.pieces as |piece|}}
-          <tr data-test-publication-case-documents-piece-row>
+          <tr>
             <td>
               <WebComponents::AuButton
                 {{on "click" (fn this.toggleFolderCollapse piece)}}
@@ -462,7 +462,7 @@
                 @skin="primary"
           {{on "click" this.savePublishPreviewActivity}}
         >
-          {{t "request-translations"}}
+          {{t "request-publish-preview"}}
         </WebComponents::AuButton>
       {{/if}}
     </WebComponents::AuModal::Footer>

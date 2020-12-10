@@ -11,7 +11,7 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-not-edit-inscription-button/>
+                <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button/>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
@@ -30,7 +30,7 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="borderless" {{on "click" this.putInscriptionInNonEditMode}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
+                <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButton
@@ -52,20 +52,43 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+                <h4 class="auk-panel__title">
+                  {{t
+                    (if this.latestSubcaseOnMeeting
+                    "publication-inscription-subcase"
+                    "publication-inscription")
+                  }}
+                </h4>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                {{#if this.latestSubcaseOnMeeting}}
+                  <WebComponents::AuButtonLink 
+                    @route="cases.case.subcases.subcase.overview"
+                    @models={{array
+                      this.model.id
+                      this.latestSubcaseOnMeeting.id
+                    }}
+                  >
+                    {{t "to-subcase"}}
+                  </WebComponents::AuButtonLink>
+                {{else}}
+                  <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                {{/if}}
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
           <div class="auk-content" data-test-publication-flow-title>
-            <h4>{{this.model.shortTitle}}</h4>
-            <p class="auk-u-text-prewrap">{{this.model.title}}</p>
+            {{#if this.latestSubcaseOnMeeting}}
+              <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
+              <p class="auk-u-text-prewrap">{{this.latestSubcaseOnMeeting.title}}</p>
+            {{else}}
+              <h4>{{this.model.shortTitle}}</h4>
+              <p class="auk-u-text-prewrap">{{this.model.title}}</p>
+            {{/if}}
           </div>
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
@@ -77,7 +100,7 @@
   {{!--  MINISTER PANEL  --}}
 
 
-  <div hidden class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+  <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
     <WebComponents::AuPanel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
@@ -88,68 +111,54 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-minister"}}</WebComponents::AuButton>
+              {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
+              {{!-- TODO scenario 4 --}}
+              {{!-- <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-minister"}}</WebComponents::AuButton> --}}
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body @noPadding="true">
-        <table class="auk-table" >
-          <thead>
-            <tr>
-              <th>{{t "minister"}}</th>
-              <th>{{t "policy-domain-policy-fields"}}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="o-flex o-flex--vertical-center">
-                <WebComponents::AuBadge @icon="user" /> <span class="auk-u-mx-2">{{t "cancel"}}</span>
-              </td>
-              <td>
-                <span>{{t "cancel"}}</span>
-                <span class="auk-u-muted">{{t "cancel"}}</span>
-              </td>
-              <td class="vl-u-align-right">
-                <button
-                  class="vl-button vl-button--link vl-button--icon"
-                  type="button"
-                  data-test-show-contactperson-popover
-                >
-                  <i class="ki-more"></i>
-                  <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="left"
-                    as |attacher|
-                  >
-                  {{!-- TODO use AuDropdown --}}
-                    <ul class="vlc-dropdown-menu">
-                      <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
-                          {{on "click" attacher.hide}}
-                        >
-                          {{t "edit-2"}}
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                          {{on "click" attacher.hide}}
-                        >
-                          {{t "delete-minister"}}
-                        </button>
-                      </li>
-                    </ul>
-                  </AttachPopover>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        {{#if (not this.latestSubcaseOnMeeting.mandatees)}}
+          <WebComponents::AuPanel::Body>
+            <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+          </WebComponents::AuPanel::Body>
+        {{else}}
+          <table class="auk-table">
+            <thead>
+              <tr>
+                <th>{{t "minister"}}</th>
+                {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                {{!-- <th>{{t "policy-domain-policy-fields"}}</th> --}}
+                {{!-- TODO row actions --}}
+                {{!-- <th></th> --}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
+                <tr>
+                  <td>
+                    <div class="o-flex o-flex--vertical-center">
+                      <WebComponents::AuBadge @icon="user"/>
+                      <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                    </div>
+                  </td>
+                  {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                  {{!-- <td>
+                    {{t "government-domain"}}
+                    <br>
+                    <span class="auk-u-muted auk-u-text-small">{{t "government-field"}}</span>
+                  </td> --}}
+                  {{!-- TODO Acties in 1 rij / enkel indien niet via MR --}}
+                  {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
+                  {{!-- TODO AuButton with AttachPopover, AuDropdown, scenario 4 --}}
+                  {{!-- <td class="vl-u-align-right">
+                  </td> --}}
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        {{/if}}
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
   </div>

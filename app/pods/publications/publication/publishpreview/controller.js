@@ -9,7 +9,7 @@ export default class PublicationPublishPreviewController extends Controller {
   @tracked panelCollapsed = false;
   @tracked panelIcon = 'chevron-down'
 
-  get activities() {
+  get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
   }

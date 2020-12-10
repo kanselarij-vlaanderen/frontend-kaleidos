@@ -648,9 +648,8 @@
   "signatures": "Handtekeningen",
   "proof": "Drukproef",
   "proofs": "Drukproeven",
-  "add-proof": "Drukproef toevoegen",
-  "no-proof": "Er is nog geen drukproef toegevoegd.",
   "publication-inscription": "Opschrift",
+  "publication-inscription-subcase": "Tekst agendering",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
   "delete-minister": "Verwijderen van minister",
@@ -683,6 +682,7 @@
   "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",
+  "no-mandatees-and-fields-added": "Er zijn nog geen ministers en beleidsvelden toegevoegd.",
   "name-document": "Naam Document",
   "file-extension": "BestandsType",
   "cancel-translation": "Aanvraag intrekken",
@@ -690,7 +690,12 @@
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",
   "files": "Bijlages",
-  "improvement": "Verbetering",
+  "no-translation-requests": "Er zijn nog geen vertalingsaanvragen.",
+  "no-publishpreview-requests": "Er zijn nog geen drukproefaanvragen.",
+  "no-improvements": "Er zijn nog geen verbeteringen toegevoegd.",
   "add-improvement": "Verbetering toevoegen",
-  "no-improvement": "Er is nog geen verbetering toegevoegd."
+  "improvement": "Verbetering",
+  "no-proof": "Er zijn nog geen drukproeven toegevoegd.",
+  "add-proof": "Drukproef toevoegen",
+  "proof": "Drukproef"
 }

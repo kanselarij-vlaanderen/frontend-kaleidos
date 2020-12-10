@@ -1,211 +1,219 @@
-{{#each this.activities as |activity|}}
-  <div class="auk-u-m-2">
-    <WebComponents::AuNavbar @noPadding="true">
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-                    @skin="tertiary"
-              {{on "click" this.cancelExistingTranslationActivity}}>
-              {{t "cancel-translation"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuNavbar>
+{{#if (gt this.publishPreviewActivities.length 0)}}
+  {{#each this.publishPreviewActivities as |activity|}}
     <div class="auk-u-m-2">
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-            {{!--TODO remove the readonly field --}}
-            <WebComponents::AuInput @value={{this.model.publicationFlow.numacNumber}} readlonly></WebComponents::AuInput>
-          </div>
-          {{!--TODO set to the correct propperty --}}
-          {{#if this.withdrawn}}
+      <WebComponents::AuNavbar @noPadding="true">
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton
+                      @skin="tertiary"
+                {{on "click" this.cancelExistingTranslationActivity}}>
+                {{t "cancel-translation"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuNavbar>
+      <div class="auk-u-m-2">
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
             <div class="auk-form-group">
-              <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format this.testDate "DD MMMM YYYY [om] H:mm"}}/>
+              <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
+              {{!--TODO remove the readonly field --}}
+              <WebComponents::AuInput @value={{this.model.publicationFlow.numacNumber}} readlonly></WebComponents::AuInput>
             </div>
-          {{/if}}
-        </div>
-        <div class="auk-o-grid-col-bp2-9">
-          <div class="auk-u-ml-4 auk-u-mb-4">
-            {{!-- Request panel --}}
-            <div class="auk-u-mb-3">
-              <WebComponents::AuPanel @scrollable="true">
-                <WebComponents::AuPanel::Header>
-                  <WebComponents::AuButton @skin="tertiary" @layout="icon-only" @icon={{this.panelIcon}} style="margin-right:1.6rem" {{on "click" this.collapsePanel}}/>
-                  <h4 class="auk-panel__title">{{t "request"}}</h4>
-                </WebComponents::AuPanel::Header>
-                {{#if (not this.panelCollapsed)}}
-                  <WebComponents::AuPanel::Body>
-                    <div class="auk-u-mb-4">
+            {{!--TODO set to the correct propperty --}}
+            {{#if this.withdrawn}}
+              <div class="auk-form-group">
+                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format this.testDate "DD MMMM YYYY [om] H:mm"}}/>
+              </div>
+            {{/if}}
+          </div>
+          <div class="auk-o-grid-col-bp2-9">
+            <div class="auk-u-ml-4 auk-u-mb-4">
+              {{!-- Request panel --}}
+              <div class="auk-u-mb-3">
+                <WebComponents::AuPanel @scrollable="true">
+                  <WebComponents::AuPanel::Header>
+                    <WebComponents::AuButton @skin="tertiary" @layout="icon-only" @icon={{this.panelIcon}} style="margin-right:1.6rem" {{on "click" this.collapsePanel}}/>
+                    <h4 class="auk-panel__title">{{t "request"}}</h4>
+                  </WebComponents::AuPanel::Header>
+                  {{#if (not this.panelCollapsed)}}
+                    <WebComponents::AuPanel::Body>
+                      <div class="auk-u-mb-4">
+                        <WebComponents::AuLabel>
+                          {{t "translation-mail-header"}}
+                          <p>{{activity.mailContent}}</p>
+                        </WebComponents::AuLabel>
+                      </div>
                       <WebComponents::AuLabel>
-                        {{t "translation-mail-header"}}
-                        <p>{{activity.mailContent}}</p>
+                        {{t "files"}}
                       </WebComponents::AuLabel>
-                    </div>
-                    <WebComponents::AuLabel>
-                      {{t "files"}}
-                    </WebComponents::AuLabel>
+                      <ul class="auk-list auk-list--bordered">
+                        {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+                          <li class="auk-list__item auk-list__item--gray-100">
+                            <WebComponents::AuBadge @skin="white" @icon="document"/>
+                            <div class="auk-u-mx-2">
+                              <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
+                              <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.documentContainer.type.label}} - {{await translationSourcePiece.file.extension}}</div>
+                            </div>
+                            <WebComponents::AuButtonToolbar>
+                              <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            </WebComponents::AuButtonToolbar>
+
+                          </li>
+                        {{/each}}
+                      </ul>
+                    </WebComponents::AuPanel::Body>
+                  {{/if}}
+                </WebComponents::AuPanel>
+              </div>
+              {{!-- Proof panel --}}
+              <div class="auk-u-mb-3">
+                <WebComponents::AuPanel>
+                  <WebComponents::AuPanel::Header>
+                    <WebComponents::AuToolbar>
+                      <WebComponents::AuToolbar::Group @position="left">
+                        <WebComponents::AuToolbar::Item>
+                          <h4 class="auk-toolbar-complex__title">{{t "proof"}}</h4>
+                        </WebComponents::AuToolbar::Item>
+                      </WebComponents::AuToolbar::Group>
+                      <WebComponents::AuToolbar::Group @position="right">
+                        <WebComponents::AuToolbar::Item>
+                          <WebComponents::AuButton
+                                  @skin="tertiary"
+                                  @icon="add"
+                            {{on "click" this.addProof}}>
+                            {{t "add-proof"}}
+                          </WebComponents::AuButton>
+                        </WebComponents::AuToolbar::Item>
+                      </WebComponents::AuToolbar::Group>
+                    </WebComponents::AuToolbar>
+                  </WebComponents::AuPanel::Header>
+                  <WebComponents::AuPanel::Body>
+                  {{!-- TODO set to loop over drukproeven --}}
+                  {{#if (await (await activity.usedPieces))}}
                     <ul class="auk-list auk-list--bordered">
                       {{#each (await activity.usedPieces) as |translationSourcePiece|}}
                         <li class="auk-list__item auk-list__item--gray-100">
                           <WebComponents::AuBadge @skin="white" @icon="document"/>
                           <div class="auk-u-mx-2">
                             <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                            <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.documentContainer.type.label}} - {{await translationSourcePiece.file.extension}}</div>
+                            <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
                           </div>
                           <WebComponents::AuButtonToolbar>
                             <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                              <AttachPopover
+                                      @renderInPlace={{true}}
+                                      @class="ember-attacher-popper"
+                                      @hideOn="clickout click"
+                                      @showOn="click"
+                                      @animation="shift"
+                                      @placement="bottom"
+                                {{!-- as |attacher| --}}
+                              >
+                                <WebComponents::AuDropdown>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editProof}}>
+                                    {{t "edit-2"}}
+                                  </WebComponents::AuDropdown::Item>
+                                  <WebComponents::AuDropdown::Item @skin="danger" {{on "click" this.deleteProof}}>
+                                    {{t "delete"}}
+                                  </WebComponents::AuDropdown::Item>
+                                </WebComponents::AuDropdown>
+                              </AttachPopover>
+                            </WebComponents::AuButton>
                           </WebComponents::AuButtonToolbar>
-
                         </li>
                       {{/each}}
                     </ul>
-                  </WebComponents::AuPanel::Body>
-                {{/if}}
-              </WebComponents::AuPanel>
-            </div>
-            {{!-- Proof panel --}}
-            <div class="auk-u-mb-3">
-              <WebComponents::AuPanel>
-                <WebComponents::AuPanel::Header>
-                  <WebComponents::AuToolbar>
-                    <WebComponents::AuToolbar::Group @position="left">
-                      <WebComponents::AuToolbar::Item>
-                        <h4 class="auk-toolbar-complex__title">{{t "proof"}}</h4>
-                      </WebComponents::AuToolbar::Item>
-                    </WebComponents::AuToolbar::Group>
-                    <WebComponents::AuToolbar::Group @position="right">
-                      <WebComponents::AuToolbar::Item>
-                        <WebComponents::AuButton
-                                @skin="tertiary"
-                                @icon="add"
-                          {{on "click" this.addProof}}>
-                          {{t "add-proof"}}
-                        </WebComponents::AuButton>
-                      </WebComponents::AuToolbar::Item>
-                    </WebComponents::AuToolbar::Group>
-                  </WebComponents::AuToolbar>
-                </WebComponents::AuPanel::Header>
-                <WebComponents::AuPanel::Body>
-                {{!-- TODO set to loop over drukproeven --}}
-                {{#if (await (await activity.usedPieces))}}
-                  <ul class="auk-list auk-list--bordered">
-                    {{#each (await activity.usedPieces) as |translationSourcePiece|}}
-                      <li class="auk-list__item auk-list__item--gray-100">
-                        <WebComponents::AuBadge @skin="white" @icon="document"/>
-                        <div class="auk-u-mx-2">
-                          <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                          <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
-                        </div>
-                        <WebComponents::AuButtonToolbar>
-                          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
-                          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
-                            <AttachPopover
-                                    @renderInPlace={{true}}
-                                    @class="ember-attacher-popper"
-                                    @hideOn="clickout click"
-                                    @showOn="click"
-                                    @animation="shift"
-                                    @placement="bottom"
-                              {{!-- as |attacher| --}}
-                            >
-                              <WebComponents::AuDropdown>
-                                <WebComponents::AuDropdown::Item {{on "click" this.editProof}}>
-                                  {{t "edit-2"}}
-                                </WebComponents::AuDropdown::Item>
-                                <WebComponents::AuDropdown::Item @skin="danger" {{on "click" this.deleteProof}}>
-                                  {{t "delete"}}
-                                </WebComponents::AuDropdown::Item>
-                              </WebComponents::AuDropdown>
-                            </AttachPopover>
-                          </WebComponents::AuButton>
-                        </WebComponents::AuButtonToolbar>
-                      </li>
-                    {{/each}}
-                  </ul>
-                {{else}}
-                  <WebComponents::AuEmptyState @message={{t "no-proof"}}/>
-                {{/if}}
+                  {{else}}
+                    <WebComponents::AuEmptyState @message={{t "no-proof"}}/>
+                  {{/if}}
 
-                </WebComponents::AuPanel::Body>
-              </WebComponents::AuPanel>
-            </div>
-            {{!-- Improvement panel --}}
-            <div class="auk-u-mb-3">
-              <WebComponents::AuPanel>
-                <WebComponents::AuPanel::Header>
-                  <WebComponents::AuToolbar>
-                    <WebComponents::AuToolbar::Group @position="left">
-                      <WebComponents::AuToolbar::Item>
-                        <h4 class="auk-toolbar-complex__title">{{t "improvement"}}</h4>
-                      </WebComponents::AuToolbar::Item>
-                    </WebComponents::AuToolbar::Group>
-                    <WebComponents::AuToolbar::Group @position="right">
-                      <WebComponents::AuToolbar::Item>
-                        <WebComponents::AuButton
-                                @skin="tertiary"
-                                @icon="add"
-                          {{on "click" this.addImprovement}}>
-                          {{t "add-improvement"}}
-                        </WebComponents::AuButton>
-                      </WebComponents::AuToolbar::Item>
-                    </WebComponents::AuToolbar::Group>
-                  </WebComponents::AuToolbar>
-                </WebComponents::AuPanel::Header>
-                <WebComponents::AuPanel::Body>
-                {{!-- TODO set to loop over verbteringen --}}
-                {{#if (await activity.improvements)}}
-                  <ul class="auk-list auk-list--bordered">
-                    {{#each (await activity.usedPieces) as |translationSourcePiece|}}
-                      <li class="auk-list__item auk-list__item--gray-100">
-                        <WebComponents::AuBadge @skin="white" @icon="document"/>
-                        <div class="auk-u-mx-2">
-                          <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                          <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
-                        </div>
-                        <WebComponents::AuButtonToolbar>
-                          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
-                          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
-                            <AttachPopover
-                                    @renderInPlace={{true}}
-                                    @class="ember-attacher-popper"
-                                    @hideOn="clickout click"
-                                    @showOn="click"
-                                    @animation="shift"
-                                    @placement="bottom"
-                              {{!-- as |attacher| --}}
-                            >
-                              <WebComponents::AuDropdown>
-                                <WebComponents::AuDropdown::Item {{on "click" this.editImprovement}}>
-                                  {{t "edit-2"}}
-                                </WebComponents::AuDropdown::Item>
-                                <WebComponents::AuDropdown::Item {{on "click" this.deleteImprovement}} @skin="danger">
-                                  {{t "delete"}}
-                                </WebComponents::AuDropdown::Item>
-                              </WebComponents::AuDropdown>
-                            </AttachPopover>
+                  </WebComponents::AuPanel::Body>
+                </WebComponents::AuPanel>
+              </div>
+              {{!-- Improvement panel --}}
+              <div class="auk-u-mb-3">
+                <WebComponents::AuPanel>
+                  <WebComponents::AuPanel::Header>
+                    <WebComponents::AuToolbar>
+                      <WebComponents::AuToolbar::Group @position="left">
+                        <WebComponents::AuToolbar::Item>
+                          <h4 class="auk-toolbar-complex__title">{{t "improvement"}}</h4>
+                        </WebComponents::AuToolbar::Item>
+                      </WebComponents::AuToolbar::Group>
+                      <WebComponents::AuToolbar::Group @position="right">
+                        <WebComponents::AuToolbar::Item>
+                          <WebComponents::AuButton
+                                  @skin="tertiary"
+                                  @icon="add"
+                            {{on "click" this.addImprovement}}>
+                            {{t "add-improvement"}}
                           </WebComponents::AuButton>
-                        </WebComponents::AuButtonToolbar>
-                      </li>
-                    {{/each}}
-                  </ul>
-                {{else}}
-                  <WebComponents::AuEmptyState @message={{t "no-improvement"}}/>
-                {{/if}}
-                </WebComponents::AuPanel::Body>
-              </WebComponents::AuPanel>
+                        </WebComponents::AuToolbar::Item>
+                      </WebComponents::AuToolbar::Group>
+                    </WebComponents::AuToolbar>
+                  </WebComponents::AuPanel::Header>
+                  <WebComponents::AuPanel::Body>
+                  {{!-- TODO set to loop over verbteringen --}}
+                  {{#if (await activity.improvements)}}
+                    <ul class="auk-list auk-list--bordered">
+                      {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+                        <li class="auk-list__item auk-list__item--gray-100">
+                          <WebComponents::AuBadge @skin="white" @icon="document"/>
+                          <div class="auk-u-mx-2">
+                            <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
+                            <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
+                          </div>
+                          <WebComponents::AuButtonToolbar>
+                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                              <AttachPopover
+                                      @renderInPlace={{true}}
+                                      @class="ember-attacher-popper"
+                                      @hideOn="clickout click"
+                                      @showOn="click"
+                                      @animation="shift"
+                                      @placement="bottom"
+                                {{!-- as |attacher| --}}
+                              >
+                                <WebComponents::AuDropdown>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editImprovement}}>
+                                    {{t "edit-2"}}
+                                  </WebComponents::AuDropdown::Item>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.deleteImprovement}} @skin="danger">
+                                    {{t "delete"}}
+                                  </WebComponents::AuDropdown::Item>
+                                </WebComponents::AuDropdown>
+                              </AttachPopover>
+                            </WebComponents::AuButton>
+                          </WebComponents::AuButtonToolbar>
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    <WebComponents::AuEmptyState @message={{t "no-improvements"}}/>
+                  {{/if}}
+                  </WebComponents::AuPanel::Body>
+                </WebComponents::AuPanel>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-{{/each}}
+  {{/each}}
+{{else}}
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Body>
+      <WebComponents::AuEmptyState @message={{t "no-publishpreview-requests"}}/>
+    </WebComponents::AuPanel::Body>
+  </WebComponents::AuPanel>
+{{/if}}
