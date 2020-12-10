@@ -648,6 +648,8 @@
   "signatures": "Handtekeningen",
   "proof": "Drukproef",
   "proofs": "Drukproeven",
+  "add-proof": "Drukproef toevoegen",
+  "no-proof": "Er is nog geen drukproef toegevoegd.",
   "publication-inscription": "Opschrift",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
@@ -687,5 +689,8 @@
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",
-  "files": "Bijlages"
+  "files": "Bijlages",
+  "improvement": "Verbetering",
+  "add-improvement": "Verbetering toevoegen",
+  "no-improvement": "Er is nog geen verbetering toegevoegd."
 }
