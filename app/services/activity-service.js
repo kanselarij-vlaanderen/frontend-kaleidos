@@ -75,4 +75,38 @@ export default class activityService extends Service {
 
     return PublishPreviewActivity;
   }
+
+  /**
+   * Create a publish to BS activity.
+   *
+   * @param mailContent
+   * @param pieces
+   * @param subcase
+   * @param activity
+   * @returns {Promise<Model|any|Promise>}
+   */
+  async createNewPublishActivity(mailContent, pieces, subcase) {
+    const creationDatetime = moment().utc()
+      .toDate();
+
+    // publishActivityType.
+    const requestPublishActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren);
+
+    // Create activity.
+    const PublishPreviewActivity = this.store.createRecord('activity', {
+      startDate: creationDatetime,
+      mailContent,
+      subcase,
+      type: requestPublishActivityType,
+      usedPieces: pieces,
+    });
+
+    // Persist to db.
+    await PublishPreviewActivity.save();
+
+    // Reload relation.
+    await subcase.hasMany('publicationActivities').reload();
+
+    return PublishPreviewActivity;
+  }
 }

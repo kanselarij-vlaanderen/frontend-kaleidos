@@ -186,6 +186,10 @@ export default EmberObject.create({
       url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
       id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
     },
+    publiceren: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    },
   },
   SUBCASE_TYPES: {
     vertalen: {

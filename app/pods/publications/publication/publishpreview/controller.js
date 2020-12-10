@@ -54,6 +54,32 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async createPublicationActivity() {
     this.showpublicationModal = false;
+    this.showLoader = true;
+    this.showTranslationModal = false;
+
+    // Fetch the type.
+    const publishSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
+
+    // TODO take from other subcase maybe?
+    const shortTitle = await this.model.case.shortTitle;
+    const title = await this.model.case.title;
+
+    // Create subase.
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishSubCaseType, shortTitle, title);
+
+    // Create activity in subcase.
+    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieced, subcase);
+
+    // Visual stuff.
+    this.selectedPieces = A([]);
+
+    // Reset local activity to empty state.
+    this.publicationActivity = {
+      mailContent: '',
+      mailSubject: '',
+      pieces: A([]),
+    };
+    this.showLoader = false;
     alert('the mails dont work yet. infra is working on it.');
   }
 
