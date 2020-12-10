@@ -244,7 +244,7 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
+                  <WebComponents::AuButton data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only">
                   </WebComponents::AuButton>
                   <AttachPopover
                     @renderInPlace={{true}}
@@ -257,7 +257,7 @@
                   >
                     <WebComponents::AuDropdown>
                       {{!-- TODO opening viewer will only work for pdf files --}}
-                      <WebComponents::AuDropdown::Item {{on "click" (fn this.showPieceViewer piece.id)}}>
+                      <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn this.showPieceViewer piece.id)}}>
                         {{t "view-document-details"}}
                       </WebComponents::AuDropdown::Item>
                       {{!-- TODO do we want this action ? how to upload a new version to a piece with multiple files ?? --}}
@@ -267,7 +267,7 @@
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
+                        <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-delete @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
                           {{t "document-delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}

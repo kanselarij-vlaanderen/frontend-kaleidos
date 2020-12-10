@@ -154,17 +154,23 @@ export default class PublicationDocumentsController extends Controller {
   *verifyDeleteExistingPiece() {
     const agendaitem = yield this.pieceToDelete.get('agendaitem');
     if (agendaitem) {
-      // possible unreachable code, failsafe
-      // do we want to show a toast ?
+      // Possible unreachable code, failsafe. Do we want to show a toast ?
     } else {
       // TODO delete with undo ?
       this.showLoader = true;
       this.isVerifyingDelete = false;
-      yield this.fileService.deletePiece(this.pieceToDelete);
+      const documentContainer = yield this.pieceToDelete.get('documentContainer');
+      const piecesFromContainer = yield documentContainer.get('pieces');
+      if (piecesFromContainer.length < 2) {
+        // Cleanup documentContainer if we are deleting the last piece in the container
+        // Must revise if we link docx and pdf as multiple files in 1 piece
+        yield this.fileService.deleteDocumentContainer(documentContainer);
+      } else {
+        yield this.fileService.deletePiece(this.pieceToDelete);
+      }
       yield this.model.case.hasMany('pieces').reload();
       this.showLoader = false;
       this.pieceToDelete = null;
-      // TODO delete orphan container if last piece is deleted
     }
   }
 
