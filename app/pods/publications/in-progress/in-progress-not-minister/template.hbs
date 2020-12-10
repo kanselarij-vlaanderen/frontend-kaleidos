@@ -11,6 +11,11 @@
 >
   <table.content as |c|>
     <c.header>
+      {{th-sortable
+        currentSorting=this.sort
+        field="publicationNumber"
+        label=(t "publications-number")
+      }}
       <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
@@ -25,11 +30,10 @@
     </c.header>
     <c.body class="tr-hover" as |row|>
       <td>
+        {{row.publicationNumber}}
+      </td>
+      <td>
         {{row.case.shortTitle}}<br/>
-        <span class="auk-u-text-small auk-u-muted">
-          {{row.publicationNumber}}
-          {{t "dash"}}
-        </span>
       </td>
       <td>
         {{#if row.publishBefore}}
