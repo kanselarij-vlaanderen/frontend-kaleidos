@@ -85,12 +85,6 @@
               </div>
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
-                  {{#if this.publicationNotAfterTranslationForPublication}}
-                    <div class="auk-form-help-text auk-form-help-text--danger">
-                      <WebComponents::AuIcon @name="alert-triangle"/>
-                      {{t "publication-date-after-translation-date"}}
-                    </div>
-                  {{/if}}
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
                   <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
                   {{#if this.expiredPublicationBeforeDate}}
@@ -99,20 +93,26 @@
                       {{t "date-expired"}}
                     </div>
                   {{/if}}
-                </div>
-                <div class="auk-form-group">
-                  {{#if this.publicationNotAfterTranslationForTranslation}}
+                  {{#if this.publicationNotAfterTranslationForPublication}}
                     <div class="auk-form-help-text auk-form-help-text--danger">
                       <WebComponents::AuIcon @name="alert-triangle"/>
                       {{t "publication-date-after-translation-date"}}
                     </div>
                   {{/if}}
+                </div>
+                <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
                   <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
                   {{#if this.expiredTranslationDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
                       {{t "date-expired"}}
+                    </div>
+                  {{/if}}
+                  {{#if this.publicationNotAfterTranslationForTranslation}}
+                    <div class="auk-form-help-text auk-form-help-text--danger">
+                      <WebComponents::AuIcon @name="alert-triangle"/>
+                      {{t "publication-date-after-translation-date"}}
                     </div>
                   {{/if}}
                 </div>
