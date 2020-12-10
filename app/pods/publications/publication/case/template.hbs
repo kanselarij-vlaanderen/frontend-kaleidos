@@ -140,7 +140,7 @@
                   <td>
                     <div class="o-flex o-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
-                      <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                      <span>{{mandatee.person.nameToDisplay}}</span>
                     </div>
                   </td>
                   {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
@@ -206,16 +206,16 @@
                       <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                     </div>
                   </td>
-                  <td class="">
-                    <span class="auk-u-mx-2">
+                  <td>
+                    <span>
                       {{#if contactPerson.email }}
                         <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
                       {{/if}}
                     </span>
                   </td>
 
-                  <td class="">
-                    <span class="auk-u-mx-2">{{contactPerson.organisationName}}</span>
+                  <td>
+                    <span>{{contactPerson.organisationName}}</span>
                   </td>
 
                   <td class="vl-u-align-right">
