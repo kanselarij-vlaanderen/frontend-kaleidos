@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
-import EmberObject from '@ember/object';
 export default class activityService extends Service {
   @service store;
   @service toaster;
@@ -22,15 +21,7 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-
-    // TranslationType.
-    const requestTranslationActivityType = EmberObject.create({
-      id: CONFIG.ACTIVITY_TYPES.vertalen.id,
-      uri: CONFIG.ACTIVITY_TYPES.vertalen.url,
-    });
-
-    const usedPieces = pieces.map((piece) => piece);
-
+    const requestTranslationActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
@@ -39,16 +30,49 @@ export default class activityService extends Service {
       mailContent,
       subcase,
       type: requestTranslationActivityType,
-      usedPieces: usedPieces,
+      usedPieces: pieces,
     });
 
     // Persist to db.
     await translateActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('activity').reload();
+    await subcase.hasMany('publicationActivities').reload();
 
 
     return translateActivity;
+  }
+
+  /**
+   * Create a new Publish preview Activity.
+   *
+   * @param mailContent
+   * @param pieces
+   * @param subcase
+   * @returns {Promise<Model|any|Promise>}
+   */
+  async createNewPublishPreviewActivity(mailContent, pieces, subcase) {
+    const creationDatetime = moment().utc()
+      .toDate();
+
+    // publishPreviewActivityType.
+    const requestPublishPreviewActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
+
+    // Create activity.
+    const PublishPreviewActivity = this.store.createRecord('activity', {
+      startDate: creationDatetime,
+      mailContent,
+      subcase,
+      type: requestPublishPreviewActivityType,
+      usedPieces: pieces,
+    });
+
+    // Persist to db.
+    await PublishPreviewActivity.save();
+
+    // Reload relation.
+    await subcase.hasMany('publicationActivities').reload();
+
+    return PublishPreviewActivity;
   }
 }

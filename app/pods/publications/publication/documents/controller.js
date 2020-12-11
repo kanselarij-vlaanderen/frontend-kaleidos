@@ -6,7 +6,7 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import EmberObject, {
+import {
   action,
   set
 } from '@ember/object';
@@ -26,21 +26,16 @@ export default class PublicationDocumentsController extends Controller {
   @tracked translateActivity = {
     mailContent: '',
     finalTranslationDate: '',
-    pieces: [],
+    pieces: A([]),
   };
-  @tracked selectedPieces = [];
-  @tracked currentPieces = this.pieces;
+  @tracked previewActivity = {
+    mailContent: '',
+    pieces: A([]),
+  };
+  @tracked selectedPieces = A([]);
 
-  get pieces() {
-    if (this.model.case.pieces) {
-      return this.model.case.pieces.toArray();
-    }
-    return null;
-  }
-
-  get selectedPiecesCount() {
-    return this.pieces.filter((piece) => piece.selected === true).length;
-  }
+  // Hacky way to refresh the checkboxes in the view without reloading the route.
+  @tracked renderPieces = true;
 
   @action
   toggleUploadModalSize() {
@@ -49,24 +44,17 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
-    if (this.selectedPieces[selectedPiece.id]) {
-      delete this.selectedPieces[selectedPiece.id];
-      selectedPiece.selected = false;
+    const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
+    if (foundPiece) {
+      this.selectedPieces.removeObject(selectedPiece);
     } else {
-      this.selectedPieces[selectedPiece.id] = selectedPiece;
-      selectedPiece.selected = true;
+      this.selectedPieces.pushObject(selectedPiece);
     }
   }
 
   @action
   openPieceUploadModal() {
     this.isOpenPieceUploadModal = true;
-  }
-
-  @action
-  openPublishPreviewRequestModal() {
-    alert('Deze functionaliteit heeft nog geen implementatie');
-    // this.isOpenPublishPreviewRequestModal = true;
   }
 
   @action
@@ -147,12 +135,57 @@ export default class PublicationDocumentsController extends Controller {
     yield piece.destroyRecord();
   }
 
+  /** PUBLISH PREVIEW ACTIVITIES **/
+
+  @action
+  openPublishPreviewRequestModal() {
+    this.isOpenPublishPreviewRequestModal = true;
+    this.previewActivity.pieces = this.selectedPieces;
+  }
+
+  @action
+  cancelPublishPreviewRequestModal() {
+    set(this.previewActivity, 'mailContent', '');
+    this.isOpenPublishPreviewRequestModal = false;
+  }
+
+  @action
+  async savePublishPreviewActivity() {
+    this.showLoader = true;
+    this.isOpenPublishPreviewRequestModal = false;
+    this.previewActivity.pieces = this.selectedPieces;
+
+    // publishPreviewActivityType.
+    const publishPreviewSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
+
+    // TODO take from other subcase maybe?
+    const shortTitle = await this.model.case.shortTitle;
+    const title = await this.model.case.title;
+
+    // Create subase.
+    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
+
+    // Create activity in subcase.
+    this.renderPieces = false;
+    await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
+
+    // Visual stuff.
+    this.selectedPieces = A([]);
+
+    // Reset local activity to empty state.
+    this.previewActivity = {
+      mailContent: '',
+      pieces: A([]),
+    };
+    this.showLoader = false;
+    this.renderPieces = true;
+  }
 
   /** TRANSLATION ACTIVITIES **/
 
   @action
   openTranslationRequestModal() {
-    this.translateActivity.finalTranslationDate = this.model.publicationFlow.translateBefore;
+    this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
     this.showTranslationModal = true;
   }
@@ -168,10 +201,9 @@ export default class PublicationDocumentsController extends Controller {
   async saveTranslationActivity() {
     this.showLoader = true;
     this.showTranslationModal = false;
-    const translateSubCaseType = EmberObject.create({
-      id: CONFIG.SUBCASE_TYPES.vertalen.id,
-      uri: CONFIG.SUBCASE_TYPES.vertalen.url,
-    });
+
+    // Fetch the type.
+    const translateSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
@@ -179,23 +211,22 @@ export default class PublicationDocumentsController extends Controller {
 
     // Create subase.
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
+    this.renderPieces = false;
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
     // Visual stuff.
-    this.showLoader = false;
-    this.currentPieces.forEach((piece) => {
-      piece.selected = false;
-    });
-    this.currentPieces = [...this.currentPieces];
+    this.selectedPieces = A([]);
 
     // Reset local activity to empty state.
     this.translateActivity = {
       mailContent: '',
       finalTranslationDate: '',
-      pieces: [],
+      pieces: A([]),
     };
+    this.showLoader = false;
+    this.renderPieces = true;
   }
 
   @action
