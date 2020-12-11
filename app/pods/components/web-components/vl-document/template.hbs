@@ -43,8 +43,8 @@
     {{/if}}
 
     {{#if (and currentSession.isEditor (await isDeletable))}}
-      <button 
-        type="button" 
+      <button
+        type="button"
         class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
         data-test-delete-piece-from-history
         {{action "deletePiece" piece}}
