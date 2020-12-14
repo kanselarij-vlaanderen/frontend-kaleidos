@@ -43,13 +43,14 @@
 {{#if @agendaitem.showAsRemark}}
   <div class="vl-u-spacer">
     <div class="vlc-input-field-block">
-      {{#if (await @newsletterInfo)}}
+      {{#if this.newsletterInfo}}
         {{web-components/vl-form-label value=(t "show-in-newsletter")}}
         {{web-components/vl-toggle
           data-test-agendaitem-titles-edit-showInNewsletter
-          value=@newsletterInfo.inNewsletter
+          value=this.newsletterInfo.inNewsletter
         }}
       {{else}}
+        {{web-components/vl-form-label value=(t "show-in-newsletter")}} 
         {{t "no-newsletter-info"}}
       {{/if}}
     </div>
