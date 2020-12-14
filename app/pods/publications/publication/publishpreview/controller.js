@@ -6,24 +6,11 @@ export default class PublicationPublishPreviewController extends Controller {
   // properties for making the design
   @tracked withdrawn = true;
   @tracked testDate = new Date();
-  @tracked panelCollapsed = false;
-  @tracked panelIcon = 'chevron-down'
+
 
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
-  }
-
-  // @action
-  // async usedPieces(activity) {
-  //   const pieces = await activity.usedPieces();
-  //   console.log('PIECES', pieces);
-  // }
-
-  @action
-  collapsePanel() {
-    this.panelCollapsed = !this.panelCollapsed;
-    this.panelIcon = ((this.panelIcon === 'chevron-up') ? 'chevron-down' : 'chevron-up');
   }
 
   @action
@@ -37,32 +24,32 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  addProof() {
+  addPublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  deleteProof() {
+  deletePublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  editProof() {
+  editPublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  addImprovement() {
+  addCorrection() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  deleteImprovement() {
+  deleteCorrection() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  editImprovement() {
+  editCorrection() {
     alert('this action is implemented in another ticket');
   }
 }

@@ -179,8 +179,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-
-    this.transitionToRoute('publications.publication.publishpreview');
   }
 
   /** TRANSLATION ACTIVITIES **/
@@ -229,8 +227,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-
-    this.transitionToRoute('publications.publication.translations');
   }
 
   @action

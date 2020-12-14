@@ -1,0 +1,47 @@
+<div class="auk-u-mb-3">
+  <WebComponents::AuPanel @scrollable="true">
+    <WebComponents::AuPanel::Header>
+      <WebComponents::AuButton {{on "click" this.collapsePanel}}
+              @skin="tertiary" @layout="icon-only"
+              @icon={{if this.panelCollapsed "chevron-down"  "chevron-up"}}
+              style="margin-right:1.6rem"
+      />
+      <h4 class="auk-panel__title">{{t "request"}}</h4>
+    </WebComponents::AuPanel::Header>
+    {{#if (not this.panelCollapsed)}}
+      <WebComponents::AuPanel::Body>
+        <div class="auk-u-mb-4">
+          <WebComponents::AuLabel>
+            {{t "translation-mail-header"}}
+          </WebComponents::AuLabel>
+          <p>{{@activity.mailContent}}</p>
+        </div>
+        <WebComponents::AuLabel>
+          {{t "files"}}
+        </WebComponents::AuLabel>
+        <ul class="auk-list auk-list--bordered">
+          {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
+            <li class="auk-list__item auk-list__item--gray-100">
+              <WebComponents::AuBadge @skin="white" @icon="document"/>
+              <div class="auk-u-mx-2">
+                <span class="auk-u-text-bold">
+                  {{translationSourcePiece.name}}
+                </span>
+                <div class="auk-u-muted auk-u-text-small">
+                  {{await translationSourcePiece.documentContainer.type.label}} - {{await translationSourcePiece.file.extension}}
+                </div>
+              </div>
+              <WebComponents::AuButtonToolbar>
+                <WebComponents::AuButton {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
+                        @layout="icon-only"
+                        @skin="borderless"
+                        @icon="book"
+                />
+              </WebComponents::AuButtonToolbar>
+            </li>
+          {{/each}}
+        </ul>
+      </WebComponents::AuPanel::Body>
+    {{/if}}
+  </WebComponents::AuPanel>
+</div>
