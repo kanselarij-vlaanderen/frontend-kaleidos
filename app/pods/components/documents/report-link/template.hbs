@@ -187,18 +187,18 @@
         <WebComponents::VlFormInput
           @value={{this.pieceInCreation.name}}
           @width={{4}} />
-        {{ember-kaleidos-webuniversum/vl-uploaded-document
-          name=this.pieceInCreation.file.filename
-          extension=this.pieceInCreation.file.extension
-          size=this.pieceInCreation.file.size
-          downloadName=this.pieceInCreation.file.filename
-          downloadLink=(concat
-                  this.pieceInCreation.file.downloadLink
+        <EmberKaleidosWebuniversum::VlUploadedDocument
+          @name={{this.pieceInCreation.file.filename}}
+          @extension={{this.pieceInCreation.file.extension}}
+          @size={{this.pieceInCreation.file.size}}
+          @downloadName={{this.pieceInCreation.file.filename}}
+          @downloadLink={{concat
+            this.pieceInCreation.file.downloadLink
             "?name="
-                  this.pieceInCreation.file.filename
-          )
-          delete=(action this.delete this.pieceInCreation)
-        }}
+            this.pieceInCreation.file.filename
+          }}
+          @delete={{action this.delete this.pieceInCreation}}
+        />
       {{/if}}
     </div>
     <WebComponents::VlModalFooter
