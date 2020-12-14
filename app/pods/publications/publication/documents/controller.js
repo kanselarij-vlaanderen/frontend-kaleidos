@@ -25,17 +25,23 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showTranslationModal = false;
   @tracked translateActivity = {
     mailContent: '',
+    mailSubject: '',
     finalTranslationDate: '',
     pieces: A([]),
   };
   @tracked previewActivity = {
     mailContent: '',
+    mailSubject: '',
     pieces: A([]),
   };
   @tracked selectedPieces = A([]);
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
+
+  concatNames(pieces) {
+    return pieces.map((piece) => piece.downloadFilename).join('\n');
+  }
 
   @action
   toggleUploadModalSize() {
@@ -141,11 +147,15 @@ export default class PublicationDocumentsController extends Controller {
   openPublishPreviewRequestModal() {
     this.isOpenPublishPreviewRequestModal = true;
     this.previewActivity.pieces = this.selectedPieces;
+    const attachmentsString = this.concatNames(this.selectedPieces);
+    this.previewActivity.mailContent = CONFIG.mail.publishPreviewRequest.content.replace('%%attachments%%', attachmentsString);
+    this.previewActivity.mailSubject = CONFIG.mail.publishPreviewRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
   }
 
   @action
   cancelPublishPreviewRequestModal() {
     set(this.previewActivity, 'mailContent', '');
+    set(this.previewActivity, 'mailSubject', '');
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -175,18 +185,21 @@ export default class PublicationDocumentsController extends Controller {
     // Reset local activity to empty state.
     this.previewActivity = {
       mailContent: '',
+      mailSubject: '',
       pieces: A([]),
     };
     this.showLoader = false;
     this.renderPieces = true;
   }
-
   /** TRANSLATION ACTIVITIES **/
 
   @action
   openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
+    const attachmentsString = this.concatNames(this.selectedPieces);
+    this.translateActivity.mailContent = CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString);
+    this.translateActivity.mailSubject = CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
     this.showTranslationModal = true;
   }
 
@@ -222,6 +235,7 @@ export default class PublicationDocumentsController extends Controller {
     // Reset local activity to empty state.
     this.translateActivity = {
       mailContent: '',
+      mailSubject: '',
       finalTranslationDate: '',
       pieces: A([]),
     };
@@ -232,6 +246,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   cancelTranslationModal() {
     set(this.translateActivity, 'mailContent', '');
+    set(this.translateActivity, 'mailSubject', '');
     this.showTranslationModal = false;
   }
 
