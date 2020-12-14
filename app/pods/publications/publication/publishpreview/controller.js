@@ -52,4 +52,9 @@ export default class PublicationPublishPreviewController extends Controller {
   editCorrection() {
     alert('this action is implemented in another ticket');
   }
+
+  @action
+  async showPieceViewer(piece) {
+    window.open(`/document/${(await piece).get('id')}`);
+  }
 }

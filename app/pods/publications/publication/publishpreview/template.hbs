@@ -73,7 +73,7 @@
                             <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
                           </div>
                           <WebComponents::AuButtonToolbar>
-                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
                             <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                               <AttachPopover
                                       @renderInPlace={{true}}
@@ -140,7 +140,7 @@
                             <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
                           </div>
                           <WebComponents::AuButtonToolbar>
-                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
                             <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                               <AttachPopover
                                       @renderInPlace={{true}}
