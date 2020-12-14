@@ -19,7 +19,7 @@ export default class InProgressNotRoute extends Route {
   };
 
   async model(params) {
-    return await this.store.query('publication-flow', {
+    return this.store.query('publication-flow', {
       filter: {
         ':has:case': 'yes',
         case: {
