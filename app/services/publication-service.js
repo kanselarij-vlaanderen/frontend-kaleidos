@@ -64,4 +64,22 @@ export default class PublicationService extends Service {
     const publicationNumberTakenList = publicationWithId.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
     return publicationNumberTakenList.toArray().length !== 0;
   }
+
+  async getNewPublicationNextNumber(isViaMinisterCouncil) {
+    if (isViaMinisterCouncil) {
+      // nextnumber generation implementation for via minister council
+    } else {
+      return (await this.store.query('publication-flow', {
+        filter: {
+          ':has:case': 'yes',
+          case: {
+            ':has-no:subcases': 'yes',
+          },
+          status: {
+            id: CONFIG.publicationStatusToPublish.id,
+          },
+        },
+      })).length + 1;
+    }
+  }
 }
