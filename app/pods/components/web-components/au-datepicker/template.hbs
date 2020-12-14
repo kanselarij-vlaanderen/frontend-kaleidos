@@ -2,20 +2,38 @@
   <div {{on "click" this.openDatepicker}}>
     <WebComponents::AuIcon  @name="calendar"/>
   </div>
-  <EmberFlatpickr
-          class="auk-input auk-input--block"
-          @allowInput={{true}}
-          @clickOpens={{true}}
-          @date={{this.defaultDate}} {{!-- Required Option --}}
-          @dateFormat="d-m-Y"
-          @mode="single"
-          @nextArrow=">"
-          @noCalendar={{false}}
-          @onChange={{@onChange}} {{!-- Required Option --}}
-          @onReady={{this.onReady}}
-          @prevArrow="<"
-          @shorthandCurrentMonth={{true}}
-          placeholder={{this.placeholder}}
-  />
+  {{#if enabledDates }}
+    <EmberFlatpickr
+            class="auk-input auk-input--block"
+            @allowInput={{true}}
+            @clickOpens={{true}}
+            @date={{this.defaultDate}} {{!-- Required Option --}}
+            @dateFormat="d-m-Y"
+            @mode="single"
+            @enable={{this.enabledDates}}
+            @nextArrow=">"
+            @noCalendar={{false}}
+            @onChange={{@onChange}} {{!-- Required Option --}}
+            @onReady={{this.onReady}}
+            @prevArrow="<"
+            @shorthandCurrentMonth={{true}}
+            placeholder={{this.placeholder}}
+    />
+  {{else}}
+    <EmberFlatpickr
+            class="auk-input auk-input--block"
+            @allowInput={{true}}
+            @clickOpens={{true}}
+            @date={{this.defaultDate}} {{!-- Required Option --}}
+            @dateFormat="d-m-Y"
+            @mode="single"
+            @nextArrow=">"
+            @noCalendar={{false}}
+            @onChange={{@onChange}} {{!-- Required Option --}}
+            @onReady={{this.onReady}}
+            @prevArrow="<"
+            @shorthandCurrentMonth={{true}}
+            placeholder={{this.placeholder}}
+    />
+  {{/if}}
 </div>
-

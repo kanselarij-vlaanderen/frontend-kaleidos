@@ -3,16 +3,24 @@ import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
-import { action } from '@ember/object';
+import {
+  computed,
+  action
+} from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 
 export default class PublicationController extends Controller {
-  @tracked numberIsAlreadyUsed = false;
+  // Services.
   @service publicationService;
   @service toaster;
   @service intl;
   @service media;
+
+  // Tracked.
+  @tracked translationDateList = [];
+  @tracked publicationDateList = [];
+  @tracked numberIsAlreadyUsed = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
@@ -88,6 +96,38 @@ export default class PublicationController extends Controller {
   get expiredTranslationDate() {
     return moment(this.model.get('translateBefore'))
       .isBefore(moment());
+  }
+
+  @computed('model.[translateBefore,publishBefore]')
+  get allowedTranslationDates() {
+    const end = moment(this.model.get('publishBefore'));
+    if (end) {
+      let increment = moment();
+      this.translationDateList  = [];
+      while (increment.isSameOrBefore(end)) {
+        increment = increment.add(1, 'days');
+        this.translationDateList.push(increment.toDate());
+      }
+      return this.translationDateList;
+    }
+    return null;
+  }
+
+  @computed('model.[translateBefore,publishBefore]')
+  get allowedPublicationDates() {
+    const end = moment().add(360, 'days');
+    let increment;
+    if (this.model.get('translateBefore')) {
+      increment = moment(this.model.get('translateBefore'));
+    } else {
+      increment = moment();
+    }
+    this.publicationDateList = [];
+    while (increment.isSameOrBefore(end)) {
+      this.publicationDateList.push(increment.toDate());
+      increment = increment.add(1, 'days');
+    }
+    return this.publicationDateList;
   }
 
   @restartableTask

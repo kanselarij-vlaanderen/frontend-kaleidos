@@ -1,7 +1,18 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject } from '@ember/service';
 
 export default class Datepicker extends Component {
+  // Injections.
+  @inject formatter;
+
+  get enabledDates() {
+    if (this.args.dateObjectsToEnable) {
+      return this.args.dateObjectsToEnable;
+    }
+    return null;
+  }
+
   get defaultDate() {
     if (this.args.defaultDate) {
       return this.args.defaultDate;
