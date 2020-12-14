@@ -6,9 +6,9 @@ export default class Datepicker extends Component {
   // Injections.
   @inject formatter;
 
-  get enabledDates() {
-    if (this.args.dateObjectsToEnable) {
-      return [this.args.dateObjectsToEnable];
+  get enabledDatesFunction() {
+    if (this.args.enabledDatesFunction) {
+      return [this.args.enabledDatesFunction];
     }
     return null;
   }

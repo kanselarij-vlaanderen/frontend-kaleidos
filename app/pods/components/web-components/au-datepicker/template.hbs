@@ -2,7 +2,7 @@
   <div {{on "click" this.openDatepicker}}>
     <WebComponents::AuIcon  @name="calendar"/>
   </div>
-  {{#if enabledDates }}
+  {{#if enabledDatesFunction }}
     <EmberFlatpickr
             class="auk-input auk-input--block"
             @allowInput={{true}}
@@ -10,7 +10,7 @@
             @date={{this.defaultDate}} {{!-- Required Option --}}
             @dateFormat="d-m-Y"
             @mode="single"
-            @enable={{this.enabledDates}}
+            @enable={{this.enabledDatesFunction}}
             @nextArrow=">"
             @noCalendar={{false}}
             @onChange={{@onChange}} {{!-- Required Option --}}
