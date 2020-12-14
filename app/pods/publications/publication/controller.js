@@ -3,10 +3,7 @@ import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
-import {
-  computed,
-  action
-} from '@ember/object';
+import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 
@@ -98,36 +95,28 @@ export default class PublicationController extends Controller {
       .isBefore(moment());
   }
 
-  @computed('model.[translateBefore,publishBefore]')
-  get allowedTranslationDates() {
+  @action
+  allowedTranslationDate(date) {
     const end = moment(this.model.get('publishBefore'));
-    if (end) {
-      let increment = moment();
-      this.translationDateList  = [];
-      while (increment.isSameOrBefore(end)) {
-        increment = increment.add(1, 'days');
-        this.translationDateList.push(increment.toDate());
-      }
-      return this.translationDateList;
+    if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(moment())) {
+      return true;
     }
-    return null;
+    return false;
   }
 
-  @computed('model.[translateBefore,publishBefore]')
-  get allowedPublicationDates() {
+  @action
+  allowedPublicationDate(date) {
     const end = moment().add(360, 'days');
-    let increment;
+    let startRange;
     if (this.model.get('translateBefore')) {
-      increment = moment(this.model.get('translateBefore'));
+      startRange = moment(this.model.get('translateBefore'));
     } else {
-      increment = moment();
+      startRange = moment();
     }
-    this.publicationDateList = [];
-    while (increment.isSameOrBefore(end)) {
-      this.publicationDateList.push(increment.toDate());
-      increment = increment.add(1, 'days');
+    if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(startRange)) {
+      return true;
     }
-    return this.publicationDateList;
+    return false;
   }
 
   @restartableTask

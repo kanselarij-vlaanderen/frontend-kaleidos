@@ -8,7 +8,7 @@ export default class Datepicker extends Component {
 
   get enabledDates() {
     if (this.args.dateObjectsToEnable) {
-      return this.args.dateObjectsToEnable;
+      return [this.args.dateObjectsToEnable];
     }
     return null;
   }
