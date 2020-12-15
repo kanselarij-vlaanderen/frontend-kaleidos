@@ -9,18 +9,39 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                      @skin="tertiary"
-                      {{on "click" this.cancelExistingTranslationActivity}}>
-                {{t "cancel-request"}}
-              </WebComponents::AuButton>
-            </WebComponents::AuToolbar::Item>
-            <WebComponents::AuToolbar::Item>
-              <WebComponents::AuCheckbox
-                      @toggle={{fn this.checkExistingTranslationActivity activity}}
-                      @label="Afgewerkt"/>
-            </WebComponents::AuToolbar::Item>
+
+            {{#if activity.isWithdrawn }}
+
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuPillList>
+                  <WebComponents::AuPill @skin="danger">{{t "canceled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
+                </WebComponents::AuPillList>
+              </WebComponents::AuToolbar::Item>
+
+            {{else if activity.isFinished }}
+
+              <WebComponents::AuToolbar::Item>
+                {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
+              </WebComponents::AuToolbar::Item>
+
+            {{else}}
+
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton
+                        @skin="tertiary"
+                  {{on "click" (fn this.cancelExistingTranslationActivity activity)}}>
+                  {{t "cancel-request"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuCheckbox
+                        @toggle={{fn this.markTranslationActivityDone activity}}
+                        @label="Afgewerkt"/>
+              </WebComponents::AuToolbar::Item>
+
+            {{/if}}
+
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuNavbar>
@@ -46,3 +67,24 @@
     </WebComponents::AuPanel>
   {{/if}}
 </div>
+
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+            @title={{t "loading-text"}}
+            @hideCloseButton={{true}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
+{{/if}}

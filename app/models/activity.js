@@ -32,6 +32,14 @@ export default class Activity extends Model {
   @hasMany('file') usedFiles;
 
   // Getters.
+  get isWithdrawn() {
+    return CONFIG.ACTIVITY_STATUSSES.withdrawn === this.get('status');
+  }
+  get isFinished() {
+    return CONFIG.ACTIVITY_STATUSSES.closed === this.get('status');
+  }
+
+
   get wasPublished() {
     const _this = this;
     return (async() => {
