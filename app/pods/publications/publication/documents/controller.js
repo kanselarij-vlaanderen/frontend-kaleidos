@@ -40,7 +40,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked renderPieces = true;
 
   concatNames(pieces) {
-    return pieces.map((piece) => piece.downloadFilename).join('\n');
+    return pieces.map((piece) => piece.name).join('\n');
   }
 
   @action
