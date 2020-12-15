@@ -86,10 +86,14 @@
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker
-                          @defaultDate={{this.getPublicationBeforeDate}}
-                          @enabledDatesFunction={{action this.allowedPublicationDate}}
-                          @onChange={{this.setPublicationBeforeDate}}/>
+                  {{#if this.showPublicationDatePicker}}
+                    <WebComponents::AuDatepicker
+                            @defaultDate={{this.getPublicationBeforeDate}}
+                            @enabledDatesFunction={{action this.allowedPublicationDate}}
+                            @onChange={{this.setPublicationBeforeDate}}/>
+                  {{else}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
+                  {{/if}}
                   {{#if this.expiredPublicationBeforeDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
@@ -105,10 +109,14 @@
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker
-                          @defaultDate={{this.getTranslationDate}}
-                          @enabledDatesFunction={{action this.allowedTranslationDate}}
-                          @onChange={{this.setTranslationDate}}/>
+                  {{#if this.showTranslationDatePicker}}
+                    <WebComponents::AuDatepicker
+                            @defaultDate={{this.getTranslationDate}}
+                            @enabledDatesFunction={{action this.allowedTranslationDate}}
+                            @onChange={{this.setTranslationDate}}/>
+                  {{else}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
+                  {{/if}}
                   {{#if this.expiredTranslationDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>

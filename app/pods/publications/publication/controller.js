@@ -3,7 +3,10 @@ import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 
@@ -21,6 +24,8 @@ export default class PublicationController extends Controller {
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
+  @tracked showTranslationDatePicker = true;
+  @tracked showPublicationDatePicker = true;
 
 
   statusOptions = [{
@@ -145,6 +150,8 @@ export default class PublicationController extends Controller {
 
   @action
   setPublicationBeforeDate(event) {
+    set(this, 'showPublicationDatePicker', false);
+    set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const translateBefore = this.model.get('translateBefore');
     if (!moment(translateBefore).isSameOrBefore(date, 'minutes')) {
@@ -154,7 +161,14 @@ export default class PublicationController extends Controller {
       });
     } else {
       this.model.set('publishBefore', new Date(event));
-      this.model.save();
+      this.model.save().then(() => {
+        set(this, 'showPublicationDatePicker', true);
+        set(this, 'showTranslationDatePicker', true);
+      }).
+        catch(() => {
+          set(this, 'showPublicationDatePicker', true);
+          set(this, 'showTranslationDatePicker', true);
+        });
       this.publicationNotAfterTranslationForPublication = false;
     }
   }
@@ -167,6 +181,8 @@ export default class PublicationController extends Controller {
 
   @action
   setTranslationDate(event) {
+    set(this, 'showPublicationDatePicker', false);
+    set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const publishBefore = this.model.get('publishBefore');
     if (!moment(date).isSameOrBefore(publishBefore)) {
@@ -176,7 +192,14 @@ export default class PublicationController extends Controller {
       });
     } else {
       this.model.set('translateBefore', new Date(event));
-      this.model.save();
+      this.model.save().then(() => {
+        set(this, 'showPublicationDatePicker', true);
+        set(this, 'showTranslationDatePicker', true);
+      }).
+        catch(() => {
+          set(this, 'showPublicationDatePicker', true);
+          set(this, 'showTranslationDatePicker', true);
+        });
       this.publicationNotAfterTranslationForTranslation = false;
     }
   }
