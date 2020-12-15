@@ -20,10 +20,10 @@ export default Component.extend({
         // eslint-disable-next-line no-unused-vars
       } catch (error) {
         // We hit his when showing less documents while the container call is pending
-        return null;
+        return false;
       }
     }
-    return null;
+    return false;
   }),
 
   actions: {

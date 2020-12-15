@@ -35,6 +35,21 @@ export default EmberObject.create({
   decisionDocumentTypeId: '2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
   minuteDocumentTypeId: 'e149294e-a8b8-4c11-83ac-6d4c417b079b',
   remarkId: '305E9678-8106-4C14-9BD6-60AE2032D794',
+  mail: {
+    defaultFromAddress: 'noreply@vlaanderen.be',
+    translationRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
+      subject: '[%%kaleidosenvironment] Aanvraag vertaling voor Publicatie %%nummer%%',
+    },
+    publishPreviewRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
+      subject: '[%%kaleidosenvironment] Aanvraag voor drukproef Publicatie %%nummer%%',
+    },
+    publishRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
+      subject: '[%%kaleidosenvironment] Aanvraag voor Publicatie %%nummer%%',
+    },
+  },
   formallyOkOptions: [
     {
       label: 'Formeel OK',

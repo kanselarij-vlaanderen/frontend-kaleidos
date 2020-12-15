@@ -13,7 +13,7 @@
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>{{t "translations"}}</WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>{{t "proofs"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>{{t "publishpreview-requests"}}</WebComponents::AuTab>
           </WebComponents::AuTabs>
         </div>
       </WebComponents::AuToolbar::Item>
@@ -86,7 +86,9 @@
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getPublicationBeforeDate}}
+                          @onChange={{this.setPublicationBeforeDate}}/>
                   {{#if this.expiredPublicationBeforeDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
@@ -96,7 +98,9 @@
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getTranslationDate}}
+                          @onChange={{this.setTranslationDate}}/>
                   {{#if this.expiredTranslationDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>

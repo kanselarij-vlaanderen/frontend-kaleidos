@@ -8,6 +8,7 @@ export default Model.extend({
   label: attr('string'),
   scopeNote: attr('string'),
   priority: attr('number'),
+  altLabel: attr('string'),
 
   documentContainers: hasMany('document-container', {
     inverse: null,

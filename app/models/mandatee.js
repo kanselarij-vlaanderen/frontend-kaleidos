@@ -19,9 +19,6 @@ export default Model.extend({
   dateSwornIn: attr('datetime'),
   dateDecree: attr('datetime'),
 
-  holds: belongsTo('mandate', {
-    inverse: null,
-  }),
   person: belongsTo('person'),
 
   iseCodes: hasMany('ise-code', {
