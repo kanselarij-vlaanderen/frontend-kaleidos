@@ -83,12 +83,10 @@ export default class PublicationPublishPreviewController extends Controller {
       pieces: A([]),
     };
     this.showLoader = false;
-
+    await this.send('refreshModel');
     // TODO Add email hook here.
     alert('the mails dont work yet. infra is working on it.');
   }
-
-  /** BS PUBLICATION ACTIVITIES **/
 
   @action
   async cancelExistingPublicationActivity(previewActivity) {
@@ -100,8 +98,24 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.endDate = moment().utc();
         publishingActivity.save();
       });
+    await this.send('refreshModel');
     this.showLoader = false;
   }
+
+  @action
+  async markPublicationActivityPublished(previewActivity) {
+    this.showLoader = true;
+    previewActivity.get('publishedBy').
+      filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
+      map((publishingActivity) => {
+        publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
+        publishingActivity.endDate = moment().utc();
+        publishingActivity.save();
+      });
+    await this.send('refreshModel');
+    this.showLoader = false;
+  }
+
   @action
   addPublishPreview() {
     alert('this action is implemented in another ticket');

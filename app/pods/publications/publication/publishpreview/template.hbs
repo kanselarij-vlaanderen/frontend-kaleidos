@@ -16,6 +16,11 @@
                 {{t "publications-published"}}
               {{else if (await activity.hasOpenPublishingActivity)}}
                 <WebComponents::AuButton
+                        @skin="primary"
+                  {{on "click" (fn this.markPublicationActivityPublished activity)}}>
+                  {{t "publications-published"}}
+                </WebComponents::AuButton>
+                <WebComponents::AuButton
                         @skin="tertiary"
                   {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
                   {{t "cancel-request"}}
