@@ -152,7 +152,7 @@ export default class PublicationController extends Controller {
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const translateBefore = this.model.get('translateBefore');
-    if (!moment(translateBefore).isSameOrBefore(date, 'minutes')) {
+    if (typeof translateBefore !== undefined && !moment(translateBefore).isSameOrBefore(date, 'minutes')) {
       this.publicationNotAfterTranslationForPublication = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
         timeOut: 5000,
