@@ -5,8 +5,6 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationPublishPreviewController extends Controller {
   // properties for making the design
   @tracked withdrawn = true;
-  @tracked testDate = new Date();
-
 
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);

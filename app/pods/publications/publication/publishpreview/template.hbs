@@ -28,10 +28,10 @@
               {{!--Value moet nog komen vanaf het model (activity) --}}
               <WebComponents::AuInput readonly></WebComponents::AuInput>
             </div>
-            {{!--TODO set to the correct propperty --}}
+            {{!--TODO set to the correct propperty null --}}
             {{#if this.withdrawn}}
               <div class="auk-form-group">
-                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format this.testDate "DD MMMM YYYY [om] H:mm"}}/>
+                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format null "DD MMMM YYYY [om] H:mm"}}/>
               </div>
             {{/if}}
           </div>
