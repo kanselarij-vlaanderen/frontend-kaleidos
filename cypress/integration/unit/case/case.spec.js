@@ -3,6 +3,7 @@
 
 import cases from '../../../selectors/case.selectors';
 import form from '../../../selectors/form.selectors';
+import modal from '../../../selectors/modal.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -51,5 +52,16 @@ context('Create case as Admin user', () => {
     cy.wait('@addSubcase-createNewSubcase');
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
+  });
+
+  it('Een dossier maken zonder korte titel geeft een error', () => {
+    cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
+    cy.visit('/dossiers');
+
+    cy.get(cases.casesHeaderAddCase).click();
+    cy.get('button').contains('Dossier aanmaken')
+      .click();
+    cy.get(modal.publication.alertError).should('be.visible');
+    cy.get(modal.publication.alertError).contains('Kijk het formulier na');
   });
 });
