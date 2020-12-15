@@ -3,11 +3,11 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class ActivityRequestPanel extends Component {
-  @tracked panelCollapsed = false;
+  @tracked isCollapsed = false;
 
   @action
   collapsePanel() {
-    this.panelCollapsed = !this.panelCollapsed;
+    this.isCollapsed = !this.isCollapsed;
   }
 
   @action

@@ -1,12 +1,12 @@
 <div class="auk-u-mb-3">
   <WebComponents::AuPanel @scrollable="true">
-    <WebComponents::AuPanel::Header>
+    <WebComponents::AuPanel::Header @borderless={{this.isCollapsed}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton {{on "click" this.collapsePanel}}
                     @skin="tertiary" @layout="icon-only"
-                    @icon={{if this.panelCollapsed "chevron-down"  "chevron-up"}}
+                    @icon={{if this.isCollapsed "chevron-down"  "chevron-up"}}
             />
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
@@ -15,7 +15,7 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuPanel::Header>
-    {{#if (not this.panelCollapsed)}}
+    {{#if (not this.isCollapsed)}}
       <WebComponents::AuPanel::Body>
         <div class="auk-u-mb-4">
           <WebComponents::AuLabel>
