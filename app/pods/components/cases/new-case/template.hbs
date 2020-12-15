@@ -1,12 +1,18 @@
-<form onsubmit={{action "createCase"}}>
+<form onsubmit={{action "createCaseAction"}}>
   <div class="vl-modal-dialog__content">
+
+    {{#if hasError}}
+      <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
+                              @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
+    {{/if}}
+
     <div class="vl-u-spacer">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "confidential")}}
         {{web-components/vl-toggle value=confidential}}
       </div>
     </div>
-    <div class="vlc-input-field-block" data-test-metadata-form>
+    <div class="vlc-input-field-block {{getClassForShortTitle}}" data-test-metadata-form>
       {{web-components/vl-form-label value=(t "short-title-case")}}
       {{textarea class="vl-textarea vl-textarea--block" rows="2" value=shortTitle}}
     </div>
@@ -17,7 +23,7 @@
         <div class="vlc-toolbar__item">
           <button type="button" data-test-vl-modal-footer-cancel
                   class="vl-button vl-button--link"
-            {{action "close"}}>
+            {{action "closeAction"}}>
             {{t "cancel"}}
           </button>
         </div>
