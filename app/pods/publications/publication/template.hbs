@@ -9,11 +9,11 @@
           </span>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.case.shortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-detail-menu-go-back-to-overview></WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.case">{{t "agendaitem-case"}}</WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.documents">{{t "documents"}}</WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.translations">{{t "translations"}}</WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.publishpreview">{{t "proofs"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-case-nav-go-back></WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>{{t "documents"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>{{t "translations"}}</WebComponents::AuTab>
+            <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>{{t "proofs"}}</WebComponents::AuTab>
           </WebComponents::AuTabs>
         </div>
       </WebComponents::AuToolbar::Item>
@@ -51,30 +51,32 @@
         <div class="auk-scroll-wrapper">
           <div class="auk-scroll-wrapper__body">
             <div class="auk-u-m-3">
-              <div class="auk-form-group">
+              <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
                 <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
                   {{on "input" (perform this.setPublicationNumber)}} />
+                {{#if this.numberIsAlreadyUsed}}
+                  <div class="auk-form-help-text auk-form-help-text--warning">
+                    <WebComponents::AuIcon @name="alert-triangle"/>
+                    {{t "publication-number-already-taken"}}
+                  </div>
+                {{/if}}
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
-                <PowerSelect
-                        @options={{this.statusOptions}}
-                        @searchEnabled={{false}}
-                        @selected={{this.getPublicationStatus}}
-                        @onchange={{this.setPublicationStatus}} as |status|>
-                  {{status.label}}
-                </PowerSelect>
+                <WebComponents::AuPowerSelect @options={{this.statusOptions}}
+                                              @isSearchable={{false}}
+                                              @onchange={{this.setPublicationStatus}}
+                                              @selected={{this.getPublicationStatus}}
+                />
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
-                <PowerSelect
-                        @options={{this.typeOptions}}
-                        @searchEnabled={{false}}
-                        @selected={{this.getPublicationType}}
-                        @onchange={{this.setPublicationType}} as |type|>
-                  {{type.label}}
-                </PowerSelect>
+                <WebComponents::AuPowerSelect @options={{this.typeOptions}}
+                                              @isSearchable={{false}}
+                                              @onchange={{this.setPublicationType}}
+                                              @selected={{this.getPublicationType}}
+                />
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
@@ -84,7 +86,9 @@
               {{#if this.model.status.isToBePublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-publication-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getPublicationBeforeDate}} @onChange={{this.setPublicationBeforeDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getPublicationBeforeDate}}
+                          @onChange={{this.setPublicationBeforeDate}}/>
                   {{#if this.expiredPublicationBeforeDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>
@@ -94,7 +98,9 @@
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'extreme-translation-date'}}</WebComponents::AuLabel>
-                  <WebComponents::AuDatepicker @defaultDate={{this.getTranslationDate}} @onChange={{this.setTranslationDate}}/>
+                  <WebComponents::AuDatepicker
+                          @defaultDate={{this.getTranslationDate}}
+                          @onChange={{this.setTranslationDate}}/>
                   {{#if this.expiredTranslationDate}}
                     <div class="auk-form-help-text auk-form-help-text--warning">
                       <WebComponents::AuIcon @name="alert-triangle"/>

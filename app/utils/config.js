@@ -35,6 +35,21 @@ export default EmberObject.create({
   decisionDocumentTypeId: '2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
   minuteDocumentTypeId: 'e149294e-a8b8-4c11-83ac-6d4c417b079b',
   remarkId: '305E9678-8106-4C14-9BD6-60AE2032D794',
+  mail: {
+    defaultFromAddress: 'noreply@vlaanderen.be',
+    translationRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
+      subject: '[%%kaleidosenvironment] Aanvraag vertaling voor Publicatie %%nummer%%',
+    },
+    publishPreviewRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
+      subject: '[%%kaleidosenvironment] Aanvraag voor drukproef Publicatie %%nummer%%',
+    },
+    publishRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
+      subject: '[%%kaleidosenvironment] Aanvraag voor Publicatie %%nummer%%',
+    },
+  },
   formallyOkOptions: [
     {
       label: 'Formeel OK',
@@ -158,10 +173,37 @@ export default EmberObject.create({
   LANGUAGE_DE: {
     uri: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
-  ACTIVITY_TYPE_URIS: {
-    vertalen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
-    handtekenen: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
-    drukproeven: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
+  ACTIVITY_TYPES: {
+    vertalen: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
+      id: 'e9a532a5-65c1-484f-9288-1720dcd1296c',
+    },
+    handtekenen: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
+      id: '6a43f78e-c835-40a2-bf32-81209ac6e42a',
+    },
+    drukproeven: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
+      id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
+    },
+  },
+  SUBCASE_TYPES: {
+    vertalen: {
+      id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/d25ac65a-34a9-11eb-adc1-0242ac120002',
+    },
+    handtekenen: {
+      id: 'e711f906-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/e711f906-34a9-11eb-adc1-0242ac120002',
+    },
+    drukproef: {
+      id: 'ef78bb52-34a9-11eb-adc1-0242ac120002',
+      url: 'http://example.com/step/ef78bb52-34a9-11eb-adc1-0242ac120002',
+    },
+    publicatieBS: {
+      id: 'ec5877b7-737b-4051-9b8b-abd177b61236',
+      url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
+    },
   },
   PUBLICATION_TYPES: {
     extenso: {
