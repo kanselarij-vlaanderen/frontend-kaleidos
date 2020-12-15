@@ -51,7 +51,6 @@ export default class Activity extends Model {
     })(_this);
   }
 
-  // Getters.
   get hasOpenPublishingActivity() {
     const _this = this;
     return (async() => {
