@@ -1,0 +1,54 @@
+<div class="auk-u-mb-3">
+  <WebComponents::AuPanel @scrollable="true">
+    <WebComponents::AuPanel::Header @borderless={{this.isCollapsed}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton {{on "click" this.collapsePanel}}
+                    @skin="tertiary" @layout="icon-only"
+                    @icon={{if this.isCollapsed "chevron-down"  "chevron-up"}}
+            />
+          </WebComponents::AuToolbar::Item>
+          <WebComponents::AuToolbar::Item>
+            <h4 class="auk-panel__title">{{t "request"}}</h4>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuPanel::Header>
+    {{#if (not this.isCollapsed)}}
+      <WebComponents::AuPanel::Body>
+        <div class="auk-u-mb-4">
+          <WebComponents::AuLabel>
+            {{t "translation-mail-header"}}
+          </WebComponents::AuLabel>
+          <p>{{@activity.mailContent}}</p>
+        </div>
+        <WebComponents::AuLabel>
+          {{t "files"}}
+        </WebComponents::AuLabel>
+        <ul class="auk-list auk-list--bordered">
+          {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
+            <li class="auk-list__item auk-list__item--gray-100">
+              <WebComponents::AuBadge @skin="white" @icon="document"/>
+              <div class="auk-u-mx-2">
+                <span class="auk-u-text-bold">
+                  {{translationSourcePiece.name}}
+                </span>
+                <div class="auk-u-muted auk-u-text-small">
+                  {{await translationSourcePiece.documentContainer.type.altLabel}} - {{await translationSourcePiece.file.extension}}
+                </div>
+              </div>
+              <WebComponents::AuButtonToolbar>
+                <WebComponents::AuButton {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
+                        @layout="icon-only"
+                        @skin="borderless"
+                        @icon="book"
+                />
+              </WebComponents::AuButtonToolbar>
+            </li>
+          {{/each}}
+        </ul>
+      </WebComponents::AuPanel::Body>
+    {{/if}}
+  </WebComponents::AuPanel>
+</div>
