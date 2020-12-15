@@ -35,6 +35,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[agendaitem][agenda][:id:]': agendaId,
       'filter[agendaitem][show-as-remark]': false,
       'filter[document-container][type][:id:]': CONFIG.notaID,
+      'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       include: 'agendaitem',
       'fields[agendaitem]': 'id,priority,short-title',
       'fields[piece]': 'id,name,modified',
