@@ -25,7 +25,8 @@
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
               {{!--TODO remove the readonly field --}}
-              <WebComponents::AuInput @value={{this.model.publicationFlow.numacNumber}} readlonly></WebComponents::AuInput>
+              {{!--Value moet nog komen vanaf het model (activity) --}}
+              <WebComponents::AuInput readonly></WebComponents::AuInput>
             </div>
             {{!--TODO set to the correct propperty --}}
             {{#if this.withdrawn}}
