@@ -13,7 +13,7 @@
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
               {{#if (await activity.wasPublished)}}
-                {{t "publications-published"}}
+                {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
               {{else if (await activity.hasOpenPublishingActivity)}}
                 <WebComponents::AuButton
                         @skin="primary"

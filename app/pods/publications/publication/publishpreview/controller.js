@@ -91,28 +91,28 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async cancelExistingPublicationActivity(previewActivity) {
     this.showLoader = true;
-    previewActivity.get('publishedBy').
+    await previewActivity.get('publishedBy').
       filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
-      map((publishingActivity) => {
+      map(async(publishingActivity) => {
         publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
         publishingActivity.endDate = moment().utc();
-        publishingActivity.save();
+        await publishingActivity.save();
+        await this.send('refreshModel');
       });
-    await this.send('refreshModel');
     this.showLoader = false;
   }
 
   @action
   async markPublicationActivityPublished(previewActivity) {
     this.showLoader = true;
-    previewActivity.get('publishedBy').
+    await previewActivity.get('publishedBy').
       filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
-      map((publishingActivity) => {
+      map(async(publishingActivity) => {
         publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
         publishingActivity.endDate = moment().utc();
-        publishingActivity.save();
+        await publishingActivity.save();
+        await this.send('refreshModel');
       });
-    await this.send('refreshModel');
     this.showLoader = false;
   }
 
