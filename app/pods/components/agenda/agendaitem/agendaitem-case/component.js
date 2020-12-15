@@ -16,6 +16,10 @@ export default class AgendaitemCase extends Component {
     return null;
   }
 
+  get newsletterInfo() {
+    return this.args.agendaitem.get('newsletterInfo');
+  }
+
   get subcases() {
     const subcase = this.subcase;
     if (subcase) {
