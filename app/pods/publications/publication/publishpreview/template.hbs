@@ -12,7 +12,7 @@
             <WebComponents::AuToolbar::Item>
               <WebComponents::AuButton
                       @skin="tertiary"
-                {{on "click" this.cancelExistingTranslationActivity}}>
+                {{on "click" this.cancelExistingPublishPreviewActivity}}>
                 {{t "cancel-translation"}}
               </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
@@ -181,7 +181,7 @@
 {{else}}
   <WebComponents::AuPanel>
     <WebComponents::AuPanel::Body>
-      <WebComponents::AuEmptyState @message={{t "no-publishpreview-added"}}/>
+      <WebComponents::AuEmptyState @message={{t "no-publishpreview-requests"}}/>
     </WebComponents::AuPanel::Body>
   </WebComponents::AuPanel>
 {{/if}}

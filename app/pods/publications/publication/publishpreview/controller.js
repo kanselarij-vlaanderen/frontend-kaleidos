@@ -14,12 +14,7 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  async cancelExistingTranslationActivity() {
-    alert('this action is implemented in another ticket');
-  }
-
-  @action
-  async checkExistingTranslationActivity() {
+  async cancelExistingPublishPreviewActivity() {
     alert('this action is implemented in another ticket');
   }
 
