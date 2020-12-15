@@ -5,21 +5,28 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
+              <h4 class="auk-toolbar-complex__title">
+                {{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}
+              </h4>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                      @skin="primary"
-                {{on "click" (fn this.requestPublicationModal activity )}}>
-                {{t "request-publication"}}
-              </WebComponents::AuButton>
-              <WebComponents::AuButton
-                      @skin="tertiary"
-                {{on "click" this.cancelExistingTranslationActivity}}>
-                {{t "cancel-translation"}}
-              </WebComponents::AuButton>
+              {{#if (await activity.wasPublished)}}
+                {{t "publications-published"}}
+              {{else if (await activity.hasOpenPublishingActivity)}}
+                <WebComponents::AuButton
+                        @skin="tertiary"
+                  {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
+                  {{t "cancel-request"}}
+                </WebComponents::AuButton>
+              {{else}}
+                <WebComponents::AuButton
+                        @skin="primary"
+                  {{on "click" (fn this.requestPublicationModal activity )}}>
+                  {{t "request-publication"}}
+                </WebComponents::AuButton>
+              {{/if}}
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -53,7 +60,7 @@
                       <div class="auk-u-mb-4">
                         <WebComponents::AuLabel>
                           {{t "translation-mail-header"}}
-                          <p>{{activity.mailContent}}</p>
+                          <p class="vlc-u-pre">{{activity.mailContent}}</p>
                         </WebComponents::AuLabel>
                       </div>
                       <WebComponents::AuLabel>
@@ -252,7 +259,7 @@
       <WebComponents::AuButton
               data-test-au-modal-footer-save
               @skin="primary"
-        {{on "click" this.createPublicationActivity}}
+        {{on "click" (fn this.createPublicationActivity this.publicationActivity.activity)}}
       >
         {{t "request-publication"}}
       </WebComponents::AuButton>

@@ -25,6 +25,7 @@ export default class activityService extends Service {
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
@@ -60,6 +61,7 @@ export default class activityService extends Service {
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
       startDate: creationDatetime,
       mailContent,
       subcase,
@@ -85,7 +87,7 @@ export default class activityService extends Service {
    * @param activity
    * @returns {Promise<Model|any|Promise>}
    */
-  async createNewPublishActivity(mailContent, pieces, subcase) {
+  async createNewPublishActivity(mailContent, pieces, subcase, publishPreviewActivity) {
     const creationDatetime = moment().utc()
       .toDate();
 
@@ -94,18 +96,21 @@ export default class activityService extends Service {
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
       startDate: creationDatetime,
       mailContent,
       subcase,
       type: requestPublishActivityType,
       usedPieces: pieces,
+      publishes: publishPreviewActivity,
     });
 
     // Persist to db.
     await PublishPreviewActivity.save();
 
-    // Reload relation.
+    // Reload relations.
     await subcase.hasMany('publicationActivities').reload();
+    await publishPreviewActivity.hasMany('publishedBy').reload();
 
     return PublishPreviewActivity;
   }

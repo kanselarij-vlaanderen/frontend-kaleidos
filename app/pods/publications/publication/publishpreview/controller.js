@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
+import moment from 'moment';
 
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
@@ -20,6 +21,7 @@ export default class PublicationPublishPreviewController extends Controller {
   @tracked showpublicationModal = false;
   @tracked panelIcon = 'chevron-down'
   @tracked publicationActivity = {
+    previewActivity: {},
     mailContent: '',
     subjectContent: '',
     pieces: A([]),
@@ -28,6 +30,13 @@ export default class PublicationPublishPreviewController extends Controller {
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
+  }
+
+  @action
+  hasSourceActivity(activity) {
+    // activity is the source. Follow sourceActivityLink to publicationRequest.
+    const publicationRequestActivity = activity.get('sourceActivity');
+    console.log(publicationRequestActivity);
   }
 
   @action
@@ -43,6 +52,7 @@ export default class PublicationPublishPreviewController extends Controller {
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = activity.usedPieces;
     const names = this.publicationActivity.pieces.map((piece) => piece.name).join('\n');
+    set(this.publicationActivity, 'previewActivity', activity);
     set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
     set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showpublicationModal = true;
@@ -51,6 +61,7 @@ export default class PublicationPublishPreviewController extends Controller {
 
   @action
   async cancelPublicationModal() {
+    set(this.publicationActivity, 'previewActivity', {});
     set(this.publicationActivity, 'pieces', A([]));
     set(this.publicationActivity, 'mailContent', '');
     set(this.publicationActivity, 'mailSubject', '');
@@ -73,13 +84,14 @@ export default class PublicationPublishPreviewController extends Controller {
     const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishSubCaseType, shortTitle, title);
 
     // Create activity in subcase.
-    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase);
+    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase, this.publicationActivity.previewActivity);
 
     // Visual stuff.
     this.selectedPieces = A([]);
 
     // Reset local activity to empty state.
     this.publicationActivity = {
+      previewActivity: {},
       mailContent: '',
       mailSubject: '',
       pieces: A([]),
@@ -87,15 +99,22 @@ export default class PublicationPublishPreviewController extends Controller {
     this.showLoader = false;
 
     // TODO Add email hook here.
-
     alert('the mails dont work yet. infra is working on it.');
   }
 
   /** BS PUBLICATION ACTIVITIES **/
 
   @action
-  async cancelExistingTranslationActivity() {
-    alert('this action is implemented in another ticket');
+  async cancelExistingPublicationActivity(previewActivity) {
+    this.showLoader = true;
+    previewActivity.get('publishedBy').
+      filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
+      map((publishingActivity) => {
+        publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
+        publishingActivity.endDate = moment().utc();
+        publishingActivity.save();
+      });
+    this.showLoader = false;
   }
 
   @action

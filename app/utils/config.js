@@ -191,6 +191,11 @@ export default EmberObject.create({
       id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
     },
   },
+  ACTIVITY_STATUSSES: {
+    open: 'open',
+    withdrawn: 'withdrawn',
+    closed: 'closed',
+  },
   SUBCASE_TYPES: {
     vertalen: {
       id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
