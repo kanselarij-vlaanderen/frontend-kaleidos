@@ -192,11 +192,7 @@
           @extension={{this.pieceInCreation.file.extension}}
           @size={{this.pieceInCreation.file.size}}
           @downloadName={{this.pieceInCreation.file.filename}}
-          @downloadLink={{concat
-            this.pieceInCreation.file.downloadLink
-            "?name="
-            this.pieceInCreation.file.filename
-          }}
+          @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
           @delete={{action this.delete this.pieceInCreation}}
         />
       {{/if}}
