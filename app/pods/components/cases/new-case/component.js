@@ -43,7 +43,7 @@ export default class NewCase extends Component {
     const {
       shortTitle,
     } = this;
-    if (shortTitle < 1) {
+    if (shortTitle === null || shortTitle.trim().length === 0) {
       this.hasError = true;
     } else {
       this.isLoading = true;
