@@ -42,7 +42,7 @@ context('Create case as Admin user', () => {
     cy.get('button').contains('Dossier aanmaken')
       .click();
 
-    cy.addSubcase('Mededeling', '', '', null, null);
+    cy.addSubcase('Mededeling', 'Dit is de korte titel', '', null, null);
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
     cy.navigateBack();

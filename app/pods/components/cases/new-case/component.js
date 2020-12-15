@@ -16,11 +16,10 @@ export default class NewCase extends Component {
     const newDate = moment().utc()
       .toDate();
     const {
-      title, shortTitle, confidential,
+      shortTitle, confidential,
     } = this;
     const caze = this.store.createRecord('case',
       {
-        title,
         shortTitle,
         confidential,
         isArchived: false,
