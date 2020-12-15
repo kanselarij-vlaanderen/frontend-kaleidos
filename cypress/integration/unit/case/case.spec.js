@@ -36,14 +36,24 @@ context('Create case as Admin user', () => {
   });
 
   it('Een lege procedurestap kopieëren in een dossier zou geen fouten mogen geven.', () => {
+    const newShortTitle = 'Dit is de korte titel';
     cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
     cy.visit('/dossiers');
 
     cy.get(cases.casesHeaderAddCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
-
-    cy.addSubcase('Mededeling', 'Dit is de korte titel', '', null, null);
+    cy.get(modal.publication.alertError).should('be.visible');
+    cy.get(modal.publication.alertError).contains('Kijk het formulier na');
+    cy.get('.vlc-input-field-block').eq(1)
+      .within(() => {
+        cy.get('.vl-textarea').click()
+          .clear()
+          .type(newShortTitle);
+      });
+    cy.get('button').contains('Dossier aanmaken')
+      .click();
+    cy.addSubcase('Mededeling', newShortTitle, '', null, null);
     cy.openSubcase(0);
     cy.get(cases.subcaseType).contains('Mededeling');
     cy.navigateBack();
