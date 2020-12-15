@@ -18,8 +18,6 @@ export default class PublicationController extends Controller {
   @service media;
 
   // Tracked.
-  @tracked translationDateList = [];
-  @tracked publicationDateList = [];
   @tracked numberIsAlreadyUsed = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
