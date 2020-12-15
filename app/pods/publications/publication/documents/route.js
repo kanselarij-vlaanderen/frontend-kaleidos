@@ -11,9 +11,22 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
+
+    // Load All subcases (all three).
+    const subcases = await this.store.query('subcase', {
+      filter: {
+        'publication-flow': {
+          id: await publicationFlow.get('id'),
+        },
+      },
+      sort: '-created',
+      include: 'type',
+    });
+
     return hash({
       publicationFlow,
       case: caze,
+      subcases: subcases,
     });
   }
 
