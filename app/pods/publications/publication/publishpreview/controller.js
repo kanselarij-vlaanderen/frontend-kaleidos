@@ -32,20 +32,6 @@ export default class PublicationPublishPreviewController extends Controller {
     return publishPreviewActivities;
   }
 
-  @action
-  hasSourceActivity(activity) {
-    // activity is the source. Follow sourceActivityLink to publicationRequest.
-    const publicationRequestActivity = activity.get('sourceActivity');
-    console.log(publicationRequestActivity);
-  }
-
-  @action
-  collapsePanel() {
-    this.panelCollapsed = !this.panelCollapsed;
-    this.panelIcon = ((this.panelIcon === 'chevron-up') ? 'chevron-down' : 'chevron-up');
-  }
-
-
   /** BS PUBLICATION ACTIVITIES **/
 
   @action
@@ -116,39 +102,38 @@ export default class PublicationPublishPreviewController extends Controller {
       });
     this.showLoader = false;
   }
-
   @action
-  async checkExistingTranslationActivity() {
+  addPublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  addProof() {
+  deletePublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  deleteProof() {
+  editPublishPreview() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  editProof() {
+  addCorrection() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  addImprovement() {
+  deleteCorrection() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  deleteImprovement() {
+  editCorrection() {
     alert('this action is implemented in another ticket');
   }
 
   @action
-  editImprovement() {
-    alert('this action is implemented in another ticket');
+  async showPieceViewer(piece) {
+    window.open(`/document/${(await piece).get('id')}`);
   }
 }

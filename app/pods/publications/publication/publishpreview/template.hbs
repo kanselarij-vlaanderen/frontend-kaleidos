@@ -1,7 +1,7 @@
 {{#if (gt this.publishPreviewActivities.length 0)}}
   {{#each this.publishPreviewActivities as |activity|}}
     <div class="auk-u-m-2">
-      <WebComponents::AuNavbar @noPadding="true">
+      <WebComponents::AuNavbar @noPadding="true" @border="none">
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -31,68 +31,34 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuNavbar>
-      <div class="auk-u-m-2">
+      <div class="auk-u-my-2">
         <div class="auk-o-grid">
           <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
               {{!--TODO remove the readonly field --}}
-              <WebComponents::AuInput @value={{this.model.publicationFlow.numacNumber}} readlonly></WebComponents::AuInput>
+              {{!--Value moet nog komen vanaf het model (activity) --}}
+              <WebComponents::AuInput readonly></WebComponents::AuInput>
             </div>
-            {{!--TODO set to the correct propperty --}}
+            {{!--TODO set to the correct propperty null --}}
             {{#if this.withdrawn}}
               <div class="auk-form-group">
-                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format this.testDate "DD MMMM YYYY [om] H:mm"}}/>
+                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format null "DD MMMM YYYY [om] H:mm"}}/>
               </div>
             {{/if}}
           </div>
           <div class="auk-o-grid-col-bp2-9">
             <div class="auk-u-ml-4 auk-u-mb-4">
               {{!-- Request panel --}}
-              <div class="auk-u-mb-3">
-                <WebComponents::AuPanel @scrollable="true">
-                  <WebComponents::AuPanel::Header>
-                    <WebComponents::AuButton @skin="tertiary" @layout="icon-only" @icon={{this.panelIcon}} style="margin-right:1.6rem" {{on "click" this.collapsePanel}}/>
-                    <h4 class="auk-panel__title">{{t "request"}}</h4>
-                  </WebComponents::AuPanel::Header>
-                  {{#if (not this.panelCollapsed)}}
-                    <WebComponents::AuPanel::Body>
-                      <div class="auk-u-mb-4">
-                        <WebComponents::AuLabel>
-                          {{t "translation-mail-header"}}
-                          <p class="vlc-u-pre">{{activity.mailContent}}</p>
-                        </WebComponents::AuLabel>
-                      </div>
-                      <WebComponents::AuLabel>
-                        {{t "files"}}
-                      </WebComponents::AuLabel>
-                      <ul class="auk-list auk-list--bordered">
-                        {{#each (await activity.usedPieces) as |translationSourcePiece|}}
-                          <li class="auk-list__item auk-list__item--gray-100">
-                            <WebComponents::AuBadge @skin="white" @icon="document"/>
-                            <div class="auk-u-mx-2">
-                              <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                              <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.documentContainer.type.label}} - {{await translationSourcePiece.file.extension}}</div>
-                            </div>
-                            <WebComponents::AuButtonToolbar>
-                              <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
-                            </WebComponents::AuButtonToolbar>
-
-                          </li>
-                        {{/each}}
-                      </ul>
-                    </WebComponents::AuPanel::Body>
-                  {{/if}}
-                </WebComponents::AuPanel>
-              </div>
-              {{!-- Proof panel --}}
+              <Publications::Publication::ActivityRequestPanel @activity={{activity}}/>
+              {{!-- PublishPreview panel --}}
               <div class="auk-u-mb-3">
                 <WebComponents::AuPanel>
                   <WebComponents::AuPanel::Header>
                     <WebComponents::AuToolbar>
                       <WebComponents::AuToolbar::Group @position="left">
                         <WebComponents::AuToolbar::Item>
-                          <h4 class="auk-toolbar-complex__title">{{t "proof"}}</h4>
+                          <h4 class="auk-toolbar-complex__title">{{t "publishpreview"}}</h4>
                         </WebComponents::AuToolbar::Item>
                       </WebComponents::AuToolbar::Group>
                       <WebComponents::AuToolbar::Group @position="right">
@@ -100,8 +66,8 @@
                           <WebComponents::AuButton
                                   @skin="tertiary"
                                   @icon="add"
-                            {{on "click" this.addProof}}>
-                            {{t "add-proof"}}
+                            {{on "click" this.addPublishPreview}}>
+                            {{t "add-publishpreview"}}
                           </WebComponents::AuButton>
                         </WebComponents::AuToolbar::Item>
                       </WebComponents::AuToolbar::Group>
@@ -109,17 +75,18 @@
                   </WebComponents::AuPanel::Header>
                   <WebComponents::AuPanel::Body>
                   {{!-- TODO set to loop over drukproeven --}}
-                  {{#if (await (await activity.usedPieces))}}
+                  {{#if (await activity.generatedPieces)}}
                     <ul class="auk-list auk-list--bordered">
-                      {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+                      {{#each (await activity.generatedPieces) as |generatedPiece|}}
+                      {{!-- TODO filter on drukproeven --}}
                         <li class="auk-list__item auk-list__item--gray-100">
                           <WebComponents::AuBadge @skin="white" @icon="document"/>
                           <div class="auk-u-mx-2">
-                            <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                            <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
+                            <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
+                            <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
                           </div>
                           <WebComponents::AuButtonToolbar>
-                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
                             <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                               <AttachPopover
                                       @renderInPlace={{true}}
@@ -131,10 +98,10 @@
                                 {{!-- as |attacher| --}}
                               >
                                 <WebComponents::AuDropdown>
-                                  <WebComponents::AuDropdown::Item {{on "click" this.editProof}}>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editPublishPreview}}>
                                     {{t "edit-2"}}
                                   </WebComponents::AuDropdown::Item>
-                                  <WebComponents::AuDropdown::Item @skin="danger" {{on "click" this.deleteProof}}>
+                                  <WebComponents::AuDropdown::Item @skin="danger" {{on "click" this.deletePublishPreview}}>
                                     {{t "delete"}}
                                   </WebComponents::AuDropdown::Item>
                                 </WebComponents::AuDropdown>
@@ -145,20 +112,20 @@
                       {{/each}}
                     </ul>
                   {{else}}
-                    <WebComponents::AuEmptyState @message={{t "no-proof"}}/>
+                    <WebComponents::AuEmptyState @message={{t "no-publishpreview-added"}}/>
                   {{/if}}
 
                   </WebComponents::AuPanel::Body>
                 </WebComponents::AuPanel>
               </div>
-              {{!-- Improvement panel --}}
+              {{!-- Correction panel --}}
               <div class="auk-u-mb-3">
                 <WebComponents::AuPanel>
                   <WebComponents::AuPanel::Header>
                     <WebComponents::AuToolbar>
                       <WebComponents::AuToolbar::Group @position="left">
                         <WebComponents::AuToolbar::Item>
-                          <h4 class="auk-toolbar-complex__title">{{t "improvement"}}</h4>
+                          <h4 class="auk-toolbar-complex__title">{{t "correction"}}</h4>
                         </WebComponents::AuToolbar::Item>
                       </WebComponents::AuToolbar::Group>
                       <WebComponents::AuToolbar::Group @position="right">
@@ -166,8 +133,8 @@
                           <WebComponents::AuButton
                                   @skin="tertiary"
                                   @icon="add"
-                            {{on "click" this.addImprovement}}>
-                            {{t "add-improvement"}}
+                            {{on "click" this.addCorrection}}>
+                            {{t "add-correction"}}
                           </WebComponents::AuButton>
                         </WebComponents::AuToolbar::Item>
                       </WebComponents::AuToolbar::Group>
@@ -175,17 +142,18 @@
                   </WebComponents::AuPanel::Header>
                   <WebComponents::AuPanel::Body>
                   {{!-- TODO set to loop over verbteringen --}}
-                  {{#if (await activity.improvements)}}
+                  {{#if (await activity.generatedPieces)}}
                     <ul class="auk-list auk-list--bordered">
-                      {{#each (await activity.usedPieces) as |translationSourcePiece|}}
+                      {{#each (await activity.generatedPieces) as |generatedPiece|}}
+                        {{!-- TODO filter on verberteringen --}}
                         <li class="auk-list__item auk-list__item--gray-100">
                           <WebComponents::AuBadge @skin="white" @icon="document"/>
                           <div class="auk-u-mx-2">
-                            <span class="auk-u-text-bold">{{translationSourcePiece.name}}</span>
-                            <div class="auk-u-muted auk-u-text-small">{{await translationSourcePiece.file.extension}}</div>
+                            <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
+                            <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
                           </div>
                           <WebComponents::AuButtonToolbar>
-                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
                             <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                               <AttachPopover
                                       @renderInPlace={{true}}
@@ -197,10 +165,10 @@
                                 {{!-- as |attacher| --}}
                               >
                                 <WebComponents::AuDropdown>
-                                  <WebComponents::AuDropdown::Item {{on "click" this.editImprovement}}>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editCorrection}}>
                                     {{t "edit-2"}}
                                   </WebComponents::AuDropdown::Item>
-                                  <WebComponents::AuDropdown::Item {{on "click" this.deleteImprovement}} @skin="danger">
+                                  <WebComponents::AuDropdown::Item {{on "click" this.deleteCorrection}} @skin="danger">
                                     {{t "delete"}}
                                   </WebComponents::AuDropdown::Item>
                                 </WebComponents::AuDropdown>
@@ -211,7 +179,7 @@
                       {{/each}}
                     </ul>
                   {{else}}
-                    <WebComponents::AuEmptyState @message={{t "no-improvements"}}/>
+                    <WebComponents::AuEmptyState @message={{t "no-corrections"}}/>
                   {{/if}}
                   </WebComponents::AuPanel::Body>
                 </WebComponents::AuPanel>

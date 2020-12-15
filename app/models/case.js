@@ -1,5 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
+import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
 
 const {
   Model, attr, hasMany, belongsTo, PromiseObject,
@@ -19,6 +21,10 @@ export default Model.extend({
 
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
+
+  sortedPieces: computed('pieces.@each.name', function() {
+    return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
+  }),
 
   latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
