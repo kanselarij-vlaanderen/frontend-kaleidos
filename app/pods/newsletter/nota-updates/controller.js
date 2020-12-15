@@ -4,16 +4,10 @@ import { action } from '@ember/object';
 export default class NewsletterNotaUpdatesController extends Controller {
   queryParams = ['sort'];
 
-  @tracked page;
   @tracked sort = '-modified';
 
-  constructor() {
-    super(...arguments);
-    this.page = 0;
-  }
-
   get size() {
-    return this.model.notas.length;
+    return this.model.length;
   }
 
   @action
