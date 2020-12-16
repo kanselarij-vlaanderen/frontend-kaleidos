@@ -21,7 +21,7 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-    const requestTranslationActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
+    const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
@@ -57,7 +57,7 @@ export default class activityService extends Service {
       .toDate();
 
     // publishPreviewActivityType.
-    const requestPublishPreviewActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
+    const requestPublishPreviewActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
@@ -92,7 +92,7 @@ export default class activityService extends Service {
       .toDate();
 
     // publishActivityType.
-    const requestPublishActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
+    const requestPublishActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {

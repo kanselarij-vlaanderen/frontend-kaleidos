@@ -58,7 +58,7 @@ export default class PublicationPublishPreviewController extends Controller {
     this.showLoader = true;
 
     // Fetch the type.
-    const publishSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
+    const publishSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
