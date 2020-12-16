@@ -41,7 +41,6 @@ export default class PublicationPublishPreviewController extends Controller {
     set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
     set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showpublicationModal = true;
-    console.log(this.publicationActivity);
   }
 
   @action
