@@ -28,15 +28,17 @@
               {{t "cases"}}
             {{/link-to}}
           </li>
-          <li class="vl-tab" data-test-m-header-newsletters>
-            {{#link-to
-              "newsletters"
-              class="vl-tab__link"
-              current-when="newsletters newsletter print-overviews.newsletter"
-            }}
-              {{t "newsletter"}}
-            {{/link-to}}
-          </li>
+          {{#if (not currentSession.isOvrb)}}
+            <li class="vl-tab" data-test-m-header-newsletters>
+              {{#link-to
+                "newsletters"
+                class="vl-tab__link"
+                current-when="newsletters newsletter print-overviews.newsletter"
+              }}
+                {{t "newsletter"}}
+              {{/link-to}}
+            </li>
+          {{/if}}
           <li class="vl-tab" data-test-m-header-search>
             <LinkTo
               class="vl-tab__link"
