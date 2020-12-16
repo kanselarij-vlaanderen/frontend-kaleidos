@@ -1,8 +1,8 @@
 {{page-title this.model.name}}
 <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__body full-height">
-    {{#if (eq this.model.file.extension "pdf")}}
-      {{pdf-view filePath=(concat "/files/" this.model.file.id "/download")}}
+    {{#if this.fileFormatIsSupported}}
+      <PdfView @filePath={{await this.model.downloadFileLink}}/>
     {{else}}
       {{t "document-viewer-message-before-type"}} <i>{{this.model.file.extension}}</i> {{t "document-viewer-message-after-type"}}
     {{/if}}
