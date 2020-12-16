@@ -14,15 +14,10 @@
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
-          {{this.caseTitle}}
-          <WebComponents::AuButtonLink
-                  @icon="circle-more"
-                  @skin="mute"
-                  @layout="icon-only">
-            <EmberTooltip @tooltipClass="auk-tooltip">
-              {{this.caseTitle}}
-            </EmberTooltip>
-          </WebComponents::AuButtonLink>
+          <WebComponents::AuAbbreviatedText
+            @text={{this.caseTitleFromCase}}
+            @size="250"
+          />
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       {{#if currentSession.isEditor}}

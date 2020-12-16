@@ -1,0 +1,13 @@
+{{#if this.textTooLong}}
+  {{this.textAbbreviated}}
+  <WebComponents::AuButtonLink
+          @icon="circle-more"
+          @skin="mute"
+          @layout="icon-only">
+    <EmberTooltip @tooltipClass="auk-tooltip">
+      {{@text}}
+    </EmberTooltip>
+  </WebComponents::AuButtonLink>
+{{else}}
+  {{@text}}
+{{/if}}

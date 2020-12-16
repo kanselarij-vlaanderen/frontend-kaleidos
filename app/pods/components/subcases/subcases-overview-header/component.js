@@ -12,8 +12,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked title = null;
   @tracked shortTitle = null;
 
-  // Returns the title of the case.
-  get caseTitle() {
+  get caseTitleFromCase() {
     const _case = this.args.model.case;
     const shortTitle = _case.shortTitle;
     if (shortTitle) {
