@@ -145,7 +145,7 @@ export default Service.extend({
           id: requiredSubcaseType.id,
         },
         'publication-flow': {
-          id: publicationFlow.get('id'),
+          id: publicationFlow.id,
         },
       },
       include: 'type',
