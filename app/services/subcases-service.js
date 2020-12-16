@@ -131,11 +131,11 @@ export default Service.extend({
   /**
    * Finds or creates a subcase of type TYPE in your publicationFlow.
    *
-   * @param subcaseType
+   * @param requiredSubcaseType
    * @param publicationFlow
    * @param title
    * @param shortTitle
-   * @returns {Promise<*>}
+   * @returns SUBCASE
    */
   async findOrCreateSubcaseFromTypeInPublicationFlow(requiredSubcaseType, publicationFlow, title, shortTitle) {
     // Load the subcase (should be just one).
@@ -145,16 +145,15 @@ export default Service.extend({
           id: requiredSubcaseType.id,
         },
         'publication-flow': {
-          id: await publicationFlow.get('id'),
+          id: publicationFlow.get('id'),
         },
       },
-      sort: '-created',
       include: 'type',
     });
     if (subcases.length > 0) {
       return subcases.firstObject;
     }
-    return this.createSubcaseForPublicationFlow(publicationFlow, requiredSubcaseType, shortTitle, title);
+    return await this.createSubcaseForPublicationFlow(publicationFlow, requiredSubcaseType, shortTitle, title);
   },
 
 });
