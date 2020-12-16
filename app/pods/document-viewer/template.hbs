@@ -4,7 +4,11 @@
     {{#if this.fileFormatIsSupported}}
       <PdfView @filePath={{await this.model.downloadFileLink}}/>
     {{else}}
-      {{t "document-viewer-message-before-type"}} <i>{{this.model.file.extension}}</i> {{t "document-viewer-message-after-type"}}
+      <WebComponents::AuAlert
+        @skin="warning"
+        @title={{t "file-type-unsupported"}}
+        @message={{t "file-viewer-type-unsupported" fileType=this.model.file.extension}}
+      />
     {{/if}}
   </div>
 </div>
