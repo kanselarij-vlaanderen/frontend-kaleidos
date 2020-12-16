@@ -137,16 +137,22 @@ export default Service.extend({
    * @param shortTitle
    * @returns {Promise<*>}
    */
-  async findOrCreateSubcaseFromTypeInPublicationFlow(subcases, requiredSubcaseType, publicationFlow, title, shortTitle) {
-    // eslint-disable-next-line id-length
-    for (let i = 0; i < subcases.length; i++) {
-      const subcase = subcases.objectAt(i);
-      const subcaseType = await subcase.get('type');
-      if (subcaseType.id) {
-        if (requiredSubcaseType.id === subcaseType.id) {
-          return this.store.findRecord('subcase', subcase.id);
-        }
-      }
+  async findOrCreateSubcaseFromTypeInPublicationFlow(requiredSubcaseType, publicationFlow, title, shortTitle) {
+    // Load the subcase (should be just one).
+    const subcases = await this.store.query('subcase', {
+      filter: {
+        type: {
+          id: requiredSubcaseType.id,
+        },
+        'publication-flow': {
+          id: await publicationFlow.get('id'),
+        },
+      },
+      sort: '-created',
+      include: 'type',
+    });
+    if (subcases.length > 0) {
+      return subcases.firstObject;
     }
     return this.createSubcaseForPublicationFlow(publicationFlow, requiredSubcaseType, shortTitle, title);
   },

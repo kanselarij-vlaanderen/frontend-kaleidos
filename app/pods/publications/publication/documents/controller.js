@@ -212,7 +212,7 @@ export default class PublicationDocumentsController extends Controller {
     const title = await this.model.case.title;
 
     // Find or Create subase.
-    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(this.model.subcases, publishPreviewSubCaseType, this.model.publicationFlow, title, shortTitle);
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishPreviewSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     this.renderPieces = false;
@@ -263,7 +263,7 @@ export default class PublicationDocumentsController extends Controller {
     const title = await this.model.case.title;
 
     // Find or Create subase.
-    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(this.model.subcases, translateSubCaseType, this.model.publicationFlow, title, shortTitle);
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(translateSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
