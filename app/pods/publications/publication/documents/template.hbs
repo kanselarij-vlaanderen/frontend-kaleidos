@@ -345,8 +345,11 @@
 {{#if this.showTranslationModal}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Header
-            @title={{t "request-translations"}}
-            @closeModal={{this.cancelTranslationModal}}
+      @title={{t
+        "request-translations-for-publication"
+        publicationNumber=this.model.publicationFlow.publicationNumber
+      }}
+      @closeModal={{this.cancelTranslationModal}}
     />
     <WebComponents::AuModal::Body>
 
@@ -363,7 +366,9 @@
           {{t "extreme-translation-date"}}
         </WebComponents::AuLabel>
         <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}}
-                                     @onChange={{this.setTranslateActivityBeforeDate}}/>
+                                     @onChange={{this.setTranslateActivityBeforeDate}}
+                                     @class="auk-input--max-width"
+        />
 
         <WebComponents::AuLabel @isRequired={{true}}>
           {{t "accompanying-text"}}
