@@ -54,6 +54,10 @@ export default Model.extend({
     });
   }),
 
+  downloadFileLink: computed('downloadFilename', 'file.downloadLink', async function() {
+    return `${await this.get('file.downloadLink')}?name=${encodeURIComponent(await this.get('downloadFilename'))}`; // url-safe
+  }),
+
   changeAccessLevelLastModified() {
     if (!this.get('confidential')) {
       this.set('accessLevelLastModified', moment().utc()
