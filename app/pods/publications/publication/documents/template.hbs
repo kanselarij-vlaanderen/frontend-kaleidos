@@ -345,8 +345,11 @@
 {{#if this.showTranslationModal}}
   <WebComponents::AuModal>
     <WebComponents::AuModal::Header
-            @title={{t "request-translations"}}
-            @closeModal={{this.cancelTranslationModal}}
+      @title={{t
+        "request-translations-for-publication"
+        publicationNumber=this.model.publicationFlow.publicationNumber
+      }}
+      @closeModal={{this.cancelTranslationModal}}
     />
     <WebComponents::AuModal::Body>
 
@@ -358,14 +361,15 @@
                                 @icon="alert-triangle"/>
       {{else}}
         {{!--  Pieces selected --}}
-        {{t "request-translation-confirmation" }}
-        <WebComponents::AuLabel @isRequired={{true}}>
+        <WebComponents::AuLabel>
           {{t "extreme-translation-date"}}
         </WebComponents::AuLabel>
         <WebComponents::AuDatepicker @defaultDate={{this.getTranslateActivityBeforeDate}}
-                                     @onChange={{this.setTranslateActivityBeforeDate}}/>
+                                     @onChange={{this.setTranslateActivityBeforeDate}}
+                                     @class="auk-input--max-width"
+        />
 
-        <WebComponents::AuLabel @isRequired={{true}}>
+        <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
           {{t "accompanying-text"}}
         </WebComponents::AuLabel>
         <WebComponents::AuTextarea
@@ -373,23 +377,25 @@
                 @rows="7"
                 @value={{mut this.translateActivity.mailContent}}
                 data-test-create-vertaalActivity-modal-email-textarea/>
-
-        <WebComponents::AuLabel @isRequired={{true}}>
+        <WebComponents::AuLabel class="auk-u-mt-2">
           {{t "attachments" }}
         </WebComponents::AuLabel>
-
-        {{#each this.selectedPieces as |pieceToSend| }}
-          <div class="o-flex o-flex--vertical-center">
-            <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
-            <div class="auk-u-ml-3">
-              <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
-              <br>
-              <span class="auk-u-muted auk-u-text-small">
-                {{await pieceToSend.documentContainer.type.label}}
-              </span>
-            </div>
-          </div>
-        {{/each}}
+      <div class="auk-u-mt-2 auk-u-mb-2">
+        <WebComponents::AuList @isBordered="true">
+          {{#each this.selectedPieces as |pieceToSend| }}
+            <WebComponents::AuList::AuListItem @skin="gray-100">
+              <WebComponents::AuBadge @icon="file" @skin="white" />
+              <div class="auk-u-mx-2">
+                <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
+                <div class="auk-u-muted auk-u-text-small">{{await pieceToSend.documentContainer.type.label}}</div>
+              </div>
+              <WebComponents::AuButtonToolbar>
+                <WebComponents::AuButton @icon="book" @layout="icon-only" @skin="borderless" {{on "click" (fn this.showPieceViewer pieceToSend.id)}}/>
+              </WebComponents::AuButtonToolbar>
+            </WebComponents::AuList::AuListItem>
+          {{/each}}
+        </WebComponents::AuList>
+      </div>
       {{/if}}
 
     </WebComponents::AuModal::Body>
@@ -431,7 +437,7 @@
       {{!--  Pieces selected --}}
         {{t "request-publishpreview-confirmation" }}
 
-        <WebComponents::AuLabel @isRequired={{true}}>
+        <WebComponents::AuLabel>
           {{t "accompanying-text"}}
         </WebComponents::AuLabel>
         <WebComponents::AuTextarea
@@ -440,7 +446,7 @@
                 @value={{mut this.previewActivity.mailContent}}
                 data-test-create-publishpreviewActivity-modal-email-textarea/>
 
-        <WebComponents::AuLabel @isRequired={{true}}>
+        <WebComponents::AuLabel>
           {{t "attachments" }}
         </WebComponents::AuLabel>
         {{#each this.selectedPieces as |pieceToSend| }}

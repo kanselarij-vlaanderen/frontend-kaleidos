@@ -31,11 +31,7 @@
               extension=pieceInCreation.file.extension
               size=pieceInCreation.file.size
               downloadName=pieceInCreation.file.filename
-              downloadLink=(concat
-                      pieceInCreation.file.downloadLink
-                      "?name="
-                      pieceInCreation.file.filename
-              )
+              downloadLink=pieceInCreation.file.namedDownloadLink
               delete=(action "deleteFile" pieceInCreation.file)
             }}
           </div>

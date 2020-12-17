@@ -71,8 +71,8 @@ export default class ToTreatController extends Controller {
       newPublication = await this.store.findRecord('publication-flow', pubFlows.content[0].id);
     } else {
       newPublication = await this.publicationService.createNewPublication(0, _case.id);
-      this.showLoader = false;
     }
+    this.showLoader = false;
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
 }
