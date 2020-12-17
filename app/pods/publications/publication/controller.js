@@ -157,6 +157,8 @@ export default class PublicationController extends Controller {
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
         timeOut: 5000,
       });
+      set(this, 'showPublicationDatePicker', true);
+      set(this, 'showTranslationDatePicker', true);
     } else {
       this.model.set('publishBefore', new Date(event));
       this.model.save().then(() => {
@@ -183,11 +185,13 @@ export default class PublicationController extends Controller {
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const publishBefore = this.model.get('publishBefore');
-    if (!moment(date).isSameOrBefore(publishBefore)) {
+    if (typeof publishBefore !== undefined && !moment(date).isSameOrBefore(publishBefore)) {
       this.publicationNotAfterTranslationForTranslation = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
         timeOut: 5000,
       });
+      set(this, 'showPublicationDatePicker', true);
+      set(this, 'showTranslationDatePicker', true);
     } else {
       this.model.set('translateBefore', new Date(event));
       this.model.save().then(() => {
