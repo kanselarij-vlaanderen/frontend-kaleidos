@@ -27,6 +27,9 @@ const selectors = {
     // buttons
     addDocumentsButton: '[data-test-publication-case-add-documents]',
     documentsPieceRow: '[data-test-publication-case-documents-piece-row]',
+    documentsRowActions: '[data-test-pub-case-doc-row-actions]',
+    documentsRowActionView: '[data-test-pub-case-doc-row-action-view]',
+    documentsRowActionDelete: '[data-test-pub-case-doc-row-action-delete]',
   },
   nav: {
     goBack: '[data-test-publication-case-nav-go-back]',

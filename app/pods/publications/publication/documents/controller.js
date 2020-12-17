@@ -14,6 +14,7 @@ import {
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
   @service subcasesService;
+  @service fileService;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -25,17 +26,25 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showTranslationModal = false;
   @tracked translateActivity = {
     mailContent: '',
+    mailSubject: '',
     finalTranslationDate: '',
     pieces: A([]),
   };
   @tracked previewActivity = {
     mailContent: '',
+    mailSubject: '',
     pieces: A([]),
   };
   @tracked selectedPieces = A([]);
+  @tracked pieceToDelete = null;
+  @tracked isVerifyingDelete = false;
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
+
+  concatNames(pieces) {
+    return pieces.map((piece) => piece.name).join('\n');
+  }
 
   @action
   toggleUploadModalSize() {
@@ -93,7 +102,7 @@ export default class PublicationDocumentsController extends Controller {
       try {
         await this.savePiece.perform(piece);
       } catch (error) {
-        await this.deletePiece.perform(piece);
+        await this.deleteUploadedPiece.perform(piece);
         throw error;
       }
     });
@@ -119,14 +128,14 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *cancelUploadPieces() {
-    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
+    const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
     yield all(deletePromises);
     this.newPieces = A();
     this.isOpenPieceUploadModal = false;
   }
 
   @task
-  *deletePiece(piece) {
+  *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
     this.newPieces.removeObject(piece);
@@ -135,17 +144,57 @@ export default class PublicationDocumentsController extends Controller {
     yield piece.destroyRecord();
   }
 
+  @action
+  cancelDeleteExistingPiece() {
+    this.pieceToDelete = null;
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  deleteExistingPiece(piece) {
+    this.pieceToDelete = piece;
+    this.isVerifyingDelete = true;
+  }
+
+  @task
+  *verifyDeleteExistingPiece() {
+    const agendaitem = yield this.pieceToDelete.get('agendaitem');
+    if (agendaitem) {
+      // Possible unreachable code, failsafe. Do we want to show a toast ?
+    } else {
+      // TODO delete with undo ?
+      this.showLoader = true;
+      this.isVerifyingDelete = false;
+      const documentContainer = yield this.pieceToDelete.get('documentContainer');
+      const piecesFromContainer = yield documentContainer.get('pieces');
+      if (piecesFromContainer.length < 2) {
+        // Cleanup documentContainer if we are deleting the last piece in the container
+        // Must revise if we link docx and pdf as multiple files in 1 piece
+        yield this.fileService.deleteDocumentContainer(documentContainer);
+      } else {
+        yield this.fileService.deletePiece(this.pieceToDelete);
+      }
+      yield this.model.case.hasMany('pieces').reload();
+      this.showLoader = false;
+      this.pieceToDelete = null;
+    }
+  }
+
   /** PUBLISH PREVIEW ACTIVITIES **/
 
   @action
   openPublishPreviewRequestModal() {
     this.isOpenPublishPreviewRequestModal = true;
     this.previewActivity.pieces = this.selectedPieces;
+    const attachmentsString = this.concatNames(this.selectedPieces);
+    this.previewActivity.mailContent = CONFIG.mail.publishPreviewRequest.content.replace('%%attachments%%', attachmentsString);
+    this.previewActivity.mailSubject = CONFIG.mail.publishPreviewRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
   }
 
   @action
   cancelPublishPreviewRequestModal() {
     set(this.previewActivity, 'mailContent', '');
+    set(this.previewActivity, 'mailSubject', '');
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -156,14 +205,14 @@ export default class PublicationDocumentsController extends Controller {
     this.previewActivity.pieces = this.selectedPieces;
 
     // publishPreviewActivityType.
-    const publishPreviewSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
+    const publishPreviewSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
 
-    // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
+    // Find or Create subase.
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishPreviewSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     this.renderPieces = false;
@@ -175,10 +224,14 @@ export default class PublicationDocumentsController extends Controller {
     // Reset local activity to empty state.
     this.previewActivity = {
       mailContent: '',
+      mailSubject: '',
       pieces: A([]),
     };
     this.showLoader = false;
     this.renderPieces = true;
+
+    alert('the mails dont work yet. infra is working on it.');
+    this.transitionToRoute('publications.publication.publishpreview');
   }
 
   /** TRANSLATION ACTIVITIES **/
@@ -187,6 +240,9 @@ export default class PublicationDocumentsController extends Controller {
   openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
+    const attachmentsString = this.concatNames(this.selectedPieces);
+    set(this.translateActivity, 'mailContent', CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString));
+    set(this.translateActivity, 'mailSubject', CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showTranslationModal = true;
   }
 
@@ -203,15 +259,14 @@ export default class PublicationDocumentsController extends Controller {
     this.showTranslationModal = false;
 
     // Fetch the type.
-    const translateSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
+    const translateSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
 
-    // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
-    this.renderPieces = false;
+    // Find or Create subase.
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(translateSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
@@ -222,16 +277,20 @@ export default class PublicationDocumentsController extends Controller {
     // Reset local activity to empty state.
     this.translateActivity = {
       mailContent: '',
+      mailSubject: '',
       finalTranslationDate: '',
       pieces: A([]),
     };
     this.showLoader = false;
     this.renderPieces = true;
+    alert('the mails dont work yet. infra is working on it.');
+    this.transitionToRoute('publications.publication.translations');
   }
 
   @action
   cancelTranslationModal() {
     set(this.translateActivity, 'mailContent', '');
+    set(this.translateActivity, 'mailSubject', '');
     this.showTranslationModal = false;
   }
 
