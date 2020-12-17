@@ -81,9 +81,15 @@ export default class ToTreatRoute extends Route {
       }
 
       if (item.attributes.publicationFlowId) {
-        entry.publicationFlow = this.store.findRecord('case', item.attributes.publicationFlowId, {
-          reload: true,
-        });
+        if (typeof item.attributes.publicationFlowId === 'string') {
+          entry.publicationFlow = this.store.findRecord('publication-flow', item.attributes.publicationFlowId, {
+            reload: true,
+          });
+        } else {
+          entry.publicationFlow = this.store.findRecord('publication-flow', item.attributes.publicationFlowId[0], {
+            reload: true,
+          });
+        }
       }
 
       entry.id = item.id;
