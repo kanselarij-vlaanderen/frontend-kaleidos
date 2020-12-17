@@ -38,16 +38,16 @@ export default EmberObject.create({
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
-      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
-      subject: '[%%kaleidosenvironment%%] Aanvraag vertaling voor Publicatie %%nummer%%',
+      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\n\nLimiet vertaling: %%limiet%%\n\nAantal bladzijden:\n\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB',
+      subject: '[%%kaleidosenvironment%%] Vertaalaanvraag (%%nummer%%)',
     },
     publishPreviewRequest: {
-      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
-      subject: '[%%kaleidosenvironment%%] Aanvraag voor drukproef Publicatie %%nummer%%',
+      content: 'Beste,\n\nIn bijlage voor drukproef ons dossier (%%nummer%%):\n\n(%%titel%%)\n\nVriendelijke groeten,\n\nTeam OVRB',
+      subject: '[%%kaleidosenvironment%%] Dossier (%%nummer%%) – drukproef aub',
     },
     publishRequest: {
-      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
-      subject: '[%%kaleidosenvironment%%] Aanvraag voor Publicatie %%nummer%%',
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB',
+      subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%numac%%)',
     },
   },
   formallyOkOptions: [
