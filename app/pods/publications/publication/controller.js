@@ -8,12 +8,14 @@ import moment from 'moment';
 import { inject as service } from '@ember/service';
 
 export default class PublicationController extends Controller {
-  @tracked numberIsAlreadyUsed = false;
+  // Services.
   @service publicationService;
   @service toaster;
   @service intl;
   @service media;
 
+  // Tracked props.
+  @tracked numberIsAlreadyUsed = false;
   @tracked collapsed = !this.get('media.isBigScreen');
 
 
