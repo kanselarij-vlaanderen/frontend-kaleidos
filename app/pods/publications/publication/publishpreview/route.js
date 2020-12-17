@@ -2,6 +2,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import CONFIG from 'fe-redpencil/utils/config';
 import { hash } from 'rsvp';
+import { action } from '@ember/object';
 
 export default class PublicationPublishPreviewRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model() {
@@ -12,8 +13,8 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       reload: true,
     });
     const publishPreviewActivities = await this.store.query('activity', {
-      include: 'type,subcase,used-pieces',
-      'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
+      include: 'type,subcase,used-pieces,published-by,publishes',
+      'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
       sort: '-start-date',
     });
@@ -23,5 +24,10 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       case: _case,
       publishPreviewActivities: publishPreviewActivities,
     });
+  }
+
+  @action
+  refreshModel() {
+    this.refresh();
   }
 }
