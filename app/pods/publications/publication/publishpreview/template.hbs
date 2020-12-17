@@ -54,7 +54,7 @@
                           <WebComponents::AuButton
                                   @skin="tertiary"
                                   @icon="add"
-                            {{on "click" this.addPublishPreview}}>
+                            {{on "click" (fn this.openUploadPublishPreviewModal activity)}}>
                             {{t "add-publishpreview"}}
                           </WebComponents::AuButton>
                         </WebComponents::AuToolbar::Item>
@@ -121,7 +121,7 @@
                           <WebComponents::AuButton
                                   @skin="tertiary"
                                   @icon="add"
-                            {{on "click" this.addCorrection}}>
+                            {{on "click" (fn this.openUploadPublishPreviewCorrectionModal activity)}}>
                             {{t "add-correction"}}
                           </WebComponents::AuButton>
                         </WebComponents::AuToolbar::Item>
@@ -184,4 +184,74 @@
       <WebComponents::AuEmptyState @message={{t "no-publishpreview-requests"}}/>
     </WebComponents::AuPanel::Body>
   </WebComponents::AuPanel>
+{{/if}}
+
+
+{{!--     UPLOAD PUBLISH-PREVIEW MODAL       --}}
+
+
+{{#if this.isOpenUploadPublishPreviewModal}}
+  <WebComponents::AuModal
+    @resized={{this.isUploadModalResized}}
+  >
+    <WebComponents::AuModal::Header
+      @resizeable={{true}}
+      @title={{t "upload-publishpreview"}}
+      @toggleSize={{this.toggleUploadModalSize}}
+      @closeModal={{perform this.cancelUploadPieces}}
+    />
+    <WebComponents::AuModal::Body>
+      {{#if this.pieceInCreation}}
+        <div class="o-flex o-flex--vertical-center auk-u-mt-3">
+          <div class="auk-u-mr-3">
+            <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
+          </div>
+          <WebComponents::AuInput type="text" id="name" @block="true" @value={{this.pieceInCreation.name}}/>
+          <div class="auk-u-ml-3">
+            <WebComponents::AuButton 
+              {{on "click" (perform this.deleteUploadedPiece this.pieceInCreation)}}
+              @layout="icon-only"
+              @icon="delete"
+            />
+          </div>
+        </div>
+      {{else}}
+        <WebComponents::AuFileUploader @fullHeight={{true}} @multipleFiles={{false}} @uploadedFileAction={{action this.uploadPublishPreview}}/>
+      {{/if}}
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{perform this.cancelUploadPieces}}>
+      {{#if this.savePublishPreview.isRunning}}
+        <Utils::SimpleSpinner></Utils::SimpleSpinner>
+      {{else}}
+        <WebComponents::AuButton
+          data-test-au-modal-footer-save
+          @skin="primary"
+          @disabled={{not this.pieceInCreation}}
+          {{on "click" (perform this.savePublishPreview)}}
+        >
+          {{t "save"}}
+        </WebComponents::AuButton>
+      {{/if}}
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+      @title={{t "loading-text"}}
+      @hideCloseButton={{true}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{concat
+          (t "saving-change-message")
+          " "
+          (t "please-be-patient")
+        }}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
 {{/if}}
