@@ -689,6 +689,7 @@
   "name-document": "Naam Document",
   "file-extension": "Bestandstype",
   "cancel-request": "Aanvraag intrekken",
+  "canceled-request": "ingetrokken",
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",

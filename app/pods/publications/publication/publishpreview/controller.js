@@ -15,11 +15,10 @@ export default class PublicationPublishPreviewController extends Controller {
 
   // properties for making the design
   @tracked withdrawn = true;
-  @tracked testDate = new Date();
   @tracked panelCollapsed = false;
   @tracked showLoader = false;
   @tracked showpublicationModal = false;
-  @tracked panelIcon = 'chevron-down'
+  @tracked panelIcon = 'chevron-down';
   @tracked publicationActivity = {
     previewActivity: {},
     mailContent: '',
@@ -36,13 +35,12 @@ export default class PublicationPublishPreviewController extends Controller {
 
   @action
   async requestPublicationModal(activity) {
-    this.publicationActivity.pieces = activity.usedPieces;
+    this.publicationActivity.pieces = await activity.usedPieces;
     const names = this.publicationActivity.pieces.map((piece) => piece.name).join('\n');
     set(this.publicationActivity, 'previewActivity', activity);
     set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
     set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showpublicationModal = true;
-    console.log(this.publicationActivity);
   }
 
   @action
@@ -60,7 +58,7 @@ export default class PublicationPublishPreviewController extends Controller {
     this.showLoader = true;
 
     // Fetch the type.
-    const publishSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
+    const publishSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.publicatieBS.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
