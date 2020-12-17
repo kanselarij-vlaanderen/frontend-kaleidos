@@ -550,7 +550,6 @@ function addExtraDocumentVersion(file) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
-  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
   cy.route('PATCH', '**').as('patchModel');
 
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
@@ -568,10 +567,6 @@ function addExtraDocumentVersion(file) {
   });
 
   cy.wait(`@createNewPiece_${randomInt}`, {
-    timeout: 24000,
-  });
-
-  cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
 
