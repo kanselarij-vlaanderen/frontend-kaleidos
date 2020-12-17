@@ -211,8 +211,8 @@ export default class PublicationDocumentsController extends Controller {
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
 
-    // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishPreviewSubCaseType, shortTitle, title);
+    // Find or Create subase.
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishPreviewSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     this.renderPieces = false;
@@ -233,6 +233,7 @@ export default class PublicationDocumentsController extends Controller {
     alert('the mails dont work yet. infra is working on it.');
     this.transitionToRoute('publications.publication.publishpreview');
   }
+
   /** TRANSLATION ACTIVITIES **/
 
   @action
@@ -264,9 +265,8 @@ export default class PublicationDocumentsController extends Controller {
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
 
-    // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, translateSubCaseType, shortTitle, title);
-    this.renderPieces = false;
+    // Find or Create subase.
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(translateSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);

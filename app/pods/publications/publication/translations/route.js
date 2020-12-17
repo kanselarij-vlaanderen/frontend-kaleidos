@@ -14,7 +14,7 @@ export default class PublicationTranslationRoute extends Route.extend(Authentica
     });
     const translationActivities = await this.store.query('activity', {
       include: 'type,subcase,used-pieces',
-      'filter[subcase][publication-flow][:id:]': publicationFlow.get('id'),
+      'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
       sort: '-start-date',
     });
