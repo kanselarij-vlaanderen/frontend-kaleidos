@@ -8,6 +8,9 @@ export default Controller.extend({
   refresh: false,
 
   actions: {
+    backLinkAction() {
+      this.transitionToRoute('cases');
+    },
     refresh() {
       this.toggleProperty('refresh');
     },

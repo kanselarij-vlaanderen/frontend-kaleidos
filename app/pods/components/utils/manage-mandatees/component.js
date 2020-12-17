@@ -68,7 +68,6 @@ export default Component.extend({
       this.set('isLoading', true);
       const oldMandatee = this.get('mandateeToEdit');
       const domains = await oldMandatee.get('governmentDomains');
-      const holds = await oldMandatee.get('holds');
 
       oldMandatee.set('end', this.get('selectedEndDate') || moment().toDate());
       oldMandatee.save().then(() => {
@@ -81,7 +80,6 @@ export default Component.extend({
           end: moment().add(5, 'years')
             .toDate(),
           person: selectedPerson,
-          holds,
           governmentDomains: domains,
           priority: oldMandatee.get('priority'),
         });

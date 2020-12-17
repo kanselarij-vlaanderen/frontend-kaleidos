@@ -15,11 +15,15 @@ export default class AgendaitemTitlesEdit extends Component {
   classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
 
+  get newsletterInfo() {
+    return this.args.newsletterInfo;
+  }
+
   @action
   async cancelEditing() {
     cancelEdit(this.args.agendaitem, get(this, 'propertiesToSet'));
-    if (this.args.newsletterInfo && this.args.newsletterInfo.get('hasDirtyAttributes')) {
-      this.args.newsletterInfo.rollbackAttributes();
+    if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
+      this.newsletterInfo.rollbackAttributes();
     }
     this.args.toggleIsEditing();
   }

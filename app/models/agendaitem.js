@@ -171,4 +171,11 @@ export default ModelWithModifier.extend({
       }),
     });
   }),
+
+  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', async function() {
+    const newsletterInfos = await this.store.query('newsletter-info', {
+      'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
+    });
+    return newsletterInfos.get('firstObject');
+  }),
 });
