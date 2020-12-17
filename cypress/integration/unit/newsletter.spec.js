@@ -41,11 +41,14 @@ context('Test the KB functionality', () => {
     cy.changeSubcaseAccessLevel(false, case1TitleShort, true, 'Intern Overheid');
     cy.addSubcaseMandatee(0, 0, 0);
 
-    cy.addDocumentsToSubcase([{
+    const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'Document dossier 1', fileType: 'Nota',
-    }]);
+    };
 
-    cy.wait(3000);
+    cy.addDocumentsToSubcase([file]);
+
+    // Extra Document Version
+    cy.addExtraDocumentVersion(file);
 
     const case2TitleShort = `${testId}Cypress test dossier 2`;
     const type2 = 'Nota';
@@ -78,11 +81,11 @@ context('Test the KB functionality', () => {
       cy.setFormalOkOnItemWithIndex(2);
 
       cy.visit(`/vergadering/${result.meetingId}/kort-bestek`);
-      cy.route('/pieces/*/document-container').as('getDocumentContainerOfPieces');
+      cy.route('/document-containers?**').as('getDocumentContainerOfPieces');
       cy.get(newsletter.notaUpdates).click();
       cy.wait('@getDocumentContainerOfPieces');
-      cy.contains(case1TitleShort);
-      cy.contains(case2TitleShort);
+      cy.contains(case1TitleShort).should('not.exist');
+      cy.contains(case2TitleShort).should('not.exist');
     });
   });
 });
