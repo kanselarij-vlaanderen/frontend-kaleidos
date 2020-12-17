@@ -49,7 +49,7 @@ export default Model.extend({
 
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, {
+    return sanitize(filename, { // file-system-safe
       replacement: '_',
     });
   }),
