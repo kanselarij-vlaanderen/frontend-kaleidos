@@ -41,15 +41,14 @@
     </div>
   </div>
   <div class="auk-panel-layout__sidebar">
-    <WebComponents::AuSidebar @position="right" class={{if
-      this.collapsed
-      "auk-sidebar--collapsed auk-panel-layout--large auk-sidebar--responsive"
-      "auk-panel-layout__sidebar auk-sidebar--large auk-sidebar--responsive"
-    }}>
+    <WebComponents::AuSidebar @position="right"
+                              class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--right
+                              auk-sidebar--large auk-sidebar--responsive {{if  this.collapsed 'auk-sidebar--collapsed'}}"
+    >
+
       <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
         <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left"/>
-          <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Group @position="{{if  this.collapsed 'center' 'right'}}">
             <WebComponents::AuToolbar::Item>
               <WebComponents::AuButton @skin="borderless" @icon={{if this.collapsed "chevron-left" "chevron-right"}}
                                        @layout="icon-only" {{on 'click' this.toggleSidebar}} />
@@ -66,7 +65,7 @@
                 <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
                   {{on "input" (perform this.setPublicationNumber)}} />
                 {{#if this.numberIsAlreadyUsed}}
-                  <div class="auk-form-help-text auk-form-help-text--warning">
+                  <div class="auk-form-help-text auk-form-help-text--danger">
                     <WebComponents::AuIcon @name="alert-triangle"/>
                     {{t "publication-number-already-taken"}}
                   </div>
@@ -90,7 +89,7 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.numacNumber}} @block="true"
+                <WebComponents::AuInput type="number" value={{this.model.numacNumber}} @block="true" readonly
                   {{on "input" (perform this.setNumacNumber)}} />
               </div>
               {{#if this.model.status.isToBePublished}}
@@ -133,18 +132,17 @@
               {{/if}}
               <div class="auk-form-group">
                 <WebComponents::AuLabel>
-                  {{t "remark-title"}}
-                  <WebComponents::AuIcon @name="circle-info"/>
-                  <AttachTooltip
-                          @arrow="true"
-                          @animation="fade"
-                          @placement="bottom"
-                          @class="auk-tooltip"
-                  >
-                    <p>
-                      {{t "publication-sidebar-tooltip"}}
-                    </p>
-                  </AttachTooltip>
+                  <div class="o-flex o-flex--vertical-center">
+                    <span class="auk-u-mr">{{t "remark-title"}}</span>
+                    <div>
+                      <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted"/>
+                      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                        <p>
+                          {{t "publication-sidebar-tooltip"}}
+                        </p>
+                      </EmberTooltip>
+                    </div>
+                  </div>
                 </WebComponents::AuLabel>
                 <WebComponents::AuTextarea rows="4" type="text" value={{this.getRemark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
               </div>

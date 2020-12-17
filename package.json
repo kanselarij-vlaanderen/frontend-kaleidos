@@ -125,7 +125,7 @@
   },
   "dependencies": {
     "@kanselarij-vlaanderen/au-kaleidos-icons": "^1.2.2",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "^1.16.2",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "^1.16.3",
     "ember-in-viewport": "^3.7.5",
     "ember-test-selectors": "^3.0.0",
     "ember-tooltips": "^3.4.5",
