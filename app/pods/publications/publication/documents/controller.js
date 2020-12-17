@@ -205,7 +205,7 @@ export default class PublicationDocumentsController extends Controller {
     this.previewActivity.pieces = this.selectedPieces;
 
     // publishPreviewActivityType.
-    const publishPreviewSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
+    const publishPreviewSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
@@ -229,6 +229,9 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
+
+    alert('the mails dont work yet. infra is working on it.');
+    this.transitionToRoute('publications.publication.publishpreview');
   }
 
   /** TRANSLATION ACTIVITIES **/
@@ -238,8 +241,8 @@ export default class PublicationDocumentsController extends Controller {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
     const attachmentsString = this.concatNames(this.selectedPieces);
-    this.translateActivity.mailContent = CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString);
-    this.translateActivity.mailSubject = CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
+    set(this.translateActivity, 'mailContent', CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString));
+    set(this.translateActivity, 'mailSubject', CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showTranslationModal = true;
   }
 
@@ -256,7 +259,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showTranslationModal = false;
 
     // Fetch the type.
-    const translateSubCaseType = await  this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
+    const translateSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
 
     // TODO take from other subcase maybe?
     const shortTitle = await this.model.case.shortTitle;
@@ -280,6 +283,8 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
+    alert('the mails dont work yet. infra is working on it.');
+    this.transitionToRoute('publications.publication.translations');
   }
 
   @action

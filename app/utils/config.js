@@ -39,15 +39,15 @@ export default EmberObject.create({
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
-      subject: '[%%kaleidosenvironment] Aanvraag vertaling voor Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag vertaling voor Publicatie %%nummer%%',
     },
     publishPreviewRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
-      subject: '[%%kaleidosenvironment] Aanvraag voor drukproef Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor drukproef Publicatie %%nummer%%',
     },
     publishRequest: {
       content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
-      subject: '[%%kaleidosenvironment] Aanvraag voor Publicatie %%nummer%%',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor Publicatie %%nummer%%',
     },
   },
   formallyOkOptions: [
@@ -187,6 +187,15 @@ export default EmberObject.create({
       url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
       id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
     },
+    publiceren: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    },
+  },
+  ACTIVITY_STATUSSES: {
+    open: 'open',
+    withdrawn: 'withdrawn',
+    closed: 'closed',
   },
   SUBCASE_TYPES: {
     vertalen: {

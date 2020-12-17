@@ -2,6 +2,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import CONFIG from 'fe-redpencil/utils/config';
 import { hash } from 'rsvp';
+import { action } from '@ember/object';
 
 export default class PublicationTranslationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model() {
@@ -11,7 +12,7 @@ export default class PublicationTranslationRoute extends Route.extend(Authentica
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    const activities = await this.store.query('activity', {
+    const translationActivities = await this.store.query('activity', {
       include: 'type,subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
@@ -21,7 +22,12 @@ export default class PublicationTranslationRoute extends Route.extend(Authentica
     return hash({
       publicationFlow,
       case: _case,
-      activities: activities,
+      translationActivities: translationActivities,
     });
+  }
+
+  @action
+  refreshModel() {
+    this.refresh();
   }
 }
