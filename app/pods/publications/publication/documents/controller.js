@@ -240,8 +240,8 @@ export default class PublicationDocumentsController extends Controller {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
     const attachmentsString = this.concatNames(this.selectedPieces);
-    this.translateActivity.mailContent = CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString);
-    this.translateActivity.mailSubject = CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
+    set(this.translateActivity, 'mailContent', CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString));
+    set(this.translateActivity, 'mailSubject', CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
     this.showTranslationModal = true;
   }
 
