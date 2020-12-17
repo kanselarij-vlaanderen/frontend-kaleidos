@@ -18,7 +18,7 @@ function createCase(confidential, shortTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
-  cy.get('.vlc-toolbar__item .vl-button')
+  cy.get('.vlc-page-header .vl-button')
     .contains('Nieuw dossier aanmaken')
     .click();
 
@@ -82,7 +82,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   cy.wait(2000);
 
-  cy.get('.vlc-toolbar__item .vl-button')
+  cy.get('.vlc-page-header .auk-button')
     .contains('Procedurestap toevoegen')
     .click();
 

@@ -64,11 +64,8 @@ export default class PublicationPublishPreviewController extends Controller {
     const shortTitle = await this.model.case.shortTitle;
     const title = await this.model.case.title;
 
-    // Create subase.
-    const subcase = await this.subcasesService.createSubcaseForPublicationFlow(this.model.publicationFlow, publishSubCaseType, shortTitle, title);
-    // TODO: Deze zou moeten herwerkt worden als branch https://github.com/kanselarij-vlaanderen/kaleidos-frontend/pull/620 gemerged is
-    // Hier moet komen:
-    // const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(this.model.subcases, publishSubCaseType, this.model.publicationFlow, title, shortTitle);
+    // Find or create Subcase.
+    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
     await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase, this.publicationActivity.previewActivity);

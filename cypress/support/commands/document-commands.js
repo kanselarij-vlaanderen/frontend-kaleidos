@@ -534,7 +534,54 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('/isPieceDeletable');
 }
 
+/**
+ * Add an extra version.
+ *
+ * @param file object.
+ */
+function addExtraDocumentVersion(file) {
+  cy.log('addExtraDocumentVersion');
+  cy.get('[data-test-documents-show-more]').click();
+  cy.server();
+  cy.route('/subcases?**').as('subcasesExtraFileversionupload');
+  cy.get('[data-test-document-upload-new-piece]').click();
+  cy.wait('@subcasesExtraFileversionupload');
+
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+
+  cy.route('PATCH', '**').as('patchModel');
+
+  cy.get('.vl-modal-dialog').as('fileUploadDialog');
+  cy.get('@fileUploadDialog').within(() => {
+    const index = 0;
+    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+    cy.get('.vl-uploaded-document', {
+      timeout: 10000,
+    }).should('have.length', index + 1);
+  });
+
+  cy.get('@fileUploadDialog').within(() => {
+    cy.get('.vl-button').contains('Toevoegen')
+      .click();
+  });
+
+  cy.wait(`@createNewPiece_${randomInt}`, {
+    timeout: 24000,
+  });
+
+  cy.get(modal.modalDialog).should('not.exist');
+  cy.wait('@patchModel', {
+    timeout: 12000 + (6000 * 1),
+  });
+
+  cy.get(modal.modalDialog).should('not.exist');
+  cy.wait(3000);
+  cy.log('/addExtraDocumentVersion');
+}
+
 Cypress.Commands.add('addDocuments', addDocuments);
+Cypress.Commands.add('addExtraDocumentVersion', addExtraDocumentVersion);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
