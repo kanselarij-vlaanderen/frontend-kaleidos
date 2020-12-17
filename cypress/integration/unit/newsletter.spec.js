@@ -83,7 +83,6 @@ context('Test the KB functionality', () => {
       cy.wait('@getDocumentContainerOfPieces');
       cy.contains(case1TitleShort);
       cy.contains(case2TitleShort);
-      cy.wait('@getDocumentContainerOfPieces');
     });
   });
 });
