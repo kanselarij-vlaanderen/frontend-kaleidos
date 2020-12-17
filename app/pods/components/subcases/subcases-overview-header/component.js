@@ -1,53 +1,53 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  currentSession: service(),
+export default class SubCasesOverviewHeader extends Component {
+  // Services
+  @service currentSession;
 
-  classNames: ['vl-u-bg-alt'],
-  isAddingSubcase: false,
-  title: null,
-  shortTitle: null,
+  // Tracked.
+  @tracked isAddingSubcase = false;
+  @tracked title = null;
+  @tracked shortTitle = null;
 
-  activeProcess: computed('isShowingProcess', function() {
-    if (this.get('isShowingProcess')) {
-      return 'vlc-tabs-reverse__link--active';
+  get caseTitleFromCase() {
+    const _case = this.args.model.case;
+    const shortTitle = _case.shortTitle;
+    if (shortTitle) {
+      return shortTitle;
     }
-    return null;
-  }),
+    return _case.title;
+  }
 
   // This is needed to give the input-helpers a proper string instead of
   // a promise object based on the previous subcase or known case
   async setKnownPropertiesOfCase() {
-    const caze = await this.get('model.case');
+    const caze = await this.args.model.case;
     const latestSubcase = await caze.get('latestSubcase');
     if (latestSubcase) {
-      this.set('title', latestSubcase.get('title'));
-      this.set('shortTitle', latestSubcase.get('shortTitle'));
+      this.title = latestSubcase.get('title');
+      this.shortTitle = latestSubcase.get('shortTitle');
     } else {
-      this.set('title', caze.title);
-      this.set('shortTitle', caze.shortTitle);
+      this.title = caze.title;
+      this.shortTitle = caze.shortTitle;
     }
-  },
+  }
 
-  actions: {
-    async toggleIsAddingSubcase() {
-      await this.setKnownPropertiesOfCase();
-      this.toggleProperty('isAddingSubcase');
-    },
+  @action
+  async toggleIsAddingSubcase() {
+    await this.setKnownPropertiesOfCase();
+    this.isAddingSubcase = true;
+  }
 
-    refresh() {
-      this.refresh();
-    },
+  @action
+  refresh() {
+    this.args.refresh();
+  }
 
-    close() {
-      this.toggleProperty('isAddingSubcase');
-    },
-
-    toggleIsShowingProcess() {
-      this.set('isShowingProcess', true);
-    },
-
-  },
-});
+  @action
+  close() {
+    this.isAddingSubcase = false;
+  }
+}

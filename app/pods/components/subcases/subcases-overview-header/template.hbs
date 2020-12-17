@@ -1,62 +1,45 @@
-<div class="vlc-page-header">
-  <div class="vlc-toolbar">
-    <div class="vlc-toolbar__left">
-      <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width-title vlc-u-padding-bottom-5"
-        >
-          {{#if (await model.case.shortTitle)}}
-            {{await model.case.shortTitle}}
-          {{else}}
-            {{await model.case.title}}
-          {{/if}}
-        </h1>
-        <div class="vlc-page-header__sub">
-          <div class="vlc-toolbar vlc-toolbar--auto">
-            <div class="vlc-toolbar__left">
-              <div class="vlc-toolbar__item">
-                {{#link-to
-                  "cases.overview"
-                  class="vlc-backlink vl-link vl-link--bold"
-                }}
-                {{!-- template-lint-disable no-bare-strings  --}}
-                  &#8629;
-                {{!-- template-lint-enable no-bare-strings  --}}
-                {{/link-to}}
-              </div>
-              <div class="vlc-toolbar__item">
-                <ul class="vlc-tabs-reverse" role="tablist">
-                  <li class="vlc-tabs-reverse__item">
-                    <a href=""
-                       class="vlc-tabs-reverse__link {{activeProcess}}"
-                       role="tab"
-                      {{action "toggleIsShowingProcess"}}
-                    >
-                      {{t "process"}}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="vlc-toolbar__right">
+<div class="vlc-page-header vl-u-bg-alt">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton
+            @skin="borderless"
+            @icon="chevron-left"
+            @layout="icon-only"
+            {{on "click" @backLink}}
+            data-test-cases-backlink/>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <span class="auk-overline auk-u-block">
+            {{t "case"}}
+          </span>
+          <WebComponents::AuAbbreviatedText
+            @text={{this.caseTitleFromCase}}
+            @size="250"
+          />
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
       {{#if currentSession.isEditor}}
-        <div class="vlc-toolbar__item">
-          <button type="button" class="vl-button vl-button--icon-before"
-                  data-test-case-create-subcase-button
-            {{action "toggleIsAddingSubcase"}}
-          >
-            <i class="vl-button__icon vl-button__icon--before ki-add"
-            ></i>
-            {{t "create-subcase"}}
-          </button>
-        </div>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+              @skin="primary"
+              @icon="add"
+              {{on "click" this.toggleIsAddingSubcase}}
+              data-test-case-create-subcase-button>
+              {{t "create-subcase"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
       {{/if}}
-    </div>
-  </div>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuToolbar>
 </div>
+
+
+{{!-- MODAL --}}
+
 {{#if isAddingSubcase}}
   {{#web-components/vl-modal
     isOverlay=true
@@ -65,9 +48,9 @@
     title=(t "create-subcase")
   }}
     {{cases/new-subcase
-      title=title
-      shortTitle=shortTitle
-      case=(await model.case)
+      title=this.title
+      shortTitle=this.shortTitle
+      case=(await @model.case)
       closeModal=(action "close")
       refresh=(action "refresh")
     }}

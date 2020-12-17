@@ -34,6 +34,7 @@
                                       @value={{this.searchText}}
                                       {{on "input" (perform this.debouncedSearchTask)}}
                                       @enter={{perform this.debouncedSearchTask}}
+                                      @autocomplete="off"
               />
               {{#if showSearchResults}}
                 <div class="autocomplete-results auk-search-results-list">

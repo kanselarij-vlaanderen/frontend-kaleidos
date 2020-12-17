@@ -1,8 +1,12 @@
 import Route from '@ember/routing/route';
 
-export default Route.extend({
-  model(params) {
-    const piece = params.piece_id;
-    return this.store.findRecord('piece', piece);
-  },
-});
+export default class DocumentViewerRoute extends Route {
+  async model(params) {
+    const pieces = await this.store.query('piece', {
+      'filter[:id:]': params.piece_id,
+      include: 'file',
+    });
+    const piece = pieces.firstObject;
+    return piece;
+  }
+}
