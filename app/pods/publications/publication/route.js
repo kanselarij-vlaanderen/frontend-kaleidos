@@ -9,4 +9,10 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'case,contact-person,status,type',
     });
   }
+
+  /* eslint-disable id-length,no-unused-vars */
+  resetController(controller, _, transition) {
+    controller.publicationNotAfterTranslationForPublication = false;
+    controller.publicationNotAfterTranslationForTranslation = false;
+  }
 }
