@@ -49,9 +49,13 @@ export default Model.extend({
 
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, {
+    return sanitize(filename, { // file-system-safe
       replacement: '_',
     });
+  }),
+
+  downloadFileLink: computed('downloadFilename', 'file.downloadLink', async function() {
+    return `${await this.get('file.downloadLink')}?name=${encodeURIComponent(await this.get('downloadFilename'))}`; // url-safe
   }),
 
   changeAccessLevelLastModified() {

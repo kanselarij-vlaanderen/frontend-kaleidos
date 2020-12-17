@@ -9,6 +9,9 @@ export default class AgendaitemsSearchController extends Controller {
     types: {
       type: 'array',
     },
+    latestOnly: {
+      type: 'boolean',
+    },
     page: {
       type: 'number',
     },
@@ -26,6 +29,7 @@ export default class AgendaitemsSearchController extends Controller {
   @tracked size;
   @tracked sort;
   @tracked types;
+  @tracked latestOnly; // Only show the most recent version of an agenda-item
   @tracked emptySearch;
 
   constructor() {
@@ -33,8 +37,8 @@ export default class AgendaitemsSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-session-dates';
-    this.decisionsOnly = false;
     this.types = A(['nota', 'mededeling']);
+    this.latestOnly = true;
   }
 
   get includeNotas() {
@@ -78,6 +82,11 @@ export default class AgendaitemsSearchController extends Controller {
   @action
   toggleIncludeMededelingen() {
     this.toggleProperty('includeMededelingen');
+  }
+
+  @action
+  toggleLatestOnly() {
+    this.toggleProperty('latestOnly');
   }
 
   @action

@@ -5,16 +5,33 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
+              <h4 class="auk-toolbar-complex__title">
+                {{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}
+              </h4>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                      @skin="tertiary"
-                {{on "click" this.cancelExistingPublishPreviewActivity}}>
-                {{t "cancel-translation"}}
-              </WebComponents::AuButton>
+              {{#if (await activity.wasPublished)}}
+                {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
+              {{else if (await activity.hasOpenPublishingActivity)}}
+                <WebComponents::AuButton
+                        @skin="primary"
+                  {{on "click" (fn this.markPublicationActivityPublished activity)}}>
+                  {{t "publications-published"}}
+                </WebComponents::AuButton>
+                <WebComponents::AuButton
+                        @skin="tertiary"
+                  {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
+                  {{t "cancel-request"}}
+                </WebComponents::AuButton>
+              {{else}}
+                <WebComponents::AuButton
+                        @skin="primary"
+                  {{on "click" (fn this.requestPublicationModal activity )}}>
+                  {{t "request-publication"}}
+                </WebComponents::AuButton>
+              {{/if}}
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -235,6 +252,44 @@
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
+
+
+{{!--      REQUEST PUBLISH PREVIEW  MODAL       --}}
+
+
+{{#if this.showpublicationModal}}
+  <WebComponents::AuModal>
+    <WebComponents::AuModal::Header
+            @title={{t "request-publication"}}
+            @closeModal={{this.cancelPublicationModal}}
+    />
+    <WebComponents::AuModal::Body>
+    {{!--  Pieces selected --}}
+      {{t "request-publishpreview-confirmation" }}
+
+      <WebComponents::AuLabel @isRequired={{true}}>
+        {{t "accompanying-text"}}
+      </WebComponents::AuLabel>
+      <WebComponents::AuTextarea
+              id="emailMessage"
+              @rows="7"
+              @value={{mut this.publicationActivity.mailContent}}
+              data-test-create-publishpreviewActivity-modal-email-textarea/>
+
+    </WebComponents::AuModal::Body>
+
+    <WebComponents::AuModal::Footer @cancelModal={{this.cancelPublicationModal}}>
+      <WebComponents::AuButton
+              data-test-au-modal-footer-save
+              @skin="primary"
+        {{on "click" (fn this.createPublicationActivity this.publicationActivity.activity)}}
+      >
+        {{t "request-publication"}}
+      </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
 
 {{!-- LOADER --}}
 

@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 export default class DocumentUpload extends Component {
   @service store;
@@ -30,10 +31,7 @@ export default class DocumentUpload extends Component {
     this.selectedDocumentType = yield this.documentContainer.type;
   }
 
-  get downloadLink() {
-    const file = this.args.piece.file;
-    return `${file.get('downloadLink')}?name=${file.get('filename')}`;
-  }
+  @alias('args.piece.file.namedDownloadLink') downloadLink;
 
   get sortedDocumentTypes() {
     return this.documentTypes.sortBy('priority');
