@@ -21,10 +21,11 @@ export default class activityService extends Service {
     const creationDatetime = moment().utc()
       .toDate();
 
-    const requestTranslationActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
+    const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
@@ -56,10 +57,11 @@ export default class activityService extends Service {
       .toDate();
 
     // publishPreviewActivityType.
-    const requestPublishPreviewActivityType = await  this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
+    const requestPublishPreviewActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
       startDate: creationDatetime,
       mailContent,
       subcase,
@@ -72,6 +74,43 @@ export default class activityService extends Service {
 
     // Reload relation.
     await subcase.hasMany('publicationActivities').reload();
+
+    return PublishPreviewActivity;
+  }
+
+  /**
+   * Create a publish to BS activity.
+   *
+   * @param mailContent
+   * @param pieces
+   * @param subcase
+   * @param activity
+   * @returns {Promise<Model|any|Promise>}
+   */
+  async createNewPublishActivity(mailContent, pieces, subcase, publishPreviewActivity) {
+    const creationDatetime = moment().utc()
+      .toDate();
+
+    // publishActivityType.
+    const requestPublishActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
+
+    // Create activity.
+    const PublishPreviewActivity = this.store.createRecord('activity', {
+      status: CONFIG.ACTIVITY_STATUSSES.open,
+      startDate: creationDatetime,
+      mailContent,
+      subcase,
+      type: requestPublishActivityType,
+      usedPieces: pieces,
+      publishes: publishPreviewActivity,
+    });
+
+    // Persist to db.
+    await PublishPreviewActivity.save();
+
+    // Reload relations.
+    await subcase.hasMany('publicationActivities').reload();
+    await publishPreviewActivity.hasMany('publishedBy').reload();
 
     return PublishPreviewActivity;
   }

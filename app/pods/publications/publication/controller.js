@@ -17,6 +17,8 @@ export default class PublicationController extends Controller {
   @service intl;
   @service media;
 
+  // Tracked props.
+  @tracked numberIsAlreadyUsed = false;
   // Tracked.
   @tracked numberIsAlreadyUsed = false;
   @tracked publicationNotAfterTranslationForPublication = false;
