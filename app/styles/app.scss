@@ -161,6 +161,7 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/util/_util';
 
 // Fixes to the framework
+@import 'fixes/fix-auk-modal-ember-select';
 @import 'fixes/fix-badge-avatars';
 @import 'fixes/fix-flex-utils';
 @import 'fixes/fix-full-height';
@@ -169,6 +170,7 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-kaleidos-viewer';
 @import 'fixes/fix-pre';
 @import 'fixes/fix-sortable-item';
+@import 'fixes/fix-power-select';
 
 // Custom utilities
 @import 'custom-utilities/_autocomplete';

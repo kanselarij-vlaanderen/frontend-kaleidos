@@ -35,6 +35,21 @@ export default EmberObject.create({
   decisionDocumentTypeId: '2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
   minuteDocumentTypeId: 'e149294e-a8b8-4c11-83ac-6d4c417b079b',
   remarkId: '305E9678-8106-4C14-9BD6-60AE2032D794',
+  mail: {
+    defaultFromAddress: 'noreply@vlaanderen.be',
+    translationRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nGraag snel oplossen.',
+      subject: '[%%kaleidosenvironment%%] Aanvraag vertaling voor Publicatie %%nummer%%',
+    },
+    publishPreviewRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor drukproef.',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor drukproef Publicatie %%nummer%%',
+    },
+    publishRequest: {
+      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie.',
+      subject: '[%%kaleidosenvironment%%] Aanvraag voor Publicatie %%nummer%%',
+    },
+  },
   formallyOkOptions: [
     {
       label: 'Formeel OK',
@@ -114,6 +129,7 @@ export default EmberObject.create({
   ministerId: '1cc0710c-1b28-4e23-b3ff-399c8089bc71',
   kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
+  ovrbId: '600d9d07-3368-4e6b-abbb-f5be5c2531a5',
   internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
   internOverheidAccessLevelId: 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29',
   publiekAccessLevelId: '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e',
@@ -171,6 +187,15 @@ export default EmberObject.create({
       url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
       id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
     },
+    publiceren: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    },
+  },
+  ACTIVITY_STATUSSES: {
+    open: 'open',
+    withdrawn: 'withdrawn',
+    closed: 'closed',
   },
   SUBCASE_TYPES: {
     vertalen: {

@@ -64,7 +64,7 @@
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
                 {{#if this.latestSubcaseOnMeeting}}
-                  <WebComponents::AuButtonLink 
+                  <WebComponents::AuButtonLink
                     @route="cases.case.subcases.subcase.overview"
                     @models={{array
                       this.model.id
@@ -84,7 +84,7 @@
           <div class="auk-content" data-test-publication-flow-title>
             {{#if this.latestSubcaseOnMeeting}}
               <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
-              <p class="auk-u-text-prewrap">{{this.latestSubcaseOnMeeting.title}}</p>
+              <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
             {{else}}
               <h4>{{this.model.shortTitle}}</h4>
               <p class="auk-u-text-prewrap">{{this.model.title}}</p>
@@ -140,7 +140,7 @@
                   <td>
                     <div class="o-flex o-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
-                      <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                      <span>{{mandatee.person.nameToDisplay}}</span>
                     </div>
                   </td>
                   {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
@@ -152,7 +152,7 @@
                   {{!-- TODO Acties in 1 rij / enkel indien niet via MR --}}
                   {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
                   {{!-- TODO AuButton with AttachPopover, AuDropdown, scenario 4 --}}
-                  {{!-- <td class="vl-u-align-right">
+                  {{!-- <td class="">
                   </td> --}}
                 </tr>
               {{/each}}
@@ -206,44 +206,35 @@
                       <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                     </div>
                   </td>
-                  <td class="">
-                    <span class="auk-u-mx-2">
+                  <td>
+                    <span>
                       {{#if contactPerson.email }}
                         <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
                       {{/if}}
                     </span>
                   </td>
 
-                  <td class="">
-                    <span class="auk-u-mx-2">{{contactPerson.organisationName}}</span>
+                  <td>
+                    <span>{{contactPerson.organisationName}}</span>
                   </td>
 
-                  <td class="vl-u-align-right">
-                    <button
-                            class="vl-button vl-button--link vl-button--icon"
-                            type="button"
-                    >
-                      <i class="ki-more"></i>
+                  <td class="auk-u-text-align--right">
+                    <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                       <AttachPopover
-                              @renderInPlace={{true}}
-                              @class="ember-attacher-popper"
-                              @hideOn="clickout click"
-                              @showOn="click"
-                              @animation="shift"
-                              @placement="left"
+                        @renderInPlace={{true}}
+                        @class="ember-attacher-popper"
+                        @hideOn="clickout click"
+                        @showOn="click"
+                        @animation="shift"
+                        @placement="left"
                       >
-                        <ul class="vlc-dropdown-menu">
-                          <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                            <button class="vl-link vl-link--block vl-u-text--error" type="button"
-                              {{on "click" (fn this.deleteContactPerson contactPerson) }}
-                                    data-test-delete-contactperson
-                            >
-                              {{t "delete"}}
-                            </button>
-                          </li>
-                        </ul>
+                        <WebComponents::AuDropdown>
+                          <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
+                            {{t "delete"}}
+                          </WebComponents::AuDropdown::Item>
+                        </WebComponents::AuDropdown>
                       </AttachPopover>
-                    </button>
+                    </WebComponents::AuButton>
                   </td>
                 </tr>
               {{/each}}

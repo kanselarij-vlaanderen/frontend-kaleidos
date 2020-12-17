@@ -2,6 +2,13 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 export default class Datepicker extends Component {
+  get enabledDatesFunction() {
+    if (this.args.enabledDatesFunction) {
+      return [this.args.enabledDatesFunction];
+    }
+    return null;
+  }
+
   get defaultDate() {
     if (this.args.defaultDate) {
       return this.args.defaultDate;

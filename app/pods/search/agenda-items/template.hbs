@@ -13,6 +13,12 @@
         @label="Mededeling"
         @toggle={{this.toggleIncludeMededelingen}}
       />
+      <WebComponents::VlFormLabel @value={{t "version"}}/>
+      <WebComponents::VlCheckbox
+        @value={{this.latestOnly}}
+        @label={{t "only-on-final-agenda"}}
+        @toggle={{this.toggleLatestOnly}}
+      />
     </div>
   </div>
   <div class="vl-col--10-12">

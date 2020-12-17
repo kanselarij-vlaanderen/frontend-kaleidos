@@ -24,11 +24,7 @@
         </span>
       </button>
       <a class="vl-button vl-button--link vl-button--icon"
-        href={{concat
-          (await piece.file.downloadLink)
-          "?name="
-          (await piece.downloadFilename)
-        }}
+        href={{await piece.downloadFileLink}}
         {{!-- download --}}
         {{! 'download' attribute doesn't specify a filename, as this gets overruled by
         the filename received in the "Content-Disposition HTTP header" }}
@@ -43,8 +39,8 @@
     {{/if}}
 
     {{#if (and currentSession.isEditor (await isDeletable))}}
-      <button 
-        type="button" 
+      <button
+        type="button"
         class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
         data-test-delete-piece-from-history
         {{action "deletePiece" piece}}

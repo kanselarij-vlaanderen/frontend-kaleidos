@@ -12,10 +12,10 @@
       {{/if}}
     </p>
   </div>
-  <div class="vlc-pagination__container">
-    <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-per-page"}}</p>
-    <div>
-      {{#if sizeOptions}}
+  {{#if sizeOptions}}
+    <div class="vlc-pagination__container">
+      <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-per-page"}}</p>
+      <div>
         {{#power-select
           options=sizeOptions
           selected=size
@@ -25,7 +25,7 @@
         }}
           {{sizeValue}}
         {{/power-select}}
-      {{/if}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 </div>

@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
+import sanitize from 'sanitize-filename';
 
 const {
   Model, attr, belongsTo,
@@ -33,8 +34,17 @@ export default Model.extend({
   extension: attr('string'),
   created: attr('datetime'),
   contentType: attr('string'),
+
+  downloadFilename: computed('filename', function() {
+    return sanitize(this.get('filename'), { // file-system-safe
+      replacement: '_',
+    });
+  }),
   downloadLink: computed('id', function() {
     return `/files/${this.get('id')}/download`;
+  }),
+  namedDownloadLink: computed('filename', 'downloadLink', function() {
+    return `${this.get('downloadLink')}?name=${encodeURIComponent(this.get('downloadFilename'))}`; // url-safe
   }),
   name: alias('filename'), // Compatibility. Use of 'name' should be refactored out.
 });

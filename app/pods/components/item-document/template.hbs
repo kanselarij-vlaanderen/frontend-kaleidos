@@ -1,6 +1,6 @@
 <li class="vlc-document-list__item
 {{if
-  this.checkAdded
+  (await this.checkAdded)
   "vlc-document-list__item vlc-document-list__item--active"
 }}">
   {{#if (is-pending @piece)}}
@@ -9,10 +9,10 @@
     <a href="" {{action "showPieceViewer" @piece}}>
       <i class="vl-badge__icon
       {{if
-        (and (not this.checkAdded) (not @piece.confidential))
+        (and (not (await this.checkAdded)) (not @piece.confidential))
         "ki-document"
       }}
-      {{if this.checkAdded "ki-document-added"}}
+      {{if (await this.checkAdded) "ki-document-added"}}
       {{if (await @piece.confidential) "ki-lock-closed"}}">
       </i>
       {{await @piece.name}}
@@ -20,7 +20,7 @@
   {{else}}
     <span>
       <i class="vl-badge__icon
-        {{if this.checkAdded "ki-document-added" "ki-document"}}">
+        {{if (await this.checkAdded) "ki-document-added" "ki-document"}}">
       </i>
       {{await @piece.name}}
     </span>

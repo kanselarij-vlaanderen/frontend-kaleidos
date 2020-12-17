@@ -239,11 +239,16 @@ context('Publications tests', () => {
     cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 
+    // make sure the agenda is approved and calls are not cancelled
+    cy.get('.vl-loader', {
+      timeout: 60000,
+    }).should('not.exist');
+
     // Check dossier;
     cy.visit('/publicaties/te-behandelen');
     cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
     cy.get(publicationSelectors.tableCell).should('exist');
-    cy.find('Cypress test dossier 1').first()
+    cy.contains('Cypress test dossier 1').eq(0)
       .should('exist');
     cy.server();
     cy.route('POST', '/publication-flows').as('postPublicationFlow');
