@@ -16,7 +16,11 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
     });
-    const openTranslationRequests = await this.store.query('activity', {
+
+    // TODO: Dit covered nog niet alle requests die niet open staan..
+    //  hier dient ook gefiltered te worden op withdrawn status
+    //  maar hiervoor dient status een relatie te zijn ipv rechtstreeks op het model
+    const closedOrWithdrawnTranslationRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
       'filter[status]': 'closed',
@@ -26,7 +30,11 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
     });
-    const openPublishPrevieuwRequests = await this.store.query('activity', {
+
+    // TODO: Dit covered nog niet alle requests die niet open staan..
+    //  hier dient ook gefiltered te worden op withdrawn status
+    //  maar hiervoor dient status een relatie te zijn ipv rechtstreeks op het model
+    const closedOrWithdrawnPublishPrevieuwRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
       'filter[status]': 'closed',
@@ -36,9 +44,9 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       publicationFlow,
       counts: {
         totalTranslations: totalTranslations.length,
-        openTranslationRequests: openTranslationRequests.length,
+        closedOrWithdrawnTranslationRequests: closedOrWithdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
-        openPublishPrevieuwRequests: openPublishPrevieuwRequests.length,
+        closedOrWithdrawnPublishPrevieuwRequests: closedOrWithdrawnPublishPrevieuwRequests.length,
       },
       refreshAction: this.refreshModel,
     });

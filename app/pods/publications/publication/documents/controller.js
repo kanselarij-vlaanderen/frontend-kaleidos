@@ -231,6 +231,7 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = true;
 
     alert('the mails dont work yet. infra is working on it.');
+    this.model.refreshAction();
     this.transitionToRoute('publications.publication.publishpreview');
   }
 
@@ -284,6 +285,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = false;
     this.renderPieces = true;
     alert('the mails dont work yet. infra is working on it.');
+    this.model.refreshAction();
     this.transitionToRoute('publications.publication.translations');
   }
 

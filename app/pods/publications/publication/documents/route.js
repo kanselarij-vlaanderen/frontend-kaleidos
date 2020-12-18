@@ -16,6 +16,7 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
     return hash({
       publicationFlow,
       case: caze,
+      refreshAction: parentHash.refreshAction,
     });
   }
 
