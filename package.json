@@ -123,9 +123,6 @@
   "engines": {
     "node": "10.* || >= 12"
   },
-  "ember": {
-    "edition": "octane"
-  },
   "dependencies": {
     "@kanselarij-vlaanderen/au-kaleidos-icons": "^1.2.2",
     "@kanselarij-vlaanderen/au-kaleidos-css": "^1.16.3",

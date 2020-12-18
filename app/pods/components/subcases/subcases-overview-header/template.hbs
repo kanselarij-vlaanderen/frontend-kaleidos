@@ -26,7 +26,8 @@
             <WebComponents::AuButton
               @skin="primary"
               @icon="add"
-              {{on "click" this.toggleIsAddingSubcase}}>
+              {{on "click" this.toggleIsAddingSubcase}}
+              data-test-case-create-subcase-button>
               {{t "create-subcase"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
