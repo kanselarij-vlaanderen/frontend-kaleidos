@@ -17,7 +17,7 @@ export default class PublicationTranslationController extends Controller {
     translationActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
-    await this.send('refreshModel');
+    this.model.refreshAction();
     this.showLoader = false;
   }
 
@@ -27,7 +27,7 @@ export default class PublicationTranslationController extends Controller {
     translationActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
-    await this.send('refreshModel');
+    this.model.refreshAction();
     this.showLoader = false;
   }
 }

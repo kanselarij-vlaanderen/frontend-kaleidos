@@ -95,7 +95,7 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
-        await this.send('refreshModel');
+        this.model.refreshAction();
       });
     this.showLoader = false;
   }
@@ -109,7 +109,7 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
-        await this.send('refreshModel');
+        this.model.refreshAction();
       });
     this.showLoader = false;
   }
