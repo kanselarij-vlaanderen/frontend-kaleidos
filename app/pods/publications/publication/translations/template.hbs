@@ -10,15 +10,15 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
 
-            {{#if activity.isWithdrawn }}
+            {{#if (await activity.isWithdrawn) }}
 
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuPillList>
-                  <WebComponents::AuPill @skin="danger">{{t "canceled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
+                  <WebComponents::AuPill @skin="danger">{{t "cancelled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
                 </WebComponents::AuPillList>
               </WebComponents::AuToolbar::Item>
 
-            {{else if activity.isFinished }}
+            {{else if (await activity.isFinished) }}
 
               <WebComponents::AuToolbar::Item>
                 {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}

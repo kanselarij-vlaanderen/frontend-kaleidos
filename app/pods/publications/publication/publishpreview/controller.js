@@ -36,10 +36,9 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
-    const names = this.publicationActivity.pieces.map((piece) => piece.name).join('\n');
     set(this.publicationActivity, 'previewActivity', activity);
-    set(this.publicationActivity, 'mailContent', CONFIG.mail.publishRequest.content.replace('%%attachments%%', names));
-    set(this.publicationActivity, 'mailSubject', CONFIG.mail.publishRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
+    this.publicationActivity.mailContent = await this.activityService.replaceTokens(CONFIG.mail.publishRequest.content, this.model.publicationFlow, this.model.case);
+    this.publicationActivity.mailSubject = await this.activityService.replaceTokens(CONFIG.mail.publishRequest.subject, this.model.publicationFlow, this.model.case);
     this.showpublicationModal = true;
   }
 
@@ -87,12 +86,35 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
+  async cancelExistingPreviewActivity(previewActivity) {
+    this.showLoader = true;
+    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
+    previewActivity.status = withDrawnStatus;
+    previewActivity.endDate = moment().utc();
+    await previewActivity.save();
+    this.model.refreshAction();
+    this.showLoader = false;
+  }
+
+  @action
+  async markPreviewActivityDone(previewActivity) {
+    this.showLoader = true;
+    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
+    previewActivity.status = closedStatus;
+    previewActivity.endDate = moment().utc();
+    await previewActivity.save();
+    this.model.refreshAction();
+    this.showLoader = false;
+  }
+
+  @action
   async cancelExistingPublicationActivity(previewActivity) {
     this.showLoader = true;
+    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     await previewActivity.get('publishedBy').
       filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
       map(async(publishingActivity) => {
-        publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
+        publishingActivity.status = withDrawnStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
         this.model.refreshAction();
@@ -103,10 +125,11 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async markPublicationActivityPublished(previewActivity) {
     this.showLoader = true;
+    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
     await previewActivity.get('publishedBy').
       filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
       map(async(publishingActivity) => {
-        publishingActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
+        publishingActivity.status = closedStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
         this.model.refreshAction();

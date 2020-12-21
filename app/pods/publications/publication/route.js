@@ -16,37 +16,38 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
     });
-
-    // TODO: Dit covered nog niet alle requests die niet open staan..
-    //  hier dient ook gefiltered te worden op withdrawn status
-    //  maar hiervoor dient status een relatie te zijn ipv rechtstreeks op het model
-    const closedOrWithdrawnTranslationRequests = await this.store.query('activity', {
+    const closedTranslationRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
-      'filter[status]': 'closed',
+      'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
     });
-
+    const WithdrawnTranslationRequests = await this.store.query('activity', {
+      'filter[subcase][publication-flow][:id:]': publicationFlow.id,
+      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
+      'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.withdrawn.id,
+    });
     const totalPublishPreviewRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
     });
-
-    // TODO: Dit covered nog niet alle requests die niet open staan..
-    //  hier dient ook gefiltered te worden op withdrawn status
-    //  maar hiervoor dient status een relatie te zijn ipv rechtstreeks op het model
-    const closedOrWithdrawnPublishPrevieuwRequests = await this.store.query('activity', {
+    const withdrawnPublishPrevieuwRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
-      'filter[status]': 'closed',
+      'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.withdrawn.id,
+    });
+    const closedPublishPrevieuwRequests = await this.store.query('activity', {
+      'filter[subcase][publication-flow][:id:]': publicationFlow.id,
+      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
+      'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
     });
 
     return hash({
       publicationFlow,
       counts: {
         totalTranslations: totalTranslations.length,
-        closedOrWithdrawnTranslationRequests: closedOrWithdrawnTranslationRequests.length,
+        closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + WithdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
-        closedOrWithdrawnPublishPrevieuwRequests: closedOrWithdrawnPublishPrevieuwRequests.length,
+        closedOrWithdrawnPublishPrevieuwRequests: closedPublishPrevieuwRequests.length + withdrawnPublishPrevieuwRequests.length,
       },
       refreshAction: this.refreshModel,
     });
