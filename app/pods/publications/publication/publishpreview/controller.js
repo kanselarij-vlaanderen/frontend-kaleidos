@@ -222,6 +222,7 @@ export default class PublicationPublishPreviewController extends Controller {
 
   /** BS PUBLICATION ACTIVITIES **/
 
+  @action
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
     set(this.publicationActivity, 'previewActivity', activity);

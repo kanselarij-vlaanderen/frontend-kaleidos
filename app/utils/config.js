@@ -38,7 +38,7 @@ export default EmberObject.create({
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
-      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\n\nLimiet vertaling:\n\nAantal bladzijden:\n\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\nLimiet vertaling:\nAantal bladzijden:\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
       subject: '[%%kaleidosenvironment%%] Vertaalaanvraag (%%nummer%%)',
     },
     publishPreviewRequest: {
