@@ -8,14 +8,6 @@
   clip: rect(1px, 1px, 1px, 1px);
 }
 
-@mixin u-hidden-off {
-  position: static !important; // sass-lint:disable-line no-important
-  clip: auto;
-  height: auto;
-  width: auto;
-  overflow: visible;
-}
-
 // Visually hide element
 @mixin u-visually-hidden {
   position: absolute !important; // sass-lint:disable-line no-important
