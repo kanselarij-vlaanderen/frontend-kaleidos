@@ -7,18 +7,18 @@ import { tracked } from '@glimmer/tracking';
 import CONFIG from 'fe-redpencil/utils/config';
 import { A } from '@ember/array';
 import moment from 'moment';
+import { task } from 'ember-concurrency-decorators';
 
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
   @service subcasesService;
+  @service fileService;
 
   // properties for making the design
   @tracked withdrawn = true;
-  @tracked panelCollapsed = false;
   @tracked showLoader = false;
   @tracked showpublicationModal = false;
-  @tracked panelIcon = 'chevron-down';
   @tracked publicationActivity = {
     previewActivity: {},
     mailContent: '',
@@ -26,14 +26,202 @@ export default class PublicationPublishPreviewController extends Controller {
     pieces: A([]),
   };
 
+  // piece uploading
+  @tracked isOpenUploadPublishPreviewModal = false;
+  @tracked isOpenUploadPublishPreviewCorrectionModal = false;
+  @tracked uploadedFile = null;
+  @tracked pieceInCreation = null;
+  @tracked isSavingPieces = false;
+  @tracked isUploadModalResized = false;
+  @tracked activityToAddPiecesTo = null;
+  @tracked defaultAccessLevel = null;
+  @tracked pieceToDelete = null;
+  @tracked isVerifyingDelete = false;
+  @tracked activityToDeletePiecesFrom = null;
+
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
   }
 
-  /** BS PUBLICATION ACTIVITIES **/
+  @action
+  toggleUploadModalSize() {
+    this.isUploadModalResized = !this.isUploadModalResized;
+  }
 
   @action
+  openUploadPublishPreviewModal(activity) {
+    this.activityToAddPiecesTo = activity;
+    this.isOpenUploadPublishPreviewModal = true;
+  }
+
+  @action
+  openUploadPublishPreviewCorrectionModal(activity) {
+    this.activityToAddPiecesTo = activity;
+    this.isOpenUploadPublishPreviewCorrectionModal = true;
+  }
+
+  @task
+  *uploadPublishPreview(file) {
+    if (!this.defaultAccessLevel) {
+      this.defaultAccessLevel = yield this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
+    }
+    const now = moment().utc()
+      .toDate();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      accessLevel: this.defaultAccessLevel,
+      confidential: false,
+      name: file.filenameWithoutExtension,
+      documentContainer: documentContainer,
+    });
+    this.pieceInCreation = piece;
+  }
+
+  @task
+  *uploadPublishPreviewCorrection(file) {
+    const generatedPieces = yield this.activityToAddPiecesTo.get('generatedPieces').toArray();
+    let lastVersionOfPublishPreview;
+    for (const generatedPiece of generatedPieces) {
+      const nextPiece = yield generatedPiece.get('nextVersion');
+      if (!nextPiece) {
+        lastVersionOfPublishPreview = generatedPiece;
+      }
+    }
+    if (!this.defaultAccessLevel) {
+      this.defaultAccessLevel = yield this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
+    }
+    const previousAccessLevel = yield lastVersionOfPublishPreview.accessLevel;
+    const documentContainer = yield lastVersionOfPublishPreview.documentContainer;
+    const containerPieces = yield documentContainer.hasMany('pieces').reload();
+    const now = moment().utc()
+      .toDate();
+    const correctionPiece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      previousPiece: lastVersionOfPublishPreview,
+      accessLevel: previousAccessLevel || this.defaultAccessLevel,
+      confidential: lastVersionOfPublishPreview.confidential,
+      name: file.filenameWithoutExtension,
+      documentContainer,
+    });
+    containerPieces.pushObject(correctionPiece);
+    this.pieceInCreation = correctionPiece;
+  }
+
+  @task
+  *savePublishPreviewOrCorrection() {
+    this.showLoader = true;
+    this.isOpenUploadPublishPreviewModal = false;
+    this.isOpenUploadPublishPreviewCorrectionModal = false;
+    try {
+      const documentContainer = yield this.pieceInCreation.documentContainer;
+      // TODO set document type publish preview
+      yield documentContainer.save();
+      yield this.savePiece.perform(this.pieceInCreation);
+      const pieces = yield this.activityToAddPiecesTo.hasMany('generatedPieces').reload();
+      pieces.pushObject(this.pieceInCreation);
+      yield this.activityToAddPiecesTo.save();
+    } catch (error) {
+      yield this.deleteUploadedPiece.perform(this.pieceInCreation);
+      throw error;
+    }
+
+    this.pieceInCreation = null;
+    this.activityToAddPiecesTo = null;
+    this.showLoader = false;
+  }
+
+  /**
+   * Save a new document container and the piece it wraps
+   */
+  @task
+  *savePiece(piece) {
+    yield piece.save();
+    // TODO do we want to save this to case pieces ? assuming yes
+    const pieces = yield this.model.case.hasMany('pieces').reload();
+    pieces.pushObject(piece);
+    yield this.model.case.save();
+  }
+
+  @task
+  *cancelUploadPublishPreview() {
+    if (this.pieceInCreation) {
+      yield this.deleteUploadedPiece.perform(this.pieceInCreation);
+    }
+    // TODO reset container needed ?
+    this.pieceInCreation = null;
+    this.activityToAddPiecesTo = null;
+    this.isOpenUploadPublishPreviewModal = false;
+  }
+
+  @task
+  *cancelUploadPublishPreviewCorrection() {
+    if (this.pieceInCreation) {
+      yield this.deleteUploadedPiece.perform(this.pieceInCreation);
+    }
+    // TODO reset container needed ?
+    this.pieceInCreation = null;
+    this.activityToAddPiecesTo = null;
+    this.isOpenUploadPublishPreviewCorrectionModal = false;
+  }
+
+  @task
+  *deleteUploadedPiece(piece) {
+    const file = yield piece.file;
+    yield file.destroyRecord();
+    this.pieceInCreation = null;
+    const documentContainer = yield piece.documentContainer;
+    const containerPieces = yield documentContainer.pieces;
+    if (containerPieces < 2) {
+      yield documentContainer.destroyRecord();
+    }
+    yield piece.destroyRecord();
+  }
+
+  @action
+  cancelDeleteExistingPiece() {
+    this.pieceToDelete = null;
+    this.activityToDeletePiecesFrom = null;
+    this.isVerifyingDelete = false;
+  }
+
+  @action
+  deleteExistingPiece(piece, activity) {
+    this.pieceToDelete = piece;
+    this.activityToDeletePiecesFrom = activity;
+    this.isVerifyingDelete = true;
+  }
+
+  @task
+  *verifyDeleteExistingPiece() {
+    // TODO delete with undo ?
+    this.showLoader = true;
+    this.isVerifyingDelete = false;
+    const documentContainer = yield this.pieceToDelete.get('documentContainer');
+    const piecesFromContainer = yield documentContainer.get('pieces');
+    if (piecesFromContainer.length < 2) {
+      // Cleanup documentContainer if we are deleting the last piece in the container
+      // Must revise if we link docx and pdf as multiple files in 1 piece
+      yield this.fileService.deleteDocumentContainer(documentContainer);
+    } else {
+      yield this.fileService.deletePiece(this.pieceToDelete);
+    }
+    yield this.activityToDeletePiecesFrom.hasMany('generatedPieces').reload();
+    this.showLoader = false;
+    this.pieceToDelete = null;
+    this.activityToDeletePiecesFrom = null;
+    // TODO refresh the activity, action delete not available but should be on new last version
+  }
+
+  /** BS PUBLICATION ACTIVITIES **/
+
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
     set(this.publicationActivity, 'previewActivity', activity);
@@ -138,27 +326,7 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  addPublishPreview() {
-    alert('this action is implemented in another ticket');
-  }
-
-  @action
-  deletePublishPreview() {
-    alert('this action is implemented in another ticket');
-  }
-
-  @action
   editPublishPreview() {
-    alert('this action is implemented in another ticket');
-  }
-
-  @action
-  addCorrection() {
-    alert('this action is implemented in another ticket');
-  }
-
-  @action
-  deleteCorrection() {
     alert('this action is implemented in another ticket');
   }
 

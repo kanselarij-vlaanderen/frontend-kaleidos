@@ -13,7 +13,7 @@ export default class PublicationPublishPreviewRoute extends Route.extend(Authent
       reload: true,
     });
     const publishPreviewActivities = await this.store.query('activity', {
-      include: 'type,subcase,used-pieces,published-by,publishes',
+      include: 'type,subcase,used-pieces,generated-pieces,published-by,publishes',
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
       sort: '-start-date',

@@ -701,5 +701,7 @@
   "correction": "Verbetering",
   "no-publishpreview-added": "Er zijn nog geen drukproeven toegevoegd.",
   "add-publishpreview": "Drukproef toevoegen",
-  "publishpreview": "Drukproef"
+  "publishpreview": "Drukproef",
+  "upload-publishpreview":"Upload drukproef",
+  "upload-publishpreview-correction":"Upload verbetering" 
 }
