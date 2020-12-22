@@ -89,11 +89,11 @@ export default class activityService extends Service {
 
     // publishPreviewActivityType.
     const requestPublishPreviewActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
-    const requestActivityStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: requestActivityStatus,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       mailContent,
       subcase,
@@ -125,11 +125,11 @@ export default class activityService extends Service {
 
     // publishActivityType.
     const requestPublishActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
-    const requestActivityStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: requestActivityStatus,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       mailContent,
       subcase,
