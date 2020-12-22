@@ -488,9 +488,5 @@
 {{/if}}
 
 {{#if showLoader}}
-  <WebComponents::VlModal
-          @isOverlay={{true}}
-          @title={{t "saving-change-message"}} >
-    <WebComponents::VlLoader @text={{t "please-be-patient"}} />
-  </WebComponents::VlModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}
