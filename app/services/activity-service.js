@@ -30,7 +30,7 @@ export default class activityService extends Service {
    * @param _case
    * @returns {Promise<*>}
    */
-  async replaceTokens(defaultString, publicationFlow, _case) {
+  replaceTokens(defaultString, publicationFlow, _case) {
     let outputString = defaultString;
     outputString = outputString.replace('%%nummer%%', publicationFlow.publicationNumber);
     outputString = outputString.replace('%%titel%%', this.caseTitleFromCase(_case));
@@ -52,11 +52,11 @@ export default class activityService extends Service {
       .toDate();
 
     const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
-    const requestTranslationActivityStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
-      status: requestTranslationActivityStatus,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
