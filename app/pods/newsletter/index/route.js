@@ -42,7 +42,6 @@ export default class IndexNewsletterRoute extends Route.extend(AuthenticatedRout
     super.setupController(...arguments);
     const agenda = this.modelFor('newsletter').agenda; // eslint-disable-line
     controller.set('agenda', agenda);
-
     controller.set('model', model);
   }
 

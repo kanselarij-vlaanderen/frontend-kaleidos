@@ -689,7 +689,7 @@
   "name-document": "Naam Document",
   "file-extension": "Bestandstype",
   "cancel-request": "Aanvraag intrekken",
-  "canceled-request": "ingetrokken",
+  "cancelled-request": "ingetrokken",
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",
@@ -701,5 +701,7 @@
   "correction": "Verbetering",
   "no-publishpreview-added": "Er zijn nog geen drukproeven toegevoegd.",
   "add-publishpreview": "Drukproef toevoegen",
-  "publishpreview": "Drukproef"
+  "publishpreview": "Drukproef",
+  "upload-publishpreview":"Upload drukproef",
+  "upload-publishpreview-correction":"Upload verbetering" 
 }

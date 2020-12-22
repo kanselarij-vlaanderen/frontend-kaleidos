@@ -38,15 +38,15 @@ export default EmberObject.create({
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
-      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\n\nLimiet vertaling: %%limiet%%\n\nAantal bladzijden:\n\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB',
+      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\n\nLimiet vertaling:\n\nAantal bladzijden:\n\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
       subject: '[%%kaleidosenvironment%%] Vertaalaanvraag (%%nummer%%)',
     },
     publishPreviewRequest: {
-      content: 'Beste,\n\nIn bijlage voor drukproef ons dossier (%%nummer%%):\n\n(%%titel%%)\n\nVriendelijke groeten,\n\nTeam OVRB',
+      content: 'Beste,\n\nIn bijlage voor drukproef ons dossier (%%nummer%%):\n\n(%%titel%%)\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
       subject: '[%%kaleidosenvironment%%] Dossier (%%nummer%%) – drukproef aub',
     },
     publishRequest: {
-      content: 'Beste,\n\nIn bijlage \n\n%%attachments%%\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB',
+      content: 'Beste,\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
       subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%numac%%)',
     },
   },
@@ -193,9 +193,18 @@ export default EmberObject.create({
     },
   },
   ACTIVITY_STATUSSES: {
-    open: 'open',
-    withdrawn: 'withdrawn',
-    closed: 'closed',
+    open: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/917349a2-4361-11eb-b378-0242ac130002',
+      id: '917349a2-4361-11eb-b378-0242ac130002',
+    },
+    withdrawn: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/b26eb1a0-4361-11eb-b378-0242ac130002',
+      id: 'b26eb1a0-4361-11eb-b378-0242ac130002',
+    },
+    closed: {
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/a6f7b9f2-4361-11eb-b378-0242ac130002',
+      id: 'a6f7b9f2-4361-11eb-b378-0242ac130002',
+    },
   },
   SUBCASE_TYPES: {
     vertalen: {
