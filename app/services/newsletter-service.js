@@ -27,7 +27,7 @@ export default Service.extend({
         archiveUrl: body.archive_url,
       });
 
-      mailCampaign.save().then(async(savedCampaign) => {
+      await mailCampaign.save().then(async(savedCampaign) => {
         const reloadedMeeting = await this.store.findRecord('meeting', meeting.id, {
           reload: true,
         });

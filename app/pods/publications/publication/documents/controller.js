@@ -183,12 +183,11 @@ export default class PublicationDocumentsController extends Controller {
   /** PUBLISH PREVIEW ACTIVITIES **/
 
   @action
-  openPublishPreviewRequestModal() {
-    this.isOpenPublishPreviewRequestModal = true;
+  async openPublishPreviewRequestModal() {
     this.previewActivity.pieces = this.selectedPieces;
-    const attachmentsString = this.concatNames(this.selectedPieces);
-    this.previewActivity.mailContent = CONFIG.mail.publishPreviewRequest.content.replace('%%attachments%%', attachmentsString);
-    this.previewActivity.mailSubject = CONFIG.mail.publishPreviewRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
+    this.previewActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case);
+    this.previewActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case);
+    this.isOpenPublishPreviewRequestModal = true;
   }
 
   @action
@@ -231,18 +230,18 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = true;
 
     alert('the mails dont work yet. infra is working on it.');
+    this.model.refreshAction();
     this.transitionToRoute('publications.publication.publishpreview');
   }
 
   /** TRANSLATION ACTIVITIES **/
 
   @action
-  openTranslationRequestModal() {
+  async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    const attachmentsString = this.concatNames(this.selectedPieces);
-    set(this.translateActivity, 'mailContent', CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString));
-    set(this.translateActivity, 'mailSubject', CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
+    this.translateActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case);
+    this.translateActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case);
     this.showTranslationModal = true;
   }
 
@@ -284,6 +283,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = false;
     this.renderPieces = true;
     alert('the mails dont work yet. infra is working on it.');
+    this.model.refreshAction();
     this.transitionToRoute('publications.publication.translations');
   }
 
