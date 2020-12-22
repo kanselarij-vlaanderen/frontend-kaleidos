@@ -1,15 +1,11 @@
 <WebComponents::AuModal>
   <WebComponents::AuModal::Header
-    @title={{t "loading-text"}}
+    @title={{this.getTitle}}
     @hideCloseButton={{true}}
   />
   <WebComponents::AuModal::Body>
     <WebComponents::AuLoader
-      @message={{concat
-        (t "saving-change-message")
-        " "
-        (t "please-be-patient")
-      }}
+      @message={{this.getMessage}}
     />
   </WebComponents::AuModal::Body>
 </WebComponents::AuModal>
