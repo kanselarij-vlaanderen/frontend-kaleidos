@@ -11,28 +11,66 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              {{#if (await activity.wasPublished)}}
-                {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
-              {{else if (await activity.hasOpenPublishingActivity)}}
-                <WebComponents::AuButton
-                        @skin="primary"
-                  {{on "click" (fn this.markPublicationActivityPublished activity)}}>
-                  {{t "publications-published"}}
-                </WebComponents::AuButton>
+
+
+
+
+            {{#if (await activity.isWithdrawn) }}
+
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuPillList>
+                  <WebComponents::AuPill @skin="danger">{{t "cancelled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
+                </WebComponents::AuPillList>
+              </WebComponents::AuToolbar::Item>
+
+            {{else if (await activity.isFinished) }}
+
+              <WebComponents::AuToolbar::Item>
+                {{t "publishpreview"}} {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
+              </WebComponents::AuToolbar::Item>
+
+
+              <WebComponents::AuToolbar::Item>
+                {{#if (await activity.wasPublished)}}
+                  {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
+                {{else if (await activity.hasOpenPublishingActivity)}}
+                  <WebComponents::AuButton
+                          @skin="primary"
+                    {{on "click" (fn this.markPublicationActivityPublished activity)}}>
+                    {{t "publications-published"}}
+                  </WebComponents::AuButton>
+                  <WebComponents::AuButton
+                          @skin="tertiary"
+                    {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
+                    {{t "cancel-request"}}
+                  </WebComponents::AuButton>
+                {{else}}
+                  <WebComponents::AuButton
+                          @skin="primary"
+                    {{on "click" (fn this.requestPublicationModal activity )}}>
+                    {{t "request-publication"}}
+                  </WebComponents::AuButton>
+                {{/if}}
+              </WebComponents::AuToolbar::Item>
+
+            {{else}}
+
+              <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButton
                         @skin="tertiary"
-                  {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
+                  {{on "click" (fn this.cancelExistingPreviewActivity activity)}}>
                   {{t "cancel-request"}}
                 </WebComponents::AuButton>
-              {{else}}
-                <WebComponents::AuButton
-                        @skin="primary"
-                  {{on "click" (fn this.requestPublicationModal activity )}}>
-                  {{t "request-publication"}}
-                </WebComponents::AuButton>
-              {{/if}}
-            </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Item>
+
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuCheckbox
+                        @toggle={{fn this.markPreviewActivityDone activity}}
+                        @label="Afgewerkt"/>
+              </WebComponents::AuToolbar::Item>
+
+            {{/if}}
+
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuNavbar>

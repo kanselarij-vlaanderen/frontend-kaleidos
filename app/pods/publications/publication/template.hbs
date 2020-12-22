@@ -5,9 +5,11 @@
         <div class="o-flex o-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
                   data-test-publication-detail-menu-publication-number>
-            {{uppercase (concat (t "publication-flow") " " this.model.publicationNumber)}}
+            {{uppercase
+              (concat (t "publication-flow") " " this.model.publicationFlow.publicationNumber)
+            }}
           </span>
-          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.case.shortTitle}}</h4>
+          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
@@ -15,13 +17,13 @@
             <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
               <div class="o-flex o-flex--center">
                 <span class="auk-u-mr-2">{{t "translations"}}</span>
-                <WebComponents::AuStatusPill></WebComponents::AuStatusPill>
+                <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnTranslationRequests}}&#47;{{this.model.counts.totalTranslations}}</WebComponents::AuStatusPill>
               </div>
             </WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
               <div class="o-flex o-flex--center">
                 <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
-                <WebComponents::AuStatusPill></WebComponents::AuStatusPill>
+                <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnPublishPrevieuwRequests}}&#47;{{this.model.counts.totalPublishPreviewRequests}}</WebComponents::AuStatusPill>
               </div>
             </WebComponents::AuTab>
           </WebComponents::AuTabs>
@@ -62,7 +64,7 @@
             <div class="auk-u-m-3">
               <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.publicationNumber}} @block="true"
+                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}} @block="true"
                   {{on "input" (perform this.setPublicationNumber)}} />
                 {{#if this.numberIsAlreadyUsed}}
                   <div class="auk-form-help-text auk-form-help-text--danger">
@@ -89,10 +91,10 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.numacNumber}} @block="true" readonly
+                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.numacNumber}} @block="true" readonly
                   {{on "input" (perform this.setNumacNumber)}} />
               </div>
-              {{#if this.model.status.isToBePublished}}
+              {{#if this.model.publicationFlow.status.isToBePublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
                   {{#if this.showPublicationDatePicker}}
@@ -140,7 +142,7 @@
                   {{/if}}
                 </div>
               {{/if}}
-              {{#if this.model.status.isPublished}}
+              {{#if this.model.publicationFlow.status.isPublished}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
                   <WebComponents::AuDatepicker @defaultDate={{this.getPublicationDate}} @onChange={{this.setPublicationDate}}/>
