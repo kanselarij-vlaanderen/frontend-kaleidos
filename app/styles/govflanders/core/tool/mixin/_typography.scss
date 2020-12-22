@@ -21,10 +21,6 @@
   text-transform: uppercase;
 }
 
-@mixin vl-u-text--lowercase {
-  text-transform: lowercase;
-}
-
 @mixin vl-u-text--capitalize {
   &::first-letter {
     text-transform: uppercase;
@@ -33,10 +29,6 @@
 
 @mixin vl-u-text--success {
   color: $success-text-color;
-}
-
-@mixin vl-u-text--warning {
-  color: $warning-text-color;
 }
 
 @mixin vl-u-text--error {
@@ -53,18 +45,4 @@
 
 @mixin vl-u-text--small {
   font-size: 1.4rem !important; // sass-lint:disable-line no-important
-}
-
-@mixin vl-u-text--xsmall {
-  font-size: 1.2rem !important; // sass-lint:disable-line no-important
-}
-
-@mixin vl-u-text--xxsmall {
-  font-size: 1rem !important; // sass-lint:disable-line no-important
-}
-
-@mixin vl-u-text--marked {
-  background: $marker-bg-color;
-  font-weight: 500;
-  color: $marker-fg-color;
 }
