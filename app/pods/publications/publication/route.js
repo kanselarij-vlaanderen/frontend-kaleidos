@@ -21,7 +21,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
     });
-    const WithdrawnTranslationRequests = await this.store.query('activity', {
+    const withdrawnTranslationRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.withdrawn.id,
@@ -45,7 +45,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       publicationFlow,
       counts: {
         totalTranslations: totalTranslations.length,
-        closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + WithdrawnTranslationRequests.length,
+        closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
         closedOrWithdrawnPublishPrevieuwRequests: closedPublishPrevieuwRequests.length + withdrawnPublishPrevieuwRequests.length,
       },
