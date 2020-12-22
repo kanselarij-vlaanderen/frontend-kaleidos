@@ -64,11 +64,12 @@ export default Component.extend({
       this.set('isLoading', true);
       const agenda = await this.get('agenda');
       const meeting = await agenda.get('createdFor');
-      this.newsletterService.createCampaign(agenda, meeting).then(() => {
+      await this.newsletterService.createCampaign(agenda, meeting).then(() => {
         this.set('isLoading', false);
       });
       this.set('newsletterHTML', null);
       this.set('testCampaignIsLoading', false);
+      location.reload();
     },
 
     async deleteCampaign() {
@@ -85,8 +86,9 @@ export default Component.extend({
       });
       reloadedMeeting.set('mailCampaign', null);
       this.set('mailCampaign', null);
-      reloadedMeeting.save();
+      await reloadedMeeting.save();
       this.set('isLoading', false);
+      location.reload();
     },
 
     async sendCampaign() {
