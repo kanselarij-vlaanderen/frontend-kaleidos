@@ -23,7 +23,7 @@ export default class activityService extends Service {
   }
 
   /**
-   * Replace activityn Tokens.
+   * Replace activity Tokens.
    *
    * @param string
    * @param publicationFlow
@@ -31,11 +31,11 @@ export default class activityService extends Service {
    * @returns {Promise<*>}
    */
   async replaceTokens(defaultString, publicationFlow, _case) {
-    let string = defaultString;
-    string = string.replace('%%nummer%%', publicationFlow.publicationNumber);
-    string = string.replace('%%titel%%', this.caseTitleFromCase(_case));
-    string = string.replace('%%kaleidosenvironment%%', window.location.origin);
-    return string;
+    let outputString = defaultString;
+    outputString = outputString.replace('%%nummer%%', publicationFlow.publicationNumber);
+    outputString = outputString.replace('%%titel%%', this.caseTitleFromCase(_case));
+    outputString = outputString.replace('%%kaleidosenvironment%%', window.location.origin);
+    return outputString;
   }
 
   /**
