@@ -30,12 +30,12 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
     });
-    const withdrawnPublishPrevieuwRequests = await this.store.query('activity', {
+    const withdrawnPublishPreviewRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.withdrawn.id,
     });
-    const closedPublishPrevieuwRequests = await this.store.query('activity', {
+    const closedPublishPreviewRequests = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.drukproeven.id,
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
@@ -47,7 +47,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
-        closedOrWithdrawnPublishPrevieuwRequests: closedPublishPrevieuwRequests.length + withdrawnPublishPrevieuwRequests.length,
+        closedOrWithdrawnPublishPreviewRequests: closedPublishPreviewRequests.length + withdrawnPublishPreviewRequests.length,
       },
       refreshAction: this.refreshModel,
     });
