@@ -10,12 +10,16 @@
     </div>
   {{else}}
     <div class="vl-alert__icon">
-      <i class={{this.iconClass}} aria-hidden="true"></i>
+      <div class='auk-icon'>
+        <i class={{this.iconClass}} aria-hidden="true"></i>
+      </div>
     </div>
   {{/if}}
   {{#if @closeable}}
     <button data-test-alert-close-button class="vl-alert__close" type="button" {{action "close"}}>
-      <i class="ki-cross" aria-hidden="true"></i>
+      <div class='auk-icon'>
+        <i class="ki-cross" aria-hidden="true"></i>
+      </div>
       <span class="vl-u-visually-hidden">{{t "close"}}</span>
     </button>
   {{/if}}
