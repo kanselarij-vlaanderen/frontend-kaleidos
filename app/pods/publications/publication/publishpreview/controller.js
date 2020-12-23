@@ -222,6 +222,7 @@ export default class PublicationPublishPreviewController extends Controller {
 
   /** BS PUBLICATION ACTIVITIES **/
 
+  @action
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
     set(this.publicationActivity, 'previewActivity', activity);
@@ -299,13 +300,14 @@ export default class PublicationPublishPreviewController extends Controller {
   async cancelExistingPublicationActivity(previewActivity) {
     this.showLoader = true;
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
+    const _this = this;
     await previewActivity.get('publishedBy').
-      filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
+      filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id).
       map(async(publishingActivity) => {
         publishingActivity.status = withDrawnStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
-        this.model.refreshAction();
+        _this.model.refreshAction();
       });
     this.showLoader = false;
   }
@@ -314,13 +316,14 @@ export default class PublicationPublishPreviewController extends Controller {
   async markPublicationActivityPublished(previewActivity) {
     this.showLoader = true;
     const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
+    const _this = this;
     await previewActivity.get('publishedBy').
-      filter((publishingActivity) => publishingActivity.get('status') === CONFIG.ACTIVITY_STATUSSES.open).
+      filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id).
       map(async(publishingActivity) => {
         publishingActivity.status = closedStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
-        this.model.refreshAction();
+        _this.model.refreshAction();
       });
     this.showLoader = false;
   }
