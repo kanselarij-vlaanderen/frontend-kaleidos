@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class PublicationsInProgressNotMinisterController extends Controller {
+export default class PublicationsWithdrawnNotMinisterController extends Controller {
   queryParams = {
     page: {
       type: 'number',

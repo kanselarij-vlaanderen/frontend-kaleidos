@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default class InProgressNotRoute extends Route {
+export default class WithdrawnNotRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
@@ -26,7 +26,7 @@ export default class InProgressNotRoute extends Route {
           ':has:subcases': 'yes',
         },
         status: {
-          id: CONFIG.publicationStatusToPublish.id,
+          id: CONFIG.publicationStatusWithdrawn.id,
         },
       },
       sort: params.sort,
