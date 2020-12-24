@@ -26,7 +26,7 @@ export default class InProgressNotRoute extends Route {
           ':has-no:subcases': 'yes',
         },
         status: {
-          id: CONFIG.publicationStatusToPublish.id,
+          id: CONFIG.publicationStatusWithdrawn.id,
         },
       },
       sort: params.sort,
