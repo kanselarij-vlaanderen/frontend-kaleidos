@@ -45,7 +45,7 @@ export default class PublicationController extends Controller {
     id: CONFIG.publicationStatusWithdrawn.id,
     label: 'ingetrokken',
     icon: {
-      svg: 'close', // TODO replace by circle-close.
+      svg: 'circle-close',
       color: 'error',
     },
   }];
