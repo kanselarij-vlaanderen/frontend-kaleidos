@@ -38,6 +38,17 @@
       </td>
       <td>
         {{row.case.shortTitle}}
+
+        {{# if (await (action "hasDecreet" row.case))}}
+          <br>
+          <span class="auk-u-muted auk-u-text-small">{{t "decreet"}}</span>
+        {{/if}}
+
+        {{# if (await (action "hasBvr" row.case))}}
+          <br>
+          <span class="auk-u-muted auk-u-text-small">{{t "BvR"}}</span>
+        {{/if}}
+
       </td>
       <td>
         {{#if row.publicationBefore}}

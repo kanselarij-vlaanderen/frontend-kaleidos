@@ -703,5 +703,7 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering" 
+  "upload-publishpreview-correction":"Upload verbetering",
+  "decreet":"Decreet",
+  "BvR":"BvR"
 }
