@@ -30,14 +30,4 @@ export default class PublicationsInProgressNotMinisterController extends Control
   navigateToPublication(publicationFlowRow) {
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
   }
-
-  @action
-  async hasBvr(_case) {
-    return await _case.hasBvr();
-  }
-
-  @action
-  async hasDecreet(_case) {
-    return await _case.hasDecreet();
-  }
 }
