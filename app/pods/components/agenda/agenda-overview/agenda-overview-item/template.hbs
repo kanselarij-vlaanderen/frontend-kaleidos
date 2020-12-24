@@ -15,32 +15,70 @@
       </span>
     </h4>
     <div class="vlc-agenda-items__text">
-      <h4 class="vlc-agenda-items__subject">
-        <LinkTo
-          data-test-agenda-overview-sub-item
-          @route="agenda.agendaitems.agendaitem"
-          @model={{@agendaitem.id}}
-        >
-          <pre>
-            {{#if @agendaitem.shortTitle}}
-              {{@agendaitem.shortTitle}}
-            {{else}}
-              {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
-            {{/if}}
-          </pre>
-        </LinkTo>
-      </h4>
-
-      {{#if (not aboutToDelete)}}
-        {{#if (not selectedAgendaitem)}}
-          {{#if (not @agendaitem.isApproval)}}
-            {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="vl-u-text vlc-agenda-items__body-padding">
-                {{@agendaitem.title}}
+      <div class="vl-u-display-flex">
+        <div class="left_side">
+          <h4 class="vlc-agenda-items__subject">
+            <LinkTo
+              data-test-agenda-overview-sub-item
+              @route="agenda.agendaitems.agendaitem"
+              @model={{@agendaitem}}
+            >
+              <pre>
+                {{#if @agendaitem.shortTitle}}
+                  {{@agendaitem.shortTitle}}
+                {{else}}
+                  {{@agendaitem.title}} {{!-- Fallback for legacy data that doesn't have a short title --}}
+                {{/if}}
               </pre>
+            </LinkTo>
+          </h4>
+
+          {{#if (not aboutToDelete)}}
+            {{#if (not selectedAgendaitem)}}
+              {{#if (not @agendaitem.isApproval)}}
+                {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
+                  <pre class="vl-u-text vlc-agenda-items__body-padding">
+                    {{@agendaitem.title}}
+                  </pre>
+                {{/if}}
+              {{/if}}
             {{/if}}
           {{/if}}
-        {{/if}}
+
+        </div>
+        <div class="vlc-u-flex-float-right">
+
+          {{!--    PUBLICATION FLOW CALL TO ACTION --}}
+
+          <div class="auk-button-toolbar">
+            {{#if (await @agendaitem.publicationFlow)}}
+              <LinkTo
+                      class=""
+                      @route="publications.publication"
+                      @model={{ await @agendaitem.publicationFlowId }}
+              >
+                {{t "publications-to" }}
+              </LinkTo>
+            {{else}}
+              {{#if (await @agendaitem.case)}}
+                <WebComponents::AuButton
+                        @skin="tertiary"
+                        @layout="icon-only"
+                        data-test-start-publication
+                  {{on "click" this.startPublication}}>
+                  {{t "start-publication"}}
+                </WebComponents::AuButton>
+              {{/if}}
+            {{/if}}
+          </div>
+
+          {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
+
+        </div>
+      </div>
+
+
+      {{#if (not aboutToDelete)}}
         {{#if (or renderDetails @isEditingOverview)}}
           <div class="vl-u-display-flex vlc-u-flex-space-between">
             {{#if (and selectedAgendaitem @isEditingOverview)}}
@@ -176,3 +214,9 @@
     </div>
   </div>
 </div>
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
+{{/if}}

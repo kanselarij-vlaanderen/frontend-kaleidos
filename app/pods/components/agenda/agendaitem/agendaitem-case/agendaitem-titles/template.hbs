@@ -1,5 +1,10 @@
 {{#if @subcase.case.id}}
+
+
+
   <div class="vl-u-spacer-extended-bottom-s">
+
+    {{!--   TO SUBCASE --}}
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
@@ -11,8 +16,41 @@
         {{t "to-subcase"}}
       </LinkTo>
     </div>
+    {{!--  END TO SUBCASE --}}
+
+    {{!--    PUBLICATION FLOW CALL TO ACTION --}}
+
+    <div class="auk-button-toolbar">
+      {{#if (await @agendaitem.publicationFlow)}}
+        <LinkTo
+                class=""
+                @route="publications.publication"
+                @model={{ await @agendaitem.publicationFlowId }}
+        >
+          {{t "publications-to" }}
+        </LinkTo>
+      {{else}}
+        {{#if (await @agendaitem.case)}}
+          <WebComponents::AuButton
+                  @skin="tertiary"
+                  @layout="icon-only"
+                  data-test-start-publication
+            {{on "click" this.startPublication}}>
+            {{t "start-publication"}}
+          </WebComponents::AuButton>
+        {{/if}}
+      {{/if}}
+    </div>
+
+    {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
   </div>
+
+
+
+
 {{/if}}
+
+
 
 <div class="vl-u-spacer-extended-bottom-s">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
@@ -131,3 +169,9 @@
     </pre>
   {{/if}}
 </div>
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
+{{/if}}
