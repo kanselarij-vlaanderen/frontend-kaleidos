@@ -17,13 +17,17 @@
             <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
               <div class="o-flex o-flex--center">
                 <span class="auk-u-mr-2">{{t "translations"}}</span>
-                <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnTranslationRequests}}&#47;{{this.model.counts.totalTranslations}}</WebComponents::AuStatusPill>
+                {{#if (gt this.model.counts.totalTranslations 0)}}
+                  <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnTranslationRequests}}&#47;{{this.model.counts.totalTranslations}}</WebComponents::AuStatusPill>
+                {{/if}}
               </div>
             </WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
               <div class="o-flex o-flex--center">
                 <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
-                <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnPublishPrevieuwRequests}}&#47;{{this.model.counts.totalPublishPreviewRequests}}</WebComponents::AuStatusPill>
+                {{#if (gt this.model.counts.totalPublishPreviewRequests 0)}}
+                  <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnPublishPrevieuwRequests}}&#47;{{this.model.counts.totalPublishPreviewRequests}}</WebComponents::AuStatusPill>
+                {{/if}}
               </div>
             </WebComponents::AuTab>
           </WebComponents::AuTabs>

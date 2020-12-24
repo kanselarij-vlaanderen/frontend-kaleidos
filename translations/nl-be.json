@@ -640,7 +640,7 @@
   "modal-error-alert-title": "Kijk het formulier na",
   "publications-to-in-progress": "Te behandelen",
   "via-cabinet": "Via Ministerraad",
-  "not-via-cabinet": "Niet Via Ministerraad",
+  "not-via-cabinet": "Niet via Ministerraad",
   "publication-before": "Uiterste publicatie",
   "translations": "Vertaalaanvragen",
   "document": "Document",
@@ -703,5 +703,5 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering" 
+  "upload-publishpreview-correction":"Upload verbetering"
 }
