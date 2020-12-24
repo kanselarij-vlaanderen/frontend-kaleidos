@@ -78,10 +78,7 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
             <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-              {{!--TODO remove the readonly field --}}
-              {{!--Value moet nog komen vanaf het model (activity) --}}
-              <WebComponents::AuInput readonly></WebComponents::AuInput>
+              <span class="vl-icon--light">{{t "no-numac-number-yet"}}</span>
             </div>
             {{!--TODO set to the correct propperty null --}}
             {{#if this.withdrawn}}
@@ -269,7 +266,7 @@
           </div>
           <WebComponents::AuInput type="text" id="name" @block="true" @value={{this.pieceInCreation.name}}/>
           <div class="auk-u-ml-3">
-            <WebComponents::AuButton 
+            <WebComponents::AuButton
               {{on "click" (perform this.deleteUploadedPiece this.pieceInCreation)}}
               @layout="icon-only"
               @icon="delete"
@@ -318,7 +315,7 @@
           </div>
           <WebComponents::AuInput type="text" id="name" @block="true" @value={{this.pieceInCreation.name}}/>
           <div class="auk-u-ml-3">
-            <WebComponents::AuButton 
+            <WebComponents::AuButton
               {{on "click" (perform this.deleteUploadedPiece this.pieceInCreation)}}
               @layout="icon-only"
               @icon="delete"
