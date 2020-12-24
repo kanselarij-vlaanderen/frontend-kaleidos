@@ -251,7 +251,9 @@
 
 
 {{#if isShowingPersonModal}}
-  <WebComponents::AuModal data-test-add-contactpersonmodal>
+  <WebComponents::AuModal
+    @size="medium"
+    data-test-add-contactpersonmodal>
     <WebComponents::AuModal::Header @title={{t "add-contact"}}
       @closeModal={{this.closeContactPersonModal}} />
     <WebComponents::AuModal::Body>
