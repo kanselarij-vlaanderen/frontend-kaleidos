@@ -607,6 +607,7 @@
   "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
   "publications": "Publicaties",
   "publications-done": "Behandeld",
+  "publications-withdrawn": "ingetrokken",
   "publications-in-progress": "In behandeling",
   "publications-new": "Nieuwe publicatie",
   "publications-published": "Gepubliceerd",
@@ -639,6 +640,7 @@
   "modal-error-missing-pieces": "Gelieve eén of meerdere stukken te selecteren.",
   "modal-error-alert-title": "Kijk het formulier na",
   "publications-to-in-progress": "Te behandelen",
+  "publications-to-publish": "Te publiceren",
   "via-cabinet": "Via Ministerraad",
   "not-via-cabinet": "Niet Via Ministerraad",
   "publication-before": "Uiterste publicatie",
@@ -703,5 +705,5 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering" 
+  "upload-publishpreview-correction":"Upload verbetering"
 }
