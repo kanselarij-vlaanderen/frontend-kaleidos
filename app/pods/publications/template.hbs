@@ -8,9 +8,11 @@
             <div class="o-flex o-flex--vertical auk-u-mt-2">
               <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
               <WebComponents::AuTabs @reversed="true">
-                <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
-                  {{t "publications-to-in-progress"}}
-                </WebComponents::AuTab>
+                {{!--
+                  <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
+                    {{t "publications-to-in-progress"}}
+                  </WebComponents::AuTab>
+                --}}
                 <WebComponents::AuTab @route="publications.in-progress"
                                       data-test-publications-overview-in-progress-tab>
                   {{t "publications-to-publish"}}
