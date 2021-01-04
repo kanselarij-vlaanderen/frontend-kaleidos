@@ -50,7 +50,7 @@
 
           {{!--    PUBLICATION FLOW CALL TO ACTION --}}
 
-
+          {{#if (not @isEditingOverview)}}
             <div class="auk-button-toolbar">
               {{#if (await @agendaitem.publicationFlow)}}
                 <LinkTo
@@ -72,7 +72,7 @@
                 {{/if}}
               {{/if}}
             </div>
-
+          {{/if}}
 
           {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
 
