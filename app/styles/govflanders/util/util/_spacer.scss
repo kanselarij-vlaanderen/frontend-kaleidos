@@ -1,11 +1,15 @@
 .vl-u-spacer {
-  @include u-spacer;
+  margin-bottom: $spacing-normal;
 }
 
 .vl-u-spacer--small {
-  @include u-spacer--small;
+  margin-bottom: $spacing-small;
 }
 
 .vl-u-spacer--large {
-  @include u-spacer--large;
+  margin-bottom: $spacing-large;
+
+  @include respond-to(small) {
+    margin-bottom: $spacing-medium;
+  }
 }

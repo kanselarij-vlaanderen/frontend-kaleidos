@@ -2,7 +2,9 @@ $button-border: 0.2rem;
 $button-border-small: 0.1rem;
 
 .vl-button {
-  @include vl-u-text--ellipse;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   @include reset-button;
   display: inline-flex;
   align-items: center;

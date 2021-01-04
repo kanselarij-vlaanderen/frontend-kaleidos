@@ -20,7 +20,9 @@
     }
 
     &__text {
-      @include vl-u-text--ellipse;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: block;
       position: relative;
       border: .2rem solid $icon-color;
