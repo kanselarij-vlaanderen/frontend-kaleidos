@@ -1,12 +1,8 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
-import { inject as service } from '@ember/service';
 
 export default class PublicationFlow extends Model {
-  // Services.
-  @service publicationService;
-
   // Attributes.
   @attr('string') publicationNumber;
   @attr('datetime') translateBefore;
