@@ -46,7 +46,7 @@ export default class PublicationController extends Controller {
     label: 'ingetrokken',
     icon: {
       svg: 'circle-close',
-      color: 'error',
+      color: 'danger',
     },
   }];
 
