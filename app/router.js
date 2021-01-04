@@ -121,7 +121,7 @@ Router.map(function() {
       this.route('publishpreview', { path: '/drukproeven', });
       this.route('signatures', { path: '/handtekeningen', });
     });
-    this.route('to-treat', { path: '/te-behandelen', });
+    // this.route('to-treat', { path: '/te-behandelen', });
     this.route('in-progress', { path: '/in-behandeling', }, function() {
       this.route('in-progress-minister', { path: '/via-ministerraad', });
       this.route('in-progress-not-minister', { path: '/niet-via-ministerraad', });
