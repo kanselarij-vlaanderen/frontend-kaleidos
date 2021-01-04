@@ -95,7 +95,7 @@
                   <WebComponents::AuInput type="number" value={{this.model.publicationFlow.numacNumber}} @block="true" readonly
                     {{on "input" (perform this.setNumacNumber)}} />
                 {{else}}
-                  <span class="vl-icon--light">{{t "no-numac-number-yet"}}</span>
+                  <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
                 {{/if}}
               </div>
               {{#if this.model.publicationFlow.status.isToBePublished}}
