@@ -30,20 +30,14 @@ export default Model.extend({
   }),
 
   // Computed.
-  hasBvr: computed('pieces.@each', function() {
-    const _this = this;
-    return (async() => {
-      const documentTypeBesluit = await _this.store.findRecord('document-type', CONFIG.documentType.besluitVlaamseRegering.id);
-      return await _this.caseService.hasPieceOfType(_this, documentTypeBesluit);
-    })(_this);
+  hasBvr: computed('pieces.@each', async function() {
+    const documentTypeBesluit = await this.store.findRecord('document-type', CONFIG.documentType.besluitVlaamseRegering.id);
+    return await this.caseService.hasPieceOfType(this, documentTypeBesluit);
   }),
 
-  hasDecreet: computed('pieces.@each', function() {
-    const _this = this;
-    return (async() => {
-      const documentTypeDecreet = await _this.store.findRecord('document-type', CONFIG.documentType.decreet.id);
-      return await _this.caseService.hasPieceOfType(_this, documentTypeDecreet);
-    })(_this);
+  hasDecreet: computed('pieces.@each', async function() {
+    const documentTypeDecreet = await this.store.findRecord('document-type', CONFIG.documentType.decreet.id);
+    return await this.caseService.hasPieceOfType(this, documentTypeDecreet);
   }),
 
   latestSubcase: computed('subcases.@each', function() {
