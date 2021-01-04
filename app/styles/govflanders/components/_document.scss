@@ -1,5 +1,13 @@
 .vl-document {
-  @include clearfix;
+  &::before,
+  &::after {
+    content: "";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
   display: flex;
   align-items: center;
   text-decoration: none;
