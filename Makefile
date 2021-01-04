@@ -43,8 +43,5 @@ me-a-sandwich:
 lint-html:
 	- ./node_modules/.bin/ember-template-lint .
 
-icon-font:
-	- ./generate-icon-font.sh
-
 drc-up-d:
 	- docker-compose ${COMPOSE_FILE} up -d
