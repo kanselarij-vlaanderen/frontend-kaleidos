@@ -73,8 +73,9 @@ context('Subcase tests', () => {
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
     const realmonth = agendaDate.month() + 1; // Js month start at 0.
+    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateFormatDotted = `${agendaDate.date()}.${realmonth}.${agendaDate.year()}`;
+    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
     cy.get('.vlc-status-timeline > li').eq(0)
