@@ -12,10 +12,10 @@
             @mode="single"
             @enable={{this.enabledDatesFunction}}
             @nextArrow=">"
+            @prevArrow="<"
             @noCalendar={{false}}
             @onChange={{@onChange}} {{!-- Required Option --}}
             @onReady={{this.onReady}}
-            @prevArrow="<"
             @shorthandCurrentMonth={{true}}
             placeholder={{this.placeholder}}
     />

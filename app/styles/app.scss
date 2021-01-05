@@ -170,6 +170,7 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'fixes/fix-pre';
 @import 'fixes/fix-sortable-item';
 @import 'fixes/fix-power-select';
+@import 'fixes/fix-ember-data-table';
 
 // Custom utilities
 @import 'custom-utilities/_autocomplete';
