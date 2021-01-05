@@ -2,11 +2,11 @@
   Utility: scroll
    ========================================================================== */
 
-.vl-u-scroll-scrollable {
+.auk-u-scroll-scrollable {
   overflow: auto !important;
   -webkit-overflow-scrolling: touch;
 }
 
-.vl-u-no-overflow { // Same as existing .vl-u-no-overflow with !important
+.auk-u-scroll-no-overflow { // Same as existing .vl-u-no-overflow with !important
   overflow: hidden !important;
 }

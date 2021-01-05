@@ -359,7 +359,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
-      cy.get('.vl-u-spacer-extended-bottom-s').click();
+      cy.get('.auk-u-mb-2').click(); // TODO: This will prolly be broken because its another selector now (BEN)
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
@@ -413,7 +413,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
     timeout: 50000,
   });
   cy.get('.vlc-panel-layout__main-content').within(() => {
-    cy.get('.vl-u-spacer-extended-bottom-l').as('detailBlocks');
+    cy.get('.auk-u-mb-8').as('detailBlocks'); // TODO: This will prolly be broken because of class rename (BEN)
     cy.get('@detailBlocks').eq(4)
       .within(() => {
         cy.contains('Acties').should('exist');

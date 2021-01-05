@@ -93,7 +93,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
   cy.get('.vl-title--h4').contains(shortTitle)
-    .parents('.vl-u-spacer-extended-bottom-l')
+    .parents('.auk-u-mb-8') // TODO: This will prolly be broken because of class rename (BEN)
     .within(() => {
       cy.get('a').click();
     });
@@ -173,7 +173,7 @@ function addSubcaseThemes(themes) {
   cy.route('GET', '/themes').as('getThemes');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
   cy.get('.vl-title--h4').contains('Thema\'s')
-    .parents('.vl-u-spacer-extended-bottom-l')
+    .parents('.auk-u-mb-8') // TODO: This will prolly be broken because of class rename (BEN)
     .as('subcaseTheme');
 
   cy.get('@subcaseTheme').within(() => {
@@ -228,7 +228,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.contains('Ministers en beleidsvelden').parents('.vl-u-spacer-extended-bottom-l')
+  cy.contains('Ministers en beleidsvelden').parents('.auk-u-mb-8') // TODO: This will prolly be broken due to class rename (BEN)
     .as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
     cy.get('.vl-u-spacer-extended-left-s', {

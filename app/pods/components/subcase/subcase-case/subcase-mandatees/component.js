@@ -14,7 +14,7 @@ export default class SubcaseMandatees extends Component {
 
   @service currentSession;
 
-  classNames = ['vl-u-spacer-extended-bottom-l'];
+  classNames = ['auk-u-mb-8'];
 
   subcase = null;
 

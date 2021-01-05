@@ -1,7 +1,7 @@
 {{title (t "cases")}}
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l">
+  <div class="auk-u-m-8">
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
@@ -12,7 +12,7 @@
       <div class="vlc-toolbar__right">
         {{#if this.currentSession.isEditor}}
           <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-            <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="isArchived">
+            <label class="vl-form__label vl-u-spacer-extended-right-s auk-u-text-nowrap" for="isArchived">
               {{t "show-archived"}}
             </label>
             {{web-components/vl-toggle value=this.showArchived}}

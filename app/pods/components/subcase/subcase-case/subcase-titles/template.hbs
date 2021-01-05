@@ -1,4 +1,4 @@
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not subcase.showAsRemark)}}
@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <h4 class="vl-title vl-title--h4">
     <pre>
       {{await subcase.shortTitle}}
@@ -30,14 +30,14 @@
   </h4>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
-  <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+<div class="auk-u-mb-2">
+  <pre class="vlc-u-flex-inline-flex auk-u-text-pre-line">
     {{await subcase.title}}
   </pre>
 </div>
 
 {{#if (not subcase.showAsRemark)}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     {{#if (await subcase.subcaseName)}}
       <span class={{await pillClass}}>
         {{await subcase.subcaseName}}
@@ -45,7 +45,7 @@
     {{/if}}
   </div>
 {{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div
     class="pill-container vl-u-display-flex"
     data-test-agenda-subcasehidden-pill

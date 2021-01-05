@@ -1,5 +1,5 @@
 {{#if allowEditing}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <div class="vl-u-display-flex vlc-u-flex-space-between">
       <h4>
         {{#if this.showIndex}}
@@ -49,12 +49,12 @@
     {{/if}}
   </div>
 {{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <p data-test-newsletter-print-item-proposal>
     {{await newsletterInfo.newsletterProposal}}
   </p>
 </div>
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div class="vl-u-text">
     {{#if (not agendaitem.showAsRemark)}}
       {{#if (not newsletterInfo.richtext)}}
@@ -80,9 +80,9 @@
 {{#if
   (gt (await newsletterInfo.themes.length) 0)
 }}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-u-spacer-extended-top-s">
-      <ul class="newsletter-themes vlc-u-no-padding vlc-u-no-margin">
+  <div class="auk-u-mb-2">
+    <div class="auk-u-mt-2">
+      <ul class="newsletter-themes auk-u-p-0 auk-u-m-0">
         {{#each
           (await newsletterInfo.themes)
         as |theme|
@@ -95,7 +95,7 @@
     </div>
   </div>
 {{else if (and allowEditing newsletterInfo.richtext)}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <p class="vl-u-text--muted vl-u-text--capitalize">
       {{t "no-themes-agendaitem"}}
     </p>

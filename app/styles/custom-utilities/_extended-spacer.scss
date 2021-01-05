@@ -11,49 +11,29 @@ $vl-u-spacer-extended-unit: 1rem !default;
 /* All
    ========================================================================== */
 
-.vl-u-spacer-extended-s {
-  margin: $vl-u-spacer-extended-unit !important;
+.auk-u-m-8 {
+  margin: 4rem !important;
 }
 
-.vl-u-spacer-extended {
-  margin: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-l {
-  margin: $vl-u-spacer-extended-unit * 4 !important;
-}
-
-.vl-u-spacer-extended-l--padding {
-  padding: $vl-u-spacer-extended-unit * 4 !important;
+.auk-u-p-8 {
+  padding: 4rem !important;
 }
 
 /* Top
    ========================================================================== */
 
-.vl-u-spacer-extended-top-s {
-  margin-top: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-top {
+.auk-u-mt-4 {
   margin-top: $vl-u-spacer-extended-unit * 2 !important;
 }
 
-.vl-u-spacer-extended-top-l {
+.auk-u-mt-8 {
   margin-top: $vl-u-spacer-extended-unit * 4 !important;
 }
 
 /* Bottom
    ========================================================================== */
 
-.vl-u-spacer-extended-bottom-s {
-  margin-bottom: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-bottom {
-  margin-bottom: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-bottom-l {
+.auk-u-mb-8 {
   margin-bottom: $vl-u-spacer-extended-unit * 4 !important;
 }
 

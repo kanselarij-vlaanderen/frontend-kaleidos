@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 export default Component.extend({
   intl: inject(),
 
-  classNames: ['vl-description-data', 'vl-u-spacer-extended-bottom', 'vl-u-spacer-extended-top-l'],
+  classNames: ['vl-description-data', 'auk-u-mb-4', 'auk-u-mt-8'],
 
   downloadUrl: computed('signature.file', function() {
     return this.signature.then((signature) => signature.get('file').then((file) => `/files/${file.get('id')}/download`));

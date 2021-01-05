@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom'],
+  classNames: ['auk-u-mb-4'],
   isEditing: false,
   itemIndex: 0,
   showIndex: false,

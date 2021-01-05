@@ -1,5 +1,5 @@
 {{#if @subcase.case.id}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <div class="vl-u-display-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
@@ -14,7 +14,7 @@
   </div>
 {{/if}}
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div class="vl-u-display-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not @agendaitem.showAsRemark)}}
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <h4 class="vl-title vl-title--h4">
     <pre>
       {{@agendaitem.shortTitle}}
@@ -46,16 +46,16 @@
   </h4>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   {{#if @shouldShowDetails}}
-    <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+    <pre class="vlc-u-flex-inline-flex auk-u-text-pre-line">
       {{@agendaitem.title}}
     </pre>
   {{/if}}
 </div>
 
 {{#if (not @agendaitem.showAsRemark)}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     {{#if @subcase.subcaseName}}
       <span class={{this.pillClass}}>
         {{@subcase.subcaseName}}
@@ -63,7 +63,7 @@
     {{/if}}
   </div>
   {{#if @agendaitem.retracted}}
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       <div class="pill-container vl-u-display-flex">
         <span class="vl-pill vl-u-text--capitalize">
           {{t "postponed-item"}}
@@ -73,7 +73,7 @@
   {{/if}}
 {{else}}
   {{#if @newsletterInfo}}
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       <div class="pill-container vl-u-display-flex">
         <span
           class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
@@ -93,12 +93,12 @@
       </div>
     </div>
   {{else}}
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       {{t "no-newsletter-info"}}
     </div>
   {{/if}}
 {{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div
     class="pill-container vl-u-display-flex"
     data-test-agenda-subcasehidden-pill
@@ -124,9 +124,9 @@
     {{/if}}
   </div>
 </div>
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   {{#if @agendaitem.explanation}}
-    <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+    <pre class="vl-u-text--muted vlc-u-flex-inline-flex auk-u-text-pre-line">
       {{t "remark-title"}}: {{@agendaitem.explanation}}
     </pre>
   {{/if}}

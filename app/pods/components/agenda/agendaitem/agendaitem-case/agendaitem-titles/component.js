@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class AgendaitemTitles extends Component {
-  classNames = ['vl-u-spacer-extended-bottom-l'];
+  classNames = ['auk-u-mb-8'];
   @service currentSession;
 
   get pillClass() {

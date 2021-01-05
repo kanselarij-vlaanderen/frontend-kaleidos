@@ -2,48 +2,35 @@
 	 Utilities: text
 	 ========================================================================== */
 
-.vlc-u-pre-line-wrap {
-  white-space: pre-line;
+.auk-u-text-pre-line {
+  white-space: pre-line !important;
 }
 
-.vlc-u-text-decoration-underline {
+.auk-u-text-decoration-underline {
   text-decoration: underline !important;
 }
 
-.vlc-u-text--nowrap {
+.auk-u-text-nowrap {
   white-space: nowrap !important;
 }
 
-.vlc-u-font-weight-normal {
-  font-weight: normal;
+.auk-u-text-normal {
+  font-weight: normal !important;
 }
 
-.vlc-u-font-weight-500 {
-  font-weight: 500;
-}
-
-.vlc-u-font-color-dove-gray {
-  color: #666;
+.auk-u-text-bold {
+  font-weight: 500 !important;
 }
 
 .vlc-u-opacity-50 {
-  opacity: 50%;
+  opacity: 50% !important;
 }
 
-.vlc-u-white-space-normal {
-  white-space: normal;
-}
-
-.vlc-u-font-weight-bold {
-  font-weight: bold;
-}
-
-.vlc-u-align-right {
-  text-align: right !important;
-}
-.vlc-u-pre {
+.auk-u-text-pre {
   white-space: pre !important;
 }
+
+// TODO: Dit staat verkeerd
 .vlc-mail-content {
   background-color: $gray-lightest;
   font-size: 90%;
