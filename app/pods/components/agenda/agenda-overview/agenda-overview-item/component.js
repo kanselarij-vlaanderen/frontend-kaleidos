@@ -20,6 +20,8 @@ export default class AgendaOverviewItem extends Component {
 
   @service publicationService;
 
+  @service router;
+
   @service('current-session') currentSessionService;
 
   @alias('sessionService.currentAgenda') currentAgenda;
@@ -66,7 +68,7 @@ export default class AgendaOverviewItem extends Component {
     const _case = await this.args.agendaitem.get('case');
     const newPublication = await this.publicationService.createNewPublication(0, _case.id);
     this.showLoader = false;
-    this.transitionToRoute('publications.publication.case', newPublication.id);
+    this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
   @action
