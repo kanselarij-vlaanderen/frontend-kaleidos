@@ -243,18 +243,5 @@ context('Publications tests', () => {
     cy.get('.vl-loader', {
       timeout: 60000,
     }).should('not.exist');
-
-    // Check dossier;
-    cy.visit('/publicaties/te-behandelen');
-    cy.get(pageClass).should('exist'); // Why not test for the existance of the case (name) ?
-    cy.get(publicationSelectors.tableCell).should('exist');
-    cy.contains('Cypress test dossier 1').eq(0)
-      .should('exist');
-    cy.server();
-    cy.route('POST', '/publication-flows').as('postPublicationFlow');
-    cy.get(publicationSelectors.startPublication).first()
-      .click();
-    cy.wait('@postPublicationFlow');
-    cy.get(publicationSelectors.flowTitle).should('exist');
   });
 });
