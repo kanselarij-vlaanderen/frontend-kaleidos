@@ -640,7 +640,7 @@
   "modal-error-alert-title": "Kijk het formulier na",
   "publications-to-in-progress": "Te behandelen",
   "via-cabinet": "Via Ministerraad",
-  "not-via-cabinet": "Niet Via Ministerraad",
+  "not-via-cabinet": "Niet via Ministerraad",
   "publication-before": "Uiterste publicatie",
   "translations": "Vertaalaanvragen",
   "document": "Document",
@@ -668,6 +668,7 @@
   "kind-of-publication": "Wijze van publicatie",
   "publication-form-publication-date": "PublicatieDatum BS",
   "publication-form-numac-nummer": "Numac nummer BS",
+  "no-numac-number-yet": "Nog geen numac nummer",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
   "request-translations-for-publication":"Vertalingen aanvragen voor Publicatie {publicationNumber}",
@@ -703,5 +704,5 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering" 
+  "upload-publishpreview-correction":"Upload verbetering"
 }

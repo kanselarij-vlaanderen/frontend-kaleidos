@@ -88,16 +88,25 @@ export default class PublicationController extends Controller {
   }
 
   get expiredPublicationBeforeDate() {
-    return moment(this.model.publicationFlow.get('publishBefore'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('publishBefore')) {
+      return moment(this.model.publicationFlow.get('publishBefore'))
+        .isBefore(moment());
+    }
+    return false;
   }
   get expiredPublicationDate() {
-    return moment(this.model.publicationFlow.get('publishedAt'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('publishedAt')) {
+      return moment(this.model.publicationFlow.get('publishedAt'))
+        .isBefore(moment());
+    }
+    return false;
   }
   get expiredTranslationDate() {
-    return moment(this.model.publicationFlow.get('translateBefore'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('translateBefore')) {
+      return moment(this.model.publicationFlow.get('translateBefore'))
+        .isBefore(moment());
+    }
+    return false;
   }
 
   @action
