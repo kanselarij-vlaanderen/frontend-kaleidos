@@ -47,7 +47,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
-        closedOrWithdrawnPublishPreviewRequests: closedPublishPreviewRequests.length + withdrawnPublishPreviewRequests.length,
+        closedOrWithdrawnPublishPrevieuwRequests: closedPublishPreviewRequests.length + withdrawnPublishPreviewRequests.length,
       },
       refreshAction: this.refreshModel,
     });
