@@ -36,35 +36,3 @@ $vl-u-spacer-extended-unit: 1rem !default;
 .auk-u-mb-8 {
   margin-bottom: $vl-u-spacer-extended-unit * 4 !important;
 }
-
-
-/* Left
-   ========================================================================== */
-
-.vl-u-spacer-extended-left-s {
-  margin-left: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-left {
-  margin-left: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-left-l {
-  margin-left: $vl-u-spacer-extended-unit * 4 !important;
-}
-
-/* Right
-   ========================================================================== */
-
-.vl-u-spacer-extended-right-s {
-  margin-right: $vl-u-spacer-extended-unit !important;
-}
-
-.vl-u-spacer-extended-right {
-  margin-right: $vl-u-spacer-extended-unit * 2 !important;
-}
-
-.vl-u-spacer-extended-right-l {
-  margin-right: $vl-u-spacer-extended-unit * 4 !important;
-}
-

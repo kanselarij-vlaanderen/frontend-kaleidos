@@ -231,7 +231,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.contains('Ministers en beleidsvelden').parents('.auk-u-mb-8') // TODO: This will prolly be broken due to class rename (BEN)
     .as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
-    cy.get('.vl-u-spacer-extended-left-s', {
+    cy.get('.auk-u-ml-2', { // TODO: Prolly broken due to class change (BEN)
       timeout: 5000,
     }).should('exist')
       .then(() => {

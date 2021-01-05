@@ -24,7 +24,7 @@
       {{/if}}
     </h2>
     {{#if currentSession.isEditor}}
-      <div class="vl-u-spacer-extended-left-s" data-test-agendaitem-edit-link>
+      <div class="auk-u-ml-2" data-test-agendaitem-edit-link>
         <a
           data-test-agendaitem-titles-edit
           href=""
@@ -76,18 +76,18 @@
     <div class="auk-u-mb-2">
       <div class="pill-container vl-u-display-flex">
         <span
-          class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
+          class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} auk-u-mr-2"
         >
           {{#if @newsletterInfo.inNewsletter}}
             <span>
               {{t "visible-in-newsletter"}}
             </span>
-            <i class="vl-button__icon ki-visible vl-u-spacer-extended-left-s"></i>
+            <i class="vl-button__icon ki-visible auk-u-ml-2"></i>
           {{else}}
             <span>
               {{t "hidden-in-newsletter"}}
             </span>
-            <i class="vl-button__icon ki-hide vl-u-spacer-extended-left-s"></i>
+            <i class="vl-button__icon ki-hide auk-u-ml-2"></i>
           {{/if}}
         </span>
       </div>
@@ -108,7 +108,7 @@
     }}
       <span
         class="{{@agendaitem.formallyOkToShow.pillClassNames}}
-        vl-u-spacer-extended-right-s"
+        auk-u-mr-2"
       >
         {{@agendaitem.formallyOkToShow.label}}
       </span>
@@ -118,7 +118,7 @@
         <i data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
       {{else}}
         <i
-          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success ki-lock-open"
+          class="vlc-pill auk-u-mr-2 vl-icon vlc-pill--success ki-lock-open"
         ></i>
       {{/if}}
     {{/if}}
