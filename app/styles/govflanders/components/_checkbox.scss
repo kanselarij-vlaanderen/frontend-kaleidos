@@ -61,7 +61,16 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
   }
 
   &__toggle {
-    @include u-visually-hidden;
+    position: absolute !important; // sass-lint:disable-line no-important
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
 
     &:focus {
       + .vl-checkbox__label {
@@ -239,7 +248,16 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
 // Deprecated HTML structure, do not use!
 .vl-checkbox--switch__wrapper {
   .vl-checkbox--switch {
-    @include u-visually-hidden;
+    position: absolute !important; // sass-lint:disable-line no-important
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
 
     &:focus {
       + .vl-checkbox--switch__label {

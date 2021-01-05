@@ -4,6 +4,17 @@ $font-location: "https://d1l6j3bn1os9t0.cloudfront.net/3.latest/fonts/flanders/"
 $flanders-family: "flanders-sans";
 $flanders-serif-family: "flanders-serif";
 
+@mixin font-face($family, $location, $name, $weight: normal, $style: normal) {
+  @font-face {
+    font-family: $family;
+    src: url($location+$name+".woff2") format("woff2"), url($location+$name+".woff") format("woff");
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+  }
+}
+
+
 @include font-face($flanders-family, $font-location, $flanders-family + "-light", 300, normal);
 @include font-face($flanders-family, $font-location, $flanders-family + "-regular", 400, normal);
 @include font-face($flanders-family, $font-location, $flanders-family + "-medium", 500, normal);

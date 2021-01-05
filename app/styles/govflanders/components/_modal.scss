@@ -13,7 +13,14 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
 
   .backdrop,
   .vl-modal__backdrop {
-    @include backdrop;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: z("overlay");
+    background-color: $overlay-bg;
+    backdrop-filter: blur(2px);
   }
 
   .vl-modal__backdrop {
@@ -44,7 +51,14 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
   outline: none;
 
   &::backdrop {
-    @include backdrop;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: z("overlay");
+    background-color: $overlay-bg;
+    backdrop-filter: blur(2px);
   }
 
   &--static {

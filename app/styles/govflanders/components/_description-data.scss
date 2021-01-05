@@ -32,7 +32,9 @@
 
   // Description data label
   &__label {
-    @include vl-u-text--ellipse;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   // Description data icon
