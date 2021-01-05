@@ -6,10 +6,7 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -24,16 +21,17 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isUploadModalResized = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
+
   @tracked translateActivity = {
-    mailContent: '',
-    mailSubject: '',
-    finalTranslationDate: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked finalTranslationDate: '',
+    @tracked pieces: A([]),
   };
   @tracked previewActivity = {
-    mailContent: '',
-    mailSubject: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked pieces: A([]),
   };
   @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
@@ -192,8 +190,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelPublishPreviewRequestModal() {
-    set(this.previewActivity, 'mailContent', '');
-    set(this.previewActivity, 'mailSubject', '');
+    this.previewActivity.mailContent = '';
+    this.previewActivity.mailSubject = '';
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -287,8 +285,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelTranslationModal() {
-    set(this.translateActivity, 'mailContent', '');
-    set(this.translateActivity, 'mailSubject', '');
+    this.translateActivity.mailContent = '';
+    this.translateActivity.mailSubject = '';
     this.showTranslationModal = false;
   }
 
