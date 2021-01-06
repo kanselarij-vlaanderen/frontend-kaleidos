@@ -1,12 +1,4 @@
-.vl-u-spacer {
-  margin-bottom: 2rem;
-}
-
-.vl-u-spacer--small {
-  margin-bottom: 1.5rem;
-}
-
-.vl-u-spacer--large {
+.auk-u-mb-10 {
   margin-bottom: 6rem;
 
   @include respond-to(small) {
