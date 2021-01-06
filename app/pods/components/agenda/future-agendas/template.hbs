@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
-            <div class="auk-u-flex vl-u-flex-align-center">
+            <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "agenda"}}
               </span>
@@ -16,7 +16,7 @@
           </th>
           <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
           >
-            <div class="auk-u-flex vl-u-flex-align-center">
+            <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "agenda-version"}}
               </span>
@@ -24,7 +24,7 @@
           </th>
           <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
           >
-            <div class="auk-u-flex vl-u-flex-align-center">
+            <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "latest-modified"}}
               </span>
@@ -32,7 +32,7 @@
           </th>
           <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
           >
-            <div class="auk-u-flex vl-u-flex-align-center">
+            <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "status"}}
               </span>
@@ -40,7 +40,7 @@
           </th>
           <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
           >
-            <div class="auk-u-flex vl-u-flex-align-center">
+            <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "kind"}}
               </span>
@@ -95,7 +95,7 @@
             <td>
               {{meeting.kindToShow.label}}
             </td>
-            <td class="vl-u-align-right">
+            <td class="auk-u-text-align--right">
               {{#link-to
                 "agenda.agendaitems"
                 meeting.id

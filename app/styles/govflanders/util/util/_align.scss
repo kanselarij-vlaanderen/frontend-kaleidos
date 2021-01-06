@@ -1,75 +1,15 @@
-.vl-u-align-center {
+.auk-u-text-align--center {
   text-align: center !important;
 }
 
-.vl-u-align-right {
-  text-align: right !important;
-}
-
-@each $name, $align in $bp-list {
-  @include respond-to(map-get($align, media)) {
-    .vl-u-align-left--#{$name} {
-      text-align: left !important;
-    }
-
-    .vl-u-align-center--#{$name} {
-      text-align: center !important;
-    }
-
-    .vl-u-align-right--#{$name} {
-      text-align: right !important;
-    }
-  }
-}
-
-.vl-u-flex-align-center {
+.auk-u-flex--vertical-center {
   align-items: center !important;
 }
 
-.vl-u-flex-align-right {
+.auk-u-flex--align-end {
   align-items: flex-end !important;
 }
 
-.vl-u-flex-v-bottom {
+.auk-u-flex--align-end {
   justify-content: flex-end !important;
-}
-
-@each $name, $align in $bp-list {
-  @include respond-to(map-get($align, media)) {
-    .vl-u-flex-align-left--#{$name} {
-      align-items: flex-start !important;
-    }
-
-    .vl-u-flex-align-center--#{$name} {
-      align-items: center !important;
-    }
-
-    .vl-u-flex-align-right--#{$name} {
-      align-items: flex-end !important;
-    }
-
-    .vl-u-flex-space-between--#{$name} {
-      align-items: space-between !important;
-    }
-
-    .vl-u-flex-space-around--#{$name} {
-      align-items: space-around !important;
-    }
-
-    .vl-u-flex-v-top--#{$name} {
-      justify-content: flex-start !important;
-    }
-
-    .vl-u-flex-v-center--#{$name} {
-      justify-content: center !important;
-    }
-
-    .vl-u-flex-v-bottom--#{$name} {
-      justify-content: flex-end !important;
-    }
-
-    .vl-u-flex-v-stretch--#{$name} {
-      justify-content: stretch !important;
-    }
-  }
 }
