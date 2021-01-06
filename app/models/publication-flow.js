@@ -1,8 +1,9 @@
-import Model, {
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
 
-export default class PublicationFlow extends Model {
+export default class PublicationFlow extends ModelWithModifier {
   @attr('string') publicationNumber;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
@@ -11,6 +12,7 @@ export default class PublicationFlow extends Model {
   @attr('string') remark;
   @attr('datetime') created;
   @attr('datetime') modified;
+  @attr('user') modifiedBy;
 
   @belongsTo('case') case;
   @belongsTo('publication-status', {
