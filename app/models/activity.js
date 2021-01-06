@@ -1,10 +1,10 @@
-import Model, {
+import {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
-
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default class Activity extends Model {
+export default class Activity extends ModelWithModifier {
   // Attributes.
   @attr('datetime') startDate;
   @attr('datetime') endDate;
