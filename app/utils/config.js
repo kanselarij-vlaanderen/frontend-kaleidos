@@ -175,6 +175,14 @@ export default EmberObject.create({
     id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
     uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
   },
+  publicationStatusPauzed: {
+    id: 'bc294fde-45c8-11eb-b378-0242ac130002',
+    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/bc294fde-45c8-11eb-b378-0242ac130002',
+  },
+  publicationStatusWithdrawn: {
+    id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
+    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+  },
   LANGUAGE_NL: {
     uri: 'http://publications.europa.eu/resource/authority/language/NLD',
   },

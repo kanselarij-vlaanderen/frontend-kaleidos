@@ -607,6 +607,7 @@
   "not-visible-in-newsletter": "Niet zichtbaar in Kort Bestek",
   "publications": "Publicaties",
   "publications-done": "Behandeld",
+  "publications-withdrawn": "Ingetrokken",
   "publications-in-progress": "In behandeling",
   "publications-new": "Nieuwe publicatie",
   "publications-published": "Gepubliceerd",
@@ -632,6 +633,7 @@
   "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
   "publications-new-button-text": "Publicatie aanmaken",
   "request-publication": "Publicatie aanvragen",
+  "withdraw-publication": "Publicatie intrekken",
   "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen.",
   "publications-number": "Publicatienummer",
   "input-error-message": "Dit veld dient ingevuld te worden.",
@@ -639,6 +641,7 @@
   "modal-error-missing-pieces": "Gelieve eén of meerdere stukken te selecteren.",
   "modal-error-alert-title": "Kijk het formulier na",
   "publications-to-in-progress": "Te behandelen",
+  "publications-to-publish": "Te publiceren",
   "via-cabinet": "Via Ministerraad",
   "not-via-cabinet": "Niet via Ministerraad",
   "publication-before": "Uiterste publicatie",
@@ -690,7 +693,7 @@
   "name-document": "Naam Document",
   "file-extension": "Bestandstype",
   "cancel-request": "Aanvraag intrekken",
-  "cancelled-request": "ingetrokken",
+  "cancelled-request": "Ingetrokken",
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "translation-mail-header": "Begeleidende tekst",
@@ -706,5 +709,7 @@
   "upload-publishpreview":"Upload drukproef",
   "upload-publishpreview-correction":"Upload verbetering",
   "decreet":"Decreet",
-  "BvR":"BvR"
+  "BvR":"BvR",
+  "cancel-publication-flow-confirm": "Bent u zeker dat u deze publicatie wil intrekken?",
+  "withdraw": "Intrekken"
 }

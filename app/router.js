@@ -127,6 +127,10 @@ Router.map(function() {
       this.route('in-progress-not-minister', { path: '/niet-via-ministerraad', });
     });
     this.route('done', { path: '/behandeld', });
+    this.route('withdrawn', { path: '/ingetrokken', }, function() {
+      this.route('withdrawn-minister', { path: '/via-ministerraad', });
+      this.route('withdrawn-not-minister', { path: '/niet-via-ministerraad', });
+    });
   });
 });
 
