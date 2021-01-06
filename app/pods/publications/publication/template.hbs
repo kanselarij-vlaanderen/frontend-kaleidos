@@ -189,7 +189,7 @@
 {{#if this.showConfirmWithdraw}}
   <WebComponents::AuModal @size="small">
     <WebComponents::AuModal::Header
-            @title={{t "are-you-sure"}}
+            @title={{t "withdraw-publication"}}
             @hideCloseButton={{true}}
     />
     <WebComponents::AuModal::Body>
@@ -197,7 +197,7 @@
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Group @position="left"n>
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
@@ -206,7 +206,7 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" {{on "click" this.withdrawPublicationFlow}}>
+            <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "withdraw"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
