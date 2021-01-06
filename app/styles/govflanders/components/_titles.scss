@@ -1,23 +1,8 @@
 .vl-title {
-  &--alt {
-    text-transform: uppercase;
-    font-weight: 500;
-    border-bottom: 3px solid $athens-gray;
-    font-size: 1.8rem;
-    padding: 0 0 .7rem;
-    margin: 0 0 2rem;
-    padding-top: 1.3rem; // create space above the title to align with the filter and the tabs.
-  }
-
   &--sans {
     // use of !important to allow proper use of --sans modifier
     // ( becuase font-family is applied to specific heading elements)
     font-family: $base-font !important; // sass-lint:disable-line no-important
-  }
-
-  &--has-border {
-    border-bottom: 1px solid $border-color;
-    margin-bottom: 1.5rem;
   }
 
   a {
@@ -44,40 +29,5 @@
     &:not(:first-child) {
       margin-top: 2 * map-get($settings, space);
     }
-  }
-}
-
-// generic title wrapper styling (also applicable for the title wrapper --sublink modifier, for specific styling use vl-title-wrapper--sublink)
-.vl-title-wrapper {
-  &__title {
-    margin-bottom: 0;
-  }
-  @each $level, $settings in $headers-typo {
-    &--h#{$level} {
-      margin-bottom: map-get($settings, space);
-    }
-  }
-}
-
-// the title combined with a cta
-.vl-title-wrapper--cta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3rem;
-
-  &__cta {
-    &--small {
-      font-size: 1.4rem;
-      margin: .8rem 0 0;
-    }
-  }
-}
-
-// remove margin on wrapper-modifiers
-.vl-title-wrapper--sublink,
-.vl-title-wrapper--cta {
-  .vl-title {
-    margin-bottom: 0;
   }
 }
