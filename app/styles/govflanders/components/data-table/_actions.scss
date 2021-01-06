@@ -15,12 +15,6 @@
     // Data table actions bottom modifier
     &--bottom {
       margin: 2rem 0 0;
-
-      .vl-data-table__actions__list {
-        @include respond-to(xsmall) {
-          margin: 0 0 1rem;
-        }
-      }
     }
 
     // Data table actions list
@@ -70,21 +64,6 @@
 
         &:last-child {
           margin-left: 0.5rem;
-        }
-      }
-
-      // Data table action toggle contract xs modifier
-      &--contract-xs {
-        @include respond-to(xsmall) {
-          span {
-            display: none;
-          }
-
-          .vl-vi {
-            &::before {
-              margin: 0;
-            }
-          }
         }
       }
     }

@@ -40,10 +40,6 @@ body {
       content: "medium-up";
     }
 
-    @include respond-to(xsmall) {
-      content: "xsmall";
-    }
-
     @include respond-to(xlarge) {
       content: "xlarge";
     }

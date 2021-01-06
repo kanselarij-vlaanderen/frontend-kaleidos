@@ -1,10 +1,6 @@
 // responsiveness
 @mixin respond-to($media) {
-  @if $media == xsmall {
-    @media screen and (max-width: $bp-xsmall) {
-      @content;
-    }
-  } @else if $media == medium {
+  @if $media == medium {
     @media screen and (max-width: $bp-medium) {
       @content;
     }

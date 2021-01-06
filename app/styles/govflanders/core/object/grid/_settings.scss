@@ -43,22 +43,6 @@ $grid_args: (
       debug_name:       "Medium",
       debug_bg:         #0c9c2e,
     ),
-    small: (
-      columns:          $grid-cols,
-      suffix:           "--s",
-      breakpoint_max:   $bp-small,
-      gutter:           1.5rem,
-      debug_name:       "Small",
-      debug_bg:         #ea8d35,
-    ),
-    xsmall: (
-      columns:          $grid-cols,
-      suffix:           "--xs",
-      breakpoint_max:   $bp-xsmall,
-      gutter:           1.5rem,
-      debug_name:       "X-Small",
-      debug_bg:         #eac11f,
-    )
   )
 );
 
@@ -79,13 +63,5 @@ $form_grid_args: (
       debug_name:       "default",
       debug_bg:           #f175c8,
     ),
-    small: (
-      columns:          $grid-cols,
-      suffix:           "--s",
-      breakpoint_max:   $bp-small,
-      gutter:           1.5rem,
-      debug_name:       "Small",
-      debug_bg:         #ea8d35,
-    )
   )
 );
