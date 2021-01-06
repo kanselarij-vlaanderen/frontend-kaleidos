@@ -11,12 +11,12 @@
 >
   <table.content as |c|>
     <c.header>
+      <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
         field="publicationNumber"
         label=(t "publications-number")
       }}
-      <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
         field="publishBefore"
@@ -34,10 +34,10 @@
     </c.header>
     <c.body class="tr-hover" as |row|>
       <td>
-        {{row.publicationNumber}}
+        {{row.case.shortTitle}}
       </td>
       <td>
-        {{row.case.shortTitle}}
+        {{row.publicationNumber}}
       </td>
       <td>
         {{#if row.publicationBefore}}

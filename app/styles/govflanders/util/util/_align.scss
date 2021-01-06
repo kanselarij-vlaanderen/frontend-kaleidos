@@ -1,10 +1,3 @@
-// sass-lint:disable no-important
-
-// Standard alignment
-.vl-u-align-left {
-  text-align: left !important;
-}
-
 .vl-u-align-center {
   text-align: center !important;
 }
@@ -29,11 +22,6 @@
   }
 }
 
-// Flex alignment
-.vl-u-flex-align-left {
-  align-items: flex-start !important;
-}
-
 .vl-u-flex-align-center {
   align-items: center !important;
 }
@@ -42,28 +30,8 @@
   align-items: flex-end !important;
 }
 
-.vl-u-flex-space-between {
-  align-items: space-between !important;
-}
-
-.vl-u-flex-space-around {
-  align-items: space-around !important;
-}
-
-.vl-u-flex-v-top {
-  justify-content: flex-start !important;
-}
-
-.vl-u-flex-v-center {
-  justify-content: center !important;
-}
-
 .vl-u-flex-v-bottom {
   justify-content: flex-end !important;
-}
-
-.vl-u-flex-v-stretch {
-  justify-content: stretch !important;
 }
 
 @each $name, $align in $bp-list {

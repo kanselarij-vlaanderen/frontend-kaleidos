@@ -3,8 +3,6 @@
   flex-wrap: wrap;
   align-items: center;
 
-  a,
-  button,
   .vl-button {
     margin-right: 0.8rem;
 
@@ -19,32 +17,6 @@
 
   &--align-center {
     justify-content: center;
-  }
-
-  &--space-between {
-    justify-content: space-between;
-  }
-
-  .vl-link {
-    white-space: nowrap;
-  }
-
-  &--bordered {
-    .vl-link,
-    .vl-link--icon {
-      padding-right: 1.4rem;
-      border-right: 1px solid $border-color;
-
-      &:last-child {
-        border: 0;
-      }
-    }
-
-    .vl-link {
-      &:not(:last-child) {
-        margin-right: 1.4rem;
-      }
-    }
   }
 
   @each $name, $align in $bp-list {

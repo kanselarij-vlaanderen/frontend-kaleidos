@@ -44,7 +44,15 @@
 
     // Form row inline modifier
     &--inline {
-      @include clearfix;
+      &::before,
+      &::after {
+        content: "";
+        display: table;
+      }
+
+      &::after {
+        clear: both;
+      }
       display: flex;
       margin-left: -$spacing-medium;
 
