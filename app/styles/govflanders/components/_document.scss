@@ -12,47 +12,6 @@
   align-items: center;
   text-decoration: none;
 
-  // icon + type on the side
-  &__type {
-    min-height: 6rem;
-    margin-right: 2rem;
-    position: relative;
-    padding: 3rem 0 0 2rem;
-
-    .vl-vi {
-      font-size: 5.5rem;
-      position: absolute;
-      left: -.5rem;
-      transform: translateY(-50%);
-      color: $icon-color;
-    }
-
-    &__text {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: block;
-      position: relative;
-      border: .2rem solid $icon-color;
-      border-radius: .2rem;
-      width: 4.3rem;
-      font-size: 1.2rem;
-      line-height: 1;
-      color: $alt-text-color;
-      background-color: $page-bg;
-      text-align: center;
-    }
-  }
-
-  &__content {
-    overflow: hidden;
-  }
-
-  &__title {
-    font-weight: 500;
-    line-height: 1.25;
-  }
-
   &__metadata {
     display: block;
     color: $alt-text-color;
