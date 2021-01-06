@@ -159,7 +159,7 @@ export default ModelWithModifier.extend({
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  case: computed('agendaItemTreatments.@each', async function() {
+  case: computed('treatments.firstObject.subcase.case', async function() {
     const agendaItemTreatments = await this.get('treatments');
     const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
     const subcase = await agendaItemTreatment.get('subcase');
@@ -173,7 +173,7 @@ export default ModelWithModifier.extend({
     return _case;
   }),
 
-  publicationFlow: computed('agendaItemTreatments.@each', async function() {
+  publicationFlow: computed('treatments.firstObject.subcase.case.publicationFlow', async function() {
     const _case = await this.get('case');
     if (!_case) {
       return false;
@@ -188,7 +188,7 @@ export default ModelWithModifier.extend({
     return publicationFlow;
   }),
 
-  publicationFlowId: computed('agendaItemTreatments.@each', async function() {
+  publicationFlowId: computed('treatments.firstObject.subcase.case.publicationFlow', async function() {
     const publicationFlow = await this.get('publicationFlow');
     return publicationFlow.id;
   }),
