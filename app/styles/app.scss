@@ -42,7 +42,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'govflanders/components/_pager';
 @import 'govflanders/components/_pill';
 @import 'govflanders/components/_radio';
-@import 'govflanders/components/_side-navigation';
 @import 'govflanders/components/_tabs';
 @import 'govflanders/components/_textarea';
 @import 'govflanders/components/_titles';
@@ -53,8 +52,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // @import 'node_modules/@govflanders/vl-ui-select/src/scss/_select';
 // @import 'node_modules/@govflanders/vl-ui-select/src/scss/_js-select';
 
-// Interdependent components - These are source order dependent
-@import 'govflanders/components/_select';
 /* Unofficial code
 ========================================================================== */
 
