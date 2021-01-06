@@ -81,19 +81,6 @@
 }
 
 ////
-// Span Columns
-//
-// Used to set grids semantically from within
-// the stylesheet with no additional HTML markup
-////
-@mixin span-items($items, $total_items, $ie9: false) {
-  @if $ie9 {
-    width: item-width($items, $total_items);
-  }
-  flex-basis: item-width($items, $total_items);
-}
-
-////
 // Grid
 //
 // Called once per breakpoint as the gutters may be different
@@ -111,14 +98,6 @@
     flex-direction: row;
     flex: 0 1 auto;
     flex-wrap: wrap;
-
-    @if $ie9 {
-      .no-flexbox &::after {
-        content: "";
-        display: table;
-        clear: both;
-      }
-    }
   }
 
   // Float children
@@ -126,11 +105,6 @@
     box-sizing: border-box;
     padding-left: $gutter;
     position: relative;
-    @if $ie9 {
-      .no-flexbox & {
-        float: left;
-      }
-    }
   }
 }
 
@@ -290,11 +264,6 @@
     // Output item classes
 
     #{$item_class} {
-      @if $ie9 {
-        .no-flexbox & {
-          width: item-width($i, $items);
-        }
-      }
       flex-basis: item-width($i, $items);
       max-width: item-width($i, $items);
       min-width: item-width($i, $items);
