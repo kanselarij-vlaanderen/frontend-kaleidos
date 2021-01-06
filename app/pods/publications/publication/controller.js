@@ -19,13 +19,12 @@ export default class PublicationController extends Controller {
 
   // Tracked props.
   @tracked numberIsAlreadyUsed = false;
-  // Tracked.
-  @tracked numberIsAlreadyUsed = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
   @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
+  @tracked showConfirmWithdraw = false;
 
 
   statusOptions = [{
@@ -41,6 +40,13 @@ export default class PublicationController extends Controller {
     icon: {
       svg: 'circle-check',
       color: 'success',
+    },
+  }, {
+    id: CONFIG.publicationStatusWithdrawn.id,
+    label: 'ingetrokken',
+    icon: {
+      svg: 'circle-close',
+      color: 'danger',
     },
   }];
 
@@ -94,6 +100,7 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+
   get expiredPublicationDate() {
     if (this.model.publicationFlow.get('publishedAt')) {
       return moment(this.model.publicationFlow.get('publishedAt'))
@@ -101,6 +108,7 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+
   get expiredTranslationDate() {
     if (this.model.publicationFlow.get('translateBefore')) {
       return moment(this.model.publicationFlow.get('translateBefore'))
@@ -143,7 +151,7 @@ export default class PublicationController extends Controller {
           timeOut: 5000,
         });
       } else {
-        this.model.publicationFlow.set('publicationNumber',  event.target.value);
+        this.model.publicationFlow.set('publicationNumber', event.target.value);
         this.numberIsAlreadyUsed = false;
         this.model.publicationFlow.save();
       }
@@ -217,12 +225,29 @@ export default class PublicationController extends Controller {
     }
   }
 
-  // TODO change this
+  @action
+  cancelWithdraw() {
+    this.showConfirmWithdraw = false;
+  }
+
+  @action
+  async withdrawPublicationFlow() {
+    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
+    this.model.publicationFlow.set('status', publicationStatus);
+    await this.model.publicationFlow.save();
+    this.showConfirmWithdraw = false;
+  }
+
   @action
   async setPublicationStatus(event) {
-    const publicationStatus = await this.store.findRecord('publication-status', event.id);
-    this.model.publicationFlow.set('status', publicationStatus);
-    this.model.publicationFlow.save();
+    if (event.id === CONFIG.publicationStatusWithdrawn.id) {
+      // Show popup and do nothing.
+      this.showConfirmWithdraw = true;
+    } else {
+      const publicationStatus = await this.store.findRecord('publication-status', event.id);
+      this.model.publicationFlow.set('status', publicationStatus);
+      this.model.publicationFlow.save();
+    }
   }
 
   @action

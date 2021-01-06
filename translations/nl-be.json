@@ -632,6 +632,7 @@
   "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
   "publications-new-button-text": "Publicatie aanmaken",
   "request-publication": "Publicatie aanvragen",
+  "withdraw-publication": "Publicatie intrekken",
   "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen.",
   "publications-number": "Publicatienummer",
   "input-error-message": "Dit veld dient ingevuld te worden.",
@@ -704,5 +705,7 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering"
+  "upload-publishpreview-correction":"Upload verbetering",
+  "cancel-publication-flow-confirm": "Bent u zeker dat u deze publicatie wil intrekken?",
+  "withdraw": "Intrekken"
 }
