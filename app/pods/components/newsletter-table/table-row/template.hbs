@@ -18,7 +18,7 @@
         </p>
       {{/if}}
     {{else}}
-      <p class="vl-u-text--muted vl-u-text--italic">
+      <p class="vl-u-text--muted auk-u-italic">
         {{t "no-newsletter-info"}}
       </p>
     {{/if}}
@@ -27,7 +27,7 @@
     {{#each (await @agendaitem.mandatees) as |mandatee|}}
       {{await mandatee.person.nameToDisplay}}<br>
     {{else}}
-      <p class="vl-u-text--muted vl-u-text--italic">
+      <p class="vl-u-text--muted auk-u-italic">
         {{t "no-mandatees"}}
       </p>
     {{/each}}
