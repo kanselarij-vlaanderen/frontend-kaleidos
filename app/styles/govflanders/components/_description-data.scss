@@ -28,26 +28,4 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  // Description data icon
-  &__icon {
-    position: absolute;
-    font-size: 2.2rem;
-    color: $ghost;
-    top: -0.4rem;
-    left: 0;
-
-    // Description data icon wrapper
-    &-wrapper {
-      position: relative;
-      padding: 0 0 0 4rem;
-    }
-  }
-
-  // Description data bordered modifier
-  &--bordered {
-    border: 0.1rem solid $border-color;
-    border-width: 0.1rem 0;
-    padding: 1.5rem 0;
-  }
 }
