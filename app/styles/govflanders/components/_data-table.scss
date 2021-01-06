@@ -133,55 +133,6 @@ $pad-tiny: 0.3rem;
     }
   }
 
-  // Data table body title
-  &__body-title {
-    max-width: 30rem;
-  }
-
-  // Data table alt modifier
-  &--alt {
-    tr {
-      th,
-      td {
-        &:first-child {
-          border-right: 0.1rem $border-color solid;
-        }
-      }
-
-      th {
-        &:not(:first-child) {
-          padding: 0 $pad $pad;
-        }
-      }
-
-      td {
-        &:not(:first-child) {
-          padding: $pad;
-        }
-      }
-    }
-  }
-
-  &--double-spacing {
-    tr {
-      td,
-      th {
-        padding: $pad ($pad-small * 3);
-      }
-    }
-  }
-
-  // Data table no header modifier
-  &--no-header {
-    tbody {
-      tr {
-        &:first-child {
-          border-top: 3px $border-color solid;
-        }
-      }
-    }
-  }
-
   &--no-scroll {
     .data-table-content {
       overflow: hidden;
