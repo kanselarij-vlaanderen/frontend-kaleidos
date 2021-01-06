@@ -107,14 +107,11 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
   margin: 0;
 }
 
-// Checkbox disabled modifier
-.vl-checkbox--disabled {
-  .vl-checkbox__label {
-    .vl-checkbox__box {
-      &::after {
-        background-color: $disabled-bg-color;
-        border-color: $disabled-color;
-      }
+.vl-checkbox__label {
+  .vl-checkbox__box {
+    &::after {
+      background-color: $disabled-bg-color;
+      border-color: $disabled-color;
     }
   }
 
@@ -161,11 +158,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       }
     }
   }
-}
-
-// Checkbox empty modifier
-.vl-checkbox--empty {
-  margin-top: 0;
 }
 
 // Checkbox switch functionality (iOS toggle)
