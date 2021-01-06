@@ -101,7 +101,14 @@
     }
 
     .vl-search__label {
-      @include form-label;
+      color: $alt-text-color;
+      font-weight: 400;
+      font-size: $form-font-size;
+
+      @include respond-to(small) {
+        font-size: $base-mobile-font-size;
+      }
+
       flex: 1;
       white-space: nowrap;
       overflow: hidden;

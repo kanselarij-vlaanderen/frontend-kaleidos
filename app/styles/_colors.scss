@@ -1,35 +1,17 @@
-/* ==========================================================================
-  Colors
-  Only define colors here. Don't use sass color functions, stick to hex values,
-  or the color component in styleguide won't regenerate automatically anymore.
- ========================================================================== */
+// ==========================================================================
+// Colors
+// Are defined by the "Name That Color" principle.
+// More info: http://chir.ag/projects/name-that-color/
+// Below the standard color names you can find the used variables throughout Flanders UI.
+// ==========================================================================
 
-/* From designs: Simple Gray
- ========================================================================== */
-
-$gray-dark: #333333;
-$dove-gray: #666666;
-$gray-light: #B2B2B2;
-$gray-lighter: #CCCCCC;
-$gray-lightest: #DDDDDD;
-
-/* From designs: Blue Gray
- ========================================================================== */
-
-$blue-gray-dark: #79838F;
-$blue-gray: #A5B3C2;
-$blue-gray-light: #C6CDD3;
-$blue-gray-lighter: #E8EBEE;
-$blue-gray-lightest: #F3F5F6;
-
-/* From designs:Base colors
- ========================================================================== */
-
+$white: #FFFFFF;
 $black: #000;
+
 $primary-yellow: #FEE539;
 $primary-blue: #0055CC;
 $blue-dark: #003BB0;
-$white: #FFFFFF;
+
 
 /* From designs: Alert colors
  ========================================================================== */
@@ -48,101 +30,108 @@ $pastel-red: #FAE6E6;
 $pastel-green: #F7FAE6;
 $pastel-yellow: #FEF9E6;
 
-
-/* From raw colors SCSS: Black/white
- ========================================================================== */
-
-$white: #FFF;
-$black: #000;
-
-/* From raw colors SCSS: Gray shaded
- ========================================================================== */
-
-$ship-gray: #3B3B3C;
+// ================================
+// Gray shaded
+// ================================
 $mine-shaft: #333332;
+$gray-dark: #333333;
+$dove-gray: #666666;
+$gray-light: #B2B2B2;
+$gray-lighter: #CCCCCC;
+$gray-lightest: #DDDDDD;
+$ghost: #cbd2da;
+$athens-gray: #e8ebee;
+$athens-gray-light: #f1f2f4;
 $fuscous-gray: #434342;
-$storm-dust: #5F6364;
-$dove-gray: #666;
-$friar-gray: #80807D;
-$gray: #8C8C8C;
-$regent-gray: #8695A8;
-$gray-chateau: #9FA4AA;
-$silver-chalice: #B2B2B2;
-$geyser: #D3D9E0;
-$loblolly: #C6CDD3;
-$ghost: #CBD2DA;
-$cararra: #E5E5E1;
-$athens-gray: #E8EBEE;
-$athens-gray-light: #F1F2F4;
-$porcelain: #F3F5F6;
+$friar-gray: #80807d;
+$cararra: #e5e5e1;
+$gray-chateau: #9fa4aa;
+$porcelain: #f3f5f6;
+$geyser: #d3d9e0;
+$silver-chalice: #b2b2b2;
+$gray: #8c8c8c;
+$ship-gray: #3b3b3c;
+$loblolly: #c6cdd3;
+$storm-dust: #5f6364;
+$regent-gray: #8695a8;
 
-/* From raw colors SCSS: Brown shaded
+/* From designs: Blue Gray
  ========================================================================== */
 
+$blue-gray-dark: #79838F;
+$blue-gray: #A5B3C2;
+$blue-gray-light: #C6CDD3;
+$blue-gray-lighter: #E8EBEE;
+$blue-gray-lightest: #F3F5F6;
+
+// ================================
+// Brown shades
+// ================================
 $brown: #966729;
-$frensh-beige: #A67F59;
-$bon-jour: #E0D7D1;
+$frensh-beige: #a67f59;
+$bon-jour: #e0d7d1;
 
-/* From raw colors SCSS: Blue shades
- ========================================================================== */
-
-$regal-blue: #003A72;
-$curious-blue: #003BB0;
-$science-blue: #05C;
+// ================================
+// Blue shades
+// ================================
+$science-blue: #05c;
 $kashmir-blue: #557797;
+$curious-blue: #003bb0;
 $endeavour: #004099;
+$regal-blue: #003a72;
 $blue-bayoux: #607284;
-$allports: #00789B;
+$allports: #00789b;
 
-/* From raw colors SCSS: Yellow shades
- ========================================================================== */
 
-$amber: #FFC515;
-$yellow: #FFE615;
-$off-yellow: #FEF9E5;
-$school-bus-yellow: #FEDD00;
+// ================================
+// Yellow shades
+// ================================
+$amber: #ffc515;
+$yellow: #ffe615;
+$off-yellow: #fef9e5;
+$school-bus-yellow: #fedd00;
 
-/* From raw colors SCSS: Red shades
- ========================================================================== */
+// ================================
+// Red shades
+// ================================
+$tall-poppy: #af2929;
+$punch: #db3434;
+$linen: #fbeaea;
+$bahia: #a6cf00;
+$azalea: #f8d6d6;
+$persian-red: #c92c2c;
 
-$tall-poppy: #AF2929;
-$punch: #DB3434;
-$linen: #FBEAEA;
-$bahia: #A6CF00;
-$azalea: #F8D6D6;
-$persian-red: #C92C2C;
-
-/* From raw colors SCSS: Green shades
- ========================================================================== */
-
+// ================================
+// Green shades
+// ================================
 $napier-green: #238000;
 
-/* From raw colors SCSS: State shades
- ========================================================================== */
 
+// ================================
+// State colors
+// ================================
 $limeade: #8bae00;
-$pistachio: #A3CC00;
-$rum-swizzle: #F7FAE5;
-$map-background: #E5E3DF;
-$green: #A3CC00;
-$background-green: #F6FAE5;
-$background-red: #FBEAEA;
-$background-yellow: #FEF9E5;
-$pink: #D53E5E;
+$pistachio: #a3cc00;
+$rum-swizzle: #f7fae5;
+$map-background: #e5e3df;
+$green: #a3cc00;
+$background-green: #f6fae5;
+$background-red: #fbeaea;
+$background-yellow: #fef9e5;
+$pink: #d53e5e;
 
-/* From raw colors SCSS: Sharing colors
- ========================================================================== */
-
-$facebook-color: #36609F;
-$twitter-color: #2CAAE1;
-$linkedin-color: #0A6C9B;
-$googleplus-color: #DC5442;
+// ================================
+// Sharing colors
+// ================================
+$facebook-color: #36609f;
+$twitter-color: #2caae1;
+$linkedin-color: #0a6c9b;
+$googleplus-color: #dc5442;
 
 /* Table colors
 	 ========================================================================== */
 
 $white-background: #eee;
-
 
 /* Environment Indicator Colors
 	 ========================================================================== */
@@ -151,7 +140,6 @@ $environment-local-color: #e86ab9;
 $environment-dev-color: #4CAF50;
 $environment-test-color: #FFF176;
 $environment-prod-color: #d53333;
-
 
 /* Tooltips
 	 ========================================================================== */
@@ -171,59 +159,142 @@ $tooltip-dark-color: #454545;
    Only make edits and additions if you **really know what you're doing**
    ========================================================================== */
 
-   /* ==========================================================================
-      Colors
-      ========================================================================== */
+/* ==========================================================================
+   Colors
+   ========================================================================== */
 
-   // Tint & shade helper functions
-   // ---
-   // Makes a color lighter
-   @function tint($color, $percent) {
-     @return mix(#fff, $color, $percent);
-   }
+// Tint & shade helper functions
+// ---
+// Makes a color lighter
+@function tint($color, $percent) {
+  @return mix(#fff, $color, $percent);
+}
 
-   // Makes a color darker
-   @function shade($color, $percent) {
-     @return mix(#000, $color, $percent);
-   }
+// Makes a color darker
+@function shade($color, $percent) {
+  @return mix(#000, $color, $percent);
+}
 
-   // Color palette
-   $au-gray-100    : #F4F5F6;
-   $au-gray-200    : #E6E8EB;
-   $au-gray-300    : #CCD1D9;
-   $au-gray-400    : #A1ABBA;
-   $au-gray-500    : #8E98A6;
-   $au-gray-600    : #69717C;
-   $au-gray-700    : #545961;
-   $au-gray-800    : #2A2D31;
-   $au-gray-900    : #212326;
-   $au-gray-1000   : #000000;
+// Color palette
+$au-gray-100    : #F4F5F6;
+$au-gray-200    : #E6E8EB;
+$au-gray-300    : #CCD1D9;
+$au-gray-400    : #A1ABBA;
+$au-gray-500    : #8E98A6;
+$au-gray-600    : #69717C;
+$au-gray-700    : #545961;
+$au-gray-800    : #2A2D31;
+$au-gray-900    : #212326;
+$au-gray-1000   : #000000;
 
-   $au-blue-100    : #EDF6FF;
-   $au-blue-200    : #DCECFD;
-   $au-blue-300    : #C1DDFB;
-   $au-blue-600    : #0F6FD7;
-   // $au-blue-700    : #0E5EB8; This color misses some saturation... Overidden...
-   $au-blue-700    : #05c;
-   $au-blue-900    : #073261;
+$au-blue-100    : #EDF6FF;
+$au-blue-200    : #DCECFD;
+$au-blue-300    : #C1DDFB;
+$au-blue-600    : #0F6FD7;
+// $au-blue-700    : #0E5EB8; This color misses some saturation... Overidden...
+$au-blue-700    : #05c;
+$au-blue-900    : #073261;
 
-   $au-yellow-100  : #FFF9D5;
-   $au-yellow-200  : #FFF29B;
-   $au-yellow-300  : #FEE539;
-   $au-yellow-400  : #FFC515;
-   $au-yellow-600  : #7F6E3B;
-   $au-yellow-900  : #473D21;
+$au-yellow-100  : #FFF9D5;
+$au-yellow-200  : #FFF29B;
+$au-yellow-300  : #FEE539;
+$au-yellow-400  : #FFC515;
+$au-yellow-600  : #7F6E3B;
+$au-yellow-900  : #473D21;
 
-   $au-red-100     : #FCF3F3;
-   $au-red-200     : #F7E3E3;
-   $au-red-500     : #FF4141;
-   $au-red-600     : #D92626;
-   $au-red-700     : #AB1F1F;
-   $au-red-900     : #470000;
+$au-red-100     : #FCF3F3;
+$au-red-200     : #F7E3E3;
+$au-red-500     : #FF4141;
+$au-red-600     : #D92626;
+$au-red-700     : #AB1F1F;
+$au-red-900     : #470000;
 
-   $au-green-100   : #F7FAE5;
-   $au-green-200   : #ECF2CD;
-   $au-green-400   : #B3E000;
-   $au-green-500   : #8BAE00;
-   $au-green-700   : #5F750B;
-   $au-green-900   : #323D08;
+$au-green-100   : #F7FAE5;
+$au-green-200   : #ECF2CD;
+$au-green-400   : #B3E000;
+$au-green-500   : #8BAE00;
+$au-green-700   : #5F750B;
+$au-green-900   : #323D08;
+
+
+// ==========================================================================
+// Mapped colors
+// Color variables based on their function or role, to see the color values
+// see _colorsRaw.scss
+// ==========================================================================
+$page-bg: $white !default;
+
+// ================================
+// Text colors
+// ================================
+$text-color: $mine-shaft !default;
+$alt-text-color: $dove-gray !default;
+$sub-text-color: $gray !default;
+$placeholder-color: $silver-chalice !default;
+$icon-color: $silver-chalice !default;
+
+// ================================
+// Default widely used colors
+// ================================
+$action-color: $science-blue !default;
+$action-fg-color: $page-bg !default;
+$action-hover-color: $curious-blue !default;
+$action-active-color: $endeavour !default;
+$action-active-border-color: $regal-blue !default;
+$action-text-color: $action-color !default;
+$action-text-hover-color: $action-hover-color !default;
+$action-text-active-color: $action-active-color !default;
+$action-secondary-color: $limeade !default;
+$action-tertiary-color: $loblolly !default;
+$action-tertiary-hover-color: darken($loblolly, 20%) !default;
+$accent-color: $yellow !default;
+$accent-fg-color: $page-bg !default;
+$accent-alt-color: darken($accent-color, 5%) !default;
+$border-color: $ghost !default;
+$outline-color: $amber !default;
+$form-label-message-color: $regent-gray !default;
+$label-color-light: $regent-gray !default;
+
+// ================================
+// Backgrounds
+// ================================
+$alt-bg: $athens-gray !default;
+$alt-hover-bg: $athens-gray-light !default;
+$overlay-bg: rgba($page-bg, 0.8) !default;
+
+// ================================
+// States
+// ================================
+$error-color: $punch !default;
+$error-fg-color: $page-bg !default;
+$error-hover-color: $tall-poppy !default;
+$error-secondary-color: mix($azalea, $page-bg, 60%) !default;
+$error-text-color: $error-color !default;
+$warning-color: $amber !default;
+$warning-text-color: $amber !default;
+$warning-fg-color: $text-color !default;
+$warning-hover-color: darken($warning-color, 5%) !default;
+$warning-secondary-color: $off-yellow !default;
+$success-color: $limeade !default;
+$success-hover-color: $success-color !default;
+$success-fg-color: $page-bg !default;
+$success-secondary-color: $rum-swizzle !default;
+$success-text-color: $success-color !default;
+$bordered-content-border-color: $alt-bg !default;
+$subtext-color: $alt-text-color !default;
+$marker-bg-color: $yellow !default;
+$marker-fg-color: $text-color !default;
+$progress-color: $pink !default;
+
+// ================================
+// Disabled
+// ================================
+$disabled-color: $ghost !default;
+$disabled-color-dark: darken($ghost, 20%);
+$disabled-bg-color: mix($athens-gray, $page-bg, 50%) !default;
+$disabled-text-color: $alt-text-color !default;
+
+// ================================
+// Regions
+// ================================
+$alt-region-bg: $alt-bg !default;

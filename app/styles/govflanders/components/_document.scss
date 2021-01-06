@@ -1,5 +1,13 @@
 .vl-document {
-  @include clearfix;
+  &::before,
+  &::after {
+    content: "";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -20,7 +28,9 @@
     }
 
     &__text {
-      @include vl-u-text--ellipse;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: block;
       position: relative;
       border: .2rem solid $icon-color;

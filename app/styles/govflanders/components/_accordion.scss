@@ -1,10 +1,5 @@
 .js-vl-accordion {
   position: relative;
-
-  &--flex-reverse {
-    display: flex;
-    flex-direction: column-reverse;
-  }
 }
 
 .vl-accordion__content {

@@ -1,18 +1,3 @@
-.horizontal-line-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .horizontal-line {
-    border-right: 1px solid $border-color;
-    height: 100%;
-    justify-self: stretch;
-    align-self: stretch;
-    background-color: #000;
-    padding-top: 25px;
-  }
-}
-
 .not-clickable:active {
   background: #fff !important;
   cursor: default !important;
@@ -40,11 +25,6 @@
   }
 }
 
-.compare-container {
-  display: flex;
-  justify-content: space-between;
-}
-
 .compare-left-column {
   width: calc(47%);
   margin-right: 6%;
@@ -63,7 +43,7 @@
   .grid-item {
     height: 100%;
 
-    & > a {
+    & > div {
       height: 100%;
 
       background: #fff !important;
