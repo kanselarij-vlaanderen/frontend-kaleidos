@@ -16,7 +16,7 @@ export default class AccessLevelPill extends Component {
 
   @service('current-session') session;
 
-  classNameBindings = [':vl-u-display-flex', ':vl-u-flex-align-center'];
+  classNameBindings = [':auk-u-flex', ':vl-u-flex-align-center'];
 
   loading = false;
   lastPiece = null;

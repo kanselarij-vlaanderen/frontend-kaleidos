@@ -4,7 +4,7 @@
   margin: 0 auto;
   min-width: $bp-medium + 1;
   max-width: $page-max-width-wide;
-  padding: 0 $spacing-medium;
+  padding: 0 3rem;
 
   @include respond-to(medium) {
     width: auto;
@@ -15,6 +15,6 @@
   @include respond-to(small) {
     width: auto;
     min-width: 0;
-    padding: 0 $spacing-small;
+    padding: 0 1.5rem;
   }
 }

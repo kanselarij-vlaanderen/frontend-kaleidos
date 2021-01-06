@@ -1,15 +1,15 @@
 .vl-u-spacer {
-  margin-bottom: $spacing-normal;
+  margin-bottom: 2rem;
 }
 
 .vl-u-spacer--small {
-  margin-bottom: $spacing-small;
+  margin-bottom: 1.5rem;
 }
 
 .vl-u-spacer--large {
-  margin-bottom: $spacing-large;
+  margin-bottom: 6rem;
 
   @include respond-to(small) {
-    margin-bottom: $spacing-medium;
+    margin-bottom: 3rem;
   }
 }

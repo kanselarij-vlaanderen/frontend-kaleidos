@@ -11,7 +11,7 @@ $alert-padding-small: 1.5rem;
   line-height: 1.4;
   border: 0.1rem solid $alt-bg;
   padding: $alert-padding;
-  margin-bottom: $spacing-small;
+  margin-bottom: 1.5rem;
 
   @include respond-to(small) {
     font-size: 1.4rem;

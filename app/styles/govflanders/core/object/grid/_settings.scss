@@ -15,7 +15,7 @@ $grid_args: (
   grids: (
     default: (
       columns:          $grid-cols,
-      gutter:           $spacing-medium,
+      gutter:           3rem,
       debug_name:       "default",
       debug_bg:           #f175c8,
     ),
@@ -23,7 +23,7 @@ $grid_args: (
       columns:          $grid-cols,
       suffix:           "--l",
       breakpoint_min:   $bp-medium + 1,
-      gutter:           $spacing-medium,
+      gutter:           3rem,
       debug_name:       "Large",
       debug_bg:         #1a4cf1,
     ),
@@ -31,7 +31,7 @@ $grid_args: (
       columns:          $grid-cols,
       suffix:           "--xl",
       breakpoint_min:   $bp-large + 1,
-      gutter:           $spacing-medium,
+      gutter:           3rem,
       debug_name:       "X-Large",
       debug_bg:         #ea121d,
     ),
@@ -39,7 +39,7 @@ $grid_args: (
       columns:          $grid-cols,
       suffix:           "--m",
       breakpoint_max:   $bp-medium,
-      gutter:           $spacing-medium,
+      gutter:           3rem,
       debug_name:       "Medium",
       debug_bg:         #0c9c2e,
     ),
@@ -47,7 +47,7 @@ $grid_args: (
       columns:          $grid-cols,
       suffix:           "--s",
       breakpoint_max:   $bp-small,
-      gutter:           $spacing-small,
+      gutter:           1.5rem,
       debug_name:       "Small",
       debug_bg:         #ea8d35,
     ),
@@ -55,7 +55,7 @@ $grid_args: (
       columns:          $grid-cols,
       suffix:           "--xs",
       breakpoint_max:   $bp-xsmall,
-      gutter:           $spacing-small,
+      gutter:           1.5rem,
       debug_name:       "X-Small",
       debug_bg:         #eac11f,
     )
@@ -75,7 +75,7 @@ $form_grid_args: (
   grids: (
     default: (
       columns:          $grid-cols,
-      gutter:           $spacing-small,
+      gutter:           1.5rem,
       debug_name:       "default",
       debug_bg:           #f175c8,
     ),
@@ -83,7 +83,7 @@ $form_grid_args: (
       columns:          $grid-cols,
       suffix:           "--s",
       breakpoint_max:   $bp-small,
-      gutter:           $spacing-small,
+      gutter:           1.5rem,
       debug_name:       "Small",
       debug_bg:         #ea8d35,
     )

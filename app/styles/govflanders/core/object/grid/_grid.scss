@@ -622,5 +622,5 @@
     @error "No Gridtacular grids defined!";
   }
 
-  @include grid-item-wide($grid_prefix, $spacing-medium, $grid-wide-expansion, $default_wide_suffix);
+  @include grid-item-wide($grid_prefix, 3rem, $grid-wide-expansion, $default_wide_suffix);
 }

@@ -42,7 +42,7 @@
           {{/if}}
         {{/if}}
         {{#if (or renderDetails @isEditingOverview)}}
-          <div class="vl-u-display-flex vlc-u-flex-space-between">
+          <div class="auk-u-flex vlc-u-flex-space-between">
             {{#if (and selectedAgendaitem @isEditingOverview)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
               </span>
@@ -129,7 +129,7 @@
                   {{/if}}
                 </div>
                 <div class="vlc-agenda-items__icons">
-                  <div class="vl-u-display-flex vlc-agenda-items__icons">
+                  <div class="auk-u-flex vlc-agenda-items__icons">
                     {{#if (not newsletterInfo.inNewsletter)}}
                       <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
                         {{#attach-tooltip

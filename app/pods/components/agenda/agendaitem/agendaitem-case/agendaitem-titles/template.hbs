@@ -1,6 +1,6 @@
 {{#if @subcase.case.id}}
   <div class="auk-u-mb-2">
-    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+    <div class="auk-u-flex vlc-u-flex-align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array
@@ -15,7 +15,7 @@
 {{/if}}
 
 <div class="auk-u-mb-2">
-  <div class="vl-u-display-flex vlc-u-display-flex-align-center">
+  <div class="auk-u-flex vlc-u-display-flex-align-center">
     <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not @agendaitem.showAsRemark)}}
         {{t "note"}}
@@ -64,7 +64,7 @@
   </div>
   {{#if @agendaitem.retracted}}
     <div class="auk-u-mb-2">
-      <div class="pill-container vl-u-display-flex">
+      <div class="pill-container auk-u-flex">
         <span class="vl-pill vl-u-text--capitalize">
           {{t "postponed-item"}}
         </span>
@@ -74,7 +74,7 @@
 {{else}}
   {{#if @newsletterInfo}}
     <div class="auk-u-mb-2">
-      <div class="pill-container vl-u-display-flex">
+      <div class="pill-container auk-u-flex">
         <span
           class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} auk-u-mr-2"
         >
@@ -100,7 +100,7 @@
 {{/if}}
 <div class="auk-u-mb-2">
   <div
-    class="pill-container vl-u-display-flex"
+    class="pill-container auk-u-flex"
     data-test-agenda-subcasehidden-pill
   >
     {{#if

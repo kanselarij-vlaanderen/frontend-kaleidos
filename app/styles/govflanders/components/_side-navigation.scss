@@ -126,7 +126,7 @@ $seethrough: rgba($black, .3) !default;
   }
 
   .vl-side-navigation__group--spaced &:not(:last-child) {
-    margin-bottom: $spacing-small;
+    margin-bottom: 1.5rem;
   }
 
   .vl-side-navigation__group--has-title & + & {

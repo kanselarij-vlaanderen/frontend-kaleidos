@@ -17,10 +17,10 @@
 
   &--has-border {
     border-bottom: 1px solid $border-color;
-    margin-bottom: $spacing-small;
+    margin-bottom: 1.5rem;
 
     @include respond-to(small) {
-      margin-bottom: $spacing-xsmall;
+      margin-bottom: 1rem;
     }
   }
 
@@ -76,7 +76,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $spacing-medium;
+  margin-bottom: 3rem;
 
   &__title {
     @include respond-to(small) {
