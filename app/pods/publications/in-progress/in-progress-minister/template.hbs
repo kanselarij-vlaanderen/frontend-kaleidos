@@ -11,12 +11,12 @@
 >
   <table.content as |c|>
     <c.header>
+      <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
         field="publicationNumber"
         label=(t "publications-number")
       }}
-      <th>{{t "agendaitem-case"}}</th>
       {{th-sortable
         currentSorting=this.sort
         field="publishBefore"
@@ -34,11 +34,7 @@
     </c.header>
     <c.body class="tr-hover" as |row|>
       <td>
-        {{row.publicationNumber}}
-      </td>
-      <td>
         {{row.case.shortTitle}}
-
         {{# if (await row.case.hasBvr)}}
           <br>
           <span class="auk-u-muted auk-u-text-small">{{t "decreet"}}</span>
@@ -48,7 +44,9 @@
           <br>
           <span class="auk-u-muted auk-u-text-small">{{t "BvR"}}</span>
         {{/if}}
-
+      </td>
+      <td>
+        {{row.publicationNumber}}
       </td>
       <td>
         {{#if row.publicationBefore}}

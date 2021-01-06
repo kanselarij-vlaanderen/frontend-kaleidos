@@ -11,36 +11,9 @@
   text-transform: none;
 }
 
-@mixin vi-icon($icon) {
-  &::before {
-    content: "\E001"; //map get icon
-  }
-}
-
-@mixin vi-icon-after($icon) {
-  &::after {
-    content: "\E001"; //map get icon
-  }
-}
-
 @mixin vi {
   &::before,
   &::after {
     @include icon-font-base;
-  }
-}
-
-.vl-vi {
-  &::before,
-  &::after {
-    @include icon-font-base;
-    display: inline-block;
-  }
-
-  &.vl-vi-u-180deg {
-    &::before {
-      display: inline-block;
-      transform: rotate(180deg);
-    }
   }
 }

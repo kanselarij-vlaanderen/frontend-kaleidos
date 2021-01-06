@@ -3,29 +3,6 @@
     * custom badge
    ========================================================================== */
 
-.vl-badge--custom {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: $porcelain;
-
-  .vl-badge__icon,
-  .o-svg-icon {
-      color: $science-blue;
-  }
-
-  .o-svg-icon {
-    margin: 0;
-    padding: 0;
-
-    svg {
-        display: block;
-        height: 100%;
-        width: 100%;
-    }
-  }
-}
-
 /* Custom badge size
    Design is 32x32?
    ========================================================================== */
