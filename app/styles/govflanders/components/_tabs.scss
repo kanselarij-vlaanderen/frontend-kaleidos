@@ -18,36 +18,9 @@ $tabs-stroke-height: 3px;
     display: none;
   }
 
-  @include respond-to(small) {
-    [data-vl-tabs] & {
-      display: none;
-      position: relative;
-      left: -1.5rem;
-      width: calc(100% + 3rem);
-      margin: 0 0 1rem;
-      padding: 0.4rem 0;
-      border-top: 1px $alt-bg solid;
-      border-bottom: 1px $alt-bg solid;
-
-      &[data-vl-show="true"] {
-        display: block;
-      }
-
-      // Functional header tabs implementation
-      .vl-functional-header & {
-        left: 0;
-        width: 100%;
-      }
-    }
-  }
-
   .vl-functional-header & {
     margin: 0;
     border: 0;
-
-    @include respond-to(small) {
-      border-bottom: 1px $border-color solid;
-    }
   }
 }
 
@@ -94,17 +67,6 @@ $tabs-stroke-height: 3px;
     }
   }
 
-  @include respond-to(small) {
-    [data-vl-tabs] & {
-      display: block;
-      top: 0;
-
-      &:first-of-type {
-        width: calc(100% - 4.2rem);
-      }
-    }
-  }
-
   // General tab link
   &__link {
     display: block;
@@ -130,29 +92,9 @@ $tabs-stroke-height: 3px;
       border-bottom: $tabs-stroke-height solid $text-color;
       background-color: transparent;
 
-      @include respond-to(small) {
-        [data-vl-tabs] & {
-          border: 0;
-        }
-      }
-
       // Functional header tabs implementation
       .vl-functional-header & {
         border-top: $tabs-stroke-height $text-color solid !important; // sass-lint:disable-line no-important
-
-        @include respond-to(small) {
-          border: 0;
-        }
-      }
-    }
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-
-      [data-vl-tabs] & {
-        padding: 0.7rem 1.5rem;
-        border: 0;
-        font-size: 1.5rem;
       }
     }
   }
@@ -181,11 +123,6 @@ $tabs-stroke-height: 3px;
 
       &:hover {
         border-top: $tabs-stroke-height solid $border-color;
-      }
-
-      @include respond-to(small) {
-        padding: .7rem 1.5rem;
-        border: 0 !important; // sass-lint:disable-line no-important
       }
     }
   }
@@ -216,14 +153,6 @@ $tabs-stroke-height: 3px;
 
   .vl-functional-header & {
     border-top: 0px;
-
-    // Functional header tabs implementation
-    @include respond-to(small) {
-      left: 0;
-      width: 100%;
-      margin: 0;
-      border-bottom: 1px $border-color solid;
-    }
   }
 
   span {
@@ -309,9 +238,5 @@ $tabs-stroke-height: 3px;
       border: 0;
       border-bottom: 1px $border-color solid;
     }
-  }
-
-  @include respond-to(small) {
-    display: block;
   }
 }

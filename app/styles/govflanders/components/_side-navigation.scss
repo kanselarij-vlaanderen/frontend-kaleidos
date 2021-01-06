@@ -33,16 +33,6 @@ $seethrough: rgba($black, .3) !default;
     }
   }
 
-  @include respond-to(small) {
-    display: none;
-    min-height: 10rem;
-    max-height: calc(100vh - 15rem);
-    padding: 1.5rem 1rem 1.5rem 1.5rem;
-    background: $page-bg;
-    box-shadow: 0 0 2.1rem $seethrough;
-    animation: fade-transition 0.3s;
-  }
-
   a {
     text-decoration: none;
 
@@ -73,13 +63,6 @@ $seethrough: rgba($black, .3) !default;
   padding: 0 0 2rem;
   border-bottom: 1px solid $alt-bg;
   font-size: 1.6rem;
-
-  @include respond-to(small) {
-    padding: 0;
-    border: 0 !important; // sass-lint:disable-line no-important
-    font-size: $base-mobile-font-size;
-    overflow: hidden;
-  }
 }
 
 // seperate groups of links in the navigation
@@ -88,11 +71,6 @@ $seethrough: rgba($black, .3) !default;
   padding-top: 2rem;
   border-top: 1px solid $alt-bg;
 
-  @include respond-to(small) {
-    padding: 0;
-    border: 0 !important; // sass-lint:disable-line no-important
-  }
-
   &:last-child {
     margin-bottom: 0;
   }
@@ -100,10 +78,6 @@ $seethrough: rgba($black, .3) !default;
   &--has-title {
     padding-top: 3rem;
     border-top-width: 3px;
-
-    @include respond-to(small) {
-      padding-top: 1.5rem;
-    }
   }
 }
 
@@ -120,11 +94,6 @@ $seethrough: rgba($black, .3) !default;
     padding: 0;
   }
 
-  @include respond-to(small) {
-    padding: 0;
-    font-size: 1.4rem;
-  }
-
   .vl-side-navigation__group--spaced &:not(:last-child) {
     margin-bottom: 1.5rem;
   }
@@ -133,29 +102,10 @@ $seethrough: rgba($black, .3) !default;
     margin-top: 0.5rem;
   }
 
-  > a {
-    @include respond-to(small) {
-      display: block;
-      margin: .7rem 0 1.4rem;
-    }
-  }
-
-  &:last-child {
-    > a {
-      @include respond-to(small) {
-        margin-bottom: .7rem;
-      }
-    }
-  }
-
   // Level two list
   > ul {
     display: none;
     padding: 0.7rem 0 0.7rem 2rem;
-
-    @include respond-to(small) {
-      padding: 0.7rem 1rem 0.7rem 1.3rem;
-    }
 
     &.vl-side-navigation__subgroup--active {
       display: block;

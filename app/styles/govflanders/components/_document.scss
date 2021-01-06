@@ -58,9 +58,5 @@
     color: $alt-text-color;
     font-size: 1.6rem;
     margin-top: 0.6rem;
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-    }
   }
 }

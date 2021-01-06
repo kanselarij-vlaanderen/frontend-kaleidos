@@ -13,11 +13,6 @@ $alert-padding-small: 1.5rem;
   padding: $alert-padding;
   margin-bottom: 1.5rem;
 
-  @include respond-to(small) {
-    font-size: 1.4rem;
-    padding: $alert-padding-small;
-  }
-
   // Alert close
   &__close {
     display: flex;
@@ -51,19 +46,11 @@ $alert-padding-small: 1.5rem;
     flex: 0 0 auto;
     background: $white;
     margin-right: $alert-padding;
-
-    @include respond-to(small) {
-      margin-right: $alert-padding-small;
-    }
   }
 
   // Alert loader
   &__loader {
     margin-right: $alert-padding;
-
-    @include respond-to(small) {
-      margin-right: $alert-padding-small;
-    }
   }
 
   // Alert title
@@ -101,10 +88,6 @@ $alert-padding-small: 1.5rem;
       .vl-vi {
         font-size: 1.5rem;
         top: 0;
-
-        @include respond-to(small) {
-          font-size: 1.2rem;
-        }
       }
     }
   }

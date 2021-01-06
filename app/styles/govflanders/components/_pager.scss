@@ -1,10 +1,6 @@
 .vl-pager {
   font-size: 1.6rem;
 
-  @include respond-to(small) {
-    font-size: 1.4rem;
-  }
-
   // Pager list
   &__list {
     text-align: left;
@@ -67,10 +63,6 @@
         font-size: 1.2rem;
         color: inherit;
         line-height: 1;
-
-        @include respond-to(small) {
-          font-size: 1rem;
-        }
       }
     }
   }

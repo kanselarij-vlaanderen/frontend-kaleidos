@@ -63,11 +63,6 @@ $headers-typo: (
       font-weight: map-get($size-info, weight);
       margin-bottom: map-get($size-info, space);
       line-height: map-get($size-info, line-height);
-
-      @include respond-to(small) {
-        font-size: map-get($size-info, size-s);
-        margin-bottom: map-get($size-info, space-s);
-      }
     }
   }
 }

@@ -1,7 +1,3 @@
 .auk-u-mb-10 {
   margin-bottom: 6rem;
-
-  @include respond-to(small) {
-    margin-bottom: 3rem;
-  }
 }

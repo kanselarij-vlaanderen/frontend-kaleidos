@@ -27,11 +27,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: none;
 
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-    line-height: $base-mobile-line-height;
-  }
-
   // transfer breakpoints to JS
   &::before {
     display: none;
@@ -43,10 +38,6 @@ body {
 
     @include respond-to(medium-up) {
       content: "medium-up";
-    }
-
-    @include respond-to(small) {
-      content: "small";
     }
 
     @include respond-to(xsmall) {

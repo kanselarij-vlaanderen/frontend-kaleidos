@@ -30,10 +30,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       top: 0.9rem;
       left: 0.5rem;
       z-index: 2;
-
-      @include respond-to(small) {
-        top: 0.6rem;
-      }
     }
 
     &::after {
@@ -53,10 +49,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       top: 0.4rem;
       left: 0;
       z-index: 1;
-
-      @include respond-to(small) {
-        top: 0.1rem;
-      }
     }
   }
 

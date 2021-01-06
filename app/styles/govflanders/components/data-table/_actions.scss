@@ -55,10 +55,6 @@
       cursor: pointer;
       padding: 0.9rem 1.5rem 0.8rem;
 
-      @include respond-to(small) {
-        font-size: 1.5rem;
-      }
-
       [data-vl-disable="true"] & {
         color: $disabled-color;
         cursor: default;

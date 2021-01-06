@@ -3,10 +3,6 @@
   margin: 0 auto;
   padding: 3rem 0 6rem;
 
-  @include respond-to(small) {
-    padding: 3rem 0;
-  }
-
   &.vl-region--no-space {
     padding: 0;
   }
@@ -33,34 +29,18 @@
 .vl-region:not(.vl-region--alt) + .vl-region--alt,
 .vl-region--alt + .vl-region:not(.vl-region--alt) {
   padding-top: 6rem;
-
-  @include respond-to(small) {
-    padding-top: 3rem;
-  }
 }
 
 .vl-region:first-child {
   padding-top: 6rem;
-
-  @include respond-to(small) {
-    padding-top: 2rem;
-  }
 }
 
 .vl-region--small {
   padding: 1.5rem 0;
-
-  @include respond-to(small) {
-    padding: 2rem 0;
-  }
 }
 
 .vl-region--medium {
   padding: 3rem 0;
-
-  @include respond-to(small) {
-    padding: 2rem 0;
-  }
 }
 
 .vl-region--bordered + .vl-region--bordered {

@@ -12,10 +12,6 @@
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
 
-  @include respond-to(small) {
-    font-size: 1.6rem;
-  }
-
   &:hover {
     box-shadow: none;
   }
@@ -137,11 +133,6 @@
     position: relative;
     display: block;
     max-width: 100%;
-
-    @include respond-to(small) {
-      display: block;
-      width: auto;
-    }
   }
 
   &--inline & {

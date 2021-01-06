@@ -23,11 +23,6 @@ $button-border-small: 0.1rem;
   outline: 0;
   cursor: default;
 
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-    padding: 0 1.5rem;
-  }
-
   &:hover,
   &:focus {
     background-color: $action-hover-color;

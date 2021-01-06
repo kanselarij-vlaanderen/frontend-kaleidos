@@ -3,10 +3,6 @@
   font-size: $form-font-size;
   font-weight: 400;
   color: $alt-text-color;
-
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-  }
 }
 
 // Form label
@@ -66,10 +62,6 @@
   @include form-message;
   font-size: 1.4rem;
   line-height: 1.25;
-
-  @include respond-to(small) {
-    font-size: 1.3rem;
-  }
 
   &--block {
     display: block;

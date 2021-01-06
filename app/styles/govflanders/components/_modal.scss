@@ -65,10 +65,6 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
     position: static;
     transform: none;
   }
-
-  @include respond-to(small) {
-    padding: $modal-padding-small;
-  }
 }
 
 .vl-modal-dialog--large {
@@ -100,11 +96,6 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
     &__icon {
       color: $action-color;
     }
-  }
-
-  @include respond-to(small) {
-    top: 0;
-    right: 0;
   }
 
   &__icon {

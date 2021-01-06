@@ -7,11 +7,6 @@
     max-width: 100%;
     overflow: hidden;
 
-    @include respond-to(small) {
-      display: block;
-      width: auto;
-    }
-
     .vl-search__submit,
     .vl-search__label {
       display: block;
@@ -87,28 +82,16 @@
   }
 
   &--block {
-
-    @include mobile-full-width;
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 2rem 1.5rem;
     background-color: $alt-bg;
 
-    @include respond-to(small) {
-      display: block;
-      padding: 1.5rem 1rem;
-    }
-
     .vl-search__label {
       color: $alt-text-color;
       font-weight: 400;
       font-size: $form-font-size;
-
-      @include respond-to(small) {
-        font-size: $base-mobile-font-size;
-      }
-
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
@@ -122,13 +105,6 @@
       @include respond-to(medium) {
         margin: 0 1rem;
         flex: 4;
-      }
-
-      @include respond-to(small) {
-        margin: 0;
-        display: block;
-        width: 100%;
-        margin-bottom: 1.5rem;
       }
     }
 

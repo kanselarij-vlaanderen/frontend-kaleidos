@@ -4,10 +4,6 @@
     @media screen and (max-width: $bp-xsmall) {
       @content;
     }
-  } @else if $media == small {
-    @media screen and (max-width: $bp-small) {
-      @content;
-    }
   } @else if $media == medium {
     @media screen and (max-width: $bp-medium) {
       @content;
@@ -30,19 +26,5 @@
     }
   } @else {
     @content;
-  }
-}
-
-// set the size to full width on mobile, asuming it is on a 6-col a-grid base
-@mixin mobile-full-width {
-  @include respond-to(small) {
-    padding-left: $grd-gutter-width;
-    padding-right: $grd-gutter-width;
-    position: relative;
-    width: 100vw;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
   }
 }

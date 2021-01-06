@@ -11,10 +11,4 @@
     min-width: $page-min-width;
     max-width: $page-max-width-wide;
   }
-
-  @include respond-to(small) {
-    width: auto;
-    min-width: 0;
-    padding: 0 1.5rem;
-  }
 }
