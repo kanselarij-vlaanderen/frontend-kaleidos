@@ -9,27 +9,6 @@
       text-align: center;
 
     }
-
-    .vl-pager--align-right & {
-      text-align: right;
-    }
-
-    @each $name, $align in $bp-list {
-      @include respond-to(map-get($align, media)) {
-
-        .vl-pager--align-left--#{$name} & {
-          text-align: left;
-        }
-
-        .vl-pager--align-center--#{$name} & {
-          text-align: center;
-        }
-
-        .vl-pager--align-right--#{$name} & {
-          text-align: right;
-        }
-      }
-    }
   }
 
   // Pager element
@@ -38,32 +17,11 @@
     vertical-align: middle;
     padding: 0 0.5rem;
 
-    // Pager element active modifier
-    &--active {
-      font-weight: 700;
-    }
-
-    // Pager element previous modifier
-    &--previous {
-      margin-right: 1rem;
-    }
-
-    // Pager element next modifier
-    &--next {
-      margin-left: 1rem;
-    }
-
     &__cta,
     a {
       display: flex;
       align-items: center;
       white-space: nowrap;
-
-      &__icon {
-        font-size: 1.2rem;
-        color: inherit;
-        line-height: 1;
-      }
     }
   }
 }
