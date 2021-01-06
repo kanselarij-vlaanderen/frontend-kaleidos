@@ -1,23 +1,15 @@
 .vl-u-spacer {
-  @include u-spacer;
-}
-
-.vl-u-spacer--xsmall {
-  @include u-spacer--xsmall;
+  margin-bottom: $spacing-normal;
 }
 
 .vl-u-spacer--small {
-  @include u-spacer--small;
-}
-
-.vl-u-spacer--medium {
-  @include u-spacer--medium;
+  margin-bottom: $spacing-small;
 }
 
 .vl-u-spacer--large {
-  @include u-spacer--large;
-}
+  margin-bottom: $spacing-large;
 
-.vl-u-spacer--none {
-  @include u-spacer--none;
+  @include respond-to(small) {
+    margin-bottom: $spacing-medium;
+  }
 }

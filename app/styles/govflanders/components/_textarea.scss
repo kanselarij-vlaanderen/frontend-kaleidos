@@ -41,12 +41,20 @@
   // Textarea error modifier
   &.invalid.validated,
   &--error {
-    @include form-input-error;
+    background-color: $error-secondary-color;
+    border-color: $error-color;
+    box-shadow: inset 0 0 0 0.1rem $error-color;
+
+    &:focus {
+      background-color: $page-bg;
+    }
   }
 
   &.valid.validated,
   &--success {
-    @include form-input-success;
+    background-color: $rum-swizzle;
+    border-color: $limeade;
+    box-shadow: inset 0 0 0 1px $limeade;
   }
 
   // Textarea disabled modifier
