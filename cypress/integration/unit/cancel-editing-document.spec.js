@@ -137,7 +137,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
 
-    cy.get('.auk-u-ml-2 > .vl-link').contains('Wijzigen') // TODO: Prolly broken due to class change (BEN)
+    cy.get('.auk-u-ml-2 > .vl-link').contains('Wijzigen')
       .click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)

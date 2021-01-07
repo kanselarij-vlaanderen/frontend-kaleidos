@@ -25,10 +25,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       margin-right: 1rem;
       line-height: 1;
 
-      @include respond-to (small) {
-        margin-top: 0.1rem;
-      }
-
       &::before {
         position: absolute;
         display: block;
@@ -108,13 +104,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
 }
 
 .vl-checkbox__label {
-  .vl-checkbox__box {
-    &::after {
-      background-color: $disabled-bg-color;
-      border-color: $disabled-color;
-    }
-  }
-
   .vl-checkbox__toggle {
     &:checked {
       + .vl-checkbox__label {
