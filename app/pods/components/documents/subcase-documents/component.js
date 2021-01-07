@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
-import { all } from 'ember-concurrency';
+import {
+  all,
+  timeout
+} from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
@@ -14,6 +17,8 @@ import { addPieceToAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class SubcaseDocuments extends Component {
   @service currentSession;
+  @service toaster;
+  @service intl;
   @service store;
 
   @tracked isEnabledPieceEdit = false;
@@ -159,8 +164,22 @@ export default class SubcaseDocuments extends Component {
       for (const piece of pieces) {
         yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
       }
-
-      this.pieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
+      for (let index = 0; index < 10; index++) {
+        const agendaitemPieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
+          // last added piece was found in the list from cache
+          this.pieces = agendaitemPieces;
+          break;
+        } else {
+          // list from cache is stale, wait with back-off strategy
+          yield timeout(500 + (index * 500));
+        }
+        this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+          {
+            timeOut: 60000,
+          });
+      }
     } else if (this.itemType === 'subcase') {
       // Link piece to all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status
@@ -168,16 +187,30 @@ export default class SubcaseDocuments extends Component {
         'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
         'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
       });
-      const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
-        for (const piece of pieces) {
-          await addPieceToAgendaitem(agendaitem, piece);
-        }
-        await agendaitem.hasMany('pieces').reload();
+      for (const agendaitem of agendaitems.toArray()) {
         setNotYetFormallyOk(agendaitem);
-        await destroyApprovalsOfAgendaitem(agendaitem);
-        await agendaitem.save();
-      });
-      yield all(agendaitemUpdates);
+        yield destroyApprovalsOfAgendaitem(agendaitem);
+        // save prior to adding pieces, micro-service does all the changes with docs
+        yield agendaitem.save();
+        for (const piece of pieces) {
+          yield addPieceToAgendaitem(agendaitem, piece);
+        }
+        // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
+        for (let index = 0; index < 10; index++) {
+          const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
+          if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
+            // last added piece was found in the list from cache
+            break;
+          } else {
+            // list from cache is stale, wait with back-off strategy
+            yield timeout(500 + (index * 500));
+          }
+          this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+            {
+              timeOut: 60000,
+            });
+        }
+      }
 
       // Link piece to subcase
       const currentSubcasePieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
