@@ -17,6 +17,8 @@ import { addPieceToAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class SubcaseDocuments extends Component {
   @service currentSession;
+  @service toaster;
+  @service intl;
   @service store;
 
   @tracked isEnabledPieceEdit = false;
@@ -173,6 +175,10 @@ export default class SubcaseDocuments extends Component {
           // list from cache is stale, wait with back-off strategy
           yield timeout(500 + (index * 500));
         }
+        this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+          {
+            timeOut: 60000,
+          });
       }
     } else if (this.itemType === 'subcase') {
       // Link piece to all agendaitems that are related to the subcase via an agendaActivity
@@ -199,7 +205,10 @@ export default class SubcaseDocuments extends Component {
             // list from cache is stale, wait with back-off strategy
             yield timeout(500 + (index * 500));
           }
-        // Throw error ? remove doc ?
+          this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+            {
+              timeOut: 60000,
+            });
         }
       }
 
