@@ -162,6 +162,7 @@ export default class SubcaseDocuments extends Component {
       for (const piece of pieces) {
         yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
       }
+      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
       for (let index = 0; index < 10; index++) {
         const agendaitemPieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
         if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
@@ -181,16 +182,18 @@ export default class SubcaseDocuments extends Component {
         'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
       });
       for (const agendaitem of agendaitems.toArray()) {
+        setNotYetFormallyOk(agendaitem);
+        yield destroyApprovalsOfAgendaitem(agendaitem);
+        // save prior to adding pieces, micro-service does all the changes with docs
+        yield agendaitem.save();
         for (const piece of pieces) {
           yield addPieceToAgendaitem(agendaitem, piece);
         }
+        // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
         for (let index = 0; index < 10; index++) {
           const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
           if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
             // last added piece was found in the list from cache
-            setNotYetFormallyOk(agendaitem);
-            yield destroyApprovalsOfAgendaitem(agendaitem);
-            yield agendaitem.save();
             break;
           } else {
             // list from cache is stale, wait with back-off strategy
