@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
-import { all } from 'ember-concurrency';
+import {
+  all,
+  timeout
+} from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
@@ -168,16 +171,24 @@ export default class SubcaseDocuments extends Component {
         'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
         'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
       });
-      const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
+      for (const agendaitem of agendaitems.toArray()) {
         for (const piece of pieces) {
-          await addPieceToAgendaitem(agendaitem, piece);
+          yield addPieceToAgendaitem(agendaitem, piece);
         }
-        await agendaitem.hasMany('pieces').reload();
+        for (let index = 0; index < 10; index++) {
+          const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
+          if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
+            // last added piece was found in the list from cache
+            break;
+          } else {
+            // list from cache is stale, wait with back-off strategy
+            yield timeout(500 + (index * 500));
+          }
+        }
         setNotYetFormallyOk(agendaitem);
-        await destroyApprovalsOfAgendaitem(agendaitem);
-        await agendaitem.save();
-      });
-      yield all(agendaitemUpdates);
+        yield destroyApprovalsOfAgendaitem(agendaitem);
+        yield agendaitem.save();
+      }
 
       // Link piece to subcase
       const currentSubcasePieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
