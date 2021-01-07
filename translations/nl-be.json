@@ -703,5 +703,6 @@
   "add-publishpreview": "Drukproef toevoegen",
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
-  "upload-publishpreview-correction":"Upload verbetering" 
+  "upload-publishpreview-correction":"Upload verbetering",
+  "documents-may-not-be-saved-message": "Er zijn inconsistenties vastgesteld bij het toevoegen van de documenten. Noteer je wijzigingen en hernieuw deze pagina om te kijken of de documenten correct zijn toegevoegd."
 }
