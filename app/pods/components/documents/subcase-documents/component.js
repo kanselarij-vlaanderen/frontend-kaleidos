@@ -162,8 +162,17 @@ export default class SubcaseDocuments extends Component {
       for (const piece of pieces) {
         yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
       }
-
-      this.pieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+      for (let index = 0; index < 10; index++) {
+        const agendaitemPieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
+          // last added piece was found in the list from cache
+          this.pieces = agendaitemPieces;
+          break;
+        } else {
+          // list from cache is stale, wait with back-off strategy
+          yield timeout(500 + (index * 500));
+        }
+      }
     } else if (this.itemType === 'subcase') {
       // Link piece to all agendaitems that are related to the subcase via an agendaActivity
       // and related to an agenda in the design status
@@ -179,15 +188,16 @@ export default class SubcaseDocuments extends Component {
           const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
           if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
             // last added piece was found in the list from cache
+            setNotYetFormallyOk(agendaitem);
+            yield destroyApprovalsOfAgendaitem(agendaitem);
+            yield agendaitem.save();
             break;
           } else {
             // list from cache is stale, wait with back-off strategy
             yield timeout(500 + (index * 500));
           }
+        // Throw error ? remove doc ?
         }
-        setNotYetFormallyOk(agendaitem);
-        yield destroyApprovalsOfAgendaitem(agendaitem);
-        yield agendaitem.save();
       }
 
       // Link piece to subcase
