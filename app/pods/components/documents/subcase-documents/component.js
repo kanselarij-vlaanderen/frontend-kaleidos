@@ -174,11 +174,13 @@ export default class SubcaseDocuments extends Component {
         } else {
           // list from cache is stale, wait with back-off strategy
           yield timeout(500 + (index * 500));
+          if (index >= 9) {
+            this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+              {
+                timeOut: 60000,
+              });
+          }
         }
-        this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-          {
-            timeOut: 60000,
-          });
       }
     } else if (this.itemType === 'subcase') {
       // Link piece to all agendaitems that are related to the subcase via an agendaActivity
@@ -204,11 +206,13 @@ export default class SubcaseDocuments extends Component {
           } else {
             // list from cache is stale, wait with back-off strategy
             yield timeout(500 + (index * 500));
+            if (index >= 9) {
+              this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+                {
+                  timeOut: 60000,
+                });
+            }
           }
-          this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-            {
-              timeOut: 60000,
-            });
         }
       }
 
