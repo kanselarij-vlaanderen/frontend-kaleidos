@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach */
+/* global context, before, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 import modal from '../../selectors/modal.selectors';
 
@@ -13,6 +13,10 @@ context('Add files to an agenda', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should open an agenda and add documents to it', () => {
