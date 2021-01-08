@@ -1,4 +1,4 @@
-/* global context, before, it, cy, Cypress, beforeEach */
+/* global context, before, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import form from '../../selectors/form.selectors';
@@ -46,6 +46,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('Editing of a document or piece but cancelling should show old data', () => {
