@@ -10,7 +10,7 @@
   <div class="auk-u-mb-4 auk-u-mt-8">
     {{#each (await @agendaitemGroups) as |group|}}
       {{#each group.agendaitems as |agendaitem|}}
-        <div class="auk-u-flex vlc-u-flex-justify-center">
+        <div class="auk-u-flex auk-u-flex--horizontal-center">
           <div class="print-only auk-u-mt-8">
             <img style="margin:-75px 0px -50px 0px; width:200px"
                  src="/assets/logo_vlaamse_regering.svg"
@@ -31,7 +31,7 @@
                 .
                 {{agendaitem.shortTitle}}
               </h3>
-              <pre class="vlc-u-flex-inline-flex auk-u-text-pre-line">
+              <pre class="auk-u-flex--inline auk-u-text-pre-line">
                 {{agendaitem.title}}
               </pre>
             </div>
