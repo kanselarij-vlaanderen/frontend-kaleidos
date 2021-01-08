@@ -1,4 +1,4 @@
-<div class="vl-u-spacer-extended-bottom-s {{if @documentContainer.aboutToDelete "vlc-document--deleted-state" }}">
+<div class="auk-u-mb-2 {{if @documentContainer.aboutToDelete "vlc-document--deleted-state" }}">
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
       <div class="vlc-document-card__content">
@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="vlc-document-card-toolbar__right">
-            <div class="vlc-toolbar__item vl-u-display-flex">
+            <div class="vlc-toolbar__item auk-u-flex">
               {{#if this.lastPiece}}
                 <AccessLevelPill @lastPiece={{this.lastPiece}} />
               {{/if}}
@@ -67,7 +67,7 @@
             </div>
           </div>
         </div>
-        <div class="vl-u-display-flex">
+        <div class="auk-u-flex">
           <div class="vlc-document-card__badge
             {{if
               @documentContainer.checkAdded
@@ -78,9 +78,9 @@
               <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
             </div>
           </div>
-          <div class="vl-u-display-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
+          <div class="auk-u-flex vlc-u-flex-direction-column vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
-              <div class="vl-u-display-flex vlc-u-display-flex-align-center">
+              <div class="auk-u-flex vlc-u-display-flex-align-center">
                 {{input
                   type="text"
                   class="vl-input-field vl-input-field--block"

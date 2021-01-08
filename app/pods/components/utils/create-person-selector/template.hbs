@@ -1,5 +1,5 @@
 {{#if (not isCreatingPerson)}}
-  <div data-test-add-mandatee-dropdown-container class="vl-u-display-flex vlc-u-display-flex-align-center vl-col-4-4">
+  <div data-test-add-mandatee-dropdown-container class="auk-u-flex vlc-u-display-flex-align-center vl-col-4-4">
     {{#power-select
       options=items
       selected=selectedItems
@@ -16,7 +16,7 @@
     }}
       {{await (model-property-to-show model propertyToShow)}}
     {{/power-select}}
-    <div class="vl-u-spacer-extended-right-s"></div>
+    <div class="auk-u-mr-2"></div>
     <button data-test-create-person-container
             type="button"
             class="vl-button vl-button--secondary vl-button--icon"
@@ -28,8 +28,8 @@
     </button>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-s">
-    <div class="vl-u-spacer-extended-s">
+  <div class="auk-u-m-2">
+    <div class="auk-u-m-2">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "first-name")}}
         {{web-components/vl-form-input

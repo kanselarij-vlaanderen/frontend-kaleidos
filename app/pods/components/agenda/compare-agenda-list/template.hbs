@@ -1,5 +1,5 @@
 {{!-- template-lint-disable  --}}
-<div class="vl-u-display-flex vlc-u-flex-space-between vl-u-spacer-extended-bottom-s">
+<div class="auk-u-flex vlc-u-flex-space-between auk-u-mb-2">
   <div class="compare-left-column">
     {{utils/agenda-selector
       data-test-compare-agenda-left
@@ -32,14 +32,14 @@
     }}
       <div class="compare-grid-container">
         {{#if combinedAgendaitem.groupName}}
-          <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+          <div class="vlc-list-section-header auk-u-mb-2">
             {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
               These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
             {{!-- template-lint-disable no-triple-curlies  --}}
             {{{combinedAgendaitem.groupName}}}
             {{!-- template-lint-enable no-triple-curlies  --}}
           </div>
-          <div class="vlc-list-section-header vl-u-spacer-extended-bottom-s">
+          <div class="vlc-list-section-header auk-u-mb-2">
             {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
               These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
             {{!-- template-lint-disable no-triple-curlies  --}}
@@ -117,7 +117,7 @@
 }}
   {{web-components/vl-loader text=(t "please-be-patient")}}
 {{else if (and this.agendaOne this.agendaTwo)}}
-  <div class="vl-u-spacer-extended-top-s">
+  <div class="auk-u-mt-2">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
 {{/if}}

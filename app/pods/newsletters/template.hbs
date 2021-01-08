@@ -3,7 +3,7 @@
 {{#if (gt model.length 0)}}
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     <div class="vlc-scroll-wrapper__body">
-      <div class="vl-u-spacer-extended-l">
+      <div class="auk-u-m-8">
         {{#data-table
           content=model
           class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
@@ -84,7 +84,7 @@
                   }}
                 {{/if}}
               </td>
-              <td class="vl-u-align-center">
+              <td class="auk-u-text-align--center">
                 <LinkTo
                   @route="newsletter"
                   @model={{this.meeting.id}}
@@ -100,7 +100,7 @@
     </div>
   </div>
 {{else}}
-  <div class="vl-u-spacer-extended-l">
+  <div class="auk-u-m-8">
     {{web-components/vl-alert message=(t "no-meetings")}}
   </div>
 {{/if}}

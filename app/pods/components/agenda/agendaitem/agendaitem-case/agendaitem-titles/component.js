@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitles extends Component {
-  classNames = ['vl-u-spacer-extended-bottom-l'];
+  classNames = ['auk-u-mb-8'];
 
   @tracked showLoader = false;
 

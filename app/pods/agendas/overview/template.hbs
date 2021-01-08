@@ -1,8 +1,8 @@
 <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
   <div class="vlc-scroll-wrapper__body">
-    <div class="vl-u-spacer-extended-l">
+    <div class="auk-u-m-8">
       {{#if (not (or from to))}}
-        <div class="vl-u-spacer--large">
+        <div class="auk-u-mb-10">
           {{agenda/future-agendas
             meetings=activeAgendas
             type="active"
@@ -19,9 +19,9 @@
       {{/if}}
 
 
-      <div class="vl-u-spacer--large">
-        <div class="vl-u-spacer--large">
-          <div class="vl-u-display-flex vlc-u-flex-space-between">
+      <div class="auk-u-mb-10">
+        <div class="auk-u-mb-10">
+          <div class="auk-u-flex vlc-u-flex-space-between">
             <h2 class="vl-title vl-title--sans vl-title--h3">
               {{t "history"}}
               {{#if (or from to)}}
@@ -32,7 +32,7 @@
                 )
               {{/if}}
             </h2>
-            <div class="vl-u-spacer-extended-bottom-s">
+            <div class="auk-u-mb-2">
               <div class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
               >
                 <div class="vlc-input-field-group vlc-input-field-group--gmeeting"
@@ -60,7 +60,7 @@
               </div>
             </div>
           </div>
-          <div class="vl-u-spacer-extended-bottom-l">
+          <div class="auk-u-mb-8">
             {{#if (await model)}}
               {{#data-table
                 content=(await model)
@@ -137,7 +137,7 @@
                       <td>
                         {{meeting.kindToShow.label}}
                       </td>
-                      <td class="vl-u-align-center">
+                      <td class="auk-u-text-align--center">
                         {{#link-to
                           "agenda.agendaitems"
                           meeting.id

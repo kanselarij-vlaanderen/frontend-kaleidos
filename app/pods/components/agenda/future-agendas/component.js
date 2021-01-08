@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer--large'],
+  classNames: ['auk-u-mb-10'],
   selectedMeeting: null,
 
   items: computed('meetings', 'type', 'nearestMeeting', function() {

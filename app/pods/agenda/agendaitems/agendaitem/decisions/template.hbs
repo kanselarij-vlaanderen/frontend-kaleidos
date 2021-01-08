@@ -1,4 +1,4 @@
-<div class="vl-u-display-flex vlc-u-flex-space-between">
+<div class="auk-u-flex vlc-u-flex-space-between">
   <h3 class="vl-title vl-title--h3">
     {{t "decision-title"}}
   </h3>
@@ -17,7 +17,7 @@
   </div>
 {{/if}}
 {{#each this.treatments as |treatment|}}
-  <div class ="vl-u-spacer">
+  <div class ="auk-u-mb-4">
     {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
     we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
     <Agenda::Agendaitem::AgendaitemDecision

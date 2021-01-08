@@ -45,14 +45,6 @@ $table-border-color: $border-color !default;
     vertical-align: top;
     padding: $pad $pad-small;
 
-    @include respond-to(small) {
-      padding: $pad-small;
-    }
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-    }
-
     &:first-child {
       border-left: 0;
     }
@@ -65,28 +57,18 @@ $table-border-color: $border-color !default;
   .vl-data-table__grouped-row {
     td {
       padding: $pad-tiny $pad-small $pad-tiny 0;
-
-      @include respond-to(small) {
-        padding: $pad-tiny $pad-small $pad-tiny 0;
-      }
     }
   }
 
   .vl-data-table__grouped-row--first {
     td {
       padding-top: $pad;
-      @include respond-to(small) {
-        padding-top: $pad-small;
-      }
     }
   }
 
   .vl-data-table__grouped-row--last {
     td {
       padding-bottom: $pad;
-      @include respond-to(small) {
-        padding-bottom: $pad-small;
-      }
     }
   }
 
@@ -158,12 +140,5 @@ $table-border-color: $border-color !default;
 
   .vl-pill {
     vertical-align: middle;
-
-    @include respond-to(small) {
-      height: 2rem;
-      line-height: 2rem;
-      padding: 0 .5rem;
-      font-size: 1.4rem;
-    }
   }
 }

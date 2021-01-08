@@ -1,17 +1,17 @@
 {{#each subcases as |subcase|}}
   {{#subcases/subcase-item subcase=subcase}}
     <hr class="vlc-hr"/>
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       <p class="vlc-subline">
         {{await subcase.case.type.label}}
       </p>
     </div>
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       <div class="vl-title vl-title--h5">
         {{subcase.shortTitle}}
       </div>
     </div>
-    <div class="vl-u-spacer-extended-bottom">
+    <div class="auk-u-mb-4">
       <p>
         {{subcase.title}}
       </p>
@@ -39,7 +39,7 @@
       </div>
       {{#if subcase.isShowingDocuments}}
         <div class="vl-accordion__panel">
-          <div class="vl-u-spacer-extended-top">
+          <div class="auk-u-mt-4">
             {{utils/pieces-list-for-item agendaitemOrSubcase=subcase isClickable=true}}
           </div>
         </div>

@@ -56,11 +56,6 @@ $pad-tiny: 0.3rem;
     vertical-align: top;
     padding: $pad $pad-small;
 
-    @include respond-to(small) {
-      font-size: 1.4rem;
-      padding: $pad-small;
-    }
-
     &:first-child {
       border-left: 0;
     }
@@ -89,20 +84,12 @@ $pad-tiny: 0.3rem;
   .vl-data-table__grouped-row {
     td {
       padding: $pad-tiny $pad-small $pad-tiny 0;
-
-      @include respond-to(small) {
-        padding: $pad-tiny $pad-small $pad-tiny 0;
-      }
     }
 
     // Data table grouped row first modifier
     &--first {
       td {
         padding-top: $pad;
-
-        @include respond-to(small) {
-          padding-top: $pad-small;
-        }
       }
     }
 
@@ -110,10 +97,6 @@ $pad-tiny: 0.3rem;
     &--last {
       td {
         padding-bottom: $pad;
-
-        @include respond-to(small) {
-          padding-bottom: $pad-small;
-        }
       }
     }
   }
@@ -150,55 +133,6 @@ $pad-tiny: 0.3rem;
     }
   }
 
-  // Data table body title
-  &__body-title {
-    max-width: 30rem;
-  }
-
-  // Data table alt modifier
-  &--alt {
-    tr {
-      th,
-      td {
-        &:first-child {
-          border-right: 0.1rem $border-color solid;
-        }
-      }
-
-      th {
-        &:not(:first-child) {
-          padding: 0 $pad $pad;
-        }
-      }
-
-      td {
-        &:not(:first-child) {
-          padding: $pad;
-        }
-      }
-    }
-  }
-
-  &--double-spacing {
-    tr {
-      td,
-      th {
-        padding: $pad ($pad-small * 3);
-      }
-    }
-  }
-
-  // Data table no header modifier
-  &--no-header {
-    tbody {
-      tr {
-        &:first-child {
-          border-top: 3px $border-color solid;
-        }
-      }
-    }
-  }
-
   &--no-scroll {
     .data-table-content {
       overflow: hidden;
@@ -207,25 +141,6 @@ $pad-tiny: 0.3rem;
 
   .vl-pill {
     vertical-align: middle;
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-      height: 2rem;
-      line-height: 2rem;
-      padding: 0 0.5rem;
-    }
-  }
-}
-
-.vl-u-table-overflow {
-  @include respond-to(small) {
-    width: 100%;
-    overflow-x: scroll;
-
-    .vl-data-table {
-      min-width: 50rem;
-      overflow: scroll;
-    }
   }
 }
 

@@ -6,7 +6,7 @@ import {
 import moment from 'moment';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom-l'],
+  classNames: ['auk-u-mb-8'],
   store: inject(),
   currentSession: inject(),
 

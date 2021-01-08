@@ -1,11 +1,11 @@
 <div data-test-agenda-news-item-view>
-  <div class="vl-u-spacer">
-    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+  <div class="auk-u-mb-4">
+    <div class="auk-u-flex vlc-u-flex-align-baseline">
       <h3 class="vl-title vl-title--h3">
         {{t "newsletter-title"}}
       </h3>
       {{#if this.currentSession.isEditor}}
-        <div class="vl-u-spacer-extended-left-s">
+        <div class="auk-u-ml-2">
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
             <a href="javascript://" data-test-newsletter-edit class="vl-link"
@@ -51,7 +51,7 @@
       />
     {{/if}}
   {{else}}
-    <div class="vl-u-spacer-extended-top-s">
+    <div class="auk-u-mt-2">
       <WebComponents::VlAlert @message={{t "no-newsletter-info"}} />
     </div>
   {{/if}}

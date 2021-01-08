@@ -1,37 +1,37 @@
 <div class="vlc-container-center">
-  <div class="vl-u-spacer-extended-top-l no-print">
+  <div class="auk-u-mt-8 no-print">
     <h3 class="vl-title vl-title--h3" data-test-print-overview-decisions-title>
       {{await title}}
       <br/>
     </h3>
   </div>
-  <div class="vl-u-spacer-extended-bottom-l no-print">
+  <div class="auk-u-mb-8 no-print">
   </div>
-  <div class="vl-u-spacer-extended-bottom vl-u-spacer-extended-top-l">
+  <div class="auk-u-mb-4 auk-u-mt-8">
     {{#each (await @agendaitemGroups) as |group|}}
       {{#each group.agendaitems as |agendaitem|}}
-        <div class="vl-u-display-flex vlc-u-flex-justify-center">
-          <div class="print-only vl-u-spacer-extended-top-l">
+        <div class="auk-u-flex vlc-u-flex-justify-center">
+          <div class="print-only auk-u-mt-8">
             <img style="margin:-75px 0px -50px 0px; width:200px"
                  src="/assets/logo_vlaamse_regering.svg"
                  alt={{t "flemish-government"}}
             />
 
-            <p class="vl-u-text--bold vl-u-text--capitalized">
+            <p class="auk-u-text-bold vl-u-text--capitalized">
               {{await title}}
             </p>
             <hr class="vlc-hr"/>
           </div>
         </div>
         <div style="page-break-after:always;">
-          <div class="vl-u-spacer-extended-bottom-l">
-            <div class="vl-u-spacer-extended-bottom-s">
+          <div class="auk-u-mb-8">
+            <div class="auk-u-mb-2">
               <h3 class="vl-title vl-title--h5">
                 {{agendaitem.number}}
                 .
                 {{agendaitem.shortTitle}}
               </h3>
-              <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+              <pre class="vlc-u-flex-inline-flex auk-u-text-pre-line">
                 {{agendaitem.title}}
               </pre>
             </div>
@@ -47,7 +47,7 @@
                         @isTableRow={{isTableRow}}
                         @agendaitem={{agendaitem}} />
                     {{else if session.isEditor}}
-                      <div class="vl-u-display-flex vl-u-flex-align-center vl-u-flex-v-bottom">
+                      <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--align-end">
                         {{#if allowEditing}}
                           <a href="" class="vl-link"
                             {{action "toggleIsEditing" treatment}}
