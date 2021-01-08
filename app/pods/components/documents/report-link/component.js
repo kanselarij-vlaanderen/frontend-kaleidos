@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import config from 'fe-redpencil/utils/config';
-import { A } from '@ember/array';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import { tracked } from '@glimmer/tracking';
 
@@ -15,7 +14,6 @@ export default class ReportLink extends Component {
   @service store;
 
   @tracked isShowingPieces = false;
-  @tracked reverseSortedPieces = A([]);
   @tracked isUploadingNewPiece = false;
   @tracked isEditing = false;
   @tracked defaultAccessLevel = null;
@@ -24,7 +22,6 @@ export default class ReportLink extends Component {
   @tracked nameBuffer = '';
   @tracked isVerifyingDelete = false;
   @tracked lastPiece = null;
-  @tracked mySortedPieces;
   @tracked documentTypes = null;
 
   classNameBindings = ['aboutToDelete'];
