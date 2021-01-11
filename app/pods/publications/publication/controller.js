@@ -167,7 +167,7 @@ export default class PublicationController extends Controller {
 
   @action
   togglePriorityProcedure() {
-    if (parseInt(this.model.publicationFlow.priority, 10) > 0) {
+    if (this.model.publicationFlow.get('hasPriority')) {
       this.model.publicationFlow.set('priority', 0);
     } else {
       this.model.publicationFlow.set('priority', 1);

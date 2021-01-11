@@ -95,7 +95,7 @@
               </div>
               <div class="auk-form-group">
                 {{web-components/vl-checkbox
-                  value=(gte this.model.publicationFlow.priority 0)
+                  value=(gt this.model.publicationFlow.priority 0)
                   label=(t "priority-procedure")
                   toggle=(action "togglePriorityProcedure")
                 }}
