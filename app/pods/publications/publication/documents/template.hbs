@@ -83,7 +83,7 @@
               </WebComponents::AuButton>
             </td>
             <td>
-              <div class="o-flex o-flex--vertical-center">
+              <div class="auk-u-flex auk-u-flex--vertical-center">
                 <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
                 <div class="auk-u-ml-3">
                   <span class="auk-u-text-bold">{{await piece.name}}</span>
@@ -456,7 +456,7 @@
           {{t "attachments" }}
         </WebComponents::AuLabel>
         {{#each this.selectedPieces as |pieceToSend| }}
-          <div class="o-flex o-flex--vertical-center">
+          <div class="auk-u-flex auk-u-flex--vertical-center">
             <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
             <div class="auk-u-ml-3">
               <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>

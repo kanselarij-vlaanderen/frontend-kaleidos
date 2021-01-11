@@ -1,7 +1,7 @@
-{{title (t "cases")}}
+{{page-title (t "cases")}}
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l">
+  <div class="auk-u-m-8">
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
@@ -11,8 +11,8 @@
 
       <div class="vlc-toolbar__right">
         {{#if this.currentSession.isEditor}}
-          <div class="vlc-toolbar__item vl-u-display-flex vl-u-flex-align-center">
-            <label class="vl-form__label vl-u-spacer-extended-right-s vlc-u-text--nowrap" for="isArchived">
+          <div class="vlc-toolbar__item auk-u-flex auk-u-flex--vertical-center">
+            <label class="vl-form__label auk-u-mr-2 auk-u-text-nowrap" for="isArchived">
               {{t "show-archived"}}
             </label>
             {{web-components/vl-toggle value=this.showArchived}}
@@ -56,7 +56,7 @@
           <td onclick={{action "navigateToCase" row}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
-          <td class="vl-u-align-right">
+          <td class="auk-u-text-align--right">
             {{#if currentSession.isEditor}}
               <button type="button"
                       class="vl-button vl-button--link vl-button--icon">

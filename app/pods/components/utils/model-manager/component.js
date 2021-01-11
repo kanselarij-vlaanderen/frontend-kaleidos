@@ -3,7 +3,7 @@ import { cached } from 'fe-redpencil/decorators/cached';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer'],
+  classNames: ['auk-u-mb-4'],
   modelName: null,
 
   title: cached('item.label'), // TODO in class syntax use as a decorator instead

@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach, Cypress */
+/* global context, before, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types='Cypress' />
 
 import agendaSelector from '../../selectors/agenda.selectors';
@@ -15,6 +15,10 @@ context('Agenda reopen previous tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   const designAgendaBTitle = 'Ontwerpagenda B';

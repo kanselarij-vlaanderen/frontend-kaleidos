@@ -4,7 +4,7 @@ import { computed } from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom-l'],
+  classNames: ['auk-u-mb-8'],
   isEditing: false,
   intl: inject(),
   currentSession: inject(),

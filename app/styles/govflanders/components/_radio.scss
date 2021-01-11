@@ -30,10 +30,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       top: 0.9rem;
       left: 0.5rem;
       z-index: 2;
-
-      @include respond-to(small) {
-        top: 0.6rem;
-      }
     }
 
     &::after {
@@ -53,10 +49,6 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
       top: 0.4rem;
       left: 0;
       z-index: 1;
-
-      @include respond-to(small) {
-        top: 0.1rem;
-      }
     }
   }
 
@@ -98,62 +90,5 @@ $custom-easing: cubic-bezier(1, 0.1, 0, 0.9);
   &--block {
     display: block;
     margin: 0;
-  }
-
-  // Radio disabled modifier
-  &--disabled {
-
-    .vl-radio__label {
-      &::after {
-        background-color: $disabled-bg-color;
-        border-color: $disabled-color;
-      }
-    }
-
-    .vl-radio__toggle {
-      &:checked {
-        + .vl-radio__label {
-          &::after {
-            background: $ghost;
-            color: $ghost;
-            border: 0.1rem $ghost solid;
-          }
-        }
-      }
-    }
-  }
-
-  // Radio single modifier
-  &--single {
-    margin: 0;
-
-    .vl-radio__label {
-      padding: 0;
-
-      &::before {
-        top: 0.6rem;
-      }
-
-      &::after {
-        position: relative;
-        top: auto;
-        left: auto;
-      }
-    }
-  }
-
-  // Radio error modifier
-  &.invalid.validated,
-  &--error {
-    .vl-radio__label {
-      &::before {
-        background-color: transparent;
-      }
-
-      &::after {
-        background-color: $error-secondary-color;
-        border-color: $error-color;
-      }
-    }
   }
 }
