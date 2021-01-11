@@ -1,6 +1,6 @@
 {{!-- TODO unused template --}}
 {{#if (await agendaitem.documentContainers)}}
-  <div class="vl-u-spacer">
+  <div class="auk-u-mb-4">
     <h2 class="vl-title vl-title--h3">
       {{title}}
     </h2>
@@ -22,7 +22,7 @@
         {{#each (await lastPieces) as |piece|}}
           {{#if (not piece.deleted)}}
             <tr>
-              <td class="vl-u-display-flex vlc-document-list__item">
+              <td class="auk-u-flex vlc-document-list__item">
                 <a href="" {{action "downloadFile" piece}}>
                   <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
                   >

@@ -14,20 +14,22 @@ export default class PublicationTranslationController extends Controller {
   @action
   async cancelExistingTranslationActivity(translationActivity) {
     this.showLoader = true;
-    translationActivity.status = CONFIG.ACTIVITY_STATUSSES.withdrawn;
+    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
+    translationActivity.status = withDrawnStatus;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
-    await this.send('refreshModel');
+    this.model.refreshAction();
     this.showLoader = false;
   }
 
   @action
   async markTranslationActivityDone(translationActivity) {
     this.showLoader = true;
-    translationActivity.status = CONFIG.ACTIVITY_STATUSSES.closed;
+    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
+    translationActivity.status = closedStatus;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
-    await this.send('refreshModel');
+    this.model.refreshAction();
     this.showLoader = false;
   }
 }

@@ -13,7 +13,14 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
 
   .backdrop,
   .vl-modal__backdrop {
-    @include backdrop;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: z("overlay");
+    background-color: $overlay-bg;
+    backdrop-filter: blur(2px);
   }
 
   .vl-modal__backdrop {
@@ -44,66 +51,19 @@ $modal-max-height: calc(100vh - #{$nav-header-height});
   outline: none;
 
   &::backdrop {
-    @include backdrop;
-  }
-
-  &--static {
-    position: static;
-    transform: none;
-  }
-
-  @include respond-to(small) {
-    padding: $modal-padding-small;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: z("overlay");
+    background-color: $overlay-bg;
+    backdrop-filter: blur(2px);
   }
 }
 
 .vl-modal-dialog--large {
   width: 80rem;
-}
-
-.vl-modal-dialog__title {
-  font-weight: 500;
-  font-family: $accent-font;
-  font-size: 2rem;
-  margin-bottom: $modal-content-padding;
-}
-
-.vl-modal-dialog__close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0.2rem;
-  right: 0.2rem;
-  padding: 1rem;
-  border: 0;
-  background: none;
-  line-height: 1;
-  overflow: hidden;
-
-  &:hover &,
-  &:focus & {
-    &__icon {
-      color: $action-color;
-    }
-  }
-
-  @include respond-to(small) {
-    top: 0;
-    right: 0;
-  }
-
-  &__icon {
-    @include vi;
-    @include vi-cross;
-    display: flex;
-    font-size: 1.4rem;
-    line-height: 1;
-
-    &.vl-icon {
-      margin-right: 0;
-    }
-  }
 }
 
 .vl-modal-dialog__content {

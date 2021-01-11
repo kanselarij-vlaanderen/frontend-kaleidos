@@ -1,4 +1,4 @@
-<div class="vl-u-spacer">
+<div class="auk-u-mb-4">
   {{#if @subcase}}
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "confidential")}}
@@ -18,7 +18,7 @@
     }}
   </div>
 </div>
-<div class="vl-u-spacer">
+<div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "title-subcase")}}
     {{textarea
@@ -29,7 +29,7 @@
     }}
   </div>
 </div>
-<div class="vl-u-spacer">
+<div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "remark-title")}}
     {{textarea
@@ -41,7 +41,7 @@
   </div>
 </div>
 {{#if @agendaitem.showAsRemark}}
-  <div class="vl-u-spacer">
+  <div class="auk-u-mb-4">
     <div class="vlc-input-field-block">
       {{#if this.newsletterInfo}}
         {{web-components/vl-form-label value=(t "show-in-newsletter")}}
@@ -50,7 +50,7 @@
           value=this.newsletterInfo.inNewsletter
         }}
       {{else}}
-        {{web-components/vl-form-label value=(t "show-in-newsletter")}} 
+        {{web-components/vl-form-label value=(t "show-in-newsletter")}}
         {{t "no-newsletter-info"}}
       {{/if}}
     </div>

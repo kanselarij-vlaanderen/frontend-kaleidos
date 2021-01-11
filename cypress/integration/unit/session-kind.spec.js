@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach */
+/* global context, before, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import actionModal from '../../selectors/action-modal.selectors';
@@ -20,6 +20,10 @@ context('Different session kinds should show different titles', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should show the correct translations for normal session in decision print overview', () => {

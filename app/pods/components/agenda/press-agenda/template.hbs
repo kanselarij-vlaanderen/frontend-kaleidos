@@ -1,32 +1,32 @@
 <div class="vlc-container-center">
   <Utils::LogoHeader />
-  <div class="vl-u-spacer-extended-bottom-l">
+  <div class="auk-u-mb-8">
     <h1 class="vl-title vl-title--h2">
       {{await title}}
       <br/>
-      <span class="vl-u-spacer-extended-top-s vl-u-text--muted">
+      <span class="auk-u-mt-2 vl-u-text--muted">
         {{t "agenda"}}
       </span>
     </h1>
   </div>
-  <div class="vl-u-spacer-extended-bottom-l">
+  <div class="auk-u-mb-8">
     <hr class="vlc-hr"/>
   </div>
-  <div class="vl-u-spacer-extended-bottom">
+  <div class="auk-u-mb-4">
     {{#each (await agendaitemGroups) as |agendaitemGroup|}}
       {{#if agendaitemGroup.agendaitems.length}}
-        <div class="vl-u-spacer-extended-bottom">
+        <div class="auk-u-mb-4">
           {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
             <h2 class="vl-title vl-title--h4">
               {{mandatee.title}}
             </h2>
           {{/each}}
         </div>
-        <div class="vl-u-spacer-extended-bottom-l">
+        <div class="auk-u-mb-8">
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
             {{#if (not agendaitem.isEditing)}}
-              <div class="vl-u-spacer-extended-bottom-s">
-                <div class="vl-u-display-flex vlc-u-flex-space-between">
+              <div class="auk-u-mb-2">
+                <div class="auk-u-flex auk-u-flex--justify-between">
                   <h3 class="vl-title vl-title--h5">
                     {{agendaitem.number}}
                     .
@@ -34,7 +34,7 @@
                   </h3>
                   {{#if (eq definite "false")}}
                     {{#if currentSession.isEditor}}
-                      <div class="vl-u-spacer-extended-left-s">
+                      <div class="auk-u-ml-2">
                         <a href="" class="vl-link"
                           {{action "toggleIsEditing" agendaitem}}>
                           {{t "edit"}}
@@ -58,7 +58,7 @@
                 @isEditing={{agendaitem.isEditing}} />
             {{/if}}
           {{/each}}
-          <div class="vl-u-spacer-extended-bottom-l">
+          <div class="auk-u-mb-8">
             <hr class="vlc-hr"/>
           </div>
         </div>

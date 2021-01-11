@@ -19,13 +19,12 @@ export default class PublicationController extends Controller {
 
   // Tracked props.
   @tracked numberIsAlreadyUsed = false;
-  // Tracked.
-  @tracked numberIsAlreadyUsed = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
   @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
+  @tracked showConfirmWithdraw = false;
 
 
   statusOptions = [{
@@ -42,6 +41,13 @@ export default class PublicationController extends Controller {
       svg: 'circle-check',
       color: 'success',
     },
+  }, {
+    id: CONFIG.publicationStatusWithdrawn.id,
+    label: 'ingetrokken',
+    icon: {
+      svg: 'circle-close',
+      color: 'danger',
+    },
   }];
 
   typeOptions = [
@@ -55,54 +61,65 @@ export default class PublicationController extends Controller {
   ];
 
   get getPublicationStatus() {
-    return this.statusOptions.find((statusOption) => statusOption.id === this.model.get('status.id'));
+    return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
   }
 
   get getPublicationType() {
-    return this.typeOptions.find((typeOption) => typeOption.id === this.model.get('type.id'));
+    return this.typeOptions.find((typeOption) => typeOption.id === this.model.publicationFlow.get('type.id'));
   }
 
   get getTranslationDate() {
-    if (!this.model.get('translateBefore')) {
+    if (!this.model.publicationFlow.get('translateBefore')) {
       return null;
     }
-    return this.model.get('translateBefore');
+    return this.model.publicationFlow.get('translateBefore');
   }
 
   get getPublicationBeforeDate() {
-    if (!this.model.get('publishBefore')) {
+    if (!this.model.publicationFlow.get('publishBefore')) {
       return null;
     }
-    return this.model.get('publishBefore');
+    return this.model.publicationFlow.get('publishBefore');
   }
 
   get getPublicationDate() {
-    if (!this.model.get('publishedAt')) {
+    if (!this.model.publicationFlow.get('publishedAt')) {
       return null;
     }
-    return this.model.get('publishedAt');
+    return this.model.publicationFlow.get('publishedAt');
   }
 
   get getRemark() {
-    return this.model.get('remark');
+    return this.model.publicationFlow.get('remark');
   }
 
   get expiredPublicationBeforeDate() {
-    return moment(this.model.get('publishBefore'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('publishBefore')) {
+      return moment(this.model.publicationFlow.get('publishBefore'))
+        .isBefore(moment());
+    }
+    return false;
   }
+
   get expiredPublicationDate() {
-    return moment(this.model.get('publishedAt'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('publishedAt')) {
+      return moment(this.model.publicationFlow.get('publishedAt'))
+        .isBefore(moment());
+    }
+    return false;
   }
+
   get expiredTranslationDate() {
-    return moment(this.model.get('translateBefore'))
-      .isBefore(moment());
+    if (this.model.publicationFlow.get('translateBefore')) {
+      return moment(this.model.publicationFlow.get('translateBefore'))
+        .isBefore(moment());
+    }
+    return false;
   }
 
   @action
   allowedTranslationDate(date) {
-    const end = moment(this.model.get('publishBefore'));
+    const end = moment(this.model.publicationFlow.get('publishBefore'));
     if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(moment())) {
       return true;
     }
@@ -113,8 +130,8 @@ export default class PublicationController extends Controller {
   allowedPublicationDate(date) {
     const end = moment().add(360, 'days');
     let startRange;
-    if (this.model.get('translateBefore')) {
-      startRange = moment(this.model.get('translateBefore'));
+    if (this.model.publicationFlow.get('translateBefore')) {
+      startRange = moment(this.model.publicationFlow.get('translateBefore'));
     } else {
       startRange = moment();
     }
@@ -127,25 +144,25 @@ export default class PublicationController extends Controller {
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);
-    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.id).then((isPublicationNumberTaken) => {
+    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
         this.toaster.error(this.intl.t('publication-number-already-taken'), this.intl.t('warning-title'), {
           timeOut: 5000,
         });
       } else {
-        this.model.set('publicationNumber',  event.target.value);
+        this.model.publicationFlow.set('publicationNumber', event.target.value);
         this.numberIsAlreadyUsed = false;
-        this.model.save();
+        this.model.publicationFlow.save();
       }
     });
   }
 
   @restartableTask
   *setNumacNumber(event) {
-    this.model.set('numacNumber', event.target.value);
+    this.model.publicationFlow.set('numacNumber', event.target.value);
     yield timeout(1000);
-    this.model.save();
+    this.model.publicationFlow.save();
   }
 
   @action
@@ -153,7 +170,7 @@ export default class PublicationController extends Controller {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
-    const translateBefore = this.model.get('translateBefore');
+    const translateBefore = this.model.publicationFlow.get('translateBefore');
     if (typeof translateBefore !== undefined && !moment(translateBefore).isSameOrBefore(date, 'minutes')) {
       this.publicationNotAfterTranslationForPublication = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
@@ -162,8 +179,8 @@ export default class PublicationController extends Controller {
       set(this, 'showPublicationDatePicker', true);
       set(this, 'showTranslationDatePicker', true);
     } else {
-      this.model.set('publishBefore', new Date(event));
-      this.model.save().then(() => {
+      this.model.publicationFlow.set('publishBefore', new Date(event));
+      this.model.publicationFlow.save().then(() => {
         set(this, 'showPublicationDatePicker', true);
         set(this, 'showTranslationDatePicker', true);
       }).
@@ -177,8 +194,8 @@ export default class PublicationController extends Controller {
 
   @action
   setPublicationDate(event) {
-    this.model.set('publishedAt', new Date(event));
-    this.model.save();
+    this.model.publicationFlow.set('publishedAt', new Date(event));
+    this.model.publicationFlow.save();
   }
 
   @action
@@ -186,7 +203,7 @@ export default class PublicationController extends Controller {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
-    const publishBefore = this.model.get('publishBefore');
+    const publishBefore = this.model.publicationFlow.get('publishBefore');
     if (typeof publishBefore !== undefined && !moment(date).isSameOrBefore(publishBefore)) {
       this.publicationNotAfterTranslationForTranslation = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
@@ -195,8 +212,8 @@ export default class PublicationController extends Controller {
       set(this, 'showPublicationDatePicker', true);
       set(this, 'showTranslationDatePicker', true);
     } else {
-      this.model.set('translateBefore', new Date(event));
-      this.model.save().then(() => {
+      this.model.publicationFlow.set('translateBefore', new Date(event));
+      this.model.publicationFlow.save().then(() => {
         set(this, 'showPublicationDatePicker', true);
         set(this, 'showTranslationDatePicker', true);
       }).
@@ -208,26 +225,43 @@ export default class PublicationController extends Controller {
     }
   }
 
-  // TODO change this
+  @action
+  cancelWithdraw() {
+    this.showConfirmWithdraw = false;
+  }
+
+  @action
+  async withdrawPublicationFlow() {
+    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
+    this.model.publicationFlow.set('status', publicationStatus);
+    await this.model.publicationFlow.save();
+    this.showConfirmWithdraw = false;
+  }
+
   @action
   async setPublicationStatus(event) {
-    const publicationStatus = await this.store.findRecord('publication-status', event.id);
-    this.model.set('status', publicationStatus);
-    this.model.save();
+    if (event.id === CONFIG.publicationStatusWithdrawn.id) {
+      // Show popup and do nothing.
+      this.showConfirmWithdraw = true;
+    } else {
+      const publicationStatus = await this.store.findRecord('publication-status', event.id);
+      this.model.publicationFlow.set('status', publicationStatus);
+      this.model.publicationFlow.save();
+    }
   }
 
   @action
   async setPublicationType(event) {
     const publicationType = await this.store.findRecord('publication-type', event.id);
-    this.model.set('type', publicationType);
-    this.model.save();
+    this.model.publicationFlow.set('type', publicationType);
+    this.model.publicationFlow.save();
   }
 
   @restartableTask
   *setRemark(event) {
-    this.model.set('remark', event.target.value);
+    this.model.publicationFlow.set('remark', event.target.value);
     yield timeout(1000);
-    this.model.save();
+    this.model.publicationFlow.save();
   }
 
   @action

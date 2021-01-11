@@ -34,7 +34,7 @@
             (await currentAgenda.isDesignAgenda)
           )
         }}
-          <div class="vl-u-spacer-extended-left-s">
+          <div class="auk-u-ml-2">
             <a href=""
                data-test-agenda-edit-formally-ok-button
                class="vlc-agenda-items-section-header__link"
@@ -50,7 +50,7 @@
 </div>
 
 {{#if (is-empty agendaitems)}}
-  <div class="vl-u-spacer-extended-top-s">
+  <div class="auk-u-mt-2">
     {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
   </div>
 {{/if}}
@@ -137,7 +137,7 @@
     {{t "announcements-subtitle"}}
   </h3>
 </div>
-<div class="vl-u-spacer">
+<div class="auk-u-mb-4">
   {{#if (gt (await announcements.length) 0)}}
     {{#if
       (and currentSessionService.isEditor (not isShowingChanges) currentAgenda.isDesignAgenda)
@@ -193,18 +193,5 @@
 </div>
 
 {{#if (await showLoader)}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @showCloseButton={{false}}
-    @title={{t "saving-agendaitem-title-message"}}
-    @disableFocus="{{true}}"
-  >
-    <WebComponents::VlLoader
-      @text={{concat
-        (t "saving-change-message")
-        " "
-        (t "please-be-patient")
-      }}
-    />
-  </WebComponents::VlModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

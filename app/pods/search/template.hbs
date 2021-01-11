@@ -2,7 +2,7 @@
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__item">
-        <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-u-padding-bottom-5"
+        <h1 class="vlc-page-header__title vlc-page-header__title--bordered auk-u-pb"
             data-test-agendas-title>
           {{capitalize (t "search")}}
         </h1>
@@ -12,20 +12,20 @@
 </div>
 
 <div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l vlc-u-box-model-maximize-height">
-    <div class="vl-form-grid vl-form-grid--is-stacked vl-u-flex-align-right vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-m-8 vlc-u-box-model-maximize-height">
+    <div class="vl-form-grid vl-form-grid--is-stacked auk-u-flex--align-end auk-u-mb-2">
       <div class="vlc-input-field-block vl-col--4-12">
-        <div class="vl-u-display-flex">
+        <div class="auk-u-flex">
           <label class="vl-form__label u-padding--right--tinier" for="dossierId">
             {{capitalize (t "keyword")}}
           </label>
           <i
-            class="ki-circle-info vlc-u-cursor-pointer"
+            class="ki-circle-info auk-u-cursor-pointer"
             aria-hidden="true"
             {{on "click" this.openPopover}}
           >
             <AttachPopover
-              @class="ember-attacher-popper vlc-search-legend-popover vlc-u-cursor-default"
+              @class="ember-attacher-popper vlc-search-legend-popover auk-u-cursor-default"
               @showOn="click"
               @placement="right"
               @hideOn="clickout"

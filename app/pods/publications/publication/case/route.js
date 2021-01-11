@@ -3,14 +3,16 @@ import Route from '@ember/routing/route';
 
 export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model() {
-    const publicationFlow = this.modelFor('publications.publication');
+    const parentHash = this.modelFor('publications.publication');
+    const publicationFlow = parentHash.publicationFlow;
     const _case = await publicationFlow.get('case');
     return _case;
   }
 
   async setupController(controller, model) {
     super.setupController(...arguments);
-    const publicationFlow = this.modelFor('publications.publication');
+    const parentHash = this.modelFor('publications.publication');
+    const publicationFlow = parentHash.publicationFlow;
     const contactPersons = await publicationFlow.get('contactPersons');
     const subcasesOnMeeting = await this.store.query('subcase', {
       filter: {

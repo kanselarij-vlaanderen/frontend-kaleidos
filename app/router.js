@@ -121,12 +121,16 @@ Router.map(function() {
       this.route('publishpreview', { path: '/drukproeven', });
       this.route('signatures', { path: '/handtekeningen', });
     });
-    this.route('to-treat', { path: '/te-behandelen', });
+    // this.route('to-treat', { path: '/te-behandelen', });
     this.route('in-progress', { path: '/in-behandeling', }, function() {
       this.route('in-progress-minister', { path: '/via-ministerraad', });
       this.route('in-progress-not-minister', { path: '/niet-via-ministerraad', });
     });
     this.route('done', { path: '/behandeld', });
+    this.route('withdrawn', { path: '/ingetrokken', }, function() {
+      this.route('withdrawn-minister', { path: '/via-ministerraad', });
+      this.route('withdrawn-not-minister', { path: '/niet-via-ministerraad', });
+    });
   });
 });
 

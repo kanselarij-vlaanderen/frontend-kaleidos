@@ -5,18 +5,23 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <div class="o-flex o-flex--vertical auk-u-mt-2">
+            <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
               <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
               <WebComponents::AuTabs @reversed="true">
-                <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
-                  {{t "publications-to-in-progress"}}
-                </WebComponents::AuTab>
+                {{!--
+                  <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
+                    {{t "publications-to-in-progress"}}
+                  </WebComponents::AuTab>
+                --}}
                 <WebComponents::AuTab @route="publications.in-progress"
                                       data-test-publications-overview-in-progress-tab>
-                  {{t "publications-in-progress"}}
+                  {{t "publications-to-publish"}}
                 </WebComponents::AuTab>
                 <WebComponents::AuTab @route="publications.done" data-test-publications-overview-done-tab>
-                  {{t "publications-done"}}
+                  {{t "publications-published"}}
+                </WebComponents::AuTab>
+                <WebComponents::AuTab @route="publications.withdrawn" data-test-publications-overview-withdrawn-tab>
+                  {{t "publications-withdrawn"}}
                 </WebComponents::AuTab>
               </WebComponents::AuTabs>
             </div>
@@ -190,19 +195,5 @@
 {{!-- LOADER --}}
 
 {{#if this.showLoader}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header
-      @title={{t "loading-text"}}
-      @hideCloseButton={{true}}
-    />
-    <WebComponents::AuModal::Body>
-      <WebComponents::AuLoader
-        @message={{concat
-          (t "saving-change-message")
-          " "
-          (t "please-be-patient")
-        }}
-      />
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

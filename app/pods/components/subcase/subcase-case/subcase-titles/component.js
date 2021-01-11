@@ -5,7 +5,7 @@ import {
 } from '@ember/object';
 
 export default class SubcaseTitles extends Component {
-  classNames = ['vl-u-spacer-extended-bottom-l'];
+  classNames = ['auk-u-mb-8'];
   @service currentSession;
   subcase = null;
 

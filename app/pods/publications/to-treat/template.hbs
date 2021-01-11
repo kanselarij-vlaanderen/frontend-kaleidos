@@ -72,7 +72,7 @@
             </c.body>
           </table.content>
         </DataTable>
-        <div class="vl-u-spacer--small"></div>
+        <div class="auk-u-mb-3"></div>
         <WebComponents::VlPagination
                 @page={{page}}
                 @nbOfItems={{this.model.length}}
@@ -90,19 +90,5 @@
 {{!-- LOADER --}}
 
 {{#if this.showLoader}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header
-      @title={{t "loading-text"}}
-      @hideCloseButton={{true}}
-    />
-    <WebComponents::AuModal::Body>
-      <WebComponents::AuLoader
-        @message={{concat
-          (t "saving-change-message")
-          " "
-          (t "please-be-patient")
-        }}
-      />
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

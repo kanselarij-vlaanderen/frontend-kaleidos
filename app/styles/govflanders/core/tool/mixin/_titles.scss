@@ -1,12 +1,3 @@
-@mixin title--alt {
-  text-transform: uppercase;
-  font-weight: 500;
-  border-bottom: 3px solid $athens-gray;
-  font-size: 1.8rem;
-  padding: 0 0 .7rem;
-  margin: 0 0 2rem;
-}
-
 $headers-typo: (
   1: (
     size: 4.8rem,
@@ -72,11 +63,6 @@ $headers-typo: (
       font-weight: map-get($size-info, weight);
       margin-bottom: map-get($size-info, space);
       line-height: map-get($size-info, line-height);
-
-      @include respond-to(small) {
-        font-size: map-get($size-info, size-s);
-        margin-bottom: map-get($size-info, space-s);
-      }
     }
   }
 }

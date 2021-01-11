@@ -5,21 +5,10 @@
 }
 
 $badge: (
-  "border": 1px solid $border-color,
-  "size-xxsmall": 1.6rem,
-  "size-xsmall": 2rem,
   "size-small": 2.75rem,
   "size-medium": 4.5rem,
-  "size-large": 5.75rem,
-  "size-xlarge": 10rem,
-  "fsz-xxsmall": 0.9rem,
-  "fsz-xsmall": 1rem,
   "fsz-small": 1.2rem,
   "fsz-medium": 2rem,
-  "fsz-large": 3rem,
-  "fsz-xlarge": 5rem,
-  "accent-fg-color": $accent-fg-color,
-  "accent-bg-color": $accent-color,
   "alt-bg-color": $alt-bg
 );
 
@@ -28,40 +17,6 @@ $badge: (
   display: inline-block;
   overflow: hidden;
   border: 0;
-
-  &--xxsmall {
-    @include badge-size("size-xxsmall");
-
-    &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-xxsmall");
-        height: map-get($badge, "fsz-xxsmall");
-      }
-    }
-
-    &.vl-badge--initials {
-      span {
-        font-size: map-get($badge, "fsz-xxsmall");
-      }
-    }
-  }
-
-  &--xsmall {
-    @include badge-size("size-xsmall");
-
-    &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-xsmall");
-        height: map-get($badge, "fsz-xsmall");
-      }
-    }
-
-    &.vl-badge--initials {
-      span {
-        font-size: map-get($badge, "fsz-xsmall");
-      }
-    }
-  }
 
   &--small {
     @include badge-size("size-small");
@@ -97,60 +52,8 @@ $badge: (
     }
   }
 
-  &--large {
-    @include badge-size("size-large");
-
-    &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-large");
-        height: map-get($badge, "fsz-large");
-      }
-    }
-
-    &.vl-badge--initials {
-      span {
-        font-size: map-get($badge, "fsz-large");
-      }
-    }
-  }
-
-  &--xlarge {
-    @include badge-size("size-xlarge");
-
-    &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-xlarge");
-        height: map-get($badge, "fsz-xlarge");
-      }
-    }
-
-    &.vl-badge--initials {
-      span {
-        font-size: map-get($badge, "fsz-xlarge");
-      }
-    }
-  }
-
   &--alt {
     background-color: map-get($badge, "alt-bg-color");
-  }
-
-  &--white {
-    background-color: $white;
-  }
-
-  &--accent {
-    color: map-get($badge, "accent-fg-color");
-    background-color: map-get($badge, "accent-bg-color");
-  }
-
-  &--action {
-    color: $white;
-    background-color: $action-color;
-
-    span {
-      color: $white;
-    }
   }
 
   &--success {
@@ -162,38 +65,14 @@ $badge: (
     }
   }
 
-  &--error {
-    color: $white;
-    background-color: $error-color;
-
-    span {
-      color: $white;
-    }
-  }
-
   &--warning {
     background-color: $warning-color;
-  }
-
-  &--border {
-    border: map-get($badge, "border");
-  }
-
-  &--block {
-    display: block;
-  }
-
-  &__img {
-    width: 100%;
-    height: auto;
   }
 
   &--icon {
     position: relative;
 
-    &.vl-badge--action,
-    &.vl-badge--success,
-    &.vl-badge--error {
+    &.vl-badge--success {
       .vl-badge__icon {
         color: $white;
       }
@@ -210,29 +89,6 @@ $badge: (
       line-height: 1;
       color: $text-color;
       fill: $text-color;
-    }
-  }
-
-  &--initials {
-    position: relative;
-
-    span {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.25rem;
-      text-transform: uppercase;
-      color: $text-color;
-      font-weight: 500;
-    }
-
-    &.vl-badge--action,
-    &.vl-badge--success,
-    &.vl-badge--error {
-      span {
-        color: $white;
-      }
     }
   }
 }

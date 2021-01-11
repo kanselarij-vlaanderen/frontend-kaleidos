@@ -15,7 +15,7 @@ export default Component.extend({
   store: inject(),
   fileService: service(),
   currentSession: inject(),
-  classNames: ['vl-u-spacer'],
+  classNames: ['auk-u-mb-4'],
   @tracked isAddingNewPiece: null,
   isLoading: false,
   pieceInCreation: null,

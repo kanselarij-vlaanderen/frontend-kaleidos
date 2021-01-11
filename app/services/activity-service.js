@@ -9,6 +9,36 @@ export default class activityService extends Service {
   @service intl;
 
   /**
+   * Get case title.
+   *
+   * @param _case
+   * @returns {*}
+   */
+  caseTitleFromCase(_case) {
+    const shortTitle = _case.shortTitle;
+    if (shortTitle) {
+      return shortTitle;
+    }
+    return _case.title;
+  }
+
+  /**
+   * Replace activity Tokens.
+   *
+   * @param string
+   * @param publicationFlow
+   * @param _case
+   * @returns {Promise<*>}
+   */
+  replaceTokens(defaultString, publicationFlow, _case) {
+    let outputString = defaultString;
+    outputString = outputString.replace('%%nummer%%', publicationFlow.publicationNumber);
+    outputString = outputString.replace('%%titel%%', this.caseTitleFromCase(_case));
+    outputString = outputString.replace('%%kaleidosenvironment%%', window.location.origin);
+    return outputString;
+  }
+
+  /**
    * Create a new Translation Activity.
    *
    * @param finalTranslationDate
@@ -22,10 +52,11 @@ export default class activityService extends Service {
       .toDate();
 
     const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const translateActivity = this.store.createRecord('activity', {
-      status: CONFIG.ACTIVITY_STATUSSES.open,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
@@ -58,10 +89,11 @@ export default class activityService extends Service {
 
     // publishPreviewActivityType.
     const requestPublishPreviewActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: CONFIG.ACTIVITY_STATUSSES.open,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       mailContent,
       subcase,
@@ -93,10 +125,11 @@ export default class activityService extends Service {
 
     // publishActivityType.
     const requestPublishActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
+    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
     const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: CONFIG.ACTIVITY_STATUSSES.open,
+      status: activityOpenStatus,
       startDate: creationDatetime,
       mailContent,
       subcase,

@@ -1,7 +1,6 @@
 // Variables
 $alert-padding: 2rem;
 $alert-padding-small: 1.5rem;
-$alert-padding-large: 5rem 5.5rem;
 
 // Alert
 .vl-alert {
@@ -12,12 +11,7 @@ $alert-padding-large: 5rem 5.5rem;
   line-height: 1.4;
   border: 0.1rem solid $alt-bg;
   padding: $alert-padding;
-  margin-bottom: $spacing-small;
-
-  @include respond-to(small) {
-    font-size: 1.4rem;
-    padding: $alert-padding-small;
-  }
+  margin-bottom: 1.5rem;
 
   // Alert close
   &__close {
@@ -37,10 +31,6 @@ $alert-padding-large: 5rem 5.5rem;
       color: $action-color;
       transform: rotate(90deg);
     }
-
-    > .vl-vi {
-      display: inline-flex;
-    }
   }
 
   &__content {
@@ -56,32 +46,11 @@ $alert-padding-large: 5rem 5.5rem;
     flex: 0 0 auto;
     background: $white;
     margin-right: $alert-padding;
-
-    @include respond-to(small) {
-      margin-right: $alert-padding-small;
-    }
-
-    .vl-vi {
-      position: relative;
-      top: -0.1rem;
-    }
   }
 
   // Alert loader
   &__loader {
     margin-right: $alert-padding;
-
-    @include respond-to(small) {
-      margin-right: $alert-padding-small;
-    }
-  }
-
-  &__icon + &__content {
-    min-height: 4rem;
-
-    @include respond-to(small) {
-      min-height: 3rem;
-    }
   }
 
   // Alert title
@@ -89,16 +58,6 @@ $alert-padding-large: 5rem 5.5rem;
     font-weight: 500;
   }
 
-  // Alert actions
-  &__actions {
-    margin-top: 1.5rem;
-  }
-
-  // Cta modifier
-  &--cta {
-    border: 0;
-    border-top: 0.3rem solid $action-color;
-  }
 
   // Error modifier
   &--error {
@@ -129,10 +88,6 @@ $alert-padding-large: 5rem 5.5rem;
       .vl-vi {
         font-size: 1.5rem;
         top: 0;
-
-        @include respond-to(small) {
-          font-size: 1.2rem;
-        }
       }
     }
   }
@@ -148,33 +103,10 @@ $alert-padding-large: 5rem 5.5rem;
       height: 2rem;
       line-height: 2rem;
       margin-right: 0.8rem;
-
-      .vl-vi {
-        font-size: 1rem;
-      }
-    }
-
-    .vl-alert__icon + .vl-alert__content {
-      min-height: auto;
-    }
-
-    .vl-alert__actions {
-      margin-top: 1rem;
-    }
-  }
-
-  // Large
-  &--large {
-    padding: $alert-padding-large;
-
-    .vl-alert__title {
-      font-size: 2.2rem;
     }
   }
 }
 
-.vl-alert__image {
-  width: 8rem;
-  height: auto;
-  margin-right: 4rem;
+.vl-alert__icon-padding-bottom--small {
+  padding-bottom: 0.5rem;
 }
