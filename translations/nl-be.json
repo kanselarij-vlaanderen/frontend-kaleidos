@@ -370,6 +370,7 @@
   "show-minutes": "Verslag openen",
   "all-subcases-loading-text": "De procedurestappen worden geladen..",
   "documents-loading-text": "De documenten worden geladen..",
+  "documents-loading-progress": "De documenten worden geladen.. {percent}%",
   "documents-uploading-text": "De documenten worden opgeladen..",
   "document-uploading-text": "Het document wordt opgeladen..",
   "themes-loading-text": "De thema's worden geladen..",
