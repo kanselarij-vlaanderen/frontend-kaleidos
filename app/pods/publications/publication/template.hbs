@@ -86,6 +86,13 @@
                 />
               </div>
               <div class="auk-form-group">
+                {{web-components/vl-checkbox
+                  value=(gte this.model.publicationFlow.priority 0)
+                  label=(t "priority-procedure")
+                  toggle=(action "togglePriorityProcedure")
+                }}
+              </div>
+              <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
                 <WebComponents::AuPowerSelect @options={{this.typeOptions}}
                                               @isSearchable={{false}}
