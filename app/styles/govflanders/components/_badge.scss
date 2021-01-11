@@ -22,10 +22,6 @@ $badge: (
     @include badge-size("size-small");
 
     &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-small");
-        height: map-get($badge, "fsz-small");
-      }
     }
 
     &.vl-badge--initials {
@@ -37,13 +33,6 @@ $badge: (
 
   &--medium {
     @include badge-size("size-medium");
-
-    &.vl-badge--icon {
-      .vl-vi {
-        font-size: map-get($badge, "fsz-medium");
-        height: map-get($badge, "fsz-medium");
-      }
-    }
 
     &.vl-badge--initials {
       span {

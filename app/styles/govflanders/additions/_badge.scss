@@ -11,12 +11,3 @@
   width: 3rem;
   height: 3rem;
 }
-
-/* Extra class because of specificity issue
-   ========================================================================== */
-
-.vl-badge--icon-light {
-  .vl-vi {
-    color: $blue-gray-dark;
-  }
-}
