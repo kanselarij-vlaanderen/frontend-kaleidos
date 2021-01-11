@@ -25,6 +25,6 @@ export default class PublicationFlow extends Model {
 
   @computed('priority')
   get hasPriority() {
-    return parseInt(this.priority, 10) > 0;
+    return this.priority > 0;
   }
 }
