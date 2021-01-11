@@ -60,6 +60,14 @@
         {{/if}} --}}
       </td>
       <td>
+        {{t "dash"}}
+        {{!-- {{#if row.printProofStatus.[0].initiated}}
+        <WebComponents::AuStatusPill @status={{row.printProofStatus.[0].status}}>{{row.printProofStatus.[0].finished}}/{{row.printProofStatus.[0].total}}</WebComponents::AuStatusPill>
+        {{else}}
+        -
+        {{/if}} --}}
+      </td>
+      <td>
         {{#if row.hasPriority}}
           <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
           <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
@@ -68,14 +76,6 @@
             </p>
           </EmberTooltip>
         {{/if}}
-      </td>
-      <td>
-        {{t "dash"}}
-        {{!-- {{#if row.printProofStatus.[0].initiated}}
-        <WebComponents::AuStatusPill @status={{row.printProofStatus.[0].status}}>{{row.printProofStatus.[0].finished}}/{{row.printProofStatus.[0].total}}</WebComponents::AuStatusPill>
-        {{else}}
-        -
-        {{/if}} --}}
       </td>
       <td>
         {{#if row.remark}}
