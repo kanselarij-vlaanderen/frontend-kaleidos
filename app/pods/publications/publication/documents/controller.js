@@ -184,9 +184,9 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async openPublishPreviewRequestModal() {
-    this.previewActivity.pieces = this.selectedPieces;
-    this.previewActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case);
-    this.previewActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.previewActivity, 'pieces', this.selectedPieces);
+    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
   }
 
@@ -240,8 +240,8 @@ export default class PublicationDocumentsController extends Controller {
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    this.translateActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case);
-    this.translateActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 
