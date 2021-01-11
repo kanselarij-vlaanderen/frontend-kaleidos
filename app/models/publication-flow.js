@@ -23,13 +23,8 @@ export default class PublicationFlow extends Model {
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
 
-  // get hasPriority() {
-  //   console.log(this.priority);
-  //   return parseInt(this.priority, 10) > 0;
-  // }
   @computed('priority')
   get hasPriority() {
-    console.log('computed', this.priority);
     return parseInt(this.priority, 10) > 0;
   }
 }
