@@ -124,7 +124,7 @@
     "node": "10.* || >= 12"
   },
   "dependencies": {
-    "@kanselarij-vlaanderen/au-kaleidos-icons": "^1.2.4",
+    "@kanselarij-vlaanderen/au-kaleidos-icons": "^1.2.5",
     "@kanselarij-vlaanderen/au-kaleidos-css": "^1.17.0",
     "ember-in-viewport": "^3.7.5",
     "ember-test-selectors": "^3.0.0",

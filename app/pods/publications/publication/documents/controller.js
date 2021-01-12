@@ -22,6 +22,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
   @tracked isUploadModalResized = false;
+  @tracked resizeIcon = 'minimize';
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
 
@@ -50,6 +51,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   toggleUploadModalSize() {
     this.isUploadModalResized = !this.isUploadModalResized;
+    this.resizeIcon = (this.resizeIcon === 'minimize' ? 'expand' : 'minimize');
   }
 
   @action
