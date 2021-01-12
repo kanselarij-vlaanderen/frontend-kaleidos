@@ -15,17 +15,19 @@
     </div>
   </div>
   {{#if this.governmentCanViewDocuments}}
-    {{#unless this.loadData.isRunning}}
+    {{#if this.loadData.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}}/>
+    {{else}}
       <Documents::DocumentList
         @agendaitemOrSubcase={{@agendaitemOrSubcase}}
         @pieces={{this.pieces}}
         @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
         @onAddPiece={{perform this.addPiece}}
-        @onCloseEdit={{this.disablePieceEdit}}  />
-    {{/unless}}
+        @onCloseEdit={{this.disablePieceEdit}}/>
+    {{/if}}
   {{else}}
     <div class="auk-u-mt-2">
-      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}}/>
     </div>
   {{/if}}
   {{#if this.currentSession.isEditor}}
