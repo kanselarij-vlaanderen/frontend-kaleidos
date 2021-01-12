@@ -4,11 +4,11 @@ import moment from 'moment';
 export default class VRDocumentName {
   static get regexGroups() {
     return Object.freeze({
-      date: '([12][90][0-9]{2} [0-3][0-9][01][0-9])',
-      docType: '((DOC)|(DEC)|(MED))',
-      caseNr: '(\\d{4})',
-      index: '(\\d{1,3})',
-      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+      date: '(?<date>[12][90][0-9]{2} [0-3][0-9][01][0-9])',
+      docType: '(?<docType>(DOC)|(DEC)|(MED))',
+      caseNr: '(?<caseNr>\\d{4})',
+      index: '(?<index>\\d{1,3})',
+      versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
   }
@@ -45,10 +45,10 @@ export default class VRDocumentName {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
     const meta = {
-      date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
-      docType: match[2],
-      caseNr: parseInt(match[6], 10),
-      index: parseInt(match[8], 10),
+      date: moment(match.groups.date, 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
+      docType: match.groups.docType,
+      caseNr: parseInt(match.groups.caseNr, 10),
+      index: parseInt(match.groups.index, 10),
       // versionSuffix: TODO
       // pieceNr: TODO
     };
