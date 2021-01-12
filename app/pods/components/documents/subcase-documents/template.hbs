@@ -16,7 +16,7 @@
   </div>
   {{#if this.governmentCanViewDocuments}}
     {{#unless this.loadData.isRunning}}
-      <Documents::DocumentList
+      <Documents::BatchDocumentEdit
         @agendaitemOrSubcase={{@agendaitemOrSubcase}}
         @pieces={{this.pieces}}
         @isEnabledPieceEdit={{this.isEnabledPieceEdit}}

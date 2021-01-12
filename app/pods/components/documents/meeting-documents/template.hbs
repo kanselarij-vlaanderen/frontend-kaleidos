@@ -15,7 +15,7 @@
     </div>
   </div>
   {{#unless this.loadData.isRunning}}
-    <Documents::DocumentList
+    <Documents::BatchDocumentEdit
       @pieces={{this.pieces}}
       @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
       @onAddPiece={{perform this.addPiece}}
