@@ -33,13 +33,6 @@ export default class PublicationsController extends Controller {
     yield this.search(this.searchText);
   }
 
-  constructor() {
-    super(...arguments);
-    this.publicationService.getNewPublicationNextNumber(false).then((res) => {
-      this.publication.number = res;
-    });
-  }
-
   @action
   async search() {
     const filter = {};
@@ -128,13 +121,15 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  showNewPublicationModal() {
+  async showNewPublicationModal() {
     this.isShowingPublicationModal = true;
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    this.set('publication.number', newPublicationNumber);
   }
 
   async resetPublication() {
     this.publication = {
-      number: await this.publicationService.getNewPublicationNextNumber(false),
+      number: null,
       shortTitle: null,
       longTitle: null,
     };

@@ -3,7 +3,7 @@ import Model, {
 } from '@ember-data/model';
 
 export default class PublicationFlow extends Model {
-  @attr('string') publicationNumber;
+  @attr('number') publicationNumber;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishedAt;

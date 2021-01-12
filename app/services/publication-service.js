@@ -79,21 +79,14 @@ export default class PublicationService extends Service {
     return publicationNumberTakenList.toArray().length !== 0;
   }
 
-  async getNewPublicationNextNumber(isViaMinisterCouncil) {
-    if (isViaMinisterCouncil) {
-      // nextnumber generation implementation for via minister council
-    } else {
-      return (await this.store.query('publication-flow', {
-        filter: {
-          ':has:case': 'yes',
-          case: {
-            ':has-no:subcases': 'yes',
-          },
-          status: {
-            id: CONFIG.publicationStatusToPublish.id,
-          },
-        },
-      })).length + 1;
+  async getNewPublicationNextNumber() {
+    const publications = await this.store.query('publication-flow', {
+      sort: '-publication-number',
+    });
+    if (publications !== null) {
+      const latestPublication = publications.toArray()[0];
+      return latestPublication.publicationNumber + 1;
     }
+    return 0;
   }
 }
