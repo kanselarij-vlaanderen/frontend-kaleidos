@@ -53,7 +53,7 @@
       </div>
     {{else}}
       {{#each this.sortedDocumentHistories as |history|}}
-        <Documents::DocumentLink
+        <Documents::DocumentCard
           @documentContainer={{history.documentContainer}}
           @lastPiece={{history.lastPiece}}
           @onAddPiece={{@onAddPiece}}
