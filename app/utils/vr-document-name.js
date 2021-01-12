@@ -52,9 +52,6 @@ export default class VRDocumentName {
       // versionSuffix: TODO
       // pieceNr: TODO
     };
-    if (this.strict) {
-      return meta;
-    }
     return meta;
   }
 
