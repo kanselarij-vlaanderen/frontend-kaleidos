@@ -1,4 +1,24 @@
 import EmberObject from '@ember/object';
+import invert from 'lodash.invert';
+
+const latinAdverbialNumberals = {
+  1: '',
+  2: 'bis',
+  3: 'ter',
+  4: 'quater',
+  5: 'quinquies',
+  6: 'sexies',
+  7: 'septies',
+  8: 'octies',
+  9: 'novies',
+  10: 'decies',
+  11: 'undecies',
+  12: 'duodecies',
+  13: 'ter decies',
+  14: 'quater decies',
+  15: 'quindecies',
+};
+const numbersBylatinAdverbialNumberals = invert(latinAdverbialNumberals);
 
 export default EmberObject.create({
   alphabet: [
@@ -105,24 +125,8 @@ export default EmberObject.create({
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
   formallyOk:
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-
-  latinAdverbialNumberals: {
-    1: '',
-    2: 'bis',
-    3: 'ter',
-    4: 'quater',
-    5: 'quinquies',
-    6: 'sexies',
-    7: 'septies',
-    8: 'octies',
-    9: 'novies',
-    10: 'decies',
-    11: 'undecies',
-    12: 'duodecies',
-    13: 'ter decies',
-    14: 'quater decies',
-    15: 'quindecies',
-  },
+  latinAdverbialNumberals,
+  numbersBylatinAdverbialNumberals,
   adminId: '71c068e6-d2f0-43de-93ab-cd1e7156ac4b',
   kanselarijId: '50f4c79c-902d-4ad2-bca1-0f37a69f0c13',
   priviligedId: '3e824494-bbe7-45cf-aed8-5828970a10dc', // TODO: Rename to overheidId?

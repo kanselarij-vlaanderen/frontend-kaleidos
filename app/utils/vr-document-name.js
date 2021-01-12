@@ -15,7 +15,7 @@ export default class VRDocumentName {
 
   static get looseRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
+    return new RegExp(`VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(.*?)${regexGroup.versionSuffix}?$`);
   }
 
   static get strictRegex() {
@@ -44,13 +44,18 @@ export default class VRDocumentName {
     if (!match) {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
+    const versionSuffix = match.groups.versionSuffix;
+    let versionNumber = 1;
+    if (versionSuffix) {
+      versionNumber = CONFIG.numbersBylatinAdverbialNumberals[versionSuffix.toLowerCase()];
+    }
     const meta = {
       date: moment(match.groups.date, 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
       docType: match.groups.docType,
       caseNr: parseInt(match.groups.caseNr, 10),
       index: parseInt(match.groups.index, 10),
-      // versionSuffix: TODO
-      // pieceNr: TODO
+      versionSuffix,
+      versionNumber,
     };
     return meta;
   }
@@ -88,7 +93,8 @@ export const compareFunction = function(parameterA, parameterB) {
       const metaB = parameterB.parseMeta();
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
-        || (metaB.date - metaA.date); // Date descending (newest first)
+        || (metaB.date - metaA.date) // Date descending (newest first)
+        || (metaB.versionNr - metaA.versionNr); // versionNumber descending (newest first)
     } catch { // Only a parses
       return -1;
     }
