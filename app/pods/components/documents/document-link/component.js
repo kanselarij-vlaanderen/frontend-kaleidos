@@ -96,7 +96,7 @@ export default class DocumentLink extends Component {
       documentContainer: documentContainer,
     });
     containerPieces.pushObject(this.newPiece);
-    const pieceName = new VRDocumentName(previousPiece.name).withOtherPieceSuffix(containerPieces.length);
+    const pieceName = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(containerPieces.length);
     this.newPiece.set('name', pieceName);
   }
 

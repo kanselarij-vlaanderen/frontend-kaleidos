@@ -8,7 +8,7 @@ export default class VRDocumentName {
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
-      pieceSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+      versionSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
   }
@@ -20,7 +20,7 @@ export default class VRDocumentName {
 
   static get strictRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.pieceSuffix}?$`);
+    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -49,7 +49,7 @@ export default class VRDocumentName {
       docType: match[2],
       caseNr: parseInt(match[6], 10),
       index: parseInt(match[8], 10),
-      // pieceSuffix: TODO
+      // versionSuffix: TODO
       // pieceNr: TODO
     };
     if (this.strict) {
@@ -75,12 +75,12 @@ export default class VRDocumentName {
     return VRDocumentName.strictRegex.test(this.name);
   }
 
-  get withoutPieceSuffix() {
-    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.pieceSuffix}$`, 'ui'), '');
+  get withoutVersionSuffix() {
+    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
-  withOtherPieceSuffix(pieceNr) {
-    return `${this.withoutPieceSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
+  withOtherVersionSuffix(pieceNr) {
+    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
   }
 }
 
