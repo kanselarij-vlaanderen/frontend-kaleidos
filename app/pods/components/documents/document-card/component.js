@@ -186,5 +186,8 @@ export default class DocumentsDocumentCardComponent extends Component {
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
     const documentContainer = yield this.args.documentContainer;
     yield this.fileService.deleteDocumentContainerWithUndo.perform(documentContainer);
+    if (this.args.didDeleteContainer) {
+      this.args.didDeleteContainer(documentContainer);
+    }
   }
 }

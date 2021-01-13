@@ -1,35 +1,18 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
-import {
-  all,
-  timeout
-} from 'ember-concurrency';
+import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import moment from 'moment';
 import config from 'fe-redpencil/utils/config';
-import {
-  destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agendaitem-utils';
-import {
-  addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
-} from 'fe-redpencil/utils/documents';
 
 export default class SubcaseDocuments extends Component {
   @service currentSession;
-  @service toaster;
-  @service intl;
   @service store;
 
-  @tracked isEnabledPieceEdit = false;
-  @tracked isOpenPieceUploadModal = false;
   @tracked isOpenLinkedPieceModal = false;
-  @tracked defaultAccessLevel;
-  @tracked pieces = A([]);
   @tracked linkedPieces = A([]);
-  @tracked newPieces = A([]);
   @tracked newLinkedPieces = A([]);
 
   constructor() {
@@ -37,217 +20,13 @@ export default class SubcaseDocuments extends Component {
     this.loadData.perform();
   }
 
-  get iterablePieces() {
-    return this.pieces.toArray();
-  }
-
   @task
   *loadData() {
-    this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
-    if (!this.defaultAccessLevel) {
-      const accessLevels = yield this.store.query('access-level', {
-        page: {
-          size: 1,
-        },
-        'filter[:id:]': config.internRegeringAccessLevelId,
-      });
-      this.defaultAccessLevel = accessLevels.firstObject;
-    }
-
-    // TODO change to store.query to have control over the page size
-    this.pieces = yield this.args.agendaitemOrSubcase.pieces;
     this.linkedPieces = yield this.args.agendaitemOrSubcase.linkedPieces;
   }
 
   get itemType() {
     return this.args.agendaitemOrSubcase && this.args.agendaitemOrSubcase.constructor.modelName;
-  }
-
-  get governmentCanViewDocuments() {
-    const isAgendaitem = this.itemType === 'agendaitem';
-    const isSubcase = this.itemType === 'subcase';
-    const isOverheid = this.currentSession.isOverheid;
-
-    if (isAgendaitem) {
-      const documentsAreReleased = this.args.agendaitemOrSubcase.get('agenda.createdFor.releasedDocuments');
-      return !(isOverheid && !documentsAreReleased);
-    }
-
-    if (isSubcase) {
-      const documentsAreReleased = this.args.agendaitemOrSubcase.get('requestedForMeeting.releasedDocuments');
-      return !(isOverheid && !documentsAreReleased);
-    }
-
-    return true;
-  }
-
-  @action
-  async enablePieceEdit() {
-    await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
-    this.isEnabledPieceEdit = true;
-  }
-
-  @action
-  disablePieceEdit() {
-    this.isEnabledPieceEdit = false;
-  }
-
-  @action
-  async openPieceUploadModal() {
-    await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
-    this.isOpenPieceUploadModal = true;
-  }
-
-  @action
-  uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-    this.newPieces.pushObject(piece);
-  }
-
-  @task
-  *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
-      try {
-        await this.savePiece.perform(piece);
-      } catch (error) {
-        await this.deletePiece.perform(piece);
-        throw error;
-      }
-    });
-    yield all(savePromises);
-    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
-    this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
-  }
-
-  /**
-   * Save a new document container and the piece it wraps
-  */
-  @task
-  *savePiece(piece) {
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    yield piece.save();
-  }
-
-  /**
-   * Add new piece to an existing document container
-  */
-  @task
-  *addPiece(piece) {
-    yield piece.save();
-    yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
-  }
-
-  @task
-  *updateRelatedAgendaitemsAndSubcase(pieces) {
-    if (this.itemType === 'agendaitem') {
-      // Link pieces to subcase related to the agendaitem
-      const agendaActivity = yield this.args.agendaitemOrSubcase.agendaActivity;
-      if (agendaActivity) {
-        const subcase = yield agendaActivity.subcase;
-        const currentSubcasePieces = yield subcase.hasMany('pieces').reload();
-        const subcasePieces = currentSubcasePieces.pushObjects(pieces);
-        subcase.set('pieces', subcasePieces);
-        yield subcase.save();
-      }
-      // Link piece to agendaitem
-      setNotYetFormallyOk(this.args.agendaitemOrSubcase);
-      yield this.args.agendaitemOrSubcase.save();
-      for (const piece of pieces) {
-        yield addPieceToAgendaitem(this.args.agendaitemOrSubcase, piece);
-      }
-      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
-      for (let index = 0; index < 10; index++) {
-        const agendaitemPieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
-        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
-          // last added piece was found in the list from cache
-          this.pieces = agendaitemPieces;
-          break;
-        } else {
-          // list from cache is stale, wait with back-off strategy
-          yield timeout(500 + (index * 500));
-          if (index >= 9) {
-            this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-              {
-                timeOut: 60000,
-              });
-          }
-        }
-      }
-    } else if (this.itemType === 'subcase') {
-      // Link piece to all agendaitems that are related to the subcase via an agendaActivity
-      // and related to an agenda in the design status
-      const agendaitems = yield this.store.query('agendaitem', {
-        'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
-        'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
-      });
-      for (const agendaitem of agendaitems.toArray()) {
-        setNotYetFormallyOk(agendaitem);
-        yield destroyApprovalsOfAgendaitem(agendaitem);
-        // save prior to adding pieces, micro-service does all the changes with docs
-        yield agendaitem.save();
-        for (const piece of pieces) {
-          yield addPieceToAgendaitem(agendaitem, piece);
-        }
-        // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
-        for (let index = 0; index < 10; index++) {
-          const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
-          if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
-            // last added piece was found in the list from cache
-            break;
-          } else {
-            // list from cache is stale, wait with back-off strategy
-            yield timeout(500 + (index * 500));
-            if (index >= 9) {
-              this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-                {
-                  timeOut: 60000,
-                });
-            }
-          }
-        }
-      }
-
-      // Link piece to subcase
-      const currentSubcasePieces = yield this.args.agendaitemOrSubcase.hasMany('pieces').reload();
-      const subcasePieces = currentSubcasePieces.pushObjects(pieces);
-      this.args.agendaitemOrSubcase.set('pieces', subcasePieces);
-      yield this.args.agendaitemOrSubcase.save();
-
-      this.pieces = subcasePieces;
-    }
-  }
-
-  @task
-  *cancelUploadPieces() {
-    const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
-    yield all(deletePromises);
-    this.newPieces = A();
-    this.isOpenPieceUploadModal = false;
-  }
-
-  @task
-  *deletePiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
   }
 
   @action
@@ -359,33 +138,5 @@ export default class SubcaseDocuments extends Component {
     this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedpieces);
     yield this.args.agendaitemOrSubcase.save();
     this.linkedPieces = newLinkedpieces;
-  }
-
-  @action
-  async ensureFreshData() {
-    if (this.itemType === 'agendaitem' || this.itemType === 'subcase') {
-      await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
-    }
-  }
-
-  @action
-  async setPreviousPiecesFromAgendaitem(documentContainer) {
-    if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece');
-      if (this.args.agendaitemOrSubcase && lastPiece) {
-        if (this.itemType === 'agendaitem') {
-          await restorePiecesFromPreviousAgendaitem(this.args.agendaitemOrSubcase, documentContainer);
-        }
-        if (this.itemType === 'subcase') {
-          const latestActivity = await this.args.agendaitemOrSubcase.get('latestActivity');
-          if (latestActivity) {
-            const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-            await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
-            await latestAgendaitem.hasMany('pieces').reload();
-          }
-        }
-        await this.args.agendaitemOrSubcase.hasMany('pieces').reload();
-      }
-    }
   }
 }
