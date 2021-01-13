@@ -8,7 +8,6 @@ import {
 import { inject as service } from '@ember/service';
 
 export default class PieceDetailsEdit extends Component {
-  @tracked documentTypes = [];
   @tracked selectedDocumentType;
   @tracked showLoader;
   @tracked documentContainer;

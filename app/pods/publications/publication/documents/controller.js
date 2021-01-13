@@ -165,6 +165,9 @@ export default class PublicationDocumentsController extends Controller {
   @action
   cancelEditPiece() {
     this.pieceBeingEdited = null;
+    this.pieceBeingEdited.rollbackAttributes();
+    this.pieceBeingEdited.documentContainer.rollbackAttributes();
+    this.pieceBeingEdited.documentContainer.belongsTo('type').reload();
     this.showPieceEditor = false;
   }
 
