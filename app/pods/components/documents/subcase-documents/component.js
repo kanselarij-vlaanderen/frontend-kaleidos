@@ -37,6 +37,10 @@ export default class SubcaseDocuments extends Component {
     this.loadData.perform();
   }
 
+  get iterablePieces() {
+    return this.pieces.toArray();
+  }
+
   @task
   *loadData() {
     this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);

@@ -2,62 +2,53 @@
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}
-    {{#if @isEnabledPieceEdit}}
-      <div class="vl-form__group vl-u-bg-porcelain">
-        <div class="auk-u-mb-4">
-          <table class="vl-data-table vl-data-table--align-middle">
-            <thead>
-              <tr>
-                <th class="vl-data-table-col-4">
-                  {{web-components/vl-form-label
-                    value=(t "document-name")
-                  }}
-                </th>
-                <th class="vl-data-table-col-3">
-                  {{web-components/vl-form-label
-                    value=(t "file-type")
-                  }}
-                </th>
-                <th class="vl-data-table-col-3">
-                  {{web-components/vl-form-label
-                    value=(t "publicity")
-                  }}
-                </th>
-                <th class="vl-data-table-col-1">
-                  {{web-components/vl-form-label
-                    value=(t "confidential")
-                  }}
-                </th>
-                <th class="vl-data-table-col-1"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each this.sortedDocumentHistories as |history|}}
-                {{#unless history.lastPiece.softDeleted}}
-                  <Documents::EditDocumentRow
-                    @piece={{history.lastPiece}} />
-                {{/unless}}
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
-        <div class="vl-action-group vl-action-group--align-right">
-          <button type="button" class="vl-link" {{on "click" (perform this.cancelEditPieces)}}>
-            {{t "cancel"}}
-          </button>
-          <WebComponents::VlSaveButton
-            @text={{t "save"}}
-            @isLoading={{this.saveEditPieces.isRunning}}
-            @saveAction={{perform this.saveEditPieces}} />
-        </div>
+    <div class="vl-form__group vl-u-bg-porcelain">
+      <div class="auk-u-mb-4">
+        <table class="vl-data-table vl-data-table--align-middle">
+          <thead>
+            <tr>
+              <th class="vl-data-table-col-4">
+                {{web-components/vl-form-label
+                  value=(t "document-name")
+                }}
+              </th>
+              <th class="vl-data-table-col-3">
+                {{web-components/vl-form-label
+                  value=(t "file-type")
+                }}
+              </th>
+              <th class="vl-data-table-col-3">
+                {{web-components/vl-form-label
+                  value=(t "publicity")
+                }}
+              </th>
+              <th class="vl-data-table-col-1">
+                {{web-components/vl-form-label
+                  value=(t "confidential")
+                }}
+              </th>
+              <th class="vl-data-table-col-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.sortedDocumentHistories as |history|}}
+              {{#unless history.lastPiece.softDeleted}}
+                <Documents::EditDocumentRow
+                  @piece={{history.lastPiece}} />
+              {{/unless}}
+            {{/each}}
+          </tbody>
+        </table>
       </div>
-    {{else}}
-      <Documents::DocumentList
-        @pieces={{this.iterablePieces}}
-        @didDeletePiece={{@didDeletePiece}}
-        @onOpenUploadModal={{@onOpenUploadModal}}
-        @onAddPiece={{@onAddPiece}}
-      />
-    {{/if}}
+      <div class="vl-action-group vl-action-group--align-right">
+        <button type="button" class="vl-link" {{on "click" (perform this.cancelEditPieces)}}>
+          {{t "cancel"}}
+        </button>
+        <WebComponents::VlSaveButton
+          @text={{t "save"}}
+          @isLoading={{this.saveEditPieces.isRunning}}
+          @saveAction={{perform this.saveEditPieces}} />
+      </div>
+    </div>
   {{/if}}
 </div>

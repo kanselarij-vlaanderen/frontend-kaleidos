@@ -15,11 +15,17 @@
     </div>
   </div>
   {{#unless this.loadData.isRunning}}
-    <Documents::BatchDocumentEdit
-      @pieces={{this.pieces}}
-      @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
-      @onAddPiece={{perform this.addPiece}}
-      @onCloseEdit={{this.disablePieceEdit}}  />
+    {{#if this.isEnabledPieceEdit}}
+      <Documents::BatchDocumentEdit
+        @pieces={{this.iterablePieces}}
+        @onCloseEdit={{this.disablePieceEdit}}
+      />
+    {{else}}
+      <Documents::DocumentList
+        @pieces={{this.iterablePieces}}
+        @onAddPiece={{perform this.addPiece}}
+      />
+    {{/if}}
   {{/unless}}
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">

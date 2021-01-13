@@ -43,10 +43,6 @@ export default class DocumentList extends Component {
     return sortedHistories;
   }
 
-  get iterablePieces() {
-    return this.args.pieces.toArray();
-  }
-
   @task
   *loadData() {
     const pieces = yield this.args.pieces;
