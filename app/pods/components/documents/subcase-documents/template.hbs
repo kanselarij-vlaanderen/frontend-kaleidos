@@ -20,7 +20,9 @@
         @agendaitemOrSubcase={{@agendaitemOrSubcase}}
         @pieces={{this.pieces}}
         @isEnabledPieceEdit={{this.isEnabledPieceEdit}}
+        @onOpenUploadModal={{this.ensureFreshData}}
         @onAddPiece={{perform this.addPiece}}
+        @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
         @onCloseEdit={{this.disablePieceEdit}}  />
     {{/unless}}
   {{else}}

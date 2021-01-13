@@ -56,8 +56,9 @@
         <Documents::DocumentCard
           @documentContainer={{history.documentContainer}}
           @lastPiece={{history.lastPiece}}
-          @onAddPiece={{@onAddPiece}}
-          @agendaitemOrSubcase={{@agendaitemOrSubcase}} />
+          @didDeletePiece={{@didDeletePiece}}
+          @onOpenUploadModal={{@onOpenUploadModal}}
+          @onAddPiece={{@onAddPiece}} />
       {{else}}
         <div class="auk-u-mt-2">
           <WebComponents::VlAlert @message={{t "no-documents-yet"}} />

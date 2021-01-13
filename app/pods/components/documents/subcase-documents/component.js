@@ -13,7 +13,9 @@ import config from 'fe-redpencil/utils/config';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
 } from 'fe-redpencil/utils/agendaitem-utils';
-import { addPieceToAgendaitem } from 'fe-redpencil/utils/documents';
+import {
+  addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
+} from 'fe-redpencil/utils/documents';
 
 export default class SubcaseDocuments extends Component {
   @service currentSession;
@@ -353,5 +355,33 @@ export default class SubcaseDocuments extends Component {
     this.args.agendaitemOrSubcase.set('linkedPieces', newLinkedpieces);
     yield this.args.agendaitemOrSubcase.save();
     this.linkedPieces = newLinkedpieces;
+  }
+
+  @action
+  async ensureFreshData() {
+    if (this.itemType === 'agendaitem' || this.itemType === 'subcase') {
+      await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
+    }
+  }
+
+  @action
+  async setPreviousPiecesFromAgendaitem(documentContainer) {
+    if (documentContainer) {
+      const lastPiece = await documentContainer.get('lastPiece');
+      if (this.args.agendaitemOrSubcase && lastPiece) {
+        if (this.itemType === 'agendaitem') {
+          await restorePiecesFromPreviousAgendaitem(this.args.agendaitemOrSubcase, documentContainer);
+        }
+        if (this.itemType === 'subcase') {
+          const latestActivity = await this.args.agendaitemOrSubcase.get('latestActivity');
+          if (latestActivity) {
+            const latestAgendaitem = await latestActivity.get('latestAgendaitem');
+            await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
+            await latestAgendaitem.hasMany('pieces').reload();
+          }
+        }
+        await this.args.agendaitemOrSubcase.hasMany('pieces').reload();
+      }
+    }
   }
 }

@@ -156,7 +156,7 @@
               <div class="vl-accordion__panel">
                 {{#each this.reverseSortedPieces as |piece|}}
                   <WebComponents::VlDocument
-                    @onDeletePieceFromContainer={{action this.setPreviousPiecesFromAgendaitem}}
+                    @onDeletePieceFromContainer={{@didDeletePiece}}
                     @piece={{piece}} />
                 {{/each}}
               </div>

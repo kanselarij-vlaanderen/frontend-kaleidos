@@ -7,7 +7,6 @@ import { A } from '@ember/array';
 import moment from 'moment';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import config from 'fe-redpencil/utils/config';
-import { restorePiecesFromPreviousAgendaitem } from 'fe-redpencil/utils/documents';
 
 export default class DocumentsDocumentCardComponent extends Component {
   @service store;
@@ -64,14 +63,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     return this.sortedPieces.slice(0).reverse();
   }
 
-  get itemType() {
-    return this.args.agendaitemOrSubcase && this.args.agendaitemOrSubcase.constructor.modelName;
-  }
-
   @action
   async openUploadModal() {
-    if (this.itemType === 'agendaitem' || this.itemType === 'subcase') {
-      await this.args.agendaitemOrSubcase.preEditOrSaveCheck();
+    if (this.args.onOpenUploadModal) {
+      await this.args.onOpenUploadModal();
     }
     this.isOpenUploadModal = true;
   }
@@ -191,26 +186,5 @@ export default class DocumentsDocumentCardComponent extends Component {
     // TODO remove yield once consuming component doesn't pass Proxy as @documentContainer
     const documentContainer = yield this.args.documentContainer;
     yield this.fileService.deleteDocumentContainerWithUndo.perform(documentContainer);
-  }
-
-  @action
-  async setPreviousPiecesFromAgendaitem(documentContainer) {
-    if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece');
-      if (this.args.agendaitemOrSubcase && lastPiece) {
-        if (this.itemType === 'agendaitem') {
-          await restorePiecesFromPreviousAgendaitem(this.args.agendaitemOrSubcase, documentContainer);
-        }
-        if (this.itemType === 'subcase') {
-          const latestActivity = await this.args.agendaitemOrSubcase.get('latestActivity');
-          if (latestActivity) {
-            const latestAgendaitem = await latestActivity.get('latestAgendaitem');
-            await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
-            await latestAgendaitem.hasMany('pieces').reload();
-          }
-        }
-        await this.args.agendaitemOrSubcase.hasMany('pieces').reload();
-      }
-    }
   }
 }
