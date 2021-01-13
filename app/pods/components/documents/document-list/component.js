@@ -49,6 +49,7 @@ export default class DocumentsDocumentListComponent extends Component {
     for (const documents of this.documentsByContainer.values()) {
       documents.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
     }
+    // eslint-disable-next-line
     this.documentsByContainer = this.documentsByContainer; // re-assign array to trigger getter
   }
 }
