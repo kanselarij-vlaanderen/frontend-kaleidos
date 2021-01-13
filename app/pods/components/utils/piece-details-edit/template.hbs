@@ -14,7 +14,7 @@
           <span class="vl-pill">{{await @piece.file.extension}}</span>
         </div>
         <div class="auk-form-group">
-          <WebComponents::VlFormLabel @value={{t "document-type"}} />
+          <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>
           {{#unless this.loadData.isRunning}}
             <Utils::RadioDropdownComboSelect
                     @options={{this.sortedDocumentTypes}}
@@ -34,3 +34,14 @@
           @saveAction={{@saveAction}}
           @disableSave={{not @piece}} />
 </WebComponents::VlModal>
+
+
+{{!-- LOADER --}}
+
+
+{{#if (or this.showLoader this.loadData.isRunning)}}
+  <WebComponents::AuLoadingOverlay
+    @title={{t "loading-text"}}
+    @message={{t "loading-text"}}
+  />
+{{/if}}
