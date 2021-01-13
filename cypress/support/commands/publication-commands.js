@@ -14,14 +14,12 @@ import publicationSelectors from '../../selectors/publication.selectors';
  * @name createPublication
  * @memberOf Cypress.Chainable#
  * @function
- * @param {number} publicationNumber The publication number, must be unique
  * @param {string} shortTitle The short title for the case
  * @param {string} longTitle The long title for the case
  * @returns {Promise<String>} the id of the created publication-flow
  */
-function createPublication(publicationNumber, shortTitle, longTitle) {
+function createPublication(shortTitle, longTitle) {
   cy.log('createPublication');
-  cy.route('GET', `/publication-flows?filter[:exact:publication-number]=${publicationNumber}`).as('publicationNumberValidation');
   cy.route('POST', '/cases').as('createNewCase');
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
@@ -30,11 +28,6 @@ function createPublication(publicationNumber, shortTitle, longTitle) {
 
   cy.get(modalSelectors.auModal.container).as('publicationModal')
     .within(() => {
-      cy.get(modalSelectors.publication.publicationNumberInput).click()
-        .clear()
-        .type(publicationNumber)
-        .blur();
-      cy.wait('@publicationNumberValidation');
       cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
