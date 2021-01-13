@@ -9,7 +9,7 @@ import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import config from 'fe-redpencil/utils/config';
 import { restorePiecesFromPreviousAgendaitem } from 'fe-redpencil/utils/documents';
 
-export default class DocumentLink extends Component {
+export default class DocumentsDocumentCardComponent extends Component {
   @service store;
   @service currentSession;
   @service fileService;
