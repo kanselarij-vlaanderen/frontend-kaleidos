@@ -516,42 +516,15 @@
 
 
 
-{{!-- EDIT PIECE MODAL --}}
-
+{{!-- EDIT PIECE DETAILS --}}
 
 {{#if this.showPieceEditor}}
-  <WebComponents::VlModal
-          @closeModal={{this.cancelEditPiece}}
-          @isOverlay={{true}}
-          @title={{t "document-edit"}}>
-    <div class="vl-modal-dialog__content">
-      <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-        {{#if this.pieceBeingEdited}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
-            <WebComponents::AuInput type="text" id="name" @value={{this.pieceBeingEdited.name}}/>
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="extension">{{t "file-extension"}}</WebComponents::AuLabel>
-            <span class="vl-pill">{{await this.pieceBeingEdited.file.extension}}</span>
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::VlFormLabel @value={{t "document-type"}} />
-            {{await this.pieceBeingEdited.documentContainer.type}}
-          </div>
-        {{/if}}
-      </div>
-    </div>
-    <WebComponents::VlModalFooter
-            @cancelButtonText={{t "cancel"}}
-            @saveButtonText={{t "save"}}
-            @isLoading={{this.addPiece.isRunning}}
-            @cancelAction={{this.cancelEditPiece}}
-            @saveAction={{this.saveEditedPiece}}
-            @disableSave={{not this.pieceBeingEdited}} />
-  </WebComponents::VlModal>
+  <Utils::pieceDetailsEdit
+     @piece={{this.pieceBeingEdited}}
+     @saveAction={{this.saveEditedPiece}}
+     @cancelAction={{this.cancelEditPiece}}
+  />
 {{/if}}
-
 
 
 

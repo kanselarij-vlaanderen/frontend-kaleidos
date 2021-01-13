@@ -38,9 +38,12 @@ export default class PublicationDocumentsController extends Controller {
   };
   @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
+  @tracked isVerifyingDelete = false;
+
+  // Editing of pieces.
   @tracked pieceBeingEdited = null;
   @tracked showPieceEditor = false;
-  @tracked isVerifyingDelete = false;
+  @tracked documentTypes = [];
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
