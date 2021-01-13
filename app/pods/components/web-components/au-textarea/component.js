@@ -10,7 +10,7 @@ export default class Textarea extends Component {
     return DEFAULT_ROWS;
   }
 
-  get resize() {
+  get getResizeClass() {
     if (this.args.resize === 'vertical') {
       return 'auk-textarea--resize-vertical';
     }
