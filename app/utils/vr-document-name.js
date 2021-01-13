@@ -94,7 +94,7 @@ export const compareFunction = function(parameterA, parameterB) {
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
         || (metaB.date - metaA.date) // Date descending (newest first)
-        || (metaB.versionNr - metaA.versionNr); // versionNumber descending (newest first)
+        || (metaB.versionNumber - metaA.versionNumber); // versionNumber descending (newest first)
     } catch { // Only a parses
       return -1;
     }
