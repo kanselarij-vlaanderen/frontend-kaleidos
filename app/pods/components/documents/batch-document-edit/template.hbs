@@ -52,18 +52,12 @@
         </div>
       </div>
     {{else}}
-      {{#each this.sortedDocumentHistories as |history|}}
-        <Documents::DocumentCard
-          @documentContainer={{history.documentContainer}}
-          @lastPiece={{history.lastPiece}}
-          @didDeletePiece={{@didDeletePiece}}
-          @onOpenUploadModal={{@onOpenUploadModal}}
-          @onAddPiece={{@onAddPiece}} />
-      {{else}}
-        <div class="auk-u-mt-2">
-          <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-        </div>
-      {{/each}}
+      <Documents::DocumentList
+        @pieces={{this.iterablePieces}}
+        @didDeletePiece={{@didDeletePiece}}
+        @onOpenUploadModal={{@onOpenUploadModal}}
+        @onAddPiece={{@onAddPiece}}
+      />
     {{/if}}
   {{/if}}
 </div>
