@@ -157,10 +157,11 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  editExistingPiece(piece) {
+  async editExistingPiece(piece) {
     this.pieceBeingEdited = piece;
     this.showPieceEditor = true;
   }
+
   @action
   cancelEditPiece() {
     this.pieceBeingEdited = null;

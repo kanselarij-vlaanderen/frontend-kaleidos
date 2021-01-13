@@ -19,7 +19,7 @@
             <Utils::RadioDropdownComboSelect
                     @options={{this.sortedDocumentTypes}}
                     @onSelect={{this.selectDocumentType}}
-                    @selected={{this.selectedDocumentType}}
+                    @selected={{await this.selectedDocumentType}}
             />
           {{/unless}}
         </div>
