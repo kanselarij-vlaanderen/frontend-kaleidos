@@ -29,6 +29,8 @@ export default class SidebarItem extends Component {
   @tracked isClickable = true;
   @tracked isRetracted = this.args.agendaitem.retracted;
 
+  @tracked renderDetails = null;
+
   get classNameBindings() {
     return `
       ${this.isActive ? 'vlc-agenda-detail-sidebar__sub-item--active' : ''}
@@ -43,6 +45,18 @@ export default class SidebarItem extends Component {
       return this.args.agendaitem.id === this.selectedAgendaitem.id;
     }
     return null;
+  }
+
+  @action
+  onEnter() {
+    setTimeout(() => {
+      this.renderDetails = true;
+    }, 100);
+  }
+
+  @action
+  onExit() {
+    this.renderDetails = false;
   }
 
   @action
