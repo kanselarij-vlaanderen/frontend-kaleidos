@@ -15,13 +15,15 @@
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>
-          {{#unless this.loadData.isRunning}}
-            <Utils::RadioDropdownComboSelect
-                    @options={{this.sortedDocumentTypes}}
-                    @onSelect={{this.selectDocumentType}}
-                    @selected={{await this.selectedDocumentType}}
-            />
-          {{/unless}}
+          <div class="group">
+            {{#unless this.loadData.isRunning}}
+              <Utils::RadioDropdownComboSelect
+                      @options={{this.sortedDocumentTypes}}
+                      @onSelect={{this.selectDocumentType}}
+                      @selected={{await this.selectedDocumentType}}
+              />
+            {{/unless}}
+          </div>
         </div>
       {{/if}}
     </div>
