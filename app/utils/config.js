@@ -1,24 +1,24 @@
 import EmberObject from '@ember/object';
 import invert from 'lodash.invert';
 
-const latinAdverbialNumberals = {
-  1: '',
-  2: 'bis',
-  3: 'ter',
-  4: 'quater',
-  5: 'quinquies',
-  6: 'sexies',
-  7: 'septies',
-  8: 'octies',
-  9: 'novies',
-  10: 'decies',
-  11: 'undecies',
-  12: 'duodecies',
-  13: 'ter decies',
-  14: 'quater decies',
-  15: 'quindecies',
+const numbersBylatinAdverbialNumberals = {
+  '': 1,
+  bis: 2,
+  ter: 3,
+  quater: 4,
+  quinquies: 5,
+  sexies: 6,
+  septies: 7,
+  octies: 8,
+  novies: 9,
+  decies: 10,
+  undecies: 11,
+  duodecies: 12,
+  'ter decies': 13,
+  'quater decies': 14,
+  quindecies: 15,
 };
-const numbersBylatinAdverbialNumberals = invert(latinAdverbialNumberals);
+const latinAdverbialNumberals = invert(numbersBylatinAdverbialNumberals);
 
 export default EmberObject.create({
   alphabet: [
