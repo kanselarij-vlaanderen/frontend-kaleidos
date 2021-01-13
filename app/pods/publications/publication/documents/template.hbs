@@ -47,7 +47,7 @@
       <div class="auk-u-flex">
         <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
           <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
-          <WebComponents::AuInput @value={{documentName}} type="text" id="blockInput" @block="true" {{on "change" this.onDocumentNameChange}}/>
+          <WebComponents::AuInput @value={{pieceName}} type="text" id="blockInput" @block="true" {{on "change" this.onFilterByPieceNameNameChange}}/>
         </div>
         <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
           <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
@@ -141,7 +141,6 @@
                   <span class="auk-u-muted auk-u-text-small">{{await piece.documentContainer.type.label}}</span>
                 </div>
               </div>
-
             </td>
             <td>
               {{moment-format piece.created}}

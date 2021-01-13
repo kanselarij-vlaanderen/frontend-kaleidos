@@ -43,9 +43,10 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
-  fileExtensionSelectOptions = ['Word', 'PDF', 'Andere'];
+  fileExtensionSelectOptions = ['doc', 'docx', 'pdf', 'Andere'];
   documentTypeSelectOptions = ['Nota', 'Decreet', 'Bijlage', 'MvT', 'Andere'];
-  @tracked documentName = '';
+  @tracked filterIsActive = false;
+  @tracked pieceName = '';
   @tracked selectedFileExtensions = [];
   @tracked selectedDocumentTypes = [];
 
@@ -305,19 +306,52 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  onDocumentNameChange(event) {
-    this.documentName = event.target.value;
+  onFilterByPieceNameNameChange(event) {
+    this.pieceName = event.target.value;
   }
 
   @action
   resetFilter() {
     this.selectedFileExtensions = [];
     this.selectedDocumentTypes = [];
-    this.documentName = '';
+    this.pieceName = '';
   }
 
   @action
-  filterDocumentsAction() {
+  async filterDocumentsAction() {
+    if (this.selectedFileExtensions === []) {
+      return [];
+    }
+    const pieces = await this.model.case.sortedPieces;
+    console.log('pieces', pieces);
+    const filteredPieces = A([]);
+    for (let index = 0; index < pieces.length; index++) {
+      const fileType = await this.checkFileType(pieces[index]);
+      if (fileType) {
+        filteredPieces.pushObject(pieces[index]);
+      }
+    }
+  }
 
+  async checkFileType(piece) {
+    const file = await piece.get('file');
+    const ext = await file.get('extension');
+    switch (ext) {
+      case 'pdf': return this.selectedFileExtensions.includes(ext);
+      case 'doc': return this.selectedFileExtensions.includes(ext);
+      case 'docx': return this.selectedFileExtensions.includes(ext);
+      default:  return this.selectedFileExtensions.includes('Andere');
+    }
+  }
+
+  async checkDocumentType(piece) {
+    const file = await piece.get('file');
+    const ext = await file.get('extension');
+    switch (ext) {
+      case 'pdf': return this.selectedFileExtensions.includes(ext);
+      case 'doc': return this.selectedFileExtensions.includes(ext);
+      case 'docx': return this.selectedFileExtensions.includes(ext);
+      default:  return this.selectedFileExtensions.includes('Andere');
+    }
   }
 }
