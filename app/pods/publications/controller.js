@@ -127,7 +127,7 @@ export default class PublicationsController extends Controller {
     this.set('publication.number', newPublicationNumber);
   }
 
-  async resetPublication() {
+  resetPublication() {
     this.publication = {
       number: null,
       shortTitle: null,
