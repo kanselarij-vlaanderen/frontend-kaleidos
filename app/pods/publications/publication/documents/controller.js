@@ -38,6 +38,8 @@ export default class PublicationDocumentsController extends Controller {
   };
   @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
   @tracked isVerifyingDelete = false;
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
@@ -149,6 +151,25 @@ export default class PublicationDocumentsController extends Controller {
   cancelDeleteExistingPiece() {
     this.pieceToDelete = null;
     this.isVerifyingDelete = false;
+  }
+
+  @action
+  editExistingPiece(piece) {
+    this.pieceBeingEdited = piece;
+    this.showPieceEditor = true;
+  }
+  @action
+  cancelEditPiece() {
+    this.pieceBeingEdited = null;
+    this.showPieceEditor = false;
+  }
+
+  @action
+  async saveEditedPiece() {
+    this.showPieceEditor = false;
+    this.showLoader = true;
+    await this.pieceBeingEdited.save();
+    this.showLoader = false;
   }
 
   @action
