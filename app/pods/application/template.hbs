@@ -1,5 +1,5 @@
 {{#if model}}
-  {{title (t "page-title")}}
+  {{page-title (t "page-title")}}
   {{head-layout}}
   {{#each this.systemAlert.unconfirmedAlerts as |alert|}}
     <Utils::SystemAlert
