@@ -172,6 +172,8 @@ export default class PublicationDocumentsController extends Controller {
     this.showPieceEditor = false;
     this.showLoader = true;
     await this.pieceBeingEdited.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
     this.showLoader = false;
   }
 

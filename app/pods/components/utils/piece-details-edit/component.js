@@ -8,6 +8,7 @@ export default class PieceDetailsEdit extends Component {
   @tracked documentTypes = [];
   @tracked selectedDocumentType;
   @tracked showLoader;
+  @tracked documentContainer;
   @service store;
 
   constructor() {
@@ -26,7 +27,7 @@ export default class PieceDetailsEdit extends Component {
       });
     }
     this.documentContainer = yield this.args.piece.documentContainer;
-    this.selectedDocumentType = yield this.documentContainer.type;
+    this.selectedDocumentType = yield this.documentContainer.get('type');
   }
 
   get sortedDocumentTypes() {
