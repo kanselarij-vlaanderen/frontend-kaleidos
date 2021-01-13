@@ -43,6 +43,12 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
+  fileExtensionSelectOptions = ['Word', 'PDF', 'Andere'];
+  documentTypeSelectOptions = ['Nota', 'Decreet', 'Bijlage', 'MvT', 'Andere'];
+  @tracked documentName = '';
+  @tracked selectedFileExtensions = [];
+  @tracked selectedDocumentTypes = [];
+
   concatNames(pieces) {
     return pieces.map((piece) => piece.name).join('\n');
   }
@@ -296,5 +302,22 @@ export default class PublicationDocumentsController extends Controller {
   @action
   setTranslateActivityBeforeDate(dates) {
     this.translateActivity.finalTranslationDate = dates[0];
+  }
+
+  @action
+  onDocumentNameChange(event) {
+    this.documentName = event.target.value;
+  }
+
+  @action
+  resetFilter() {
+    this.selectedFileExtensions = [];
+    this.selectedDocumentTypes = [];
+    this.documentName = '';
+  }
+
+  @action
+  filterDocumentsAction() {
+
   }
 }
