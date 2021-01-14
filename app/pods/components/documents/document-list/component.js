@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import VRDocumentName, { compareFunction as compareDocuments } from 'fe-redpencil/utils/vr-document-name';
+import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
 
 export default class DocumentsDocumentListComponent extends Component {
   /**
@@ -47,7 +47,7 @@ export default class DocumentsDocumentListComponent extends Component {
     }
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
     for (const documents of this.documentsByContainer.values()) {
-      documents.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+      documents.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
     }
     // eslint-disable-next-line
     this.documentsByContainer = this.documentsByContainer; // re-assign array to trigger getter
