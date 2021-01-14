@@ -8,7 +8,8 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 import {
   action,
-  set
+  set,
+  computed
 } from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
@@ -24,6 +25,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isUploadModalResized = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
+  @tracked filteredSortedPieces = A([]);
 
   @tracked translateActivity = {
     @tracked mailContent: '',
@@ -44,11 +46,11 @@ export default class PublicationDocumentsController extends Controller {
   @tracked renderPieces = true;
 
   fileExtensionSelectOptions = ['doc', 'docx', 'pdf', 'Andere'];
-  documentTypeSelectOptions = ['Nota', 'Decreet', 'Bijlage', 'MvT', 'Andere'];
+  pieceTypeSelectOptions = ['Nota', 'Decreet', 'Bijlage', 'MvT', 'Andere'];
   @tracked filterIsActive = false;
   @tracked pieceName = '';
   @tracked selectedFileExtensions = [];
-  @tracked selectedDocumentTypes = [];
+  @tracked selectedPieceTypes = [];
 
   concatNames(pieces) {
     return pieces.map((piece) => piece.name).join('\n');
@@ -317,23 +319,49 @@ export default class PublicationDocumentsController extends Controller {
     this.pieceName = '';
   }
 
+  @computed('model.case.sortedPieces')
+  get initialDocumentLoad() {
+    this.sortedFilteredPieces();
+    return true;
+  }
+
   @action
   async filterDocumentsAction() {
-    if (this.selectedFileExtensions === []) {
-      return [];
-    }
-    const pieces = await this.model.case.sortedPieces;
-    console.log('pieces', pieces);
-    const filteredPieces = A([]);
-    for (let index = 0; index < pieces.length; index++) {
-      const fileType = await this.checkFileType(pieces[index]);
-      if (fileType) {
-        filteredPieces.pushObject(pieces[index]);
+    await this.sortedFilteredPieces();
+  }
+
+  async sortedFilteredPieces() {
+    this.showLoader = true;
+    const filteredPieces =  [...this.model.case.sortedPieces];
+    this.filteredSortedPieces = null;
+    this.filteredSortedPieces = A([]);
+
+    for (let index = 0; index < filteredPieces.length; index++) {
+      const piece = filteredPieces[index];
+      if (!await this.fileTypeAllowed(piece)) {
+        continue;
       }
+      if (!await this.pieceTypeAllowed(piece)) {
+        continue;
+      }
+
+      if (!this.filterTitle(piece)) {
+        continue;
+      }
+      this.filteredSortedPieces.pushObject(piece);
     }
+    this.showLoader = false;
   }
 
-  async checkFileType(piece) {
+  filterTitle(piece) {
+    return piece.name.toLowerCase().includes(this.pieceName.toLowerCase());
+  }
+
+  async fileTypeAllowed(piece) {
+    // Als we geen types hebben geselecteerd, laten we alles zien.
+    if (this.selectedFileExtensions.length === 0) {
+      return true;
+    }
     const file = await piece.get('file');
     const ext = await file.get('extension');
     switch (ext) {
@@ -344,14 +372,27 @@ export default class PublicationDocumentsController extends Controller {
     }
   }
 
-  async checkDocumentType(piece) {
-    const file = await piece.get('file');
-    const ext = await file.get('extension');
-    switch (ext) {
-      case 'pdf': return this.selectedFileExtensions.includes(ext);
-      case 'doc': return this.selectedFileExtensions.includes(ext);
-      case 'docx': return this.selectedFileExtensions.includes(ext);
-      default:  return this.selectedFileExtensions.includes('Andere');
+  async pieceTypeAllowed(piece) {
+    // Als we geen types hebben geselecteerd, laten we alles zien.
+    if (this.selectedPieceTypes.length === 0) {
+      return true;
     }
+    const container = await piece.get('documentContainer');
+    if (container) {
+      const containerType = await container.get('type');
+      if (containerType) {
+        const label = await containerType.get('label');
+        switch (label) {
+          case 'BvR': return this.selectedPieceTypes.includes(label);
+          case 'Nota': return this.selectedPieceTypes.includes(label);
+          case 'Decreet': return this.selectedPieceTypes.includes(label);
+          case 'Bijlage': return this.selectedPieceTypes.includes(label);
+          case 'MvT': return this.selectedPieceTypes.includes(label);
+          default:  return this.selectedPieceTypes.includes('Andere');
+        }
+      }
+      return false;
+    }
+    return false;
   }
 }
