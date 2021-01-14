@@ -63,15 +63,6 @@ $pad-tiny: 0.3rem;
     &.vl-data-table__icon-container {
       background-color: $porcelain;
       color: $text-color;
-
-      .vl-vi {
-        color: $alt-text-color;
-        font-size: 3rem;
-      }
-
-      .vl-vi & {
-        text-align: center;
-      }
     }
   }
 
@@ -109,10 +100,6 @@ $pad-tiny: 0.3rem;
 
       .vl-data-table__header-title__sort-icon {
         opacity: 0;
-
-        .vl-vi {
-          color: $primary-blue;
-        }
       }
 
       &:hover,
