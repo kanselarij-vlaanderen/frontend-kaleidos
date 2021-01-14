@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach */
+/* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import modal from '../../selectors/modal.selectors';
@@ -7,6 +7,10 @@ context('Formally ok/nok tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {

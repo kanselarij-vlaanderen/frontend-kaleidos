@@ -71,16 +71,6 @@
       &::before {
         font-size: map_get($sizes, font);
       }
-
-      @include respond-to(small) {
-        width: map_get($sizes, respsize);
-        height: map_get($sizes, respsize);
-        line-height: map_get($sizes, respsize);
-
-        &::before {
-          font-size: map_get($sizes, respfont);
-        }
-      }
     }
   }
 }

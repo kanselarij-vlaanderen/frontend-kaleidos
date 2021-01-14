@@ -1,6 +1,6 @@
-<div class="vl-u-spacer-extended-l">
-  {{title (t "manage-ministers")}}
-  <div class="vl-u-display-flex vlc-u-flex-space-between">
+<div class="auk-u-m-8">
+  {{page-title (t "manage-ministers")}}
+  <div class="auk-u-flex auk-u-flex--justify-between">
     <h4 class="vl-title vl-title--h4"></h4>
     <button data-test-minister-add
             type="button"
@@ -22,7 +22,7 @@
                href="#"
             ></a>
             <a class="vl-data-table__header-title--sortable" href="#">
-              <div class="vl-u-display-flex vl-u-flex-align-center">
+              <div class="auk-u-flex auk-u-flex--vertical-center">
                 <span>
                   {{t "minister"}}
                 </span>
@@ -34,7 +34,7 @@
                href="#"
             ></a>
             <a class="vl-data-table__header-title--sortable" href="#">
-              <div class="vl-u-display-flex vl-u-flex-align-center">
+              <div class="auk-u-flex auk-u-flex--vertical-center">
                 <span>
                   {{t "nick-name"}}
                 </span>
@@ -46,7 +46,7 @@
                href="#"
             ></a>
             <a class="vl-data-table__header-title--sortable" href="#">
-              <div class="vl-u-display-flex vl-u-flex-align-center">
+              <div class="auk-u-flex auk-u-flex--vertical-center">
                 <span>
                   {{t "priority"}}
                 </span>
@@ -90,7 +90,7 @@
             <td data-test-mandatee-priority={{index}} class="mandatee-draggable-row">
               {{await mandatee.priority}}
             </td>
-            <td class="vl-u-align-center">
+            <td class="auk-u-text-align--center">
               <div class="vl-action-group vl-action-group--align-center">
                 <button data-test-mandatee-edit={{index}}
                         type="button"

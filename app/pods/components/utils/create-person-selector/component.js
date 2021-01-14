@@ -9,7 +9,7 @@ export default Component.extend({
   classNames: ['vlc-input-field-block'],
   classNameBindings: [
     'isCreatingPerson:vl-u-bg-alt',
-    'isCreatingPerson:vlc-u-no-margin',
+    'isCreatingPerson:auk-u-m-0',
     'isCreatingPerson:vlc-u-padding-2',
     'classes'
   ],

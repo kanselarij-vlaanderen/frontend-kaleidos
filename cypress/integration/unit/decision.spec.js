@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach, Cypress */
+/* global context, before, it, cy, beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -25,6 +25,10 @@ context('Add files to an agenda', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should test the document CRUD for a decision', () => {

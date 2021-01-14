@@ -1,11 +1,7 @@
 // sass-lint:disable force-pseudo-nesting no-important
 .vl-region {
   margin: 0 auto;
-  padding: $spacing-medium 0 $spacing-large;
-
-  @include respond-to(small) {
-    padding: $spacing-medium 0;
-  }
+  padding: 3rem 0 6rem;
 
   &.vl-region--no-space {
     padding: 0;
@@ -32,35 +28,19 @@
 // two consequent different regions
 .vl-region:not(.vl-region--alt) + .vl-region--alt,
 .vl-region--alt + .vl-region:not(.vl-region--alt) {
-  padding-top: $spacing-large;
-
-  @include respond-to(small) {
-    padding-top: $spacing-medium;
-  }
+  padding-top: 6rem;
 }
 
 .vl-region:first-child {
-  padding-top: $spacing-large;
-
-  @include respond-to(small) {
-    padding-top: $spacing-normal;
-  }
+  padding-top: 6rem;
 }
 
 .vl-region--small {
-  padding: $spacing-small 0;
-
-  @include respond-to(small) {
-    padding: $spacing-normal 0;
-  }
+  padding: 1.5rem 0;
 }
 
 .vl-region--medium {
-  padding: $spacing-medium 0;
-
-  @include respond-to(small) {
-    padding: $spacing-normal 0;
-  }
+  padding: 3rem 0;
 }
 
 .vl-region--bordered + .vl-region--bordered {

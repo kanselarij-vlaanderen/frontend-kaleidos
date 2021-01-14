@@ -138,7 +138,7 @@
               {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
                 <tr>
                   <td>
-                    <div class="o-flex o-flex--vertical-center">
+                    <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
                       <span>{{mandatee.person.nameToDisplay}}</span>
                     </div>
@@ -201,7 +201,7 @@
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
                   <td>
-                    <div class="o-flex o-flex--vertical-center">
+                    <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
                       <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                     </div>

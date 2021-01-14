@@ -1,11 +1,11 @@
 {{#if (gt (await agendaitem.mandatees.length) 1)}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+  <div class="auk-u-mb-2">
+    <div class="auk-u-flex auk-u-flex--align-baseline">
       <h4 class="vl-title vl-title--h4">
         {{t "actions"}}
       </h4>
       {{#if currentSession.isEditor}}
-        <div class="vl-u-spacer-extended-left-s">
+        <div class="auk-u-ml-2">
           <a href="" class="vl-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
@@ -13,12 +13,12 @@
       {{/if}}
     </div>
   </div>
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <h5 class="vl-title vl-title--h6">
       {{t "mandatee-approval"}}
     </h5>
   </div>
-  <div class="vl-u-spacer">
+  <div class="auk-u-mb-4">
     <table class="vl-data-table">
       <thead>
         <tr>

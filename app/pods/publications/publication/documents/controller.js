@@ -6,7 +6,10 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -182,16 +185,16 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async openPublishPreviewRequestModal() {
-    this.previewActivity.pieces = this.selectedPieces;
-    this.previewActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case);
-    this.previewActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.previewActivity, 'pieces', this.selectedPieces);
+    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
   }
 
   @action
   cancelPublishPreviewRequestModal() {
-    this.previewActivity.mailContent = '';
-    this.previewActivity.mailSubject = '';
+    set(this.previewActivity, 'mailContent', '');
+    set(this.previewActivity, 'mailSubject', '');
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -237,8 +240,8 @@ export default class PublicationDocumentsController extends Controller {
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    this.translateActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case);
-    this.translateActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 
@@ -285,8 +288,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelTranslationModal() {
-    this.translateActivity.mailContent = '';
-    this.translateActivity.mailSubject = '';
+    set(this.translateActivity, 'mailContent', '');
+    set(this.translateActivity, 'mailSubject', '');
     this.showTranslationModal = false;
   }
 

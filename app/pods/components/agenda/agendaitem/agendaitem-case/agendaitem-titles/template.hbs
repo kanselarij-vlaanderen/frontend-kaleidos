@@ -1,6 +1,7 @@
 {{#if @subcase.case.id}}
-  <div class="vl-u-spacer-extended-bottom-s">
-    <div class="vl-u-display-flex vlc-u-flex-align-baseline">
+  <div class="auk-u-mb-2">
+    {{!--   TO SUBCASE --}}
+    <div class="auk-u-flex auk-u-flex--align-baseline">
       <LinkTo
         @route="cases.case.subcases.subcase.overview"
         @models={{array
@@ -11,11 +12,42 @@
         {{t "to-subcase"}}
       </LinkTo>
     </div>
+    {{!--  END TO SUBCASE --}}
+
+    {{!--    PUBLICATION FLOW CALL TO ACTION --}}
+
+    <div class="auk-button-toolbar">
+      {{#if (await @agendaitem.publicationFlow)}}
+        <LinkTo
+                class=""
+                @route="publications.publication"
+                @model={{ await @agendaitem.publicationFlowId }}
+        >
+          {{t "publications-to" }}
+        </LinkTo>
+      {{else}}
+        {{#if (await @agendaitem.case)}}
+          <WebComponents::AuButton
+                  @skin="tertiary"
+                  @layout="icon-only"
+                  data-test-start-publication
+            {{on "click" this.startPublication}}>
+            {{t "start-publication"}}
+          </WebComponents::AuButton>
+        {{/if}}
+      {{/if}}
+    </div>
+
+    {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
   </div>
+
+
+
+
 {{/if}}
 
-<div class="vl-u-spacer-extended-bottom-s">
-  <div class="vl-u-display-flex vlc-u-display-flex-align-center">
+<div class="auk-u-mb-2">
+  <div class="auk-u-flex auk-u-flex--vertical-center">
     <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not @agendaitem.showAsRemark)}}
         {{t "note"}}
@@ -24,7 +56,7 @@
       {{/if}}
     </h2>
     {{#if currentSession.isEditor}}
-      <div class="vl-u-spacer-extended-left-s" data-test-agendaitem-edit-link>
+      <div class="auk-u-ml-2" data-test-agendaitem-edit-link>
         <a
           data-test-agendaitem-titles-edit
           href=""
@@ -38,7 +70,7 @@
   </div>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <h4 class="vl-title vl-title--h4">
     <pre>
       {{@agendaitem.shortTitle}}
@@ -46,16 +78,16 @@
   </h4>
 </div>
 
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   {{#if @shouldShowDetails}}
-    <pre class="vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+    <pre class="auk-u-flex--inline auk-u-text-pre-line">
       {{@agendaitem.title}}
     </pre>
   {{/if}}
 </div>
 
 {{#if (not @agendaitem.showAsRemark)}}
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     {{#if @subcase.subcaseName}}
       <span class={{this.pillClass}}>
         {{@subcase.subcaseName}}
@@ -63,8 +95,8 @@
     {{/if}}
   </div>
   {{#if @agendaitem.retracted}}
-    <div class="vl-u-spacer-extended-bottom-s">
-      <div class="pill-container vl-u-display-flex">
+    <div class="auk-u-mb-2">
+      <div class="pill-container auk-u-flex">
         <span class="vl-pill vl-u-text--capitalize">
           {{t "postponed-item"}}
         </span>
@@ -73,34 +105,34 @@
   {{/if}}
 {{else}}
   {{#if @newsletterInfo}}
-    <div class="vl-u-spacer-extended-bottom-s">
-      <div class="pill-container vl-u-display-flex">
+    <div class="auk-u-mb-2">
+      <div class="pill-container auk-u-flex">
         <span
-          class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} vl-u-spacer-extended-right-s"
+          class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} auk-u-mr-2"
         >
           {{#if @newsletterInfo.inNewsletter}}
             <span>
               {{t "visible-in-newsletter"}}
             </span>
-            <i class="vl-button__icon ki-visible vl-u-spacer-extended-left-s"></i>
+            <i class="vl-button__icon ki-visible auk-u-ml-2"></i>
           {{else}}
             <span>
               {{t "hidden-in-newsletter"}}
             </span>
-            <i class="vl-button__icon ki-hide vl-u-spacer-extended-left-s"></i>
+            <i class="vl-button__icon ki-hide auk-u-ml-2"></i>
           {{/if}}
         </span>
       </div>
     </div>
   {{else}}
-    <div class="vl-u-spacer-extended-bottom-s">
+    <div class="auk-u-mb-2">
       {{t "no-newsletter-info"}}
     </div>
   {{/if}}
 {{/if}}
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   <div
-    class="pill-container vl-u-display-flex"
+    class="pill-container auk-u-flex"
     data-test-agenda-subcasehidden-pill
   >
     {{#if
@@ -108,7 +140,7 @@
     }}
       <span
         class="{{@agendaitem.formallyOkToShow.pillClassNames}}
-        vl-u-spacer-extended-right-s"
+        auk-u-mr-2"
       >
         {{@agendaitem.formallyOkToShow.label}}
       </span>
@@ -118,16 +150,22 @@
         <i data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
       {{else}}
         <i
-          class="vlc-pill vl-u-spacer-extended-right-s vl-icon vlc-pill--success ki-lock-open"
+          class="vlc-pill auk-u-mr-2 vl-icon vlc-pill--success ki-lock-open"
         ></i>
       {{/if}}
     {{/if}}
   </div>
 </div>
-<div class="vl-u-spacer-extended-bottom-s">
+<div class="auk-u-mb-2">
   {{#if @agendaitem.explanation}}
-    <pre class="vl-u-text--muted vlc-u-flex-inline-flex vlc-u-pre-line-wrap">
+    <pre class="vl-u-text--muted auk-u-flex--inline auk-u-text-pre-line">
       {{t "remark-title"}}: {{@agendaitem.explanation}}
     </pre>
   {{/if}}
 </div>
+
+{{!-- LOADER --}}
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
+{{/if}}

@@ -1,12 +1,12 @@
 <div class="vlc-padding-bottom--large">
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <h3 class="vl-title vl-title--h6">
       {{@newsletterInfo.title}}
     </h3>
   </div>
-  <div class="vl-u-spacer-extended-bottom-s">
+  <div class="auk-u-mb-2">
     <div class="vl-typography">
-      <p class="vl-u-text--italic">
+      <p class="auk-u-italic">
         {{await @newsletterInfo.newsletterProposal}}
       </p>
       <p>
@@ -23,7 +23,7 @@
     </p>
   {{/if}}
   <div
-    class="vl-u-spacer-extended-bottom-s vl-u-spacer-extended-top-s"
+    class="auk-u-mb-2 auk-u-mt-2"
     data-test-agenda-news-item-themes>
     {{#if (is-pending @newsletterInfo.themes)}}
       <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
@@ -39,13 +39,13 @@
         {{/each}}
       </ul>
     {{else}}
-      <div class="vl-u-spacer-extended-top-s">
+      <div class="auk-u-mt-2">
         <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
       </div>
     {{/if}}
   </div>
   <hr/>
-  <div class="vl-u-spacer vl-u-spacer-extended-top-s">
+  <div class="auk-u-mb-4 auk-u-mt-2">
     {{#if @newsletterInfo.finished}}
       <div class="vlc-pill vlc-pill--success">
         {{t "finished"}}

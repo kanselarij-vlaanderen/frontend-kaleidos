@@ -12,7 +12,7 @@ import {
 export default Component.extend({
   store: inject(),
   currentSession: inject(),
-  classNames: ['vl-u-spacer-extended-bottom-l'],
+  classNames: ['auk-u-mb-8'],
   subcase: null,
 
   subcaseName: cached('subcase.subcaseName'), // TODO in class syntax use as a decorator instead

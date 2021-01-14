@@ -10,7 +10,7 @@ export default class AgendaOverview extends Component {
 
   @service('current-session') currentSessionService;
 
-  classNames = ['vlc-agenda-items', 'vl-u-spacer-extended-l', 'vlc-agenda-items--spaced'];
+  classNames = ['vlc-agenda-items', 'auk-u-m-8', 'vlc-agenda-items--spaced'];
 
   dragHandleClass = '.ki-drag-handle-2';
 

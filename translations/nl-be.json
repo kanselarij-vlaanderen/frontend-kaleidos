@@ -370,6 +370,7 @@
   "show-minutes": "Verslag openen",
   "all-subcases-loading-text": "De procedurestappen worden geladen..",
   "documents-loading-text": "De documenten worden geladen..",
+  "documents-loading-progress": "De documenten worden geladen.. {percent}%",
   "documents-uploading-text": "De documenten worden opgeladen..",
   "document-uploading-text": "Het document wordt opgeladen..",
   "themes-loading-text": "De thema's worden geladen..",
@@ -613,7 +614,7 @@
   "publications-published": "Gepubliceerd",
   "publications-to": "Naar publicatie",
   "publication-not-started-yet": "Nog niet gestart",
-  "start-publication": "Start publicatie",
+  "start-publication": "Publicatie starten",
   "no-mandatee-assigned": "Geen toekenning",
   "newsletter-update-notas": "Update nota's",
   "newsletter-update-notas-number": "Nummer",
@@ -711,5 +712,6 @@
   "decreet":"Decreet",
   "BvR":"BvR",
   "cancel-publication-flow-confirm": "Bent u zeker dat u deze publicatie wil intrekken?",
-  "withdraw": "Intrekken"
+  "withdraw": "Intrekken",
+  "documents-may-not-be-saved-message": "Er zijn inconsistenties vastgesteld bij het toevoegen van de documenten. Noteer je wijzigingen en hernieuw deze pagina om te kijken of de documenten correct zijn toegevoegd."
 }
