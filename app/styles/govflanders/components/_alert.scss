@@ -41,7 +41,25 @@ $alert-padding-small: 1.5rem;
 
   // Alert icon
   &__icon {
-    @include vi-u-badge;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+
+    // place the icon in the middle
+    &::before {
+      margin: 0;
+      display: block;
+    }
+
+    &--link {
+      margin-right: 1rem;
+    }
+
+    &--link-after {
+      margin-left: 1rem;
+    }
+
     @include vi-u-badge--size("medium");
     flex: 0 0 auto;
     background: $white;
@@ -84,11 +102,6 @@ $alert-padding-small: 1.5rem;
     .vl-alert__icon {
       // @include vi-check;
       @include vi-u-badge--color("positive");
-
-      .vl-vi {
-        font-size: 1.5rem;
-        top: 0;
-      }
     }
   }
 

@@ -26,7 +26,7 @@ export default class PausedNotMinisterRoute extends Route {
           ':has-no:subcases': 'yes',
         },
         status: {
-          id: CONFIG.publicationStatusWithdrawn.id,
+          id: CONFIG.publicationStatusPauzed.id,
         },
       },
       sort: params.sort,
