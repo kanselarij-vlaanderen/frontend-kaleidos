@@ -42,6 +42,13 @@ export default class PublicationController extends Controller {
       color: 'success',
     },
   }, {
+    id: CONFIG.publicationStatusPauzed.id,
+    label: 'Gepauzeerd',
+    icon: {
+      svg: 'circle-pause',
+      color: 'muted',
+    },
+  }, {
     id: CONFIG.publicationStatusWithdrawn.id,
     label: 'ingetrokken',
     icon: {
