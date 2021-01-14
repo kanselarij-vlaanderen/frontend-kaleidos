@@ -31,6 +31,7 @@ export default ModelWithModifier.extend({
   agendaActivities: hasMany('agenda-activity', {
     inverse: null,
   }),
+  submissionActivities: hasMany('submission-activity'),
   pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),
