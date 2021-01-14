@@ -346,7 +346,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   resetFilter() {
     this.selectedFileExtensions = [];
-    this.selectedDocumentTypes = [];
+    this.selectedPieceTypes = [];
     this.pieceName = '';
   }
 

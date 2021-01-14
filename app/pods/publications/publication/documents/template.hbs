@@ -52,7 +52,6 @@
         <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
           <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
           <PowerSelectMultiple
-                  @placeholder="Select some names..."
                   @searchEnabled={{true}}
                   @selected={{this.selectedFileExtensions}}
                   @options={{this.fileExtensions}}
