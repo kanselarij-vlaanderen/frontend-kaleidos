@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import config from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
-import VRDocumentName, { compareFunction as compareDocuments } from 'fe-redpencil/utils/vr-document-name';
+import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
@@ -11,7 +11,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
       'page[size]': 500 // TODO add pagination when sorting is done in the backend
     });
     pieces = pieces.toArray();
-    const sortedPieces = pieces.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+    const sortedPieces = pieces.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('agenda.agendaitems.agendaitem').get('linkedPieces')
