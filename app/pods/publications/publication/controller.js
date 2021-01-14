@@ -166,6 +166,16 @@ export default class PublicationController extends Controller {
   }
 
   @action
+  togglePriorityProcedure() {
+    if (this.model.publicationFlow.get('hasPriority')) {
+      this.model.publicationFlow.set('priority', 0);
+    } else {
+      this.model.publicationFlow.set('priority', 1);
+    }
+    this.model.publicationFlow.save();
+  }
+
+  @action
   setPublicationBeforeDate(event) {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
