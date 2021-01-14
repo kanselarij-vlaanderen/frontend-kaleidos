@@ -6,7 +6,7 @@
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
     With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
     is set right from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
-  <div class="auk-u-flex" {{did-insert this.conditionallyScrollIntoView}}>
+  <div class="auk-u-flex" {{did-insert this.conditionallyScrollIntoView}} {{in-viewport onEnter=this.onEnter onExit=this.onExit}}>
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
@@ -38,46 +38,48 @@
 
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              {{#if (await @agendaitem.checkAdded)}}
-                <span class="added-tag vlc-agenda-meta__recently-added">
-                  <i class="ki-calendar-plus"></i>
-                  {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="top"
-                    class="ember-attacher-tooltip"
-                  }}
-                    <p>
-                      {{t "added-agendaitem-text"}}
-                    </p>
-                  {{/attach-tooltip}}
-                </span>
-              {{/if}}
+              {{#if this.renderDetails}}
+                {{#if (await @agendaitem.checkAdded)}}
+                  <span class="added-tag vlc-agenda-meta__recently-added">
+                    <i class="ki-calendar-plus"></i>
+                    {{#attach-tooltip
+                      arrow="true"
+                      animation="shift"
+                      placement="top"
+                      class="ember-attacher-tooltip"
+                    }}
+                      <p>
+                        {{t "added-agendaitem-text"}}
+                      </p>
+                    {{/attach-tooltip}}
+                  </span>
+                {{/if}}
+                {{#if newsletterInfo}}
+                  {{#if (not newsletterInfo.inNewsletter)}}
+                    <span class="added-tag vlc-agenda-meta__recently-added">
+                      <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                      {{#attach-tooltip
+                        arrow="true"
+                        animation="shift"
+                        placement="top"
+                        class="ember-attacher-tooltip"
+                      }}
+                        <p>
+                          {{t "not-visible-in-newsletter"}}
+                        </p>
+                      {{/attach-tooltip}}
+                    </span>
+                  {{/if}}
+                {{/if}}
 
-              {{#if (not newsletterInfo.inNewsletter)}}
-                <span class="added-tag vlc-agenda-meta__recently-added">
-                  <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
-                  {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="top"
-                    class="ember-attacher-tooltip"
-                  }}
-                    <p>
-                      {{t "not-visible-in-newsletter"}}
-                    </p>
-                  {{/attach-tooltip}}
-                </span>
-              {{/if}}
-
-              {{#if (await subcase.confidential)}}
-                <i
-                 class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                 data-test-icon-agenda-confidentiality-locked
-                ></i>
+                {{#if (await subcase.confidential)}}
+                  <i
+                  class="vl-icon ki-lock-closed vlc-u-opacity-50"
+                  data-test-icon-agenda-confidentiality-locked
+                  ></i>
+                {{/if}}
               {{/if}}
             </div>
-
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-u-flex--align-end">
               {{#if
                 (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
