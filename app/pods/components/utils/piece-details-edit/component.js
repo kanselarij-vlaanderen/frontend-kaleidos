@@ -8,6 +8,7 @@ import {
 import { inject as service } from '@ember/service';
 
 export default class PieceDetailsEdit extends Component {
+  @tracked documentTypes = [];
   @tracked selectedDocumentType;
   @tracked showLoader;
   @tracked documentContainer;
@@ -32,7 +33,10 @@ export default class PieceDetailsEdit extends Component {
   }
 
   get sortedDocumentTypes() {
-    return this.documentTypes.sortBy('priority');
+    if (this.documentTypes) {
+      return this.documentTypes.sortBy('priority');
+    }
+    return [];
   }
 
   @action
