@@ -5,7 +5,11 @@ import VRDocumentName, { compareFunction as compareDocuments } from 'fe-redpenci
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   async model() {
-    let pieces = await this.modelFor('cases.case.subcases.subcase').pieces; // TODO: ember-data cache doesn't update this array in case an element get removed
+    const subcase = this.modelFor('cases.case.subcases.subcase');
+    let pieces = await this.store.query('piece', {
+      'filter[subcase][:id:]': subcase.id,
+      'page[size]': 500 // TODO add pagination when sorting is done in the backend
+    });
     pieces = pieces.toArray();
     const sortedPieces = pieces.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
     return {
