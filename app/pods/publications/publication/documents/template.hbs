@@ -62,12 +62,14 @@
         </div>
         <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
           <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
-          <PowerSelectMultiple @options={{this.pieceTypeSelectOptions}}
-                               @isSearchable={{false}}
-                               @selected={{this.selectedPieceTypes}}
-                               @onchange={{fn (mut this.selectedPieceTypes)}} as |selectedPieceTypes|>
-            {{selectedPieceTypes}}
-          </PowerSelectMultiple>
+          {{#unless this.loadData.isRunning}}
+            <PowerSelectMultiple @options={{this.sortedDocumentTypes}}
+                                 @isSearchable={{false}}
+                                 @selected={{this.selectedPieceTypes}}
+                                 @onchange={{fn (mut this.selectedPieceTypes)}} as |selectedPieceType|>
+              {{get selectedPieceType "label"}}
+            </PowerSelectMultiple>
+          {{/unless}}
         </div>
       </div>
       <div class="auk-u-flex auk-u-flex--justify-end">
@@ -393,4 +395,11 @@
     @message={{t "delete-document-message"}}
     @cancel={{action this.cancelDeleteExistingPiece}}
     @verify={{perform this.verifyDeleteExistingPiece}} />
+{{/if}}
+
+{{#if (or this.showLoader this.loadData.isRunning)}}
+  <WebComponents::AuLoadingOverlay
+          @title={{t "loading-text"}}
+          @message={{t "loading-text"}}
+  />
 {{/if}}

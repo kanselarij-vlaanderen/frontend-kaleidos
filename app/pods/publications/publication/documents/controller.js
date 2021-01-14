@@ -16,6 +16,8 @@ export default class PublicationDocumentsController extends Controller {
   @service activityService;
   @service subcasesService;
   @service fileService;
+  @service store;
+
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -26,6 +28,8 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
   @tracked filteredSortedPieces = A([]);
+  @tracked documentTypes = [];
+
 
   @tracked translateActivity = {
     @tracked mailContent: '',
@@ -54,6 +58,26 @@ export default class PublicationDocumentsController extends Controller {
 
   concatNames(pieces) {
     return pieces.map((piece) => piece.name).join('\n');
+  }
+
+  constructor() {
+    super(...arguments);
+    this.loadData.perform();
+  }
+
+  @task
+  *loadData() {
+    if (!this.documentTypes.length) {
+      this.documentTypes = yield this.store.query('document-type', {
+        page: {
+          size: 50,
+        },
+      });
+    }
+  }
+
+  get sortedDocumentTypes() {
+    return this.documentTypes.sortBy('priority');
   }
 
   @action
@@ -381,15 +405,9 @@ export default class PublicationDocumentsController extends Controller {
     if (container) {
       const containerType = await container.get('type');
       if (containerType) {
-        const label = await containerType.get('label');
-        switch (label) {
-          case 'BvR': return this.selectedPieceTypes.includes(label);
-          case 'Nota': return this.selectedPieceTypes.includes(label);
-          case 'Decreet': return this.selectedPieceTypes.includes(label);
-          case 'Bijlage': return this.selectedPieceTypes.includes(label);
-          case 'MvT': return this.selectedPieceTypes.includes(label);
-          default:  return this.selectedPieceTypes.includes('Andere');
-        }
+        const typeId = await containerType.get('id');
+        const listOfTypeIds = this.selectedPieceTypes.map((type) => type.id);
+        return listOfTypeIds.includes(typeId);
       }
       return false;
     }
