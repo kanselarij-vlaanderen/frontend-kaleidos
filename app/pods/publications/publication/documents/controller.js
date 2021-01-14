@@ -163,11 +163,14 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  cancelEditPiece() {
-    this.pieceBeingEdited = null;
+  async cancelEditPiece() {
     this.pieceBeingEdited.rollbackAttributes();
-    this.pieceBeingEdited.documentContainer.rollbackAttributes();
-    this.pieceBeingEdited.documentContainer.belongsTo('type').reload();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
+    }
+    this.pieceBeingEdited = null;
     this.showPieceEditor = false;
   }
 
