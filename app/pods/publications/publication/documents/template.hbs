@@ -55,7 +55,7 @@
                   @placeholder="Select some names..."
                   @searchEnabled={{true}}
                   @selected={{this.selectedFileExtensions}}
-                  @options={{this.fileExtensionSelectOptions}}
+                  @options={{this.fileExtensions}}
                   @onchange={{fn (mut this.selectedFileExtensions)}} as |selectedFileExtensions|>
             {{selectedFileExtensions}}
           </PowerSelectMultiple>

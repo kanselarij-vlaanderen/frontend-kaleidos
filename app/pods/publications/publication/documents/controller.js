@@ -49,8 +49,7 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
-  fileExtensionSelectOptions = ['doc', 'docx', 'pdf', 'Andere'];
-  pieceTypeSelectOptions = ['Nota', 'Decreet', 'Bijlage', 'MvT', 'Andere'];
+  @tracked fileExtensions = [];
   @tracked filterIsActive = false;
   @tracked pieceName = '';
   @tracked selectedFileExtensions = [];
@@ -63,6 +62,7 @@ export default class PublicationDocumentsController extends Controller {
   constructor() {
     super(...arguments);
     this.loadData.perform();
+    this.loadExtensionData.perform();
   }
 
   @task
@@ -73,6 +73,13 @@ export default class PublicationDocumentsController extends Controller {
           size: 50,
         },
       });
+    }
+  }
+
+  @task
+  *loadExtensionData() {
+    if (!this.fileExtensions.length) {
+      this.fileExtensions = yield this.fileService.getFileExtensions();
     }
   }
 
@@ -388,12 +395,7 @@ export default class PublicationDocumentsController extends Controller {
     }
     const file = await piece.get('file');
     const ext = await file.get('extension');
-    switch (ext) {
-      case 'pdf': return this.selectedFileExtensions.includes(ext);
-      case 'doc': return this.selectedFileExtensions.includes(ext);
-      case 'docx': return this.selectedFileExtensions.includes(ext);
-      default:  return this.selectedFileExtensions.includes('Andere');
-    }
+    return this.selectedFileExtensions.includes(ext);
   }
 
   async pieceTypeAllowed(piece) {
