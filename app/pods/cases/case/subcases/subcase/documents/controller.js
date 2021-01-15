@@ -66,6 +66,7 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
       confidential: false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
+      cases: [this.case],
     });
     this.newPieces.pushObject(piece);
   }
@@ -102,8 +103,10 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
   */
   @task
   *addPiece(piece) {
+    piece.cases.pushObject(this.case);
     yield piece.save();
     yield this.handleSubmittedPieces.perform([piece]);
+    this.send('reloadModel');
   }
 
   @task
@@ -153,11 +156,6 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
   @task
   *handleSubmittedPieces(pieces) {
     yield this.ensureFreshData.perform();
-
-    // Add the pieces on the case
-    const casePieces = yield this.case.pieces;
-    casePieces.pushObjects(pieces);
-    yield this.case.save();
 
     // Attach pieces to submission activity and on open agendaitem (if any)
     const agendaActivity = yield this.getAgendaActivity.perform();

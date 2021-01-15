@@ -4,7 +4,7 @@ import sanitize from 'sanitize-filename';
 import moment from 'moment';
 
 const {
-  Model, attr, belongsTo,
+  Model, attr, belongsTo, hasMany,
 } = DS;
 
 export default Model.extend({
@@ -43,9 +43,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  case: belongsTo('case', {
-    inverse: null,
-  }),
+  cases: hasMany('case'),
 
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
