@@ -9,6 +9,7 @@ export default Model.extend({
   startDate: attr('datetime'),
   subcase: belongsTo('subcase'),
   agendaitems: hasMany('agendaitems'), // TODO ember-data model name should be singular?
+  submissionActivities: hasMany('submission-activity'),
 
   latestAgendaitem: computed('agendaitems.@each', async function() {
     const subcase = await this.get('subcase');
