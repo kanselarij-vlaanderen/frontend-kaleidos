@@ -3,7 +3,7 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import { keepLatestTask, task } from 'ember-concurrency-decorators';
 import {
   all,
   timeout
@@ -35,7 +35,9 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
 
   @action
   async enablePieceEdit() {
-    await this.subcase.preEditOrSaveCheck();
+    // TODO reload must be moved to save handler
+    // when Documents::BatchDocumentEdit component bubbles 'save' action
+    await this.ensureFreshData.perform();
     this.isEnabledPieceEdit = true;
   }
 
@@ -46,7 +48,6 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
 
   @action
   async openPieceUploadModal() {
-    await this.subcase.preEditOrSaveCheck();
     this.isOpenPieceUploadModal = true;
   }
 
@@ -80,9 +81,10 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
       }
     });
     yield all(savePromises);
-    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
+    this.send('reloadModel');
   }
 
   /**
@@ -101,7 +103,7 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
   @task
   *addPiece(piece) {
     yield piece.save();
-    yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
+    yield this.handleSubmittedPieces.perform([piece]);
   }
 
   @task
@@ -122,9 +124,13 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
     yield piece.destroyRecord();
   }
 
-  @action
-  async ensureFreshData() {
-    await this.subcase.preEditOrSaveCheck();
+  @keepLatestTask
+  *ensureFreshData() {
+    yield this.case.reload();
+    yield this.case.hasMany('pieces').reload();
+    yield this.subcase.reload();
+    // we don't need to reload subcase.agendaActivities nor subcase.submissionActivities
+    // since we query them from the backend on addition of new pieces
   }
 
   @action
@@ -144,16 +150,80 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
     }
   }
 
-  // /////
+  @task
+  *handleSubmittedPieces(pieces) {
+    yield this.ensureFreshData.perform();
+
+    // Add the pieces on the case
+    const casePieces = yield this.case.pieces;
+    casePieces.pushObjects(pieces);
+    yield this.case.save();
+
+    // Attach pieces to submission activity and on open agendaitem (if any)
+    const agendaActivity = yield this.getAgendaActivity.perform();
+    if (agendaActivity) { // Item is already on open agenda; adding extra pieces
+      yield this.createSubmissionActivity.perform(pieces, agendaActivity);
+      yield this.updateRelatedAgendaitems.perform(pieces);
+    } else { // Preparing pieces for subcase that is not yet on agenda
+      yield this.updateSubmissionActivity.perform(pieces);
+    }
+  }
 
   @task
-  *updateRelatedAgendaitemsAndSubcase(pieces) {
+  *getAgendaActivity() {
+    const agendaActivities = yield this.store.query('agenda-activity', {
+      'filter[subcase][:id:]': this.subcase.id,
+      'filter[agendaitems][agenda][created-for][is-final]': false,
+      'page[size]': 1,
+    });
+
+    return agendaActivities.firstObject;
+  }
+
+  @task
+  *createSubmissionActivity(pieces, agendaActivity = null) {
+    let submissionActivity = this.store.createRecord('submission-activity', {
+      startDate: new Date(),
+      subcase: this.subcase,
+      pieces,
+      agendaActivity,
+    });
+
+    submissionActivity = yield submissionActivity.save();
+    return submissionActivity;
+  }
+
+  @task
+  *updateSubmissionActivity(pieces) {
+    const submissionActivities = yield this.store.query('submission-activity', {
+      'filter[subcase][:id:]': this.subcase.id,
+      'filter[:has-no:agenda-activity]': true,
+      'page[size]': 1,
+    });
+
+    if (submissionActivities.length) { // Adding pieces to existing submission activity
+      let submissionActivity = submissionActivities.firstObject;
+      const submissionPieces = yield submissionActivity.pieces;
+      submissionPieces.pushObjects(pieces);
+
+      submissionActivity = yield submissionActivity.save();
+      return submissionActivity;
+    } else { // Create first submission activity to add pieces on
+      return this.createSubmissionActivity.perform(pieces);
+    }
+  }
+
+  @task
+  *updateRelatedAgendaitems(pieces) {
     // Link piece to all agendaitems that are related to the subcase via an agendaActivity
     // and related to an agenda in the design status
     const agendaitems = yield this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.subcase.get('id'),
       'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
     });
+
+    // agendaitems can only have more than 1 item
+    // in case the subcase is on multiple (future) open agendas
     for (const agendaitem of agendaitems.toArray()) {
       setNotYetFormallyOk(agendaitem);
       yield destroyApprovalsOfAgendaitem(agendaitem);
@@ -179,12 +249,6 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
           }
         }
       }
-      // Link piece to subcase
-      const currentSubcasePieces = yield this.subcase.hasMany('pieces').reload();
-      const subcasePieces = currentSubcasePieces.pushObjects(pieces);
-      this.subcase.set('pieces', subcasePieces);
-      yield this.subcase.save();
-      this.send('reloadModel');
     }
   }
 

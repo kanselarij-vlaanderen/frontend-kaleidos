@@ -1,16 +1,25 @@
 import Route from '@ember/routing/route';
 import config from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   async model() {
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    let pieces = await this.store.query('piece', {
+    const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      'page[size]': 500,
+      include: 'pieces'
     });
-    pieces = pieces.toArray();
+
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
+
     const sortedPieces = pieces.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
     return {
       pieces: sortedPieces,
@@ -33,6 +42,8 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
     controller.set('subcase', subcase);
+    const _case = this.modelFor('cases.case');
+    controller.set('case', _case);
     controller.set('defaultAccessLevel', this.defaultAccessLevel);
   }
 
