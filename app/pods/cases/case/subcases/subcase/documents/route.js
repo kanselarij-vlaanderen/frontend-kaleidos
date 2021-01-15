@@ -1,8 +1,7 @@
 import Route from '@ember/routing/route';
 import config from 'fe-redpencil/utils/config';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
-import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
+import { sortPieces } from 'fe-redpencil/utils/documents';
 
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   async model() {
@@ -20,7 +19,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
       pieces.push(...submissionPieces);
     }
 
-    const sortedPieces = pieces.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+    const sortedPieces = sortPieces(pieces);
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('cases.case.subcases.subcase').get('linkedPieces')
