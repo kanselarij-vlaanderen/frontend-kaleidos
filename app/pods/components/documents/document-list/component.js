@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
+import { sortPieces } from 'fe-redpencil/utils/documents';
 
 export default class DocumentsDocumentListComponent extends Component {
   /**
@@ -49,22 +50,7 @@ export default class DocumentsDocumentListComponent extends Component {
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
     for (const key of this.documentsByContainer.keys()) {
       const documents = this.documentsByContainer.get(key);
-
-      const validNamedDocuments = [];
-      let invalidNamedDocuments = A();
-      for (const document of documents) {
-        try {
-          (new VRDocumentName(document.name)).parseMeta();
-          validNamedDocuments.push(document);
-        } catch(e) {
-          invalidNamedDocuments.push(document);
-        }
-      }
-      validNamedDocuments.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
-      invalidNamedDocuments = invalidNamedDocuments.sortBy('created').toArray();
-      invalidNamedDocuments.reverse();
-
-      const sortedDocuments = [...validNamedDocuments, ...invalidNamedDocuments];
+      const sortedDocuments = sortPieces(documents);
       this.documentsByContainer.set(key, sortedDocuments);
     }
     // eslint-disable-next-line
