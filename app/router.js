@@ -93,6 +93,35 @@ Router.map(function() {
   this.route('help');
   this.route('manual', { path: '/handleiding', });
 
+  this.route('aukstyleguide', function() {
+    this.route('accordion');
+    this.route('agenda-side-nav');
+    this.route('alert-stack');
+    this.route('brand');
+    this.route('checkboxes-radio-buttons');
+    this.route('colors');
+    this.route('datepicker');
+    this.route('document-card');
+    this.route('document-list');
+    this.route('dropdown');
+    this.route('empty-state');
+    this.route('heading');
+    this.route('icons');
+    this.route('key-value');
+    this.route('link-button');
+    this.route('list');
+    this.route('loader');
+    this.route('pager');
+    this.route('popover');
+    this.route('procedure-steps');
+    this.route('status-pill');
+    this.route('table');
+    this.route('tabs');
+    this.route('toolbar');
+    this.route('typography');
+    this.route('upload');
+  });
+
   this.route('styleguide', function() {
     this.route('alerts');
     this.route('buttons');
