@@ -187,7 +187,7 @@
                             Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
                         <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
-                          {{t "document-delete"}}
+                          {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
 
@@ -288,7 +288,7 @@
                             Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
                         <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-delete @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
-                          {{t "document-delete"}}
+                          {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
                     </WebComponents::AuDropdown>
