@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
-import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 
 export default class DocumentsDocumentListComponent extends Component {

@@ -45,7 +45,7 @@ export const sortPieces = (pieces) => {
     try {
       (new VRDocumentName(piece.name)).parseMeta();
       validNamedPieces.push(piece);
-    } catch(e) {
+    } catch {
       invalidNamedPieces.push(piece);
     }
   }
