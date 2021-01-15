@@ -8,7 +8,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     let pieces = await this.store.query('piece', {
       'filter[agendaitem][:id:]': agendaitem.id,
-      'page[size]': 500 // TODO add pagination when sorting is done in the backend
+      'page[size]': 500, // TODO add pagination when sorting is done in the backend
     });
     pieces = pieces.toArray();
     const sortedPieces = pieces.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
