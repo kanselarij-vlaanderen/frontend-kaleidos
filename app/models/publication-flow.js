@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { computed } from '@ember/object';
 
 export default class PublicationFlow extends Model {
   @attr('string') publicationNumber;
@@ -9,6 +10,7 @@ export default class PublicationFlow extends Model {
   @attr('datetime') publishedAt;
   @attr('string') numacNumber; // is this only 1 per flow ?
   @attr('string') remark;
+  @attr('number') priority;
   @attr('datetime') created;
   @attr('datetime') modified;
 
@@ -20,4 +22,9 @@ export default class PublicationFlow extends Model {
 
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
+
+  @computed('priority')
+  get hasPriority() {
+    return this.priority > 0;
+  }
 }

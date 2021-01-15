@@ -379,10 +379,9 @@
                                 @message={{t "modal-error-missing-pieces"}}
                                 @icon="alert-triangle"/>
       {{else}}
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col-6">
+        <div class="auk-o-grid auk-u-maximize-height">
+          <div class="auk-u-maximize-height auk-o-grid-col-5 auk-u-mr-2 auk-u-scroll-scrollable">
             {{!--  Pieces selected --}}
-            {{t "request-translation-confirmation" }}
             <WebComponents::AuLabel>
               {{t "final-translation-date"}}
             </WebComponents::AuLabel>
@@ -397,10 +396,12 @@
             <WebComponents::AuTextarea
                     id="emailMessage"
                     @rows="15"
+                    @resize="vertical"
                     @value={{mut this.translateActivity.mailContent}}
-                    data-test-create-vertaalActivity-modal-email-textarea/>
+                    data-test-create-vertaalActivity-modal-email-textarea
+            />
           </div>
-          <div class="auk-o-grid-col-3">
+          <div class="auk-u-maximize-height auk-o-grid-col-4 auk-u-scroll-scrollable">
             <WebComponents::AuLabel class="auk-u-mt-2">
               {{t "attachments" }}
             </WebComponents::AuLabel>
