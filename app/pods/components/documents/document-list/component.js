@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import VRDocumentName, { compareFunction as compareDocuments } from 'fe-redpencil/utils/vr-document-name';
+import { A } from '@ember/array';
+import VRDocumentName, { compareFunction as compareNames } from 'fe-redpencil/utils/vr-document-name';
 
 export default class DocumentsDocumentListComponent extends Component {
   /**
@@ -46,8 +47,25 @@ export default class DocumentsDocumentListComponent extends Component {
       }
     }
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
-    for (const documents of this.documentsByContainer.values()) {
-      documents.sort((docA, docB) => compareDocuments(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+    for (const key of this.documentsByContainer.keys()) {
+      const documents = this.documentsByContainer.get(key);
+
+      const validNamedDocuments = [];
+      let invalidNamedDocuments = A();
+      for (const document of documents) {
+        try {
+          (new VRDocumentName(document.name)).parseMeta();
+          validNamedDocuments.push(document);
+        } catch(e) {
+          invalidNamedDocuments.push(document);
+        }
+      }
+      validNamedDocuments.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+      invalidNamedDocuments = invalidNamedDocuments.sortBy('created').toArray();
+      invalidNamedDocuments.reverse();
+
+      const sortedDocuments = [...validNamedDocuments, ...invalidNamedDocuments];
+      this.documentsByContainer.set(key, sortedDocuments);
     }
     // eslint-disable-next-line
     this.documentsByContainer = this.documentsByContainer; // re-assign array to trigger getter
