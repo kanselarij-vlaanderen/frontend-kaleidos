@@ -129,9 +129,13 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
 
   @keepLatestTask
   *ensureFreshData() {
-    yield this.case.reload();
-    yield this.case.hasMany('pieces').reload();
-    yield this.subcase.reload();
+    // piece is linked to a case at the piece-side,
+    // so we don't need to reload this.case and this.case.pieces
+
+    // we don't need to reload the subcase because we don't need to save it
+    // Pieces are added on a submission activity, instead of directly on the subcase
+    // Submission activities are related to subcase by means of the inverse relation
+
     // we don't need to reload subcase.agendaActivities nor subcase.submissionActivities
     // since we query them from the backend on addition of new pieces
   }
