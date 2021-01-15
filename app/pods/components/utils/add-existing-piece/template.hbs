@@ -1,8 +1,8 @@
-<div class="vl-form-grid vl-form-grid--is-stacked auk-u-flex--align-end auk-u-mb-2">
-  <div class="vl-col--8-12 vl-col--1-1--s">
+<div class="auk-u-mb-2">
+  <div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__justified custom-table-search">
-        <div class="vlc-toolbar__item" style="width:100%;">
+        <div class="vlc-toolbar__item vlc-toolbar__item__width">
           <div class="vl-input-field--inline">
             <Input
               data-test-search-existing-document
@@ -24,43 +24,46 @@
       </div>
     </div>
   </div>
-  <div class="vl-col--3-12 vl-col--1-1--s">
+  <div>
     {{#if this.performSearch.isRunning}}
-      <div data-test-search-loader class="vl-loader" role="alert" aria-busy="true"></div>
+      <div class="auk-u-flex auk-u-flex--center auk-u-mt-4">
+        <WebComponents::AuLoader @message="Test"/>
+      </div>
+    {{else}}
+      {{#data-table
+        content=this.pieces
+        sort=this.sort
+        page=this.pageParam
+        size=size
+        noDataMessage=(t "no-results-found")
+        isLoading=this.findAll.isRunning
+        onClickRow=(action "select")
+      as |table|
+      }}
+        {{#table.content
+        as |c|
+        }}
+          {{#c.header}}
+            <th></th>
+            <th><span class="">{{t "title-document"}}</span></th>
+            <th><span class="">{{t "created-on"}}</span></th>
+          {{/c.header}}
+          {{#c.body as |row|}}
+            <td class="vl-data-table-col-1">
+              {{web-components/vl-checkbox
+                value=row.selected
+                toggle=(action "select" row)
+              }}
+            </td>
+            <td class="vl-data-table-col-8">
+              {{row.name}}
+            </td>
+            <td class="vl-data-table-col-3">
+              {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
+            </td>
+          {{/c.body}}
+        {{/table.content}}
+      {{/data-table}}
     {{/if}}
   </div>
 </div>
-{{#data-table
-  content=this.pieces
-  sort=this.sort
-  page=this.pageParam
-  size=size
-  noDataMessage=(t "no-results-found")
-  isLoading=this.findAll.isRunning
-  onClickRow=(action "select")
-as |table|
-}}
-  {{#table.content
-  as |c|
-  }}
-    {{#c.header}}
-      <th></th>
-      <th><span class="">{{t "title-document"}}</span></th>
-      <th><span class="">{{t "created-on"}}</span></th>
-    {{/c.header}}
-    {{#c.body as |row|}}
-      <td class="vl-data-table-col-1">
-        {{web-components/vl-checkbox
-          value=row.selected
-          toggle=(action "select" row)
-        }}
-      </td>
-      <td class="vl-data-table-col-8">
-        {{row.name}}
-      </td>
-      <td class="vl-data-table-col-3">
-        {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
-      </td>
-    {{/c.body}}
-  {{/table.content}}
-{{/data-table}}
