@@ -18,9 +18,9 @@
     </div>
   {{else}}
     <div class="vl-modal-dialog__content">
-      <div class="vl-form-grid vl-form-grid--is-stacked auk-u-flex--align-end auk-u-mb-2"
+      <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2"
       >
-        <div class="vl-col--8-12 vl-col--1-1--s">
+        <div class="auk-o-grid-col-8">
           <div class="vlc-toolbar vlc-toolbar--auto">
             <div class="vlc-toolbar__justified custom-table-search">
               <div class="vlc-toolbar__item" style="width:100%;">
@@ -44,7 +44,7 @@
             </div>
           </div>
         </div>
-        <div class="vl-col--3-12 vl-col--1-1--s">
+        <div class="auk-o-grid-col-4">
           <div class="vlc-input-field-block">
             {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
             {{web-components/vl-checkbox
@@ -53,51 +53,54 @@
             }}
           </div>
         </div>
-        <div class="vl-col--3-12 vl-col--1-1--s">
+        <div class="auk-o-grid-col-3">
           {{#if searchTask.isRunning}}
-            <div class="vl-loader" role="alert" aria-busy="true"></div>
+            <div class="auk-u-flex auk-u-flex--center auk-u-mt-4">
+              <WebComponents::AuLoader @message={{t "loading"}}/>
+            </div>
+          {{else}}
+            {{#data-table
+              content=model
+              sort=sortParam
+              page=pageParam
+              size=size
+              isLoading=findAll.isRunning
+              noDataMessage=(t "no-results-found")
+              onClickRow=(action "selectPostponed")
+            as |table|
+            }}
+              {{#table.content
+              as |c|
+              }}
+                {{#c.header}}
+                  <th></th>
+                  {{th-sortable
+                    field="shortTitle"
+                    currentSorting=sortParam
+                    label=(t "short-title-case")
+                  }}
+                  <th></th>
+                {{/c.header}}
+                {{#c.body as |subcase|}}
+                  <td class="vl-data-table-col-1">
+                    {{web-components/vl-checkbox
+                      value=subcase.selected
+                      toggle=(action "selectAvailableSubcase" subcase)
+                    }}
+                  </td>
+                  <td class="vl-data-table-col-11">
+                    {{subcase.shortTitle}}
+                    <br>
+                    <p class="vl-u-text--muted">
+                      {{subcase.subcaseName}}
+                    </p>
+                  </td>
+                {{/c.body}}
+              {{/table.content}}
+            {{/data-table}}
           {{/if}}
         </div>
       </div>
-      {{#data-table
-        content=model
-        sort=sortParam
-        page=pageParam
-        size=size
-        isLoading=findAll.isRunning
-        noDataMessage=(t "no-results-found")
-        onClickRow=(action "selectPostponed")
-      as |table|
-      }}
-        {{#table.content
-        as |c|
-        }}
-          {{#c.header}}
-            <th></th>
-            {{th-sortable
-              field="shortTitle"
-              currentSorting=sortParam
-              label=(t "short-title-case")
-            }}
-            <th></th>
-          {{/c.header}}
-          {{#c.body as |subcase|}}
-            <td class="vl-data-table-col-1">
-              {{web-components/vl-checkbox
-                value=subcase.selected
-                toggle=(action "selectAvailableSubcase" subcase)
-              }}
-            </td>
-            <td class="vl-data-table-col-11">
-              {{subcase.shortTitle}}
-              <br>
-              <p class="vl-u-text--muted">
-                {{subcase.subcaseName}}
-              </p>
-            </td>
-          {{/c.body}}
-        {{/table.content}}
-      {{/data-table}}
     </div>
     {{web-components/vl-modal-footer
       isLoading=isLoading
