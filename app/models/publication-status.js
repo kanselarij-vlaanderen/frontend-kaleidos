@@ -15,4 +15,8 @@ export default class PublicationStatus extends Model {
   get isPublished() {
     return this.uri === CONFIG.publicationStatusPublished.uri;
   }
+
+  get isPaused() {
+    return this.uri === CONFIG.publicationStatusPauzed.uri;
+  }
 }
