@@ -8,7 +8,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const subcase = this.modelFor('cases.case.subcases.subcase');
     let pieces = await this.store.query('piece', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500 // TODO add pagination when sorting is done in the backend
+      'page[size]': 500, // TODO add pagination when sorting is done in the backend
     });
     pieces = pieces.toArray();
     const sortedPieces = pieces.sort((docA, docB) => compareNames(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
