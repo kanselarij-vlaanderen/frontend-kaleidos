@@ -3,7 +3,10 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask, task } from 'ember-concurrency-decorators';
+import {
+  keepLatestTask,
+  task
+} from 'ember-concurrency-decorators';
 import {
   all,
   timeout
@@ -210,9 +213,10 @@ export default class DocumentsSubcaseSubcasesController extends Controller {
 
       submissionActivity = yield submissionActivity.save();
       return submissionActivity;
-    } else { // Create first submission activity to add pieces on
-      return this.createSubmissionActivity.perform(pieces);
     }
+
+    // Create first submission activity to add pieces on
+    return this.createSubmissionActivity.perform(pieces);
   }
 
   @task

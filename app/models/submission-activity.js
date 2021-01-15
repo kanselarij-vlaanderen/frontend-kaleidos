@@ -1,4 +1,8 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, {
+  attr,
+  hasMany,
+  belongsTo
+} from '@ember-data/model';
 
 export default class SubmissionActivity extends Model {
   @attr('datetime') startDate;
