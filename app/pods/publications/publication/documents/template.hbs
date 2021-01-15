@@ -226,7 +226,7 @@
                 <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
               </td>
               <td>
-                {{#if piece.confidential}}
+                {{#if (await piece.agendaitem)}}
                   <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
                 {{/if}}
                 {{await piece.name}}
