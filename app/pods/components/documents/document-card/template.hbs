@@ -1,4 +1,4 @@
-<div class="auk-u-mb-2 {{if @documentContainer.aboutToDelete "vlc-document--deleted-state" }}">
+<div class="auk-u-mb-2 {{if this.documentContainer.aboutToDelete "vlc-document--deleted-state" }}">
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
       <div class="vlc-document-card__content">
@@ -6,15 +6,17 @@
           <div class="vlc-toolbar__left">
             <div class="vlc-toolbar__item">
               <p class="vlc-subline vlc-document-card__subline">
-                {{@documentContainer.type.label}}
+                {{#unless this.loadPieceRelatedData.isRunning}}
+                  {{this.documentContainer.type.label}}
+                {{/unless}}
               </p>
             </div>
           </div>
           <div class="vlc-document-card-toolbar__right">
             <div class="vlc-toolbar__item auk-u-flex">
-              {{#if this.lastPiece}}
-                <AccessLevelPill @lastPiece={{this.lastPiece}} />
-              {{/if}}
+              {{#unless this.loadPieceRelatedData.isRunning}}
+                <AccessLevelPill @lastPiece={{this.piece}} />
+              {{/unless}}
             </div>
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}
@@ -116,21 +118,21 @@
             {{else}}
               <h6 class="vl-title vl-title--h6">
                 <span {{on "click" this.enableEditPieceName}}>
-                  {{this.lastPiece.name}}
+                  {{this.piece.name}}
                 </span>
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">
               {{t "uploaded-at"}}
-              {{moment-format this.lastPiece.created}}
+              {{moment-format this.piece.created}}
               {{t "at"}}
-              {{moment-format this.lastPiece.created "HH:mm"}}
-              {{#if this.lastPiece.accessLevelLastModified}}
+              {{moment-format this.piece.created "HH:mm"}}
+              {{#if this.piece.accessLevelLastModified}}
                 <div>
                   {{t "access-level-last-modified"}}
-                  {{moment-format this.lastPiece.accessLevelLastModified}}
+                  {{moment-format this.piece.accessLevelLastModified}}
                   {{t "at"}}
-                  {{moment-format this.lastPiece.accessLevelLastModified "HH:mm"}}
+                  {{moment-format this.piece.accessLevelLastModified "HH:mm"}}
                 </div>
               {{/if}}
             </div>
@@ -138,33 +140,35 @@
         </div>
       </div>
     </div>
-    {{#if this.reverseSortedPieces.length}}
-      <div class="vlc-document-card__more">
-        <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-          <button
-            class="vl-toggle vl-link vl-link--bold"
-            type="button"
-            data-test-show-pieces-history
-            {{on "click" this.toggleVersionHistory}}
-          >
-            <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-            ></i>
-            {{t "show-pieces"}}
-          </button>
-          {{#if this.isExpandedVersionHistory}}
-            <div class="vl-accordion__content js-vl-accordion__content">
-              <div class="vl-accordion__panel">
-                {{#each this.reverseSortedPieces as |piece|}}
-                  <WebComponents::VlDocument
-                    @onDeletePieceFromContainer={{@didDeletePiece}}
-                    @piece={{piece}} />
-                {{/each}}
-              </div>
-            </div>
+    <div class="vlc-document-card__more">
+      <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
+        <button
+          class="vl-toggle vl-link vl-link--bold"
+          type="button"
+          disabled={{this.loadPieceRelatedData.isRunning}}
+          data-test-show-pieces-history
+          {{on "click" (if this.isExpandedVersionHistory this.collapseVersionHistory (perform this.expandVersionHistory))}}
+        >
+          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
+          ></i>
+          {{t "show-pieces"}}
+          {{#if this.expandVersionHistory.isRunning}}
+            <WebComponents::AuLoader/>
           {{/if}}
-        </div>
+        </button>
+        {{#if this.isExpandedVersionHistory}}
+          <div class="vl-accordion__content js-vl-accordion__content">
+            <div class="vl-accordion__panel">
+              {{#each this.visiblePieces as |piece|}}
+                <WebComponents::VlDocument
+                  @onDeletePieceFromContainer={{@didDeletePiece}}
+                  @piece={{piece}} />
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
       </div>
-    {{/if}}
+    </div>
   </div>
 </div>
 
