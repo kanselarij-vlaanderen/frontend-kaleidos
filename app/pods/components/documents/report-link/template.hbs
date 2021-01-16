@@ -12,7 +12,7 @@
         <div class="vlc-document-card-toolbar__right">
           <div class="vlc-toolbar__item auk-u-flex">
             {{#if @treatment.report}}
-              <AccessLevelPill @lastPiece={{await @treatment.report}} />
+              <AccessLevelPill @piece={{await @treatment.report}} />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">

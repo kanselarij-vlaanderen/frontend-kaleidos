@@ -1,112 +1,93 @@
-import Component from '@ember/component';
-import EmberObject, {
-  action, computed
-} from '@ember/object';
-
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
+import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
-import DS from 'ember-data';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AccessLevelPill extends Component {
-  confidential = false;
-
-  editing = false;
-
+  /**
+   * An access-level pill component specific to the piece model.
+   *
+   * @argument piece: a Piece
+   */
   @service() intl;
-
   @service('current-session') session;
 
-  classNameBindings = [':auk-u-flex', ':auk-u-flex--vertical-center'];
+  @tracked accessLevel;
+  @alias('args.piece.confidential') confidential;
+  @tracked isEditing = false;
 
-  loading = false;
-  lastPiece = null;
-
-  @computed('lastPiece.accessLevel')
-  get accessLevel() {
-    const accessLevel = this.get('lastPiece.accessLevel');
-
-    if (!accessLevel) {
-      return null;
-    }
-
-    return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => access),
-    });
+  constructor() {
+    super(...arguments);
+    this.loadData.perform();
   }
 
-  @computed('lastPiece.accessLevel')
-  get originalAccessLevel() {
-    const accessLevel = this.get('lastPiece.accessLevel');
-
-    if (!accessLevel) {
-      return null;
-    }
-
-    return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => access),
-    });
+  @task
+  *loadData() {
+    this.accessLevel = yield this.args.piece.accessLevel;
   }
 
-  @computed('accessLevelId')
+  get isLoading() {
+    return this.loadData.isRunning
+      || this.toggleAndSaveConfidentiality.isRunning
+      || this.saveAccessLevel.isRunning;
+  }
+
   get accessLevelClass() {
-    switch (this.accessLevelId) {
-      case CONFIG.publiekAccessLevelId:
-        return 'vlc-pill--success';
-      case CONFIG.internOverheidAccessLevelId:
-        return 'vlc-pill--warning';
-      case CONFIG.internRegeringAccessLevelId:
-        return 'vlc-pill--error';
-      default:
-        return '';
+    if (this.accessLevel) {
+      switch (this.accessLevel.id) {
+        case CONFIG.publiekAccessLevelId:
+          return 'vlc-pill--success';
+        case CONFIG.internOverheidAccessLevelId:
+          return 'vlc-pill--warning';
+        case CONFIG.internRegeringAccessLevelId:
+          return 'vlc-pill--error';
+        default:
+          return '';
+      }
     }
+    return '';
   }
 
-  @computed('accessLevel.id')
-  get accessLevelId() {
-    return (this.get('accessLevel') || EmberObject.create()).get('id');
-  }
-
-  @computed('accessLevel.label')
   get accessLevelLabel() {
-    return (this.get('accessLevel') || EmberObject.create()).get('label') || this.intl.t('no-accessLevel');
+    if (this.accessLevel) {
+      return this.accessLevel.label;
+    }
+    return this.intl.t('no-accessLevel');
   }
 
   @action
   toggleEdit() {
-    if (this.get('session.isEditor')) {
-      this.toggleProperty('editing');
+    if (this.session.isEditor) {
+      this.isEditing = !this.isEditing;
     }
   }
 
   @action
-  cancelChanges() {
-    this.set('accessLevel', this.originalAccessLevel);
-    this.set('editing', false);
+  async cancelChanges() {
+    this.accessLevel = await this.args.piece.accessLevel;
+    this.isEditing = false;
   }
 
   @action
   chooseAccessLevel(accessLevel) {
-    this.set('accessLevel', accessLevel);
+    this.accessLevel = accessLevel;
   }
 
-  @action
-  toggleConfidential() {
-    if (!this.get('session.isEditor')) {
-      return;
-    }
-
-    this.lastPiece.set('confidential', !this.lastPiece.get('confidential'));
-    this.lastPiece.save();
+  @task
+  *toggleAndSaveConfidentiality() {
+    // TODO what with overwriting other properties with old data?
+    this.confidential = !this.confidential;
+    yield this.args.piece.save();
   }
 
-  @action
-  save() {
-    if (this.get('accessLevel')) {
-      this.set('loading', true);
-      this.lastPiece.set('accessLevel', this.accessLevel);
-      this.lastPiece.save();
-      this.set('loading', false);
-      this.set('editing', false);
-    }
+  @task
+  *saveAccessLevel() {
+    // TODO what with overwriting other properties with old data?
+    this.args.piece.set('accessLevel', this.accessLevel);
+    yield this.args.piece.save();
+    this.isEditing = false;
   }
 }
