@@ -2,6 +2,7 @@
 
 ## Prerequisites
 
+a change
 You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
@@ -59,4 +60,3 @@ These commands are used in the above commands. you only need them if you want to
 1. In the project run `docker-compose up -d` make sure every service is up and running.
 2. Make sure your frontend is running on port 4200 also. Issueing the command `npm start` in the frontend should do the trick.
 3. Also in the frontend: issue the  `make run-cypress-tests-headless` command. Your tests are now running.
-
