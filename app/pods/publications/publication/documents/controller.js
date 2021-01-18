@@ -43,7 +43,6 @@ export default class PublicationDocumentsController extends Controller {
   // Editing of pieces.
   @tracked pieceBeingEdited = null;
   @tracked showPieceEditor = false;
-  @tracked documentTypes = [];
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
