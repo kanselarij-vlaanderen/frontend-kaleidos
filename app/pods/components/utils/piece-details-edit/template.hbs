@@ -25,6 +25,19 @@
             {{/unless}}
           </div>
         </div>
+
+        <div class="vlc-hr"></div>
+
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="pages-amount">{{t "pages-amount"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="pages-amount" @value={{@piece.pages}}/>
+        </div>
+
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="words-amount">{{t "words-amount"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="words-amount" @value={{@piece.words}}/>
+        </div>
+
       {{/if}}
     </div>
   </div>
