@@ -1,0 +1,204 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Toolbar">
+  <p>The toolbar is meant as a generic construct to position tools. It provides a structure where you can position items on the left, in the center and on the right. The toolbar component is used in many parts of the user interface: modals, panels, navbars and popovers all use the toolbar component to position elements in a consistent way.</p>
+  <p>The toolbar requires a parent <code>AuToolbar</code> component that contains <code>AuToolbar::Group</code> children that define the positioning with the argument <code>@position="left"</code>, <code>@position="right"</code>, or<code>@position="center"</code>.</p>
+</ComponentPageIntro>
+
+<StyleguideSample @snippet="toolbar-1.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-1 --}}
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <p>I am an item on the left</p>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="center">
+      <WebComponents::AuToolbar::Item>
+        <p>I am an item in the middle</p>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <p>I am an item on the right</p>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<p class="auk-u-mb-2">Position every child of left, right or middle inside a <code>AuToolbar::Item</code> child.</p>
+
+<StyleguideSample @snippet="toolbar-2.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-2 --}}
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <p>Item left 1</p>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <p>Item left 2</p>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <p>Item right 1</p>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <p>Item right 2</p>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<div class="auk-content">
+  <h2>Toolbar inside Navbars</h2>
+  <p>A toolbar as it might appear inside a <LinkTo @route="styleguide.navbar">Navbar</LinkTo> component.</p>
+</div>
+
+<StyleguideSample @title="Toolbar - Add" @snippet="toolbar-3.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-3 --}}
+  <WebComponents::AuNavbar @skin="gray-100">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h2 class="auk-toolbar__title">Titel</h2>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @icon="add" @skin="primary">Toevoegen</WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<StyleguideSample @title="Toolbar - Detail" @snippet="toolbar-4.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-4 --}}
+  <WebComponents::AuNavbar @skin="gray-100">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="chevron-left">Ga terug</WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <h2 class="auk-toolbar__title">Titel</h2>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="primary">Opslaan</WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample @title="Toolbar - Complex" @snippet="toolbar-5.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-5 --}}
+  <WebComponents::AuNavbar @border="bottom" @skin="gray-100" @auto="true">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <div class="o-flex o-flex--vertical auk-u-mt-2">
+            <div class="o-flex o-flex--vertical-center">
+              <h4 class="auk-toolbar-complex__title">Agenda van 12 juni 2020 om 10:00</h4>
+              <span class="auk-u-muted auk-body-1 ">- Ministerraad</span>
+            </div>
+            <WebComponents::AuTabs @reversed="true">
+              <WebComponents::AuTab @icon="back" class="auk-tabs__hierarchical-back"></WebComponents::AuTab>
+              <WebComponents::AuTab>Overzicht</WebComponents::AuTab>
+              <WebComponents::AuTab>Detail</WebComponents::AuTab>
+              <WebComponents::AuTab>Vergelijk</WebComponents::AuTab>
+              <WebComponents::AuTab>Documenten</WebComponents::AuTab>
+            </WebComponents::AuTabs>
+          </div>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="primary">Ontwerpagenda goedkeuren</WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</WebComponents::AuButton>
+          <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
+            <WebComponents::AuDropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
+              <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
+              <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
+              <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
+            </WebComponents::AuDropdown>
+          </EmberPopover>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<div class="auk-content">
+  <h2>Toolbar inside Panels</h2>
+  <p>A toolbar as it might appear inside a <LinkTo @route="styleguide.panel">Panel</LinkTo> component.</p>
+</div>
+
+<StyleguideSample @snippet="toolbar-6.hbs">
+  {{!-- BEGIN-SNIPPET toolbar-6 --}}
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Header>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <h4 class="auk-panel__title">Panel header</h4>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @skin="tertiary" @icon="edit">Button label</WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuPanel::Header>
+    <WebComponents::AuPanel::Body>
+      Panel body text
+    </WebComponents::AuPanel::Body>
+  </WebComponents::AuPanel>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<div class="auk-content">
+  <h2>Button toolbar</h2>
+</div>
+
+
+<StyleguideSample @title="Button toolbar in toolbar example" @description="A button toolbar is used to group related buttons. Combine toolbar groups with specific button toolbars." @snippet="button-toolbar-in-toolbar.hbs">
+  {{!-- BEGIN-SNIPPET button-toolbar-in-toolbar --}}
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton>Left button 1</WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButtonToolbar>
+          <WebComponents::AuButton @icon="chevron-left" @layout="icon-only">Toevoegen</WebComponents::AuButton>
+          <WebComponents::AuButton @icon="chevron-right" @layout="icon-only">Toevoegen</WebComponents::AuButton>
+        </WebComponents::AuButtonToolbar>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton>Right button 1</WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButtonToolbar>
+          <WebComponents::AuButton @icon="edit" @layout="icon-only">Bewerken</WebComponents::AuButton>
+          <WebComponents::AuButton @icon="delete" @skin="danger-hover" @layout="icon-only">Verwijderen</WebComponents::AuButton>
+        </WebComponents::AuButtonToolbar>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>

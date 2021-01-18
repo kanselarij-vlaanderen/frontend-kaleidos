@@ -1,0 +1,44 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Key/value" />
+
+<StyleguideSample
+        @title="Key value"
+        @snippet="key-value.hbs"
+>
+  {{!-- BEGIN-SNIPPET key-value --}}
+  {{#each (array 1 2 3) as |item|}}
+    <WebComponents::AuKeyValue @key="Label" @value="Data"/>
+  {{/each}}
+  {{!-- END-SNIPPET --}}
+
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Key value (horizontal)"
+        @snippet="key-value-horizontal.hbs"
+>
+  {{!-- BEGIN-SNIPPET key-value-horizontal --}}
+  {{#each (array 1 2 3) as |item|}}
+    <WebComponents::AuKeyValue @layout="horizontal" @key="Label" @value="Data"/>
+  {{/each}}
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@layout</code></td>
+    <td>string</td>
+    <td><code>horizontal</code></td>
+    <td>Aligns the key value component in a horizontal layout.</td>
+  </tr>
+  </tbody>
+</table>
