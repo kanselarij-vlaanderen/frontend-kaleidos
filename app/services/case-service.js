@@ -8,18 +8,22 @@ export default class CaseService extends Service {
   @service intl;
 
   async hasPieceOfType(_case, typeToTest) {
-    const pieces = _case.get('pieces').toArray();
-    for (let index = 0; index < pieces.length; index++) {
-      const piece = pieces[index];
-      const container = await piece.get('documentContainer');
-      const type = await container.get('type');
-      // If container has no type, can not check type.
-      if (!type) {
-        break;
-      }
-      if (type.id === typeToTest.id) {
-        return true;
-      }
+    const list = await this.store
+      .query('document-container', {
+        filter: {
+          pieces: {
+            cases: {
+              id: _case.get('id'),
+            },
+          },
+          type: {
+            id: typeToTest.id,
+          },
+        },
+        include: 'pieces,type',
+      });
+    if (list.length > 0) {
+      return true;
     }
     return false;
   }

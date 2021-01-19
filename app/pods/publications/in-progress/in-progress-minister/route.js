@@ -30,7 +30,7 @@ export default class InProgressNotRoute extends Route {
         },
       },
       sort: params.sort,
-      include: 'case,status,case.pieces,case.pieces.document-container',
+      include: 'case,status',
     });
   }
 
