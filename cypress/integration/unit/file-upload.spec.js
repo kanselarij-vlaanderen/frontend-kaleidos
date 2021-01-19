@@ -21,30 +21,53 @@ context('Add files to an agenda', () => {
 
   it('should open an agenda and add documents to it', () => {
     cy.visit('/vergadering/5EBA8CB1DAB6BB0009000001/agenda/5EBA8CB2DAB6BB0009000002/agendapunten');
+    // Open the modal, add files
     cy.addDocumentsToAgenda([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+
+    // Click save
+    cy.route('POST', 'pieces').as('createNewPiece');
+    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+    cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
+    cy.get('@fileUploadDialog').within(() => {
+      cy.get('.vl-button').contains('Documenten toevoegen')
+        .click();
+    });
+    cy.wait('@createNewDocumentContainer', {
+      timeout: 24000,
+    });
+    cy.wait('@createNewPiece', {
+      timeout: 24000,
+    });
+    cy.wait('@loadPieces');
+
+    // Check the name of the document we just uploaded
+    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains('test pdf');
         });
     });
 
+    // Add a new version and check its name
     cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.wait('@loadPieces');
+    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(/BIS/);
         });
     });
 
+    // Add a new version and check its name
     cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.wait('@loadPieces');
+    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.vl-title--h6 > span').contains(/TER/);
@@ -54,7 +77,7 @@ context('Add files to an agenda', () => {
 
   it('should add several documents that should be sorted', () => {
     cy.visit('/vergadering/5EBA8CCADAB6BB0009000005/agenda/5EBA8CCCDAB6BB0009000006/agendapunten');
-    // TODO The sorting is fixed in agenda print branch using "/ gave a different result then "-
+    // Open the modal, add files
     cy.addDocumentsToAgenda(
       [
         {
@@ -81,7 +104,24 @@ context('Add files to an agenda', () => {
       ]
     );
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    // Click save
+    cy.route('POST', 'pieces').as('createNewPiece');
+    cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
+    cy.get('@fileUploadDialog').within(() => {
+      cy.get('.vl-button').contains('Documenten toevoegen')
+        .click();
+    });
+    cy.wait('@createNewDocumentContainer', {
+      timeout: 24000,
+    });
+    cy.wait('@createNewPiece', {
+      timeout: 24000,
+    });
+    cy.wait('@loadPieces');
+
+    // Test if documents are listed in the correct sorting order
+    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
       cy.get('@docCards').eq(0)
         .within(() => {
@@ -115,11 +155,18 @@ context('Add files to an agenda', () => {
   });
 
   it('should delete documents, pieces and files', () => {
+    // Multiple "vlc-scroll-wrapper__body" in this view. Wait until fully loaded, or we'll capture the wrong one
+    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
     cy.visit('/vergadering/5EBA8CE1DAB6BB0009000009/agenda/5EBA8CE3DAB6BB000900000A/documenten');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.wait('@loadPieces');
+
+    // Test if the documents we're looking for are present
+    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
     });
     cy.get('@docCards').should('have.length', 2);
+
+    // Remove a document
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/1e/);
@@ -147,8 +194,12 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteDocumentContainer', {
       timeout: 20000,
     });
+    cy.wait('@loadPieces');
 
+    // One document should be gone.
     cy.get('@docCards').should('have.length', 1);
+
+    // Delete another document
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.vl-title--h6 > span').contains(/2e/);
@@ -175,7 +226,9 @@ context('Add files to an agenda', () => {
       timeout: 20000,
     });
     // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO fix the deletion of document in vl-document component
+    cy.wait('@loadPieces');
 
+    // Nothing should be left
     cy.get('@docCards').should('have.length', 0);
 
     cy.deleteAgenda('5EBA8CE1DAB6BB0009000009', true);
