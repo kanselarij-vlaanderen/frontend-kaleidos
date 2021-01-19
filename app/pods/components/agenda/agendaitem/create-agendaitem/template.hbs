@@ -48,6 +48,7 @@
           <div class="vlc-input-field-block">
             {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
             {{web-components/vl-checkbox
+              data-test-postponed-checkbox
               value=showPostponed
               toggle=(action "checkShowPostponedValue")
             }}

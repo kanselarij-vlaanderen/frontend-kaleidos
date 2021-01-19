@@ -524,11 +524,8 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
 
   cy.get('.vl-modal-dialog').as('dialog')
     .within(() => {
-      cy.get('.vl-form-grid').children()
-        .as('formGrid');
-
       if (postponed) {
-        cy.get('@formGrid').eq(1)
+        cy.get('[data-test-postponed-checkbox]')
           .within(() => {
             cy.get('.vl-checkbox--switch__label').click();
           });
@@ -536,20 +533,16 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       cy.get('.vl-loader', {
         timeout: 12000,
       }).should('not.exist');
-
       if (caseTitle) {
-        cy.get('@formGrid').eq(0)
-          .within(() => {
-            cy.get('.vl-input-field').clear()
-              .type(caseTitle, {
-                force: true,
-              });
-            cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-            cy.wait('@getSubcasesFiltered', {
-              timeout: 12000,
-            });
-            cy.get('.vl-loader').should('not.exist');
+        cy.get('.vl-input-field').clear()
+          .type(caseTitle, {
+            force: true,
           });
+        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
+        cy.wait('@getSubcasesFiltered', {
+          timeout: 12000,
+        });
+        cy.get('.vl-loader').should('not.exist');
         cy.get('table > tbody > tr').as('rows');
       } else {
         cy.get('table > tbody > tr').as('rows');
