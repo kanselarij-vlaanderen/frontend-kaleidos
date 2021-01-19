@@ -93,7 +93,7 @@ context('Tests for KAS-1076', () => {
       cy.get(document.documentCard, {
         timeout: 60000,
       }).as('docCards')
-        .should('have.length', 22);
+        .should('have.length', files.length);
     });
 
     cy.openCase(caseTitleSingle);
@@ -103,7 +103,7 @@ context('Tests for KAS-1076', () => {
       cy.get(document.documentCard, {
         timeout: 80000,
       }).as('docCards')
-        .should('have.length', 22);
+        .should('have.length', files.length);
     });
 
     const linkedDocumentsNames = files.slice(9, 14).map((file) => file.newFileName);
