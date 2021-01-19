@@ -2,7 +2,8 @@ import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
-
+import { isAnnexMeetingKind } from 'fe-redpencil/utils/meeting-utils';
+import moment from 'moment';
 import {
   sortDocumentContainers, getPropertyLength
 } from 'fe-redpencil/utils/documents';
@@ -31,11 +32,21 @@ export default Model.extend({
   requestedSubcases: hasMany('subcase'),
   pieces: hasMany('piece'),
 
+  mainMeeting: belongsTo('meeting', {
+    inverse: null,
+  }),
   newsletter: belongsTo('newsletter-info'),
   signature: belongsTo('signature'),
   mailCampaign: belongsTo('mail-campaign'),
   agenda: belongsTo('agenda', {
     inverse: null,
+  }),
+
+  label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
+    const date = moment(this.plannedStart).format('DD-MM-YYYY');
+    const kind = CONFIG.kinds.find((kind) => kind.uri === this.kind);
+    const kindLabel = kind ? kind.altLabel : '';
+    return `${kindLabel} van ${date} (${this.numberRepresentation})`;
   }),
 
   documentContainersLength: computed('documentContainers', function() {
@@ -123,8 +134,6 @@ export default Model.extend({
   }),
 
   isAnnex: computed('kind', function() {
-    // TODO once codelists are correctly used in the frontend
-    // we should check whether this.kind has a broader type 'Annex'
-    return this.kind === 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c';
+    return isAnnexMeetingKind(this.kind);
   }),
 });

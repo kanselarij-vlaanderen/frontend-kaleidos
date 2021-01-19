@@ -101,6 +101,7 @@ export default EmberObject.create({
     {
       label: 'Plan Vlaamse Veerkracht',
       altLabel: 'Plan Vlaamse Veerkracht',
+      postfix: 'VV',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c',
     }
