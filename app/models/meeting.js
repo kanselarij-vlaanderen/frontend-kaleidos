@@ -122,4 +122,9 @@ export default Model.extend({
     return EmberObject.create(foundOption);
   }),
 
+  isAnnex: computed('kind', function() {
+    // TODO once codelists are correctly used in the frontend
+    // we should check whether this.kind has a broader type 'Annex'
+    return this.kind === 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c';
+  }),
 });

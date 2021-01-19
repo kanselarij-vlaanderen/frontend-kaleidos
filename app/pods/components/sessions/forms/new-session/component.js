@@ -60,8 +60,8 @@ export default Component.extend({
     return savedAgenda;
   },
 
-  async createAgendaitemToApproveMinutes(agenda, closestMeeting) {
-    if (!closestMeeting) {
+  async createAgendaitemToApproveMinutes(meeting, agenda, closestMeeting) {
+    if (meeting.isAnnex || !closestMeeting) {
       return null;
     }
     const fallBackDate = this.formatter.formatDate(null);
@@ -105,7 +105,7 @@ export default Component.extend({
         .save()
         .then(async(meeting) => {
           const agenda = await this.createAgenda(meeting, date);
-          await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
+          await this.createAgendaitemToApproveMinutes(meeting, agenda, closestMeeting);
           await this.newsletterService.createNewsItemForMeeting(meeting);
 
           // TODO: Should fix sessionNrBug
