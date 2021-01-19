@@ -46,6 +46,10 @@ export default class PublicationDocumentsController extends Controller {
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
+  // Editing of pieces.
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
+
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
@@ -189,6 +193,34 @@ export default class PublicationDocumentsController extends Controller {
   cancelDeleteExistingPiece() {
     this.pieceToDelete = null;
     this.isVerifyingDelete = false;
+  }
+
+  @action
+  async editExistingPiece(piece) {
+    this.pieceBeingEdited = piece;
+    this.showPieceEditor = true;
+  }
+
+  @action
+  async cancelEditPiece() {
+    this.pieceBeingEdited.rollbackAttributes();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
+    }
+    this.pieceBeingEdited = null;
+    this.showPieceEditor = false;
+  }
+
+  @action
+  async saveEditedPiece() {
+    this.showPieceEditor = false;
+    this.showLoader = true;
+    await this.pieceBeingEdited.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
+    this.showLoader = false;
   }
 
   @action
