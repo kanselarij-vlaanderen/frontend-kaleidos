@@ -12,11 +12,10 @@
         <WebComponents::AuToolbar::Item>
           {{#if @resizeable}}
             <WebComponents::AuButton
-                    @icon={{@resizeIcon}}
+                    @icon={{if @changeIcon 'minimize' 'expand'}}
                     @skin="borderless"
                     @layout="icon-only"
                     {{on "click" @toggleSize}}>
-
             </WebComponents::AuButton>
           {{/if}}
           {{#if (not @hideCloseButton)}}
