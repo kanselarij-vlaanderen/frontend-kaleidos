@@ -158,6 +158,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
+    // TODO KAS-2192 get('agendaitem') can only be 1 item even if there are many (belongsTo), saving piece creates faulty data
     const agendaitem = yield this.pieceToDelete.get('agendaitem');
     if (agendaitem) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
