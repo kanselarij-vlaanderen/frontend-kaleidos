@@ -40,7 +40,7 @@
         <span class="vl-description-data__label">
           {{t "number-session"}}
         </span>
-        <span class="vl-description-data__value">
+        <span data-test-meeting-number class="vl-description-data__value">
           {{#if (await subcase.latestMeeting.number)}}
             {{await subcase.latestMeeting.number}}
           {{else}}
@@ -52,7 +52,7 @@
         <span class="vl-description-data__label">
           {{t "requested-for-session"}}
         </span>
-        <span class="vl-description-data__value">
+        <span data-test-meeting-plannedStart class="vl-description-data__value">
           {{#if (await subcase.requestedForMeeting.plannedStart)}}
             {{t "requested-for-agenda"}}
             {{moment-format
@@ -60,7 +60,7 @@
               "DD MMMM YYYY"
             }}
           {{else}}
-            {{t "not-yet-requested"}}
+            <p>{{t "not-yet-requested"}}</p>
           {{/if}}
         </span>
       </div>
@@ -104,7 +104,7 @@
         <span class="vl-description-data__label">
           {{t "date-last-edited"}}
         </span>
-        <span class="vl-description-data__value">
+        <span data-test-subcase-modified class="vl-description-data__value">
           {{moment-format subcase.modified "DD MMMM YYYY"}}
         </span>
       </div>
@@ -114,7 +114,7 @@
         <span class="vl-description-data__label">
           {{t "decided-on"}}
         </span>
-        <span class="vl-description-data__value">
+        <span data-test-subcase-decided-on class="vl-description-data__value">
           {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if (await subcase.approved)}}
@@ -128,7 +128,7 @@
         <span class="vl-description-data__label">
           {{t "requested-by"}}
         </span>
-        <span class="vl-description-data__value">
+        <span data-test-subcase-requested-by class="vl-description-data__value">
           {{#if
             (or
                 (is-pending subcase.requestedBy)
