@@ -99,8 +99,8 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
     },
     {
-      label: 'Annex Vlaamse Veerkracht',
-      altLabel: 'Annex Vlaamse Veerkracht',
+      label: 'Plan Vlaamse Veerkracht',
+      altLabel: 'Plan Vlaamse Veerkracht',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c',
     }
