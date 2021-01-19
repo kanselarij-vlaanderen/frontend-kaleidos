@@ -21,7 +21,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
-  @tracked isUploadModalResized = false;
+  @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
 
@@ -53,7 +53,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   toggleUploadModalSize() {
-    this.isUploadModalResized = !this.isUploadModalResized;
+    this.isExpanded = !this.isExpanded;
   }
 
   @action

@@ -249,11 +249,10 @@
 
 
 {{#if this.isOpenUploadPublishPreviewModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreview}}
@@ -298,11 +297,10 @@
 
 
 {{#if this.isOpenUploadPublishPreviewCorrectionModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview-correction"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreviewCorrection}}
