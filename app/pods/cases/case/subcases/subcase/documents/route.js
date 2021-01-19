@@ -9,6 +9,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     let pieces = await this.store.query('piece', {
       'filter[subcase][:id:]': subcase.id,
       'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      include: 'document-container',
     });
     pieces = pieces.toArray();
 
