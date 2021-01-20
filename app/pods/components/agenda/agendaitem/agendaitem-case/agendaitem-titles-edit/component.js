@@ -52,6 +52,10 @@ export default class AgendaitemTitlesEdit extends Component {
       if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
         await this.newsletterInfo.save();
       }
+      setTimeout(() => {
+        // wait for delta handling to be completed in the backend
+        this.newsletterInfo.reload();
+      }, 1000);
       this.isLoading = false;
       this.args.toggleIsEditing();
     } catch (exception) {
