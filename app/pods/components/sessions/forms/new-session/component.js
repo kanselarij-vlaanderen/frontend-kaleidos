@@ -22,6 +22,10 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
+    this.generateNewNumber();
+  },
+
+  generateNewNumber() {
     // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
@@ -30,7 +34,11 @@ export default Component.extend({
       if (meetings.length) {
         const meetingsFromThisYear = meetings.filter((meeting) => meeting.plannedStart && meeting.plannedStart.getFullYear() === this.currentYear);
         const meetingIds = meetingsFromThisYear.map((meeting) => meeting.number);
-        const id = Math.max(...meetingIds);
+        let id = 0;
+        // FIX voor de eerste agenda van het jaar -> Anders math.max infinity
+        if (meetingIds.length !== 0) {
+          id = Math.max(...meetingIds);
+        }
         this.set('meetingNumber', id + 1);
         this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${this.meetingNumber}`);
       }
@@ -93,6 +101,7 @@ export default Component.extend({
         number: meetingNumber,
         numberRepresentation: formattedMeetingIdentifier,
       });
+
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
       newMeeting
@@ -142,6 +151,7 @@ export default Component.extend({
       this.set('selectedKindUri', kind);
       if (!this.isAnnexMeeting) {
         this.set('selectedMainMeeting', null);
+        this.generateNewNumber();
       }
     },
 

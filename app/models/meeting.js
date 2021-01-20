@@ -46,7 +46,7 @@ export default Model.extend({
     const date = moment(this.plannedStart).format('DD-MM-YYYY');
     const kind = CONFIG.kinds.find((kind) => kind.uri === this.kind);
     const kindLabel = kind ? kind.altLabel : '';
-    return `${kindLabel} van ${date} (${this.numberRepresentation})`;
+    return `${kindLabel} ${this.intl.t('of')} ${date} (${this.numberRepresentation})`;
   }),
 
   documentContainersLength: computed('documentContainers', function() {
