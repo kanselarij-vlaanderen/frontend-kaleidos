@@ -17,7 +17,7 @@ export default Transform.extend({
 
   serialize(deserialized) {
     if (deserialized) {
-      return 'mailto:' + deserialized;
+      return `mailto: ${deserialized}`;
     } else {
       return deserialized;
     }
