@@ -32,7 +32,7 @@ export default class PublicationPublishPreviewController extends Controller {
   @tracked uploadedFile = null;
   @tracked pieceInCreation = null;
   @tracked isSavingPieces = false;
-  @tracked isUploadModalResized = false;
+  @tracked isExpanded = false;
   @tracked activityToAddPiecesTo = null;
   @tracked defaultAccessLevel = null;
   @tracked pieceToDelete = null;
@@ -46,7 +46,7 @@ export default class PublicationPublishPreviewController extends Controller {
 
   @action
   toggleUploadModalSize() {
-    this.isUploadModalResized = !this.isUploadModalResized;
+    this.isExpanded = !this.isExpanded;
   }
 
   @action
@@ -226,8 +226,8 @@ export default class PublicationPublishPreviewController extends Controller {
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
     set(this.publicationActivity, 'previewActivity', activity);
-    this.publicationActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.publishRequest.content, this.model.publicationFlow, this.model.case);
-    this.publicationActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.publishRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.publicationActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.publicationActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishRequest.subject, this.model.publicationFlow, this.model.case));
     this.showpublicationModal = true;
   }
 

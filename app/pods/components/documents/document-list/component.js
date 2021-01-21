@@ -25,6 +25,7 @@ export default class DocumentList extends Component {
   @service fileService;
 
   @tracked documentHistories = A([]);
+  @tracked documentsLoadedPercent = 0;
 
   constructor() {
     super(...arguments);
@@ -60,10 +61,12 @@ export default class DocumentList extends Component {
         },
       });
       documentContainers.forEach((container) => uniqueDocumentContainers.add(container));
+      this.documentsLoadedPercent = (uniqueDocumentContainers.size / pieces.length) * 100;
     }
 
     // For each document container, determine the lastest version to display
     this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, pieces)));
+    this.documentsLoadedPercent = 0;
   }
 
   @task

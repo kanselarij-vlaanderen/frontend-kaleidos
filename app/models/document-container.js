@@ -58,9 +58,9 @@ export default Model.extend({
     }
   ),
 
-  reverseSortedPieces: computed('sortedPieces', function() {
+  reverseSortedPieces: computed('pieces.@each', function() {
     return PromiseArray.create({
-      promise: this.get('sortedPieces').then((sortedPieces) => sortedPieces.reverse()),
+      promise: this.get('pieces').then((pieces) => pieces.sortBy('created').reverse()),
     });
   }),
 
