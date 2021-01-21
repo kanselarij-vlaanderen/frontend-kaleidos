@@ -1,35 +1,41 @@
-/* global context, before, it, cy, beforeEach, afterEach */
+/* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
 import modal from '../../selectors/modal.selectors';
 
 import document from '../../selectors/document.selectors';
 
-context('Add files to an agenda', () => {
+function formatmeetingDocumentsUrl(meetingId, agendaId) {
+  return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
+}
+
+context('Add files to an agenda', () => { // At the meeting-level
   before(() => {
     cy.server();
-    cy.resetCache();
   });
 
   beforeEach(() => {
     cy.server();
+    cy.resetCache();
     cy.login('Admin');
-  });
-
-  afterEach(() => {
-    cy.logout();
+    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
   });
 
   it('should open an agenda and add documents to it', () => {
-    cy.visit('/vergadering/5EBA8CB1DAB6BB0009000001/agenda/5EBA8CB2DAB6BB0009000002/agendapunten');
+    const meetingId = '5EBA8CB1DAB6BB0009000001';
+    const agendaId = '5EBA8CB2DAB6BB0009000002';
+    cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
+    cy.wait('@loadPieces');
+
     // Open the modal, add files
-    cy.addDocumentsToAgenda([{
+    cy.contains('Documenten toevoegen').click();
+    cy.addNewDocumentsInUploadModal([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }]);
 
     // Click save
     cy.route('POST', 'pieces').as('createNewPiece');
     cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
+    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
     cy.get('@fileUploadDialog').within(() => {
       cy.get('.vl-button').contains('Documenten toevoegen')
         .click();
@@ -76,9 +82,14 @@ context('Add files to an agenda', () => {
   });
 
   it('should add several documents that should be sorted', () => {
-    cy.visit('/vergadering/5EBA8CCADAB6BB0009000005/agenda/5EBA8CCCDAB6BB0009000006/agendapunten');
+    const meetingId = '5EBA8CCADAB6BB0009000005';
+    const agendaId = '5EBA8CCCDAB6BB0009000006';
+    cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
+    cy.wait('@loadPieces');
+
     // Open the modal, add files
-    cy.addDocumentsToAgenda(
+    cy.contains('Documenten toevoegen').click();
+    cy.addNewDocumentsInUploadModal(
       [
         {
           folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2019 1011 DOC.0005-6 - 6e', fileType: 'Nota',
@@ -155,9 +166,9 @@ context('Add files to an agenda', () => {
   });
 
   it('should delete documents, pieces and files', () => {
-    // Multiple "vlc-scroll-wrapper__body" in this view. Wait until fully loaded, or we'll capture the wrong one
-    cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
-    cy.visit('/vergadering/5EBA8CE1DAB6BB0009000009/agenda/5EBA8CE3DAB6BB000900000A/documenten');
+    const meetingId = '5EBA8CE1DAB6BB0009000009';
+    const agendaId = '5EBA8CE3DAB6BB000900000A';
+    cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
     cy.wait('@loadPieces');
 
     // Test if the documents we're looking for are present
@@ -231,6 +242,6 @@ context('Add files to an agenda', () => {
     // Nothing should be left
     cy.get('@docCards').should('have.length', 0);
 
-    cy.deleteAgenda('5EBA8CE1DAB6BB0009000009', true);
+    cy.deleteAgenda(meetingId, true);
   });
 });
