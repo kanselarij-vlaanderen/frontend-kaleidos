@@ -1,0 +1,56 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Inputs" />
+
+<StyleguideSample
+        @title="Input text"
+        @snippet="input-text.hbs"
+>
+  {{!-- BEGIN-SNIPPET input-text --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="defaultInput"/>
+  </div>
+
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="blockInput" @block="true"/>
+  </div>
+  {{!-- END-SNIPPET input-text --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Input error"
+        @snippet="input-error.hbs"
+>
+  {{!-- BEGIN-SNIPPET input-error --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput type="text" id="blockInput" @block="true" @error="true"/>
+  </div>
+  {{!-- END-SNIPPET input-error --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Input with icon"
+        @snippet="input-icon.hbs"
+>
+  {{!-- BEGIN-SNIPPET input-icon --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
+    <WebComponents::AuInput @icon="search" type="text" id="defaultInput"/>
+  </div>
+
+  {{!-- END-SNIPPET input-icon --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Textarea"
+        @snippet="input-textarea.hbs"
+>
+  {{!-- BEGIN-SNIPPET input-textarea --}}
+  <div class="auk-form-group">
+    <WebComponents::AuLabel for="blockInput">Label</WebComponents::AuLabel>
+    <textarea class="auk-textarea"></textarea>
+  </div>
+  {{!-- END-SNIPPET input-textarea --}}
+</StyleguideSample>
