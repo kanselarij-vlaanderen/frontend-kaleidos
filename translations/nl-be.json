@@ -705,5 +705,8 @@
   "publishpreview": "Drukproef",
   "upload-publishpreview":"Upload drukproef",
   "upload-publishpreview-correction":"Upload verbetering",
-  "documents-may-not-be-saved-message": "Er zijn inconsistenties vastgesteld bij het toevoegen van de documenten. Noteer je wijzigingen en hernieuw deze pagina om te kijken of de documenten correct zijn toegevoegd."
+  "cancel-publication-flow-confirm": "Bent u zeker dat u deze publicatie wil intrekken?",
+  "withdraw": "Intrekken",
+  "documents-may-not-be-saved-message": "Er zijn inconsistenties vastgesteld bij het toevoegen van de documenten. Noteer je wijzigingen en hernieuw deze pagina om te kijken of de documenten correct zijn toegevoegd.",
+  "related-main-meeting-field-label": "Hoort bij ministerraad"
 }
