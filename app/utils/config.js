@@ -252,4 +252,12 @@ export default EmberObject.create({
       id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
     },
   },
+  EMAIL: {
+    DEFAULT_FROM: 'kaleidos-noreply@vlaanderen.be',
+    TO: {
+      translationsEmail: 'johan.delaure@redpencil.be',
+      publishpreviewEmail: 'johan.delaure@redpencil.be',
+      publishEmail: 'johan.delaure@redpencil.be',
+    },
+  },
 });
