@@ -121,7 +121,6 @@ Router.map(function() {
       this.route('publishpreview', { path: '/drukproeven', });
       this.route('signatures', { path: '/handtekeningen', });
     });
-    // this.route('to-treat', { path: '/te-behandelen', });
     this.route('in-progress', { path: '/in-behandeling', }, function() {
       this.route('in-progress-minister', { path: '/via-ministerraad', });
       this.route('in-progress-not-minister', { path: '/niet-via-ministerraad', });
@@ -129,6 +128,7 @@ Router.map(function() {
     this.route('done', { path: '/behandeld', }, function() {
       this.route('done-minister', { path: '/via-ministerraad', });
       this.route('done-not-minister', { path: '/niet-via-ministerraad', });
+    });
     this.route('paused', { path: '/gepauzeerd', }, function() {
       this.route('paused-minister', { path: '/via-ministerraad', });
       this.route('paused-not-minister', { path: '/niet-via-ministerraad', });
