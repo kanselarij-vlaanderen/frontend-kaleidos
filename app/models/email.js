@@ -4,12 +4,13 @@ import Model, {
 
 export default class Email extends Model {
   // @attr() messageId;
-  // @attr('email') to;
+  @attr('string') to; // dont use email, it will translate to mailto:
+  @attr('string') from; // dont use email, it will translate to mailto:
   // @attr('email') cc;
   // @attr('email') bcc;
-  @attr() subject;
-  @attr() content;
-  @attr() html; // html-content
+  @attr('string') subject;
+  @attr('string') content;
+  // @attr('string') html; // html-content
   // @attr() isRead;
   // @attr() contentMimeType;
   // @attr('datetime') receivedDate;

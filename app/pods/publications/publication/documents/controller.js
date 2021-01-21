@@ -14,6 +14,7 @@ import {
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
   @service subcasesService;
+  @service emailService;
   @service fileService;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
@@ -251,20 +252,8 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = false;
     await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
 
-    // Prepare email
-    // TODO: refactor document selection logic before implementing attachments
-    // const attachments = await this.store.query('file', {
-    //   'filter[piece][:id:]': this.translateActivity.pieces.map((piece) => piece.id).join(','),
-    //   // 'filter[format]': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    // });
-    const email = this.store.createRecord('email', {
-      // TODO: link the created mail to an outgoing mail-folder
-      // TODO: establish from/to mailing list mgmt
-      subject: '', // TODO: Template string to be determined
-      content: this.previewActivity.mailContent, // TODO: establish HTML-template and save to property 'html' instead
-      // attachments,
-    });
-    email.save(); // Can go in background
+    // Send email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
 
     // Visual stuff.
     this.selectedPieces = A([]);
@@ -277,8 +266,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-
-    alert('the mails dont work yet. infra is working on it.');
     this.model.refreshAction();
   }
 
@@ -318,20 +305,8 @@ export default class PublicationDocumentsController extends Controller {
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
-    // Prepare email
-    // TODO: refactor document selection logic before implementing attachments
-    // const attachments = await this.store.query('file', {
-    //   'filter[piece][:id:]': this.translateActivity.pieces.map((piece) => piece.id).join(','),
-    //   // 'filter[format]': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    // });
-    const email = this.store.createRecord('email', {
-      // TODO: link the created mail to an outgoing mail-folder
-      // TODO: establish from/to mailing list mgmt
-      subject: '', // TODO: Template string to be determined
-      content: this.translateActivity.mailContent, // TODO: establish HTML-template and save to property 'html' instead
-      // attachments,
-    });
-    email.save(); // Can go in background
+    // Send the email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
 
     // Visual stuff.
     this.selectedPieces = A([]);
@@ -345,7 +320,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-    alert('the mails dont work yet. infra is working on it.');
     this.model.refreshAction();
   }
 
