@@ -11,10 +11,6 @@
     font-size: 1.6rem;
     font-weight: 400;
     color: $alt-text-color;
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-    }
   }
 
   // Description data value / data
@@ -24,10 +20,6 @@
     font-size: 1.8rem;
     font-weight: 500;
     color: $text-color;
-
-    @include respond-to(small) {
-      font-size: 1.4rem;
-    }
   }
 
   // Description data label
@@ -35,36 +27,5 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  // Description data icon
-  &__icon {
-    position: absolute;
-    font-size: 2.2rem;
-    color: $ghost;
-    top: -0.4rem;
-    left: 0;
-
-    @include respond-to(small) {
-      font-size: 1.8rem;
-      top: -0.2rem;
-    }
-
-    // Description data icon wrapper
-    &-wrapper {
-      position: relative;
-      padding: 0 0 0 4rem;
-
-      @include respond-to(small) {
-        padding: 0 0 0 3rem;
-      }
-    }
-  }
-
-  // Description data bordered modifier
-  &--bordered {
-    border: 0.1rem solid $border-color;
-    border-width: 0.1rem 0;
-    padding: $spacing-small 0;
   }
 }

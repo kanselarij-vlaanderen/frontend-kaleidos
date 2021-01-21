@@ -1,63 +1,10 @@
 
-// badges
-@mixin vi-u-badge {
-  display: inline-block;
-  border-radius: 50%;
-  text-align: center;
-  vertical-align: middle;
-
-  // place the icon in the middle
-  &::before {
-    margin: 0;
-    display: block;
-  }
-
-  &--link {
-    margin-right: 1rem;
-  }
-
-  &--link-after {
-    margin-left: 1rem;
-  }
-}
-
 @mixin vi-u-badge--color($colorname) {
   @each $name, $colors in $badge-colors {
     @if $colorname == $name {
       background-color: map-get($colors, bg);
       color: map-get($colors, fg);
     }
-  }
-}
-
-@mixin caret-before {
-  @include vi;
-  @include vi-arrow;
-}
-
-@mixin caret-back-before {
-  @include caret-before;
-
-  &::before {
-    transform: rotate(180deg);
-  }
-}
-
-@mixin caret-before-absolute {
-  @include vi;
-  @include vi-arrow;
-
-  &::before {
-    position: absolute;
-    font-size: 1.4rem;
-  }
-}
-
-@mixin caret-before-absolute-light {
-  @include caret-before-absolute;
-
-  &::before {
-    color: $white;
   }
 }
 
@@ -70,16 +17,6 @@
 
       &::before {
         font-size: map_get($sizes, font);
-      }
-
-      @include respond-to(small) {
-        width: map_get($sizes, respsize);
-        height: map_get($sizes, respsize);
-        line-height: map_get($sizes, respsize);
-
-        &::before {
-          font-size: map_get($sizes, respfont);
-        }
       }
     }
   }

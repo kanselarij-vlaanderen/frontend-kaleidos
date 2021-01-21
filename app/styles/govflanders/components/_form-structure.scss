@@ -1,109 +1,10 @@
 .vl-form {
   font-size: $form-font-size;
 
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-  }
-
   // Form group
   &__group {
     background-color: $alt-bg;
     padding: 2rem 1.5rem;
     margin: 2rem 0 0;
-
-    @include respond-to(small) {
-      padding: 1.5rem 1rem;
-    }
-
-    &--mobile-full-width {
-      @include mobile-full-width;
-    }
-  }
-
-  // Form row (deprecated, use form grid instead)
-  &__row {
-    + .vl-form__row {
-      margin-top: 1.5rem;
-    }
-
-    .vl-form__row__group + .vl-form__row__group {
-      @include respond-to(small) {
-        margin-top: 1.5rem;
-      }
-    }
-
-    // Form row addon modifier
-    &--addon {
-      display: flex;
-      flex-direction: row;
-
-      .vl-form__addon {
-        flex-grow: 0;
-      }
-    }
-
-    // Form row inline modifier
-    &--inline {
-      &::before,
-      &::after {
-        content: "";
-        display: table;
-      }
-
-      &::after {
-        clear: both;
-      }
-      display: flex;
-      margin-left: -$spacing-medium;
-
-      @include respond-to(small) {
-        display: block;
-        margin-left: -$spacing-small;
-      }
-
-      .vl-form__label {
-        float: left;
-        width: 25%;
-        min-width: 25%;
-        max-width: 25%;
-        flex-basis: 25%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-top: $form-label-top-padding;
-        padding-left: $spacing-medium;
-
-        @include respond-to(small) {
-          display: block;
-          width: auto;
-          max-width: none;
-          padding-left: $spacing-small;
-        }
-      }
-
-      .vl-form__input {
-        float: right;
-        width: 75%;
-        margin-left: $spacing-medium;
-
-        @include respond-to(small) {
-          width: auto;
-          margin-left: $spacing-small;
-        }
-
-        .vl-radio,
-        .vl-checkbox,
-        input[type="file"] { // sass-lint:disable-line force-attribute-nesting, no-qualifying-elements, max-line-length
-          margin-top: 0.6rem;
-        }
-      }
-
-      @include respond-to(small) {
-        .vl-form__input,
-        .vl-form__label {
-          float: none;
-          width: auto;
-        }
-      }
-    }
   }
 }

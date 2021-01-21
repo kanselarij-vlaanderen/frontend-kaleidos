@@ -129,6 +129,9 @@ Router.map(function() {
     this.route('done', { path: '/behandeld', }, function() {
       this.route('done-minister', { path: '/via-ministerraad', });
       this.route('done-not-minister', { path: '/niet-via-ministerraad', });
+    this.route('paused', { path: '/gepauzeerd', }, function() {
+      this.route('paused-minister', { path: '/via-ministerraad', });
+      this.route('paused-not-minister', { path: '/niet-via-ministerraad', });
     });
     this.route('withdrawn', { path: '/ingetrokken', }, function() {
       this.route('withdrawn-minister', { path: '/via-ministerraad', });

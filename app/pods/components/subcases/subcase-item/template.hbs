@@ -1,6 +1,6 @@
 <div class="vlc-procedure-step__badge-wrapper">
   {{#if (is-pending subcase.approved)}}
-    <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
+    <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
     ></div>
   {{else if (await subcase.approved)}}
     <div class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
@@ -17,7 +17,7 @@
 <div class="vlc-toolbar vlc-toolbar--auto">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      <div class="vl-u-spacer-extended-bottom-s">
+      <div class="auk-u-mb-2">
         {{#if (not (is-pending subcase))}}
           {{#link-to
             "cases.case.subcases.subcase.overview"

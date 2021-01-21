@@ -1,8 +1,8 @@
-<Textarea 
-  class="auk-textarea auk-textarea--block"
+<Textarea
+  class="auk-textarea auk-textarea--block {{this.getResizeClass}}"
   data-test-auk-textarea
-  rows={{this.getRows}} 
-  @value={{@value}} 
+  rows={{this.getRows}}
+  @value={{@value}}
   @enter={{@enter}}
   @insert-newline={{@insert-newline}}
   @escape-press={{@escape-press}}

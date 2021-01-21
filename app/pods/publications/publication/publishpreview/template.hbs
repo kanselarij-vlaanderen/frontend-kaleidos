@@ -249,18 +249,17 @@
 
 
 {{#if this.isOpenUploadPublishPreviewModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreview}}
     />
     <WebComponents::AuModal::Body>
       {{#if this.pieceInCreation}}
-        <div class="o-flex o-flex--vertical-center auk-u-mt-3">
+        <div class="auk-u-flex auk-u-flex--vertical-center auk-u-mt-3">
           <div class="auk-u-mr-3">
             <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
           </div>
@@ -298,18 +297,17 @@
 
 
 {{#if this.isOpenUploadPublishPreviewCorrectionModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview-correction"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreviewCorrection}}
     />
     <WebComponents::AuModal::Body>
       {{#if this.pieceInCreation}}
-        <div class="o-flex o-flex--vertical-center auk-u-mt-3">
+        <div class="auk-u-flex auk-u-flex--vertical-center auk-u-mt-3">
           <div class="auk-u-mr-3">
             <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
           </div>

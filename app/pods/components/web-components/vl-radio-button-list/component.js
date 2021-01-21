@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   store: inject(),
-  classNames: ['vl-u-spacer'],
+  classNames: ['auk-u-mb-4'],
 
   actions: {
     modelChanged(event) {

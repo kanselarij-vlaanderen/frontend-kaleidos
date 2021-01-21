@@ -12,10 +12,6 @@
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
 
-  @include respond-to(small) {
-    font-size: 1.6rem;
-  }
-
   &:hover {
     box-shadow: none;
   }
@@ -41,91 +37,6 @@
     width: 100%;
   }
 
-  // Input field small modifier
-  &--small {
-    max-width: 6rem;
-    padding: 0 0.8rem;
-  }
-
-  &.invalid.validated,
-  &--error {
-    background-color: $error-secondary-color;
-    border-color: $error-color;
-    box-shadow: inset 0 0 0 0.1rem $error-color;
-
-    &:focus {
-      background-color: $page-bg;
-    }
-    display: inline;
-
-    .vl-select {
-      background-color: $error-secondary-color;
-      border-color: $error-color;
-      box-shadow: inset 0 0 0 0.1rem $error-color;
-
-      &:focus {
-        background-color: $page-bg;
-      }
-    }
-
-    .js-vl-select {
-      &[data-type*="select-one"],
-      &[data-type*="select-multiple"] {
-        background-color: $error-secondary-color;
-        border-color: $error-color;
-        box-shadow: inset 0 0 0 0.1rem $error-color;
-
-        &:focus {
-          background-color: $page-bg;
-        }
-
-        .vl-select__inner {
-          background-color: $error-secondary-color;
-          border-color: $error-color;
-          box-shadow: inset 0 0 0 0.1rem $error-color;
-
-          &:focus {
-            background-color: $page-bg;
-          }
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-  &.valid.validated,
-  &--success {
-    background-color: $rum-swizzle;
-    border-color: $limeade;
-    box-shadow: inset 0 0 0 1px $limeade;
-
-    display: inline;
-
-    .vl-select {
-      background-color: $rum-swizzle;
-      border-color: $limeade;
-      box-shadow: inset 0 0 0 1px $limeade;
-    }
-
-    .js-vl-select {
-      &[data-type*="select-one"],
-      &[data-type*="select-multiple"] {
-        background-color: $rum-swizzle;
-        border-color: $limeade;
-        box-shadow: inset 0 0 0 1px $limeade;
-
-        .vl-select__inner {
-          background-color: $rum-swizzle;
-          border-color: $limeade;
-          box-shadow: inset 0 0 0 1px $limeade;
-
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-
   // Input field disabled modifier
   &--disabled,
   &[disabled] {
@@ -137,11 +48,6 @@
     position: relative;
     display: block;
     max-width: 100%;
-
-    @include respond-to(small) {
-      display: block;
-      width: auto;
-    }
   }
 
   &--inline & {

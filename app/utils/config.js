@@ -55,7 +55,7 @@ export default EmberObject.create({
       label: 'Formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive vl-u-display-flex',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-u-flex',
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
       iconClassNames: 'ki-check formally-ok-icon',
@@ -64,7 +64,7 @@ export default EmberObject.create({
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items__status vl-u-text--error vlc-u-font-weight-500 vl-u-display-flex',
+      classNames: 'vlc-agenda-items__status vl-u-text--error auk-u-text-bold auk-u-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
       iconClassNames: 'ki-cross formally-ok-icon',
     },
@@ -72,7 +72,7 @@ export default EmberObject.create({
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items__status vlc-u-font-weight-500  vl-u-display-flex',
+      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-u-flex',
       pillClassNames: 'vlc-pill',
       iconClassNames: 'ki-question-mark formally-ok-icon',
     }

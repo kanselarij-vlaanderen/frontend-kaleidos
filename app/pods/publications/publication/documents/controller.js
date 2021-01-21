@@ -6,7 +6,10 @@ import { A } from '@ember/array';
 import CONFIG from 'fe-redpencil/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -18,7 +21,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
-  @tracked isUploadModalResized = false;
+  @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
 
@@ -37,6 +40,10 @@ export default class PublicationDocumentsController extends Controller {
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
+  // Editing of pieces.
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
+
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
@@ -46,7 +53,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   toggleUploadModalSize() {
-    this.isUploadModalResized = !this.isUploadModalResized;
+    this.isExpanded = !this.isExpanded;
   }
 
   @action
@@ -149,6 +156,34 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
+  async editExistingPiece(piece) {
+    this.pieceBeingEdited = piece;
+    this.showPieceEditor = true;
+  }
+
+  @action
+  async cancelEditPiece() {
+    this.pieceBeingEdited.rollbackAttributes();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
+    }
+    this.pieceBeingEdited = null;
+    this.showPieceEditor = false;
+  }
+
+  @action
+  async saveEditedPiece() {
+    this.showPieceEditor = false;
+    this.showLoader = true;
+    await this.pieceBeingEdited.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
+    this.showLoader = false;
+  }
+
+  @action
   deleteExistingPiece(piece) {
     this.pieceToDelete = piece;
     this.isVerifyingDelete = true;
@@ -156,6 +191,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
+    // TODO KAS-2192 get('agendaitem') can only be 1 item even if there are many (belongsTo), saving piece creates faulty data
     const agendaitem = yield this.pieceToDelete.get('agendaitem');
     if (agendaitem) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
@@ -182,16 +218,16 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async openPublishPreviewRequestModal() {
-    this.previewActivity.pieces = this.selectedPieces;
-    this.previewActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case);
-    this.previewActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.previewActivity, 'pieces', this.selectedPieces);
+    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
   }
 
   @action
   cancelPublishPreviewRequestModal() {
-    this.previewActivity.mailContent = '';
-    this.previewActivity.mailSubject = '';
+    set(this.previewActivity, 'mailContent', '');
+    set(this.previewActivity, 'mailSubject', '');
     this.isOpenPublishPreviewRequestModal = false;
   }
 
@@ -237,8 +273,8 @@ export default class PublicationDocumentsController extends Controller {
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    this.translateActivity.mailContent = this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case);
-    this.translateActivity.mailSubject = this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case);
+    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 
@@ -285,8 +321,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   cancelTranslationModal() {
-    this.translateActivity.mailContent = '';
-    this.translateActivity.mailSubject = '';
+    set(this.translateActivity, 'mailContent', '');
+    set(this.translateActivity, 'mailSubject', '');
     this.showTranslationModal = false;
   }
 

@@ -23,11 +23,6 @@ $button-border-small: 0.1rem;
   outline: 0;
   cursor: default;
 
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-    padding: 0 $spacing-small;
-  }
-
   &:hover,
   &:focus {
     background-color: $action-hover-color;
@@ -154,13 +149,6 @@ $button-border-small: 0.1rem;
     }
   }
 
-  // Large modifier
-  &--large {
-    height: $form-input-height-large;
-    line-height: $form-input-height-large;
-    font-size: $form-font-size-large;
-  }
-
   // Loading modifier
   &--loading {
     background-color: $disabled-color;
@@ -223,16 +211,5 @@ $button-border-small: 0.1rem;
     &--after {
       margin-left: 0.8rem;
     }
-  }
-}
-
-// Button Group
-.vl-button-group {
-  display: flex;
-  flex-wrap: wrap;
-
-  .vl-button {
-    margin-right: 1rem;
-    margin-bottom: 1rem;
   }
 }

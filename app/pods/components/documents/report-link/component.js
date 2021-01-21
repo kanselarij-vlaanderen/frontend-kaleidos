@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
 import config from 'fe-redpencil/utils/config';
-import { A } from '@ember/array';
 import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
 import { tracked } from '@glimmer/tracking';
 
@@ -15,7 +14,6 @@ export default class ReportLink extends Component {
   @service store;
 
   @tracked isShowingPieces = false;
-  @tracked reverseSortedPieces = A([]);
   @tracked isUploadingNewPiece = false;
   @tracked isEditing = false;
   @tracked defaultAccessLevel = null;
@@ -24,7 +22,6 @@ export default class ReportLink extends Component {
   @tracked nameBuffer = '';
   @tracked isVerifyingDelete = false;
   @tracked lastPiece = null;
-  @tracked mySortedPieces;
   @tracked documentTypes = null;
 
   classNameBindings = ['aboutToDelete'];
@@ -106,16 +103,17 @@ export default class ReportLink extends Component {
       this.defaultAccessLevel = await this.store.findRecord('access-level', config.internRegeringAccessLevelId);
     }
 
-    const previousPiece = this.args.documentContainer ? (await this.args.documentContainer.get('lastPiece')) : null;
+    const containerPieces = await this.args.documentContainer.get('pieces');
+    const sortedContainerPieces = containerPieces.sortBy('created');
+    const previousPiece = sortedContainerPieces.get('lastObject');
     const newPiece = this.createNewPiece(uploadedFile, previousPiece, {
       accessLevel: this.defaultAccessLevel,
     });
     newPiece.set('created', creationDate);
     newPiece.set('modified', creationDate);
-    const pieces = await this.args.documentContainer.get('pieces');
-    pieces.pushObject(newPiece);
+    containerPieces.pushObject(newPiece);
     newPiece.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
-    const newName = new VRDocumentName(previousPiece.get('name')).withOtherPieceSuffix(pieces.length);
+    const newName = new VRDocumentName(previousPiece.get('name')).withOtherPieceSuffix(containerPieces.length);
     newPiece.set('name', newName);
     this.args.documentContainer.notifyPropertyChange('pieces');// Why exactly? Ember should handle this?
     this.pieceInCreation = await newPiece;
@@ -172,8 +170,8 @@ export default class ReportLink extends Component {
   @action
   async cancelUploadPiece() {
     if (this.uploadedFile) {
-      const piece = await this.args.documentContainer.lastPiece;
-      piece.rollbackAttributes();
+      const previousPiece = await this.pieceInCreation.get('previousPiece');
+      previousPiece.rollbackAttributes();
       const pieceInCreation = await this.uploadedFile.get('piece');
       if (pieceInCreation) {
         await this.fileService.deletePiece(pieceInCreation);
@@ -181,6 +179,7 @@ export default class ReportLink extends Component {
         await this.fileService.deleteFile(this.uploadedFile);
       }
       this.uploadedFile = null;
+      this.pieceInCreation = null;
     }
     this.isUploadingNewPiece = false;
   }
@@ -188,7 +187,7 @@ export default class ReportLink extends Component {
   @action
   async savePiece() {
     this.isLoading = true;
-    const piece = await this.args.documentContainer.lastPiece;
+    const piece = this.pieceInCreation;
     await piece.save();
     try {
       await this.attachPieceToTreatment(piece, this.args.treatment);
@@ -200,6 +199,7 @@ export default class ReportLink extends Component {
         this.uploadedFile = null;
         this.isLoading = false;
         this.isUploadingNewPiece = false;
+        this.pieceInCreation = null;
       }
     }
   }
@@ -238,10 +238,14 @@ export default class ReportLink extends Component {
   @action
   async setPreviousPiece(documentContainer) {
     if (documentContainer) {
-      const lastPiece = await documentContainer.get('lastPiece');
-      if (lastPiece) {
-        this.args.treatment.set('report', lastPiece);
-        await this.args.treatment.save();
+      const containerPieces = await documentContainer.get('pieces');
+      if (containerPieces) {
+        const sortedContainerPieces = containerPieces.sortBy('created');
+        const previousPiece = sortedContainerPieces.get('lastObject');
+        if (previousPiece) {
+          this.args.treatment.set('report', previousPiece);
+          await this.args.treatment.save();
+        }
       }
     }
   }

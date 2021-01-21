@@ -1,15 +1,15 @@
 {{#if model.shortTitle}}
-  {{title model.shortTitle}}
+  {{page-title model.shortTitle}}
 {{else if model.title}}
-  {{title model.title}}
+  {{page-title model.title}}
 {{else}}
-  {{title model.subcaseName}}
+  {{page-title model.subcaseName}}
 {{/if}}
 <div class="vl-u-bg-alt">
   {{subcases/subcase-header subcase=model}}
 </div>
 <div class="vlc-scroll-wrapper__body">
-  <div class="vl-u-spacer-extended-l">
+  <div class="auk-u-m-8">
     {{outlet}}
   </div>
 </div>
