@@ -1,0 +1,11 @@
+<td class="auk-content br-type-sample__label">
+  <div class="br-type-sample">
+    <p>{{@title}}</p>
+    {{#if @description}}
+      {{format-markdown @description}}
+    {{/if}}
+  </div>
+</td>
+<td class="br-type-sample__sample">
+  {{yield}}
+</td>

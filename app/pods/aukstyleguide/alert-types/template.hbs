@@ -1,0 +1,80 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro
+        @title="Alert types"
+>
+  <p>Use alerts for messaging across the application. Alerts are the primary method to give a user feedback when they interact with the user interface. Provide the user with appropriate feedback to guide their actions.</p>
+
+  <p>This page documents the different types of alerts. For the different looks, see <a href="/styleguide/alert-skins">skins</a>.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Default"
+        @snippet="alert-default.hbs"
+>
+  {{!-- BEGIN-SNIPPET alert-default --}}
+  <WebComponents::AuAlert
+          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Default with title"
+        @snippet="alert-with-title.hbs"
+>
+  {{!-- BEGIN-SNIPPET alert-with-title --}}
+  <WebComponents::AuAlert
+          @title="Alert title"
+          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<StyleguideSample
+        @title="Closable"
+        @snippet="alert-closable.hbs"
+>
+  {{!-- BEGIN-SNIPPET alert-closable --}}
+  <WebComponents::AuAlert
+          @isClosable="true"
+          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<h3 class="auk-h3">Arguments</h3>
+
+<p>These are the arguments that concern content and interactions. For the different colors, see <a href="/styleguide/alert-skins">skins</a>.</p>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@isClosable</code></td>
+    <td>boolean</td>
+    <td>true, false</td>
+    <td>Determines whether the alert is closable.</td>
+  </tr>
+  <tr>
+    <td><code>@title</code></td>
+    <td>string</td>
+    <td></td>
+    <td>Determines whether the alert has a title.</td>
+  </tr>
+  <tr>
+    <td><code>@message</code></td>
+    <td>string</td>
+    <td></td>
+    <td>Determines the text of the alert. This is the secondary text if a title is present.</td>
+  </tr>
+  </tbody>
+</table>

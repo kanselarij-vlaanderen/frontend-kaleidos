@@ -1,0 +1,137 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Table" />
+
+<StyleguideSample
+        @title="Data table"
+        @snippet="data-table.hbs"
+>
+  {{!-- BEGIN-SNIPPET data-table --}}
+  <table class="auk-table">
+    <thead>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+      <th>Header</th>
+      <th>Header</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each (array 1 2 3) as |item|}}
+      <tr>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>Data punt</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Data table with action"
+        @snippet="data-table-with-action.hbs"
+        @description="Note the `auk-table--striped` class."
+>
+  {{!-- BEGIN-SNIPPET data-table-with-action --}}
+  <table class="auk-table auk-table--striped">
+    <thead>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+      <th>Header</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each (array 1 2 3) as |item|}}
+      <tr>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>
+          <WebComponents::AuButtonToolbar>
+            <WebComponents::AuButton @skin="borderless" @layout="icon-only" id={{@index}} @icon="more">Acties</WebComponents::AuButton>
+
+            <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId={{@index}} as |popover|>
+              <WebComponents::AuDropdown>
+                <WebComponents::AuDropdown::Item @route="styleguide.table">Actie</WebComponents::AuDropdown::Item>
+                <WebComponents::AuDropdown::Item @route="styleguide.table">Actie</WebComponents::AuDropdown::Item>
+                <WebComponents::AuDropdown::Item @route="styleguide.table">Actie</WebComponents::AuDropdown::Item>
+              </WebComponents::AuDropdown>
+            </EmberPopover>
+          </WebComponents::AuButtonToolbar>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Data table with 2 actions"
+        @snippet="data-table-with-2-actions.hbs">
+  {{!-- BEGIN-SNIPPET data-table-with-2-actions --}}
+  <table class="auk-table">
+    <thead>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+      <th>Header</th>
+      <th></th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {{#each (array 1 2 3) as |item|}}
+      <tr>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>
+          <WebComponents::AuButtonToolbar>
+            <WebComponents::AuButton @skin="borderless" @icon="edit" @layout="icon-only" @route="styleguide">Edit item</WebComponents::AuButton>
+            <WebComponents::AuButton @skin="borderless" @icon="delete" @layout="icon-only" @route="styleguide">Delete item</WebComponents::AuButton>
+          </WebComponents::AuButtonToolbar>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Data table with checkbox"
+        @snippet="data-table-with-checkbox.hbs"
+>
+  {{!-- BEGIN-SNIPPET data-table-with-checkbox --}}
+  <table class="auk-table">
+    <thead>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+      <th>Header</th>
+      <th></th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {{#each (array 1 2 3) as |item|}}
+      <tr>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>Data punt</td>
+        <td>
+          <div class="auk-form-group">
+            <WebComponents::AuCheckbox />
+          </div>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>

@@ -1,0 +1,23 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Pagination" />
+
+<StyleguideSample
+        @title="Pagination"
+        @snippet="pagination.hbs"
+>
+  {{!-- BEGIN-SNIPPET pagination --}}
+  <div class="auk-pagination">
+    <ul class="auk-pagination__list">
+      <li class="auk-pagination__element">
+        <p><strong>1-10</strong> van 142</p>
+      </li>
+      <li class="auk-pagination__element">
+        <WebComponents::AuButtonLink @icon="chevron-left" disabled>Vorige</WebComponents::AuButtonLink>
+      </li>
+      <li class="auk-pagination__element">
+        <WebComponents::AuButtonLink @icon="chevron-right" @layout="icon-right">Volgende</WebComponents::AuButtonLink>
+      </li>
+    </ul>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>

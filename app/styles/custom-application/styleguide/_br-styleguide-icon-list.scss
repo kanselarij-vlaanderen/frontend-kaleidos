@@ -1,0 +1,18 @@
+/* ==========================================================================
+  Styleguide - Icon list
+  ========================================================================== */
+
+.br-styleguide-icon-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.br-styleguide-icon-list > li .auk-icon {
+  margin-right: 0.8rem;
+}
+
+.br-styleguide-icon-list > li {
+  min-width: 24rem;
+  padding: 0 0.8rem 0.8rem 0;
+}
