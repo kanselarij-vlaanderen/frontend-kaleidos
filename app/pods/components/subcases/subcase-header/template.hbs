@@ -37,6 +37,7 @@
                   >
                     {{t "agenda-for"}}
                     {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                    {{concat " - " meeting.numberRepresentation}}
                   </button>
                 </li>
               {{/each}}
