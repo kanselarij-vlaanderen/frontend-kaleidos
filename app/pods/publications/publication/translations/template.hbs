@@ -3,62 +3,17 @@
     {{#each this.activities as |activity|}}
       <WebComponents::AuNavbar @noPadding="true">
         <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h4 class="auk-toolbar-complex__title">{{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}</h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-
-            {{#if (await activity.isWithdrawn) }}
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuPillList>
-                  <WebComponents::AuPill @skin="danger">{{t "cancelled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
-                </WebComponents::AuPillList>
-              </WebComponents::AuToolbar::Item>
-
-            {{else if (await activity.isFinished) }}
-
-              <WebComponents::AuToolbar::Item>
-                {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
-              </WebComponents::AuToolbar::Item>
-
-            {{else}}
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                        @skin="tertiary"
-                  {{on "click" (fn this.cancelExistingTranslationActivity activity)}}>
-                  {{t "cancel-request"}}
-                </WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuCheckbox
-                        @toggle={{fn this.markTranslationActivityDone activity}}
-                        @label="Afgewerkt"/>
-              </WebComponents::AuToolbar::Item>
-
-            {{/if}}
-
-          </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuNavbar>
       <div class="auk-u-my-2">
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
-            <WebComponents::AuKeyValue @key={{t "final-translation-date"}} @value={{moment-format activity.finalTranslationDate "DD-MM-YYYY"}}/>
-          </div>
-          <div class="auk-o-grid-col-bp2-9">
-            <div class="auk-u-ml-4 auk-u-mb-4">
-              {{!-- Request panel --}}
-              <Publications::Publication::ActivityRequestPanel @activity={{activity}}/>
-            </div>
-          </div>
-        </div>
+        {{!-- Request panel --}}
+        <Publications::Publication::ActivityRequestPanel
+                @activity={{activity}}
+                @finishedToggle={{fn this.markTranslationActivityDone activity}}
+                @cancelExisting={{fn this.cancelExistingTranslationActivity activity}}
+                @translation={{true}}
+        />
       </div>
-      <hr class="auk-hr"/>
     {{/each}}
   {{else}}
     <WebComponents::AuPanel>

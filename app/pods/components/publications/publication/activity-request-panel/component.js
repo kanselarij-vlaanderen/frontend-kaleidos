@@ -2,8 +2,22 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
+/*
+*  @activity={{activity}}
+*  @finishedToggle: function
+*  @cancelExisting: function
+*  @translation: true/false
+ */
+
 export default class ActivityRequestPanel extends Component {
   @tracked isCollapsed = false;
+
+  get isTranslation() {
+    if (this.args.translation === true) {
+      return true;
+    }
+    return false;
+  }
 
   @action
   collapsePanel() {
