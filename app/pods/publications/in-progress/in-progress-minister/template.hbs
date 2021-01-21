@@ -36,6 +36,15 @@
     <c.body class="tr-hover" as |row|>
       <td>
         {{row.case.shortTitle}}
+        {{# if (await row.case.hasBvr)}}
+          <br>
+          <span class="auk-u-muted auk-u-text-small">{{t "decreet"}}</span>
+        {{/if}}
+
+        {{# if (await row.case.hasDecreet)}}
+          <br>
+          <span class="auk-u-muted auk-u-text-small">{{t "BvR"}}</span>
+        {{/if}}
       </td>
       <td>
         {{row.publicationNumber}}
