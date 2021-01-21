@@ -2,8 +2,13 @@ $button-border: 0.2rem;
 $button-border-small: 0.1rem;
 
 .vl-button {
-  @include vl-u-text--ellipse;
-  @include reset-button;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none; // doesn't work without prefix on Safari iOS11
+  border: 0;
   display: inline-flex;
   align-items: center;
   height: $form-input-height;
@@ -17,11 +22,6 @@ $button-border-small: 0.1rem;
   text-align: center;
   outline: 0;
   cursor: default;
-
-  @include respond-to(small) {
-    font-size: $base-mobile-font-size;
-    padding: 0 $spacing-small;
-  }
 
   &:hover,
   &:focus {
@@ -149,13 +149,6 @@ $button-border-small: 0.1rem;
     }
   }
 
-  // Large modifier
-  &--large {
-    height: $form-input-height-large;
-    line-height: $form-input-height-large;
-    font-size: $form-font-size-large;
-  }
-
   // Loading modifier
   &--loading {
     background-color: $disabled-color;
@@ -218,16 +211,5 @@ $button-border-small: 0.1rem;
     &--after {
       margin-left: 0.8rem;
     }
-  }
-}
-
-// Button Group
-.vl-button-group {
-  display: flex;
-  flex-wrap: wrap;
-
-  .vl-button {
-    margin-right: 1rem;
-    margin-bottom: 1rem;
   }
 }

@@ -11,7 +11,6 @@ export default class Activity extends Model {
   @attr('datetime') finalTranslationDate;
   @attr('string') name;
   @attr('string') mailContent;
-  @attr('string') status;
 
   // Relations.
   @belongsTo('subcase') subcase;
@@ -26,6 +25,7 @@ export default class Activity extends Model {
 
   @belongsTo('language') language;
   @belongsTo('activity-type') type;
+  @belongsTo('activity-status') status;
 
   @hasMany('piece') usedPieces;
   @hasMany('piece') generatedPieces;
@@ -33,13 +33,22 @@ export default class Activity extends Model {
 
   // Getters.
   get isWithdrawn() {
-    return CONFIG.ACTIVITY_STATUSSES.withdrawn === this.get('status');
+    const _this = this;
+    return (async() => {
+      const status = await _this.get('status');
+      return CONFIG.ACTIVITY_STATUSSES.withdrawn.id === status.id;
+    })(_this);
   }
+
   get isFinished() {
-    return CONFIG.ACTIVITY_STATUSSES.closed === this.get('status');
+    const _this = this;
+    return (async() => {
+      const status = await _this.get('status');
+      return CONFIG.ACTIVITY_STATUSSES.closed.id === status.id;
+    })(_this);
   }
 
-
+  // async getter
   get wasPublished() {
     const _this = this;
     return (async() => {
@@ -53,7 +62,7 @@ export default class Activity extends Model {
       // Find Activities that are CLOSED that publish This one.
       const closingActivities = await this.store.query('activity', {
         'filter[publishes][:id:]': _this.id,
-        'filter[status]': CONFIG.ACTIVITY_STATUSSES.closed,
+        'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
       });
       return closingActivities.length;
     })(_this);
@@ -71,7 +80,7 @@ export default class Activity extends Model {
       // Find Activities that are OPEN that publish This one.
       const openActivities = await this.store.query('activity', {
         'filter[publishes][:id:]': _this.id,
-        'filter[status]': CONFIG.ACTIVITY_STATUSSES.open,
+        'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.open.id,
       });
       return openActivities.length > 0;
     })(_this);

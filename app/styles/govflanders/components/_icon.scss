@@ -11,23 +11,11 @@
   display: inline;
   color: inherit;
 
-  &--small {
-    font-size: 0.8em;
-  }
-
   &--large {
     font-size: 1.2em;
   }
 
-  &--light {
-    color: $sub-text-color;
-  }
-
   &--before {
     margin-right: 0.5em;
-  }
-
-  &--after {
-    margin-left: 0.5em;
   }
 }

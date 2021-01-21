@@ -1,4 +1,4 @@
-{{title (t "subcases")}}
+{{page-title (t "subcases")}}
 {{subcases/subcases-overview-header
   model=model
   isShowingProcess=isShowingProcess
@@ -11,7 +11,7 @@
     {{subcases/subcases-process subcases=(await model.subcases)}}
 
   {{else}}
-    <div class="vl-u-spacer-extended-l">
+    <div class="auk-u-m-8">
       {{web-components/vl-alert message=(t "no-subcases")}}
     </div>
   {{/if}}

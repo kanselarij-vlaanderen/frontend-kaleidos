@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach */
+/* global context, before, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 context('Test print overviews', () => {
@@ -13,6 +13,10 @@ context('Test print overviews', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should visit beslissingen print overview', () => {

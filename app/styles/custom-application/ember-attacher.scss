@@ -27,19 +27,6 @@
     }
   }
 
-  @include respond-to(small) {
-    max-height: 65vh;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: none;
-    z-index: z('popover');
-    transform: translateY(120%);
-  }
-
   &::before {
     display: block;
     content: '';

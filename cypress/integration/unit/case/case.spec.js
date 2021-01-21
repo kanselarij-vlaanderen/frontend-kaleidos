@@ -1,4 +1,4 @@
-/* global context, it, cy,beforeEach */
+/* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import cases from '../../../selectors/case.selectors';
@@ -9,6 +9,10 @@ context('Create case as Admin user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('Create a case with confidentiality and short title', () => {

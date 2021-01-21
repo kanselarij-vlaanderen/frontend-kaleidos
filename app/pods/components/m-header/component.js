@@ -5,7 +5,7 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   currentSession: service(),
-  classNames: ['vl-u-display-block'],
+  classNames: ['auk-u-block'],
 
   init() {
     this._super(...arguments);

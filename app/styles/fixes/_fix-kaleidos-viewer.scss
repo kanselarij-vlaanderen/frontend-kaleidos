@@ -1,9 +1,4 @@
-.vlc-scroll-wrapper__body.full-height {
-  > .ember-view {
-    height: 100% !important;
-  }
-}
-
+// Does not seem to make a difference
 .full-height {
   height: 95% !important;
 }

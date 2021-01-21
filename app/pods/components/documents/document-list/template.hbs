@@ -1,10 +1,15 @@
 <div {{did-update (perform this.loadData) @pieces}}>
   {{#if this.loadData.isRunning}}
-    <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    <WebComponents::VlLoader 
+    @text={{t
+      "documents-loading-progress"
+      percent=(format-number this.documentsLoadedPercent style="decimal" maximumFractionDigits="0")
+    }}
+    />
   {{else}}
     {{#if @isEnabledPieceEdit}}
       <div class="vl-form__group vl-u-bg-porcelain">
-        <div class="vl-u-spacer">
+        <div class="auk-u-mb-4">
           <table class="vl-data-table vl-data-table--align-middle">
             <thead>
               <tr>
@@ -59,7 +64,7 @@
           @onAddPiece={{@onAddPiece}}
           @agendaitemOrSubcase={{@agendaitemOrSubcase}} />
       {{else}}
-        <div class="vl-u-spacer-extended-top-s">
+        <div class="auk-u-mt-2">
           <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
         </div>
       {{/each}}

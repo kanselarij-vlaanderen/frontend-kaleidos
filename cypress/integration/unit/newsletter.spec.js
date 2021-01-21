@@ -1,4 +1,4 @@
-/* global context, before, cy,beforeEach, it, Cypress */
+/* global context, before, cy, beforeEach, afterEach, it, Cypress */
 // / <reference types="Cypress" />
 import newsletter from '../../selectors/newsletter.selector';
 
@@ -20,6 +20,10 @@ context('Test the KB functionality', () => {
 
   beforeEach(() => {
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should test the newsletter of an agenda', () => {

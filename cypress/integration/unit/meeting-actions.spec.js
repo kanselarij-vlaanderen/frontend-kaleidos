@@ -1,10 +1,14 @@
-/* global context, it, cy,beforeEach */
+/* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 import modal from '../../selectors/modal.selectors';
 
 context('meeting actions tests', () => {
   beforeEach(() => {
     cy.server();
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should perform action delete agenda with agendaitems on designagenda', () => {

@@ -12,10 +12,6 @@
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0 1rem;
 
-  @include respond-to(small) {
-    font-size: 1.6rem;
-  }
-
   &:hover {
     box-shadow: none;
   }
@@ -41,57 +37,6 @@
     width: 100%;
   }
 
-  // Input field small modifier
-  &--small {
-    max-width: 6rem;
-    padding: 0 0.8rem;
-  }
-
-  &.invalid.validated,
-  &--error {
-    @include form-input-error;
-    display: inline;
-
-    .vl-select {
-      @include form-input-error;
-    }
-
-    .js-vl-select {
-      &[data-type*="select-one"],
-      &[data-type*="select-multiple"] {
-        @include form-input-error;
-
-        .vl-select__inner {
-          @include form-input-error;
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-  &.valid.validated,
-  &--success {
-    @include form-input-success;
-    display: inline;
-
-    .vl-select {
-      @include form-input-success;
-    }
-
-    .js-vl-select {
-      &[data-type*="select-one"],
-      &[data-type*="select-multiple"] {
-        @include form-input-success;
-
-        .vl-select__inner {
-          @include form-input-success;
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-
   // Input field disabled modifier
   &--disabled,
   &[disabled] {
@@ -103,11 +48,6 @@
     position: relative;
     display: block;
     max-width: 100%;
-
-    @include respond-to(small) {
-      display: block;
-      width: auto;
-    }
   }
 
   &--inline & {

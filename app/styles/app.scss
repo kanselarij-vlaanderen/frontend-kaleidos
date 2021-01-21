@@ -11,21 +11,18 @@
    ========================================================================== */
 
 @import '_colors';
-$icon-font-location: '/fonts/';
-@import '_icon-font';
+$icon-font-location: '/fonts/'; // overrides the default location for flanders-icons font files
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/core/_setting.scss';
 @import 'govflanders/core/_tool.scss';
 @import 'govflanders/core/_generic.scss';
-@import 'govflanders/core/_element.scss';
 @import 'govflanders/core/_object.scss';
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_accordion';
 @import 'govflanders/components/_action-group';
 @import 'govflanders/components/_alert';
-@import 'govflanders/components/_autocomplete';
 @import 'govflanders/components/_badge';
 @import 'govflanders/components/_button';
 @import 'govflanders/components/_checkbox';
@@ -39,16 +36,12 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/components/_input-addon';
 @import 'govflanders/components/_input-field';
 @import 'govflanders/components/_input-group';
-@import 'govflanders/components/_link-list';
 @import 'govflanders/components/_link';
 @import 'govflanders/components/_loader';
 @import 'govflanders/components/_modal';
 @import 'govflanders/components/_pager';
-@import 'govflanders/components/_pill-input';
 @import 'govflanders/components/_pill';
 @import 'govflanders/components/_radio';
-@import 'govflanders/components/_search';
-@import 'govflanders/components/_side-navigation';
 @import 'govflanders/components/_tabs';
 @import 'govflanders/components/_textarea';
 @import 'govflanders/components/_titles';
@@ -59,10 +52,6 @@ $icon-font-location: '/fonts/';
 // @import 'node_modules/@govflanders/vl-ui-select/src/scss/_select';
 // @import 'node_modules/@govflanders/vl-ui-select/src/scss/_js-select';
 
-// Interdependent components - These are source order dependent
-@import 'govflanders/components/_select';
-@import 'govflanders/components/_js-select';
-
 /* Unofficial code
 ========================================================================== */
 
@@ -71,12 +60,9 @@ $icon-font-location: '/fonts/';
 @import 'govflanders/additions/_button';
 @import 'govflanders/additions/_checkbox';
 @import 'govflanders/additions/_data-table';
-@import 'govflanders/additions/_icon-list';
-@import 'govflanders/additions/_link-list';
 @import 'govflanders/additions/_loader';
 @import 'govflanders/additions/_modal';
 @import 'govflanders/additions/_pill';
-@import 'govflanders/additions/_pill-input';
 @import 'govflanders/additions/_tabs';
 
 // Additions to existing utilities
@@ -89,7 +75,6 @@ $icon-font-location: '/fonts/';
 @import 'custom-components/vlc-agenda-detail-sidebar-section-header';
 @import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
-@import 'custom-components/vlc-auk-panel';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
 @import 'custom-components/vlc-block-link';
@@ -163,7 +148,6 @@ $icon-font-location: '/fonts/';
 // Fixes to the framework
 @import 'fixes/fix-auk-modal-ember-select';
 @import 'fixes/fix-badge-avatars';
-@import 'fixes/fix-flex-utils';
 @import 'fixes/fix-full-height';
 @import 'fixes/fix-light-table';
 @import 'fixes/fix-icon-positioning';
@@ -171,15 +155,12 @@ $icon-font-location: '/fonts/';
 @import 'fixes/fix-pre';
 @import 'fixes/fix-sortable-item';
 @import 'fixes/fix-power-select';
+@import 'fixes/fix-ember-data-table';
 
 // Custom utilities
 @import 'custom-utilities/_autocomplete';
 @import 'custom-utilities/_box-model';
-@import 'custom-utilities/_cursors';
-@import 'custom-utilities/_extended-spacer';
 @import 'custom-utilities/_spacing';
-@import 'custom-utilities/_reset';
-@import 'custom-utilities/_scroll';
 @import 'custom-utilities/_text';
 @import 'custom-utilities/_transparency';
 

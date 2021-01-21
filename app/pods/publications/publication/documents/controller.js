@@ -21,23 +21,28 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
-  @tracked isUploadModalResized = false;
+  @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
+
   @tracked translateActivity = {
-    mailContent: '',
-    mailSubject: '',
-    finalTranslationDate: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked finalTranslationDate: '',
+    @tracked pieces: A([]),
   };
   @tracked previewActivity = {
-    mailContent: '',
-    mailSubject: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked pieces: A([]),
   };
   @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
+
+  // Editing of pieces.
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
@@ -48,7 +53,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   toggleUploadModalSize() {
-    this.isUploadModalResized = !this.isUploadModalResized;
+    this.isExpanded = !this.isExpanded;
   }
 
   @action
@@ -151,6 +156,34 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
+  async editExistingPiece(piece) {
+    this.pieceBeingEdited = piece;
+    this.showPieceEditor = true;
+  }
+
+  @action
+  async cancelEditPiece() {
+    this.pieceBeingEdited.rollbackAttributes();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
+    }
+    this.pieceBeingEdited = null;
+    this.showPieceEditor = false;
+  }
+
+  @action
+  async saveEditedPiece() {
+    this.showPieceEditor = false;
+    this.showLoader = true;
+    await this.pieceBeingEdited.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
+    this.showLoader = false;
+  }
+
+  @action
   deleteExistingPiece(piece) {
     this.pieceToDelete = piece;
     this.isVerifyingDelete = true;
@@ -158,6 +191,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
+    // TODO KAS-2192 get('agendaitem') can only be 1 item even if there are many (belongsTo), saving piece creates faulty data
     const agendaitem = yield this.pieceToDelete.get('agendaitem');
     if (agendaitem) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
@@ -183,12 +217,11 @@ export default class PublicationDocumentsController extends Controller {
   /** PUBLISH PREVIEW ACTIVITIES **/
 
   @action
-  openPublishPreviewRequestModal() {
+  async openPublishPreviewRequestModal() {
+    set(this.previewActivity, 'pieces', this.selectedPieces);
+    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
-    this.previewActivity.pieces = this.selectedPieces;
-    const attachmentsString = this.concatNames(this.selectedPieces);
-    this.previewActivity.mailContent = CONFIG.mail.publishPreviewRequest.content.replace('%%attachments%%', attachmentsString);
-    this.previewActivity.mailSubject = CONFIG.mail.publishPreviewRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber);
   }
 
   @action
@@ -246,18 +279,17 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = true;
 
     alert('the mails dont work yet. infra is working on it.');
-    this.transitionToRoute('publications.publication.publishpreview');
+    this.model.refreshAction();
   }
 
   /** TRANSLATION ACTIVITIES **/
 
   @action
-  openTranslationRequestModal() {
+  async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    const attachmentsString = this.concatNames(this.selectedPieces);
-    set(this.translateActivity, 'mailContent', CONFIG.mail.translationRequest.content.replace('%%attachments%%', attachmentsString));
-    set(this.translateActivity, 'mailSubject', CONFIG.mail.translationRequest.subject.replace('%%nummer%%', this.model.publicationFlow.publicationNumber));
+    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 
@@ -314,7 +346,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = false;
     this.renderPieces = true;
     alert('the mails dont work yet. infra is working on it.');
-    this.transitionToRoute('publications.publication.translations');
+    this.model.refreshAction();
   }
 
   @action

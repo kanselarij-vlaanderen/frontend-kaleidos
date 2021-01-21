@@ -4,7 +4,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 import EmberObject, { computed } from '@ember/object';
 
 export default Component.extend({
-  classNames: ['vl-u-spacer-extended-bottom-s'],
+  classNames: ['auk-u-mb-2'],
   isLoading: null,
   hideLabel: null,
 

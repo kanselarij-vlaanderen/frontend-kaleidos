@@ -10,15 +10,15 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
 
-            {{#if activity.isWithdrawn }}
+            {{#if (await activity.isWithdrawn) }}
 
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuPillList>
-                  <WebComponents::AuPill @skin="danger">{{t "canceled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
+                  <WebComponents::AuPill @skin="danger">{{t "cancelled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
                 </WebComponents::AuPillList>
               </WebComponents::AuToolbar::Item>
 
-            {{else if activity.isFinished }}
+            {{else if (await activity.isFinished) }}
 
               <WebComponents::AuToolbar::Item>
                 {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
@@ -48,7 +48,7 @@
       <div class="auk-u-my-2">
         <div class="auk-o-grid">
           <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
-            <WebComponents::AuKeyValue @key="Uiterste Vertaaldatum" @value={{moment-format activity.finalTranslationDate "DD-MM-YYYY"}}/>
+            <WebComponents::AuKeyValue @key={{t "final-translation-date"}} @value={{moment-format activity.finalTranslationDate "DD-MM-YYYY"}}/>
           </div>
           <div class="auk-o-grid-col-bp2-9">
             <div class="auk-u-ml-4 auk-u-mb-4">
@@ -73,19 +73,5 @@
 {{!-- LOADER --}}
 
 {{#if this.showLoader}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header
-            @title={{t "loading-text"}}
-            @hideCloseButton={{true}}
-    />
-    <WebComponents::AuModal::Body>
-      <WebComponents::AuLoader
-        @message={{concat
-          (t "saving-change-message")
-          " "
-          (t "please-be-patient")
-        }}
-      />
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

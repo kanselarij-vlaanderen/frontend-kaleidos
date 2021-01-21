@@ -12,10 +12,6 @@
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
   padding: 0.5rem 1rem;
 
-  @include respond-to(small) {
-    font-size: 1.6rem;
-  }
-
   &:hover {
     box-shadow: none;
   }
@@ -36,22 +32,5 @@
     display: block;
     width: 100%;
     box-sizing: border-box;
-  }
-
-  // Textarea error modifier
-  &.invalid.validated,
-  &--error {
-    @include form-input-error;
-  }
-
-  &.valid.validated,
-  &--success {
-    @include form-input-success;
-  }
-
-  // Textarea disabled modifier
-  &--disabled,
-  &[disabled] {
-    background-color: $disabled-bg-color;
   }
 }

@@ -138,7 +138,7 @@
               {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
                 <tr>
                   <td>
-                    <div class="o-flex o-flex--vertical-center">
+                    <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
                       <span>{{mandatee.person.nameToDisplay}}</span>
                     </div>
@@ -201,7 +201,7 @@
               {{#each this.contactPersons as | contactPerson |}}
                 <tr>
                   <td>
-                    <div class="o-flex o-flex--vertical-center">
+                    <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
                       <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                     </div>
@@ -251,7 +251,9 @@
 
 
 {{#if isShowingPersonModal}}
-  <WebComponents::AuModal data-test-add-contactpersonmodal>
+  <WebComponents::AuModal
+    @size="medium"
+    data-test-add-contactpersonmodal>
     <WebComponents::AuModal::Header @title={{t "add-contact"}}
       @closeModal={{this.closeContactPersonModal}} />
     <WebComponents::AuModal::Body>
@@ -306,19 +308,5 @@
 {{!-- LOADER --}}
 
 {{#if this.showLoader}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header
-      @title={{t "loading-text"}}
-      @hideCloseButton={{true}}
-    />
-    <WebComponents::AuModal::Body>
-      <WebComponents::AuLoader
-        @message={{concat
-          (t "saving-change-message")
-          " "
-          (t "please-be-patient")
-        }}
-      />
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

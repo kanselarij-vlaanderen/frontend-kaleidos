@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach */
+/* global context, before, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 context('Table Row Click tests', () => {
@@ -9,6 +9,10 @@ context('Table Row Click tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   it('should open an agenda after clicking a row', () => {
