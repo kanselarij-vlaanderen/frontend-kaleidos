@@ -16,8 +16,14 @@
           {{t "requests"}}
         </WebComponents::AuButton>
         {{#if (await this.model.case.pieces)}}
-          <AttachPopover @renderInPlace={{true}} @class="ember-attacher-popper" @hideOn="clickout click" @showOn="click"
-                         @animation="shift" @placement="bottom" {{!-- as |attacher| --}}>
+          <AttachPopover
+                  @renderInPlace={{true}}
+                  @class="ember-attacher-popper"
+                  @hideOn="clickout click"
+                  @showOn="click"
+                  @animation="shift"
+                  @placement="bottom" {{!-- as |attacher| --}}
+          >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item {{on "click" this.openTranslationRequestModal}}>
                 {{t "request-translations"}}
@@ -85,7 +91,7 @@
             </td>
             <td>
               <div class="auk-u-flex auk-u-flex--vertical-center">
-                <WebComponents::AuBadge @icon="folder"></WebComponents::AuBadge>
+                <WebComponents::AuBadge @icon="folder"/>
                 <div class="auk-u-ml-3">
                   <span class="auk-u-text-bold">{{await piece.name}}</span>
                   <br>
@@ -104,10 +110,19 @@
             <td colspan="2"></td>
             <td>
               <WebComponents::AuButtonToolbar>
-                <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
-                </WebComponents::AuButton>
-                <AttachPopover @renderInPlace={{true}} @class="ember-attacher-popper" @hideOn="clickout click"
-                               @showOn="click" @animation="shift" @placement="bottom" {{!-- as |attacher| --}}>
+                <WebComponents::AuButton
+                        @skin="borderless"
+                        @icon="more"
+                        @layout="icon-only"
+                />
+                <AttachPopover
+                        @renderInPlace={{true}}
+                        @class="ember-attacher-popper"
+                        @hideOn="clickout click"
+                        @showOn="click"
+                        @animation="shift"
+                        @placement="bottom" {{!-- as |attacher| --}}
+                >
                   <WebComponents::AuDropdown>
                     {{!-- <WebComponents::AuDropdown::Item>
                       {{t "upload-docx"}}
@@ -143,22 +158,31 @@
               <td>
               </td>
               <td class="auk-table__cell auk-table__cell--success">
-                <WebComponents::AuIcon @name="check"></WebComponents::AuIcon>
+                <WebComponents::AuIcon @name="check"/>
               </td>
               <td></td>
               <td class="auk-table__cell auk-table__cell--success">
-                <WebComponents::AuIcon @name="check"></WebComponents::AuIcon>
+                <WebComponents::AuIcon @name="check"/>
               </td>
               <td></td>
               <td class="auk-table__cell auk-table__cell--warning">
-                <WebComponents::AuIcon @name="clock"></WebComponents::AuIcon>
+                <WebComponents::AuIcon @name="clock"/>
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
-                  </WebComponents::AuButton>
-                  <AttachPopover @renderInPlace={{true}} @class="ember-attacher-popper" @hideOn="clickout click"
-                                 @showOn="click" @animation="shift" @placement="bottom" {{!-- as |attacher| --}}>
+                  <WebComponents::AuButton
+                          @skin="borderless"
+                          @icon="more"
+                          @layout="icon-only"
+                  />
+                  <AttachPopover
+                          @renderInPlace={{true}}
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="bottom" {{!-- as |attacher| --}}
+                  >
                     <WebComponents::AuDropdown>
                       {{!-- TODO opening viewer will only work for pdf files --}}
                       <WebComponents::AuDropdown::Item {{on "click" (fn this.showPieceViewer piece.id)}}>
@@ -239,7 +263,11 @@
               </td>
               <td>
                 {{#if (await piece.agendaitem)}}
-                  <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
+                  <WebComponents::AuIcon
+                          @name="lock-closed"
+                          @iconSkinColor="muted"
+                          @layout="icon-only"
+                  />
                 {{/if}}
                 {{await piece.name}}
               </td>
@@ -256,11 +284,19 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton data-test-pub-case-doc-row-actions @skin="borderless" @icon="more"
-                                           @layout="icon-only">
-                  </WebComponents::AuButton>
-                  <AttachPopover @renderInPlace={{true}} @class="ember-attacher-popper" @hideOn="clickout click"
-                                 @showOn="click" @animation="shift" @placement="bottom" {{!-- as |attacher| --}}>
+                  <WebComponents::AuButton
+                          data-test-pub-case-doc-row-actions
+                          @skin="borderless" @icon="more"
+                          @layout="icon-only"
+                  />
+                  <AttachPopover
+                          @renderInPlace={{true}}
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="bottom" {{!-- as |attacher| --}}
+                  >
                     <WebComponents::AuDropdown>
                       {{!-- TODO opening viewer will only work for pdf files --}}
                       <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn
@@ -285,9 +321,11 @@
                       that have been released by kanselarij
                       Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-delete @skin="danger" {{on
-                                "click"
-                                (fn this.deleteExistingPiece piece)}}>
+                        <WebComponents::AuDropdown::Item
+                                data-test-pub-case-doc-row-action-delete
+                                @skin="danger"
+                                {{on "click" (fn this.deleteExistingPiece piece)}}
+                        >
                           {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
@@ -325,8 +363,11 @@
             @closeModal={{perform this.cancelUploadPieces}}
     />
     <WebComponents::AuModal::Body>
-      <WebComponents::AuFileUploader @fullHeight={{eq this.newPieces.length 0}} @multipleFiles={{true}}
-                                     @uploadedFileAction={{action this.uploadPiece}} />
+      <WebComponents::AuFileUploader
+              @fullHeight={{eq this.newPieces.length 0}}
+              @multipleFiles={{true}}
+              @uploadedFileAction={{action this.uploadPiece}}
+      />
       {{!-- TODO vervangen met correct design (nog in flux), au css en componenten --}}
       {{!-- TODO document types dropdown is hidden by z-index, using custom dropdown requires a lot of new components --}}
       <div class="upload-container">
@@ -343,8 +384,11 @@
       {{#if this.savePieces.isRunning}}
         <Utils::SimpleSpinner></Utils::SimpleSpinner>
       {{else}}
-        <WebComponents::AuButton data-test-au-modal-footer-save @skin="primary" @disabled={{eq this.newPieces.length 0}}
-          {{on "click" (perform this.savePieces)}}>
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save @skin="primary"
+                @disabled={{eq this.newPieces.length 0}}
+                {{on "click" (perform this.savePieces)}}
+        >
           {{t "documents-add"}}
         </WebComponents::AuButton>
       {{/if}}
@@ -363,11 +407,17 @@
               "request-translations-for-publication"
               publicationNumber=this.model.publicationFlow.publicationNumber
             }}
-            @closeModal={{this.cancelTranslationModal}} />
+            @closeModal={{this.cancelTranslationModal}}
+    />
     <WebComponents::AuModal::Body>
       {{#if (eq this.selectedPieces.length 0) }}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
-                                @message={{t "modal-error-missing-pieces" }} @icon="alert-triangle"/>
+        <WebComponents::AuAlert
+                data-test-auk-alert-error
+                @title={{t "modal-error-alert-title" }}
+                @skin="error"
+                @message={{t "modal-error-missing-pieces" }}
+                @icon="alert-triangle"
+        />
       {{else}}
         <div class="auk-o-grid auk-u-maximize-height">
           <div class="auk-u-maximize-height auk-o-grid-col-5 auk-u-mr-2 auk-u-scroll-scrollable">
@@ -397,14 +447,21 @@
               <WebComponents::AuList @isBordered="true">
                 {{#each this.selectedPieces as |pieceToSend| }}
                   <WebComponents::AuList::AuListItem @skin="gray-100">
-                    <WebComponents::AuBadge @icon="file" @skin="white"/>
+                    <WebComponents::AuBadge
+                            @icon="file"
+                            @skin="white"
+                    />
                     <div class="auk-u-mx-2">
                       <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
                       <div class="auk-u-muted auk-u-text-small">{{await pieceToSend.documentContainer.type.label}}</div>
                     </div>
                     <WebComponents::AuButtonToolbar>
-                      <WebComponents::AuButton @icon="book" @layout="icon-only" @skin="borderless" {{on "click" (fn
-                              this.showPieceViewer pieceToSend.id)}} />
+                      <WebComponents::AuButton
+                              @icon="book"
+                              @layout="icon-only"
+                              @skin="borderless"
+                              {{on "click" (fn this.showPieceViewer pieceToSend.id)}}
+                      />
                     </WebComponents::AuButtonToolbar>
                   </WebComponents::AuList::AuListItem>
                 {{/each}}
@@ -418,8 +475,11 @@
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelTranslationModal}}>
       {{#if (gt this.selectedPieces.length 0) }}
-        <WebComponents::AuButton data-test-au-modal-footer-save @skin="primary" {{on "click"
-                                                                                     this.saveTranslationActivity}}>
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save
+                @skin="primary"
+                {{on "click" this.saveTranslationActivity}}
+        >
           {{t "request-translations"}}
         </WebComponents::AuButton>
       {{/if}}
@@ -434,13 +494,20 @@
 
 {{#if this.isOpenPublishPreviewRequestModal}}
   <WebComponents::AuModal>
-    <WebComponents::AuModal::Header @title={{t "request-publish-preview" }}
-                                    @closeModal={{this.cancelPublishPreviewRequestModal}} />
+    <WebComponents::AuModal::Header
+            @title={{t "request-publish-preview" }}
+            @closeModal={{this.cancelPublishPreviewRequestModal}}
+    />
     <WebComponents::AuModal::Body>
 
       {{#if (eq this.selectedPieces.length 0) }}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
-                                @message={{t "modal-error-missing-pieces" }} @icon="alert-triangle"/>
+        <WebComponents::AuAlert
+                data-test-auk-alert-error
+                @title={{t "modal-error-alert-title" }}
+                @skin="error"
+                @message={{t "modal-error-missing-pieces" }}
+                @icon="alert-triangle"
+        />
       {{else}}
       {{!-- Pieces selected --}}
         <div class="auk-o-grid auk-u-maximize-height">
@@ -452,8 +519,12 @@
             <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
               {{t "accompanying-text"}}
             </WebComponents::AuLabel>
-            <WebComponents::AuTextarea id="emailMessage" @rows="15" @value={{mut this.previewActivity.mailContent}}
-                                       data-test-create-publishpreviewActivity-modal-email-textarea/>
+            <WebComponents::AuTextarea
+                    id="emailMessage"
+                    @rows="15"
+                    @value={{mut this.previewActivity.mailContent}}
+                    data-test-create-publishpreviewActivity-modal-email-textarea
+            />
           </div>
           <div class="auk-u-maximize-height auk-o-grid-col-4 auk-u-scroll-scrollable">
             <WebComponents::AuLabel class="auk-u-mt-2">
@@ -463,14 +534,21 @@
               <WebComponents::AuList @isBordered="true">
                 {{#each this.selectedPieces as |pieceToSend| }}
                   <WebComponents::AuList::AuListItem @skin="gray-100">
-                    <WebComponents::AuBadge @icon="file" @skin="white"/>
+                    <WebComponents::AuBadge
+                            @icon="file"
+                            @skin="white"
+                    />
                     <div class="auk-u-mx-2">
                       <span class="auk-u-text-bold">{{await pieceToSend.name}}</span>
                       <div class="auk-u-muted auk-u-text-small">{{await pieceToSend.documentContainer.type.label}}</div>
                     </div>
                     <WebComponents::AuButtonToolbar>
-                      <WebComponents::AuButton @icon="book" @layout="icon-only" @skin="borderless" {{on "click" (fn
-                              this.showPieceViewer pieceToSend.id)}} />
+                      <WebComponents::AuButton
+                              @icon="book"
+                              @layout="icon-only"
+                              @skin="borderless"
+                              {{on "click" (fn this.showPieceViewer pieceToSend.id)}}
+                      />
                     </WebComponents::AuButtonToolbar>
                   </WebComponents::AuList::AuListItem>
                 {{/each}}
@@ -484,8 +562,11 @@
 
     <WebComponents::AuModal::Footer @cancelModal={{this.cancelPublishPreviewRequestModal}}>
       {{#if (gt this.selectedPieces.length 0) }}
-        <WebComponents::AuButton data-test-au-modal-footer-save @skin="primary" {{on "click"
-                                                                                     this.savePublishPreviewActivity}}>
+        <WebComponents::AuButton
+                data-test-au-modal-footer-save
+                @skin="primary"
+                {{on "click" this.savePublishPreviewActivity}}
+        >
           {{t "request-publish-preview"}}
         </WebComponents::AuButton>
       {{/if}}
@@ -507,8 +588,11 @@
 {{!-- EDIT PIECE DETAILS --}}
 
 {{#if this.showPieceEditor}}
-  <Utils::pieceDetailsEdit @piece={{this.pieceBeingEdited}} @saveAction={{this.saveEditedPiece}}
-                           @cancelAction={{this.cancelEditPiece}} />
+  <Utils::pieceDetailsEdit
+          @piece={{this.pieceBeingEdited}}
+          @saveAction={{this.saveEditedPiece}}
+          @cancelAction={{this.cancelEditPiece}}
+  />
 {{/if}}
 
 
