@@ -513,9 +513,15 @@
         <div class="auk-o-grid auk-u-maximize-height">
           <div class="auk-u-maximize-height auk-o-grid-col-5 auk-u-mr-2 auk-u-scroll-scrollable">
             {{!-- Pieces selected --}}
-            <WebComponents::AuLabel>
-              {{t "request-publishpreview-confirmation" }}
+            <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+              {{t "subject"}}
             </WebComponents::AuLabel>
+            <WebComponents::AuInput
+                    {{on "change" this.setMailSubject}}
+                    @value={{mut this.previewActivity.mailSubject}}
+                    type="text"
+                    @block="true"
+            />
             <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
               {{t "accompanying-text"}}
             </WebComponents::AuLabel>
