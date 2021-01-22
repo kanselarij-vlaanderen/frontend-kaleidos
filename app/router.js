@@ -160,7 +160,6 @@ Router.map(function() {
       this.route('signatures', { path: '/handtekeningen', });
     });
     // this.route('to-treat', { path: '/te-behandelen', });
-    this.route('done', { path: '/behandeld', });
     this.route('paused', { path: '/gepauzeerd', }, function() {
       this.route('paused-minister', { path: '/via-ministerraad', });
       this.route('paused-not-minister', { path: '/niet-via-ministerraad', });
