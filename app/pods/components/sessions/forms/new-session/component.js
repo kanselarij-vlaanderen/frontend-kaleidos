@@ -1,6 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
 import CONFIG from 'fe-redpencil/utils/config';
+import { isAnnexMeetingKind } from 'fe-redpencil/utils/meeting-utils';
 import moment from 'moment';
 
 export default Component.extend({
@@ -10,40 +12,42 @@ export default Component.extend({
   toaster: service(),
   formatter: service(),
   kind: null,
+  selectedMainMeeting: null,
   selectedKindUri: null,
   meetingNumber: null,
   isEditingFormattedMeetingIdentifier: false,
   formattedMeetingIdentifier: null,
-  currentYear: moment().year(),
+  currentYear: new Date().getFullYear(),
   meetingNumberPrefix: null,
 
   init() {
     this._super(...arguments);
+    this.generateNewNumber();
+  },
+
+  generateNewNumber() {
     // TODO: Improve samen met Michael of Sven
     this.store.query('meeting',
       {
         sort: '-planned-start',
       }).then((meetings) => {
-      let meetingsFromThisYear = null;
       if (meetings.length) {
-        meetingsFromThisYear = meetings.map((meeting) => {
-          if (moment(meeting.plannedStart).year() === this.currentYear) {
-            return meeting;
-          }
-        }).filter((meeting) => meeting); // Filter undefineds out of results..
-
+        const meetingsFromThisYear = meetings.filter((meeting) => meeting.plannedStart && meeting.plannedStart.getFullYear() === this.currentYear);
+        const meetingIds = meetingsFromThisYear.map((meeting) => meeting.number);
         let id = 0;
-        meetingsFromThisYear.forEach((meeting) => {
-          const number = meeting.get('number');
-          if (number > id) {
-            id = number;
-          }
-        });
+        // FIX voor de eerste agenda van het jaar -> Anders math.max infinity
+        if (meetingIds.length !== 0) {
+          id = Math.max(...meetingIds);
+        }
         this.set('meetingNumber', id + 1);
         this.set('formattedMeetingIdentifier', `VR PV ${this.currentYear}/${this.meetingNumber}`);
       }
     });
   },
+
+  isAnnexMeeting: computed('selectedKindUri', function() {
+    return isAnnexMeetingKind(this.selectedKindUri);
+  }),
 
   async createAgenda(meeting, date) {
     const status = await this.store.findRecord('agendastatus', CONFIG.agendaStatusDesignAgenda.id);
@@ -61,9 +65,6 @@ export default Component.extend({
   },
 
   async createAgendaitemToApproveMinutes(agenda, closestMeeting) {
-    if (!closestMeeting) {
-      return null;
-    }
     const fallBackDate = this.formatter.formatDate(null);
     const agendaitem = this.store.createRecord('agendaitem', {
       created: fallBackDate,
@@ -96,16 +97,20 @@ export default Component.extend({
         plannedStart: startDate,
         created: date,
         kind: kindUriToAdd,
+        mainMeeting: this.selectedMainMeeting,
         number: meetingNumber,
         numberRepresentation: formattedMeetingIdentifier,
       });
+
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
       newMeeting
         .save()
         .then(async(meeting) => {
           const agenda = await this.createAgenda(meeting, date);
-          await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
+          if (!meeting.isAnnex && closestMeeting) {
+            await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
+          }
           await this.newsletterService.createNewsItemForMeeting(meeting);
 
           // TODO: Should fix sessionNrBug
@@ -120,7 +125,17 @@ export default Component.extend({
         });
     },
 
-    async selectStartDate(val) {
+    selectMainMeeting(mainMeeting) {
+      const kind = CONFIG.kinds.find((kind) => kind.uri === this.selectedKindUri);
+      const postfix = (kind && kind.postfix) || '';
+      this.set('selectedMainMeeting', mainMeeting);
+      this.set('startDate', mainMeeting.plannedStart);
+      this.set('meetingNumber', mainMeeting.number);
+      this.set('formattedMeetingIdentifier', `${mainMeeting.numberRepresentation}-${postfix}`);
+      this.set('extraInfo', mainMeeting.extraInfo);
+    },
+
+    selectStartDate(val) {
       this.set('startDate', this.formatter.formatDate(val));
     },
 
@@ -134,6 +149,10 @@ export default Component.extend({
 
     setKind(kind) {
       this.set('selectedKindUri', kind);
+      if (!this.isAnnexMeeting) {
+        this.set('selectedMainMeeting', null);
+        this.generateNewNumber();
+      }
     },
 
     meetingNumberChangedAction(meetingNumber) {
