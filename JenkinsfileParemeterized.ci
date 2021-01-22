@@ -18,14 +18,10 @@ pipeline {
         stage('DEBUG') {
                     steps {
                         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                        sh "echo BUILDING BACKEND BRANCH"
                         sh "echo ${env.backendbranch}"
+                        sh "echo BUILDING FRONTEND BRANCH"
                         sh "echo ${env.frontendbranch}"
-                        sh "echo ${backendbranch}"
-                        sh "echo ${frontendbranch}"
-                        sh "echo ${BACKENDBRANCH}"
-                        sh "echo ${FRONTENDBRANCH}"
-                        sh "echo ${env.BACKENDBRANCH}"
-                        sh "echo ${env.FRONTENDBRANCH}"
                     }
                 }
         stage('Linting') {
@@ -40,8 +36,7 @@ pipeline {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "cp .dist.env .env"
                 sh "rm -rf kaleidos-project 2> /dev/null"
-                //sh "eval `ssh-agent -s` && ssh-add /var/lib/jenkins/.ssh/id_rsa_github_kaleidos && git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
-                sh "git clone -b development https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+                sh "git clone -b ${env.BACKENDBRANCH} https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
             }
         }
         stage('Prepare for automated tests') {
@@ -55,17 +50,12 @@ pipeline {
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 1777 /data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod 1777 -R /data"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chown -R elasticsearch:root /usr/share/elasticsearch/data"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod 777 -R /share"
 
                 sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
                 // Wait for elasticsearch to have cerated the indices and stuff.
                 sh "sleep 45"
-
-                // Make the folders deletable.
-                // sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
                 // Reset the contents of DB an search
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  musearch"
@@ -78,7 +68,6 @@ pipeline {
 
                 // up te system
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
-                //sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} exec -T elasticsearch chmod 1777 -R /usr/share/elasticsearch/data"
 
                 // Wait for indexation.
                 sh "sleep 60"
