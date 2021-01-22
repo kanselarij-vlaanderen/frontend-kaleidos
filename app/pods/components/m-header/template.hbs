@@ -28,7 +28,7 @@
               {{t "cases"}}
             {{/link-to}}
           </li>
-          {{#if (not currentSession.isOvrb)}}
+          {{#if (or (not currentSession.isOvrb) currentSession.isAdmin) }}
             <li class="vl-tab" data-test-m-header-newsletters>
               {{#link-to
                 "newsletters"
