@@ -1,0 +1,15 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Typography" />
+
+<table class="br-type-sample-table">
+  {{#each model as |typeStyle|}}
+    <tr>
+      <TypeSample
+              @title="{{typeStyle.name}}"
+              @code='{{{typeStyle.code}}}
+        '>
+        {{{typeStyle.code}}}
+      </TypeSample>
+    </tr>
+  {{/each}}
+</table>

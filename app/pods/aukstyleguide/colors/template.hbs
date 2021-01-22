@@ -1,0 +1,15 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Colors" />
+
+{{#each model as |colorCategory|}}
+  <h2 class="auk-h3">{{colorCategory.category}}</h2>
+  <ul class="br-styleguide-color-swatch-list">
+    {{#each colorCategory.items as |item|}}
+      <li class="br-styleguide-color-swatch">
+        <div class="br-styleguide-color-swatch__self" style="background:{{item.hex}}"></div>
+        <span class="br-styleguide-color-swatch__line1">{{item.name}}<br></span>
+        <span class="br-styleguide-color-swatch__line2">{{item.hex}}</span>
+      </li>
+    {{/each}}
+  </ul>
+{{/each}}

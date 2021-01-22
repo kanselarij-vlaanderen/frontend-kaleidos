@@ -25,23 +25,19 @@ export default Component.extend({
     return null;
   }),
 
-  isDeletable: computed('piece.agendaitem', async function() {
+  isDeletable: computed('piece', 'piece.nextPiece', async function() {
     const nextPiece = await this.piece.get('nextPiece');
     if (nextPiece) {
       return false;
     }
-    const agendaitem = await this.piece.get('agendaitem');
-    if (agendaitem) {
-      const agendaitemsFromQuery = await this.store.query('agendaitem', {
-        filter: {
-          pieces: {
-            id: this.piece.id,
-          },
+    const agendaitemsFromQuery = await this.store.query('agendaitem', {
+      filter: {
+        pieces: {
+          id: this.piece.id,
         },
-      });
-      return agendaitemsFromQuery.length === 1;
-    }
-    return true;
+      },
+    });
+    return agendaitemsFromQuery.length <= 1;
   }),
 
   async deletePieceWithUndo() {
