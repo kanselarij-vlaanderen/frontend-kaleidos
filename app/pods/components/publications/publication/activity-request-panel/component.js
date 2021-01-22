@@ -12,8 +12,8 @@ import { action } from '@ember/object';
 export default class ActivityRequestPanel extends Component {
   @tracked isCollapsed = false;
 
-  get isTranslation() {
-    if (this.args.translation === true) {
+  get modus() {
+    if (this.args.modus === 'translation') {
       return true;
     }
     return false;
