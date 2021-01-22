@@ -192,6 +192,7 @@ export default class PublicationDocumentsController extends Controller {
   @task
   *verifyDeleteExistingPiece() {
     const agendaitems = yield this.pieceToDelete.get('agendaitems');
+    // TODO reverse if else, do we need the else in this case ?
     if (agendaitems && agendaitems.length > 0) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
     } else {
