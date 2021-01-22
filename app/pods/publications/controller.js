@@ -18,6 +18,7 @@ export default class PublicationsController extends Controller {
   @tracked showSearchResults = false;
   @tracked searchResults;
   @tracked showLoader = false;
+  @tracked isShowPublicationFilterModal = false;
 
   @tracked
   publication = {
@@ -119,6 +120,20 @@ export default class PublicationsController extends Controller {
   @action
   showNewPublicationModal() {
     this.isShowingPublicationModal = true;
+  }
+
+  @action
+  showFilterModal() {
+    this.isShowPublicationFilterModal = true;
+  }
+
+  @action
+  closeFilterModal() {
+    this.isShowPublicationFilterModal = false;
+  }
+
+  get shouldShowPublicationHeader() {
+    return this.routing.currentRouteName.startsWith('publications.index');
   }
 
   resetPublication() {

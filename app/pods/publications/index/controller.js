@@ -28,7 +28,6 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   navigateToPublication(publicationFlowRow) {
-    console.log('pubflow', publicationFlowRow);
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
   }
 }

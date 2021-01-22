@@ -7,9 +7,6 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
     return this.store.query('publication-flow', {
       filter: {
         ':has:case': 'yes',
-        case: {
-          ':has-no:subcases': 'yes',
-        },
       },
       sort: params.sort,
       page: {
