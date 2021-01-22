@@ -1,0 +1,76 @@
+{{!-- template-lint-disable --}}
+
+<ComponentPageIntro @title="Button (types)">
+  <p>These are variants of button types using <code>Button</code>. For link buttons, see <a href="/styleguide/link-button">this page</a>.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Label"
+        @snippet="button.hbs"
+>
+  {{!-- BEGIN-SNIPPET button --}}
+  <WebComponents::AuButton>Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Icon + Label"
+        @snippet="button-type-icon-label.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-type-icon-label --}}
+  <WebComponents::AuButton @icon="add">Add item</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Icon only"
+        @snippet="button-type-icon-only.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-type-icon-only --}}
+  <WebComponents::AuButton @icon="add" @layout="icon-only">Toevoegen</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Icon right"
+        @snippet="button-type-icon-right.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-type-icon-right --}}
+  <WebComponents::AuButton @icon="chevron-down" @layout="icon-right">Acties</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Block"
+        @snippet="button-type-block.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-type-block --}}
+  <WebComponents::AuButton @block="true" @icon="chevron-down" @layout="icon-right">Acties</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@layout</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>icon-only</code>, <code>icon-right</code></td>
+    <td>Determines the layout of the button. The layout is automatically determined from the existence of @icon, unless <code>icon-only</code> is specified this will result in a button layout with icon on the left.</td>
+  </tr>
+  <tr>
+    <td><code>@block</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>true</code>, <code>false</code></td>
+    <td>Determines whether the button is rendered as a block.</td>
+  </tr>
+  </tbody>
+</table>

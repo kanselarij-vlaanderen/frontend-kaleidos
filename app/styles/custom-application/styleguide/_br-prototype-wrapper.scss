@@ -1,0 +1,27 @@
+/* ==========================================================================
+  Prototype wrapper
+  ========================================================================== */
+
+.br-prototype-wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row-reverse;
+  overflow: hidden;
+}
+
+.br-prototype-wrapper__content {
+  flex: 0 1 100%;
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
+
+.br-prototype-wrapper__nav {
+  z-index: 4000;
+  height: 100%;
+  width: 32rem;
+  overflow: auto;
+  background: #FFF;
+  box-shadow: 0 0 0.8rem rgba(0,0,0,0.15);
+}
