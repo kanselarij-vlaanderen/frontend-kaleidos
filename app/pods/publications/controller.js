@@ -75,10 +75,6 @@ export default class PublicationsController extends Controller {
     return null;
   }
 
-  get shouldShowPublicationHeader() {
-    return !this.routing.currentRouteName.startsWith('publications.publication');
-  }
-
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
