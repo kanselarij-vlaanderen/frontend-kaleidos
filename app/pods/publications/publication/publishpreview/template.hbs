@@ -80,7 +80,7 @@
                       @finishedToggle={{fn this.markPreviewActivityDone activity}}
                       @cancelExisting={{fn this.cancelExistingPreviewActivity activity}}
                       @publishPreview={{fn this.requestPublicationModal activity}}
-                      @translation={{false}}
+                      @mode={{'publishPreview'}}
               />
               {{!-- Correction panel --}}
               {{#if (await activity.generatedPieces)}}
