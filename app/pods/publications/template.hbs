@@ -170,11 +170,49 @@
       {{#if isShowPublicationFilterModal}}
         <WebComponents::AuModal data-test-au-modal-publication-new>
           <WebComponents::AuModal::Header
-                  @title={{t "publications-new-not-minister"}}
+                  @size="medium"
+                  @title={{t "publications-filter"}}
                   @closeModal={{this.closeFilterModal}}
           />
           <WebComponents::AuModal::Body>
-
+            <div class="auk-form-group-layout auk-form-group-layout--grid">
+              <div class="auk-o-grid">
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuLabel for="defaultInput">{{t "cancel"}}</WebComponents::AuLabel>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuLabel for="defaultInput">{{t "cancel"}}</WebComponents::AuLabel>
+                  </div>
+                </div>
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label="Label 1" @name="ministerFilterOption" @checked={{this.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label="Label 1" @name="publishedFilterOption" @checked={{this.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label="Label 1" @name="pausedFilterOption" @checked={{this.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                </div>
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label="Label 1" @name="notMinisterFilterOption" @checked={{this.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label="Label 1" @name="toPublishFilterOption" @checked={{this.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label="Label 1" @name="withdrawnFilterOption" @checked={{this.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}}  />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                </div>
+              </div>
+            </div>
           </WebComponents::AuModal::Body>
           {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
           <WebComponents::AuModal::Footer @custom={{true}}>
@@ -182,7 +220,7 @@
               <WebComponents::AuToolbar::Group @position="left">
                 <WebComponents::AuToolbar::Item>
                   <WebComponents::AuButton @skin="borderless"
-                    {{on "click" this.closePublicationModal}}
+                    {{on "click" this.closeFilterModal}}
                                            data-test-publication-button-cancel>
                     {{t "cancel"}}
                   </WebComponents::AuButton>
@@ -190,14 +228,16 @@
               </WebComponents::AuToolbar::Group>
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
-                  {{#if (not this.isCreatingPublication)}}
-                    <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new
-                      {{on "click" this.createNewPublication}}>
-                      {{t "publications-new-button-text"}}
-                    </WebComponents::AuButton>
-                  {{else}}
-                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
-                  {{/if}}
+                  <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters
+                    {{on "click" this.resetModelFilterOptions}}>
+                    {{t "clear-filter-plural"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
+                    {{on "click" this.filterModel}}>
+                    {{t "filter-content"}}
+                  </WebComponents::AuButton>
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
