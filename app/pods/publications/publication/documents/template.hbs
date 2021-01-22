@@ -177,7 +177,7 @@
 
                       {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
+                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
                         <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
                           {{t "document-edit"}}
                         </WebComponents::AuDropdown::Item>
@@ -185,8 +185,7 @@
 
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
-                      {{!-- TODO KAS-2192 piece.agendaitem can only be 1 item even if there are many (belongsTo), saving piece creates faulty data --}}
-                      {{#if (not (await piece.agendaitem))}}
+                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
                         <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
                           {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
@@ -238,7 +237,7 @@
                 <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
               </td>
               <td>
-                {{#if (await piece.agendaitem)}}
+                {{#if (gt (await piece.agendaitems.length) 0)}}
                   <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
                 {{/if}}
                 {{await piece.name}}
@@ -279,7 +278,7 @@
 
                       {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that have been released by kanselarij
                       Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
+                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
                         <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
                           {{t "document-edit"}}
                         </WebComponents::AuDropdown::Item>
@@ -287,7 +286,7 @@
 
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
+                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
                         <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-delete @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
                           {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
