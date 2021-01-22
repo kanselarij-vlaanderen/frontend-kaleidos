@@ -258,6 +258,9 @@ export default class PublicationPublishPreviewController extends Controller {
     // Create activity in subcase.
     await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase, this.publicationActivity.previewActivity);
 
+    // Send the email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishEmail, this.publicationActivity.mailSubject, this.publicationActivity.mailContent, this.publicationActivity.pieces);
+
     // Visual stuff.
     this.selectedPieces = A([]);
 
@@ -270,8 +273,6 @@ export default class PublicationPublishPreviewController extends Controller {
     };
     this.showLoader = false;
     await this.send('refreshModel');
-    // TODO Add email hook here.
-    alert('the mails dont work yet. infra is working on it.');
   }
 
   @action
