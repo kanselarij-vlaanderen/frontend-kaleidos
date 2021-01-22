@@ -159,11 +159,6 @@ Router.map(function() {
       this.route('publishpreview', { path: '/drukproeven', });
       this.route('signatures', { path: '/handtekeningen', });
     });
-    // this.route('to-treat', { path: '/te-behandelen', });
-    this.route('paused', { path: '/gepauzeerd', }, function() {
-      this.route('paused-minister', { path: '/via-ministerraad', });
-      this.route('paused-not-minister', { path: '/niet-via-ministerraad', });
-    });
     this.route('withdrawn', { path: '/ingetrokken', }, function() {
       this.route('withdrawn-minister', { path: '/via-ministerraad', });
       this.route('withdrawn-not-minister', { path: '/niet-via-ministerraad', });
