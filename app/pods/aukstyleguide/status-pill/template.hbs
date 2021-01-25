@@ -1,0 +1,51 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Status Pills" />
+
+<StyleguideSample
+        @title="In Progress"
+        @snippet="status-pill-in-progress.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-in-progress --}}
+  <WebComponents::AuStatusPill>2/4</WebComponents::AuStatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Not started"
+        @snippet="status-pill-not-started.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-not-started --}}
+  <WebComponents::AuStatusPill @status="not-started">0/4</WebComponents::AuStatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Done"
+        @snippet="status-pill-done.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-done --}}
+  <WebComponents::AuStatusPill @status="done">4/4</WebComponents::AuStatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>@status</td>
+    <td>string</td>
+    <td><code>in-progress</code>, <code>not-started</code>, <code>done</code></td>
+    <td>Determines the status of the pill. Unless specified, the default skin is set to in-progress.</td>
+  </tr>
+  </tbody>
+</table>

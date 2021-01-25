@@ -198,13 +198,11 @@
 
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-    @size="full-screen"
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
       @title={{t "documents-add"}}
+      @changeIcon={{this.isExpanded}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPieces}}
     />

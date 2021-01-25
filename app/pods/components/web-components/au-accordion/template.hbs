@@ -1,0 +1,19 @@
+<div class="auk-accordion {{if this.isActive "auk-accordion--is-active"}}">
+  <WebComponents::AuButtonLink
+    @padded="padded-y"
+    @icon="chevron-right"
+    @block="true"
+    {{on "click" this.toggleAccordion}}
+    aria-expanded={{if this.isActive "true" "false"}}
+    aria-controls={{this.accordionId}}>
+    {{@label}}
+  </WebComponents::AuButtonLink>
+  <div
+    class="auk-accordion__content"
+    id={{this.accordionId}}
+    aria-hidden={{if this.isActive "false" "true"}}
+  >
+    {{yield}}
+  </div>
+
+</div>
