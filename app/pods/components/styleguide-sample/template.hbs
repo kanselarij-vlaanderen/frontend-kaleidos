@@ -1,0 +1,44 @@
+{{!-- template-lint-disable no-bare-strings --}}
+<div class="br-styleguide-sample">
+  <div class="auk-content">
+    <h3>{{@title}}</h3>
+    {{#if @description}}
+      {{format-markdown @description}}
+    {{/if}}
+  </div>
+
+  <div class="br-styleguide-sample__sample {{this.getModalCssClass}}">
+    {{yield}}
+  </div>
+
+  {{#if (or @code @snippet)}}
+    <WebComponents::AuButtonLink @skin="muted" {{on "click" this.toggleVisibility}}>Toggle code</WebComponents::AuButtonLink>
+  {{/if}}
+
+  {{#unless this.visibility}}
+
+    {{#if @code}}
+      <CodeBlock
+              class="br-styleguide-code-block"
+              @code={{@code}}
+              @language="markup"
+      />
+    {{/if}}
+
+    {{#if @snippet}}
+
+      {{#let (get-code-snippet @snippet) as |snippet|}}
+        <CodeBlock
+                class="br-styleguide-code-block"
+                @code={{snippet.source}}
+                @language="markup"
+        />
+      {{/let}}
+
+    {{/if}}
+
+
+  {{/unless}}
+</div>
+
+

@@ -4,7 +4,7 @@ import sanitize from 'sanitize-filename';
 import moment from 'moment';
 
 const {
-  Model, attr, belongsTo,
+  Model, attr, belongsTo, hasMany,
 } = DS;
 
 export default Model.extend({
@@ -45,7 +45,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  case: belongsTo('case', {
+  cases: hasMany('case', {
     inverse: null,
   }),
 
