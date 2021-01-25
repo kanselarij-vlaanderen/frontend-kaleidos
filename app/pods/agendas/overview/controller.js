@@ -14,7 +14,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
 
   dateRegex: /^(?:(\d{1,2})-)?(?:(\d{1,2})-)?(\d{4})$/,
 
-  sort: '-planned-start',
+  sort: '-planned-start,number-representation',
   size: 10,
 
   activeAgendas: computed('model', async function() {
@@ -29,7 +29,7 @@ export default Controller.extend(DefaultQueryParamsMixin, {
       filter: {
         ':gte:planned-start': dateOfToday,
       },
-      sort: 'planned-start',
+      sort: 'planned-start,number-representation',
     });
     const activeAgendas = await this.agendaService.getActiveAgendas(dateOfToday);
 

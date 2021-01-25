@@ -1,0 +1,40 @@
+/* ==========================================================================
+  auk-columns
+  ========================================================================== */
+
+.br-styleguide-columns {
+  display: flex;
+  height: 100%;
+  overflow: auto;
+}
+
+.br-styleguide-columns__column {
+  flex: 1 1 auto;
+  margin-right: 2.4rem;
+  height: 100%;
+  overflow: auto;
+}
+
+.br-styleguide-columns__column:first-child {
+  width: 24rem;
+  max-width: 24rem;
+  min-width: 24rem;
+  background: $au-gray-100;
+  border-right: .1rem solid $au-gray-200;
+}
+
+.br-styleguide-columns__column:last-child {
+  margin-right: 0;
+
+}
+
+
+.br-styleguide-content {
+  height: 100%;
+  margin: 0 auto;
+  padding: 2.4rem;
+
+  table {
+    margin-bottom: 2.4rem;
+  }
+}
