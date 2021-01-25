@@ -1,0 +1,85 @@
+{{!-- template-lint-disable --}}
+
+<ComponentPageIntro
+        @title="Button skins"
+>
+  <p>This page documents the different button skins. For the different types, see <a href="/styleguide/button-types">types</a>.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Primary button"
+        @description="Please use maximum 1 primary button per screen."
+        @snippet="button-skin-primary.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-primary --}}
+  <WebComponents::AuButton @skin="primary">Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Secondary button"
+        @description="This is the default button."
+        @snippet="button-skin-secondary.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-secondary --}}
+  <WebComponents::AuButton @skin="secondary">Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Tertiary button"
+        @snippet="button-skin-tertiary.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-tertiary --}}
+  <WebComponents::AuButton @skin="tertiary">Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Borderless button"
+        @snippet="button-skin-borderless.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-borderless --}}
+  <WebComponents::AuButton @skin="borderless">Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Danger primary button"
+        @snippet="button-skin-danger-primary.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-danger --}}
+  <WebComponents::AuButton @skin="danger-primary">Button text</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Danger on hover button"
+        @description="Use this button for destructive actions."
+        @snippet="button-skin-danger-on-hover.hbs"
+>
+  {{!-- BEGIN-SNIPPET button-skin-danger-on-hover --}}
+  <WebComponents::AuButton @skin="danger-hover" @icon="delete">Verwijderen</WebComponents::AuButton>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@skin</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>primary</code>, <code>tertiary</code>, <code>danger-primary</code>, <code>danger-on-hover</code> (Secondary is the default skin)</td>
+    <td>Determines the skin of the button.</td>
+  </tr>
+  </tbody>
+</table>

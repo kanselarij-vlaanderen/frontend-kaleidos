@@ -1,8 +1,8 @@
 /* eslint-disable no-duplicate-imports */
-import { inject as service } from '@ember/service';
-import Service from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+
 export default class activityService extends Service {
   @service store;
   @service toaster;
@@ -43,12 +43,14 @@ export default class activityService extends Service {
    *
    * @param finalTranslationDate
    * @param mailContent
+   * @param mailSubject
    * @param pieces
    * @param subcase
    * @returns {Promise<Model|any|Promise>}
    */
-  async createNewTranslationActivity(finalTranslationDate, mailContent, pieces, subcase) {
-    const creationDatetime = moment().utc()
+  async createNewTranslationActivity(finalTranslationDate, mailContent, mailSubject, pieces, subcase) {
+    const creationDatetime = moment()
+      .utc()
       .toDate();
 
     const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
@@ -60,6 +62,7 @@ export default class activityService extends Service {
       startDate: creationDatetime,
       finalTranslationDate,
       mailContent,
+      mailSubject,
       subcase,
       type: requestTranslationActivityType,
       usedPieces: pieces,
@@ -69,7 +72,8 @@ export default class activityService extends Service {
     await translateActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('publicationActivities').reload();
+    await subcase.hasMany('publicationActivities')
+      .reload();
 
 
     return translateActivity;
@@ -79,12 +83,14 @@ export default class activityService extends Service {
    * Create a new Publish preview Activity.
    *
    * @param mailContent
+   * @param mailSubject
    * @param pieces
    * @param subcase
    * @returns {Promise<Model|any|Promise>}
    */
-  async createNewPublishPreviewActivity(mailContent, pieces, subcase) {
-    const creationDatetime = moment().utc()
+  async createNewPublishPreviewActivity(mailContent, mailSubject, pieces, subcase) {
+    const creationDatetime = moment()
+      .utc()
       .toDate();
 
     // publishPreviewActivityType.
@@ -96,6 +102,7 @@ export default class activityService extends Service {
       status: activityOpenStatus,
       startDate: creationDatetime,
       mailContent,
+      mailSubject,
       subcase,
       type: requestPublishPreviewActivityType,
       usedPieces: pieces,
@@ -105,7 +112,8 @@ export default class activityService extends Service {
     await PublishPreviewActivity.save();
 
     // Reload relation.
-    await subcase.hasMany('publicationActivities').reload();
+    await subcase.hasMany('publicationActivities')
+      .reload();
 
     return PublishPreviewActivity;
   }
@@ -120,7 +128,8 @@ export default class activityService extends Service {
    * @returns {Promise<Model|any|Promise>}
    */
   async createNewPublishActivity(mailContent, pieces, subcase, publishPreviewActivity) {
-    const creationDatetime = moment().utc()
+    const creationDatetime = moment()
+      .utc()
       .toDate();
 
     // publishActivityType.
@@ -142,8 +151,10 @@ export default class activityService extends Service {
     await PublishPreviewActivity.save();
 
     // Reload relations.
-    await subcase.hasMany('publicationActivities').reload();
-    await publishPreviewActivity.hasMany('publishedBy').reload();
+    await subcase.hasMany('publicationActivities')
+      .reload();
+    await publishPreviewActivity.hasMany('publishedBy')
+      .reload();
 
     return PublishPreviewActivity;
   }

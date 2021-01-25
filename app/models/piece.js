@@ -43,7 +43,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  case: belongsTo('case', {
+  cases: hasMany('case', {
     inverse: null,
   }),
   // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
