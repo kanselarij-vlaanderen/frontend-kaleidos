@@ -1,0 +1,67 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Pills" />
+
+<StyleguideSample
+        @title="Default"
+>
+  <WebComponents::AuPill>Label</WebComponents::AuPill>
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Success"
+        @snippet="pills-success.hbs"
+>
+  {{!-- BEGIN-SNIPPET pills-success --}}
+  <WebComponents::AuPillList>
+    <WebComponents::AuPill @skin="success">Label</WebComponents::AuPill>
+    <WebComponents::AuPill @skin="success" @icon="lock-open">Label</WebComponents::AuPill>
+  </WebComponents::AuPillList>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Warning"
+        @snippet="pill-warning.hbs"
+>
+  {{!-- BEGIN-SNIPPET pill-warning --}}
+  <WebComponents::AuPill @skin="warning">Label</WebComponents::AuPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Danger"
+        @snippet="pills-danger.hbs"
+>
+  {{!-- BEGIN-SNIPPET pills-danger --}}
+  <WebComponents::AuPillList>
+    <WebComponents::AuPill @skin="danger">Label</WebComponents::AuPill>
+    <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
+    <WebComponents::AuPill @skin="danger" @layout="icon-right" @icon="lock-closed">Label</WebComponents::AuPill>
+  </WebComponents::AuPillList>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>@skin</td>
+    <td>string</td>
+    <td><code>default</code>, <code>success</code>, <code>warning</code>, <code>danger</code></td>
+    <td>Determines the skin of the pill. Unless specified, the default skin is set to default.</td>
+  </tr>
+  <tr>
+    <td>@layout</td>
+    <td>string</td>
+    <td><code>icon-only</code>, <code>icon-left</code>, <code>icon-right</code></td>
+    <td>Determines the layout of the pill when there is an @icon. The default layout is icon-left.</td>
+  </tr>
+  </tbody>
+</table>

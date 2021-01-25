@@ -1,0 +1,97 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Navbar">
+  <p>A navbar is used to wrap a <a href="/aukstyleguide/toolbar">toolbar</a>. The navbar is the element that “holds” the navigation items.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Navbar - Border bottom"
+        @snippet="navbar.hbs"
+>
+  {{!-- BEGIN-SNIPPET navbar --}}
+  <WebComponents::AuNavbar>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h4 class="auk-toolbar-complex__title">Title</h4>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Navbar - Border top"
+        @snippet="navbar-border-top.hbs"
+>
+  {{!-- BEGIN-SNIPPET navbar-border-top --}}
+  <WebComponents::AuNavbar @border="top">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h4 class="auk-toolbar-complex__title">Title</h4>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Navbar - Gray 100"
+        @snippet="navbar-gray-100.hbs"
+>
+  {{!-- BEGIN-SNIPPET navbar-gray-100 --}}
+  <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h4 class="auk-toolbar-complex__title">Title</h4>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Navbar - Gray 200"
+        @snippet="navbar-gray-200.hbs"
+>
+  {{!-- BEGIN-SNIPPET navbar-gray-200 --}}
+  <WebComponents::AuNavbar @border="bottom" @skin="gray-200">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h4 class="auk-toolbar-complex__title">Title</h4>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Prop</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>skin</td>
+    <td>string</td>
+    <td>gray-100, gray-200</td>
+    <td>Determines the background colour of the navbar. Defaults to white.</td>
+  </tr>
+  <tr>
+    <td>border</td>
+    <td>string</td>
+    <td>none, top, bottom</td>
+    <td>Determines if the navbar has a border, for example border top. Defaults to bottom.</td>
+  </tr>
+  </tbody>
+</table>

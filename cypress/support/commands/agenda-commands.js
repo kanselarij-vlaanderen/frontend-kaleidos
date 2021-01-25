@@ -116,7 +116,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   }
 
   // Set the location
-  cy.get('@newAgendaForm').eq(2)
+  cy.get('@newAgendaForm').eq(3)
     .within(() => {
       cy.get('.vl-input-field').click({
         force: true,
