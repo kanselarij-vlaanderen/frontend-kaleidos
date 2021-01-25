@@ -256,6 +256,10 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   /** PUBLISH PREVIEW ACTIVITIES **/
+  @action
+  setMailSubject(event) {
+    set(this.previewActivity, 'mailSubject', event.target.value);
+  }
 
   @action
   async openPublishPreviewRequestModal() {
@@ -290,7 +294,7 @@ export default class PublicationDocumentsController extends Controller {
 
     // Create activity in subcase.
     this.renderPieces = false;
-    await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
+    await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.mailSubject, this.previewActivity.pieces, subcase);
 
     // Send email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
@@ -343,7 +347,7 @@ export default class PublicationDocumentsController extends Controller {
     const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(translateSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
-    await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
+    await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.mailSubject, this.translateActivity.pieces, subcase);
 
     // Send the email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
