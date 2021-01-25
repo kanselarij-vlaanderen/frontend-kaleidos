@@ -1,0 +1,9 @@
+/* Styling for grid documentation
+   ========================================================================== */
+
+.br-styleguide-grid-documentation [class*=auk-o-grid-col] {
+  background: $au-gray-100;
+  margin-bottom: 1.6rem;
+  padding: 1rem;
+  text-align: center;
+}

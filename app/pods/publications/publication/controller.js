@@ -42,6 +42,13 @@ export default class PublicationController extends Controller {
       color: 'success',
     },
   }, {
+    id: CONFIG.publicationStatusPauzed.id,
+    label: 'Gepauzeerd',
+    icon: {
+      svg: 'circle-pause',
+      color: 'muted',
+    },
+  }, {
     id: CONFIG.publicationStatusWithdrawn.id,
     label: 'ingetrokken',
     icon: {
@@ -162,6 +169,16 @@ export default class PublicationController extends Controller {
   *setNumacNumber(event) {
     this.model.publicationFlow.set('numacNumber', event.target.value);
     yield timeout(1000);
+    this.model.publicationFlow.save();
+  }
+
+  @action
+  togglePriorityProcedure() {
+    if (this.model.publicationFlow.get('hasPriority')) {
+      this.model.publicationFlow.set('priority', 0);
+    } else {
+      this.model.publicationFlow.set('priority', 1);
+    }
     this.model.publicationFlow.save();
   }
 

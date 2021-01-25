@@ -14,6 +14,7 @@ import {
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
   @service subcasesService;
+  @service emailService;
   @service fileService;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
@@ -21,7 +22,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
-  @tracked isUploadModalResized = false;
+  @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
 
@@ -40,6 +41,10 @@ export default class PublicationDocumentsController extends Controller {
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
+  // Editing of pieces.
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
+
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
@@ -49,7 +54,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   toggleUploadModalSize() {
-    this.isUploadModalResized = !this.isUploadModalResized;
+    this.isExpanded = !this.isExpanded;
   }
 
   @action
@@ -152,6 +157,34 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
+  async editExistingPiece(piece) {
+    this.pieceBeingEdited = piece;
+    this.showPieceEditor = true;
+  }
+
+  @action
+  async cancelEditPiece() {
+    this.pieceBeingEdited.rollbackAttributes();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
+    }
+    this.pieceBeingEdited = null;
+    this.showPieceEditor = false;
+  }
+
+  @action
+  async saveEditedPiece() {
+    this.showPieceEditor = false;
+    this.showLoader = true;
+    await this.pieceBeingEdited.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
+    this.showLoader = false;
+  }
+
+  @action
   deleteExistingPiece(piece) {
     this.pieceToDelete = piece;
     this.isVerifyingDelete = true;
@@ -159,6 +192,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
+    // TODO KAS-2192 get('agendaitem') can only be 1 item even if there are many (belongsTo), saving piece creates faulty data
     const agendaitem = yield this.pieceToDelete.get('agendaitem');
     if (agendaitem) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
@@ -218,6 +252,9 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = false;
     await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.pieces, subcase);
 
+    // Send email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
+
     // Visual stuff.
     this.selectedPieces = A([]);
 
@@ -229,8 +266,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-
-    alert('the mails dont work yet. infra is working on it.');
     this.model.refreshAction();
   }
 
@@ -270,6 +305,9 @@ export default class PublicationDocumentsController extends Controller {
     // Create activity in subcase.
     await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.pieces, subcase);
 
+    // Send the email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
+
     // Visual stuff.
     this.selectedPieces = A([]);
 
@@ -282,7 +320,6 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-    alert('the mails dont work yet. infra is working on it.');
     this.model.refreshAction();
   }
 

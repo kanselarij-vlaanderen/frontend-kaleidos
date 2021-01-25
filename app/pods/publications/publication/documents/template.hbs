@@ -174,13 +174,25 @@
                       {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
                         {{t "new-version"}}
                       </WebComponents::AuDropdown::Item> --}}
-                      {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
+
+                      {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
-                          {{t "document-delete"}}
+                        <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
+                          {{t "document-edit"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
+
+                      {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
+                            Offering this as an option should be very restrictive --}}
+                      {{!-- TODO KAS-2192 piece.agendaitem can only be 1 item even if there are many (belongsTo), saving piece creates faulty data --}}
+                      {{#if (not (await piece.agendaitem))}}
+                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
+                          {{t "delete"}}
+                        </WebComponents::AuDropdown::Item>
+                      {{/if}}
+
+
                     </WebComponents::AuDropdown>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
@@ -226,7 +238,7 @@
                 <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
               </td>
               <td>
-                {{#if piece.confidential}}
+                {{#if (await piece.agendaitem)}}
                   <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
                 {{/if}}
                 {{await piece.name}}
@@ -264,11 +276,20 @@
                       {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
                         {{t "new-version"}}
                       </WebComponents::AuDropdown::Item> --}}
+
+                      {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that have been released by kanselarij
+                      Offering this as an option should be very restrictive --}}
+                      {{#if (not (await piece.agendaitem))}}
+                        <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
+                          {{t "document-edit"}}
+                        </WebComponents::AuDropdown::Item>
+                      {{/if}}
+
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents that have been released by kanselarij
                             Offering this as an option should be very restrictive --}}
                       {{#if (not (await piece.agendaitem))}}
                         <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-delete @skin="danger" {{on "click" (fn this.deleteExistingPiece piece)}}>
-                          {{t "document-delete"}}
+                          {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
                     </WebComponents::AuDropdown>
@@ -298,13 +319,11 @@
 
 
 {{#if this.isOpenPieceUploadModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-    @size="full-screen"
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
       @title={{t "documents-add"}}
+      @changeIcon={{this.isExpanded}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPieces}}
     />
@@ -359,10 +378,9 @@
                                 @message={{t "modal-error-missing-pieces"}}
                                 @icon="alert-triangle"/>
       {{else}}
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col-6">
+        <div class="auk-o-grid auk-u-maximize-height">
+          <div class="auk-u-maximize-height auk-o-grid-col-5 auk-u-mr-2 auk-u-scroll-scrollable">
             {{!--  Pieces selected --}}
-            {{t "request-translation-confirmation" }}
             <WebComponents::AuLabel>
               {{t "final-translation-date"}}
             </WebComponents::AuLabel>
@@ -377,10 +395,12 @@
             <WebComponents::AuTextarea
                     id="emailMessage"
                     @rows="15"
+                    @resize="vertical"
                     @value={{mut this.translateActivity.mailContent}}
-                    data-test-create-vertaalActivity-modal-email-textarea/>
+                    data-test-create-vertaalActivity-modal-email-textarea
+            />
           </div>
-          <div class="auk-o-grid-col-3">
+          <div class="auk-u-maximize-height auk-o-grid-col-4 auk-u-scroll-scrollable">
             <WebComponents::AuLabel class="auk-u-mt-2">
               {{t "attachments" }}
             </WebComponents::AuLabel>
@@ -488,9 +508,24 @@
 
 {{!-- LOADER --}}
 
+
 {{#if this.showLoader}}
   <WebComponents::AuLoadingOverlay/>
 {{/if}}
+
+
+
+
+{{!-- EDIT PIECE DETAILS --}}
+
+{{#if this.showPieceEditor}}
+  <Utils::pieceDetailsEdit
+     @piece={{this.pieceBeingEdited}}
+     @saveAction={{this.saveEditedPiece}}
+     @cancelAction={{this.cancelEditPiece}}
+  />
+{{/if}}
+
 
 
 {{!-- VERIFY DELETE PIECE MODAL --}}

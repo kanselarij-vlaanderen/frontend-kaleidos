@@ -9,6 +9,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     let pieces = await this.store.query('piece', {
       'filter[agendaitem][:id:]': agendaitem.id,
       'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      include: 'document-container',
     });
     pieces = pieces.toArray();
     const sortedPieces = sortPieces(pieces);

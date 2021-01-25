@@ -43,6 +43,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       sort: params.sort,
     });
     for (const nota of notas.toArray()) { // proxyarray to native JS array
+      // TODO KAS-2192 get('agendaitem') can only be 1 item even if there are many (belongsTo), saving piece creates faulty data
       const agendaItem = await nota.get('agendaitem');
       const agendaitemPriority = agendaItem.get('priority');
       const agendaitemId = agendaItem.get('id');

@@ -9,6 +9,8 @@ const {
 
 export default Model.extend({
   name: attr('string'),
+  pages: attr('number'),
+  words: attr('number'),
   created: attr('datetime'),
   modified: attr('datetime'),
   confidential: attr('boolean'),
