@@ -46,7 +46,9 @@ export default Model.extend({
   case: belongsTo('case', {
     inverse: null,
   }),
+  // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
   agendaitems: hasMany('agendaitem', {
+    serialize: false,
     inverse: null,
   }),
 
