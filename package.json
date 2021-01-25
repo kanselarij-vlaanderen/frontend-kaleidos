@@ -116,6 +116,7 @@
     "eslint-plugin-node": "^11.0.0",
     "liquid-fire": "^0.30.0",
     "loader.js": "^4.7.0",
+    "marked": "^1.2.7",
     "moment": "2.24.0",
     "npm-run-all": "^4.1.5",
     "qunit-dom": "^1.1.0",
@@ -128,7 +129,7 @@
   },
   "dependencies": {
     "@kanselarij-vlaanderen/au-kaleidos-icons": "^1.2.5",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "^1.17.3",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "^1.17.6",
     "ember-in-viewport": "^3.7.5",
     "ember-test-selectors": "^3.0.0",
     "ember-tooltips": "^3.4.5",
