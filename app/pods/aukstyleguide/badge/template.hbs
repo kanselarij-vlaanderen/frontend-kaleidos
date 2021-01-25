@@ -1,0 +1,80 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Badges" />
+
+<h3 class="auk-h2">Sizes</h3>
+
+<StyleguideSample
+        @title="Small"
+        @snippet="badge-small.hbs"
+>
+  {{!-- BEGIN-SNIPPET badge-small --}}
+  <WebComponents::AuBadge @icon="user" @size="small"/>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h2">Skins</h3>
+
+<StyleguideSample
+        @title="Regular badge"
+        @snippet="badge-regular.hbs"
+>
+  {{!-- BEGIN-SNIPPET badge-regular --}}
+  <WebComponents::AuBadge @icon="user" />
+  {{!-- END-SNIPPET --}}
+
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Warning badge"
+        @snippet="badge-warning.hbs"
+>
+  {{!-- BEGIN-SNIPPET badge-warning --}}
+  <WebComponents::AuBadge @icon="alert-triangle" @skin="warning"  />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Error badge"
+        @snippet="badge-error.hbs"
+>
+  {{!-- BEGIN-SNIPPET badge-error --}}
+  <WebComponents::AuBadge @icon="alert-triangle" @skin="error" />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Success badge"
+        @snippet="badge-success.hbs"
+>
+  {{!-- BEGIN-SNIPPET badge-success --}}
+  <WebComponents::AuBadge @icon="check" @skin="success" />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@skin</code></td>
+    <td>string</td>
+    <td><code>success</code>, <code>error</code>, <code>warning</code></td>
+    <td>Determines the skin of the badge</td>
+  </tr>
+  <tr>
+    <td><code>@size</code></td>
+    <td>string</td>
+    <td><code>small</code> (optional)</td>
+    <td>Determines the sizes of the badge</td>
+  </tr>
+  </tbody>
+</table>

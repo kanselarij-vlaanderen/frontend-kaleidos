@@ -11,13 +11,11 @@
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
           {{#if @resizeable}}
-            {{!-- TODO this is the wrong icon, the correct icon is not yet available in the package --}}
             <WebComponents::AuButton
-                    @icon="external-link"
+                    @icon={{if @changeIcon 'minimize' 'expand'}}
                     @skin="borderless"
                     @layout="icon-only"
                     {{on "click" @toggleSize}}>
-
             </WebComponents::AuButton>
           {{/if}}
           {{#if (not @hideCloseButton)}}

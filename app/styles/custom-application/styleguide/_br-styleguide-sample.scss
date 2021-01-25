@@ -1,0 +1,38 @@
+/* ==========================================================================
+  br-styleguide-sample
+   ========================================================================== */
+
+.br-styleguide-sample {
+  margin: 0 0 4.8rem;
+}
+
+.br-styleguide-sample__sample {
+  position: relative;
+  border: .1rem solid $au-gray-300;
+  padding: 2.4rem;
+  margin: 0 0 0.6rem;
+}
+
+.br-styleguide-sample__sample--modal {
+  height: 30rem;
+}
+
+/* ==========================================================================
+  Changes to components in styleguide context
+  ========================================================================== */
+
+.br-styleguide-sample {
+  .auk-modal-backdrop {
+    position: absolute;
+
+  }
+  .auk-modal {
+    position: relative;
+  }
+}
+
+.br-styleguide-sample {
+  .auk-alert-stack {
+    position: absolute;
+  }
+}

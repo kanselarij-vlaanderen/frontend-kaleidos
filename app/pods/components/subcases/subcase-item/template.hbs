@@ -1,6 +1,6 @@
 <div class="vlc-procedure-step__badge-wrapper">
   {{#if (is-pending subcase.approved)}}
-    <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
+    <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper vl-icon-wrapper-loading"
     ></div>
   {{else if (await subcase.approved)}}
     <div class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
