@@ -30,7 +30,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
+  textSearchFields = Object.freeze(['title', 'shortTitle', 'data.content', 'titlePress', 'textPress']);
 
   constructor() {
     super(...arguments);

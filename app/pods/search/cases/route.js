@@ -30,8 +30,6 @@ export default class CasesSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle']);
-
   postProcessDates(_case) {
     const {
       sessionDates,
@@ -60,12 +58,17 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
+    const textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
+    if (params.decisionsOnly) {
+      textSearchFields.push('decision.content');
+    } else {
+      textSearchFields.push('documents.content');
+    }
+
     const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
+    const textSearchKey = textSearchFields.join(',');
 
     const filter = {};
-
-    const searchDocumentType = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
 
     if (!isEmpty(params.searchText)) {
       filter[searchModifier + textSearchKey] = params.searchText;
@@ -105,7 +108,7 @@ export default class CasesSearchRoute extends Route {
     const {
       postProcessDates,
     } = this;
-    return search(searchDocumentType, params.page, params.size, params.sort, filter, (searchData) => {
+    return search('cases', params.page, params.size, params.sort, filter, (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
       postProcessDates(searchData);
