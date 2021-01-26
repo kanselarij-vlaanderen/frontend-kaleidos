@@ -188,26 +188,26 @@
                 <div class="auk-o-grid-col-4">
                   <div class="auk-form-group">
                     <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label="Label 1" @name="ministerFilterOption" @checked={{this.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "via-cabinet"}} @name="ministerFilterOption" @checked={{this.filterOptionKeys.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
                     </WebComponents::AuCheckboxList>
                   </div>
                   <div class="auk-form-group">
                     <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label="Label 1" @name="publishedFilterOption" @checked={{this.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
-                      <WebComponents::AuCheckbox @label="Label 1" @name="pausedFilterOption" @checked={{this.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "publications-published"}} @name="publishedFilterOption" @checked={{this.filterOptionKeys.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "publications-paused"}} @name="pausedFilterOption" @checked={{this.filterOptionKeys.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
                     </WebComponents::AuCheckboxList>
                   </div>
                 </div>
                 <div class="auk-o-grid-col-4">
                   <div class="auk-form-group">
                     <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label="Label 1" @name="notMinisterFilterOption" @checked={{this.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "not-via-cabinet"}} @name="notMinisterFilterOption" @checked={{this.filterOptionKeys.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
                     </WebComponents::AuCheckboxList>
                   </div>
                   <div class="auk-form-group">
                     <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label="Label 1" @name="toPublishFilterOption" @checked={{this.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
-                      <WebComponents::AuCheckbox @label="Label 1" @name="withdrawnFilterOption" @checked={{this.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}}  />
+                      <WebComponents::AuCheckbox @label={{t "publications-to-publish"}} @name="toPublishFilterOption" @checked={{this.filterOptionKeys.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "cancelled-request"}} @name="withdrawnFilterOption" @checked={{this.filterOptionKeys.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}}  />
                     </WebComponents::AuCheckboxList>
                   </div>
                 </div>

@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import {
+  action, set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { restartableTask } from 'ember-concurrency-decorators';
@@ -21,29 +23,15 @@ export default class PublicationsController extends Controller {
   @tracked isShowPublicationFilterModal = false;
 
 
-  get ministerFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.minister'));
-  }
-
-  get notMinisterFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.notMinister'));
-  }
-
-  get publishedFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.published'));
-  }
-
-  get toPublishFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.toPublish'));
-  }
-
-  get pausedFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.paused'));
-  }
-
-  get withdrawnFilterOption() {
-    return JSON.parse(localStorage.getItem('filterOptions.withdrawn'));
-  }
+  @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
+    || {
+      ministerFilterOption: false,
+      notMinisterFilterOption: false,
+      publishedFilterOption: false,
+      toPublishFilterOption: false,
+      pausedFilterOption: false,
+      withdrawnFilterOption: false,
+    };
 
   @tracked
   publication = {
@@ -154,6 +142,7 @@ export default class PublicationsController extends Controller {
 
   @action
   closeFilterModal() {
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.isShowPublicationFilterModal = false;
   }
 
@@ -172,41 +161,26 @@ export default class PublicationsController extends Controller {
 
   @action
   resetModelFilterOptions() {
-    console.log('Filter options');
-    localStorage.removeItem('filterOptions.minister');
-    localStorage.removeItem('filterOptions.notMinister');
-    localStorage.removeItem('filterOptions.published');
-    localStorage.removeItem('filterOptions.toPublish');
-    localStorage.removeItem('filterOptions.paused');
-    localStorage.removeItem('filterOptions.withdrawn');
+    this.filterOptionKeys = {
+      ministerFilterOption: false,
+      notMinisterFilterOption: false,
+      publishedFilterOption: false,
+      toPublishFilterOption: false,
+      pausedFilterOption: false,
+      withdrawnFilterOption: false,
+    };
   }
 
   @action
   filterModel() {
-    console.log('Filter model');
+    this.isShowPublicationFilterModal = false;
+    // filter querries schrijven
   }
 
   @action
   toggleFilterOption(event) {
-    switch (event.target.name) {
-      case 'ministerFilterOption':
-        localStorage.setItem('filterOptions.minister', !this.ministerFilterOption);
-        break;
-      case 'notMinisterFilterOption':
-        localStorage.setItem('filterOptions.notMinister', !this.notMinisterFilterOption);
-        break;
-      case 'publishedFilterOption':
-        localStorage.setItem('filterOptions.published', !this.publishedFilterOption);
-        break;
-      case 'toPublishFilterOption':
-        localStorage.setItem('filterOptions.toPublish', !this.toPublishFilterOption);
-        break;
-      case 'pausedFilterOption':
-        localStorage.setItem('filterOptions.paused', !this.pausedFilterOption);
-        break;
-      case 'withdrawnFilterOption':
-        localStorage.setItem('filterOptions.withdrawn', !this.withdrawnFilterOption);
-        break;
-    }
+    const tempArr = this.get('filterOptionKeys');
+    set(tempArr, event.target.name, !tempArr[event.target.name]);
+    this.set('filterOptionKeys', tempArr);
   }
 }
