@@ -50,16 +50,34 @@
         {{moment-format row.modified "DD-MM-YYYY"}}<br/>
         <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
       </td>
+      
       <td>
         {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-          <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{ await row.publishpreviewRequestsFinished }}/{{ await row.publishpreviewRequestsTotal }}</WebComponents::AuStatusPill>
+          {{#if (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal)) }}
+            <WebComponents::AuStatusPill @status="done">
+              {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{else}}
+            <WebComponents::AuStatusPill @status="in-progress">
+              {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{/if}}
         {{else}}
           {{t "dash"}}
         {{/if}}
       </td>
+
       <td>
         {{#if (gt (await row.translationRequestsTotal) 0)}}
-          <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}</WebComponents::AuStatusPill>
+          {{#if (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal)) }}
+            <WebComponents::AuStatusPill @status="done">
+              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{else}}
+            <WebComponents::AuStatusPill @status="in-progress">
+              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{/if}}
         {{else}}
           {{t "dash"}}
         {{/if}}
