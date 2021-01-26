@@ -4,7 +4,6 @@ import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
 import CONFIG from 'fe-redpencil/utils/config';
-import moment from 'moment';
 import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
 import { A } from '@ember/array';
 
