@@ -82,7 +82,7 @@ context('Subcase tests', () => {
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering/);
 
-    cy.get(cases.subcaseMeetingNumber).contains('1');
+    cy.get(cases.subcaseMeetingNumber);
     cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
     cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
     cy.get(agenda.subcase.agendaLink).contains(dateFormat);
@@ -155,7 +155,7 @@ context('Subcase tests', () => {
     const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
-    cy.get(cases.subcaseMeetingNumber).contains('1');
+    cy.get(cases.subcaseMeetingNumber);
     cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
     cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
     cy.get(agenda.subcase.agendaLink).contains(dateFormat);
