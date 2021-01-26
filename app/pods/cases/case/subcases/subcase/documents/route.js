@@ -9,7 +9,6 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
       'page[size]': 500, // TODO add pagination when sorting is done in the backend
-      include: 'document-container',
     });
 
     const pieces = [];
