@@ -51,20 +51,18 @@
         <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
       </td>
       <td>
-        {{t "dash"}}
-        {{!-- {{#if row.translationStatus.[0].initiated}}
-        <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{row.translationStatus.[0].finished}}/{{row.translationStatus.[0].total}}</WebComponents::AuStatusPill>
+        {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
+          <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{ await row.publishpreviewRequestsFinished }}/{{ await row.publishpreviewRequestsTotal }}</WebComponents::AuStatusPill>
         {{else}}
-        -
-        {{/if}} --}}
+          {{t "dash"}}
+        {{/if}}
       </td>
       <td>
-        {{t "dash"}}
-        {{!-- {{#if row.printProofStatus.[0].initiated}}
-        <WebComponents::AuStatusPill @status={{row.printProofStatus.[0].status}}>{{row.printProofStatus.[0].finished}}/{{row.printProofStatus.[0].total}}</WebComponents::AuStatusPill>
+        {{#if (gt (await row.translationRequestsTotal) 0)}}
+          <WebComponents::AuStatusPill @status={{row.translationStatus.[0].status}}>{{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}</WebComponents::AuStatusPill>
         {{else}}
-        -
-        {{/if}} --}}
+          {{t "dash"}}
+        {{/if}}
       </td>
       <td class="auk-u-text-align--center">
         {{#if row.hasPriority}}

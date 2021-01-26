@@ -2,6 +2,7 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import moment from 'moment';
 
 export default class PublicationService extends Service {
@@ -77,5 +78,24 @@ export default class PublicationService extends Service {
     });
     const publicationNumberTakenList = publicationWithId.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
     return publicationNumberTakenList.toArray().length !== 0;
+  }
+
+  getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
+    for (let index = 0; index < totals.length; index++) {
+      const item = totals[index];
+      if (item.activityType === ActivityType) {
+        if (item.status === ActivityStatus) {
+          return parseInt(item.count, 10);
+        }
+      }
+    }
+    return 0;
+  }
+
+  getPublicationCounts(publicationId) {
+    return ajax({
+      method: 'GET',
+      url: `/lazy-loading/getCountsForPublication?uuid=${publicationId}`,
+    }).then((result) => result.body.counts);
   }
 }
