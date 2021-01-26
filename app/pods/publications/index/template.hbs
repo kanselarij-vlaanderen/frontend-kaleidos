@@ -1,7 +1,3 @@
-<WebComponents::AuButton @icon="filter" @skin="secondary" data-test-publication-button-filter-tables
-  {{on "click" this.filterTables}}>
-  {{t "filter-content"}}
-</WebComponents::AuButton>
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
   <DataTable
           @content={{this.model}}
@@ -15,167 +11,288 @@
           as |table|>
     <table.content as |c|>
       <c.header>
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-case-name")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-publication-number")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-derived-publicationtype")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-on-meeting")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-requested-publication-date")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-final-publication-date")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-publication-date")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-numacnummer-bs")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-case-manager")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-last-edited")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-last-edited-by")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-withdrawn-date")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-pause-date")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-translate-requests")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-sign-requests")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-publish-preview-requests")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-speed-procedure")
-        }}
-        {{th-sortable
-          currentSorting=this.sort
-          field="publicationNumber"
-          label=(t "publications-table-comment")
-        }}
+        {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
+          <th>{{t "publications-table-case-name"}}</th>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-publication-number")
+          }}
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
+          <th>{{t "publications-table-derived-publicationtype"}}</th>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-on-meeting")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-title-subcase")
+          }}
+        {{/if}}
+
+
+        {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-requested-publication-date")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-final-publication-date")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-publication-date")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-numacnummer-bs")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-case-manager")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-last-edited")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.lastEditedByFilterOption}}
+          <th>{{t "publications-table-last-edited-by"}}</th>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-withdrawn-date")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-pause-date")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
+          <th>{{t "publications-table-translate-requests"}}</th>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.signRequestsFilterOption}}
+          <th>{{t "publications-table-sign-requests"}}</th>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
+          <th>{{t "publications-table-publish-preview-requests"}}</th>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-speed-procedure")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-comment")
+          }}
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
+          {{th-sortable
+            currentSorting=this.sort
+            field="publicationNumber"
+            label=(t "publications-table-from-designagenda")
+          }}
+        {{/if}}
+        <th>
+          <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+            {{on "click" this.filterTables}}
+          />
+        </th>
       </c.header>
       <c.body class="tr-hover" as |row|>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.case.shortTitle}}
-        </td>
-        <td>
-          {{row.publicationNumber}}
-        </td>
-        <td>
-          {{#if row.publicationBefore}}
-            {{moment-format row.publicationBefore "DD-MM-YYYY"}}
-          {{else}}
+        {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
+          <td>
+            {{if row.case.shortTitle row.case.shortTitle (t "dash")}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
+          <td>
+            {{if
+              row.publicationNumberFilterOption
+              row.publicationNumberFilterOption
+              (t "dash")
+            }}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
+          <td>
             {{t "dash"}}
-          {{/if}}
-        </td>
-        <td>
-          {{moment-format row.modified "DD-MM-YYYY"}}<br/>
-          <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
-        </td>
-        <td class="auk-u-text-align--center">
-          {{#if row.hasPriority}}
-            <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
-            <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-              <p>
-                {{t "priority-procedure"}}
-              </p>
-            </EmberTooltip>
-          {{/if}}
-        </td>
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
+          <td>
+            {{if
+              row.publishBefore
+              (moment-format row.publicationBefore "DD-MM-YYYY")
+              (t "dash")
+            }}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
+          <td>
+            {{if
+              row.publishedAt
+              (moment-format row.publishedAt "DD-MM-YYYY")
+              (t "dash")
+            }}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
+          <td>
+            {{if row.numacNumber row.numacNumber (t "dash")}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
+          <td>
+            {{moment-format row.modified "DD-MM-YYYY"}}<br/>
+            <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
+          </td>
+        {{/if}}
+
+
+        {{#if this.filterTableColumnOptionKeys.lastEditedByFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
+          <td>
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+
+
+        {{#if this.filterTableColumnOptionKeys.signRequestsFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{t "dash"}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{t "dash"}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{#if row.hasPriority}}
+              <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
+              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                <p>
+                  {{t "priority-procedure"}}
+                </p>
+              </EmberTooltip>
+            {{/if}}
+          </td>
+        {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{#if row.remark}}
+              <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
+              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                <p>
+                  {{row.remark}}
+                </p>
+              </EmberTooltip>
+            {{/if}}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
+          <td class="auk-u-text-align--center">
+            {{t "dash"}}
+          </td>
+        {{/if}}
         <td>
           <WebComponents::AuButtonToolbar>
             <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" data-test-publications-button-go-to-publication/>
