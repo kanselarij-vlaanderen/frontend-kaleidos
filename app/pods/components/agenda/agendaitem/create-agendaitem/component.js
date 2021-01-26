@@ -204,43 +204,24 @@ export default Component.extend(DataTableRouteMixin, {
     async addSubcasesToAgenda() {
       this.set('loading', true);
       const {
-        selectedAgenda,
         availableSubcases,
         postponedSubcases,
-        agendaService,
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
 
-      // These counters are needed to set an init counter for the agendaitems that are being added to an empty agenda.
-      let index;
-      let agendaitemCounter = -1;
-      let announcementCounter = -1;
+      for (const subcase of subcasesToAdd) {
+        await this.agendaService.putSubmissionOnAgenda(this.currentSession, (await subcase.submissionActivities).firstObject);
+        // TODO: handle postponed subcase for submissionActivities.firstObject
+      }
 
-      const promise = Promise.all(
-        subcasesToAdd.map(async(subcase) => {
-          if (subcase.selected) {
-            if (subcase.showAsRemark) {
-              announcementCounter++;
-              index = announcementCounter;
-            } else {
-              agendaitemCounter++;
-              index = agendaitemCounter;
-            }
-            return await agendaService.createNewAgendaitem(selectedAgenda, subcase, index);
-          }
-        })
-      );
-
-      promise.then(async() => {
-        this.set('loading', false);
-        this.set('isAddingAgendaitems', false);
-        this.set('sessionService.selectedAgendaitem', null);
-        const anyAddedSubcase = subcasesToAdd.get('firstObject');
-        const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
-        if (this.onCreate) {
-          this.onCreate(newAgendaitem.id);
-        }
-      });
+      this.set('loading', false);
+      this.set('isAddingAgendaitems', false);
+      this.set('sessionService.selectedAgendaitem', null);
+      const anyAddedSubcase = subcasesToAdd.get('firstObject');
+      const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
+      if (this.onCreate) {
+        this.onCreate(newAgendaitem.id);
+      }
     },
   },
 });
