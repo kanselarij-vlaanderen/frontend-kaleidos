@@ -123,15 +123,8 @@ export default Component.extend({
 
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
-      const meetingFromStore = await this.store.findRecord('meeting', meeting.get('id'));
-      const designAgenda = await this.store.findRecord('agenda', (await meetingFromStore.get('latestAgenda')).get('id'));
-      // ensures latest state is pulled
-      await designAgenda.reload();
-      await designAgenda.belongsTo('status').reload();
-      const isDesignAgenda = designAgenda.get('isDesignAgenda');
-      if (isDesignAgenda) {
-        await this.get('agendaService').createNewAgendaitem(designAgenda, subcase);
-      }
+      await this.agendaService.putSubmissionOnAgenda(meeting, (await subcase.submissionActivities).firstObject);
+      // TODO: handle postponed subcase for submissionActivities.firstObject
       this.toggleAllPropertiesBackToDefault();
     },
 
