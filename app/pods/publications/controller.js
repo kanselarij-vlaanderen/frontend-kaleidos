@@ -11,7 +11,6 @@ import search from 'fe-redpencil/utils/mu-search';
 export default class PublicationsController extends Controller {
   @service publicationService;
   @service('-routing') routing;
-
   @tracked isShowingPublicationModal = false; // createPublicationModal ? more accurate
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed = false;
@@ -173,8 +172,10 @@ export default class PublicationsController extends Controller {
 
   @action
   filterModel() {
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.isShowPublicationFilterModal = false;
-    // filter querries schrijven
+    // this.refreshModel();
+    this.send('refreshModel');
   }
 
   @action
