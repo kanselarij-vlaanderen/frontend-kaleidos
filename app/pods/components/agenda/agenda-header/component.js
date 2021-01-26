@@ -24,6 +24,8 @@ import {
 } from 'fe-redpencil/utils/zip-agenda-files';
 import CONFIG from 'fe-redpencil/utils/config';
 import moment from 'moment';
+import agendaitem from '../../../../adapters/agendaitem';
+import { A } from '@ember/array';
 
 export default Component.extend(FileSaverMixin, {
   classNames: ['vlc-page-header'],
@@ -43,14 +45,15 @@ export default Component.extend(FileSaverMixin, {
   isAddingAgendaitems: false,
   isApprovingAgenda: false,
   isDeletingAgenda: false,
-  isLockingAgenda: false,
+  isClosingAgenda: false,
   isShowingAgendaActions: false,
   onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
   onApproveAgenda: null, // argument. Function to execute after approving an agenda.
   isApprovingAllAgendaitems: false,
   isShowingWarningOnClose: false,
-  isReopenAgenda: false,
-  isDeleteCurrentAgenda: false,
+  showWarningForApprovingAgenda: false,
+  showConfirmReopenPreviousAgenda: false,
+  showConfirmDeleteCurrentAgenda: false,
   showApproveAndCloseWarning: false,
 
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
@@ -59,8 +62,9 @@ export default Component.extend(FileSaverMixin, {
   agendas: alias('sessionService.agendas'), // This list is reverse sorted on serialNumber
   selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
+  addedAgendaitems: alias('agendaService.addedAgendaitems'),
 
-  isLockable: computed('agendas.@each', async function() {
+  isSessionClosable: computed('agendas.@each', async function() {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
@@ -94,31 +98,38 @@ export default Component.extend(FileSaverMixin, {
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
 
-  shouldShowLoader: computed('isDeletingAgenda', 'isLockingAgenda', function() {
-    return this.isDeletingAgenda || this.isLockingAgenda;
+  shouldShowLoader: computed('isDeletingAgenda', 'isClosingAgenda', function() {
+    return this.isDeletingAgenda || this.isClosingAgenda;
   }),
 
-  loaderText: computed('isDeletingAgenda', 'isLockingAgenda', function() {
+  loaderText: computed('isDeletingAgenda', 'isClosingAgenda', function() {
     let text = '';
     if (this.isDeletingAgenda) {
       text = this.intl.t('agenda-delete-message');
     }
-    if (this.isLockingAgenda) {
-      text = this.intl.t('agenda-lock-message');
+    if (this.isClosingAgenda) {
+      text = this.intl.t('agenda-close-message');
     }
     return `${text} ${this.intl.t('please-be-patient')}`;
   }),
 
-  loaderTitle: computed('isDeletingAgenda', 'isLockingAgenda', function() {
+  loaderTitle: computed('isDeletingAgenda', 'isClosingAgenda', function() {
     if (this.isDeletingAgenda) {
       return this.intl.t('agenda-delete');
     }
-    if (this.isLockingAgenda) {
-      return this.intl.t('agenda-lock');
+    if (this.isClosingAgenda) {
+      return this.intl.t('agenda-close');
     }
     return '';
   }),
 
+
+  /**
+   * CreateDesignAgenda
+   *
+   * Get the last approved agenda and change te status to approves (from final)
+   * Then approve that agenda using the agenda-approve service which yields a new design agenda
+   */
   async createDesignAgenda() {
     this.changeLoading();
     const session = this.get('currentSession');
@@ -187,7 +198,7 @@ export default Component.extend(FileSaverMixin, {
   },
 
   async lockAgenda(lastAgenda) {
-    this.set('isLockingAgenda', true);
+    this.set('isClosingAgenda', true);
     const meetingOfAgenda = await this.currentAgenda.get('createdFor');
     // Als je deze reload niet doet dan refreshed de interface niet (Ember).
     await meetingOfAgenda.hasMany('agendas').reload();
@@ -201,13 +212,24 @@ export default Component.extend(FileSaverMixin, {
     this.set('sessionService.currentSession.agendas', meetingOfAgenda.agendas);
 
     if (!this.isDestroyed) {
-      this.set('isLockingAgenda', false);
+      this.set('isClosingAgenda', false);
     }
   },
+
+  /**
+   * closeAgenda
+   *
+   * Deze functie gaat de huidige zitting afsluiten. Als er een ontwerpagenda is zal deze verwijderd worden.
+   * De laatst goedgekeurde agenda wordt genomen als finale agenda in deze zitting.
+   * Agendaitems die nieuw waren op deze ontwerpagenda moeten terug agendeerbaar worden (gebeurd in service)
+   * Agendaitems die aanpassingen hebben gekregen (nieuwe docs, andere ministers) gaan verloren door verwijdering, echter bestaan die changes nog op procedurestap
+   * Daarmee omgaan is nog TODO
+   * voorgaande goedgekeurde agenda's mogen hier niet aangepast worden (er moet geen data worden teruggezet in dit geval)
+   */
   async closeAgenda() {
     const isClosable = await this.currentAgenda.get('isClosable');
     if (isClosable) {
-      this.set('isLockingAgenda', true);
+      this.set('isClosingAgenda', true);
       const agendas = await this.get('agendas');
       const designAgenda = agendas
         .filter((agenda) => agenda.get('isDesignAgenda'))
@@ -235,12 +257,13 @@ export default Component.extend(FileSaverMixin, {
         await this.deleteAgenda(designAgenda);
       }
       if (!this.isDestroyed) {
-        this.set('isLockingAgenda', false);
+        this.set('isClosingAgenda', false);
       }
     } else {
       this.set('isShowingWarningOnClose', true);
     }
   },
+
   actions: {
     async removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus() {
       const agendaitemsToRemoveFromCurrentAgenda = await getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus(this.currentAgenda);
@@ -294,27 +317,27 @@ export default Component.extend(FileSaverMixin, {
     },
 
     cancel() {
-      this.set('showWarning', false);
+      this.set('showWarningForApprovingAgenda', false);
       this.set('releasingDecisions', false);
       this.set('releasingDocuments', false);
       this.set('isApprovingAllAgendaitems', false);
     },
 
     verify() {
-      this.set('showWarning', false);
+      this.set('showWarningForApprovingAgenda', false);
     },
 
-    async tryToApproveAgenda(session) {
+    async approveAgendaAction(session) {
       const isApprovable = await this.currentAgenda.get('isApprovable');
       if (!isApprovable) {
-        this.set('showWarning', true);
+        this.set('showWarningForApprovingAgenda', true);
       } else {
         await this.approveAgenda(session);
       }
     },
 
     async doApproveAgenda(session) {
-      set(this, 'showWarning', false);
+      set(this, 'showWarningForApprovingAgenda', false);
       await this.approveAgenda(session);
     },
 
@@ -375,7 +398,7 @@ export default Component.extend(FileSaverMixin, {
       }
     },
 
-    async lockAgendaAction() {
+    async approveAndLockAgendaAction() {
       const isClosable = await this.currentAgenda.get('isClosable');
       const isApproved = await this.currentAgenda.get('isApproved');
       if (isClosable) {
@@ -386,6 +409,35 @@ export default Component.extend(FileSaverMixin, {
         }
       } else {
         this.set('showCloseWarning', true);
+      }
+    },
+    /**
+     * confirmCloseAgenda
+     *
+     * Deze actie gaat de huidige zitting afsluiten. Als er een ontwerpagenda is zal deze verwijderd worden.
+     * De laatst goedgekeurde agenda wordt genomen als finale agenda in deze zitting.
+     * Agendaitems die nieuw waren op deze ontwerpagenda moeten terug agendeerbaar worden (gebeurd in service)
+     * Agendaitems die aanpassingen hebben gekregen (nieuwe docs, andere ministers) gaan verloren door verwijdering, echter bestaan die changes nog op procedurestap
+     * Daarmee omgaan is nog TODO
+     * voorgaande goedgekeurde agenda's mogen hier niet aangepast worden (er moet geen data worden teruggezet in dit geval)
+     */
+    async confirmCloseAgenda() {
+      const isClosable = await this.currentAgenda.get('isClosable');
+      const isApproved = await this.currentAgenda.get('isApproved');
+      if (isClosable) {
+        // All agendaitems are formallyOk
+        if (isApproved) {
+          // last agenda is approved
+          console.log('confirmCloseAgenda isapproved true'); // A, B, alles ok, afsluiten (manueel agenda verwijderd)
+          this.set('isShowingWarningOnClose', true);  // confirm close agenda
+        } else {
+          // last agenda is design (or closed)
+          console.log('confirmCloseAgenda isapproved false');  // A, Bo, alles formeel ok, afsluiten
+          this.set('showCloseWarning', true); // confirm delete designagenda
+        }
+      } else {
+        console.log('confirmCloseAgenda isClosable false'); // A, Bo, iets nog niet formeel ok, afsluiten
+        this.set('showCloseWarning', true);  // warning formal not ok
       }
     },
 
@@ -423,7 +475,7 @@ export default Component.extend(FileSaverMixin, {
       this.compareAgendas();
     },
 
-    addAgendaitems() {
+    addAgendaitemsAction() {
       this.set('isAddingAgendaitems', true);
     },
 
@@ -482,20 +534,20 @@ export default Component.extend(FileSaverMixin, {
       }
     },
 
-    async deleteAgenda(agenda) {
+    async deleteAgendaAction() {
       this.set('isDeletingAgenda', true);
-      await this.deleteAgenda(agenda);
+      await this.deleteAgenda(this.currentAgenda);
       if (!this.isDestroyed) {
         this.set('isDeletingAgenda', false);
       }
     },
 
-    async createNewDesignAgenda() {
+    async createNewDesignAgendaAction() {
       await this.createDesignAgenda();
     },
-    async reopenPreviousAgendaAndDeleteCurrent() {
-      this.set('isDeleteCurrentAgenda', false);
-      this.set('isReopenAgenda', false);
+    async reopenPreviousAgendaAndDeleteCurrentAction() {
+      this.set('showConfirmDeleteCurrentAgenda', false);
+      this.set('showConfirmReopenPreviousAgenda', false);
       this.set('showLoader', true);
       const agendas = await this.get('agendas');
       const designAgenda = agendas
@@ -523,22 +575,22 @@ export default Component.extend(FileSaverMixin, {
       }
 
       if (!this.isDestroyed) {
-        this.set('isLockingAgenda', false);
+        this.set('isClosingAgenda', false);
       }
       this.set('showLoader', false);
     },
-    deleteCurrentAgendaForModal() {
-      this.set('isDeleteCurrentAgenda', true);
+    confirmReopenActionStepDeleteAgenda() {
+      this.set('showConfirmDeleteCurrentAgenda', true);
     },
-    cancelDeleteCurrentAgendaForModal() {
-      this.set('isDeleteCurrentAgenda', false);
+    cancelConfirmReopenActionStepDeleteAgenda() {
+      this.set('showConfirmDeleteCurrentAgenda', false);
     },
-    cancelReopenAgendaForModal() {
-      this.set('isReopenAgenda', false);
+    cancelConfirmReopenActionStepReopenPreviousAgenda() {
+      this.set('showConfirmReopenPreviousAgenda', false);
     },
-    reopenPreviousAgendaForModal() {
-      this.set('isDeleteCurrentAgenda', false);
-      this.set('isReopenAgenda', true);
+    confirmReopenActionStepReopenPreviousAgenda() {
+      this.set('showConfirmDeleteCurrentAgenda', false);
+      this.set('showConfirmReopenPreviousAgenda', true);
     },
     selectSignature() {
       this.toggleProperty('isAssigningSignature', false);
@@ -570,13 +622,51 @@ export default Component.extend(FileSaverMixin, {
     cancelEditSessionForm() {
       this.toggleProperty('editingSession');
     },
+
+    // KAS-2194 new actions
+    async openConfirmApproveAgenda() {
+      // Check if any items are formally NOT ok or NOT YET ok
+      // const agendaitemsFormallyNotOk = await this.currentAgenda.get('agendaitemsFormallyNotOk');
+      // const agendaitemsFormallyNotYetOk = await this.currentAgenda.get('agendaitemsFormallyNotYetOk');
+
+      this.set('showConfirmForApprovingAgenda', true);
+
+      // open a confirmation model, showing a message based on the previous check with consequences
+      // verify triggers the code that will complete the action
+      // await this.approveAgenda(session);
+    },
+
+    async confirmApproveAgenda() {
+      this.set('showConfirmForApprovingAgenda', false);
+      await this.approveCurrentAgenda();
+    },
+
+    cancelApproveAgenda() {
+      this.set('showConfirmForApprovingAgenda', false);
+    },
+
   },
 
   changeLoading() {
     this.loading();
   },
 
-  async approveAgenda(session) {
+  // This is outside of actions, move to local methods
+
+  /**
+   * ApproveAgenda
+   *
+   * This method is going to send the current design agenda to the agenda service for approval
+   * - For new items that were formally not ok, they have to be removed from the approved agenda and the agendaitems on that agenda have to be resorted (do this in service ?)
+   * - For items that have been on previous approved agendas (and not formally ok now), we have to move the changes made to the new agenda
+   * This means rolling back the agendaitem version on the recently approved agenda to match what was approved in the past
+   * Basically we want all info and relationships from the old version, while keeping our id, link to agenda, link to previous and next agendaitems
+   * This should best be done in the approve service, because we want all triples copied.
+   *
+   * @returns
+   */
+  async approveAgenda() {
+    const session = this.get('currentSession');
     if (this.get('isApprovingAgenda')) {
       return;
     }
@@ -613,6 +703,108 @@ export default Component.extend(FileSaverMixin, {
           agendaitemsWithStatusDifferentFromFormallyOkFromNewAgenda.forEach((agendaitem) => {
             agendaitem.set('priority', agendaitem.get('priority') + 9999);
           });
+          await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
+          return newAgenda;
+        })
+        .then((newAgenda) => {
+          if (this.onApproveAgenda) {
+            this.set('sessionService.selectedAgendaitem', null);
+            this.changeLoading();
+            this.set('isApprovingAgenda', false);
+            this.onApproveAgenda(newAgenda.get('id'));
+          }
+        });
+    });
+  },
+
+
+  // KAS-2194  new local stuff
+
+  showConfirmForApprovingAgenda: false,
+
+  /**
+   * approveCurrentAgenda
+   *
+   * This method is going to send the current design agenda to the agenda service for approval
+   * - For new items that were formally not ok, they have to be removed from the approved agenda and the agendaitems on that agenda have to be resorted (do this in service ?)
+   * - For items that have been on previous approved agendas (and not formally ok now), we have to move the changes made to the new agenda
+   * This means rolling back the agendaitem version on the recently approved agenda to match what was approved in the past
+   * Basically we want all info and relationships from the old version, while keeping our id, link to agenda, link to previous and next agendaitems
+   * This should best be done in the approve service, because we want all triples copied.
+   *
+   * @returns
+   */
+  async approveCurrentAgenda() {
+    const session = this.get('currentSession');
+    if (this.get('isApprovingAgenda')) {
+      return; // why do we need this? can you approve another agenda while approving ?
+    }
+    this.set('isApprovingAgenda', true);
+    this.changeLoading();
+    const agendas = await this.get('agendas');
+    let currentDesignAgenda = await agendas.find((agenda) => agenda.get('isDesignAgenda'));
+    if (currentDesignAgenda) {
+      // reload: true ?
+      currentDesignAgenda = await this.store.findRecord('agenda', currentDesignAgenda.get('id'));
+    }
+
+    currentDesignAgenda.set(
+      'modified',
+      moment()
+        .utc()
+        .toDate()
+    );
+    currentDesignAgenda.save().then((agendaToApprove) => {
+      this.get('agendaService')
+        .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
+        .then(async(newAgenda) => {
+          const isEditor = this.currentSessionService.isEditor;
+          // KAS-2194 New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists  DONE
+          // KAS-2194 old agenda: rollback formally NOT / not yet ok items  && remove new formaly NOT / not yet ok items
+
+          // Old agenda: new agendaitems that have been moved to the new agenda must be removed from the old agenda
+          const agendaitemsFromOldAgenda = await currentDesignAgenda.get('agendaitems');
+          const agendaitemsToMove = A([]);
+          const agendaitemsToRollback = A([]);
+          const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromOldAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+          for (agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
+            const previousVersion = await agendaitem.get('previousVersion');
+            if (previousVersion) {
+              agendaitemsToRollback.pushObject(agendaitem);
+            } else {
+              agendaitemsToMove.pushObject(agendaitem);
+            }
+          }
+          await this.reloadAgendaitemsOfSubcases(agendaitemsFromOldAgenda);
+          await this.destroyAgendaitemsList(agendaitemsToMove);
+          await reorderAgendaitemsOnAgenda(currentDesignAgenda, isEditor);
+
+          // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
+          await this.agendaService.rollbackAgendaitemsNotFormallyOk(currentDesignAgenda);
+          for (agendaitem of agendaitemsToRollback) {
+            await agendaitem.reload();
+            // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
+            await agendaitem.hasMany('pieces').reload();
+            await agendaitem.hasMany('treatments').reload();
+            await agendaitem.hasMany('mandatees').reload();
+            await agendaitem.hasMany('approvals').reload();
+            await agendaitem.hasMany('linkedPieces').reload();
+          }
+
+          // New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists on new agenda
+          const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
+          const newagendaitemsToReorder = A([]);
+          const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+          for (agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
+            const previousVersion = await agendaitem.get('previousVersion');
+            if (!previousVersion) {
+              newagendaitemsToReorder.pushObject(agendaitem);
+            }
+          }
+          newagendaitemsToReorder.forEach((agendaitem) => {
+            agendaitem.set('priority', agendaitem.get('priority') + 9999);
+          });
+
           await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
           return newAgenda;
         })

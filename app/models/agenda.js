@@ -54,6 +54,9 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
+  /**
+   * KAS-2194, can you approve and agenda with formal NOT ok ? Would assume that we have to rollback the agendaitem to a previous version in that case
+   */
   isApprovable: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk, CONFIG.formallyNok].includes(agendaitem.get('formallyOk')));
@@ -105,6 +108,44 @@ export default Model.extend(LoadableModel, {
   firstAgendaitem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
+    });
+  }),
+
+  // KAS-2194 new stuff
+
+  agendaitemsFormallyNotOk: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitems').then((agendaitems) => {
+      const agendaitemsFormallyNotOk = agendaitems.filter((agendaitem) => [CONFIG.formallyNok].includes(agendaitem.get('formallyOk')));
+      return agendaitemsFormallyNotOk;
+    });
+  }),
+
+  hasAgendaitemsFormallyNotOk: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitemsFormallyNotOk').length > 0;
+  }),
+
+  agendaitemsFormallyNotYetOk: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitems').then((agendaitems) => {
+      const agendaitemsFormallyNotYetOk = agendaitems.filter((agendaitem) => [CONFIG.notYetFormallyOk].includes(agendaitem.get('formallyOk')));
+      return agendaitemsFormallyNotYetOk;
+    });
+  }),
+
+  hasAgendaitemsFormallyNotYetOk: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitemsFormallyNotYetOk').length > 0;
+  }),
+
+  canBeApproved: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitems').then((agendaitems) => {
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk].includes(agendaitem.get('formallyOk')));
+      return approvedAgendaitems.get('length') === agendaitems.get('length');
+    });
+  }),
+
+  agendaitemsNotOk: computed('agendaitems.@each.formallyOk', function() {
+    return this.get('agendaitems').then((agendaitems) => {
+      const agendaitemsNotOk = agendaitems.filter((agendaitem) => [CONFIG.formallyNok, CONFIG.notYetFormallyOk].includes(agendaitem.get('formallyOk')));
+      return agendaitemsNotOk.sortBy('number');
     });
   }),
 

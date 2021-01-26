@@ -62,6 +62,21 @@ export default Service.extend({
     notifyPropertyChange(agendaToApprove, 'agendaitems');
   },
 
+  async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
+    if (!agendaToRollback) {
+      return agendaToRollback;
+    }
+    // Triggers the agendaApproveService to rollback the not formal ok agendaitems on the agenda.
+    await ajax({
+      method: 'POST',
+      url: '/agenda-approve/rollbackAgendaitemsNotFormallyOk',
+      data: {
+        oldAgendaId: agendaToRollback.id,
+      },
+    });
+    // notifyPropertyChange(agendaToApprove, 'agendaitems');
+  },
+
   async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {
     if (!oldAgenda) {
       return oldAgenda;
