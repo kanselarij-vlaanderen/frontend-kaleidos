@@ -7,8 +7,7 @@
         @isLoading={{this.isLoadingModel}}
         @onClickRow={{this.navigateToPublication}}
         @class="auk-table auk-table--disable-bottom-border"
-        as |table|
->
+        as |table|>
   <table.content as |c|>
     <c.header>
       <th>{{t "agendaitem-case"}}</th>
@@ -36,15 +35,6 @@
     <c.body class="tr-hover" as |row|>
       <td>
         {{row.case.shortTitle}}
-        {{# if (await row.case.hasBvr)}}
-          <br>
-          <span class="auk-u-muted auk-u-text-small">{{t "decreet"}}</span>
-        {{/if}}
-
-        {{# if (await row.case.hasDecreet)}}
-          <br>
-          <span class="auk-u-muted auk-u-text-small">{{t "BvR"}}</span>
-        {{/if}}
       </td>
       <td>
         {{row.publicationNumber}}

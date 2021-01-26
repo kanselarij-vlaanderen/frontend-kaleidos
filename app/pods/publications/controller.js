@@ -18,6 +18,32 @@ export default class PublicationsController extends Controller {
   @tracked showSearchResults = false;
   @tracked searchResults;
   @tracked showLoader = false;
+  @tracked isShowPublicationFilterModal = false;
+
+
+  get ministerFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.minister'));
+  }
+
+  get notMinisterFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.notMinister'));
+  }
+
+  get publishedFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.published'));
+  }
+
+  get toPublishFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.toPublish'));
+  }
+
+  get pausedFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.paused'));
+  }
+
+  get withdrawnFilterOption() {
+    return JSON.parse(localStorage.getItem('filterOptions.withdrawn'));
+  }
 
   @tracked
   publication = {
@@ -75,10 +101,6 @@ export default class PublicationsController extends Controller {
     return null;
   }
 
-  get shouldShowPublicationHeader() {
-    return !this.routing.currentRouteName.startsWith('publications.publication');
-  }
-
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
@@ -125,6 +147,20 @@ export default class PublicationsController extends Controller {
     this.isShowingPublicationModal = true;
   }
 
+  @action
+  showFilterModal() {
+    this.isShowPublicationFilterModal = true;
+  }
+
+  @action
+  closeFilterModal() {
+    this.isShowPublicationFilterModal = false;
+  }
+
+  get shouldShowPublicationHeader() {
+    return this.routing.currentRouteName.startsWith('publications.index');
+  }
+
   resetPublication() {
     this.publication = {
       number: null,
@@ -132,5 +168,45 @@ export default class PublicationsController extends Controller {
       longTitle: null,
     };
     this.hasError = false;
+  }
+
+  @action
+  resetModelFilterOptions() {
+    console.log('Filter options');
+    localStorage.removeItem('filterOptions.minister');
+    localStorage.removeItem('filterOptions.notMinister');
+    localStorage.removeItem('filterOptions.published');
+    localStorage.removeItem('filterOptions.toPublish');
+    localStorage.removeItem('filterOptions.paused');
+    localStorage.removeItem('filterOptions.withdrawn');
+  }
+
+  @action
+  filterModel() {
+    console.log('Filter model');
+  }
+
+  @action
+  toggleFilterOption(event) {
+    switch (event.target.name) {
+      case 'ministerFilterOption':
+        localStorage.setItem('filterOptions.minister', !this.ministerFilterOption);
+        break;
+      case 'notMinisterFilterOption':
+        localStorage.setItem('filterOptions.notMinister', !this.notMinisterFilterOption);
+        break;
+      case 'publishedFilterOption':
+        localStorage.setItem('filterOptions.published', !this.publishedFilterOption);
+        break;
+      case 'toPublishFilterOption':
+        localStorage.setItem('filterOptions.toPublish', !this.toPublishFilterOption);
+        break;
+      case 'pausedFilterOption':
+        localStorage.setItem('filterOptions.paused', !this.pausedFilterOption);
+        break;
+      case 'withdrawnFilterOption':
+        localStorage.setItem('filterOptions.withdrawn', !this.withdrawnFilterOption);
+        break;
+    }
   }
 }
