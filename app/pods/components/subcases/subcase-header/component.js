@@ -54,7 +54,7 @@ export default Component.extend({
       .subtract(1, 'weeks')
       .format();
     const futureDate = moment().utc()
-      .add(6, 'weeks')
+      .add(20, 'weeks')
       .format();
 
     return this.store.query('meeting', {
@@ -123,8 +123,11 @@ export default Component.extend({
 
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
-      await this.agendaService.putSubmissionOnAgenda(meeting, (await subcase.submissionActivities).firstObject);
-      // TODO: handle postponed subcase for submissionActivities.firstObject
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        'filter[subcase][:id:]': subcase.id,
+        'filter[:has-no:agenda-activity]': true,
+      });
+      await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivity);
       this.toggleAllPropertiesBackToDefault();
     },
 

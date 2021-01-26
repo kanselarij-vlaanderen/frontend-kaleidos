@@ -208,10 +208,12 @@ export default Component.extend(DataTableRouteMixin, {
         postponedSubcases,
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
-
       for (const subcase of subcasesToAdd) {
-        await this.agendaService.putSubmissionOnAgenda(this.currentSession, (await subcase.submissionActivities).firstObject);
-        // TODO: handle postponed subcase for submissionActivities.firstObject
+        const submissionActivity = await this.store.queryOne('submission-activity', {
+          'filter[subcase][:id:]': subcase.id,
+          'filter[:has-no:agenda-activity]': true,
+        });
+        await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivity);
       }
 
       this.set('loading', false);
