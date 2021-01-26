@@ -1,8 +1,36 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsIndexController extends Controller {
+  @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
+    || {
+      caseNameFilterOption: false,
+      publicationNumberFilterOption: false,
+      derivedPublicationTypeFilterOption: false,
+      onMeetingFilterOption: false,
+      longTitleFilterOption: false,
+      requestedPublicationDateFilterOption: false,
+      finalPublicationDateFilterOption: false,
+      publicationDateFilterOption: false,
+      numacNuberBsFilterOption: false,
+      caseManagerFilterOption: false,
+      lastEditedFilterOption: false,
+      lastEditedByFilterOption: false,
+      withdrawnDateFilterOption: false,
+      pauseDateFilterOption: false,
+      translateRequestsFilterOption: false,
+      signRequestsFilterOption: false,
+      publishPreviewRequestsFilterOption: false,
+      speedProcedureFilterOption: false,
+      commentFilterOption: false,
+      fromDesignAgendaFilterOption: false,
+    };
+
+  @tracked showFilterTableModal = false;
   queryParams = {
     page: {
       type: 'number',
@@ -29,5 +57,23 @@ export default class PublicationsIndexController extends Controller {
   @action
   navigateToPublication(publicationFlowRow) {
     this.transitionToRoute('publications.publication', publicationFlowRow.get('id'));
+  }
+
+  @action
+  filterTables() {
+    this.showFilterTableModal = true;
+  }
+
+  @action
+  closeFilterTableModal() {
+    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
+    this.showFilterTableModal = false;
+  }
+
+  @action
+  toggleFilterOption(event) {
+    const tempArr = this.get('filterTableColumnOptionKeys');
+    set(tempArr, event.target.name, !tempArr[event.target.name]);
+    this.set('filterTableColumnOptionKeys', tempArr);
   }
 }
