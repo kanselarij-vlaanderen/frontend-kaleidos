@@ -49,6 +49,10 @@ $c-toolbar-middle-z: 20;
   }
 }
 
+.vlc-toolbar__item__width {
+  width: 60%;
+}
+
 .vlc-toolbar__right {
   z-index: $c-toolbar-z; // Left and right should have higher z-index than center; if the elements overlap, there is a bigger chance we can still tap the action most likely contained on the left or right end
   max-width: 100%;
