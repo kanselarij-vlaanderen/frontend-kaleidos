@@ -87,9 +87,21 @@
     {{#if this.isShowingDocuments}}
       <div class="vl-accordion__panel">
         <div class="auk-u-mt-4">
-          {{utils/pieces-list-for-item agendaitemOrSubcase=@subcase isClickable=true}}
+          <Documents::DocumentBadgeList @pieces={{this.limitedSubcaseDocuments}}/>
         </div>
       </div>
+      {{#if this.enableShowMore}}
+        <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
+          <i class="{{if this.isShowingAllDocuments "ki-remove" "ki-plus"}} vl-icon vlc-document-show-more-button__icon "/>
+          <p  class="vlc-document-show-more-button__text">
+            {{#if this.isShowingAllDocuments }}
+              {{t "show-less"}}
+            {{else}}
+              {{t "show-more"}}
+            {{/if}}
+          </p>
+        </button>
+      {{/if}}
     {{/if}}
   {{/if}}
 </div>
