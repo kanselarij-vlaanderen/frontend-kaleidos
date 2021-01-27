@@ -23,7 +23,7 @@
           @onCloseEdit={{this.disablePieceEdit}}
         />
       {{else}}
-        <Documents::DocumentList
+        <Documents::DocumentCardList
           @pieces={{this.model.pieces}}
           @onAddPiece={{perform this.addPiece}}
           @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}

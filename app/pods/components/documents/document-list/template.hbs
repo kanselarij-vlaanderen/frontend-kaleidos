@@ -1,17 +1,3 @@
 <div {{did-update (perform this.groupDocumentsByContainer) this.documents}}>
-  {{#each this.latestDocuments as |doc|}}
-    <Documents::DocumentCard
-      @documentContainer={{doc.documentContainer}}
-      @lastPiece={{doc}}
-      @didDeletePiece={{@didDeletePiece}}
-      @didDeleteContainer={{@didDeleteContainer}}
-      @onOpenUploadModal={{@onOpenUploadModal}}
-      @onAddPiece={{@onAddPiece}} />
-  {{else}}
-    {{#if this.groupDocumentsByContainer.lastSuccessful}}
-      <div class="auk-u-mt-2">
-        <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-      </div>
-    {{/if}}
-  {{/each}}
+  {{yield this.latestDocuments}}
 </div>
