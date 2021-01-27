@@ -35,9 +35,7 @@ export default Model.extend({
   subcase: belongsTo('subcase', {
     inverse: null,
   }),
-  agendaitem: belongsTo('agendaitem', {
-    inverse: null,
-  }),
+
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
@@ -45,7 +43,14 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  cases: hasMany('case'),
+  cases: hasMany('case', {
+    inverse: null,
+  }),
+  // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
+  agendaitems: hasMany('agendaitem', {
+    serialize: false,
+    inverse: null,
+  }),
 
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
