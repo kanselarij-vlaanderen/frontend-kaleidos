@@ -1,6 +1,6 @@
 <div class="auk-u-m-8">
   {{#each @subcases as |subcase|}}
-    {{#subcases/subcase-item subcase=subcase}}
+    <Subcases::SubcaseItem @subcase={{subcase}}>
       <hr class="vlc-hr"/>
       <div class="auk-u-mb-2">
         <p class="vlc-subline">
@@ -17,6 +17,6 @@
           {{subcase.title}}
         </p>
       </div>
-    {{/subcases/subcase-item}}
+    </Subcases::SubcaseItem>
   {{/each}}
 </div>
