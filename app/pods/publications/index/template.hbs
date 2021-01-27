@@ -1,14 +1,14 @@
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
   <DataTable
-          @content={{this.model}}
-          @page={{this.page}}
-          @noDataMessage={{t "no-results-found"}}
-          @size={{this.size}}
-          @sort={{this.sort}}
-          @isLoading={{this.isLoadingModel}}
-          @onClickRow={{this.navigateToPublication}}
-          @class="auk-table auk-table--disable-bottom-border"
-          as |table|>
+    @content={{this.model}}
+    @page={{this.page}}
+    @noDataMessage={{t "no-results-found"}}
+    @size={{this.size}}
+    @sort={{this.sort}}
+    @isLoading={{this.isLoadingModel}}
+    @onClickRow={{this.navigateToPublication}}
+    @class="auk-table auk-table--disable-bottom-border"
+    as |table|>
     <table.content as |c|>
       <c.header>
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
@@ -17,7 +17,7 @@
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="publicationNumber"
+            @field="publication-number"
             @label={{t "publications-table-publication-number"}}
           />
         {{/if}}
@@ -39,19 +39,10 @@
           <th>{{t "publications-table-on-meeting"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-title-subcase"}}
-          />
-        {{/if}}
-
-
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field="publishBefore"
             @label={{t "publications-table-requested-publication-date"}}
           />
         {{/if}}
@@ -59,7 +50,7 @@
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field=""
             @label={{t "publications-table-final-publication-date"}}
           />
         {{/if}}
@@ -67,7 +58,7 @@
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field="publishedAt"
             @label={{t "publications-table-publication-date"}}
           />
         {{/if}}
@@ -83,7 +74,7 @@
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field="modified"
             @label={{t "publications-table-last-edited"}}
           />
         {{/if}}
@@ -95,7 +86,7 @@
         {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field=""
             @label={{t "publications-table-withdrawn-date"}}
           />
         {{/if}}
@@ -103,7 +94,7 @@
         {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
-            @field="title"
+            @field=""
             @label={{t "publications-table-pause-date"}}
           />
         {{/if}}
@@ -160,11 +151,6 @@
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
           <td>
             {{t "dash"}}
-          </td>
-        {{/if}}
-        {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
-          <td>
-            {{row.case.title}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
@@ -308,7 +294,6 @@
                 <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="derivedPublicationTypeFilterOption" @label={{t "publications-table-derived-publicationtype"}} @checked={{this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="longTitleFilterOption" @label={{t "publications-table-title-subcase"}} @checked={{this.filterTableColumnOptionKeys.longTitleFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="finalPublicationDateFilterOption" @label={{t "publications-table-final-publication-date"}} @checked={{this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="publicationDateFilterOption" @label={{t "publications-table-publication-date"}} @checked={{this.filterTableColumnOptionKeys.publicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>

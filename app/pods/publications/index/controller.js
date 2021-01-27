@@ -12,7 +12,6 @@ export default class PublicationsIndexController extends Controller {
       publicationNumberFilterOption: true,
       derivedPublicationTypeFilterOption: true,
       onMeetingFilterOption: true,
-      longTitleFilterOption: true,
       requestedPublicationDateFilterOption: true,
       finalPublicationDateFilterOption: true,
       publicationDateFilterOption: true,
