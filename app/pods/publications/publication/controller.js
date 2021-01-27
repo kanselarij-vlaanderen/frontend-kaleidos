@@ -24,6 +24,7 @@ export default class PublicationController extends Controller {
   @tracked collapsed = !this.get('media.isBigScreen');
   @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
+  @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
 
 
@@ -83,6 +84,13 @@ export default class PublicationController extends Controller {
   }
 
   get getPublicationBeforeDate() {
+    if (!this.model.publicationFlow.get('publishBefore')) {
+      return null;
+    }
+    return this.model.publicationFlow.get('publishBefore');
+  }
+
+  get getRequestedPublicationDate() {
     if (!this.model.publicationFlow.get('publishBefore')) {
       return null;
     }
@@ -207,6 +215,12 @@ export default class PublicationController extends Controller {
         });
       this.publicationNotAfterTranslationForPublication = false;
     }
+  }
+
+  @action
+  setRequestedPublicationDate(event) {
+    this.model.publicationFlow.set('publishDateRequested', new Date(event));
+    this.model.publicationFlow.save();
   }
 
   @action
