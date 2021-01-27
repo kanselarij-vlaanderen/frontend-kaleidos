@@ -7,7 +7,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     let pieces = await this.store.query('piece', {
-      'filter[agendaitem][:id:]': agendaitem.id,
+      'filter[agendaitems][:id:]': agendaitem.id,
       'page[size]': 500, // TODO add pagination when sorting is done in the backend
       include: 'document-container',
     });

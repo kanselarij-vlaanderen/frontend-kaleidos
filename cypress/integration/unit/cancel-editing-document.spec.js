@@ -323,6 +323,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
 
     cy.log('uploadFileToCancel 4');
+    cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
     cy.get(modal.baseModal.dialogWindow).within(() => {
       cy.get(form.formSave).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -339,6 +340,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.wait('@patchAgendaitem', {
         timeout: 12000,
       });
+      cy.wait('@loadPiecesAgendaitemQuater');
     });
 
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
