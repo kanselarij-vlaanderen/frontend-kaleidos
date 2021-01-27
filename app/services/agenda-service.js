@@ -148,9 +148,10 @@ export default Service.extend({
     const agendaActivity = await this.store.createRecord('agenda-activity', {
       startDate: now,
       subcase,
-      submissionActivities: [submissionActivity],
     });
     await agendaActivity.save();
+    submissionActivity.set('agendaActivity', agendaActivity);
+    await submissionActivity.save();
 
     // load code-list item
     const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
