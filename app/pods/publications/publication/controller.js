@@ -91,10 +91,10 @@ export default class PublicationController extends Controller {
   }
 
   get getRequestedPublicationDate() {
-    if (!this.model.publicationFlow.get('publishBefore')) {
+    if (!this.model.publicationFlow.get('publishDateRequested')) {
       return null;
     }
-    return this.model.publicationFlow.get('publishBefore');
+    return this.model.publicationFlow.get('publishDateRequested');
   }
 
   get getPublicationDate() {

@@ -18,6 +18,11 @@
       }}
       {{th-sortable
         currentSorting=this.sort
+        field="publishDateRequested"
+        label=(t "publication-date-requested")
+      }}
+      {{th-sortable
+        currentSorting=this.sort
         field="publishBefore"
         label=(t "publication-before")
       }}
@@ -38,6 +43,13 @@
       </td>
       <td>
         {{row.publicationNumber}}
+      </td>
+      <td>
+        {{#if row.publishDateRequested}}
+          {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+        {{else}}
+          {{t "dash"}}
+        {{/if}}
       </td>
       <td>
         {{#if row.publicationBefore}}
