@@ -37,7 +37,7 @@
             type="number"
             value=meetingNumber
             input=(action "meetingNumberChangedAction" meetingNumber)
-            width="2"
+            class="auk-input--w-medium"
           }}
         {{/unless}}
         <div class="vlc-new-session vlc-new-session__flex">
@@ -59,8 +59,7 @@
           {{web-components/vl-form-input
             data-test-meeting-formattedMeetingIdentifier-edit-value
             value=formattedMeetingIdentifier
-            width="2"
-            class="vlc-new-session__meetingNumberPrefix__container"
+            class="vlc-new-session__meetingNumberPrefix__container auk-input--w-medium"
           }}
           {{web-components/vl-save-button
             text=(t "save")
@@ -74,7 +73,7 @@
     <div class="auk-u-mb-2">
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "meeting-location")}}
-        {{web-components/vl-form-input width="4" value=extraInfo}}
+        {{web-components/vl-form-input value=extraInfo}}
       </div>
     </div>
   {{/unless}}
