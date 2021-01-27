@@ -53,6 +53,24 @@
       </td>
 
       <td>
+        {{#if (gt (await row.translationRequestsTotal) 0)}}
+          {{#if
+            (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
+          }}
+            <WebComponents::AuStatusPill @status="done">
+              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{else}}
+            <WebComponents::AuStatusPill @status="in-progress">
+              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+            </WebComponents::AuStatusPill>
+          {{/if}}
+        {{else}}
+          {{t "dash"}}
+        {{/if}}
+      </td>
+
+      <td>
         {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
           {{#if
             (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
@@ -70,23 +88,6 @@
         {{/if}}
       </td>
 
-      <td>
-        {{#if (gt (await row.translationRequestsTotal) 0)}}
-          {{#if
-            (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
-          }}
-            <WebComponents::AuStatusPill @status="done">
-              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
-            </WebComponents::AuStatusPill>
-          {{else}}
-            <WebComponents::AuStatusPill @status="in-progress">
-              {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
-            </WebComponents::AuStatusPill>
-          {{/if}}
-        {{else}}
-          {{t "dash"}}
-        {{/if}}
-      </td>
       <td class="auk-u-text-align--center">
         {{#if row.hasPriority}}
           <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
