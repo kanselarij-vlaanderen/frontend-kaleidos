@@ -1,3 +1,6 @@
+{{ page-title
+  (concat (t "publication-flow") " " this.model.publicationFlow.publicationNumber " - "  (t "translation-requests") )
+}}
 <div class="auk-u-m-2">
   {{#if (gt this.activities.length 0)}}
     {{#each this.activities as |activity|}}
