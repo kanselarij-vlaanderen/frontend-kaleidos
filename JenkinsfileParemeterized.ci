@@ -1,0 +1,116 @@
+def getBranchName(branch) {
+  return branch.replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
+}
+
+pipeline {
+    agent any
+
+    environment {
+        branch = getBranchName("${env.GIT_BRANCH}")
+        project = "Kaleidos"
+        appName = "${env.JOB_NAME - ~/\/.*/}"
+        version = "${branch}-${env.BUILD_NUMBER}"
+        projectName = "${project}--${appName}--${version}"
+        HOME = "${WORKSPACE}"
+        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+    }
+    stages {
+        stage('DEBUG') {
+                    steps {
+                        sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                        sh "echo BUILDING BACKEND BRANCH"
+                        sh "echo ${env.backendbranch}"
+                        sh "echo BUILDING FRONTEND BRANCH"
+                        sh "echo ${env.frontendbranch}"
+                    }
+                }
+        stage('Linting') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                sh "npm install"
+                sh "npx npm-run-all lint:hbs lint:js"
+            }
+        }
+        stage('Checkout project') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                sh "cp .dist.env .env"
+                sh "rm -rf kaleidos-project 2> /dev/null"
+                sh "git clone -b ${env.BACKENDBRANCH} https://github.com/kanselarij-vlaanderen/kaleidos-project.git"
+            }
+        }
+        stage('Prepare for automated tests') {
+            steps {
+                sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
+                sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
+
+                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data && chmod 1777 -R data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
+
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 1777 /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T musearch chmod 1777 -R /data"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T file-bundling-service chmod 777 -R /share"
+
+                sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
+
+                // Wait for elasticsearch to have cerated the indices and stuff.
+                sh "sleep 45"
+
+                // Reset the contents of DB an search
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch  musearch"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file cache resource yggdrasil migrations-service"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata"
+                sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
+                sh "cd ${WORKSPACE}/kaleidos-project && chmod 1777 -R data"
+                sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
+                sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
+
+                // up te system
+                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d"
+
+                // Wait for indexation.
+                sh "sleep 60"
+            }
+        }
+        stage('Automated tests: Cypress') {
+            steps {
+                 // sh "npx cypress run"
+                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p  ${projectName} exec -T e2e-electron cypress run"
+            }
+        }
+
+    }
+
+    post {
+        always {
+            sh "mkdir ${WORKSPACE}/reports"
+            sh "mkdir ${WORKSPACE}/reports/cypress_screenshots/"
+            sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
+            sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+
+            // Cypress reports and screenshots
+
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+        }
+        success {
+            rocketSend channel: 'kaleidosbuilds', message: "Build SUCCESS - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'green', avatar: 'https://github.com/fluidicon.png'
+        }
+        unstable {
+            rocketSend channel: 'kaleidosbuilds', message: "Build UNSTABLE - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'orange', avatar: 'https://github.com/fluidicon.png'
+        }
+        failure {
+            rocketSend channel: 'kaleidosbuilds', message: "Build FAILED - ${projectName}  (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'red',avatar: 'https://github.com/fluidicon.png'
+        }
+
+        cleanup {
+          sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
+          sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} down -v"
+          sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} rm -f"
+          sh "docker network prune -f"
+          cleanWs()
+        }
+    }
+}
