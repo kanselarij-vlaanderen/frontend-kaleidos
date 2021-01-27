@@ -17,7 +17,7 @@ export default class PublicationFlow extends Model {
   @attr('datetime') created;
   @attr('datetime') modified;
 
-
+  // Services.
   @service publicationService;
 
   // Belongs To.
@@ -34,10 +34,6 @@ export default class PublicationFlow extends Model {
   @computed('priority')
   get hasPriority() {
     return this.priority > 0;
-  }
-
-  get activitiesTotals() {
-    return this.publicationService.getPublicationCounts(this.id).then((totals) => totals);
   }
 
   get translationRequestsTotal() {
