@@ -3,8 +3,10 @@ import { action } from '@ember/object';
 import moment from 'moment';
 import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class PublicationTranslationController extends Controller {
+  @service publicationService;
   @tracked showLoader = false;
 
   get activities() {
@@ -18,6 +20,10 @@ export default class PublicationTranslationController extends Controller {
     translationActivity.status = withDrawnStatus;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     this.model.refreshAction();
     this.showLoader = false;
   }
@@ -29,6 +35,10 @@ export default class PublicationTranslationController extends Controller {
     translationActivity.status = closedStatus;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     this.model.refreshAction();
     this.showLoader = false;
   }

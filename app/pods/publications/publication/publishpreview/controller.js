@@ -12,6 +12,7 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
+  @service publicationService;
   @service subcasesService;
   @service fileService;
 
@@ -282,6 +283,10 @@ export default class PublicationPublishPreviewController extends Controller {
     previewActivity.status = withDrawnStatus;
     previewActivity.endDate = moment().utc();
     await previewActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     this.model.refreshAction();
     this.showLoader = false;
   }
@@ -293,6 +298,10 @@ export default class PublicationPublishPreviewController extends Controller {
     previewActivity.status = closedStatus;
     previewActivity.endDate = moment().utc();
     await previewActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     this.model.refreshAction();
     this.showLoader = false;
   }
@@ -308,6 +317,10 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.status = withDrawnStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
@@ -324,6 +337,10 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.status = closedStatus;
         publishingActivity.endDate = moment().utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
