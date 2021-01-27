@@ -15,79 +15,79 @@
           <th>{{t "publications-table-case-name"}}</th>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-publication-number")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="publicationNumber"
+            @label={{t "publications-table-publication-number"}}
+          />
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <th>{{t "publications-table-derived-publicationtype"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-on-meeting")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="publicationNumber"
+            @label={{t "publications-table-on-meeting"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-title-subcase")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-title-subcase"}}
+          />
         {{/if}}
 
 
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-requested-publication-date")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-requested-publication-date"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-final-publication-date")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-final-publication-date"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-publication-date")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-publication-date"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-numacnummer-bs")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-numacnummer-bs"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-case-manager")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-case-manager"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-last-edited")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-last-edited"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.lastEditedByFilterOption}}
@@ -95,19 +95,19 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-withdrawn-date")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-withdrawn-date"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-pause-date")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-pause-date"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
@@ -123,27 +123,27 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-speed-procedure")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-speed-procedure"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-comment")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-comment"}}
+          />
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
-          {{th-sortable
-            currentSorting=this.sort
-            field="publicationNumber"
-            label=(t "publications-table-from-designagenda")
-          }}
+          <ThSortable
+            @currentSorting={{this.sort}}
+            @field="title"
+            @label={{t "publications-table-from-designagenda"}}
+          />
         {{/if}}
         <th>
           <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
@@ -178,7 +178,7 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
           <td>
-            {{t "dash"}}
+            {{row.case.title}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
@@ -306,9 +306,9 @@
 {{#if showFilterTableModal}}
   <WebComponents::AuModal data-test-au-modal-publication-new>
     <WebComponents::AuModal::Header
-            @size="medium"
-            @title={{t "publications-setting-show-columns-modal-title"}}
-            @closeModal={{this.closeFilterTableModal}}
+      @size="medium"
+      @title={{t "publications-setting-show-columns-modal-title"}}
+      @closeModal={{this.closeFilterTableModal}}
     />
     <WebComponents::AuModal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--grid">
