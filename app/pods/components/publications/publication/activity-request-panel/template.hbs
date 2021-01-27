@@ -15,7 +15,7 @@
             <h4 class="auk-toolbar-complex__title">
               {{#if (await @activity.isWithdrawn) }}
                 {{t "cancelled-request"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
-              {{else if (await @activity.isFinished) }}
+              {{else if (await @activity.endDate) }}
                 {{t "finished"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
               {{else if (await @activity.wasPublished)}}
                 {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
@@ -25,15 +25,16 @@
             </h4>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-
         <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuCheckbox
-                    @toggle={{@finishedToggle}}
-                    @label="Afgewerkt"
-                    @checked={{await @activity.isFinished}}
-            />
-          </WebComponents::AuToolbar::Item>
+          {{#if (not (await @activity.isWithdrawn)) }}
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuCheckbox
+                      @toggle={{@finishedToggle}}
+                      @label="Afgewerkt"
+                      @checked={{this.checked}}
+              />
+            </WebComponents::AuToolbar::Item>
+          {{/if}}
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
             </WebComponents::AuButton>
@@ -46,9 +47,11 @@
                     @placement="bottom"
             >
               <WebComponents::AuDropdown>
-                <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
-                  {{t "cancel-request"}}
-                </WebComponents::AuDropdown::Item>
+                {{#if (and (not this.checked) ( not (await @activity.isWithdrawn)))}}
+                  <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
+                    {{t "cancel-request"}}
+                  </WebComponents::AuDropdown::Item>
+                {{/if}}
                 <WebComponents::AuDropdown::Item>
                   {{t "download-documents"}}
                 </WebComponents::AuDropdown::Item>
