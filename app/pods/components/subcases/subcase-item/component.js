@@ -1,17 +1,5 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
 
-export default Component.extend({
-  classNames: ['vlc-procedure-step'],
-  classNameBindings: ['getClassNames'],
+export default class SubcaseItemSubcasesComponent extends Component {
 
-  getClassNames: computed('isMinimal', function() {
-    const {
-      isMinimal,
-    } = this;
-    if (isMinimal) {
-      return 'vlc-procedure-step--minimal';
-    }
-    return null;
-  }),
-});
+}
