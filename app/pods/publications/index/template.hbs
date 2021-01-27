@@ -1,4 +1,3 @@
-{{ page-title (t "publications") }}
 <DataTable
         @content={{this.model}}
         @page={{this.page}}
@@ -8,8 +7,7 @@
         @isLoading={{this.isLoadingModel}}
         @onClickRow={{this.navigateToPublication}}
         @class="auk-table auk-table--disable-bottom-border"
-        as |table|
->
+        as |table|>
   <table.content as |c|>
     <c.header>
       <th>{{t "agendaitem-case"}}</th>
@@ -37,15 +35,6 @@
     <c.body class="tr-hover" as |row|>
       <td>
         {{row.case.shortTitle}}
-        {{# if (await row.case.hasBvr)}}
-          <br>
-          <span class="auk-u-muted auk-u-text-small">{{t "decreet"}}</span>
-        {{/if}}
-
-        {{# if (await row.case.hasDecreet)}}
-          <br>
-          <span class="auk-u-muted auk-u-text-small">{{t "BvR"}}</span>
-        {{/if}}
       </td>
       <td>
         {{row.publicationNumber}}
@@ -61,7 +50,6 @@
         {{moment-format row.modified "DD-MM-YYYY"}}<br/>
         <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
       </td>
-
       <td>
         {{t "dash"}}
         {{!-- {{#if row.translationStatus.[0].initiated}}
