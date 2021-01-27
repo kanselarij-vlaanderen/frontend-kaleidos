@@ -22,15 +22,21 @@
           />
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
-          <th>{{t "publications-table-derived-publicationtype"}}</th>
+          <th>
+            <span class="auk-u-mr">
+              {{t "publications-table-derived-publicationtype"}}
+              <WebComponents::AuIcon @name="circle-info"/>
+              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                <p>
+                  {{t "publications-table-derived-publicationtype-info"}}
+                </p>
+              </EmberTooltip>
+            </span>
+          </th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publicationNumber"
-            @label={{t "publications-table-on-meeting"}}
-          />
+          <th>{{t "publications-table-on-meeting"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.longTitleFilterOption}}
@@ -67,19 +73,11 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-numacnummer-bs"}}
-          />
+          <th>{{t "publications-table-numacnummer-bs"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-case-manager"}}
-          />
+          <th>{{t "publications-table-case-manager"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
@@ -123,27 +121,15 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-speed-procedure"}}
-          />
+          <th>{{t "publications-table-speed-procedure"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-comment"}}
-          />
+          <th>{{t "publications-table-comment"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="title"
-            @label={{t "publications-table-from-designagenda"}}
-          />
+          <th>{{t "publications-table-from-designagenda"}}</th>
         {{/if}}
         <th>
           <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
@@ -221,7 +207,9 @@
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
           <td>
             {{moment-format row.modified "DD-MM-YYYY"}}<br/>
-            <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
+            <span class="auk-u-text-small auk-u-muted">
+              {{moment-format row.modified "HH:mm"}}
+            </span>
           </td>
         {{/if}}
 

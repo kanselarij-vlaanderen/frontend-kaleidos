@@ -769,5 +769,6 @@
   "publications-table-speed-procedure" : "Spoedprocedure",
   "publications-table-comment" : "Opmerking",
   "publications-setting-show-columns-modal-title" : "Weergave instellingen",
-  "publications-table-from-designagenda" : "Uit ontwerpagenda"
+  "publications-table-from-designagenda" : "Uit ontwerpagenda",
+  "publications-table-derived-publicationtype-info": "Wordt afgeleid op basis van de documenten binnen de publicatie"
 }
