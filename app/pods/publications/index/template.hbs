@@ -54,7 +54,9 @@
 
       <td>
         {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-          {{#if (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal)) }}
+          {{#if
+            (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
+          }}
             <WebComponents::AuStatusPill @status="done">
               {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
             </WebComponents::AuStatusPill>
@@ -70,7 +72,9 @@
 
       <td>
         {{#if (gt (await row.translationRequestsTotal) 0)}}
-          {{#if (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal)) }}
+          {{#if
+            (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
+          }}
             <WebComponents::AuStatusPill @status="done">
               {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
             </WebComponents::AuStatusPill>
