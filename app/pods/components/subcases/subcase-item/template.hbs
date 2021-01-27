@@ -60,7 +60,7 @@
       </div>
     </div>
   </div>
-  {{yield}}
+  {{yield @subcase}}
   {{#if (gt (await @subcase.pieces.length) 1)}}
     <div class="js-vl-accordion">
       <button class="vl-toggle vl-link vl-link--bold"

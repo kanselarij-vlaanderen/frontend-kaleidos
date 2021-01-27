@@ -9,7 +9,7 @@
   {{web-components/vl-loader text=(t "all-subcases-loading-text")}}
 {{else if @subcases.length}}
   {{#each @subcases as |subcase|}}
-    <Subcases::SubcaseItem @subcase={{await subcase}}>
+    <Subcases::SubcaseItem @subcase={{await subcase}} as |subcase|>
       <hr class="vlc-hr"/>
       <div class="auk-u-mb-4">
         <p>
