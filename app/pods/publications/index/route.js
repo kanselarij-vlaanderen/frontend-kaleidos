@@ -1,18 +1,80 @@
-import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
-export default class IndexPublicationRoute extends Route.extend(AuthenticatedRouteMixin)  {
-  beforeModel() {
-    /* It is assumed here that explicitly navigating to the index-route
-     * expresses a desire to "reset", to "start a new search-session".
-     * Therefore all parameters except filters -such as "type" of agenda-item- are cleared.
-     * We assume that those (checkbox-like) filters are specific to the user/session
-     * and therefore are desired to be persisted. */
-    /* TODO: If you go through this transition when already in a search (sub-) route, the queryParams
-     * in the url get reset as requested, but you don't go through the model/setupController-hook
-     * of the "search" route, even though the queryParams are marked `refreshModel: true`.
-     * As a result "searchTextBuffer" doesn't get cleared.
-     */
-    this.transitionTo('publications.in-progress');
+
+export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
+  async model(params) {
+    const filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
+      || {
+        ministerFilterOption: false,
+        notMinisterFilterOption: false,
+        publishedFilterOption: false,
+        toPublishFilterOption: false,
+        pausedFilterOption: false,
+        withdrawnFilterOption: false,
+      };
+    const ids = [];
+    let ministerFilter = {};
+
+    if (filterOptionKeys.publishedFilterOption) {
+      ids.push(CONFIG.publicationStatusPublished.id);
+    }
+    if (filterOptionKeys.pausedFilterOption) {
+      ids.push(CONFIG.publicationStatusPauzed.id);
+    }
+    if (filterOptionKeys.withdrawnFilterOption) {
+      ids.push(CONFIG.publicationStatusWithdrawn.id);
+    }
+    if (filterOptionKeys.toPublishFilterOption) {
+      ids.push(CONFIG.publicationStatusToPublish.id);
+    }
+    if (!(filterOptionKeys.ministerFilterOption && filterOptionKeys.notMinisterFilterOption)) {
+      if (filterOptionKeys.ministerFilterOption) {
+        ministerFilter = {
+          ':has:subcases': 'yes',
+        };
+      }
+      if (filterOptionKeys.notMinisterFilterOption) {
+        ministerFilter = {
+          ':has-no:subcases': 'yes',
+        };
+      }
+    }
+
+    const filter = {
+      ':has:case': 'yes',
+    };
+
+    if (ministerFilter) {
+      filter.case = ministerFilter;
+    }
+
+    if (ids.length > 0) {
+      filter.status = {
+        id: ids.join(','),
+      };
+    }
+
+    return this.store.query('publication-flow', {
+      filter: filter,
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+      include: 'case,status',
+    });
+  }
+
+  @action
+  refreshModel() {
+    this.refresh();
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }

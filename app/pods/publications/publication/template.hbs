@@ -14,7 +14,7 @@
           </span>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-case-nav-go-back></WebComponents::AuTab>
+            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>

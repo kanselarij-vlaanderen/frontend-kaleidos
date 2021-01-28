@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class PausedMinisterController extends Controller {
+export default class PublicationsIndexController extends Controller {
   queryParams = {
     page: {
       type: 'number',
@@ -15,10 +15,10 @@ export default class PausedMinisterController extends Controller {
     },
   };
 
-  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
 
   @tracked page = 0;
-  @tracked size = 25;
+  @tracked size = 5;
   @tracked sort = '-created';
 
   @action
