@@ -1,3 +1,6 @@
+{{ page-title
+  (t "publishpreview-requests")
+}}
 {{#if (gt this.publishPreviewActivities.length 0)}}
   {{#each this.publishPreviewActivities as |activity|}}
     <div class="auk-u-m-2">
@@ -366,9 +369,6 @@
             @closeModal={{this.cancelPublicationModal}}
     />
     <WebComponents::AuModal::Body>
-    {{!--  Pieces selected --}}
-      {{t "request-publishpreview-confirmation" }}
-
       <WebComponents::AuLabel @isRequired={{true}}>
         {{t "accompanying-text"}}
       </WebComponents::AuLabel>

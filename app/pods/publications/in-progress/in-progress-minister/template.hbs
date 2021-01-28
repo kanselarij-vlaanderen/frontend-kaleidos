@@ -1,3 +1,4 @@
+{{ page-title (t "publications") }}
 <DataTable
         @content={{this.model}}
         @page={{this.page}}
@@ -60,6 +61,7 @@
         {{moment-format row.modified "DD-MM-YYYY"}}<br/>
         <span class="auk-u-text-small auk-u-muted">{{moment-format row.modified "HH:mm"}}</span>
       </td>
+
       <td>
         {{t "dash"}}
         {{!-- {{#if row.translationStatus.[0].initiated}}

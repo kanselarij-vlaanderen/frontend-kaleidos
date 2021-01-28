@@ -1,3 +1,6 @@
+{{ page-title
+  (t "search")
+}}
 <div class="vl-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
@@ -12,9 +15,9 @@
 </div>
 
 <div class="vlc-scroll-wrapper__body">
-  <div class="auk-u-m-8 vlc-u-box-model-maximize-height">
-    <div class="vl-form-grid vl-form-grid--is-stacked auk-u-flex--align-end auk-u-mb-2">
-      <div class="vlc-input-field-block vl-col--4-12">
+  <div class="auk-u-m-8 auk-u-mt-4 vlc-u-box-model-maximize-height">
+    <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
+      <div class="vlc-input-field-block auk-o-grid-col-4">
         <div class="auk-u-flex">
           <label class="vl-form__label u-padding--right--tinier" for="dossierId">
             {{capitalize (t "keyword")}}
@@ -46,7 +49,7 @@
           @enter={{fn this.search}}
         />
       </div>
-      <div class="vlc-input-field-block vl-col--2-12">
+      <div class="vlc-input-field-block auk-o-grid-col-2">
         <WebComponents::VlFormLabel @value={{t "from"}}/>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
@@ -63,7 +66,7 @@
           </button>
         {{/if}}
       </div>
-      <div class="vlc-input-field-block vl-col--2-12">
+      <div class="vlc-input-field-block auk-o-grid-col-2">
         <WebComponents::VlFormLabel @value={{t "until-inclusive"}}/>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
@@ -79,7 +82,7 @@
           </button>
         {{/if}}
       </div>
-      <div class="vlc-input-field-block vl-col--2-12">
+      <div class="vlc-input-field-block auk-o-grid-col-2">
         <label class="vl-form__label" for="ministerName">
           {{t "minister"}}
         </label>
@@ -91,7 +94,7 @@
           @enter={{fn this.search}}
         />
       </div>
-      <div class="vl-col--1-12">
+      <div class="auk-o-grid-col-1">
         <WebComponents::AuButton
           @skin="primary"
           @icon="search"
