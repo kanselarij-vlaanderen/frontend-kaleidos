@@ -4,6 +4,9 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CasesSearchController extends Controller {
   queryParams =[{
+    includeArchived: {
+      type: 'boolean',
+    },
     decisionsOnly: {
       type: 'boolean',
     },
@@ -23,6 +26,7 @@ export default class CasesSearchController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
+  @tracked includeArchived;
   @tracked decisionsOnly;
   @tracked emptySearch;
 
@@ -31,6 +35,7 @@ export default class CasesSearchController extends Controller {
     this.page = 0;
     this.size = this.sizeOptions[2];
     this.sort = '-session-dates';
+    this.includeArchived = true;
     this.decisionsOnly = false;
   }
 
@@ -42,6 +47,11 @@ export default class CasesSearchController extends Controller {
   @action
   toggleDesisionsOnly() {
     this.toggleProperty('desicionsOnly');
+  }
+
+  @action
+  toggleIncludeArchived() {
+    this.toggleProperty('includeArchived');
   }
 
   @action

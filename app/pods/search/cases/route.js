@@ -9,9 +9,10 @@ import { inject as service } from '@ember/service';
 export default class CasesSearchRoute extends Route {
   @service metrics;
   queryParams = {
-    // isArchived: {
-    //   refreshModel: true
-    // },
+    includeArchived: {
+      refreshModel: true,
+      as: 'incl_gearchiveerd',
+    },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
@@ -94,10 +95,9 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
-    // Param below not yet in use, since it isn't indexed
-    // if (this.isArchived) {
-    //   filter['isArchived'] = 'true';
-    // }
+    if (!params.includeArchived) {
+      filter['isArchived'] = 'false';
+    }
 
     this.lastParams.commit();
 

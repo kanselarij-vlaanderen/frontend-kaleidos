@@ -11,7 +11,12 @@
         @label={{t "search-in-decisions-only"}}
         @toggle={{this.toggleDesisionsOnly}}
       />
-
+      <WebComponents::VlFormLabel @value="Archief"/>
+      <WebComponents::VlCheckbox
+        @value={{this.includeArchived}}
+        @label={{t "search-include-archived"}}
+        @toggle={{this.toggleIncludeArchived}}
+      />
     </div>
   </div>
   <div class="auk-o-grid-col-10">
