@@ -13,6 +13,7 @@ export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
   @service publicationService;
+  @service emailService;
   @service subcasesService;
   @service fileService;
 
