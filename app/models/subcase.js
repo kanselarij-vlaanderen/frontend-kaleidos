@@ -80,11 +80,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  documentContainersLength: computed('documentContainers', function() {
-    return getPropertyLength(this, 'documentContainers');
-  }),
-
-
   documentContainers: computed('pieces.@each.name', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
