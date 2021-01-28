@@ -60,7 +60,7 @@ export default class CasesSearchRoute extends Route {
 
     const textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
     if (params.decisionsOnly) {
-      textSearchFields.push('decision.content');
+      textSearchFields.push('decisions.content');
     } else {
       textSearchFields.push('documents.content');
     }
