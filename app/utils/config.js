@@ -63,6 +63,10 @@ export default EmberObject.create({
       content: 'Beste,\n\nIntrekking vertaling voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
       subject: '[%%kaleidosenvironment%%] Intrekking vertalingsaanvraag (%%nummer%%)',
     },
+    withdrawalPublishPreview: {
+      content: 'Beste,\n\nIntrekking drukproef voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      subject: '[%%kaleidosenvironment%%] Intrekking drukproef (%%nummer%%)',
+    },
   },
   formallyOkOptions: [
     {
@@ -269,6 +273,7 @@ export default EmberObject.create({
       translationsEmail: 'johan.delaure@redpencil.be',
       publishpreviewEmail: 'johan.delaure@redpencil.be',
       activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.be',
+      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.be',
       publishEmail: 'johan.delaure@redpencil.be',
     },
   },
