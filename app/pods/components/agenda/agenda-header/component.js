@@ -31,6 +31,7 @@ export default Component.extend(FileSaverMixin, {
   classNames: ['vlc-page-header'],
 
   store: service(),
+  // These 2 can be very confusing, session-service is for meetings, current-session is for checking admin etc.
   sessionService: service('session-service'),
   currentSessionService: service('current-session'),
   agendaService: service(),
@@ -624,16 +625,8 @@ export default Component.extend(FileSaverMixin, {
     },
 
     // KAS-2194 new actions
-    async openConfirmApproveAgenda() {
-      // Check if any items are formally NOT ok or NOT YET ok
-      // const agendaitemsFormallyNotOk = await this.currentAgenda.get('agendaitemsFormallyNotOk');
-      // const agendaitemsFormallyNotYetOk = await this.currentAgenda.get('agendaitemsFormallyNotYetOk');
-
+    openConfirmApproveAgenda() {
       this.set('showConfirmForApprovingAgenda', true);
-
-      // open a confirmation model, showing a message based on the previous check with consequences
-      // verify triggers the code that will complete the action
-      // await this.approveAgenda(session);
     },
 
     async confirmApproveAgenda() {
@@ -643,6 +636,19 @@ export default Component.extend(FileSaverMixin, {
 
     cancelApproveAgenda() {
       this.set('showConfirmForApprovingAgenda', false);
+    },
+
+    openConfirmApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', true);
+    },
+
+    async confirmApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
+      await this.approveCurrentAgendaAndCloseMeeting();
+    },
+
+    cancelApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
     },
 
   },
@@ -721,6 +727,7 @@ export default Component.extend(FileSaverMixin, {
   // KAS-2194  new local stuff
 
   showConfirmForApprovingAgenda: false,
+  showConfirmForApprovingAgendaAndClosingMeeting: false,
 
   /**
    * approveCurrentAgenda
@@ -736,8 +743,9 @@ export default Component.extend(FileSaverMixin, {
    */
   async approveCurrentAgenda() {
     const session = this.get('currentSession');
+    // TODO surround with isApprovable for safety ?
     if (this.get('isApprovingAgenda')) {
-      return; // why do we need this? can you approve another agenda while approving ?
+      return; // why do we need this? can you approve another agenda while approving ? // TODO YES, buttons are available whie loader is showing
     }
     this.set('isApprovingAgenda', true);
     this.changeLoading();
@@ -758,54 +766,61 @@ export default Component.extend(FileSaverMixin, {
       this.get('agendaService')
         .approveAgendaAndCopyToDesignAgenda(session, agendaToApprove)
         .then(async(newAgenda) => {
-          const isEditor = this.currentSessionService.isEditor;
-          // KAS-2194 New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists  DONE
-          // KAS-2194 old agenda: rollback formally NOT / not yet ok items  && remove new formaly NOT / not yet ok items
-
-          // Old agenda: new agendaitems that have been moved to the new agenda must be removed from the old agenda
+          // Old agenda: determine what agendaitem has to be moved, and what agendaitem has to be rolled back
           const agendaitemsFromOldAgenda = await currentDesignAgenda.get('agendaitems');
-          const agendaitemsToMove = A([]);
-          const agendaitemsToRollback = A([]);
           const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromOldAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
-          for (agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
-            const previousVersion = await agendaitem.get('previousVersion');
-            if (previousVersion) {
-              agendaitemsToRollback.pushObject(agendaitem);
-            } else {
-              agendaitemsToMove.pushObject(agendaitem);
+          if (agendaitemsWithStatusDifferentFromFormallyOk.length > 0) {
+            const isEditor = this.currentSessionService.isEditor;
+            const agendaitemsToMove = A([]);
+            const agendaitemsToRollback = A([]);
+            for (agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
+              const previousVersion = await agendaitem.get('previousVersion');
+              if (previousVersion) {
+                agendaitemsToRollback.pushObject(agendaitem);
+              } else {
+                agendaitemsToMove.pushObject(agendaitem);
+              }
+            }
+
+            // Old agenda: new agendaitems that have been moved to the new agenda must be removed from the old agenda, resort old agendaitems
+            if (agendaitemsToMove.length > 0) {
+              await this.reloadAgendaitemsOfSubcases(agendaitemsFromOldAgenda); // TODO figure out why we need this and if we need it pre-rollback
+              await this.destroyAgendaitemsList(agendaitemsToMove);
+              await reorderAgendaitemsOnAgenda(currentDesignAgenda, isEditor);
+            }
+
+            // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
+            if (agendaitemsToRollback.length > 0) {
+              await this.agendaService.rollbackAgendaitemsNotFormallyOk(currentDesignAgenda);
+              for (agendaitem of agendaitemsToRollback) {
+                await agendaitem.reload();
+                // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
+                await agendaitem.hasMany('pieces').reload();
+                await agendaitem.hasMany('treatments').reload();
+                await agendaitem.hasMany('mandatees').reload();
+                await agendaitem.hasMany('approvals').reload();
+                await agendaitem.hasMany('linkedPieces').reload();
+              }
+            }
+
+            // New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists (note && announcements) on new agenda
+            const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
+            const newAgendaitemsToReorder = A([]);
+            const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+            for (agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
+              const previousVersion = await agendaitem.get('previousVersion');
+              if (!previousVersion) {
+                newAgendaitemsToReorder.pushObject(agendaitem);
+              }
+            }
+            if (newAgendaitemsToReorder.length > 0) {
+              newAgendaitemsToReorder.forEach((agendaitem) => {
+                agendaitem.set('priority', agendaitem.get('priority') + 9999);
+              });
+              await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
             }
           }
-          await this.reloadAgendaitemsOfSubcases(agendaitemsFromOldAgenda);
-          await this.destroyAgendaitemsList(agendaitemsToMove);
-          await reorderAgendaitemsOnAgenda(currentDesignAgenda, isEditor);
 
-          // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
-          await this.agendaService.rollbackAgendaitemsNotFormallyOk(currentDesignAgenda);
-          for (agendaitem of agendaitemsToRollback) {
-            await agendaitem.reload();
-            // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
-            await agendaitem.hasMany('pieces').reload();
-            await agendaitem.hasMany('treatments').reload();
-            await agendaitem.hasMany('mandatees').reload();
-            await agendaitem.hasMany('approvals').reload();
-            await agendaitem.hasMany('linkedPieces').reload();
-          }
-
-          // New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists on new agenda
-          const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
-          const newagendaitemsToReorder = A([]);
-          const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
-          for (agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
-            const previousVersion = await agendaitem.get('previousVersion');
-            if (!previousVersion) {
-              newagendaitemsToReorder.pushObject(agendaitem);
-            }
-          }
-          newagendaitemsToReorder.forEach((agendaitem) => {
-            agendaitem.set('priority', agendaitem.get('priority') + 9999);
-          });
-
-          await reorderAgendaitemsOnAgenda(newAgenda, isEditor);
           return newAgenda;
         })
         .then((newAgenda) => {
@@ -817,5 +832,91 @@ export default Component.extend(FileSaverMixin, {
           }
         });
     });
+  },
+
+  /**
+   * approveCurrentAgenda
+   *
+   * This method is going to change the status the current design agenda to to closed
+   * - For new items that were formally not ok, they have to be removed from the approved agenda and the agendaitems have to be resorted
+   * - For items that have been on previous approved agendas (and not formally ok now), we have to rollback the agendaitems to a previous version
+   * This means rolling back the agendaitem version on the recently approved agenda to match what was approved in the past
+   * Basically we want all info and relationships from the old version, while keeping our id, link to agenda, link to previous and next agendaitems
+   * This should best be done in the approve service, because we want all triples copied.
+   * We also set the meeting to closed and set the final agenda
+   *
+   * @returns
+   */
+  async approveCurrentAgendaAndCloseMeeting() {
+    const currentMeeting = this.get('currentSession');
+    const isDesignAgenda = await this.currentAgenda.get('isDesignAgenda');
+    if (isDesignAgenda) {
+      const agendasOfMeeting = await currentMeeting.get('agendas'); // this.agendas ?
+
+      // We have to change the current agenda from design to closed status
+      // TODO we did this in the microservice, but only thing that does is set the status, we can do that right here !
+      this.set('isApprovingAgenda', true);
+      this.changeLoading();
+      const agendaToApproveAndClose = await agendasOfMeeting.find((agenda) => agenda.get('isDesignAgenda'));
+      const closedStatus = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id);
+      agendaToApproveAndClose.set(
+        'modified',
+        moment()
+          .utc()
+          .toDate()
+      );
+      agendaToApproveAndClose.set('status', closedStatus);
+      agendaToApproveAndClose.save();
+      this.set('isApprovingAgenda', false);
+      this.set('isClosingAgenda', true);
+
+      // Als je deze reload niet doet dan refreshed de interface niet (Ember).
+      await currentMeeting.hasMany('agendas').reload();
+      currentMeeting.set('isFinal', true);
+      currentMeeting.set('agenda', agendaToApproveAndClose);
+      await currentMeeting.save();
+      // this.set('sessionService.currentSession.agendas', meetingOfAgenda.agendas); // WHY, nothing changed ??
+
+      const agendaitemsFromApprovedAgenda = await agendaToApproveAndClose.get('agendaitems');
+      const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromApprovedAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+      if (agendaitemsWithStatusDifferentFromFormallyOk.length > 0) {
+        const isEditor = this.currentSessionService.isEditor;
+        const agendaitemsToRemove = A([]);
+        const agendaitemsToRollback = A([]);
+        for (agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
+          const previousVersion = await agendaitem.get('previousVersion');
+          if (previousVersion) {
+            agendaitemsToRollback.pushObject(agendaitem);
+          } else {
+            agendaitemsToRemove.pushObject(agendaitem);
+          }
+        }
+
+        // Old agenda: new agendaitems that need te be removed from the agenda must be propoable again, resort old agendaitems
+        if (agendaitemsToRemove.length > 0) {
+          for (agendaitem of agendaitemsToRemove) {
+            // await this.reloadAgendaitemsOfSubcases(agendaitemsFromOldAgenda); // TODO figure out why we need this and if we need it pre-rollback
+            await this.agendaService.deleteAgendaitem(agendaitem);
+          }
+          await reorderAgendaitemsOnAgenda(agendaToApproveAndClose, isEditor);
+        }
+
+        // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
+        if (agendaitemsToRollback.length > 0) {
+          await this.agendaService.rollbackAgendaitemsNotFormallyOk(agendaToApproveAndClose);
+          for (agendaitem of agendaitemsToRollback) {
+            await agendaitem.reload();
+            // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
+            await agendaitem.hasMany('pieces').reload();
+            await agendaitem.hasMany('treatments').reload();
+            await agendaitem.hasMany('mandatees').reload();
+            await agendaitem.hasMany('approvals').reload();
+            await agendaitem.hasMany('linkedPieces').reload();
+          }
+        }
+      }
+      this.changeLoading();
+      this.set('isClosingAgenda', false);
+    }
   },
 });

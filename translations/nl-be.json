@@ -625,7 +625,7 @@
   "no-documents-to-download-warning-title": "Download afgebroken",
   "access-level-last-modified": "Rechten gewijzigd op",
   "approve-small-and-close": "goedkeuren en afsluiten",
-  "agendaApproveActions": "Agenda goedkeuren",
+  "approve-agenda-and-close": "Ontwerpagenda {serialnumber} goedkeuren en afsluiten",
   "meeting-number-visual-representation": "Nummer van de vergadering",
   "approve-all-agendaitems": "Alles formeel goedkeuren",
   "approve-all-agendaitems-warning-message": "Bent u zeker dat u {amountOfAgendaitemsNotFormallyOk} agenda items formeel wil goedkeuren",
@@ -744,9 +744,12 @@
   "related-main-meeting-field-label": "Hoort bij ministerraad",
   "approve-agenda-all-ok": "Alle agendapunten zijn formeel ok, bevestig dat u de agenda wilt goedkeuren.",
   "approve-agenda-not-ok": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat.",
-  "rollback-agendaitem-on-approving-agenda": "Dit agendapunt zal worden teruggezet zoals het op de vorige goedkeurde agenda stond. De wijzigingen worden overgezet naar de nieuwe ontwerpagenda.",
+  "close-meeting-not-ok": "Er zijn agendapunten gevonden die niet kunnen worden goedgekeurd in hun huidige staat. Als u doorgaat gaan er mogelijk wijzigingen verloren bij afsluiten van de agenda!",
+  "close-meeting-all-ok": "Alle agendapunten zijn formeel ok, bevestig dat u de agenda wilt goedkeuren en afsluiten.",
+  "rollback-agendaitem-on-approving-agenda": "Dit agendapunt zal worden teruggezet zoals het op de vorige goedgekeurde agenda stond. De wijzigingen worden overgezet naar de nieuwe ontwerpagenda.",
+  "rollback-agendaitem-on-approving-agenda-close-meeting": "Dit agendapunt zal worden teruggezet zoals het op de vorige goedgekeurde agenda stond. De wijzigingen gemaakt op deze agenda zullen verloren gaan!",
   "move-agendaitem-on-approving-agenda": "Dit agendapunt zal worden verwijdert van deze agenda en verplaatst worden naar de nieuwe ontwerpagenda.",
-  "delete-agendaitem-on-approving-agenda": "Dit agendapunt zal worden verwijdert van deze agenda en terug agendeerbaar worden.",
+  "delete-agendaitem-on-approving-agenda": "Dit agendapunt zal worden verwijdert van deze agenda en terug agendeerbaar worden gemaakt.",
   "remark-number-short-title": "Mededeling {priority}. {shortTitle}",
   "note-number-short-title": "Nota {priority}. {shortTitle}"
 }
