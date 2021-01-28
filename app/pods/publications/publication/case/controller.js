@@ -12,7 +12,7 @@ export default class CaseController extends Controller {
   @tracked mandateeModalOpen = false;
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
-
+  @tracked selectedMandatee = null;
 
   @tracked
   contactPerson = {
@@ -118,11 +118,13 @@ export default class CaseController extends Controller {
 
   @action
   showMandateeModal() {
+    this.selectedMandatee = null;
     this.mandateeModalOpen = true;
   }
 
   @action
   closeMandateeModal() {
+    this.selectedMandatee = null;
     this.mandateeModalOpen = false;
   }
 
@@ -133,6 +135,7 @@ export default class CaseController extends Controller {
     mandatees.push(mandatee);
     this.model.publicationFlow.set('mandatees', mandatees);
     await this.model.publicationFlow.save();
+    this.selectedMandatee = null;
     this.mandateeModalOpen = false;
     this.showLoader = false;
   }
