@@ -4,9 +4,6 @@ import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import {
-  sortDocumentContainers, getPropertyLength
-} from 'fe-redpencil/utils/documents';
 
 const {
   attr, hasMany, belongsTo, PromiseArray, PromiseObject,
