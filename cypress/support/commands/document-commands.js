@@ -203,6 +203,7 @@ function addDocumentsToAgenda(files) {
 function addDocumentsToSubcase(files) {
   cy.log('addDocumentsToSubcase');
   cy.clickReverseTab('Documenten');
+  cy.wait(1000); // clicking adding documents sometimes does nothing, page not loaded?
   cy.contains('Documenten toevoegen').click();
   return addNewDocumentsInUploadModal(files, 'subcase');
 }

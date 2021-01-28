@@ -68,6 +68,7 @@ context('Agendaitem changes tests', () => {
 
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
+    cy.wait(1000); // flaky, page not loading ?
     cy.openCase(caseTitle);
     cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.visit(agendaURL);
