@@ -128,7 +128,6 @@
           {{/if}}
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-
       {{#if (not this.latestSubcaseOnMeeting)}}
         {{# if (gt this.model.publicationFlow.mandatees.length 0) }}
           <WebComponents::AuPanel::Body @noPadding="true">
@@ -218,7 +217,6 @@
           </table>
         </WebComponents::AuPanel::Body>
       {{/if}}
-
     </WebComponents::AuPanel>
   </div>
 
@@ -231,7 +229,9 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">{{t "contacts"}}</h4>
+              <h4 class="auk-panel__title">
+                {{t "contacts"}}
+              </h4>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
@@ -315,9 +315,6 @@
 {{!--  END VISIBLE PANELS  --}}
 
 
-
-
-
 {{!-- ADD CONTACTPERSON MODAL --}}
 
 
@@ -376,16 +373,18 @@
 {{/if}}
 
 
-
 {{!-- ADD MINISTER MODAL --}}
 
 
 {{#if mandateeModalOpen}}
   <WebComponents::AuModal
-          @size="medium"
-          data-test-add-mandateemodal>
-    <WebComponents::AuModal::Header @title={{t "create-mandatee"}}
-                                    @closeModal={{this.closeMandateeModal}} />
+    @size="medium"
+    data-test-add-mandateemodal
+  >
+    <WebComponents::AuModal::Header
+      @title={{t "create-mandatee"}}
+      @closeModal={{this.closeMandateeModal}}
+    />
     <WebComponents::AuModal::Body>
       {{utils/mandatee-selector
         data-test-mandatee-selector
@@ -394,19 +393,27 @@
         chooseMandatee=(action "mandateeSelectedForPublication")
       }}
     </WebComponents::AuModal::Body>
-    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
     <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeMandateeModal}}>
+            <WebComponents::AuButton
+              @skin="borderless"
+              {{on "click" this.closeMandateeModal}}
+            >
               {{t "cancel"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
+            <WebComponents::AuButton
+              @skin="primary"
+              @icon="plus"
+              @size="small"
+              {{on "click" this.addNewContactPerson}}
+              data-test-add-contactperson-submit-button
+            >
               {{t "add"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
