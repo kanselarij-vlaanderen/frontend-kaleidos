@@ -75,7 +75,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['creators,mandatees,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
+      filter['mandatees,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
