@@ -34,7 +34,6 @@ export default ModelWithModifier.extend({
   submissionActivities: hasMany('submission-activity', {
     serialize: true,
   }),
-  pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),
   treatments: hasMany('agenda-item-treatment', {
