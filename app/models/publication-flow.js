@@ -25,6 +25,7 @@ export default class PublicationFlow extends Model {
   // Has many .
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
+  @hasMany('mandatee') mandatees;
 
   @computed('priority')
   get hasPriority() {
