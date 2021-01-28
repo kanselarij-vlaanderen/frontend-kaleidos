@@ -12,6 +12,7 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
+  @service emailService;
   @service subcasesService;
   @service fileService;
 
