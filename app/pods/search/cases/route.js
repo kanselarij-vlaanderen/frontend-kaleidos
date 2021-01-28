@@ -96,7 +96,7 @@ export default class CasesSearchRoute extends Route {
     }
 
     if (!params.includeArchived) {
-      filter['isArchived'] = 'false';
+      filter.isArchived = 'false';
     }
 
     this.lastParams.commit();
