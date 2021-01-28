@@ -80,29 +80,6 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  documentContainers: computed('pieces.@each.name', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                subcase: {
-                  id: this.get('id'),
-                },
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
-        }
-      }),
-    });
-  }),
-
-
   nameToShow: computed('subcaseName', function() {
     const {
       subcaseName, title, shortTitle,
