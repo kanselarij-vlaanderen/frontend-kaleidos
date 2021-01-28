@@ -54,6 +54,7 @@ export default class PublicationTranslationController extends Controller {
     // Update activity.
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     translationActivity.status = withDrawnStatus;
+    translationActivity.withdrawReason = this.withdrawalReason;
     translationActivity.endDate = moment().utc();
     await translationActivity.save();
 
