@@ -130,13 +130,19 @@ export default class CaseController extends Controller {
 
   @action
   async mandateeSelectedForPublication(mandatee) {
+    this.selectedMandatee = mandatee;
+  }
+
+  @action
+  async addSelectedMandateeToPublicationFlow() {
+    const mandatee = this.selectedMandatee;
+    this.mandateeModalOpen = false;
     this.showLoader = true;
     const mandatees = this.model.publicationFlow.get('mandatees').toArray();
     mandatees.push(mandatee);
     this.model.publicationFlow.set('mandatees', mandatees);
     await this.model.publicationFlow.save();
     this.selectedMandatee = null;
-    this.mandateeModalOpen = false;
     this.showLoader = false;
   }
 
