@@ -105,10 +105,19 @@ export default class CasesSearchRoute extends Route {
       return [];
     }
 
+    // session-dates can contain multiple values.
+    // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
+    let sort = params.sort;
+    if (params.sort === 'session-dates') {
+      sort = ':min:session-dates';
+    } else if (params.sort === '-session-dates') {
+      sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
+    }
+
     const {
       postProcessDates,
     } = this;
-    return search('cases', params.page, params.size, params.sort, filter, (searchData) => {
+    return search('cases', params.page, params.size, sort, filter, (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
       postProcessDates(searchData);
