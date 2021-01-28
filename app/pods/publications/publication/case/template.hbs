@@ -248,7 +248,7 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      {{#if (not this.contactPersons) }}
+      {{#if (not this.model.contactPersons) }}
         <WebComponents::AuPanel::Body>
           <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
         </WebComponents::AuPanel::Body>
@@ -264,7 +264,7 @@
               </tr>
             </thead>
             <tbody>
-              {{#each this.contactPersons as | contactPerson |}}
+              {{#each this.model.contactPersons as | contactPerson |}}
                 <tr>
                   <td>
                     <div class="auk-u-flex auk-u-flex--vertical-center">
