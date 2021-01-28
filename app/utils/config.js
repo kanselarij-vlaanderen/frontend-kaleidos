@@ -57,7 +57,11 @@ export default EmberObject.create({
     },
     publishRequest: {
       content: 'Beste,\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
-      subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%numac%%)',
+      subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%nummer%%)',
+    },
+    withdrawalTranslation: {
+      content: 'Beste,\n\nIntrekking vertaling voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      subject: '[%%kaleidosenvironment%%] Intrekking vertalingsaanvraag (%%nummer%%)',
     },
   },
   formallyOkOptions: [
@@ -264,6 +268,7 @@ export default EmberObject.create({
     TO: {
       translationsEmail: 'johan.delaure@redpencil.be',
       publishpreviewEmail: 'johan.delaure@redpencil.be',
+      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.be',
       publishEmail: 'johan.delaure@redpencil.be',
     },
   },
