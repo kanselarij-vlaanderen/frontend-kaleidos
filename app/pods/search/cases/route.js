@@ -54,6 +54,7 @@ export default class CasesSearchRoute extends Route {
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams}; // eslint-disable-line
+
     this.lastParams.stageLive(params);
 
     if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {
