@@ -31,11 +31,6 @@ export default Model.extend({
   previousPiece: belongsTo('piece', {
     inverse: 'nextPiece',
   }),
-
-  subcase: belongsTo('subcase', {
-    inverse: null,
-  }),
-
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),

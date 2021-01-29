@@ -14,10 +14,8 @@ as |documents|>
       @onOpenUploadModal={{@onOpenUploadModal}}
       @onAddPiece={{@onAddPiece}} />
   {{else}}
-    {{#if this.groupDocumentsByContainer.lastSuccessful}}
-      <div class="auk-u-mt-2">
-        <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-      </div>
-    {{/if}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
   {{/each}}
 </Documents::DocumentList>

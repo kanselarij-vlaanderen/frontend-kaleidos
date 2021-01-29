@@ -4,9 +4,6 @@ import { inject } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
-import {
-  sortDocumentContainers, getPropertyLength
-} from 'fe-redpencil/utils/documents';
 
 const {
   attr, hasMany, belongsTo, PromiseArray, PromiseObject,
@@ -34,7 +31,6 @@ export default ModelWithModifier.extend({
   submissionActivities: hasMany('submission-activity', {
     serialize: true,
   }),
-  pieces: hasMany('piece'),
   linkedPieces: hasMany('piece'),
   mandatees: hasMany('mandatee'),
   treatments: hasMany('agenda-item-treatment', {
@@ -79,34 +75,6 @@ export default ModelWithModifier.extend({
     }
     return null;
   }),
-
-  documentContainersLength: computed('documentContainers', function() {
-    return getPropertyLength(this, 'documentContainers');
-  }),
-
-
-  documentContainers: computed('pieces.@each.name', function() {
-    return PromiseArray.create({
-      promise: this.get('pieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          return this.store.query('document-container', {
-            filter: {
-              pieces: {
-                subcase: {
-                  id: this.get('id'),
-                },
-              },
-            },
-            page: {
-              size: pieces.get('length'), // # documentContainers will always be <= # pieces
-            },
-            include: 'type,pieces,pieces.access-level,pieces.next-piece,pieces.previous-piece',
-          }).then((containers) => sortDocumentContainers(this.get('pieces'), containers));
-        }
-      }),
-    });
-  }),
-
 
   nameToShow: computed('subcaseName', function() {
     const {
