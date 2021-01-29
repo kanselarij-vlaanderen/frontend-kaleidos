@@ -86,133 +86,119 @@
 
 
       {{#if (not aboutToDelete)}}
-        {{#if @isEditingOverview}}
-          <div class="auk-u-flex auk-u-flex--justify-between">
-            {{#if (and selectedAgendaitem @isEditingOverview)}}
+        <div class="auk-u-flex auk-u-flex--justify-between">
+          {{#if (and selectedAgendaitem @isEditingOverview)}}
+            <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
+            </span>
+          {{else}}
+            {{#if subcase.subcaseName}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
+                {{subcase.subcaseName}}
               </span>
             {{else}}
-              {{#if subcase.subcaseName}}
-                <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-                  {{subcase.subcaseName}}
-                </span>
+              <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
+            {{/if}}
+          {{/if}}
+          <div class="vlc-agenda-meta__status-holder">
+            {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
+              {{#if (not @isEditingOverview)}}
+                <p class="{{@agendaitem.formallyOkToShow.classNames}}">
+                  <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
+                  {{@agendaitem.formallyOkToShow.label}}
+                </p>
               {{else}}
-                <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
+                <Utils::FormallyOkSelector
+                        @formallyOk={{formallyOk}}
+                        @isLoading={{isLoading}}
+                        @hideLabel={{hideLabel}}
+                        @setAction={{action "setAction"}} />
               {{/if}}
             {{/if}}
-            <div class="vlc-agenda-meta__status-holder">
-              {{#if
-                (and
-                  currentSessionService.isEditor
-                  (await currentAgenda.isDesignAgenda)
-                )
-              }}
-                {{#if (not @isEditingOverview)}}
-                  {{#if @agendaitem.formallyOkToShow.approved}}
-                    <p class="{{@agendaitem.formallyOkToShow.classNames}}">
-                      <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
-                      {{@agendaitem.formallyOkToShow.label}}
-                    </p>
-                  {{else}}
-                    <p class="{{@agendaitem.formallyOkToShow.classNames}}">
-                      <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
-                      {{@agendaitem.formallyOkToShow.label}}
-                    </p>
-                  {{/if}}
-                {{else}}
-                  <Utils::FormallyOkSelector
-                          @formallyOk={{formallyOk}}
-                          @isLoading={{isLoading}}
-                          @hideLabel={{hideLabel}}
-                          @setAction={{action "setAction"}} />
-                {{/if}}
-              {{/if}}
-            </div>
           </div>
-          {{#if (not aboutToDelete)}}
-            {{#if (not selectedAgendaitem)}}
-              {{#if overheidCanViewDocuments}}
-                {{#if (await @agendaitem.sortedPieces)}}
-                  <div class="vlc-hr"></div>
-                  <Utils::PiecesListForItem
-                    @isClickable={{true}}
-                    @agendaitemOrSubcase={{@agendaitem}}
-                  />
-                {{else}}
-                  {{#if (await @agendaitem.pieceNames)}}
-                    <div class="vlc-hr"></div>
-                    <Utils::PiecesListLazyLoaded
-                     @pieceNames={{await @agendaitem.pieceNames}}
-                    />
-                  {{/if}}
-                {{/if}}
+        </div>
+        {{#if (not aboutToDelete)}}
+          {{#if (not selectedAgendaitem)}}
+            {{#if overheidCanViewDocuments}}
+              {{#if (await @agendaitem.sortedPieces)}}
+                <div class="vlc-hr"></div>
+                <Utils::PiecesListForItem
+                  @isClickable={{true}}
+                  @agendaitemOrSubcase={{@agendaitem}}
+                />
               {{else}}
                 {{#if (await @agendaitem.pieceNames)}}
                   <div class="vlc-hr"></div>
                   <Utils::PiecesListLazyLoaded
-                    @pieceNames={{await @agendaitem.pieceNames}}
+                   @pieceNames={{await @agendaitem.pieceNames}}
                   />
                 {{/if}}
               {{/if}}
+            {{else}}
+              {{#if (await @agendaitem.pieceNames)}}
+                <div class="vlc-hr"></div>
+                <Utils::PiecesListLazyLoaded
+                  @pieceNames={{await @agendaitem.pieceNames}}
+                />
+              {{/if}}
             {{/if}}
           {{/if}}
-          {{#if (not @isEditingOverview)}}
-            {{#if currentSessionService.isViewer}}
-              {{#if
-                (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not newsletterInfo.inNewsletter))))
-              }}
-                <div class="vlc-hr"></div>
-              {{/if}}
-              <div class="vlc-agenda-items__remarks">
-                <div>
-                  {{#if @agendaitem.explanation}}
-                    <span class="auk-u-text-bold">
-                      {{t "remark-title"}}:
-                    </span> {{@agendaitem.explanation}}
-                  {{/if}}
-                </div>
-                <div class="vlc-agenda-items__icons">
-                  <div class="auk-u-flex vlc-agenda-items__icons">
-                    {{#if (not newsletterInfo.inNewsletter)}}
-                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                        {{#attach-tooltip
-                          arrow="true"
-                          animation="shift"
-                          placement="top"
-                          class="ember-attacher-tooltip"
-                        }}
-                          <p>
-                            {{t "not-visible-in-newsletter"}}
-                          </p>
-                        {{/attach-tooltip}}
-                      </i>
-                    {{/if}}
-                    {{#if (await @agendaitem.checkAdded)}}
-                      <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
-                        {{#attach-tooltip
-                          arrow="true"
-                          animation="shift"
-                          placement="top"
-                          class="ember-attacher-tooltip"
-                        }}
-                          <p>
-                            {{t "added-agendaitem-text"}}
-                          </p>
-                        {{/attach-tooltip}}
-                      </i>
-                    {{/if}}
-                  </div>
-                  {{#if subcase.confidential}}
-                    <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
-                      <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
-                         data-test-icon-agenda-confidentiality-locked
-                      ></i>
-                      {{t "confidential"}}
-                    </span>
-                  {{/if}}
-                </div>
-              </div>
+        {{/if}}
+        {{#if (not @isEditingOverview)}}
+          {{#if currentSessionService.isViewer}}
+            {{#if
+              (or subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not newsletterInfo.inNewsletter))))
+            }}
+              <div class="vlc-hr"></div>
             {{/if}}
+            <div class="vlc-agenda-items__remarks">
+              <div>
+                {{#if @agendaitem.explanation}}
+                  <span class="auk-u-text-bold">
+                    {{t "remark-title"}}:
+                  </span> {{@agendaitem.explanation}}
+                {{/if}}
+              </div>
+              <div class="vlc-agenda-items__icons">
+                <div class="auk-u-flex vlc-agenda-items__icons">
+                  {{#if (not newsletterInfo.inNewsletter)}}
+                    <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                      {{#attach-tooltip
+                        arrow="true"
+                        animation="shift"
+                        placement="top"
+                        class="ember-attacher-tooltip"
+                      }}
+                        <p>
+                          {{t "not-visible-in-newsletter"}}
+                        </p>
+                      {{/attach-tooltip}}
+                    </i>
+                  {{/if}}
+                  {{#if (await @agendaitem.checkAdded)}}
+                    <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
+                      {{#attach-tooltip
+                        arrow="true"
+                        animation="shift"
+                        placement="top"
+                        class="ember-attacher-tooltip"
+                      }}
+                        <p>
+                          {{t "added-agendaitem-text"}}
+                        </p>
+                      {{/attach-tooltip}}
+                    </i>
+                  {{/if}}
+                </div>
+                {{#if subcase.confidential}}
+                  <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
+                    <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
+                       data-test-icon-agenda-confidentiality-locked
+                    ></i>
+                    {{t "confidential"}}
+                  </span>
+                {{/if}}
+              </div>
+            </div>
           {{/if}}
         {{/if}}
       {{/if}}

@@ -42,10 +42,12 @@ export default class AgendaOverview extends Component {
   @tracked isShowingChanges = null;
   @tracked showLoader = null;
   @tracked groupedNotas;
+  @tracked isDesignAgenda;
 
   constructor() {
     super(...arguments);
     this.groupNotasOnGroupName.perform(this.regularNotas);
+    this.determineIfDesignAgenda.perform();
   }
 
   get approvalNotas() {
@@ -96,5 +98,11 @@ export default class AgendaOverview extends Component {
       }
     }
     this.groupedNotas = agendaitemGroups;
+  }
+
+  @task
+  *determineIfDesignAgenda() {
+    const agendaStatus = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = agendaStatus.isDesignAgenda;
   }
 }
