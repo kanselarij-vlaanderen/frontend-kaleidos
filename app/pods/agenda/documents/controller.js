@@ -1,42 +1,21 @@
-import Component from '@glimmer/component';
+import Controller from '@ember/controller';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
-import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
-import { A } from '@ember/array';
 import moment from 'moment';
-import config from 'fe-redpencil/utils/config';
 
-export default class MeetingDocuments extends Component {
+export default class DocumentsAgendaController extends Controller {
   @service currentSession;
-  @service store;
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked defaultAccessLevel;
-  @tracked pieces = A([]);
   @tracked newPieces = A([]);
 
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
-
-  @task
-  *loadData() {
-    this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
-    if (!this.defaultAccessLevel) {
-      const accessLevels = yield this.store.query('access-level', {
-        page: {
-          size: 1,
-        },
-        'filter[:id:]': config.internRegeringAccessLevelId,
-      });
-      this.defaultAccessLevel = accessLevels.firstObject;
-    }
-
-    this.pieces = yield this.args.meeting.pieces; // TODO replace with query?
+  get iterablePieces() {
+    return this.pieces.toArray();
   }
 
   @action
@@ -47,6 +26,7 @@ export default class MeetingDocuments extends Component {
   @action
   disablePieceEdit() {
     this.isEnabledPieceEdit = false;
+    this.send('reloadModel');
   }
 
   @action
@@ -68,6 +48,7 @@ export default class MeetingDocuments extends Component {
       accessLevel: this.defaultAccessLevel,
       confidential: false,
       name: file.filenameWithoutExtension,
+      meeting: this.meeting,
       documentContainer: documentContainer,
     });
     this.newPieces.pushObject(piece);
@@ -86,6 +67,7 @@ export default class MeetingDocuments extends Component {
     yield all(savePromises);
     this.isOpenPieceUploadModal = false;
     this.newPieces = A();
+    this.send('reloadModel');
   }
 
   /**
@@ -96,9 +78,6 @@ export default class MeetingDocuments extends Component {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     yield piece.save();
-    const pieces = yield this.args.meeting.hasMany('pieces').reload();
-    pieces.pushObject(piece);
-    yield this.args.meeting.save();
   }
 
   /**
@@ -106,10 +85,9 @@ export default class MeetingDocuments extends Component {
   */
   @task
   *addPiece(piece) {
+    piece.meeting = this.meeting;
     yield piece.save();
-    const pieces = yield this.args.meeting.hasMany('pieces').reload();
-    pieces.pushObject(piece);
-    yield this.args.meeting.save();
+    this.send('reloadModel');
   }
 
   @task
@@ -128,5 +106,10 @@ export default class MeetingDocuments extends Component {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
+  }
+
+  @action
+  refresh() {
+    this.send('reloadModel');
   }
 }

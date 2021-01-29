@@ -54,7 +54,7 @@ export default Component.extend({
       .subtract(1, 'weeks')
       .format();
     const futureDate = moment().utc()
-      .add(6, 'weeks')
+      .add(20, 'weeks')
       .format();
 
     return this.store.query('meeting', {
@@ -123,15 +123,11 @@ export default Component.extend({
 
     async proposeForAgenda(subcase, meeting) {
       this.set('isLoading', true);
-      const meetingFromStore = await this.store.findRecord('meeting', meeting.get('id'));
-      const designAgenda = await this.store.findRecord('agenda', (await meetingFromStore.get('latestAgenda')).get('id'));
-      // ensures latest state is pulled
-      await designAgenda.reload();
-      await designAgenda.belongsTo('status').reload();
-      const isDesignAgenda = designAgenda.get('isDesignAgenda');
-      if (isDesignAgenda) {
-        await this.get('agendaService').createNewAgendaitem(designAgenda, subcase);
-      }
+      const submissionActivity = await this.store.queryOne('submission-activity', {
+        'filter[subcase][:id:]': subcase.id,
+        'filter[:has-no:agenda-activity]': true,
+      });
+      await this.agendaService.putSubmissionOnAgenda(meeting, submissionActivity);
       this.toggleAllPropertiesBackToDefault();
     },
 

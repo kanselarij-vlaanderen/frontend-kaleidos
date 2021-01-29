@@ -1,2 +1,83 @@
-<Documents::SubcaseDocuments
-  @agendaitemOrSubcase={{this.agendaitem}} />
+<div class="auk-u-mb-10">
+  <div class="auk-u-mb-4">
+    <div class="auk-u-flex auk-u-flex--vertical-center">
+      <h4 class="vl-title vl-title--h4">
+        {{t "documents"}}
+      </h4>
+      {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
+        <div class="auk-u-ml-2">
+          <button data-test-subcase-documents-edit class="vl-link" type="button"
+            {{on "click" this.enablePieceEdit}}>
+            {{t "edit"}}
+          </button>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  {{#if this.governmentCanViewDocuments}}
+    {{#unless this.loadData.isRunning}}
+      {{#if this.isEnabledPieceEdit}}
+        <Documents::BatchDocumentEdit
+          @pieces={{this.model.pieces}}
+          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+          @onCloseEdit={{this.disablePieceEdit}}
+        />
+      {{else}}
+        <Documents::DocumentCardList
+          @pieces={{this.model.pieces}}
+          @onOpenUploadModal={{this.ensureFreshData}}
+          @onAddPiece={{perform this.addPiece}}
+          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+          @didDeleteContainer={{this.refresh}}
+        />
+      {{/if}}
+    {{/unless}}
+  {{else}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
+  {{/if}}
+  {{#if this.currentSession.isEditor}}
+    <div class="auk-u-mb-4">
+      <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+        {{on "click" this.openPieceUploadModal}}>
+        <i class="vl-button__icon vl-button__icon--before ki-add"></i>
+        {{t "documents-add"}}
+      </button>
+    </div>
+  {{/if}}
+</div>
+
+{{#if this.isOpenPieceUploadModal}}
+  <WebComponents::VlModal
+    @closeModal={{perform this.cancelUploadPieces}}
+    @isOverlay={{true}}
+    @large={{true}}
+    @title={{t "document-add"}} >
+    <div class="vl-modal-dialog__content">
+      {{#if this.savePieces.isRunning}}
+        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      {{else}}
+        <FileUploader
+          @multipleFiles={{true}}
+          @uploadedFileAction={{this.uploadPiece}} />
+        <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::DocumentUpload
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}} />
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+    <WebComponents::VlModalFooter
+      @isLoading={{this.savePieces.isRunning}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "documents-add"}}
+      @cancelAction={{perform this.cancelUploadPieces}}
+      @saveAction={{perform this.savePieces}}
+      @disableSave={{eq this.newPieces.length 0}} />
+  </WebComponents::VlModal>
+{{/if}}
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}}/>

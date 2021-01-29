@@ -38,6 +38,24 @@ export const sortDocumentContainers = (pieces, containers) => {
   });
 };
 
+export const sortPieces = (pieces) => {
+  const validNamedPieces = [];
+  let invalidNamedPieces = A();
+  for (const piece of pieces) {
+    try {
+      (new VRDocumentName(piece.name)).parseMeta();
+      validNamedPieces.push(piece);
+    } catch {
+      invalidNamedPieces.push(piece);
+    }
+  }
+  validNamedPieces.sort((docA, docB) => compareFunction(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+  invalidNamedPieces = invalidNamedPieces.sortBy('created').toArray();
+  invalidNamedPieces.reverse();
+
+  return [...validNamedPieces, ...invalidNamedPieces];
+};
+
 export const getPropertyLength = (model, property) => PromiseObject.create({
   promise: model.get(property).then((property) => (property ? property.get('length') : 0)),
 });
