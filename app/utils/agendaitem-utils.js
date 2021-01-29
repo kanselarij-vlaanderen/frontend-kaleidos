@@ -238,8 +238,10 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
 export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgenda) => {
   if (isEditor && isDesignAgenda) {
     return await Promise.all(agendaitems.map(async(agendaitem, index) => {
-      agendaitem.set('priority', index + 1);
-      return await agendaitem.save();
+      if (agendaitem.priority !== index + 1) {
+        agendaitem.set('priority', index + 1);
+        return agendaitem.save();
+      }
     }));
   }
 };
