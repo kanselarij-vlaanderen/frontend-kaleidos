@@ -57,72 +57,74 @@
   {{/if}}
   <div class={{this.spacerClass}}>
     {{#if
-      (and this.currentSessionService.isEditor (not this.isShowingChanges) @currentAgenda.isDesignAgenda)
+      (and this.currentSessionService.isEditor @currentAgenda.isDesignAgenda)
     }}
-      {{#sortable-group
-        tagName="ul"
-        onChange=(action "reorderItems")
+      <SortableGroup
+        @tagName="ul"
+        @onChange={{this.reorderItems}}
       as |sortableGroup|
-      }}
-        {{#each @notas as |agendaitem|}}
-          {{#if agendaitem.groupName}}
-            <div class="vlc-list-section-header" data-test-agenda-overview-agenda-item-header>
-              {{#if (eq agendaitem.groupName (t 'no-mandatee-assigned'))}}
-              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-              {{!-- template-lint-disable no-triple-curlies  --}}
-                <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
-              {{!-- template-lint-enable no-triple-curlies  --}}
-              {{else}}
-                {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                  These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-                {{!-- template-lint-disable no-triple-curlies  --}}
-                <span>{{{agendaitem.groupName}}}</span>
-                {{!-- template-lint-enable no-triple-curlies  --}}
-              {{/if}}
-            </div>
-          {{/if}}
-          {{#sortable-item
-            tagName="li"
-            class="vlc-agenda-items__sub-item"
-            model=agendaitem
-            group=sortableGroup
-            distance=30
-            handle=dragHandleClass
-          }}
+      >
+        {{!-- Goedkeuringen vorige vergaderingen --}}
+        {{#each this.approvalNotas as |agendaitem|}}
+          <SortableItem
+            @tagName="li"
+            @class="vlc-agenda-items__sub-item"
+            @model={{agendaitem}}
+            @group={{sortableGroup}}
+            @distance={{30}}
+            @handle={{this.dragHandleClass}}
+          >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
               @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
               @isEditingOverview={{this.isEditingOverview}}
               @selectAgendaitem={{this.selectAgendaitemAction}}
             />
-          {{/sortable-item}}
+          </SortableItem>
         {{/each}}
-      {{/sortable-group}}
-    {{else}}
-      <ul>
-        {{#each @notas as |agendaitem|}}
-          {{#if (and agendaitem.groupName (not this.isShowingChanges))}}
-            <div class="vlc-list-section-header" data-test-agenda-overview-agenda-item-header>
-              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-              {{!-- template-lint-disable no-triple-curlies  --}}
-              {{{agendaitem.groupName}}}
-              {{!-- template-lint-enable no-triple-curlies  --}}
-            </div>
-          {{/if}}
-          {{#if
-            (or (not this.isShowingChanges) (and this.isShowingChanges (await agendaitem.hasChanges)))
-          }}
-            <li class="vlc-agenda-items__sub-item">
+        {{!-- other notas --}}
+        {{#each this.groupedNotas as |agendaitemGroup|}}
+          <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
+          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+            <SortableItem
+              @tagName="li"
+              @class="vlc-agenda-items__sub-item"
+              @model={{agendaitem}}
+              @group={{sortableGroup}}
+              @distance={{30}}
+              @handle={{this.dragHandleClass}}
+            >
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{agendaitem}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
                 @isEditingOverview={{this.isEditingOverview}}
                 @selectAgendaitem={{this.selectAgendaitemAction}}
               />
-            </li>
-          {{/if}}
+            </SortableItem>
+          {{/each}}
+        {{/each}}
+      </SortableGroup>
+    {{else}}
+      {{!-- Else clause can be avoided once drag & drop can be disabled (bump version) --}}
+      <ul>
+        {{#each this.groupedNotas as |agendaitemGroup|}}
+          {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+            <SortableItem
+              @tagName="li"
+              @class="vlc-agenda-items__sub-item"
+              @model={{agendaitem}}
+              @group={{sortableGroup}}
+              @distance={{30}}
+              @handle={{this.dragHandleClass}}
+            >
+              <Agenda::AgendaOverview::AgendaOverviewItem
+                @agendaitem={{agendaitem}}
+                @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
+                @isEditingOverview={{this.isEditingOverview}}
+                @selectAgendaitem={{this.selectAgendaitemAction}}
+              />
+            </SortableItem>
+          {{/each}}
         {{/each}}
       </ul>
     {{/if}}
@@ -135,52 +137,46 @@
   <div class="auk-u-mb-4">
     {{#if (gt @announcements.length 0)}}
       {{#if
-        (and this.currentSessionService.isEditor (not this.isShowingChanges) @currentAgenda.isDesignAgenda)
+        (and this.currentSessionService.isEditor @currentAgenda.isDesignAgenda)
       }}
-        {{#sortable-group
-          tagName="ul"
-          onChange=(action "reorderItems")
-        as |sortableAnnouncements|
-        }}
+        <SortableGroup
+          @tagName="ul"
+          @onChange={{this.reorderItems}}
+        as |sortableAnnouncements|>
           {{#each @announcements as |announcement|}}
-            {{#sortable-item
-              tagName="li"
-              class="vlc-agenda-items__sub-item"
-              model=announcement
-              group=sortableAnnouncements
-              distance=30
-              handle=dragHandleClass
-            }}
+            <SortableItem
+              @tagName="li"
+              @class="vlc-agenda-items__sub-item"
+              @model={{announcement}}
+              @group={{sortableAnnouncements}}
+              @distance={{30}}
+              @handle={{this.dragHandleClass}}
+            >
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{announcement}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
                 @isEditingOverview={{this.isEditingOverview}}
                 @selectAgendaitem={{this.selectAgendaitemAction}}
               />
-            {{/sortable-item}}
+            </SortableItem>
           {{/each}}
-        {{/sortable-group}}
+        </SortableGroup>
       {{else}}
         {{#each @announcements as |announcement|}}
-          {{#if
-            (or (not this.isShowingChanges) (and this.isShowingChanges (await announcement.hasChanges)))
-          }}
-            <div class="vlc-agenda-items__sub-item">
-              <Agenda::AgendaOverview::AgendaOverviewItem
-                @agendaitem={{announcement}}
-                @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
-                @isEditingOverview={{this.isEditingOverview}}
-                @selectAgendaitem={{this.selectAgendaitemAction}}
-              />
-            </div>
-          {{/if}}
+          <div class="vlc-agenda-items__sub-item">
+            <Agenda::AgendaOverview::AgendaOverviewItem
+              @agendaitem={{announcement}}
+              @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
+              @isEditingOverview={{this.isEditingOverview}}
+              @selectAgendaitem={{this.selectAgendaitemAction}}
+            />
+          </div>
         {{/each}}
       {{/if}}
     {{else}}
       <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}
   </div>
-
   {{#if this.showLoader}}
     <WebComponents::AuLoadingOverlay/>
   {{/if}}

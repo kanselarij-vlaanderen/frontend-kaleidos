@@ -32,8 +32,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @computed('filteredNotas.@each.{isDeleted}')
   get sortedNotas() {
-    const actualAgendaitems = this.filteredNotas.filter((agendaitem) => !agendaitem.isDeleted);
-    return this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems).then(() => actualAgendaitems);
+    return this.filteredNotas.filter((agendaitem) => !agendaitem.isDeleted);
   }
 
   @computed('filteredAnnouncements.@each.{isDeleted}')
