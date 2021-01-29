@@ -1,6 +1,6 @@
 <form class="vl-form" onsubmit={{action "createSubCase"}}>
   <div class="vl-modal-dialog__content">
-    <div class="auk-u-flex auk-u-flex--justify-between vl-col-4-4">
+    <div class="auk-u-flex auk-u-flex--justify-between">
       {{web-components/vl-radio-button-list
         title=(t "subcase-type")
         optionList=(await caseTypes)
@@ -42,7 +42,7 @@
     </div>
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "subcase-name")}}
-      <div class="auk-u-flex auk-u-flex--vertical-center vl-col-4-4">
+      <div class="auk-u-flex auk-u-flex--vertical-center">
         {{#if (not isEditing)}}
           {{utils/model-selector
             class="vlc-u-box-model-maximize-width"
