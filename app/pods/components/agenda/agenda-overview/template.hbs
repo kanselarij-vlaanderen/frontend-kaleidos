@@ -1,10 +1,4 @@
 <div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
-  {{#if this.isEditingOverview}}
-    <ChangesAlert
-      @message={{t "editing-agenda-overview"}}
-      @buttonText={{t "end-editing-overview"}}
-      @clearAction={{this.toggleIsEditingOverview}} />
-  {{/if}}
   <div class="vlc-toolbar vlc-agenda-items-section-header">
 
     <div class="vlc-toolbar__left">
@@ -14,40 +8,37 @@
         </h3>
       </div>
     </div>
-    {{#if (not this.isEditingOverview)}}
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <a href=""
-             class="vlc-agenda-items-section-header__link"
-             {{on "click" this.toggleChangesOnly}}
-          >
-            {{#if (not this.isShowingChanges)}}
-              {{t "show-changes"}}
-            {{else}}
-              {{t "show-all"}}
-            {{/if}}
-          </a>
-        </div>
-        <div class="vlc-toolbar__item">
-          {{#if
-            (and
-              this.currentSessionService.isEditor
-              (await @currentAgenda.isDesignAgenda)
-            )
-          }}
-            <div class="auk-u-ml-2">
-              <a href=""
-                 data-test-agenda-edit-formally-ok-button
-                 class="vlc-agenda-items-section-header__link"
-                {{on "click" this.toggleIsEditingOverview}}
-              >
-                {{t "edit"}}
-              </a>
-            </div>
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <a href=""
+           class="vlc-agenda-items-section-header__link"
+           {{on "click" this.toggleChangesOnly}}
+        >
+          {{#if (not this.isShowingChanges)}}
+            {{t "show-changes"}}
+          {{else}}
+            {{t "show-all"}}
           {{/if}}
-        </div>
+        </a>
       </div>
-    {{/if}}
+      <div class="vlc-toolbar__item">
+        {{#if
+          (and
+            this.currentSessionService.isEditor
+            (await @currentAgenda.isDesignAgenda)
+          )
+        }}
+          <div class="auk-u-ml-2">
+            <a href=""
+               data-test-agenda-edit-formally-ok-button
+               class="vlc-agenda-items-section-header__link"
+            >
+              {{t "edit"}}
+            </a>
+          </div>
+        {{/if}}
+      </div>
+    </div>
   </div>
 
   {{#if (is-empty @notas)}}
@@ -77,7 +68,6 @@
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
               @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
-              @isEditingOverview={{this.isEditingOverview}}
             />
           </SortableItem>
         {{/each}}
@@ -96,7 +86,6 @@
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{agendaitem}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
-                @isEditingOverview={{this.isEditingOverview}}
               />
             </SortableItem>
           {{/each}}
@@ -118,7 +107,6 @@
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{agendaitem}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
-                @isEditingOverview={{this.isEditingOverview}}
               />
             </SortableItem>
           {{/each}}
@@ -152,7 +140,6 @@
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{announcement}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
-                @isEditingOverview={{this.isEditingOverview}}
               />
             </SortableItem>
           {{/each}}
@@ -163,7 +150,6 @@
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}
               @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
-              @isEditingOverview={{this.isEditingOverview}}
             />
           </div>
         {{/each}}
