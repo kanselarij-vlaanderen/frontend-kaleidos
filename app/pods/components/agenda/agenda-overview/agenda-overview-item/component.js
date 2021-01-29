@@ -11,7 +11,6 @@ export default class AgendaOverviewItem extends Component {
    *
    * @agendaitem={{agendaitem}}
    * @isEditingOverview={{isEditingOverview}}
-   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;

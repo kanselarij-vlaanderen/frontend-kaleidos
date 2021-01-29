@@ -57,11 +57,6 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  selectAgendaitemAction(agendaitem) {
-    this.selectAgendaitem(agendaitem);
-  }
-
-  @action
   async setFormallyOkAction(agendaitem, formallyOkUri) {
     this.showLoader = true;
     agendaitem.formallyOk = formallyOkUri;

@@ -20,7 +20,6 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @alias('model.agendaitems') agendaitems;
   @alias('model.announcements') announcements;
-  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('sessionService.currentSession') currentSession;
 
