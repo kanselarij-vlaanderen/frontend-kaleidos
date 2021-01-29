@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import search from 'fe-redpencil/utils/mu-search';
 import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
+import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaitemsAgendaController extends Controller {
   queryParams = ['filter'];
@@ -72,6 +73,12 @@ export default class AgendaitemsAgendaController extends Controller {
   async searchAgendaitems(value) {
     this.filter = value;
     await this.filterTask.perform();
+  }
+
+  @task
+  *assignNewPriorities(reorderedAgendaitems) {
+    yield setAgendaitemsPriority(reorderedAgendaitems, true, true); // permissions guarded in template (and backend)
+    this.refresh();
   }
 
   @action

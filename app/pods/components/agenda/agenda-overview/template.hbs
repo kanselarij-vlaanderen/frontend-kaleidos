@@ -61,7 +61,7 @@
     }}
       <SortableGroup
         @tagName="ul"
-        @onChange={{this.reorderItems}}
+        @onChange={{@onReorderAgendaitems}}
       as |sortableGroup|
       >
         {{!-- Goedkeuringen vorige vergaderingen --}}
@@ -141,7 +141,7 @@
       }}
         <SortableGroup
           @tagName="ul"
-          @onChange={{this.reorderItems}}
+          @onChange={{@onReorderAgendaitems}}
         as |sortableAnnouncements|>
           {{#each @announcements as |announcement|}}
             <SortableItem

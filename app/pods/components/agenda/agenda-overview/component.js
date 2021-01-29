@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
@@ -84,15 +83,6 @@ export default class AgendaOverview extends Component {
   @action
   toggleChangesOnly() {
     this.isShowingChanges = ! this.isShowingChanges;
-  }
-
-  @action
-  async reorderItems(itemModels) {
-    const isEditor = this.currentSessionService.isEditor;
-    const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
-    this.showLoader = true;
-    await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
-    this.showLoader = false;
   }
 
   @task

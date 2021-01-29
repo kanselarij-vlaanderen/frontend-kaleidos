@@ -11,7 +11,11 @@
           @notas={{this.sortedNotas}}
           @announcements={{this.sortedAnnouncements}}
           @currentAgenda={{this.agenda}}
+          @onReorderAgendaitems={{perform this.assignNewPriorities}}
         />
+        {{#if this.assignNewPriorities.isRunning}}
+          <WebComponents::AuLoadingOverlay/>
+        {{/if}}
       {{else}}
         <Agenda::AgendaDetail::Sidebar
           @announcements={{await this.sortedAnnouncements}}
