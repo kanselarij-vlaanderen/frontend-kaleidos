@@ -31,7 +31,7 @@
               <WebComponents::AuCheckbox
                       @toggle={{@finishedToggle}}
                       @label="Afgewerkt"
-                      @checked={{this.checked}}
+                      @checked={{this.finished}}
               />
             </WebComponents::AuToolbar::Item>
           {{/if}}
@@ -47,7 +47,7 @@
                     @placement="bottom"
             >
               <WebComponents::AuDropdown>
-                {{#if (and (not this.checked) ( not (await @activity.isWithdrawn)))}}
+                {{#if (and (not this.finished) ( not (await @activity.isWithdrawn)))}}
                   <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
                     {{t "cancel-request"}}
                   </WebComponents::AuDropdown::Item>
@@ -71,7 +71,7 @@
       <WebComponents::AuPanel::Body>
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6 auk-u-mr-2">
-            {{#if this.mode}}
+            {{#if this.isTranslation}}
               <WebComponents::AuKeyValue
                       @key={{t "final-translation-date"}}
                       @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}

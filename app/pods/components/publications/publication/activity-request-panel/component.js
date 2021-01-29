@@ -14,13 +14,10 @@ import { inject as service } from '@ember/service';
 export default class ActivityRequestPanel extends Component {
   @service store;
   @tracked isCollapsed = false;
-  @tracked checked;
+  @tracked finished;
 
-  get mode() {
-    if (this.args.mode === 'translation') {
-      return true;
-    }
-    return false;
+  get isTranslation() {
+    return this.args.mode === 'translation';
   }
 
   constructor() {
@@ -34,9 +31,9 @@ export default class ActivityRequestPanel extends Component {
     const activityStatus = await this.args.activity.get('status');
 
     if (activityStatus.id === closedStatus.id) {
-      this.checked = true;
+      this.finished = true;
     } else {
-      this.checked = false;
+      this.finished = false;
     }
   }
 

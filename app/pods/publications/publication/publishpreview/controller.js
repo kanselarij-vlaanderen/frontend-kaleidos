@@ -304,7 +304,7 @@ export default class PublicationPublishPreviewController extends Controller {
 
     if (previewActivityActivityStatus.id === closedStatus.id) {
       previewActivity.status = openStatus;
-      previewActivity.endDate = undefined;
+      previewActivity.endDate = null;
       await previewActivity.save();
     } else {
       previewActivity.status = closedStatus;

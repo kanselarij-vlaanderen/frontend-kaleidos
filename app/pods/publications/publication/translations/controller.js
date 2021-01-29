@@ -32,7 +32,7 @@ export default class PublicationTranslationController extends Controller {
 
     if (translationActivityStatus.id === closedStatus.id) {
       translationActivity.status = openStatus;
-      translationActivity.endDate = undefined;
+      translationActivity.endDate = null;
       await translationActivity.save();
     } else {
       translationActivity.status = closedStatus;
