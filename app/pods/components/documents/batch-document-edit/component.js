@@ -20,7 +20,7 @@ class DocumentHistory {
   @tracked lastPiece
 }
 
-export default class DocumentList extends Component {
+export default class DocumentsBatchDocumentEdit extends Component {
   @service store;
   @service fileService;
 
