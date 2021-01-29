@@ -1,8 +1,8 @@
-<div class="auk-u-flex auk-u-flex--vertical-center" {{did-update this.loadData @piece}}>
+<div class="auk-u-flex auk-u-flex--vertical-center">
   {{#if this.isLoading}}
     <div class="vl-loader" role="alert" aria-busy="true"></div>
   {{else}}
-    {{#if (not this.confidential)}}
+    {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
         <div
           class="pill-wrap"
@@ -22,14 +22,14 @@
             @hideSearch={{true}}
             @propertyToShow="label"
             @sortField="priority"
-            @selectedItems={{this.accessLevel}}
-            @selectModel={{this.chooseAccessLevel}} />
+            @selectedItems={{@accessLevel}}
+            @selectModel={{this.changeAccessLevel}} />
         </div>
         <button
           type="button"
           class="vl-button vl-button--link vl-button--icon"
           data-test-access-level-save
-          {{on "click" (perform this.saveAccessLevel)}}
+          {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
           <i class="ki-check vl-button__icon" aria-hidden="true"></i>
           <span class="vl-u-visually-hidden">
@@ -39,7 +39,7 @@
         <button
           type="button"
           class="vl-button vl-button--link vl-button--icon"
-          {{on "click" this.cancelChanges}}
+          {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
           <i class="ki-cross vl-button__icon" aria-hidden="true"></i>
           <span class="vl-u-visually-hidden">
@@ -48,54 +48,28 @@
         </button>
       {{/if}}
     {{/if}}
-    {{#if this.session.isEditor}}
-      <button
-        type="button"
-        class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
-        disabled={{not this.session.isEditor}}
-        {{on "click" (perform this.toggleAndSaveConfidentiality)}}
-      >
-        {{#if this.confidential}}
-          {{#attach-tooltip
-            arrow="true"
-            animation="shift"
-            placement="top"
-            class="ember-attacher-tooltip"
-          }}
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          {{/attach-tooltip}}
-          <i class="vl-icon ki-lock-closed vl-u-text--error"
-          ></i>
-        {{else}}
-          <i class="vl-icon ki-lock-open"></i>
-        {{/if}}
-      </button>
-    {{else}}
-      <button
-        type="button"
-        class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
-        disabled={{not this.session.isEditor}}
-        {{on "click" (perform this.toggleAndSaveConfidentiality)}}
-      >
-        {{#if this.confidential}}
-          {{#attach-tooltip
-            arrow="true"
-            animation="shift"
-            placement="top"
-            class="ember-attacher-tooltip"
-          }}
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          {{/attach-tooltip}}
-          <i class="vl-icon ki-lock-closed vl-u-text--error"
-          ></i>
-        {{else}}
-          <i class="vl-icon ki-lock-open"></i>
-        {{/if}}
-      </button>
-    {{/if}}
+    <button
+      type="button"
+      class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+      disabled={{not this.session.isEditor}}
+      {{on "click" (perform this.changeConfidentiality)}}
+    >
+      {{#if @confidential}}
+        {{#attach-tooltip
+          arrow="true"
+          animation="shift"
+          placement="top"
+          class="ember-attacher-tooltip"
+        }}
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        {{/attach-tooltip}}
+        <i class="vl-icon ki-lock-closed vl-u-text--error"
+        ></i>
+      {{else}}
+        <i class="vl-icon ki-lock-open"></i>
+      {{/if}}
+    </button>
   {{/if}}
 </div>

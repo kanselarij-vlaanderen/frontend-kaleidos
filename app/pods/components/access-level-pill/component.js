@@ -2,42 +2,34 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default class AccessLevelPill extends Component {
+export default class AccessLevelPillComponent extends Component {
   /**
-   * An access-level pill component specific to the piece model.
+   * An access-level pill component.
    *
-   * @argument piece: a Piece
+   * @argument accessLevel: an accessLevel object or null
+   * @argument confidential: boolean
    */
-  @service() intl;
+  @service intl;
   @service('current-session') session;
 
-  @tracked accessLevel;
-  @alias('args.piece.confidential') confidential;
   @tracked isEditing = false;
 
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
-
-  @task
-  *loadData() {
-    this.accessLevel = yield this.args.piece.accessLevel;
-  }
-
   get isLoading() {
-    return this.loadData.isRunning
-      || this.toggleAndSaveConfidentiality.isRunning
-      || this.saveAccessLevel.isRunning;
+    return this.confirmChangeAccessLevel.isRunning
+      || this.cancelChangeAccessLevel.isRunning
+      || this.changeConfidentiality.isRunning;
+  }
+
+  get inverseConfidentiality() {
+    return !this.args.confidential;
   }
 
   get accessLevelClass() {
-    if (this.accessLevel) {
-      switch (this.accessLevel.id) {
+    if (this.args.accessLevel) {
+      switch (this.args.accessLevel.id) {
         case CONFIG.publiekAccessLevelId:
           return 'vlc-pill--success';
         case CONFIG.internOverheidAccessLevelId:
@@ -52,8 +44,8 @@ export default class AccessLevelPill extends Component {
   }
 
   get accessLevelLabel() {
-    if (this.accessLevel) {
-      return this.accessLevel.label;
+    if (this.args.accessLevel) {
+      return this.args.accessLevel.label;
     }
     return this.intl.t('no-accessLevel');
   }
@@ -66,28 +58,33 @@ export default class AccessLevelPill extends Component {
   }
 
   @action
-  async cancelChanges() {
-    this.accessLevel = await this.args.piece.accessLevel;
-    this.isEditing = false;
-  }
-
-  @action
-  chooseAccessLevel(accessLevel) {
-    this.accessLevel = accessLevel;
+  changeAccessLevel(accessLevel) {
+    debugger
+    if (this.args.onChangeAccessLevel) {
+      this.args.onChangeAccessLevel(accessLevel);
+    }
   }
 
   @task
-  *toggleAndSaveConfidentiality() {
-    // TODO what with overwriting other properties with old data?
-    this.confidential = !this.confidential;
-    yield this.args.piece.save();
+  *confirmChangeAccessLevel(accessLevel) {
+    if (this.args.onConfirmChangeAccessLevel) {
+      yield this.args.onConfirmChangeAccessLevel(accessLevel);
+    }
+    this.isEditing = false;
   }
 
   @task
-  *saveAccessLevel() {
-    // TODO what with overwriting other properties with old data?
-    this.args.piece.set('accessLevel', this.accessLevel);
-    yield this.args.piece.save();
+  *cancelChangeAccessLevel() {
+    if (this.args.onCancelChangeAccessLevel) {
+      yield this.args.onCancelChangeAccessLevel();
+    }
     this.isEditing = false;
+  }
+
+  @task
+  *changeConfidentiality(confidentiality) {
+    if (this.args.onChangeConfidentiality) {
+      yield this.args.onChangeConfidentiality(confidentiality);
+    }
   }
 }
