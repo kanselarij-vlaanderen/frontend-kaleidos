@@ -141,6 +141,15 @@ export default class PublicationsController extends Controller {
 
   @action
   closeFilterModal() {
+    this.filterOptionKeys = {
+      ministerFilterOption: false,
+      notMinisterFilterOption: false,
+      publishedFilterOption: false,
+      toPublishFilterOption: false,
+      pausedFilterOption: false,
+      withdrawnFilterOption: false,
+    };
+
     localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.isShowPublicationFilterModal = false;
   }
