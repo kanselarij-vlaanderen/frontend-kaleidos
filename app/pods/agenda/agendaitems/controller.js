@@ -38,11 +38,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @computed('filteredAnnouncements.@each.{isDeleted}')
   get sortedAnnouncements() {
-    const announcements = this.filteredAnnouncements;
-    if (announcements) {
-      return announcements.filter((announcement) => !announcement.isDeleted);
-    }
-    return [];
+    return this.filteredAnnouncements.filter((announcement) => !announcement.isDeleted);
   }
 
   get agendaitemsClass() {
