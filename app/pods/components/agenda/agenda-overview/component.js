@@ -14,7 +14,7 @@ export default class AgendaOverview extends Component {
 
   dragHandleClass = '.ki-drag-handle-2';
 
-  agendaitems = null;
+  notas = null;
   currentAgenda = null;
 
   isEditingOverview = null;
