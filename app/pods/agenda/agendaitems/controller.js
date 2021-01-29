@@ -7,7 +7,7 @@ import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import search from 'fe-redpencil/utils/mu-search';
-import { task } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
 import { isEmpty } from '@ember/utils';
 
 export default class AgendaitemsAgendaController extends Controller {
@@ -52,7 +52,8 @@ export default class AgendaitemsAgendaController extends Controller {
     return this.routing.currentRouteName === 'agenda.agendaitems.index';
   }
 
-  @(task(function *() {
+  @task
+  *filterTask() {
     if (isEmpty(this.filter)) {
       this.filteredNotas = this.model.notas;
       this.filteredAnnouncements = this.model.announcements;
@@ -66,7 +67,7 @@ export default class AgendaitemsAgendaController extends Controller {
       this.filteredNotas = this.model.notas.filter((ai) => matchingIds.includes(ai.id));
       this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
     }
-  })) filterTask;
+  }
 
   @action
   async searchAgendaitems(value) {
