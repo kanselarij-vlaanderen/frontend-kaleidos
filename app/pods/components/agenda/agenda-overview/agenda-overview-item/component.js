@@ -59,16 +59,8 @@ export default class AgendaOverviewItem extends Component {
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
-  get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
-      return this.args.agendaitem === this.selectedAgendaitem.id;
-    }
-    return null;
-  }
-
   get classNameBindings() {
     return `
-    ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
     ${this.isClickable ? '' : 'not-clickable'}
     ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
     ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
