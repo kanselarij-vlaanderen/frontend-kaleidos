@@ -383,7 +383,7 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  async hideWithdrawalWindow() {
+  hideWithdrawalWindow() {
     this.withdrawalReason = '';
     this.withdrawalSubject = '';
     this.withdrawalContent = '';
