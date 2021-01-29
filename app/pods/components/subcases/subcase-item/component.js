@@ -49,7 +49,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
     const submissionActivities = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.args.subcase.id,
       'page[size]': 500,
-      include: 'pieces', // TODO: Makes sure we have all pieces, unpaginated
+      include: 'pieces', // Make sure we have all pieces, unpaginated
     });
 
     const pieces = [];
