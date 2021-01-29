@@ -19,7 +19,6 @@ export default class AgendaOverviewItem extends Component {
   @service router;
 
   @service('current-session') currentSessionService;
-  @alias('sessionService.currentAgenda') currentAgenda;
   @alias('sessionService.currentSession') currentSession;
   @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
