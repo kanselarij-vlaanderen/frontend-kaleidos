@@ -1,4 +1,4 @@
-<div {{in-viewport onEnter=this.onEnter onExit=this.onExit}} class={{classNameBindings}}>
+<div class={{classNameBindings}}>
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
       <div class="vlc-agenda-items__cursor">
@@ -86,7 +86,7 @@
 
 
       {{#if (not aboutToDelete)}}
-        {{#if (or renderDetails @isEditingOverview)}}
+        {{#if @isEditingOverview}}
           <div class="auk-u-flex auk-u-flex--justify-between">
             {{#if (and selectedAgendaitem @isEditingOverview)}}
               <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
@@ -132,28 +132,26 @@
           {{#if (not aboutToDelete)}}
             {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
-                {{#if renderDetails}}
-                  {{#if (await @agendaitem.sortedPieces)}}
-                    <div class="vlc-hr"></div>
-                    <Utils::PiecesListForItem
-                      @isClickable={{true}}
-                      @agendaitemOrSubcase={{@agendaitem}}
-                    />
-                  {{else}}
-                    {{#if (await @agendaitem.pieceNames)}}
-                      <div class="vlc-hr"></div>
-                      <Utils::PiecesListLazyLoaded
-                       @pieceNames={{await @agendaitem.pieceNames}}
-                      />
-                    {{/if}}
-                  {{/if}}
+                {{#if (await @agendaitem.sortedPieces)}}
+                  <div class="vlc-hr"></div>
+                  <Utils::PiecesListForItem
+                    @isClickable={{true}}
+                    @agendaitemOrSubcase={{@agendaitem}}
+                  />
                 {{else}}
                   {{#if (await @agendaitem.pieceNames)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListLazyLoaded
-                      @pieceNames={{await @agendaitem.pieceNames}}
+                     @pieceNames={{await @agendaitem.pieceNames}}
                     />
                   {{/if}}
+                {{/if}}
+              {{else}}
+                {{#if (await @agendaitem.pieceNames)}}
+                  <div class="vlc-hr"></div>
+                  <Utils::PiecesListLazyLoaded
+                    @pieceNames={{await @agendaitem.pieceNames}}
+                  />
                 {{/if}}
               {{/if}}
             {{/if}}

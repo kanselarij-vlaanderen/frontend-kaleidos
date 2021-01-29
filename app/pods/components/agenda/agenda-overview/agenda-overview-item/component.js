@@ -30,7 +30,6 @@ export default class AgendaOverviewItem extends Component {
 
   isShowingChanges = null;
 
-  @tracked renderDetails = null;
   @tracked showLoader = false;
 
   @tracked retracted = this.args.agendaitem.retracted || false;
@@ -58,18 +57,6 @@ export default class AgendaOverviewItem extends Component {
     const newPublication = await this.publicationService.createNewPublication(0, _case.id);
     this.showLoader = false;
     this.router.transitionTo('publications.publication.case', newPublication.id);
-  }
-
-  @action
-  onEnter() {
-    setTimeout(() => {
-      this.renderDetails = true;
-    }, 500);
-  }
-
-  @action
-  onExit() {
-    this.renderDetails = false;
   }
 
   get isActive() {
