@@ -30,18 +30,17 @@ export default class AgendaitemsAgendaController extends Controller {
   @tracked filteredNotas;
   @tracked filteredAnnouncements;
 
-  @computed('filteredNotas.@each.{priority,isDeleted}')
+  @computed('filteredNotas.@each.{isDeleted}')
   get sortedNotas() {
-    const actualAgendaitems = this.filteredNotas.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-      .sortBy('priority');
+    const actualAgendaitems = this.filteredNotas.filter((agendaitem) => !agendaitem.isDeleted);
     return this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems).then(() => actualAgendaitems);
   }
 
-  @computed('filteredAnnouncements.@each.{priority,isDeleted}')
+  @computed('filteredAnnouncements.@each.{isDeleted}')
   get sortedAnnouncements() {
     const announcements = this.filteredAnnouncements;
     if (announcements) {
-      return announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
+      return announcements.filter((announcement) => !announcement.isDeleted);
     }
     return [];
   }

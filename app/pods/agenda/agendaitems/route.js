@@ -23,6 +23,7 @@ export default class AgendaItemsAgendaRoute extends Route {
       'filter[agenda][:id:]': agenda.id,
       include: 'mandatees',
       'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
+      sort: 'show-as-remark,priority',
     });
 
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
