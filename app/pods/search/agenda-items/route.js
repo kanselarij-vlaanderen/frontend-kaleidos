@@ -54,7 +54,6 @@ export default class AgendaitemSearchRoute extends Route {
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams}; // eslint-disable-line
-    console.log('params agendaitems', params);
     if (!params.dateFrom) {
       params.dateFrom = null;
     }
