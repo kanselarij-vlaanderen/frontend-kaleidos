@@ -2,10 +2,7 @@
   {{utils/logo-header}}
 
   <h4 class="vlc-printable-agenda-list__session-title" data-test-agenda-print-header-title>
-    {{this.meeting.kindToShow.altLabel}} - {{t "session-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}}
-  </h4>
-  <h4 class="vlc-printable-agenda-list__session-title">
-    {{t "agenda"}}
+    {{t "agenda-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY"}} - {{this.meeting.kindToShow.altLabel}}
   </h4>
 
   {{#if (gt this.notas.length 0)}}
