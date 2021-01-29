@@ -55,13 +55,6 @@ export default class AgendaOverviewItem extends Component {
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
-  get classNameBindings() {
-    return `
-    ${this.isClickable ? '' : 'not-clickable'}
-    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
-    `;
-  }
-
   @action
   async setAction(agendaitem) {
     const uri = agendaitem.get('uri');
