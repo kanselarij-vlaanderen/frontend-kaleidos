@@ -20,7 +20,6 @@ export default class AgendaOverviewItem extends Component {
 
   @service('current-session') currentSessionService;
   @alias('sessionService.currentSession') currentSession;
-  @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
@@ -37,7 +36,6 @@ export default class AgendaOverviewItem extends Component {
   get classNameBindings() {
     return `
     ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }
 
@@ -61,7 +59,6 @@ export default class AgendaOverviewItem extends Component {
     return `
     ${this.isClickable ? '' : 'not-clickable'}
     ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }
 
