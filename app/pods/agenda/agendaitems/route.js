@@ -28,7 +28,6 @@ export default class AgendaItemsAgendaRoute extends Route {
     this.set('sessionService.selectedAgendaitem', null);
 
     return hash({
-      currentAgenda: agenda, // TODO: figure out where this still gets used and remove. This can be fetched from parent routes' model
       announcements,
       agendaitems,
     });
