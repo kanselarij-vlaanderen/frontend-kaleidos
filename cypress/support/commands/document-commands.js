@@ -19,7 +19,7 @@ import modal from '../../selectors/modal.selectors';
  * @function
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
  */
-function addNewDocumentsInUploadModal(files) {
+function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
   cy.get('.vl-modal-dialog').as('fileUploadDialog');
 
@@ -74,6 +74,23 @@ function addNewDocumentsInUploadModal(files) {
       });
     }
   });
+  // Click save
+  cy.route('POST', 'pieces').as('createNewPiece');
+  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
+  cy.get('@fileUploadDialog').within(() => {
+    cy.get('.vl-button').contains('Documenten toevoegen')
+      .click();
+  });
+  cy.wait('@createNewDocumentContainer', {
+    timeout: 24000,
+  });
+  cy.wait('@createNewPiece', {
+    timeout: 24000,
+  });
+  cy.wait(`@loadPieces${model}`, {
+    timeout: 24000 + (6000 * files.length),
+  });
   cy.log('/addNewDocumentsInUploadModal');
 }
 
@@ -89,6 +106,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.log('addNewPiece');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
+  cy.route('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
       cy.route('PATCH', '/subcases/**').as('patchSubcase');
@@ -156,6 +174,8 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       });
     }
   }
+  cy.wait(`@loadPieces_${randomInt}`);
+  cy.wait(1000); // cypress is too fast
   cy.log('/addNewPiece');
 }
 
@@ -170,7 +190,22 @@ function addDocumentsToAgenda(files) {
   cy.log('addDocumentsToAgenda');
   cy.clickReverseTab('Documenten');
   cy.contains('Documenten toevoegen').click();
-  return addNewDocumentsInUploadModal(files);
+  return addNewDocumentsInUploadModal(files, 'meeting');
+}
+
+/**
+ * @description Add document to a subcase.
+ * @name addDocumentsToSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {string[]} files
+ */
+function addDocumentsToSubcase(files) {
+  cy.log('addDocumentsToSubcase');
+  cy.clickReverseTab('Documenten');
+  cy.wait(1000); // clicking adding documents sometimes does nothing, page not loaded?
+  cy.contains('Documenten toevoegen').click();
+  return addNewDocumentsInUploadModal(files, 'subcase');
 }
 
 /**
@@ -242,25 +277,26 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
 
   // Open the modal, add files
   cy.contains('Documenten toevoegen').click();
-  addNewDocumentsInUploadModal(files);
+  addNewDocumentsInUploadModal(files, 'agendaitems');
 
   // Click save
-  cy.route('POST', 'pieces').as('createNewPiece');
-  cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-  cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Documenten toevoegen')
-      .click();
-  });
-  cy.wait('@createNewDocumentContainer', {
-    timeout: 24000,
-  });
-  cy.wait('@createNewPiece', {
-    timeout: 24000,
-  });
-  cy.wait('@loadPieces', {
-    timeout: 24000 + (6000 * files.length),
-  });
+  // Dont save here, save in the general cy.addNewDocumentsInUploadModal
+  // cy.route('POST', 'pieces').as('createNewPiece');
+  // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+  // cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
+  // cy.get('@fileUploadDialog').within(() => {
+  //   cy.get('.vl-button').contains('Documenten toevoegen')
+  //     .click();
+  // });
+  // cy.wait('@createNewDocumentContainer', {
+  //   timeout: 24000,
+  // });
+  // cy.wait('@createNewPiece', {
+  //   timeout: 24000,
+  // });
+  // cy.wait('@loadPieces', {
+  //   timeout: 24000 + (6000 * files.length),
+  // });
 }
 
 /**
@@ -573,7 +609,7 @@ function addExtraDocumentVersion(file) {
 
 Cypress.Commands.add('addNewDocumentsInUploadModal', addNewDocumentsInUploadModal);
 Cypress.Commands.add('addExtraDocumentVersion', addExtraDocumentVersion);
-Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToAgenda); // same code, goes to reverse tab to add docs
+Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same code, goes to reverse tab to add docs
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);
 Cypress.Commands.add('addDocumentsToAgendaitem', addDocumentsToAgendaitem);

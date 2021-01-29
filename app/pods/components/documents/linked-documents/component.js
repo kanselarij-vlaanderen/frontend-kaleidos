@@ -7,7 +7,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import config from 'fe-redpencil/utils/config';
 
-export default class SubcaseDocuments extends Component {
+export default class DocumentsLinkedDocumentsComponent extends Component {
   @service currentSession;
   @service store;
 

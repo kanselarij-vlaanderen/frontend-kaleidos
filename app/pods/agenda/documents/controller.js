@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import moment from 'moment';
 
-export default class DocumentsAgendaController extends Controller {
+export default class AgendaDocumentsController extends Controller {
   @service currentSession;
 
   @tracked isEnabledPieceEdit = false;
