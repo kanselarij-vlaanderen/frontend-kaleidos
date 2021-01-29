@@ -3,6 +3,7 @@ import { hash } from 'rsvp';
 import { isEmpty } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AgendaItemsAgendaRoute extends Route {
   queryParams = {
@@ -21,6 +22,7 @@ export default class AgendaItemsAgendaRoute extends Route {
     const agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       include: 'mandatees',
+      'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
     });
 
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);

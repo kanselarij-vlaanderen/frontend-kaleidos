@@ -281,4 +281,7 @@ export default EmberObject.create({
       publishEmail: 'johan.delaure@redpencil.be',
     },
   },
+  MAX_PAGE_SIZE: {
+    AGENDAITEMS: 300,
+  },
 });
