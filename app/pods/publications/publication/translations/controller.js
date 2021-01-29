@@ -37,7 +37,7 @@ export default class PublicationTranslationController extends Controller {
   }
 
   @action
-  async hideWithdrawalWindow() {
+  hideWithdrawalWindow() {
     this.withdrawalReason = '';
     this.withdrawalSubject = '';
     this.withdrawalContent = '';
