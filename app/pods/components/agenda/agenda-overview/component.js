@@ -1,27 +1,25 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { tracked } from '@glimmer/tracking';
 
 export default class AgendaOverview extends Component {
+  /**
+   * @argument notas
+   * @argument announcements
+   * @argument currentAgenda
+   */
   @service sessionService;
-
   @service agendaService;
 
   @service('current-session') currentSessionService;
 
-  classNames = ['vlc-agenda-items', 'auk-u-m-8', 'vlc-agenda-items--spaced'];
-
   dragHandleClass = '.ki-drag-handle-2';
 
-  notas = null;
-  currentAgenda = null;
-
-  isEditingOverview = null;
-
-  isShowingChanges = null;
-
-  showLoader = null;
+  @tracked isEditingOverview = null;
+  @tracked isShowingChanges = null;
+  @tracked showLoader = null;
 
   @action
   selectAgendaitemAction(agendaitem) {
@@ -30,7 +28,7 @@ export default class AgendaOverview extends Component {
 
   @action
   async setFormallyOkAction(agendaitem, formallyOkUri) {
-    this.set('showLoader', true);
+    this.showLoader = true;
     agendaitem.formallyOk = formallyOkUri;
     await agendaitem
       .save()
@@ -38,26 +36,26 @@ export default class AgendaOverview extends Component {
         this.toaster.error();
       })
       .finally(() => {
-        this.set('showLoader', false);
+        this.showLoader = false;
       });
   }
 
   @action
   toggleIsEditingOverview() {
-    this.toggleProperty('isEditingOverview');
+    this.isEditingOverview = !this.isEditingOverview;
   }
 
   @action
   toggleChangesOnly() {
-    this.toggleProperty('isShowingChanges');
+    this.isShowingChanges = ! this.isShowingChanges;
   }
 
   @action
   async reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
-    const isDesignAgenda = this.currentAgenda.isDesignAgenda;
-    this.set('showLoader', true);
+    const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
+    this.showLoader = true;
     await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
-    this.set('showLoader', false);
+    this.showLoader = false;
   }
 }
