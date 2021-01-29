@@ -699,8 +699,8 @@
   "accompanying-text": "Begeleidende tekst",
   "kind-of-publication": "Wijze van publicatie",
   "publication-form-publication-date": "PublicatieDatum BS",
-  "publication-form-numac-nummer": "Numac nummer BS",
-  "no-numac-number-yet": "Nog geen numac nummer",
+  "publication-form-numac-nummer": "Werknummer BS",
+  "no-numac-number-yet": "Nog geen werknummer",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
   "request-translations-for-publication":"Vertalingen aanvragen voor Publicatie {publicationNumber}",
@@ -725,7 +725,7 @@
   "cancelled-request": "Ingetrokken",
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
-  "translation-mail-header": "Begeleidende tekst",
+  "translation-mail-header": "Bericht",
   "files": "Bijlages",
   "no-translation-requests": "Er zijn nog geen vertalingsaanvragen.",
   "translation-requests": "Vertalingsaanvragen.",
@@ -744,5 +744,7 @@
   "withdraw": "Intrekken",
   "reason-withdraw": "Reden van intrekken",
   "documents-may-not-be-saved-message": "Er zijn inconsistenties vastgesteld bij het toevoegen van de documenten. Noteer je wijzigingen en hernieuw deze pagina om te kijken of de documenten correct zijn toegevoegd.",
+  "translation-subject": "Nog te implementeren",
+  "publishpreview-subject": "Nog te implementeren",
   "related-main-meeting-field-label": "Hoort bij ministerraad"
 }
