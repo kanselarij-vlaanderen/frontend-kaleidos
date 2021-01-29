@@ -61,7 +61,7 @@
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButton
                         @skin="tertiary"
-                  {{on "click" (fn this.cancelExistingPreviewActivity activity)}}>
+                  {{on "click" (fn this.showWithdrawalWindow activity)}}>
                   {{t "cancel-request"}}
                 </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
@@ -388,6 +388,77 @@
       >
         {{t "request-publication"}}
       </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{!-- showWithdrawPopup --}}
+
+{{#if showWithdrawPopup}}
+  <WebComponents::AuModal
+    @size="medium"
+    data-test-withdraw-publishpreview
+  >
+    <WebComponents::AuModal::Header @title={{t "cancel-request"}}
+                                    @closeModal={{this.hideWithdrawalWindow}} />
+    <WebComponents::AuModal::Body>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="reason">{{t "reason-withdraw"}}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea
+            @rows="5"
+            @value={{this.withdrawalReason}}
+            data-test-publication-activity-withdrawal-reason-textarea
+          ></WebComponents::AuTextarea>
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="subject">{{t "subject"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput
+                  @block="true"
+                  type="text"
+                  id="subject"
+                  @value={{this.withdrawalSubject}}
+          />
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="reason">{{t "content"}}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea
+            @rows="8"
+            @value={{this.withdrawalContent}}
+            data-test-publication-activity-withdrawal-textarea
+          ></WebComponents::AuTextarea>
+        </div>
+      </div>
+    </WebComponents::AuModal::Body>
+    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+    <WebComponents::AuModal::Footer @custom={{true}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="borderless"
+              {{on "click" this.hideWithdrawalWindow}}
+            >
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="primary"
+                    @icon="close"
+                    @size="small"
+              {{on "click" this.cancelExistingPreviewActivity}}
+                    data-test-withdraw-activity-submit-button
+            >
+              {{t "cancel-request"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
