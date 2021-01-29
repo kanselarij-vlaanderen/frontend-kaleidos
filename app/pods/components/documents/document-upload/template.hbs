@@ -10,7 +10,6 @@
       <div class="vlc-input-field-block">
         <WebComponents::VlFormLabel @value={{t "document-name"}} />
         <WebComponents::VlFormInput
-          @width="4"
           @value={{mut @piece.name}} />
       </div>
       {{#unless this.loadData.isRunning}}

@@ -141,15 +141,7 @@ export default class PublicationsController extends Controller {
 
   @action
   closeFilterModal() {
-    this.filterOptionKeys = {
-      ministerFilterOption: false,
-      notMinisterFilterOption: false,
-      publishedFilterOption: false,
-      toPublishFilterOption: false,
-      pausedFilterOption: false,
-      withdrawnFilterOption: false,
-    };
-
+    this.filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
     localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.isShowPublicationFilterModal = false;
   }
@@ -177,6 +169,8 @@ export default class PublicationsController extends Controller {
       pausedFilterOption: false,
       withdrawnFilterOption: false,
     };
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    this.send('refreshModel');
   }
 
   @action

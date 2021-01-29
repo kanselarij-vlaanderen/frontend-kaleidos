@@ -1,6 +1,7 @@
 /* global context, before, cy,beforeEach, it, Cypress */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
+import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -80,22 +81,15 @@ context('Subcase tests', () => {
 
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering/);
-    cy.get('.vl-description-data').within(() => {
-      cy.get('.vl-description-data__value').as('descriptionValue');
-      // cy.get('@descriptionValue').eq(0).contains(/Nog geen nummer/); // zitting number is a thing now, can we know this value ?
-      cy.get('@descriptionValue').eq(1)
-        .contains(/Ingediend voor de agenda van/);
-      cy.get('@descriptionValue').eq(1)
-        .contains(dateRegex);
-      cy.get('@descriptionValue').eq(2)
-        .contains(dateFormat);
-      cy.get('@descriptionValue').eq(4)
-        .contains(dateFormatDotted);
-      // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
-      // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-      cy.get('@descriptionValue').eq(5)
-        .contains(/Hilde Crevits/);
-    });
+
+    cy.get(cases.subcaseMeetingNumber);
+    cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
+    cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
+    cy.get(agenda.subcase.agendaLink).contains(dateFormat);
+    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
+    // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
+    // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
+    cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
 
     cy.openAgendaForDate(agendaDate);
     cy.contains(SubcaseTitleShort).click();
@@ -155,16 +149,21 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
-    const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+    const realmonth = agendaDate.month() + 1; // Js month start at 0.
+    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
+    const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
+    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
+    const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
-    cy.get('.vl-description-data').within(() => {
-      cy.get('.vl-description-data__value').as('descriptionValue');
-      cy.get('@descriptionValue').eq(2)
-        .contains(formattedDate);
-      cy.get('@descriptionValue').eq(2)
-        .get('.vl-link')
-        .click();
-    });
+    cy.get(cases.subcaseMeetingNumber);
+    cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
+    cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
+    cy.get(agenda.subcase.agendaLink).contains(dateFormat);
+    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
+    // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
+    // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
+    cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
+    cy.get(agenda.subcase.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossier/');

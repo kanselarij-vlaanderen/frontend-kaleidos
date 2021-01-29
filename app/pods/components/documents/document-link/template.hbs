@@ -177,8 +177,7 @@
       {{#if this.newPiece}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}
-          @width={{4}} />
+          @value={{this.newPiece.name}}/>
         <Documents::DocumentUpload
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}} />
