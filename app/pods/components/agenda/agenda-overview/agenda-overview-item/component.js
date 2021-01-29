@@ -21,13 +21,13 @@ export default class AgendaOverviewItem extends Component {
 
   @service('current-session') currentSessionService;
   @alias('sessionService.currentSession') currentSession;
-  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   hideLabel = true;
 
   isShowingChanges = null;
 
   @tracked subcase;
+  @tracked newsletterIsVisible;
 
   @tracked showLoader = false;
 
@@ -38,6 +38,7 @@ export default class AgendaOverviewItem extends Component {
   constructor() {
     super(...arguments);
     this.loadSubcase.perform();
+    this.loadNewsletterVisibility.perform();
   }
 
   get classNameBindings() {
@@ -73,6 +74,19 @@ export default class AgendaOverviewItem extends Component {
     const agendaActivity = yield this.args.agendaitem.agendaActivity;
     if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
       this.subcase = yield agendaActivity.subcase;
+    }
+  }
+
+  @task
+  *loadNewsletterVisibility() {
+    const treatments = yield this.args.agendaitem.treatments;
+    // TODO: treatments always seems to be undefined. Maybe in submission activity refactor?
+    const treatment = treatments.firstObject;
+    const newsletterInfo = yield treatment.newsletterInfo;
+    if (newsletterInfo) {
+      this.newsletterIsVisible = newsletterInfo.inNewsletter;
+    } else {
+      this.newsletterIsVisible = false;
     }
   }
 }
