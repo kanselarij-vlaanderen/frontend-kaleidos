@@ -15,23 +15,15 @@ export default class AgendaOverviewItem extends Component {
    */
 
   @service store;
-
   @service sessionService;
-
   @service publicationService;
-
   @service router;
 
   @service('current-session') currentSessionService;
-
   @alias('sessionService.currentAgenda') currentAgenda;
-
   @alias('sessionService.currentSession') currentSession;
-
   @alias('args.agendaitem.checkAdded') isNew;
-
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
-
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   hideLabel = true;
@@ -39,13 +31,10 @@ export default class AgendaOverviewItem extends Component {
   isShowingChanges = null;
 
   @tracked renderDetails = null;
-
   @tracked showLoader = false;
 
   @tracked retracted = this.args.agendaitem.retracted || false;
-
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
-
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
   get classNameBindings() {
