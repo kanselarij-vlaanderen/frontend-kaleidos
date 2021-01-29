@@ -47,11 +47,10 @@ export default class AgendaItemsAgendaRoute extends Route {
       agenda,
       meeting,
     } = this.modelFor('agenda');
-    controller.set('meeting', meeting);
-    controller.set('agenda', agenda);
-
-    controller.set('filteredNotas', model.notas);
-    controller.set('filteredAnnouncements', model.announcements);
+    controller.meeting = meeting;
+    controller.agenda = agenda;
+    controller.filteredNotas = model.notas;
+    controller.filteredAnnouncements = model.announcements;
   }
 
   @action
