@@ -9,13 +9,13 @@
       {{!-- await for both announcements and agendaitems is needed to have scrolling to selected agendaitem --}}
         <Agenda::AgendaOverview
           @announcements={{await this.sortedAnnouncements}}
-          @agendaitems={{await this.sortedAgendaitems}}
+          @agendaitems={{await this.sortedNotas}}
           @currentAgenda={{this.agenda}}
         />
       {{else}}
         <Agenda::AgendaDetail::Sidebar
           @announcements={{await this.sortedAnnouncements}}
-          @agendaitems={{await this.sortedAgendaitems}}
+          @agendaitems={{await this.sortedNotas}}
           @currentAgenda={{this.agenda}}
         />
       {{/if}}

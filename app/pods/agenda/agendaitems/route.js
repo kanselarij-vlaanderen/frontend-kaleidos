@@ -23,13 +23,14 @@ export default class AgendaItemsAgendaRoute extends Route {
       include: 'mandatees',
     });
 
+    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
     this.set('sessionService.selectedAgendaitem', null);
 
     return hash({
+      notas,
       announcements,
-      agendaitems,
     });
   }
 
@@ -49,7 +50,7 @@ export default class AgendaItemsAgendaRoute extends Route {
     controller.set('meeting', meeting);
     controller.set('agenda', agenda);
 
-    controller.set('filteredAgendaitems', model.agendaitems);
+    controller.set('filteredNotas', model.notas);
     controller.set('filteredAnnouncements', model.announcements);
   }
 

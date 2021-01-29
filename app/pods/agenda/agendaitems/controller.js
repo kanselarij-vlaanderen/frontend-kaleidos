@@ -27,12 +27,12 @@ export default class AgendaitemsAgendaController extends Controller {
 
   meeting;
   agenda;
-  @tracked filteredAgendaitems;
+  @tracked filteredNotas;
   @tracked filteredAnnouncements;
 
-  @computed('filteredAgendaitems.@each.{priority,isDeleted}')
-  get sortedAgendaitems() {
-    const actualAgendaitems = this.filteredAgendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
+  @computed('filteredNotas.@each.{priority,isDeleted}')
+  get sortedNotas() {
+    const actualAgendaitems = this.filteredNotas.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
       .sortBy('priority');
     return this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems).then(() => actualAgendaitems);
   }
@@ -59,7 +59,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @(task(function *() {
     if (isEmpty(this.filter)) {
-      this.filteredAgendaitems = this.model.agendaitems;
+      this.filteredNotas = this.model.notas;
       this.filteredAnnouncements = this.model.announcements;
     } else {
       const filter = {
@@ -68,7 +68,7 @@ export default class AgendaitemsAgendaController extends Controller {
         agendaId: this.agenda.id,
       };
       const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
-      this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingIds.includes(ai.id));
+      this.filteredNotas = this.model.notas.filter((ai) => matchingIds.includes(ai.id));
       this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
     }
   })) filterTask;
