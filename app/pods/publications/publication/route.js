@@ -46,7 +46,9 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       counts: {
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
+        openTranslationRequests: totalTranslations.length - closedTranslationRequests.length - withdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
+        openPublishPreviewRequests: totalPublishPreviewRequests.length - closedPublishPreviewRequests.length - withdrawnPublishPreviewRequests.length,
         closedOrWithdrawnPublishPrevieuwRequests: closedPublishPreviewRequests.length + withdrawnPublishPreviewRequests.length,
       },
       refreshAction: this.refreshModel,

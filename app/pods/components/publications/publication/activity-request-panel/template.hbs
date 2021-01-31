@@ -17,12 +17,24 @@
     </WebComponents::AuPanel::Header>
     {{#if (not this.isCollapsed)}}
       <WebComponents::AuPanel::Body>
+
+        {{!-- IF WITHDRAWN SHOW REASON--}}
+        {{#if @activity.withdrawReason}}
+          <div class="auk-u-mb-4">
+            <WebComponents::AuLabel>
+              {{t "reason-withdraw"}}
+            </WebComponents::AuLabel>
+            <p class="auk-u-text-pre vlc-mail-content">{{@activity.withdrawReason}}</p>
+          </div>
+        {{/if}}
+
         <div class="auk-u-mb-4">
           <WebComponents::AuLabel>
             {{t "translation-mail-header"}}
           </WebComponents::AuLabel>
           <p class="auk-u-text-pre vlc-mail-content">{{@activity.mailContent}}</p>
         </div>
+
         <WebComponents::AuLabel>
           {{t "files"}}
         </WebComponents::AuLabel>

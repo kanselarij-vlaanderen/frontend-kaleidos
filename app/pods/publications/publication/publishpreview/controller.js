@@ -12,10 +12,11 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
+  @service emailService;
   @service subcasesService;
   @service fileService;
 
-  // properties for making the design
+  // Properties for making the design.
   @tracked withdrawn = true;
   @tracked showLoader = false;
   @tracked showpublicationModal = false;
@@ -26,7 +27,7 @@ export default class PublicationPublishPreviewController extends Controller {
     pieces: A([]),
   };
 
-  // piece uploading
+  // piece uploading.
   @tracked isOpenUploadPublishPreviewModal = false;
   @tracked isOpenUploadPublishPreviewCorrectionModal = false;
   @tracked uploadedFile = null;
@@ -38,6 +39,13 @@ export default class PublicationPublishPreviewController extends Controller {
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
   @tracked activityToDeletePiecesFrom = null;
+
+  // Withdrawal.
+  @tracked withdrawalContent = '';
+  @tracked withdrawalSubject = '';
+  @tracked withdrawActivity = null;
+  @tracked withdrawalReason = '';
+  @tracked showWithdrawPopup = false;
 
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
@@ -276,13 +284,28 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  async cancelExistingPreviewActivity(previewActivity) {
+  async cancelExistingPreviewActivity() {
+    const previewActivity = this.withdrawActivity;
     this.showLoader = true;
+    this.showWithdrawPopup = false;
+
+    // Update activity.
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     previewActivity.status = withDrawnStatus;
+    previewActivity.withdrawReason = this.withdrawalReason;
     previewActivity.endDate = moment().utc();
     await previewActivity.save();
+
+    const pieces = await previewActivity.get('usedPieces');
+    // Send email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawPublishPreviewEmail, this.withdrawalSubject, this.withdrawalContent, pieces);
+
+    // Reset local state.
     this.model.refreshAction();
+    this.withdrawalReason = '';
+    this.withdrawalSubject = '';
+    this.withdrawalContent = '';
+    this.withdrawActivity = null;
     this.showLoader = false;
   }
 
@@ -342,5 +365,29 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async showPieceViewer(piece) {
     window.open(`/document/${(await piece).get('id')}`);
+  }
+
+  // Withdrawal.
+
+  @action
+  async showWithdrawalWindow(activity) {
+    this.showLoader = true;
+    this.withdrawActivity = activity;
+    const subcase = await activity.get('subcase');
+    const publicationFlow = await subcase.get('publicationFlow');
+    const _case = await publicationFlow.get('case');
+    set(this, 'withdrawalContent', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.content, publicationFlow, _case));
+    set(this, 'withdrawalSubject', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.subject, publicationFlow, _case));
+    this.showLoader = false;
+    this.showWithdrawPopup = true;
+  }
+
+  @action
+  hideWithdrawalWindow() {
+    this.withdrawalReason = '';
+    this.withdrawalSubject = '';
+    this.withdrawalContent = '';
+    this.withdrawActivity = null;
+    this.showWithdrawPopup = false;
   }
 }

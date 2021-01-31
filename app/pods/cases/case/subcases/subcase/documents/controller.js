@@ -17,7 +17,7 @@ import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
 } from 'fe-redpencil/utils/agendaitem-utils';
 
-export default class DocumentsSubcaseSubcasesController extends Controller {
+export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
   @service currentSession;
   @service intl;
 

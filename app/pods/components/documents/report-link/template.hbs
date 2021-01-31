@@ -185,8 +185,7 @@
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.pieceInCreation.name}}
-          @width={{4}} />
+          @value={{this.pieceInCreation.name}}/>
         <EmberKaleidosWebuniversum::VlUploadedDocument
           @name={{this.pieceInCreation.file.filename}}
           @extension={{this.pieceInCreation.file.extension}}
