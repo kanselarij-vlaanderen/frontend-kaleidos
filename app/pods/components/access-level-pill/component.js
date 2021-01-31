@@ -1,112 +1,90 @@
-import Component from '@ember/component';
-import EmberObject, {
-  action, computed
-} from '@ember/object';
-
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import DS from 'ember-data';
 import CONFIG from 'fe-redpencil/utils/config';
 
-export default class AccessLevelPill extends Component {
-  confidential = false;
-
-  editing = false;
-
-  @service() intl;
-
+export default class AccessLevelPillComponent extends Component {
+  /**
+   * An access-level pill component.
+   *
+   * @argument accessLevel: an accessLevel object or null
+   * @argument confidential: boolean
+   */
+  @service intl;
   @service('current-session') session;
 
-  classNameBindings = [':auk-u-flex', ':auk-u-flex--vertical-center'];
+  @tracked isEditing = false;
 
-  loading = false;
-  lastPiece = null;
-
-  @computed('lastPiece.accessLevel')
-  get accessLevel() {
-    const accessLevel = this.get('lastPiece.accessLevel');
-
-    if (!accessLevel) {
-      return null;
-    }
-
-    return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => access),
-    });
+  get isLoading() {
+    return this.confirmChangeAccessLevel.isRunning
+      || this.cancelChangeAccessLevel.isRunning
+      || this.changeConfidentiality.isRunning;
   }
 
-  @computed('lastPiece.accessLevel')
-  get originalAccessLevel() {
-    const accessLevel = this.get('lastPiece.accessLevel');
-
-    if (!accessLevel) {
-      return null;
-    }
-
-    return DS.PromiseObject.create({
-      promise: accessLevel.then((access) => access),
-    });
+  get inverseConfidentiality() {
+    return !this.args.confidential;
   }
 
-  @computed('accessLevelId')
   get accessLevelClass() {
-    switch (this.accessLevelId) {
-      case CONFIG.publiekAccessLevelId:
-        return 'vlc-pill--success';
-      case CONFIG.internOverheidAccessLevelId:
-        return 'vlc-pill--warning';
-      case CONFIG.internRegeringAccessLevelId:
-        return 'vlc-pill--error';
-      default:
-        return '';
+    if (this.args.accessLevel) {
+      switch (this.args.accessLevel.id) {
+        case CONFIG.publiekAccessLevelId:
+          return 'vlc-pill--success';
+        case CONFIG.internOverheidAccessLevelId:
+          return 'vlc-pill--warning';
+        case CONFIG.internRegeringAccessLevelId:
+          return 'vlc-pill--error';
+        default:
+          return '';
+      }
     }
+    return '';
   }
 
-  @computed('accessLevel.id')
-  get accessLevelId() {
-    return (this.get('accessLevel') || EmberObject.create()).get('id');
-  }
-
-  @computed('accessLevel.label')
   get accessLevelLabel() {
-    return (this.get('accessLevel') || EmberObject.create()).get('label') || this.intl.t('no-accessLevel');
+    if (this.args.accessLevel) {
+      return this.args.accessLevel.label;
+    }
+    return this.intl.t('no-accessLevel');
   }
 
   @action
   toggleEdit() {
-    if (this.get('session.isEditor')) {
-      this.toggleProperty('editing');
+    if (this.session.isEditor) {
+      this.isEditing = !this.isEditing;
     }
   }
 
   @action
-  cancelChanges() {
-    this.set('accessLevel', this.originalAccessLevel);
-    this.set('editing', false);
-  }
-
-  @action
-  chooseAccessLevel(accessLevel) {
-    this.set('accessLevel', accessLevel);
-  }
-
-  @action
-  toggleConfidential() {
-    if (!this.get('session.isEditor')) {
-      return;
+  changeAccessLevel(accessLevel) {
+    debugger
+    if (this.args.onChangeAccessLevel) {
+      this.args.onChangeAccessLevel(accessLevel);
     }
-
-    this.lastPiece.set('confidential', !this.lastPiece.get('confidential'));
-    this.lastPiece.save();
   }
 
-  @action
-  save() {
-    if (this.get('accessLevel')) {
-      this.set('loading', true);
-      this.lastPiece.set('accessLevel', this.accessLevel);
-      this.lastPiece.save();
-      this.set('loading', false);
-      this.set('editing', false);
+  @task
+  *confirmChangeAccessLevel(accessLevel) {
+    if (this.args.onConfirmChangeAccessLevel) {
+      yield this.args.onConfirmChangeAccessLevel(accessLevel);
+    }
+    this.isEditing = false;
+  }
+
+  @task
+  *cancelChangeAccessLevel() {
+    if (this.args.onCancelChangeAccessLevel) {
+      yield this.args.onCancelChangeAccessLevel();
+    }
+    this.isEditing = false;
+  }
+
+  @task
+  *changeConfidentiality(confidentiality) {
+    if (this.args.onChangeConfidentiality) {
+      yield this.args.onChangeConfidentiality(confidentiality);
     }
   }
 }

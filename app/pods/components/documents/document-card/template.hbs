@@ -14,9 +14,9 @@
           </div>
           <div class="vlc-document-card-toolbar__right">
             <div class="vlc-toolbar__item auk-u-flex">
-              {{#unless this.loadPieceRelatedData.isRunning}}
-                <AccessLevelPill @lastPiece={{this.piece}} />
-              {{/unless}}
+              {{#if this.lastPiece}}
+                <AccessLevelPill @piece={{this.lastPiece}} />
+              {{/if}}
             </div>
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}

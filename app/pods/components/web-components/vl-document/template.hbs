@@ -13,7 +13,7 @@
       {{/if}}
       {{await piece.name}}
     </h6>
-    {{access-level-pill lastPiece=piece}}
+    <AccessLevelPill @piece={{this.piece}}/>
     {{#if (await piece.file.downloadLink)}}
       <button type="button" class="vl-button vl-button--link vl-button--icon"
         {{action "showPieceViewer" piece}}
