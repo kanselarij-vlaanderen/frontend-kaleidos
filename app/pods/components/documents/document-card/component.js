@@ -35,6 +35,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isEditingPiece = false;
 
   @tracked piece;
+  @tracked accessLevel;
   @tracked documentContainer;
 
   @tracked uploadedFile;
@@ -72,6 +73,7 @@ export default class DocumentsDocumentCardComponent extends Component {
         include: 'document-container,document-container.type,access-level',
       })).firstObject;
       this.documentContainer = yield this.piece.documentContainer;
+      this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
@@ -79,6 +81,7 @@ export default class DocumentsDocumentCardComponent extends Component {
         'filter[:id:]': piece.id,
         include: 'document-container,document-container.type,access-level',
       });
+      this.accessLevel = yield this.piece.accessLevel;
     } else {
       throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
     }
@@ -232,5 +235,30 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (this.args.didDeleteContainer) {
       this.args.didDeleteContainer(this.documentContainer);
     }
+  }
+
+  @action
+  changeAccessLevel(al) {
+    this.piece.set('accessLevel', al);
+    this.accessLevel = al;
+  }
+
+  @action
+  async saveAccessLevel() {
+    // TODO make sure not to overwrite things
+    await this.piece.save();
+    await this.loadPieceRelatedData.perform();
+  }
+
+  @action
+  async changeConfidentiality(confidential) {
+    this.piece.set('confidential', confidential);
+    // TODO make sure not to overwrite things
+    await this.piece.save();
+  }
+
+  @action
+  async reloadAccessLevel() {
+    await this.loadPieceRelatedData.perform();
   }
 }

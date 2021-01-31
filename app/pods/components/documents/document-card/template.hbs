@@ -14,9 +14,16 @@
           </div>
           <div class="vlc-document-card-toolbar__right">
             <div class="vlc-toolbar__item auk-u-flex">
-              {{#if this.lastPiece}}
-                <AccessLevelPill @piece={{this.lastPiece}} />
-              {{/if}}
+              {{#unless this.loadPieceRelatedData.isRunning}}
+                <AccessLevelPill
+                  @accessLevel={{this.accessLevel}}
+                  @confidential={{this.piece.confidential}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                  @onChangeConfidentiality={{this.changeConfidentiality}}
+                />
+              {{/unless}}
             </div>
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}
