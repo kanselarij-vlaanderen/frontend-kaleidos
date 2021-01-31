@@ -55,7 +55,8 @@ export default class PublicationTranslationController extends Controller {
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     translationActivity.status = withDrawnStatus;
     translationActivity.withdrawReason = this.withdrawalReason;
-    translationActivity.endDate = moment().utc();
+    translationActivity.endDate = moment()
+      .utc();
     await translationActivity.save();
 
     const pieces = await translationActivity.get('usedPieces');
@@ -74,10 +75,20 @@ export default class PublicationTranslationController extends Controller {
   @action
   async markTranslationActivityDone(translationActivity) {
     this.showLoader = true;
+    const openStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
     const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-    translationActivity.status = closedStatus;
-    translationActivity.endDate = moment().utc();
-    await translationActivity.save();
+    const translationActivityStatus = await translationActivity.get('status');
+
+    if (translationActivityStatus.id === closedStatus.id) {
+      translationActivity.status = openStatus;
+      translationActivity.endDate = null;
+      await translationActivity.save();
+    } else {
+      translationActivity.status = closedStatus;
+      translationActivity.endDate = moment()
+        .utc();
+      await translationActivity.save();
+    }
     this.model.refreshAction();
     this.showLoader = false;
   }
