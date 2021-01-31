@@ -63,7 +63,6 @@ export default class AccessLevelPillComponent extends Component {
 
   @action
   changeAccessLevel(accessLevel) {
-    debugger
     if (this.args.onChangeAccessLevel) {
       this.args.onChangeAccessLevel(accessLevel);
     }
