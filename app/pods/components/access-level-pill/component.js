@@ -11,6 +11,10 @@ export default class AccessLevelPillComponent extends Component {
    *
    * @argument accessLevel: an accessLevel object or null
    * @argument confidential: boolean
+   * @argument onChangeAccessLevel
+   * @argument onConfirmChangeAccessLevel
+   * @argument onCancelChangeAccessLevel
+   * @argument onChangeConfidentiality
    */
   @service intl;
   @service('current-session') session;
