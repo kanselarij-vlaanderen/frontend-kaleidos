@@ -85,9 +85,9 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   @task
-  *changeConfidentiality(confidentiality) {
+  *changeConfidentiality() {
     if (this.args.onChangeConfidentiality) {
-      yield this.args.onChangeConfidentiality(confidentiality);
+      yield this.args.onChangeConfidentiality(!this.args.confidential);
     }
   }
 }
