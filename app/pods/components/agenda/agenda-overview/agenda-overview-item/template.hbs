@@ -127,62 +127,60 @@
         {{/if}}
       {{/if}}
       {{#if (not @isEditingOverview)}}
-        {{#if currentSessionService.isViewer}}
-          {{#if
-            (or this.subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not this.newsletterIsVisible))))
-          }}
-            <div class="vlc-hr"></div>
-          {{/if}}
-          <div class="vlc-agenda-items__remarks">
-            <div>
-              {{#if @agendaitem.explanation}}
-                <span class="auk-u-text-bold">
-                  {{t "remark-title"}}:
-                </span> {{@agendaitem.explanation}}
-              {{/if}}
-            </div>
-            <div class="vlc-agenda-items__icons">
-              <div class="auk-u-flex vlc-agenda-items__icons">
-                {{#if (not this.newsletterIsVisible)}}
-                  <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                    {{#attach-tooltip
-                      arrow="true"
-                      animation="shift"
-                      placement="top"
-                      class="ember-attacher-tooltip"
-                    }}
-                      <p>
-                        {{t "not-visible-in-newsletter"}}
-                      </p>
-                    {{/attach-tooltip}}
-                  </i>
-                {{/if}}
-                {{#if (await @agendaitem.checkAdded)}}
-                  <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
-                    {{#attach-tooltip
-                      arrow="true"
-                      animation="shift"
-                      placement="top"
-                      class="ember-attacher-tooltip"
-                    }}
-                      <p>
-                        {{t "added-agendaitem-text"}}
-                      </p>
-                    {{/attach-tooltip}}
-                  </i>
-                {{/if}}
-              </div>
-              {{#if this.subcase.confidential}}
-                <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
-                  <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
-                     data-test-icon-agenda-confidentiality-locked
-                  ></i>
-                  {{t "confidential"}}
-                </span>
-              {{/if}}
-            </div>
-          </div>
+        {{#if
+          (or this.subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not this.newsletterIsVisible))))
+        }}
+          <div class="vlc-hr"></div>
         {{/if}}
+        <div class="vlc-agenda-items__remarks">
+          <div>
+            {{#if @agendaitem.explanation}}
+              <span class="auk-u-text-bold">
+                {{t "remark-title"}}:
+              </span> {{@agendaitem.explanation}}
+            {{/if}}
+          </div>
+          <div class="vlc-agenda-items__icons">
+            <div class="auk-u-flex vlc-agenda-items__icons">
+              {{#if (not this.newsletterIsVisible)}}
+                <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                  {{#attach-tooltip
+                    arrow="true"
+                    animation="shift"
+                    placement="top"
+                    class="ember-attacher-tooltip"
+                  }}
+                    <p>
+                      {{t "not-visible-in-newsletter"}}
+                    </p>
+                  {{/attach-tooltip}}
+                </i>
+              {{/if}}
+              {{#if (await @agendaitem.checkAdded)}}
+                <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
+                  {{#attach-tooltip
+                    arrow="true"
+                    animation="shift"
+                    placement="top"
+                    class="ember-attacher-tooltip"
+                  }}
+                    <p>
+                      {{t "added-agendaitem-text"}}
+                    </p>
+                  {{/attach-tooltip}}
+                </i>
+              {{/if}}
+            </div>
+            {{#if this.subcase.confidential}}
+              <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
+                <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
+                   data-test-icon-agenda-confidentiality-locked
+                ></i>
+                {{t "confidential"}}
+              </span>
+            {{/if}}
+          </div>
+        </div>
       {{/if}}
     </div>
   </div>
