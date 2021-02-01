@@ -87,17 +87,18 @@
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
-            {{#if (not @isEditingOverview)}}
+            {{#if @isEditingOverview}}
+              <Utils::FormallyOkSelector
+                @formallyOk={{formallyOk}}
+                @isLoading={{isLoading}}
+                @hideLabel={{hideLabel}}
+                @setAction={{perform this.setFormallyOkStatus}}
+              />
+            {{else}}
               <p class="{{@agendaitem.formallyOkToShow.classNames}}">
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
                 {{@agendaitem.formallyOkToShow.label}}
               </p>
-            {{else}}
-              <Utils::FormallyOkSelector
-                      @formallyOk={{formallyOk}}
-                      @isLoading={{isLoading}}
-                      @hideLabel={{hideLabel}}
-                      @setAction={{action "setAction"}} />
             {{/if}}
           {{/if}}
         </div>

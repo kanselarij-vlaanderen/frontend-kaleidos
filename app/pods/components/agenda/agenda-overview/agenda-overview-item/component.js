@@ -62,10 +62,9 @@ export default class AgendaOverviewItem extends Component {
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
-  @action
-  async setAction(agendaitem) {
-    const uri = agendaitem.get('uri');
-    this.args.setFormallyOkAction(uri);
+  @task
+  *setFormallyOkStatus(status) {
+    yield this.args.setFormallyOkAction(status.uri);
   }
 
   @task
