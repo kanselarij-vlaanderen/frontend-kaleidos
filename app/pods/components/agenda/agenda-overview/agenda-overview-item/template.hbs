@@ -104,20 +104,23 @@
           {{/if}}
         </div>
       </div>
-      {{#if this.documentsAreReleased}}
-        {{#if (await @agendaitem.sortedPieces)}}
-          <div class="vlc-hr"></div>
-          <Utils::PiecesListForItem
-            @isClickable={{true}}
-            @agendaitemOrSubcase={{@agendaitem}}
-          />
-        {{else}}
-          {{#if (await @agendaitem.pieceNames)}}
-            <div class="vlc-hr"></div>
-            <Utils::PiecesListLazyLoaded
-             @pieceNames={{await @agendaitem.pieceNames}}
-            />
-          {{/if}}
+      {{#if (or this.currentSessionService.isEditor this.documentsAreReleased)}}
+        <div class="vl-accordion__panel">
+          <div class="auk-u-mt-4">
+            <Documents::DocumentBadgeList @pieces={{this.limitedAgendaitemDocuments}}/>
+          </div>
+        </div>
+        {{#if this.enableShowMore}}
+          <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
+            <i class="{{if this.isShowingAllDocuments "ki-remove" "ki-plus"}} vl-icon vlc-document-show-more-button__icon "/>
+            <p  class="vlc-document-show-more-button__text">
+              {{#if this.isShowingAllDocuments }}
+                {{t "show-less"}}
+              {{else}}
+                {{t "show-more"}}
+              {{/if}}
+            </p>
+          </button>
         {{/if}}
       {{/if}}
       {{#if (not @isEditingOverview)}}
