@@ -50,7 +50,6 @@ export default class AgendaOverviewItem extends Component {
     return this.agendaitemDocuments.length > this.documentListSize;
   }
 
-
   @task
   *startPublication() {
     const _case = yield this.args.agendaitem.get('case');
