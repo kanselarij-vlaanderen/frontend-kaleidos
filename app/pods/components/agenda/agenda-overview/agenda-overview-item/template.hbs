@@ -103,7 +103,7 @@
           {{/if}}
         </div>
       </div>
-      {{#if overheidCanViewDocuments}}
+      {{#if this.overheidCanViewDocuments}}
         {{#if (await @agendaitem.sortedPieces)}}
           <div class="vlc-hr"></div>
           <Utils::PiecesListForItem
