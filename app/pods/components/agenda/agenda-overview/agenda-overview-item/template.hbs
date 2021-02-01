@@ -7,11 +7,7 @@
         </WebComponents::AuButton>
       </div>
       <span class="vlc-agenda-items-sub-item__numbering">
-        {{#if @agendaitem.number}}
-          {{@agendaitem.number}}.
-        {{else}}
-          {{add index 1}}.
-        {{/if}}
+        {{@agendaitem.number}}.
       </span>
     </h4>
     <div class="vlc-agenda-items__text">
