@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-class-members */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -8,10 +7,9 @@ import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaOverviewItem extends Component {
   /**
-   * INFO arguments from parent.
    *
-   * @agendaitem={{agendaitem}}
-   * @isEditingOverview={{isEditingOverview}}
+   * @argument agendaitem
+   * @argument isEditingOverview
    */
 
   @service store;

@@ -77,17 +77,15 @@
       </div>
 
       <div class="auk-u-flex auk-u-flex--justify-between">
-        {{#if @isEditingOverview}}
+        {{#if this.subcase.subcaseName}}
           <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
+            {{#if @isEditingOverview}}
+              {{this.subcase.subcaseName}}
+            {{/if}}
           </span>
         {{else}}
-          {{#if this.subcase.subcaseName}}
-            <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-              {{this.subcase.subcaseName}}
-            </span>
-          {{else}}
-            <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
-          {{/if}}
+          {{!--  TODO: Only here because required for alignment of flex items --}}
+          <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
