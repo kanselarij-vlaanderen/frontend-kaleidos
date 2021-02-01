@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 
@@ -92,5 +93,10 @@ export default class AgendaOverviewItem extends Component {
     } else {
       this.newsletterIsVisible = false;
     }
+  }
+
+  @action
+  toggleShowingAllDocuments() {
+    this.isShowingAllDocuments = !this.isShowingAllDocuments;
   }
 }
