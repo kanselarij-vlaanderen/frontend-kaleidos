@@ -18,8 +18,6 @@ export default class AgendaOverviewItem extends Component {
 
   @service('current-session') currentSessionService;
 
-  isShowingChanges = null;
-
   @tracked subcase;
   @tracked newsletterIsVisible;
 
@@ -44,12 +42,10 @@ export default class AgendaOverviewItem extends Component {
     return this.sessionService.currentSession.releasedDocuments > new Date();
   }
 
-  @action
-  async startPublication() {
-    this.showLoader = true;
-    const _case = await this.args.agendaitem.get('case');
-    const newPublication = await this.publicationService.createNewPublication(0, _case.id);
-    this.showLoader = false;
+  @task
+  *startPublication() {
+    const _case = yield this.args.agendaitem.get('case');
+    const newPublication = yield this.publicationService.createNewPublication(0, _case.id);
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
