@@ -127,11 +127,7 @@
         {{/if}}
       {{/if}}
       {{#if (not @isEditingOverview)}}
-        {{#if
-          (or this.subcase.confidential (or (await @agendaitem.checkAdded) (or @agendaitem.explanation (not this.newsletterIsVisible))))
-        }}
-          <div class="vlc-hr"></div>
-        {{/if}}
+        <div class="vlc-hr"></div>
         <div class="vlc-agenda-items__remarks">
           <div>
             {{#if @agendaitem.explanation}}
