@@ -31,12 +31,13 @@ export default class AgendaOverviewItem extends Component {
 
   @tracked showLoader = false;
 
-  @tracked retracted = this.args.agendaitem.retracted || false;
-  @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
-  @tracked formallyOk = this.args.agendaitem.formallyOk || null;
+  @tracked retracted;
+  @tracked formallyOk;
 
   constructor() {
     super(...arguments);
+    this.retracted = this.args.agendaitem.retracted || false;
+    this.formallyOk = this.args.agendaitem.formallyOk || null;
     this.loadSubcase.perform();
     this.loadNewsletterVisibility.perform();
   }
