@@ -79,9 +79,7 @@
       <div class="auk-u-flex auk-u-flex--justify-between">
         {{#if this.subcase.subcaseName}}
           <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-            {{#if @isEditingOverview}}
-              {{this.subcase.subcaseName}}
-            {{/if}}
+            {{this.subcase.subcaseName}}
           </span>
         {{else}}
           {{!--  TODO: Only here because required for alignment of flex items --}}
