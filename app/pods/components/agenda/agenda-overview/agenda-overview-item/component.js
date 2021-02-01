@@ -80,11 +80,14 @@ export default class AgendaOverviewItem extends Component {
   @task
   *loadNewsletterVisibility() {
     const treatments = yield this.args.agendaitem.treatments;
-    // TODO: treatments always seems to be undefined. Maybe in submission activity refactor?
     const treatment = treatments.firstObject;
-    const newsletterInfo = yield treatment.newsletterInfo;
-    if (newsletterInfo) {
-      this.newsletterIsVisible = newsletterInfo.inNewsletter;
+    if (treatment) { // TODO: this is only the case for the first item of the agenda (approval, older data)
+      const newsletterInfo = yield treatment.newsletterInfo;
+      if (newsletterInfo) {
+        this.newsletterIsVisible = newsletterInfo.inNewsletter;
+      } else {
+        this.newsletterIsVisible = false;
+      }
     } else {
       this.newsletterIsVisible = false;
     }
