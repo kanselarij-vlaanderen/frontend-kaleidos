@@ -48,6 +48,11 @@ export default class VlDocument extends Component {
     }
   }
 
+  @action
+  showPieceViewer() {
+    window.open(`/document/${this.piece.id}`);
+  }
+
   // TODO: @enableDelete will replace this
   // isDeletable: computed('piece', 'piece.nextPiece', async function() {
   //   const nextPiece = await this.piece.get('nextPiece');
