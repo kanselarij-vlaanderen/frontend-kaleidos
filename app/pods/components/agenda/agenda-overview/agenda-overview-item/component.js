@@ -18,7 +18,6 @@ export default class AgendaOverviewItem extends Component {
   @service router;
 
   @service('current-session') currentSessionService;
-  @alias('sessionService.currentSession') currentSession;
 
   isShowingChanges = null;
 
@@ -42,11 +41,8 @@ export default class AgendaOverviewItem extends Component {
     `;
   }
 
-  get overheidCanViewDocuments() {
-    const isOverheid = this.currentSessionService.isOverheid;
-    const documentsAreReleased = this.currentSession.releasedDocuments;
-
-    return !(isOverheid && !documentsAreReleased);
+  get documentsAreReleased() {
+    return this.sessionService.currentSession.releasedDocuments > new Date();
   }
 
   @action
