@@ -168,8 +168,9 @@
             <div class="vl-accordion__panel">
               {{#each this.visiblePieces as |piece|}}
                 <WebComponents::VlDocument
-                  @onDeletePieceFromContainer={{@didDeletePiece}}
-                  @piece={{piece}} />
+                  @didDeletePiece={{@didDeletePiece}}
+                  @piece={{piece}}
+                />
               {{/each}}
             </div>
           </div>

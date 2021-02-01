@@ -1,88 +1,128 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 
-export default Component.extend({
-  intl: service(),
-  store: service(),
-  toaster: service(),
-  fileService: service(),
-  currentSession: service(),
+export default class VlDocument extends Component {
+  /**
+   * A document card with expandable document history .
+   * By default uses the @piece argument, but can fall back to @documentContainer when
+   * no piece is provided. In this case the latest version within the container will be shown.
+   *
+   * @argument piece: a Piece object
+   * @argument didDeletePiece: action triggered when a piece has been deleted
+   * @argument enableDelete
+   */
+  @service store;
+  @service currentSession;
+  @service fileService;
+  @service toaster;
+  @service intl;
 
-  async didInsertElement() {
-    this._super(...arguments);
-  },
+  @tracked piece;
+  @tracked file;
+  @tracked accessLevel;
 
-  classNameBindings: ['aboutToDelete'],
-  piece: null,
+  @tracked isVerifyingDelete;
 
-  aboutToDelete: computed('piece.aboutToDelete', function() {
-    if (this.piece) {
-      if (this.piece.get('aboutToDelete')) {
-        return 'vlc-document--deleted-state';
-      }
+  constructor() {
+    super(...arguments);
+    this.isVerifyingDelete = false;
+    this.loadPieceRelatedData.perform();
+  }
+
+  @task
+  *loadPieceRelatedData() {
+    const piece = this.args.piece;
+    if (piece) {
+      this.piece = (yield this.store.query('piece', {
+        'filter[:id:]': piece.id,
+        include: 'file,document-container,document-container.type,access-level',
+      })).firstObject;
+      this.file = yield this.piece.file;
+      this.documentContainer = yield this.piece.documentContainer;
+      this.accessLevel = yield this.piece.accessLevel;
+    } else {
+      throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
     }
-    return null;
-  }),
+  }
 
-  isDeletable: computed('piece', 'piece.nextPiece', async function() {
-    const nextPiece = await this.piece.get('nextPiece');
-    if (nextPiece) {
-      return false;
-    }
-    const agendaitemsFromQuery = await this.store.query('agendaitem', {
-      filter: {
-        pieces: {
-          id: this.piece.id,
-        },
-      },
-    });
-    return agendaitemsFromQuery.length <= 1;
-  }),
+  // TODO: @enableDelete will replace this
+  // isDeletable: computed('piece', 'piece.nextPiece', async function() {
+  //   const nextPiece = await this.piece.get('nextPiece');
+  //   if (nextPiece) {
+  //     return false;
+  //   const agendaitemsFromQuery = await this.store.query('agendaitem', {
+  //     filter: {
+  //       pieces: {
+  //         id: this.piece.id,
+  //       },
+  //     },
+  //   });
+  //   return agendaitemsFromQuery.length <= 1;
+  // }),
+
+  @action
+  deletePiece() {
+    this.isVerifyingDelete = true;
+  }
 
   async deletePieceWithUndo() {
-    const pieceToDelete = this.get('pieceToDelete');
-    const documentContainer = await pieceToDelete.get('documentContainer');
-    await this.fileService.get('deletePieceWithUndo').perform(pieceToDelete);
+    await this.fileService.get('deletePieceWithUndo').perform(this.piece);
     // when cancelled, the aboutToDelete flag will be false
-    if (this.onDeletePieceFromContainer && pieceToDelete.aboutToDelete) {
-      this.onDeletePieceFromContainer(documentContainer);
+    if (this.args.didDeletePiece && this.piece.aboutToDelete) {
+      this.args.didDeletePiece(this.piece);
     }
     // TODO delete orphan container if last piece is deleted
-  },
+  }
 
-  actions: {
-    cancel() {
-      this.set('pieceToDelete', null);
-      this.set('isVerifyingDelete', false);
-    },
+  @action
+  cancelDelete() {
+    this.isVerifyingDelete = false;
+  }
 
-    verify() {
-      const verificationToast = {
-        type: 'revert-action',
-        title: this.intl.t('warning-title'),
-        message: this.intl.t('document-being-deleted'),
-        options: {
-          timeOut: 15000,
-        },
-      };
-      verificationToast.options.onUndo = () => {
-        this.fileService.reverseDelete(this.pieceToDelete.get('id'));
-        this.toaster.toasts.removeObject(verificationToast);
-      };
-      this.toaster.displayToast.perform(verificationToast);
-      this.deletePieceWithUndo();
-      this.set('isVerifyingDelete', false);
-    },
+  @action
+  confirmDelete() {
+    const verificationToast = {
+      type: 'revert-action',
+      title: this.intl.t('warning-title'),
+      message: this.intl.t('document-being-deleted'),
+      options: {
+        timeOut: 15000,
+      },
+    };
+    verificationToast.options.onUndo = () => {
+      this.fileService.reverseDelete(this.piece.id);
+      this.toaster.toasts.removeObject(verificationToast);
+    };
+    this.toaster.displayToast.perform(verificationToast);
+    this.deletePieceWithUndo();
+    this.isVerifyingDelete = false;
+  }
 
-    deletePiece(piece) {
-      this.set('pieceToDelete', piece);
-      this.set('isVerifyingDelete', true);
-    },
+  @action
+  changeAccessLevel(al) {
+    this.piece.set('accessLevel', al);
+    this.accessLevel = al;
+  }
 
-    async showPieceViewer(piece) {
-      window.open(`/document/${(await piece).get('id')}`);
-    },
-  },
+  @action
+  async saveAccessLevel() {
+    // TODO make sure not to overwrite things
+    await this.piece.save();
+    await this.loadPieceRelatedData.perform();
+  }
 
-});
+  @action
+  async changeConfidentiality(confidential) {
+    this.piece.set('confidential', confidential);
+    // TODO make sure not to overwrite things
+    await this.piece.save();
+  }
+
+  @action
+  async reloadAccessLevel() {
+    await this.loadPieceRelatedData.perform();
+  }
+}
