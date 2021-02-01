@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -21,21 +20,10 @@ export default class AgendaOverviewItem extends Component {
   @tracked subcase;
   @tracked newsletterIsVisible;
 
-  @tracked showLoader = false;
-
-  @tracked retracted;
-
   constructor() {
     super(...arguments);
-    this.retracted = this.args.agendaitem.retracted || false;
     this.loadSubcase.perform();
     this.loadNewsletterVisibility.perform();
-  }
-
-  get classNameBindings() {
-    return `
-    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
-    `;
   }
 
   get documentsAreReleased() {
