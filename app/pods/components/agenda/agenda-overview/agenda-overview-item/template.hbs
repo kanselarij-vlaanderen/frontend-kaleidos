@@ -140,30 +140,30 @@
             <div class="auk-u-flex vlc-agenda-items__icons">
               {{#if (not this.newsletterIsVisible)}}
                 <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                  {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="top"
-                    class="ember-attacher-tooltip"
-                  }}
+                  <AttachTooltip
+                    @arrow="true"
+                    @animation="shift"
+                    @placement="top"
+                    @class="ember-attacher-tooltip"
+                  >
                     <p>
                       {{t "not-visible-in-newsletter"}}
                     </p>
-                  {{/attach-tooltip}}
+                  </AttachTooltip>
                 </i>
               {{/if}}
               {{#if (await @agendaitem.checkAdded)}}
                 <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
-                  {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="top"
-                    class="ember-attacher-tooltip"
-                  }}
+                  <AttachTooltip
+                    @arrow="true"
+                    @animation="shift"
+                    @placement="top"
+                    @class="ember-attacher-tooltip"
+                  >
                     <p>
                       {{t "added-agendaitem-text"}}
                     </p>
-                  {{/attach-tooltip}}
+                  </AttachTooltip>
                 </i>
               {{/if}}
             </div>
