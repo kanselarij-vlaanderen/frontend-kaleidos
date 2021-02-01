@@ -89,9 +89,9 @@
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
             {{#if @isEditingOverview}}
               <Utils::FormallyOkSelector
-                @formallyOk={{formallyOk}}
-                @isLoading={{isLoading}}
-                @hideLabel={{hideLabel}}
+                @formallyOk={{@agendaitem.formallyOk}}
+                @isLoading={{false}}
+                @hideLabel={{true}}
                 @setAction={{perform this.setFormallyOkStatus}}
               />
             {{else}}

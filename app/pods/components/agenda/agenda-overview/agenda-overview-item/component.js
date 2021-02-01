@@ -20,8 +20,6 @@ export default class AgendaOverviewItem extends Component {
   @service('current-session') currentSessionService;
   @alias('sessionService.currentSession') currentSession;
 
-  hideLabel = true;
-
   isShowingChanges = null;
 
   @tracked subcase;
@@ -30,12 +28,10 @@ export default class AgendaOverviewItem extends Component {
   @tracked showLoader = false;
 
   @tracked retracted;
-  @tracked formallyOk;
 
   constructor() {
     super(...arguments);
     this.retracted = this.args.agendaitem.retracted || false;
-    this.formallyOk = this.args.agendaitem.formallyOk || null;
     this.loadSubcase.perform();
     this.loadNewsletterVisibility.perform();
   }
