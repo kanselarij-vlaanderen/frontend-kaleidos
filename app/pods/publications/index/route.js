@@ -5,6 +5,21 @@ import CONFIG from 'fe-redpencil/utils/config';
 
 
 export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
+  queryParams = {
+    page: {
+      refreshModel: true,
+      as: 'pagina',
+    },
+    size: {
+      refreshModel: true,
+      as: 'aantal',
+    },
+    sort: {
+      refreshModel: true,
+      as: 'sorteer',
+    },
+  }
+
   async model(params) {
     const filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
       || {
@@ -76,5 +91,11 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
   @action
   refresh() {
     super.refresh();
+  }
+
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    const params = this.paramsFor('publications.index');
+    controller.page = params.page;
   }
 }

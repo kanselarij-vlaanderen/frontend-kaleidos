@@ -1,21 +1,25 @@
 {{ page-title
   (t "cases")
 }}
-<div class="vl-grid auk-u-mb-2">
-
-  <div class="vl-col--2-12">
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-2">
     <div class="vlc-box">
       <WebComponents::VlFormLabel @value="Type"/>
       <WebComponents::VlCheckbox
         data-test-decisions-only-check
         @value={{this.decisionsOnly}}
         @label={{t "search-in-decisions-only"}}
-        @toggle={{this.toggleDesisionsOnly}}
+        @toggle={{this.toggleDecisionsOnly}}
       />
-
+      <WebComponents::VlFormLabel @value="Archief"/>
+      <WebComponents::VlCheckbox
+        @value={{this.includeArchived}}
+        @label={{t "search-include-archived"}}
+        @toggle={{this.toggleIncludeArchived}}
+      />
     </div>
   </div>
-  <div class="vl-col--10-12">
+  <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
         <DataTable

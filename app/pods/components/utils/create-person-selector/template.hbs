@@ -1,5 +1,5 @@
 {{#if (not isCreatingPerson)}}
-  <div data-test-add-mandatee-dropdown-container class="auk-u-flex auk-u-flex--vertical-center vl-col-4-4">
+  <div data-test-add-mandatee-dropdown-container class="auk-u-flex auk-u-flex--vertical-center">
     {{#power-select
       options=items
       selected=selectedItems
@@ -34,7 +34,6 @@
         {{web-components/vl-form-label value=(t "first-name")}}
         {{web-components/vl-form-input
           data-test-create-person-firstname
-          width="4"
           value=firstName
         }}
       </div>
@@ -42,7 +41,6 @@
         {{web-components/vl-form-label value=(t "name")}}
         {{web-components/vl-form-input
           data-test-create-person-lastname
-          width="4"
           value=lastName
         }}
       </div>

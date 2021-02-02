@@ -22,11 +22,11 @@
         <WebComponents::AuPanel::Body>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="2" @value={{this.model.case.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-            <WebComponents::AuTextarea @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+            <WebComponents::AuTextarea @rows="4" @value={{this.model.case.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
           </div>
         </WebComponents::AuPanel::Body>
         <WebComponents::AuPanel::Footer>
@@ -70,7 +70,7 @@
                   <WebComponents::AuButtonLink
                     @route="cases.case.subcases.subcase.overview"
                     @models={{array
-                      this.model.id
+                      this.model.case.id
                       this.latestSubcaseOnMeeting.id
                     }}
                   >
@@ -89,8 +89,8 @@
               <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
               <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
             {{else}}
-              <h4>{{this.model.shortTitle}}</h4>
-              <p class="auk-u-text-prewrap">{{this.model.title}}</p>
+              <h4>{{this.model.case.shortTitle}}</h4>
+              <p class="auk-u-text-prewrap">{{this.model.case.title}}</p>
             {{/if}}
           </div>
         </WebComponents::AuPanel::Body>
@@ -112,21 +112,75 @@
               <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
-              {{!-- TODO scenario 4 --}}
-              {{!-- <WebComponents::AuButton @skin="tertiary" @icon="plus">{{t "add-minister"}}</WebComponents::AuButton> --}}
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
+          {{#if (not this.latestSubcaseOnMeeting)}}
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton
+                  {{on "click" this.showMandateeModal}}
+                        @skin="tertiary"
+                        @icon="add"
+                        data-test-add-mandatee
+                >
+                  {{t "create-mandatee"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          {{/if}}
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      <WebComponents::AuPanel::Body @noPadding="true">
-        {{#if (not this.latestSubcaseOnMeeting.mandatees)}}
+      {{#if (not this.latestSubcaseOnMeeting)}}
+        {{# if (gt this.model.publicationFlow.mandatees.length 0) }}
+          <WebComponents::AuPanel::Body @noPadding="true">
+            <table class="auk-table" data-test-table-mandatees>
+              <thead>
+                <tr>
+                  <th>{{t "minister"}}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this.model.publicationFlow.mandatees as |mandatee|}}
+                  <tr>
+                    <td>
+                      <div class="auk-u-flex auk-u-flex--vertical-center">
+                        <WebComponents::AuBadge @icon="user"/>
+                        <span class="auk-u-mx-2">{{await mandatee.person.nameToDisplay}}</span>
+                      </div>
+                    </td>
+                    <td class="auk-u-text-align--right">
+                      <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                        <AttachPopover
+                                @renderInPlace={{true}}
+                                @class="ember-attacher-popper"
+                                @hideOn="clickout click"
+                                @showOn="click"
+                                @animation="shift"
+                                @placement="left"
+                        >
+                          <WebComponents::AuDropdown>
+                            <WebComponents::AuDropdown::Item
+                              data-test-unlink-mandatee
+                              {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
+                              @skin="danger"
+                            >
+                              {{t "delete"}}
+                            </WebComponents::AuDropdown::Item>
+                          </WebComponents::AuDropdown>
+                        </AttachPopover>
+                      </WebComponents::AuButton>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </WebComponents::AuPanel::Body>
+        {{else}}
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
           </WebComponents::AuPanel::Body>
-        {{else}}
+        {{/if}}
+      {{else}}
+        <WebComponents::AuPanel::Body @noPadding="true">
           <table class="auk-table">
             <thead>
               <tr>
@@ -161,8 +215,8 @@
               {{/each}}
             </tbody>
           </table>
-        {{/if}}
-      </WebComponents::AuPanel::Body>
+        </WebComponents::AuPanel::Body>
+      {{/if}}
     </WebComponents::AuPanel>
   </div>
 
@@ -175,17 +229,26 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">{{t "contacts"}}</h4>
+              <h4 class="auk-panel__title">
+                {{t "contacts"}}
+              </h4>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton {{on "click" this.showContactPersonModal}} @skin="tertiary" @icon="add" data-test-add-contactperson>{{t "add-contact"}}</WebComponents::AuButton>
+              <WebComponents::AuButton
+                {{on "click" this.showContactPersonModal}}
+                @skin="tertiary"
+                @icon="add"
+                data-test-add-contactperson
+              >
+                {{t "add-contact"}}
+              </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      {{#if (not this.contactPersons) }}
+      {{#if (not this.model.contactPersons) }}
         <WebComponents::AuPanel::Body>
           <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
         </WebComponents::AuPanel::Body>
@@ -201,7 +264,7 @@
               </tr>
             </thead>
             <tbody>
-              {{#each this.contactPersons as | contactPerson |}}
+              {{#each this.model.contactPersons as | contactPerson |}}
                 <tr>
                   <td>
                     <div class="auk-u-flex auk-u-flex--vertical-center">
@@ -249,11 +312,13 @@
   </div>
 
 
+{{!--  END VISIBLE PANELS  --}}
+
 
 {{!-- ADD CONTACTPERSON MODAL --}}
 
 
-{{#if isShowingPersonModal}}
+{{#if personModalOpen}}
   <WebComponents::AuModal
     @size="medium"
     data-test-add-contactpersonmodal>
@@ -307,6 +372,56 @@
   </WebComponents::AuModal>
 {{/if}}
 
+
+{{!-- ADD MINISTER MODAL --}}
+
+
+{{#if mandateeModalOpen}}
+  <WebComponents::AuModal
+    @size="medium"
+    data-test-add-mandateemodal
+  >
+    <WebComponents::AuModal::Header
+      @title={{t "create-mandatee"}}
+      @closeModal={{this.closeMandateeModal}}
+    />
+    <WebComponents::AuModal::Body>
+      {{utils/mandatee-selector
+        data-test-mandatee-selector
+        singleSelect=true
+        selectedMandatees=selectedMandatee
+        chooseMandatee=(action "mandateeSelectedForPublication")
+      }}
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @custom={{true}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+              @skin="borderless"
+              {{on "click" this.closeMandateeModal}}
+            >
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+              @skin="primary"
+              @icon="plus"
+              @size="small"
+              {{on "click" this.addSelectedMandateeToPublicationFlow}}
+              data-test-add-contactperson-submit-button
+            >
+              {{t "add"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
 
 {{!-- LOADER --}}
 
