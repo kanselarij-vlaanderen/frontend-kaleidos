@@ -12,6 +12,7 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
+  @service publicationService;
   @service emailService;
   @service subcasesService;
   @service fileService;
@@ -304,6 +305,10 @@ export default class PublicationPublishPreviewController extends Controller {
       .utc();
     await previewActivity.save();
 
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
+
     const pieces = await previewActivity.get('usedPieces');
     // Send email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawPublishPreviewEmail, this.withdrawalSubject, this.withdrawalContent, pieces);
@@ -334,6 +339,7 @@ export default class PublicationPublishPreviewController extends Controller {
         .utc();
       await previewActivity.save();
     }
+    this.publicationService.invalidatePublicationCache();
     this.model.refreshAction();
     this.showLoader = false;
   }
@@ -350,6 +356,10 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.endDate = moment()
           .utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
@@ -367,6 +377,10 @@ export default class PublicationPublishPreviewController extends Controller {
         publishingActivity.endDate = moment()
           .utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
