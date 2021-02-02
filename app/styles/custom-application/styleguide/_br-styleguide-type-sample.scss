@@ -1,0 +1,21 @@
+/* ==========================================================================
+  br-type-sample
+   ========================================================================== */
+
+.br-type-sample-table {
+  td {
+    border-bottom: 0.1rem solid $au-gray-200;
+    padding: 1.2rem 0;
+  }
+}
+
+.br-type-sample__label{
+  width: 20rem;
+  padding: 1.6rem;
+  vertical-align: top;
+}
+
+.br-type-sample__sample {
+  position: relative;
+  padding: 1.2rem 1.6rem;
+}

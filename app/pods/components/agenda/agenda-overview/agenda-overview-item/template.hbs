@@ -46,37 +46,42 @@
           {{/if}}
 
         </div>
-        <div class="vlc-u-flex-float-right">
 
-          {{!--    PUBLICATION FLOW CALL TO ACTION --}}
+        {{#if currentSessionService.isOvrb}}
 
-          {{#if (not @isEditingOverview)}}
-            <div class="auk-button-toolbar">
-              {{#if (await @agendaitem.publicationFlow)}}
-                <LinkTo
-                        class=""
-                        @route="publications.publication"
-                        @model={{ await @agendaitem.publicationFlowId }}
-                >
-                  {{t "publications-to" }}
-                </LinkTo>
-              {{else}}
-                {{#if (await @agendaitem.case)}}
-                  <WebComponents::AuButton
-                          @skin="tertiary"
-                          @layout="icon-only"
-                          data-test-start-publication
-                    {{on "click" this.startPublication}}>
-                    {{t "start-publication"}}
-                  </WebComponents::AuButton>
+          <div class="vlc-u-flex-float-right">
+
+            {{!--    PUBLICATION FLOW CALL TO ACTION --}}
+
+            {{#if (not @isEditingOverview)}}
+              <div class="auk-button-toolbar">
+                {{#if (await @agendaitem.publicationFlow)}}
+                  <LinkTo
+                          class=""
+                          @route="publications.publication"
+                          @model={{ await @agendaitem.publicationFlowId }}
+                  >
+                    {{t "publications-to" }}
+                  </LinkTo>
+                {{else}}
+                  {{#if (await @agendaitem.case)}}
+                    <WebComponents::AuButton
+                            @skin="tertiary"
+                            @layout="icon-only"
+                            data-test-start-publication
+                      {{on "click" this.startPublication}}>
+                      {{t "start-publication"}}
+                    </WebComponents::AuButton>
+                  {{/if}}
                 {{/if}}
-              {{/if}}
-            </div>
-          {{/if}}
+              </div>
+            {{/if}}
 
-          {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
+            {{!--  END  PUBLICATION FLOW CALL TO ACTION --}}
 
-        </div>
+          </div>
+        {{/if}}
+
       </div>
 
 

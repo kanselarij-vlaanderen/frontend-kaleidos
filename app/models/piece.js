@@ -4,7 +4,7 @@ import sanitize from 'sanitize-filename';
 import moment from 'moment';
 
 const {
-  Model, attr, belongsTo,
+  Model, attr, belongsTo, hasMany,
 } = DS;
 
 export default Model.extend({
@@ -35,9 +35,7 @@ export default Model.extend({
   subcase: belongsTo('subcase', {
     inverse: null,
   }),
-  agendaitem: belongsTo('agendaitem', {
-    inverse: null,
-  }),
+
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
@@ -45,7 +43,12 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  case: belongsTo('case', {
+  cases: hasMany('case', {
+    inverse: null,
+  }),
+  // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
+  agendaitems: hasMany('agendaitem', {
+    serialize: false,
     inverse: null,
   }),
 

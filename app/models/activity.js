@@ -11,9 +11,9 @@ export default class Activity extends ModelWithModifier {
   @attr('datetime') finalTranslationDate;
   @attr('string') name;
   @attr('string') mailContent;
+  @attr('string') withdrawReason;
+  @attr('string') mailSubject;
   @attr('datetime') created;
-  @attr('datetime') modified;
-  @attr('user') modifiedBy;
 
   // Relations.
   @belongsTo('subcase') subcase;

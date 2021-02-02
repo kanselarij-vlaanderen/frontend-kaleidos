@@ -1,3 +1,6 @@
+{{ page-title
+  (concat (t "publication-flow") " " this.model.publicationFlow.publicationNumber )
+}}
 <WebComponents::AuNavbar @border="bottom" @skin="gray-100" @auto="true">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
@@ -11,23 +14,19 @@
           </span>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>
           <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications.in-progress.in-progress-not-minister" data-test-publication-case-nav-go-back></WebComponents::AuTab>
+            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>{{t "documents"}}</WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
               <div class="auk-u-flex auk-u-flex--center">
                 <span class="auk-u-mr-2">{{t "translations"}}</span>
-                {{#if (gt this.model.counts.totalTranslations 0)}}
-                  <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnTranslationRequests}}&#47;{{this.model.counts.totalTranslations}}</WebComponents::AuStatusPill>
-                {{/if}}
+                <WebComponents::AuStatusPill @status={{this.showStatusForTranslations.status}}>{{this.showStatusForTranslations.value}}</WebComponents::AuStatusPill>
               </div>
             </WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
               <div class="auk-u-flex auk-u-flex--center">
                 <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
-                {{#if (gt this.model.counts.totalPublishPreviewRequests 0)}}
-                  <WebComponents::AuStatusPill>{{this.model.counts.closedOrWithdrawnPublishPrevieuwRequests}}&#47;{{this.model.counts.totalPublishPreviewRequests}}</WebComponents::AuStatusPill>
-                {{/if}}
+                <WebComponents::AuStatusPill @status={{this.showStatusForPublicationPreviews.status}}>{{this.showStatusForPublicationPreviews.value}}</WebComponents::AuStatusPill>
               </div>
             </WebComponents::AuTab>
           </WebComponents::AuTabs>
