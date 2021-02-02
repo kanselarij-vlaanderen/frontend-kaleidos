@@ -51,13 +51,6 @@ export default class AgendaItemsAgendaRoute extends Route {
     });
   }
 
-  afterModel(_, transition) { // eslint-disable-line
-    if (!isEmpty(transition.to.queryParams.filter)) {
-      const controller = this.controllerFor('agenda.agendaitems');
-      controller.filterTask.perform();
-    }
-  }
-
   setupController(controller, model) {
     super.setupController(...arguments);
     const {
@@ -66,8 +59,8 @@ export default class AgendaItemsAgendaRoute extends Route {
     } = this.modelFor('agenda');
     controller.meeting = meeting;
     controller.agenda = agenda;
-    controller.filteredNotas = model.notas;
-    controller.filteredAnnouncements = model.announcements;
+    // Initialize filteredNotas and filteredAnnouncements on controller
+    controller.filterTask.perform();
   }
 
   @action
