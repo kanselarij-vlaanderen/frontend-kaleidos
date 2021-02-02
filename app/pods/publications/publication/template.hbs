@@ -1,6 +1,4 @@
-{{ page-title
-  (concat (t "publication-flow") " " this.model.publicationFlow.publicationNumber )
-}}
+{{ page-title this.casePath }}
 <WebComponents::AuNavbar @border="bottom" @skin="gray-100" @auto="true">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
@@ -9,7 +7,7 @@
           <span class="auk-overline auk-u-muted"
                   data-test-publication-detail-menu-publication-number>
             {{uppercase
-              (concat (t "publication-flow") " " this.model.publicationFlow.publicationNumber)
+              this.casePath
             }}
           </span>
           <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>

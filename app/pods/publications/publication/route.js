@@ -11,6 +11,19 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     }, {
       include: 'case,contact-person,status,type',
     });
+    const _case = await publicationFlow.get('case');
+
+    const subcasesOnMeeting = await this.store.query('subcase', {
+      filter: {
+        case: {
+          id: _case.id,
+        },
+        ':has:agenda-activities': 'yes',
+      },
+      sort: '-created',
+      include: 'mandatees',
+    });
+
 
     const totalTranslations = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
@@ -43,6 +56,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
 
     return hash({
       publicationFlow,
+      latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       counts: {
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,

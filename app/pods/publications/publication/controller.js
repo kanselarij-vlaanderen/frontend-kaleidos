@@ -124,6 +124,16 @@ export default class PublicationController extends Controller {
     return false;
   }
 
+  get casePath() {
+    let title = this.intl.t('publication-flow');
+    if (!this.model.latestSubcaseOnMeeting) {
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    } else {
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    }
+    return title;
+  }
+
   @action
   allowedTranslationDate(date) {
     const end = moment(this.model.publicationFlow.get('publishBefore'));
