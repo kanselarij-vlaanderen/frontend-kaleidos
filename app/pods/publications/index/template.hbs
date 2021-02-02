@@ -54,14 +54,6 @@
             @label={{t "publications-table-final-publication-date"}}
           />
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDateRequestedFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publishDateRequested"
-            @label={{t "publication-date-requested"}}
-          />
-        {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
@@ -162,7 +154,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
           <td>
-            {{t "dash"}}
+            {{#if row.publishDateRequested}}
+              {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
@@ -172,15 +168,6 @@
               (moment-format row.publishBefore "DD-MM-YYYY")
               (t "dash")
             }}
-          </td>
-        {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDateRequestedFilterOption}}
-          <td>
-            {{#if row.publishDateRequested}}
-              {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
