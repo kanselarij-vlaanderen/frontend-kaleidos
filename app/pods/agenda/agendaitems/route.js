@@ -21,7 +21,21 @@ export default class AgendaItemsAgendaRoute extends Route {
     } = this.modelFor('agenda');
     const agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      include: 'mandatees',
+      include: [
+        'mandatees',
+        'pieces',
+        'pieces.document-container', // Only needed for relationship pieces -> document-container
+      ].join(','),
+      'fields[mandatees]': [
+        'title', // Display group header per agendaitems group
+        'priority', // Sorting agendaitems on minister protocol order
+      ].join(','),
+      'fields[pieces]': [
+        'name', // Display and sorting pieces per agendaitem
+        'document-container', // Deduplicating multiple pieces per container
+        'created', // Fallback sorting pieces per agendaitem
+      ].join(','),
+      'fields[document-containers]': '',
       'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
       sort: 'show-as-remark,priority',
     });
