@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import {
+  action, set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { restartableTask } from 'ember-concurrency-decorators';
@@ -9,7 +11,6 @@ import search from 'fe-redpencil/utils/mu-search';
 export default class PublicationsController extends Controller {
   @service publicationService;
   @service('-routing') routing;
-
   @tracked isShowingPublicationModal = false; // createPublicationModal ? more accurate
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed = false;
@@ -18,6 +19,18 @@ export default class PublicationsController extends Controller {
   @tracked showSearchResults = false;
   @tracked searchResults;
   @tracked showLoader = false;
+  @tracked isShowPublicationFilterModal = false;
+
+
+  @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
+    || {
+      ministerFilterOption: false,
+      notMinisterFilterOption: false,
+      publishedFilterOption: false,
+      toPublishFilterOption: false,
+      pausedFilterOption: false,
+      withdrawnFilterOption: false,
+    };
 
   @tracked
   publication = {
@@ -75,10 +88,6 @@ export default class PublicationsController extends Controller {
     return null;
   }
 
-  get shouldShowPublicationHeader() {
-    return !this.routing.currentRouteName.startsWith('publications.publication');
-  }
-
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
@@ -125,6 +134,22 @@ export default class PublicationsController extends Controller {
     this.isShowingPublicationModal = true;
   }
 
+  @action
+  showFilterModal() {
+    this.isShowPublicationFilterModal = true;
+  }
+
+  @action
+  closeFilterModal() {
+    this.filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    this.isShowPublicationFilterModal = false;
+  }
+
+  get shouldShowPublicationHeader() {
+    return this.routing.currentRouteName.startsWith('publications.index');
+  }
+
   resetPublication() {
     this.publication = {
       number: null,
@@ -132,5 +157,34 @@ export default class PublicationsController extends Controller {
       longTitle: null,
     };
     this.hasError = false;
+  }
+
+  @action
+  resetModelFilterOptions() {
+    this.filterOptionKeys = {
+      ministerFilterOption: false,
+      notMinisterFilterOption: false,
+      publishedFilterOption: false,
+      toPublishFilterOption: false,
+      pausedFilterOption: false,
+      withdrawnFilterOption: false,
+    };
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    this.send('refreshModel');
+  }
+
+  @action
+  filterModel() {
+    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    this.isShowPublicationFilterModal = false;
+    // this.refreshModel();
+    this.send('refreshModel');
+  }
+
+  @action
+  toggleFilterOption(event) {
+    const tempArr = this.get('filterOptionKeys');
+    set(tempArr, event.target.name, !tempArr[event.target.name]);
+    this.set('filterOptionKeys', tempArr);
   }
 }

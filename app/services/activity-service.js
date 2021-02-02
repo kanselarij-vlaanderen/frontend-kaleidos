@@ -6,6 +6,7 @@ import moment from 'moment';
 export default class activityService extends Service {
   @service store;
   @service toaster;
+  @service publicationService;
   @service intl;
 
   /**
@@ -71,6 +72,9 @@ export default class activityService extends Service {
     // Persist to db.
     await translateActivity.save();
 
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     // Reload relation.
     await subcase.hasMany('publicationActivities')
       .reload();
@@ -111,6 +115,9 @@ export default class activityService extends Service {
     // Persist to db.
     await PublishPreviewActivity.save();
 
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     // Reload relation.
     await subcase.hasMany('publicationActivities')
       .reload();
@@ -149,6 +156,9 @@ export default class activityService extends Service {
 
     // Persist to db.
     await PublishPreviewActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
 
     // Reload relations.
     await subcase.hasMany('publicationActivities')

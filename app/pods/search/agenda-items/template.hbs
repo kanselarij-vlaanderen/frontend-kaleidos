@@ -1,6 +1,8 @@
-<div class="vl-grid auk-u-mb-2">
-
-  <div class="vl-col--2-12">
+{{ page-title
+  (t "agendaitems")
+}}
+<div class="auk-o-grid auk-u-mb-2">
+  <div class="auk-o-grid-col-2">
     <div class="vlc-box">
       <WebComponents::VlFormLabel @value="Type"/>
       <WebComponents::VlCheckbox
@@ -21,7 +23,7 @@
       />
     </div>
   </div>
-  <div class="vl-col--10-12">
+  <div class="auk-o-grid-col-10">
     <div>
       {{#if this.model.length}}
         <DataTable
