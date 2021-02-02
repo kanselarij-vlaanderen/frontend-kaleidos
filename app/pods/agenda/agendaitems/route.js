@@ -24,16 +24,16 @@ export default class AgendaItemsAgendaRoute extends Route {
       include: [
         'mandatees',
         'pieces',
-        'pieces.document-container', // Only needed for relationship pieces -> document-container
+        'pieces.document-container' // Only needed for relationship pieces -> document-container
       ].join(','),
       'fields[mandatees]': [
         'title', // Display group header per agendaitems group
-        'priority', // Sorting agendaitems on minister protocol order
+        'priority' // Sorting agendaitems on minister protocol order
       ].join(','),
       'fields[pieces]': [
         'name', // Display and sorting pieces per agendaitem
         'document-container', // Deduplicating multiple pieces per container
-        'created', // Fallback sorting pieces per agendaitem
+        'created' // Fallback sorting pieces per agendaitem
       ].join(','),
       'fields[document-containers]': '',
       'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,

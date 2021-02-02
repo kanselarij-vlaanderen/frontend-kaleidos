@@ -63,14 +63,11 @@
         @onChange={{action "reorderItems" model}}
       as |sortableGroup|
       >
-        {{#each
-             sortableGroup.model
-             as |mandatee index|
-        }}
+        {{#each sortableGroup.model as |mandatee index|}}
           <sortableGroup.item
             @tagName="tr"
             @model={{mandatee}}
-            data-test-ministers-sortable-group-row=index
+            data-test-ministers-sortable-group-row="index"
             @handle=".mandatee-draggable-row"
           >
             <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
