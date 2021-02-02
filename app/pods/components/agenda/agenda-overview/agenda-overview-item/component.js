@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { task } from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
+import { dropTask, task } from 'ember-concurrency-decorators';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 
 export default class AgendaOverviewItem extends Component {
@@ -28,8 +29,6 @@ export default class AgendaOverviewItem extends Component {
     super(...arguments);
     this.agendaitemDocuments = [];
     this.loadDocuments.perform();
-    this.loadSubcase.perform();
-    this.loadNewsletterVisibility.perform();
   }
 
   get documentsAreReleased() {
@@ -64,14 +63,6 @@ export default class AgendaOverviewItem extends Component {
   }
 
   @task
-  *loadSubcase() {
-    const agendaActivity = yield this.args.agendaitem.agendaActivity;
-    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
-      this.subcase = yield agendaActivity.subcase;
-    }
-  }
-
-  @task
   *loadDocuments() {
     let pieces = yield this.args.agendaitem.pieces;
     pieces = pieces.toArray();
@@ -80,6 +71,37 @@ export default class AgendaOverviewItem extends Component {
   }
 
   @task
+  *lazyLoad(task) {
+    if (task.performCount == 0) {
+      yield timeout(400);
+      yield task.perform();
+    }
+  }
+
+  @action
+  cancelLazyLoad(task) {
+    task.cancelAll();
+  }
+
+  @dropTask
+  *lazyLoadSubcase() {
+    yield this.lazyLoad.perform(this.loadSubcase);
+  }
+
+  @dropTask
+  *loadSubcase() {
+    const agendaActivity = yield this.args.agendaitem.agendaActivity;
+    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
+      this.subcase = yield agendaActivity.subcase;
+    }
+  }
+
+  @dropTask
+  *lazyLoadNewsletterVisibility() {
+    yield this.lazyLoad.perform(this.loadNewsletterVisibility);
+  }
+
+  @dropTask
   *loadNewsletterVisibility() {
     const treatments = yield this.args.agendaitem.treatments;
     const treatment = treatments.firstObject;
