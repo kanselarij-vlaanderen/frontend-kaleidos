@@ -96,22 +96,27 @@
     {{else}}
       {{!-- Else clause can be avoided once drag & drop can be disabled (bump version) --}}
       <ul>
+        {{!-- Goedkeuringen vorige vergaderingen --}}
+        {{#each this.approvalNotas as |agendaitem|}}
+          <li>
+            <Agenda::AgendaOverview::AgendaOverviewItem
+              @agendaitem={{agendaitem}}
+              @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
+              @showFormallyOkStatus={{this.isDesignAgenda}}
+            />
+          </li>
+        {{/each}}
+        {{!-- other notas --}}
         {{#each this.groupedNotas as |agendaitemGroup|}}
+          <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-            <SortableItem
-              @tagName="li"
-              @class="vlc-agenda-items__sub-item"
-              @model={{agendaitem}}
-              @group={{sortableGroup}}
-              @distance={{30}}
-              @handle={{this.dragHandleClass}}
-            >
+            <li class="vlc-agenda-items__sub-item">
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{agendaitem}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
                 @showFormallyOkStatus={{this.isDesignAgenda}}
               />
-            </SortableItem>
+            </li>
           {{/each}}
         {{/each}}
       </ul>
