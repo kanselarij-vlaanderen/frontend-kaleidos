@@ -54,12 +54,15 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
     });
 
+    const pieces = await _case.get('pieces');
+    const documentCount = pieces.length;
+
     return hash({
       publicationFlow,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {
-        documentCount: _case.pieces.length,
+        documentCount: documentCount,
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
         openTranslationRequests: totalTranslations.length - closedTranslationRequests.length - withdrawnTranslationRequests.length,
