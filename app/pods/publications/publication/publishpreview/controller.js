@@ -12,10 +12,12 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
+  @service publicationService;
+  @service emailService;
   @service subcasesService;
   @service fileService;
 
-  // properties for making the design
+  // Properties for making the design.
   @tracked withdrawn = true;
   @tracked showLoader = false;
   @tracked showpublicationModal = false;
@@ -26,7 +28,7 @@ export default class PublicationPublishPreviewController extends Controller {
     pieces: A([]),
   };
 
-  // piece uploading
+  // piece uploading.
   @tracked isOpenUploadPublishPreviewModal = false;
   @tracked isOpenUploadPublishPreviewCorrectionModal = false;
   @tracked uploadedFile = null;
@@ -38,6 +40,13 @@ export default class PublicationPublishPreviewController extends Controller {
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
   @tracked activityToDeletePiecesFrom = null;
+
+  // Withdrawal.
+  @tracked withdrawalContent = '';
+  @tracked withdrawalSubject = '';
+  @tracked withdrawActivity = null;
+  @tracked withdrawalReason = '';
+  @tracked showWithdrawPopup = false;
 
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
@@ -66,7 +75,8 @@ export default class PublicationPublishPreviewController extends Controller {
     if (!this.defaultAccessLevel) {
       this.defaultAccessLevel = yield this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
     }
-    const now = moment().utc()
+    const now = moment()
+      .utc()
       .toDate();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
@@ -85,7 +95,8 @@ export default class PublicationPublishPreviewController extends Controller {
 
   @task
   *uploadPublishPreviewCorrection(file) {
-    const generatedPieces = yield this.activityToAddPiecesTo.get('generatedPieces').toArray();
+    const generatedPieces = yield this.activityToAddPiecesTo.get('generatedPieces')
+      .toArray();
     let lastVersionOfPublishPreview;
     for (const generatedPiece of generatedPieces) {
       const nextPiece = yield generatedPiece.get('nextVersion');
@@ -98,8 +109,10 @@ export default class PublicationPublishPreviewController extends Controller {
     }
     const previousAccessLevel = yield lastVersionOfPublishPreview.accessLevel;
     const documentContainer = yield lastVersionOfPublishPreview.documentContainer;
-    const containerPieces = yield documentContainer.hasMany('pieces').reload();
-    const now = moment().utc()
+    const containerPieces = yield documentContainer.hasMany('pieces')
+      .reload();
+    const now = moment()
+      .utc()
       .toDate();
     const correctionPiece = this.store.createRecord('piece', {
       created: now,
@@ -125,7 +138,8 @@ export default class PublicationPublishPreviewController extends Controller {
       // TODO set document type publish preview
       yield documentContainer.save();
       yield this.savePiece.perform(this.pieceInCreation);
-      const pieces = yield this.activityToAddPiecesTo.hasMany('generatedPieces').reload();
+      const pieces = yield this.activityToAddPiecesTo.hasMany('generatedPieces')
+        .reload();
       pieces.pushObject(this.pieceInCreation);
       yield this.activityToAddPiecesTo.save();
     } catch (error) {
@@ -145,7 +159,8 @@ export default class PublicationPublishPreviewController extends Controller {
   *savePiece(piece) {
     yield piece.save();
     // TODO do we want to save this to case pieces ? assuming yes
-    const pieces = yield this.model.case.hasMany('pieces').reload();
+    const pieces = yield this.model.case.hasMany('pieces')
+      .reload();
     pieces.pushObject(piece);
     yield this.model.case.save();
   }
@@ -213,7 +228,8 @@ export default class PublicationPublishPreviewController extends Controller {
     } else {
       yield this.fileService.deletePiece(this.pieceToDelete);
     }
-    yield this.activityToDeletePiecesFrom.hasMany('generatedPieces').reload();
+    yield this.activityToDeletePiecesFrom.hasMany('generatedPieces')
+      .reload();
     this.showLoader = false;
     this.pieceToDelete = null;
     this.activityToDeletePiecesFrom = null;
@@ -276,23 +292,54 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  async cancelExistingPreviewActivity(previewActivity) {
+  async cancelExistingPreviewActivity() {
+    const previewActivity = this.withdrawActivity;
     this.showLoader = true;
+    this.showWithdrawPopup = false;
+
+    // Update activity.
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     previewActivity.status = withDrawnStatus;
-    previewActivity.endDate = moment().utc();
+    previewActivity.withdrawReason = this.withdrawalReason;
+    previewActivity.endDate = moment()
+      .utc();
     await previewActivity.save();
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
+
+    const pieces = await previewActivity.get('usedPieces');
+    // Send email
+    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawPublishPreviewEmail, this.withdrawalSubject, this.withdrawalContent, pieces);
+
+    // Reset local state.
     this.model.refreshAction();
+    this.withdrawalReason = '';
+    this.withdrawalSubject = '';
+    this.withdrawalContent = '';
+    this.withdrawActivity = null;
     this.showLoader = false;
   }
 
   @action
   async markPreviewActivityDone(previewActivity) {
     this.showLoader = true;
+    const openStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
     const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-    previewActivity.status = closedStatus;
-    previewActivity.endDate = moment().utc();
-    await previewActivity.save();
+    const previewActivityActivityStatus = await previewActivity.get('status');
+
+    if (previewActivityActivityStatus.id === closedStatus.id) {
+      previewActivity.status = openStatus;
+      previewActivity.endDate = null;
+      await previewActivity.save();
+    } else {
+      previewActivity.status = closedStatus;
+      previewActivity.endDate = moment()
+        .utc();
+      await previewActivity.save();
+    }
+    this.publicationService.invalidatePublicationCache();
     this.model.refreshAction();
     this.showLoader = false;
   }
@@ -302,12 +349,17 @@ export default class PublicationPublishPreviewController extends Controller {
     this.showLoader = true;
     const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
     const _this = this;
-    await previewActivity.get('publishedBy').
-      filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id).
-      map(async(publishingActivity) => {
+    await previewActivity.get('publishedBy')
+      .filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id)
+      .map(async(publishingActivity) => {
         publishingActivity.status = withDrawnStatus;
-        publishingActivity.endDate = moment().utc();
+        publishingActivity.endDate = moment()
+          .utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
@@ -318,12 +370,17 @@ export default class PublicationPublishPreviewController extends Controller {
     this.showLoader = true;
     const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
     const _this = this;
-    await previewActivity.get('publishedBy').
-      filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id).
-      map(async(publishingActivity) => {
+    await previewActivity.get('publishedBy')
+      .filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id)
+      .map(async(publishingActivity) => {
         publishingActivity.status = closedStatus;
-        publishingActivity.endDate = moment().utc();
+        publishingActivity.endDate = moment()
+          .utc();
         await publishingActivity.save();
+
+        // Invalidate local count cache.
+        this.publicationService.invalidatePublicationCache();
+
         _this.model.refreshAction();
       });
     this.showLoader = false;
@@ -342,5 +399,29 @@ export default class PublicationPublishPreviewController extends Controller {
   @action
   async showPieceViewer(piece) {
     window.open(`/document/${(await piece).get('id')}`);
+  }
+
+  // Withdrawal.
+
+  @action
+  async showWithdrawalWindow(activity) {
+    this.showLoader = true;
+    this.withdrawActivity = activity;
+    const subcase = await activity.get('subcase');
+    const publicationFlow = await subcase.get('publicationFlow');
+    const _case = await publicationFlow.get('case');
+    set(this, 'withdrawalContent', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.content, publicationFlow, _case));
+    set(this, 'withdrawalSubject', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.subject, publicationFlow, _case));
+    this.showLoader = false;
+    this.showWithdrawPopup = true;
+  }
+
+  @action
+  hideWithdrawalWindow() {
+    this.withdrawalReason = '';
+    this.withdrawalSubject = '';
+    this.withdrawalContent = '';
+    this.withdrawActivity = null;
+    this.showWithdrawPopup = false;
   }
 }
