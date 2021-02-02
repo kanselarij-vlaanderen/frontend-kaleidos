@@ -60,7 +60,9 @@
       {{/each}}
     </ul>
 
-    <ul {{sortable-group onChange=@onReorderAgendaitems}}>
+    <ul
+      {{sortable-group onChange=@onReorderAgendaitems}}
+      {{did-update (perform this.groupNotasOnGroupName this.regularNotas) this.regularNotas}}>
       {{!-- other notas --}}
       {{#each this.groupedNotas as |agendaitemGroup|}}
         <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
