@@ -39,7 +39,6 @@ export default class AgendaOverview extends Component {
   dragHandleClass = '.ki-drag-handle-2';
 
   @tracked isEditingOverview = null;
-  @tracked isShowingChanges = null;
   @tracked showLoader = null;
   @tracked groupedNotas;
   @tracked isDesignAgenda;
@@ -79,11 +78,6 @@ export default class AgendaOverview extends Component {
   @action
   toggleIsEditingOverview() {
     this.isEditingOverview = !this.isEditingOverview;
-  }
-
-  @action
-  toggleChangesOnly() {
-    this.isShowingChanges = ! this.isShowingChanges;
   }
 
   @task

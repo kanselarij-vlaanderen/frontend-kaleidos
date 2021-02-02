@@ -12,6 +12,8 @@
           @announcements={{this.sortedAnnouncements}}
           @currentAgenda={{this.agenda}}
           @onReorderAgendaitems={{perform this.assignNewPriorities}}
+          @showModifiedOnly={{this.showModifiedOnly}}
+          @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
         />
         {{#if this.assignNewPriorities.isRunning}}
           <WebComponents::AuLoadingOverlay/>

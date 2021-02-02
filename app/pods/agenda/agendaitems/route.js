@@ -8,8 +8,12 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default class AgendaItemsAgendaRoute extends Route {
   queryParams = {
     filter: {
-      refreshModel: false,
+      refreshModel: false, // Free-text search is applied in controller
     },
+    showModifiedOnly: {
+      refreshModel: false,
+      as: 'toon_enkel_gewijzigd',
+    }
   };
 
   @service sessionService;

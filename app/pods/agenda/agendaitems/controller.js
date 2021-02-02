@@ -13,7 +13,14 @@ import { isEmpty } from '@ember/utils';
 import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaitemsAgendaController extends Controller {
-  queryParams = ['filter'];
+  queryParams = [{
+    filter: {
+      type: 'string',
+    },
+    showModifiedOnly: {
+      type: 'boolean',
+    },
+  }];
 
   @service('-routing') routing;
   @service sessionService;
@@ -25,6 +32,7 @@ export default class AgendaitemsAgendaController extends Controller {
   @alias('sessionService.currentSession') currentSession;
 
   @tracked filter;
+  @tracked showModifiedOnly;
 
   @tracked meeting;
   @tracked agenda;
@@ -60,19 +68,29 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @task
   *filterTask() {
-    if (isEmpty(this.filter)) {
-      this.filteredNotas = this.model.notas;
-      this.filteredAnnouncements = this.model.announcements;
-    } else {
+    let filteredNotas = this.model.notas;
+    let filteredAnnouncements = this.model.announcements;
+
+    if (this.showModifiedOnly) {
+      // agendaService.agendaWithChanges is called by parent route
+      const matchingIds = this.agendaService.addedAgendaitems;
+      filteredNotas = filteredNotas.filter((ai) => matchingIds.includes(ai.id));
+      filteredAnnouncements = filteredAnnouncements.filter((ai) => matchingIds.includes(ai.id));
+    }
+
+    if (this.filter) {
       const filter = {
         ':sqs:title,shortTitle': `${this.filter}`, // sqs can be replaced by "phrase_prefix" once a release containing https://github.com/mu-semtech/mu-search/pull/17 is available
         meetingId: this.meeting.id,
         agendaId: this.agenda.id,
       };
       const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
-      this.filteredNotas = this.model.notas.filter((ai) => matchingIds.includes(ai.id));
-      this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
+      filteredNotas = filteredNotas.filter((ai) => matchingIds.includes(ai.id));
+      filteredAnnouncements = filteredAnnouncements.filter((ai) => matchingIds.includes(ai.id));
     }
+
+    this.filteredNotas = filteredNotas;
+    this.filteredAnnouncements = filteredAnnouncements;
   }
 
   @action
@@ -85,6 +103,12 @@ export default class AgendaitemsAgendaController extends Controller {
   *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsPriority(reorderedAgendaitems, true, true); // permissions guarded in template (and backend)
     this.refresh();
+  }
+
+  @action
+  toggleShowModifiedOnly() {
+    this.showModifiedOnly = !this.showModifiedOnly;
+    this.filterTask.perform();
   }
 
   @action

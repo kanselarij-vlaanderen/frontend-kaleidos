@@ -10,14 +10,14 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <a href=""
-           class="vlc-agenda-items-section-header__link"
-           {{on "click" this.toggleChangesOnly}}
+        <a href="javascript://"
+          class="vlc-agenda-items-section-header__link"
+          {{on "click" @toggleShowModifiedOnly}}
         >
-          {{#if (not this.isShowingChanges)}}
-            {{t "show-changes"}}
-          {{else}}
+          {{#if @showModifiedOnly}}
             {{t "show-all"}}
+          {{else}}
+            {{t "show-changes"}}
           {{/if}}
         </a>
       </div>
