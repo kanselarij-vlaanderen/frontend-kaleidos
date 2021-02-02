@@ -76,7 +76,9 @@ context('Publications tests', () => {
     });
     cy.get(modalSelectors.publication.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.contains(someText).should('not.exist');
+    cy.get('@publicationModal').within(() => {
+      cy.contains(someText).should('not.exist');
+    });
     // make sure all fields are tested
   });
 

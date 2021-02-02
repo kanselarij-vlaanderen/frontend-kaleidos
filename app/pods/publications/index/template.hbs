@@ -100,23 +100,23 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
-          <th>{{t "publications-table-translate-requests"}}</th>
+          <th class="auk-u-text-align--center">{{t "publications-table-translate-requests"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.signRequestsFilterOption}}
-          <th>{{t "publications-table-sign-requests"}}</th>
+          <th class="auk-u-text-align--center">{{t "publications-table-sign-requests"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
-          <th>{{t "publications-table-publish-preview-requests"}}</th>
+          <th class="auk-u-text-align--center">{{t "publications-table-publish-preview-requests"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
-          <th>{{t "publications-table-speed-procedure"}}</th>
+          <th class="auk-u-text-align--center">{{t "publications-table-speed-procedure"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
-          <th>{{t "publications-table-comment"}}</th>
+          <th class="auk-u-text-align--center">{{t "publications-table-comment"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
@@ -220,7 +220,21 @@
 
         {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
           <td class="auk-u-text-align--center">
-            {{t "dash"}}
+            {{#if (gt (await row.translationRequestsTotal) 0)}}
+              {{#if
+                (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
+              }}
+                <WebComponents::AuStatusPill @status="done">
+                  {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+                </WebComponents::AuStatusPill>
+              {{else}}
+                <WebComponents::AuStatusPill @status="in-progress">
+                  {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+                </WebComponents::AuStatusPill>
+              {{/if}}
+            {{else}}
+              <WebComponents::AuStatusPill @status="not-started" />
+            {{/if}}
           </td>
         {{/if}}
 
@@ -233,7 +247,21 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
           <td class="auk-u-text-align--center">
-            {{t "dash"}}
+            {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
+              {{#if
+                (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
+              }}
+                <WebComponents::AuStatusPill @status="done">
+                  {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+                </WebComponents::AuStatusPill>
+              {{else}}
+                <WebComponents::AuStatusPill @status="in-progress">
+                  {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+                </WebComponents::AuStatusPill>
+              {{/if}}
+            {{else}}
+              <WebComponents::AuStatusPill @status="not-started" />
+            {{/if}}
           </td>
         {{/if}}
 

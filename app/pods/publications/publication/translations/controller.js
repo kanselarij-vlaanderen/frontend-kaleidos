@@ -9,6 +9,8 @@ import CONFIG from 'fe-redpencil/utils/config';
 import { tracked } from '@glimmer/tracking';
 
 export default class PublicationTranslationController extends Controller {
+  @service publicationService;
+
   // Tracked.
   @tracked showLoader = false;
   @tracked showWithdrawPopup = false;
@@ -59,6 +61,10 @@ export default class PublicationTranslationController extends Controller {
       .utc();
     await translationActivity.save();
 
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
+
     const pieces = await translationActivity.get('usedPieces');
     // Send email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawTranslationsEmail, this.withdrawalSubject, this.withdrawalContent, pieces);
@@ -77,6 +83,10 @@ export default class PublicationTranslationController extends Controller {
     this.showLoader = true;
     const openStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
     const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
+
+    // Invalidate local count cache.
+    this.publicationService.invalidatePublicationCache();
+
     const translationActivityStatus = await translationActivity.get('status');
 
     if (translationActivityStatus.id === closedStatus.id) {

@@ -95,7 +95,7 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    const params = this.paramsFor('index');
+    const params = this.paramsFor('publications.index');
     controller.page = params.page;
   }
 }
