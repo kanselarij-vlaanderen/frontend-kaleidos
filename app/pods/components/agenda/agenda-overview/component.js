@@ -58,6 +58,10 @@ export default class AgendaOverview extends Component {
     return this.args.notas.filterBy('isApproval', false);
   }
 
+  get isDraggingEnabled() {
+    return this.currentSessionService.isEditor && this.isDesignAgenda;
+  }
+
   @action
   async setFormallyOkAction(agendaitem, formallyOkUri) {
     this.showLoader = true;
