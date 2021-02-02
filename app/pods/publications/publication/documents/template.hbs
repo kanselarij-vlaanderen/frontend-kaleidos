@@ -1,3 +1,6 @@
+{{ page-title
+  (t "documents")
+}}
 {{!-- TITLE AND TOOLBAR --}}
 <div class="auk-u-my-2">
   <WebComponents::AuToolbar>
@@ -49,305 +52,160 @@
   </WebComponents::AuToolbar>
 </div>
 
+<div class="auk-u-mb-2">
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Body class="auk-panel--editing">
+      <div class="auk-u-flex">
+        <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
+          <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
+          <WebComponents::AuInput @value={{pieceName}} type="text" id="blockInput" @block="true" {{on "change" this.onFilterByPieceNameNameChange}}/>
+        </div>
+        <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
+          <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
+          <PowerSelectMultiple
+                  @searchEnabled={{true}}
+                  @selected={{this.selectedFileExtensions}}
+                  @options={{this.fileExtensions}}
+                  @onchange={{fn (mut this.selectedFileExtensions)}} as |selectedFileExtensions|>
+            {{selectedFileExtensions}}
+          </PowerSelectMultiple>
+        </div>
+        <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
+          <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
+          {{#unless this.loadData.isRunning}}
+            <PowerSelectMultiple @options={{this.sortedDocumentTypes}}
+                                 @isSearchable={{false}}
+                                 @selected={{this.selectedPieceTypes}}
+                                 @onchange={{fn (mut this.selectedPieceTypes)}} as |selectedPieceType|>
+              {{get selectedPieceType "label"}}
+            </PowerSelectMultiple>
+          {{/unless}}
+        </div>
+      </div>
+      <div class="auk-u-flex auk-u-flex--justify-end">
+        <div>
+          <WebComponents::AuButton
+                  data-test-publication-filter-reset
+                  @skin="secondary"
+                  {{on "click" this.resetFilter}}
+          >
+            {{t "reset"}}
+          </WebComponents::AuButton>
+          <WebComponents::AuButton
+                  @icon="filter"
+                  data-test-publication-filter
+                  @skin="primary"
+                  {{on "click" this.filterDocumentsAction}}
+          >
+            {{t "filter-plural"}}
+          </WebComponents::AuButton>
+        </div>
+      </div>
+    </WebComponents::AuPanel::Body>
+  </WebComponents::AuPanel>
+</div>
 
-{{!-- TABLE FOR DOCUMENTS --}}
-
-
-<div hidden class="auk-u-mb-3">
-  {{#if (gt (await this.model.case.sortedPieces.length) 0)}}
-    <table class="auk-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th class="auk-table__col--6">{{t "document"}}</th>
-          <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
-          <th colspan="2">{{t "translations"}}</th>
-          <th colspan="2">{{t "signatures"}}</th>
-          <th colspan="2">{{t "proof"}}</th>
-          <th></th>
-        </tr>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th>{{t "needed?"}}</th>
-          <th>{{t "present?"}}</th>
-          <th>{{t "needed?"}}</th>
-          <th>{{t "present?"}}</th>
-          <th>{{t "needed?"}}</th>
-          <th>{{t "present?"}}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each this.model.case.sortedPieces as |piece|}}
-          <tr>
-            <td>
-              <WebComponents::AuButton
-                {{on "click" (fn this.toggleFolderCollapse piece)}}
-                      @skin="borderless"
-                      @icon={{if (not piece.collapsed) "chevron-down" "chevron-right" }}
-                      @layout="icon-only"/>
-            </td>
-            <td>
-              <div class="auk-u-flex auk-u-flex--vertical-center">
-                <WebComponents::AuBadge @icon="folder"/>
-                <div class="auk-u-ml-3">
-                  <span class="auk-u-text-bold">{{await piece.name}}</span>
+{{#if (await this.initialDocumentLoad)}}
+  <div class="auk-u-mb-3">
+    {{#if (gt (await this.filteredSortedPieces.length) 0 )}}
+      {{#if this.renderPieces}}
+        <table class="auk-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="auk-table__col--6">{{t "name-document"}}</th>
+              <th colspan="2">{{t "file-extension"}}</th>
+              <th colspan="2">{{t "file-type"}}</th>
+              <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.filteredSortedPieces as |piece|}}
+              <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
+                <td>
+                  <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
+                </td>
+                <td>
+                  {{#if (gt (await piece.agendaitems.length) 0)}}
+                    <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
+                  {{/if}}
+                  {{await piece.name}}
+                </td>
+                <td colspan="2">
+                  {{await piece.file.extension}}
+                </td>
+                <td colspan="2">
+                  {{await piece.documentContainer.type.label}}
+                </td>
+                <td>
+                  {{moment-format piece.created}}
                   <br>
-                  <span class="auk-u-muted auk-u-text-small">{{await piece.documentContainer.type.label}}</span>
-                </div>
-              </div>
-
-            </td>
-            <td>
-              {{moment-format piece.created}}
-              <br>
-              <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
-            </td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
-            <td colspan="2"></td>
-            <td>
-              <WebComponents::AuButtonToolbar>
-                <WebComponents::AuButton
-                        @skin="borderless"
-                        @icon="more"
-                        @layout="icon-only"
-                />
-                <AttachPopover
+                  <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+                </td>
+                <td>
+                  <WebComponents::AuButtonToolbar>
+                    <WebComponents::AuButton data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only"></WebComponents::AuButton>
+                    <AttachPopover
                         @renderInPlace={{true}}
                         @class="ember-attacher-popper"
                         @hideOn="clickout click"
                         @showOn="click"
                         @animation="shift"
-                        @placement="bottom" {{!-- as |attacher| --}}
-                >
-                  <WebComponents::AuDropdown>
-                    {{!-- <WebComponents::AuDropdown::Item>
-                      {{t "upload-docx"}}
-                    </WebComponents::AuDropdown::Item> --}}
-                    {{!-- TODO delete folder ? Intent for this action is unclear and delete rules must be checked --}}
-                    {{!-- <WebComponents::AuDropdown::Item @skin="danger" {{on "click" attacher.hide}}>
-                      {{t "delete-folder"}}
-                    </WebComponents::AuDropdown::Item> --}}
-                  </WebComponents::AuDropdown>
-                </AttachPopover>
-              </WebComponents::AuButtonToolbar>
-            </td>
-          </tr>
-          {{#if (not piece.collapsed)}}
-            <tr class="auk-table__row auk-table__row--collapsed-content">
-              <td>
-                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} />
-              </td>
-              <td>
-                <span>{{await piece.name}}</span>
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{await piece.file.extension}}</span>
-              </td>
-              <td>
-                {{moment-format piece.created}}
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
-              </td>
-              {{!-- TODO Logic for checkboxes checked --}}
-              {{!-- TODO Logic for the checkmark (isPresent), based on activities or just checking for the relevcant pieces?
-              --}}
-
-              <td>
-              </td>
-              <td class="auk-table__cell auk-table__cell--success">
-                <WebComponents::AuIcon @name="check"/>
-              </td>
-              <td></td>
-              <td class="auk-table__cell auk-table__cell--success">
-                <WebComponents::AuIcon @name="check"/>
-              </td>
-              <td></td>
-              <td class="auk-table__cell auk-table__cell--warning">
-                <WebComponents::AuIcon @name="clock"/>
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton
-                          @skin="borderless"
-                          @icon="more"
-                          @layout="icon-only"
-                  />
-                  <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="bottom" {{!-- as |attacher| --}}
-                  >
-                    <WebComponents::AuDropdown>
-                      {{!-- TODO opening viewer will only work for pdf files --}}
-                      <WebComponents::AuDropdown::Item {{on "click" (fn this.showPieceViewer piece.id)}}>
-                        {{t "view-document-details"}}
-                      </WebComponents::AuDropdown::Item>
-                      {{!-- TODO do we want this action ? how to upload a new version to a piece with multiple files ?? --}}
-                      {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
-                        {{t "new-version"}}
-                      </WebComponents::AuDropdown::Item> --}}
+                        @placement="bottom"
+                        {{!-- as |attacher| --}}
+                      >
+                      <WebComponents::AuDropdown>
+                        {{!-- TODO opening viewer will only work for pdf files --}}
+                        <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn this.showPieceViewer piece.id)}}>
+                          {{t "view-document-details"}}
+                        </WebComponents::AuDropdown::Item>
+                        {{!-- TODO do we want this action ? how to upload a new version to a piece with multiple files ?? --}}
+                        {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
+                          {{t "new-version"}}
+                        </WebComponents::AuDropdown::Item> --}}
 
                       {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that
                       have been released by kanselarij
                       Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
-                          {{t "document-edit"}}
-                        </WebComponents::AuDropdown::Item>
-                      {{/if}}
+                        {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                          <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
+                            {{t "document-edit"}}
+                          </WebComponents::AuDropdown::Item>
+                        {{/if}}
 
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents
                       that have been released by kanselarij
                       Offering this as an option should be very restrictive --}}
-                      {{!-- TODO KAS-2192 piece.agendaitem can only be 1 item even if there are many (belongsTo), saving piece
-                      creates faulty data --}}
-                      {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click"
-                                                                             (fn this.deleteExistingPiece piece)}}>
-                          {{t "delete"}}
-                        </WebComponents::AuDropdown::Item>
-                      {{/if}}
-
-
-                    </WebComponents::AuDropdown>
-                  </AttachPopover>
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
-        {{!-- TODO KAS-1986 have to make this a #each, or several ? 1 each for pieces (translations), 1 each for
-        files(docx, pdf) --}}
-        {{!-- TODO KAS-1986 which has to come first ? assuming pdf, then docx or other extensions, then translations of
-        docx --}}
-        {{!-- if @model has other extension --}}
-        {{!-- if @model has other translation --}}
-          {{/if}}
-        {{/each}}
-      </tbody>
-    </table>
-  {{else}}
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Body>
-        <WebComponents::AuEmptyState @message={{t "no-documents-yet" }} />
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
-  {{/if}}
-</div>
-
-{{!-- TABLE FOR DOCUMENTS SIMPLIFIED --}}
-
-<div class="auk-u-mb-3">
-  {{#if (gt (await this.model.case.sortedPieces.length) 0 )}}
-    {{#if this.renderPieces}}
-      <table class="auk-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="auk-table__col--6">{{t "name-document"}}</th>
-            <th colspan="2">{{t "file-extension"}}</th>
-            <th colspan="2">{{t "file-type"}}</th>
-            <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each this.model.case.sortedPieces as |piece|}}
-            <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
-              <td>
-                <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} />
-              </td>
-              <td>
-                {{#if (await piece.agendaitem)}}
-                  <WebComponents::AuIcon
-                          @name="lock-closed"
-                          @iconSkinColor="muted"
-                          @layout="icon-only"
-                  />
-                {{/if}}
-                {{await piece.name}}
-              </td>
-              <td colspan="2">
-                {{await piece.file.extension}}
-              </td>
-              <td colspan="2">
-                {{await piece.documentContainer.type.label}}
-              </td>
-              <td>
-                {{moment-format piece.created}}
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton
-                          data-test-pub-case-doc-row-actions
-                          @skin="borderless" @icon="more"
-                          @layout="icon-only"
-                  />
-                  <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="bottom" {{!-- as |attacher| --}}
-                  >
-                    <WebComponents::AuDropdown>
-                      {{!-- TODO opening viewer will only work for pdf files --}}
-                      <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn
-                              this.showPieceViewer piece.id)}}>
-                        {{t "view-document-details"}}
-                      </WebComponents::AuDropdown::Item>
-                      {{!-- TODO do we want this action ? how to upload a new version to a piece with multiple files ?? --}}
-                      {{!-- <WebComponents::AuDropdown::Item {{on "click" attacher.hide}}>
-                        {{t "new-version"}}
-                      </WebComponents::AuDropdown::Item> --}}
-
-                      {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that
-                      have been released by kanselarij
-                      Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
-                          {{t "document-edit"}}
-                        </WebComponents::AuDropdown::Item>
-                      {{/if}}
-
-                      {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents
-                      that have been released by kanselarij
-                      Offering this as an option should be very restrictive --}}
-                      {{#if (not (await piece.agendaitem))}}
-                        <WebComponents::AuDropdown::Item
-                                data-test-pub-case-doc-row-action-delete
-                                @skin="danger"
-                                {{on "click" (fn this.deleteExistingPiece piece)}}
-                        >
-                          {{t "delete"}}
-                        </WebComponents::AuDropdown::Item>
-                      {{/if}}
-                    </WebComponents::AuDropdown>
-                  </AttachPopover>
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
-          {{/each}}
-        </tbody>
-      </table>
+                        {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                          <WebComponents::AuDropdown::Item
+                                  data-test-pub-case-doc-row-action-delete
+                                  @skin="danger"
+                                  {{on "click" (fn this.deleteExistingPiece piece)}}
+                          >
+                            {{t "delete"}}
+                          </WebComponents::AuDropdown::Item>
+                        {{/if}}
+                      </WebComponents::AuDropdown>
+                    </AttachPopover>
+                  </WebComponents::AuButtonToolbar>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{else}}
+        <WebComponents::AuLoader @message={{t "please-be-patient" }} />
+      {{/if}}
     {{else}}
-      <WebComponents::AuLoader @message={{t "please-be-patient" }} />
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-documents-yet" }} />
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
     {{/if}}
-  {{else}}
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Body>
-        <WebComponents::AuEmptyState @message={{t "no-documents-yet" }} />
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
-  {{/if}}
-</div>
+  </div>
+{{/if}}
 
 
 {{!-- UPLOAD PIECE MODAL --}}
@@ -613,5 +471,12 @@
           @message={{t "delete-document-message" }}
           @cancel={{action this.cancelDeleteExistingPiece}}
           @verify={{perform this.verifyDeleteExistingPiece}}
+  />
+{{/if}}
+
+{{#if (or this.showLoader this.loadData.isRunning)}}
+  <WebComponents::AuLoadingOverlay
+          @title={{t "loading-text"}}
+          @message={{t "loading-text"}}
   />
 {{/if}}

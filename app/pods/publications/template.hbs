@@ -1,3 +1,6 @@
+{{ page-title
+  (t "publications")
+}}
 {{#if shouldShowPublicationHeader}}
 {{!-- TODO auk-panel-layout gebruiken, component ? --}}
   <div class="vlc-panel-layout__main-content">
@@ -7,26 +10,6 @@
           <WebComponents::AuToolbar::Item>
             <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
               <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
-              <WebComponents::AuTabs @reversed="true">
-                {{!--
-                  <WebComponents::AuTab @route="publications.to-treat" data-test-publications-overview-to-treat-tab>
-                    {{t "publications-to-in-progress"}}
-                  </WebComponents::AuTab>
-                --}}
-                <WebComponents::AuTab @route="publications.in-progress"
-                                      data-test-publications-overview-in-progress-tab>
-                  {{t "publications-to-publish"}}
-                </WebComponents::AuTab>
-                <WebComponents::AuTab @route="publications.done" data-test-publications-overview-done-tab>
-                  {{t "publications-published"}}
-                </WebComponents::AuTab>
-                <WebComponents::AuTab @route="publications.paused" data-test-publications-overview-paused-tab>
-                  {{t "publications-paused"}}
-                </WebComponents::AuTab>
-                <WebComponents::AuTab @route="publications.withdrawn" data-test-publications-overview-withdrawn-tab>
-                  {{t "publications-withdrawn"}}
-                </WebComponents::AuTab>
-              </WebComponents::AuTabs>
             </div>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
@@ -77,6 +60,16 @@
             </WebComponents::AuDropdown>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="secondary"
+                    @icon="filter"
+                    {{on "click" (fn this.showFilterModal)}}
+            >
+              {{t "filter-content"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+
+          <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary"
               {{on "click" (fn this.showNewPublicationModal)}}>
               {{t "publications-new"}}
@@ -86,18 +79,6 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuNavbar>
     <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-      {{!-- <Navbar @size="large" @border="none">
-          <WebComponents::AuToolbar>
-            <WebComponents::AuToolbar::Group>
-              <WebComponents::AuInput @icon="search" @block="true" placeholder="Zoeken..."></WebComponents::AuInput>
-            </WebComponents::AuToolbar::Group>
-            <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @icon="filter">{{t "filter"}}</WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
-          </WebComponents::AuToolbar>
-        </Navbar> --}}
       {{#if isShowingPublicationModal}}
         <WebComponents::AuModal data-test-au-modal-publication-new>
           <WebComponents::AuModal::Header
@@ -188,15 +169,90 @@
           </WebComponents::AuModal::Footer>
         </WebComponents::AuModal>
       {{/if}}
+      {{#if isShowPublicationFilterModal}}
+        <WebComponents::AuModal data-test-au-modal-publication-new>
+          <WebComponents::AuModal::Header
+                  @size="medium"
+                  @title={{t "publications-filter"}}
+                  @closeModal={{this.closeFilterModal}}
+          />
+          <WebComponents::AuModal::Body>
+            <div class="auk-form-group-layout auk-form-group-layout--grid">
+              <div class="auk-o-grid">
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuLabel for="defaultInput">{{t "source"}}</WebComponents::AuLabel>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuLabel for="defaultInput">{{t "status"}}</WebComponents::AuLabel>
+                  </div>
+                </div>
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label={{t "via-cabinet"}} @name="ministerFilterOption" @checked={{this.filterOptionKeys.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label={{t "publications-published"}} @name="publishedFilterOption" @checked={{this.filterOptionKeys.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "publications-paused"}} @name="pausedFilterOption" @checked={{this.filterOptionKeys.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                </div>
+                <div class="auk-o-grid-col-4">
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label={{t "not-via-cabinet"}} @name="notMinisterFilterOption" @checked={{this.filterOptionKeys.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                  <div class="auk-form-group">
+                    <WebComponents::AuCheckboxList>
+                      <WebComponents::AuCheckbox @label={{t "publications-to-publish"}} @name="toPublishFilterOption" @checked={{this.filterOptionKeys.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
+                      <WebComponents::AuCheckbox @label={{t "cancelled-request"}} @name="withdrawnFilterOption" @checked={{this.filterOptionKeys.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}}  />
+                    </WebComponents::AuCheckboxList>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </WebComponents::AuModal::Body>
+          {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+          <WebComponents::AuModal::Footer @custom={{true}}>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group @position="left">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @skin="borderless"
+                    {{on "click" this.closeFilterModal}}
+                                           data-test-publication-button-cancel>
+                    {{t "cancel"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters
+                    {{on "click" this.resetModelFilterOptions}}>
+                    {{t "clear-filter-plural"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
+                    {{on "click" this.filterModel}}>
+                    {{t "filter-content"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
+          </WebComponents::AuModal::Footer>
+        </WebComponents::AuModal>
+      {{/if}}
       {{outlet}}
     </div>
   </div>
 {{else}}
   {{outlet}}
 {{/if}}
-
 {{!-- LOADER --}}
-
 {{#if this.showLoader}}
   <WebComponents::AuLoadingOverlay/>
 {{/if}}

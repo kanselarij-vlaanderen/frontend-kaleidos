@@ -13,7 +13,7 @@ context('Testing the toolbar as user user', () => {
   it('Should have meeting, Case, Newsletter in toolbar', () => {
     cy.get(toolbar.agenda).should('exist');
     cy.get(toolbar.cases).should('exist');
-    cy.get(toolbar.newsletters).should('exist');
+    cy.get(toolbar.newsletters).should('not.exist');
     cy.get(toolbar.settings).should('not.exist');
   });
 
@@ -29,9 +29,10 @@ context('Testing the toolbar as user user', () => {
     cy.get(toolbar.settings).should('not.exist');
   });
 
-  it('Should switch to newsletter tab when newsletter is clicked as user', () => {
-    cy.get(toolbar.newsletters).click();
-    cy.contains('Geen rechten');
-    cy.get(toolbar.settings).should('not.exist');
-  });
+  // Users can no longer see newsletters, do we want this ?
+  // it('Should switch to newsletter tab when newsletter is clicked as user', () => {
+  //   cy.get(toolbar.newsletters).click();
+  //   cy.contains('Geen rechten');
+  //   cy.get(toolbar.settings).should('not.exist');
+  // });
 });

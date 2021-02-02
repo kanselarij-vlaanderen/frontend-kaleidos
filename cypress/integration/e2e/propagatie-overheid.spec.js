@@ -88,6 +88,22 @@ context('Propagation to other graphs', () => {
     cy.logoutFlow();
   });
 
+  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
+  it('Test as Minister', () => {
+    cy.server();
+    cy.login('Minister');
+    cy.searchCase(caseTitle);
+    cy.openSubcase(0);
+    cy.url().should('contain', '/deeldossiers/');
+    cy.url().should('contain', '/overzicht');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Acties').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.clickReverseTab('Documenten');
+    cy.contains('Wijzigen').should('not.exist');
+    cy.contains('Documenten toevoegen').should('not.exist');
+    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
+  });
   it('Test as Overheid', () => {
     cy.server();
     cy.login('Overheid');
@@ -128,22 +144,5 @@ context('Propagation to other graphs', () => {
     });
 
     cy.logoutFlow();
-  });
-
-  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
-  it('Test as Minister', () => {
-    cy.server();
-    cy.login('Minister');
-    cy.searchCase(caseTitle);
-    cy.openSubcase(0);
-    cy.url().should('contain', '/deeldossiers/');
-    cy.url().should('contain', '/overzicht');
-    cy.contains('Wijzigen').should('not.exist');
-    cy.contains('Acties').should('not.exist');
-    cy.contains('Indienen voor agendering').should('not.exist');
-    cy.clickReverseTab('Documenten');
-    cy.contains('Wijzigen').should('not.exist');
-    cy.contains('Documenten toevoegen').should('not.exist');
-    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
   });
 });

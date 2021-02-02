@@ -8,10 +8,11 @@ export default class CaseController extends Controller {
   @service publicationService;
 
   @tracked showLoader = false;
-  @tracked isShowingPersonModal = false;
+  @tracked personModalOpen = false;
+  @tracked mandateeModalOpen = false;
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
-
+  @tracked selectedMandatee = null;
 
   @tracked
   contactPerson = {
@@ -47,27 +48,27 @@ export default class CaseController extends Controller {
   }
 
   get getShortTitle() {
-    if (this.model) {
-      return this.model.shortTitle;
+    if (this.model.case) {
+      return this.model.case.shortTitle;
     }
     return '';
   }
 
   get getLongTitle() {
-    if (this.model) {
-      return this.model.title;
+    if (this.model.case) {
+      return this.model.case.title;
     }
     return '';
   }
 
   @action
   showContactPersonModal() {
-    this.isShowingPersonModal = true;
+    this.personModalOpen = true;
   }
 
   @action
   closeContactPersonModal() {
-    this.isShowingPersonModal = false;
+    this.personModalOpen = false;
   }
 
   @action
@@ -77,7 +78,7 @@ export default class CaseController extends Controller {
 
   @action
   cancelEditingInscription() {
-    this.model.rollbackAttributes();
+    this.model.case.rollbackAttributes();
     this.putInscriptionInNonEditMode();
   }
 
@@ -89,7 +90,7 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.save();
+      yield this.model.case.save();
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work
@@ -101,8 +102,8 @@ export default class CaseController extends Controller {
     this.showLoader = true;
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
-    this.isShowingPersonModal = false;
+    await this.publicationService.linkContactPersonToPublication(this.model.publicationFlow.id, contactPerson);
+    this.personModalOpen = false;
     this.showLoader = false;
   }
 
@@ -110,6 +111,54 @@ export default class CaseController extends Controller {
   async deleteContactPerson(contactPerson) {
     this.showLoader = true;
     await contactPerson.destroyRecord();
+    this.showLoader = false;
+  }
+
+  // Mandatee Stuff.
+
+  @action
+  showMandateeModal() {
+    this.selectedMandatee = null;
+    this.mandateeModalOpen = true;
+  }
+
+  @action
+  closeMandateeModal() {
+    this.selectedMandatee = null;
+    this.mandateeModalOpen = false;
+  }
+
+  @action
+  async mandateeSelectedForPublication(mandatee) {
+    this.selectedMandatee = mandatee;
+  }
+
+  @action
+  async addSelectedMandateeToPublicationFlow() {
+    const mandatee = this.selectedMandatee;
+    this.mandateeModalOpen = false;
+    this.showLoader = true;
+    const mandatees = this.model.publicationFlow.get('mandatees').toArray();
+    mandatees.push(mandatee);
+    this.model.publicationFlow.set('mandatees', mandatees);
+    await this.model.publicationFlow.save();
+    this.selectedMandatee = null;
+    this.showLoader = false;
+  }
+
+  @action
+  async unlinkMandateeFromPublicationFlow(mandateeToUnlink) {
+    this.showLoader = true;
+    const mandatees = this.model.publicationFlow.get('mandatees').toArray();
+    for (let index = 0; index < mandatees.length; index++) {
+      const mandatee = mandatees[index];
+      if (mandateeToUnlink.id === mandatee.id) {
+        mandatees.splice(index, 1);
+      }
+    }
+    this.model.publicationFlow.set('mandatees', mandatees);
+    await this.model.publicationFlow.save();
+    this.mandateeModalOpen = false;
     this.showLoader = false;
   }
 }
