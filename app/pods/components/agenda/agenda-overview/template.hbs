@@ -50,37 +50,33 @@
     {{#if
       (and this.currentSessionService.isEditor this.isDesignAgenda)
     }}
-      <SortableGroup
-        @tagName="ul"
-        @onChange={{@onReorderAgendaitems}}
-      as |sortableGroup|
-      >
+      <ul>
         {{!-- Goedkeuringen vorige vergaderingen --}}
         {{#each this.approvalNotas as |agendaitem|}}
-          <SortableItem
-            @tagName="li"
-            @class="vlc-agenda-items__sub-item"
-            @model={{agendaitem}}
-            @group={{sortableGroup}}
-            @distance={{30}}
-            @handle={{this.dragHandleClass}}
-          >
+          <li class="vlc-agenda-items__sub-item">
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
               @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
             />
-          </SortableItem>
+          </li>
         {{/each}}
+      </ul>
+
+      <SortableGroup
+        @tagName="ul"
+        @model={{this.groupedNotas}}
+        @onChange={{@onReorderAgendaitems}}
+        as |sortableGroup|
+      >
         {{!-- other notas --}}
-        {{#each this.groupedNotas as |agendaitemGroup|}}
+        {{#each sortableGroup.model as |agendaitemGroup|}}
           <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
           {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-            <SortableItem
+            <sortableGroup.item
               @tagName="li"
               @class="vlc-agenda-items__sub-item"
               @model={{agendaitem}}
-              @group={{sortableGroup}}
               @distance={{30}}
               @handle={{this.dragHandleClass}}
             >
@@ -89,7 +85,7 @@
                 @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
                 @showFormallyOkStatus={{this.isDesignAgenda}}
               />
-            </SortableItem>
+            </sortableGroup.item>
           {{/each}}
         {{/each}}
       </SortableGroup>
@@ -134,23 +130,23 @@
       }}
         <SortableGroup
           @tagName="ul"
+          @model={{@announcements}}
           @onChange={{@onReorderAgendaitems}}
         as |sortableAnnouncements|>
-          {{#each @announcements as |announcement|}}
-            <SortableItem
+          {{#each sortableAnnouncements.model as |announcement|}}
+            <sortableAnnouncements.item
               @tagName="li"
               @class="vlc-agenda-items__sub-item"
               @model={{announcement}}
-              @group={{sortableAnnouncements}}
               @distance={{30}}
               @handle={{this.dragHandleClass}}
-            >
+              >
               <Agenda::AgendaOverview::AgendaOverviewItem
                 @agendaitem={{announcement}}
                 @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
                 @showFormallyOkStatus={{this.isDesignAgenda}}
               />
-            </SortableItem>
+            </sortableAnnouncements.item>
           {{/each}}
         </SortableGroup>
       {{else}}
