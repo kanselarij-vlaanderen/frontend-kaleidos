@@ -1,0 +1,38 @@
+<ul class="auk-list auk-list--bordered auk-navbar--no-pad">
+  {{#each (await @agendaitems) as |agendaitem|}}
+    <li class="auk-list__item auk-list__item--gray-100">
+      <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-input--block">
+        {{t
+          "number-point-title"
+          number=agendaitem.number
+          title=(if agendaitem.shortTitle agendaitem.shortTitle agendaitem.title)
+        }}
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              {{#if (await agendaitem.checkAdded)}}
+                <WebComponents::AuIcon @name="calendar-plus" @iconSkinColor="muted"/>
+              {{/if}}
+              {{#if (await agendaitem.newsletterInfo)}}
+                {{#if (not (await agendaitem.newsletterInfo.inNewsletter))}}
+                  <WebComponents::AuIcon @name="hide" @iconSkinColor="muted"/>
+                {{/if}}
+              {{/if}}
+              {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
+                <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted"/>
+              {{/if}}
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <p class="{{agendaitem.formallyOkToShow.classNames}}">
+                <i class="{{agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
+                {{agendaitem.formallyOkToShow.label}}
+              </p>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </div>
+    </li>
+  {{/each}}
+</ul>

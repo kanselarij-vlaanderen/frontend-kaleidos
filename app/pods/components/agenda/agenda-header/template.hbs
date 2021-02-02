@@ -66,10 +66,9 @@
                     <li class="vlc-dropdown-menu__item">
                       <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
                         {{action attacher.hide}}
-                        {{!-- {{action "approveAgendaAction" currentSession}} --}}
                         {{action "openConfirmApproveAgenda"}}
                       >
-                        {{await currentSession.latestAgendaName}} {{t "approve-small"}}
+                        {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
                       </button>
                     </li>
                     <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -79,7 +78,7 @@
                         {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                       >
                         <span>
-                          {{await currentSession.latestAgendaName}} {{t "approve-small-and-close"}}
+                          {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
                         </span>
                       </button>
                     </li>
@@ -240,7 +239,7 @@
                         <a href=""
                            data-test-agenda-header-lockAgenda
                            class="vl-link vl-link--block vl-u-text--error"
-                          {{action "confirmCloseAgenda" currentAgenda}}
+                          {{action "openConfirmCloseMeeting"}}
                           {{action attacher.hide}}
                         >
                           {{t "agenda-close"}}
@@ -280,16 +279,11 @@
                   </li>
                   <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
-                    {{#if
-                      (or
-                        (and currentAgenda currentAgenda.isDesignAgenda)
-                        (and currentSessionService.isAdmin (await currentAgendaIsLast))
-                      )
-                    }}
+                    {{#if canDeleteSelectedAgenda}}
                       <a href=""
                          data-test-agenda-header-deleteAgenda
                          class="vl-link vl-u-text--error"
-                        {{action "deleteAgendaAction"}}
+                        {{action "openConfirmDeleteSelectedAgenda"}}
                         {{action attacher.hide}}
                       >
                         {{t "agenda-delete"}}
@@ -316,20 +310,13 @@
                   {{/if}}
 
 
-                  {{#if
-                    (and
-                      (not currentSession.isFinal)
-                      (and (await isSessionClosable))
-                      (and currentAgenda currentAgenda.isDesignAgenda)
-                      (and currentSessionService.isAdmin (await currentAgendaIsLast))
-                      )
-                  }}
+                  {{#if (await canReopenPreviousAgenda)}}
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                       >
                       <a href=""
                            data-test-agenda-header-reopen-previous-version
                            class="vl-link vl-link--block vl-u-text--error"
-                          {{action "confirmReopenActionStepDeleteAgenda"}}
+                          {{action "openConfirmReopenPreviousAgenda"}}
                           {{action attacher.hide}}
                         >
                         {{t "agenda-reopen-previous-version"}}
@@ -354,29 +341,6 @@
   <Session::SelectSignature
     @meeting={{currentSession}}
     @closeDialog={{action "selectSignature"}} />
-{{/if}}
-{{#if showWarningForApprovingAgenda}}
-  <WebComponents::VlModalVerify
-    data-test-agenda-approve-modal
-    @title={{t "warning-title"}}
-    @buttonType="warning"
-    @isLoading={{isApprovingAgenda}}
-    @verifyButtonText={{t "continue"}}
-    @message={{if
-      (and
-        (await currentAgenda.isPassable)
-        (not (await currentAgenda.isApprovable) )
-      )
-      (t "approve-agenda-passable")
-      (t "approve-agenda-warning")
-    }}
-    @cancel={{action "cancel"}}
-    @verify={{action "doApproveAgenda" currentSession}}
-    @showVerify={{and
-      (await currentAgenda.isPassable)
-      (not (await currentAgenda.isApprovable)
-      )
-    }} />
 {{/if}}
 {{#if releasingDocuments}}
   <WebComponents::VlModalVerify
@@ -408,13 +372,6 @@
       @cancelForm={{action "cancelEditSessionForm"}} />
   </WebComponents::VlModal>
 {{/if}}
-{{#if shouldShowLoader}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @title={{loaderTitle}} >
-    <WebComponents::VlLoader @text={{loaderText}} />
-  </WebComponents::VlModal>
-{{/if}}
 
 {{#if isApprovingAllAgendaitems}}
   <WebComponents::VlModalVerify
@@ -423,171 +380,194 @@
     @verifyButtonText={{t "approve"}}
     @message={{t
       "approve-all-agendaitems-warning-message"
-      amountOfAgendaitemsNotFormallyOk=(await amountOfAgendaitemsNotFormallyOk)
+      amountOfAgendaitems=(await this.currentAgenda.allAgendaitemsNotOkLength)
     }}
     @cancel={{action "cancel"}}
     @verify={{action "approveAllAgendaitems"}}
   />
 {{/if}}
 
-{{#if isShowingWarningOnClose}}
-  <WebComponents::VlModalVerify
-      @isOverlay={{true}}
-      @message={{t "close-agenda-message"}}
-      @title={{t "agenda-close"}}
-      @buttonType="warning"
-      @verifyButtonText={{t "continue"}}
-      @cancel={{action "cancelCloseAgenda"}}
-      @verify={{action "closeAgendaAction"}}
-      @closeModal={{action "cancelCloseAgenda"}}
-  />
-{{/if}}
-
-{{!-- Deze tekst klopt niet voor agenda afsluiten method --}}
-{{! ontwerapgenda wordt verwijderd}}
-
-{{#if showCloseWarning}}
-  <WebComponents::VlModalVerify
-          @isOverlay={{true}}
-          @message={{t "agenda-has-nok-agendaitems-warning"}}
-          @title={{t "approve-agenda-error"}}
-          @buttonType="warning"
-          @verifyButtonText={{t "close-agenda"}}
-          @cancel={{action "cancelLockAgenda"}}
-          @verify={{action "removeAgendaitemsFromAgendaThatDontHaveFormallyOkStatus"}}
-          @closeModal={{action "cancelLockAgenda"}}
-  />
-{{/if}}
-
-{{#if showApproveAndCloseWarning}}
-  <WebComponents::VlModalVerify
-          @isOverlay={{true}}
-          @message={{t "close-agenda-message"}}
-          @title={{t "agenda-close"}}
-          @buttonType="warning"
-          @verifyButtonText={{t "continue"}}
-          @cancel={{action "cancelCloseAgenda"}}
-          @verify={{action "approveAndCloseAgenda"}}
-          @closeModal={{action "cancelCloseAgenda"}}
-  />
-{{/if}}
-
-{{#if showConfirmDeleteCurrentAgenda}}
-  {{web-components/vl-modal-verify
-    title=(t "agenda-design-delete")
-    message=(t "agenda-design-delete-message" agenda=currentAgenda.agendaName)
-    cancel=(action "cancelConfirmReopenActionStepDeleteAgenda")
-    verify=(action "confirmReopenActionStepReopenPreviousAgenda")
-  }}
-{{/if}}
-{{#if showConfirmReopenPreviousAgenda}}
-  {{web-components/vl-modal-verify
-    title=(t "agenda-reopen")
-    message=(t "agenda-reopen-message" agenda=(await lastAgendaName))
-    cancel=(action "cancelConfirmReopenActionStepReopenPreviousAgenda")
-    verify=(action "reopenPreviousAgendaAndDeleteCurrentAction")
-    verifyButtonText=(t "agenda-reopen")
-    buttonType="warning"
-  }}
-{{/if}}
-
-{{#if showLoader}}
-  <WebComponents::AuLoadingOverlay/>
+{{!-- TODO Is this a full overlay ? we can use this --}}
+{{#if showLoadingOverlay}}
+  <WebComponents::AuLoadingOverlay @size="medium" @message={{this.loadingOverlayMessage}}/>
 {{/if}}
 
 {{!-- KAS-2194 new stuff --}}
-{{!-- {{#if showConfirmForApprovingAgenda}}
-  <WebComponents::VlModalVerify
-          @isOverlay={{true}}
-          @message={{approveAgendaMessage}}
-          @title={{t "agenda-approve"}}
-          @buttonType="warning"
-          @verifyButtonText={{t "continue"}}
-          @cancel={{action "cancelApproveAgenda"}}
-          @verify={{action "confirmApproveAgenda"}}
-          @closeModal={{action "cancelApproveAgenda"}}
-  />
-{{/if}} --}}
 
 {{#if this.showConfirmForApprovingAgenda}}
-  <WebComponents::AuModal @size="large">
+  <WebComponents::AuModal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <WebComponents::AuModal::Header
-            @title={{t "agenda-approve"}}
-            @closeModal={{action "cancelApproveAgenda"}}
+      @title={{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+      @closeModal={{action "cancelApproveAgenda"}}
     />
     <WebComponents::AuModal::Body>
       {{#if (await this.currentAgenda.canBeApproved)}}
-        {{t "approve-agenda-all-ok"}}
+        {{t "approve-agenda-confirmation"}}
       {{else}}
-        <h1>{{t "warning-title" }}</h1>
-        <div>{{t "approve-agenda-not-ok"}}</div>
-        <br>
-        {{#each (await this.currentAgenda.agendaitemsNotOk) as |agendaitem|}}
-          <p>
+        <WebComponents::AuAlert @skin="error" @message={{t "approve-agenda-not-ok-message"}}/>
+        <div>{{t "approve-agenda-confirmation"}}</div>
+        {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
+          <br>
+          <div class="auk-u-mb-2">{{t "rollback-agendaitem-on-approving-agenda"}}</div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.approvedAgendaitemsNotOk}}/>
+        {{/if}}
+        {{#if (await this.currentAgenda.newAgendaitemsNotOk)}}
+          <br>
+          <div class="auk-u-mb-2">
             {{t
-              (if agendaitem.showAsRemark "remark-number-short-title" "note-number-short-title")
-              priority = agendaitem.priority
-              shortTitle = agendaitem.shortTitle
+              "move-agendaitem-on-approving-agenda"
+              serialnumber=this.currentAgenda.serialnumber
             }}
-          </p>
-          {{#if (await agendaitem.previousVersion)}}
-            <div class="auk-u-text-small">{{t "rollback-agendaitem-on-approving-agenda"}}</div>
-          {{else}}
-            <div class="auk-u-text-small">{{t "move-agendaitem-on-approving-agenda"}}</div>
-          {{/if}}
-          <hr>
-        {{/each}}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.newAgendaitemsNotOk}}/>
+        {{/if}}
       {{/if}}
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{action "cancelApproveAgenda"}}>
       <WebComponents::AuButton
-              data-test-au-modal-footer-save
-              @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
-              {{on "click" (action "confirmApproveAgenda")}}
+        data-test-au-modal-footer-save
+        @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
+        {{on "click" (action "confirmApproveAgenda")}}
       >
-        {{t "continue"}}
+        {{t "approve"}}
       </WebComponents::AuButton>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
 
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
-  <WebComponents::AuModal @size="large">
+  <WebComponents::AuModal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <WebComponents::AuModal::Header
-            @title={{t "approve-agenda-and-close" serialnumber = this.currentAgenda.serialnumber}}
-            @closeModal={{action "cancelApproveAgendaAndCloseMeeting"}}
+      @title={{t "approve-agenda-and-close" serialnumber = this.currentAgenda.serialnumber}}
+      @closeModal={{action "cancelApproveAgendaAndCloseMeeting"}}
     />
     <WebComponents::AuModal::Body>
       {{#if (await this.currentAgenda.canBeApproved)}}
-        {{t "close-meeting-all-ok"}}
+        {{t "approve-agenda-close-meeting-confirmation"}}
       {{else}}
-        <h1>{{t "warning-title" }}</h1>
-        <div>{{t "close-meeting-not-ok"}}</div>
-        <br>
-        {{#each (await this.currentAgenda.agendaitemsNotOk) as |agendaitem|}}
-          <p>
+        <WebComponents::AuAlert @skin="error" @message={{t "approve-agenda-close-meeting-not-ok-message"}}/>
+        <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
+        {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
+          <br>
+          <div class="auk-u-mb-2">{{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}</div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.approvedAgendaitemsNotOk}}/>
+        {{/if}}
+        {{#if (await this.currentAgenda.newAgendaitemsNotOk)}}
+          <br>
+          <div class="auk-u-mb-2">
             {{t
-              (if agendaitem.showAsRemark "remark-number-short-title" "note-number-short-title")
-              priority = agendaitem.priority
-              shortTitle = agendaitem.shortTitle
+              "delete-agendaitem-on-closing-meeting"
+              serialnumber=this.currentAgenda.serialnumber
             }}
-          </p>
-          {{#if (await agendaitem.previousVersion)}}
-            <div class="auk-u-text-small">{{t "rollback-agendaitem-on-approving-agenda-close-meeting"}}</div>
-          {{else}}
-            <div class="auk-u-text-small">{{t "delete-agendaitem-on-approving-agenda"}}</div>
-          {{/if}}
-          <hr>
-        {{/each}}
+          </div>
+          <Agenda::AgendaHeader::AgendaActionPopupAgendaitems @agendaitems={{await this.currentAgenda.newAgendaitemsNotOk}}/>
+        {{/if}}
       {{/if}}
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{action "cancelApproveAgendaAndCloseMeeting"}}>
       <WebComponents::AuButton
-              data-test-au-modal-footer-save
-              @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
-              {{on "click" (action "confirmApproveAgendaAndCloseMeeting")}}
+        data-test-au-modal-footer-save
+        @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
+        {{on "click" (action "confirmApproveAgendaAndCloseMeeting")}}
       >
-        {{t "continue"}}
+        {{t "approve-and-close"}}
+      </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+{{#if this.showConfirmForClosingMeeting}}
+  <WebComponents::AuModal @size="large">
+    <WebComponents::AuModal::Header
+            @title={{t "agenda-close"}}
+            @closeModal={{action "cancelCloseMeeting"}}
+    />
+    <WebComponents::AuModal::Body>
+      {{#if (await this.currentSession.latestAgenda.isDesignAgenda)}}
+        <WebComponents::AuAlert
+          @skin="error" 
+          @message={{t
+            "agenda-design-delete-message"
+            agenda=this.currentSession.latestAgenda.agendaName
+          }}
+        />
+      {{/if}}
+      <div>{{t "close-meeting-confirmation"}}</div>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{action "cancelCloseMeeting"}}>
+      <WebComponents::AuButton
+        data-test-au-modal-footer-save
+        @skin={{if
+          (await this.currentSession.latestAgenda.isDesignAgenda)
+          "danger-primary"
+          "primary"
+        }}
+        {{on "click" (action "confirmCloseMeeting")}}
+      >
+        {{t "agenda-close"}}
+      </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+{{#if this.showConfirmForDeletingSelectedAgenda}}
+  <WebComponents::AuModal @size="large">
+    <WebComponents::AuModal::Header
+      @title={{t "agenda-delete"}}
+      @closeModal={{action "cancelDeleteSelectedAgenda"}}
+    />
+    <WebComponents::AuModal::Body>
+      <div class="auk-h3">{{t "warning-title" }}</div>
+      <div>
+        {{t
+          "delete-design-agenda-close-meeting-message"
+          agenda=this.currentSession.latestAgenda.agendaName
+        }}
+      </div>
+      {{#if (eq this.agendas.length 1)}}
+        <div>{{t "delete-final-agenda-and-meeting"}}</div>
+      {{/if}}
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{action "cancelDeleteSelectedAgenda"}}>
+      <WebComponents::AuButton
+        data-test-au-modal-footer-save
+        @skin="danger-primary"
+        {{on "click" (action "confirmDeleteSelectedAgenda")}}
+      >
+        {{t "agenda-delete"}}
+      </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+{{#if this.showConfirmForReopeningPreviousAgenda}}
+  <WebComponents::AuModal @size="large">
+    <WebComponents::AuModal::Header
+      @title={{t "agenda-reopen-previous-version"}}
+      @closeModal={{action "cancelReopenPreviousAgenda"}}
+    />
+    <WebComponents::AuModal::Body>
+      <div class="auk-h3">{{t "warning-title" }}</div>
+      <div>
+        {{t 
+          "agenda-design-delete-message"
+          agenda=(await this.currentAgenda.agendaName)
+        }}
+      </div>
+      <div>
+        {{t 
+          "agenda-reopen-confirmation"
+          agenda=(await this.lastApprovedAgenda.agendaName)
+        }}
+      </div>
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
+      <WebComponents::AuButton
+        data-test-au-modal-footer-save
+        @skin="danger-primary"
+        {{on "click" (action "confirmReopenPreviousAgenda")}}
+      >
+        {{t "agenda-reopen-previous-version"}}
       </WebComponents::AuButton>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>

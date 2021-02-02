@@ -1,5 +1,5 @@
 <div class="auk-u-flex auk-u-flex--justify-around">
-  <WebComponents::AuModal @size="xsmall">
+  <WebComponents::AuModal @size={{this.getSize}}>
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
               @message={{this.getMessage}}
