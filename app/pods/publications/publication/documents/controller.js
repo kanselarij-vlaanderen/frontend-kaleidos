@@ -385,10 +385,14 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  resetFilter() {
+  async resetFilter() {
     this.selectedFileExtensions = [];
     this.selectedPieceTypes = [];
     this.pieceName = '';
+    this.renderPieces = false;
+    this.selectedPieces = A([]);
+    await this.sortedFilteredPieces();
+    this.renderPieces = true;
   }
 
   @computed('model.case.sortedPieces')
@@ -399,7 +403,10 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async filterDocumentsAction() {
+    this.renderPieces = false;
+    this.selectedPieces = A([]);
     await this.sortedFilteredPieces();
+    this.renderPieces = true;
   }
 
   async sortedFilteredPieces() {
