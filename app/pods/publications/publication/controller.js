@@ -308,6 +308,11 @@ export default class PublicationController extends Controller {
     }
     return null;
   }
+  get documentsCount() {
+    return {
+      value: `(${this.model.counts.documentCount})`,
+    };
+  }
 
   get showStatusForTranslations() {
     const totalTranslations = this.model.counts.totalTranslations;

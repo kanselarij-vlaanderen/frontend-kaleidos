@@ -57,7 +57,9 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     return hash({
       publicationFlow,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
+      case: _case,
       counts: {
+        documentCount: _case.pieces.length,
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
         openTranslationRequests: totalTranslations.length - closedTranslationRequests.length - withdrawnTranslationRequests.length,
