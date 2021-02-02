@@ -15,7 +15,7 @@ export default class AgendaItemSearch extends Component {
 
   @(task(function *() {
     yield timeout(500);
-    yield this.search(this.searchText);
+    yield this.search();
   }).restartable()) debouncedSearchTask;
 
   @action

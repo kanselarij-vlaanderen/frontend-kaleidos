@@ -443,6 +443,7 @@
   "until-inclusive": "Tot en met",
   "search-in-decisions-only": "Zoek enkel in beslissingen",
   "search-in-announcements-only": "Zoek enkel in mededelingen",
+  "search-include-archived": "Zoek ook in archief",
   "find-mandatee-label": "Mandataris",
   "no-nota": "Geen nota beschikbaar.",
   "nota-loading-text": "De nota wordt geladen..",
