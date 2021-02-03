@@ -51,7 +51,7 @@ export default class PublicationController extends Controller {
     },
   }, {
     id: CONFIG.publicationStatusWithdrawn.id,
-    label: 'ingetrokken',
+    label: 'Ingetrokken',
     icon: {
       svg: 'circle-close',
       color: 'danger',
@@ -130,6 +130,16 @@ export default class PublicationController extends Controller {
         .isBefore(moment());
     }
     return false;
+  }
+
+  get casePath() {
+    let title = this.intl.t('publication-flow');
+    if (!this.model.latestSubcaseOnMeeting) {
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    } else {
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    }
+    return title;
   }
 
   @action
@@ -311,6 +321,9 @@ export default class PublicationController extends Controller {
       return 'auk-form-group--error';
     }
     return null;
+  }
+  get documentsCount() {
+    return `(${this.model.counts.documentCount})`;
   }
 
   get showStatusForTranslations() {
