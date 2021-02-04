@@ -132,8 +132,8 @@ context('Agendaitem changes tests', () => {
       timeout: 80000,
     }).should('exist')
       .should('be.visible');
-    cy.get(agenda.printHeaderTitle).contains('Vergadering van');
-
+    cy.get(agenda.printHeaderTitle).contains('Agenda van');
+    // TODO Type is now visible in printHeaderTitle, but not tested for correctness
     cy.get(agenda.printContainer).should('exist')
       .should('be.visible');
 

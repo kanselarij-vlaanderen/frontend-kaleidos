@@ -26,7 +26,7 @@ export default class SubcaseItemSubcasesComponent extends Component {
     if (this.isShowingAllDocuments) {
       return this.subcaseDocuments;
     }
-    return this.subcaseDocuments.slice(this.documentListSize);
+    return this.subcaseDocuments.slice(0, this.documentListSize);
   }
 
   get enableShowMore() {

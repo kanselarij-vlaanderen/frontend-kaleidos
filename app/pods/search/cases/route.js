@@ -9,9 +9,10 @@ import { inject as service } from '@ember/service';
 export default class CasesSearchRoute extends Route {
   @service metrics;
   queryParams = {
-    // isArchived: {
-    //   refreshModel: true
-    // },
+    includeArchived: {
+      refreshModel: true,
+      as: 'incl_gearchiveerd',
+    },
     decisionsOnly: {
       refreshModel: true,
       as: 'enkel_beslissingen',
@@ -29,8 +30,6 @@ export default class CasesSearchRoute extends Route {
       as: 'sorteer',
     },
   };
-
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'subcaseTitle', 'subcaseSubTitle']);
 
   postProcessDates(_case) {
     const {
@@ -61,19 +60,24 @@ export default class CasesSearchRoute extends Route {
       params.page = 0;
     }
 
+    const textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
+    if (params.decisionsOnly) {
+      textSearchFields.push('decisions.content');
+    } else {
+      textSearchFields.push('documents.content');
+    }
+
     const searchModifier = ':sqs:';
-    const textSearchKey = this.textSearchFields.join(',');
+    const textSearchKey = textSearchFields.join(',');
 
     const filter = {};
-
-    const searchDocumentType = params.decisionsOnly ? 'casesByDecisionText' : 'cases';
 
     if (!isEmpty(params.searchText)) {
       filter[searchModifier + textSearchKey] = params.searchText;
     }
 
     if (!isEmpty(params.mandatees)) {
-      filter['creators,mandatees'] = params.mandatees;
+      filter['mandatees,mandateeFirstNames,mandateeFamilyNames'] = params.mandatees;
     }
 
     /* A closed range is treated as something different than 2 open ranges because
@@ -92,10 +96,9 @@ export default class CasesSearchRoute extends Route {
       filter[':lte:sessionDates'] = date.utc().toISOString();
     }
 
-    // Param below not yet in use, since it isn't indexed
-    // if (this.isArchived) {
-    //   filter['isArchived'] = 'true';
-    // }
+    if (!params.includeArchived) {
+      filter.isArchived = 'false';
+    }
 
     this.lastParams.commit();
 
@@ -103,10 +106,19 @@ export default class CasesSearchRoute extends Route {
       return [];
     }
 
+    // session-dates can contain multiple values.
+    // Depending on the sort order (desc, asc) we need to aggregrate the values using min/max
+    let sort = params.sort;
+    if (params.sort === 'session-dates') {
+      sort = ':min:session-dates';
+    } else if (params.sort === '-session-dates') {
+      sort = '-:max:session-dates'; // correctly converted to mu-search syntax by the mu-search util
+    }
+
     const {
       postProcessDates,
     } = this;
-    return search(searchDocumentType, params.page, params.size, params.sort, filter, (searchData) => {
+    return search('cases', params.page, params.size, sort, filter, (searchData) => {
       const entry = searchData.attributes;
       entry.id = searchData.id;
       postProcessDates(searchData);
