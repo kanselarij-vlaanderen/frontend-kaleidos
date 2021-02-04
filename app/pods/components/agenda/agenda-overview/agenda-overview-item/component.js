@@ -3,7 +3,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { timeout } from 'ember-concurrency';
-import { dropTask, task } from 'ember-concurrency-decorators';
+import {
+  dropTask,
+  task
+} from 'ember-concurrency-decorators';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 
 export default class AgendaOverviewItem extends Component {
@@ -72,7 +75,7 @@ export default class AgendaOverviewItem extends Component {
 
   @task
   *lazyLoad(task) {
-    if (task.performCount == 0) {
+    if (task.performCount === 0) {
       yield timeout(400);
       yield task.perform();
     }
