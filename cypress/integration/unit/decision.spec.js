@@ -179,7 +179,6 @@ context('Add files to an agenda', () => {
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
-    cy.get(modal.agenda.approveAgenda).should('not.exist');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.postponeAgendaitemButton).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {

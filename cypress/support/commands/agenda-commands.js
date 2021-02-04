@@ -27,6 +27,7 @@ import agendaOverview from '../../selectors/agenda-overview.selectors';
  * @returns {Promise<String>} the id of the created agenda
  */
 function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRepresentation) {
+  cy.log('createAgenda');
   cy.route('POST', '/meetings').as('createNewMeeting');
   cy.route('POST', '/agendas').as('createNewAgenda');
   cy.route('POST', '/newsletter-infos').as('createNewsletter');
@@ -144,6 +145,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     .then((res) => {
       agendaId = res.responseBody.data.id;
     });
+  cy.log('/createAgenda');
   cy.wait('@patchMeetings', {
     timeout: 20000,
   })
@@ -155,107 +157,6 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 }
 
 /**
- * Create a default agenda
- * @memberOf Cypress.Chainable#
- * @name createDefaultAgenda
- * @function
- * @param {String} kindOfAgenda - kind of agenda that should be made
- * @param {String} year - year that the agenda should be made on
- * @param {String} month - month that the agenda should be made on
- * @param {String} day - day that the agenda should be made on
- * @param {String} location - Location that the event is taking place
- */
-function createDefaultAgenda(kindOfAgenda, year, month, day, location, meetingId) {
-  cy.route('POST', '/meetings').as('createNewMeeting');
-  cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
-
-  const TOEVOEGEN = 'Toevoegen';
-
-  cy.get(agenda.createNewAgendaButton).click();
-  cy.get(agenda.emberPowerSelectTrigger).click();
-  cy.get(agenda.emberPowerSelectOption).contains(kindOfAgenda)
-    .click();
-  cy.selectDate(year, month, day);
-  cy.get(form.formInput).eq(0)
-    .type(meetingId, {
-      force: true,
-    });
-  cy.get(form.formInput).eq(1)
-    .type(location);
-  cy.get(agenda.button).contains(TOEVOEGEN)
-    .click();
-
-  cy.wait('@createNewMeeting', {
-    timeout: 20000,
-  });
-  cy.wait('@createNewAgenda', {
-    timeout: 20000,
-  });
-  cy.wait('@createNewsletter', {
-    timeout: 20000,
-  });
-  cy.wait('@patchMeetings', {
-    timeout: 20000,
-  });
-}
-
-/**
- * Create a default agenda
- * @memberOf Cypress.Chainable#
- * @name createAgendaOnDate
- * @function
- * @param {String} kindOfAgenda - kind of agenda that should be made
- * @param {String} year - year that the agenda should be made on
- * @param {String} month - month that the agenda should be made on
- * @param {String} day - day that the agenda should be made on
- * @param {String} hour - hour of the day that the agenda should be made on
- * @param {String} minute - minute of the day that the agenda should be made on
- * @param {String} location - Location that the event is taking place
- */
-function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, location) {
-  // Wait for all calls to finish before we continue the activities.
-  cy.route('GET', '/meetings/**').as('meetings');
-  // Create agenda backend calls
-  cy.route('POST', '/meetings').as('createNewMeeting');
-  cy.route('POST', '/agendas').as('createNewAgenda');
-  cy.route('POST', '/newsletter-infos').as('createNewsletter');
-  cy.route('PATCH', '/meetings/**').as('patchMeetings');
-
-  return cy.wait('@meetings').its('status')
-    .should('to.equal', 200)
-    .then(() => cy.existsAndVisible(agenda.createNewAgendaButton)
-      .click()
-      .then(() => {
-        cy.existsAndInvisible(modal.vlModalComponents.createNewAgendaModal);
-        cy.existsAndInvisible(modal.baseModal.container);
-        cy.existsAndVisible(modal.baseModal.dialogWindow);
-        return cy.existsAndVisible('.ember-power-select-trigger')
-          .click()
-          .then(() => cy.selectOptionInSelectByText(kindOfAgenda))
-          .then(() => {
-            cy.existsAndVisible(utils.datePickerIcon)
-              .click()
-              .then(() => {
-                cy.setYearMonthDayHourMinuteInFlatPicker(year, month, day, hour, minute);
-              });
-          });
-      })
-      .then(() => cy.existsAndVisible(form.formInput).type(location)
-        .then(() => cy.existsAndVisible(form.formSave).click()
-          .then(() => {
-            cy.wait('@createNewAgenda').its('status')
-              .should('to.equal', 201);
-            cy.wait('@createNewsletter').its('status')
-              .should('to.equal', 201);
-            cy.wait('@patchMeetings').its('status')
-              .should('to.equal', 204);
-            return cy.wait('@createNewMeeting').then((xhr) => xhr.response.body.data.id);
-          }))));
-}
-
-/**
  * @description Searches for the agendaDate in the history view of the agenda page, or uses the meetingId to open the meeting directly using the route 'agenda/meetingId/agendapunten'
  * @name openAgendaForDate
  * @memberOf Cypress.Chainable#
@@ -263,6 +164,7 @@ function createAgendaOnDate(kindOfAgenda, year, month, day, hour, minute, locati
  * @param {*} agendaDate A cypress.moment object with the date to search
  */
 function openAgendaForDate(agendaDate) {
+  cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
   // cy.route('GET', '/meetings/**').as('getMeetings');
   cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
@@ -283,10 +185,11 @@ function openAgendaForDate(agendaDate) {
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
+  cy.log('/openAgendaForDate');
 }
 
 /**
- * Create a default agenda
+ * Goes to the detailview of agendaitem and opens the kort-bestek tab
  * @memberOf Cypress.Chainable#
  * @name openAgendaitemKortBestekTab
  * @function
@@ -301,13 +204,16 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
 
 /**
  * @description Deletes the current **open agenda**, either a design or an approved one
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
  * @name deleteAgenda
  * @memberOf Cypress.Chainable#
  * @function
  * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
  * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
+ * @param {Boolean} shouldConfirm - Default true, should the command click the confirm button? false is used if you want to check the message in the modal
  */
-function deleteAgenda(meetingId, lastAgenda) {
+function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
+  cy.log('deleteAgenda');
   if (meetingId) {
     cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
   } else {
@@ -319,19 +225,24 @@ function deleteAgenda(meetingId, lastAgenda) {
 
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
-  // cy.wait('@deleteAgenda', { timeout: 20000 }).then(() =>{
-  cy.get(modal.modal, {
-    timeout: 20000,
-  }).should('not.exist');
-  // });
-  if (lastAgenda) {
-    cy.wait('@deleteNewsletter', {
-      timeout: 20000,
-    })
-      .wait('@deleteMeeting', {
+  if (shouldConfirm) {
+    cy.get(modal.auModal.container).within(() => {
+      cy.get(modal.auModal.save).click();
+    });
+    if (lastAgenda) {
+      cy.wait('@deleteNewsletter', {
         timeout: 20000,
-      });
+      })
+        .wait('@deleteMeeting', {
+          timeout: 20000,
+        });
+    }
+    cy.get(modal.auModal.container, {
+      timeout: 20000,
+    }).should('not.exist');
   }
+
+  cy.log('/deleteAgenda');
   // TODO should patches happen when deleting a design agenda ?
 }
 
@@ -342,6 +253,7 @@ function deleteAgenda(meetingId, lastAgenda) {
  * @function
  */
 function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
+  cy.log('setFormalOkOnItemWithIndex');
   // TODO set only some items to formally ok with list as parameter
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
@@ -371,6 +283,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   // .get('.ember-power-select-option').should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
+  cy.log('/setFormalOkOnItemWithIndex');
 }
 
 /**
@@ -380,15 +293,17 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
  * @function
  */
 function setAllItemsFormallyOk(amountOfFormallyOks) {
+  cy.log('setAllItemsFormallyOk');
   cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
   // TODO set only some items to formally ok with list as parameter
   cy.get(actionModel.showActionOptions).click();
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(actionModel.approveAllAgendaitems).click();
-  cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agenda items formeel wil goedkeuren`);
+  cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
   cy.get(modal.verify.save).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
+  cy.log('/setAllItemsFormallyOk');
 }
 
 
@@ -400,6 +315,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
  * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
  */
 function approveCoAgendaitem(agendaitemShortTitle) {
+  cy.log('approveCoAgendaitem');
   cy.route('GET', '/ise-codes/**').as('getIseCodes');
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH', '/approvals/**').as('patchApprovals');
@@ -439,15 +355,20 @@ function approveCoAgendaitem(agendaitemShortTitle) {
   cy.wait('@patchAgenda', {
     timeout: 10000,
   });
+  cy.log('/approveCoAgendaitem');
 }
 
 /**
- * @description Approve an open agenda when all formally OK's are set ()
+ * @description triggers the action "approve agenda" in agenda view
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * This pop will contain information about which agendaitems are not ok, if any
  * @name approveDesignAgenda
  * @memberOf Cypress.Chainable#
  * @function
+ * @param {Boolean} shouldConfirm - Default true, should the command click the confirm button
  */
-const approveDesignAgenda = () => {
+function approveDesignAgenda(shouldConfirm = true) {
+  cy.log('approveDesignAgenda');
   // cy.route('PATCH', '/agendas/**').as('patchAgenda');
   // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
   // cy.route('GET', '/agendas/**').as('getAgendas');
@@ -458,6 +379,15 @@ const approveDesignAgenda = () => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.approveAgenda).click();
+  if (shouldConfirm) {
+    cy.get(modal.auModal.container).within(() => {
+      cy.get(modal.auModal.save).click();
+    });
+    // as long as the modal exists, the action is not completed
+    cy.get(modal.auModal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+  }
   // .wait('@patchAgenda', {
   //   timeout: 12000,
   // })
@@ -466,18 +396,23 @@ const approveDesignAgenda = () => {
   //   timeout: 12000,
   // });
 
-  cy.get('.vl-loader', {
-    timeout: 60000,
-  }).should('not.exist');
-};
+  // cy.get(modal.auModal.container, {
+  //   timeout: 60000,
+  // }).should('not.exist');
+  cy.log('/approveDesignAgenda');
+}
 
 /**
- * @description Approve an open agenda when all formally OK's are set ()
+ * @description triggers the action "approve and close agenda" in agenda view
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
+ * This pop will contain information about which agendaitems are not ok, if any
  * @name approveAndCloseDesignAgenda
  * @memberOf Cypress.Chainable#
  * @function
+ * @param {Boolean} shouldConfirm - Default true, should the command click the confirm button
  */
-const approveAndCloseDesignAgenda = () => {
+function approveAndCloseDesignAgenda(shouldConfirm = true) {
+  cy.log('approveAndCloseDesignAgenda');
   cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
   cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
@@ -487,10 +422,17 @@ const approveAndCloseDesignAgenda = () => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
-  cy.get('.vl-loader', {
-    timeout: 60000,
-  }).should('not.exist');
-};
+  if (shouldConfirm) {
+    cy.get(modal.auModal.container).within(() => {
+      cy.get(modal.auModal.save).click();
+    });
+    // as long as the modal exists, the action is not completed
+    cy.get(modal.auModal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+  }
+  cy.log('/approveAndCloseDesignAgenda');
+}
 
 /**
  * @description Add a new case to the agenda
@@ -501,6 +443,7 @@ const approveAndCloseDesignAgenda = () => {
  * @param {boolean} postponed - The remark
  */
 function addAgendaitemToAgenda(caseTitle, postponed) {
+  cy.log('addAgendaitemToAgenda');
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
   cy.route('POST', '/agenda-activities').as('createAgendaActivity');
@@ -574,6 +517,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       timeout: 20000,
     });
   cy.wait(`@loadAgendaitemFilter${randomInt}`);
+  cy.log('/addAgendaitemToAgenda');
 }
 
 /**
@@ -584,6 +528,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  * @param {boolean} refresh - boolean to check if a refresh needs to happen.
  */
 function toggleShowChanges(refresh) {
+  cy.log('toggleShowChanges');
   cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
 
   if (refresh) {
@@ -613,6 +558,7 @@ function toggleShowChanges(refresh) {
     .first()
     .click();
   cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
+  cy.log('/toggleShowChanges');
 }
 
 /**
@@ -701,19 +647,25 @@ function changeSelectedAgenda(agendaName) {
 
 /**
  * @description closes an agenda
+ * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
  * @name closeAgenda
  * @memberOf Cypress.Chainable#
  * @function
  */
 function closeAgenda() {
+  cy.log('closeAgenda');
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
   cy.get(actionModel.lockAgenda).click();
-  cy.get(modal.verify.save).click();
-  cy.get(modal.modal, {
-    timeout: 20000,
+  cy.get(modal.auModal.container).within(() => {
+    cy.get(modal.auModal.save).click();
+  });
+  // as long as the modal exists, the action is not completed
+  cy.get(modal.auModal.container, {
+    timeout: 60000,
   }).should('not.exist');
+  cy.log('/closeAgenda');
 }
 
 /**
@@ -723,6 +675,7 @@ function closeAgenda() {
  * @function
  */
 function releaseDecisions() {
+  cy.log('releaseDecisions');
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
@@ -736,6 +689,7 @@ function releaseDecisions() {
   cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
+  cy.log('/releaseDecisions');
 }
 
 /**
@@ -745,6 +699,7 @@ function releaseDecisions() {
  * @function
  */
 function releaseDocuments() {
+  cy.log('releaseDocuments');
   cy.get('.vl-button--icon-before')
     .contains('Acties')
     .click();
@@ -756,6 +711,7 @@ function releaseDocuments() {
   cy.get(modal.modal, {
     timeout: 20000,
   }).should('not.exist');
+  cy.log('/releaseDocuments');
 }
 
 /**
@@ -785,9 +741,7 @@ Cypress.Commands.add('changeSelectedAgenda', changeSelectedAgenda);
 Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
-Cypress.Commands.add('createDefaultAgenda', createDefaultAgenda);
 Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
-Cypress.Commands.add('createAgendaOnDate', createAgendaOnDate);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);

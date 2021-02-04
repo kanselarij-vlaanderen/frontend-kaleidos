@@ -1,4 +1,4 @@
-<ul class="auk-list auk-list--bordered auk-navbar--no-pad">
+<ul class="auk-list auk-list--bordered">
   {{#each (await @agendaitems) as |agendaitem|}}
     <li class="auk-list__item auk-list__item--gray-100">
       <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-input--block">
@@ -13,10 +13,13 @@
               {{#if (await agendaitem.checkAdded)}}
                 <WebComponents::AuIcon @name="calendar-plus" @iconSkinColor="muted"/>
               {{/if}}
+              {{!-- This does not seem to work properly without the #let, newsletterInfo.inNewsletter is undefined --}}
               {{#if (await agendaitem.newsletterInfo)}}
-                {{#if (not (await agendaitem.newsletterInfo.inNewsletter))}}
-                  <WebComponents::AuIcon @name="hide" @iconSkinColor="muted"/>
-                {{/if}}
+                {{#let (await agendaitem.newsletterInfo) as |newsletterInfo|}}
+                  {{#if (eq (await newsletterInfo.inNewsletter) false)}}
+                    <WebComponents::AuIcon @name="hide" @iconSkinColor="muted"/>
+                  {{/if}}
+                {{/let}}
               {{/if}}
               {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
                 <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted"/>

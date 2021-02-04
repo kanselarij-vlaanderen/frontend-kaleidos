@@ -279,7 +279,7 @@
                   </li>
                   <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
                   >
-                    {{#if canDeleteSelectedAgenda}}
+                    {{#if (await canDeleteSelectedAgenda)}}
                       <a href=""
                          data-test-agenda-header-deleteAgenda
                          class="vl-link vl-u-text--error"
@@ -477,7 +477,7 @@
 {{/if}}
 
 {{#if this.showConfirmForClosingMeeting}}
-  <WebComponents::AuModal @size="large">
+  <WebComponents::AuModal>
     <WebComponents::AuModal::Header
             @title={{t "agenda-close"}}
             @closeModal={{action "cancelCloseMeeting"}}
@@ -511,22 +511,24 @@
 {{/if}}
 
 {{#if this.showConfirmForDeletingSelectedAgenda}}
-  <WebComponents::AuModal @size="large">
+  <WebComponents::AuModal>
     <WebComponents::AuModal::Header
       @title={{t "agenda-delete"}}
       @closeModal={{action "cancelDeleteSelectedAgenda"}}
     />
     <WebComponents::AuModal::Body>
-      <div class="auk-h3">{{t "warning-title" }}</div>
+      {{#if (eq this.agendas.length 1)}}
+        <WebComponents::AuAlert
+          @skin="error" 
+          @message={{t "delete-final-agenda-and-meeting"}}
+        />
+      {{/if}}
       <div>
         {{t
           "delete-design-agenda-close-meeting-message"
           agenda=this.currentSession.latestAgenda.agendaName
         }}
       </div>
-      {{#if (eq this.agendas.length 1)}}
-        <div>{{t "delete-final-agenda-and-meeting"}}</div>
-      {{/if}}
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{action "cancelDeleteSelectedAgenda"}}>
       <WebComponents::AuButton
@@ -541,25 +543,20 @@
 {{/if}}
 
 {{#if this.showConfirmForReopeningPreviousAgenda}}
-  <WebComponents::AuModal @size="large">
+  <WebComponents::AuModal>
     <WebComponents::AuModal::Header
       @title={{t "agenda-reopen-previous-version"}}
       @closeModal={{action "cancelReopenPreviousAgenda"}}
     />
     <WebComponents::AuModal::Body>
-      <div class="auk-h3">{{t "warning-title" }}</div>
-      <div>
-        {{t 
-          "agenda-design-delete-message"
-          agenda=(await this.currentAgenda.agendaName)
-        }}
-      </div>
-      <div>
-        {{t 
+      <WebComponents::AuAlert
+        @skin="error"
+        @message={{t
           "agenda-reopen-confirmation"
-          agenda=(await this.lastApprovedAgenda.agendaName)
+          designAgenda = this.currentAgenda.agendaName
+          approvedAgenda = (await this.lastApprovedAgendaName)
         }}
-      </div>
+      />
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
       <WebComponents::AuButton

@@ -72,16 +72,26 @@ export default Component.extend(FileSaverMixin, {
    * @computed lastApprovedAgenda
    *
    * From all agendas, get the last agenda that is not a design agenda
-   * @return {Agenda}
    */
   lastApprovedAgenda: computed('agendas.@each', async function() {
     const agendas = await this.get('agendas');
-    const lastAgenda = agendas
+    // this.agendas are already sorted on reverse serialNumbers
+    const lastApprovedAgenda = agendas
       .filter((agenda) => !agenda.get('isDesignAgenda'))
-      .sortBy('serialnumber')
-      .reverse()
       .get('firstObject');
-    return lastAgenda;
+    return lastApprovedAgenda;
+  }),
+
+  /**
+   * @computed lastApprovedAgendaName
+   *
+   * From all agendas, get the last agenda that is not a design agenda and return the name
+   * For some bizarre reason, doing lastApprovedAgenda.agendaName in template gives nothing, but this works...
+   * @return {String}
+   */
+  lastApprovedAgendaName: computed('lastApprovedAgenda', async function() {
+    const lastApprovedAgenda = await this.get('lastApprovedAgenda');
+    return lastApprovedAgenda.agendaName;
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
@@ -327,7 +337,8 @@ export default Component.extend(FileSaverMixin, {
       this.set('showConfirmForDeletingSelectedAgenda', false);
     },
 
-    openConfirmReopenPreviousAgenda() {
+    async openConfirmReopenPreviousAgenda() {
+      await this.get('lastApprovedAgenda').then((agenda) => agenda); // The computed is not loaded before the message with params is sent to the modal, so wait here
       this.set('showConfirmForReopeningPreviousAgenda', true);
     },
 
@@ -543,7 +554,7 @@ export default Component.extend(FileSaverMixin, {
         .sortBy('serialnumber')
         .reverse()
         .get('firstObject');
-      const lastApprovedAgenda = this.get('lastApprovedAgenda');
+      const lastApprovedAgenda = await this.get('lastApprovedAgenda');
 
       if (lastApprovedAgenda) {
         currentMeeting.set('isFinal', true);

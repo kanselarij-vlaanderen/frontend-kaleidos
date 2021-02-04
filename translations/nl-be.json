@@ -31,7 +31,7 @@
   "agenda-of-date": "Agenda van {date}",
   "agenda-title": "Agenda’s",
   "agenda-reopen": "Agenda heropenen",
-  "agenda-reopen-confirmation": "Bent u zeker dat u goedgekeurde {agenda} terug wilt openen?",
+  "agenda-reopen-confirmation": "Bent u zeker dat u de huidige {designAgenda} met alle wijzigingen wil verwijderen en goedgekeurde {approvedAgenda} terug wilt openen?",
   "agenda-reopen-previous-version": "Vorige versie heropenen",
   "agenda-release-decisions": "Beslissingen vrijgeven",
   "agenda-release-documents": "Documenten vrijgeven",

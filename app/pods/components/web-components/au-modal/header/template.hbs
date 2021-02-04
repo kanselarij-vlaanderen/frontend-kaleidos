@@ -5,7 +5,7 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <h2 class="auk-toolbar__title">{{@title}}</h2>
+          <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
@@ -15,7 +15,8 @@
                     @icon={{if @changeIcon 'minimize' 'expand'}}
                     @skin="borderless"
                     @layout="icon-only"
-                    {{on "click" @toggleSize}}>
+                    {{on "click" @toggleSize}}
+                    data-test-au-modal-header-resize>
             </WebComponents::AuButton>
           {{/if}}
           {{#if (not @hideCloseButton)}}
