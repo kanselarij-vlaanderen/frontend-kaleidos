@@ -112,7 +112,7 @@
         <table class="auk-table">
           <thead>
             <tr>
-              <th></th>
+              <th class="col-min-width"><WebComponents::AuCheckbox @toggle={{this.selectAllDocuments}}/></th>
               <th class="auk-table__col--6">{{t "name-document"}}</th>
               <th colspan="2">{{t "file-extension"}}</th>
               <th colspan="2">{{t "file-type"}}</th>
@@ -124,7 +124,7 @@
             {{#each this.filteredSortedPieces as |piece|}}
               <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
                 <td>
-                  <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}}/>
+                  <WebComponents::AuCheckbox @toggle={{fn this.changePieceSelection piece}} @checked={{piece.selectedForPublicationActivity}}/>
                 </td>
                 <td>
                   {{#if (gt (await piece.agendaitems.length) 0)}}
