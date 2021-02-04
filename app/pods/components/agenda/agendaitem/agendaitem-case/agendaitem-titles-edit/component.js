@@ -52,6 +52,10 @@ export default class AgendaitemTitlesEdit extends Component {
       if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
         await this.newsletterInfo.save();
       }
+      if (this.newsletterInfo && this.args.agendaitem.showAsRemark) {
+        this.newsletterInfo.set('richtext', trimText(this.args.agendaitem.title));
+        this.newsletterInfo.set('title', trimText(this.args.agendaitem.shortTitle));
+      }
       this.isLoading = false;
       this.args.toggleIsEditing();
     } catch (exception) {
