@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import modal from '../../selectors/modal.selectors';
+import auComponent from '../../selectors/au-component-selectors';
 
 context('Formally ok/nok tests', () => {
   beforeEach(() => {
@@ -21,8 +22,9 @@ context('Formally ok/nok tests', () => {
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
     cy.get(agenda.approveAgenda).click();
+    cy.get(auComponent.auAlert.message).should('exist');
     // TODO optional, check if there is no au-alert in the new pop?
-    cy.get(modal.verify.cancel).click();
+    cy.get(modal.auModal.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
     cy.get('.vlc-side-nav-item').as('agendas');
     cy.get('@agendas').eq(1)
@@ -30,5 +32,7 @@ context('Formally ok/nok tests', () => {
     cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('not.contain', 'Formeel OK');
+    // TODO this test does more than needed to assert what it should. open any agenda and check for the absence of "formeel ok"
+    // "formeel niet ok" and "formeel nog niet ok" status are not allowed on approved agendas
   });
 });

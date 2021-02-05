@@ -3,6 +3,7 @@
 
 import agendaSelector from '../../selectors/agenda.selectors';
 import modalSelector from '../../selectors/modal.selectors';
+import auComponentSelector from '../../selectors/au-component-selectors';
 
 context('Agenda reopen previous tests', () => {
   const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')
@@ -39,14 +40,14 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaATitle).should('not.exist');
     cy.get(agendaSelector.agendaActions).click();
     cy.get(agendaSelector.reopenPreviousVersion).click();
-    cy.get(modalSelector.modal).contains(designAgendaDeleteModalTitle, {
+    cy.get(auComponentSelector.auAlert.message).contains(designAgendaDeleteModalTitle, {
       timeout: 5000,
     });
-    cy.get(modalSelector.verify.save).click();
-    cy.get(modalSelector.modal).contains(agendaReopenModalTitle, {
+    cy.get(auComponentSelector.auAlert.message).contains(agendaReopenModalTitle, {
       timeout: 5000,
     });
-    cy.get(modalSelector.verify.save).click();
+    cy.get(modalSelector.auModal.save).contains('Vorige versie heropenen')
+      .click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.contains(designAgendaATitle).should('exist');

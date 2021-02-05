@@ -352,7 +352,7 @@ export default Component.extend(FileSaverMixin, {
     },
 
   },
-  // KAS-2194  new local stuff
+  // KAS-2194 new private methods / computeds, should move these above actions but git diff might be hard to read
 
   toggleLoadingOverlayWithMessage(message) {
     if (message) {
