@@ -255,7 +255,7 @@ context('Agenda tests', () => {
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.lockAgenda).click();
       // TODO KAS-2194 check the message
-      cy.get(modal.body.container).within(() => {
+      cy.get(modal.auModal.body).within(() => {
         cy.get(auComponent.auAlert.container).should('not.exist');
       });
 
@@ -271,7 +271,7 @@ context('Agenda tests', () => {
     });
   });
 
-  it('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
+  it.only('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
@@ -340,7 +340,7 @@ context('Agenda tests', () => {
     cy.contains(newSubcase2TitleShort).should('not.exist');
   });
 
-  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
+  it.only('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
@@ -395,25 +395,25 @@ context('Agenda tests', () => {
     cy.get(actionModel.showActionOptions).click();
     cy.get(actionModel.lockAgenda).click();
 
-    // TODO KAS-2194 tekst aanpassen/ check op au-alert instead ?
+    // TODO KAS-2194 do we need all these awaits ? what calls happen ?
     // cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
     // cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
-    cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
-    cy.route('GET', '/agendaitems/*/agenda').as('agenda');
-    cy.route('GET', '/subcases?filter*').as('subcasesFilter');
-    cy.route('PATCH', '/subcases/*').as('patchSubcases');
-    cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
+    // cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
+    // cy.route('GET', '/agendaitems/*/agenda').as('agenda');
+    // cy.route('GET', '/subcases?filter*').as('subcasesFilter');
+    // cy.route('PATCH', '/subcases/*').as('patchSubcases');
+    // cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
 
 
     cy.get(modal.auModal.save)
       .click();
 
     // cy.wait('@agendaActivitiesAgendaItems');
-    cy.wait('@agendaitems');
-    cy.wait('@agenda');
-    cy.wait('@subcasesFilter');
-    cy.wait('@patchSubcases');
-    cy.wait('@agendaActivities');
+    // cy.wait('@agendaitems');
+    // cy.wait('@agenda');
+    // cy.wait('@subcasesFilter');
+    // cy.wait('@patchSubcases');
+    // cy.wait('@agendaActivities');
 
     // cy.contains('Doorgaan')
     //   .click();
@@ -424,13 +424,8 @@ context('Agenda tests', () => {
       timeout: 60000,
     }).should('not.exist');
     cy.contains(newSubcase2TitleShort).should('not.exist');
-    cy.get(`[${agenda.agendaSidenavElement}="1"]`).click();
-    // TODO KAS-2194 waarom deze, agenda switch ?
-    cy.get('.vl-loader', {
-      timeout: 60000,
-    }).should('not.exist');
-    cy.contains(newSubcase2TitleShort)
-      .should('not.exist');
+    // Closing an agenda should remove any design agenda
+    cy.contains('Agenda B').should('not.exist');
   });
 });
 

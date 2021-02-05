@@ -10,7 +10,6 @@ export default Model.extend({
   subcase: belongsTo('subcase'),
   agendaitems: hasMany('agendaitems'),
 
-  // TODO, is this recomputing when an agenda is approved ? One of my tests says no. What are the possible side-effects??
   latestAgendaitem: computed('agendaitems.@each', async function() {
     const subcase = await this.get('subcase');
     const meeting = await subcase.get('requestedForMeeting');

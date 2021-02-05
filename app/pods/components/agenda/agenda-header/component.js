@@ -118,7 +118,10 @@ export default Component.extend(FileSaverMixin, {
     await lastApprovedAgenda.save();
     this.get('agendaService')
       .approveAgendaAndCopyToDesignAgenda(session, lastApprovedAgenda)
-      .then((newAgenda) => {
+      .then(async(newAgenda) => {
+        // After the agenda has been approved, we want to update the agendaitems of activities
+        const agendaitems = await lastApprovedAgenda.get('agendaitems');
+        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
         this.toggleLoadingOverlayWithMessage(null);
         this.onApproveAgenda(newAgenda.get('id'));
       });
@@ -400,6 +403,11 @@ export default Component.extend(FileSaverMixin, {
     const approvedAgenda = currentDesignAgenda;
     // TODO What if service fails ?
     if (newAgenda) {
+      // After the agenda has been approved, we want to update the agendaitems of activity
+      const agendaitems = await currentDesignAgenda.get('agendaitems');
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+
+      // proceed with only the specific agendaitems that were not ok before approving
       const agendaitemsNotFormallyOk = await approvedAgenda.get('allAgendaitemsNotOk');
       if (agendaitemsNotFormallyOk.length > 0) {
         const isEditor = this.currentSessionService.isEditor;
@@ -568,6 +576,9 @@ export default Component.extend(FileSaverMixin, {
 
       if (designAgenda) {
         await this.agendaService.deleteAgenda(designAgenda);
+        // After the agenda has been deleted, we want to update the agendaitems of activity
+        const agendaitems = await lastApprovedAgenda.get('agendaitems');
+        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
         await this.set('sessionService.currentAgenda', lastApprovedAgenda);
         this.router.transitionTo('agenda.agendaitems', currentMeeting.id, lastApprovedAgenda.get('id'));
       }
@@ -598,7 +609,13 @@ export default Component.extend(FileSaverMixin, {
       await currentMeeting.save();
 
       await this.agendaService.deleteAgenda(currentAgenda);
+
+      // TODO KAS-2194 The deleteAgenda will also make new agendaitems that were removed proposable again. Do we want to display this information in the confirmation screen ?
       if (previousAgenda) {
+        // After the agenda has been deleted, we want to update the agendaitems of activity
+        const agendaitems = await previousAgenda.get('agendaitems');
+        await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+
         await this.set('sessionService.currentAgenda', previousAgenda);
         this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
       } else if (agendasLength === 1) {
@@ -642,8 +659,10 @@ export default Component.extend(FileSaverMixin, {
       await previousAgenda.save();
 
       await this.agendaService.deleteAgenda(designAgenda);
-      // kinda funny, we use currentAgenda in soo many places, but it is set in the route model. Not even mentioned in the session-service.
-      // So we are using the sessionService as a place to dump state ?
+      // After the agenda has been deleted, we want to update the agendaitems of activity
+      const agendaitems = await previousAgenda.get('agendaitems');
+      await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
+
       await this.set('sessionService.currentAgenda', previousAgenda);
       this.router.transitionTo('agenda.agendaitems', currentMeeting.id, previousAgenda.get('id'));
     }
@@ -679,4 +698,19 @@ export default Component.extend(FileSaverMixin, {
     }
     return false;
   }),
+
+  /**
+   * reloadAgendaitemsOfAgendaActivities
+   * After a new designagenda is created in the service (approveAgendaAndCopyToDesignAgenda) we need to update the agenda activities
+   * The store only updates the agendaitems of agenda-activities if we do it outselves
+   */
+  async reloadAgendaitemsOfAgendaActivities(agendaitems) {
+    await agendaitems.map(async(agendaitem) => {
+      const agendaActivity = await agendaitem.get('agendaActivity');
+      if (agendaActivity) {
+        await agendaActivity.hasMany('agendaitems').reload();
+      }
+    });
+  },
+
 });

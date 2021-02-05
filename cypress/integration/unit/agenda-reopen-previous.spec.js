@@ -23,8 +23,7 @@ context('Agenda reopen previous tests', () => {
   });
 
   const designAgendaBTitle = 'Ontwerpagenda B';
-  const designAgendaDeleteModalTitle = 'Ontwerpagenda verwijderen';
-  const agendaReopenModalTitle = 'Agenda heropenen';
+  const designAgendaDeleteModalTitleAndVerify = 'Vorige versie heropenen';
   const designAgendaATitle = 'Ontwerpagenda A';
   const designAgendaCTitle = 'Ontwerpagenda C';
   const agendaReopenPreviousVersionMenuActionItem = 'Vorige versie heropenen';
@@ -40,13 +39,16 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaATitle).should('not.exist');
     cy.get(agendaSelector.agendaActions).click();
     cy.get(agendaSelector.reopenPreviousVersion).click();
-    cy.get(auComponentSelector.auAlert.message).contains(designAgendaDeleteModalTitle, {
+    cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
-    cy.get(auComponentSelector.auAlert.message).contains(agendaReopenModalTitle, {
+    cy.get(auComponentSelector.auAlert.message).contains(designAgendaBTitle, {
       timeout: 5000,
     });
-    cy.get(modalSelector.auModal.save).contains('Vorige versie heropenen')
+    cy.get(auComponentSelector.auAlert.message).contains('Agenda A', {
+      timeout: 5000,
+    });
+    cy.get(modalSelector.auModal.save).contains(designAgendaDeleteModalTitleAndVerify)
       .click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaBTitle).should('not.exist');
