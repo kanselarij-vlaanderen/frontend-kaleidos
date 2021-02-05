@@ -33,7 +33,7 @@ context('Agenda tests', () => {
     cy.logout();
   });
 
-  it.only('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
+  it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
       .day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
@@ -59,12 +59,11 @@ context('Agenda tests', () => {
       cy.get(auComponent.auAlert.container).should('exist');
       cy.get(auComponent.auAlert.message).should('exist');
     });
-    cy.get(modal.auModal.save).contains('Agenda verwijderen');
+    cy.get(modal.auModal.save).contains('Goedkeuren');
     cy.get(modal.auModal.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
-    cy.approveDesignAgenda();
-    // TODO check if there is no au-alert in the new popup
     cy.setFormalOkOnItemWithIndex(0);
+    cy.approveDesignAgenda();
   });
 
   it('should add an agendaitem to an agenda', () => {
@@ -256,12 +255,16 @@ context('Agenda tests', () => {
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.lockAgenda).click();
       // TODO KAS-2194 check the message
+      cy.get(modal.body.container).within(() => {
+        cy.get(auComponent.auAlert.container).should('not.exist');
+      });
 
-      cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
+      // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
 
-      cy.get(modal.auModal.save).click();
-      cy.wait('@agendasCreatedFor');
+      cy.get(modal.auModal.save).contains('afsluiten')
+        .click();
+      // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
       // TODO KAS-2194 hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
       cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
@@ -324,8 +327,9 @@ context('Agenda tests', () => {
     cy.wait('@subcasesFilter');
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
-    cy.contains('Doorgaan')
-      .click();
+    // TODO dit was 2de popup , niet meer nodig
+    // cy.contains('Doorgaan')
+    //   .click();
 
     // TODO KAS-2194 is deze not exists wel goed ?
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
@@ -378,9 +382,11 @@ context('Agenda tests', () => {
     cy.route('GET', '/agendaitems/**/treatments').as('treatments');
 
     // TODO KAS-2194 tekst aanpassen/ check op au-alert instead ?
-    cy.get(modal.auModal.container).contains('Opgelet!')
-      .get(modal.auModal.save)
-      .click();
+    cy.get(modal.auModal.container).within(() => {
+      cy.get(auComponent.auAlert.message).should('exist');
+      cy.get(modal.auModal.save)
+        .click();
+    });
 
     cy.get(modal.auModal.container, {
       timeout: 60000,
@@ -390,8 +396,8 @@ context('Agenda tests', () => {
     cy.get(actionModel.lockAgenda).click();
 
     // TODO KAS-2194 tekst aanpassen/ check op au-alert instead ?
-    cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
-    cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
+    // cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
+    // cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
     cy.route('GET', '/agendaitems/*/agenda').as('agenda');
     cy.route('GET', '/subcases?filter*').as('subcasesFilter');
@@ -402,18 +408,18 @@ context('Agenda tests', () => {
     cy.get(modal.auModal.save)
       .click();
 
-    cy.wait('@agendaActivitiesAgendaItems');
+    // cy.wait('@agendaActivitiesAgendaItems');
     cy.wait('@agendaitems');
     cy.wait('@agenda');
     cy.wait('@subcasesFilter');
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
 
-    cy.contains('Doorgaan')
-      .click();
+    // cy.contains('Doorgaan')
+    //   .click();
 
     // TODO KAS-2194 eerst die modal dat weg is afwachten, check of editFormallyokbutton ?
-    cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    // cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
     cy.get(modal.auModal.container, {
       timeout: 60000,
     }).should('not.exist');
