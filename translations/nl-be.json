@@ -785,5 +785,6 @@
   "publications-table-from-designagenda" : "Uit ontwerpagenda",
   "publications-table-derived-publicationtype-info": "Wordt afgeleid op basis van de documenten binnen de publicatie",
   "filter-plural": "Filteren",
-  "reset": "Reset"
+  "reset": "Reset",
+  "to-case": "Naar dossier"
 }

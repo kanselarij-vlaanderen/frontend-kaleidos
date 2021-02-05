@@ -35,13 +35,11 @@ services:
     user: ${HOST_UID_GID}
   cache:
     user: ${HOST_UID_GID}
-    image: semtech/mu-cache:latest
     links:
       - resource:backend
     restart: always
     user: ${HOST_UID_GID}
   resource:
-    image: semtech/mu-cl-resources:latest
     links:
       - database:database
     environment:
