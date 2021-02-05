@@ -256,13 +256,13 @@ context('Agenda tests', () => {
       cy.get(actionModel.lockAgenda).click();
       // TODO KAS-2194 check the message
       cy.get(modal.auModal.body).within(() => {
-        cy.get(auComponent.auAlert.container).should('not.exist');
+        cy.get(auComponent.auAlert.container).should('exist');
       });
 
       // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
 
-      cy.get(modal.auModal.save).contains('afsluiten')
+      cy.get(modal.auModal.save).contains('Agenda afsluiten')
         .click();
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
