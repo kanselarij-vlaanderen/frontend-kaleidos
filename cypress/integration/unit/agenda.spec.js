@@ -271,7 +271,7 @@ context('Agenda tests', () => {
     });
   });
 
-  it.only('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
@@ -340,7 +340,7 @@ context('Agenda tests', () => {
     cy.contains(newSubcase2TitleShort).should('not.exist');
   });
 
-  it.only('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
