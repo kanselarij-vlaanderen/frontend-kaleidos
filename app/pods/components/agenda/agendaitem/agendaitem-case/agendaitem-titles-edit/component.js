@@ -33,14 +33,17 @@ export default class AgendaitemTitlesEdit extends Component {
     this.isLoading = true;
     const shouldResetFormallyOk = this.args.agendaitem.get('hasDirtyAttributes');
 
+    const title = trimText(this.args.agendaitem.title);
+    const shortTitle = trimText(this.args.agendaitem.shortTitle);
+
     const propertiesToSetOnAgendaitem = {
-      title: trimText(this.args.agendaitem.title),
-      shortTitle: trimText(this.args.agendaitem.shortTitle),
+      title: title,
+      shortTitle: shortTitle,
       // explanation and showInNewsletter are set directly on the agendaitem, no need to have them in here
     };
     const propertiesToSetOnSubcase = {
-      title: trimText(this.args.agendaitem.title),
-      shortTitle: trimText(this.args.agendaitem.shortTitle),
+      title: title,
+      shortTitle: shortTitle,
     };
 
     if (this.args.subcase) {
@@ -49,13 +52,15 @@ export default class AgendaitemTitlesEdit extends Component {
 
     try {
       await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
-      if (this.newsletterInfo && this.newsletterInfo.get('hasDirtyAttributes')) {
+      if (this.newsletterInfo &&
+        (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
+          if (this.args.agendaitem.showAsRemark) {
+            this.newsletterInfo.set('richtext', title);
+            this.newsletterInfo.set('title',shortTitle);
+          }
         await this.newsletterInfo.save();
       }
-      if (this.newsletterInfo && this.args.agendaitem.showAsRemark) {
-        this.newsletterInfo.set('richtext', trimText(this.args.agendaitem.title));
-        this.newsletterInfo.set('title', trimText(this.args.agendaitem.shortTitle));
-      }
+
       this.isLoading = false;
       this.args.toggleIsEditing();
     } catch (exception) {
