@@ -1,5 +1,11 @@
 <li class="{{this.class}}">
-  <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} ...attributes>
-    {{yield}}
-  </LinkTo>
+  {{#if @route}}
+    <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} ...attributes>
+      {{yield}}
+    </LinkTo>
+  {{else}}
+    <a class="auk-menu__item active {{this.skin}}" href={{@href}} ...attributes>
+      {{yield}}
+    </a>
+  {{/if}}
 </li>
