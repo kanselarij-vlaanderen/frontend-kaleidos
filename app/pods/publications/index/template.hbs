@@ -21,6 +21,11 @@
             @label={{t "publications-table-publication-number"}}
           />
         {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <th>{{t "numac-number"}}</th>
+        {{/if}}
+
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <th>
             <span class="auk-u-mr">
@@ -141,6 +146,13 @@
               row.publicationNumberFilterOption
               (t "dash")
             }}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <td>
+            {{#each row.numacNumbers as |numac|}}
+              <WebComponents::AuPill>{{numac.name }}</WebComponents::AuPill>
+            {{/each}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
@@ -320,6 +332,7 @@
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @name="caseNameFilterOption" @label={{t "publications-table-case-name"}} @checked={{this.filterTableColumnOptionKeys.caseNameFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
+                <WebComponents::AuCheckbox @name="numacNumberFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="derivedPublicationTypeFilterOption" @label={{t "publications-table-derived-publicationtype"}} @checked={{this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
