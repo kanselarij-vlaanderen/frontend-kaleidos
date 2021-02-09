@@ -101,14 +101,23 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                {{#each this.numacNumbers as |numac|}}
-                  <WebComponents::AuInput
-                    type="number"
-                    value={{ numac.name }}
-                    @block="true"
-                    readonly
-                  />
-                {{/each}}
+                <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;">
+                  {{#each this.numacNumbers as |numac|}}
+                    <div style="    background-color: lightgray;
+                                    border: 1px solid gray;
+                                    border-radius: 8px;
+                                    display: inline-block;
+                                    padding: 0.4em;">
+                      <span>{{ numac.name }}</span>
+                      <WebComponents::AuButton
+                        @skin="borderless"
+                        @icon="close"
+                        @layout="icon-only"
+                        {{on "click" (fn this.deleteNumacNumber numac)}}
+                        data-test-cases-backlink/>
+                    </div>
+                  {{/each}}
+                </div>
                 <WebComponents::AuInput
                   type="text"
                   id="newNumacNumber"

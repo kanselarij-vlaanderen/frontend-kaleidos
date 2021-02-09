@@ -704,6 +704,7 @@
   "publication-form-publication-date": "PublicatieDatum BS",
   "publication-form-numac-nummer": "Werknummer BS",
   "no-numac-number-yet": "Nog geen werknummer",
+  "numac-number": "Werknummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling(en) aanvragen",
   "request-translations-for-publication":"Vertalingen aanvragen voor Publicatie {publicationNumber}",

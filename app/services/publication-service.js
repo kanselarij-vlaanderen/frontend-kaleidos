@@ -125,4 +125,17 @@ export default class PublicationService extends Service {
     publicationFlow.set('numacNumbers', numberslist);
     return await publicationFlow.save();
   }
+
+  async unlinkNumacNumber(numacNumber, publicationFlow) {
+    console.log(numacNumber);
+    const numberslist = await publicationFlow.get('numacNumbers').toArray();
+    for (let index = 0; index < numberslist.length; index++) {
+      const numacNumberInLoop = numberslist[index];
+      if (numacNumberInLoop.get('id') === numacNumber.get('id')) {
+        numberslist.splice(index, 1);
+      }
+    }
+    publicationFlow.set('numacNumbers', numberslist);
+    return await publicationFlow.save();
+  }
 }

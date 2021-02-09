@@ -184,6 +184,14 @@ export default class PublicationController extends Controller {
     this.set('showLoader', true);
     const numacNumber = await this.publicationService.createNumacNumber(this.newNumacNumber);
     await this.publicationService.linkNumacNumber(numacNumber, this.model.publicationFlow);
+    this.set('newNumacNumber', '');
+    this.set('showLoader', false);
+  }
+
+  @action
+  async deleteNumacNumber(numacNumber) {
+    this.set('showLoader', true);
+    await this.publicationService.unlinkNumacNumber(numacNumber, this.model.publicationFlow);
     this.set('showLoader', false);
   }
 
