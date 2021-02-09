@@ -103,18 +103,32 @@
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
                 <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;">
                   {{#each this.numacNumbers as |numac|}}
-                    <div style="    background-color: lightgray;
-                                    border: 1px solid gray;
-                                    border-radius: 8px;
-                                    display: inline-block;
-                                    padding: 0.4em;">
-                      <span>{{ numac.name }}</span>
-                      <WebComponents::AuButton
-                        @skin="borderless"
-                        @icon="close"
-                        @layout="icon-only"
-                        {{on "click" (fn this.deleteNumacNumber numac)}}
-                        data-test-cases-backlink/>
+                    <div style="display:inline-block;margin:0.1em;">
+                      <div style="    background-color: #F3F5F6;
+                                      border: 1px solid #CBD2DA;
+                                      border-right:0px solid #CBD2DA;
+                                      border-radius: 8px 0px 0px 8px;
+                                      display: inline-block;
+                                      padding: 0px;
+                                      min-width: 60px;
+                                      font-weight:bold;
+                                      color:#69717C;
+                                      text-align: right;
+                                      padding: 0.4em;float:left;">
+                        <span>{{ numac.name }}</span>
+                      </div>
+                      <div style="    background-color: #F3F5F6;
+                                        border: 1px solid #CBD2DA;
+                                            border-radius: 0px 8px 8px 0px;
+                                        display: inline-block;
+                                        padding: 0.4em;float:left;">
+                        <WebComponents::AuButton class="auk-button--nopadding"
+                          @skin="borderless"
+                          @icon="close"
+                          @layout="icon-only"
+                          {{on "click" (fn this.deleteNumacNumber numac)}}
+                          data-test-cases-backlink/>
+                      </div>
                     </div>
                   {{/each}}
                 </div>
