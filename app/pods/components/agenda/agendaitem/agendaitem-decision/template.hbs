@@ -43,18 +43,26 @@
       {{/if}}
     </div>
   </div>
-  {{#if @treatment.report}} {{!-- awaiting here breaks loading after adding, do not add await --}}
-    <Documents::ReportLink
-      @documentContainer={{await @treatment.report.documentContainer}}
-      @treatment={{@treatment}}
-    />
+  {{#if this.loadReport.isIdle}}
+    {{#if this.report}}
+      <Documents::DocumentCard
+        @piece={{this.report}}
+        @hideNewerVersions={{true}}
+        @onOpenUploadModal={{@onOpenUploadModal}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeletePiece={{perform this.didDeletePieceHandler}}
+        @didDeleteContainer={{this.refresh}}
+      />
+    {{else}}
+      <Utils::AddDocuments
+        @treatment={{@treatment}}
+        @defaultType={{this.defaultType}}
+        @modelToAddPieceTo="agendaItemTreatment"
+        @title={{t "signed-decision-add"}}
+      />
+    {{/if}}
   {{else}}
-    <Utils::AddDocuments
-      @treatment={{@treatment}}
-      @defaultType={{this.defaultType}}
-      @modelToAddPieceTo="agendaItemTreatment"
-      @title={{t "signed-decision-add"}}
-    />
+    {{t "loading"}}{{!-- TODO: find the right loader --}}
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemDecisionEdit
