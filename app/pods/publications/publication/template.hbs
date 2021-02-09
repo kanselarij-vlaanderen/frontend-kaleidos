@@ -101,12 +101,27 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                {{#if this.model.publicationFlow.numacNumber}}
-                  <WebComponents::AuInput type="number" value={{this.model.publicationFlow.numacNumber}} @block="true" readonly
-                    {{on "input" (perform this.setNumacNumber)}} />
-                {{else}}
-                  <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-                {{/if}}
+                {{#each this.numacNumbers as |numac|}}
+                  <WebComponents::AuInput
+                    type="number"
+                    value={{ numac.name }}
+                    @block="true"
+                    readonly
+                  />
+                {{/each}}
+                <WebComponents::AuInput
+                  type="text"
+                  id="newNumacNumber"
+                  value={{mut this.newNumacNumber}}
+                  onchange={{action "setNumacNummer"}}
+                />
+
+                <WebComponents::AuButton
+                  @skin="borderless"
+                  {{on "click"
+                   this.addNumacNumber}}>
+                  {{t "save"}}
+                </WebComponents::AuButton>
               </div>
               {{#if this.model.publicationFlow.status.isToBePublished}}
                 <div class="auk-form-group">
@@ -220,4 +235,10 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

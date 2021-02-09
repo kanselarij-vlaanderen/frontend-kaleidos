@@ -111,4 +111,18 @@ export default class PublicationService extends Service {
   invalidatePublicationCache() {
     this.cachedData = A([]);
   }
+
+  async createNumacNumber(name) {
+    const numacNumber = this.store.createRecord('numac-number', {
+      name: name,
+    });
+    return await numacNumber.save();
+  }
+
+  async linkNumacNumber(numacNumber, publicationFlow) {
+    const numberslist = await publicationFlow.get('numacNumbers');
+    numberslist.pushObject(numacNumber);
+    publicationFlow.set('numacNumbers', numberslist);
+    return await publicationFlow.save();
+  }
 }
