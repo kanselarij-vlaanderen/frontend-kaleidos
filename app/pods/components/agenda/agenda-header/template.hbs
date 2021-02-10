@@ -392,7 +392,7 @@
   <WebComponents::AuLoadingOverlay @size="medium" @message={{this.loadingOverlayMessage}}/>
 {{/if}}
 
-{{!-- KAS-2194 new stuff --}}
+{{!-- new agenda actions with single pop-up for confirmation --}}
 
 {{#if this.showConfirmForApprovingAgenda}}
   <WebComponents::AuModal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>

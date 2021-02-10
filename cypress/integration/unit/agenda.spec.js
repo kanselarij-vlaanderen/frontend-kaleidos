@@ -254,7 +254,7 @@ context('Agenda tests', () => {
       cy.approveDesignAgenda();
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.lockAgenda).click();
-      // TODO KAS-2194 check the message
+      // TODO check the message?
       cy.get(modal.auModal.body).within(() => {
         cy.get(auComponent.auAlert.container).should('exist');
       });
@@ -266,7 +266,7 @@ context('Agenda tests', () => {
         .click();
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
-      // TODO KAS-2194 hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
+      // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
       cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
     });
   });
@@ -307,7 +307,7 @@ context('Agenda tests', () => {
       cy.setFormalOkOnItemWithIndex(1);
     });
     cy.approveAndCloseDesignAgenda(false);
-    // TODO KAS-2194 tekst beter afcheken
+    // TODO tekst beter afcheken
     // cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
 
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
@@ -320,20 +320,17 @@ context('Agenda tests', () => {
 
     cy.get(modal.auModal.save).click();
 
-    // TODO KAS-2194 gebeuren al deze patches nog ?
+    // TODO gebeuren al deze patches nog ?
     cy.wait('@agendaActivitiesAgendaItems');
     cy.wait('@agendaitems');
     cy.wait('@agenda');
     cy.wait('@subcasesFilter');
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
-    // TODO dit was 2de popup , niet meer nodig
-    // cy.contains('Doorgaan')
-    //   .click();
 
-    // TODO KAS-2194 is deze not exists wel goed ?
+    // TODO is deze not exists wel goed ?
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
-    // TODO KAS-2194 als de bovenste slaagt, dan is de loader normaal al weg ?
+    // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
     // cy.get('.vl-loader', {
     //   timeout: 60000,
     // }).should('not.exist');
@@ -381,7 +378,7 @@ context('Agenda tests', () => {
     cy.route('GET', '/agendaitems/**/agenda-activity').as('agendaActivity');
     cy.route('GET', '/agendaitems/**/treatments').as('treatments');
 
-    // TODO KAS-2194 tekst aanpassen/ check op au-alert instead ?
+    // TODO tekst checken ?
     cy.get(modal.auModal.container).within(() => {
       cy.get(auComponent.auAlert.message).should('exist');
       cy.get(modal.auModal.save)
@@ -395,7 +392,7 @@ context('Agenda tests', () => {
     cy.get(actionModel.showActionOptions).click();
     cy.get(actionModel.lockAgenda).click();
 
-    // TODO KAS-2194 do we need all these awaits ? what calls happen ?
+    // TODO do we need all these awaits ? what calls happen ?
     // cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
     // cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     // cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
@@ -418,7 +415,6 @@ context('Agenda tests', () => {
     // cy.contains('Doorgaan')
     //   .click();
 
-    // TODO KAS-2194 eerst die modal dat weg is afwachten, check of editFormallyokbutton ?
     // cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
     cy.get(modal.auModal.container, {
       timeout: 60000,

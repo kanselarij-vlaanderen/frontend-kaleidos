@@ -43,6 +43,11 @@ export default Component.extend(FileSaverMixin, {
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
+  showConfirmForApprovingAgenda: false,
+  showConfirmForApprovingAgendaAndClosingMeeting: false,
+  showConfirmForClosingMeeting: false,
+  showConfirmForDeletingSelectedAgenda: false,
+  showConfirmForReopeningPreviousAgenda: false,
 
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
@@ -101,6 +106,55 @@ export default Component.extend(FileSaverMixin, {
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
 
   /**
+   * canReopenPreviousAgenda
+   * - the meeting must not be final
+   * - the meeting to have at least one approved agenda (isSessionClosable)
+   * - the user must be admin
+   * - the current selected agenda must be the last one
+   * - the current selected agenda should be design agenda
+   * TODO check if kanselarij should be able to use this
+   * TODO check if we want to be able to reopen an approved agenda without a design agenda present
+   * @returns boolean
+   */
+  canReopenPreviousAgenda: computed('currentSession', 'currentAgenda', 'isSessionClosable', 'currentAgendaIsLast', async function() {
+    const isSessionClosable = await this.isSessionClosable;
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+
+    if (!this.currentSession.isFinal && isSessionClosable && this.currentAgenda.isDesignAgenda && isAdminAndLastAgenda) {
+      return true;
+    }
+    return false;
+  }),
+
+  /**
+   * canDeleteSelectedAgenda
+   * - if the currentAgenda is design agenda, both editor and admin can delete
+   * - if the currentAgenda is approved, only admin can delete the agenda if it's the latest one
+   * @returns boolean
+   */
+  canDeleteSelectedAgenda: computed('currentAgenda', 'currentAgendaIsLast', async function() {
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+    if (this.currentAgenda.isDesignAgenda || isAdminAndLastAgenda) {
+      return true;
+    }
+    return false;
+  }),
+
+  /**
+   * reloadAgendaitemsOfAgendaActivities
+   * After a new designagenda is created in the service (approveAgendaAndCopyToDesignAgenda) we need to update the agenda activities
+   * The store only updates the agendaitems of agenda-activities if we do it outselves
+   */
+  async reloadAgendaitemsOfAgendaActivities(agendaitems) {
+    await agendaitems.map(async(agendaitem) => {
+      const agendaActivity = await agendaitem.get('agendaActivity');
+      if (agendaActivity) {
+        await agendaActivity.hasMany('agendaitems').reload();
+      }
+    });
+  },
+
+  /**
    * @method CreateDesignAgenda
    *
    * Get the last approved agenda and change te status to approves (from final)
@@ -127,236 +181,12 @@ export default Component.extend(FileSaverMixin, {
       });
   },
 
-  actions: {
-    print() {
-      window.print();
-    },
-
-    navigateToPressAgenda() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToNewsletter() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    navigateToDecisions() {
-      const {
-        currentSession, currentAgenda,
-      } = this;
-      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
-    },
-
-    clearSelectedAgendaitem() {
-      this.clearSelectedAgendaitem();
-    },
-
-    cancel() {
-      this.set('releasingDecisions', false);
-      this.set('releasingDocuments', false);
-      this.set('isApprovingAllAgendaitems', false);
-    },
-
-    showApproveAllAgendaitemsWarning() {
-      this.set('isApprovingAllAgendaitems', true);
-    },
-
-    async approveAllAgendaitems() {
-      this.set('isApprovingAllAgendaitems', false);
-      this.toggleLoadingOverlayWithMessage(this.intl.t('approve-all-agendaitems-message'));
-      const allAgendaitemsNotOk = await this.currentAgenda.get('allAgendaitemsNotOk');
-      for (const agendaitem of allAgendaitemsNotOk) {
-        await setAgendaitemFormallyOk(agendaitem);
-      }
-      this.toggleLoadingOverlayWithMessage(null);
-    },
-
-    async unlockAgenda() {
-      // TODO bevestiging ?
-      await this.createDesignAgenda();
-    },
-
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
-    },
-
-    showAgendaActions() {
-      this.toggleProperty('isShowingAgendaActions');
-    },
-
-    compareAgendas() {
-      this.compareAgendas();
-    },
-
-    addAgendaitemsAction() {
-      this.set('isAddingAgendaitems', true);
-    },
-
-    navigateToDocuments() {
-      this.navigateToDocuments();
-    },
-
-    async downloadAllDocuments() {
-      // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
-      const fileDownloadToast = {
-        title: this.intl.t('file-ready'),
-        type: 'download-file',
-        options: {
-          timeOut: 60 * 10 * 1000,
-        },
-      };
-
-      const namePromise = constructArchiveName(this.currentAgenda);
-      debug('Checking if archive exists ...');
-      const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
-      const [name, job] = await all([namePromise, jobPromise]);
-      if (!job) {
-        this.toaster.warning(this.intl.t('no-documents-to-download-warning-text'), this.intl.t('no-documents-to-download-warning-title'), {
-          timeOut: 10000,
-        });
-        return;
-      }
-      if (!job.hasEnded) {
-        debug('Archive in creation ...');
-        const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
-          this.intl.t('archive-in-creation-title'), {
-            timeOut: 3 * 60 * 1000,
-          });
-        this.jobMonitor.register(job);
-        job.on('didEnd', this, async function(status) {
-          if (this.toaster.toasts.includes(inCreationToast)) {
-            this.toaster.toasts.removeObject(inCreationToast);
-          }
-          if (status === job.SUCCESS) {
-            const url = await fileDownloadUrlFromJob(job, name);
-            debug(`Archive ready. Prompting for download now (${url})`);
-            fileDownloadToast.options.downloadLink = url;
-            fileDownloadToast.options.fileName = name;
-            this.toaster.displayToast.perform(fileDownloadToast);
-          } else {
-            debug('Something went wrong while generating archive.');
-            this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
-          }
-        });
-      } else {
-        const url = await fileDownloadUrlFromJob(job, name);
-        debug(`Archive ready. Prompting for download now (${url})`);
-        fileDownloadToast.options.downloadLink = url;
-        fileDownloadToast.options.fileName = name;
-        this.toaster.displayToast.perform(fileDownloadToast);
-      }
-    },
-
-    async createNewDesignAgendaAction() {
-      await this.createDesignAgenda();
-    },
-    selectSignature() {
-      this.toggleProperty('isAssigningSignature', false);
-    },
-    releaseDecisions() {
-      this.set('releasingDecisions', true);
-    },
-    confirmReleaseDecisions() {
-      this.set('releasingDecisions', false);
-      this.currentSession.set('releasedDecisions', moment().utc()
-        .toDate());
-      this.currentSession.save();
-    },
-    releaseDocuments() {
-      this.set('releasingDocuments', true);
-    },
-    confirmReleaseDocuments() {
-      this.set('releasingDocuments', false);
-      this.currentSession.set('releasedDocuments', moment().utc()
-        .toDate());
-      this.currentSession.save();
-    },
-    toggleEditingSession() {
-      this.toggleProperty('editingSession');
-    },
-    successfullyEdited() {
-      this.toggleProperty('editingSession');
-    },
-    cancelEditSessionForm() {
-      this.toggleProperty('editingSession');
-    },
-
-    // KAS-2194 new actions
-    openConfirmApproveAgenda() {
-      this.set('showConfirmForApprovingAgenda', true);
-    },
-
-    async confirmApproveAgenda() {
-      this.set('showConfirmForApprovingAgenda', false);
-      await this.approveCurrentAgenda();
-    },
-
-    cancelApproveAgenda() {
-      this.set('showConfirmForApprovingAgenda', false);
-    },
-
-    openConfirmApproveAgendaAndCloseMeeting() {
-      this.set('showConfirmForApprovingAgendaAndClosingMeeting', true);
-    },
-
-    async confirmApproveAgendaAndCloseMeeting() {
-      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
-      await this.approveCurrentAgendaAndCloseMeeting();
-    },
-
-    cancelApproveAgendaAndCloseMeeting() {
-      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
-    },
-
-    openConfirmCloseMeeting() {
-      this.set('showConfirmForClosingMeeting', true);
-    },
-
-    async confirmCloseMeeting() {
-      this.set('showConfirmForClosingMeeting', false);
-      await this.closeMeeting();
-    },
-
-    cancelCloseMeeting() {
-      this.set('showConfirmForClosingMeeting', false);
-    },
-
-    openConfirmDeleteSelectedAgenda() {
-      this.set('showConfirmForDeletingSelectedAgenda', true);
-    },
-
-    async confirmDeleteSelectedAgenda() {
-      this.set('showConfirmForDeletingSelectedAgenda', false);
-      await this.deleteSelectedAgenda();
-    },
-
-    cancelDeleteSelectedAgenda() {
-      this.set('showConfirmForDeletingSelectedAgenda', false);
-    },
-
-    async openConfirmReopenPreviousAgenda() {
-      await this.get('lastApprovedAgenda').then((agenda) => agenda); // The computed is not loaded before the message with params is sent to the modal, so wait here
-      this.set('showConfirmForReopeningPreviousAgenda', true);
-    },
-
-    async confirmReopenPreviousAgenda() {
-      this.set('showConfirmForReopeningPreviousAgenda', false);
-      await this.reopenPreviousAgenda();
-    },
-
-    cancelReopenPreviousAgenda() {
-      this.set('showConfirmForReopeningPreviousAgenda', false);
-    },
-
-  },
-  // KAS-2194 new private methods / computeds, should move these above actions but git diff might be hard to read
-
+  /**
+   * toggleLoadingOverlayWithMessage
+   * This method will toggle the AUOverlay modal component with a custom message
+   * message = null will instead show a default message in the loader, and clear the local state of the message
+   * @param {String} message: the message to show. If given, the text " even geduld aub..." will always be appended
+   */
   toggleLoadingOverlayWithMessage(message) {
     if (message) {
       this.set('loadingOverlayMessage', `${message} ${this.intl.t('please-be-patient')}`);
@@ -367,12 +197,6 @@ export default Component.extend(FileSaverMixin, {
     this.toggleProperty('showLoadingOverlay'); // blocks the use of buttons
   },
 
-  showConfirmForApprovingAgenda: false,
-  showConfirmForApprovingAgendaAndClosingMeeting: false,
-  showConfirmForClosingMeeting: false,
-  showConfirmForDeletingSelectedAgenda: false,
-  showConfirmForReopeningPreviousAgenda: false,
-
   /**
    * approveCurrentAgenda
    *
@@ -382,6 +206,7 @@ export default Component.extend(FileSaverMixin, {
    * This means rolling back the agendaitem version on the recently approved agenda to match what was approved in the past
    * Basically we want all info and relationships from the old version, while keeping our id, link to agenda, link to previous and next agendaitems
    * This should best be done in the approve service, because we want all triples copied.
+   * Since the changes happen in a mirco-service, we have to update our local store by reloading
    *
    */
   async approveCurrentAgenda() {
@@ -610,7 +435,7 @@ export default Component.extend(FileSaverMixin, {
 
       await this.agendaService.deleteAgenda(currentAgenda);
 
-      // TODO KAS-2194 The deleteAgenda will also make new agendaitems that were removed proposable again. Do we want to display this information in the confirmation screen ?
+      // TODO The deleteAgenda will also make new agendaitems that were removed proposable again. Do we want to display this information in the confirmation screen ?
       if (previousAgenda) {
         // After the agenda has been deleted, we want to update the agendaitems of activity
         const agendaitems = await previousAgenda.get('agendaitems');
@@ -671,46 +496,232 @@ export default Component.extend(FileSaverMixin, {
     }
   },
 
-  /**
-   * canReopenPreviousAgenda
-   *
-   * @returns boolean
-   */
-  canReopenPreviousAgenda: computed('currentSession', 'currentAgenda', 'isSessionClosable', 'currentAgendaIsLast', async function() {
-    const isSessionClosable = await this.isSessionClosable;
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+  actions: {
+    print() {
+      window.print();
+    },
 
-    if (!this.currentSession.isFinal && isSessionClosable && this.currentAgenda.isDesignAgenda && isAdminAndLastAgenda) {
-      return true;
-    }
-    return false;
-  }),
+    navigateToPressAgenda() {
+      const {
+        currentSession, currentAgenda,
+      } = this;
+      this.navigateToPressAgenda(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-  /**
-   * canDeleteSelectedAgenda
-   * A designagenda can be deleted by editor or admin, only admin may delete an approved agenda when it's the last one of the meeting
-   * @returns boolean
-   */
-  canDeleteSelectedAgenda: computed('currentAgenda', 'currentAgendaIsLast', async function() {
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
-    if (this.currentAgenda.isDesignAgenda || isAdminAndLastAgenda) {
-      return true;
-    }
-    return false;
-  }),
+    navigateToNewsletter() {
+      const {
+        currentSession, currentAgenda,
+      } = this;
+      this.navigateToNewsletter(currentSession.get('id'), currentAgenda.get('id'));
+    },
 
-  /**
-   * reloadAgendaitemsOfAgendaActivities
-   * After a new designagenda is created in the service (approveAgendaAndCopyToDesignAgenda) we need to update the agenda activities
-   * The store only updates the agendaitems of agenda-activities if we do it outselves
-   */
-  async reloadAgendaitemsOfAgendaActivities(agendaitems) {
-    await agendaitems.map(async(agendaitem) => {
-      const agendaActivity = await agendaitem.get('agendaActivity');
-      if (agendaActivity) {
-        await agendaActivity.hasMany('agendaitems').reload();
+    navigateToDecisions() {
+      const {
+        currentSession, currentAgenda,
+      } = this;
+      this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
+    },
+
+    clearSelectedAgendaitem() {
+      this.clearSelectedAgendaitem();
+    },
+
+    cancel() {
+      this.set('releasingDecisions', false);
+      this.set('releasingDocuments', false);
+      this.set('isApprovingAllAgendaitems', false);
+    },
+
+    showApproveAllAgendaitemsWarning() {
+      this.set('isApprovingAllAgendaitems', true);
+    },
+
+    async approveAllAgendaitems() {
+      this.set('isApprovingAllAgendaitems', false);
+      this.toggleLoadingOverlayWithMessage(this.intl.t('approve-all-agendaitems-message'));
+      const allAgendaitemsNotOk = await this.currentAgenda.get('allAgendaitemsNotOk');
+      for (const agendaitem of allAgendaitemsNotOk) {
+        await setAgendaitemFormallyOk(agendaitem);
       }
-    });
+      this.toggleLoadingOverlayWithMessage(null);
+    },
+
+    async unlockAgenda() {
+      // TODO bevestiging ?
+      await this.createDesignAgenda();
+    },
+
+    showMultipleOptions() {
+      this.toggleProperty('isShowingOptions');
+    },
+
+    showAgendaActions() {
+      this.toggleProperty('isShowingAgendaActions');
+    },
+
+    compareAgendas() {
+      this.compareAgendas();
+    },
+
+    addAgendaitemsAction() {
+      this.set('isAddingAgendaitems', true);
+    },
+
+    navigateToDocuments() {
+      this.navigateToDocuments();
+    },
+
+    async downloadAllDocuments() {
+      // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
+      const fileDownloadToast = {
+        title: this.intl.t('file-ready'),
+        type: 'download-file',
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      };
+
+      const namePromise = constructArchiveName(this.currentAgenda);
+      debug('Checking if archive exists ...');
+      const jobPromise = fetchArchivingJobForAgenda(this.currentAgenda, this.store);
+      const [name, job] = await all([namePromise, jobPromise]);
+      if (!job) {
+        this.toaster.warning(this.intl.t('no-documents-to-download-warning-text'), this.intl.t('no-documents-to-download-warning-title'), {
+          timeOut: 10000,
+        });
+        return;
+      }
+      if (!job.hasEnded) {
+        debug('Archive in creation ...');
+        const inCreationToast = this.toaster.loading(this.intl.t('archive-in-creation-message'),
+          this.intl.t('archive-in-creation-title'), {
+            timeOut: 3 * 60 * 1000,
+          });
+        this.jobMonitor.register(job);
+        job.on('didEnd', this, async function(status) {
+          if (this.toaster.toasts.includes(inCreationToast)) {
+            this.toaster.toasts.removeObject(inCreationToast);
+          }
+          if (status === job.SUCCESS) {
+            const url = await fileDownloadUrlFromJob(job, name);
+            debug(`Archive ready. Prompting for download now (${url})`);
+            fileDownloadToast.options.downloadLink = url;
+            fileDownloadToast.options.fileName = name;
+            this.toaster.displayToast.perform(fileDownloadToast);
+          } else {
+            debug('Something went wrong while generating archive.');
+            this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
+          }
+        });
+      } else {
+        const url = await fileDownloadUrlFromJob(job, name);
+        debug(`Archive ready. Prompting for download now (${url})`);
+        fileDownloadToast.options.downloadLink = url;
+        fileDownloadToast.options.fileName = name;
+        this.toaster.displayToast.perform(fileDownloadToast);
+      }
+    },
+
+    async createNewDesignAgendaAction() {
+      await this.createDesignAgenda();
+    },
+    selectSignature() {
+      this.toggleProperty('isAssigningSignature', false);
+    },
+    releaseDecisions() {
+      this.set('releasingDecisions', true);
+    },
+    confirmReleaseDecisions() {
+      this.set('releasingDecisions', false);
+      this.currentSession.set('releasedDecisions', moment().utc()
+        .toDate());
+      this.currentSession.save();
+    },
+    releaseDocuments() {
+      this.set('releasingDocuments', true);
+    },
+    confirmReleaseDocuments() {
+      this.set('releasingDocuments', false);
+      this.currentSession.set('releasedDocuments', moment().utc()
+        .toDate());
+      this.currentSession.save();
+    },
+    toggleEditingSession() {
+      this.toggleProperty('editingSession');
+    },
+    successfullyEdited() {
+      this.toggleProperty('editingSession');
+    },
+    cancelEditSessionForm() {
+      this.toggleProperty('editingSession');
+    },
+
+    openConfirmApproveAgenda() {
+      this.set('showConfirmForApprovingAgenda', true);
+    },
+
+    async confirmApproveAgenda() {
+      this.set('showConfirmForApprovingAgenda', false);
+      await this.approveCurrentAgenda();
+    },
+
+    cancelApproveAgenda() {
+      this.set('showConfirmForApprovingAgenda', false);
+    },
+
+    openConfirmApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', true);
+    },
+
+    async confirmApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
+      await this.approveCurrentAgendaAndCloseMeeting();
+    },
+
+    cancelApproveAgendaAndCloseMeeting() {
+      this.set('showConfirmForApprovingAgendaAndClosingMeeting', false);
+    },
+
+    openConfirmCloseMeeting() {
+      this.set('showConfirmForClosingMeeting', true);
+    },
+
+    async confirmCloseMeeting() {
+      this.set('showConfirmForClosingMeeting', false);
+      await this.closeMeeting();
+    },
+
+    cancelCloseMeeting() {
+      this.set('showConfirmForClosingMeeting', false);
+    },
+
+    openConfirmDeleteSelectedAgenda() {
+      this.set('showConfirmForDeletingSelectedAgenda', true);
+    },
+
+    async confirmDeleteSelectedAgenda() {
+      this.set('showConfirmForDeletingSelectedAgenda', false);
+      await this.deleteSelectedAgenda();
+    },
+
+    cancelDeleteSelectedAgenda() {
+      this.set('showConfirmForDeletingSelectedAgenda', false);
+    },
+
+    async openConfirmReopenPreviousAgenda() {
+      await this.get('lastApprovedAgenda').then((agenda) => agenda); // The computed is not loaded before the message with params is sent to the modal, so wait here
+      this.set('showConfirmForReopeningPreviousAgenda', true);
+    },
+
+    async confirmReopenPreviousAgenda() {
+      this.set('showConfirmForReopeningPreviousAgenda', false);
+      await this.reopenPreviousAgenda();
+    },
+
+    cancelReopenPreviousAgenda() {
+      this.set('showConfirmForReopeningPreviousAgenda', false);
+    },
+
   },
 
 });

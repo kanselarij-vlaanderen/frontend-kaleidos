@@ -55,10 +55,6 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  /**
-   * KAS-2194, can you approve and agenda with formal NOT ok ? Would assume that we have to rollback the agendaitem to a previous version in that case
-   */
-
   lastAgendaitemPriority: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
@@ -84,8 +80,6 @@ export default Model.extend(LoadableModel, {
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
   }),
-
-  // KAS-2194 new stuff
 
   canBeApproved: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
