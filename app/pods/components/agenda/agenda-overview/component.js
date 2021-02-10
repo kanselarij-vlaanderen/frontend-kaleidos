@@ -6,22 +6,32 @@ import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
 
 class AgendaitemGroup {
-  @tracked mandatees;
-  @tracked agendaitems;
+  sortedMandatees;
+  mandateeGroupId;
+  agendaitems;
 
   constructor(mandatees, firstAgendaItem) {
-    this.mandatees = mandatees;
+    this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
     this.agendaitems = A([firstAgendaItem]);
   }
 
-  get sortedMandatees() {
-    return this.mandatees.sortBy('priority');
+  static sortedMandatees(mandatees) {
+    // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
+    const copiedMandatees = A(mandatees.toArray());
+    return copiedMandatees.sortBy('priority');
+  }
+
+  static generateMandateeGroupId(sortedMandatees) {
+    // Assumes mandatees to be sorted
+    return sortedMandatees.mapBy('id').join();
   }
 
   async itemBelongsToThisGroup(agendaitem) {
-    const mandatees = await agendaitem.get('mandatees');
-    mandatees.sortBy('priority');
-    return mandatees.mapBy('id').join() === this.sortedMandatees.mapBy('id').join(); // Compare by value
+    const mandatees = await agendaitem.mandatees;
+    const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
+    return mandateeGroupId === this.mandateeGroupId;
   }
 }
 
@@ -90,7 +100,6 @@ export default class AgendaOverview extends Component {
         currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        mandatees.sortBy('priority');
         currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
         agendaitemGroups.push(currentAgendaitemGroup);
       }

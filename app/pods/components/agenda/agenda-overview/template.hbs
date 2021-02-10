@@ -65,7 +65,7 @@
       {{did-update (perform this.groupNotasOnGroupName this.regularNotas) this.regularNotas}}>
       {{!-- other notas --}}
       {{#each this.groupedNotas as |agendaitemGroup|}}
-        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.mandatees}}/>
+        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <li
             class="vlc-agenda-items__sub-item"
