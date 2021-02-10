@@ -1,6 +1,7 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
@@ -10,27 +11,17 @@ export default class AgendaOverview extends Component {
 
   @service('current-session') currentSessionService;
 
-  classNames = ['vlc-agenda-items', 'auk-u-m-8', 'vlc-agenda-items--spaced'];
-
   dragHandleClass = '.ki-drag-handle-2';
 
-  agendaitems = null;
-  currentAgenda = null;
+  @tracked isEditingOverview = false;
 
-  isEditingOverview = null;
+  @tracked isShowingChanges = false;
 
-  isShowingChanges = null;
-
-  showLoader = null;
-
-  @action
-  selectAgendaitemAction(agendaitem) {
-    this.selectAgendaitem(agendaitem);
-  }
+  @tracked showLoader = null;
 
   @action
   async setFormallyOkAction(agendaitem, formallyOkUri) {
-    this.set('showLoader', true);
+    this.showLoader = true;
     agendaitem.formallyOk = formallyOkUri;
     await agendaitem
       .save()
@@ -38,26 +29,26 @@ export default class AgendaOverview extends Component {
         this.toaster.error();
       })
       .finally(() => {
-        this.set('showLoader', false);
+        this.showLoader = false;
       });
   }
 
   @action
   toggleIsEditingOverview() {
-    this.toggleProperty('isEditingOverview');
+    this.isEditingOverview = !this.isEditingOverview;
   }
 
   @action
   toggleChangesOnly() {
-    this.toggleProperty('isShowingChanges');
+    this.isShowingChanges = !this.isShowingChanges;
   }
 
   @action
   async reorderItems(itemModels) {
     const isEditor = this.currentSessionService.isEditor;
-    const isDesignAgenda = this.currentAgenda.isDesignAgenda;
-    this.set('showLoader', true);
+    const isDesignAgenda = this.args.currentAgenda.isDesignAgenda;
+    this.showLoader = true;
     await setAgendaitemsPriority(itemModels, isEditor, isDesignAgenda);
-    this.set('showLoader', false);
+    this.showLoader = false;
   }
 }
