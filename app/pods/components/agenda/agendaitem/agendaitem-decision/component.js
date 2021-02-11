@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 // import { all } from 'ember-concurrency';
 import { sortPieces } from 'fe-redpencil/utils/documents';
+import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
@@ -14,13 +15,13 @@ export default class AgendaitemDecisionComponent extends Component {
 
   @tracked isEditing = false;
   @tracked isVerifyingDelete = null;
+  @tracked isAddingReport = false;
   @tracked treatmentToDelete = null;
 
   constructor() {
     super(...arguments);
     this.loadReport.perform();
   }
-
 
   @action
   openEditingWindow() {
@@ -30,6 +31,11 @@ export default class AgendaitemDecisionComponent extends Component {
   @action
   closeEditingWindow() {
     this.isEditing = false;
+  }
+
+  @action
+  toggleIsAddingReport() {
+    this.isAddingReport = !this.isAddingReport;
   }
 
   @action

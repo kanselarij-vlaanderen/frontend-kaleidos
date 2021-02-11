@@ -54,12 +54,14 @@
         @didDeleteContainer={{this.refresh}}
       />
     {{else}}
-      <Utils::AddDocuments
-        @treatment={{@treatment}}
-        @defaultType={{this.defaultType}}
-        @modelToAddPieceTo="agendaItemTreatment"
-        @title={{t "signed-decision-add"}}
-      />
+      {{#if this.currentSession.isEditor}}
+        <button type="button" class="vl-button vl-button--tertiary"
+          data-test-upload-decision-file
+          {{on "click" this.toggleIsAddingReport}}
+        >
+          {{t "signed-decision-add"}}
+        </button>
+      {{/if}}
     {{/if}}
   {{else}}
     {{t "loading"}}{{!-- TODO: find the right loader --}}
@@ -78,5 +80,10 @@
     @message={{t "delete-decision-message"}}
     @cancel={{this.cancel}}
     @verify={{this.deleteTreatment}}
+  />
+{{/if}}
+{{#if this.isAddingReport}}
+  <Utils::AddDocument
+    @title={{t "signed-decision-add"}}
   />
 {{/if}}
