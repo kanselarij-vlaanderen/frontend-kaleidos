@@ -27,7 +27,6 @@ export default class FileUploader extends Component {
     this.isLoading = false;
     this.uploadedFileLength = 0;
     this.filesInQueue = A([]);
-    this.totalInsertedFiles = 0;
   }
 
   @enqueueTask({
