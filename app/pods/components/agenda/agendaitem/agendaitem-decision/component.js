@@ -2,14 +2,13 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-// import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
-// import { all } from 'ember-concurrency';
 import { sortPieces } from 'fe-redpencil/utils/documents';
 import CONFIG from 'fe-redpencil/utils/config';
 
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
+  @service store;
 
   @tracked report;
 
@@ -18,9 +17,33 @@ export default class AgendaitemDecisionComponent extends Component {
   @tracked isAddingReport = false;
   @tracked treatmentToDelete = null;
 
+  @tracked defaultAccessLevel;
+  @tracked decisionDocType;
+
   constructor() {
     super(...arguments);
     this.loadReport.perform();
+    this.loadCodelists.perform();
+  }
+
+  @task
+  *loadCodelists() {
+    this.defaultAccessLevel = this.store.peekRecord('access-level', CONFIG.internRegeringAccessLevelId);
+    if (!this.defaultAccessLevel) {
+      const accessLevels = yield this.store.query('access-level', {
+        'page[size]': 1,
+        'filter[:id:]': CONFIG.internRegeringAccessLevelId,
+      });
+      this.defaultAccessLevel = accessLevels.firstObject;
+    }
+    this.decisionDocType = this.store.peekRecord('document-type', CONFIG.decisionDocumentTypeId);
+    if (!this.defaultAccessLevel) {
+      const docTypes = yield this.store.query('document-type', {
+        'page[size]': 1,
+        'filter[:id:]': CONFIG.decisionDocumentTypeId,
+      });
+      this.defaultAccessLevel = docTypes.firstObject;
+    }
   }
 
   @action
@@ -49,74 +72,43 @@ export default class AgendaitemDecisionComponent extends Component {
     this.report = yield this.args.treatment.report;
   }
 
-  // @action
-  // uploadPiece(file) {
-  //   const now = moment().utc()
-  //     .toDate();
-  //   const documentContainer = this.store.createRecord('document-container', {
-  //     created: now,
-  //   });
-  //   const piece = this.store.createRecord('piece', {
-  //     created: now,
-  //     modified: now,
-  //     file: file,await @treatment
-  //     accessLevel: this.defaultAccessLevel,
-  //     confidential: false,
-  //     name: file.filenameWithoutExtension,
-  //     documentContainer: documentContainer,
-  //   });
-  //   this.newPieces.pushObject(piece);
-  // }
-  //
-  // @task
-  // *savePieces() {
-  //   const savePromises = this.newPieces.map(async(piece) => {
-  //     try {
-  //       await this.savePiece.perform(piece);
-  //     } catch (error) {
-  //       await this.deletePiece.perform(piece);
-  //       throw error;
-  //     }
-  //   });
-  //   yield all(savePromises);
-  //   yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
-  //   this.isOpenPieceUploadModal = false;
-  //   this.newPieces = A();
-  // }
-  //
-  // /**
-  //  * Save a new document container and the piece it wraps
-  // */
-  // @task
-  // *savePiece(piece) {
-  //   const documentContainer = yield piece.documentContainer;
-  //   yield documentContainer.save();
-  //   yield piece.save();
-  // }
-  //
-  /**
-   * Add new piece to an existing document container
-  */
+  @action
+  async attachReport(piece) {
+    const now = new Date();
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+      type: this.decisionDocType,
+    });
+    await documentContainer.save();
+    piece.setProperties({
+      confidential: false,
+      accessLevel: this.defaultAccessLevel,
+      documentContainer,
+    });
+    await piece.save();
+    this.args.treatment.set('report', piece);
+    this.args.treatment.save();
+    this.isAddingReport = false;
+    this.loadReport.perform();
+  }
+
   @task
-  *addPiece(piece) {
+  *attachNewReportVersion(piece) {
     yield piece.save();
     this.args.treatment.set('report', piece);
     yield this.args.treatment.save();
     yield this.loadReport.perform();
   }
 
-  // TODO: rename
   @task
-  *didDeletePieceHandler(container) {
-    // attach the last of the remaining versions
-    console.log("Just deleted piece from container", container);
+  *attachPreviousReportVersion(container) {
     let remainingVersions = yield container.pieces;
     if (remainingVersions.length) {
       remainingVersions = remainingVersions.toArray();
       const sortedPieces = sortPieces(remainingVersions);
       this.args.treatment.set('report', sortedPieces[0]);
       yield this.args.treatment.save();
-    }
+    } // else no previous version available. Treatment no longer has a report
     yield this.loadReport.perform();
   }
 

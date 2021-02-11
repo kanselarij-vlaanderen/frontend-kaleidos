@@ -49,8 +49,8 @@
         @piece={{this.report}}
         @hideNewerVersions={{true}}
         @onOpenUploadModal={{@onOpenUploadModal}}
-        @onAddPiece={{perform this.addPiece}}
-        @didDeletePiece={{perform this.didDeletePieceHandler}}
+        @onAddPiece={{perform this.attachNewReportVersion}}
+        @didDeletePiece={{perform this.attachPreviousReportVersion}}
         @didDeleteContainer={{this.refresh}}
       />
     {{else}}
@@ -85,5 +85,6 @@
 {{#if this.isAddingReport}}
   <Utils::AddDocument
     @title={{t "signed-decision-add"}}
+    @onSave={{this.attachReport}}
   />
 {{/if}}
