@@ -32,21 +32,35 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const agendaId = agenda.id;
     const meetingId = meeting.id;
     const notas = await this.store.query('piece', {
-      'filter[agendaitem][agenda][:id:]': agendaId,
-      'filter[agendaitem][show-as-remark]': false,
+      'filter[agendaitems][agenda][:id:]': agendaId,
+      'filter[agendaitems][show-as-remark]': false,
       'filter[document-container][type][:id:]': CONFIG.notaID,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
-      include: 'agendaitem',
-      'fields[agendaitem]': 'id,priority,short-title',
+      include: 'agendaitems',
+      'fields[agendaitems]': 'id,priority,short-title',
       'fields[piece]': 'id,name,modified',
       'page[size]': 50,
       sort: params.sort,
     });
     for (const nota of notas.toArray()) { // proxyarray to native JS array
-      const agendaItem = await nota.get('agendaitem');
-      const agendaitemPriority = agendaItem.get('priority');
-      const agendaitemId = agendaItem.get('id');
-      const agendaitemShortTitle = agendaItem.get('shortTitle');
+      const agendaitemsLinkedToNota = await nota.get('agendaitems');
+      let agendaitemOnLatestAgenda;
+      for (let index = 0; index < agendaitemsLinkedToNota.length; index++) {
+        const agendaitemToFetch = agendaitemsLinkedToNota.objectAt(index);
+        const agendaitemFromStore = await this.store.findRecord('agendaitem', agendaitemToFetch.id,
+          {
+            reload: true,
+          });
+        const agendaToCheck = await agendaitemFromStore.get('agenda');
+        if (agendaToCheck) {
+          if (agendaToCheck.get('id') === agendaId) {
+            agendaitemOnLatestAgenda = agendaitemFromStore;
+          }
+        }
+      }
+      const agendaitemPriority = agendaitemOnLatestAgenda.get('priority');
+      const agendaitemId = agendaitemOnLatestAgenda.get('id');
+      const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
       const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(nota);
       const processedNota =  {
         meetingId,

@@ -1,26 +1,45 @@
 <div class="vl-modal-dialog__content">
   {{utils/kind-selector kind=kind setAction=(action "setKind")}}
-  <div class="auk-u-mb-2">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "start-date")}}
-      {{web-components/vl-datepicker
-        enableTime=true
-        defaultHour=10
-        defaultMinute=0
-        dateChanged=(action "selectStartDate")
-      }}
+
+  {{#if this.isAnnexMeeting}}
+    <div class="auk-u-mb-2">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "related-main-meeting-field-label")}}
+        {{utils/model-selector
+          modelName="meeting"
+          searchField="numberRepresentation"
+          propertyToShow="label"
+          sortField="-planned-start"
+          selectedItems=selectedMainMeeting
+          selectModel=(action "selectMainMeeting")
+        }}
+      </div>
     </div>
-  </div>
+  {{else}}
+    <div class="auk-u-mb-2">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "start-date")}}
+        {{web-components/vl-datepicker
+          enableTime=true
+          defaultHour=10
+          defaultMinute=0
+          dateChanged=(action "selectStartDate")
+        }}
+      </div>
+    </div>
+  {{/if}}
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block" style="display: flex; flex-direction: column">
       {{web-components/vl-form-label value=(t "meeting-number")}}
       <div class="vlc-new-session__flex">
-        {{web-components/vl-form-input
-          type="number"
-          value=meetingNumber
-          input=(action "meetingNumberChangedAction" meetingNumber)
-          width="2"
-        }}
+        {{#unless this.isAnnexMeeting}}
+          {{web-components/vl-form-input
+            type="number"
+            value=meetingNumber
+            input=(action "meetingNumberChangedAction" meetingNumber)
+            class="auk-input--w-medium"
+          }}
+        {{/unless}}
         <div class="vlc-new-session vlc-new-session__flex">
           <span class="vlc-new-session__label">
             <span class="vlc-new-session__identifier" data-test-meeting-formattedMeetingIdentifier>{{formattedMeetingIdentifier}}</span>
@@ -40,8 +59,7 @@
           {{web-components/vl-form-input
             data-test-meeting-formattedMeetingIdentifier-edit-value
             value=formattedMeetingIdentifier
-            width="2"
-            class="vlc-new-session__meetingNumberPrefix__container"
+            class="vlc-new-session__meetingNumberPrefix__container auk-input--w-medium"
           }}
           {{web-components/vl-save-button
             text=(t "save")
@@ -51,12 +69,14 @@
       </div>
     {{/if}}
   </div>
-  <div class="auk-u-mb-2">
-    <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "meeting-location")}}
-      {{web-components/vl-form-input width="4" value=extraInfo}}
+  {{#unless this.isAnnexMeeting}}
+    <div class="auk-u-mb-2">
+      <div class="vlc-input-field-block">
+        {{web-components/vl-form-label value=(t "meeting-location")}}
+        {{web-components/vl-form-input value=extraInfo}}
+      </div>
     </div>
-  </div>
+  {{/unless}}
 </div>
 {{web-components/vl-modal-footer
   isLoading=isLoading

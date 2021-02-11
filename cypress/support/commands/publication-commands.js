@@ -23,7 +23,7 @@ function createPublication(shortTitle, longTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
-  cy.visit('publicaties/in-behandeling/via-ministerraad');
+  cy.visit('publicaties');
   cy.get(publicationSelectors.newPublicationButton).click();
 
   cy.get(modalSelectors.auModal.container).as('publicationModal')

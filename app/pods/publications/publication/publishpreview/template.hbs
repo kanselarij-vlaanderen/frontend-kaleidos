@@ -1,96 +1,13 @@
+{{ page-title
+  (t "publishpreview-requests")
+}}
 {{#if (gt this.publishPreviewActivities.length 0)}}
   {{#each this.publishPreviewActivities as |activity|}}
     <div class="auk-u-m-2">
-      <WebComponents::AuNavbar @noPadding="true" @border="none">
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h4 class="auk-toolbar-complex__title">
-                {{t "requested-on"}} {{moment-format activity.startDate "DD MMMM YYYY [om] H:mm"}}
-              </h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-
-
-
-
-            {{#if (await activity.isWithdrawn) }}
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuPillList>
-                  <WebComponents::AuPill @skin="danger">{{t "cancelled-request"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}</WebComponents::AuPill>
-                </WebComponents::AuPillList>
-              </WebComponents::AuToolbar::Item>
-
-            {{else if (await activity.isFinished) }}
-
-              <WebComponents::AuToolbar::Item>
-                {{t "publishpreview"}} {{t "finished"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
-              </WebComponents::AuToolbar::Item>
-
-
-              <WebComponents::AuToolbar::Item>
-                {{#if (await activity.wasPublished)}}
-                  {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
-                {{else if (await activity.hasOpenPublishingActivity)}}
-                  <WebComponents::AuButton
-                          @skin="primary"
-                    {{on "click" (fn this.markPublicationActivityPublished activity)}}>
-                    {{t "publications-published"}}
-                  </WebComponents::AuButton>
-                  <WebComponents::AuButton
-                          @skin="tertiary"
-                    {{on "click" (fn this.cancelExistingPublicationActivity activity)}}>
-                    {{t "cancel-request"}}
-                  </WebComponents::AuButton>
-                {{else}}
-                  <WebComponents::AuButton
-                          @skin="primary"
-                    {{on "click" (fn this.requestPublicationModal activity )}}>
-                    {{t "request-publication"}}
-                  </WebComponents::AuButton>
-                {{/if}}
-              </WebComponents::AuToolbar::Item>
-
-            {{else}}
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                        @skin="tertiary"
-                  {{on "click" (fn this.cancelExistingPreviewActivity activity)}}>
-                  {{t "cancel-request"}}
-                </WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuCheckbox
-                        @toggle={{fn this.markPreviewActivityDone activity}}
-                        @label="Afgewerkt"/>
-              </WebComponents::AuToolbar::Item>
-
-            {{/if}}
-
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
-      </WebComponents::AuNavbar>
       <div class="auk-u-my-2">
         <div class="auk-o-grid">
-          <div class="auk-o-grid-col auk-o-grid-col-bp2-3 auk-u-mb-3">
-            <div class="auk-form-group">
-              <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-            </div>
-            {{!--TODO set to the correct propperty null --}}
-            {{#if this.withdrawn}}
-              <div class="auk-form-group">
-                <WebComponents::AuKeyValue @key="Ingetrokken op" @value={{moment-format null "DD MMMM YYYY [om] H:mm"}}/>
-              </div>
-            {{/if}}
-          </div>
           <div class="auk-o-grid-col-bp2-9">
             <div class="auk-u-ml-4 auk-u-mb-4">
-              {{!-- Request panel --}}
-              <Publications::Publication::ActivityRequestPanel @activity={{activity}}/>
               {{!-- PublishPreview panel --}}
               <div class="auk-u-mb-3">
                 <WebComponents::AuPanel>
@@ -160,6 +77,14 @@
                   </WebComponents::AuPanel::Body>
                 </WebComponents::AuPanel>
               </div>
+              {{!-- Request panel --}}
+              <Publications::Publication::ActivityRequestPanel
+                      @activity={{activity}}
+                      @finishedToggle={{fn this.markPreviewActivityDone activity}}
+                      @cancelExisting={{fn this.showWithdrawalWindow activity}}
+                      @publishPreview={{fn this.requestPublicationModal activity}}
+                      @mode={{'publishPreview'}}
+              />
               {{!-- Correction panel --}}
               {{#if (await activity.generatedPieces)}}
                 <div class="auk-u-mb-3">
@@ -246,14 +171,11 @@
 
 
 {{!--     UPLOAD PUBLISH-PREVIEW MODAL       --}}
-
-
 {{#if this.isOpenUploadPublishPreviewModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreview}}
@@ -298,11 +220,10 @@
 
 
 {{#if this.isOpenUploadPublishPreviewCorrectionModal}}
-  <WebComponents::AuModal
-    @resized={{this.isUploadModalResized}}
-  >
+  <WebComponents::AuModal @resized={{this.isExpanded}}>
     <WebComponents::AuModal::Header
       @resizeable={{true}}
+      @changeIcon={{this.isExpanded}}
       @title={{t "upload-publishpreview-correction"}}
       @toggleSize={{this.toggleUploadModalSize}}
       @closeModal={{perform this.cancelUploadPublishPreviewCorrection}}
@@ -368,9 +289,6 @@
             @closeModal={{this.cancelPublicationModal}}
     />
     <WebComponents::AuModal::Body>
-    {{!--  Pieces selected --}}
-      {{t "request-publishpreview-confirmation" }}
-
       <WebComponents::AuLabel @isRequired={{true}}>
         {{t "accompanying-text"}}
       </WebComponents::AuLabel>
@@ -390,6 +308,77 @@
       >
         {{t "request-publication"}}
       </WebComponents::AuButton>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{!-- showWithdrawPopup --}}
+
+{{#if showWithdrawPopup}}
+  <WebComponents::AuModal
+    @size="medium"
+    data-test-withdraw-publishpreview
+  >
+    <WebComponents::AuModal::Header @title={{t "cancel-request"}}
+                                    @closeModal={{this.hideWithdrawalWindow}} />
+    <WebComponents::AuModal::Body>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="reason">{{t "reason-withdraw"}}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea
+            @rows="5"
+            @value={{this.withdrawalReason}}
+            data-test-publication-activity-withdrawal-reason-textarea
+          ></WebComponents::AuTextarea>
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="subject">{{t "subject"}}</WebComponents::AuLabel>
+          <WebComponents::AuInput
+                  @block="true"
+                  type="text"
+                  id="subject"
+                  @value={{this.withdrawalSubject}}
+          />
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="reason">{{t "content"}}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea
+            @rows="8"
+            @value={{this.withdrawalContent}}
+            data-test-publication-activity-withdrawal-textarea
+          ></WebComponents::AuTextarea>
+        </div>
+      </div>
+    </WebComponents::AuModal::Body>
+    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+    <WebComponents::AuModal::Footer @custom={{true}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="borderless"
+              {{on "click" this.hideWithdrawalWindow}}
+            >
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="primary"
+                    @icon="close"
+                    @size="small"
+              {{on "click" this.cancelExistingPreviewActivity}}
+                    data-test-withdraw-activity-submit-button
+            >
+              {{t "cancel-request"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}

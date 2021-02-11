@@ -5,6 +5,7 @@ export default class VRDocumentName {
   static get regexGroups() {
     return Object.freeze({
       date: '([12][90][0-9]{2} [0-3][0-9][01][0-9])',
+      casePrefix: '(( VV)|())',  // VV = Vlaamse Veerkracht
       docType: '((DOC)|(DEC)|(MED))',
       caseNr: '(\\d{4})',
       index: '(\\d{1,3})',
@@ -15,12 +16,12 @@ export default class VRDocumentName {
 
   static get looseRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
+    return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
   }
 
   static get strictRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${regexGroup.date} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.pieceSuffix}?$`);
+    return new RegExp(`^VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.pieceSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -46,9 +47,10 @@ export default class VRDocumentName {
     }
     const meta = {
       date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
-      docType: match[2],
-      caseNr: parseInt(match[6], 10),
-      index: parseInt(match[8], 10),
+      casePrefix: match[2],
+      docType: match[5],
+      caseNr: parseInt(match[9], 10),
+      index: parseInt(match[11], 10),
       // pieceSuffix: TODO
       // pieceNr: TODO
     };

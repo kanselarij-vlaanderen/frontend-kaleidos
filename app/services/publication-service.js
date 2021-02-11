@@ -2,12 +2,18 @@
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
 import CONFIG from 'fe-redpencil/utils/config';
+import { ajax } from 'fe-redpencil/utils/ajax';
 import moment from 'moment';
+import { tracked } from '@glimmer/tracking';
+import { A } from '@ember/array';
 
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
   @service intl;
+
+  // Tracked.
+  @tracked cachedData = A([]);
 
   async createNewPublication(publicationNumber, _caseId, title, shortTitle) {
     // Work with the case.
@@ -88,5 +94,32 @@ export default class PublicationService extends Service {
       return latestPublication.publicationNumber + 1;
     }
     return 0;
+  }
+
+  getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
+    for (let index = 0; index < totals.length; index++) {
+      const item = totals[index];
+      if (item.activityType === ActivityType) {
+        if (item.status === ActivityStatus) {
+          return parseInt(item.count, 10);
+        }
+      }
+    }
+    return 0;
+  }
+
+  getPublicationCounts(publicationId) {
+    if (this.cachedData[publicationId]) {
+      return this.cachedData[publicationId];
+    }
+    this.cachedData[publicationId] = ajax({
+      method: 'GET',
+      url: `/lazy-loading/getCountsForPublication?uuid=${publicationId}`,
+    }).then((result) => result.body.counts);
+    return this.cachedData[publicationId];
+  }
+
+  invalidatePublicationCache() {
+    this.cachedData = A([]);
   }
 }

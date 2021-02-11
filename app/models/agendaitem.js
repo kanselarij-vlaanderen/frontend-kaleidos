@@ -42,11 +42,11 @@ export default ModelWithModifier.extend({
   agenda: belongsTo('agenda', {
     inverse: null,
   }),
-  nextAgendaitem: belongsTo('agendaitem', {
-    inverse: 'previousAgendaitem',
+  nextVersion: belongsTo('agendaitem', {
+    inverse: 'previousVersion',
   }),
-  previousAgendaitem: belongsTo('agendaitem', {
-    inverse: 'nextAgendaitem',
+  previousVersion: belongsTo('agendaitem', {
+    inverse: 'nextVersion',
   }),
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
@@ -76,7 +76,7 @@ export default ModelWithModifier.extend({
           return this.store.query('document-container', {
             filter: {
               pieces: {
-                agendaitem: {
+                agendaitems: {
                   id: this.get('id'),
                 },
               },
@@ -115,7 +115,7 @@ export default ModelWithModifier.extend({
             .query('document-container', {
               filter: {
                 pieces: {
-                  agendaitem: {
+                  agendaitems: {
                     id: this.get('id'),
                   },
                 },

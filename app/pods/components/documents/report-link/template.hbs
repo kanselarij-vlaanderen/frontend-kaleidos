@@ -76,7 +76,7 @@
             "vlc-document-list__item vlc-document-list__item--active"
           }}"
         >
-          <div class="vl-badge vl-badge--icon vl-badge--icon-light vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
+          <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
             <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
           </div>
         </div>
@@ -185,8 +185,7 @@
       {{else}}
         <WebComponents::VlFormLabel @value={{t "name"}} />
         <WebComponents::VlFormInput
-          @value={{this.pieceInCreation.name}}
-          @width={{4}} />
+          @value={{this.pieceInCreation.name}}/>
         <EmberKaleidosWebuniversum::VlUploadedDocument
           @name={{this.pieceInCreation.file.filename}}
           @extension={{this.pieceInCreation.file.extension}}

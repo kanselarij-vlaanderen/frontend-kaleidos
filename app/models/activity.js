@@ -11,6 +11,8 @@ export default class Activity extends Model {
   @attr('datetime') finalTranslationDate;
   @attr('string') name;
   @attr('string') mailContent;
+  @attr('string') withdrawReason;
+  @attr('string') mailSubject;
 
   // Relations.
   @belongsTo('subcase') subcase;

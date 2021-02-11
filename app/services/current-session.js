@@ -70,8 +70,9 @@ export default Service.extend({
     } = this;
     const {
       ovrbId,
+      adminId,
     } = CONFIG;
-    const roles = [ovrbId];
+    const roles = [ovrbId, adminId];
     return roles.includes(userRoleId);
   },
 

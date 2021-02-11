@@ -56,7 +56,7 @@ export default Component.extend(FileSaverMixin, {
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
   currentAgenda: alias('sessionService.currentAgenda'),
-  agendas: alias('sessionService.agendas'),
+  agendas: alias('sessionService.agendas'), // This list is reverse sorted on serialNumber
   selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
   definiteAgendas: alias('sessionService.definiteAgendas'),
 
@@ -76,7 +76,8 @@ export default Component.extend(FileSaverMixin, {
     const agendas = await this.get('agendas');
     const lastAgendaFromList = agendas
       .filter((agenda) => !agenda.get('isDesignAgenda'))
-      .sortBy('-serialnumber')
+      .sortBy('serialnumber')
+      .reverse()
       .get('firstObject');
     return lastAgendaFromList.agendaName;
   }),
@@ -210,11 +211,13 @@ export default Component.extend(FileSaverMixin, {
       const agendas = await this.get('agendas');
       const designAgenda = agendas
         .filter((agenda) => agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
+        .sortBy('serialnumber')
+        .reverse()
         .get('firstObject');
       const lastAgenda = agendas
         .filter((agenda) => !agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
+        .sortBy('serialnumber')
+        .reverse()
         .get('firstObject');
 
       if (lastAgenda) {
@@ -497,12 +500,14 @@ export default Component.extend(FileSaverMixin, {
       const agendas = await this.get('agendas');
       const designAgenda = agendas
         .filter((agenda) => agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
+        .sortBy('serialnumber')
+        .reverse()
         .get('firstObject');
 
       const lastAgenda = agendas
         .filter((agenda) => !agenda.get('isDesignAgenda'))
-        .sortBy('-serialnumber')
+        .sortBy('serialnumber')
+        .reverse()
         .get('firstObject');
 
       const session = await lastAgenda.get('createdFor');

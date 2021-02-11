@@ -350,7 +350,7 @@
     @onCreate={{this.onCreateAgendaitem}} />
 {{/if}}
 {{#if isAssigningSignature}}
-  <Session::SelectSignature
+  <Sessions::SelectSignature
     @meeting={{currentSession}}
     @closeDialog={{action "selectSignature"}} />
 {{/if}}
