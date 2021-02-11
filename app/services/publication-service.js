@@ -15,7 +15,7 @@ export default class PublicationService extends Service {
   // Tracked.
   @tracked cachedData = A([]);
 
-  async createNewPublication(publicationNumber, _caseId, title, shortTitle) {
+  async createNewPublication(publicationNumber, publicationSuffix, _caseId, title, shortTitle) {
     // Work with the case.
     // Test if dossier already had publication (index not up to date).
     // For people that dont refresh and we're in a SPA.
@@ -48,6 +48,7 @@ export default class PublicationService extends Service {
     const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
+      publicationSuffix,
       case: caze,
       created: creationDatetime,
       status: toPublishStatus,

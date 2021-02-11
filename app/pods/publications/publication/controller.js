@@ -19,6 +19,7 @@ export default class PublicationController extends Controller {
 
   // Tracked props.
   @tracked numberIsAlreadyUsed = false;
+  @tracked numberIsRequired = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
@@ -161,6 +162,14 @@ export default class PublicationController extends Controller {
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);
+    this.numberIsRequired = false;
+    if (event.target.value === '') {
+      this.numberIsRequired = true;
+      this.toaster.error(this.intl.t('publication-number-required'), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+      return;
+    }
     this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.publicationFlow.get('publicationSuffix'), this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;

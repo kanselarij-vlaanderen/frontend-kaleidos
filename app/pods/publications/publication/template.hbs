@@ -81,6 +81,12 @@
                     {{t "publication-number-already-taken"}}
                   </div>
                 {{/if}}
+                {{#if this.numberIsRequired}}
+                  <div class="auk-form-help-text auk-form-help-text--danger">
+                    <WebComponents::AuIcon @name="alert-triangle"/>
+                    {{t "publication-number-required"}}
+                  </div>
+                {{/if}}
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>

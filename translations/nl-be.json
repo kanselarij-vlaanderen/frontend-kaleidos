@@ -717,6 +717,7 @@
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document",
   "publication-number-already-taken":"Dit publicatienummer en suffix zijn reeds in gebruik.",
+  "publication-number-required":"Publicatienummer Is verplicht.",
   "publication-date-after-translation-date":"De publicatiedatum moet altijd op of na de uiterste vertaaldatum liggen.",
   "version": "Versie",
   "only-on-final-agenda": "Enkel op definitieve agenda",
