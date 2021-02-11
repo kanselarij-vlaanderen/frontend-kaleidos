@@ -6,6 +6,13 @@ export default class AbbreviatedText extends Component {
     return this.args.text;
   }
 
+  get isCustom() {
+    if (this.args.custom) {
+      return true;
+    }
+    return false;
+  }
+
   // Get Maxsize.
   getMaxSize() {
     // The amount of characters to show in the title.

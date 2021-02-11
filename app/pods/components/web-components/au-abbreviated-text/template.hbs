@@ -1,6 +1,6 @@
 {{#if this.textTooLong}}
-  {{this.textAbbreviated}}
-  <div class="auk-u-flex auk-u-flex--inline auk-u-align-middle">
+  <div class="auk-u-flex">
+    {{this.textAbbreviated}}
     <WebComponents::AuButtonLink
             @icon="circle-more"
             @skin="mute"
@@ -11,5 +11,11 @@
     </WebComponents::AuButtonLink>
   </div>
 {{else}}
-  {{@text}}
+  {{#if this.isCustom}}
+    <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>
+      {{@text}}
+    </h4>
+  {{else}}
+    {{@text}}
+  {{/if}}
 {{/if}}
