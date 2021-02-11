@@ -63,7 +63,7 @@ export default class AgendaitemsAgendaController extends Controller {
       this.filteredAnnouncements = this.model.announcements;
     } else {
       const filter = {
-        ':sqs:title,shortTitle': `${this.filter}`, // sqs can be replaced by "phrase_prefix" once a release containing https://github.com/mu-semtech/mu-search/pull/17 is available
+        ':phrase_prefix:title,shortTitle': `${this.filter}`,
         meetingId: this.meeting.id,
         agendaId: this.agenda.id,
       };

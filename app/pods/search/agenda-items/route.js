@@ -30,7 +30,7 @@ export default class AgendaitemSearchRoute extends Route {
     },
   };
 
-  textSearchFields = Object.freeze(['title', 'shortTitle', 'data', 'titlePress', 'textPress']);
+  textSearchFields = Object.freeze(['title', 'shortTitle', 'data.content', 'titlePress', 'textPress']);
 
   constructor() {
     super(...arguments);
@@ -54,6 +54,15 @@ export default class AgendaitemSearchRoute extends Route {
   model(filterParams) {
     const searchParams = this.paramsFor('search');
     const params = {...searchParams, ...filterParams}; // eslint-disable-line
+    if (!params.dateFrom) {
+      params.dateFrom = null;
+    }
+    if (!params.dateTo) {
+      params.dateTo = null;
+    }
+    if (!params.mandatees) {
+      params.mandatees = null;
+    }
     this.lastParams.stageLive(params);
 
     if (this.lastParams.anyFieldChanged(Object.keys(params).filter((key) => key !== 'page'))) {

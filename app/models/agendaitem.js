@@ -76,7 +76,7 @@ export default ModelWithModifier.extend({
           return this.store.query('document-container', {
             filter: {
               pieces: {
-                agendaitem: {
+                agendaitems: {
                   id: this.get('id'),
                 },
               },
@@ -115,7 +115,7 @@ export default ModelWithModifier.extend({
             .query('document-container', {
               filter: {
                 pieces: {
-                  agendaitem: {
+                  agendaitems: {
                     id: this.get('id'),
                   },
                 },

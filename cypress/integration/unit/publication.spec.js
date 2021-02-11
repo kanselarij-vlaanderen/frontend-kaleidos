@@ -19,32 +19,12 @@ context('Publications tests', () => {
     cy.logout();
   });
 
-  const publicationOverviewUrl = '/publicaties/in-behandeling';
-  const publicationNotViaMinisterOverviewUrl = '/publicaties/in-behandeling/niet-via-ministerraad';
+  const publicationOverviewUrl = '/publicaties';
   const someText = 'Some text';
   const shortTitle = 'Korte titel cypress test';
   const shortTitle2 = 'Korte titel cypress test gewijzigd';
   const longTitle = 'Lange titel voor de cypress test die we in de publicatieflow gaan testen.';
-  const pageClass = '.vlc-panel-layout__main-content';
 
-  it('publications:urls: should see pages', () => {
-    cy.visit(publicationOverviewUrl);
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties/te-behandelen');
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties');
-    // Should redirect.
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties/in-behandeling');
-    // Should redirect.
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties/behandeld');
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties/in-behandeling/via-ministerraad');
-    cy.get(pageClass).should('exist');
-    cy.visit('/publicaties/in-behandeling/niet-via-ministerraad');
-    cy.get(pageClass).should('exist');
-  });
 
   it('should render error when required fields are not filled in to create new publication', () => {
     cy.visit(publicationOverviewUrl);
@@ -96,7 +76,9 @@ context('Publications tests', () => {
     });
     cy.get(modalSelectors.publication.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.contains(someText).should('not.exist');
+    cy.get('@publicationModal').within(() => {
+      cy.contains(someText).should('not.exist');
+    });
     // make sure all fields are tested
   });
 
@@ -125,7 +107,7 @@ context('Publications tests', () => {
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
-    cy.visit(publicationNotViaMinisterOverviewUrl);
+    cy.visit(publicationOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()
@@ -133,11 +115,11 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE 3');
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE - NIET VIA MINISTERRAAD - 3');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
-    cy.visit(publicationNotViaMinisterOverviewUrl);
+    cy.visit(publicationOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()
@@ -172,7 +154,7 @@ context('Publications tests', () => {
       org: 'US and A',
     };
 
-    cy.visit(publicationNotViaMinisterOverviewUrl);
+    cy.visit(publicationOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
     cy.get(publicationSelectors.goToPublication).first()

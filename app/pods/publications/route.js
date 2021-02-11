@@ -1,9 +1,15 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class PublicationsRoute extends Route.extend(AuthenticatedRouteMixin) {
-  model() {
-    // Normally we would query store here, but for now, we get the mocks
-    return null;
+  @action
+  refreshModel() {
+    this.refresh();
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }
