@@ -136,11 +136,7 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
-            {{if
-              row.publicationNumberFilterOption
-              row.publicationNumberFilterOption
-              (t "dash")
-            }}
+            {{ row.publicationNumber }}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
