@@ -89,7 +89,7 @@ export default class AgendaitemDecisionComponent extends Component {
     this.args.treatment.set('report', piece);
     this.args.treatment.save();
     this.isAddingReport = false;
-    this.loadReport.perform();
+    await this.loadReport.perform();
   }
 
   @task
