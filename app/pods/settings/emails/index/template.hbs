@@ -1,0 +1,54 @@
+{{ page-title
+  (t "manage-emails")
+}}
+<div class="vlc-panel-layout__main-content auk-u-m-8">
+  {{#each this.emails as |email|}}
+    <div class="auk-u-mb-3">
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <h4 class="auk-panel__title">{{email.title}}</h4>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+            {{t "subject"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput
+            {{on "change" (fn this.setMailSubject email)}}
+            @value={{ await email.subject }}
+            type="text"
+            @block="true"
+          />
+          <pre>{{ await email.defaultSubject }}</pre>
+          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+            {{t "accompanying-text"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuTextarea
+            id="emailMessage"
+            @rows="15"
+            @value={{await email.content}}
+            {{on "change" (fn this.setMailContent email)}}
+            data-test-email-content-textarea
+          />
+          <pre>{{ await email.defaultContent }}</pre>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
+    </div>
+  {{/each}}
+
+  {{!-- LOADER --}}
+
+  <WebComponents::VlSaveButton
+    @text={{t "save"}}
+    @isLoading={{this.showLoader}}
+    @saveAction={{this.saveSettings}} />
+
+  {{#if this.showLoader}}
+    <WebComponents::AuLoadingOverlay/>
+  {{/if}}
+</div>
