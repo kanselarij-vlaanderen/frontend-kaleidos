@@ -102,11 +102,20 @@
                 <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
                   {{t "publications-number"}}
                 </WebComponents::AuLabel>
-                <WebComponents::AuInput type="text" id="publicationNumberInput" class="auk-input--max-width"
+                <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width"
                                         @block="true"
                                         @value={{mut publication.number}}
                                         data-test-create-publication-modal-number-input
                                         {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                />
+                <WebComponents::AuLabel for="publicationSuffixInput" @isRequired={{true}}>
+                  {{t "publications-suffix"}}
+                </WebComponents::AuLabel>
+                <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width"
+                                        @block="true"
+                                        @value={{mut publication.suffix}}
+                                        data-test-create-publication-modal-suffix-input
+                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
                 />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>

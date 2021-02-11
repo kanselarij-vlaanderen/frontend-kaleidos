@@ -668,6 +668,7 @@
   "withdraw-publication": "Publicatie intrekken",
   "publications-new-warning-message": "Deze actie dient voor publicaties van documenten die niet via de Ministerraad komen.",
   "publications-number": "Publicatienummer",
+  "publications-suffix": "Suffix",
   "input-error-message": "Dit veld dient ingevuld te worden.",
   "modal-error-alert-message": "Eén of meerdere velden bevatten een fout.",
   "modal-error-missing-pieces": "Gelieve eén of meerdere stukken te selecteren.",

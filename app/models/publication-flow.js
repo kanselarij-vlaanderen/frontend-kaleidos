@@ -8,6 +8,7 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default class PublicationFlow extends Model {
   // Attributes.
   @attr('number') publicationNumber;
+  @attr('string') publicationSuffix;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishedAt;

@@ -35,6 +35,7 @@ export default class PublicationsController extends Controller {
   @tracked
   publication = {
     number: null,
+    suffix: null,
     shortTitle: null,
     longTitle: null,
   };
@@ -98,7 +99,7 @@ export default class PublicationsController extends Controller {
 
   @action
   async isPublicationNumberAlreadyTaken() {
-    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number);
+    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number, this.publication.suffix);
     if (isPublicationNumberTaken) {
       this.numberIsAlreadyUsed = true;
     } else {

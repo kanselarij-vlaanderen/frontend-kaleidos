@@ -72,6 +72,9 @@
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
                 <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}} @block="true"
                   {{on "input" (perform this.setPublicationNumber)}} />
+                <WebComponents::AuInput type="text" value={{this.model.publicationFlow.publicationSuffix}} @block="true"
+                  {{on "input" (perform this.setPublicationSuffix)}} />
+
                 {{#if this.numberIsAlreadyUsed}}
                   <div class="auk-form-help-text auk-form-help-text--danger">
                     <WebComponents::AuIcon @name="alert-triangle"/>

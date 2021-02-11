@@ -75,10 +75,12 @@ export default class PublicationService extends Service {
       });
   }
 
-  async publicationNumberAlreadyTaken(publicationNumber, publicationFlowId) {
+  async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
     const publicationWithId = await this.store.query('publication-flow', {
       filter: {
-        ':exact:publication-number': publicationNumber,
+        // :exact: does not work on numbers.
+        'publication-number': publicationNumber,
+        ':exact:publication-suffix': publicationSuffix,
       },
     });
     const publicationNumberTakenList = publicationWithId.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
