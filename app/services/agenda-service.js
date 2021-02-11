@@ -114,6 +114,23 @@ export default Service.extend({
       });
   },
 
+  async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
+    /* eslint-disable no-unreachable */
+    return []; // Mock until method available
+    const url = `/agenda/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const piecesFromStore = [];
+    for (const piece of payload.data) {
+      let pieceFromStore = this.store.peekRecord(piece.type, piece.id);
+      if (!pieceFromStore) {
+        pieceFromStore = this.store.queryRecord(piece.type, piece.id);
+      }
+      piecesFromStore.push(piece);
+    }
+    return piecesFromStore;
+  },
+
   async computeNextItemNumber(agenda, isAnnouncement) {
     const lastItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': agenda.id,

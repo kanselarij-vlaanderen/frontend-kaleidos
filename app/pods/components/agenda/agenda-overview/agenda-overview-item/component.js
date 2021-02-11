@@ -14,15 +14,19 @@ export default class AgendaOverviewItem extends Component {
    *
    * @argument agendaitem
    * @argument isEditingOverview
+   * @argument currentAgenda: both agenda's for determining changed documents
+   * @argument previousAgenda
    */
 
   @service store;
   @service sessionService;
+  @service agendaService;
   @service publicationService;
   @service router;
   @service('current-session') currentSessionService;
 
-  @tracked agendaitemDocuments
+  @tracked agendaitemDocuments;
+  @tracked newAgendaitemDocuments;
   @tracked subcase;
   @tracked newsletterIsVisible;
 
@@ -31,6 +35,7 @@ export default class AgendaOverviewItem extends Component {
   constructor() {
     super(...arguments);
     this.agendaitemDocuments = [];
+    this.newAgendaitemDocuments = [];
     this.loadDocuments.perform();
   }
 
@@ -84,6 +89,19 @@ export default class AgendaOverviewItem extends Component {
   @action
   cancelLazyLoad(task) {
     task.cancelAll();
+  }
+
+  @dropTask
+  *lazyLoadNewDocuments() {
+    if (this.args.previousAgenda) { // Highlighting everything on the first agenda-version as "new" doesn't add a lot of value.
+      yield this.lazyLoad.perform(this.loadNewDocuments);
+    }
+  }
+
+  @dropTask
+  *loadNewDocuments() { // Documents to be highlighted
+    this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
+      this.args.previousAgenda.id, this.args.agendaitem.id);
   }
 
   @dropTask

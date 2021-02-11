@@ -40,6 +40,7 @@ export default class AgendaOverview extends Component {
    * @argument notas
    * @argument announcements
    * @argument currentAgenda
+   * @argument previousAgenda
    */
   @service sessionService;
   @service agendaService;

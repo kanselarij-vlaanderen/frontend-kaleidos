@@ -53,6 +53,8 @@
         <li class="vlc-agenda-items__sub-item">
           <Agenda::AgendaOverview::AgendaOverviewItem
             @agendaitem={{agendaitem}}
+            @currentAgenda={{@currentAgenda}}
+            @previousAgenda={{@previousAgenda}}
             @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
             @showFormallyOkStatus={{this.isDesignAgenda}}
           />
@@ -78,6 +80,8 @@
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{agendaitem}}
+              @currentAgenda={{@currentAgenda}}
+              @previousAgenda={{@previousAgenda}}
               @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
             />
@@ -106,6 +110,8 @@
           >
             <Agenda::AgendaOverview::AgendaOverviewItem
               @agendaitem={{announcement}}
+              @currentAgenda={{@currentAgenda}}
+              @previousAgenda={{@previousAgenda}}
               @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
             />
