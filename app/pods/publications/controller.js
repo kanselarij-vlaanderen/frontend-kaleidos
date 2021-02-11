@@ -24,12 +24,12 @@ export default class PublicationsController extends Controller {
 
   @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
     || {
-      ministerFilterOption: false,
-      notMinisterFilterOption: false,
-      publishedFilterOption: false,
-      toPublishFilterOption: false,
-      pausedFilterOption: false,
-      withdrawnFilterOption: false,
+      ministerFilterOption: true,
+      notMinisterFilterOption: true,
+      publishedFilterOption: true,
+      toPublishFilterOption: true,
+      pausedFilterOption: true,
+      withdrawnFilterOption: true,
     };
 
   @tracked
@@ -141,8 +141,12 @@ export default class PublicationsController extends Controller {
 
   @action
   closeFilterModal() {
-    this.filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
-    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    const localeFilterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
+    if (localeFilterOptionKeys !== null) {
+      localStorage.setItem('filterOptions', JSON.stringify(localeFilterOptionKeys));
+    } else {
+      localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    }
     this.isShowPublicationFilterModal = false;
   }
 
@@ -162,12 +166,12 @@ export default class PublicationsController extends Controller {
   @action
   resetModelFilterOptions() {
     this.filterOptionKeys = {
-      ministerFilterOption: false,
-      notMinisterFilterOption: false,
-      publishedFilterOption: false,
-      toPublishFilterOption: false,
-      pausedFilterOption: false,
-      withdrawnFilterOption: false,
+      ministerFilterOption: true,
+      notMinisterFilterOption: true,
+      publishedFilterOption: true,
+      toPublishFilterOption: true,
+      pausedFilterOption: true,
+      withdrawnFilterOption: true,
     };
     localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.send('refreshModel');
