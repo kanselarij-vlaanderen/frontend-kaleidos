@@ -70,9 +70,9 @@
             <div class="auk-u-m-3">
               <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}} @block="true"
+                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}}
                   {{on "input" (perform this.setPublicationNumber)}} />
-                <WebComponents::AuInput type="text" value={{this.model.publicationFlow.publicationSuffix}} @block="true"
+                <WebComponents::AuInput size="5" type="text" value={{this.model.publicationFlow.publicationSuffix}}
                   {{on "input" (perform this.setPublicationSuffix)}} />
 
                 {{#if this.numberIsAlreadyUsed}}

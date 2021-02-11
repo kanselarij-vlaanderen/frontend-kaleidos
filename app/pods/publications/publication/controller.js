@@ -127,9 +127,9 @@ export default class PublicationController extends Controller {
   get casePath() {
     let title = this.intl.t('publication-flow');
     if (!this.model.latestSubcaseOnMeeting) {
-      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix);
     } else {
-      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix);
     }
     return title;
   }
@@ -161,10 +161,20 @@ export default class PublicationController extends Controller {
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);
-    this.model.publicationFlow.set('publicationNumber', event.target.value);
-    this.numberIsAlreadyUsed = false;
-    this.model.publicationFlow.save();
+    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.publicationFlow.get('publicationSuffix'), this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
+      if (isPublicationNumberTaken) {
+        this.numberIsAlreadyUsed = true;
+        this.toaster.error(this.intl.t('publication-number-already-taken'), this.intl.t('warning-title'), {
+          timeOut: 5000,
+        });
+      } else {
+        this.model.publicationFlow.set('publicationNumber', event.target.value);
+        this.numberIsAlreadyUsed = false;
+        this.model.publicationFlow.save();
+      }
+    });
   }
+
   @restartableTask
   *setPublicationSuffix(event) {
     yield timeout(1000);

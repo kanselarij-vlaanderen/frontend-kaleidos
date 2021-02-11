@@ -716,7 +716,7 @@
   "upload-docx": "Upload Word versie",
   "delete-folder": "Map verwijderen",
   "view-document-details": "Bekijk document",
-  "publication-number-already-taken":"Dit publicatienummer is reeds in gebruik.",
+  "publication-number-already-taken":"Dit publicatienummer en suffix zijn reeds in gebruik.",
   "publication-date-after-translation-date":"De publicatiedatum moet altijd op of na de uiterste vertaaldatum liggen.",
   "version": "Versie",
   "only-on-final-agenda": "Enkel op definitieve agenda",

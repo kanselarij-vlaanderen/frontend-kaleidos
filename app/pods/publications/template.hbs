@@ -115,7 +115,7 @@
                                         @block="true"
                                         @value={{mut publication.suffix}}
                                         data-test-create-publication-modal-suffix-input
-                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
                 />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>
