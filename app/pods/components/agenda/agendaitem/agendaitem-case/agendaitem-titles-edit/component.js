@@ -52,12 +52,12 @@ export default class AgendaitemTitlesEdit extends Component {
 
     try {
       await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
-      if (this.newsletterInfo &&
-        (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
-          if (this.args.agendaitem.showAsRemark) {
-            this.newsletterInfo.set('richtext', title);
-            this.newsletterInfo.set('title',shortTitle);
-          }
+      if (this.newsletterInfo
+        && (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
+        if (this.args.agendaitem.showAsRemark) {
+          this.newsletterInfo.set('richtext', title);
+          this.newsletterInfo.set('title', shortTitle);
+        }
         await this.newsletterInfo.save();
       }
 
