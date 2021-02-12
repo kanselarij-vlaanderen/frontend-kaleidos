@@ -2,6 +2,9 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { A } from '@ember/array';
+import {
+  set, action
+} from '@ember/object';
 
 export default class PublicationDocumentsRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model() {
@@ -23,6 +26,15 @@ export default class PublicationDocumentsRoute extends Route.extend(Authenticate
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
     controller.selectedPieces = A([]);
+    controller.selectedFileExtensions = [];
+    controller.selectedPieceTypes = [];
+    controller.pieceName = '';
     controller.renderPieces = true;
+    controller.selectedAll = false;
+  }
+
+  @action
+  willTransition(transition) {
+    this.controller.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
   }
 }
