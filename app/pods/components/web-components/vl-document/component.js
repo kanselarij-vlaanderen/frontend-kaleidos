@@ -54,21 +54,6 @@ export default class VlDocument extends Component {
     window.open(`/document/${this.piece.id}`);
   }
 
-  // TODO: @enableDelete will replace this
-  // isDeletable: computed('piece', 'piece.nextPiece', async function() {
-  //   const nextPiece = await this.piece.get('nextPiece');
-  //   if (nextPiece) {
-  //     return false;
-  //   const agendaitemsFromQuery = await this.store.query('agendaitem', {
-  //     filter: {
-  //       pieces: {
-  //         id: this.piece.id,
-  //       },
-  //     },
-  //   });
-  //   return agendaitemsFromQuery.length <= 1;
-  // }),
-
   @action
   deletePiece() {
     this.isVerifyingDelete = true;

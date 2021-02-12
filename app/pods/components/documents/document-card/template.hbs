@@ -170,9 +170,11 @@
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
               {{#each this.visiblePieces as |piece|}}
+                {{!-- TODO: also  disable delete when piece linked to other agenda-items while maintaining DDAU --}}
                 <WebComponents::VlDocument
-                  @didDeletePiece={{@didDeletePiece}}
                   @piece={{piece}}
+                  @enableDelete={{eq piece @piece}}
+                  @didDeletePiece={{@didDeletePiece}}
                 />
               {{/each}}
             </div>
