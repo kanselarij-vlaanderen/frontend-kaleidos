@@ -174,7 +174,7 @@
                           </WebComponents::AuDropdown::Item>
                         {{/if}}
                         {{#if (not (gt (await piece.agendaitems.length) 0))}}
-                          <WebComponents::AuDropdown::Item @href={{await piece.file.namedDownloadLink}} download={{await piece.file.downloadFilename}}>
+                          <WebComponents::AuDropdown::Item @href={{await piece.downloadFileLink}} download={{await piece.downloadFilename}}>
                             {{t "download"}}
                           </WebComponents::AuDropdown::Item>
                         {{/if}}
