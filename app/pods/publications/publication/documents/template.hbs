@@ -173,6 +173,11 @@
                             {{t "document-edit"}}
                           </WebComponents::AuDropdown::Item>
                         {{/if}}
+                        {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                          <WebComponents::AuDropdown::Item @href={{await piece.downloadFileLink}} download={{await piece.downloadFilename}}>
+                            {{t "download"}}
+                          </WebComponents::AuDropdown::Item>
+                        {{/if}}
 
                       {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents
                       that have been released by kanselarij
