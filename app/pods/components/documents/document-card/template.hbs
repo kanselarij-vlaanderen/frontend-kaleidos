@@ -160,7 +160,7 @@
           data-test-show-pieces-history
           {{on "click" (if this.isExpandedVersionHistory this.collapseVersionHistory (perform this.expandVersionHistory))}}
         >
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
+          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-{{if this.isExpandedVersionHistory "down" "right"}}"
           ></i>
           {{t "show-pieces"}}
           {{#if this.expandVersionHistory.isRunning}}
