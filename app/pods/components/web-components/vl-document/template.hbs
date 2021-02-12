@@ -5,7 +5,7 @@
   <div class="vlc-document-card-item" data-test-single-piece-history>
     <div class="vlc-document-card-item__title">
       <h6 class="vl-title vl-title--h6">
-        {{#if (await this.piece.downloadFileLink)}}
+        {{#if (not this.file)}}
           <AttachTooltip
             @arrow="true"
             @animation="shift"
