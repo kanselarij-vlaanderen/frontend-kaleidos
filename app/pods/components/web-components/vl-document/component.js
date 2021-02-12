@@ -36,6 +36,7 @@ export default class VlDocument extends Component {
   *loadPieceRelatedData() {
     const piece = this.args.piece;
     if (piece) {
+      this.piece = piece; // Assign what we already have, so that can be rendered already
       this.piece = (yield this.store.query('piece', {
         'filter[:id:]': piece.id,
         include: 'file,document-container,document-container.type,access-level',
