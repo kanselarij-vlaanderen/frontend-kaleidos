@@ -176,6 +176,7 @@
                   @piece={{piece}}
                   @enableDelete={{eq piece @piece}}
                   @didDeletePiece={{@didDeletePiece}}
+                  @didUpdateAccessLevel={{perform this.loadPieceRelatedData}}
                 />
               {{/each}}
             </div>

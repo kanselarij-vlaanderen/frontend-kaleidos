@@ -12,7 +12,8 @@ export default class VlDocument extends Component {
    *
    * @argument piece: a Piece object
    * @argument didDeletePiece: action triggered when a piece has been deleted
-   * @argument enableDelete
+   * @argument didUpdateAccessLevel: action triggered when the pieces'access level has been modified
+   * @argument enableDelete: boolean indicating if delete functionality may be exposed
    */
   @service store;
   @service currentSession;
@@ -103,6 +104,9 @@ export default class VlDocument extends Component {
     // TODO make sure not to overwrite things
     await this.piece.save();
     await this.loadPieceRelatedData.perform();
+    if (this.args.didUpdateAccessLevel) {
+      this.args.didUpdateAccessLevel(this.accessLevel);
+    }
   }
 
   @action
