@@ -54,7 +54,7 @@ export default class AgendaitemTitlesEdit extends Component {
       await saveSubcaseTitles(this.args.agendaitem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, shouldResetFormallyOk);
       if (this.newsletterInfo
         && (this.newsletterInfo.get('hasDirtyAttributes') || this.args.agendaitem.showAsRemark)) {
-        if (this.args.agendaitem.showAsRemark) {
+        if (this.args.agendaitem.showAsRemark) { // Keep generated newsletterInfo for announcement in sync
           this.newsletterInfo.set('richtext', title);
           this.newsletterInfo.set('title', shortTitle);
         }
