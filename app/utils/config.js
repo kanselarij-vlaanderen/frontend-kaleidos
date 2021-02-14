@@ -77,7 +77,15 @@ export default EmberObject.create({
     },
     publishRequest: {
       content: 'Beste,\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
-      subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%numac%%)',
+      subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%nummer%%)',
+    },
+    withdrawalTranslation: {
+      content: 'Beste,\n\nIntrekking vertaling voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      subject: '[%%kaleidosenvironment%%] Intrekking vertalingsaanvraag (%%nummer%%)',
+    },
+    withdrawalPublishPreview: {
+      content: 'Beste,\n\nIntrekking drukproef voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      subject: '[%%kaleidosenvironment%%] Intrekking drukproef (%%nummer%%)',
     },
   },
   formallyOkOptions: [
@@ -223,15 +231,15 @@ export default EmberObject.create({
   },
   ACTIVITY_STATUSSES: {
     open: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/917349a2-4361-11eb-b378-0242ac130002',
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/917349a2-4361-11eb-b378-0242ac130002',
       id: '917349a2-4361-11eb-b378-0242ac130002',
     },
     withdrawn: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/b26eb1a0-4361-11eb-b378-0242ac130002',
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/b26eb1a0-4361-11eb-b378-0242ac130002',
       id: 'b26eb1a0-4361-11eb-b378-0242ac130002',
     },
     closed: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-types/a6f7b9f2-4361-11eb-b378-0242ac130002',
+      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/a6f7b9f2-4361-11eb-b378-0242ac130002',
       id: 'a6f7b9f2-4361-11eb-b378-0242ac130002',
     },
   },
@@ -268,6 +276,8 @@ export default EmberObject.create({
     TO: {
       translationsEmail: 'johan.delaure@redpencil.be',
       publishpreviewEmail: 'johan.delaure@redpencil.be',
+      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.be',
+      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.be',
       publishEmail: 'johan.delaure@redpencil.be',
     },
   },

@@ -11,6 +11,19 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     }, {
       include: 'case,contact-person,status,type',
     });
+    const _case = await publicationFlow.get('case');
+
+    const subcasesOnMeeting = await this.store.query('subcase', {
+      filter: {
+        case: {
+          id: _case.id,
+        },
+        ':has:agenda-activities': 'yes',
+      },
+      sort: '-created',
+      include: 'mandatees',
+    });
+
 
     const totalTranslations = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
@@ -41,12 +54,20 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       'filter[status][:id:]': CONFIG.ACTIVITY_STATUSSES.closed.id,
     });
 
+    const pieces = await _case.get('pieces');
+    const documentCount = pieces.length;
+
     return hash({
       publicationFlow,
+      latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
+      case: _case,
       counts: {
+        documentCount: documentCount,
         totalTranslations: totalTranslations.length,
         closedOrWithdrawnTranslationRequests: closedTranslationRequests.length + withdrawnTranslationRequests.length,
+        openTranslationRequests: totalTranslations.length - closedTranslationRequests.length - withdrawnTranslationRequests.length,
         totalPublishPreviewRequests: totalPublishPreviewRequests.length,
+        openPublishPreviewRequests: totalPublishPreviewRequests.length - closedPublishPreviewRequests.length - withdrawnPublishPreviewRequests.length,
         closedOrWithdrawnPublishPrevieuwRequests: closedPublishPreviewRequests.length + withdrawnPublishPreviewRequests.length,
       },
       refreshAction: this.refreshModel,
