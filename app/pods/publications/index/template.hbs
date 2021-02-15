@@ -170,12 +170,21 @@
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
           <td class="auk-u-text-nowrap">
             {{#if row.publishBefore}}
-              {{#if (is-before row.publishBefore moment)}}
-                <span class="auk-form-help-text--warning">
-                  <WebComponents::AuIcon  @name="alert-triangle"/>
-                </span>
+              {{#if
+                (is-between (moment-subtract row.publishBefore 2 precision='days') row.publishBefore)
+              }}
+                <div class="auk-form-help-text--warning">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else if (is-before row.publishBefore now)}}
+                <div class="auk-form-help-text--danger">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else}}
+                <div>
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
               {{/if}}
-              {{moment-format row.publishBefore "DD-MM-YYYY"}}
             {{else}}
               {{t "dash"}}
             {{/if}}
