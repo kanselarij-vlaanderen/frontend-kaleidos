@@ -169,11 +169,19 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
           <td class="auk-u-text-nowrap">
-            {{if
-              row.publishBefore
-              (moment-format row.publishBefore "DD-MM-YYYY")
-              (t "dash")
-            }}
+            {{#if row.publishBefore}}
+              {{#if (is-before row.publishBefore moment)}}
+                <span class="auk-form-help-text--warning">
+                  <WebComponents::AuIcon  @name="alert-triangle"/>
+                </span>
+                {{moment-format row.publishBefore "DD-MM-YYYY"}}
+
+              {{else}}
+                {{moment-format row.publishBefore "DD-MM-YYYY"}}
+              {{/if}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
