@@ -20,7 +20,6 @@ export default class FileUploader extends Component {
   @tracked isLoading = null;
 
   @tracked filesInQueue = alias('fileQueue.files');
-
   uploadedFileAction = this.args.uploadedFileAction;
 
   @action
@@ -51,6 +50,7 @@ export default class FileUploader extends Component {
 
   @action
   uploadFile(file) {
+    this.uploadedFileLength = 0;
     this.uploadFileTask.perform(file);
   }
 
