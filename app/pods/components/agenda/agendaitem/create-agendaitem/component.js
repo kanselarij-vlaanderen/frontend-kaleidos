@@ -39,6 +39,7 @@ export default Component.extend(DataTableRouteMixin, {
       filter: {
         ':has-no:agenda-activities': 'yes',
         ':not:is-archived': 'true',
+        ':has-no:publication-flow': 'yes',
       },
     };
 
