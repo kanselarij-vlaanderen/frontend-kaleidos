@@ -24,6 +24,7 @@ export default class PublicationController extends Controller {
   @tracked collapsed = !this.get('media.isBigScreen');
   @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
+  @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
 
 
@@ -50,7 +51,7 @@ export default class PublicationController extends Controller {
     },
   }, {
     id: CONFIG.publicationStatusWithdrawn.id,
-    label: 'ingetrokken',
+    label: 'Ingetrokken',
     icon: {
       svg: 'circle-close',
       color: 'danger',
@@ -89,6 +90,13 @@ export default class PublicationController extends Controller {
     return this.model.publicationFlow.get('publishBefore');
   }
 
+  get getRequestedPublicationDate() {
+    if (!this.model.publicationFlow.get('publishDateRequested')) {
+      return null;
+    }
+    return this.model.publicationFlow.get('publishDateRequested');
+  }
+
   get getPublicationDate() {
     if (!this.model.publicationFlow.get('publishedAt')) {
       return null;
@@ -122,6 +130,16 @@ export default class PublicationController extends Controller {
         .isBefore(moment());
     }
     return false;
+  }
+
+  get casePath() {
+    let title = this.intl.t('publication-flow');
+    if (!this.model.latestSubcaseOnMeeting) {
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    } else {
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+    }
+    return title;
   }
 
   @action
@@ -207,6 +225,12 @@ export default class PublicationController extends Controller {
         });
       this.publicationNotAfterTranslationForPublication = false;
     }
+  }
+
+  @action
+  setRequestedPublicationDate(event) {
+    this.model.publicationFlow.set('publishDateRequested', new Date(event));
+    this.model.publicationFlow.save();
   }
 
   @action
@@ -297,6 +321,9 @@ export default class PublicationController extends Controller {
       return 'auk-form-group--error';
     }
     return null;
+  }
+  get documentsCount() {
+    return `(${this.model.counts.documentCount})`;
   }
 
   get showStatusForTranslations() {

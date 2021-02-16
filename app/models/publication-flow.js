@@ -10,6 +10,7 @@ export default class PublicationFlow extends Model {
   @attr('string') publicationNumber;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
+  @attr('datetime') publishDateRequested;
   @attr('datetime') publishedAt;
   @attr('string') numacNumber; // is this only 1 per flow ?
   @attr('string') remark;

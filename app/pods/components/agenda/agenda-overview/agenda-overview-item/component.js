@@ -66,9 +66,8 @@ export default class AgendaOverviewItem extends Component {
   async startPublication() {
     this.showLoader = true;
     const _case = await this.args.agendaitem.get('case');
-    const newPublication = await this.publicationService.createNewPublication(0, _case.id);
+    await this.publicationService.createNewPublication(0, _case.id);
     this.showLoader = false;
-    this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
   @action
