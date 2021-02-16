@@ -2,6 +2,34 @@
   (t "manage-emails")
 }}
 <div class="vlc-panel-layout__main-content auk-u-m-8">
+  <div class="auk-u-mb-3">
+    <WebComponents::AuPanel>
+      <WebComponents::AuPanel::Header>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h4 class="auk-panel__title">{{t "manage-emails"}}</h4>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuPanel::Header>
+      <WebComponents::AuPanel::Body>
+        <pre>{{t "manage-emails-tokens"}}</pre>
+        <LinkTo
+                data-test-manage-emails
+                @tagName="button"
+                @type="button"
+                class="vl-button vl-button--tertiary vl-button--icon-before"
+                @route="settings.emails.debug"
+        >
+          {{t "send-test-mail"}}
+        </LinkTo>
+      </WebComponents::AuPanel::Body>
+    </WebComponents::AuPanel>
+  </div>
+</div>
+
+<div class="vlc-panel-layout__main-content auk-u-m-8">
   {{#each this.emails as |email|}}
     <div class="auk-u-mb-3">
       <WebComponents::AuPanel>

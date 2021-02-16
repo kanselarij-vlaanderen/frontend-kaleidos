@@ -63,10 +63,8 @@ export default class SettingsEmailController extends Controller {
     for (let index = 0; index < this.emails.length; index++) {
       const item = this.emails[index];
       const configSubject = this.getConfig(item.subjectKey, item.defaultSubject).then((result) => result);
-      console.log(configSubject);
       set(item, 'subject', configSubject);
       const configContent = this.getConfig(item.contentKey, item.defaultContent).then((result) => result);
-      console.log(configContent);
       set(item, 'content', configContent);
     }
   }
@@ -84,8 +82,8 @@ export default class SettingsEmailController extends Controller {
     this.showLoader = true;
     for (let index = 0; index < this.emails.length; index ++) {
       const email = this.emails[index];
-      await this.configService.set(email.subjectKey, email.subject);
-      await this.configService.set(email.contentKey, email.content);
+      await this.configService.set(email.subjectKey, await email.subject);
+      await this.configService.set(email.contentKey, await email.content);
     }
     this.showLoader = false;
   }
