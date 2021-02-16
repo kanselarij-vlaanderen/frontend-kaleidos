@@ -2,11 +2,13 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import CONFIG from 'fe-redpencil/app/utils/config';
+import CONFIG from 'fe-redpencil/utils/config';
 
-export default class SettingsEmailDebugController extends Controller {
+export default class SettingsEmailsDebugController extends Controller {
   @service configService;
-  @service mailService;
+  @service emailService;
+  @service toaster;
+  @service intl;
   @tracked showLoader = false;
 
   @tracked subject = '';
@@ -16,7 +18,11 @@ export default class SettingsEmailDebugController extends Controller {
   @action
   async sendTestMail() {
     this.showLoader = true;
-    await this.mailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content);
+    await this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content);
+    this.subject = '';
+    this.content = '';
+    this.toMailAddress = '';
+    this.toaster.success(this.intl.t('sent-test-mail'), this.intl.t('sent-test-mail'));
     this.showLoader = false;
   }
   @action
