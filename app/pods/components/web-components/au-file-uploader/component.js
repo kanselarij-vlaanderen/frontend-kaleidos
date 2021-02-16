@@ -48,6 +48,7 @@ export default class FileUploader extends Component {
       console.warn('An exception occurred', exception);
     } finally {
       this.isLoading = false;
+      this.showLoader = false;
     }
   }
 
