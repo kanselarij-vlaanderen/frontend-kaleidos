@@ -4,7 +4,6 @@ $headers-typo: (
     space: 6rem,
     line-height: 1.2,
     weight: 300,
-    family: $accent-font,
     size-s: 3rem,
     space-s: 3rem
   ),
@@ -13,7 +12,6 @@ $headers-typo: (
     space: 2rem,
     line-height: 1.2,
     weight: 400,
-    family: $accent-font,
     size-s: 2.2rem,
     space-s: 1.5rem
   ),
@@ -22,7 +20,6 @@ $headers-typo: (
     space: 2rem,
     line-height: 1.2,
     weight: 500,
-    family: $accent-font,
     size-s: 1.8rem,
     space-s: 1.5rem
   ),
@@ -31,7 +28,6 @@ $headers-typo: (
     space: 0,
     line-height: 1.2,
     weight: 500,
-    family: $base-font,
     size-s: 1.8rem,
     space-s: 0
   ),
@@ -40,7 +36,6 @@ $headers-typo: (
     space: 0,
     line-height: 1.44,
     weight: 500,
-    family: $base-font,
     size-s: 1.6rem,
     space-s: 0
   ),
@@ -49,7 +44,6 @@ $headers-typo: (
     space: 0,
     line-height: 1.2,
     weight: 500,
-    family: $base-font,
     size-s: 1.4rem,
     space-s: 0
   )
@@ -59,7 +53,6 @@ $headers-typo: (
   @each $size, $size-info in $headers-typo {
     @if $header-size == $size {
       font-size: map-get($size-info, size);
-      font-family: map-get($size-info, family);
       font-weight: map-get($size-info, weight);
       margin-bottom: map-get($size-info, space);
       line-height: map-get($size-info, line-height);

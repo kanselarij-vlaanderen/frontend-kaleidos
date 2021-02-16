@@ -8,7 +8,6 @@
 
   .vlc-page-header__title {
     padding-bottom: 0.5rem;
-    font-family: flanders-serif, serif;
     font-size: 2rem;
     font-weight: 500;
     margin: 0;
@@ -30,7 +29,6 @@
   }
 
   .vlc-page-header__subtitle {
-    font-family: $base-font;
     font-weight: normal;
   }
 }
@@ -51,7 +49,6 @@
 
 // Same as .vlc-page-header__title - refactor
 .vlc-toolbar__title {
-  font-family: flanders-serif,sans-serif;
   font-size: 2.4rem;
   font-weight: 500;
   margin: 0;
