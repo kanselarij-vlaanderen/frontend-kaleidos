@@ -11,8 +11,9 @@
     as |table|>
     <table.content as |c|>
       <c.header>
+        {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <th>{{t "publications-table-case-name"}}</th>
+          <th style="min-width: 50rem">{{t "publications-table-case-name"}}</th>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <ThSortable
@@ -54,7 +55,6 @@
             @label={{t "publications-table-final-publication-date"}}
           />
         {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
@@ -130,13 +130,22 @@
       </c.header>
       <c.body class="tr-hover" as |row|>
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <td>
-            {{if row.case.shortTitle row.case.shortTitle (t "dash")}}
+        {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
+          <td class="auk-table__col--6">
+            {{if
+              row.case.shortTitle
+              row.case.shortTitle
+              (if row.case.title row.case.title (t "dash"))
+            }}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
-            {{ row.publicationNumber }} {{ row.publicationSuffix }}
+            {{#if row.publicationNumber}}
+              {{ row.publicationNumber }} {{ row.publicationSuffix }}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
@@ -151,11 +160,15 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
           <td>
-            {{t "dash"}}
+            {{#if row.publishDateRequested}}
+              {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{if
               row.publishBefore
               (moment-format row.publishBefore "DD-MM-YYYY")
@@ -163,9 +176,8 @@
             }}
           </td>
         {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{if
               row.publishedAt
               (moment-format row.publishedAt "DD-MM-YYYY")
@@ -187,7 +199,7 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{moment-format row.modified "DD-MM-YYYY"}}<br/>
             <span class="auk-u-text-small auk-u-muted">
               {{moment-format row.modified "HH:mm"}}
