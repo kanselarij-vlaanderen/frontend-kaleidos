@@ -181,7 +181,8 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-application/loader';
 
 // Components (from npm package)
-@import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
+// @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
+@import "au-kaleidos-css/auk-standalone";
 
 // Styleguide
 @import "custom-application/styleguide/_br-prototype-wrapper";
