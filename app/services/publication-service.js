@@ -112,29 +112,18 @@ export default class PublicationService extends Service {
     this.cachedData = A([]);
   }
 
-  async createNumacNumber(name) {
-    const numacNumber = this.store.createRecord('numac-number', {
+  async createNumacNumber(name, publicationFlow) {
+    const numacNumber = await this.store.createRecord('numac-number', {
       name: name,
+      publicationFlow: publicationFlow,
     });
-    return await numacNumber.save();
-  }
-
-  async linkNumacNumber(numacNumber, publicationFlow) {
-    const numberslist = await publicationFlow.get('numacNumbers');
-    numberslist.pushObject(numacNumber);
-    publicationFlow.set('numacNumbers', numberslist);
-    return await publicationFlow.save();
+    await numacNumber.save();
+    await publicationFlow.hasMany('numacNumbers').reload();
+    return numacNumber;
   }
 
   async unlinkNumacNumber(numacNumber, publicationFlow) {
-    const numberslist = await publicationFlow.get('numacNumbers').toArray();
-    for (let index = 0; index < numberslist.length; index++) {
-      const numacNumberInLoop = numberslist[index];
-      if (numacNumberInLoop.get('id') === numacNumber.get('id')) {
-        numberslist.splice(index, 1);
-      }
-    }
-    publicationFlow.set('numacNumbers', numberslist);
-    return await publicationFlow.save();
+    await numacNumber.deleteRecord();
+    await publicationFlow.hasMany('numacNumbers').reload();
   }
 }
