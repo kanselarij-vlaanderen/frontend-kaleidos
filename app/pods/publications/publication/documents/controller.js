@@ -17,6 +17,7 @@ export default class PublicationDocumentsController extends Controller {
   @service subcasesService;
   @service emailService;
   @service fileService;
+  @service configService;
   @service store;
 
   @tracked isOpenPieceUploadModal = false;
@@ -64,6 +65,9 @@ export default class PublicationDocumentsController extends Controller {
     return pieces.map((piece) => piece.name).join('\n');
   }
 
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
+  }
   constructor() {
     super(...arguments);
     this.loadData.perform();
@@ -264,8 +268,10 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async openPublishPreviewRequestModal() {
     set(this.previewActivity, 'pieces', this.selectedPieces);
-    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.content, this.model.publicationFlow, this.model.case));
-    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishPreviewRequest.subject, this.model.publicationFlow, this.model.case));
+    const subject = await this.getConfig('email:publishPreviewRequest:subject', CONFIG.mail.publishPreviewRequest.subject);
+    const content = await this.getConfig('email:publishPreviewRequest:content', CONFIG.mail.publishPreviewRequest.content);
+    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
   }
 
@@ -319,8 +325,10 @@ export default class PublicationDocumentsController extends Controller {
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
     this.translateActivity.pieces = this.selectedPieces;
-    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.translationRequest.content, this.model.publicationFlow, this.model.case));
-    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.translationRequest.subject, this.model.publicationFlow, this.model.case));
+    const subject = await this.getConfig('email:translationRequest:subject', CONFIG.mail.translationRequest.subject);
+    const content = await this.getConfig('email:translationRequest:content', CONFIG.mail.translationRequest.content);
+    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 

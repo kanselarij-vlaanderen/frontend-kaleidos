@@ -10,6 +10,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class PublicationTranslationController extends Controller {
   @service publicationService;
+  @service configService;
 
   // Tracked.
   @tracked showLoader = false;
@@ -27,14 +28,20 @@ export default class PublicationTranslationController extends Controller {
     return this.model.translationActivities.map((activity) => activity);
   }
 
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
+  }
+
   @action
   async showWithdrawalWindow(translationActivity) {
     this.withdrawActivity = translationActivity;
     const subcase = await translationActivity.get('subcase');
     const publicationFlow = await subcase.get('publicationFlow');
     const _case = await publicationFlow.get('case');
-    set(this, 'withdrawalContent', this.activityService.replaceTokens(CONFIG.mail.withdrawalTranslation.content, publicationFlow, _case));
-    set(this, 'withdrawalSubject', this.activityService.replaceTokens(CONFIG.mail.withdrawalTranslation.subject, publicationFlow, _case));
+    const subject = await this.getConfig('email:withdrawalTranslation:subject', CONFIG.mail.withdrawalTranslation.subject);
+    const content = await this.getConfig('email:withdrawalTranslation:content', CONFIG.mail.withdrawalTranslation.content);
+    set(this, 'withdrawalContent', this.activityService.replaceTokens(content, publicationFlow, _case));
+    set(this, 'withdrawalSubject', this.activityService.replaceTokens(subject, publicationFlow, _case));
     this.showWithdrawPopup = true;
   }
 

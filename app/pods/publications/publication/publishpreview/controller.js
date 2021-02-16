@@ -16,6 +16,7 @@ export default class PublicationPublishPreviewController extends Controller {
   @service emailService;
   @service subcasesService;
   @service fileService;
+  @service configService;
 
   // Properties for making the design.
   @tracked withdrawn = true;
@@ -51,6 +52,10 @@ export default class PublicationPublishPreviewController extends Controller {
   get publishPreviewActivities() {
     const publishPreviewActivities = this.model.publishPreviewActivities.map((activity) => activity);
     return publishPreviewActivities;
+  }
+
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
   }
 
   @action
@@ -242,8 +247,10 @@ export default class PublicationPublishPreviewController extends Controller {
   async requestPublicationModal(activity) {
     this.publicationActivity.pieces = await activity.usedPieces;
     set(this.publicationActivity, 'previewActivity', activity);
-    set(this.publicationActivity, 'mailContent', this.activityService.replaceTokens(CONFIG.mail.publishRequest.content, this.model.publicationFlow, this.model.case));
-    set(this.publicationActivity, 'mailSubject', this.activityService.replaceTokens(CONFIG.mail.publishRequest.subject, this.model.publicationFlow, this.model.case));
+    const subject = await this.getConfig('email:publishRequest:subject', CONFIG.mail.publishRequest.subject);
+    const content = await this.getConfig('email:publishRequest:content', CONFIG.mail.publishRequest.content);
+    set(this.publicationActivity, 'mailContent', this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
+    set(this.publicationActivity, 'mailSubject', this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
     this.showpublicationModal = true;
   }
 
@@ -410,8 +417,10 @@ export default class PublicationPublishPreviewController extends Controller {
     const subcase = await activity.get('subcase');
     const publicationFlow = await subcase.get('publicationFlow');
     const _case = await publicationFlow.get('case');
-    set(this, 'withdrawalContent', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.content, publicationFlow, _case));
-    set(this, 'withdrawalSubject', this.activityService.replaceTokens(CONFIG.mail.withdrawalPublishPreview.subject, publicationFlow, _case));
+    const subject = await this.getConfig('email:withdrawalPublishPreview:subject', CONFIG.mail.withdrawalPublishPreview.subject);
+    const content = await this.getConfig('email:withdrawalPublishPreview:content', CONFIG.mail.withdrawalPublishPreview.content);
+    set(this, 'withdrawalContent', this.activityService.replaceTokens(content, publicationFlow, _case));
+    set(this, 'withdrawalSubject', this.activityService.replaceTokens(subject, publicationFlow, _case));
     this.showLoader = false;
     this.showWithdrawPopup = true;
   }
