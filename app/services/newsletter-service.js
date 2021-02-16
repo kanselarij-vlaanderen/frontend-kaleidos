@@ -124,6 +124,7 @@ export default Service.extend({
           })).firstObject;
           if (previousNewsItem) {
             news.set('richtext', previousNewsItem.richtext);
+            news.set('title', previousNewsItem.title);
             const themes = await previousNewsItem.get('themes');
             news.set('themes', themes);
           }

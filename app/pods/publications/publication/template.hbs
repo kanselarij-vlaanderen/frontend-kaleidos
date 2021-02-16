@@ -10,7 +10,14 @@
               this.casePath
             }}
           </span>
-          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>
+          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>
+            {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
+            {{if
+              model.publicationFlow.case.shortTitle
+              model.publicationFlow.case.shortTitle
+              model.publicationFlow.case.title
+            }}
+          </h4>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
@@ -112,6 +119,16 @@
                 {{/if}}
               </div>
               {{#if this.model.publicationFlow.status.isToBePublished}}
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
+                  {{#if this.showRequestedPublicationDatePicker}}
+                    <WebComponents::AuDatepicker
+                            @defaultDate={{this.getRequestedPublicationDate}}
+                            @onChange={{this.setRequestedPublicationDate}}/>
+                  {{else}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
+                  {{/if}}
+                </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
                   {{#if this.showPublicationDatePicker}}

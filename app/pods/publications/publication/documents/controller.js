@@ -20,6 +20,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
+  @tracked selectedAll = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -103,11 +104,30 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   changePieceSelection(selectedPiece) {
+    const tempPieces = [...this.filteredSortedPieces];
+    const tempSelectedPiece = tempPieces.find((piece) => piece.id === selectedPiece.id);
+
+    set(tempSelectedPiece, 'selectedForPublicationActivity', !selectedPiece.selectedForPublicationActivity);
+
     const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
+
     if (foundPiece) {
       this.selectedPieces.removeObject(selectedPiece);
     } else {
       this.selectedPieces.pushObject(selectedPiece);
+    }
+    this.filteredSortedPieces = tempPieces;
+  }
+
+  @action selectAllDocuments() {
+    this.selectedAll = !this.selectedAll;
+
+    if (this.selectedAll) {
+      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', true));
+      this.selectedPieces = this.filteredSortedPieces;
+    } else {
+      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
+      this.selectedPieces = A([]);
     }
   }
 
@@ -399,6 +419,7 @@ export default class PublicationDocumentsController extends Controller {
     this.pieceName = '';
     this.renderPieces = false;
     this.selectedPieces = A([]);
+    this.selectedAll = false;
     await this.sortedFilteredPieces();
     this.renderPieces = true;
   }
@@ -412,6 +433,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async filterDocumentsAction() {
     this.renderPieces = false;
+    this.selectedAll = false;
     this.selectedPieces = A([]);
     await this.sortedFilteredPieces();
     this.renderPieces = true;
@@ -420,6 +442,7 @@ export default class PublicationDocumentsController extends Controller {
   async sortedFilteredPieces() {
     this.showLoader = true;
     const filteredPieces =  [...this.model.case.sortedPieces];
+    filteredPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
     this.filteredSortedPieces = null;
     this.filteredSortedPieces = A([]);
 
