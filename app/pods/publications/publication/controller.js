@@ -79,8 +79,7 @@ export default class PublicationController extends Controller {
   }
 
   get getSelectedDocumentType() {
-    this.selectedDocumentType = this.model.publicationFlow.get('deducedType');
-    return this.selectedDocumentType;
+    return this.model.documentTypes.find((documentType) => documentType.id === this.model.publicationFlow.get('deducedType.id'));
   }
 
   get getPublicationStatus() {
