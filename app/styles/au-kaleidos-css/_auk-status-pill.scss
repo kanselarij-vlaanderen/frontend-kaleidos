@@ -1,0 +1,52 @@
+/* ==========================================================================
+  auk-status-pill
+   ========================================================================== */
+
+.auk-status-pill {
+  border: 0.1rem solid $au-gray-300;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  white-space: nowrap;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.auk-status-pill__label {
+  padding-left: 0.4rem;
+}
+
+.auk-status-pill--in-progress {
+  background-color: $au-yellow-200;
+  border: 0.1rem solid $au-yellow-200;
+  color: $au-yellow-600;
+  .auk-icon {
+    color: $au-yellow-600;
+  }
+}
+
+.auk-status-pill--done {
+  background-color: $au-green-200;
+  border: 0.1rem solid $au-green-200;
+  color: $au-green-700;
+  .auk-icon {
+    color: $au-green-700;
+  }
+}
+
+.auk-status-pill--not-started {
+  background-color: $au-blue-200;
+  border: 0.1rem solid $au-blue-200;
+  color: $au-blue-700;
+  .auk-icon {
+    color: $au-blue-700;
+  }
+}
+
+.auk-status-pill--error {
+  background-color: $au-red-200;
+  border: 0.1rem solid $au-red-200;
+  color: $au-red-700;
+  .auk-icon {
+    color: $au-red-700;
+  }
+}

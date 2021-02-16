@@ -1,0 +1,14 @@
+/* ==========================================================================
+  auk-button-toolbar
+   ========================================================================== */
+
+.auk-button-toolbar {
+  display: flex;
+  align-items: center;
+}
+
+.auk-button-toolbar {
+  .auk-button + .auk-button {
+    margin-left: 1rem;
+  }
+}

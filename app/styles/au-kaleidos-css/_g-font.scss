@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Font
+   ========================================================================== */
+
+/* Variables
+   ========================================================================== */
+
+$font-location  : "fonts" !default;
+$font-serif-path: "flanders-serif" !default;
+$font-sans-path: "flanders-sans" !default;
+$font-serif-name: "flanders-serif" !default;
+$font-sans-name: "flanders-sans" !default;
+
+/* Content
+  ========================================================================== */
+
+@font-face {
+  font-family: #{$font-serif-name};
+  src: url(#{$font-location}/#{$font-serif-path}-light.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-serif-path}-light.woff) format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-serif-name};
+  src: url(#{$font-location}/#{$font-serif-path}-regular.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-serif-path}-regular.woff) format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-serif-name};
+  src: url(#{$font-location}/#{$font-serif-path}-medium.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-serif-path}-medium.woff) format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-serif-name};
+  src: url(#{$font-location}/#{$font-serif-path}-bold.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-serif-path}-bold.woff) format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-sans-name};
+  src: url(#{$font-location}/#{$font-sans-path}-light.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-sans-path}-light.woff) format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-sans-name};
+  src: url(#{$font-location}/#{$font-sans-path}-regular.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-sans-path}-regular.woff) format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-sans-name};
+  src: url(#{$font-location}/#{$font-sans-path}-medium.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-sans-path}-medium.woff) format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: fallback;
+}
+
+@font-face {
+  font-family: #{$font-sans-name};
+  src: url(#{$font-location}/#{$font-sans-path}-bold.woff2) format("woff2"),
+       url(#{$font-location}/#{$font-sans-path}-bold.woff) format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+}

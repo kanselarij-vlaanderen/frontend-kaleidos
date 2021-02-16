@@ -1,0 +1,20 @@
+/* ==========================================================================
+  auk-columns
+  ========================================================================== */
+
+.auk-columns {
+  display: flex;
+}
+
+.auk-columns__column {
+  flex: 1 1 auto;
+  margin-right: 2.4rem;
+}
+
+.auk-columns__column:first-child {
+  width: 24rem;
+}
+
+.auk-columns__column:last-child {
+  margin-right: 0;
+}
