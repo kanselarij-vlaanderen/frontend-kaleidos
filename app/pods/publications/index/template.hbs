@@ -22,18 +22,20 @@
             @label={{t "publications-table-publication-number"}}
           />
         {{/if}}
+
+
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
-          <th>
-            <span class="auk-u-mr">
-              {{t "publications-table-derived-publicationtype"}}
-              <WebComponents::AuIcon @name="circle-info"/>
-              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                <p>
-                  {{t "publications-table-derived-publicationtype-info"}}
-                </p>
-              </EmberTooltip>
-            </span>
-          </th>
+          <ThSortable
+                  @currentSorting={{this.sort}}
+                  @field="deducedType.priority"
+                  @label={{t "deduced-publication-type"}}
+          />
+          {{!--<WebComponents::AuIcon @name="circle-info"/>
+          <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+            <p>
+              {{t "publications-table-derived-publicationtype-info"}}
+            </p>
+          </EmberTooltip>--}}
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
@@ -150,7 +152,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <td>
-            {{t "dash"}}
+            {{#if row.deducedType}}
+              {{ row.deducedType.label }}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}

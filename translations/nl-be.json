@@ -702,6 +702,7 @@
   "final-publication-date": "Uiterste datum publicatie",
   "accompanying-text": "Begeleidende tekst",
   "kind-of-publication": "Wijze van publicatie",
+  "deduced-publication-type": "Afgeleid publicatietype",
   "publication-form-publication-date": "PublicatieDatum BS",
   "publication-form-numac-nummer": "Werknummer BS",
   "no-numac-number-yet": "Nog geen werknummer",

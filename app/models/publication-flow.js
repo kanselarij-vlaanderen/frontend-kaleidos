@@ -26,7 +26,9 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-status', {
     inverse: null,
   }) status;
+
   @belongsTo('publication-type') type;
+  @belongsTo('document-type') deducedType;
 
   // Has many .
   @hasMany('subcase') subcases;
