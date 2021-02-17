@@ -2,9 +2,6 @@ const selectors = {
   vlModalComponents: {
     createNewAgendaModal: '[data-test-vl-modal="createNewAgendaModal"]',
   },
-  agenda: {
-    approveAgenda: '[data-test-agenda-approve-modal]',
-  },
   baseModal: {
     container: '[data-test-vl-modal-container]',
     dialogWindow: '[data-test-vl-modal-dialogwindow]',
@@ -34,8 +31,11 @@ const selectors = {
   auModal: {
     container: '[data-test-au-modal]',
     close: '[data-test-au-modal-header-close]',
+    resize: '[data-test-au-modal-header-resize]',
     cancel: '[data-test-au-modal-footer-cancel]',
     save: '[data-test-au-modal-footer-save]',
+    title: '[data-test-au-modal-header-title]',
+    body: '[data-test-au-modal-body-content]',
   },
   modalDialog: '[data-test-vl-modal-dialog]',
   modal: '[data-test-vl-modal]',

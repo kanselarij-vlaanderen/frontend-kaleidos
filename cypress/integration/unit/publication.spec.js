@@ -214,16 +214,11 @@ context('Publications tests', () => {
     cy.wait('@publicationagendapuntentreatments');
     cy.approveAndCloseDesignAgenda();
 
-    // Approve agenda
-    cy.get(modalSelectors.verify.save).click();
-    cy.wait(2000);
-
-    cy.get(modalSelectors.agenda.approveAgenda).should('not.exist');
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 
     // make sure the agenda is approved and calls are not cancelled
-    cy.get('.vl-loader', {
-      timeout: 60000,
-    }).should('not.exist');
+    // cy.get(modal.auModal.container, {
+    //   timeout: 60000,
+    // }).should('not.exist');
   });
 });

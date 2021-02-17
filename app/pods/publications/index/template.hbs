@@ -22,6 +22,11 @@
             @label={{t "publications-table-publication-number"}}
           />
         {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <th>{{t "numac-number"}}</th>
+        {{/if}}
+
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <th>
             <span class="auk-u-mr">
@@ -148,6 +153,13 @@
             }}
           </td>
         {{/if}}
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <td>
+            {{#each row.numacNumbers as |numac|}}
+              <WebComponents::AuPill>{{numac.name }}</WebComponents::AuPill>
+            {{/each}}
+          </td>
+        {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <td>
             {{t "dash"}}
@@ -159,7 +171,7 @@
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{#if row.publishDateRequested}}
               {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
             {{else}}
@@ -169,11 +181,25 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
           <td class="auk-u-text-nowrap">
-            {{if
-              row.publishBefore
-              (moment-format row.publishBefore "DD-MM-YYYY")
-              (t "dash")
-            }}
+            {{#if row.publishBefore}}
+              {{#if
+                (is-between (moment-subtract row.publishBefore 2 precision='days') row.publishBefore)
+              }}
+                <div class="auk-form-help-text--warning">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else if (is-before row.publishBefore now)}}
+                <div class="auk-form-help-text--danger">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else}}
+                <div>
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{/if}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
@@ -328,6 +354,7 @@
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @name="caseNameFilterOption" @label={{t "publications-table-case-name"}} @checked={{this.filterTableColumnOptionKeys.caseNameFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
+                <WebComponents::AuCheckbox @name="numacNumberFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="derivedPublicationTypeFilterOption" @label={{t "publications-table-derived-publicationtype"}} @checked={{this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>

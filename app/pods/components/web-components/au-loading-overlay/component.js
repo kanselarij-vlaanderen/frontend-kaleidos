@@ -4,6 +4,13 @@ import { inject as service } from '@ember/service';
 export default class LoadingOverlay extends Component {
   @service() intl;
 
+  get getSize() {
+    if (this.args.size) {
+      return `${this.args.size}`;
+    }
+    return 'xsmall';
+  }
+
   get getTitle() {
     if (this.args.title) {
       return `${this.args.title}`;

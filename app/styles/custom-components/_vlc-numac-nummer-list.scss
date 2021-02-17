@@ -1,0 +1,28 @@
+/* ==========================================================================
+  vl-numac-nummer-list
+  ========================================================================== */
+.vlc-numac-number-wrapper{
+  display:inline-block;margin:0.1em;
+}
+.vlc-numac-number{
+  background-color: #F3F5F6;
+  border: 1px solid #CBD2DA;
+  border-right:0px solid #CBD2DA;
+  border-radius: 8px 0px 0px 8px;
+  display: inline-block;
+  min-width: 60px;
+  font-weight:bold;
+  line-height: 1.9rem;
+  color:#69717C;
+  text-align: right;
+  padding: 0.44em;
+  float:left;
+}
+.vlc-numac-number-delete-button-wrapper{
+  background-color: #F3F5F6;
+  border: 1px solid #CBD2DA;
+  border-radius: 0px 8px 8px 0px;
+  display: inline-block;
+  padding: 0px;
+  float:left;
+}
