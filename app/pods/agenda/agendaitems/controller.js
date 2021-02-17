@@ -26,11 +26,6 @@ export default class AgendaitemsAgendaController extends Controller {
   @service sessionService;
   @service agendaService;
 
-  @alias('model.agendaitems') agendaitems;
-  @alias('model.announcements') announcements;
-  @alias('sessionService.currentAgenda') currentAgenda;
-  @alias('sessionService.currentSession') currentSession;
-
   @tracked filter;
   @tracked showModifiedOnly;
 
@@ -43,16 +38,6 @@ export default class AgendaitemsAgendaController extends Controller {
     super(...arguments);
     this.filteredNotas = A();
     this.filteredAnnouncements = A();
-  }
-
-  @computed('filteredNotas.@each.{isDeleted}')
-  get sortedNotas() {
-    return this.filteredNotas.filter((agendaitem) => !agendaitem.isDeleted);
-  }
-
-  @computed('filteredAnnouncements.@each.{isDeleted}')
-  get sortedAnnouncements() {
-    return this.filteredAnnouncements.filter((announcement) => !announcement.isDeleted);
   }
 
   get agendaitemsClass() {

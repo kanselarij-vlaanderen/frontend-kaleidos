@@ -8,8 +8,8 @@
       {{#if isOverviewWindow}}
       {{!-- await for both announcements and agendaitems is needed to have scrolling to selected agendaitem --}}
         <Agenda::AgendaOverview
-          @notas={{this.sortedNotas}}
-          @announcements={{this.sortedAnnouncements}}
+          @notas={{this.filteredNotas}}
+          @announcements={{this.filteredAnnouncements}}
           @currentAgenda={{this.agenda}}
           @previousAgenda={{this.previousAgenda}}
           @onReorderAgendaitems={{perform this.assignNewPriorities}}
@@ -21,8 +21,8 @@
         {{/if}}
       {{else}}
         <Agenda::AgendaDetail::Sidebar
-          @announcements={{await this.sortedAnnouncements}}
-          @agendaitems={{await this.sortedNotas}}
+          @announcements={{await this.filteredAnnouncements}}
+          @agendaitems={{await this.filteredNotas}}
           @currentAgenda={{this.agenda}}
         />
       {{/if}}
