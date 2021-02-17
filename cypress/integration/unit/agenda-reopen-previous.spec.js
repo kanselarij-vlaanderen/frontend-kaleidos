@@ -3,6 +3,7 @@
 
 import agendaSelector from '../../selectors/agenda.selectors';
 import modalSelector from '../../selectors/modal.selectors';
+import auComponentSelector from '../../selectors/au-component-selectors';
 
 context('Agenda reopen previous tests', () => {
   const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')
@@ -22,8 +23,7 @@ context('Agenda reopen previous tests', () => {
   });
 
   const designAgendaBTitle = 'Ontwerpagenda B';
-  const designAgendaDeleteModalTitle = 'Ontwerpagenda verwijderen';
-  const agendaReopenModalTitle = 'Agenda heropenen';
+  const designAgendaDeleteModalTitleAndVerify = 'Vorige versie heropenen';
   const designAgendaATitle = 'Ontwerpagenda A';
   const designAgendaCTitle = 'Ontwerpagenda C';
   const agendaReopenPreviousVersionMenuActionItem = 'Vorige versie heropenen';
@@ -39,14 +39,17 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaATitle).should('not.exist');
     cy.get(agendaSelector.agendaActions).click();
     cy.get(agendaSelector.reopenPreviousVersion).click();
-    cy.get(modalSelector.modal).contains(designAgendaDeleteModalTitle, {
+    cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
-    cy.get(modalSelector.verify.save).click();
-    cy.get(modalSelector.modal).contains(agendaReopenModalTitle, {
+    cy.get(auComponentSelector.auAlert.message).contains(designAgendaBTitle, {
       timeout: 5000,
     });
-    cy.get(modalSelector.verify.save).click();
+    cy.get(auComponentSelector.auAlert.message).contains('Agenda A', {
+      timeout: 5000,
+    });
+    cy.get(modalSelector.auModal.save).contains(designAgendaDeleteModalTitleAndVerify)
+      .click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.contains(designAgendaATitle).should('exist');
