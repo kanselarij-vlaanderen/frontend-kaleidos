@@ -40,8 +40,8 @@ export default class PublicationTranslationController extends Controller {
     const _case = await publicationFlow.get('case');
     const subject = await this.getConfig('email:withdrawalTranslation:subject', CONFIG.mail.withdrawalTranslation.subject);
     const content = await this.getConfig('email:withdrawalTranslation:content', CONFIG.mail.withdrawalTranslation.content);
-    set(this, 'withdrawalContent', this.activityService.replaceTokens(content, publicationFlow, _case));
-    set(this, 'withdrawalSubject', this.activityService.replaceTokens(subject, publicationFlow, _case));
+    set(this, 'withdrawalContent', await this.activityService.replaceTokens(content, publicationFlow, _case));
+    set(this, 'withdrawalSubject', await this.activityService.replaceTokens(subject, publicationFlow, _case));
     this.showWithdrawPopup = true;
   }
 

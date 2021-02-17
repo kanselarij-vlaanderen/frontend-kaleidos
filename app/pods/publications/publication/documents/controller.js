@@ -292,8 +292,8 @@ export default class PublicationDocumentsController extends Controller {
     set(this.previewActivity, 'pieces', this.selectedPieces);
     const subject = await this.getConfig('email:publishPreviewRequest:subject', CONFIG.mail.publishPreviewRequest.subject);
     const content = await this.getConfig('email:publishPreviewRequest:content', CONFIG.mail.publishPreviewRequest.content);
-    set(this.previewActivity, 'mailContent', this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
-    set(this.previewActivity, 'mailSubject', this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
+    set(this.previewActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
     this.isOpenPublishPreviewRequestModal = true;
   }
 
@@ -349,8 +349,8 @@ export default class PublicationDocumentsController extends Controller {
     this.translateActivity.pieces = this.selectedPieces;
     const subject = await this.getConfig('email:translationRequest:subject', CONFIG.mail.translationRequest.subject);
     const content = await this.getConfig('email:translationRequest:content', CONFIG.mail.translationRequest.content);
-    set(this.translateActivity, 'mailContent', this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
-    set(this.translateActivity, 'mailSubject', this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
+    set(this.translateActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
     this.showTranslationModal = true;
   }
 

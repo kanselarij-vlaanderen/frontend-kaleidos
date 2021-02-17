@@ -10,51 +10,69 @@ import CONFIG from 'fe-redpencil/utils/config';
 export default class SettingsEmailController extends Controller {
   @service configService;
   @tracked showLoader = false;
+
+  @tracked footerKey = 'email:footer';
+  @tracked footer = '';
   @tracked emails = [
     {
       subjectKey: 'email:translationRequest:subject',
       contentKey: 'email:translationRequest:content',
+      mailKey: 'email:translationRequest:to',
       title: 'vertalingsaanvraag',
       subject: '',
       defaultSubject: CONFIG.mail.translationRequest.subject,
       content: '',
       defaultContent: CONFIG.mail.translationRequest.content,
+      to: '',
+      defaultTo: CONFIG.EMAIL.TO.translationsEmail,
     },
     {
       subjectKey: 'email:publishPreviewRequest:subject',
       contentKey: 'email:publishPreviewRequest:content',
+      mailKey: 'email:publishPreviewRequest:to',
       title: 'drukproefaanvraag',
       subject: '',
       defaultSubject: CONFIG.mail.publishPreviewRequest.subject,
       content: '',
       defaultContent: CONFIG.mail.publishPreviewRequest.content,
+      to: '',
+      defaultTo: CONFIG.EMAIL.TO.publishpreviewEmail,
     },
     {
       subjectKey: 'email:publishRequest:subject',
       contentKey: 'email:publishRequest:content',
+      mailKey: 'email:publishRequest:to',
       title: 'publicatieaanvraag',
       subject: '',
       defaultSubject: CONFIG.mail.publishRequest.subject,
       content: '',
       defaultContent: CONFIG.mail.publishRequest.content,
+      to: '',
+      defaultTo: CONFIG.EMAIL.TO.publishEmail,
     },
     {
       subjectKey: 'email:withdrawalTranslation:subject',
       contentKey: 'email:withdrawalTranslation:content',
+      mailKey: 'email:withdrawalTranslation:to',
       title: 'terugtrekking vertalingsaanvraag',
       subject: '',
       defaultSubject: CONFIG.mail.withdrawalTranslation.subject,
       content: '',
       defaultContent: CONFIG.mail.publishRequest.content,
+      to: '',
+      defaultTo: CONFIG.EMAIL.TO.activityWithdrawTranslationsEmail,
     },
     {
       subjectKey: 'email:withdrawalPublishPreview:subject',
       contentKey: 'email:withdrawalPublishPreview:content',
+      mailKey: 'email:withdrawalPublishPreview:to',
       title: 'terugtrekking drukproefaanvraag',
       subject: '',
       defaultSubject: CONFIG.mail.withdrawalPublishPreview.subject,
       content: '',
       defaultContent: CONFIG.mail.withdrawalPublishPreview.content,
+      to: '',
+      defaultTo: CONFIG.EMAIL.TO.activityWithdrawPublishPreviewEmail,
     }
   ];
 
@@ -66,7 +84,10 @@ export default class SettingsEmailController extends Controller {
       set(item, 'subject', configSubject);
       const configContent = this.getConfig(item.contentKey, item.defaultContent).then((result) => result);
       set(item, 'content', configContent);
+      const toMailAddress = this.getConfig(item.mailKey, item.defaultTo).then((result) => result);
+      set(item, 'to', toMailAddress);
     }
+    this.footer = this.configService.get(this.footerKey, CONFIG.mail.defaultFooter);
   }
 
   async getConfig(name, defaultValue) {
@@ -84,7 +105,9 @@ export default class SettingsEmailController extends Controller {
       const email = this.emails[index];
       await this.configService.set(email.subjectKey, await email.subject);
       await this.configService.set(email.contentKey, await email.content);
+      await this.configService.set(email.mailKey, await email.to);
     }
+    await this.configService.set(this.footerKey, await this.footer);
     this.showLoader = false;
   }
 
@@ -101,16 +124,31 @@ export default class SettingsEmailController extends Controller {
   }
 
   @action
+  async setFooterContent(event) {
+    this.footer = event.target.value;
+  }
+
+  @action
+  async setMailTo(mail, event) {
+    const mailCopy = this.emails;
+    for (let index = 0; index < mailCopy.length; index++) {
+      const item = mailCopy[index];
+      if (item.subjectKey === mail.subjectKey) {
+        set(item, 'to', event.target.value);
+      }
+    }
+    this.set('emails', mailCopy);
+  }
+
+  @action
   async setMailContent(mail, event) {
     const mailCopy = this.emails;
     for (let index = 0; index < mailCopy.length; index++) {
       const item = mailCopy[index];
       if (item.contentKey === mail.contentKey) {
-        console.log(event.target.value);
         await set(item, 'content', event.target.value);
       }
     }
-    console.log(mailCopy);
     await this.set('emails', mailCopy);
   }
 }

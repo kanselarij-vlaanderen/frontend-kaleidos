@@ -24,10 +24,25 @@
         >
           {{t "send-test-mail"}}
         </LinkTo>
+
+        {{!-- Footer of the mail --}}
+        <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          {{t "email-footer"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuTextarea
+                id="emailFooter"
+                @rows="15"
+                @value={{await this.footer}}
+          {{on "change" (fn this.setFooterContent)}}
+                data-test-email-content-textarea
+        />
       </WebComponents::AuPanel::Body>
     </WebComponents::AuPanel>
   </div>
 </div>
+
+
+{{!-- Mails and their configuration --}}
 
 <div class="vlc-panel-layout__main-content auk-u-m-8">
   {{#each this.emails as |email|}}
@@ -43,6 +58,21 @@
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
+
+
+          {{!-- Mails of this tyype go to --}}
+          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+            {{t "email-to"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput
+            {{on "change" (fn this.setMailTo email)}}
+                  @value={{ await email.to }}
+                  type="text"
+                  @block="true"
+          />
+          <pre>{{ await email.defaultTo }}</pre>
+
+          {{!-- subject of the mail --}}
           <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
             {{t "subject"}}
           </WebComponents::AuLabel>
@@ -53,6 +83,9 @@
             @block="true"
           />
           <pre>{{ await email.defaultSubject }}</pre>
+
+
+          {{!-- content of the mail --}}
           <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
             {{t "accompanying-text"}}
           </WebComponents::AuLabel>
