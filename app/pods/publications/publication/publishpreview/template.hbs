@@ -3,160 +3,156 @@
 }}
 {{#if (gt this.publishPreviewActivities.length 0)}}
   {{#each this.publishPreviewActivities as |activity|}}
-    <div class="auk-u-m-2">
-      <div class="auk-u-my-2">
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col-bp2-9">
-            <div class="auk-u-ml-4 auk-u-mb-4">
-              {{!-- PublishPreview panel --}}
-              <div class="auk-u-mb-3">
-                <WebComponents::AuPanel>
-                  <WebComponents::AuPanel::Header>
-                    <WebComponents::AuToolbar>
-                      <WebComponents::AuToolbar::Group @position="left">
-                        <WebComponents::AuToolbar::Item>
-                          <h4 class="auk-toolbar-complex__title">{{t "publishpreview"}}</h4>
-                        </WebComponents::AuToolbar::Item>
-                      </WebComponents::AuToolbar::Group>
-                      <WebComponents::AuToolbar::Group @position="right">
-                        <WebComponents::AuToolbar::Item>
-                          {{#if (not (await activity.generatedPieces))}}
-                            <WebComponents::AuButton
-                                    @skin="tertiary"
-                                    @icon="add"
-                              {{on "click" (fn this.openUploadPublishPreviewModal activity)}}>
-                              {{t "add-publishpreview"}}
+    <div class="auk-o-grid">
+      <div class="auk-o-grid-col-bp2-9">
+        <div class="auk-u-mb-8">
+          {{!-- PublishPreview panel --}}
+          <div class="auk-u-mb-3">
+            <WebComponents::AuPanel>
+              <WebComponents::AuPanel::Header>
+                <WebComponents::AuToolbar>
+                  <WebComponents::AuToolbar::Group @position="left">
+                    <WebComponents::AuToolbar::Item>
+                      <h4 class="auk-toolbar-complex__title">{{t "publishpreview"}}</h4>
+                    </WebComponents::AuToolbar::Item>
+                  </WebComponents::AuToolbar::Group>
+                  <WebComponents::AuToolbar::Group @position="right">
+                    <WebComponents::AuToolbar::Item>
+                      {{#if (not (await activity.generatedPieces))}}
+                        <WebComponents::AuButton
+                                @skin="tertiary"
+                                @icon="add"
+                          {{on "click" (fn this.openUploadPublishPreviewModal activity)}}>
+                          {{t "add-publishpreview"}}
+                        </WebComponents::AuButton>
+                      {{/if}}
+                    </WebComponents::AuToolbar::Item>
+                  </WebComponents::AuToolbar::Group>
+                </WebComponents::AuToolbar>
+              </WebComponents::AuPanel::Header>
+              <WebComponents::AuPanel::Body>
+                {{#if (await activity.generatedPieces)}}
+                  <ul class="auk-list auk-list--bordered">
+                    {{#each (await activity.generatedPieces) as |generatedPiece|}}
+                      {{#if (not (await generatedPiece.previousPiece))}}
+                        <li class="auk-list__item auk-list__item--gray-100">
+                          <WebComponents::AuBadge @skin="white" @icon="document"/>
+                          <div class="auk-u-mx-2">
+                            <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
+                            <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
+                          </div>
+                          <WebComponents::AuButtonToolbar>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece)}} @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                              <AttachPopover
+                                      @renderInPlace={{true}}
+                                      @class="ember-attacher-popper"
+                                      @hideOn="clickout click"
+                                      @showOn="click"
+                                      @animation="shift"
+                                      @placement="bottom"
+                              >
+                                <WebComponents::AuDropdown>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editPublishPreview}}>
+                                    {{t "edit-2"}}
+                                  </WebComponents::AuDropdown::Item>
+                                  {{#if (not (await generatedPiece.nextPiece))}}
+                                    <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece generatedPiece activity)}}>
+                                      {{t "delete"}}
+                                    </WebComponents::AuDropdown::Item>
+                                  {{/if}}
+                                </WebComponents::AuDropdown>
+                              </AttachPopover>
                             </WebComponents::AuButton>
-                          {{/if}}
-                        </WebComponents::AuToolbar::Item>
-                      </WebComponents::AuToolbar::Group>
-                    </WebComponents::AuToolbar>
-                  </WebComponents::AuPanel::Header>
-                  <WebComponents::AuPanel::Body>
-                    {{#if (await activity.generatedPieces)}}
-                      <ul class="auk-list auk-list--bordered">
-                        {{#each (await activity.generatedPieces) as |generatedPiece|}}
-                          {{#if (not (await generatedPiece.previousPiece))}}
-                            <li class="auk-list__item auk-list__item--gray-100">
-                              <WebComponents::AuBadge @skin="white" @icon="document"/>
-                              <div class="auk-u-mx-2">
-                                <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
-                                <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
-                              </div>
-                              <WebComponents::AuButtonToolbar>
-                                <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece)}} @layout="icon-only" @skin="borderless" @icon="book"/>
-                                <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
-                                  <AttachPopover
-                                          @renderInPlace={{true}}
-                                          @class="ember-attacher-popper"
-                                          @hideOn="clickout click"
-                                          @showOn="click"
-                                          @animation="shift"
-                                          @placement="bottom"
-                                  >
-                                    <WebComponents::AuDropdown>
-                                      <WebComponents::AuDropdown::Item {{on "click" this.editPublishPreview}}>
-                                        {{t "edit-2"}}
-                                      </WebComponents::AuDropdown::Item>
-                                      {{#if (not (await generatedPiece.nextPiece))}}
-                                        <WebComponents::AuDropdown::Item @skin="danger" {{on "click" (fn this.deleteExistingPiece generatedPiece activity)}}>
-                                          {{t "delete"}}
-                                        </WebComponents::AuDropdown::Item>
-                                      {{/if}}
-                                    </WebComponents::AuDropdown>
-                                  </AttachPopover>
-                                </WebComponents::AuButton>
-                              </WebComponents::AuButtonToolbar>
-                            </li>
-                          {{/if}}
-                        {{/each}}
-                      </ul>
-                    {{else}}
-                      <WebComponents::AuEmptyState @message={{t "no-publishpreview-added"}}/>
-                    {{/if}}
-                  </WebComponents::AuPanel::Body>
-                </WebComponents::AuPanel>
-              </div>
-              {{!-- Request panel --}}
-              <Publications::Publication::ActivityRequestPanel
-                      @activity={{activity}}
-                      @finishedToggle={{fn this.markPreviewActivityDone activity}}
-                      @cancelExisting={{fn this.showWithdrawalWindow activity}}
-                      @publishPreview={{fn this.requestPublicationModal activity}}
-                      @mode={{'publishPreview'}}
-              />
-              {{!-- Correction panel --}}
-              {{#if (await activity.generatedPieces)}}
-                <div class="auk-u-mb-3">
-                  <WebComponents::AuPanel>
-                    <WebComponents::AuPanel::Header>
-                      <WebComponents::AuToolbar>
-                        <WebComponents::AuToolbar::Group @position="left">
-                          <WebComponents::AuToolbar::Item>
-                            <h4 class="auk-toolbar-complex__title">{{t "correction"}}</h4>
-                          </WebComponents::AuToolbar::Item>
-                        </WebComponents::AuToolbar::Group>
-                        <WebComponents::AuToolbar::Group @position="right">
-                          <WebComponents::AuToolbar::Item>
-                            <WebComponents::AuButton
-                                    @skin="tertiary"
-                                    @icon="add"
-                              {{on "click" (fn this.openUploadPublishPreviewCorrectionModal activity)}}>
-                              {{t "add-correction"}}
-                            </WebComponents::AuButton>
-                          </WebComponents::AuToolbar::Item>
-                        </WebComponents::AuToolbar::Group>
-                      </WebComponents::AuToolbar>
-                    </WebComponents::AuPanel::Header>
-                    <WebComponents::AuPanel::Body>
-                    {{!-- TODO set to loop over verbteringen --}}
-                    {{#if (gt (await activity.generatedPieces.length) 1)}}
-                      <ul class="auk-list auk-list--bordered">
-                        {{#each (await activity.generatedPieces) as |generatedPiece|}}
-                          {{#if (await generatedPiece.previousPiece)}}
-                            <li class="auk-list__item auk-list__item--gray-100">
-                              <WebComponents::AuBadge @skin="white" @icon="document"/>
-                              <div class="auk-u-mx-2">
-                                <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
-                                <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
-                              </div>
-                              <WebComponents::AuButtonToolbar>
-                                <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
-                                <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
-                                  <AttachPopover
-                                          @renderInPlace={{true}}
-                                          @class="ember-attacher-popper"
-                                          @hideOn="clickout click"
-                                          @showOn="click"
-                                          @animation="shift"
-                                          @placement="bottom"
-                                  >
-                                    <WebComponents::AuDropdown>
-                                      <WebComponents::AuDropdown::Item {{on "click" this.editCorrection}}>
-                                        {{t "edit-2"}}
-                                      </WebComponents::AuDropdown::Item>
-                                      {{#if (not (await generatedPiece.nextPiece))}}
-                                        <WebComponents::AuDropdown::Item {{on "click" (fn this.deleteExistingPiece generatedPiece activity)}} @skin="danger">
-                                          {{t "delete"}}
-                                        </WebComponents::AuDropdown::Item>
-                                      {{/if}}
-                                    </WebComponents::AuDropdown>
-                                  </AttachPopover>
-                                </WebComponents::AuButton>
-                              </WebComponents::AuButtonToolbar>
-                            </li>
-                          {{/if}}
-                        {{/each}}
-                      </ul>
-                    {{else}}
-                      <WebComponents::AuEmptyState @message={{t "no-corrections"}}/>
-                    {{/if}}
-                    </WebComponents::AuPanel::Body>
-                  </WebComponents::AuPanel>
-                </div>
-              {{/if}}
-            </div>
+                          </WebComponents::AuButtonToolbar>
+                        </li>
+                      {{/if}}
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  <WebComponents::AuEmptyState @message={{t "no-publishpreview-added"}}/>
+                {{/if}}
+              </WebComponents::AuPanel::Body>
+            </WebComponents::AuPanel>
           </div>
+          {{!-- Request panel --}}
+          <Publications::Publication::ActivityRequestPanel
+                  @activity={{activity}}
+                  @finishedToggle={{fn this.markPreviewActivityDone activity}}
+                  @cancelExisting={{fn this.showWithdrawalWindow activity}}
+                  @publishPreview={{fn this.requestPublicationModal activity}}
+                  @mode={{'publishPreview'}}
+          />
+          {{!-- Correction panel --}}
+          {{#if (await activity.generatedPieces)}}
+            <div class="auk-u-mb-3">
+              <WebComponents::AuPanel>
+                <WebComponents::AuPanel::Header>
+                  <WebComponents::AuToolbar>
+                    <WebComponents::AuToolbar::Group @position="left">
+                      <WebComponents::AuToolbar::Item>
+                        <h4 class="auk-toolbar-complex__title">{{t "correction"}}</h4>
+                      </WebComponents::AuToolbar::Item>
+                    </WebComponents::AuToolbar::Group>
+                    <WebComponents::AuToolbar::Group @position="right">
+                      <WebComponents::AuToolbar::Item>
+                        <WebComponents::AuButton
+                                @skin="tertiary"
+                                @icon="add"
+                          {{on "click" (fn this.openUploadPublishPreviewCorrectionModal activity)}}>
+                          {{t "add-correction"}}
+                        </WebComponents::AuButton>
+                      </WebComponents::AuToolbar::Item>
+                    </WebComponents::AuToolbar::Group>
+                  </WebComponents::AuToolbar>
+                </WebComponents::AuPanel::Header>
+                <WebComponents::AuPanel::Body>
+                {{!-- TODO set to loop over verbteringen --}}
+                {{#if (gt (await activity.generatedPieces.length) 1)}}
+                  <ul class="auk-list auk-list--bordered">
+                    {{#each (await activity.generatedPieces) as |generatedPiece|}}
+                      {{#if (await generatedPiece.previousPiece)}}
+                        <li class="auk-list__item auk-list__item--gray-100">
+                          <WebComponents::AuBadge @skin="white" @icon="document"/>
+                          <div class="auk-u-mx-2">
+                            <span class="auk-u-text-bold">{{generatedPiece.name}}</span>
+                            <div class="auk-u-muted auk-u-text-small">{{await generatedPiece.file.extension}}</div>
+                          </div>
+                          <WebComponents::AuButtonToolbar>
+                            <WebComponents::AuButton {{on "click" (fn this.showPieceViewer generatedPiece) }} @layout="icon-only" @skin="borderless" @icon="book"/>
+                            <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                              <AttachPopover
+                                      @renderInPlace={{true}}
+                                      @class="ember-attacher-popper"
+                                      @hideOn="clickout click"
+                                      @showOn="click"
+                                      @animation="shift"
+                                      @placement="bottom"
+                              >
+                                <WebComponents::AuDropdown>
+                                  <WebComponents::AuDropdown::Item {{on "click" this.editCorrection}}>
+                                    {{t "edit-2"}}
+                                  </WebComponents::AuDropdown::Item>
+                                  {{#if (not (await generatedPiece.nextPiece))}}
+                                    <WebComponents::AuDropdown::Item {{on "click" (fn this.deleteExistingPiece generatedPiece activity)}} @skin="danger">
+                                      {{t "delete"}}
+                                    </WebComponents::AuDropdown::Item>
+                                  {{/if}}
+                                </WebComponents::AuDropdown>
+                              </AttachPopover>
+                            </WebComponents::AuButton>
+                          </WebComponents::AuButtonToolbar>
+                        </li>
+                      {{/if}}
+                    {{/each}}
+                  </ul>
+                {{else}}
+                  <WebComponents::AuEmptyState @message={{t "no-corrections"}}/>
+                {{/if}}
+                </WebComponents::AuPanel::Body>
+              </WebComponents::AuPanel>
+            </div>
+          {{/if}}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitles extends Component {
-  classNames = ['auk-u-mb-8'];
+  classNames = ['auk-u-mb-8']; // @brenner-company: since this is a glimmer component, this can be removed?
 
   @tracked showLoader = false;
 
