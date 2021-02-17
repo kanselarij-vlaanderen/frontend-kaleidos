@@ -10,7 +10,7 @@
               type="text"
               data-test-trigger-search-input
               @placeholder={{t "search-placeholder"}}
-              @value={{this.searchText}}
+              value={{this.searchText}}
               @enter={{this.search}}
               {{on "input" this.debouncedSearch}}
             />
