@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import ENV from 'fe-redpencil/config/environment';
+import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 

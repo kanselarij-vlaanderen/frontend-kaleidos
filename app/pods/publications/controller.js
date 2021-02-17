@@ -6,7 +6,7 @@ import {
 import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { restartableTask } from 'ember-concurrency-decorators';
-import search from 'fe-redpencil/utils/mu-search';
+import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class PublicationsController extends Controller {
   @service publicationService;

@@ -5,7 +5,7 @@ import EmberObject, {
 
 import { inject as service } from '@ember/service';
 import DS from 'ember-data';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class AccessLevelPill extends Component {
   confidential = false;

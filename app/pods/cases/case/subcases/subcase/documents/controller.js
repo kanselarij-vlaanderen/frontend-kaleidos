@@ -9,13 +9,13 @@ import {
   timeout
 } from 'ember-concurrency';
 import moment from 'moment';
-import config from 'fe-redpencil/utils/config';
+import config from 'frontend-kaleidos/utils/config';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
-} from 'fe-redpencil/utils/documents';
+} from 'frontend-kaleidos/utils/documents';
 import {
   destroyApprovalsOfAgendaitem, setNotYetFormallyOk
-} from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseDocumentsController extends Controller {
   @service currentSession;

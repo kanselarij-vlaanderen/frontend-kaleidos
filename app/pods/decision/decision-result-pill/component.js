@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class DecisionResultPill extends Component {
   get modifierClass() {
