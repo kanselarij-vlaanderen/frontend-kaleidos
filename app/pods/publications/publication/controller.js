@@ -27,6 +27,8 @@ export default class PublicationController extends Controller {
   @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
 
+  @tracked newNumacNumber = '';
+  @tracked showLoader = false;
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -115,6 +117,14 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+  get titleText() {
+    const shortTitle = this.model.publicationFlow.case.get('shortTitle');
+    if (shortTitle) {
+      return shortTitle;
+    }
+    return this.model.publicationFlow.case.get('title');
+  }
+
 
   get expiredPublicationDate() {
     if (this.model.publicationFlow.get('publishedAt')) {
@@ -183,11 +193,31 @@ export default class PublicationController extends Controller {
     });
   }
 
-  @restartableTask
-  *setNumacNumber(event) {
-    this.model.publicationFlow.set('numacNumber', event.target.value);
-    yield timeout(1000);
-    this.model.publicationFlow.save();
+  get numacNumbers() {
+    if (this.model.publicationFlow.numacNumbers) {
+      return this.model.publicationFlow.numacNumbers;
+    }
+    return false;
+  }
+
+  @action
+  setNumacNummer(event) {
+    this.newNumacNumber = event.target.value;
+  }
+
+  @action
+  async addNumacNumber() {
+    this.set('showLoader', true);
+    await this.publicationService.createNumacNumber(this.newNumacNumber, this.model.publicationFlow);
+    this.set('newNumacNumber', '');
+    this.set('showLoader', false);
+  }
+
+  @action
+  async deleteNumacNumber(numacNumber) {
+    this.set('showLoader', true);
+    await this.publicationService.unlinkNumacNumber(numacNumber, this.model.publicationFlow);
+    this.set('showLoader', false);
   }
 
   @action

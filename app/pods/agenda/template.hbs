@@ -29,7 +29,6 @@
     {{outlet}}
   </div>
 {{else}}
-  {{web-components/vl-loader
-    text=(concat (t "agenda-approving-text") " " (t "please-be-patient"))
-  }}
+  {{!-- TODO, with an auLoadingOverlay, this text was semi hidden so opted to remove this for now. Page just goes blank when loading (only triggered on header actions)--}}
+  {{!-- {{web-components/vl-loader}} --}}
 {{/if}}

@@ -54,32 +54,32 @@
                     {{/attach-tooltip}}
                   </span>
                 {{/if}}
-                {{#if newsletterInfo}}
-                  {{#if (not newsletterInfo.inNewsletter)}}
-                    <span class="added-tag vlc-agenda-meta__recently-added">
-                      <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
-                      {{#attach-tooltip
-                        arrow="true"
-                        animation="shift"
-                        placement="top"
-                        class="ember-attacher-tooltip"
-                      }}
-                        <p>
-                          {{t "not-visible-in-newsletter"}}
-                        </p>
-                      {{/attach-tooltip}}
-                    </span>
-                  {{/if}}
+
+                {{#if (not newsletterInfo.inNewsletter)}}
+                  <span class="added-tag vlc-agenda-meta__recently-added">
+                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                    {{#attach-tooltip
+                      arrow="true"
+                      animation="shift"
+                      placement="top"
+                      class="ember-attacher-tooltip"
+                    }}
+                      <p>
+                        {{t "not-visible-in-newsletter"}}
+                      </p>
+                    {{/attach-tooltip}}
+                  </span>
                 {{/if}}
 
                 {{#if (await subcase.confidential)}}
                   <i
-                  class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                  data-test-icon-agenda-confidentiality-locked
+                    class="vl-icon ki-lock-closed vlc-u-opacity-50"
+                    data-test-icon-agenda-confidentiality-locked
                   ></i>
                 {{/if}}
               {{/if}}
             </div>
+
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-u-flex--align-end">
               {{#if
                 (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
