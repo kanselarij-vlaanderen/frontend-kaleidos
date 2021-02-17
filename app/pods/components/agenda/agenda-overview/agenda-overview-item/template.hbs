@@ -120,12 +120,13 @@
       </div>
       {{#if (or this.currentSessionService.isEditor this.documentsAreReleased)}}
         <div class="vl-accordion__panel">
-          <div class="auk-u-mt-4">
+          <div class="auk-u-mt-4"
+            {{in-viewport
+              onEnter=(perform this.lazyLoadNewDocuments)
+              onExit=(fn this.cancelLazyLoad this.lazyLoadNewDocuments)
+            }}
+          >
             <Documents::DocumentBadgeList
-              {{in-viewport
-                onEnter=(perform this.lazyLoadNewDocuments)
-                onExit=(fn this.cancelLazyLoad this.lazyLoadNewDocuments)
-              }}
               @pieces={{this.limitedAgendaitemDocuments}}
               @highlightedPieces={{this.newAgendaitemDocuments}}
             />
