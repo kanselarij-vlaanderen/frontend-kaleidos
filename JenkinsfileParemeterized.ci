@@ -45,7 +45,7 @@ pipeline {
                 sh "cp ${env.WORKSPACE}/Dockerfile.ci ${env.WORKSPACE}/Dockerfile"
                 sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ${env.WORKSPACE}/kaleidos-project/docker-compose.override.yml"
 
-                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data -p && && chmod 1777 -R data"
+                sh "cd ${WORKSPACE}/kaleidos-project && mkdir data -p && chmod 1777 -R data"
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d --build"
 
                 sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName}  exec -T triplestore chmod -R 1777 /data"

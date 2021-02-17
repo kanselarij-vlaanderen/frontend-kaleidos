@@ -12,7 +12,6 @@ export default class PublicationFlow extends Model {
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
   @attr('datetime') publishedAt;
-  @attr('string') numacNumber; // is this only 1 per flow ?
   @attr('string') remark;
   @attr('number') priority;
   @attr('datetime') created;
@@ -23,6 +22,7 @@ export default class PublicationFlow extends Model {
 
   // Belongs To.
   @belongsTo('case') case;
+
   @belongsTo('publication-status', {
     inverse: null,
   }) status;
@@ -31,6 +31,9 @@ export default class PublicationFlow extends Model {
   @belongsTo('document-type') deducedType;
 
   // Has many .
+  @hasMany('numac-number', {
+    inverse: null,
+  }) numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;

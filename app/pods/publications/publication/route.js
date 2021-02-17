@@ -9,7 +9,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
       reload: true,
     }, {
-      include: 'case,contact-person,status,type,document-type',
+      include: 'case,contact-person,status,type,numac-number,document-type',
     });
     await publicationFlow.get('deducedType');
     const _case = await publicationFlow.get('case');

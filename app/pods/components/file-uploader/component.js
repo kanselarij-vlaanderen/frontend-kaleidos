@@ -20,6 +20,7 @@ export default class FileUploader extends Component {
   multipleFiles = this.args.multipleFiles;
 
   @tracked isLoading = null;
+  @tracked blockInterface = false;
 
   @tracked filesInQueue = alias('fileQueue.files');
 
@@ -35,6 +36,7 @@ export default class FileUploader extends Component {
   @enqueueTask({
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
+    this.blockInterface = true;
     try {
       this.isLoading = true;
       file.readAsDataURL().then(() => {
@@ -46,8 +48,10 @@ export default class FileUploader extends Component {
     } catch (exception) {
       this.isLoading = false;
       console.warn('An exception occurred', exception);
+      this.blockInterface = false;
     } finally {
       this.isLoading = false;
+      this.blockInterface = false;
     }
   }
 
