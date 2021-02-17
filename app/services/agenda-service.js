@@ -113,9 +113,7 @@ export default Service.extend({
   },
 
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
-    /* eslint-disable no-unreachable */
-    return []; // Mock until method available
-    const url = `/agenda/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
     const payload = await response.json();
     const piecesFromStore = [];
