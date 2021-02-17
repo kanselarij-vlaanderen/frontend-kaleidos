@@ -108,15 +108,6 @@
                                         data-test-create-publication-modal-number-input
                                         {{on "change" (await isPublicationNumberAlreadyTaken)}}
                 />
-                <WebComponents::AuLabel for="publicationSuffixInput" @isRequired={{true}}>
-                  {{t "publications-suffix"}}
-                </WebComponents::AuLabel>
-                <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width"
-                                        @block="true"
-                                        @value={{mut publication.suffix}}
-                                        data-test-create-publication-modal-suffix-input
-                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
-                />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>
                     {{t "input-error-message"}}
@@ -127,6 +118,17 @@
                     {{t "publication-number-already-taken"}}
                   </WebComponents::AuLabelError>
                 {{/if}}
+              </div>
+              <div class='auk-form-group'>
+                <WebComponents::AuLabel for="publicationSuffixInput" @isRequired={{true}}>
+                  {{t "publications-suffix"}}
+                </WebComponents::AuLabel>
+                <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width"
+                                        @block="true"
+                                        @value={{mut publication.suffix}}
+                                        data-test-create-publication-modal-suffix-input
+                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
+                />
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
                 <WebComponents::AuLabel for="shortTitleInput"
