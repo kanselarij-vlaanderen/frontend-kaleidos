@@ -10,7 +10,7 @@
               this.casePath
             }}
           </span>
-          <WebComponents::AuAbbreviatedText @text={{model.publicationFlow.case.shortTitle}} @size="150" @custom="true" />
+          <WebComponents::AuAbbreviatedText @text={{this.titleText}} @size="150" @custom="true" />
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
@@ -104,14 +104,66 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                {{#if this.model.publicationFlow.numacNumber}}
-                  <WebComponents::AuInput type="number" value={{this.model.publicationFlow.numacNumber}} @block="true" readonly
-                    {{on "input" (perform this.setNumacNumber)}} />
-                {{else}}
-                  <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-                {{/if}}
+                <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
+                  {{#if (gt this.numacNumbers.length 0) }}
+                    {{#each this.numacNumbers as |numac|}}
+                      <div style="display:inline-block;margin:0.1em;">
+                        <div style="    background-color: #F3F5F6;
+                                        border: 1px solid #CBD2DA;
+                                        border-right:0px solid #CBD2DA;
+                                        border-radius: 8px 0px 0px 8px;
+                                        display: inline-block;
+                                        min-width: 60px;
+                                        font-weight:bold;
+                                        line-height: 1.9rem;
+                                        color:#69717C;
+                                        text-align: right;
+                                        padding: 0.4em;float:left;">
+                          <span>{{ numac.name }}</span>
+                        </div>
+                        <div style="    background-color: #F3F5F6;
+                                          border: 1px solid #CBD2DA;
+                                              border-radius: 0px 8px 8px 0px;
+                                          display: inline-block;
+                                          padding: 0.4em;float:left;">
+                          <WebComponents::AuButton class="auk-button--nopadding"
+                            @skin="borderless"
+                            @icon="close"
+                            @layout="icon-only"
+                            {{on "click" (fn this.deleteNumacNumber numac)}}
+                            data-test-cases-backlink/>
+                        </div>
+                      </div>
+                    {{/each}}
+                  {{else}}
+                    <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
+                  {{/if}}
+                </div>
+                <WebComponents::AuInput
+                  type="text"
+                  id="newNumacNumber"
+                  value={{mut this.newNumacNumber}}
+                  onchange={{action "setNumacNummer"}}
+                />
+
+                <WebComponents::AuButton
+                  @skin="borderless"
+                  {{on "click"
+                   this.addNumacNumber}}>
+                  {{t "add"}}
+                </WebComponents::AuButton>
               </div>
               {{#if this.model.publicationFlow.status.isToBePublished}}
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
+                  {{#if this.showRequestedPublicationDatePicker}}
+                    <WebComponents::AuDatepicker
+                            @defaultDate={{this.getRequestedPublicationDate}}
+                            @onChange={{this.setRequestedPublicationDate}}/>
+                  {{else}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
+                  {{/if}}
+                </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
                   {{#if this.showPublicationDatePicker}}
@@ -223,4 +275,10 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}
