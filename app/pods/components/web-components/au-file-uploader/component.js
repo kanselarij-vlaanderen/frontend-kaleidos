@@ -19,6 +19,8 @@ export default class FileUploader extends Component {
 
   @tracked isLoading = null;
 
+  @tracked showLoader = false;
+
   @tracked filesInQueue = alias('fileQueue.files');
   uploadedFileAction = this.args.uploadedFileAction;
 
@@ -34,6 +36,7 @@ export default class FileUploader extends Component {
   }) *uploadFileTask(file) {
     try {
       this.isLoading = true;
+      this.showLoader = true;
       file.readAsDataURL().then(() => {
       });
       const response = yield file.upload('/files');
@@ -45,6 +48,7 @@ export default class FileUploader extends Component {
       console.warn('An exception occurred', exception);
     } finally {
       this.isLoading = false;
+      this.showLoader = false;
     }
   }
 

@@ -74,6 +74,7 @@ export default Service.extend({
     const file = pieceToDelete.get('file');
     await this.deleteFile(file);
     return pieceToDelete.destroyRecord();
+    // TODO: delete container in case we just orphaned it
   },
 
   async deleteFile(file) {
