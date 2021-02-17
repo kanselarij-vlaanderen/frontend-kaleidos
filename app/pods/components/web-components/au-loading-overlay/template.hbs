@@ -1,8 +1,12 @@
 <div class="auk-u-flex auk-u-flex--justify-around">
   <WebComponents::AuModal @size={{this.getSize}}>
+    <WebComponents::AuModal::Header
+      @title={{this.getTitle}}
+      @hideCloseButton={{true}}
+    />
     <WebComponents::AuModal::Body>
       <WebComponents::AuLoader
-              @message={{this.getMessage}}
+        @message={{this.getMessage}}
       />
     </WebComponents::AuModal::Body>
   </WebComponents::AuModal>

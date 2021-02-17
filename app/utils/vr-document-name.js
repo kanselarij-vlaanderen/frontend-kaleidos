@@ -4,24 +4,24 @@ import moment from 'moment';
 export default class VRDocumentName {
   static get regexGroups() {
     return Object.freeze({
-      date: '([12][90][0-9]{2} [0-3][0-9][01][0-9])',
-      casePrefix: '(( VV)|())',  // VV = Vlaamse Veerkracht
-      docType: '((DOC)|(DEC)|(MED))',
-      caseNr: '(\\d{4})',
-      index: '(\\d{1,3})',
-      pieceSuffix: `((${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
+      date: '(?<date>[12][90][0-9]{2} [0-3][0-9][01][0-9])',
+      casePrefix: '(?<casePrefix>( VV)|())',  // VV = Vlaamse Veerkracht
+      docType: '(?<docType>(DOC)|(DEC)|(MED))',
+      caseNr: '(?<caseNr>\\d{4})',
+      index: '(?<index>\\d{1,3})',
+      versionSuffix: `(?<versionSuffix>(${Object.values(CONFIG.latinAdverbialNumberals).map((suffix) => suffix.toUpperCase())
         .join(')|(')}))`.replace('()|', ''), // Hack to get out the value for piece '0'
     });
   }
 
   static get looseRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?`);
+    return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(.*?)${regexGroup.versionSuffix}?$`);
   }
 
   static get strictRegex() {
     const regexGroup = VRDocumentName.regexGroups;
-    return new RegExp(`^VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.pieceSuffix}?$`);
+    return new RegExp(`^VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}(/${regexGroup.index})?${regexGroup.versionSuffix}?$`);
   }
 
   constructor(name, options) {
@@ -45,18 +45,20 @@ export default class VRDocumentName {
     if (!match) {
       throw new Error(`Couldn't parse VR Document Name "${this.name}" (${this.strict ? 'strict' : 'loose'} parsing mode)`);
     }
-    const meta = {
-      date: moment(match[1], 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
-      casePrefix: match[2],
-      docType: match[5],
-      caseNr: parseInt(match[9], 10),
-      index: parseInt(match[11], 10),
-      // pieceSuffix: TODO
-      // pieceNr: TODO
-    };
-    if (this.strict) {
-      return meta;
+    const versionSuffix = match.groups.versionSuffix;
+    let versionNumber = 1;
+    if (versionSuffix) {
+      versionNumber = CONFIG.numbersBylatinAdverbialNumberals[versionSuffix.toLowerCase()];
     }
+    const meta = {
+      date: moment(match.groups.date, 'YYYY DDMM').toDate(), // TODO set moment "strict" parsing to true + throw error when "Invalid date"
+      casePrefix: match.groups.casePrefix,
+      docType: match.groups.docType,
+      caseNr: parseInt(match.groups.caseNr, 10),
+      index: parseInt(match.groups.index, 10),
+      versionSuffix,
+      versionNumber,
+    };
     return meta;
   }
 
@@ -77,12 +79,12 @@ export default class VRDocumentName {
     return VRDocumentName.strictRegex.test(this.name);
   }
 
-  get withoutPieceSuffix() {
-    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.pieceSuffix}$`, 'ui'), '');
+  get withoutVersionSuffix() {
+    return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
-  withOtherPieceSuffix(pieceNr) {
-    return `${this.withoutPieceSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
+  withOtherVersionSuffix(pieceNr) {
+    return `${this.withoutVersionSuffix}${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
   }
 }
 
@@ -93,7 +95,8 @@ export const compareFunction = function(parameterA, parameterB) {
       const metaB = parameterB.parseMeta();
       return (metaB.caseNr - metaA.caseNr) // Case number descending (newest first)
         || (metaA.index - metaB.index) // Index ascending
-        || (metaB.date - metaA.date); // Date descending (newest first)
+        || (metaB.date - metaA.date) // Date descending (newest first)
+        || (metaB.versionNumber - metaA.versionNumber); // versionNumber descending (newest first)
     } catch { // Only a parses
       return -1;
     }
