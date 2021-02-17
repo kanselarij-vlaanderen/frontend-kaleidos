@@ -55,7 +55,7 @@ export default class AgendaItemsAgendaRoute extends Route {
     });
   }
 
-  setupController(controller, model) {
+  async setupController(controller) {
     super.setupController(...arguments);
     const {
       agenda,
@@ -63,6 +63,7 @@ export default class AgendaItemsAgendaRoute extends Route {
     } = this.modelFor('agenda');
     controller.meeting = meeting;
     controller.agenda = agenda;
+    controller.previousAgenda = await agenda.previousVersion;
     // Initialize filteredNotas and filteredAnnouncements on controller
     controller.filterTask.perform();
   }
