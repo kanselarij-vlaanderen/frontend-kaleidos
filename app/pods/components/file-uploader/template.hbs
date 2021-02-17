@@ -49,3 +49,11 @@
     {{/file-dropzone}}
   {{/file-upload}}
 </div>
+
+
+{{#if this.blockInterface}}
+  <WebComponents::AuLoadingOverlay
+          @title={{t "upload-file"}}
+          @message={{t "upload-file"}}
+  />
+{{/if}}
