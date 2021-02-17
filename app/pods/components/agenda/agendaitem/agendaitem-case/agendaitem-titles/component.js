@@ -14,15 +14,15 @@ export default class AgendaitemTitles extends Component {
 
   @service router;
 
-  get pillClass() {
-    const baseClass = 'vl-pill vl-u-text--capitalize';
-    if (this.args.subcase) {
-      if (this.args.subcase.approved) {
-        return `${baseClass} vl-pill--success`;
-      }
-    }
-    return baseClass;
-  }
+  // get pillClass() {
+  //   const baseClass = 'vl-pill vl-u-text--capitalize';
+  //   if (this.args.subcase) {
+  //     if (this.args.subcase.approved) {
+  //       return `${baseClass} vl-pill--success`;
+  //     }
+  //   }
+  //   return baseClass;
+  // }
 
   @action
   toggleIsEditingAction() {
