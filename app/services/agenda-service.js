@@ -122,7 +122,7 @@ export default Service.extend({
       if (!pieceFromStore) {
         pieceFromStore = this.store.queryRecord(singularize(piece.type), piece.id);
       }
-      piecesFromStore.push(piece);
+      piecesFromStore.push(pieceFromStore);
     }
     return piecesFromStore;
   },
