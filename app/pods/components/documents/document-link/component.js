@@ -204,6 +204,7 @@ export default class DocumentLink extends Component {
         if (this.itemType === 'subcase') {
           const latestActivity = await this.args.agendaitemOrSubcase.get('latestActivity');
           if (latestActivity) {
+            await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
             const latestAgendaitem = await latestActivity.get('latestAgendaitem');
             await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
             await latestAgendaitem.hasMany('pieces').reload();

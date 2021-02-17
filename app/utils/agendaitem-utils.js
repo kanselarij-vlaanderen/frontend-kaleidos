@@ -46,15 +46,6 @@ export const setAgendaitemFormallyOk = async(agendaitem) => {
 };
 
 /**
- *@description Return een lijst met agendaitems die nog niet formeel ok zijn.
- * @param agendaitems
- */
-export const getListOfAgendaitemsThatAreNotFormallyOk = (agendaitems) => {
-  const agendaitemNotFormallyOk = (agendaitem) => agendaitem.get('formallyOk') !== CONFIG.formallyOk;
-  return agendaitems.filter(agendaitemNotFormallyOk);
-};
-
-/**
  * @description Set some properties on a model.
  * @param model Kan van het type agendaitem of subcase zijn
  * @param propertiesToSet de properties die we dienen aan te passen
@@ -242,19 +233,6 @@ export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgend
       return await agendaitem.save();
     }));
   }
-};
-
-export const getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus = async(currentAgenda) => {
-  const agendaitemsFromCurrentAgenda = await currentAgenda.get('agendaitems').toArray();
-  return agendaitemsFromCurrentAgenda.filter((agendaitem) => {
-    const formallyOkOption = CONFIG.formallyOkOptions.find((option) => option.label === 'Formeel OK');
-    if (formallyOkOption) {
-      const formallyOkUri = formallyOkOption.uri;
-      if (formallyOkUri !== agendaitem.formallyOk) {
-        return agendaitem;
-      }
-    }
-  });
 };
 
 export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
