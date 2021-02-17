@@ -175,7 +175,8 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     }
   }
   cy.wait(`@loadPieces_${randomInt}`);
-  cy.wait(1000); // cypress is too fast
+  cy.wait(1000); // Cypress is too fast
+  // TODO Check if the modal is gone, had 1 flaky where the modal was still showing after the patches
   cy.log('/addNewPiece');
 }
 
@@ -518,7 +519,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
       .click();
   });
   cy.wait('@deletePiece', {
-    timeout: 20000,
+    timeout: 40000,
   }).wait('@putRestoreAgendaitems', {
     timeout: 20000,
   });

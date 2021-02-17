@@ -11,8 +11,9 @@
     as |table|>
     <table.content as |c|>
       <c.header>
+        {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <th>{{t "publications-table-case-name"}}</th>
+          <th style="min-width: 50rem">{{t "publications-table-case-name"}}</th>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <ThSortable
@@ -21,6 +22,11 @@
             @label={{t "publications-table-publication-number"}}
           />
         {{/if}}
+
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <th>{{t "numac-number"}}</th>
+        {{/if}}
+
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <th>
             <span class="auk-u-mr">
@@ -54,7 +60,6 @@
             @label={{t "publications-table-final-publication-date"}}
           />
         {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
           <ThSortable
             @currentSorting={{this.sort}}
@@ -130,17 +135,29 @@
       </c.header>
       <c.body class="tr-hover" as |row|>
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <td>
-            {{if row.case.shortTitle row.case.shortTitle (t "dash")}}
+        {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
+          <td class="auk-table__col--6">
+            {{if
+              row.case.shortTitle
+              row.case.shortTitle
+              (if row.case.title row.case.title (t "dash"))
+            }}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
             {{if
-              row.publicationNumberFilterOption
-              row.publicationNumberFilterOption
+              row.publicationNumber
+              row.publicationNumber
               (t "dash")
             }}
+          </td>
+        {{/if}}
+        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+          <td>
+            {{#each row.numacNumbers as |numac|}}
+              <WebComponents::AuPill>{{numac.name }}</WebComponents::AuPill>
+            {{/each}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
@@ -154,22 +171,39 @@
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
-          <td>
-            {{t "dash"}}
+          <td class="auk-u-text-nowrap">
+            {{#if row.publishDateRequested}}
+              {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
-          <td>
-            {{if
-              row.publishBefore
-              (moment-format row.publishBefore "DD-MM-YYYY")
-              (t "dash")
-            }}
+          <td class="auk-u-text-nowrap">
+            {{#if row.publishBefore}}
+              {{#if
+                (is-between (moment-subtract row.publishBefore 2 precision='days') row.publishBefore)
+              }}
+                <div class="auk-form-help-text--warning">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else if (is-before row.publishBefore now)}}
+                <div class="auk-form-help-text--danger">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else}}
+                <div>
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{/if}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{if
               row.publishedAt
               (moment-format row.publishedAt "DD-MM-YYYY")
@@ -191,7 +225,7 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{moment-format row.modified "DD-MM-YYYY"}}<br/>
             <span class="auk-u-text-small auk-u-muted">
               {{moment-format row.modified "HH:mm"}}
@@ -320,6 +354,7 @@
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @name="caseNameFilterOption" @label={{t "publications-table-case-name"}} @checked={{this.filterTableColumnOptionKeys.caseNameFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
+                <WebComponents::AuCheckbox @name="numacNumberFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="derivedPublicationTypeFilterOption" @label={{t "publications-table-derived-publicationtype"}} @checked={{this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>

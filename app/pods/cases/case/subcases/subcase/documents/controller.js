@@ -134,6 +134,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
       if (this.subcase && lastPiece) {
         const latestActivity = await this.subcase.get('latestActivity');
         if (latestActivity) {
+          await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
           const latestAgendaitem = await latestActivity.get('latestAgendaitem');
           await restorePiecesFromPreviousAgendaitem(latestAgendaitem, documentContainer);
           // TODO: make sure we're not loading stale cache
