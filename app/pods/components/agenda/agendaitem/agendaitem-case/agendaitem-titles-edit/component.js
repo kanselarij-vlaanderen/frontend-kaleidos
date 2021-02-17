@@ -12,7 +12,7 @@ import { tracked } from '@glimmer/tracking';
 export default class AgendaitemTitlesEdit extends Component {
   @service store;
   @tracked isLoading = false;
-  classNames = ['vl-form__group', 'vl-u-bg-porcelain'];
+  classNames = ['vl-form__group', 'vl-u-bg-porcelain']; // @brenner-company: since this is a glimmer component, this can be removed or correctly translated within the HTML?
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'explanation']);
 
   get newsletterInfo() {
