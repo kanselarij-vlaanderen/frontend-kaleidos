@@ -10,14 +10,7 @@
               this.casePath
             }}
           </span>
-          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>
-            {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
-            {{if
-              model.publicationFlow.case.shortTitle
-              model.publicationFlow.case.shortTitle
-              model.publicationFlow.case.title
-            }}
-          </h4>
+          <WebComponents::AuAbbreviatedText @text={{this.titleText}} @size="150" @custom="true" />
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
