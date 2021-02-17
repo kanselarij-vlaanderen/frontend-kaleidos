@@ -123,7 +123,7 @@ export default class PublicationService extends Service {
   }
 
   async unlinkNumacNumber(numacNumber, publicationFlow) {
-    await numacNumber.deleteRecord();
+    await numacNumber.destroyRecord();
     await publicationFlow.hasMany('numacNumbers').reload();
   }
 }
