@@ -1,11 +1,13 @@
-<WebComponents::AuModal>
-  <WebComponents::AuModal::Header
-    @title={{this.getTitle}}
-    @hideCloseButton={{true}}
-  />
-  <WebComponents::AuModal::Body>
-    <WebComponents::AuLoader
-      @message={{this.getMessage}}
+<div class="auk-u-flex auk-u-flex--justify-around">
+  <WebComponents::AuModal @size={{this.getSize}}>
+    <WebComponents::AuModal::Header
+      @title={{this.getTitle}}
+      @hideCloseButton={{true}}
     />
-  </WebComponents::AuModal::Body>
-</WebComponents::AuModal>
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuLoader
+        @message={{this.getMessage}}
+      />
+    </WebComponents::AuModal::Body>
+  </WebComponents::AuModal>
+</div>
