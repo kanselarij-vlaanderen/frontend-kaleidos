@@ -146,7 +146,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
-            {{ row.publicationNumber }} {{ row.publicationSuffix }}
+            {{#if row.publicationNumber}}
+              {{ row.publicationNumber }} {{ row.publicationSuffix }}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
