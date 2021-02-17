@@ -98,9 +98,7 @@
   {{#if (not @agendaitem.showAsRemark)}}
     <div class="auk-u-mb-2">
       {{#if @subcase.subcaseName}}
-      	<span class="auk-pill auk-pill--default">
-          {{@subcase.subcaseName}}
-        </span>
+        <WebComponents::AuPill>{{@subcase.subcaseName}}</WebComponents::AuPill>
       {{/if}}
     </div>
     {{#if @agendaitem.retracted}}
