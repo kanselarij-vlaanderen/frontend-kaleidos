@@ -57,12 +57,6 @@ export default Service.extend({
     return [];
   }),
 
-  definiteAgendas: computed('agendas', function() {
-    return this.get('agendas').filter((agenda) => !agenda.get('isDesignAgenda'))
-      .sortBy('serialnumber')
-      .reverse();
-  }),
-
   async findPreviousAgendaOfSession(session, agenda) {
     const agendas = await session.get('sortedAgendas');
     if (agendas) {

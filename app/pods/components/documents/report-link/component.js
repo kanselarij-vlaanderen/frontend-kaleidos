@@ -113,7 +113,7 @@ export default class ReportLink extends Component {
     newPiece.set('modified', creationDate);
     containerPieces.pushObject(newPiece);
     newPiece.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
-    const newName = new VRDocumentName(previousPiece.get('name')).withOtherPieceSuffix(containerPieces.length);
+    const newName = new VRDocumentName(previousPiece.get('name')).withOtherVersionSuffix(containerPieces.length);
     newPiece.set('name', newName);
     this.args.documentContainer.notifyPropertyChange('pieces');// Why exactly? Ember should handle this?
     this.pieceInCreation = await newPiece;
