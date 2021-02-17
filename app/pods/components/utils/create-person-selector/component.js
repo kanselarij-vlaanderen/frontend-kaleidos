@@ -10,7 +10,7 @@ export default Component.extend({
   classNameBindings: [
     'isCreatingPerson:vl-u-bg-alt',
     'isCreatingPerson:auk-u-m-0',
-    'isCreatingPerson:vlc-u-padding-2',
+    'isCreatingPerson:auk-u-p-2',
     'classes'
   ],
   searchField: 'first-name',
