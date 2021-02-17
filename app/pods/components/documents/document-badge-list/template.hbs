@@ -5,7 +5,7 @@ as |documents|>
     {{#each documents as |doc|}}
       <Documents::DocumentBadge
         @piece={{doc}}
-        @isHighlighted={{contains doc @highlightedPieces}}
+        @isHighlighted={{includes doc @highlightedPieces}}
         @isClickable={{true}}
       />
     {{/each}}
