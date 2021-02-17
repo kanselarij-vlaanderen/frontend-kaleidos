@@ -283,7 +283,7 @@ export default class PublicationDocumentsController extends Controller {
 
   /** PUBLISH PREVIEW ACTIVITIES **/
   @action
-  setMailSubject(event) {
+  setPreviewMailSubject(event) {
     set(this.previewActivity, 'mailSubject', event.target.value);
   }
 
@@ -342,7 +342,10 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   /** TRANSLATION ACTIVITIES **/
-
+  @action
+  setTranslationMailSubject(event) {
+    set(this.translateActivity, 'mailSubject', event.target.value);
+  }
   @action
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
