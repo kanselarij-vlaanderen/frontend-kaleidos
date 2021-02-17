@@ -1,5 +1,5 @@
 import Service, { inject as service } from '@ember/service';
-
+import { singularize } from 'ember-inflector';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'fe-redpencil/utils/ajax';
@@ -118,9 +118,9 @@ export default Service.extend({
     const payload = await response.json();
     const piecesFromStore = [];
     for (const piece of payload.data) {
-      let pieceFromStore = this.store.peekRecord(piece.type, piece.id);
+      let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
       if (!pieceFromStore) {
-        pieceFromStore = this.store.queryRecord(piece.type, piece.id);
+        pieceFromStore = this.store.queryRecord(singularize(piece.type), piece.id);
       }
       piecesFromStore.push(piece);
     }
