@@ -171,7 +171,7 @@
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
-          <td>
+          <td class="auk-u-text-nowrap">
             {{#if row.publishDateRequested}}
               {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
             {{else}}
@@ -181,11 +181,25 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
           <td class="auk-u-text-nowrap">
-            {{if
-              row.publishBefore
-              (moment-format row.publishBefore "DD-MM-YYYY")
-              (t "dash")
-            }}
+            {{#if row.publishBefore}}
+              {{#if
+                (is-between (moment-subtract row.publishBefore 2 precision='days') row.publishBefore)
+              }}
+                <div class="auk-form-help-text--warning">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else if (is-before row.publishBefore now)}}
+                <div class="auk-form-help-text--danger">
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{else}}
+                <div>
+                  {{moment-format row.publishBefore "DD-MM-YYYY"}}
+                </div>
+              {{/if}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
