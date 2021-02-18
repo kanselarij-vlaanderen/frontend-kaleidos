@@ -1,10 +1,10 @@
-import Model,
-{
+import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import {
   attr,
   hasMany
 } from '@ember-data/model';
 
-export default class Organization extends Model {
+export default class Organization extends ModelWithModifier {
   @attr('string') name;
 
   // Has many .

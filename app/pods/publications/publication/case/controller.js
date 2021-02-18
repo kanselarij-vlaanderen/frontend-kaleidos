@@ -16,6 +16,8 @@ export default class CaseController extends Controller {
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
   @tracked selectedMandatee = null;
+  @tracked showAddOrganisationModal = false;
+  @tracked inputOrganization = '';
 
   @tracked
   contactPerson = {
@@ -32,21 +34,42 @@ export default class CaseController extends Controller {
     sort: '',
   };
 
+  /**
+   * ZONE FOR TTHE ORGANIZATIONS
+   */
   get allOrganizations() {
-    console.log('allOrganizations', this.model.organizations);
     return this.model.organizations;
   }
-  /*
-  * const newTreatment = this.store.createRecord('agenda-item-treatment', {
-          created: moment().utc()
-            .toDate(),
-          modified: moment().utc()
-            .toDate(),
-          agendaitem: this.agendaitem,
-          subcase: this.subcase,
-        });
-        await newTreatment.save();
-        this.refresh();*/
+
+  @action
+  customPowerSelectSearchFunction(searchTerm, event) {
+    // Just because we can.
+    return event.results.filter((result) => result.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+
+  @action
+  async addOrganisation() {
+    this.showLoader = true;
+    const newOrganization = this.store.createRecord('organization', {
+      name: this.inputOrganization,
+    });
+    await newOrganization.save();
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+    this.showLoader = false;
+  }
+
+  @action
+  openAddOrganisationModal() {
+    this.showAddOrganisationModal = true;
+  }
+
+  @action
+  closeAddOrganisationModal() {
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+  }
+
   @action
   selectOrganization(selections, event) {
     // Return all available organizations
@@ -61,6 +84,9 @@ export default class CaseController extends Controller {
     return this.contactPerson.organizations;
   }
 
+  /**
+   * ZONE FOR TTHE CONTACT PERSONS
+   */
   @action
   onFirstNameChanged(event) {
     this.contactPerson.firstName = event.target.value;

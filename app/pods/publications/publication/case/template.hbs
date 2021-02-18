@@ -351,8 +351,12 @@
           <WebComponents::AuInput {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
+          <WebComponents::AuLabel for="organisationInput">
+            {{t "organisation"}}
+          </WebComponents::AuLabel>
           <PowerSelectMultiple
+                  @searchField="name"
+                  @search={{this.customPowerSelectSearchFunction}}
                   @options={{await this.allOrganizations}}
                   @selected={{this.selectedOrganizations}}
                   @noMatchesMessage={{t "search-organization"}}
@@ -361,6 +365,10 @@
                   as |organization|>
             {{ organization.name }}
           </PowerSelectMultiple>
+          <WebComponents::AuButton @skin="borderless" {{on "click" this.openAddOrganisationModal}}>
+            {{t "add-organization"}}
+          </WebComponents::AuButton>
+
         </div>
       </div>
     </WebComponents::AuModal::Body>
@@ -427,6 +435,57 @@
               @size="small"
               {{on "click" this.addSelectedMandateeToPublicationFlow}}
               data-test-add-contactperson-submit-button
+            >
+              {{t "add"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}
+
+{{!-- ADD organization MODAL --}}
+
+
+{{#if showAddOrganisationModal}}
+  <WebComponents::AuModal
+          @size="medium"
+          data-test-add-organisationModal
+  >
+    <WebComponents::AuModal::Header
+            @title={{t "add-organization"}}
+            @closeModal={{this.closeAddOrganisationModal}}
+    />
+    <WebComponents::AuModal::Body>
+      <WebComponents::AuInput @icon=""
+                              class="auk-input--block"
+                              type="text"
+                              data-test-trigger-search-input
+                              id="defaultInput"
+                              @value={{this.inputOrganization}}
+      />
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @custom={{true}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="borderless"
+              {{on "click" this.closeAddOrganisationModal}}
+            >
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+                    @skin="primary"
+                    @icon="plus"
+                    @size="small"
+              {{on "click" this.addOrganisation}}
+                    data-test-add-organization-submit-button
             >
               {{t "add"}}
             </WebComponents::AuButton>
