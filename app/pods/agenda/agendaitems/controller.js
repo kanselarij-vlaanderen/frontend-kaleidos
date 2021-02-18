@@ -86,8 +86,10 @@ export default class AgendaitemsAgendaController extends Controller {
   }
 
   @task
-  *assignNewPriorities(reorderedAgendaitems) {
-    yield setAgendaitemsPriority(reorderedAgendaitems, true, true); // permissions guarded in template (and backend)
+  *assignNewPriorities(reorderedAgendaitems, draggedAgendaItem) {
+    // reorderedAgendaitems includes all items on the whole page. We only want to re-order within one category (nota/announcement/...)
+    const reorderedAgendaitemsOfCategory = reorderedAgendaitems.filter((item) => item.showAsRemark === draggedAgendaItem.showAsRemark);
+    yield setAgendaitemsPriority(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
     this.refresh();
   }
 
