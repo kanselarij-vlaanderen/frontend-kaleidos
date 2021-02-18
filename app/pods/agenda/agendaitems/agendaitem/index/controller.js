@@ -46,4 +46,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     await this.reassignPrioritiesForAgendaitems();
     await this.navigateToNeighbouringItem(agendaitem);
   }
+
+  get subcase() {
+    const agendaActivity = this.model.get('agendaActivity');
+    if (agendaActivity) {
+      return agendaActivity.get('subcase');
+    }
+    return null;
+  }
 }
