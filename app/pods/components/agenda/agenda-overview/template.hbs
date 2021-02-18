@@ -16,16 +16,12 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <a href="javascript://"
+        <WebComponents::AuButtonLink
           class="vlc-agenda-items-section-header__link"
           {{on "click" @toggleShowModifiedOnly}}
         >
-          {{#if @showModifiedOnly}}
-            {{t "show-all"}}
-          {{else}}
-            {{t "show-changes"}}
-          {{/if}}
-        </a>
+          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+        </WebComponents::AuButtonLink>
       </div>
       <div class="vlc-toolbar__item">
         {{#if
