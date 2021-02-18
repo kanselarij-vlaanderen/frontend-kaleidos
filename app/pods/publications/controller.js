@@ -58,7 +58,7 @@ export default class PublicationsController extends Controller {
       this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', ' publicationFlowNumacNumbers', 'publicationFlowId'];
       const searchModifier = ':sqs:';
       const textSearchKey = this.textSearchFields.join(',');
-      filter[`${searchModifier}${textSearchKey}`] = this.searchText;
+      filter[`${searchModifier}${textSearchKey}`] = `${this.searchText}*`;
       this.showSearchResults = true;
     }
 
