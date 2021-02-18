@@ -24,7 +24,6 @@ export default Component.extend({
   }),
 
   async validatedCampaign(campaignId) {
-    console.log('validating', campaignId);
     const campaign = await this.newsletterService.getMailCampaign(campaignId).catch(() => {
       this.toaster.error(this.intl.t('error-fetch-newsletter'), this.intl.t('warning-title'));
       return false;

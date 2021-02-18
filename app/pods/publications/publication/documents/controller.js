@@ -194,10 +194,12 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *cancelUploadPieces() {
+    this.showLoader = true;
     const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
     yield all(deletePromises);
     this.newPieces = A();
     this.isOpenPieceUploadModal = false;
+    this.showLoader = false;
   }
 
   @task

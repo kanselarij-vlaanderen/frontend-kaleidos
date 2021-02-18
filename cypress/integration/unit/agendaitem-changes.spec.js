@@ -68,6 +68,7 @@ context('Agendaitem changes tests', () => {
 
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
+    cy.wait(1000); // flaky, page not loading ?
     cy.openCase(caseTitle);
     cy.addSubcase('Mededeling', subcaseTitle3, `${subcaseTitle3} lange titel`, 'In voorbereiding', 'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.visit(agendaURL);
@@ -102,7 +103,8 @@ context('Agendaitem changes tests', () => {
     // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.get(agenda.agendaitemDocumentsTab).click();
-    cy.addDocuments(files);
+    cy.contains('Documenten toevoegen').click();
+    cy.addNewDocumentsInUploadModal(files, 'agendaitems');
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.setFormalOkOnItemWithIndex(0);
