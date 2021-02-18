@@ -48,12 +48,14 @@ export default class PublicationsController extends Controller {
 
   @action
   async search() {
-    const filter = {};
+    const filter = {
+      ':has:publicationFlowNumber': 1,
+    };
     if (this.searchText.length === 0 || this.searchText === '') {
       filter[':sqs:title'] = '*'; // search without filter
       this.showSearchResults = false;
     } else {
-      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle'];
+      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', ' publicationFlowNumacNumbers', 'publicationFlowId'];
       const searchModifier = ':sqs:';
       const textSearchKey = this.textSearchFields.join(',');
       filter[`${searchModifier}${textSearchKey}`] = this.searchText;
