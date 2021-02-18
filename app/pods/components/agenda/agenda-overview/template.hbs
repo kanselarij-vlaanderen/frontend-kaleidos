@@ -59,9 +59,8 @@
             @agendaitem={{agendaitem}}
             @currentAgenda={{@currentAgenda}}
             @previousAgenda={{@previousAgenda}}
-            @isEditingFormallyOkStatus={{this.isEditingOverview}}
-            @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
             @showFormallyOkStatus={{this.isDesignAgenda}}
+            @isEditingFormallyOkStatus={{this.isEditingOverview}}
           />
         </li>
       {{/each}}
@@ -87,8 +86,8 @@
               @agendaitem={{agendaitem}}
               @currentAgenda={{@currentAgenda}}
               @previousAgenda={{@previousAgenda}}
-              @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
+              @isEditingFormallyOkStatus={{this.isEditingOverview}}
             />
           </li>
         {{/each}}
@@ -117,8 +116,8 @@
               @agendaitem={{announcement}}
               @currentAgenda={{@currentAgenda}}
               @previousAgenda={{@previousAgenda}}
-              @setFormallyOkAction={{fn this.setFormallyOkAction announcement}}
               @showFormallyOkStatus={{this.isDesignAgenda}}
+              @isEditingFormallyOkStatus={{this.isEditingOverview}}
             />
           </li>
         {{/each}}
