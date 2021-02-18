@@ -1,27 +1,34 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import CONFIG from 'fe-redpencil/utils/config';
-import EmberObject, { computed } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 
-export default Component.extend({
-  classNames: ['auk-u-mb-2'],
-  isLoading: null,
-  hideLabel: null,
+export default class UtilsFormallyOkSelector extends Component {
+  /**
+   * @argument formallyOkStatusUri: TODO: change to ember object
+   * @argument onChange
+   */
 
-  options: computed(() => CONFIG.formallyOkOptions.map((formallyOkOption) => EmberObject.create(formallyOkOption))),
+  options;
+  defaultOption;
 
-  selectedFormallyOk: computed('options', 'formallyOk', function() {
-    const formallyOk = this.get('formallyOk');
-    if (!formallyOk) {
-      return this.options.find((option) => option.get('uri') === CONFIG.notYetFormallyOk);
+  constructor() {
+    super(...arguments);
+    this.options = CONFIG.formallyOkOptions;
+    this.defaultOption = this.options.find((option) => option.uri === CONFIG.notYetFormallyOk);
+  }
+
+  get formallyOkStatus() {
+    return this.options.find((option) => option.uri === this.args.formallyOkStatusUri);
+  }
+
+  get selectedStatus() {
+    return this.formallyOkStatus || this.defaultOption;
+  }
+
+  @task
+  *onChange(newStatus) {
+    if (this.args.onChange) {
+      yield this.args.onChange(newStatus.uri);
     }
-    return this.options.find((option) => option.get('uri') === formallyOk);
-  }),
-
-  actions: {
-    setAction(formallyOkStatus) {
-      this.set('selectedFormallyOk', formallyOkStatus);
-      this.setAction(formallyOkStatus);
-    },
-  },
-});
+  }
+}

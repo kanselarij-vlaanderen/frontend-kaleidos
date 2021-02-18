@@ -1,20 +1,15 @@
-<div class="vlc-input-field-block">
-  {{#if (not hideLabel)}}
-    {{web-components/vl-form-label value=(t "status")}}
-  {{/if}}
-  {{#if isLoading}}
-    <div class="vl-u-text--muted">
-      {{t "please-be-patient"}}
-      <div class="vl-loader" role="alert" aria-busy="true"></div>
-    </div>
-  {{else}}
-    {{#power-select
-      options=options
-      selected=selectedFormallyOk
-      onchange=(action "setAction")
-    as |option|
-    }}
-      {{option.label}}
-    {{/power-select}}
-  {{/if}}
+{{#if this.onChange.isRunning}}
+  <div class="vl-u-text--muted">
+    <div class="vl-loader" role="alert" aria-busy="true"></div>
+  </div>
+{{/if}}
+<div class="auk-u-mb-2">
+  <PowerSelect
+    @options={{this.options}}
+    @selected={{this.selectedStatus}}
+    @onchange={{perform this.onChange}}
+    @disabled={{this.onChange.isRunning}}
+  as |option|>
+    {{option.label}}
+  </PowerSelect>
 </div>
