@@ -49,7 +49,7 @@
 
                      PUBLICATION FLOW CALL TO ACTION
 
-            {{#if (not @isEditingOverview)}}
+            {{#if (not @isEditingFormallyOkStatus)}}
               <div class="auk-button-toolbar">
                 {{#if (await @agendaitem.publicationFlow)}}
                   <LinkTo
@@ -102,12 +102,10 @@
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
-            {{#if @isEditingOverview}}
+            {{#if @isEditingFormallyOkStatus}}
               <Utils::FormallyOkSelector
-                @formallyOk={{@agendaitem.formallyOk}}
-                @isLoading={{false}}
-                @hideLabel={{true}}
-                @setAction={{perform this.setFormallyOkStatus}}
+                @formallyOkStatusUri={{@agendaitem.formallyOk}}
+                @onChange={{this.setAndSaveFormallyOkStatus}}
               />
             {{else}}
               <p class="{{@agendaitem.formallyOkToShow.classNames}}">
@@ -145,7 +143,7 @@
           </button>
         {{/if}}
       {{/if}}
-      {{#if (not @isEditingOverview)}}
+      {{#unless @isEditingFormallyOkStatus}}
         <div class="vlc-hr"></div>
         <div class="vlc-agenda-items__remarks">
           <div>
@@ -208,7 +206,7 @@
             {{/if}}
           </div>
         </div>
-      {{/if}}
+      {{/unless}}
     </div>
   </div>
 </div>

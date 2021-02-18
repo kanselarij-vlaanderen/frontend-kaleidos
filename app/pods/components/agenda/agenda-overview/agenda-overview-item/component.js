@@ -13,12 +13,13 @@ export default class AgendaOverviewItem extends Component {
   /**
    *
    * @argument agendaitem
-   * @argument isEditingOverview
    * @argument currentAgenda: both agenda's for determining changed documents
    * @argument previousAgenda
+   * @argument isEditingFormallyOkStatus
    */
 
   @service store;
+  @service toaster;
   @service sessionService;
   @service agendaService;
   @service publicationService;
@@ -141,5 +142,16 @@ export default class AgendaOverviewItem extends Component {
   @action
   toggleShowingAllDocuments() {
     this.isShowingAllDocuments = !this.isShowingAllDocuments;
+  }
+
+  @action
+  async setAndSaveFormallyOkStatus(newFormallyOkUri) {
+    this.args.agendaitem.formallyOk = newFormallyOkUri;
+    await this.args.agendaitem
+      .save()
+      .catch(() => {
+        this.args.agendaitem.rollbackAttributes();
+        this.toaster.error();
+      });
   }
 }

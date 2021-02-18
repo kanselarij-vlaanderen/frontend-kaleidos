@@ -73,20 +73,6 @@ export default class AgendaOverview extends Component {
   }
 
   @action
-  async setFormallyOkAction(agendaitem, formallyOkUri) {
-    this.showLoader = true;
-    agendaitem.formallyOk = formallyOkUri;
-    await agendaitem
-      .save()
-      .catch(() => {
-        this.toaster.error();
-      })
-      .finally(() => {
-        this.showLoader = false;
-      });
-  }
-
-  @action
   toggleIsEditingOverview() {
     this.isEditingOverview = !this.isEditingOverview;
   }

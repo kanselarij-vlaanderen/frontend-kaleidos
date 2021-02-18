@@ -1,6 +1,5 @@
 <div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
   <div class="vlc-toolbar vlc-agenda-items-section-header">
-
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
@@ -29,12 +28,12 @@
           )
         }}
           <div class="auk-u-ml-2">
-            <a href=""
-               data-test-agenda-edit-formally-ok-button
-               class="vlc-agenda-items-section-header__link"
+            <WebComponents::AuButtonLink
+              class="vlc-agenda-items-section-header__link"
+              {{on "click" this.toggleIsEditingOverview}}
             >
               {{t "edit"}}
-            </a>
+            </WebComponents::AuButtonLink>
           </div>
         {{/if}}
       </div>
@@ -55,6 +54,7 @@
             @agendaitem={{agendaitem}}
             @currentAgenda={{@currentAgenda}}
             @previousAgenda={{@previousAgenda}}
+            @isEditingFormallyOkStatus={{this.isEditingOverview}}
             @setFormallyOkAction={{fn this.setFormallyOkAction agendaitem}}
             @showFormallyOkStatus={{this.isDesignAgenda}}
           />
