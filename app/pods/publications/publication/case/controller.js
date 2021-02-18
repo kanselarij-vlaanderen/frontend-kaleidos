@@ -124,6 +124,7 @@ export default class CaseController extends Controller {
   @action
   closeContactPersonModal() {
     this.personModalOpen = false;
+    this.contactPerson.organizations = [];
   }
 
   @action
@@ -158,6 +159,7 @@ export default class CaseController extends Controller {
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
     await this.publicationService.linkContactPersonToPublication(this.model.publicationFlow.id, contactPerson);
+    this.contactPerson.organizations = [];
     this.personModalOpen = false;
     this.showLoader = false;
   }
