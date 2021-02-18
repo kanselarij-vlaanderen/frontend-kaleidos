@@ -56,16 +56,8 @@ export default class AgendaOverview extends Component {
 
   constructor() {
     super(...arguments);
-    this.groupNotasOnGroupName.perform(this.regularNotas);
+    this.groupNotasOnGroupName.perform(this.args.notas);
     this.determineIfDesignAgenda.perform();
-  }
-
-  get approvalNotas() {
-    return this.args.notas.filterBy('isApproval', true);
-  }
-
-  get regularNotas() {
-    return this.args.notas.filterBy('isApproval', false);
   }
 
   get isDraggingEnabled() {

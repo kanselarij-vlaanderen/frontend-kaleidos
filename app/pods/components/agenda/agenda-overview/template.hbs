@@ -51,27 +51,13 @@
     </div>
   {{/if}}
   <div class={{this.spacerClass}}>
-    <ul>
-      {{!-- Goedkeuringen vorige vergaderingen --}}
-      {{#each this.approvalNotas as |agendaitem|}}
-        <li class="vlc-agenda-items__sub-item">
-          <Agenda::AgendaOverview::AgendaOverviewItem
-            @agendaitem={{agendaitem}}
-            @currentAgenda={{@currentAgenda}}
-            @previousAgenda={{@previousAgenda}}
-            @showFormallyOkStatus={{this.isDesignAgenda}}
-            @isEditingFormallyOkStatus={{this.isEditingOverview}}
-          />
-        </li>
-      {{/each}}
-    </ul>
-
     <ul
       {{sortable-group onChange=@onReorderAgendaitems}}
-      {{did-update (perform this.groupNotasOnGroupName this.regularNotas) this.regularNotas}}>
-      {{!-- other notas --}}
-      {{#each this.groupedNotas as |agendaitemGroup|}}
-        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
+      {{did-update (perform this.groupNotasOnGroupName @notas) @notas}}>
+      {{#each this.groupedNotas as |agendaitemGroup index|}}
+        {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
+          <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
+        {{/unless}}
         {{#each agendaitemGroup.agendaitems as |agendaitem|}}
           <li
             class="vlc-agenda-items__sub-item"
