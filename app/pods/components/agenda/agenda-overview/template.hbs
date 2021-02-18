@@ -1,4 +1,11 @@
 <div class="vlc-agenda-items auk-u-m-8 vlc-agenda-items--spaced">
+  {{#if this.isEditingOverview}}
+    <ChangesAlert
+      @message={{t "editing-agenda-overview"}}
+      @buttonText={{t "end-editing-overview"}}
+      @clearAction={{this.toggleIsEditingOverview}}
+    />
+  {{/if}}
   <div class="vlc-toolbar vlc-agenda-items-section-header">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
@@ -27,14 +34,16 @@
             this.isDesignAgenda
           )
         }}
-          <div class="auk-u-ml-2">
-            <WebComponents::AuButtonLink
-              class="vlc-agenda-items-section-header__link"
-              {{on "click" this.toggleIsEditingOverview}}
-            >
-              {{t "edit"}}
-            </WebComponents::AuButtonLink>
-          </div>
+          {{#unless this.isEditingOverview}}
+            <div class="auk-u-ml-2">
+              <WebComponents::AuButtonLink
+                class="vlc-agenda-items-section-header__link"
+                {{on "click" this.toggleIsEditingOverview}}
+              >
+                {{t "edit"}}
+              </WebComponents::AuButtonLink>
+            </div>
+          {{/unless}}
         {{/if}}
       </div>
     </div>
