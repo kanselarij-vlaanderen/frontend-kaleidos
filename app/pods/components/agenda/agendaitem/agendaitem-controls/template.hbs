@@ -1,24 +1,45 @@
-{{#if currentAgenda.isDesignAgenda}}
-  {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
-    {{#if (await isPostPonable)}}
-      {{#if agendaitem.retracted}}
-        <button data-test-revert-postpone-agendaitem type="button" class="vl-button vl-button--tertiary"
-          {{action "advanceAgendaitem" agendaitem}}
-        >
-          {{t "not-postpone"}}
-        </button>
-      {{else}}
-        <button data-test-postpone-agendaitem type="button" class="vl-button vl-button--tertiary" {{action "postponeAgendaitem" agendaitem}}>
-          {{t "postpone"}}
-        </button>
-      {{/if}}
-    {{/if}}
-    {{#if (or currentSession.isAdmin (await isDeletable))}}
-      <button data-test-delete-agendaitem type="button" class="vl-button vl-button--tertiary"
-        {{action "toggleIsVerifying"}}>
-        {{t "delete"}}
-      </button>
-    {{/if}}
+{{#if @currentAgenda.isDesignAgenda}}
+  {{#if
+    (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
+  }}
+    <WebComponents::AuButtonToolbar>
+      <WebComponents::AuButton
+              @layout="icon-right"
+              @icon="chevron-down"
+      >
+        {{t "actions"}}
+      </WebComponents::AuButton>
+      <AttachPopover
+              @renderInPlace={{true}}
+              @class="ember-attacher-popper"
+              @hideOn="clickout click"
+              @showOn="click"
+              @animation="shift"
+              @placement="bottom"
+      {{!-- as |attacher| --}}
+      >
+        <WebComponents::AuDropdown>
+          {{#if this.isPostPonable}}
+            {{#if @agendaitem.retracted}}
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}}>
+                {{t "not-postpone"}}
+              </WebComponents::AuDropdown::Item>
+            {{else}}
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}}>
+                {{t "postpone"}}
+              </WebComponents::AuDropdown::Item>
+            {{/if}}
+          {{/if}}
+          {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
+            <WebComponents::AuDropdown::Item {{on "click" this.toggleIsVerifying}}
+                    @skin="danger"
+            >
+              {{t "delete"}}
+            </WebComponents::AuDropdown::Item>
+          {{/if}}
+        </WebComponents::AuDropdown>
+      </AttachPopover>
+    </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="vl-loader"></div>
   {{/if}}

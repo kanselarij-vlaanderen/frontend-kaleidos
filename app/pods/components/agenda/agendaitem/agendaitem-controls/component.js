@@ -1,43 +1,54 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  store: service(),
-  intl: service(),
-  sessionService: service(),
-  agendaService: service(),
-  currentSession: service(),
-  currentAgenda: null,
-  agendaitem: null,
-  isSavingRetracted: null,
+
+export default class AgendaItemControls extends Component {
+  @service store;
+  @service intl;
+  @service sessionService;
+  @service agendaService;
+  @service currentSession;
+
+  currentAgenda = null;
+  agendaitem = null;
+  @tracked isSavingRetracted = false;
 
   // eslint-disable-next-line ember/use-brace-expansion
-  isPostPonable: computed('sessionService.agendas.@each', 'agendaitem.agendaActivity', 'agendaitem.retracted', async function() {
-    const agendaActivity = await this.get('agendaitem.agendaActivity');
+  get isPostPonable() {
+    const agendaActivity = this.args.agendaitem.get('agendaActivity');
     if (!agendaActivity) {
       // In case of legacy agendaitems without a link to subcase (old) or agenda-activity
       // Or in case of the agendaitem to approve minutes ("verslag vorige vergadering")
       return false;
     }
-    return this.get('sessionService.agendas').then((agendas) => !!(agendas && agendas.get('length') > 1));
-  }),
+    return this.sessionService.get('agendas')
+      .then((agendas) => !!(agendas && agendas.get('length') > 1));
+  }
 
   // TODO verbose logic
-  isDeletable: computed(
-    'agendaitem.agendaActivity', 'currentAgenda.name', async function() {
-      const designAgenda = await this.get('currentAgenda.isDesignAgenda');
-      const agendaActivity = await this.get('agendaitem.agendaActivity');
-      if (!designAgenda) {
-        return false;
-      }
-      if (agendaActivity) {
-        const agendaitems = await agendaActivity.get('agendaitems');
-        return !(agendaitems && agendaitems.length > 1);
-      }
-      return true;
+  get isDeletable() {
+    const designAgenda =  this.args.currentAgenda.get('isDesignAgenda');
+    const agendaActivity =  this.args.agendaitem.get('agendaActivity');
+    if (!designAgenda) {
+      return false;
     }
-  ),
+    if (agendaActivity) {
+      const agendaitems = agendaActivity.get('agendaitems');
+      return !(agendaitems && agendaitems.length > 1);
+    }
+    return true;
+  }
+
+  get deleteWarningText() {
+    if (this.isDeletable) {
+      return this.intl.t('delete-agendaitem-message');
+    } if (this.currentSession.isAdmin) {
+      return this.intl.t('delete-agendaitem-from-meeting-message');
+    }
+    return null;
+  }
 
   async deleteItem(agendaitem) {
     this.toggleProperty('isVerifying');
@@ -50,55 +61,51 @@ export default Component.extend({
     if (this.onDeleteAgendaitem) {
       this.onDeleteAgendaitem(agendaitem);
     }
-  },
+  }
 
-  deleteWarningText: computed('agendaitem.agendaActivity', async function() {
+
+  @action
+  showOptions() {
+    this.toggleProperty('showOptions');
+  }
+
+  @action
+  async postponeAgendaitem(agendaitem) {
+    this.isSavingRetracted = true;
+    agendaitem.set('retracted', true);
+    // TODO KAS-1420 change property on treatment during model rework
+    // TODO KAS-1420 create treatment ?
+    await agendaitem.save();
+    this.isSavingRetracted = false;
+  }
+
+  @action
+  async advanceAgendaitem(agendaitem) {
+    this.isSavingRetracted = true;
+    // TODO KAS-1420 change property on treatment during model rework
+    // TODO KAS-1420 delete postponed treatment ?
+    // what to do when deleting treatment ?
+    agendaitem.set('retracted', false);
+    await agendaitem.save();
+    this.isSavingRetracted = false;
+  }
+
+  @action
+  toggleIsVerifying() {
+    this.toggleProperty('isVerifying');
+  }
+
+  @action
+  async tryToDeleteItem(agendaitem) {
     if (await this.isDeletable) {
-      return this.intl.t('delete-agendaitem-message');
-    } if (this.currentSession.isAdmin) {
-      return this.intl.t('delete-agendaitem-from-meeting-message');
-    }
-    return null;
-  }),
-
-  actions: {
-    showOptions() {
-      this.toggleProperty('showOptions');
-    },
-
-    async postponeAgendaitem(agendaitem) {
-      this.set('isSavingRetracted', true);
-      agendaitem.set('retracted', true);
-      // TODO KAS-1420 change property on treatment during model rework
-      // TODO KAS-1420 create treatment ?
-      await agendaitem.save();
-      this.set('isSavingRetracted', false);
-    },
-
-    async advanceAgendaitem(agendaitem) {
-      this.set('isSavingRetracted', true);
-      // TODO KAS-1420 change property on treatment during model rework
-      // TODO KAS-1420 delete postponed treatment ?
-      // what to do when deleting treatment ?
-      agendaitem.set('retracted', false);
-      await agendaitem.save();
-      this.set('isSavingRetracted', false);
-    },
-
-    toggleIsVerifying() {
-      this.toggleProperty('isVerifying');
-    },
-
-    async tryToDeleteItem(agendaitem) {
-      if (await this.isDeletable) {
-        this.deleteItem(agendaitem);
-      } else if (this.currentSession.isAdmin) {
-        this.toggleProperty('isVerifying');
-      }
-    },
-
-    verifyDelete(agendaitem) {
       this.deleteItem(agendaitem);
-    },
-  },
-});
+    } else if (this.currentSession.isAdmin) {
+      this.toggleProperty('isVerifying');
+    }
+  }
+
+  @action
+  verifyDelete(agendaitem) {
+    this.deleteItem(agendaitem);
+  }
+}
