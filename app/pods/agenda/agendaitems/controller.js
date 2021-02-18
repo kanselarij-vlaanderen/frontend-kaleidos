@@ -31,6 +31,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @tracked meeting;
   @tracked agenda;
+  @tracked previousAgenda;
   @tracked filteredNotas;
   @tracked filteredAnnouncements;
 
