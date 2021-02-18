@@ -259,7 +259,7 @@
               <tr>
                 <th>{{t "name"}}</th>
                 <th>{{t "email"}}</th>
-                <th>{{t "organisation"}}</th>
+                <th>{{t "organisations"}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -281,7 +281,13 @@
                   </td>
 
                   <td>
-                    <span>{{contactPerson.organisationName}}</span>
+                    {{#if contactPerson.organizations}}
+                      <ul>
+                        {{#each (await contactPerson.organizations) as |organization|}}
+                          <li>{{await organization.name}}</li>
+                        {{/each}}
+                      </ul>
+                    {{/if}}
                   </td>
 
                   <td class="auk-u-text-align--right">
@@ -346,7 +352,15 @@
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
+          <PowerSelectMultiple
+                  @options={{await this.allOrganizations}}
+                  @selected={{this.selectedOrganizations}}
+                  @noMatchesMessage={{t "search-organization"}}
+                  @placeholder={{t "search-organization"}}
+                  @onchange={{this.selectOrganization}}
+                  as |organization|>
+            {{ organization.name }}
+          </PowerSelectMultiple>
         </div>
       </div>
     </WebComponents::AuModal::Body>

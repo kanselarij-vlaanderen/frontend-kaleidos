@@ -1,4 +1,7 @@
-import Model, { attr } from '@ember-data/model';
+import Model, {
+  attr,
+  hasMany
+} from '@ember-data/model';
 import { computed } from '@ember/object';
 
 export default class ContactPerson extends Model {
@@ -7,6 +10,8 @@ export default class ContactPerson extends Model {
   @attr('string') email;
   @attr('string') organisationName; // TODO: Misschien organisation model?
   @attr('string') phone;  // TODO: Voorlopig niet in gebuik
+
+  @hasMany('organization') organizations;
 
   @computed('firstName', 'lastName')
   get nameToDisplay() {

@@ -1,5 +1,8 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
@@ -19,6 +22,7 @@ export default class CaseController extends Controller {
     firstName: '',
     lastName: '',
     email: '',
+    organizations: [],
   };
 
   @tracked
@@ -27,6 +31,35 @@ export default class CaseController extends Controller {
     page: 0,
     sort: '',
   };
+
+  get allOrganizations() {
+    console.log('allOrganizations', this.model.organizations);
+    return this.model.organizations;
+  }
+  /*
+  * const newTreatment = this.store.createRecord('agenda-item-treatment', {
+          created: moment().utc()
+            .toDate(),
+          modified: moment().utc()
+            .toDate(),
+          agendaitem: this.agendaitem,
+          subcase: this.subcase,
+        });
+        await newTreatment.save();
+        this.refresh();*/
+  @action
+  selectOrganization(selections, event) {
+    // Return all available organizations
+    console.log('selectOrganization', event);
+    set(event, 'selected', selections);
+    console.log(selections);
+    this.contactPerson.organizations = selections;
+  }
+
+  get selectedOrganizations() {
+    console.log('selectedOrganizations', this.contactPerson.organizations);
+    return this.contactPerson.organizations;
+  }
 
   @action
   onFirstNameChanged(event) {
@@ -41,10 +74,6 @@ export default class CaseController extends Controller {
   @action
   onEmailChanged(event) {
     this.contactPerson.email = event.target.value;
-  }
-  @action
-  onOrganisationChanged(event) {
-    this.contactPerson.organisationName = event.target.value;
   }
 
   get getShortTitle() {

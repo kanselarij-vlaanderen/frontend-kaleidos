@@ -1,15 +1,19 @@
-import DS from 'ember-data';
-import { alias } from '@ember/object/computed';
+import Model,
+{
+  attr,
+  hasMany
+} from '@ember-data/model';
 
-const {
-  Model, attr, hasMany,
-} = DS;
+export default class Organization extends Model {
+  @attr('string') name;
 
-export default Model.extend({
-  uri: attr(),
-  name: attr(),
-  identifier: attr(), // OVO-code
-  member: hasMany('user'),
+  // Has many .
+  @hasMany('contact-person', {
+    inverse: null,
+  }) contactPersons;
 
-  subjectPage: alias('uri'),
-});
+  // identifier: attr(), // OVO-code not used
+  // member: hasMany('user'), not used.
+  // abbreviation: attr('string'), not used.
+  // subjectPage: alias('uri'), not used.
+}
