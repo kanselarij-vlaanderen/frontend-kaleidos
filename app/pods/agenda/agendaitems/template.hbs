@@ -5,7 +5,7 @@
       @onSearch={{this.searchAgendaitems}}
     />
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
-      {{#if isOverviewWindow}}
+      {{#if this.isOverviewWindow}}
       {{!-- await for both announcements and agendaitems is needed to have scrolling to selected agendaitem --}}
         <Agenda::AgendaOverview
           @notas={{this.filteredNotas}}
