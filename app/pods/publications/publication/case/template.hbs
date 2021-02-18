@@ -1,168 +1,302 @@
-{{ page-title
-  (t "case")
-}}
- {{!--  DOSSIER PANEL  --}}
-  <div class="auk-u-mb-3">
-    {{#if this.isInscriptionInEditMode}}
-      <WebComponents::AuPanel data-test-publication-case-panel-case-editing class="auk-panel--editing">
+<div class="auk-u-m-4">
+  {{ page-title
+    (t "case")
+  }}
+  {{!--  DOSSIER PANEL  --}}
+    <div class="auk-u-mb-3">
+      {{#if this.isInscriptionInEditMode}}
+        <WebComponents::AuPanel data-test-publication-case-panel-case-editing class="auk-panel--editing">
+          <WebComponents::AuPanel::Header>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group @position="left">
+                <WebComponents::AuToolbar::Item>
+                  <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button/>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
+          </WebComponents::AuPanel::Header>
+          <WebComponents::AuPanel::Body>
+            <div class="auk-form-group">
+              <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
+              <WebComponents::AuTextarea @rows="2" @value={{this.model.case.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+            </div>
+            <div class="auk-form-group">
+              <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
+              <WebComponents::AuTextarea @rows="4" @value={{this.model.case.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+            </div>
+          </WebComponents::AuPanel::Body>
+          <WebComponents::AuPanel::Footer>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton
+                    data-test-publication-save-inscription
+                    @skin="primary"
+                    @disabled={{this.saveInscription.isRunning}}
+                    {{on "click" (perform this.saveInscription)}}
+                  >
+                    {{t "save"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
+          </WebComponents::AuPanel::Footer>
+        </WebComponents::AuPanel>
+      {{else}}
+        <WebComponents::AuPanel data-test-publication-case-panel-case>
+          <WebComponents::AuPanel::Header>
+            <WebComponents::AuToolbar>
+              <WebComponents::AuToolbar::Group @position="left">
+                <WebComponents::AuToolbar::Item>
+                  <h4 class="auk-panel__title">
+                    {{t
+                      (if this.latestSubcaseOnMeeting
+                      "publication-inscription-subcase"
+                      "publication-inscription")
+                    }}
+                  </h4>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  {{#if this.latestSubcaseOnMeeting}}
+                    <WebComponents::AuButtonLink
+                      @route="cases.case.subcases.subcase.overview"
+                      @models={{array
+                        this.model.case.id
+                        this.latestSubcaseOnMeeting.id
+                      }}
+                    >
+                      {{t "to-case"}}
+                    </WebComponents::AuButtonLink>
+                  {{else}}
+                    <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                  {{/if}}
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            </WebComponents::AuToolbar>
+          </WebComponents::AuPanel::Header>
+          <WebComponents::AuPanel::Body>
+            <div class="auk-content" data-test-publication-flow-title>
+              {{#if this.latestSubcaseOnMeeting}}
+                <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
+                <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
+              {{else}}
+                <h4>{{this.model.case.shortTitle}}</h4>
+                <p class="auk-u-text-prewrap">{{this.model.case.title}}</p>
+              {{/if}}
+            </div>
+          </WebComponents::AuPanel::Body>
+        </WebComponents::AuPanel>
+      {{/if}}
+    </div>
+
+
+
+    {{!--  MINISTER PANEL  --}}
+
+
+    <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+      <WebComponents::AuPanel>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
+                <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
-            <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button/>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
+            {{#if (not this.latestSubcaseOnMeeting)}}
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton
+                    {{on "click" this.showMandateeModal}}
+                          @skin="tertiary"
+                          @icon="add"
+                          data-test-add-mandatee
+                  >
+                    {{t "create-mandatee"}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            {{/if}}
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
-        <WebComponents::AuPanel::Body>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-            <WebComponents::AuTextarea @rows="2" @value={{this.model.case.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
-          </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-            <WebComponents::AuTextarea @rows="4" @value={{this.model.case.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
-          </div>
-        </WebComponents::AuPanel::Body>
-        <WebComponents::AuPanel::Footer>
-          <WebComponents::AuToolbar>
-            <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                  data-test-publication-save-inscription
-                  @skin="primary"
-                  @disabled={{this.saveInscription.isRunning}}
-                  {{on "click" (perform this.saveInscription)}}
-                >
-                  {{t "save"}}
-                </WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
-          </WebComponents::AuToolbar>
-        </WebComponents::AuPanel::Footer>
+        {{#if (not this.latestSubcaseOnMeeting)}}
+          {{# if (gt this.model.publicationFlow.mandatees.length 0) }}
+            <WebComponents::AuPanel::Body @noPadding="true">
+              <table class="auk-table" data-test-table-mandatees>
+                <thead>
+                  <tr>
+                    <th>{{t "minister"}}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each this.model.publicationFlow.mandatees as |mandatee|}}
+                    <tr>
+                      <td>
+                        <div class="auk-u-flex auk-u-flex--vertical-center">
+                          <WebComponents::AuBadge @icon="user"/>
+                          <span class="auk-u-mx-2">{{await mandatee.person.nameToDisplay}}</span>
+                        </div>
+                      </td>
+                      <td class="auk-u-text-align--right">
+                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                          <AttachPopover
+                                  @renderInPlace={{true}}
+                                  @class="ember-attacher-popper"
+                                  @hideOn="clickout click"
+                                  @showOn="click"
+                                  @animation="shift"
+                                  @placement="left"
+                          >
+                            <WebComponents::AuDropdown>
+                              <WebComponents::AuDropdown::Item
+                                data-test-unlink-mandatee
+                                {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
+                                @skin="danger"
+                              >
+                                {{t "delete"}}
+                              </WebComponents::AuDropdown::Item>
+                            </WebComponents::AuDropdown>
+                          </AttachPopover>
+                        </WebComponents::AuButton>
+                      </td>
+                    </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </WebComponents::AuPanel::Body>
+          {{else}}
+            <WebComponents::AuPanel::Body>
+              <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+            </WebComponents::AuPanel::Body>
+          {{/if}}
+        {{else}}
+          <WebComponents::AuPanel::Body @noPadding="true">
+            <table class="auk-table">
+              <thead>
+                <tr>
+                  <th>{{t "minister"}}</th>
+                  {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                  {{!-- <th>{{t "policy-domain-policy-fields"}}</th> --}}
+                  {{!-- TODO row actions --}}
+                  {{!-- <th></th> --}}
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
+                  <tr>
+                    <td>
+                      <div class="auk-u-flex auk-u-flex--vertical-center">
+                        <WebComponents::AuBadge @icon="user"/>
+                        <span>{{mandatee.person.nameToDisplay}}</span>
+                      </div>
+                    </td>
+                    {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                    {{!-- <td>
+                      {{t "government-domain"}}
+                      <br>
+                      <span class="auk-u-muted auk-u-text-small">{{t "government-field"}}</span>
+                    </td> --}}
+                    {{!-- TODO Acties in 1 rij / enkel indien niet via MR --}}
+                    {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
+                    {{!-- TODO AuButton with AttachPopover, AuDropdown, scenario 4 --}}
+                    {{!-- <td class="">
+                    </td> --}}
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </WebComponents::AuPanel::Body>
+        {{/if}}
       </WebComponents::AuPanel>
-    {{else}}
-      <WebComponents::AuPanel data-test-publication-case-panel-case>
+    </div>
+
+
+    {{!--  CONTACTPERSON PANEL  --}}
+
+    <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
+      <WebComponents::AuPanel>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
                 <h4 class="auk-panel__title">
-                  {{t
-                    (if this.latestSubcaseOnMeeting
-                    "publication-inscription-subcase"
-                    "publication-inscription")
-                  }}
+                  {{t "contacts"}}
                 </h4>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                {{#if this.latestSubcaseOnMeeting}}
-                  <WebComponents::AuButtonLink
-                    @route="cases.case.subcases.subcase.overview"
-                    @models={{array
-                      this.model.case.id
-                      this.latestSubcaseOnMeeting.id
-                    }}
-                  >
-                    {{t "to-case"}}
-                  </WebComponents::AuButtonLink>
-                {{else}}
-                  <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
-                {{/if}}
+                <WebComponents::AuButton
+                  {{on "click" this.showContactPersonModal}}
+                  @skin="tertiary"
+                  @icon="add"
+                  data-test-add-contactperson
+                >
+                  {{t "add-contact"}}
+                </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
-        <WebComponents::AuPanel::Body>
-          <div class="auk-content" data-test-publication-flow-title>
-            {{#if this.latestSubcaseOnMeeting}}
-              <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
-              <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
-            {{else}}
-              <h4>{{this.model.case.shortTitle}}</h4>
-              <p class="auk-u-text-prewrap">{{this.model.case.title}}</p>
-            {{/if}}
-          </div>
-        </WebComponents::AuPanel::Body>
-      </WebComponents::AuPanel>
-    {{/if}}
-  </div>
-
-
-
-  {{!--  MINISTER PANEL  --}}
-
-
-  <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Header>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          {{#if (not this.latestSubcaseOnMeeting)}}
-            <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                  {{on "click" this.showMandateeModal}}
-                        @skin="tertiary"
-                        @icon="add"
-                        data-test-add-mandatee
-                >
-                  {{t "create-mandatee"}}
-                </WebComponents::AuButton>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
-          {{/if}}
-        </WebComponents::AuToolbar>
-      </WebComponents::AuPanel::Header>
-      {{#if (not this.latestSubcaseOnMeeting)}}
-        {{# if (gt this.model.publicationFlow.mandatees.length 0) }}
+        {{#if (not this.model.contactPersons) }}
+          <WebComponents::AuPanel::Body>
+            <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
+          </WebComponents::AuPanel::Body>
+        {{else}}
           <WebComponents::AuPanel::Body @noPadding="true">
-            <table class="auk-table" data-test-table-mandatees>
+            <table class="auk-table"  data-test-contact-persons>
               <thead>
                 <tr>
-                  <th>{{t "minister"}}</th>
+                  <th>{{t "name"}}</th>
+                  <th>{{t "email"}}</th>
+                  <th>{{t "organisation"}}</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                {{#each this.model.publicationFlow.mandatees as |mandatee|}}
+                {{#each this.model.contactPersons as | contactPerson |}}
                   <tr>
                     <td>
                       <div class="auk-u-flex auk-u-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
-                        <span class="auk-u-mx-2">{{await mandatee.person.nameToDisplay}}</span>
+                        <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
                       </div>
                     </td>
+                    <td>
+                      <span>
+                        {{#if contactPerson.email }}
+                          <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                        {{/if}}
+                      </span>
+                    </td>
+
+                    <td>
+                      <span>{{contactPerson.organisationName}}</span>
+                    </td>
+
                     <td class="auk-u-text-align--right">
                       <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                         <AttachPopover
-                                @renderInPlace={{true}}
-                                @class="ember-attacher-popper"
-                                @hideOn="clickout click"
-                                @showOn="click"
-                                @animation="shift"
-                                @placement="left"
+                          @renderInPlace={{true}}
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="left"
                         >
                           <WebComponents::AuDropdown>
-                            <WebComponents::AuDropdown::Item
-                              data-test-unlink-mandatee
-                              {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
-                              @skin="danger"
-                            >
+                            <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
                               {{t "delete"}}
                             </WebComponents::AuDropdown::Item>
                           </WebComponents::AuDropdown>
@@ -174,257 +308,125 @@
               </tbody>
             </table>
           </WebComponents::AuPanel::Body>
-        {{else}}
-          <WebComponents::AuPanel::Body>
-            <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
-          </WebComponents::AuPanel::Body>
         {{/if}}
-      {{else}}
-        <WebComponents::AuPanel::Body @noPadding="true">
-          <table class="auk-table">
-            <thead>
-              <tr>
-                <th>{{t "minister"}}</th>
-                {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
-                {{!-- <th>{{t "policy-domain-policy-fields"}}</th> --}}
-                {{!-- TODO row actions --}}
-                {{!-- <th></th> --}}
-              </tr>
-            </thead>
-            <tbody>
-              {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
-                <tr>
-                  <td>
-                    <div class="auk-u-flex auk-u-flex--vertical-center">
-                      <WebComponents::AuBadge @icon="user"/>
-                      <span>{{mandatee.person.nameToDisplay}}</span>
-                    </div>
-                  </td>
-                  {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
-                  {{!-- <td>
-                    {{t "government-domain"}}
-                    <br>
-                    <span class="auk-u-muted auk-u-text-small">{{t "government-field"}}</span>
-                  </td> --}}
-                  {{!-- TODO Acties in 1 rij / enkel indien niet via MR --}}
-                  {{!-- TODO check for the existence of latestSubcaseOnMeeting? --}}
-                  {{!-- TODO AuButton with AttachPopover, AuDropdown, scenario 4 --}}
-                  {{!-- <td class="">
-                  </td> --}}
-                </tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </WebComponents::AuPanel::Body>
-      {{/if}}
-    </WebComponents::AuPanel>
-  </div>
+      </WebComponents::AuPanel>
+    </div>
 
 
-  {{!--  CONTACTPERSON PANEL  --}}
+  {{!--  END VISIBLE PANELS  --}}
 
-  <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Header>
+
+  {{!-- ADD CONTACTPERSON MODAL --}}
+
+
+  {{#if personModalOpen}}
+    <WebComponents::AuModal
+      @size="medium"
+      data-test-add-contactpersonmodal>
+      <WebComponents::AuModal::Header @title={{t "add-contact"}}
+        @closeModal={{this.closeContactPersonModal}} />
+      <WebComponents::AuModal::Body>
+        <div class="auk-form-group-layout auk-form-group-layout--standard">
+          <div class='auk-form-group auk-form-group--grid'>
+            <div>
+              <WebComponents::AuLabel for="firstNameInput">
+                {{t "first-name"}}
+              </WebComponents::AuLabel>
+              <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
+            </div>
+            <div>
+              <WebComponents::AuLabel for="lastNameInput">
+                {{t "name"}}
+              </WebComponents::AuLabel>
+              <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
+            </div>
+          </div>
+          <div class='auk-form-group'>
+            <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
+          </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
+          </div>
+        </div>
+      </WebComponents::AuModal::Body>
+      {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+      <WebComponents::AuModal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">
-                {{t "contacts"}}
-              </h4>
+              <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
+                {{t "cancel"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton @skin="primary" @icon="plus" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
+                {{t "add"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuModal::Footer>
+    </WebComponents::AuModal>
+  {{/if}}
+
+
+  {{!-- ADD MINISTER MODAL --}}
+
+
+  {{#if mandateeModalOpen}}
+    <WebComponents::AuModal
+      @size="medium"
+      data-test-add-mandateemodal
+    >
+      <WebComponents::AuModal::Header
+        @title={{t "create-mandatee"}}
+        @closeModal={{this.closeMandateeModal}}
+      />
+      <WebComponents::AuModal::Body>
+        {{utils/mandatee-selector
+          data-test-mandatee-selector
+          singleSelect=true
+          selectedMandatees=selectedMandatee
+          chooseMandatee=(action "mandateeSelectedForPublication")
+        }}
+      </WebComponents::AuModal::Body>
+      <WebComponents::AuModal::Footer @custom={{true}}>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton
+                @skin="borderless"
+                {{on "click" this.closeMandateeModal}}
+              >
+                {{t "cancel"}}
+              </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
               <WebComponents::AuButton
-                {{on "click" this.showContactPersonModal}}
-                @skin="tertiary"
-                @icon="add"
-                data-test-add-contactperson
+                @skin="primary"
+                @icon="plus"
+                @size="small"
+                {{on "click" this.addSelectedMandateeToPublicationFlow}}
+                data-test-add-contactperson-submit-button
               >
-                {{t "add-contact"}}
+                {{t "add"}}
               </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuPanel::Header>
-      {{#if (not this.model.contactPersons) }}
-        <WebComponents::AuPanel::Body>
-          <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
-        </WebComponents::AuPanel::Body>
-      {{else}}
-        <WebComponents::AuPanel::Body @noPadding="true">
-          <table class="auk-table"  data-test-contact-persons>
-            <thead>
-              <tr>
-                <th>{{t "name"}}</th>
-                <th>{{t "email"}}</th>
-                <th>{{t "organisation"}}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each this.model.contactPersons as | contactPerson |}}
-                <tr>
-                  <td>
-                    <div class="auk-u-flex auk-u-flex--vertical-center">
-                      <WebComponents::AuBadge @icon="user"/>
-                      <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span>
-                      {{#if contactPerson.email }}
-                        <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
-                      {{/if}}
-                    </span>
-                  </td>
+      </WebComponents::AuModal::Footer>
+    </WebComponents::AuModal>
+  {{/if}}
 
-                  <td>
-                    <span>{{contactPerson.organisationName}}</span>
-                  </td>
+  {{!-- LOADER --}}
 
-                  <td class="auk-u-text-align--right">
-                    <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
-                      <AttachPopover
-                        @renderInPlace={{true}}
-                        @class="ember-attacher-popper"
-                        @hideOn="clickout click"
-                        @showOn="click"
-                        @animation="shift"
-                        @placement="left"
-                      >
-                        <WebComponents::AuDropdown>
-                          <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
-                            {{t "delete"}}
-                          </WebComponents::AuDropdown::Item>
-                        </WebComponents::AuDropdown>
-                      </AttachPopover>
-                    </WebComponents::AuButton>
-                  </td>
-                </tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </WebComponents::AuPanel::Body>
-      {{/if}}
-    </WebComponents::AuPanel>
-  </div>
-
-
-{{!--  END VISIBLE PANELS  --}}
-
-
-{{!-- ADD CONTACTPERSON MODAL --}}
-
-
-{{#if personModalOpen}}
-  <WebComponents::AuModal
-    @size="medium"
-    data-test-add-contactpersonmodal>
-    <WebComponents::AuModal::Header @title={{t "add-contact"}}
-      @closeModal={{this.closeContactPersonModal}} />
-    <WebComponents::AuModal::Body>
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group auk-form-group--grid'>
-          <div>
-            <WebComponents::AuLabel for="firstNameInput">
-              {{t "first-name"}}
-            </WebComponents::AuLabel>
-            <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
-          </div>
-          <div>
-            <WebComponents::AuLabel for="lastNameInput">
-              {{t "name"}}
-            </WebComponents::AuLabel>
-            <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
-          </div>
-        </div>
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
-        </div>
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="organisationInput">{{t "organisation"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput {{on "blur" this.onOrganisationChanged}} type="text" id="organisationInput" @block="true" />
-        </div>
-      </div>
-    </WebComponents::AuModal::Body>
-    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
-    <WebComponents::AuModal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
-              {{t "cancel"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary" @icon="plus" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
-              {{t "add"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
-{{/if}}
-
-
-{{!-- ADD MINISTER MODAL --}}
-
-
-{{#if mandateeModalOpen}}
-  <WebComponents::AuModal
-    @size="medium"
-    data-test-add-mandateemodal
-  >
-    <WebComponents::AuModal::Header
-      @title={{t "create-mandatee"}}
-      @closeModal={{this.closeMandateeModal}}
-    />
-    <WebComponents::AuModal::Body>
-      {{utils/mandatee-selector
-        data-test-mandatee-selector
-        singleSelect=true
-        selectedMandatees=selectedMandatee
-        chooseMandatee=(action "mandateeSelectedForPublication")
-      }}
-    </WebComponents::AuModal::Body>
-    <WebComponents::AuModal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-              @skin="borderless"
-              {{on "click" this.closeMandateeModal}}
-            >
-              {{t "cancel"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-              @skin="primary"
-              @icon="plus"
-              @size="small"
-              {{on "click" this.addSelectedMandateeToPublicationFlow}}
-              data-test-add-contactperson-submit-button
-            >
-              {{t "add"}}
-            </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
-{{/if}}
-
-{{!-- LOADER --}}
-
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
-{{/if}}
+  {{#if this.showLoader}}
+    <WebComponents::AuLoadingOverlay/>
+  {{/if}}
+</div>
