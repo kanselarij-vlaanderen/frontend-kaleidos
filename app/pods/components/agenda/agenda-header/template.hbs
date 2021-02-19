@@ -477,7 +477,7 @@
 {{/if}}
 
 {{#if this.showConfirmForClosingMeeting}}
-  <WebComponents::AuModal>
+  <WebComponents::AuModal @size={{if (await this.currentSession.latestAgenda.isDesignAgenda) "large" "small"}}>
     <WebComponents::AuModal::Header
             @title={{t "agenda-close"}}
             @closeModal={{action "cancelCloseMeeting"}}
@@ -511,7 +511,7 @@
 {{/if}}
 
 {{#if this.showConfirmForDeletingSelectedAgenda}}
-  <WebComponents::AuModal>
+  <WebComponents::AuModal @size={{if (eq this.agendas.length 1) "large" "small"}}>
     <WebComponents::AuModal::Header
       @title={{t "agenda-delete"}}
       @closeModal={{action "cancelDeleteSelectedAgenda"}}
@@ -525,7 +525,7 @@
       {{/if}}
       <div>
         {{t
-          "delete-design-agenda-close-meeting-message"
+          "delete-agenda-message"
           agenda=this.currentSession.latestAgenda.agendaName
         }}
       </div>
