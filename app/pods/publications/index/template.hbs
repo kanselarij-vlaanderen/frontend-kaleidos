@@ -147,7 +147,7 @@
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
             {{#if row.publicationNumber}}
-              {{ row.publicationNumber }} {{ row.publicationSuffix }}
+              {{row.publicationNumberToDisplay}}
             {{else}}
               {{t "dash"}}
             {{/if}}

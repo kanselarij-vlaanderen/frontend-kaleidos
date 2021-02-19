@@ -3,7 +3,7 @@
 // / <reference types="Cypress" />
 import publicationSelectors from '../../selectors/publication.selectors';
 import modalSelectors from '../../selectors/modal.selectors';
-import utilsSelectors from '../../selectors/utils.selectors';
+import auComponentSelectors from '../../selectors/au-component-selectors';
 
 context('Publications tests', () => {
   before(() => {
@@ -19,6 +19,9 @@ context('Publications tests', () => {
     cy.logout();
   });
 
+  // TODO tests that duplicate publication numbers are not possible unless a suffix is given, combination of number+suffix should be unique
+  // TODO both during creation as in sidebar
+
   const publicationOverviewUrl = '/publicaties';
   const someText = 'Some text';
   const shortTitle = 'Korte titel cypress test';
@@ -30,56 +33,69 @@ context('Publications tests', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.auModal.container).as('publicationModal');
-    cy.get(modalSelectors.publication.alertInfo, {
-      timeout: 5000,
-    }).should('exist');
-    cy.get(modalSelectors.publication.alertError, {
-      timeout: 5000,
-    }).should('not.exist');
-    cy.get(modalSelectors.publication.createButton).click();
-    cy.get(modalSelectors.publication.alertError, {
-      timeout: 5000,
-    }).should('exist');
-    cy.get(modalSelectors.publication.alertInfo, {
-      timeout: 5000,
-    }).should('not.exist');
     cy.get('@publicationModal').within(() => {
-      cy.get(utilsSelectors.aukInput).click()
+      // No errors on initial view, just info
+      cy.get(modalSelectors.publication.alertInfo, {
+        timeout: 5000,
+      }).should('exist');
+      cy.get(modalSelectors.publication.alertError, {
+        timeout: 5000,
+      }).should('not.exist');
+      // Clear the next number to validate that empty number is not allowed
+      cy.get(modalSelectors.publication.publicationNumberInput).click()
+        .clear();
+      cy.get(modalSelectors.publication.createButton).click();
+      // The info alert is replaces by error alert
+      cy.get(modalSelectors.publication.alertError, {
+        timeout: 5000,
+      }).should('exist');
+      cy.get(modalSelectors.publication.alertInfo, {
+        timeout: 5000,
+      }).should('not.exist');
+      // both number and shortTitle should show error when empty
+      cy.get(auComponentSelectors.auLabelError).should('have.length', 2);
+      // Create publication with number and title
+      // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
+      cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
         .type('1');
+      cy.get(modalSelectors.publication.publicationShortTitleTextarea)
+        .click()
+        .clear()
+        .type(someText);
+      cy.get(modalSelectors.publication.createButton).click();
+      cy.get(modalSelectors.publication.alertError, {
+        timeout: 5000,
+      }).should('not.exist');
+      cy.get(modalSelectors.publication.alertInfo, {
+        timeout: 5000,
+      }).should('exist');
     });
-    cy.get(utilsSelectors.aukTextarea).eq(0)
-      .click()
-      .clear()
-      .type(someText);
-    cy.get(modalSelectors.publication.createButton).click();
-    cy.get(modalSelectors.publication.alertError, {
-      timeout: 5000,
-    }).should('not.exist');
-    cy.get(modalSelectors.publication.alertInfo, {
-      timeout: 5000,
-    }).should('exist');
   });
 
   it('should clear input data when closing and reopening modal to create new publication', () => {
     cy.visit(publicationOverviewUrl);
+    const numberToCheck = 999;
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
-      cy.get(utilsSelectors.aukInput).click()
-        .clear()
-        .type('2');
-      cy.get(utilsSelectors.aukTextarea).eq(0)
+      // TODO check if suffix and long title are cleared
+      cy.get(modalSelectors.publication.publicationNumberInput)
         .click()
-        .clear(); // Why do a manual clear ?
+        .clear()
+        .type(numberToCheck);
+      cy.get(modalSelectors.publication.publicationShortTitleTextarea)
+        .click()
+        .type(someText);
       // Why don't we check the long title text area ?
     });
     cy.get(modalSelectors.publication.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get('@publicationModal').within(() => {
+      // TODO check the other fields
+      cy.get(modalSelectors.publication.publicationNumberInput).should('not.contain', numberToCheck);
       cy.contains(someText).should('not.exist');
     });
-    // make sure all fields are tested
   });
 
   it('should create a publication and redirect to its detail page', () => {
@@ -213,6 +229,7 @@ context('Publications tests', () => {
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.wait('@publicationagendapuntentreatments');
     cy.approveAndCloseDesignAgenda();
+    // TODO this test does not do wat it says it does, no publications are created
 
     // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
 

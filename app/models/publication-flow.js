@@ -42,6 +42,14 @@ export default class PublicationFlow extends Model {
     return this.priority > 0;
   }
 
+  @computed('publicationNumber,publicationSuffix')
+  get publicationNumberToDisplay() {
+    if (this.publicationSuffix && this.publicationSuffix !== '') {
+      return `${this.publicationNumber} ${this.publicationSuffix}`;
+    }
+    return `${this.publicationNumber}`;
+  }
+
   get translationRequestsTotal() {
     return this.publicationService.getPublicationCounts(this.id).then((totals) => {
       const openVertalingen = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.vertalen.url, CONFIG.ACTIVITY_STATUSSES.open.url);

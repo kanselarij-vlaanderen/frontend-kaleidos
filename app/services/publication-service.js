@@ -77,14 +77,29 @@ export default class PublicationService extends Service {
   }
 
   async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
-    const publicationWithId = await this.store.query('publication-flow', {
-      filter: {
-        // :exact: does not work on numbers.
-        'publication-number': publicationNumber,
-        ':exact:publication-suffix': publicationSuffix,
-      },
-    });
-    const publicationNumberTakenList = publicationWithId.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
+    let publicationsFromQuery;
+    if (publicationSuffix && !(publicationSuffix === '')) {
+      // if a valid suffix is given, we check if the number + suffix combo has been taken instead
+      publicationsFromQuery = await this.store.query('publication-flow', {
+        filter: {
+          // :exact: does not work on numbers.
+          'publication-number': publicationNumber,
+          ':exact:publication-suffix': publicationSuffix,
+        },
+      });
+    } else {
+      // if no suffix is given, we query only on same number but we have to filter out everything that has a suffix
+      // filtering on non-existing attributes, is this possible in a query?
+      const publicationsFromQueryWithSameNumber = await this.store.query('publication-flow', {
+        filter: {
+          // :exact: does not work on numbers.
+          'publication-number': publicationNumber,
+        },
+      });
+      publicationsFromQuery = publicationsFromQueryWithSameNumber.filter((publicationFlow) => !publicationFlow.publicationSuffix);
+    }
+    // filter own model from data or we can't save our own number
+    const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
     return publicationNumberTakenList.toArray().length !== 0;
   }
 
