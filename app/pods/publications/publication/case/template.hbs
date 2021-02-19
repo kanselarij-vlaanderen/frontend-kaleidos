@@ -350,19 +350,17 @@
           <WebComponents::AuLabel for="organisationInput">
             {{t "organisation"}}
           </WebComponents::AuLabel>
-          {{#if (not showAddOrganisationModal)}}
-            <PowerSelect
-                    @searchField="name"
-                    @search={{this.customPowerSelectSearchFunction}}
-                    @options={{await this.allOrganizations}}
-                    @selected={{this.selectedOrganizations}}
-                    @noMatchesMessage={{t "search-organization"}}
-                    @placeholder={{t "search-organization"}}
-                    @onchange={{this.selectOrganization}}
-                    as |organization|>
-              {{ organization.name }}
-            </PowerSelect>
-          {{/if}}
+          <PowerSelect
+                  @searchField="name"
+                  @search={{this.customPowerSelectSearchFunction}}
+                  @options={{await this.allOrganizations}}
+                  @selected={{this.selectedOrganizations}}
+                  @noMatchesMessage={{t "search-organization"}}
+                  @placeholder={{t "search-organization"}}
+                  @onchange={{this.selectOrganization}}
+                  as |organization|>
+            {{ organization.name }}
+          </PowerSelect>
           <WebComponents::AuButton @skin="borderless" {{on "click" this.openAddOrganisationModal}}>
             {{t "add-organization"}}
           </WebComponents::AuButton>

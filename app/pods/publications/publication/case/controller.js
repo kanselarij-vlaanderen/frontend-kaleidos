@@ -35,56 +35,6 @@ export default class CaseController extends Controller {
   };
 
   /**
-   * ZONE FOR TTHE ORGANIZATIONS
-   */
-  get allOrganizations() {
-    return this.model.organizations;
-  }
-
-  @action
-  customPowerSelectSearchFunction(searchTerm, event) {
-    // Just because we can.
-    return event.results.filter((result) => result.name.toLowerCase().includes(searchTerm.toLowerCase()));
-  }
-
-  @action
-  async addOrganisation() {
-    this.showLoader = true;
-    const newOrganization = this.store.createRecord('organization', {
-      name: this.inputOrganization,
-    });
-    await newOrganization.save();
-    this.inputOrganization = '';
-    this.showAddOrganisationModal = false;
-    this.showLoader = false;
-  }
-
-  @action
-  openAddOrganisationModal() {
-    this.showAddOrganisationModal = true;
-  }
-
-  @action
-  closeAddOrganisationModal() {
-    this.inputOrganization = '';
-    this.showAddOrganisationModal = false;
-  }
-
-  @action
-  selectOrganization(selections, event) {
-    // Return all available organizations
-    console.log('selectOrganization', event);
-    set(event, 'selected', selections);
-    console.log(selections);
-    this.contactPerson.organization = selections;
-  }
-
-  get selectedOrganizations() {
-    console.log('selectedOrganizations', this.contactPerson.organization);
-    return this.contactPerson.organization;
-  }
-
-  /**
    * ZONE FOR TTHE CONTACT PERSONS
    */
   @action
@@ -125,6 +75,54 @@ export default class CaseController extends Controller {
   closeContactPersonModal() {
     this.personModalOpen = false;
     this.contactPerson.organization = null;
+  }
+
+  /**
+   * ZONE FOR THE ORGANIZATIONS
+   */
+  get allOrganizations() {
+    return this.model.organizations;
+  }
+
+  @action
+  customPowerSelectSearchFunction(searchTerm, event) {
+    // Just because we can.
+    return event.results.filter((result) => result.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+
+  @action
+  async addOrganisation() {
+    this.showLoader = true;
+    const newOrganization = this.store.createRecord('organization', {
+      name: this.inputOrganization,
+    });
+    await newOrganization.save();
+    this.model.organizations.pushObject(newOrganization);
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+    this.showLoader = false;
+  }
+
+  @action
+  openAddOrganisationModal() {
+    this.showAddOrganisationModal = true;
+  }
+
+  @action
+  closeAddOrganisationModal() {
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+  }
+
+  @action
+  selectOrganization(selections, event) {
+    // Return all available organizations
+    set(event, 'selected', selections);
+    this.contactPerson.organization = selections;
+  }
+
+  get selectedOrganizations() {
+    return this.contactPerson.organization;
   }
 
   @action

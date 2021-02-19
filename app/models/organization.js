@@ -6,6 +6,7 @@ import {
 
 export default class Organization extends ModelWithModifier {
   @attr('string') name;
+  @attr('datetime') created;
 
   // Has many .
   @hasMany('contact-person', {
