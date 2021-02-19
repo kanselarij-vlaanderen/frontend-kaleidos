@@ -24,7 +24,7 @@ export default class CaseController extends Controller {
     firstName: '',
     lastName: '',
     email: '',
-    organizations: [],
+    organization: null,
   };
 
   @tracked
@@ -76,12 +76,12 @@ export default class CaseController extends Controller {
     console.log('selectOrganization', event);
     set(event, 'selected', selections);
     console.log(selections);
-    this.contactPerson.organizations = selections;
+    this.contactPerson.organization = selections;
   }
 
   get selectedOrganizations() {
-    console.log('selectedOrganizations', this.contactPerson.organizations);
-    return this.contactPerson.organizations;
+    console.log('selectedOrganizations', this.contactPerson.organization);
+    return this.contactPerson.organization;
   }
 
   /**
@@ -124,7 +124,7 @@ export default class CaseController extends Controller {
   @action
   closeContactPersonModal() {
     this.personModalOpen = false;
-    this.contactPerson.organizations = [];
+    this.contactPerson.organization = null;
   }
 
   @action
@@ -159,7 +159,7 @@ export default class CaseController extends Controller {
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
     await this.publicationService.linkContactPersonToPublication(this.model.publicationFlow.id, contactPerson);
-    this.contactPerson.organizations = [];
+    this.contactPerson.organization = null;
     this.personModalOpen = false;
     this.showLoader = false;
   }

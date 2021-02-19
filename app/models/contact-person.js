@@ -1,6 +1,6 @@
 import Model, {
   attr,
-  hasMany
+  belongsTo
 } from '@ember-data/model';
 import { computed } from '@ember/object';
 
@@ -11,7 +11,7 @@ export default class ContactPerson extends Model {
   @attr('string') organisationName; // TODO: Misschien organisation model?
   @attr('string') phone;  // TODO: Voorlopig niet in gebuik
 
-  @hasMany('organization') organizations;
+  @belongsTo('organization') organization;
 
   @computed('firstName', 'lastName')
   get nameToDisplay() {
