@@ -259,7 +259,6 @@
               <tr>
                 <th>{{t "name"}}</th>
                 <th>{{t "email"}}</th>
-                <th>{{t "organization"}}</th>
                 <th></th>
               </tr>
             </thead>
@@ -269,7 +268,14 @@
                   <td>
                     <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
-                      <span class="auk-u-mx-2">{{await contactPerson.nameToDisplay}}</span>
+                      <div class="auk-u-mx-2">
+                        <span>{{ await contactPerson.nameToDisplay }}</span>
+                        {{#if contactPerson.organization}}
+                          <div class="auk-u-muted auk-u-text-small">
+                            {{await contactPerson.organization.name}}
+                          </div>
+                        {{/if}}
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -278,12 +284,6 @@
                         <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
                       {{/if}}
                     </span>
-                  </td>
-
-                  <td>
-                    {{#if contactPerson.organization}}
-                      {{await contactPerson.organization.name}}
-                    {{/if}}
                   </td>
 
                   <td class="auk-u-text-align--right">
