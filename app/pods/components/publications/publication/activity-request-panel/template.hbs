@@ -16,7 +16,7 @@
               {{#if (await @activity.isWithdrawn) }}
                 {{t "cancelled-request"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
               {{else if (await @activity.endDate) }}
-                {{t "finished"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
+                {{t "received"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
               {{else if (await @activity.wasPublished)}}
                 {{t "publications-published"}} {{moment-format activity.endDate "DD MMMM YYYY [om] H:mm"}}
               {{else}}
