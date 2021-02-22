@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 // TODO unused service ?
 export default Service.extend({

@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default Component.extend({
   classNames: ['vl-form__group vl-u-bg-porcelain'],

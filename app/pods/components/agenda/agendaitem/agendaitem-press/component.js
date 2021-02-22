@@ -3,7 +3,7 @@ import {
   action, computed
 } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default class AgendaitemPress extends Component {
   @service currentSession;

@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { debounce } from '@ember/runloop';
-import search from 'fe-redpencil/utils/mu-search';
+import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class CaseSearch extends Component {
   size = 5;

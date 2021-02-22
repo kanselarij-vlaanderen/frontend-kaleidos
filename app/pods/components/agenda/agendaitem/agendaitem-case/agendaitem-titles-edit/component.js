@@ -5,8 +5,8 @@ import {
 } from '@ember/object';
 import {
   saveChanges as saveSubcaseTitles, cancelEdit
-} from 'fe-redpencil/utils/agendaitem-utils';
-import { trimText } from 'fe-redpencil/utils/trim-util';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitlesEdit extends Component {

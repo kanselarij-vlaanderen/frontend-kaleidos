@@ -1,4 +1,4 @@
-import { ajax } from 'fe-redpencil/utils/ajax';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 
 export const downloadFilePrompt = function(context, file, filename) {
   const newfilename = filename || file.get('filename');

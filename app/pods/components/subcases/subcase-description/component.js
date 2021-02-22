@@ -2,12 +2,12 @@ import Component from '@ember/component';
 import {
   computed, set
 } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject } from '@ember/service';
-import { cached } from 'fe-redpencil/decorators/cached';
+import { cached } from 'frontend-kaleidos/decorators/cached';
 import {
   saveChanges as saveSubcaseDescription, cancelEdit
-} from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default Component.extend({
   store: inject(),
