@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
-import config from 'fe-redpencil/utils/config';
-import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
+import config from 'frontend-kaleidos/utils/config';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { tracked } from '@glimmer/tracking';
 
 export default class ReportLink extends Component {

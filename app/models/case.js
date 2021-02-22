@@ -1,8 +1,8 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject } from '@ember/service';
 
 const {

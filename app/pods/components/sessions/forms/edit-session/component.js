@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import EmberObject, { computed } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';

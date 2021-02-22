@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import { sortPieces } from 'fe-redpencil/utils/documents';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class SubcaseItemSubcasesComponent extends Component {
   @service store;

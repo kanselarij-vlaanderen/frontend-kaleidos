@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
-import config from 'fe-redpencil/utils/config';
+import config from 'frontend-kaleidos/utils/config';
 import { action } from '@ember/object';
-import { sortPieces } from 'fe-redpencil/utils/documents';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {

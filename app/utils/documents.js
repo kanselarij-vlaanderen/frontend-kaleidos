@@ -1,5 +1,5 @@
 import { A } from '@ember/array';
-import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import DS from 'ember-data';
 import fetch from 'fetch';
 

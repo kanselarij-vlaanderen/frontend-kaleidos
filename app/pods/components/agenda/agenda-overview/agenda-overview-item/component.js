@@ -7,7 +7,7 @@ import {
   dropTask,
   task
 } from 'ember-concurrency-decorators';
-import { sortPieces } from 'fe-redpencil/utils/documents';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class AgendaOverviewItem extends Component {
   /**
