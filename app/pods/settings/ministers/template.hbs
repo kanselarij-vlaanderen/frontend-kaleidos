@@ -102,14 +102,9 @@
                   {{action "toggleProperty" "isResigningMandatee" mandatee}}
                 >
                   <i class="vl-button__icon ki-settings"></i>
-                  {{#attach-tooltip
-                    arrow="true"
-                    animation="shift"
-                    placement="bottom"
-                    class="ember-attacher-tooltip"
-                  }}
+                  <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
                     {{t "resign"}}
-                  {{/attach-tooltip}}
+                  </EmberTooltip>
                 </button>
                 <button type="button"
                         data-test-mandatee-delete={{index}}
