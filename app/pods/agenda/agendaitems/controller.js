@@ -1,15 +1,10 @@
 import Controller from '@ember/controller';
-import {
-  computed,
-  action
-} from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import search from 'fe-redpencil/utils/mu-search';
 import { task } from 'ember-concurrency-decorators';
-import { isEmpty } from '@ember/utils';
 import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
 
 export default class AgendaitemsAgendaController extends Controller {
