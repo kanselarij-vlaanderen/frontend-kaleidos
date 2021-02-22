@@ -5,7 +5,7 @@ import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import config from 'fe-redpencil/utils/config';
+import config from 'frontend-kaleidos/utils/config';
 
 export default class DocumentsLinkedDocumentsComponent extends Component {
   @service currentSession;

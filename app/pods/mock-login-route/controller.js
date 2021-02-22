@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import {
   task, timeout
 } from 'ember-concurrency';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default Controller.extend({
   queryParams: ['role', 'page'],

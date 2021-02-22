@@ -1,8 +1,8 @@
 /* eslint-disable no-duplicate-imports */
 import { inject as service } from '@ember/service';
 import Service from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
-import { ajax } from 'fe-redpencil/utils/ajax';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
