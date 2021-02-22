@@ -10,13 +10,13 @@ import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
   reorderAgendaitemsOnAgenda
-} from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 import {
   constructArchiveName,
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob
-} from 'fe-redpencil/utils/zip-agenda-files';
-import CONFIG from 'fe-redpencil/utils/config';
+} from 'frontend-kaleidos/utils/zip-agenda-files';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
 import agendaitem from '../../../../adapters/agendaitem';
 import { A } from '@ember/array';

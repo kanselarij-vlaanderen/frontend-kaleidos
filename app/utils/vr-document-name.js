@@ -1,4 +1,4 @@
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
 
 export default class VRDocumentName {

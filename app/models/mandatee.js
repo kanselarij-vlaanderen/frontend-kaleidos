@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 
 const {
