@@ -3,8 +3,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { sortPieces } from 'fe-redpencil/utils/documents';
-import CONFIG from 'fe-redpencil/utils/config';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;

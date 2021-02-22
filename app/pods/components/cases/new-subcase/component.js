@@ -2,8 +2,8 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import moment from 'moment';
-import CONFIG from 'fe-redpencil/utils/config';
-import { trimText } from 'fe-redpencil/utils/trim-util';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default Component.extend({
   store: inject(),

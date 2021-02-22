@@ -11,8 +11,8 @@ import {
 import moment from 'moment';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
-} from 'fe-redpencil/utils/documents';
-import { setNotYetFormallyOk } from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/documents';
+import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;

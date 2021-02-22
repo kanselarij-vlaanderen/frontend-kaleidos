@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 
-import { ajax } from 'fe-redpencil/utils/ajax';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
 export default Service.extend({

@@ -7,7 +7,7 @@ import {
 // eslint-disable-next-line no-duplicate-imports
 import EmberObject from '@ember/object';
 import { inject as service } from '@ember/service';
-import { saveChanges as saveMandateeChanges } from 'fe-redpencil/utils/agendaitem-utils';
+import { saveChanges as saveMandateeChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 import DS from 'ember-data';
 
 // TODO code cuplication with subcase-case/subcase-mandatees
