@@ -1,8 +1,8 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
-import { isAnnexMeetingKind } from 'fe-redpencil/utils/meeting-utils';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 
 export default Component.extend({

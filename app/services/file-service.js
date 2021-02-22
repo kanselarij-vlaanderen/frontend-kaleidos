@@ -3,7 +3,7 @@ import Service, { inject as service } from '@ember/service';
 import {
   task, timeout
 } from 'ember-concurrency';
-import { ajax } from 'fe-redpencil/utils/ajax';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 
 export default Service.extend({
   toaster: service(),
@@ -74,6 +74,7 @@ export default Service.extend({
     const file = pieceToDelete.get('file');
     await this.deleteFile(file);
     return pieceToDelete.destroyRecord();
+    // TODO: delete container in case we just orphaned it
   },
 
   async deleteFile(file) {

@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import {
   action,
   set
@@ -131,6 +131,14 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+  get titleText() {
+    const shortTitle = this.model.publicationFlow.case.get('shortTitle');
+    if (shortTitle) {
+      return shortTitle;
+    }
+    return this.model.publicationFlow.case.get('title');
+  }
+
 
   get expiredPublicationDate() {
     if (this.model.publicationFlow.get('publishedAt')) {

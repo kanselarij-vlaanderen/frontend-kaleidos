@@ -4,7 +4,7 @@ import {
   selectDomain,
   selectField,
   prepareMandateeRowAfterEdit
-} from 'fe-redpencil/utils/manage-minister-util';
+} from 'frontend-kaleidos/utils/manage-minister-util';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 

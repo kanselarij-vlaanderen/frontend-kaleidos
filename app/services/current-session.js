@@ -6,7 +6,7 @@ import {
 import {
   task, waitForProperty
 } from 'ember-concurrency';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default Service.extend({
   session: service('session'),

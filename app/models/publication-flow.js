@@ -3,7 +3,7 @@ import Model, {
 } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
   // Attributes.

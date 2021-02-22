@@ -1,7 +1,7 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { action } from '@ember/object';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {

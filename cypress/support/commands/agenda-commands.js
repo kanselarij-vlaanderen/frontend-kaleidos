@@ -493,6 +493,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
           timeout: 12000,
         }).should('not.have.length', 1);
       }
+      cy.get('.vl-loader').should('not.exist');
       cy.get('@rows', {
         timeout: 12000,
       }).eq(0)

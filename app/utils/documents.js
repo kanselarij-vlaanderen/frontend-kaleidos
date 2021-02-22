@@ -1,5 +1,5 @@
 import { A } from '@ember/array';
-import VRDocumentName, { compareFunction } from 'fe-redpencil/utils/vr-document-name';
+import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import DS from 'ember-data';
 import fetch from 'fetch';
 
@@ -36,6 +36,24 @@ export const sortDocumentContainers = (pieces, containers) => {
     }
     return sortedPieces.indexOf(matchingPieceA) - sortedPieces.indexOf(matchingPieceB);
   });
+};
+
+export const sortPieces = (pieces) => {
+  const validNamedPieces = [];
+  let invalidNamedPieces = A();
+  for (const piece of pieces) {
+    try {
+      (new VRDocumentName(piece.name)).parseMeta();
+      validNamedPieces.push(piece);
+    } catch {
+      invalidNamedPieces.push(piece);
+    }
+  }
+  validNamedPieces.sort((docA, docB) => compareFunction(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+  invalidNamedPieces = invalidNamedPieces.sortBy('created').toArray();
+  invalidNamedPieces.reverse();
+
+  return [...validNamedPieces, ...invalidNamedPieces];
 };
 
 export const getPropertyLength = (model, property) => PromiseObject.create({
