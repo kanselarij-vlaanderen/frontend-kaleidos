@@ -26,8 +26,6 @@ context('Agenda reopen previous tests', () => {
   const designAgendaDeleteModalTitleAndVerify = 'Vorige versie heropenen';
   const designAgendaATitle = 'Ontwerpagenda A';
   const designAgendaCTitle = 'Ontwerpagenda C';
-  const agendaReopenPreviousVersionMenuActionItem = 'Vorige versie heropenen';
-
 
   it('should delete current design agenda and reopen previous accepted agenda', () => {
     cy.route('GET', '/agendas/**').as('getAgendas');
@@ -37,7 +35,7 @@ context('Agenda reopen previous tests', () => {
     cy.approveDesignAgenda();
     cy.contains(designAgendaBTitle).should('exist');
     cy.contains(designAgendaATitle).should('not.exist');
-    cy.get(agendaSelector.agendaActions).click();
+    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
     cy.get(agendaSelector.reopenPreviousVersion).click();
     cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
@@ -65,8 +63,8 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaCTitle).should('exist');
     cy.deleteAgenda();
     cy.contains(designAgendaCTitle).should('not.exist');
-    cy.get(agendaSelector.agendaActions).click();
-    cy.contains(agendaReopenPreviousVersionMenuActionItem).should('not.exist');
+    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
+    cy.get(agendaSelector.reopenPreviousVersion).should('not.exist');
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.deleteAgenda();
     cy.get(agendaSelector.agendaActions).click();
@@ -74,7 +72,7 @@ context('Agenda reopen previous tests', () => {
     cy.wait('@getAgendas');
     cy.contains(designAgendaATitle).should('not.exist');
     cy.contains(designAgendaBTitle).should('exist');
-    cy.get(agendaSelector.agendaActions).click();
-    cy.contains(agendaReopenPreviousVersionMenuActionItem).should('exist');
+    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
+    cy.get(agendaSelector.reopenPreviousVersion).should('exist');
   });
 });

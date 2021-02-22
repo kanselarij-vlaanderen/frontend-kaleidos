@@ -223,7 +223,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
-  cy.get(actionModel.showActionOptions).click();
+  cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   if (shouldConfirm) {
     cy.get(modal.auModal.container).within(() => {
