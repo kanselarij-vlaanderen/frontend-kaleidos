@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import { sortPieces } from 'fe-redpencil/utils/documents';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentsDocumentListComponent extends Component {
   /**

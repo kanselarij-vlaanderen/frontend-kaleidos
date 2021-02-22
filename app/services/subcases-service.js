@@ -1,6 +1,6 @@
 import Service, { inject } from '@ember/service';
-import { ajax } from 'fe-redpencil/utils/ajax';
-import { trimText } from 'fe-redpencil/utils/trim-util';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import moment from 'moment';
 
 export default Service.extend({

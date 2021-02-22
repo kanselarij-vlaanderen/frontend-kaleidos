@@ -3,7 +3,7 @@ import Service, { inject as service } from '@ember/service';
 import {
   task, timeout
 } from 'ember-concurrency';
-import { ajax } from 'fe-redpencil/utils/ajax';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 
 export default Service.extend({
   toaster: service(),

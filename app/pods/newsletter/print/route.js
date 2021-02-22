@@ -6,7 +6,7 @@ import {
   setCalculatedGroupPriorities,
   groupAgendaitemsByGroupname,
   sortByPriority
-} from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {

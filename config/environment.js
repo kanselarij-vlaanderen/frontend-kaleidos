@@ -1,8 +1,8 @@
 /* eslint-disable object-curly-newline */
 module.exports = function(environment) {
   const ENV = {
-    modulePrefix: 'fe-redpencil',
-    podModulePrefix: 'fe-redpencil/pods',
+    modulePrefix: 'frontend-kaleidos',
+    podModulePrefix: 'frontend-kaleidos/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',

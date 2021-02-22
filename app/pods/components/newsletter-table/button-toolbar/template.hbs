@@ -8,14 +8,9 @@
   </button>
   {{#if (is-pending (await @agendaitem.nota))}}
     <div class="vl-loader" role="alert" aria-busy="true">
-      {{#attach-tooltip
-        arrow="true"
-        animation="shift"
-        placement="bottom"
-        class="ember-attacher-tooltip"
-      }}
+      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
         {{t "nota-loading-text"}}
-      {{/attach-tooltip}}
+      </EmberTooltip>
     </div>
   {{else}}
     <button
@@ -26,14 +21,9 @@
       {{on "click" this.openNota}}
     >
       <i class="vl-button__icon ki-document"></i>
-      {{#attach-tooltip
-        arrow="true"
-        animation="shift"
-        placement="bottom"
-        class="ember-attacher-tooltip"
-      }}
+      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
         {{if (await @agendaitem.nota) (t "open-note") (t "no-nota")}}
-      {{/attach-tooltip}}
+      </EmberTooltip>
     </button>
   {{/if}}
   <LinkTo
