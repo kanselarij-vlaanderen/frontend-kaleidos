@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
+import { animationFrame } from 'ember-concurrency';
 
 class AgendaitemGroup {
   sortedMandatees;
@@ -75,6 +76,7 @@ export default class AgendaOverview extends Component {
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
+      yield animationFrame(); // Computationally heavy task. This keeps the interface alive
       if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
         currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
       } else {

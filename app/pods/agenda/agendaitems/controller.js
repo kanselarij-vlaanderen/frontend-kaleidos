@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { task } from 'ember-concurrency-decorators';
 import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { animationFrame } from 'ember-concurrency';
 
 export default class AgendaitemsAgendaController extends Controller {
   queryParams = [{
@@ -49,6 +50,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @task
   *filterTask() {
+    yield animationFrame();
     let filteredNotas = this.model.notas;
     let filteredAnnouncements = this.model.announcements;
 

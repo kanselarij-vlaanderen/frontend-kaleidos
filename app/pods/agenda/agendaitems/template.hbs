@@ -6,20 +6,24 @@
     />
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       {{#if this.isOverviewWindow}}
-      {{!-- await for both announcements and agendaitems is needed to have scrolling to selected agendaitem --}}
-        <Agenda::AgendaOverview
-          @notas={{this.filteredNotas}}
-          @announcements={{this.filteredAnnouncements}}
-          @currentAgenda={{this.agenda}}
-          @previousAgenda={{this.previousAgenda}}
-          @onReorderAgendaitems={{perform this.assignNewPriorities}}
-          @showModifiedOnly={{this.showModifiedOnly}}
-          @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
-        />
+        {{#if (not this.filterTask.lastSuccessful)}}
+          <WebComponents::AuLoadingPage/>
+        {{else}}
+          <Agenda::AgendaOverview
+            @notas={{this.filteredNotas}}
+            @announcements={{this.filteredAnnouncements}}
+            @currentAgenda={{this.agenda}}
+            @previousAgenda={{this.previousAgenda}}
+            @onReorderAgendaitems={{perform this.assignNewPriorities}}
+            @showModifiedOnly={{this.showModifiedOnly}}
+            @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+          />
+        {{/if}}
         {{#if this.assignNewPriorities.isRunning}}
           <WebComponents::AuLoadingOverlay/>
         {{/if}}
       {{else}}
+      {{!-- await for both announcements and agendaitems is needed to have scrolling to selected agendaitem --}}
         <Agenda::AgendaDetail::Sidebar
           @announcements={{await this.filteredAnnouncements}}
           @agendaitems={{await this.filteredNotas}}
