@@ -55,16 +55,11 @@
       {{on "click" (perform this.changeConfidentiality)}}
     >
       {{#if @confidential}}
-        {{#attach-tooltip
-          arrow="true"
-          animation="shift"
-          placement="top"
-          class="ember-attacher-tooltip"
-        }}
+        <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
           <p>
             {{t "document-is-confidential"}}
           </p>
-        {{/attach-tooltip}}
+        </EmberTooltip>
         <i class="vl-icon ki-lock-closed vl-u-text--error"
         ></i>
       {{else}}

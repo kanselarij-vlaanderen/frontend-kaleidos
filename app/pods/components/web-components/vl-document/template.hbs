@@ -6,14 +6,9 @@
     <div class="vlc-document-card-item__title">
       <h6 class="vl-title vl-title--h6">
         {{#if (not this.file)}}
-          <AttachTooltip
-            @arrow="true"
-            @animation="shift"
-            @placement="top"
-            @class="ember-attacher-tooltip"
-          >
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
             {{t "document-not-consultable"}}
-          </AttachTooltip>
+          </EmberTooltip>
         {{/if}}
         {{this.piece.name}}
       </h6>
