@@ -104,14 +104,17 @@ export default class PublicationService extends Service {
   }
 
   async getNewPublicationNextNumber() {
+    // Deze query possibly breaks if publication-flows without number exist
     const publications = await this.store.query('publication-flow', {
       sort: '-publication-number',
+      size: 1, // we only want the last result
     });
-    if (publications !== null) {
-      const latestPublication = publications.toArray()[0];
+    const latestPublication = publications.get('firstObject');
+    if (latestPublication) {
       return latestPublication.publicationNumber + 1;
     }
-    return 0;
+    // This should only be a "no-data" issue, in that case we have to default to number 1
+    return 1;
   }
 
   getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {

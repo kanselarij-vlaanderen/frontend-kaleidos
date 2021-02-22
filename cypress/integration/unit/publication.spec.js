@@ -21,6 +21,7 @@ context('Publications tests', () => {
 
   // TODO tests that duplicate publication numbers are not possible unless a suffix is given, combination of number+suffix should be unique
   // TODO both during creation as in sidebar
+  // Be careful when using fixed numbers in tests, with automatic numbering implemented, some of them were already used
 
   const publicationOverviewUrl = '/publicaties';
   const someText = 'Some text';
@@ -58,7 +59,7 @@ context('Publications tests', () => {
       // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type('1');
+        .type('100');
       cy.get(modalSelectors.publication.publicationShortTitleTextarea)
         .click()
         .clear()
@@ -100,12 +101,13 @@ context('Publications tests', () => {
 
   it('should create a publication and redirect to its detail page', () => {
     cy.visit(publicationOverviewUrl);
+    const numberToCheck = 200;
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       cy.get(modalSelectors.publication.publicationNumberInput).click()
         .clear()
-        .type('3');
+        .type(numberToCheck);
       cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
@@ -119,7 +121,7 @@ context('Publications tests', () => {
     });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', '3');
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', numberToCheck);
   });
 
   it('should have an overview of publication-flows and be able to click on it to go to the detail page', () => {
@@ -129,9 +131,9 @@ context('Publications tests', () => {
     cy.get(publicationSelectors.goToPublication).first()
       .click();
     cy.wait('@getNewPublicationDetail');
-
+    // TODO This test is VERY dependent on existing data from previous test, fixing this for now but this will break at some point
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE - NIET VIA MINISTERRAAD - 3');
+    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', 'PUBLICATIE - NIET VIA MINISTERRAAD - 200');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
