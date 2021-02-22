@@ -1,6 +1,6 @@
 /* eslint-disable no-duplicate-imports */
 import Service, { inject as service } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
 
 export default class activityService extends Service {

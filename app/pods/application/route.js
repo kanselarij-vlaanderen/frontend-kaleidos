@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import ENV from 'fe-redpencil/config/environment';
+import ENV from 'frontend-kaleidos/config/environment';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 import { inject as service } from '@ember/service';
 

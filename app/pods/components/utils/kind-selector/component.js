@@ -1,6 +1,6 @@
 /* eslint-disable ember/no-arrow-function-computed-properties */
 import Component from '@ember/component';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import EmberObject, { computed } from '@ember/object';
 
 export default Component.extend({
