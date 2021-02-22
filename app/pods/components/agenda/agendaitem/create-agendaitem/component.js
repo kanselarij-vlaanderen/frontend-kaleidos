@@ -6,7 +6,6 @@ import { computed } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
-
 export default Component.extend(DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
@@ -26,7 +25,7 @@ export default Component.extend(DataTableRouteMixin, {
   size: 10,
   filter: '',
   sort: 'short-title',
-  queryOptions: computed('sort', 'filter', 'page', function() {
+  queryOptions: computed('sort', 'filter', 'page', 'size', function() {
     const {
       page, filter, size, sort,
     } = this;
@@ -54,8 +53,17 @@ export default Component.extend(DataTableRouteMixin, {
     return this.page;
   },
 
+  get sizeParam() {
+    return this.size;
+  },
+
   set pageParam(page) {
     this.set('page', page);
+    this.findAll.perform();
+  },
+
+  set sizeParam(size) {
+    this.set('size', size);
     this.findAll.perform();
   },
 
@@ -66,6 +74,7 @@ export default Component.extend(DataTableRouteMixin, {
   set filterParam(filter) {
     this.set('filter', filter);
     this.set('page', 0);
+    this.set('size', 10);
   },
 
   get sortParam() {
@@ -132,6 +141,10 @@ export default Component.extend(DataTableRouteMixin, {
   },
 
   actions: {
+    selectSize(size) {
+      this.size = size;
+    },
+
     close() {
       this.set('isAddingAgendaitems', false);
     },
