@@ -101,7 +101,9 @@ export default class AgendaitemDecisionComponent extends Component {
   }
 
   @task
-  *attachPreviousReportVersion(container) {
+  *attachPreviousReportVersion(piece) {
+    // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
+    const container = yield piece.documentContainer;
     let remainingVersions = yield container.pieces;
     if (remainingVersions.length) {
       remainingVersions = remainingVersions.toArray();
