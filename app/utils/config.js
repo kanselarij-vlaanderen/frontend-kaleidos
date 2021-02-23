@@ -97,6 +97,10 @@ export default EmberObject.create({
       approved: true,
       pillClassNames: 'vlc-pill vlc-pill--success',
       iconClassNames: 'ki-check formally-ok-icon',
+      svg: {
+        icon: 'check',
+        color: 'success',
+      },
     },
     {
       label: 'Formeel niet OK',
@@ -105,6 +109,10 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status vl-u-text--error auk-u-text-bold auk-u-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
       iconClassNames: 'ki-cross formally-ok-icon',
+      svg: {
+        icon: 'cross',
+        color: 'danger',
+      },
     },
     {
       label: 'Nog niet formeel OK',
@@ -113,6 +121,10 @@ export default EmberObject.create({
       classNames: 'vlc-agenda-items__status auk-u-text-bold auk-u-flex',
       pillClassNames: 'vlc-pill',
       iconClassNames: 'ki-question-mark formally-ok-icon',
+      svg: {
+        icon: 'question-mark',
+        color: '',
+      },
     }
   ],
   defaultKindUri:
