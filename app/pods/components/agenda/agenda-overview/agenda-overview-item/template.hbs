@@ -1,4 +1,9 @@
-<div class={{if @agendaitem.retracted "vlc-u-opacity-lighter"}}>
+<div class={{if @agendaitem.retracted "vlc-u-opacity-lighter"}}
+  {{in-viewport
+    onEnter=(perform this.lazyLoadSideData)
+    onExit=(fn this.cancelLazyLoad)
+  }}
+>
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
       <div class="vlc-agenda-items__cursor">
@@ -85,13 +90,7 @@
         --}}
       </div>
 
-      <div
-        class="auk-u-flex auk-u-flex--justify-between"
-        {{in-viewport
-          onEnter=(perform this.lazyLoadSubcase)
-          onExit=(fn this.cancelLazyLoad this.lazyLoadSubcase)
-        }}
-      >
+      <div class="auk-u-flex auk-u-flex--justify-between">
         {{#if this.subcase.subcaseName}}
           <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
             {{this.subcase.subcaseName}}
@@ -118,12 +117,7 @@
       </div>
       {{#if (or this.currentSessionService.isEditor this.documentsAreReleased)}}
         <div class="vl-accordion__panel">
-          <div class="auk-u-mt-4"
-            {{in-viewport
-              onEnter=(perform this.lazyLoadNewDocuments)
-              onExit=(fn this.cancelLazyLoad this.lazyLoadNewDocuments)
-            }}
-          >
+          <div class="auk-u-mt-4">
             <Documents::DocumentBadgeList
               @pieces={{this.limitedAgendaitemDocuments}}
               @highlightedPieces={{this.newAgendaitemDocuments}}
@@ -153,19 +147,9 @@
               </span> {{@agendaitem.explanation}}
             {{/if}}
           </div>
-          <div
-            class="vlc-agenda-items__icons"
-            {{in-viewport
-              onEnter=(perform this.lazyLoadSubcase)
-              onExit=(fn this.cancelLazyLoad this.lazyLoadSubcase)
-            }}
-          >
+          <div class="vlc-agenda-items__icons">
             <div
               class="auk-u-flex vlc-agenda-items__icons"
-              {{in-viewport
-                onEnter=(perform this.lazyLoadNewsletterVisibility)
-                onExit=(fn this.cancelLazyLoad this.lazyLoadNewsletterVisibility)
-              }}
             >
               {{#if (not this.newsletterIsVisible)}}
                 <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
