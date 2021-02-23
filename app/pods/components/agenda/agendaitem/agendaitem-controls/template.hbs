@@ -4,6 +4,7 @@
   }}
     <WebComponents::AuButtonToolbar>
       <WebComponents::AuButton
+              data-test-agendaitem-controls-actions
               @layout="icon-right"
               @icon="chevron-down"
       >
@@ -21,17 +22,18 @@
         <WebComponents::AuDropdown>
           {{#if this.isPostPonable}}
             {{#if @agendaitem.retracted}}
-              <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}}>
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
                 {{t "not-postpone"}}
               </WebComponents::AuDropdown::Item>
             {{else}}
-              <WebComponents::AuDropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}}>
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
                 {{t "postpone"}}
               </WebComponents::AuDropdown::Item>
             {{/if}}
           {{/if}}
           {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
             <WebComponents::AuDropdown::Item {{on "click" this.toggleIsVerifying}}
+                    data-test-agendaitem-controls-action-delete
                     @skin="danger"
             >
               {{t "delete"}}

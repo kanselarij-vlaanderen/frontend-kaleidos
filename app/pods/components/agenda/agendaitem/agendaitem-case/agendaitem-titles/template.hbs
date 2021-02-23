@@ -17,6 +17,7 @@
           {{#if @subcase.case.id}}
             <WebComponents::AuToolbar::Item>
               <WebComponents::AuButton
+                data-test-agendaitem-titles-to-subcase
                 {{on "click" this.redirectToSubcase}}
                       @skin="tertiary"
                       @layout="icon-right"
@@ -28,10 +29,10 @@
           {{/if}}
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton
+              data-test-agendaitem-titles-edit
               {{on "click" this.toggleIsEditingAction}}
                     @skin="tertiary"
                     @icon="edit"
-                    data-test-add-mandatee
             />
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
@@ -47,11 +48,47 @@
             {{@agendaitem.title}}
           </p>
         {{/if}}
-        {{#if @subcase.subcaseName}}
-          <WebComponents::AuPill>
-            {{@subcase.subcaseName}}
-          </WebComponents::AuPill>
-        {{/if}}
+        <div class="auk-u-flex--vertical-center">
+          {{#if (not @agendaitem.showAsRemark) }}
+            {{#if @subcase.subcaseName}}
+              <WebComponents::AuPill>
+                {{@subcase.subcaseName}}
+              </WebComponents::AuPill>
+            {{/if}}
+            {{#if @agendaitem.retracted}}
+              <WebComponents::AuPill>
+                {{t "postponed-item"}}
+              </WebComponents::AuPill>
+            {{/if}}
+          {{else}}
+            {{#if @newsletterInfo}}
+              {{#if @newsletterInfo.inNewsletter}}
+                <WebComponents::AuPill @skin="success" @icon="visible">
+                  {{t "visible-in-newsletter"}}
+                </WebComponents::AuPill>
+              {{else}}
+                <WebComponents::AuPill @skin="danger" @icon="hide">
+                  {{t "hidden-in-newsletter"}}
+                </WebComponents::AuPill>
+              {{/if}}
+            {{else}}
+              <WebComponents::AuPill>
+                {{t "no-newsletter-info"}}
+              </WebComponents::AuPill>
+            {{/if}}
+          {{/if}}
+          {{#if
+            (and @agendaitem.isDesignAgenda
+                    (and currentSession.isEditor @agendaitem.formallyOkToShow))
+          }}
+            <WebComponents::AuPill
+              @skin={{@agendaitem.formallyOkToShow.svg.color}}
+              @icon={{@agendaitem.formallyOkToShow.svg.icon}}
+            >
+              {{@agendaitem.formallyOkToShow.label}}
+            </WebComponents::AuPill>
+          {{/if}}
+        </div>
       </div>
     </WebComponents::AuPanel::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>

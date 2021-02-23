@@ -15,7 +15,7 @@
                   {{on "click" this.toggleIsEditing}}
                         @skin="tertiary"
                         @icon="settings"
-                        data-test-add-mandatee
+                        data-test-subcase-mandatees-edit
                 >
                   {{t "edit-2"}}
                 </WebComponents::AuButton>
@@ -26,7 +26,7 @@
       </WebComponents::AuPanel::Header>
       {{# if (gt (await mandateeRows.length) 0) }}
         <WebComponents::AuPanel::Body @noPadding="true">
-          <table class="auk-table" data-test-table-mandatees>
+          <table class="auk-table">
             <thead>
               <tr>
                 <th>{{t "minister"}}</th>
@@ -37,7 +37,7 @@
             </thead>
             <tbody>
               {{#each mandateeRows as |mandateeRow|}}
-                <tr>
+                <tr data-test-mandatee-link-list-item >
                   <td class="auk-table__col--4">
                     <div class="auk-u-flex auk-u-flex--vertical-center">
                       <WebComponents::AuBadge @icon="user"/>
@@ -45,13 +45,17 @@
                     </div>
                   </td>
                   <td>
-                    <ul>
-                      {{#each mandateeRow.fields as |field|}}
-                        <li>
-                          {{field.label}}
-                        </li>
-                      {{/each}}
-                    </ul>
+                    {{#if mandateeRow.fields}}
+                      <ul data-test-agendaitem-mandatees-fields-list>
+                        {{#each mandateeRow.fields as |field|}}
+                          <li>
+                            {{field.label}}
+                          </li>
+                        {{/each}}
+                      </ul>
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
                   </td>
                   <td>
                     {{#if mandateeRow.isSubmitter}}

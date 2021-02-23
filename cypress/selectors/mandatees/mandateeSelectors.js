@@ -1,6 +1,7 @@
 const selectors = {
   mandateeLinkFieldsToggle: '[data-test-mandatee-link-fields-show]',
   mandateeLinkListItem: '[data-test-mandatee-link-list-item]',
+  agendaitemMandateeFieldsList: '[data-test-agendaitem-mandatees-fields-list]',
   addMandateeTitleContainer: '[data-test-mandatee-title-container]',
   addMandateeNicknameContainer: '[data-test-mandatee-nick-name]',
   addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
