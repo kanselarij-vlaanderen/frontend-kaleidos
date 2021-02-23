@@ -70,12 +70,21 @@
             <div class="auk-u-m-3">
               <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}} @block="true"
+                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}}
                   {{on "input" (perform this.setPublicationNumber)}} />
+                <WebComponents::AuInput size="5" type="text" value={{this.model.publicationFlow.publicationSuffix}}
+                  {{on "input" (perform this.setPublicationSuffix)}} />
+
                 {{#if this.numberIsAlreadyUsed}}
                   <div class="auk-form-help-text auk-form-help-text--danger">
                     <WebComponents::AuIcon @name="alert-triangle"/>
                     {{t "publication-number-already-taken"}}
+                  </div>
+                {{/if}}
+                {{#if this.numberIsRequired}}
+                  <div class="auk-form-help-text auk-form-help-text--danger">
+                    <WebComponents::AuIcon @name="alert-triangle"/>
+                    {{t "publication-number-required"}}
                   </div>
                 {{/if}}
               </div>
@@ -85,6 +94,14 @@
                                               @isSearchable={{false}}
                                               @onchange={{this.setPublicationStatus}}
                                               @selected={{this.getPublicationStatus}}
+                />
+              </div>
+              <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t "deduced-publication-type"}}</WebComponents::AuLabel>
+                <Utils::RadioDropdownComboSelect @radioOptionsSize="3"
+                                                 @options={{this.sortedDocumentTypes}}
+                                                 @onSelect={{this.selectDocumentType}}
+                                                 @selected={{this.getSelectedDocumentType}}
                 />
               </div>
               <div class="auk-form-group">
@@ -236,11 +253,11 @@
 {{#if this.showConfirmWithdraw}}
   <WebComponents::AuModal @size="small">
     <WebComponents::AuModal::Header
-            @title={{t "withdraw-publication"}}
+            @title={{t "discharge-publication"}}
             @hideCloseButton={{true}}
     />
     <WebComponents::AuModal::Body>
-      {{t "cancel-publication-flow-confirm"}}
+      {{t "discharge-publication-flow-confirm"}}
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
@@ -254,7 +271,7 @@
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
-              {{t "withdraw"}}
+              {{t "discharge"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>

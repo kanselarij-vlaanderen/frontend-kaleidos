@@ -13,6 +13,9 @@ export default Model.extend({
   documentContainers: hasMany('document-container', {
     inverse: null,
   }),
+  publicationFlows: hasMany('publication-flow', {
+    inverse: null,
+  }),
   subtypes: hasMany('document-type', {
     inverse: null,
   }),

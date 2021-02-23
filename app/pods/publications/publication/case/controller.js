@@ -1,5 +1,8 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
@@ -13,12 +16,15 @@ export default class CaseController extends Controller {
   @tracked isInscriptionInEditMode = false;
   @tracked isUpdatingInscription = false;
   @tracked selectedMandatee = null;
+  @tracked showAddOrganisationModal = false;
+  @tracked inputOrganization = '';
 
   @tracked
   contactPerson = {
     firstName: '',
     lastName: '',
     email: '',
+    organization: null,
   };
 
   @tracked
@@ -28,6 +34,9 @@ export default class CaseController extends Controller {
     sort: '',
   };
 
+  /**
+   * ZONE FOR TTHE CONTACT PERSONS
+   */
   @action
   onFirstNameChanged(event) {
     this.contactPerson.firstName = event.target.value;
@@ -41,10 +50,6 @@ export default class CaseController extends Controller {
   @action
   onEmailChanged(event) {
     this.contactPerson.email = event.target.value;
-  }
-  @action
-  onOrganisationChanged(event) {
-    this.contactPerson.organisationName = event.target.value;
   }
 
   get getShortTitle() {
@@ -69,6 +74,55 @@ export default class CaseController extends Controller {
   @action
   closeContactPersonModal() {
     this.personModalOpen = false;
+    this.contactPerson.organization = null;
+  }
+
+  /**
+   * ZONE FOR THE ORGANIZATIONS
+   */
+  get allOrganizations() {
+    return this.model.organizations;
+  }
+
+  @action
+  customPowerSelectSearchFunction(searchTerm, event) {
+    // Just because we can.
+    return event.results.filter((result) => result.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  }
+
+  @action
+  async addOrganisation() {
+    this.showLoader = true;
+    const newOrganization = this.store.createRecord('organization', {
+      name: this.inputOrganization,
+    });
+    await newOrganization.save();
+    this.model.organizations.pushObject(newOrganization);
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+    this.showLoader = false;
+  }
+
+  @action
+  openAddOrganisationModal() {
+    this.showAddOrganisationModal = true;
+  }
+
+  @action
+  closeAddOrganisationModal() {
+    this.inputOrganization = '';
+    this.showAddOrganisationModal = false;
+  }
+
+  @action
+  selectOrganization(selections, event) {
+    // Return all available organizations
+    set(event, 'selected', selections);
+    this.contactPerson.organization = selections;
+  }
+
+  get selectedOrganizations() {
+    return this.contactPerson.organization;
   }
 
   @action
@@ -103,6 +157,7 @@ export default class CaseController extends Controller {
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
     await this.publicationService.linkContactPersonToPublication(this.model.publicationFlow.id, contactPerson);
+    this.contactPerson.organization = null;
     this.personModalOpen = false;
     this.showLoader = false;
   }

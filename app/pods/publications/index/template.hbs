@@ -1,4 +1,7 @@
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
+  <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+    {{on "click" this.filterTables}}
+  />
   <DataTable
     @content={{this.model}}
     @page={{this.page}}
@@ -12,8 +15,11 @@
     <table.content as |c|>
       <c.header>
         {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
+
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <th style="min-width: 50rem">{{t "publications-table-case-name"}}</th>
+          <th style="min-width: 50rem">
+            {{t "publications-table-case-name"}}
+          </th>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <ThSortable
@@ -28,17 +34,17 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
-          <th>
-            <span class="auk-u-mr">
-              {{t "publications-table-derived-publicationtype"}}
-              <WebComponents::AuIcon @name="circle-info"/>
-              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                <p>
-                  {{t "publications-table-derived-publicationtype-info"}}
-                </p>
-              </EmberTooltip>
-            </span>
-          </th>
+          <ThSortable
+                  @currentSorting={{this.sort}}
+                  @field="deducedType.priority"
+                  @label={{t "deduced-publication-type"}}
+          />
+          {{!--<WebComponents::AuIcon @name="circle-info"/>
+          <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+            <p>
+              {{t "publications-table-derived-publicationtype-info"}}
+            </p>
+          </EmberTooltip>--}}
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
@@ -128,9 +134,7 @@
           <th>{{t "publications-table-from-designagenda"}}</th>
         {{/if}}
         <th>
-          <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-            {{on "click" this.filterTables}}
-          />
+          &nbsp;
         </th>
       </c.header>
       <c.body class="tr-hover" as |row|>
@@ -146,11 +150,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
-            {{if
-              row.publicationNumber
-              row.publicationNumber
-              (t "dash")
-            }}
+            {{#if row.publicationNumber}}
+              {{row.publicationNumberToDisplay}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
@@ -162,7 +166,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <td>
-            {{t "dash"}}
+            {{#if row.deducedType}}
+              {{ row.deducedType.label }}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
@@ -209,12 +217,6 @@
               (moment-format row.publishedAt "DD-MM-YYYY")
               (t "dash")
             }}
-          </td>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
-          <td>
-            {{if row.numacNumber row.numacNumber (t "dash")}}
           </td>
         {{/if}}
 
@@ -360,7 +362,6 @@
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="finalPublicationDateFilterOption" @label={{t "publications-table-final-publication-date"}} @checked={{this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="publicationDateFilterOption" @label={{t "publications-table-publication-date"}} @checked={{this.filterTableColumnOptionKeys.publicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="numacNuberBsFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNuberBsFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="lastEditedFilterOption" @label={{t "publications-table-last-edited"}} @checked={{this.filterTableColumnOptionKeys.lastEditedFilterOption}} @toggle={{this.toggleFilterOption}}/>
               </WebComponents::AuCheckboxList>
             </div>

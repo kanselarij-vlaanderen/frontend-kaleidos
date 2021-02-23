@@ -25,6 +25,7 @@ const selectors = {
     createButton: '[data-test-publication-button-create-new]',
     cancelButton: '[data-test-publication-button-cancel]',
     publicationNumberInput: '[data-test-create-publication-modal-number-input]',
+    publicationNumberSuffixInput: '[data-test-create-publication-modal-suffix-input]',
     publicationShortTitleTextarea: '[data-test-create-publication-modal-short-title-textarea]',
     publicationLongTitleTextarea: '[data-test-create-publication-modal-long-title-textarea]',
   },

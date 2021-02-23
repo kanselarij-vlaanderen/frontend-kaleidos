@@ -8,12 +8,17 @@ export default class CaseRoute extends Route.extend(AuthenticatedRouteMixin) {
     const publicationFlow = parentHash.publicationFlow;
     const _case = await publicationFlow.get('case');
     const contactPersons = await publicationFlow.get('contactPersons');
+    const organizations = await this.store.query('organization', {});
     return hash({
       publicationFlow,
       case: _case,
       contactPersons: contactPersons,
       refreshAction: parentHash.refreshAction,
+      organizations: organizations.toArray(),
     });
+  }
+  async afterModel(model) {
+    model.contactPersons.map((contactperson) => contactperson.get('organizations'));
   }
 
   async setupController(controller, model) {

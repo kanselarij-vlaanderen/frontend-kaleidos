@@ -15,7 +15,7 @@ export default class PublicationsIndexController extends Controller {
       requestedPublicationDateFilterOption: true,
       finalPublicationDateFilterOption: true,
       publicationDateFilterOption: true,
-      numacNuberBsFilterOption: true,
+      numacNumberFilterOption: true,
       caseManagerFilterOption: true,
       lastEditedFilterOption: true,
       lastEditedByFilterOption: true,
