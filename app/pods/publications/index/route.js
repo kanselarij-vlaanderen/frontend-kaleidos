@@ -71,10 +71,17 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
         id: ids.join(','),
       };
     }
+    let sort;
+    if (typeof params.sort === 'string' && params.sort.includes('publication-number')) {
+      // Specifically requested by Johan, because Suffix needs to be string and Quater...
+      sort = `${params.sort},-created`;
+    } else {
+      sort = params.sort;
+    }
 
     return this.store.query('publication-flow', {
       filter: filter,
-      sort: params.sort,
+      sort: sort,
       page: {
         number: params.page,
         size: params.size,

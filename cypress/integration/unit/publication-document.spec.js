@@ -19,7 +19,6 @@ context('Publications documents tests', () => {
     cy.logout();
   });
 
-  let basePublicationNumber = '1000';
   const shortTitle = 'Korte titel cypress test - document upload';
   const longTitle = 'Lange titel voor de cypress test - document upload';
   const files = [
@@ -32,8 +31,7 @@ context('Publications documents tests', () => {
   ];
 
   it('should add some documents to a publication', () => {
-    const pubNumber = basePublicationNumber++;
-    cy.createPublication(pubNumber, shortTitle, longTitle);
+    cy.createPublication(shortTitle, longTitle);
     cy.get(publicationSelectors.nav.documents).click();
     cy.get(auComponentSelectors.auEmptyState).should('exist');
     cy.get(auComponentSelectors.auEmptyStateText).should('contain', 'Er zijn nog geen documenten toegevoegd.');
@@ -45,8 +43,7 @@ context('Publications documents tests', () => {
   });
 
   it('should add and remove documents from a publication', () => {
-    const pubNumber = basePublicationNumber++;
-    cy.createPublication(pubNumber, shortTitle, longTitle);
+    cy.createPublication(shortTitle, longTitle);
     cy.get(publicationSelectors.nav.documents).click();
     cy.get(auComponentSelectors.auEmptyState).should('exist');
     cy.get(auComponentSelectors.auEmptyStateText).should('contain', 'Er zijn nog geen documenten toegevoegd.');

@@ -35,6 +35,7 @@ export default class PublicationsController extends Controller {
   @tracked
   publication = {
     number: null,
+    suffix: null,
     shortTitle: null,
     longTitle: null,
   };
@@ -91,15 +92,15 @@ export default class PublicationsController extends Controller {
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
-    // TODO replace 0 with code from nexnumber branch.
-    const newPublication = await this.publicationService.createNewPublication(0, _caseId);
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, _caseId);
     this.showLoader = false;
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
 
   @action
   async isPublicationNumberAlreadyTaken() {
-    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number);
+    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number, this.publication.suffix);
     if (isPublicationNumberTaken) {
       this.numberIsAlreadyUsed = true;
     } else {
@@ -117,7 +118,7 @@ export default class PublicationsController extends Controller {
 
     if (!this.hasError) {
       this.isCreatingPublication = true;
-      const newPublication = await this.publicationService.createNewPublication(this.publication.number, false, this.publication.longTitle, this.publication.shortTitle);
+      const newPublication = await this.publicationService.createNewPublication(this.publication.number, this.publication.suffix, false, this.publication.longTitle, this.publication.shortTitle);
       this.closePublicationModal();
       this.transitionToRoute('publications.publication', newPublication.get('id'));
     }
@@ -131,8 +132,10 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  showNewPublicationModal() {
+  async showNewPublicationModal() {
     this.isShowingPublicationModal = true;
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    this.set('publication.number', newPublicationNumber);
   }
 
   @action

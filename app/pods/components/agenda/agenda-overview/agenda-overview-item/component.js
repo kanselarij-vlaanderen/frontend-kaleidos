@@ -11,7 +11,6 @@ export default class AgendaOverviewItem extends Component {
    *
    * @agendaitem={{agendaitem}}
    * @isEditingOverview={{isEditingOverview}}
-   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -48,13 +47,6 @@ export default class AgendaOverviewItem extends Component {
 
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
 
-  get classNameBindings() {
-    return `
-    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
-    `;
-  }
-
   get overheidCanViewDocuments() {
     const isOverheid = this.currentSessionService.isOverheid;
     const documentsAreReleased = this.currentSession.releasedDocuments;
@@ -66,9 +58,10 @@ export default class AgendaOverviewItem extends Component {
   async startPublication() {
     this.showLoader = true;
     const _case = await this.args.agendaitem.get('case');
-    // TODO replace 0 with code from nexnumber branch.
-    await this.publicationService.createNewPublication(0, _case.id);
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, _case.id);
     this.showLoader = false;
+    this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
   @action
@@ -94,7 +87,7 @@ export default class AgendaOverviewItem extends Component {
     return `
     ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
     ${this.isClickable ? '' : 'not-clickable'}
-    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
+    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
     ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }

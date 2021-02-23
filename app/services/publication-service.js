@@ -15,7 +15,7 @@ export default class PublicationService extends Service {
   // Tracked.
   @tracked cachedData = A([]);
 
-  async createNewPublication(publicationNumber, _caseId, title, shortTitle) {
+  async createNewPublication(publicationNumber, publicationSuffix, _caseId, title, shortTitle) {
     // Work with the case.
     // Test if dossier already had publication (index not up to date).
     // For people that dont refresh and we're in a SPA.
@@ -37,6 +37,7 @@ export default class PublicationService extends Service {
     const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
+      publicationSuffix,
       case: caze,
       created: creationDatetime,
       status: toPublishStatus,
@@ -64,14 +65,45 @@ export default class PublicationService extends Service {
       });
   }
 
-  async publicationNumberAlreadyTaken(publicationNumber, publicationFlowId) {
-    const publicationWithId = await this.store.query('publication-flow', {
-      filter: {
-        ':exact:publication-number': publicationNumber,
-      },
-    });
-    const publicationNumberTakenList = publicationWithId.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
+  async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
+    let publicationsFromQuery;
+    if (publicationSuffix && !(publicationSuffix === '')) {
+      // if a valid suffix is given, we check if the number + suffix combo has been taken instead
+      publicationsFromQuery = await this.store.query('publication-flow', {
+        filter: {
+          // :exact: does not work on numbers.
+          'publication-number': publicationNumber,
+          ':exact:publication-suffix': publicationSuffix,
+        },
+      });
+    } else {
+      // if no suffix is given, we query only on same number but we have to filter out everything that has a suffix
+      // filtering on non-existing attributes, is this possible in a query?
+      const publicationsFromQueryWithSameNumber = await this.store.query('publication-flow', {
+        filter: {
+          // :exact: does not work on numbers.
+          'publication-number': publicationNumber,
+        },
+      });
+      publicationsFromQuery = publicationsFromQueryWithSameNumber.filter((publicationFlow) => !publicationFlow.publicationSuffix);
+    }
+    // filter own model from data or we can't save our own number
+    const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
     return publicationNumberTakenList.toArray().length !== 0;
+  }
+
+  async getNewPublicationNextNumber() {
+    // Deze query possibly breaks if publication-flows without number exist
+    const publications = await this.store.query('publication-flow', {
+      sort: '-publication-number',
+      size: 1, // we only want the last result
+    });
+    const latestPublication = publications.get('firstObject');
+    if (latestPublication) {
+      return latestPublication.publicationNumber + 1;
+    }
+    // This should only be a "no-data" issue, in that case we have to default to number 1
+    return 1;
   }
 
   getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
