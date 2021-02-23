@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;

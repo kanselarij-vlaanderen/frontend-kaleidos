@@ -3,11 +3,12 @@ import Model, {
 } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
   // Attributes.
-  @attr('string') publicationNumber;
+  @attr('number') publicationNumber;
+  @attr('string') publicationSuffix;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
@@ -26,7 +27,9 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-status', {
     inverse: null,
   }) status;
+
   @belongsTo('publication-type') type;
+  @belongsTo('document-type') deducedType;
 
   // Has many .
   @hasMany('numac-number', {
@@ -39,6 +42,14 @@ export default class PublicationFlow extends Model {
   @computed('priority')
   get hasPriority() {
     return this.priority > 0;
+  }
+
+  @computed('publicationNumber,publicationSuffix')
+  get publicationNumberToDisplay() {
+    if (this.publicationSuffix && this.publicationSuffix !== '') {
+      return `${this.publicationNumber} ${this.publicationSuffix}`;
+    }
+    return `${this.publicationNumber}`;
   }
 
   get translationRequestsTotal() {

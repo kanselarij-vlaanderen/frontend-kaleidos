@@ -1,7 +1,7 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { action } from '@ember/object';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
@@ -9,8 +9,9 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
       reload: true,
     }, {
-      include: 'case,contact-person,status,type,numac-number',
+      include: 'case,contact-person,status,type,numac-number,document-type',
     });
+    await publicationFlow.get('deducedType');
     const _case = await publicationFlow.get('case');
 
     const subcasesOnMeeting = await this.store.query('subcase', {
@@ -57,8 +58,13 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const pieces = await _case.get('pieces');
     const documentCount = pieces.length;
 
+    const documentTypes = this.store.query('document-type', {
+      sort: 'priority', 'page[size]': 50,
+    }).then((types) => types);
+
     return hash({
       publicationFlow,
+      documentTypes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {
@@ -78,6 +84,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
+    controller.numberIsAlreadyUsed = false;
   }
 
   @action

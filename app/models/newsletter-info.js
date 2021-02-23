@@ -2,7 +2,7 @@ import DS from 'ember-data';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 const {
   attr, hasMany, belongsTo,

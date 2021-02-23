@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import SendingOldCampaignError from 'fe-redpencil/errors/sending-old-campaign-error';
+import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
 export default Component.extend({
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],

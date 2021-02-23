@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import { getPrintOverviewTitle } from 'fe-redpencil/utils/print-overview-util';
+import { getPrintOverviewTitle } from 'frontend-kaleidos/utils/print-overview-util';
 
 export default Controller.extend({
   titleTranslationKey: 'decisions-of-kind',

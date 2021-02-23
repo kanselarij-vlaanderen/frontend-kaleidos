@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { cached } from 'fe-redpencil/decorators/cached';
+import { cached } from 'frontend-kaleidos/decorators/cached';
 
 export default Component.extend({
   store: inject(),
