@@ -4,7 +4,7 @@ import { hash } from 'rsvp';
 import {
   parseDraftsAndGroupsFromAgendaitems,
   sortByPriority
-} from 'fe-redpencil/utils/agendaitem-utils';
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default Route.extend({
   agendaService: inject(),

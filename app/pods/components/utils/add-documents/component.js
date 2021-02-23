@@ -5,7 +5,7 @@ import {
 import {
   computed, set
 } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { tracked } from '@glimmer/tracking';
 
 import moment from 'moment';
@@ -41,7 +41,7 @@ export default Component.extend({
     } catch (exception) {
       console.warn('An exception occurred', exception);
       // TODO error during cypress tests:
-      // calling set on destroyed object: <fe-redpencil@component:item-document::ember796>.defaultAccessLevel
+      // calling set on destroyed object: <frontend-kaleidos@component:item-document::ember796>.defaultAccessLevel
     }
   },
 

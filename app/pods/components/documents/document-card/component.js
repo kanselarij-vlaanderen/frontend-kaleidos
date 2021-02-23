@@ -5,8 +5,8 @@ import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';
-import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
-import config from 'fe-redpencil/utils/config';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
+import config from 'frontend-kaleidos/utils/config';
 
 export default class DocumentsDocumentCardComponent extends Component {
   @service store;
