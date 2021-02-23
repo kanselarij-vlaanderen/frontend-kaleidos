@@ -236,7 +236,7 @@
 {{#if this.showConfirmWithdraw}}
   <WebComponents::AuModal @size="small">
     <WebComponents::AuModal::Header
-            @title={{t "withdraw-publication"}}
+            @title={{t "discharge-publication"}}
             @hideCloseButton={{true}}
     />
     <WebComponents::AuModal::Body>
@@ -254,7 +254,7 @@
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
-              {{t "withdraw"}}
+              {{t "discharge"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
