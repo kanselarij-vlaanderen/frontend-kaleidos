@@ -167,11 +167,30 @@
                 onExit=(fn this.cancelLazyLoad this.lazyLoadNewsletterVisibility)
               }}
             >
-              {{#if (not this.newsletterIsVisible)}}
-                <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+              {{#if this.loadNewsletterVisibility.lastSuccessful}}
+                {{#if (not this.newsletterIsVisible)}}
+                  <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                      <p>
+                        {{t "not-visible-in-newsletter"}}
+                      </p>
+                    </EmberTooltip>
+                  </i>
+                {{else}}
+                  {{!-- TODO: this icon is merely here as an invisible placeholder.
+                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
+                    This should be tackled differently through modified design --}}
+                  <i
+                    class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter"
+                    style="color: white;"
+                  ></i>
+                {{/if}}
+              {{else}}
+                {{!-- TODO: design loading state for newsletter visibility --}}
+                <i class="vl-button__icon ki-circle-question vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
-                      {{t "not-visible-in-newsletter"}}
+                      {{t "loading"}}
                     </p>
                   </EmberTooltip>
                 </i>
