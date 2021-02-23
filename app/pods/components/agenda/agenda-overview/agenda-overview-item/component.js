@@ -11,7 +11,6 @@ export default class AgendaOverviewItem extends Component {
    *
    * @agendaitem={{agendaitem}}
    * @isEditingOverview={{isEditingOverview}}
-   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -47,13 +46,6 @@ export default class AgendaOverviewItem extends Component {
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
 
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
-
-  get classNameBindings() {
-    return `
-    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
-    `;
-  }
 
   get overheidCanViewDocuments() {
     const isOverheid = this.currentSessionService.isOverheid;
@@ -95,7 +87,7 @@ export default class AgendaOverviewItem extends Component {
     return `
     ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
     ${this.isClickable ? '' : 'not-clickable'}
-    ${this.retracted || this.isPostponed ? 'vlc-u-opacity-lighter' : ''}
+    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
     ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }
