@@ -1,4 +1,7 @@
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
+  <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+    {{on "click" this.filterTables}}
+  />
   <DataTable
     @content={{this.model}}
     @page={{this.page}}
@@ -15,9 +18,6 @@
 
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
           <th style="min-width: 50rem">
-            <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-              {{on "click" this.filterTables}}
-            />
             {{t "publications-table-case-name"}}
           </th>
         {{/if}}
