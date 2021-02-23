@@ -20,14 +20,9 @@
     {{else}}
       <div class="vl-loader" role="alert" aria-busy="true">
         <div class="vl-loader" role="alert" aria-busy="true">
-          {{#attach-tooltip
-            arrow="true"
-            animation="shift"
-            placement="bottom"
-            class="ember-attacher-tooltip"
-          }}
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
             {{t "nota-loading-text"}}
-          {{/attach-tooltip}}
+          </EmberTooltip>
         </div>
       </div>
     {{/if}}

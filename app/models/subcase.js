@@ -1,12 +1,12 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { alias } from '@ember/object/computed';
-import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import {
   sortDocumentContainers, getPropertyLength
-} from 'fe-redpencil/utils/documents';
+} from 'frontend-kaleidos/utils/documents';
 
 const {
   attr, hasMany, belongsTo, PromiseArray, PromiseObject,

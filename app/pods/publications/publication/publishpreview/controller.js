@@ -4,7 +4,7 @@ import {
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { A } from '@ember/array';
 import moment from 'moment';
 import { task } from 'ember-concurrency-decorators';

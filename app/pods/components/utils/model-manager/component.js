@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { cached } from 'fe-redpencil/decorators/cached';
+import { cached } from 'frontend-kaleidos/decorators/cached';
 import { inject } from '@ember/service';
 
 export default Component.extend({

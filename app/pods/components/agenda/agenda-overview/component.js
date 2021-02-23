@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaitemsPriority } from 'fe-redpencil/utils/agendaitem-utils';
+import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class AgendaOverview extends Component {
   @service sessionService;
