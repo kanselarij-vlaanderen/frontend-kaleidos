@@ -91,16 +91,18 @@
         </WebComponents::AuPillList>
       </div>
     </WebComponents::AuPanel::Body>
-    <WebComponents::AuModal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left"n>
-          <WebComponents::AuToolbar::Item>
-            <pre class="auk-u-flex--inline auk-u-text-pre-line auk-u-italic">
-             {{t "remark-title"}}: {{@agendaitem.explanation}}
-            </pre>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
+    {{#if @agendaitem.explanation }}
+      <WebComponents::AuModal::Footer @custom={{true}}>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left"n>
+            <WebComponents::AuToolbar::Item>
+              <pre class="auk-u-flex--inline auk-u-text-pre-line auk-u-italic">
+               {{t "remark-title"}}: {{@agendaitem.explanation}}
+              </pre>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuModal::Footer>
+    {{/if}}
   </WebComponents::AuPanel>
 </div>
