@@ -531,6 +531,7 @@
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
   "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
+  "search-legend-title": "Hulp bij zoeken",
   "search-legend-header-example": "Voorbeeldtoepassing",
   "search-legend-header-explanation": "Betekenis",
   "search-legend-and-example": "Digitale+meters",
