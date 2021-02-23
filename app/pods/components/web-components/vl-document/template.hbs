@@ -2,14 +2,9 @@
   <div class="vlc-document-card-item__title">
     <h6 class="vl-title vl-title--h6">
       {{#if (not (await piece.file.downloadLink))}}
-        {{#attach-tooltip
-          arrow="true"
-          animation="shift"
-          placement="top"
-          class="ember-attacher-tooltip"
-        }}
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
           {{t "document-not-consultable"}}
-        {{/attach-tooltip}}
+        </EmberTooltip>
       {{/if}}
       {{await piece.name}}
     </h6>

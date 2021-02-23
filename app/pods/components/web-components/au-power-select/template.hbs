@@ -2,9 +2,11 @@
   @options={{this.options}}
   @searchEnabled={{@isSearchable}}
   @selected={{@selected}}
+  @search={{@search}}
   @placeholder={{this.placeholder}}
+  @noMatchesMessage={{this.getMatchesMessage}}
   @onchange={{@onchange}} as |item|>
-  {{#if item.icon}}
+  {{#if item.icon }}
     <WebComponents::AuIcon @name={{item.icon.svg}} @iconSkinColor={{item.icon.color}}/>
   {{/if}}
   {{item.label}}
