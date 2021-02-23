@@ -78,6 +78,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
+    controller.numberIsAlreadyUsed = false;
   }
 
   @action

@@ -146,11 +146,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
           <td>
-            {{if
-              row.publicationNumber
-              row.publicationNumber
-              (t "dash")
-            }}
+            {{#if row.publicationNumber}}
+              {{row.publicationNumberToDisplay}}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}

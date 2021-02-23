@@ -7,7 +7,8 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
   // Attributes.
-  @attr('string') publicationNumber;
+  @attr('number') publicationNumber;
+  @attr('string') publicationSuffix;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
@@ -39,6 +40,14 @@ export default class PublicationFlow extends Model {
   @computed('priority')
   get hasPriority() {
     return this.priority > 0;
+  }
+
+  @computed('publicationNumber,publicationSuffix')
+  get publicationNumberToDisplay() {
+    if (this.publicationSuffix && this.publicationSuffix !== '') {
+      return `${this.publicationNumber} ${this.publicationSuffix}`;
+    }
+    return `${this.publicationNumber}`;
   }
 
   get translationRequestsTotal() {
