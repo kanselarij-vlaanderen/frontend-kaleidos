@@ -1,4 +1,4 @@
-import ModelWithModifier from 'fe-redpencil/models/model-with-modifier';
+import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import {
   attr,
   hasMany
