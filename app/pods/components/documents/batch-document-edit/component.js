@@ -5,7 +5,7 @@ import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { warn } from '@ember/debug';
-import { sortDocumentContainers } from 'fe-redpencil/utils/documents';
+import { sortDocumentContainers } from 'frontend-kaleidos/utils/documents';
 
 const batchSize = 20;
 

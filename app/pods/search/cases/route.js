@@ -2,8 +2,8 @@
 import Route from '@ember/routing/route';
 import { isEmpty } from '@ember/utils';
 import moment from 'moment';
-import search from 'fe-redpencil/utils/mu-search';
-import Snapshot from 'fe-redpencil/utils/snapshot';
+import search from 'frontend-kaleidos/utils/mu-search';
+import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { inject as service } from '@ember/service';
 
 export default class CasesSearchRoute extends Route {

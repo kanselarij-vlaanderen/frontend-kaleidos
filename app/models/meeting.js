@@ -1,12 +1,12 @@
 import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
-import { isAnnexMeetingKind } from 'fe-redpencil/utils/meeting-utils';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import {
   sortDocumentContainers, getPropertyLength
-} from 'fe-redpencil/utils/documents';
+} from 'frontend-kaleidos/utils/documents';
 
 const {
   Model, attr, hasMany, belongsTo, PromiseArray,

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import {
   task, timeout
 } from 'ember-concurrency';
