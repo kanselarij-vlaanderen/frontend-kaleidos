@@ -37,12 +37,12 @@ export default class AgendaitemDecisionComponent extends Component {
       this.defaultAccessLevel = accessLevels.firstObject;
     }
     this.decisionDocType = this.store.peekRecord('document-type', CONFIG.decisionDocumentTypeId);
-    if (!this.defaultAccessLevel) {
+    if (!this.decisionDocType) {
       const docTypes = yield this.store.query('document-type', {
         'page[size]': 1,
         'filter[:id:]': CONFIG.decisionDocumentTypeId,
       });
-      this.defaultAccessLevel = docTypes.firstObject;
+      this.decisionDocType = docTypes.firstObject;
     }
   }
 
