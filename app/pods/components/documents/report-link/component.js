@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import moment from 'moment';
 import { inject as service } from '@ember/service';
-import config from 'fe-redpencil/utils/config';
-import VRDocumentName from 'fe-redpencil/utils/vr-document-name';
+import config from 'frontend-kaleidos/utils/config';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { tracked } from '@glimmer/tracking';
 
 export default class ReportLink extends Component {
@@ -113,7 +113,7 @@ export default class ReportLink extends Component {
     newPiece.set('modified', creationDate);
     containerPieces.pushObject(newPiece);
     newPiece.set('documentContainer', this.args.documentContainer); // Explicitly set relation both ways
-    const newName = new VRDocumentName(previousPiece.get('name')).withOtherPieceSuffix(containerPieces.length);
+    const newName = new VRDocumentName(previousPiece.get('name')).withOtherVersionSuffix(containerPieces.length);
     newPiece.set('name', newName);
     this.args.documentContainer.notifyPropertyChange('pieces');// Why exactly? Ember should handle this?
     this.pieceInCreation = await newPiece;

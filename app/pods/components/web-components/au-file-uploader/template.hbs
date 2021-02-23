@@ -48,9 +48,29 @@
           {{/if}}
         {{/if}}
       </span>
-      {{#each queue.files as |file|}}
-        <span>{{file.name}} {{format-number file.progress style="decimal" maximumFractionDigits="0"}}&#37;</span>
-      {{/each}}
+      {{#if (gt fileQueue.files.length 0)}}
+        <span>
+          {{ember-progress-bar
+            progress=(div this.uploadedFileLength fileQueue.files.length)
+            options=(hash strokeWidth=2 duration=1000)
+          }}
+          {{format-number
+            (mult (div this.uploadedFileLength fileQueue.files.length) 100)
+            style="decimal"
+            maximumFractionDigits="0"
+          }}
+            &#37;
+        </span>
+      {{/if}}
+
     </FileUpload>
   </FileDropzone>
 </div>
+
+
+{{#if this.isLoading}}
+  <WebComponents::AuLoadingOverlay
+          @title={{t "upload-file"}}
+          @message={{t "upload-file"}}
+  />
+{{/if}}

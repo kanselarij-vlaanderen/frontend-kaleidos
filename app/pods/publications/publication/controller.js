@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import {
   action,
   set
@@ -19,13 +19,17 @@ export default class PublicationController extends Controller {
 
   // Tracked props.
   @tracked numberIsAlreadyUsed = false;
+  @tracked numberIsRequired = false;
   @tracked publicationNotAfterTranslationForPublication = false;
   @tracked publicationNotAfterTranslationForTranslation = false;
   @tracked collapsed = !this.get('media.isBigScreen');
   @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
+  @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
 
+  @tracked newNumacNumber = '';
+  @tracked showLoader = false;
 
   statusOptions = [{
     id: CONFIG.publicationStatusToPublish.id,
@@ -89,6 +93,13 @@ export default class PublicationController extends Controller {
     return this.model.publicationFlow.get('publishBefore');
   }
 
+  get getRequestedPublicationDate() {
+    if (!this.model.publicationFlow.get('publishDateRequested')) {
+      return null;
+    }
+    return this.model.publicationFlow.get('publishDateRequested');
+  }
+
   get getPublicationDate() {
     if (!this.model.publicationFlow.get('publishedAt')) {
       return null;
@@ -107,6 +118,14 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+  get titleText() {
+    const shortTitle = this.model.publicationFlow.case.get('shortTitle');
+    if (shortTitle) {
+      return shortTitle;
+    }
+    return this.model.publicationFlow.case.get('title');
+  }
+
 
   get expiredPublicationDate() {
     if (this.model.publicationFlow.get('publishedAt')) {
@@ -126,10 +145,11 @@ export default class PublicationController extends Controller {
 
   get casePath() {
     let title = this.intl.t('publication-flow');
+    // TODO use publicationNumberToDisplay here, but doesn't seem to update when changing suffix
     if (!this.model.latestSubcaseOnMeeting) {
-      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
     } else {
-      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber);
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
     }
     return title;
   }
@@ -161,14 +181,33 @@ export default class PublicationController extends Controller {
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);
-    this.publicationService.publicationNumberAlreadyTaken(event.target.value, this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
+    this.numberIsRequired = false;
+    this.numberIsAlreadyUsed = false;
+    if (event.target.value === '') {
+      this.numberIsRequired = true;
+      this.toaster.error(this.intl.t('publication-number-required'), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+      return;
+    }
+    const publicationSuffix = this.model.publicationFlow.get('publicationSuffix');
+    this.publicationService.publicationNumberAlreadyTaken(event.target.value, publicationSuffix, this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
-        this.toaster.error(this.intl.t('publication-number-already-taken'), this.intl.t('warning-title'), {
-          timeOut: 5000,
+        let suffixText = this.intl.t('without-suffix');
+        if (publicationSuffix && publicationSuffix !== '') {
+          suffixText = `${this.intl.t('with-suffix')} '${publicationSuffix}'`;
+        }
+        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
+          number: event.target.value,
+          suffix: suffixText,
+        }), this.intl.t('warning-title'), {
+          timeOut: 20000,
         });
+        // rollback the value in the view
+        event.target.value = this.model.publicationFlow.get('publicationNumber') || '';
       } else {
-        this.model.publicationFlow.set('publicationNumber', event.target.value);
+        this.model.publicationFlow.set('publicationNumber', parseInt(event.target.value, 10));
         this.numberIsAlreadyUsed = false;
         this.model.publicationFlow.save();
       }
@@ -176,10 +215,63 @@ export default class PublicationController extends Controller {
   }
 
   @restartableTask
-  *setNumacNumber(event) {
-    this.model.publicationFlow.set('numacNumber', event.target.value);
+  *setPublicationSuffix(event) {
     yield timeout(1000);
-    this.model.publicationFlow.save();
+    this.numberIsAlreadyUsed = false;
+    const publicationNumber = this.model.publicationFlow.get('publicationNumber');
+    this.publicationService.publicationNumberAlreadyTaken(publicationNumber, event.target.value, this.model.publicationFlow.id).then((isPublicationNumberTaken) => {
+      if (isPublicationNumberTaken) {
+        this.numberIsAlreadyUsed = true;
+        let suffixText = this.intl.t('without-suffix');
+        if (event.target.value !== '') {
+          suffixText = `${this.intl.t('with-suffix')} '${event.target.value}'`;
+        }
+        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
+          number: publicationNumber,
+          suffix: suffixText,
+        }), this.intl.t('warning-title'), {
+          timeOut: 20000,
+        });
+        // rollback the value in the view
+        event.target.value = this.model.publicationFlow.get('publicationSuffix') || '';
+      } else {
+        // TODO trimText here to remove spaces, enters ?
+        if (event.target.value !== '') {
+          this.model.publicationFlow.set('publicationSuffix', event.target.value);
+        } else {
+          this.model.publicationFlow.set('publicationSuffix', undefined);
+        }
+        this.numberIsAlreadyUsed = false;
+        this.model.publicationFlow.save();
+      }
+    });
+  }
+
+  get numacNumbers() {
+    if (this.model.publicationFlow.numacNumbers) {
+      return this.model.publicationFlow.numacNumbers;
+    }
+    return false;
+  }
+
+  @action
+  setNumacNummer(event) {
+    this.newNumacNumber = event.target.value;
+  }
+
+  @action
+  async addNumacNumber() {
+    this.set('showLoader', true);
+    await this.publicationService.createNumacNumber(this.newNumacNumber, this.model.publicationFlow);
+    this.set('newNumacNumber', '');
+    this.set('showLoader', false);
+  }
+
+  @action
+  async deleteNumacNumber(numacNumber) {
+    this.set('showLoader', true);
+    await this.publicationService.unlinkNumacNumber(numacNumber, this.model.publicationFlow);
+    this.set('showLoader', false);
   }
 
   @action
@@ -217,6 +309,12 @@ export default class PublicationController extends Controller {
         });
       this.publicationNotAfterTranslationForPublication = false;
     }
+  }
+
+  @action
+  setRequestedPublicationDate(event) {
+    this.model.publicationFlow.set('publishDateRequested', new Date(event));
+    this.model.publicationFlow.save();
   }
 
   @action

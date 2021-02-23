@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default Route.extend({
   queryParams: {

@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 
-import { ajax } from 'fe-redpencil/utils/ajax';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
 export default Service.extend({
@@ -124,6 +124,7 @@ export default Service.extend({
           })).firstObject;
           if (previousNewsItem) {
             news.set('richtext', previousNewsItem.richtext);
+            news.set('title', previousNewsItem.title);
             const themes = await previousNewsItem.get('themes');
             news.set('themes', themes);
           }

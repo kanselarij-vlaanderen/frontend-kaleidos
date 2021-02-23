@@ -10,7 +10,7 @@
               this.casePath
             }}
           </span>
-          <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>{{model.publicationFlow.case.shortTitle}}</h4>
+          <WebComponents::AuAbbreviatedText @text={{this.titleText}} @size="150" @custom="true" />
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
@@ -70,12 +70,21 @@
             <div class="auk-u-m-3">
               <div class="auk-form-group {{getClassForPublicationNumber}}">
                 <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}} @block="true"
+                <WebComponents::AuInput type="number" value={{this.model.publicationFlow.publicationNumber}}
                   {{on "input" (perform this.setPublicationNumber)}} />
+                <WebComponents::AuInput size="5" type="text" value={{this.model.publicationFlow.publicationSuffix}}
+                  {{on "input" (perform this.setPublicationSuffix)}} />
+
                 {{#if this.numberIsAlreadyUsed}}
                   <div class="auk-form-help-text auk-form-help-text--danger">
                     <WebComponents::AuIcon @name="alert-triangle"/>
                     {{t "publication-number-already-taken"}}
+                  </div>
+                {{/if}}
+                {{#if this.numberIsRequired}}
+                  <div class="auk-form-help-text auk-form-help-text--danger">
+                    <WebComponents::AuIcon @name="alert-triangle"/>
+                    {{t "publication-number-required"}}
                   </div>
                 {{/if}}
               </div>
@@ -104,14 +113,52 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-                {{#if this.model.publicationFlow.numacNumber}}
-                  <WebComponents::AuInput type="number" value={{this.model.publicationFlow.numacNumber}} @block="true" readonly
-                    {{on "input" (perform this.setNumacNumber)}} />
-                {{else}}
-                  <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-                {{/if}}
+                <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
+                  {{#if (gt this.numacNumbers.length 0) }}
+                    {{#each this.numacNumbers as |numac|}}
+                      <div class="vlc-numac-number-wrapper">
+                        <div class="vlc-numac-number">
+                          <span>{{ numac.name }}</span>
+                        </div>
+                        <div class="vlc-numac-number-delete-button-wrapper">
+                          <WebComponents::AuButton class="auk-button--nopadding"
+                            @skin="borderless"
+                            @icon="close"
+                            @layout="icon-only"
+                            {{on "click" (fn this.deleteNumacNumber numac)}}
+                            data-test-cases-backlink/>
+                        </div>
+                      </div>
+                    {{/each}}
+                  {{else}}
+                    <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
+                  {{/if}}
+                </div>
+                <WebComponents::AuInput
+                  type="text"
+                  id="newNumacNumber"
+                  value={{mut this.newNumacNumber}}
+                  onchange={{action "setNumacNummer"}}
+                />
+
+                <WebComponents::AuButton
+                  @skin="borderless"
+                  {{on "click"
+                   this.addNumacNumber}}>
+                  {{t "add"}}
+                </WebComponents::AuButton>
               </div>
               {{#if this.model.publicationFlow.status.isToBePublished}}
+                <div class="auk-form-group">
+                  <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
+                  {{#if this.showRequestedPublicationDatePicker}}
+                    <WebComponents::AuDatepicker
+                            @defaultDate={{this.getRequestedPublicationDate}}
+                            @onChange={{this.setRequestedPublicationDate}}/>
+                  {{else}}
+                    <Utils::SimpleSpinner></Utils::SimpleSpinner>
+                  {{/if}}
+                </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
                   {{#if this.showPublicationDatePicker}}
@@ -223,4 +270,10 @@
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
+{{/if}}
+
+
+
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}

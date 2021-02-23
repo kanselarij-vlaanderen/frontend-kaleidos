@@ -42,44 +42,34 @@
                 {{#if (await @agendaitem.checkAdded)}}
                   <span class="added-tag vlc-agenda-meta__recently-added">
                     <i class="ki-calendar-plus"></i>
-                    {{#attach-tooltip
-                      arrow="true"
-                      animation="shift"
-                      placement="top"
-                      class="ember-attacher-tooltip"
-                    }}
+                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "added-agendaitem-text"}}
                       </p>
-                    {{/attach-tooltip}}
+                    </EmberTooltip>
                   </span>
                 {{/if}}
-                {{#if newsletterInfo}}
-                  {{#if (not newsletterInfo.inNewsletter)}}
-                    <span class="added-tag vlc-agenda-meta__recently-added">
-                      <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
-                      {{#attach-tooltip
-                        arrow="true"
-                        animation="shift"
-                        placement="top"
-                        class="ember-attacher-tooltip"
-                      }}
-                        <p>
-                          {{t "not-visible-in-newsletter"}}
-                        </p>
-                      {{/attach-tooltip}}
-                    </span>
-                  {{/if}}
+
+                {{#if (not newsletterInfo.inNewsletter)}}
+                  <span class="added-tag vlc-agenda-meta__recently-added">
+                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                      <p>
+                        {{t "not-visible-in-newsletter"}}
+                      </p>
+                    </EmberTooltip>
+                  </span>
                 {{/if}}
 
                 {{#if (await subcase.confidential)}}
                   <i
-                  class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                  data-test-icon-agenda-confidentiality-locked
+                    class="vl-icon ki-lock-closed vlc-u-opacity-50"
+                    data-test-icon-agenda-confidentiality-locked
                   ></i>
                 {{/if}}
               {{/if}}
             </div>
+
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-u-flex--align-end">
               {{#if
                 (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))

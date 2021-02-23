@@ -2,10 +2,10 @@ import Service, { inject as service } from '@ember/service';
 
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
-import { ajax } from 'fe-redpencil/utils/ajax';
-import CONFIG from 'fe-redpencil/utils/config';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
 export default Service.extend({
@@ -46,20 +46,18 @@ export default Service.extend({
     }).then((result) => result.body.documentNames);
   },
 
-  async approveAgenda(currentMeeting, agendaToApprove) {
-    if (!agendaToApprove) {
-      return agendaToApprove;
+  async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
+    if (!agendaToRollback) {
+      return agendaToRollback;
     }
-    // Triggers the agendaApproveService to approve the agenda.
+    // Triggers the agendaApproveService to rollback the not formal ok agendaitems on the agenda.
     await ajax({
       method: 'POST',
-      url: '/agenda-approve/onlyApprove',
+      url: '/agenda-approve/rollbackAgendaitemsNotFormallyOk',
       data: {
-        createdForMeetingWithId: currentMeeting.id,
-        idOfAgendaToApprove: agendaToApprove.id,
+        oldAgendaId: agendaToRollback.id,
       },
     });
-    notifyPropertyChange(agendaToApprove, 'agendaitems');
   },
 
   async approveAgendaAndCopyToDesignAgenda(currentMeeting, oldAgenda) {

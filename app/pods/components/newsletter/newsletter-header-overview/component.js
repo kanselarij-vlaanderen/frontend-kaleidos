@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
-import SendingOldCampaignError from 'fe-redpencil/errors/sending-old-campaign-error';
+import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
 export default Component.extend({
   classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
@@ -24,7 +24,6 @@ export default Component.extend({
   }),
 
   async validatedCampaign(campaignId) {
-    console.log('validating', campaignId);
     const campaign = await this.newsletterService.getMailCampaign(campaignId).catch(() => {
       this.toaster.error(this.intl.t('error-fetch-newsletter'), this.intl.t('warning-title'));
       return false;

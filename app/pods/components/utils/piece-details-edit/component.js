@@ -41,7 +41,6 @@ export default class PieceDetailsEdit extends Component {
 
   @action
   selectDocumentType(value) {
-    console.log('selectDocumentType', value);
     this.selectedDocumentType = value;
     set(this.args.piece.documentContainer, 'type', value);
   }

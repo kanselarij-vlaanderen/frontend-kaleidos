@@ -1,144 +1,57 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
-import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
-import { warn } from '@ember/debug';
-import { sortDocumentContainers } from 'fe-redpencil/utils/documents';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-const batchSize = 20;
-
-class DocumentHistory {
+export default class DocumentsDocumentListComponent extends Component {
   /**
-   * Document container to show the document history for
-  */
-  @tracked documentContainer
-  /**
-   * Piece until which the document history of the container should be shown
-  */
-  @tracked lastPiece
-}
+   * A list of document cards.
+   * In the case where multiple pieces are provided that belong to the same container,
+   * only one card per container will be shown, featuring the most recent of the provided versions.
+   *
+   * @argument pieces: a regular JS Array of Piece objects
+   * @argument didDeletePiece: action triggered when a piece from the list has been removed
+   * @argument onOpenUploadModal: action triggered when the modal to upload a new version is being opened
+   * @argument onAddPiece: action triggered when a new version has been uploaded
+   */
 
-export default class DocumentList extends Component {
-  @service store;
-  @service fileService;
-
-  @tracked documentHistories = A([]);
-  @tracked documentsLoadedPercent = 0;
+  @tracked documentsByContainer;
 
   constructor() {
     super(...arguments);
-    this.loadData.perform();
+    this.groupDocumentsByContainer.perform();
   }
 
-  get sortedDocumentHistories() {
-    const containers = this.documentHistories.map((history) => history.documentContainer);
-    const pieces = this.documentHistories.map((history) => history.lastPiece);
-    const sortedContainers = sortDocumentContainers(pieces, containers);
-    const sortedHistories = A([]);
-    for (const container of sortedContainers) {
-      const history = this.documentHistories.find((history) => history.documentContainer.get('id') === container.get('id'));
-      sortedHistories.pushObject(history);
-    }
-    return sortedHistories;
+  get documents() {
+    return this.args.pieces;
   }
 
-  @task
-  *loadData() {
-    const pieces = yield this.args.pieces;
-    const pieceIds = pieces.map((piece) => piece.get('id'));
-
-    // Get a list of unique document containers of the documents
-    const uniqueDocumentContainers = new Set();
-    for (let idx = 0; idx < pieces.length; idx = idx + batchSize) {
-      const batch = pieceIds.slice(idx, idx + batchSize);
-      const documentContainers = yield this.store.query('document-container', {
-        'filter[pieces][id]': batch.join(','),
-        include: 'type,pieces.access-level,pieces.previous-piece,pieces.next-piece',
-        page: {
-          size: batch.length,
-        },
-      });
-      documentContainers.forEach((container) => uniqueDocumentContainers.add(container));
-      this.documentsLoadedPercent = (uniqueDocumentContainers.size / pieces.length) * 100;
+  get latestDocuments() {
+    const latestDocs = [];
+    for (const docs of this.documentsByContainer.values()) {
+      latestDocs.push(docs[0]);
     }
-
-    // For each document container, determine the lastest version to display
-    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, pieces)));
-    this.documentsLoadedPercent = 0;
+    return latestDocs;
   }
 
   @task
-  *createDocumentHistory(documentContainer, allPieces) {
-    const history = new DocumentHistory();
-    history.documentContainer = documentContainer;
-
-    const containerPieces = yield documentContainer.pieces;
-
-    // This code is roughly similar to documentContainer.sortedPieces
-    // The reason for this is to avoid dependency on the computed property
-    const heads = [];
-    for (const piece of containerPieces.toArray()) {
-      const previousPiece = yield piece.previousPiece;
-      if (!previousPiece) {
-        heads.push(piece);
-      }
-    }
-
-    let sortedContainerPieces = [];
-    if (heads.length > 1) {
-      warn('More than 1 possible head found for linked list of pieces. Falling back to sort by document creation date', {
-        id: 'multiple-possible-linked-list-heads',
-      });
-      sortedContainerPieces = containerPieces.sortBy('created');
-    } else {
-      let next = heads[0];
-      while (next) {
-        sortedContainerPieces.push(next);
-        next = yield next.nextPiece;
-      }
-    }
-
-    // Loop over the reverse sorted pieces and find the latest version that is also included
-    // in all pieces.
-    const reverseSortedContainerPieces = sortedContainerPieces.slice(0).reverse();
-    for (const containerPiece of reverseSortedContainerPieces) {
-      const matchingPiece = allPieces.find((piece) => piece.get('id') === containerPiece.get('id'));
-      if (matchingPiece) {
-        history.lastPiece = matchingPiece;
-        break;
-      }
-    }
-
-    return history;
-  }
-
-
-  @task
-  *saveEditPieces() {
-    const updatePromises = this.documentHistories.map(async(history) => {
-      if (history.lastPiece.softDeleted) {
-        this.fileService.deleteDocumentContainer(history.documentContainer);
+  *groupDocumentsByContainer() {
+    this.documentsByContainer = new Map();
+    for (const doc of this.documents) {
+      const container = yield doc.documentContainer;
+      if (this.documentsByContainer.has(container)) {
+        this.documentsByContainer.get(container).push(doc);
       } else {
-        await history.lastPiece.save();
-        await history.documentContainer.save();
+        this.documentsByContainer.set(container, [doc]);
       }
-    });
-    yield all(updatePromises);
-    this.args.onCloseEdit();
-  }
-
-  @task
-  *cancelEditPieces() {
-    const rollbacks = this.documentHistories.map(async(history) => {
-      history.lastPiece.set('softDeleted', false);
-      history.lastPiece.rollbackAttributes();
-      await history.lastPiece.belongsTo('accessLevel').reload();
-      history.documentContainer.rollbackAttributes();
-      history.documentContainer.belongsTo('type').reload();
-    });
-    yield all(rollbacks);
-    this.args.onCloseEdit();
+    }
+    // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
+    for (const key of this.documentsByContainer.keys()) {
+      const documents = this.documentsByContainer.get(key);
+      const sortedDocuments = sortPieces(documents);
+      this.documentsByContainer.set(key, sortedDocuments);
+    }
+    // eslint-disable-next-line
+    this.documentsByContainer = this.documentsByContainer; // re-assign array to trigger getter
   }
 }

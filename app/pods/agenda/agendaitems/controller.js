@@ -6,7 +6,7 @@ import {
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
-import search from 'fe-redpencil/utils/mu-search';
+import search from 'frontend-kaleidos/utils/mu-search';
 import { task } from 'ember-concurrency';
 import { isEmpty } from '@ember/utils';
 

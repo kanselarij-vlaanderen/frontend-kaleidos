@@ -1,7 +1,7 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { action } from '@ember/object';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
@@ -9,7 +9,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
       reload: true,
     }, {
-      include: 'case,contact-person,status,type',
+      include: 'case,contact-person,status,type,numac-number',
     });
     const _case = await publicationFlow.get('case');
 
@@ -78,6 +78,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
+    controller.numberIsAlreadyUsed = false;
   }
 
   @action

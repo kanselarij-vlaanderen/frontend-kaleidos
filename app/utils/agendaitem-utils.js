@@ -1,4 +1,4 @@
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import EmberObject from '@ember/object';
 import moment from 'moment';
 
@@ -43,15 +43,6 @@ export const setAgendaitemFormallyOk = async(agendaitem) => {
     agendaitem.set('formallyOk', CONFIG.formallyOk);
     await agendaitem.save();
   }
-};
-
-/**
- *@description Return een lijst met agendaitems die nog niet formeel ok zijn.
- * @param agendaitems
- */
-export const getListOfAgendaitemsThatAreNotFormallyOk = (agendaitems) => {
-  const agendaitemNotFormallyOk = (agendaitem) => agendaitem.get('formallyOk') !== CONFIG.formallyOk;
-  return agendaitems.filter(agendaitemNotFormallyOk);
 };
 
 /**
@@ -242,19 +233,6 @@ export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgend
       return await agendaitem.save();
     }));
   }
-};
-
-export const getAgendaitemsFromAgendaThatDontHaveFormallyOkStatus = async(currentAgenda) => {
-  const agendaitemsFromCurrentAgenda = await currentAgenda.get('agendaitems').toArray();
-  return agendaitemsFromCurrentAgenda.filter((agendaitem) => {
-    const formallyOkOption = CONFIG.formallyOkOptions.find((option) => option.label === 'Formeel OK');
-    if (formallyOkOption) {
-      const formallyOkUri = formallyOkOption.uri;
-      if (formallyOkUri !== agendaitem.formallyOk) {
-        return agendaitem;
-      }
-    }
-  });
 };
 
 export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {

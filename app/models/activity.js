@@ -2,7 +2,7 @@ import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
 
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class Activity extends Model {
   // Attributes.

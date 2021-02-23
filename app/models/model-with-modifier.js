@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import ModelWithToasts from 'fe-redpencil/models/model-with-toasts';
+import ModelWithToasts from 'frontend-kaleidos/models/model-with-toasts';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
