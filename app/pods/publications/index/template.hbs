@@ -28,17 +28,17 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
-          <th>
-            <span class="auk-u-mr">
-              {{t "publications-table-derived-publicationtype"}}
-              <WebComponents::AuIcon @name="circle-info"/>
-              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                <p>
-                  {{t "publications-table-derived-publicationtype-info"}}
-                </p>
-              </EmberTooltip>
-            </span>
-          </th>
+          <ThSortable
+                  @currentSorting={{this.sort}}
+                  @field="deducedType.priority"
+                  @label={{t "deduced-publication-type"}}
+          />
+          {{!--<WebComponents::AuIcon @name="circle-info"/>
+          <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+            <p>
+              {{t "publications-table-derived-publicationtype-info"}}
+            </p>
+          </EmberTooltip>--}}
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
@@ -162,7 +162,11 @@
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <td>
-            {{t "dash"}}
+            {{#if row.deducedType}}
+              {{ row.deducedType.label }}
+            {{else}}
+              {{t "dash"}}
+            {{/if}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
@@ -209,12 +213,6 @@
               (moment-format row.publishedAt "DD-MM-YYYY")
               (t "dash")
             }}
-          </td>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
-          <td>
-            {{if row.numacNumber row.numacNumber (t "dash")}}
           </td>
         {{/if}}
 
@@ -360,7 +358,6 @@
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="finalPublicationDateFilterOption" @label={{t "publications-table-final-publication-date"}} @checked={{this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="publicationDateFilterOption" @label={{t "publications-table-publication-date"}} @checked={{this.filterTableColumnOptionKeys.publicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="numacNuberBsFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNuberBsFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="lastEditedFilterOption" @label={{t "publications-table-last-edited"}} @checked={{this.filterTableColumnOptionKeys.lastEditedFilterOption}} @toggle={{this.toggleFilterOption}}/>
               </WebComponents::AuCheckboxList>
             </div>

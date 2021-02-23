@@ -27,7 +27,7 @@ export default class PublicationController extends Controller {
   @tracked showPublicationDatePicker = true;
   @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
-
+  @tracked selectedDocumentType;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
@@ -70,6 +70,20 @@ export default class PublicationController extends Controller {
       label: 'Bij uitreksel',
     }
   ];
+
+  get sortedDocumentTypes() {
+    return this.model.documentTypes.sortBy('priority');
+  }
+
+  @action
+  selectDocumentType(documentType) {
+    this.model.publicationFlow.set('deducedType', documentType);
+    this.model.publicationFlow.save();
+  }
+
+  get getSelectedDocumentType() {
+    return this.model.documentTypes.find((documentType) => documentType.id === this.model.publicationFlow.get('deducedType.id'));
+  }
 
   get getPublicationStatus() {
     return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));

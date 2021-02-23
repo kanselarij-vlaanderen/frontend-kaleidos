@@ -97,6 +97,14 @@
                 />
               </div>
               <div class="auk-form-group">
+                <WebComponents::AuLabel for="blockInput">{{t "deduced-publication-type"}}</WebComponents::AuLabel>
+                <Utils::RadioDropdownComboSelect @radioOptionsSize="3"
+                                                 @options={{this.sortedDocumentTypes}}
+                                                 @onSelect={{this.selectDocumentType}}
+                                                 @selected={{this.getSelectedDocumentType}}
+                />
+              </div>
+              <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
                 <WebComponents::AuPowerSelect @options={{this.typeOptions}}
                                               @isSearchable={{false}}
