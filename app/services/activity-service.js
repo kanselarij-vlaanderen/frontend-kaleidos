@@ -6,6 +6,7 @@ import moment from 'moment';
 export default class activityService extends Service {
   @service store;
   @service toaster;
+  @service configService;
   @service publicationService;
   @service intl;
 
@@ -31,10 +32,11 @@ export default class activityService extends Service {
    * @param _case
    * @returns {Promise<*>}
    */
-  replaceTokens(defaultString, publicationFlow, _case) {
+  async replaceTokens(defaultString, publicationFlow, _case) {
     let outputString = defaultString;
     outputString = outputString.replace('%%nummer%%', publicationFlow.publicationNumber);
     outputString = outputString.replace('%%titel%%', this.caseTitleFromCase(_case));
+    outputString = outputString.replace('%%footer%%', await this.configService.get('email:footer', CONFIG.mail.defaultFooter));
     outputString = outputString.replace('%%kaleidosenvironment%%', window.location.origin);
     return outputString;
   }
