@@ -7,5 +7,6 @@ const selectors = {
     message: '[data-test-au-alert-message]',
     close: '[data-test-au-alert-close]',
   },
+  auLabelError: '[data-test-au-label-error]',
 };
 export default selectors;

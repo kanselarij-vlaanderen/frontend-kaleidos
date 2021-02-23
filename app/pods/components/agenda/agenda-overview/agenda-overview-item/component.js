@@ -59,10 +59,13 @@ export default class AgendaOverviewItem extends Component {
     return this.agendaitemDocuments.length > this.documentListSize;
   }
 
-  @task
-  *startPublication() {
-    const _case = yield this.args.agendaitem.get('case');
-    const newPublication = yield this.publicationService.createNewPublication(0, _case.id);
+  @action
+  async startPublication() {
+    this.showLoader = true;
+    const _case = await this.args.agendaitem.get('case');
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, _case.id);
+    this.showLoader = false;
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
