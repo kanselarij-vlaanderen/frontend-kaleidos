@@ -5,7 +5,7 @@ import {
   action,
   set
 } from '@ember/object';
-import CONFIG from 'fe-redpencil/utils/config';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class SettingsEmailController extends Controller {
   @service configService;
