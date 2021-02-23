@@ -48,7 +48,7 @@
             {{@agendaitem.title}}
           </p>
         {{/if}}
-        <div class="auk-u-flex--vertical-center">
+        <WebComponents::AuPillList>
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
               <WebComponents::AuPill>
@@ -88,7 +88,7 @@
               {{@agendaitem.formallyOkToShow.label}}
             </WebComponents::AuPill>
           {{/if}}
-        </div>
+        </WebComponents::AuPillList>
       </div>
     </WebComponents::AuPanel::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>
