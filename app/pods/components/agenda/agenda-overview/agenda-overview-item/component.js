@@ -82,38 +82,31 @@ export default class AgendaOverviewItem extends Component {
     this.agendaitemDocuments = sortedPieces;
   }
 
-  @task
-  *lazyLoad(task) {
-    if (task.performCount === 0) {
-      yield timeout(400);
-      yield task.perform();
-    }
+  @dropTask
+  *lazyLoadSideData() {
+    yield timeout(400);
+    const tasks = [
+      this.loadNewsletterVisibility,
+      this.loadSubcase,
+      this.loadNewDocuments
+    ].filter((task) => task.performCount === 0);
+    yield Promise.all(tasks.map((task) => task.perform()));
   }
 
   @action
-  cancelLazyLoad(task) {
-    task.cancelAll();
+  cancelLazyLoad() {
+    this.lazyLoadSideData.cancelAll();
   }
 
-  @dropTask
-  *lazyLoadNewDocuments() {
+  @task
+  *loadNewDocuments() { // Documents to be highlighted
     if (this.args.previousAgenda) { // Highlighting everything on the first agenda-version as "new" doesn't add a lot of value.
-      yield this.lazyLoad.perform(this.loadNewDocuments);
+      this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
+        this.args.previousAgenda.id, this.args.agendaitem.id);
     }
   }
 
-  @dropTask
-  *loadNewDocuments() { // Documents to be highlighted
-    this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
-      this.args.previousAgenda.id, this.args.agendaitem.id);
-  }
-
-  @dropTask
-  *lazyLoadSubcase() {
-    yield this.lazyLoad.perform(this.loadSubcase);
-  }
-
-  @dropTask
+  @task
   *loadSubcase() {
     const agendaActivity = yield this.args.agendaitem.agendaActivity;
     if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
@@ -121,12 +114,7 @@ export default class AgendaOverviewItem extends Component {
     }
   }
 
-  @dropTask
-  *lazyLoadNewsletterVisibility() {
-    yield this.lazyLoad.perform(this.loadNewsletterVisibility);
-  }
-
-  @dropTask
+  @task
   *loadNewsletterVisibility() {
     const treatments = yield this.args.agendaitem.treatments;
     const treatment = treatments.firstObject;
