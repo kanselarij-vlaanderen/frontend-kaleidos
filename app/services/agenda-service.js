@@ -2,10 +2,10 @@ import Service, { inject as service } from '@ember/service';
 
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
-import { ajax } from 'fe-redpencil/utils/ajax';
-import CONFIG from 'fe-redpencil/utils/config';
+import { ajax } from 'frontend-kaleidos/utils/ajax';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
-import { updateModifiedProperty } from 'fe-redpencil/utils/modification-utils';
+import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
 export default Service.extend({
