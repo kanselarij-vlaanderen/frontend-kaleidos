@@ -159,40 +159,6 @@ export default ModelWithModifier.extend({
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  case: computed('treatments.firstObject.subcase.case', async function() {
-    const agendaItemTreatments = await this.get('treatments');
-    const agendaItemTreatment = agendaItemTreatments.firstObject; // TODO: Agendaitem can have many treatments (decisions)
-    const subcase = await agendaItemTreatment.get('subcase');
-    if (!subcase) {
-      return false;
-    }
-    const _case = await subcase.get('case');
-    if (!_case) {
-      return false;
-    }
-    return _case;
-  }),
-
-  publicationFlow: computed('treatments.firstObject.subcase.case.publicationFlow', async function() {
-    const _case = await this.get('case');
-    if (!_case) {
-      return false;
-    }
-    const publicationFlow = await _case.get('publicationFlow');
-    // Preload case.
-    await publicationFlow.get('case');
-    await publicationFlow.reload();
-    if (!publicationFlow) {
-      return false;
-    }
-    return publicationFlow;
-  }),
-
-  publicationFlowId: computed('treatments.firstObject.subcase.case.publicationFlow', async function() {
-    const publicationFlow = await this.get('publicationFlow');
-    return publicationFlow.id;
-  }),
-
   sortedApprovals: computed('approvals.@each', async function() {
     return PromiseArray.create({
       promise: this.store.query('approval', {

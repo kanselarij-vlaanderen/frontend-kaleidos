@@ -47,49 +47,38 @@
 
         </div>
 
-        {{!--  TODO: Commented out section triggers many requests that slow down agenda overview
+        {{!-- TODO: Commented out section triggers many requests that slow down agenda overview --}}
         <div class="vlc-u-flex-float-right">
-        {{#if currentSessionService.isOvrb}}
-
-                   PUBLICATION FLOW CALL TO ACTION
-
-          <div class="vlc-u-flex-float-right">
-
-                     PUBLICATION FLOW CALL TO ACTION
-
-            {{#if (not @isEditingOverview)}}
-              <div class="auk-button-toolbar">
-                {{#if (await @agendaitem.publicationFlow)}}
-                  <LinkTo
-                          class=""
-                          @route="publications.publication"
-                          @model={{ await @agendaitem.publicationFlowId }}
-                  >
-                    {{t "publications-to" }}
-                  </LinkTo>
-                {{else}}
-                  {{#if (await @agendaitem.case)}}
-                    <WebComponents::AuButton
-                            @skin="tertiary"
-                            @layout="icon-only"
-                            data-test-start-publication
-                      {{on "click" this.startPublication}}>
-                      {{t "start-publication"}}
-                    </WebComponents::AuButton>
-                  {{/if}}
-                {{/if}}
-              </div>
-            {{/if}}
-
-                   END  PUBLICATION FLOW CALL TO ACTION
-
-          </div>
-        {{/if}}
-
-                 END  PUBLICATION FLOW CALL TO ACTION
-
+          {{#if currentSessionService.isOvrb}}
+            <div class="auk-button-toolbar">
+              {{!-- {{#if (gt (await @agendaitem.publicationFlows.length) 0)}}
+                <ul>
+                  {{#each @agendaitem.publicationFlows as |publicationFlow|}}
+                    <li>
+                      <LinkTo
+                            class=""
+                            @route="publications.publication"
+                            @model={{ await publicationFlow.id }}
+                    >
+                        {{t "publications-to" }} {{ publicationFlow.publicationNumber }}
+                      </LinkTo>
+                    </li>
+                  {{/each}}
+                </ul>
+              {{/if}}--}}
+              {{#if (not @agendaitem.isApproval)}}
+                <WebComponents::AuButton
+                        @skin="tertiary"
+                        @layout="icon-only"
+                        data-test-start-publication
+                  {{on "click" this.startPublication}}>
+                  {{t "start-publication"}}
+                </WebComponents::AuButton>
+              {{/if}}
+            </div>
+          {{/if}}
+          {{!--END  PUBLICATION FLOW CALL TO ACTION--}}
         </div>
-        --}}
       </div>
 
 

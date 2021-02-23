@@ -91,6 +91,7 @@ export default class PublicationsController extends Controller {
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
+    // TODO replace 0 with code from nexnumber branch.
     const newPublication = await this.publicationService.createNewPublication(0, _caseId);
     this.showLoader = false;
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));

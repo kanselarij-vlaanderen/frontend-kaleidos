@@ -19,17 +19,6 @@ export default class PublicationService extends Service {
     // Work with the case.
     // Test if dossier already had publication (index not up to date).
     // For people that dont refresh and we're in a SPA.
-    const pubFlows = await this.store.query('publication-flow', {
-      filter: {
-        case: {
-          id: _caseId,
-        },
-      },
-    });
-    if (pubFlows.content.length > 0) {
-      return await this.store.findRecord('publication-flow', pubFlows.content[0].id);
-    }
-
     const creationDatetime = moment().utc()
       .toDate();
     let caze;
@@ -54,7 +43,7 @@ export default class PublicationService extends Service {
       modified: creationDatetime,
     });
     await publicationFlow.save();
-    await caze.belongsTo('publicationFlow').reload();
+    await caze.hasMany('publicationFlows').reload();
     return publicationFlow;
   }
 

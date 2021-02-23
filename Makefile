@@ -1,6 +1,18 @@
 include .env.cypress
 export $(shell sed 's/=.*//' .env.cypress)
 
+up:
+	- docker-compose ${COMPOSE_FILE} up -d
+	- sleep 5
+
+down:
+	- docker-compose ${COMPOSE_FILE} down
+	- sleep 5
+
+kill:
+	- docker-compose ${COMPOSE_FILE} kill
+	- sleep 5
+
 reset-cache-resource-only:
 	- docker-compose ${COMPOSE_FILE} kill cache resource
 	- docker-compose ${COMPOSE_FILE} up -d cache resource

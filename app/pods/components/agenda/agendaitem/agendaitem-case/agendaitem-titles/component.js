@@ -33,6 +33,7 @@ export default class AgendaitemTitles extends Component {
   async startPublication() {
     this.showLoader = true;
     const _case = await this.args.agendaitem.get('case');
+    // TODO replace 0 with code from nexnumber branch.
     const newPublication = await this.publicationService.createNewPublication(0, _case.id);
     this.showLoader = false;
     this.router.transitionTo('publications.publication.case', newPublication.id);
