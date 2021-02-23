@@ -75,7 +75,11 @@
             <WebComponents::AuLabel>
               {{t "reason-withdraw"}}
             </WebComponents::AuLabel>
-            <p class="auk-u-text-pre vlc-mail-content">{{@activity.withdrawReason}}</p>
+            <p class="auk-u-text-pre vlc-mail-content">
+              <pre>
+                {{@activity.withdrawReason}}
+              </pre>
+            </p>
           </div>
         {{/if}}
 
@@ -100,7 +104,9 @@
               {{t "translation-mail-header"}}
             </WebComponents::AuLabel>
             <div class="auk-u-text-pre vlc-mail-content">
-              <p>{{@activity.mailContent}}</p>
+              <pre>
+                {{@activity.mailContent}}
+              </pre>
             </div>
           </div>
           <div class="auk-o-grid-col-4">

@@ -1,11 +1,23 @@
 <div class="auk-u-m-8 auk-u-flex auk-u-flex--wrap">
   <div class="auk-u-m-2">
     <LinkTo
-      data-test-manage-government-domains
+      data-test-manage-emails
       @tagName="button"
       @type="button"
       class="vl-button vl-button--tertiary vl-button--icon-before"
-      @route="settings.government-domains"
+      @route="settings.emails"
+    >
+      <i class="vl-button__icon vl-button__icon--before ki-pencil"></i>
+      {{t "manage-emails"}}
+    </LinkTo>
+  </div>
+  <div class="auk-u-m-2">
+    <LinkTo
+            data-test-manage-government-domains
+            @tagName="button"
+            @type="button"
+            class="vl-button vl-button--tertiary vl-button--icon-before"
+            @route="settings.government-domains"
     >
       <i class="vl-button__icon vl-button__icon--before ki-pencil"></i>
       {{t "manage-government-domains"}}
