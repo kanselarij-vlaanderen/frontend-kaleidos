@@ -51,6 +51,9 @@ Router.map(function() {
     this.route('government-domains', () => {});
     this.route('government-fields', () => {});
     this.route('ise-codes', () => {});
+    this.route('emails', { path: '/emailberichten', }, function() {
+      this.route('debug');
+    });
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
