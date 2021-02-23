@@ -84,7 +84,7 @@ export default class AgendaOverviewItem extends Component {
 
   @dropTask
   *lazyLoadSideData() {
-    yield timeout(400);
+    yield timeout(350);
     const tasks = [
       this.loadNewsletterVisibility,
       this.loadSubcase,
