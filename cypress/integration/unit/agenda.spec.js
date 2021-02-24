@@ -96,9 +96,7 @@ context('Agenda tests', () => {
       .day(5); // Friday in four weeks
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.get('.vl-button--icon-before')
-      .contains('Acties')
-      .click();
+    cy.get(actionModel.showAgendaOptions).click();
     cy.get(actionModel.lockAgenda).should('not.exist');
   });
 
