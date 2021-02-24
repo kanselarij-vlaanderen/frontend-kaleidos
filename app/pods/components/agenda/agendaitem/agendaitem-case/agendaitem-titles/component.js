@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import ENV from 'frontend-kaleidos/config/environment';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitles extends Component {
@@ -13,6 +14,8 @@ export default class AgendaitemTitles extends Component {
   @service publicationService;
 
   @service router;
+
+  @tracked hasPublicationsEnabled = ENV.APP.ENABLE_PUBLICATIONS_TAB;
 
   get pillClass() {
     const baseClass = 'vl-pill vl-u-text--capitalize';

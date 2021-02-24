@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
+import ENV from 'frontend-kaleidos/config/environment';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaOverviewItem extends Component {
@@ -46,6 +47,8 @@ export default class AgendaOverviewItem extends Component {
   @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
 
   @tracked formallyOk = this.args.agendaitem.formallyOk || null;
+
+  @tracked hasPublicationsEnabled =  ENV.APP.ENABLE_PUBLICATIONS_TAB;
 
   get overheidCanViewDocuments() {
     const isOverheid = this.currentSessionService.isOverheid;
