@@ -285,6 +285,9 @@ export default EmberObject.create({
     },
   },
   EMAIL: {
+    OUTBOX: {
+      ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
+    },
     DEFAULT_FROM: 'kaleidos-noreply@vlaanderen.be',
     TO: {
       translationsEmail: 'johan.delaure@redpencil.be',

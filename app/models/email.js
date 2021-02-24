@@ -10,7 +10,7 @@ export default class Email extends Model {
   // @attr('email') bcc;
   @attr('string') subject;
   @attr('string') content;
-  // @attr('string') html; // html-content
+  // @attr('string') htmlContent; // html-content
   // @attr() isRead;
   // @attr() contentMimeType;
   // @attr('datetime') receivedDate;
