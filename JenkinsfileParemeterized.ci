@@ -85,8 +85,8 @@ pipeline {
 
     post {
         always {
-            sh "mkdir ${WORKSPACE}/reports"
-            sh "mkdir ${WORKSPACE}/reports/cypress_screenshots/"
+            sh "mkdir -p ${WORKSPACE}/reports"
+            sh "mkdir -p ${WORKSPACE}/reports/cypress_screenshots/"
             sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
             sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
 
