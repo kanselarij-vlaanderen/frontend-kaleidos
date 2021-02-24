@@ -33,6 +33,7 @@ export default class emailService extends Service {
       // htmlContent: ??
       // TODO: establish HTML-template and save to property 'html' instead
     });
+    // TODO @sven this in untested:
     if (attachedPieces) {
       const files = attachedPieces.map((piece) => piece.file);
       email.set('attachments', files);
