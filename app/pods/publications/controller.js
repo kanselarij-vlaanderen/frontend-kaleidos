@@ -52,7 +52,6 @@ export default class PublicationsController extends Controller {
       ':has:publicationFlowNumber': 1,
     };
     if (this.searchText.length === 0 || this.searchText === '') {
-      filter[':sqs:title'] = '*'; // search without filter
       this.showSearchResults = false;
     } else {
       this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', 'publicationFlowNumacNumbers', 'publicationFlowId'];
@@ -60,15 +59,14 @@ export default class PublicationsController extends Controller {
       const textSearchKey = this.textSearchFields.join(',');
       filter[`${searchModifier}${textSearchKey}`] = `${this.searchText}*`;
       this.showSearchResults = true;
-    }
-
-    this.searchResults = await search('cases', 0, 10, null, filter, (item) => {
-      const entry = item.attributes;
-      entry.id = item.id;
-      return entry;
-    });
-    if (this.searchResults.length === 0) {
-      this.searchResults = false;
+      this.searchResults = await search('cases', 0, 10, null, filter, (item) => {
+        const entry = item.attributes;
+        entry.id = item.id;
+        return entry;
+      });
+      if (this.searchResults.length === 0) {
+        this.searchResults = false;
+      }
     }
   }
 
