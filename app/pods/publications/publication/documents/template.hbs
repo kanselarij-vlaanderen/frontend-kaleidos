@@ -171,7 +171,7 @@
                         Offering this as an option should be very restrictive --}}
                           {{#if (not (gt (await piece.agendaitems.length) 0))}}
                             <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
-                            {{t "edit"}}
+                              {{t "edit"}}
                             </WebComponents::AuDropdown::Item>
                           {{/if}}
                           {{#if (not (gt (await piece.agendaitems.length) 0))}}
