@@ -1,10 +1,12 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
-
-export default class AgendaItemControls extends Component {
+export default class AgendaitemControls extends Component {
   @service store;
   @service intl;
   @service sessionService;
@@ -13,7 +15,7 @@ export default class AgendaItemControls extends Component {
 
   @tracked isSavingRetracted = false;
   @tracked isVerifying = false;
-  @tracked showOptions = false;
+  @tracked showLoader = false;
 
   // eslint-disable-next-line ember/use-brace-expansion
   get isPostPonable() {
@@ -27,7 +29,7 @@ export default class AgendaItemControls extends Component {
       .then((agendas) => !!(agendas && agendas.get('length') > 1));
   }
 
-  // TODO verbose logic
+  // TODO document this
   get isDeletable() {
     const designAgenda =  this.args.currentAgenda.get('isDesignAgenda');
     const agendaActivity =  this.args.agendaitem.get('agendaActivity');
@@ -52,29 +54,24 @@ export default class AgendaItemControls extends Component {
 
   async deleteItem(agendaitem) {
     this.isVerifying = false;
-    if (await this.get('isDeletable')) {
+    this.showLoader = true;
+    if (await this.isDeletable) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
-    this.set('sessionService.selectedAgendaitem', null);
-    if (this.onDeleteAgendaitem) {
-      this.onDeleteAgendaitem(agendaitem);
+    set(this.sessionService, 'selectedAgendaitem', null);
+
+    if (this.args.onDeleteAgendaitem) {
+      await this.args.onDeleteAgendaitem();
     }
-  }
-
-
-  @action
-  showOptions() {
-    this.showOptions = !this.showOptions;
+    this.showLoader = false;
   }
 
   @action
   async postponeAgendaitem(agendaitem) {
     this.isSavingRetracted = true;
     agendaitem.set('retracted', true);
-    // TODO KAS-1420 change property on treatment during model rework
-    // TODO KAS-1420 create treatment ?
     await agendaitem.save();
     this.isSavingRetracted = false;
   }
@@ -82,9 +79,6 @@ export default class AgendaItemControls extends Component {
   @action
   async advanceAgendaitem(agendaitem) {
     this.isSavingRetracted = true;
-    // TODO KAS-1420 change property on treatment during model rework
-    // TODO KAS-1420 delete postponed treatment ?
-    // what to do when deleting treatment ?
     agendaitem.set('retracted', false);
     await agendaitem.save();
     this.isSavingRetracted = false;
@@ -93,15 +87,6 @@ export default class AgendaItemControls extends Component {
   @action
   toggleIsVerifying() {
     this.isVerifying = !this.isVerifying;
-  }
-
-  @action
-  async tryToDeleteItem(agendaitem) {
-    if (await this.isDeletable) {
-      this.deleteItem(agendaitem);
-    } else if (this.currentSession.isAdmin) {
-      this.isVerifying = true;
-    }
   }
 
   @action

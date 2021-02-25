@@ -17,7 +17,6 @@
               @showOn="click"
               @animation="shift"
               @placement="bottom"
-      {{!-- as |attacher| --}}
       >
         <WebComponents::AuDropdown>
           {{#if this.isPostPonable}}
@@ -45,15 +44,15 @@
   {{else}}
     <div class="vl-loader"></div>
   {{/if}}
-  {{#if isVerifying}}
+  {{#if this.isVerifying}}
     <WebComponents::VlModalVerify
       @title={{t "delete-agendaitem"}}
-      @message={{await deleteWarningText}}
-      @cancel={{action "toggleIsVerifying"}}
-      @verify={{action "verifyDelete" agendaitem}} />
+      @message={{await this.deleteWarningText}}
+      @cancel={{this.toggleIsVerifying}}
+      @verify={{fn this.verifyDelete @agendaitem}}/>
   {{/if}}
 {{/if}}
-{{#if (await isSavingRetracted)}}
+{{#if this.isSavingRetracted}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
@@ -67,4 +66,7 @@
       }}
     />
   </WebComponents::VlModal>
+{{/if}}
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}
