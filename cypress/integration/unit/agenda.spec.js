@@ -96,9 +96,7 @@ context('Agenda tests', () => {
       .day(5); // Friday in four weeks
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.get('.vl-button--icon-before')
-      .contains('Acties')
-      .click();
+    cy.get(actionModel.showAgendaOptions).click();
     cy.get(actionModel.lockAgenda).should('not.exist');
   });
 
@@ -252,7 +250,7 @@ context('Agenda tests', () => {
 
       cy.setAllItemsFormallyOk(3);
       cy.approveDesignAgenda();
-      cy.get(actionModel.showActionOptions).click();
+      cy.get(actionModel.showAgendaOptions).click();
       cy.get(actionModel.lockAgenda).click();
       // TODO check the message?
       cy.get(modal.auModal.body).within(() => {
@@ -389,7 +387,7 @@ context('Agenda tests', () => {
       timeout: 60000,
     }).should('not.exist');
 
-    cy.get(actionModel.showActionOptions).click();
+    cy.get(actionModel.showAgendaOptions).click();
     cy.get(actionModel.lockAgenda).click();
 
     // TODO do we need all these awaits ? what calls happen ?

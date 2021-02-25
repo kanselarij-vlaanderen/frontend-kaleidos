@@ -42,7 +42,6 @@ const selectors = {
   lockAgenda: '[data-test-agenda-header-lockagenda]',
   reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
   agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
-  deleteAgenda: '[data-test-agenda-header-deleteagenda]',
   createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
   reopenCurrentAgenda: '[data-test-agenda-header-unlockagenda]',
   agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
