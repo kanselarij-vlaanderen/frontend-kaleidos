@@ -33,6 +33,7 @@ Router.map(function() {
         this.route('subcase', { path: ':subcase_id', }, function() {
           this.route('documents', { path: '/documenten', });
           this.route('overview', { path: '/overzicht', });
+          this.route('decision', { path: '/beslissing', });
         });
         this.route('loading', { path: '/laden', });
       });

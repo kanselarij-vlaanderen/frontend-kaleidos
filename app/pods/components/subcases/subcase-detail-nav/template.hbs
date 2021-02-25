@@ -31,6 +31,15 @@
             {{t "documents"}}
           {{/link-to}}
         </li>
+        <li class="vlc-tabs-reverse__item">
+          {{#link-to
+            "cases.case.subcases.subcase.decision"
+            class="vlc-tabs-reverse__link"
+            activeClass="vlc-tabs-reverse__link--active"
+          }}
+            {{capitalize (t "decision")}}
+          {{/link-to}}
+        </li>
       </ul>
     </div>
   </div>
