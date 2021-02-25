@@ -1,0 +1,42 @@
+{{ page-title (t "send-test-mail") }}
+
+<div class="vlc-panel-layout__main-content auk-u-m-8">
+  <div class="auk-u-mb-3">
+    <WebComponents::AuPanel>
+      <WebComponents::AuPanel::Header>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h4 class="auk-panel__title">{{t "send-test-mail"}}</h4>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuPanel::Header>
+      <WebComponents::AuPanel::Body>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="defaultInput">{{t "email-to" }}</WebComponents::AuLabel>
+          <WebComponents::AuInput @value={{this.to}} type="text" id="blockInput" @block="true" {{on "change" this.onchangeTargetMailAddress}}/>
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="defaultInput">{{t "subject" }}</WebComponents::AuLabel>
+          <WebComponents::AuInput @value={{this.subject}} type="text" id="blockInput" @block="true" {{on "change" this.onChangeSubject}}/>
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="defaultInput">{{t "content" }}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea @rows="2" @value={{this.content}} {{on "change" this.onChangeContent}}></WebComponents::AuTextarea>
+        </div>
+        <WebComponents::VlSaveButton
+                @text={{t "send-test-mail"}}
+                @isLoading={{this.showLoader}}
+                @saveAction={{this.sendTestMail}} />
+      </WebComponents::AuPanel::Body>
+    </WebComponents::AuPanel>
+  </div>
+
+  {{!-- LOADER --}}
+
+
+  {{#if this.showLoader}}
+    <WebComponents::AuLoadingOverlay/>
+  {{/if}}
+</div>

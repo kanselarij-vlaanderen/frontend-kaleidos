@@ -191,8 +191,6 @@ context('Publications tests', () => {
       .type(contactperson.lan);
     cy.get(publicationSelectors.contactperson.emailInput).clear()
       .type(contactperson.eml);
-    cy.get(publicationSelectors.contactperson.organisationInput).clear()
-      .type(contactperson.org);
 
     // Click submit.
     cy.route('POST', '/contact-persons').as('postContactPerson');
@@ -204,7 +202,6 @@ context('Publications tests', () => {
     cy.contains(contactperson.fin).should('exist');
     cy.contains(contactperson.lan).should('exist');
     cy.contains(contactperson.eml).should('exist');
-    cy.contains(contactperson.org).should('exist');
 
     // Open dropdown menu.
     cy.get(publicationSelectors.contactperson.threedotsButton).click();
@@ -219,7 +216,7 @@ context('Publications tests', () => {
     cy.contains(contactperson.fin).should('not.exist');
     cy.contains(contactperson.lan).should('not.exist');
     cy.contains(contactperson.eml).should('not.exist');
-    cy.contains(contactperson.org).should('not.exist');
+
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
   });
 
