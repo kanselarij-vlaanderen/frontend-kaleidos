@@ -24,7 +24,7 @@
           {{/if}}
         </WebComponents::AuToolbar>
       </WebComponents::AuPanel::Header>
-      {{# if (gt (await mandateeRows.length) 0) }}
+      {{#if (gt (await mandateeRows.length) 0) }}
         <WebComponents::AuPanel::Body @noPadding="true">
           <table class="auk-table">
             <thead>
@@ -32,7 +32,7 @@
                 <th>{{t "minister"}}</th>
                 <th>{{t "policy-domain-policy-fields"}}</th>
                 <th>{{t "submitter"}}</th>
-                <th></th>
+                {{!-- <th></th> --}}
               </tr>
             </thead>
             <tbody>
@@ -64,7 +64,8 @@
                       {{t "dash"}}
                     {{/if}}
                   </td>
-                  <td class="auk-u-text-align--right">
+                  {{!-- TODO implement actions --}}
+                  {{!-- <td class="auk-u-text-align--right">
                     <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
                       <AttachPopover
                               @renderInPlace={{true}}
@@ -84,7 +85,7 @@
                         </WebComponents::AuDropdown>
                       </AttachPopover>
                     </WebComponents::AuButton>
-                  </td>
+                  </td> --}}
                 </tr>
               {{/each}}
             </tbody>

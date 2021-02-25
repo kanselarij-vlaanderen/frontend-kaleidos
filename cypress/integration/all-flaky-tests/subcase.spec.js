@@ -181,8 +181,7 @@ context('Subcase tests', () => {
 
     // Status is hidden
     cy.get(auComponents.auPillSpan).contains('Zichtbaar in kort bestek');
-    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
 
     // Assert status also hidden
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
@@ -210,9 +209,12 @@ context('Subcase tests', () => {
 
     // Save the changes setting
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(agenda.item.actionButton).contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
+    // We toggled hide in newsletter, await the patch
+    cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
     cy.get(auComponents.auPillSpan).contains('Verborgen in kort bestek');
@@ -220,8 +222,7 @@ context('Subcase tests', () => {
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('exist');
 
-    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
   });
@@ -333,8 +334,7 @@ context('Subcase tests', () => {
       .click();
 
     cy.wait(1000);
-    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(agenda.subcase.agendaLink).click();

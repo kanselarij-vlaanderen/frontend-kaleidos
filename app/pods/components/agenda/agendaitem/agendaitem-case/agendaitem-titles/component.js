@@ -21,8 +21,9 @@ export default class AgendaitemTitles extends Component {
 
   @action
   async redirectToSubcase() {
-    const _case = await this.args.subcase.get('case');
-    const subcaseId = await this.args.subcase.id;
+    const subcase = this.args.subcase;
+    const _case = await subcase.get('case');
+    const subcaseId = subcase.id;
     this.router.transitionTo('cases.case.subcases.subcase.overview', _case.id, subcaseId);
   }
 

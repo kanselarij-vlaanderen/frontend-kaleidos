@@ -11,9 +11,9 @@ export default class AgendaItemControls extends Component {
   @service agendaService;
   @service currentSession;
 
-  currentAgenda = null;
-  agendaitem = null;
   @tracked isSavingRetracted = false;
+  @tracked isVerifying = false;
+  @tracked showOptions = false;
 
   // eslint-disable-next-line ember/use-brace-expansion
   get isPostPonable() {
@@ -51,7 +51,7 @@ export default class AgendaItemControls extends Component {
   }
 
   async deleteItem(agendaitem) {
-    this.toggleProperty('isVerifying');
+    this.isVerifying = false;
     if (await this.get('isDeletable')) {
       await this.agendaService.deleteAgendaitem(agendaitem);
     } else {
@@ -66,7 +66,7 @@ export default class AgendaItemControls extends Component {
 
   @action
   showOptions() {
-    this.toggleProperty('showOptions');
+    this.showOptions = !this.showOptions;
   }
 
   @action
@@ -92,7 +92,7 @@ export default class AgendaItemControls extends Component {
 
   @action
   toggleIsVerifying() {
-    this.toggleProperty('isVerifying');
+    this.isVerifying = !this.isVerifying;
   }
 
   @action
@@ -100,7 +100,7 @@ export default class AgendaItemControls extends Component {
     if (await this.isDeletable) {
       this.deleteItem(agendaitem);
     } else if (this.currentSession.isAdmin) {
-      this.toggleProperty('isVerifying');
+      this.isVerifying = true;
     }
   }
 
