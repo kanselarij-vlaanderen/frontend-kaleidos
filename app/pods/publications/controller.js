@@ -92,7 +92,8 @@ export default class PublicationsController extends Controller {
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
-    const newPublication = await this.publicationService.createNewPublication(0, _caseId);
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
     this.showLoader = false;
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
   }
