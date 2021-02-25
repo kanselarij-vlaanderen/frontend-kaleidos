@@ -5,6 +5,10 @@ def getBranchName(branch) {
 pipeline {
     agent any
 
+    options {
+        disableConcurrentBuilds()
+    }
+
     environment {
         branch = getBranchName("${env.GIT_BRANCH}")
         project = "Kaleidos"
