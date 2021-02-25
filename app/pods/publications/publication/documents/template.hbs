@@ -293,16 +293,16 @@
                                           @onChange={{this.setTranslateActivityBeforeDate}}
                                           @class="auk-input--max-width"/>
               <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
-              {{t "subject"}}
-            </WebComponents::AuLabel>
-            <WebComponents::AuInput
-              {{on "change" this.setTranslationMailSubject}}
-                    @value={{mut this.translateActivity.mailSubject}}
-                    type="text"
-                    @block="true"
-            />
+                {{t "subject"}}
+              </WebComponents::AuLabel>
+              <WebComponents::AuInput
+                {{on "change" this.setTranslationMailSubject}}
+                      @value={{mut this.translateActivity.mailSubject}}
+                      type="text"
+                      @block="true"
+              />
 
-            <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+              <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
                 {{t "accompanying-text"}}
               </WebComponents::AuLabel>
               <WebComponents::AuTextarea
