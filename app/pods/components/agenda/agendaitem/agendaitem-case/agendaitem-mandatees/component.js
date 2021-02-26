@@ -24,17 +24,22 @@ export default class AgendaitemMandatees extends Component {
   @computed('agendaitem', 'subcase', 'mandatees.@each')
   get mandateeRows() {
     return DS.PromiseArray.create({
-      promise: this.constructMandateeRows().then((rows) => this.get('subcase.requestedBy').then((requestedBy) => {
-        if (!requestedBy && rows.get('length') > 0) {
-          rows.get('firstObject').set('isSubmitter', true);
-        } else {
-          const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
-          if (foundMandatee) {
-            foundMandatee.set('isSubmitter', true);
-          }
+      promise: this.constructMandateeRows().then((rows) => {
+        // this.subcase is no longer a proxy, so instead of resolving in the .then it will try undefined.requestedBy which errors
+        if (this.subcase) {
+          return this.subcase.get('requestedBy').then((requestedBy) => {
+            if (!requestedBy && rows.get('length') > 0) {
+              rows.get('firstObject').set('isSubmitter', true);
+            } else {
+              const foundMandatee = rows.find((row) => row.get('mandatee.id') === requestedBy.get('id'));
+              if (foundMandatee) {
+                foundMandatee.set('isSubmitter', true);
+              }
+            }
+            return rows.sortBy('mandateePriority');
+          });
         }
-        return rows.sortBy('mandateePriority');
-      })),
+      }),
     });
   }
 
@@ -66,7 +71,7 @@ export default class AgendaitemMandatees extends Component {
   }
 
   async constructMandateeRows() {
-    const subcase = await this.subcase;
+    const subcase = this.subcase;
     // we hit this multiple times when loading the component, the first time subcase is null and will throw an error if we don't check ths
     // This could possibly be fixed by adding subcase to the model in the route instead of awaiting in templates
     if (subcase) {

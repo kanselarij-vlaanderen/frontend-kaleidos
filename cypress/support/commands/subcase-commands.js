@@ -231,12 +231,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
   cy.contains('Ministers en beleidsvelden').parents('.auk-u-mb-8')
     .as('subcaseMandatees');
   cy.get('@subcaseMandatees').within(() => {
-    cy.get('.auk-u-ml-2', {
-      timeout: 5000,
-    }).should('exist')
-      .then(() => {
-        cy.contains('Wijzigen').click();
-      });
+    cy.get(cases.editSubcaseMandatees).click();
   });
 
   cy.get('.vlc-box a').contains('Minister toevoegen')

@@ -1,179 +1,108 @@
-{{#if @subcase.case.id}}
-  <div class="auk-u-mb-2">
-    {{!--   TO SUBCASE --}}
-    <div class="auk-u-flex auk-u-flex--align-baseline">
-      <LinkTo
-        @route="cases.case.subcases.subcase.overview"
-        @models={{array
-          @subcase.case.id
-          @subcase.id
-        }}
-        class="vl-link" >
-        {{t "to-subcase"}}
-      </LinkTo>
-    </div>
-    {{!--  END TO SUBCASE --}}
-
-    {{!--  TODO: Commented out section triggers many requests that slow down agenda-item loading
-
-             PUBLICATION FLOW CALL TO ACTION
-
-    {{#if currentSession.isOvrb}}
-
-      <div class="auk-button-toolbar">
-
-        {{#if (await @agendaitem.publicationFlow)}}
-          <LinkTo
-                  class=""
-                  @route="publications.publication"
-                  @model={{ await @agendaitem.publicationFlowId }}
-          >
-            {{t "publications-to" }}
-          </LinkTo>
-        {{else}}
-          {{#if (await @agendaitem.case)}}
+<div class="auk-u-mb-3">
+  <WebComponents::AuPanel>
+    <WebComponents::AuPanel::Header>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <h4 class="auk-panel__title">
+              {{#if (not @agendaitem.showAsRemark)}}
+                {{t "note"}}
+              {{else}}
+                {{t "text"}}
+              {{/if}}
+            </h4>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          {{#if @subcase.case.id}}
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton
+                data-test-agendaitem-titles-to-subcase
+                {{on "click" this.redirectToSubcase}}
+                      @skin="tertiary"
+                      @layout="icon-right"
+                      @icon="chevron-right"
+              >
+                {{t "to-subcase"}}
+              </WebComponents::AuButton>
+            </WebComponents::AuToolbar::Item>
+          {{/if}}
+          <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton
+              data-test-agendaitem-titles-edit
+              {{on "click" this.toggleIsEditingAction}}
                     @skin="tertiary"
-                    @layout="icon-only"
-                    data-test-start-publication
-              {{on "click" this.startPublication}}>
-              {{t "start-publication"}}
-            </WebComponents::AuButton>
-          {{/if}}
+                    @icon="edit"
+            />
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuPanel::Header>
+    <WebComponents::AuPanel::Body>
+      <div class="auk-content">
+        <h4>
+          {{@agendaitem.shortTitle}}
+        </h4>
+        {{#if @agendaitem.title }}
+          <p>
+            {{@agendaitem.title}}
+          </p>
         {{/if}}
-      </div>
-
-    {{/if}}
-
-           END  PUBLICATION FLOW CALL TO ACTION
-    --}}
-  </div>
-
-
-
-
-{{/if}}
-
-<div class="auk-u-mb-2">
-  <div class="auk-u-flex auk-u-flex--vertical-center">
-    <h2 class="vlc-subline" data-test-subcase-type>
-      {{#if (not @agendaitem.showAsRemark)}}
-        {{t "note"}}
-      {{else}}
-        {{t "text"}}
-      {{/if}}
-    </h2>
-    {{#if currentSession.isEditor}}
-      <div class="auk-u-ml-2" data-test-agendaitem-edit-link>
-        <a
-          data-test-agendaitem-titles-edit
-          href=""
-          class="vl-link"
-          {{action this.toggleIsEditingAction}}
-        >
-          {{t "edit"}}
-        </a>
-      </div>
-    {{/if}}
-  </div>
-</div>
-
-<div class="auk-u-mb-2">
-  <h4 class="vl-title vl-title--h4">
-    <pre>
-      {{@agendaitem.shortTitle}}
-    </pre>
-  </h4>
-</div>
-
-<div class="auk-u-mb-2">
-  {{#if @shouldShowDetails}}
-    <pre class="auk-u-flex--inline auk-u-text-pre-line">
-      {{@agendaitem.title}}
-    </pre>
-  {{/if}}
-</div>
-
-{{#if (not @agendaitem.showAsRemark)}}
-  <div class="auk-u-mb-2">
-    {{#if @subcase.subcaseName}}
-      <span class={{this.pillClass}}>
-        {{@subcase.subcaseName}}
-      </span>
-    {{/if}}
-  </div>
-  {{#if @agendaitem.retracted}}
-    <div class="auk-u-mb-2">
-      <div class="pill-container auk-u-flex">
-        <span class="vl-pill vl-u-text--capitalize">
-          {{t "postponed-item"}}
-        </span>
-      </div>
-    </div>
-  {{/if}}
-{{else}}
-  {{#if @newsletterInfo}}
-    <div class="auk-u-mb-2">
-      <div class="pill-container auk-u-flex">
-        <span
-          class="vlc-pill {{if @newsletterInfo.inNewsletter "vlc-pill--success" "vlc-pill--error"}} auk-u-mr-2"
-        >
-          {{#if @newsletterInfo.inNewsletter}}
-            <span>
-              {{t "visible-in-newsletter"}}
-            </span>
-            <i class="vl-button__icon ki-visible auk-u-ml-2"></i>
+        <WebComponents::AuPillList>
+          {{#if (not @agendaitem.showAsRemark) }}
+            {{#if @subcase.subcaseName}}
+              <WebComponents::AuPill>
+                {{@subcase.subcaseName}}
+              </WebComponents::AuPill>
+            {{/if}}
+            {{#if @agendaitem.retracted}}
+              <WebComponents::AuPill>
+                {{t "postponed-item"}}
+              </WebComponents::AuPill>
+            {{/if}}
           {{else}}
-            <span>
-              {{t "hidden-in-newsletter"}}
-            </span>
-            <i class="vl-button__icon ki-hide auk-u-ml-2"></i>
+            {{#if @newsletterInfo}}
+              {{#if @newsletterInfo.inNewsletter}}
+                <WebComponents::AuPill @skin="success" @icon="visible">
+                  {{t "visible-in-newsletter"}}
+                </WebComponents::AuPill>
+              {{else}}
+                <WebComponents::AuPill @skin="danger" @icon="hide">
+                  {{t "hidden-in-newsletter"}}
+                </WebComponents::AuPill>
+              {{/if}}
+            {{else}}
+              <WebComponents::AuPill>
+                {{t "no-newsletter-info"}}
+              </WebComponents::AuPill>
+            {{/if}}
           {{/if}}
-        </span>
+          {{#if
+            (and @agendaitem.isDesignAgenda
+                    (and currentSession.isEditor @agendaitem.formallyOkToShow))
+          }}
+            <WebComponents::AuPill
+              @skin={{@agendaitem.formallyOkToShow.svg.color}}
+              @icon={{@agendaitem.formallyOkToShow.svg.icon}}
+            >
+              {{@agendaitem.formallyOkToShow.label}}
+            </WebComponents::AuPill>
+          {{/if}}
+        </WebComponents::AuPillList>
       </div>
-    </div>
-  {{else}}
-    <div class="auk-u-mb-2">
-      {{t "no-newsletter-info"}}
-    </div>
-  {{/if}}
-{{/if}}
-<div class="auk-u-mb-2">
-  <div
-    class="pill-container auk-u-flex"
-    data-test-agenda-subcasehidden-pill
-  >
-    {{#if
-      (and @agendaitem.isDesignAgenda (and currentSession.isEditor @agendaitem.formallyOkToShow))
-    }}
-      <span
-        class="{{@agendaitem.formallyOkToShow.pillClassNames}}
-        auk-u-mr-2"
-      >
-        {{@agendaitem.formallyOkToShow.label}}
-      </span>
+    </WebComponents::AuPanel::Body>
+    {{#if @agendaitem.explanation }}
+      <WebComponents::AuModal::Footer @custom={{true}}>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left"n>
+            <WebComponents::AuToolbar::Item>
+              <pre class="auk-u-flex--inline auk-u-text-pre-line auk-u-italic">
+               {{t "remark-title"}}: {{@agendaitem.explanation}}
+              </pre>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
+      </WebComponents::AuModal::Footer>
     {{/if}}
-    {{#if (await @subcase)}}
-      {{#if (await @subcase.confidential)}}
-        <i data-test-agenda-subcase-confidential class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
-      {{else}}
-        <i
-          class="vlc-pill auk-u-mr-2 vl-icon vlc-pill--success ki-lock-open"
-        ></i>
-      {{/if}}
-    {{/if}}
-  </div>
+  </WebComponents::AuPanel>
 </div>
-<div class="auk-u-mb-2">
-  {{#if @agendaitem.explanation}}
-    <pre class="vl-u-text--muted auk-u-flex--inline auk-u-text-pre-line">
-      {{t "remark-title"}}: {{@agendaitem.explanation}}
-    </pre>
-  {{/if}}
-</div>
-
-{{!-- LOADER --}}
-
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
-{{/if}}
