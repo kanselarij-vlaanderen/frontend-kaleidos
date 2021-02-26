@@ -1,16 +1,15 @@
-<WebComponents::AuToolbar style="margin-bottom:2rem">
+<WebComponents::AuToolbar class="auk-u-mb-4">
   <WebComponents::AuToolbar::Group @position="left">
     <WebComponents::AuToolbar::Item>
-      <div style="display: flex; margin-right: 1rem; align-content: center; align-items: center">
-        <h4 style="font-weight:500; font-size: 2rem; margin-right: 1rem ">
-          {{t "agendaitem-case"}}
-        </h4>
-        {{#if (await this.subcase.confidential)}}
-          <WebComponents::AuPill @skin="danger" @icon="lock-closed">{{t "confidential"}}</WebComponents::AuPill>
-        {{/if}}
-      </div>
-
+      <h3 class="auk-toolbar__title">
+        {{t "agendaitem-case"}}
+      </h3>
     </WebComponents::AuToolbar::Item>
+    {{#if (await this.subcase.confidential)}}
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuPill @skin="danger" @icon="lock-closed">{{t "confidential"}}</WebComponents::AuPill>
+      </WebComponents::AuToolbar::Item>
+    {{/if}}
   </WebComponents::AuToolbar::Group>
   <WebComponents::AuToolbar::Group @position="right">
     <WebComponents::AuToolbar::Item>
