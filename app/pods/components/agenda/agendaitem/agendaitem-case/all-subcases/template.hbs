@@ -16,7 +16,7 @@
           {{subcase.title}}
         </p>
       </div>
-      {{#if (gt (await subcase.pieces.length) 1)}}
+      {{#if (gt (await subcase.pieces.length) 0)}}
         <div class="js-vl-accordion">
           <button class="vl-toggle vl-link vl-link--bold"
                   data-vl-accordion-toggle=""
@@ -40,7 +40,7 @@
         {{#if subcase.isShowingDocuments}}
           <div class="vl-accordion__panel">
             <div class="auk-u-mt-4">
-              {{utils/pieces-list-for-item agendaitemOrSubcase=subcase isClickable=true}}
+              {{utils/pieces-list-for-item pieces=(await subcase.pieces) isClickable=true}}
             </div>
           </div>
         {{/if}}
