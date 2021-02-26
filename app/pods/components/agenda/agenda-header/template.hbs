@@ -36,22 +36,16 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         <div class="vl-action-group">
-          {{#if (and currentAgenda.isDesignAgenda currentSessionService.isEditor)}}
+          {{#if currentSessionService.isEditor}}
             <button type="button"
                     data-test-agenda-header-showAgendaOptions
                     class="vl-button vl-button--icon-before"
               {{action "showAgendaActions"}}
             >
-              {{t "agenda-approve"}}
-              {{#if (not isShowingAgendaActions)}}
-                <i class="vl-button__icon vl-button__icon--after ki-chevron-down"
+              {{t "agenda-actions"}}
+              <i class="vl-button__icon vl-button__icon--after {{if (not isShowingAgendaActions) "ki-chevron-down" "ki-chevron-up"}}"
                   {{action "showAgendaActions" bubbles=false}}
                 ></i>
-              {{else}}
-                <i class="vl-button__icon vl-button__icon--after ki-chevron-up"
-                  {{action "showAgendaActions" bubbles=false}}
-                ></i>
-              {{/if}}
               {{#attach-popover
                 renderInPlace=true
                 class="ember-attacher-popper vlc-hide-on-print"
@@ -62,30 +56,85 @@
               as |attacher|
               }}
                 <ul class="vlc-dropdown-menu">
-                  {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+                  {{#if currentSessionService.isEditor}}
+                    {{#if currentAgenda.isDesignAgenda}}
+                      <li class="vlc-dropdown-menu__item">
+                        <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "openConfirmApproveAgenda"}}
+                        >
+                          {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                        </button>
+                      </li>
+                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                      <li class="vlc-dropdown-menu__item">
+                        <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
+                          {{action attacher.hide}}
+                          {{action "openConfirmApproveAgendaAndCloseMeeting"}}
+                        >
+                          <span>
+                            {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
+                          </span>
+                        </button>
+                      </li>
+                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                    {{/if}}
                     <li class="vlc-dropdown-menu__item">
-                      <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
-                        {{action attacher.hide}}
-                        {{action "openConfirmApproveAgenda"}}
-                      >
-                        {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
-                      </button>
+                      {{#if (not currentSession.isFinal)}}
+                        {{#if (await isSessionClosable)}}
+                          <a href=""
+                            data-test-agenda-header-lockAgenda
+                            class="vl-link vl-link--block vl-u-text--error"
+                            {{action "openConfirmCloseMeeting"}}
+                            {{action attacher.hide}}
+                          >
+                            {{t "agenda-close"}}
+                          </a>
+                        {{/if}}
+                      {{else}}
+                        <a href=""
+                          data-test-agenda-header-unlockAgenda
+                          class="vl-link vl-link--block"
+                          {{action "unlockAgenda"}}
+                          {{action attacher.hide}}
+                        >
+                          {{t "agenda-reopen"}}
+                        </a>
+                      {{/if}}
                     </li>
+                    
+                  {{/if}}
+                  {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
+                  {{#if (await canDeleteSelectedAgenda)}}
                     <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                    <li class="vlc-dropdown-menu__item">
-                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                      <a href=""
+                        data-test-agenda-header-deleteAgenda
+                        class="vl-link vl-u-text--error"
+                        {{action "openConfirmDeleteSelectedAgenda"}}
                         {{action attacher.hide}}
-                        {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                       >
-                        <span>
-                          {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
-                        </span>
-                      </button>
+                        {{t "agenda-delete"}}
+                      </a>
+                    </li>
+                    
+                  {{/if}}
+                  {{#if (await canReopenPreviousAgenda)}}
+                    <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                      >
+                      <a href=""
+                          data-test-agenda-header-reopen-previous-version
+                          class="vl-link vl-link--block vl-u-text--error"
+                          {{action "openConfirmReopenPreviousAgenda"}}
+                          {{action attacher.hide}}
+                        >
+                        {{t "agenda-reopen-previous-version"}}
+                      </a>
                     </li>
                   {{/if}}
                 </ul>
               {{/attach-popover}}
-
             </button>
           {{/if}}
           <button type="button"
@@ -94,15 +143,9 @@
             {{action "showMultipleOptions"}}
           >
             {{t "actions"}}
-            {{#if (not isShowingOptions)}}
-              <i class="vl-button__icon vl-button__icon--after ki-chevron-down"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
-            {{else}}
-              <i class="vl-button__icon vl-button__icon--after ki-chevron-up"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
-            {{/if}}
+            <i class="vl-button__icon vl-button__icon--after {{if (not isShowingOptions) "ki-chevron-down" "ki-chevron-up"}}"
+              {{action "showMultipleOptions" bubbles=false}}
+            ></i>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper vlc-hide-on-print"
@@ -234,29 +277,6 @@
                 {{#if currentSessionService.isEditor}}
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                   <li class="vlc-dropdown-menu__item">
-                    {{#if (not currentSession.isFinal)}}
-                      {{#if (await isSessionClosable)}}
-                        <a href=""
-                           data-test-agenda-header-lockAgenda
-                           class="vl-link vl-link--block vl-u-text--error"
-                          {{action "openConfirmCloseMeeting"}}
-                          {{action attacher.hide}}
-                        >
-                          {{t "agenda-close"}}
-                        </a>
-                      {{/if}}
-                    {{else}}
-                      <a href=""
-                         data-test-agenda-header-unlockAgenda
-                         class="vl-link vl-link--block"
-                        {{action "unlockAgenda"}}
-                        {{action attacher.hide}}
-                      >
-                        {{t "agenda-reopen"}}
-                      </a>
-                    {{/if}}
-                  </li>
-                  <li class="vlc-dropdown-menu__item">
                     {{#if currentSession.canReleaseDecisions}}
                       <a href=""
                          data-test-agenda-header-releaseDecisions
@@ -277,27 +297,13 @@
                       </a>
                     {{/if}}
                   </li>
-                  <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
-                  >
-                    {{#if (await canDeleteSelectedAgenda)}}
-                      <a href=""
-                         data-test-agenda-header-deleteAgenda
-                         class="vl-link vl-u-text--error"
-                        {{action "openConfirmDeleteSelectedAgenda"}}
-                        {{action attacher.hide}}
-                      >
-                        {{t "agenda-delete"}}
-                      </a>
-                    {{/if}}
-                  </li>
                   {{#if
                     (and
                       (not (await designAgendaPresent))
                       (not (await currentSession.isFinal))
                     )
                   }}
-                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
-                    >
+                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a href=""
                          data-test-agenda-header-create-new-design
                          class="vl-link vl-link--block"
@@ -305,21 +311,6 @@
                         {{action attacher.hide}}
                       >
                         {{t "agenda-add"}}
-                      </a>
-                    </li>
-                  {{/if}}
-
-
-                  {{#if (await canReopenPreviousAgenda)}}
-                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
-                      >
-                      <a href=""
-                           data-test-agenda-header-reopen-previous-version
-                           class="vl-link vl-link--block vl-u-text--error"
-                          {{action "openConfirmReopenPreviousAgenda"}}
-                          {{action attacher.hide}}
-                        >
-                        {{t "agenda-reopen-previous-version"}}
                       </a>
                     </li>
                   {{/if}}
@@ -477,7 +468,7 @@
 {{/if}}
 
 {{#if this.showConfirmForClosingMeeting}}
-  <WebComponents::AuModal>
+  <WebComponents::AuModal @size={{if (await this.currentSession.latestAgenda.isDesignAgenda) "large" "small"}}>
     <WebComponents::AuModal::Header
             @title={{t "agenda-close"}}
             @closeModal={{action "cancelCloseMeeting"}}
@@ -511,7 +502,7 @@
 {{/if}}
 
 {{#if this.showConfirmForDeletingSelectedAgenda}}
-  <WebComponents::AuModal>
+  <WebComponents::AuModal @size={{if (eq this.agendas.length 1) "large" "small"}}>
     <WebComponents::AuModal::Header
       @title={{t "agenda-delete"}}
       @closeModal={{action "cancelDeleteSelectedAgenda"}}
@@ -525,7 +516,7 @@
       {{/if}}
       <div>
         {{t
-          "delete-design-agenda-close-meeting-message"
+          "delete-agenda-message"
           agenda=this.currentSession.latestAgenda.agendaName
         }}
       </div>

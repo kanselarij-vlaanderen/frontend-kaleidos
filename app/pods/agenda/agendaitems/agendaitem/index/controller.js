@@ -1,14 +1,21 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
 
   @service store;
 
-  @action
+  get subcase() {
+    const agendaActivity = this.model.get('agendaActivity');
+    if (agendaActivity) {
+      return agendaActivity.get('subcase');
+    }
+    return null;
+  }
+
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
@@ -29,21 +36,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   async reassignPrioritiesForAgendaitems() {
     const isEditor = this.currentSession.isEditor;
-    const isDesignAgenda = this.agenda.isDesignAgenda;
-    const agendaitems = await this.agenda.agendaitems;
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
-    const actualAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-      .sortBy('priority');
-    if (announcements) {
-      const actualAnnouncements = announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
-      await setAgendaitemsPriority(actualAnnouncements, isEditor, isDesignAgenda);
-    }
-    await setAgendaitemsPriority(actualAgendaitems, isEditor, isDesignAgenda);
+    await reorderAgendaitemsOnAgenda(this.agenda, isEditor);
   }
 
   @action
-  async reassignPrioritiesAndNavigateToNeighbouringAgendaitem(agendaitem) {
+  async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
     await this.reassignPrioritiesForAgendaitems();
-    await this.navigateToNeighbouringItem(agendaitem);
+    await this.navigateToNeighbouringItem(this.model);
   }
 }

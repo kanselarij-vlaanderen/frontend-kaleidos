@@ -5,6 +5,10 @@ def getBranchName(branch) {
 pipeline {
     agent any
 
+    options {
+        disableConcurrentBuilds()
+    }
+
     environment {
         branch = getBranchName("${env.GIT_BRANCH}")
         project = "Kaleidos"
@@ -84,8 +88,8 @@ pipeline {
 
     post {
         always {
-            sh "mkdir ${WORKSPACE}/reports"
-            sh "mkdir ${WORKSPACE}/reports/cypress_screenshots/"
+            sh "mkdir -p ${WORKSPACE}/reports"
+            sh "mkdir -p ${WORKSPACE}/reports/cypress_screenshots/"
             sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
             sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
 
@@ -94,16 +98,6 @@ pipeline {
             archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
         }
-        success {
-            rocketSend channel: 'kaleidosbuilds', message: "Build SUCCESS - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'green', avatar: 'https://github.com/fluidicon.png'
-        }
-        unstable {
-            rocketSend channel: 'kaleidosbuilds', message: "Build UNSTABLE - ${projectName} (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'orange', avatar: 'https://github.com/fluidicon.png'
-        }
-        failure {
-            rocketSend channel: 'kaleidosbuilds', message: "Build FAILED - ${projectName}  (<${env.BUILD_URL}|Open>)", serverUrl: 'https://chat.semte.ch', trustSSL: true, color: 'red',avatar: 'https://github.com/fluidicon.png'
-        }
-
         cleanup {
           sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
           sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} down -v"

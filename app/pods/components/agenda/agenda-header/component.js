@@ -157,7 +157,7 @@ export default Component.extend(FileSaverMixin, {
   /**
    * @method CreateDesignAgenda
    *
-   * Get the last approved agenda and change te status to approves (from final)
+   * Get the last approved agenda and change the status to approves (from final)
    * Then approve that agenda using the agenda-approve service which yields a new design agenda
    */
   async createDesignAgenda() {
@@ -401,6 +401,7 @@ export default Component.extend(FileSaverMixin, {
 
       if (designAgenda) {
         await this.agendaService.deleteAgenda(designAgenda);
+        // TODO is alle data uit de local store na deze actie ?
         // After the agenda has been deleted, we want to update the agendaitems of activity
         const agendaitems = await lastApprovedAgenda.get('agendaitems');
         await this.reloadAgendaitemsOfAgendaActivities(agendaitems);
@@ -430,7 +431,7 @@ export default Component.extend(FileSaverMixin, {
 
       // this could be previousVersion of agenda, but is not implemented
       const previousAgenda = await this.get('sessionService').findPreviousAgendaOfSession(currentMeeting, currentAgenda);
-      currentMeeting.set('agenda', previousAgenda);
+      currentMeeting.set('agenda', previousAgenda); // TODO setting this here might result in a one-to-many with multiple on the "one" side on future agenda versions
       await currentMeeting.save();
 
       await this.agendaService.deleteAgenda(currentAgenda);

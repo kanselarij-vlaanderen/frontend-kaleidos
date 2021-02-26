@@ -26,7 +26,10 @@ export default class AbbreviatedText extends Component {
 
   // Should show ellipsis?
   get textTooLong() {
-    return this.text().length > this.getMaxSize();
+    if (this.text()) {
+      return this.text().length > this.getMaxSize();
+    }
+    return false;
   }
 
   // Abbreviated version of title.

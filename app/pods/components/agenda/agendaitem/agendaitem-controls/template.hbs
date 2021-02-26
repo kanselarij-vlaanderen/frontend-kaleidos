@@ -1,36 +1,58 @@
-{{#if currentAgenda.isDesignAgenda}}
-  {{#if (and (not (is-pending isDeletable)) (not (is-pending isPostPonable)))}}
-    {{#if (await isPostPonable)}}
-      {{#if agendaitem.retracted}}
-        <button data-test-revert-postpone-agendaitem type="button" class="vl-button vl-button--tertiary"
-          {{action "advanceAgendaitem" agendaitem}}
-        >
-          {{t "not-postpone"}}
-        </button>
-      {{else}}
-        <button data-test-postpone-agendaitem type="button" class="vl-button vl-button--tertiary" {{action "postponeAgendaitem" agendaitem}}>
-          {{t "postpone"}}
-        </button>
-      {{/if}}
-    {{/if}}
-    {{#if (or currentSession.isAdmin (await isDeletable))}}
-      <button data-test-delete-agendaitem type="button" class="vl-button vl-button--tertiary"
-        {{action "toggleIsVerifying"}}>
-        {{t "delete"}}
-      </button>
-    {{/if}}
+{{#if @currentAgenda.isDesignAgenda}}
+  {{#if
+    (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
+  }}
+    <WebComponents::AuButtonToolbar>
+      <WebComponents::AuButton
+              data-test-agendaitem-controls-actions
+              @layout="icon-right"
+              @icon="chevron-down"
+      >
+        {{t "actions"}}
+      </WebComponents::AuButton>
+      <AttachPopover
+              @renderInPlace={{true}}
+              @class="ember-attacher-popper"
+              @hideOn="clickout click"
+              @showOn="click"
+              @animation="shift"
+              @placement="bottom"
+      >
+        <WebComponents::AuDropdown>
+          {{#if this.isPostPonable}}
+            {{#if @agendaitem.retracted}}
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+                {{t "not-postpone"}}
+              </WebComponents::AuDropdown::Item>
+            {{else}}
+              <WebComponents::AuDropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+                {{t "postpone"}}
+              </WebComponents::AuDropdown::Item>
+            {{/if}}
+          {{/if}}
+          {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
+            <WebComponents::AuDropdown::Item {{on "click" this.toggleIsVerifying}}
+                    data-test-agendaitem-controls-action-delete
+                    @skin="danger"
+            >
+              {{t "delete"}}
+            </WebComponents::AuDropdown::Item>
+          {{/if}}
+        </WebComponents::AuDropdown>
+      </AttachPopover>
+    </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="vl-loader"></div>
   {{/if}}
-  {{#if isVerifying}}
+  {{#if this.isVerifying}}
     <WebComponents::VlModalVerify
       @title={{t "delete-agendaitem"}}
-      @message={{await deleteWarningText}}
-      @cancel={{action "toggleIsVerifying"}}
-      @verify={{action "verifyDelete" agendaitem}} />
+      @message={{await this.deleteWarningText}}
+      @cancel={{this.toggleIsVerifying}}
+      @verify={{fn this.verifyDelete @agendaitem}}/>
   {{/if}}
 {{/if}}
-{{#if (await isSavingRetracted)}}
+{{#if this.isSavingRetracted}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @showCloseButton={{false}}
@@ -44,4 +66,7 @@
       }}
     />
   </WebComponents::VlModal>
+{{/if}}
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay/>
 {{/if}}
