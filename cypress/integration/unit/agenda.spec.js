@@ -161,8 +161,8 @@ context('Agenda tests', () => {
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('Dit is de opmerking');
-    cy.get(agenda.agendaitemTitelsConfidential).should('exist')
-      .should('be.visible');
+    // TODO KAS-2142 setting confidentiality and cancelling does not roll back
+    cy.get(auComponent.auPillSpan).contains('Vertrouwelijk');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {

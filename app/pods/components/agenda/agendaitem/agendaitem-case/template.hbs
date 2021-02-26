@@ -2,7 +2,7 @@
 {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
     @agendaitem={{@agendaitem}}
-    @subcase={{await this.subcase}}
+    @subcase={{@subcase}}
     @shouldShowDetails={{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
     @newsletterInfo={{await this.newsletterInfo}}
     @toggleIsEditing={{action this.toggleIsEditing}}
@@ -11,7 +11,7 @@
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
     @agendaitem={{@agendaitem}}
     @isEditing={{@isEditing}}
-    @subcase= {{await this.subcase}}
+    @subcase= {{@subcase}}
     @newsletterInfo={{await this.newsletterInfo}}
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
@@ -20,13 +20,13 @@
 {{!-- TODO refactor mandatees to a glimmer component --}}
   <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
     @agendaitem={{@agendaitem}}
-    @subcase={{await this.subcase}}
+    @subcase={{@subcase}}
   />
 {{else}}
   {{#if @agendaitem.agendaActivity}}
     <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
       @agendaitem={{@agendaitem}}
-      @subcase={{await this.subcase}}
+      @subcase={{@subcase}}
     />
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
