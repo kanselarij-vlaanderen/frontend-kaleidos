@@ -180,12 +180,14 @@ context('Add files to an agenda', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.postponeAgendaitemButton).click();
+    cy.get(agenda.agendaitemControlsActions).click();
+    cy.get(agenda.agendaitemControlsActionPostpone).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter');
-    cy.get(agenda.revertPostponeAgendaitemButton).click();
+    cy.get(agenda.agendaitemControlsActions).click();
+    cy.get(agenda.agendaitemControlsActionAdvance).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
@@ -222,7 +224,7 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
+    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
       .click();
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering op/);

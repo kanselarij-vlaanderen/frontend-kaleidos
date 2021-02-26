@@ -1,6 +1,7 @@
 /* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 import modal from '../../selectors/modal.selectors';
+import agenda from '../../selectors/agenda.selectors';
 
 context('meeting actions tests', () => {
   beforeEach(() => {
@@ -57,11 +58,8 @@ context('meeting actions tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.get('.vl-action-group').within(() => {
-        cy.contains('Verwijderen').should('not.exist');
-      });
-    });
+    cy.get(agenda.agendaitemControlsActions).click();
+    cy.get(agenda.agendaitemControlsActionDelete).should('not.exist');
   });
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
@@ -80,11 +78,9 @@ context('meeting actions tests', () => {
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
-    cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.get('.vl-action-group').within(() => {
-        cy.contains('Verwijderen').click();
-      });
-    });
+
+    cy.get(agenda.agendaitemControlsActions).click();
+    cy.get(agenda.agendaitemControlsActionDelete).click();
 
     cy.get(modal.modal).within(() => {
       cy.get('.vl-button').contains('Verwijderen')

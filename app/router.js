@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
+import ENV from 'frontend-kaleidos/config/environment';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
@@ -154,15 +155,17 @@ Router.map(function() {
     this.route('agenda-items', { path: '/agendapunten', });
   });
 
-  this.route('publications', { path: '/publicaties', }, function() {
-    this.route('publication', { path: ':publication_id', }, function() {
-      this.route('case', { path: '/dossiers', });
-      this.route('documents', { path: '/documenten', });
-      this.route('translations', { path: '/vertalingen', });
-      this.route('publishpreview', { path: '/drukproeven', });
-      this.route('signatures', { path: '/handtekeningen', });
+  if (ENV.APP.ENABLE_PUBLICATIONS_TAB) {
+    this.route('publications', { path: '/publicaties', }, function() {
+      this.route('publication', { path: ':publication_id', }, function() {
+        this.route('case', { path: '/dossiers', });
+        this.route('documents', { path: '/documenten', });
+        this.route('translations', { path: '/vertalingen', });
+        this.route('publishpreview', { path: '/drukproeven', });
+        this.route('signatures', { path: '/handtekeningen', });
+      });
     });
-  });
+  }
 });
 
 export default Router;

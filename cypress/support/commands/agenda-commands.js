@@ -223,7 +223,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
 
-  cy.get(actionModel.showActionOptions).click();
+  cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
   if (shouldConfirm) {
     cy.get(modal.auModal.container).within(() => {
@@ -451,11 +451,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.contains('Pagina is aan het laden').should('not.exist');
-  cy.get('.vl-button--icon-before', {
-    timeout: 10000,
-  }).should('exist')
-    .contains('Acties')
-    .click();
+  cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.addAgendaitems)
     .should('be.visible')
     .click();
@@ -655,9 +651,7 @@ function changeSelectedAgenda(agendaName) {
  */
 function closeAgenda() {
   cy.log('closeAgenda');
-  cy.get('.vl-button--icon-before')
-    .contains('Acties')
-    .click();
+  cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.lockAgenda).click();
   cy.get(modal.auModal.container).within(() => {
     cy.get(modal.auModal.save).click();
@@ -677,9 +671,7 @@ function closeAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
-  cy.get('.vl-button--icon-before')
-    .contains('Acties')
-    .click();
+  cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.releaseDecisions).click({
     force: true,
   });
@@ -701,9 +693,7 @@ function releaseDecisions() {
  */
 function releaseDocuments() {
   cy.log('releaseDocuments');
-  cy.get('.vl-button--icon-before')
-    .contains('Acties')
-    .click();
+  cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.releaseDocuments).click();
   cy.get(modal.modal).within(() => {
     cy.get('.vl-button').contains('Vrijgeven')
