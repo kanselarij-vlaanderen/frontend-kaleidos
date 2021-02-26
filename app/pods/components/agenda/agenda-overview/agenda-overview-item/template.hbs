@@ -6,11 +6,15 @@
 >
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
-      <div class="vlc-agenda-items__cursor">
-        <WebComponents::AuButton class="auk-u-p-0" @skin="borderless">
-          <WebComponents::AuIcon @name="drag-handle-2" @grab={{true}}/>
-        </WebComponents::AuButton>
-      </div>
+      {{#if
+        (and this.currentSessionService.isEditor this.currentAgenda.isDesignAgenda)
+      }}
+        <div class="vlc-agenda-items__cursor">
+          <WebComponents::AuButton class="auk-u-p-0" @skin="borderless">
+            <WebComponents::AuIcon @name="drag-handle-2" @grab={{true}}/>
+          </WebComponents::AuButton>
+        </div>
+      {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
         {{@agendaitem.priority}}.
       </span>

@@ -1,5 +1,6 @@
 const selectors = {
-  showActionOptions: '[data-test-agenda-header-showactionoptions]',
+  showActionOptions: '[data-test-agenda-header-showactionoptions]', // the right action button in agenda-header
+  showAgendaOptions: '[data-test-agenda-header-showAgendaOptions]', // the left action button in agenda-header
   addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
   navigatetodecisions: '[data-test-agenda-header-navigatetodecisions]',
   navigatetonewsletter: '[data-test-agenda-header-navigatetonewsletter]',
