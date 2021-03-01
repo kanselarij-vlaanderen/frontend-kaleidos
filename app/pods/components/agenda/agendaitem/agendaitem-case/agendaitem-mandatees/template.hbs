@@ -1,35 +1,103 @@
-{{!-- TODO code duplication with subcase-case/subcase-mandatees --}}
-<div class="auk-u-mb-2">
-  <div class="auk-u-flex auk-u-flex--vertical-center">
-    <h4 class="vl-title vl-title--h4">
-      {{t "manage-ministers-title"}}
-    </h4>
-    {{#if (and currentSession.isEditor (not isEditing))}}
-      <div class="auk-u-ml-2">
-        <a href="" data-test-subcase-mandatees-edit class="vl-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
-        </a>
-      </div>
-    {{/if}}
-  </div>
-</div>
 {{#if (not isEditing)}}
-  {{#if (is-pending mandateeRows)}}
-    {{web-components/vl-loader text=(t "mandatees-loading-text")}}
-  {{else if (gt (await mandateeRows.length) 0)}}
-    <ul class="vlc-minister-list">
-      {{#each mandateeRows as |mandateeRow|}}
-        {{web-components/vl-mandatee-link
-          data-test-mandatee-link-list-item
-          mandatee=mandateeRow.mandatee
-          fields=mandateeRow.fields
-          submitter=mandateeRow.isSubmitter
-        }}
-      {{/each}}
-    </ul>
-  {{else}}
-    {{web-components/vl-alert message=(t "no-domains-yet")}}
-  {{/if}}
+  <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+    <WebComponents::AuPanel>
+      <WebComponents::AuPanel::Header>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          {{#if (not this.latestSubcaseOnMeeting)}}
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton
+                  {{on "click" this.toggleIsEditing}}
+                        @skin="tertiary"
+                        @icon="settings"
+                        data-test-subcase-mandatees-edit
+                >
+                  {{t "edit-2"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          {{/if}}
+        </WebComponents::AuToolbar>
+      </WebComponents::AuPanel::Header>
+      {{#if (gt (await mandateeRows.length) 0) }}
+        <WebComponents::AuPanel::Body @noPadding="true">
+          <table class="auk-table">
+            <thead>
+              <tr>
+                <th>{{t "minister"}}</th>
+                <th>{{t "policy-domain-policy-fields"}}</th>
+                <th>{{t "submitter"}}</th>
+                {{!-- <th></th> --}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each mandateeRows as |mandateeRow|}}
+                <tr data-test-mandatee-link-list-item >
+                  <td class="auk-table__col--4">
+                    <div class="auk-u-flex auk-u-flex--vertical-center">
+                      <WebComponents::AuBadge @icon="user"/>
+                      <span class="auk-u-mx-2">{{await mandateeRow.mandatee.person.nameToDisplay}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    {{#if mandateeRow.fields}}
+                      <ul data-test-agendaitem-mandatees-fields-list>
+                        {{#each mandateeRow.fields as |field|}}
+                          <li>
+                            {{field.label}}
+                          </li>
+                        {{/each}}
+                      </ul>
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{#if mandateeRow.isSubmitter}}
+                      <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
+                  </td>
+                  {{!-- TODO implement actions --}}
+                  {{!-- <td class="auk-u-text-align--right">
+                    <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                      <AttachPopover
+                              @renderInPlace={{true}}
+                              @class="ember-attacher-popper"
+                              @hideOn="clickout click"
+                              @showOn="click"
+                              @animation="shift"
+                              @placement="left"
+                      >
+                        <WebComponents::AuDropdown>
+                          <WebComponents::AuDropdown::Item>
+                            {{t "edit-2"}}
+                          </WebComponents::AuDropdown::Item>
+                          <WebComponents::AuDropdown::Item @skin="danger">
+                            {{t "delete"}}
+                          </WebComponents::AuDropdown::Item>
+                        </WebComponents::AuDropdown>
+                      </AttachPopover>
+                    </WebComponents::AuButton>
+                  </td> --}}
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </WebComponents::AuPanel::Body>
+      {{else}}
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+        </WebComponents::AuPanel::Body>
+      {{/if}}
+    </WebComponents::AuPanel>
+  </div>
 {{else}}
   <div class="vlc-box">
     {{cases/subcase-mandatees
@@ -41,14 +109,14 @@
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
         <a
-          href=""
-          data-test-subcase-mandatees-add-mandatee
-          class="vl-button vl-button--tertiary vl-button--icon-before"
+                href=""
+                data-test-subcase-mandatees-add-mandatee
+                class="vl-button vl-button--tertiary vl-button--icon-before"
           {{action "addRow"}}
         >
           <i
-            class="vl-button__icon vl-button__icon--before ki-add"
-            aria-hidden="true"
+                  class="vl-button__icon vl-button__icon--before ki-add"
+                  aria-hidden="true"
           ></i>
           {{t "add-minister"}}
         </a>
@@ -56,9 +124,9 @@
       <div class="vlc-toolbar__right">
         <div class="vl-action-group vl-action-group--align-right">
           <a
-            data-test-subcase-mandatees-edit-cancel
-            href=""
-            class="vl-button vl-button--tertiary"
+                  data-test-subcase-mandatees-edit-cancel
+                  href=""
+                  class="vl-button vl-button--tertiary"
             {{action "cancelEditing"}}
           >
             {{t "cancel"}}

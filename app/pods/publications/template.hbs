@@ -30,31 +30,29 @@
               {{#if showSearchResults}}
                 <div class="autocomplete-results auk-search-results-list">
                   {{#each this.searchResults as |result|}}
-                    {{#if result.publicationFlowId}}
-                      <WebComponents::AuDropdown::Item
-                              @class="auk-search-results-list__item">
-                        <LinkTo
-                                data-test-publication-search-result
-                                @route="publications.publication.documents"
-                                @model={{result.publicationFlowId}}
-                        >
+                    <WebComponents::AuDropdown::Item
+                            @class="auk-search-results-list__item">
+                      <LinkTo
+                              data-test-publication-search-result
+                              @route="publications.publication.documents"
+                              @model={{result.publicationFlowId}}
+                      >
+                        {{#if result.subcaseSubTitle}}
                           {{result.subcaseSubTitle}}
-                          <br>
-                          <span class="auk-u-muted auk-u-text-small">{{result.publicationFlowNumber}}</span>
-                        </LinkTo>
-                      </WebComponents::AuDropdown::Item>
-                    {{else}}
-                      <WebComponents::AuDropdown::Item
-                              {{on "click" (fn this.startPublicationFromCaseId result.id)}}
-                              @class="auk-search-results-list__item">
-                        {{result.subcaseSubTitle}}
+                        {{else if result.subcaseTitle}}
+                          {{result.subcaseTitle}}
+                        {{else if result.shortTitle}}
+                          {{result.shortTitle}}
+                        {{else if result.title}}
+                          {{result.title}}
+                        {{/if}}
                         <br>
-                        <span class="auk-u-muted auk-u-text-small">
-                          {{t "publication-not-started-yet"}}
-                        </span>
-                      </WebComponents::AuDropdown::Item>
-                    {{/if}}
-               {{/each }}
+                        <span class="auk-u-muted auk-u-text-small">{{result.publicationFlowNumber}}</span>
+                      </LinkTo>
+                    </WebComponents::AuDropdown::Item>
+                  {{else}}
+                    {{ t "no-results-found" }}
+                  {{/each}}
                 </div>
               {{/if}}
             </WebComponents::AuDropdown>
