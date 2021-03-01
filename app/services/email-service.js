@@ -5,12 +5,6 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 export default class emailService extends Service {
   @service store;
 
-  /**
-   * Get case title.
-   *
-   * @param _case
-   * @returns {*}
-   */
   async sendEmail(from, to, subject, content, attachedPieces) {
     // TODO: refactor document selection logic before implementing attachments
     // const attachments = await this.store.query('file', {
@@ -18,22 +12,13 @@ export default class emailService extends Service {
     //   // 'filter[format]': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     // });
     const folder = await this.store.findRecord('mail-folder', CONFIG.EMAIL.OUTBOX.ID);
-    alert('Email infra not working yet. Check console for email details.');
-    console.info('from', from);
-    console.info('to', to);
-    console.info('subject', subject);
-    console.info('content', content);
-    console.info('attachedPieces', attachedPieces);
     const email = await this.store.createRecord('email', {
       folder: folder,
       from: from,
       to: to,
       subject: subject,
       content: content,
-      // htmlContent: ??
-      // TODO: establish HTML-template and save to property 'html' instead
     });
-    // TODO @sven this in untested:
     if (attachedPieces) {
       const files = await Promise.all(attachedPieces.map((piece) => piece.file));
       email.set('attachments', files);
