@@ -38,6 +38,6 @@ export default class emailService extends Service {
       const files = await Promise.all(attachedPieces.map((piece) => piece.file));
       email.set('attachments', files);
     }
-    email.save();
+    return email.save();
   }
 }
