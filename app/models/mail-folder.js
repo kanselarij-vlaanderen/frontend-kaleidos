@@ -7,5 +7,5 @@ export default class EmailFolder extends Model {
   @attr() description;
 
   @hasMany('email') emails;
-  // @hasMany('email-folder') folders;
+  // @hasMany('mail-folder') folders;
 }
