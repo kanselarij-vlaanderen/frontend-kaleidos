@@ -482,6 +482,7 @@
   "delete-meeting-message": "Weet u zeker dat u de vergadering wil verwijderen? Alle bijbehorende agendapunten en documenten zullen ook verwijderd worden.",
   "no-signature-yet": "Geen handtekening beschikbaar",
   "subject": "Onderwerp",
+  "test-attachement-piece-id": "Test bijlage piece id",
   "decision-in-newsletter": "De beslissing in kort bestek",
   "title-and-content": "Titel en inhoud",
   "confidential": "Vertrouwelijk",

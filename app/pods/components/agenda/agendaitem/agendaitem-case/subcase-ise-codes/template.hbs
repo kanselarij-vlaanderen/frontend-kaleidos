@@ -11,17 +11,15 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuPanel::Header>
-    {{# if (gt (await @item.iseCodes.length) 0) }}
+    {{#if (gt (await @item.iseCodes.length) 0) }}
       <WebComponents::AuPanel::Body>
-        <ul data-test-subcase-ise-codes-list>
+        <WebComponents::AuPillList data-test-subcase-ise-codes-list>
           {{#each (await @item.iseCodes) as |iseCode|}}
-            <li class="vl-pill" data-test-subcase-ise-codes-list-item>
-              <WebComponents::AuPill>
-                {{iseCode.name}}
-              </WebComponents::AuPill>
-            </li>
+            <WebComponents::AuPill data-test-subcase-ise-codes-list-item>
+              {{iseCode.name}}
+            </WebComponents::AuPill>
           {{/each}}
-        </ul>
+        </WebComponents::AuPillList>
       </WebComponents::AuPanel::Body>
     {{else}}
       <WebComponents::AuPanel::Body>
