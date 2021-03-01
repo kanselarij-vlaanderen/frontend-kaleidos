@@ -31,20 +31,27 @@ export default class AccessLevelPillComponent extends Component {
     return !this.args.confidential;
   }
 
-  get accessLevelClass() {
+  get pillClass() {
+    const baseClass = 'vlc-pill';
+    const classes = [baseClass];
+    let modifier;
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.id) {
         case CONFIG.publiekAccessLevelId:
-          return 'vlc-pill--success';
+          modifier = 'success';
+          break;
         case CONFIG.internOverheidAccessLevelId:
-          return 'vlc-pill--warning';
+          modifier = 'warning';
+          break;
         case CONFIG.internRegeringAccessLevelId:
-          return 'vlc-pill--error';
-        default:
-          return '';
+          modifier = 'error';
+          break;
+      }
+      if (modifier) {
+        classes.push(`${baseClass}--${modifier}`);
       }
     }
-    return '';
+    return classes.join(' ');
   }
 
   get accessLevelLabel() {
