@@ -22,6 +22,10 @@
           <WebComponents::AuInput @value={{this.subject}} type="text" id="blockInput" @block="true" {{on "change" this.onChangeSubject}}/>
         </div>
         <div class="auk-form-group">
+          <WebComponents::AuLabel for="defaultInput">{{t "test-attachement-piece-id" }}</WebComponents::AuLabel>
+          <WebComponents::AuInput @value={{this.pieceId}} type="text" id="blockInput" @block="true" {{on "change" this.onChangePieceId}}/>
+        </div>
+        <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">{{t "content" }}</WebComponents::AuLabel>
           <WebComponents::AuTextarea @rows="2" @value={{this.content}} {{on "change" this.onChangeContent}}></WebComponents::AuTextarea>
         </div>
