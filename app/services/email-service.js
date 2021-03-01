@@ -17,7 +17,7 @@ export default class emailService extends Service {
     //   'filter[piece][:id:]': this.translateActivity.pieces.map((piece) => piece.id).join(','),
     //   // 'filter[format]': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     // });
-    const folder = await this.store.findRecord('email-folder', CONFIG.EMAIL.OUTBOX.ID);
+    const folder = await this.store.findRecord('mail-folder', CONFIG.EMAIL.OUTBOX.ID);
     alert('Email infra not working yet. Check console for email details.');
     console.info('from', from);
     console.info('to', to);
