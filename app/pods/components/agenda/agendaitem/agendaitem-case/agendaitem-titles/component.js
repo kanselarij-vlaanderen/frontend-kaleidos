@@ -5,8 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
 export default class AgendaitemTitles extends Component {
-  classNames = ['auk-u-mb-8']; // @brenner-company: since this is a glimmer component, this can be removed?
-
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   @tracked showLoader = false;
