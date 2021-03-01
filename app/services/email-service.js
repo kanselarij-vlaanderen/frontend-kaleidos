@@ -35,7 +35,7 @@ export default class emailService extends Service {
     });
     // TODO @sven this in untested:
     if (attachedPieces) {
-      const files = attachedPieces.map((piece) => piece.file);
+      const files = await Promise.all(attachedPieces.map((piece) => piece.file));
       email.set('attachments', files);
     }
     email.save();
