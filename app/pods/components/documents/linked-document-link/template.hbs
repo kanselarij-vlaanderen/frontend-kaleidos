@@ -17,7 +17,14 @@
         <div class="vlc-document-card-toolbar__right">
           <div class="vlc-toolbar__item">
             {{#if this.lastPiece}}
-              <AccessLevelPill @lastPiece={{this.lastPiece}} />
+              <AccessLevelPill
+                @accessLevel={{this.accessLevel}}
+                @confidential={{this.lastPiece.confidential}}
+                @onChangeAccessLevel={{this.changeAccessLevel}}
+                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                @onChangeConfidentiality={{this.changeConfidentiality}}
+              />
             {{/if}}
           </div>
           <div class="vlc-toolbar__item">
@@ -62,7 +69,9 @@
             <div class="vl-accordion__panel">
               {{#each this.reverseSortedPieces as |piece|}}
                 <WebComponents::VlDocument
-                  @piece={{piece}} />
+                  @piece={{piece}}
+                  @didUpdateAccessLevel={{perform this.loadData}}
+                />
               {{/each}}
             </div>
           </div>

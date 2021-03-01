@@ -84,10 +84,12 @@ context('Test the KB functionality', () => {
       cy.setFormalOkOnItemWithIndex(1);
       cy.setFormalOkOnItemWithIndex(2);
 
-      cy.route('/document-containers?**').as('getDocumentContainerOfPieces');
+      // TODO this route is flaky, check why, used general wait instead
+      // cy.route('/document-containers?**').as('getDocumentContainerOfPieces');
       cy.visit(`/vergadering/${result.meetingId}/kort-bestek`);
       cy.get(newsletter.notaUpdates).click();
-      cy.wait('@getDocumentContainerOfPieces');
+      cy.wait(2000);
+      // cy.wait('@getDocumentContainerOfPieces');
       cy.contains(case1TitleShort).should('exist');
       cy.contains(case2TitleShort).should('not.exist');
     });
