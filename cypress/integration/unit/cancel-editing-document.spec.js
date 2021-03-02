@@ -11,7 +11,7 @@ function currentTimestamp() {
 }
 
 function uploadFileToCancel(file) {
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(file.fileName, {
@@ -80,7 +80,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName);
+          cy.get('.auk-h4 > span').contains(file.newFileName);
         });
     });
 
@@ -89,7 +89,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
     cy.get(document.showPiecesHistory).click();
@@ -182,7 +182,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
     cy.get(document.documentCard).within(() => {
-      cy.get('.vl-title--h6').as('documentName');
+      cy.get('.auk-h4').as('documentName');
       cy.get('@documentName').contains(fileName)
         .click();
       cy.get('.vl-input-field--block').click()
@@ -285,7 +285,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(file.newFileName);
+          cy.get('.auk-h4 > span').contains(file.newFileName);
         });
     });
 
@@ -299,7 +299,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
 
@@ -312,7 +312,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}TER`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}TER`);
         });
     });
 
@@ -347,7 +347,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}QUATER`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}QUATER`);
         });
     });
 
@@ -356,19 +356,19 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
+        cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);
       });
     cy.get('@pieces').eq(1)
       .within(() => {
-        cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
+        cy.get('.auk-h4').contains(`${file.newFileName}TER`);
       });
     cy.get('@pieces').eq(2)
       .within(() => {
-        cy.get('.vl-title--h6').contains(`${file.newFileName}BIS`);
+        cy.get('.auk-h4').contains(`${file.newFileName}BIS`);
       });
     cy.get('@pieces').eq(3)
       .within(() => {
-        cy.get('.vl-title--h6').contains(file.newFileName);
+        cy.get('.auk-h4').contains(file.newFileName);
       });
     cy.get('.js-vl-accordion > button').click();
 
@@ -379,19 +379,19 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6').contains(`${file.newFileName}QUATER`);
+        cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);
       });
     cy.get('@pieces').eq(1)
       .within(() => {
-        cy.get('.vl-title--h6').contains(`${file.newFileName}TER`);
+        cy.get('.auk-h4').contains(`${file.newFileName}TER`);
       });
     cy.get('@pieces').eq(2)
       .within(() => {
-        cy.get('.vl-title--h6 ').contains(`${file.newFileName}BIS`);
+        cy.get('.auk-h4 ').contains(`${file.newFileName}BIS`);
       });
     cy.get('@pieces').eq(3)
       .within(() => {
-        cy.get('.vl-title--h6').contains(file.newFileName);
+        cy.get('.auk-h4').contains(file.newFileName);
       });
     cy.get('.js-vl-accordion > button').click();
   });

@@ -67,7 +67,7 @@ function openSubcase(index = 0) {
   cy.get('@subcasesList').eq(index)
     .within(() => {
       cy.wait(1000); // sorry, link is not loaded most of the time
-      cy.get('.vl-title').eq(0)
+      cy.get('.auk-h4').eq(0)
         .click();
     });
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
@@ -92,7 +92,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
   cy.log('changeSubcaseAccessLevel');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get('.vl-title--h4').contains(shortTitle)
+  cy.get('.auk-h3').contains(shortTitle)
     .parents('.auk-u-mb-8')
     .within(() => {
       cy.get('a').click();
@@ -172,7 +172,7 @@ function addSubcaseThemes(themes) {
   cy.log('addSubcaseThemes');
   cy.route('GET', '/themes').as('getThemes');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get('.vl-title--h4').contains('Thema\'s')
+  cy.get('.auk-h3').contains('Thema\'s')
     .parents('.auk-u-mb-8')
     .as('subcaseTheme');
 

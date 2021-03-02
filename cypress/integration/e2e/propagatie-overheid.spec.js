@@ -112,7 +112,7 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.agendaitemDecisionTab).click();
     cy.get(document.documentCard).eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.fileName);
+        cy.get('.auk-h4 > span').contains(file.fileName);
       });
     cy.get(agenda.agendaitemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {

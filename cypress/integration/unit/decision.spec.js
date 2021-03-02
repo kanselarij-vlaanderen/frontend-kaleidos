@@ -94,7 +94,7 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/BIS/);
+        cy.get('.auk-h4 > span').contains(/BIS/);
       });
 
     // Delete the TER piece, the BIS should then become the report
@@ -105,7 +105,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/TER/);
+        cy.get('.auk-h4 > span').contains(/TER/);
         cy.get(document.showPiecesHistory).click();
         cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
@@ -130,7 +130,7 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/BIS/);
+        cy.get('.auk-h4 > span').contains(/BIS/);
         cy.get('.ki-more').click();
       });
 

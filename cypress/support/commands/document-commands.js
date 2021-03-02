@@ -117,7 +117,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     }
   }
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(oldFileName, {
@@ -424,7 +424,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(oldFileName, {
@@ -495,7 +495,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
   cy.log('deleteSinglePiece');
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(fileName, {
@@ -538,7 +538,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
 function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('isPieceDeletable');
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(fileName, {
