@@ -14,12 +14,11 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     this.set('sessionService.selectedAgendaitem', model); // TODO: get rid of this global state
   }
 
-  setupController(controller, model) {
+  setupController(controller) {
     super.setupController(...arguments);
     const {
       meeting,
     } = this.modelFor('agenda');
-    controller.set('meeting', meeting);
-    controller.set('model', model);
+    controller.meeting = meeting;
   }
 }
