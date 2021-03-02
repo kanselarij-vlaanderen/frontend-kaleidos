@@ -18,7 +18,6 @@ import {
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
-import agendaitem from '../../../../adapters/agendaitem';
 import { A } from '@ember/array';
 
 export default Component.extend(FileSaverMixin, {
@@ -239,7 +238,7 @@ export default Component.extend(FileSaverMixin, {
         const agendaitemsToMove = A([]);
         const agendaitemsToRollback = A([]);
         // CHECK IF FORMAL NOT OK NEEDS TO BE ROLLED BACK, FORMAL OK SHOULD NOT BE ON APPROVED AGENDA ACCORDING TO KENNY
-        for (agendaitem of agendaitemsNotFormallyOk) {
+        for (const agendaitem of agendaitemsNotFormallyOk) {
           const previousVersion = await agendaitem.get('previousVersion');
           if (previousVersion) {
             agendaitemsToRollback.pushObject(agendaitem);
@@ -250,7 +249,7 @@ export default Component.extend(FileSaverMixin, {
 
         // Old agenda: new agendaitems that have been moved to the new agenda must be removed from the old agenda, resort old agendaitems
         if (agendaitemsToMove.length > 0) {
-          for (agendaitem of agendaitemsToMove) {
+          for (const agendaitem of agendaitemsToMove) {
             // destroyRecord ensures only this agendaitem is deleted and does not do any cascading deletes
             await agendaitem.destroyRecord();
           }
@@ -259,7 +258,7 @@ export default Component.extend(FileSaverMixin, {
         // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
         if (agendaitemsToRollback.length > 0) {
           await this.agendaService.rollbackAgendaitemsNotFormallyOk(approvedAgenda);
-          for (agendaitem of agendaitemsToRollback) {
+          for (const agendaitem of agendaitemsToRollback) {
             await agendaitem.reload();
             // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
             await agendaitem.hasMany('pieces').reload();
@@ -275,7 +274,7 @@ export default Component.extend(FileSaverMixin, {
         const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
         const newAgendaitemsToReorder = A([]);
         const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
-        for (agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
+        for (const agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
           const previousVersion = await agendaitem.get('previousVersion');
           if (!previousVersion) {
             newAgendaitemsToReorder.pushObject(agendaitem);
@@ -337,7 +336,7 @@ export default Component.extend(FileSaverMixin, {
         const isEditor = this.currentSessionService.isEditor;
         const agendaitemsToRemove = A([]);
         const agendaitemsToRollback = A([]);
-        for (agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
+        for (const agendaitem of agendaitemsWithStatusDifferentFromFormallyOk) {
           const previousVersion = await agendaitem.get('previousVersion');
           if (previousVersion) {
             agendaitemsToRollback.pushObject(agendaitem);
@@ -348,7 +347,7 @@ export default Component.extend(FileSaverMixin, {
 
         // Old agenda: new agendaitems that need te be removed from the agenda must be propoable again, resort old agendaitems
         if (agendaitemsToRemove.length > 0) {
-          for (agendaitem of agendaitemsToRemove) {
+          for (const agendaitem of agendaitemsToRemove) {
             await this.agendaService.deleteAgendaitem(agendaitem);
           }
         }
@@ -356,7 +355,7 @@ export default Component.extend(FileSaverMixin, {
         // Old agenda: already approved agendaitems that were not formally ok will be rolled back to the previous version
         if (agendaitemsToRollback.length > 0) {
           await this.agendaService.rollbackAgendaitemsNotFormallyOk(agendaToApproveAndClose);
-          for (agendaitem of agendaitemsToRollback) {
+          for (const agendaitem of agendaitemsToRollback) {
             await agendaitem.reload();
             // Do we need to reload everything, possible side effects? we could check if a value was present, and only reload those.
             await agendaitem.hasMany('pieces').reload();
