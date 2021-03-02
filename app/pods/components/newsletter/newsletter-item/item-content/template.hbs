@@ -58,7 +58,7 @@
   <div class="vl-u-text">
     {{#if (not agendaitem.showAsRemark)}}
       {{#if (not newsletterInfo.richtext)}}
-        <p class="vl-u-text auk-u-italic vl-u-text--muted">
+        <p class="vl-u-text auk-u-italic auk-u-muted">
           {{t "no-newsletter-info"}}
         </p>
       {{else}}
@@ -72,7 +72,7 @@
 </div>
 {{#if allowEditing}}
   {{#if (await newsletterInfo.remark)}}
-    <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+    <p class="auk-u-muted vl-u-text--capitalize vl-u-text--small">
       {{t "remark"}}: {{await newsletterInfo.remark}}
     </p>
   {{/if}}
@@ -96,7 +96,7 @@
   </div>
 {{else if (and allowEditing newsletterInfo.richtext)}}
   <div class="auk-u-mb-2">
-    <p class="vl-u-text--muted vl-u-text--capitalize">
+    <p class="auk-u-muted vl-u-text--capitalize">
       {{t "no-themes-agendaitem"}}
     </p>
   </div>

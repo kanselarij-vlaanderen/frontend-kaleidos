@@ -16,14 +16,14 @@ export default Component.extend({
 
   disabledNext: computed('isLastPage', function() {
     if (this.get('isLastPage')) {
-      return 'disabled vl-u-text--muted';
+      return 'disabled auk-u-muted';
     }
     return null;
   }),
 
   disabledPrev: computed('isFirstPage', function() {
     if (this.get('isFirstPage')) {
-      return 'disabled vl-u-text--muted';
+      return 'disabled auk-u-muted';
     }
     return null;
   }),

@@ -13,12 +13,12 @@
         {{sanitize-html raw=true value=this.newsletterInfo.richtext}}
       </div>
       {{#if this.newsletterInfo.remark}}
-        <p class="vl-u-text--muted vl-u-text--capitalize vl-u-text--small">
+        <p class="auk-u-muted vl-u-text--capitalize vl-u-text--small">
           {{this.newsletterInfo.remark}}
         </p>
       {{/if}}
     {{else}}
-      <p class="vl-u-text--muted auk-u-italic">
+      <p class="auk-u-muted auk-u-italic">
         {{t "no-newsletter-info"}}
       </p>
     {{/if}}
@@ -27,7 +27,7 @@
     {{#each (await @agendaitem.mandatees) as |mandatee|}}
       {{await mandatee.person.nameToDisplay}}<br>
     {{else}}
-      <p class="vl-u-text--muted auk-u-italic">
+      <p class="auk-u-muted auk-u-italic">
         {{t "no-mandatees"}}
       </p>
     {{/each}}
