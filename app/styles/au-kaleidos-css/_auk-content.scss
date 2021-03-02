@@ -10,7 +10,7 @@
 }
 
 .auk-content strong {
-  color: $au-gray-1000;
+  color: $au-black;
 }
 
 .auk-content h1, .auk-h1,
@@ -44,16 +44,10 @@
   font-weight: 500;
 }
 
-.auk-content h5, .auk-h5 {
-  font-size: 1.3rem;
-  margin: 0 0 1.3rem;
-  font-weight: 500;
-}
-
 .auk-content p small, .auk-body-2 {
   font-size: 1.3rem;
 }
 
-.auk-ul {
+.auk-content ul, .auk-ul {
   list-style: inside;
 }
