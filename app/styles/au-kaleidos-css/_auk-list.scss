@@ -1,0 +1,31 @@
+/* ==========================================================================
+  auk-list
+  ========================================================================== */
+
+.auk-list__item {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.auk-list__item {
+  .auk-button-toolbar {
+    margin-left: auto;
+  }
+}
+
+.auk-list--bordered {
+  .auk-list__item {
+    border-bottom: 0.1rem solid $au-gray-300;
+    padding: 1.2rem 1rem;
+    margin: 0;
+
+    &:last-child {
+      border: none;
+    }
+  }
+}
+
+.auk-list__item--gray-100 {
+  background: $au-gray-100;
+}

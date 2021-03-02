@@ -1,0 +1,12 @@
+/* ==========================================================================
+  auk-pill-list
+   ========================================================================== */
+
+.auk-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .auk-pill:not(:first-of-type) {
+    margin-left: .5rem;
+  }
+}

@@ -1,0 +1,51 @@
+/* ==========================================================================
+  Text utilities
+   ========================================================================== */
+
+.auk-u-muted {
+  color: $au-gray-600 !important;
+}
+
+.auk-u-italic {
+  font-style: italic !important;
+}
+
+.auk-u-text-small {
+  font-size: 1.3rem !important;
+}
+
+.auk-u-text-bold {
+  font-weight: 500 !important;
+}
+
+.auk-u-text-normal {
+  font-weight: normal !important;
+}
+
+.auk-u-text-nowrap {
+  white-space: nowrap !important;
+}
+
+.auk-u-text-prewrap {
+  white-space: pre-wrap !important;
+}
+
+.auk-u-text-align--right {
+  text-align: right !important;
+}
+
+.auk-u-text-align--center {
+  text-align: center !important;
+}
+
+.auk-u-text-pre {
+  white-space: pre !important;
+}
+
+.auk-u-text-pre-line {
+  white-space: pre-line !important;
+}
+
+.auk-u-text-decoration-underline {
+  text-decoration: underline !important;
+}
