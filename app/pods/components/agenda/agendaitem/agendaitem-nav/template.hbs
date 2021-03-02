@@ -1,4 +1,4 @@
-<WebComponents::AuTabs {{did-update this.checkExistance this.agendaitem}}>
+<WebComponents::AuTabs {{did-update this.checkExistance this.agendaitem}} data-test-agenda-agendaitem>
   <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.index" data-test-agenda-agendaitem-tab="agendaitem-case">{{capitalize (t "case")}}</WebComponents::AuTab>
   <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.documents" data-test-agenda-agendaitem-tab="documents">{{capitalize (t "documents")}}</WebComponents::AuTab>
   {{#if (not this.agendaitem.isApproval) }}

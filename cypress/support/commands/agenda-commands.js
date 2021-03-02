@@ -608,7 +608,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
     .click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
-  cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
+  cy.get('[data-test-agenda-agendaitem] .active').then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
