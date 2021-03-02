@@ -42,7 +42,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'govflanders/components/_pager';
 @import 'govflanders/components/_pill';
 @import 'govflanders/components/_radio';
-@import 'govflanders/components/_tabs';
 @import 'govflanders/components/_textarea';
 @import 'govflanders/components/_titles';
 @import 'govflanders/components/_typography';
@@ -63,7 +62,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'govflanders/additions/_loader';
 @import 'govflanders/additions/_modal';
 @import 'govflanders/additions/_pill';
-@import 'govflanders/additions/_tabs';
 
 // Additions to existing utilities
 @import 'govflanders/additions/_background';
