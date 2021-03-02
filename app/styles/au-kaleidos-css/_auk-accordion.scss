@@ -1,0 +1,12 @@
+/* ==========================================================================
+  auk-accordion
+  ========================================================================== */
+
+.auk-accordion__content {
+  display: none;
+  transition: max-height 0.3s cubiauk-bezier(0, 1.05, 0, 1), overflow 0s 0s;
+}
+
+.auk-accordion--is-active .auk-accordion__content {
+  display: block;
+}
