@@ -1,0 +1,31 @@
+/* ==========================================================================
+  auk-code
+   ========================================================================== */
+
+.auk-code {
+  background-color: #EEE;
+  color: #905;
+  padding: .2rem .4rem;
+}
+
+.auk-code, .auk-pre {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 1.3rem;
+}
+
+.auk-pre {
+  text-align: left;
+  white-space: pre-wrap;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  tab-size: 4;
+  hyphens: none;
+  background: #EEE;
+  padding: 1.5rem;
+}
+
+.auk-pre > .auk-code {
+  background: none;
+}

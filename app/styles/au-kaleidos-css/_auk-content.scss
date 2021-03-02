@@ -1,0 +1,59 @@
+/* ==========================================================================
+  auk-content
+   ========================================================================== */
+
+.auk-content p {
+  font-size: 1.6rem;
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+  color: $au-gray-700;
+}
+
+.auk-content strong {
+  color: $au-gray-1000;
+}
+
+.auk-content h1, .auk-h1,
+.auk-content h2, .auk-h2,
+.auk-content h3, .auk-h3,
+.auk-content h4, .auk-h4 {
+  color: $au-gray-900;
+}
+
+.auk-content h1, .auk-h1 {
+  font-size: 3.2rem;
+  margin: 0 0 3.2rem;
+  font-weight: 500;
+}
+
+.auk-content h2, .auk-h2 {
+  font-size: 2.6rem;
+  margin: 0 0 2.6rem;
+  font-weight: 500;
+}
+
+.auk-content h3, .auk-h3 {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  font-weight: 500;
+}
+
+.auk-content h4, .auk-h4 {
+  font-size: 1.6rem;
+  margin: 0 0 1.6rem;
+  font-weight: 500;
+}
+
+.auk-content h5, .auk-h5 {
+  font-size: 1.3rem;
+  margin: 0 0 1.3rem;
+  font-weight: 500;
+}
+
+.auk-content p small, .auk-body-2 {
+  font-size: 1.3rem;
+}
+
+.auk-ul {
+  list-style: inside;
+}
