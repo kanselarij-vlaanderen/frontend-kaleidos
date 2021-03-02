@@ -1,0 +1,16 @@
+/* ==========================================================================
+  auk-scroll-wrapper
+   ========================================================================== */
+
+.auk-scroll-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.auk-scroll-wrapper__body {
+  margin-bottom: 5rem;
+  overflow: scroll;
+  flex: 1;
+  height: 100%;
+}

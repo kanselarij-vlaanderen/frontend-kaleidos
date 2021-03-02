@@ -1,0 +1,40 @@
+/* ==========================================================================
+  e-base
+   ========================================================================== */
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  color: $au-gray-800;
+  line-height: 1.375;
+  font-family: flanders-sans, sans-serif;
+  font-size: 1.5rem;
+}
+
+a {
+  color: $au-blue-700;
+}
+
+strong {
+  font-weight: 500;
+}
+
+i, em {
+  font-style: italic;
+}
+
+hr {
+  border: none;
+  border-top: .1rem solid $au-gray-300;
+}
+
+abbr[title] {
+  text-decoration: none;
+  opacity: 0.5;
+}
