@@ -482,6 +482,7 @@
   "delete-meeting-message": "Weet u zeker dat u de vergadering wil verwijderen? Alle bijbehorende agendapunten en documenten zullen ook verwijderd worden.",
   "no-signature-yet": "Geen handtekening beschikbaar",
   "subject": "Onderwerp",
+  "test-attachement-piece-id": "Test bijlage piece id",
   "decision-in-newsletter": "De beslissing in kort bestek",
   "title-and-content": "Titel en inhoud",
   "confidential": "Vertrouwelijk",
@@ -538,6 +539,7 @@
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
   "no-themes-selected-message": "Er zijn nog geen thema's geselecteerd. Bent u zeker dat u het kort bestek wilt opslaan?",
+  "search-legend-title": "Hulp bij zoeken",
   "search-legend-header-example": "Voorbeeldtoepassing",
   "search-legend-header-explanation": "Betekenis",
   "search-legend-and-example": "Digitale+meters",
@@ -806,5 +808,6 @@
   "publications-table-derived-publicationtype-info": "Wordt afgeleid op basis van de documenten binnen de publicatie",
   "filter-plural": "Filteren",
   "reset": "Reset",
-  "to-case": "Naar dossier"
+  "to-case": "Naar dossier",
+  "submission-activity": "Indieningsactiviteit"
 }

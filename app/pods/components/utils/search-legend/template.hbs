@@ -1,44 +1,45 @@
-<table class="vl-data-table auk-u-cursor-default">
-  <thead>
-    <tr>
-      <th class="vl-data-table-col-2 vl-data-table__header-title">
-        {{t "search-legend-header-example"}}
-      </th>
-      <th class="vl-data-table-col-9 vl-data-table__header-title">
-        {{t "search-legend-header-explanation"}}
-      </th>
-      <th class="vl-data-table-col-9 vl-data-table__header-title">
-        <button type="button" class="vl-button vl-button--link-muted vl-button--icon auk-u-cursor-pointer" {{action "close"}}>
-          <i class="vl-button__icon ki-close" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
-            {{t "close"}}
-          </span>
+<div class="auk-popover__header">
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
+        <h4 class="auk-toolbar__title">{{t "search-legend-title"}}</h4>
+      </div>
+    </div>
+    <div class="auk-toolbar-complex__right">
+      <div class="auk-toolbar-complex__item">
+        <button class="auk-button-link auk-button-link--muted" type="button" {{action "close"}}>
+          <div class="auk-icon auk-icon--close auk-icon--default">
+            <i class="ki ki-close"></i>
+          </div>
+          <span class="auk-u-sr-only">{{t "close"}}</span>
         </button>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="vl-data-table-col-1">{{t "search-legend-and-example"}}</td>
-      <td class="vl-data-table-col-12">{{t "search-legend-and-explanation"}}</td>
-    </tr>
-  {{!-- Disabled this for now, because this doesn't actually work yet
-  <tr>
-    <td class="vl-data-table-col-1">{{t "search-legend-or-example"}}</td>
-    <td class="vl-data-table-col-12">{{t "search-legend-or-explanation"}}</td>
-  </tr>
-  --}}
-    <tr>
-      <td class="vl-data-table-col-1">{{t "search-legend-not-example"}}</td>
-      <td class="vl-data-table-col-12">{{t "search-legend-not-explanation"}}</td>
-    </tr>
-    <tr>
-      <td class="vl-data-table-col-1">{{t "search-legend-order-example"}}</td>
-      <td class="vl-data-table-col-12">{{t "search-legend-order-explanation"}}</td>
-    </tr>
-    <tr>
-      <td class="vl-data-table-col-1">{{t "search-legend-wildcard-example"}}</td>
-      <td class="vl-data-table-col-12">{{t "search-legend-wildcard-explanation"}}</td>
-    </tr>
-  </tbody>
-</table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="auk-popover__body">
+  <table class="auk-table">
+    <thead>
+      <tr>
+        <th>{{t "search-legend-header-example"}}</th>
+        <th>{{t "search-legend-header-explanation"}}</th>
+      </tr>
+      <tr>
+        <td class="auk-table__col--4">{{t "search-legend-and-example"}}</td>
+        <td class="auk-table__col--8">{{t "search-legend-and-explanation"}}</td>
+      </tr>
+      <tr>
+        <td class="auk-table__col--4">{{t "search-legend-not-example"}}</td>
+        <td class="auk-table__col--8">{{t "search-legend-not-explanation"}}</td>
+      </tr>
+      <tr>
+        <td class="auk-table__col--4">{{t "search-legend-order-example"}}</td>
+        <td class="auk-table__col--8">{{t "search-legend-order-explanation"}}</td>
+      </tr>
+      <tr>
+        <td class="auk-table__col--4">{{t "search-legend-wildcard-example"}}</td>
+        <td class="auk-table__col--8">{{t "search-legend-wildcard-explanation"}}</td>
+      </tr>
+    </thead>
+  </table>
+</div>

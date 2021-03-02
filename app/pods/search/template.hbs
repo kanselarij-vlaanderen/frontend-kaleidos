@@ -18,17 +18,19 @@
   <div class="auk-u-m-8 auk-u-mt-4 vlc-u-box-model-maximize-height">
     <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
       <div class="vlc-input-field-block auk-o-grid-col-4">
-        <div class="auk-u-flex">
+        <div class="auk-u-flex auk-u-flex--align-baseline">
           <label class="vl-form__label u-padding--right--tinier" for="dossierId">
             {{capitalize (t "keyword")}}
           </label>
-          <i
-            class="ki-circle-info auk-u-cursor-pointer"
-            aria-hidden="true"
-            {{on "click" this.openPopover}}
-          >
+          <span>
+            <i
+              class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
+              aria-hidden="true"
+              {{on "click" this.openPopover}}
+            >
+            </i>
             <AttachPopover
-              @class="ember-attacher-popper vlc-search-legend-popover auk-u-cursor-default"
+              @class="auk-popover"
               @showOn="click"
               @placement="right"
               @hideOn="clickout"
@@ -37,7 +39,7 @@
             >
               <Utils::SearchLegend @userClickedClose={{this.closePopover}}/>
             </AttachPopover>
-          </i>
+          </span>
         </div>
         <Input
           data-test-searchfield

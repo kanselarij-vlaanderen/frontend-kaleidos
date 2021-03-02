@@ -125,7 +125,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  async setPreviousPiecesFromAgendaitem(documentContainer) {
+  async setPreviousPiecesFromAgendaitem(deletedPiece) {
+    // TODO: Assess if we need to go over container. `previousVersion` (if existant) might suffice?
+    const documentContainer = await deletedPiece.documentContainer;
     if (documentContainer) {
       const lastPiece = await documentContainer.get('lastPiece'); // TODO: what is the purpose of getting lastPiece here
       if (this.agendaitem && lastPiece) {

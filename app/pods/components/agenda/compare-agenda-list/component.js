@@ -20,8 +20,6 @@ export default class CompareAgendaList extends Component {
   @service agendaService;
   @alias('agendaService.addedAgendaitems') addedAgendaitems;
 
-  classNames = ['vlc-scroll-wrapper__body'];
-
   agendaToCompare = null;
   currentAgenda = null;
   currentAgendaGroups = null;

@@ -11,7 +11,9 @@ export default class LinkedDocumentLink extends Component {
 
   @tracked isExpandedVersionHistory = false;
   @tracked isOpenVerifyDeleteModal = false;
+
   @tracked sortedPieces = [];
+  @tracked accessLevel;
 
   constructor() {
     super(...arguments);
@@ -27,6 +29,7 @@ export default class LinkedDocumentLink extends Component {
     } else {
       this.sortedPieces = A(containerPieces);
     }
+    this.accessLevel = yield this.lastPiece.accessLevel;
   }
 
   get lastPiece() {
@@ -56,5 +59,27 @@ export default class LinkedDocumentLink extends Component {
   verifyDeletePieceLink() {
     this.args.onUnlinkDocumentContainer(this.args.documentContainer);
     this.isOpenVerifyDeleteModal = false;
+  }
+
+  @action
+  changeAccessLevel(al) {
+    this.accessLevel = this.lastPiece.set('accessLevel', al);
+  }
+
+  @action
+  async saveAccessLevel() {
+    await this.lastPiece.save();
+    this.loadData.perform();
+  }
+
+  @action
+  async changeConfidentiality(confidential) {
+    this.lastPiece.set('confidential', confidential);
+    await this.lastPiece.save();
+  }
+
+  @action
+  async reloadAccessLevel() {
+    this.accessLevel = await this.lastPiece.belongsTo('accessLevel').reload();
   }
 }
