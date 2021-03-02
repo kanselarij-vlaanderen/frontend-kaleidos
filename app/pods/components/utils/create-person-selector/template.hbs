@@ -28,32 +28,28 @@
     </button>
   </div>
 {{else}}
-  <div class="auk-u-m-2">
-    <div class="auk-u-m-2">
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "first-name")}}
-        {{web-components/vl-form-input
-          data-test-create-person-firstname
-          value=firstName
-        }}
-      </div>
-      <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "name")}}
-        {{web-components/vl-form-input
-          data-test-create-person-lastname
-          value=lastName
-        }}
-      </div>
-    </div>
-    <div class="vl-action-group vl-action-group--align-right">
-      <a href="" class="vl-link" {{action "resetValuesAndCancelCreation"}}>
-        {{t "cancel"}}
-      </a>
-      {{web-components/vl-save-button
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "createPerson")
-      }}
-    </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "first-name")}}
+    {{web-components/vl-form-input
+      data-test-create-person-firstname
+      value=firstName
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "name")}}
+    {{web-components/vl-form-input
+      data-test-create-person-lastname
+      value=lastName
+    }}
+  </div>
+  <div class="vl-action-group vl-action-group--align-right">
+    <a href="" class="vl-link" {{action "resetValuesAndCancelCreation"}}>
+      {{t "cancel"}}
+    </a>
+    {{web-components/vl-save-button
+      text=(t "save")
+      isLoading=isLoading
+      saveAction=(action "createPerson")
+    }}
   </div>
 {{/if}}
