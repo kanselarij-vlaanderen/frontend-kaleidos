@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
-export default class AgendaItemsAgendaRoute extends Route {
+export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
     filter: {
       refreshModel: false, // Free-text search is applied in controller

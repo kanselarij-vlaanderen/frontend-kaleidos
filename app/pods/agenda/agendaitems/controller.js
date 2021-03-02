@@ -8,7 +8,7 @@ import { task } from 'ember-concurrency-decorators';
 import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { animationFrame } from 'ember-concurrency';
 
-export default class AgendaitemsAgendaController extends Controller {
+export default class AgendaAgendaitemsController extends Controller {
   queryParams = [{
     filter: {
       type: 'string',
