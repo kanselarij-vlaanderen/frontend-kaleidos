@@ -7,10 +7,11 @@
   border-right: 1px solid $ghost;
   height: 100%;
 
-  .vl-title {
+  .auk-h4 {
     display: flex;
     align-items: center;
     margin-right: .8rem;
+    margin-bottom: 0;
 
     .vl-icon {
       &:before {
