@@ -1,7 +1,7 @@
 <div class="vlc-container-center">
   <Utils::LogoHeader />
   <div class="auk-u-mb-8">
-    <h1 class="vl-title vl-title--h2">
+    <h1 class="auk-h1">
       {{await title}}
       <br/>
       <span class="auk-u-mt-2 vl-u-text--muted">
@@ -17,7 +17,7 @@
       {{#if agendaitemGroup.agendaitems.length}}
         <div class="auk-u-mb-4">
           {{#each (await agendaitemGroup.mandatees) as |mandatee|}}
-            <h2 class="vl-title vl-title--h4">
+            <h2 class="auk-h3">
               {{mandatee.title}}
             </h2>
           {{/each}}
@@ -27,7 +27,7 @@
             {{#if (not agendaitem.isEditing)}}
               <div class="auk-u-mb-2">
                 <div class="auk-u-flex auk-u-flex--justify-between">
-                  <h3 class="vl-title vl-title--h5">
+                  <h3 class="auk-h4">
                     {{agendaitem.number}}
                     .
                     {{agendaitem.titlePress}}
