@@ -44,9 +44,11 @@ export default ModelWithModifier.extend({
   }),
   nextVersion: belongsTo('agendaitem', {
     inverse: 'previousVersion',
+    serialize: false,
   }),
   previousVersion: belongsTo('agendaitem', {
     inverse: 'nextVersion',
+    serialize: false,
   }),
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,
