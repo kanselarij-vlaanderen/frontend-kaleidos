@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { animationFrame } from 'ember-concurrency';
@@ -40,10 +39,6 @@ export default class AgendaSidebar extends Component {
    * @argument notas
    * @argument announcements
    */
-  @service sessionService;
-  @service('current-session') currentSessionService;
-  @service agendaService;
-
   @tracked isShowingChanges = false;
   @tracked groupedNotas;
   @tracked isDesignAgenda;
