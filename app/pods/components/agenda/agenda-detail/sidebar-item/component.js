@@ -9,7 +9,6 @@ export default class SidebarItem extends Component {
    * INFO arguments from parent.
    * @agendaitem={{agendaitem}}
    * @argument isActive: boolean indicating if the component should be highlighted as the active item
-   * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
   @service store;
@@ -49,14 +48,6 @@ export default class SidebarItem extends Component {
   @action
   onExit() {
     this.renderDetails = false;
-  }
-
-  @action
-  async openDetailPage() {
-    if (!this.isEditingOverview && !this.isComparing) {
-      const agendaitem = await this.store.findRecord('agendaitem', this.args.agendaitem.id);
-      this.args.selectAgendaitem(agendaitem);
-    }
   }
 
   @action

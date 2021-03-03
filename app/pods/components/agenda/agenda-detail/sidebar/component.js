@@ -56,11 +56,6 @@ export default class AgendaSidebar extends Component {
   }
 
   @action
-  selectAgendaitemAction(agendaitem) {
-    this.args.selectAgendaitem(agendaitem);
-  }
-
-  @action
   toggleChangesOnly() {
     this.isShowingChanges = !this.isShowingChanges;
   }
