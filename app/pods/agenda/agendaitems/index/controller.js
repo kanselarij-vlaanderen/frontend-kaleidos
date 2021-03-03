@@ -1,5 +1,8 @@
 import Controller, { inject as controller } from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -20,7 +23,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @action
   searchAgendaitems(value) {
-    this.agendaitemsController.filter = value;
+    set(this.agendaitemsController, 'filter', value);
   }
 
   @task
@@ -33,7 +36,7 @@ export default class AgendaitemsAgendaController extends Controller {
 
   @action
   toggleShowModifiedOnly() {
-    this.agendaitemsController.showModifiedOnly = !this.agendaitemsController.showModifiedOnly;
+    set(this.agendaitemsController, 'showModifiedOnly', !this.agendaitemsController.showModifiedOnly);
   }
 
   @action
