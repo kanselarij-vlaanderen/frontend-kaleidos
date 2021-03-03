@@ -23,7 +23,7 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
-  @tracked isRetracted = this.args.agendaitem.retracted;
+  @alias('args.agendaitem.retracted') isRetracted;
 
   @tracked renderDetails = null;
 
