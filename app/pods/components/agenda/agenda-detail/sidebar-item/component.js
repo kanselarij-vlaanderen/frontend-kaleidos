@@ -16,12 +16,7 @@ export default class SidebarItem extends Component {
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
-  @service store;
-  @service sessionService;
   @service router;
-
-  @alias('args.agendaitem.agendaActivity.subcase') subcase;
-  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   @alias('args.agendaitem.retracted') isRetracted;
   @tracked subcase;
