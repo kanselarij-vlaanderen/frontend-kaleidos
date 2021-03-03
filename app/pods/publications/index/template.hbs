@@ -30,7 +30,7 @@
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
-          <th>{{t "numac-number"}}</th>
+          <th>{{t "publications-table-numacnummer-bs"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
@@ -72,10 +72,6 @@
             @field="publishedAt"
             @label={{t "publications-table-publication-date"}}
           />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.numacNuberBsFilterOption}}
-          <th>{{t "publications-table-numacnummer-bs"}}</th>
         {{/if}}
 
         {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
@@ -141,11 +137,21 @@
         {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
         {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
           <td class="auk-table__col--6">
-            {{if
+            {{#if row.case.shortTitle}}
+              <WebComponents::AuAbbreviatedText @text={{row.case.shortTitle}} @size="150"/>
+            {{else}}
+              {{#if row.case.title}}
+                <WebComponents::AuAbbreviatedText @text={{row.case.title}} @size="150"/>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            {{/if}}
+            {{!-- <WebComponents::AuAbbreviatedText @text={{this.titleText}} @size="150" @custom="true" /> --}}
+            {{!-- {{if
               row.case.shortTitle
               row.case.shortTitle
               (if row.case.title row.case.title (t "dash"))
-            }}
+            }} --}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
@@ -160,14 +166,16 @@
         {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
           <td>
             {{#each row.numacNumbers as |numac|}}
-              <WebComponents::AuPill>{{numac.name }}</WebComponents::AuPill>
+              <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
+            {{else}}
+              {{t "dash"}}
             {{/each}}
           </td>
         {{/if}}
         {{#if this.filterTableColumnOptionKeys.derivedPublicationTypeFilterOption}}
           <td>
             {{#if row.deducedType}}
-              {{ row.deducedType.label }}
+              {{row.deducedType.label}}
             {{else}}
               {{t "dash"}}
             {{/if}}
@@ -261,11 +269,11 @@
                 (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
               }}
                 <WebComponents::AuStatusPill @status="done">
-                  {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+                  {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
                 </WebComponents::AuStatusPill>
               {{else}}
                 <WebComponents::AuStatusPill @status="in-progress">
-                  {{ await row.translationRequestsFinished }} / {{ await row.translationRequestsTotal }}
+                  {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
                 </WebComponents::AuStatusPill>
               {{/if}}
             {{else}}
@@ -288,11 +296,11 @@
                 (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
               }}
                 <WebComponents::AuStatusPill @status="done">
-                  {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+                  {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
                 </WebComponents::AuStatusPill>
               {{else}}
                 <WebComponents::AuStatusPill @status="in-progress">
-                  {{ await row.publishpreviewRequestsFinished }} / {{ await row.publishpreviewRequestsTotal }}
+                  {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
                 </WebComponents::AuStatusPill>
               {{/if}}
             {{else}}
@@ -310,6 +318,8 @@
                   {{t "priority-procedure"}}
                 </p>
               </EmberTooltip>
+            {{else}}
+              {{t "dash"}}
             {{/if}}
           </td>
         {{/if}}
@@ -323,6 +333,8 @@
                   {{row.remark}}
                 </p>
               </EmberTooltip>
+            {{else}}
+              {{t "dash"}}
             {{/if}}
           </td>
         {{/if}}

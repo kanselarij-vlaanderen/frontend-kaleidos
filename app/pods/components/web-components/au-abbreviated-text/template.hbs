@@ -1,10 +1,16 @@
 {{#if this.textTooLong}}
   <div class="auk-u-flex">
-    {{this.textAbbreviated}}
+    {{#if this.isCustom}}
+      <div class="{{@customTextClass}}">{{this.textAbbreviated}}</div>
+    {{else}}
+      {{this.textAbbreviated}}
+    {{/if}}
     <WebComponents::AuButtonLink
             @icon="circle-more"
             @skin="mute"
-            @layout="icon-only">
+            @layout="icon-only"
+            class="auk-u-flex--vertical-center"
+            >
       <EmberTooltip @tooltipClass="auk-tooltip">
         {{@text}}
       </EmberTooltip>
@@ -12,9 +18,7 @@
   </div>
 {{else}}
   {{#if this.isCustom}}
-    <h4 class="auk-toolbar-complex__title" data-test-publication-detail-menu-short-title>
-      {{@text}}
-    </h4>
+    <div class="{{@customTextClass}}">{{@text}}</div>
   {{else}}
     {{@text}}
   {{/if}}
