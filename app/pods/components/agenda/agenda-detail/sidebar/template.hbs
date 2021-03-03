@@ -18,25 +18,29 @@
   </div>
 </div>
 <div>
-  {{#each this.groupedNotas as |agendaitemGroup index|}}
-    {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
-      <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
-    {{/unless}}
-    {{#each agendaitemGroup.agendaitems as |agendaitem|}}
-      <div
-        data-test-agenda-detail-sidebar-sub-item
-        class="vlc-agenda-detail-sidebar__sub-item">
-        <Agenda::AgendaDetail::SidebarItem
-          @agendaitem={{agendaitem}}
-          @isActive={{eq @activeItem agendaitem}}
-        />
+  {{#if this.groupNotasOnGroupName.isIdle}}
+    {{#each this.groupedNotas as |agendaitemGroup index|}}
+      {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
+        <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
+      {{/unless}}
+      {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+        <div
+          data-test-agenda-detail-sidebar-sub-item
+          class="vlc-agenda-detail-sidebar__sub-item">
+          <Agenda::AgendaDetail::SidebarItem
+            @agendaitem={{agendaitem}}
+            @isActive={{eq @activeItem agendaitem}}
+          />
+        </div>
+      {{/each}}
+    {{else}}
+      <div class="vlc-agenda-detail-sidebar__no-items-message">
+        <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
       </div>
     {{/each}}
   {{else}}
-    <div class="vlc-agenda-detail-sidebar__no-items-message">
-      <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
-    </div>
-  {{/each}}
+    <WebComponents::AuLoadingPage/>
+  {{/if}}
 </div>
 <div class="vlc-agenda-detail-sidebar-section-header {{unless
                                                        this.selectedAgendaitem
