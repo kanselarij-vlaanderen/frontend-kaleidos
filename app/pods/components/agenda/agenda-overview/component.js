@@ -2,7 +2,6 @@ import AgendaSidebar from 'frontend-kaleidos/pods/components/agenda/agenda-detai
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaOverview extends AgendaSidebar {
   /**
@@ -20,12 +19,6 @@ export default class AgendaOverview extends AgendaSidebar {
 
   @tracked isEditingOverview = null;
   @tracked showLoader = null;
-  @tracked isDesignAgenda;
-
-  constructor() {
-    super(...arguments);
-    this.determineIfDesignAgenda.perform();
-  }
 
   get isDraggingEnabled() {
     return this.currentSessionService.isEditor && this.isDesignAgenda;
@@ -34,11 +27,5 @@ export default class AgendaOverview extends AgendaSidebar {
   @action
   toggleIsEditingOverview() {
     this.isEditingOverview = !this.isEditingOverview;
-  }
-
-  @task
-  *determineIfDesignAgenda() {
-    const agendaStatus = yield this.args.currentAgenda.status;
-    this.isDesignAgenda = agendaStatus.isDesignAgenda;
   }
 }

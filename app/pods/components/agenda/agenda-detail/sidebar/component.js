@@ -48,10 +48,12 @@ export default class AgendaSidebar extends Component {
 
   @tracked isShowingChanges = false;
   @tracked groupedNotas;
+  @tracked isDesignAgenda;
 
   constructor() {
     super(...arguments);
     this.groupNotasOnGroupName.perform(this.args.notas);
+    this.determineIfDesignAgenda.perform();
   }
 
   @task
@@ -70,5 +72,11 @@ export default class AgendaSidebar extends Component {
       }
     }
     this.groupedNotas = agendaitemGroups;
+  }
+
+  @task
+  *determineIfDesignAgenda() {
+    const agendaStatus = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = agendaStatus.isDesignAgenda;
   }
 }
