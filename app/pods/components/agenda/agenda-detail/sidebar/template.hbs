@@ -29,6 +29,7 @@
         <Agenda::AgendaDetail::SidebarItem
           @agendaitem={{agendaitem}}
           @selectAgendaitem={{action "selectAgendaitemAction"}}
+          @isActive={{eq @activeItem agendaitem}}
         />
       </div>
     {{/each}}
@@ -49,7 +50,11 @@
 <div class="auk-u-mb-4">
   {{#each @announcements as |announcement|}}
     <div class="vlc-agenda-detail-sidebar__sub-item">
-      <Agenda::AgendaDetail::SidebarItem @agendaitem={{announcement}} @selectAgendaitem={{action "selectAgendaitemAction"}}/>
+      <Agenda::AgendaDetail::SidebarItem
+        @agendaitem={{announcement}}
+        @selectAgendaitem={{action "selectAgendaitemAction"}}
+        @isActive={{eq @activeItem announcement}}
+      />
     </div>
   {{else}}
     <div class="vlc-agenda-detail-sidebar__no-items-message">

@@ -25,7 +25,7 @@
         </pre>
       </h4>
       {{#if (not @agendaitem.aboutToDelete)}}
-        {{#if (not selectedAgendaitem)}}
+        {{#unless @isActive}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
               <pre class="vl-u-text">
@@ -33,7 +33,7 @@
               </pre>
             {{/if}}
           {{/if}}
-        {{/if}}
+        {{/unless}}
         <div>
 
           <div class="auk-u-flex auk-u-flex--justify-between">

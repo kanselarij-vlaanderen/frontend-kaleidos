@@ -8,6 +8,7 @@ export default class SidebarItem extends Component {
   /**
    * INFO arguments from parent.
    * @agendaitem={{agendaitem}}
+   * @argument isActive: boolean indicating if the component should be highlighted as the active item
    * @selectAgendaitem={{action "selectAgendaitemAction"}}
    */
 
@@ -29,20 +30,13 @@ export default class SidebarItem extends Component {
 
   get class() {
     const classes = [];
-    if (this.isActive) {
+    if (this.args.isActive) {
       classes.push('vlc-agenda-detail-sidebar__sub-item--active');
     }
     if (this.isRetracted) {
       classes.push('vlc-u-opacity-lighter');
     }
     return classes.join(' ');
-  }
-
-  get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
-      return this.args.agendaitem.id === this.selectedAgendaitem.id;
-    }
-    return null;
   }
 
   @action
@@ -67,7 +61,7 @@ export default class SidebarItem extends Component {
 
   @action
   conditionallyScrollIntoView(element) {
-    if (this.isActive) {
+    if (this.args.isActive) {
       element.scrollIntoView({
         behavior: 'smooth', block: 'center',
       });
