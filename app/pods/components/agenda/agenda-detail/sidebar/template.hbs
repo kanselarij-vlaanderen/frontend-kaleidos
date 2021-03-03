@@ -10,7 +10,7 @@
     <div class="vlc-toolbar__item">
       <WebComponents::AuButtonLink
         class="vlc-agenda-items-section-header__link"
-        {{on "click" this.toggleChangesOnly}}
+        {{on "click" @toggleShowModifiedOnly}}
       >
         {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
       </WebComponents::AuButtonLink>

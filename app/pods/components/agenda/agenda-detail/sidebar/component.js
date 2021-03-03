@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -53,11 +52,6 @@ export default class AgendaSidebar extends Component {
   constructor() {
     super(...arguments);
     this.groupNotasOnGroupName.perform(this.args.notas);
-  }
-
-  @action
-  toggleChangesOnly() {
-    this.isShowingChanges = !this.isShowingChanges;
   }
 
   @task
