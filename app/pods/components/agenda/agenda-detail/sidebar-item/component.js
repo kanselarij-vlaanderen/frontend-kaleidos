@@ -23,19 +23,19 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
-  hideLabel = true;
-
-  @tracked isClickable = true;
   @tracked isRetracted = this.args.agendaitem.retracted;
 
   @tracked renderDetails = null;
 
-  get classNameBindings() {
-    return `
-      ${this.isActive ? 'vlc-agenda-detail-sidebar__sub-item--active' : ''}
-      ${this.isClickable ? '' : 'not-clickable'}
-      ${this.isRetracted ? 'vlc-u-opacity-lighter' : ''}
-    `;
+  get class() {
+    const classes = [];
+    if (this.isActive) {
+      classes.push('vlc-agenda-detail-sidebar__sub-item--active');
+    }
+    if (this.isRetracted) {
+      classes.push('vlc-u-opacity-lighter');
+    }
+    return classes.join(' ');
   }
 
   get isActive() {
