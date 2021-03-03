@@ -1,40 +1,34 @@
-<div class="vl-modal" data-test-vl-modal-container data-test-vl-modal>
-  <div class={{backdropClass}}>
-    {{#click-outside
-      action=(action "clickOutside")
-      except-selector=".flatpickr-calendar"
-    }}
-      <div class="vl-modal-dialog {{sizeClass}}" tabindex="-2" role="dialog" data-test-vl-modal-dialogwindow>
-        <div class="vlc-navbar vlc-navbar--bordered-bottom">
-          <div class="vlc-toolbar">
-            <div class="vlc-toolbar__left">
-              <div class="vlc-toolbar__item">
-                <h4 class="vlc-toolbar__title">
-                  {{title}}
-                </h4>
-              </div>
-            </div>
-            <div class="vlc-toolbar__right">
+<div class="auk-modal-backdrop" data-test-vl-modal-container data-test-vl-modal>
+  {{#click-outside
+    action=(action "clickOutside")
+    except-selector=".flatpickr-calendar"
+  }}
+    <div class="auk-modal {{sizeClass}}" tabindex="-2" role="dialog" data-test-vl-modal-dialogwindow>
+      <div class="auk-modal__push">&nbsp;</div>
+      <div class="auk-modal__header auk-modal__header--bordered">
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="left">
+            <WebComponents::AuToolbar::Item>
+              <h2 class="auk-toolbar__title">{{title}}</h2>
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
               {{#if showCloseButton}}
-                <div class="vlc-toolbar__item">
-                  <button type="button" data-test-vl-modal-close
-                          class="vl-button vl-button--link-muted vl-button--icon"
-                    {{action "close"}}
-                  >
-                    <i class="vl-button__icon ki-close"
-                       aria-hidden="true"
-                    ></i>
-                    <span class="vl-u-visually-hidden">
-                      {{t "close"}}
-                    </span>
-                  </button>
-                </div>
+                <WebComponents::AuButton
+                        @icon="close"
+                        @skin="borderless"
+                        @layout="icon-only"
+                        {{action "close"}}
+                        data-test-vl-modal-close>
+                </WebComponents::AuButton>
               {{/if}}
-            </div>
-          </div>
-        </div>
-        {{yield}}
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
       </div>
-    {{/click-outside}}
-  </div>
+      {{yield}}
+      <div class="auk-modal__push">&nbsp;</div>
+    </div>
+  {{/click-outside}}
 </div>

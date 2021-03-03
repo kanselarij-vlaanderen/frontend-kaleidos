@@ -62,13 +62,10 @@ export default Component.extend({
     const {
       large, isDocumentViewer,
     } = this;
-    if (large) {
-      return 'vl-modal-dialog--large';
-    }
     if (isDocumentViewer) {
-      return 'vl-modal-dialog full-height';
+      return 'auk-modal--full-screen';
     }
-    return null;
+    return 'auk-modal--large';
   }),
 
   getFocusableNodes() {
