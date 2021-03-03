@@ -806,5 +806,6 @@
   "publications-table-derived-publicationtype-info": "Wordt afgeleid op basis van de documenten binnen de publicatie",
   "filter-plural": "Filteren",
   "reset": "Reset",
-  "to-case": "Naar dossier"
+  "to-case": "Naar dossier",
+  "config": "Instelling"
 }
