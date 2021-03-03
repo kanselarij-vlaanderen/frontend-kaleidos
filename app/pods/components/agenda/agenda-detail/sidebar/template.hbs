@@ -8,16 +8,12 @@
   </div>
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
-      <a href=""
-         class="vlc-agenda-detail-sidebar-section-header__link"
-        {{action "toggleChangesOnly"}}
+      <WebComponents::AuButtonLink
+        class="vlc-agenda-items-section-header__link"
+        {{on "click" this.toggleChangesOnly}}
       >
-        {{#if (not isShowingChanges)}}
-          {{t "show-changes"}}
-        {{else}}
-          {{t "show-all"}}
-        {{/if}}
-      </a>
+        {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+      </WebComponents::AuButtonLink>
     </div>
   </div>
 </div>
