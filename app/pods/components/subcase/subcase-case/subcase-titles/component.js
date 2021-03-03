@@ -15,12 +15,12 @@ export default class SubcaseTitles extends Component {
   }
 
   async getPillClass() {
-    const baseClass = 'vl-pill vl-u-text--capitalize';
+    const baseClass = 'auk-pill vl-u-text--capitalize';
     const approved = await this.subcase.get('approved');
     if (approved) {
-      return `${baseClass} vl-pill--success`;
+      return `${baseClass} auk-pill--success`;
     }
-    return baseClass;
+    return `${baseClass} auk-pill--default`;
   }
 
   @action

@@ -82,16 +82,14 @@
 }}
   <div class="auk-u-mb-2">
     <div class="auk-u-mt-2">
-      <ul class="newsletter-themes auk-u-p-0 auk-u-m-0">
+      <WebComponents::AuPillList>
         {{#each
           (await newsletterInfo.themes)
         as |theme|
         }}
-          <li class="vl-pill">
-            {{theme.label}}
-          </li>
+          <WebComponents::AuPill>{{theme.label}}</WebComponents::AuPill>
         {{/each}}
-      </ul>
+      </WebComponents::AuPillList>
     </div>
   </div>
 {{else if (and allowEditing newsletterInfo.richtext)}}
