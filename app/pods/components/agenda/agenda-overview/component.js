@@ -1,42 +1,10 @@
-import Component from '@glimmer/component';
+import AgendaSidebar from 'frontend-kaleidos/pods/components/agenda/agenda-detail/sidebar/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 import { task } from 'ember-concurrency-decorators';
-import { animationFrame } from 'ember-concurrency';
 
-class AgendaitemGroup {
-  sortedMandatees;
-  mandateeGroupId;
-  agendaitems;
-
-  constructor(mandatees, firstAgendaItem) {
-    this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
-    this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
-    this.agendaitems = A([firstAgendaItem]);
-  }
-
-  static sortedMandatees(mandatees) {
-    // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
-    const copiedMandatees = A(mandatees.toArray());
-    return copiedMandatees.sortBy('priority');
-  }
-
-  static generateMandateeGroupId(sortedMandatees) {
-    // Assumes mandatees to be sorted
-    return sortedMandatees.mapBy('id').join();
-  }
-
-  async itemBelongsToThisGroup(agendaitem) {
-    const mandatees = await agendaitem.mandatees;
-    const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
-    const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
-    return mandateeGroupId === this.mandateeGroupId;
-  }
-}
-
-export default class AgendaOverview extends Component {
+export default class AgendaOverview extends AgendaSidebar {
   /**
    * @argument notas
    * @argument announcements
@@ -52,12 +20,10 @@ export default class AgendaOverview extends Component {
 
   @tracked isEditingOverview = null;
   @tracked showLoader = null;
-  @tracked groupedNotas;
   @tracked isDesignAgenda;
 
   constructor() {
     super(...arguments);
-    this.groupNotasOnGroupName.perform(this.args.notas);
     this.determineIfDesignAgenda.perform();
   }
 
@@ -68,24 +34,6 @@ export default class AgendaOverview extends Component {
   @action
   toggleIsEditingOverview() {
     this.isEditingOverview = !this.isEditingOverview;
-  }
-
-  @task
-  *groupNotasOnGroupName(agendaitems) {
-    const agendaitemsArray = agendaitems.toArray();
-    const agendaitemGroups = [];
-    let currentAgendaitemGroup;
-    for (const agendaitem of agendaitemsArray) {
-      yield animationFrame(); // Computationally heavy task. This keeps the interface alive
-      if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
-        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
-      } else {
-        const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
-        agendaitemGroups.push(currentAgendaitemGroup);
-      }
-    }
-    this.groupedNotas = agendaitemGroups;
   }
 
   @task
