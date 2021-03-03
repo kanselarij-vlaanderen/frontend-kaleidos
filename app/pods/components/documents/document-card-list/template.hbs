@@ -7,8 +7,8 @@
 as |documents|>
   {{#each documents as |doc|}}
     <Documents::DocumentCard
-      @documentContainer={{doc.documentContainer}}
-      @lastPiece={{doc}}
+      @piece={{doc}}
+      @hideNewerVersions={{false}}
       @didDeletePiece={{@didDeletePiece}}
       @didDeleteContainer={{@didDeleteContainer}}
       @onOpenUploadModal={{@onOpenUploadModal}}
