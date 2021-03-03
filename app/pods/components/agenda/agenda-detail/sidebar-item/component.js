@@ -6,8 +6,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class SidebarItem extends Component {
   /**
-   * INFO arguments from parent.
-   * @agendaitem={{agendaitem}}
+   * @argument agendaitem
    * @argument isActive: boolean indicating if the component should be highlighted as the active item
    */
 
