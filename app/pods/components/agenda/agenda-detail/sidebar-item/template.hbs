@@ -75,9 +75,7 @@
             </div>
 
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-u-flex--align-end">
-              {{#if
-                (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
-              }}
+              {{#if @showFormallyOkStatus}}
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
                 <p class="{{@agendaitem.formallyOkToShow.classNames}}">
                   {{@agendaitem.formallyOkToShow.label}}

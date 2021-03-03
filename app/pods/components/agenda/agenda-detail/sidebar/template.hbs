@@ -30,6 +30,7 @@
           <Agenda::AgendaDetail::SidebarItem
             @agendaitem={{agendaitem}}
             @isActive={{eq @activeItem agendaitem}}
+            @showFormallyOkStatus={{this.isDesignAgenda}}
           />
         </div>
       {{/each}}
@@ -56,6 +57,7 @@
       <Agenda::AgendaDetail::SidebarItem
         @agendaitem={{announcement}}
         @isActive={{eq @activeItem announcement}}
+        @showFormallyOkStatus={{this.isDesignAgenda}}
       />
     </div>
   {{else}}

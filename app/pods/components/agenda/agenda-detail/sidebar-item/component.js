@@ -13,14 +13,13 @@ export default class SidebarItem extends Component {
   /**
    * @argument agendaitem
    * @argument isActive: boolean indicating if the component should be highlighted as the active item
+   * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
   @service store;
   @service sessionService;
-  @service('current-session') currentSessionService;
   @service router;
 
-  @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
