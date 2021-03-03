@@ -3,6 +3,11 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
+import { timeout } from 'ember-concurrency';
+import {
+  dropTask,
+  task
+} from 'ember-concurrency-decorators';
 
 export default class SidebarItem extends Component {
   /**
@@ -20,8 +25,8 @@ export default class SidebarItem extends Component {
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
   @alias('args.agendaitem.retracted') isRetracted;
-
-  @tracked renderDetails = null;
+  @tracked subcase;
+  @tracked newsletterIsVisible;
 
   get class() {
     const classes = [];
@@ -34,16 +39,43 @@ export default class SidebarItem extends Component {
     return classes.join(' ');
   }
 
-  @action
-  onEnter() {
-    setTimeout(() => {
-      this.renderDetails = true;
-    }, 100);
+  @dropTask
+  *lazyLoadSideData() {
+    yield timeout(350);
+    const tasks = [
+      this.loadNewsletterVisibility,
+      this.loadSubcase
+    ].filter((task) => task.performCount === 0);
+    yield Promise.all(tasks.map((task) => task.perform()));
   }
 
   @action
-  onExit() {
-    this.renderDetails = false;
+  cancelLazyLoad() {
+    this.lazyLoadSideData.cancelAll();
+  }
+
+  @task
+  *loadSubcase() {
+    const agendaActivity = yield this.args.agendaitem.agendaActivity;
+    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
+      this.subcase = yield agendaActivity.subcase;
+    }
+  }
+
+  @task
+  *loadNewsletterVisibility() {
+    const treatments = yield this.args.agendaitem.treatments;
+    const treatment = treatments.firstObject;
+    if (treatment) { // TODO: this is only the case for the first item of the agenda (approval, older data)
+      const newsletterInfo = yield treatment.newsletterInfo;
+      if (newsletterInfo) {
+        this.newsletterIsVisible = newsletterInfo.inNewsletter;
+      } else {
+        this.newsletterIsVisible = false;
+      }
+    } else {
+      this.newsletterIsVisible = false;
+    }
   }
 
   @action

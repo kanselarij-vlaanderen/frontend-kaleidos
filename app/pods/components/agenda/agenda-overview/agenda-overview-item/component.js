@@ -1,4 +1,4 @@
-import Component from '@glimmer/component';
+import AgendaSidebarItem from 'frontend-kaleidos/pods/components/agenda/agenda-detail/sidebar-item/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
@@ -9,7 +9,7 @@ import {
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-export default class AgendaOverviewItem extends Component {
+export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
    *
    * @argument agendaitem
@@ -28,8 +28,6 @@ export default class AgendaOverviewItem extends Component {
 
   @tracked agendaitemDocuments;
   @tracked newAgendaitemDocuments;
-  @tracked subcase;
-  @tracked newsletterIsVisible;
 
   @tracked isShowingAllDocuments = false;
 
@@ -93,40 +91,11 @@ export default class AgendaOverviewItem extends Component {
     yield Promise.all(tasks.map((task) => task.perform()));
   }
 
-  @action
-  cancelLazyLoad() {
-    this.lazyLoadSideData.cancelAll();
-  }
-
   @task
   *loadNewDocuments() { // Documents to be highlighted
     if (this.args.previousAgenda) { // Highlighting everything on the first agenda-version as "new" doesn't add a lot of value.
       this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
         this.args.previousAgenda.id, this.args.agendaitem.id);
-    }
-  }
-
-  @task
-  *loadSubcase() {
-    const agendaActivity = yield this.args.agendaitem.agendaActivity;
-    if (agendaActivity) { // the approval agenda-item doesn't have agenda activity
-      this.subcase = yield agendaActivity.subcase;
-    }
-  }
-
-  @task
-  *loadNewsletterVisibility() {
-    const treatments = yield this.args.agendaitem.treatments;
-    const treatment = treatments.firstObject;
-    if (treatment) { // TODO: this is only the case for the first item of the agenda (approval, older data)
-      const newsletterInfo = yield treatment.newsletterInfo;
-      if (newsletterInfo) {
-        this.newsletterIsVisible = newsletterInfo.inNewsletter;
-      } else {
-        this.newsletterIsVisible = false;
-      }
-    } else {
-      this.newsletterIsVisible = false;
     }
   }
 

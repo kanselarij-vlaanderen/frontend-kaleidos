@@ -6,7 +6,13 @@
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
     With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
     is set right from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
-  <div class="auk-u-flex" {{did-insert this.conditionallyScrollIntoView}} {{in-viewport onEnter=this.onEnter onExit=this.onExit}}>
+  <div class="auk-u-flex"
+    {{did-insert this.conditionallyScrollIntoView}}
+    {{in-viewport
+      onEnter=(perform this.lazyLoadSideData)
+      onExit=(fn this.cancelLazyLoad)
+    }}
+  >
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
@@ -38,35 +44,33 @@
 
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              {{#if this.renderDetails}}
-                {{#if (await @agendaitem.checkAdded)}}
-                  <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-calendar-plus"></i>
-                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-                      <p>
-                        {{t "added-agendaitem-text"}}
-                      </p>
-                    </EmberTooltip>
-                  </span>
-                {{/if}}
+              {{#if (await @agendaitem.checkAdded)}}
+                <span class="added-tag vlc-agenda-meta__recently-added">
+                  <i class="ki-calendar-plus"></i>
+                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "added-agendaitem-text"}}
+                    </p>
+                  </EmberTooltip>
+                </span>
+              {{/if}}
 
-                {{#if (not newsletterInfo.inNewsletter)}}
-                  <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
-                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-                      <p>
-                        {{t "not-visible-in-newsletter"}}
-                      </p>
-                    </EmberTooltip>
-                  </span>
-                {{/if}}
+              {{#if (not this.newsletterIsVisible)}}
+                <span class="added-tag vlc-agenda-meta__recently-added">
+                  <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "not-visible-in-newsletter"}}
+                    </p>
+                  </EmberTooltip>
+                </span>
+              {{/if}}
 
-                {{#if (await subcase.confidential)}}
-                  <i
-                    class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                    data-test-icon-agenda-confidentiality-locked
-                  ></i>
-                {{/if}}
+              {{#if this.subcase.confidential}}
+                <i
+                  class="vl-icon ki-lock-closed vlc-u-opacity-50"
+                  data-test-icon-agenda-confidentiality-locked
+                ></i>
               {{/if}}
             </div>
 
