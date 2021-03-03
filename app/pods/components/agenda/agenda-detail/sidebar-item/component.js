@@ -20,7 +20,6 @@ export default class SidebarItem extends Component {
 
   @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
   @alias('sessionService.currentAgenda') currentAgenda;
-  @alias('args.agendaitem.checkAdded') isNew;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
 
@@ -36,7 +35,6 @@ export default class SidebarItem extends Component {
       ${this.isActive ? 'vlc-agenda-detail-sidebar__sub-item--active' : ''}
       ${this.isClickable ? '' : 'not-clickable'}
       ${this.isRetracted ? 'vlc-u-opacity-lighter' : ''}
-      ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
     `;
   }
 
