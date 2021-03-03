@@ -1,3 +1,18 @@
+<div class="vlc-panel-layout__agenda-items">
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <Agenda::AgendaitemSearch
+      @searchText={{readonly this.agendaitemsController.filter}}
+      @onSearch={{this.searchAgendaitems}}
+    />
+    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
+      <Agenda::AgendaDetail::Sidebar
+        @announcements={{this.announcements}}
+        @agendaitems={{this.notas}}
+        @currentAgenda={{this.agenda}}
+      />
+    </div>
+  </div>
+</div>
 <div class="vlc-panel-layout__main-content">
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     <div class="vlc-scroll-wrapper__header">

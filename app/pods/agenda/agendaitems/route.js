@@ -3,14 +3,15 @@ import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
     filter: {
-      refreshModel: false, // Free-text search is applied in controller
+      refreshModel: true,
     },
     showModifiedOnly: {
-      refreshModel: false,
+      refreshModel: true,
       as: 'toon_enkel_gewijzigd',
     },
   };
@@ -18,30 +19,43 @@ export default class AgendaAgendaitemsRoute extends Route {
   @service sessionService;
   @service agendaService;
 
-  async model() {
+  async model(params, transition) {
     const {
       agenda,
+      meeting,
     } = this.modelFor('agenda');
-    const agendaitems = await this.store.query('agendaitem', {
+    console.log(params);
+    if (transition.from) {
+      console.log('From transition', transition.from);
+    }
+    let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       include: [
-        'mandatees',
-        'pieces',
-        'pieces.document-container' // Only needed for relationship pieces -> document-container
+        'mandatees'
       ].join(','),
       'fields[mandatees]': [
         'title', // Display group header per agendaitems group
         'priority' // Sorting agendaitems on minister protocol order
       ].join(','),
-      'fields[pieces]': [
-        'name', // Display and sorting pieces per agendaitem
-        'document-container', // Deduplicating multiple pieces per container
-        'created' // Fallback sorting pieces per agendaitem
-      ].join(','),
-      'fields[document-containers]': '',
       'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
       sort: 'show-as-remark,priority',
     });
+
+    if (params.showModifiedOnly) {
+      // agendaService.agendaWithChanges is called by parent route
+      const matchingIds = this.agendaService.addedAgendaitems;
+      agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
+    }
+
+    if (params.filter) {
+      const filter = {
+        ':phrase_prefix:title,shortTitle': `${params.filter}`,
+        meetingId: meeting.id,
+        agendaId: agenda.id,
+      };
+      const matchingIds = await search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
+      agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
+    }
 
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
@@ -63,8 +77,6 @@ export default class AgendaAgendaitemsRoute extends Route {
     controller.meeting = meeting;
     controller.agenda = agenda;
     controller.previousAgenda = await agenda.previousVersion;
-    // Initialize filteredNotas and filteredAnnouncements on controller
-    controller.filterTask.perform();
   }
 
   @action
