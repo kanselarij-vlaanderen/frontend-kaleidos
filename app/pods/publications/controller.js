@@ -55,7 +55,7 @@ export default class PublicationsController extends Controller {
     if (this.searchText.length === 0 || this.searchText === '') {
       this.showSearchResults = false;
     } else {
-      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', 'publicationFlowNumacNumbers', 'publicationFlowId'];
+      this.textSearchFields = ['title', 'publicationFlowNumbers', 'publicationFlowRemarks', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', 'publicationFlowNumacNumbers', 'publicationFlowIds'];
       const searchModifier = ':phrase_prefix:';
       const textSearchKey = this.textSearchFields.join(',');
       filter[`${searchModifier}${textSearchKey}`] = `${this.searchText}*`;
