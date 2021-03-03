@@ -14,11 +14,8 @@ export default class SidebarItem extends Component {
   @service store;
   @service sessionService;
   @service('current-session') currentSessionService;
-  @service agendaService;
-  @service toaster;
   @service router;
 
-  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
   @alias('sessionService.currentAgenda') currentAgenda;
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
   @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
