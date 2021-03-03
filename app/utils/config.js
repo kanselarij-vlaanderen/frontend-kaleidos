@@ -68,25 +68,26 @@ export default EmberObject.create({
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
-      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\nLimiet vertaling:\nAantal bladzijden:\nAantal woorden:\n\n\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Collega’s\n\nIn bijlage voor vertaling ons dossier (publicatienummer):\n\n%%titel%%\nLimiet vertaling:\nAantal bladzijden:\nAantal woorden:\n\n\n\n%%footer%%',
       subject: '[%%kaleidosenvironment%%] Vertaalaanvraag (%%nummer%%)',
     },
     publishPreviewRequest: {
-      content: 'Beste,\n\nIn bijlage voor drukproef ons dossier (%%nummer%%):\n\n(%%titel%%)\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Beste,\n\nIn bijlage voor drukproef ons dossier (%%nummer%%):\n\n(%%titel%%)\n\n%%footer%%',
       subject: '[%%kaleidosenvironment%%] Dossier (%%nummer%%) – drukproef aub',
     },
     publishRequest: {
-      content: 'Beste,\n\nVoor publicatie %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Beste,\n\nVoor publicatie %%nummer%%.\n\n%%footer%%',
       subject: '[%%kaleidosenvironment%%] Aanvraag publicatie (%%nummer%%)',
     },
     withdrawalTranslation: {
-      content: 'Beste,\n\nIntrekking vertaling voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Beste,\n\nIntrekking vertaling voor %%nummer%%.\n\n%%footer%%',
       subject: '[%%kaleidosenvironment%%] Intrekking vertalingsaanvraag (%%nummer%%)',
     },
     withdrawalPublishPreview: {
-      content: 'Beste,\n\nIntrekking drukproef voor %%nummer%%.\n\nVriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
+      content: 'Beste,\n\nIntrekking drukproef voor %%nummer%%.\n\n%%footer%%',
       subject: '[%%kaleidosenvironment%%] Intrekking drukproef (%%nummer%%)',
     },
+    defaultFooter: 'Vriendelijke groeten,\n\nTeam OVRB\n\n[%%kaleidosenvironment%%]',
   },
   formallyOkOptions: [
     {
@@ -284,13 +285,16 @@ export default EmberObject.create({
     },
   },
   EMAIL: {
-    DEFAULT_FROM: 'kaleidos-noreply@vlaanderen.be',
+    OUTBOX: {
+      ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
+    },
+    DEFAULT_FROM: 'noreply@kaleidos.vlaanderen.be',
     TO: {
-      translationsEmail: 'johan.delaure@redpencil.be',
-      publishpreviewEmail: 'johan.delaure@redpencil.be',
-      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.be',
-      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.be',
-      publishEmail: 'johan.delaure@redpencil.be',
+      translationsEmail: 'johan.delaure@redpencil.io',
+      publishpreviewEmail: 'johan.delaure@redpencil.io',
+      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.io',
+      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.io',
+      publishEmail: 'johan.delaure@redpencil.io',
     },
   },
 });

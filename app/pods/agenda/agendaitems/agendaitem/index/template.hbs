@@ -1,12 +1,28 @@
-<div class="vl-action-group vl-action-group--align-right">
-  {{#if this.currentSession.isEditor}}
-    {{#if (not this.agenda.isFinal)}}
-      <Agenda::Agendaitem::AgendaitemControls
-        @agendaitem={{this.model}}
-        @currentAgenda={{this.agenda}}
-        @onDeleteAgendaitem={{this.reassignPrioritiesAndNavigateToNeighbouringAgendaitem}}
-      />
+<WebComponents::AuToolbar class="auk-u-mb-4">
+  <WebComponents::AuToolbar::Group @position="left">
+    <WebComponents::AuToolbar::Item>
+      <h3 class="auk-toolbar__title">
+        {{t "agendaitem-case"}}
+      </h3>
+    </WebComponents::AuToolbar::Item>
+    {{#if (await this.subcase.confidential)}}
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuPill @skin="danger" @icon="lock-closed">{{t "confidential"}}</WebComponents::AuPill>
+      </WebComponents::AuToolbar::Item>
     {{/if}}
-  {{/if}}
-</div>
-<Agenda::Agendaitem::AgendaitemCase @agendaitem={{this.model}}/>
+  </WebComponents::AuToolbar::Group>
+  <WebComponents::AuToolbar::Group @position="right">
+    <WebComponents::AuToolbar::Item>
+      {{#if this.currentSession.isEditor}}
+        {{#if (not this.agenda.isFinal)}}
+          <Agenda::Agendaitem::AgendaitemControls
+                  @agendaitem={{this.model}}
+                  @currentAgenda={{this.agenda}}
+                  @onDeleteAgendaitem={{this.reassignPrioritiesAndNavigateToNeighbouringAgendaitem}}
+          />
+        {{/if}}
+      {{/if}}
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>
+<Agenda::Agendaitem::AgendaitemCase @agendaitem={{this.model}} @subcase={{await this.subcase}}/>

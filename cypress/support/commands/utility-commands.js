@@ -49,22 +49,6 @@ function selectDate(year, month, day, index) {
 }
 
 /**
- * Create a default agenda
- * @memberOf Cypress.Chainable#
- * @name selectAction
- * @function
- * @param {String} elementToSelect - The action that has to be made
- * @param {String} textToContain - Tekst that the element should contain that is selected
- */
-function selectAction(elementToSelect, textToContain) {
-  cy.log('selectAction');
-  cy.get('[data-test-agenda-header-showactionoptions]').click();
-  cy.get(elementToSelect).should('be.visible');
-  cy.get(elementToSelect).should('contain.text', textToContain);
-  cy.log('/selectAction');
-}
-
-/**
  * Validate the content of the dropdown
  * @memberOf Cypress.Chainable#
  * @name validateDropdownElements
@@ -134,7 +118,6 @@ function existsAndInvisible(element) {
 }
 
 Cypress.Commands.add('selectDate', selectDate);
-Cypress.Commands.add('selectAction', selectAction);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 
 Cypress.Commands.add('currentMoment', currentMoment);

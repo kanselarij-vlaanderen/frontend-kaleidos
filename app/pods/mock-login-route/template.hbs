@@ -1,59 +1,46 @@
 {{!-- template-lint-disable no-bare-strings --}}
 <div class="vlc-mock-login">
   <div id="main" itemprop="mainContentOfPage" role="main" tabindex="-1" class="main-content">
-    <header class="content-header content-header--small content-header--half-image u-spacer--large">
-      <div class="content-header__wrapper">
-        <picture class="content-header__bg"><img sizes="50vw" srcset="" alt="" role="none" title=""></picture>
-        <div class="layout layout--wide">
-          <div class="content-header__content">
-            <div class="content-header__logo-wrapper">
-              <a href="#"
-                 class="content-header__entity-logo content-header__entity-logo--lowercase">
-                <span class="content-header__entity-logo__prefix">Kanselarij</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="col--9-12--s col--5-12--m col--6-12">
-      <div class="grid grid--align-right">
-        <div class="col--1-1 col--10-12--m col--6-12--l">
-          <h2 class="h4 u-spacer">Kies een gebruiker om mee in te loggen.</h2>
-          <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
-                 placeholder="Gebruikersnaam..."
-                 value={{role}} autofocus
-                 oninput={{perform updateSearch value='target.value'}}>
-          {{#mock-login as |login|}}
-            {{#if queryStore.isRunning}}
-              <div class="loader-wrapper">
-                <div class="loader">
-                  <span class="u-visually-hidden">Aan het laden</span>
+    <div class="auk-u-mt-8">
+      <div class="col--9-12--s col--5-12--m col--6-12">
+        <div class="grid grid--align-right">
+          <div class="col--1-1 col--10-12--m col--6-12--l">
+            <h2 class="h4 u-spacer">Kies een gebruiker om mee in te loggen.</h2>
+            <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
+                  placeholder="Gebruikersnaam..."
+                  value={{role}} autofocus
+                  oninput={{perform updateSearch value='target.value'}}>
+            {{#mock-login as |login|}}
+              {{#if queryStore.isRunning}}
+                <div class="loader-wrapper">
+                  <div class="loader">
+                    <span class="u-visually-hidden">Aan het laden</span>
+                  </div>
                 </div>
-              </div>
-            {{else}}
-              {{#if login.errorMessage}}
-                {{wu-alert
-                  title=login.errorMessage
-                  isWarning=true
+              {{else}}
+                {{#if login.errorMessage}}
+                  {{wu-alert
+                    title=login.errorMessage
+                    isWarning=true
+                  }}
+                {{/if}}
+                <ul>
+                  {{#login.each-account accounts=model as |account|}}
+                    <BlockLink>
+                      {{account.user.firstName}} {{account.user.lastName}}
+                    </BlockLink>
+                  {{/login.each-account}}
+                </ul>
+                {{number-pagination
+                  page=page
+                  size=size
+                  nbOfItems=model.length
+                  total=model.meta.count
+                  links=model.meta.pagination
                 }}
               {{/if}}
-              <ul>
-                {{#login.each-account accounts=model as |account|}}
-                  <BlockLink>
-                    {{account.user.firstName}} {{account.user.lastName}}
-                  </BlockLink>
-                {{/login.each-account}}
-              </ul>
-              {{number-pagination
-                page=page
-                size=size
-                nbOfItems=model.length
-                total=model.meta.count
-                links=model.meta.pagination
-              }}
-            {{/if}}
-          {{/mock-login}}
+            {{/mock-login}}
+          </div>
         </div>
       </div>
     </div>

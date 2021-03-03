@@ -42,11 +42,14 @@ export default ModelWithModifier.extend({
   agenda: belongsTo('agenda', {
     inverse: null,
   }),
+  // the next and previous version of agendaitem is set in agenda-approve-service, read-only in frontend
   nextVersion: belongsTo('agendaitem', {
     inverse: 'previousVersion',
+    serialize: false,
   }),
   previousVersion: belongsTo('agendaitem', {
     inverse: 'nextVersion',
+    serialize: false,
   }),
   agendaActivity: belongsTo('agenda-activity', {
     inverse: null,

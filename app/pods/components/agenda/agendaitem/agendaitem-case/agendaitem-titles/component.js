@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 
 export default class AgendaitemTitles extends Component {
-  classNames = ['auk-u-mb-8'];
+  @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
   @alias('args.agendaitem.agendaActivity.subcase') subcase;
 
@@ -19,20 +19,17 @@ export default class AgendaitemTitles extends Component {
   @service router;
 
   @tracked hasPublicationsEnabled = ENV.APP.ENABLE_PUBLICATIONS_TAB;
-
-  get pillClass() {
-    const baseClass = 'vl-pill vl-u-text--capitalize';
-    if (this.args.subcase) {
-      if (this.args.subcase.approved) {
-        return `${baseClass} vl-pill--success`;
-      }
-    }
-    return baseClass;
-  }
-
   @action
   toggleIsEditingAction() {
     this.args.toggleIsEditing();
+  }
+
+  @action
+  async redirectToSubcase() {
+    const subcase = this.args.subcase;
+    const _case = await subcase.get('case');
+    const subcaseId = subcase.id;
+    this.router.transitionTo('cases.case.subcases.subcase.overview', _case.id, subcaseId);
   }
 
   @action
@@ -40,7 +37,7 @@ export default class AgendaitemTitles extends Component {
     this.showLoader = true;
     const _case = await this.subcase.get('case');
     const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, _case.id);
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _case.id);
     this.showLoader = false;
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }

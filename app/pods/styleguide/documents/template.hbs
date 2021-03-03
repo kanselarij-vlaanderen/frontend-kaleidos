@@ -7,6 +7,8 @@
   @snippet="document.hbs"
 >
   {{!-- BEGIN-SNIPPET document --}}
-  <WebComponents::VlDocument/>
+  <Documents::DocumentCard
+    @piece={{this.model}}
+  />
   {{!-- END-SNIPPET --}}
 </Styleguide::KitchensinkSample>

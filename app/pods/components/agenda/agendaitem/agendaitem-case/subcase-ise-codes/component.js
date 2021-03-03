@@ -1,5 +1,5 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 
-export default Component.extend({
-  classNames: ['auk-u-mb-8'],
-});
+export default class SubcaseIseCodes extends Component {
+
+}
