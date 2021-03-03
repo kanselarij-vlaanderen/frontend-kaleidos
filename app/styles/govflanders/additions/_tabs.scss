@@ -7,14 +7,6 @@
   }
 }
 
-// Spacing in case of a clickable pill in tab item
-.vl-tab {
-  .vl-pill {
-    margin-left: 0.7rem;
-  }
-}
-
-
 .vl-tab__link {
   &.active {
     color: $text-color;
