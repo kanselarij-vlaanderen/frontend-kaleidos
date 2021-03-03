@@ -1,8 +1,8 @@
 <div {{did-update (perform this.groupDocumentsByContainer) this.documents}}>
   {{#each this.latestDocuments as |doc|}}
     <Documents::DocumentCard
-      @documentContainer={{doc.documentContainer}}
-      @lastPiece={{doc}}
+      @piece={{doc}}
+      @hideNewerVersions={{true}}
       @didDeletePiece={{@didDeletePiece}}
       @didDeleteContainer={{@didDeleteContainer}}
       @onOpenUploadModal={{@onOpenUploadModal}}

@@ -285,13 +285,16 @@ export default EmberObject.create({
     },
   },
   EMAIL: {
-    DEFAULT_FROM: 'kaleidos-noreply@vlaanderen.be',
+    OUTBOX: {
+      ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
+    },
+    DEFAULT_FROM: 'noreply@kaleidos.vlaanderen.be',
     TO: {
-      translationsEmail: 'johan.delaure@redpencil.be',
-      publishpreviewEmail: 'johan.delaure@redpencil.be',
-      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.be',
-      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.be',
-      publishEmail: 'johan.delaure@redpencil.be',
+      translationsEmail: 'johan.delaure@redpencil.io',
+      publishpreviewEmail: 'johan.delaure@redpencil.io',
+      activityWithdrawTranslationsEmail: 'johan.delaure@redpencil.io',
+      activityWithdrawPublishPreviewEmail: 'johan.delaure@redpencil.io',
+      publishEmail: 'johan.delaure@redpencil.io',
     },
   },
 });

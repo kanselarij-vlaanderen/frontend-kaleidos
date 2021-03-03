@@ -1,0 +1,36 @@
+<div class="auk-u-mb-4">
+  <WebComponents::VlModal
+    @title={{t "document-add"}}
+    @closeModal={{this.cancel}}
+    @isOverlay={{true}}
+    @large={{true}}
+  >
+    <div class="vl-modal-dialog__content">
+      {{#if this.pieceInCreation}}
+        <div class="upload-container">
+          <EmberKaleidosWebuniversum::VlUploadedDocument
+            @name={{this.pieceInCreation.file.filename}}
+            @extension={{this.pieceInCreation.file.extension}}
+            @size={{this.pieceInCreation.file.size}}
+            @downloadName={{this.pieceInCreation.file.filename}}
+            @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
+            @delete={{fn this.deletePieceInCreation}}
+          />
+        </div>
+      {{else}}
+        <FileUploader
+          @multipleFiles={{false}}
+          @uploadedFileAction={{this.createNewPiece}}
+        />
+      {{/if}}
+    </div>
+    <WebComponents::VlModalFooter
+      @isLoading={{this.save.isRunning}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "document-add"}}
+      @cancelAction={{this.cancel}}
+      @saveAction={{perform this.save}}
+      @disableSave={{not this.pieceInCreation}}
+    />
+  </WebComponents::VlModal>
+</div>

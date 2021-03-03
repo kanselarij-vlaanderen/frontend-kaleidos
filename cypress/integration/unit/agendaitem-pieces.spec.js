@@ -108,8 +108,9 @@ context('Tests of pieces on agendaitems', () => {
         cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
-      cy.isPieceDeletable('VR 2020 1212 DOC.0001-1', 0, false);
-      cy.isPieceDeletable('VR 2020 1212 DOC.0001-2', 0, false);
+      // TODO: Policy regarding "safe document removal" should be revised. (https://kanselarij.atlassian.net/browse/VAL-287)
+      // cy.isPieceDeletable('VR 2020 1212 DOC.0001-1', 0, false);
+      // cy.isPieceDeletable('VR 2020 1212 DOC.0001-2', 0, false);
     });
   });
 });
