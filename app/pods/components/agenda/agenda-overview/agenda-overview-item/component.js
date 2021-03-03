@@ -16,6 +16,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument currentAgenda: both agenda's for determining changed documents
    * @argument previousAgenda
    * @argument isEditingFormallyOkStatus
+   * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
   @service store;
