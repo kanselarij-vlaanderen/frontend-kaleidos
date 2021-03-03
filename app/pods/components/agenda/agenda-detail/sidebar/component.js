@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -44,7 +43,6 @@ export default class AgendaSidebar extends Component {
   @service sessionService;
   @service('current-session') currentSessionService;
   @service agendaService;
-  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
 
   @tracked isShowingChanges = false;
   @tracked groupedNotas;
