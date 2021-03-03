@@ -23,7 +23,7 @@
     <p class="vlc-agenda-detail-sidebar__no-items-text">{{t "no-agendaitems-yet"}}</p>
   </div>
 {{/if}}
-<div class="{{spacerClass}}">
+<div>
   {{#if (and currentSessionService.isEditor (not isShowingChanges))}}
     {{#each
       @agendaitems

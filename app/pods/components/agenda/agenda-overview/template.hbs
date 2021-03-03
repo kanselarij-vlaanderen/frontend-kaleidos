@@ -46,7 +46,7 @@
   </div>
   {{#if this.groupNotasOnGroupName.isIdle}}
     {{#if this.groupedNotas.length}}
-      <div class={{this.spacerClass}}>
+      <div>
         <ul
           {{sortable-group onChange=@onReorderAgendaitems}}
           {{did-update (perform this.groupNotasOnGroupName @notas) @notas}}>
