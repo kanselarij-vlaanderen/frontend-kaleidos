@@ -58,9 +58,9 @@ export default Component.extend({
     return null;
   }),
 
-  sizeClass: computed('large', 'isDocumentViewer', function() {
+  sizeClass: computed('isDocumentViewer', function() {
     const {
-      large, isDocumentViewer,
+      isDocumentViewer,
     } = this;
     if (isDocumentViewer) {
       return 'auk-modal--full-screen';
