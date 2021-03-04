@@ -103,3 +103,10 @@
   height: 100%;
   z-index: $z-index-modal-backdrop;
 }
+
+/* Temporary overrides
+   ========================================================================== */
+
+.auk-modal-backdrop > .ember-view {
+  height: 100%;
+}
