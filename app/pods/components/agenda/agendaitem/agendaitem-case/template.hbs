@@ -1,6 +1,6 @@
 {{#if (not isEditing)}}
-{{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
-  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
+  {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
     @agendaitem={{@agendaitem}}
     @subcase={{@subcase}}
     @shouldShowDetails={{or @agendaitem.showAsRemark (await @agendaitem.agendaActivity)}}
@@ -8,7 +8,7 @@
     @toggleIsEditing={{action this.toggleIsEditing}}
   />
 {{else}}
-  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
     @agendaitem={{@agendaitem}}
     @isEditing={{@isEditing}}
     @subcase= {{@subcase}}
@@ -17,23 +17,23 @@
   />
 {{/if}}
 {{#if @agendaitem.showAsRemark}}
-{{!-- TODO refactor mandatees to a glimmer component --}}
-  <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+  {{!-- TODO refactor mandatees to a glimmer component --}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
     @agendaitem={{@agendaitem}}
     @subcase={{@subcase}}
   />
 {{else}}
   {{#if @agendaitem.agendaActivity}}
-    <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+    <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
       @agendaitem={{@agendaitem}}
       @subcase={{@subcase}}
     />
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
-    <Components::Agenda::Agendaitem::AgendaitemCase::SubcaseIseCodes
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseIseCodes
       @item={{@agendaitem}}
     />
-    <Components::Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
+    <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
       @agendaitem={{@agendaitem}}
     />
   {{/if}}
