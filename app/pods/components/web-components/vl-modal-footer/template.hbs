@@ -1,26 +1,24 @@
-<div class="auk-modal__footer auk-modal__footer--bordered">
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="borderless" {{action "cancelAction"}} data-test-vl-modal-footer-cancel>
-          {{cancelButtonText}}
-        </WebComponents::AuButton>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton
-          @skin="primary"
-          disabled={{disableSave}}
-          {{!-- loadingText=(t "please-be-patient")
-          isLoading=isLoading --}}
-          data-test-vl-save=true
-          data-test-vl-modal-footer-save=true
-          {{action "saveAction"}}
-        >
-          {{saveButtonText}}
-        </WebComponents::AuButton>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
-</div>
+<WebComponents::AuToolbar>
+  <WebComponents::AuToolbar::Group @position="left">
+    <WebComponents::AuToolbar::Item>
+      <WebComponents::AuButton @skin="borderless" {{action "cancelAction"}} data-test-vl-modal-footer-cancel>
+        {{cancelButtonText}}
+      </WebComponents::AuButton>
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+  <WebComponents::AuToolbar::Group @position="right">
+    <WebComponents::AuToolbar::Item>
+      <WebComponents::AuButton
+        @skin="primary"
+        disabled={{disableSave}}
+        {{!-- loadingText=(t "please-be-patient")
+        isLoading=isLoading --}}
+        data-test-vl-save={{true}}
+        data-test-vl-modal-footer-save={{true}}
+        {{action "saveAction"}}
+      >
+        {{saveButtonText}}
+      </WebComponents::AuButton>
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>
