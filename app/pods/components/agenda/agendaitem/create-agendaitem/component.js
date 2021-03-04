@@ -223,19 +223,21 @@ export default Component.extend(DataTableRouteMixin, {
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
       for (const subcase of subcasesToAdd) {
-        let submissionActivity = await this.store.queryOne('submission-activity', {
+        let submissionActivities = await this.store.query('submission-activity', {
           'filter[subcase][:id:]': subcase.id,
           'filter[:has-no:agenda-activity]': true,
         });
-        if (!submissionActivity) {
+        submissionActivities = submissionActivities.toArray();
+        if (!submissionActivities.length) {
           const now = new Date();
-          submissionActivity = this.store.createRecord('submission-activity', {
+          const submissionActivity = this.store.createRecord('submission-activity', {
             startDate: now,
             subcase,
           });
           await submissionActivity.save();
+          submissionActivities = [submissionActivity];
         }
-        await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivity);
+        await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivities);
       }
 
       this.set('loading', false);
