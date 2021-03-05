@@ -469,7 +469,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
             cy.get('.vl-checkbox--switch__label').click();
           });
       }
-      cy.get('.vl-loader', {
+      cy.get('.auk-loader', {
         timeout: 12000,
       }).should('not.exist');
       if (caseTitle) {
@@ -481,7 +481,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         cy.wait('@getSubcasesFiltered', {
           timeout: 12000,
         });
-        cy.get('.vl-loader').should('not.exist');
+        cy.get('.auk-loader').should('not.exist');
         cy.get('table > tbody > tr').as('rows');
       } else {
         cy.get('table > tbody > tr').as('rows');
@@ -489,7 +489,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
           timeout: 12000,
         }).should('not.have.length', 1);
       }
-      cy.get('.vl-loader').should('not.exist');
+      cy.get('.auk-loader').should('not.exist');
       cy.get('@rows', {
         timeout: 12000,
       }).eq(0)
