@@ -208,9 +208,7 @@
                   </div>
                   {{#if subcase.confidential}}
                     <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
-                      <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
-                         data-test-icon-agenda-confidentiality-locked
-                      ></i>
+                      <WebComponents::AuIcon @name="lock-closed" class="vlc-agenda-items__icons" data-test-icon-agenda-confidentiality-locked />{{!-- TODO: needs `vlc-agenda-items__icons` class passed? --}}
                       {{t "confidential"}}
                     </span>
                   {{/if}}

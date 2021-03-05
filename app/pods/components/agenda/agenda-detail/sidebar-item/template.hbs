@@ -62,10 +62,7 @@
                 {{/if}}
 
                 {{#if (await subcase.confidential)}}
-                  <i
-                    class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                    data-test-icon-agenda-confidentiality-locked
-                  ></i>
+                  <WebComponents::AuIcon @name="lock-closed" data-test-icon-agenda-confidentiality-locked />
                 {{/if}}
               {{/if}}
             </div>

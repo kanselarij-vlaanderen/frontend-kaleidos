@@ -60,10 +60,9 @@
             {{t "document-is-confidential"}}
           </p>
         </EmberTooltip>
-        <i class="vl-icon ki-lock-closed vl-u-text--error"
-        ></i>
+        <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="danger" />
       {{else}}
-        <i class="vl-icon ki-lock-open"></i>
+        <WebComponents::AuIcon @name="lock-open" />
       {{/if}}
     </button>
   {{/if}}
