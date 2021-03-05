@@ -1,7 +1,7 @@
 {{#if this.textTooLong}}
   <div class="auk-u-flex">
     {{#if this.isCustom}}
-      <div class="{{@customTextClass}}">{{this.textAbbreviated}}</div>
+      <div class="{{@customTextClass}}" ...attributes>{{this.textAbbreviated}}</div>
     {{else}}
       {{this.textAbbreviated}}
     {{/if}}
@@ -18,7 +18,7 @@
   </div>
 {{else}}
   {{#if this.isCustom}}
-    <div class="{{@customTextClass}}">{{@text}}</div>
+    <div class="{{@customTextClass}}" ...attributes>{{@text}}</div>
   {{else}}
     {{@text}}
   {{/if}}
