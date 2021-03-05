@@ -77,7 +77,7 @@
                (is-pending subcase.onAgendaInfo)
             )
           }}
-            <div class="vl-loader"></div>
+            <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
               {{#if
