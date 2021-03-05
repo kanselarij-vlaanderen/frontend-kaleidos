@@ -31,14 +31,14 @@
     </div>
   {{/if}}
   {{#link-to
-       "agenda.agendaitems.agendaitem"
-       (await latestMeetingId)
-       (await latestAgendaId)
-       (await latestAgendaitemId)
-       data-test-link-to-subcase-overview=true
-       target="_blank"
-       bubbles=false
-       class="vl-button vl-button--link vl-button--icon"
+    "agenda.agendaitems.agendaitem"
+    (await latestMeetingId)
+    (await latestAgendaId)
+    (await latestAgendaitemId)
+    data-test-link-to-subcase-overview=true
+    target="_blank"
+    bubbles=false
+    class="vl-button vl-button--link vl-button--icon"
   }}
     <i class="vl-button__icon ki-nav-right"></i>
   {{/link-to}}
