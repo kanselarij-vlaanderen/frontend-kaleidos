@@ -1,0 +1,13 @@
+.vl-not-supported {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .width-50 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}
