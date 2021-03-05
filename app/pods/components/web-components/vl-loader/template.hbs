@@ -1,14 +1,12 @@
-<div data-test-vl-loader class="vl-region">
-  <div class="auk-u-text-align--center">
-    <div class="vl-loader" role="alert" aria-busy="true"></div>
-    {{#if (not text)}}
-      <p>
-        {{t "loading-text"}}
-      </p>
-    {{else}}
-      <p>
-        {{text}}
-      </p>
-    {{/if}}
-  </div>
+<div data-test-vl-loader class="auk-loader-wrapper auk-loader-wrapper--small">
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
+  {{#if (not text)}}
+    <p>
+      {{t "loading-text"}}
+    </p>
+  {{else}}
+    <p>
+      {{text}}
+    </p>
+  {{/if}}
 </div>
