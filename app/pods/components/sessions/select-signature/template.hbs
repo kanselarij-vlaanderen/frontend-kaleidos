@@ -4,14 +4,16 @@
   title=(t "signature-edit")
 }}
   <div class="auk-modal__content">
-    {{utils/model-selector
-      modelName="signature"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      selectedItems=selectedSignature
-      selectModel=(action "selectSignature")
-    }}
+    <div class="vlc-scroll-wrapper__body">
+      {{utils/model-selector
+        modelName="signature"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
+        selectedItems=selectedSignature
+        selectModel=(action "selectSignature")
+      }}
+    </div>
   </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading
