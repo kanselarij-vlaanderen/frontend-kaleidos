@@ -23,7 +23,7 @@ function uploadFileToCancel(file) {
   cy.get('@documentCard').within(() => {
     cy.get('.ki-more').click();
   });
-  cy.get('.vl-link--block')
+  cy.get('.auk-button-link--block')
     .contains('Nieuwe versie uploaden', {
       timeout: 12000,
     })
@@ -141,7 +141,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.vlc-pill').contains('Intern Regering');
     });
 
-    cy.get('.auk-u-ml-2 > .vl-link').contains('Wijzigen')
+    cy.get('.auk-u-ml-2 > .auk-button-link').contains('Wijzigen')
       .click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
