@@ -1,0 +1,40 @@
+<WebComponents::AuInput
+  class="auk-input--block"
+  @icon="search"
+  @type="text"
+  data-test-trigger-search-input
+  @placeholder={{t "search-placeholder"}}
+  value={{this.searchText}}
+  {{on "input" (perform this.debouncedSearch)}}
+  {{on "focusout" this.hideResults}}
+  {{on "focusin" (if this.search.lastSuccessful this.showResults)}}
+  @enter={{perform this.search}}
+  @autocomplete="off"
+/>
+{{#if this.isShowingResults}}
+  <div class="autocomplete-results auk-search-results-list">
+    {{#each this.searchResults as |result|}}
+      <WebComponents::AuDropdown::Item @class="auk-search-results-list__item">
+        <LinkTo
+          data-test-publication-search-result
+          @route="publications.publication.documents"
+          @model={{result.publicationFlowId}}
+        >
+          {{#if result.subcaseSubTitle}}
+            {{result.subcaseSubTitle}}
+          {{else if result.subcaseTitle}}
+            {{result.subcaseTitle}}
+          {{else if result.shortTitle}}
+            {{result.shortTitle}}
+          {{else if result.title}}
+            {{result.title}}
+          {{/if}}
+          <br>
+          <span class="auk-u-muted auk-u-text-small">{{result.publicationFlowNumber}}</span>
+        </LinkTo>
+      </WebComponents::AuDropdown::Item>
+    {{else}}
+      {{ t "no-results-found" }}
+    {{/each}}
+  </div>
+{{/if}}
