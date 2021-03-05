@@ -4,7 +4,7 @@
       {{#if this.currentSession.isEditor}}
         <a
           href="javascript://"
-          class="vl-link"
+          class="auk-button-link"
           {{on "click" this.openEditingWindow}}
         >
           {{t "edit"}}
@@ -24,7 +24,7 @@
                   <button
                     data-test-delete-decision
                     type="button"
-                    class="vl-link vl-u-text--error"
+                    class="auk-button-link vl-u-text--error"
                     {{on "click" attacher.hide}}
                     {{on "click" (fn this.promptDeleteTreatment @treatment)}}
                   >

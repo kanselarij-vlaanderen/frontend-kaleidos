@@ -17,7 +17,7 @@
             <div class="vlc-toolbar__item">
               {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
               {{!-- template-lint-disable no-bare-strings  --}}
-              <LinkTo @route="agendas.overview" class="vlc-backlink vl-link vl-link--bold">
+              <LinkTo @route="agendas.overview" class="vlc-backlink auk-button-link">
                 &#8629;
               </LinkTo>
               {{!-- template-lint-enable no-bare-strings  --}}
@@ -59,7 +59,7 @@
                   {{#if currentSessionService.isEditor}}
                     {{#if currentAgenda.isDesignAgenda}}
                       <li class="vlc-dropdown-menu__item">
-                        <button type="button" data-test-agenda-header-approveAgenda class="vl-link vl-link--block"
+                        <button type="button" data-test-agenda-header-approveAgenda class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "openConfirmApproveAgenda"}}
                         >
@@ -68,7 +68,7 @@
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                       <li class="vlc-dropdown-menu__item">
-                        <button  type="button" data-test-agenda-header-approve-and-close-agenda class="vl-link vl-link--block"
+                        <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                         >
@@ -84,7 +84,7 @@
                         {{#if (await isSessionClosable)}}
                           <a href=""
                             data-test-agenda-header-lockAgenda
-                            class="vl-link vl-link--block vl-u-text--error"
+                            class="auk-button-link auk-button-link--block vl-u-text--error"
                             {{action "openConfirmCloseMeeting"}}
                             {{action attacher.hide}}
                           >
@@ -94,7 +94,7 @@
                       {{else}}
                         <a href=""
                           data-test-agenda-header-unlockAgenda
-                          class="vl-link vl-link--block"
+                          class="auk-button-link auk-button-link--block"
                           {{action "unlockAgenda"}}
                           {{action attacher.hide}}
                         >
@@ -102,7 +102,7 @@
                         </a>
                       {{/if}}
                     </li>
-                    
+
                   {{/if}}
                   {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
                   {{#if (await canDeleteSelectedAgenda)}}
@@ -110,14 +110,14 @@
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a href=""
                         data-test-agenda-header-deleteAgenda
-                        class="vl-link vl-u-text--error"
+                        class="auk-button-link vl-u-text--error"
                         {{action "openConfirmDeleteSelectedAgenda"}}
                         {{action attacher.hide}}
                       >
                         {{t "agenda-delete"}}
                       </a>
                     </li>
-                    
+
                   {{/if}}
                   {{#if (await canReopenPreviousAgenda)}}
                     <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -125,7 +125,7 @@
                       >
                       <a href=""
                           data-test-agenda-header-reopen-previous-version
-                          class="vl-link vl-link--block vl-u-text--error"
+                          class="auk-button-link auk-button-link--block vl-u-text--error"
                           {{action "openConfirmReopenPreviousAgenda"}}
                           {{action attacher.hide}}
                         >
@@ -160,7 +160,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <a href="javascript://"
                        data-test-agenda-header-add-agendaitems
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action attacher.hide}}
                       {{action "addAgendaitemsAction"}}
                     >
@@ -172,7 +172,7 @@
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
                      data-test-agenda-header-navigateToDecisions
-                     class="vl-link vl-link--block"
+                     class="auk-button-link auk-button-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToDecisions"}}
                   >
@@ -182,7 +182,7 @@
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
                      data-test-agenda-header-navigateToNewsletter
-                     class="vl-link vl-link--block"
+                     class="auk-button-link auk-button-link--block"
                     {{action attacher.hide}}
                     {{action "navigateToNewsletter"}}
                   >
@@ -192,7 +192,7 @@
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
                      data-test-agenda-header-navigateToPressAgenda
-                     class="vl-link vl-link--block"
+                     class="auk-button-link auk-button-link--block"
                     {{action "navigateToPressAgenda"}}
                     {{action attacher.hide}}
                   >
@@ -203,7 +203,7 @@
                   <li class="vlc-dropdown-menu__item">
                     {{#link-to
                       "agenda.agendaitems"
-                      class="vl-link vl-link--block"
+                      class="auk-button-link auk-button-link--block"
                     }}
                       {{t "agenda-view"}}
                     {{/link-to}}
@@ -211,7 +211,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-navigateToPressAgenda
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action attacher.hide}}
                       {{action "print"}}
                     >
@@ -222,7 +222,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <LinkTo
                       data-test-agenda-header-navigateToPrintableAgenda
-                      class="vl-link vl-link--block"
+                      class="auk-button-link auk-button-link--block"
                       @route="agenda.print"
                     >
                       {{t "printable-version"}}
@@ -234,7 +234,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-toggleEditingSession
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action "toggleEditingSession"}}
                       {{action attacher.hide}}
                     >
@@ -244,7 +244,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-selectSignature
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action "selectSignature"}}
                       {{action attacher.hide}}
                     >
@@ -255,7 +255,7 @@
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
                      data-test-agenda-header-downloaddDocuments
-                     class="vl-link vl-link--block"
+                     class="auk-button-link auk-button-link--block"
                     {{action attacher.hide}}
                     {{action "downloadAllDocuments"}}
                   >
@@ -266,7 +266,7 @@
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                        data-test-agenda-header-approve-all-agendaitems
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action attacher.hide}}
                       {{action "showApproveAllAgendaitemsWarning"}}
                     >
@@ -280,7 +280,7 @@
                     {{#if currentSession.canReleaseDecisions}}
                       <a href=""
                          data-test-agenda-header-releaseDecisions
-                         class="vl-link vl-link--block vl-u-text--error"
+                         class="auk-button-link auk-button-link--block vl-u-text--error"
                         {{action "releaseDecisions"}}
                         {{action attacher.hide}}
                       >
@@ -289,7 +289,7 @@
                     {{else if currentSession.canReleaseDocuments}}
                       <a href=""
                          data-test-agenda-header-releaseDocuments
-                         class="vl-link vl-link--block vl-u-text--error"
+                         class="auk-button-link auk-button-link--block vl-u-text--error"
                         {{action "releaseDocuments"}}
                         {{action attacher.hide}}
                       >
@@ -306,7 +306,7 @@
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a href=""
                          data-test-agenda-header-create-new-design
-                         class="vl-link vl-link--block"
+                         class="auk-button-link auk-button-link--block"
                         {{action "createNewDesignAgendaAction" currentSession}}
                         {{action attacher.hide}}
                       >
@@ -476,7 +476,7 @@
     <WebComponents::AuModal::Body>
       {{#if (await this.currentSession.latestAgenda.isDesignAgenda)}}
         <WebComponents::AuAlert
-          @skin="error" 
+          @skin="error"
           @message={{t
             "agenda-design-delete-message"
             agenda=this.currentSession.latestAgenda.agendaName
@@ -510,7 +510,7 @@
     <WebComponents::AuModal::Body>
       {{#if (eq this.agendas.length 1)}}
         <WebComponents::AuAlert
-          @skin="error" 
+          @skin="error"
           @message={{t "delete-final-agenda-and-meeting"}}
         />
       {{/if}}

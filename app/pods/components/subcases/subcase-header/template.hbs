@@ -31,7 +31,7 @@
               as |meeting|
               }}
                 <li class="vlc-dropdown-menu__item">
-                  <button type="button" class="vl-link"
+                  <button type="button" class="auk-button-link"
                     {{action attacher.hide}}
                     {{action "proposeForAgenda" subcase meeting}}
                   >
@@ -45,7 +45,7 @@
                 <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
               {{/if}}
               <li class="vlc-dropdown-menu__item">
-                <button type="button" class="vl-link"
+                <button type="button" class="auk-button-link"
                   {{action attacher.hide}}
                   {{action "proposeForOtherAgenda" subcase}}
                 >
@@ -81,7 +81,7 @@
             <ul class="vlc-dropdown-menu">
               {{#if (await canDelete)}}
                 <li class="vlc-dropdown-menu__item">
-                  <a href="" class="vl-link"
+                  <a href="" class="auk-button-link"
                      data-test-delete-subcase
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
@@ -92,7 +92,7 @@
               {{/if}}
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                   class="vl-link vl-link--block"
+                   class="auk-button-link auk-button-link--block"
                   {{action attacher.hide}}
                   {{action "triggerMoveSubcaseDialog" }}
                 >

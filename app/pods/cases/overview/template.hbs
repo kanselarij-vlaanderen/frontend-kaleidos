@@ -73,7 +73,7 @@
                 }}
                   <ul class="vlc-dropdown-menu">
                     <li class="vlc-dropdown-menu__item">
-                      <button type="button" class="vl-link"
+                      <button type="button" class="auk-button-link"
                         {{action attacher.hide}}
                         {{action "editRow" row}}
                       >
@@ -82,14 +82,14 @@
                     </li>
                     <li class="vlc-dropdown-menu__item">
                       {{#if (not row.isArchived)}}
-                        <a href="" class="vl-link vl-link--block"
+                        <a href="" class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "requestArchiveCase" row}}
                         >
                           {{t "archive-case"}}
                         </a>
                       {{else}}
-                        <a href="" class="vl-link vl-link--block"
+                        <a href="" class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "unarchiveCase" row}}
                         >

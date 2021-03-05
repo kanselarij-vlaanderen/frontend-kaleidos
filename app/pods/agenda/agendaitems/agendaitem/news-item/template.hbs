@@ -8,13 +8,13 @@
         <div class="auk-u-ml-2">
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
              {{on "click" this.startEditing}}>
               {{t "edit"}}
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
              {{on "click" this.createAndStartEditing}}>
               {{t "create"}}
             </a>

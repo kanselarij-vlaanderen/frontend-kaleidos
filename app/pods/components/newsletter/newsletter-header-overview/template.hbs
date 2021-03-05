@@ -16,7 +16,7 @@
             <div class="vlc-toolbar__item">
               <LinkTo
                 @route="newsletters"
-                class="vlc-backlink vl-link vl-link--bold" >
+                class="vlc-backlink auk-button-link" >
               {{!-- template-lint-disable no-bare-strings  --}}
                 &#8629;
               {{!-- template-lint-enable no-bare-strings  --}}
@@ -122,7 +122,7 @@
                     {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
                       <li class="vlc-dropdown-menu__item">
                         <a href=""
-                           class="vl-link vl-link--block"
+                           class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "sendTestCampaign"}}
                         >
@@ -131,7 +131,7 @@
                       </li>
                       <li class="vlc-dropdown-menu__item">
                         <a href=""
-                           class="vl-link vl-link--block"
+                           class="auk-button-link auk-button-link--block"
                           {{action attacher.hide}}
                           {{action "toggleIsVerifying"}}
                         >
@@ -145,7 +145,7 @@
                     {{/if}}
                     <li class="vlc-dropdown-menu__item">
                       <a
-                        class="vl-link vl-link--block"
+                        class="auk-button-link auk-button-link--block"
                         target="_blank"
                         rel="noopener noreferrer"
                         href={{concat
@@ -166,7 +166,7 @@
                     ></li>
                     <li class="vlc-dropdown-menu__item">
                       <a href=""
-                         class="vl-link vl-link--block vl-u-text--error"
+                         class="auk-button-link auk-button-link--block vl-u-text--error"
                         {{action attacher.hide}}
                         {{action "deleteCampaign"}}
                       >
@@ -176,7 +176,7 @@
                   {{else}}
                     <li class="vlc-dropdown-menu__item">
                       <a href=""
-                         class="vl-link vl-link--block"
+                         class="auk-button-link auk-button-link--block"
                         {{action "createCampaign"}}
                       >
                         {{t "create-campaign"}}
@@ -187,7 +187,7 @@
                 {{#if shouldShowPrintButton}}
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
-                       class="vl-link vl-link--block"
+                       class="auk-button-link auk-button-link--block"
                       {{action attacher.hide}}
                       {{action "print"}}
                     >
