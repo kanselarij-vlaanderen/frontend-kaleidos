@@ -24,7 +24,6 @@
                                       @placeholder={{t "search-placeholder"}}
                                       @value={{this.searchText}}
                                       {{on "input" (perform this.debouncedSearchTask)}}
-                                      {{!-- @enter={{perform this.debouncedSearchTask}} --}}
                                       @autocomplete="off"
               />
               {{#if showSearchResults}}

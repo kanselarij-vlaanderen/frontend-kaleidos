@@ -701,6 +701,7 @@
   "organization": "Organisatie",
   "add-organization": "Organisatie toevoegen",
   "search-organization": "Zoek een organisatie",
+  "organizations-empty-result": "Geen organisaties gevonden",
   "contacts": "Contactpersonen",
   "add-contact-persons": "Contactpersonen toevoegen",
   "no-added-contact-persons": "Er zijn nog geen contactpersonen toegevoegd",
