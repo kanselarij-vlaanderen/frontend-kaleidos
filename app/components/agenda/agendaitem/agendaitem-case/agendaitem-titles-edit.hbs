@@ -4,7 +4,7 @@
       <div class="vlc-input-field-block">
         {{web-components/vl-form-label value=(t "confidential")}}
         {{web-components/vl-toggle
-          data-test-agendaitem-titles-edit-confidential
+          data-test-agendaitem-titles-edit-confidential=true
           value=@subcase.confidential
         }}
       </div>
@@ -12,7 +12,7 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "name-subcase")}}
       {{textarea
-        data-test-agendaitem-titles-edit-shorttitle
+        data-test-agendaitem-titles-edit-shorttitle=true
         rows="2"
         class="vl-textarea vl-textarea--block"
         value=@agendaitem.shortTitle
@@ -23,7 +23,7 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "title-subcase")}}
       {{textarea
-        data-test-agendaitem-titles-edit-title
+        data-test-agendaitem-titles-edit-title=true
         rows="4"
         class="vl-textarea vl-textarea--block"
         value=@agendaitem.title
@@ -34,7 +34,7 @@
     <div class="vlc-input-field-block">
       {{web-components/vl-form-label value=(t "remark-title")}}
       {{textarea
-        data-test-agendaitem-titles-edit-explanation
+        data-test-agendaitem-titles-edit-explanation=true
         rows="2"
         class="vl-textarea vl-textarea--block"
         value=@agendaitem.explanation
@@ -47,7 +47,7 @@
         {{#if this.newsletterInfo}}
           {{web-components/vl-form-label value=(t "show-in-newsletter")}}
           {{web-components/vl-toggle
-            data-test-agendaitem-titles-edit-showInNewsletter
+            data-test-agendaitem-titles-edit-showInNewsletter=true
             value=this.newsletterInfo.inNewsletter
           }}
         {{else}}
@@ -64,7 +64,7 @@
       {{t "cancel"}}
     </a>
     {{web-components/vl-save-button
-      data-test-agendaitem-titles-edit-save
+      data-test-agendaitem-titles-edit-save=true
       text=(t "save")
       isLoading=this.isLoading
       saveAction=(action this.saveChanges)

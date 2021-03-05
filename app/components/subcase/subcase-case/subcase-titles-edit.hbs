@@ -2,7 +2,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "confidential")}}
     {{web-components/vl-toggle
-      data-test-subcase-titles-edit-confidential
+      data-test-subcase-titles-edit-confidential=true
       value=subcase.confidential
     }}
   </div>
@@ -10,7 +10,7 @@
 <div class="auk-u-mb-2">
   {{web-components/vl-form-label value=(t "publicity")}}
   {{utils/model-selector
-    data-test-subcase-titles-edit-accessLevel
+    data-test-subcase-titles-edit-accessLevel=true
     modelName="access-level"
     allowClear=true
     searchField="label"
@@ -26,7 +26,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "name-subcase")}}
     {{textarea
-      data-test-subcase-titles-edit-shorttitle
+      data-test-subcase-titles-edit-shorttitle=true
       rows="2"
       class="vl-textarea vl-textarea--block"
       value=subcase.shortTitle
@@ -37,7 +37,7 @@
   <div class="vlc-input-field-block">
     {{web-components/vl-form-label value=(t "title-subcase")}}
     {{textarea
-      data-test-subcase-titles-edit-title
+      data-test-subcase-titles-edit-title=true
       rows="4"
       class="vl-textarea vl-textarea--block"
       value=subcase.title
@@ -52,7 +52,7 @@
     {{t "cancel"}}
   </a>
   {{web-components/vl-save-button
-    data-test-subcase-titles-edit-save
+    data-test-subcase-titles-edit-save=true
     text=(t "save")
     isLoading=isLoading
     saveAction=(action "saveChanges")

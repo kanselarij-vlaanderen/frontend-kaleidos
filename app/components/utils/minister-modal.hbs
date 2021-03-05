@@ -8,7 +8,7 @@
     <div class="auk-u-mb-8">
       {{#if isAddingMinister}}
         {{utils/mandatee-selector
-          data-test-mandatee-selector
+          data-test-mandatee-selector=true
           singleSelect=true
           selectedMandatees=selectedMandatee
           chooseMandatee=(action "mandateeSelected")

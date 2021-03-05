@@ -9,7 +9,7 @@
   <div class="vl-modal-dialog__content">
     {{#if showVerificationPopup}}
       {{changes-alert
-        data-test-manage-mandatee-changes-alert
+        data-test-manage-mandatee-changes-alert=true
         message=(t "show-active-minister-alert")
         buttonText=(t "close")
         clearAction=(action "close")

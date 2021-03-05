@@ -28,7 +28,7 @@
 
   {{#if (await model)}}
     {{#data-table
-      data-test-settings-user-table
+      data-test-settings-user-table=true
       content=(await model)
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
       isLoading=isLoadingModel

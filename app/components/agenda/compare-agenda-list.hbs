@@ -2,7 +2,7 @@
 <div class="auk-u-flex auk-u-flex--justify-between auk-u-mb-2">
   <div class="compare-left-column">
     {{utils/agenda-selector
-      data-test-compare-agenda-left
+      data-test-compare-agenda-left=true
       searchField="name"
       propertyToShow="agendaName"
       placeholder=(t "select-agenda")
@@ -14,7 +14,7 @@
   </div>
   <div class="compare-right-column">
     {{utils/agenda-selector
-      data-test-compare-agenda-right
+      data-test-compare-agenda-right=true
       searchField="name"
       propertyToShow="agendaName"
       placeholder=(t "select-agenda")
