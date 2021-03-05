@@ -62,7 +62,7 @@ context('Table Row Click tests', () => {
     cy.wait('@getMeetings', {
       timeout: 12000,
     });
-    cy.get('.vl-input-field').as('inputField')
+    cy.get('.auk-input').as('inputField')
       .click()
       .type('02/2019');
     cy.get('.vl-button.vl-button--secondary.vl-button--icon').as('searchButton')

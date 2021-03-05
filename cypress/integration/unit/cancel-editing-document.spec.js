@@ -185,13 +185,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.vl-title--h6').as('documentName');
       cy.get('@documentName').contains(fileName)
         .click();
-      cy.get('.vl-input-field--block').click()
+      cy.get('.auk-input--block').click()
         .type(extraName);
       cy.get('.ki-cross').click();
       // assert old value is back
       cy.get('@documentName').contains(fileName)
         .click();
-      cy.get('.vl-input-field--block').click()
+      cy.get('.auk-input--block').click()
         .type(extraName);
       cy.get('.ki-check').click();
       // TODO patch happens

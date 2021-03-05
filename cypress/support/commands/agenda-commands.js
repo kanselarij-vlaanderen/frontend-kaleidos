@@ -76,13 +76,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.get('@newAgendaForm').eq(2)
     .within(() => {
       if (meetingNumber) {
-        cy.get('.vl-input-field').click({
+        cy.get('.auk-input').click({
           force: true,
         })
           .clear()
           .type(meetingNumber);
       } else {
-        cy.get('.vl-input-field').click({
+        cy.get('.auk-input').click({
           force: true,
         })
           .invoke('val')
@@ -119,7 +119,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the location
   cy.get('@newAgendaForm').eq(3)
     .within(() => {
-      cy.get('.vl-input-field').click({
+      cy.get('.auk-input').click({
         force: true,
       })
         .type(location);
@@ -473,7 +473,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         timeout: 12000,
       }).should('not.exist');
       if (caseTitle) {
-        cy.get('.vl-input-field').clear()
+        cy.get('.auk-input').clear()
           .type(caseTitle, {
             force: true,
           });
