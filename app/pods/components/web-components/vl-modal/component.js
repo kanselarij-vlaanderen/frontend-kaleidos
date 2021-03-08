@@ -58,17 +58,14 @@ export default Component.extend({
     return null;
   }),
 
-  sizeClass: computed('large', 'isDocumentViewer', function() {
+  sizeClass: computed('isDocumentViewer', function() {
     const {
-      large, isDocumentViewer,
+      isDocumentViewer,
     } = this;
-    if (large) {
-      return 'vl-modal-dialog--large';
-    }
     if (isDocumentViewer) {
-      return 'vl-modal-dialog full-height';
+      return 'auk-modal--full-screen';
     }
-    return null;
+    return 'auk-modal--large';
   }),
 
   getFocusableNodes() {
