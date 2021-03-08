@@ -1,133 +1,87 @@
 // sass-lint:disable force-element-nesting placeholder-in-extend
 
-.vl-typography ul,
-.ul {
-  list-style-type: disc;
-}
-
-.vl-typography ol,
-.ol {
-  list-style-type: decimal;
-}
-
-.vl-typography ol,
-.ol,
-.vl-typography ul,
-.ul {
-  display: block;
-  margin: 1.8rem 0 2rem 1rem;
-  padding-left: 2rem;
-
-  li {
-    display: list-item;
-    margin-bottom: 0.5em;
-  }
-
-  ul {
-    list-style-type: circle;
-  }
-
-  ol {
-    list-style-type: decimal;
-  }
-
-  ul,
-  ol {
-    margin: 0.5em 0 0.5rem 1.5em;
-  }
-}
-
-.vl-typography p,
-.p {
-  margin-bottom: 1.8rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
 // styling for all WYSIWYG tags out there
 
-.vl-typography {
-  strong,
-  b {
-    font-weight: 500;
-  }
+// .vl-typography {
+//   strong,
+//   b {
+//     font-weight: 500;
+//   }
 
-  em,
-  i {
-    font-style: italic;
-  }
+//   em,
+//   i {
+//     font-style: italic;
+//   }
 
-  strike,
-  s {
-    text-decoration: line-through;
-  }
+//   strike,
+//   s {
+//     text-decoration: line-through;
+//   }
 
-  hr {
-    display: block;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    margin-left: auto;
-    margin-right: auto;
-    border: 0;
-    border-top: 1px solid $border-color;
-  }
+//   hr {
+//     display: block;
+//     margin-top: 0.5rem;
+//     margin-bottom: 0.5rem;
+//     margin-left: auto;
+//     margin-right: auto;
+//     border: 0;
+//     border-top: 1px solid $border-color;
+//   }
 
-  table {
-    @include data-table;
-    margin-bottom: 2rem;
-  }
+//   table {
+//     @include data-table;
+//     margin-bottom: 2rem;
+//   }
 
-  blockquote {
-    position: relative;
-    padding-left: 9rem;
-    font-size: 3.4rem;
-    font-weight: 400;
-    margin-bottom: 2rem;
-    line-height: 1.5;
+//   blockquote {
+//     position: relative;
+//     padding-left: 9rem;
+//     font-size: 3.4rem;
+//     font-weight: 400;
+//     margin-bottom: 2rem;
+//     line-height: 1.5;
 
-    &::before {
-      position: absolute;
-      content: "\201C";
-      font-size: 9rem;
-      left: 0;
-      top: 0;
-      padding-top: 1rem;
-      padding-left: 1rem;
-      width: 7rem;
-      height: 6rem;
-      line-height: 1;
-      color: $text-color;
-      background: linear-gradient(-110deg, transparent 20px, $accent-color 20px);
-    }
-  }
+//     &::before {
+//       position: absolute;
+//       content: "\201C";
+//       font-size: 9rem;
+//       left: 0;
+//       top: 0;
+//       padding-top: 1rem;
+//       padding-left: 1rem;
+//       width: 7rem;
+//       height: 6rem;
+//       line-height: 1;
+//       color: $text-color;
+//       background: linear-gradient(-110deg, transparent 20px, $accent-color 20px);
+//     }
+//   }
 
-  pre {
-    padding: 1.5rem;
-    background-color: $mine-shaft;
-    display: block;
-    white-space: pre;
-    overflow-x: scroll;
-    tab-size: 2;
-    word-break: normal;
-    hyphens: none;
-  }
+//   pre {
+//     padding: 1.5rem;
+//     background-color: $mine-shaft;
+//     display: block;
+//     white-space: pre;
+//     overflow-x: scroll;
+//     tab-size: 2;
+//     word-break: normal;
+//     hyphens: none;
+//   }
 
-  code,
-  kdb,
-  samp {
-    font-family: "monospace";
-    background: $athens-gray;
-    padding: .2rem;
-  }
+//   code,
+//   kdb,
+//   samp {
+//     font-family: "monospace";
+//     background: $athens-gray;
+//     padding: .2rem;
+//   }
 
-  a {
-    text-decoration: underline;
+//   a {
+//     text-decoration: underline;
 
-    &:hover,
-    &:focus {
-      text-decoration: none;
-    }
-  }
-}
+//     &:hover,
+//     &:focus {
+//       text-decoration: none;
+//     }
+//   }
+// }

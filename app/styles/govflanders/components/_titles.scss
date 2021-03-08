@@ -20,14 +20,3 @@
     }
   }
 }
-
-// apply the same styling for WYSIWYG elements
-@each $level, $settings in $headers-typo {
-  .vl-typography h#{$level} { // sass-lint:disable-line force-element-nesting
-    @include title($level);
-
-    &:not(:first-child) {
-      margin-top: 2 * map-get($settings, space);
-    }
-  }
-}

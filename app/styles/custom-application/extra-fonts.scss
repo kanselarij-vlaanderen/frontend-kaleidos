@@ -10,17 +10,13 @@
   font-weight:  500;
 }
 
-.vl-typography {
-
+.auk-content {
   &--definite {
     font-family: 'Flanders Art Serif' !important;
+
     h4 {
       font-family: 'Flanders Art Serif' !important;
-      margin:0 !important;
-      font-weight: bold;
-    }
-    strong {
-      font-weight:  bold;
+      margin: 0 !important;
     }
   }
 }

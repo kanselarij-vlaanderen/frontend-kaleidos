@@ -1,0 +1,26 @@
+/* ==========================================================================
+   Component: search-results-list
+   ========================================================================== */
+
+.auk-search-results-list {
+  background: #fff;
+  min-width: 32rem;
+  padding: 1rem 0;
+}
+
+.auk-search-results-list__item a {
+  color: $au-gray-700;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem 1.6rem;
+
+  &:hover {
+    background-color: $au-gray-100;
+    color: $au-blue-600;
+  }
+}
+
+.auk-search-results-list__item:not(:last-of-type) {
+  border-bottom: 0.1rem solid $au-gray-200;
+}

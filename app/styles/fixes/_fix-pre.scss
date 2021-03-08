@@ -1,8 +1,7 @@
 // Hotfix for pre styles (code styles)
 // See https://github.com/mono-company/digikan/issues/24
 
-.vl-typography {
-
+.auk-content {
   code,
   kdb,
   samp {
@@ -19,7 +18,6 @@
     color: #FFF;
     background: none;
   }
-
 }
 
 pre {

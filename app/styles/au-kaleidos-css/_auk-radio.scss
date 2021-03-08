@@ -1,0 +1,56 @@
+/* ==========================================================================
+  auk-radio
+   ========================================================================== */
+
+.auk-radio {
+  display: block;
+  position: relative;
+  padding: .5rem 0 .5rem 2.4rem;
+}
+
+.auk-radio__toggle {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.auk-radio__box {
+  position: absolute;
+  top: .7rem;
+  left: 0;
+  height: 1.8rem;
+  width: 1.8rem;
+  border-radius: 100%;
+  border: .1rem solid $au-gray-300;
+}
+
+.auk-radio input[type='radio']:checked ~ .auk-radio__box {
+  background: $au-blue-700;
+  border-color: $au-blue-700;
+  &:before {
+    content: "";
+    background-color: $au-gray-100;
+    position: absolute;
+    height: .8rem;
+    width: .8rem;
+    top: (.8rem) / 2;
+    left: (.8rem) / 2;
+    border-radius: 100%;
+  }
+}
+
+.auk-radio-list--inline {
+  display: flex;
+  align-items: center;
+  .auk-radio:not(:last-of-type) {
+    margin-right: 2rem;
+  }
+}
+
+.auk-radio input[type='radio']:focus ~ .auk-radio__box,
+.auk-radio input[type='radio']:active ~ .auk-radio__box {
+  border-color: $au-yellow-400;
+  box-shadow: 0 0 0 0.1rem $au-yellow-400;
+}

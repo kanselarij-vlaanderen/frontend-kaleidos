@@ -1,0 +1,23 @@
+/* ==========================================================================
+  auk-pagination
+   ========================================================================== */
+
+.auk-pagination {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.auk-pagination__element {
+  padding: 0 0.5rem;
+}
+
+.auk-pagination__list {
+  display: flex;
+  align-items: center;
+}
+
+.auk-pagination__element-link--active {
+  font-weight: 500;
+}

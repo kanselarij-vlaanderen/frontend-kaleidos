@@ -35,7 +35,7 @@
                 {{agendaitem.title}}
               </pre>
             </div>
-            <div class="vl-typography">
+            <div class="auk-content">
               <ul>
                 {{#if (gt agendaitem.treatments.length 0)}}
                   {{#each (await agendaitem.treatments) as |treatment|}}
@@ -60,7 +60,7 @@
                   {{/each}}
                 {{else}}
                   <li>
-                    <p class="vl-u-text--muted">
+                    <p class="auk-u-muted">
                       {{t "no-decision"}}
                     </p>
                   </li>

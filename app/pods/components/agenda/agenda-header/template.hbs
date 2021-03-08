@@ -7,7 +7,7 @@
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
-        <span class="vlc-page-header__subtitle vl-u-text vl-u-text--muted" style="font-size:1.6rem;">
+        <span class="vlc-page-header__subtitle vl-u-text auk-u-muted" style="font-size:1.6rem;">
           - {{await currentSession.kindToShow.label}}
         </span>
       </h1>
@@ -119,7 +119,7 @@
                         {{t "agenda-delete"}}
                       </a>
                     </li>
-                    
+
                   {{/if}}
                   {{#if (await canReopenPreviousAgenda)}}
                     <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -478,7 +478,7 @@
     <WebComponents::AuModal::Body>
       {{#if (await this.currentSession.latestAgenda.isDesignAgenda)}}
         <WebComponents::AuAlert
-          @skin="error" 
+          @skin="error"
           @message={{t
             "agenda-design-delete-message"
             agenda=this.currentSession.latestAgenda.agendaName
@@ -512,7 +512,7 @@
     <WebComponents::AuModal::Body>
       {{#if (eq this.agendas.length 1)}}
         <WebComponents::AuAlert
-          @skin="error" 
+          @skin="error"
           @message={{t "delete-final-agenda-and-meeting"}}
         />
       {{/if}}
