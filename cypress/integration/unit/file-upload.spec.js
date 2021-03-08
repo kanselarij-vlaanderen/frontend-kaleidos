@@ -52,7 +52,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains('test pdf');
+          cy.get('.auk-h4 > span').contains('test pdf');
         });
     });
 
@@ -64,7 +64,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/BIS/);
+          cy.get('.auk-h4 > span').contains(/BIS/);
         });
     });
 
@@ -76,7 +76,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/TER/);
+          cy.get('.auk-h4 > span').contains(/TER/);
         });
     });
   });
@@ -136,31 +136,31 @@ context('Add files to an agenda', () => { // At the meeting-level
       cy.get(document.documentCard).as('docCards');
       cy.get('@docCards').eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/1e/);
+          cy.get('.auk-h4 > span').contains(/1e/);
         });
       cy.get('@docCards').eq(1)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/2e/);
+          cy.get('.auk-h4 > span').contains(/2e/);
         });
       cy.get('@docCards').eq(2)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/3e/);
+          cy.get('.auk-h4 > span').contains(/3e/);
         });
       cy.get('@docCards').eq(3)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/4e/);
+          cy.get('.auk-h4 > span').contains(/4e/);
         });
       cy.get('@docCards').eq(4)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/5e/);
+          cy.get('.auk-h4 > span').contains(/5e/);
         });
       cy.get('@docCards').eq(5)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/6e/);
+          cy.get('.auk-h4 > span').contains(/6e/);
         });
       cy.get('@docCards').eq(6)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(/7e/);
+          cy.get('.auk-h4 > span').contains(/7e/);
         });
     });
   });
@@ -180,7 +180,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Remove a document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/1e/);
+        cy.get('.auk-h4 > span').contains(/1e/);
         cy.get('.ki-more').click();
       });
     cy.get('.vlc-dropdown-menu').within(() => {
@@ -213,7 +213,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Delete another document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/2e/);
+        cy.get('.auk-h4 > span').contains(/2e/);
         cy.get(document.showPiecesHistory).click();
         cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
