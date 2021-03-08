@@ -18,12 +18,10 @@
         </button>
       {{/if}}
     {{else}}
-      <div class="vl-loader" role="alert" aria-busy="true">
-        <div class="vl-loader" role="alert" aria-busy="true">
-          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-            {{t "nota-loading-text"}}
-          </EmberTooltip>
-        </div>
+      <div class="auk-loader" role="alert" aria-busy="true">
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{t "nota-loading-text"}}
+        </EmberTooltip>
       </div>
     {{/if}}
   </div>
