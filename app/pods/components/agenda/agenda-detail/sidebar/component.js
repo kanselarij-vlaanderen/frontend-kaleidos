@@ -12,8 +12,6 @@ export default class AgendaSidebar extends Component {
 
   @tracked isShowingChanges = false;
 
-  classNames = ['vlc-agenda-items'];
-
   @action
   selectAgendaitemAction(agendaitem) {
     this.args.selectAgendaitem(agendaitem);

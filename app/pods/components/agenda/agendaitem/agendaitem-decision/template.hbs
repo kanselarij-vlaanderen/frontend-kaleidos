@@ -43,18 +43,28 @@
       {{/if}}
     </div>
   </div>
-  {{#if @treatment.report}} {{!-- awaiting here breaks loading after adding, do not add await --}}
-    <Documents::ReportLink
-      @documentContainer={{await @treatment.report.documentContainer}}
-      @treatment={{@treatment}}
-    />
+  {{#if this.loadReport.isIdle}}
+    {{#if this.report}}
+      <Documents::DocumentCard
+        @piece={{this.report}}
+        @hideNewerVersions={{true}}
+        @onOpenUploadModal={{@onOpenUploadModal}}
+        @onAddPiece={{perform this.attachNewReportVersion}}
+        @didDeletePiece={{perform this.attachPreviousReportVersion}}
+        @didDeleteContainer={{perform this.loadReport}}
+      />
+    {{else}}
+      {{#if this.currentSession.isEditor}}
+        <button type="button" class="vl-button vl-button--tertiary"
+          data-test-upload-decision-file
+          {{on "click" this.toggleIsAddingReport}}
+        >
+          {{t "signed-decision-add"}}
+        </button>
+      {{/if}}
+    {{/if}}
   {{else}}
-    <Utils::AddDocuments
-      @treatment={{@treatment}}
-      @defaultType={{this.defaultType}}
-      @modelToAddPieceTo="agendaItemTreatment"
-      @title={{t "signed-decision-add"}}
-    />
+    <WebComponents::AuLoader/>
   {{/if}}
 {{else}}
   <Agenda::Agendaitem::AgendaitemDecisionEdit
@@ -70,5 +80,12 @@
     @message={{t "delete-decision-message"}}
     @cancel={{this.cancel}}
     @verify={{this.deleteTreatment}}
+  />
+{{/if}}
+{{#if this.isAddingReport}}
+  <Utils::AddDocument
+    @title={{t "signed-decision-add"}}
+    @onSave={{this.attachReport}}
+    @onCancel={{this.toggleIsAddingReport}}
   />
 {{/if}}

@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
+import auComponents from '../../selectors/au-component-selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -93,18 +94,8 @@ context('Subcase tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.contains(SubcaseTitleShort).click();
-    cy.get('.vlc-panel-layout__main-content').within(() => {
-      cy.wait(1000); // TODO do we need a wait here ?
-      cy.get('.vl-tab').as('agendaitemTabs');
-      cy.get('@agendaitemTabs').eq(0)
-        .should('contain', 'Dossier')
-        .click();
-
-      cy.get('.vlc-container').as('agendaitemContent');
-      cy.get('@agendaitemContent').within(() => {
-        cy.contains('Naar procedurestap').should('exist');
-      });
-    });
+    cy.openAgendaitemDossierTab(SubcaseTitleShort);
+    cy.get(agenda.agendaitemTitlesToSubcase).should('exist');
   });
 
   it('should add a subcase and then delete it', () => {
@@ -189,9 +180,8 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(agenda.pillContainer).contains('Zichtbaar in kort bestek');
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
-      .click();
+    cy.get(auComponents.auPillSpan).contains('Zichtbaar in kort bestek');
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
 
     // Assert status also hidden
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
@@ -206,9 +196,11 @@ context('Subcase tests', () => {
     cy.get(agenda.subcase.agendaLink).click();
     cy.wait('@getMeetingsRequest');
     cy.get(agenda.confidentialityIcon).should('exist');
+    // Index view
+    cy.get(auComponents.auPillSpan).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
-    cy.get(agenda.item.editLink).click();
+    cy.get(agenda.agendaitemTitlesEdit).click();
 
     // Check the checkbox (toggle this invisible motafoka).
     cy.get(agenda.agendaitemTitlesEditShowInNewsletter)
@@ -217,18 +209,20 @@ context('Subcase tests', () => {
 
     // Save the changes setting
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
+    cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(agenda.item.actionButton).contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
+    // We toggled hide in newsletter, await the patch
+    cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(agenda.pillContainer).contains('Verborgen in kort bestek');
+    cy.get(auComponents.auPillSpan).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('exist');
 
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
   });
@@ -338,8 +332,9 @@ context('Subcase tests', () => {
     cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]')
       .first()
       .click();
-    cy.get(agenda.toProcedureStapLink).contains('Naar procedurestap')
-      .click();
+
+    cy.wait(1000);
+    cy.get(agenda.agendaitemTitlesToSubcase).click();
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(agenda.subcase.agendaLink).click();

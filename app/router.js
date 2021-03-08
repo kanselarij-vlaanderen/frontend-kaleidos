@@ -98,7 +98,7 @@ Router.map(function() {
   this.route('help');
   this.route('manual', { path: '/handleiding', });
 
-  this.route('aukstyleguide', function() {
+  this.route('auk-styleguide', function() {
     this.route('accordion');
     this.route('alert-skins');
     this.route('alert-types');
