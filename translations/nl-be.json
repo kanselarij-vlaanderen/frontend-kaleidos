@@ -810,5 +810,7 @@
   "filter-plural": "Filteren",
   "reset": "Reset",
   "to-case": "Naar dossier",
-  "config": "Instelling"
+  "config": "Instelling",
+  "type": "Type",
+  "archive": "Archief"
 }
