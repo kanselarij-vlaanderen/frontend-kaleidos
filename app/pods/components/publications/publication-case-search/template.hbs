@@ -7,7 +7,7 @@
   value={{this.searchText}}
   {{on "input" (perform this.debouncedSearch)}}
   {{on "focusout" this.hideResults}}
-  {{on "focusin" (if this.search.lastSuccessful this.showResults)}}
+  {{on "focusin" (if this.search.lastSuccessful this.showResults this.hideResults)}}
   @enter={{perform this.search}}
   @autocomplete="off"
 />
