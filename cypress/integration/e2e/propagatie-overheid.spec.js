@@ -68,7 +68,7 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.accessLevelSave).click();
 
     cy.contains('Wijzigen').click();
-    cy.get('.vl-form__group').as('editDecision');
+    cy.get('.vlc-box').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
