@@ -101,15 +101,12 @@
         {{#if (or renderDetails @isEditingOverview)}}
           <div class="auk-u-flex auk-u-flex--justify-between">
             {{#if (and selectedAgendaitem @isEditingOverview)}}
-              <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-              </span>
+              <WebComponents::AuPill class="vlc-agenda-meta__times-passed vl-u-text--capitalize"></WebComponents::AuPill>
             {{else}}
               {{#if subcase.subcaseName}}
-                <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
-                  {{subcase.subcaseName}}
-                </span>
+                <WebComponents::AuPill class="vlc-agenda-meta__times-passed vl-u-text--capitalize">{{subcase.subcaseName}}</WebComponents::AuPill>
               {{else}}
-                <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
+                <span class="vlc-agenda-meta__times-passed vl-u-text--capitalize"></span>
               {{/if}}
             {{/if}}
             <div class="vlc-agenda-meta__status-holder">
