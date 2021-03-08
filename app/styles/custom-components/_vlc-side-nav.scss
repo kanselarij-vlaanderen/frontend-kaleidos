@@ -11,15 +11,6 @@
     display: flex;
     align-items: center;
     margin-right: .8rem;
-
-    .vl-icon {
-      &:before {
-        position: relative;
-        top: 2.2px;
-      }
-      font-size: 1.8rem;
-      margin-right: .4rem;
-    }
   }
 
   // Small fix to center icon in toggle
