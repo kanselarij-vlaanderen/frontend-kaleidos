@@ -1,6 +1,6 @@
 <div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "confidential")}}
+    <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
     {{web-components/vl-toggle
       data-test-subcase-titles-edit-confidential
       value=subcase.confidential
@@ -8,7 +8,7 @@
   </div>
 </div>
 <div class="auk-u-mb-2">
-  {{web-components/vl-form-label value=(t "publicity")}}
+  <WebComponents::AuLabel>{{t "publicity"}}</WebComponents::AuLabel>
   {{utils/model-selector
     data-test-subcase-titles-edit-accessLevel
     modelName="access-level"
@@ -24,7 +24,7 @@
 
 <div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "name-subcase")}}
+    <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
     {{textarea
       data-test-subcase-titles-edit-shorttitle
       rows="2"
@@ -35,7 +35,7 @@
 </div>
 <div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "title-subcase")}}
+    <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
     {{textarea
       data-test-subcase-titles-edit-title
       rows="4"

@@ -1,27 +1,27 @@
 <div class="vl-modal-dialog__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "title")}}
+    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-mandatee-title-container
       value=title
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "nick-name")}}
+    <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-mandatee-nick-name
       value=nickName
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "add-people")}}
+    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
     {{utils/create-person-selector
       selectedItems=selectedPerson
       selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "ise-code")}}
+    <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
     {{utils/model-selector
       data-test-ise-code-dropdown-container
       modelName="ise-code"
@@ -34,7 +34,7 @@
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "start-date")}}
+    <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
     {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
   </div>
 </div>

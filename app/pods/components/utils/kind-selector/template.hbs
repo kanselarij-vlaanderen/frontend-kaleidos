@@ -1,6 +1,6 @@
 <div class="vlc-input-field-block">
   {{#if (not hideLabel)}}
-    {{web-components/vl-form-label value=(t "kind")}}
+    <WebComponents::AuLabel>{{t "kind"}}</WebComponents::AuLabel>
   {{/if}}
   {{#if isLoading}}
     <div class="vl-u-text--muted">

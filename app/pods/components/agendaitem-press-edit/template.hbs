@@ -1,10 +1,10 @@
 <div class="auk-u-mb-4">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "title")}}
+    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=agendaitem.titlePress}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "content")}}
+    <WebComponents::AuLabel>{{t "content"}}</WebComponents::AuLabel>
     {{textarea
       class="vl-textarea vl-textarea--block"
       rows="10"
@@ -12,7 +12,7 @@
     }}
   </div>
   <div class="vlc-input-field vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "for-press")}}
+    <WebComponents::AuLabel>{{t "for-press"}}</WebComponents::AuLabel>
     {{web-components/vl-toggle value=agendaitem.forPress}}
   </div>
 </div>

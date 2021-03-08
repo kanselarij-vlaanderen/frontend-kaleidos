@@ -4,7 +4,7 @@
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="vlc-box">
-      <WebComponents::VlFormLabel @value="Type"/>
+      <WebComponents::AuLabel>Type</WebComponents::AuLabel>
       <WebComponents::VlCheckbox
         @value={{this.includeNotas}}
         @label="Nota"
@@ -15,7 +15,7 @@
         @label="Mededeling"
         @toggle={{this.toggleIncludeMededelingen}}
       />
-      <WebComponents::VlFormLabel @value={{t "version"}}/>
+      <WebComponents::AuLabel>{{t "version"}}</WebComponents::AuLabel>
       <WebComponents::VlCheckbox
         @value={{this.latestOnly}}
         @label={{t "only-on-final-agenda"}}

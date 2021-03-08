@@ -8,13 +8,13 @@
   {{#if @allowDocumentContainerEdit}}
     <div class="metadata-container">
       <div class="vlc-input-field-block">
-        <WebComponents::VlFormLabel @value={{t "document-name"}} />
+        <WebComponents::AuLabel>{{t "document-name"}}</WebComponents::AuLabel>
         <WebComponents::VlFormInput
           @value={{mut @piece.name}} />
       </div>
       {{#unless this.loadData.isRunning}}
         <div class="vlc-input-field-block">
-          <WebComponents::VlFormLabel @value={{t "document-type"}} />
+          <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
             @onSelect={{this.selectDocumentType}}

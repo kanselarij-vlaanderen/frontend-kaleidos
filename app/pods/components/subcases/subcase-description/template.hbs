@@ -157,7 +157,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
+        <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="subcase-type"
           searchField="label"
@@ -168,7 +168,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-name")}}
+        <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>

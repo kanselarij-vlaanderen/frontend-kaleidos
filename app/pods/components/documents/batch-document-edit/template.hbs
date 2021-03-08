@@ -2,30 +2,30 @@
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}
-    <div class="vl-form__group vl-u-bg-porcelain">
+    <div class="vlc-box">
       <div class="auk-u-mb-4">
         <table class="vl-data-table vl-data-table--align-middle">
           <thead>
             <tr>
               <th class="vl-data-table-col-4">
-                {{web-components/vl-form-label
-                  value=(t "document-name")
-                }}
+                <WebComponents::AuLabel>
+                  {{t "document-name"}}
+                </WebComponents::AuLabel>
               </th>
               <th class="vl-data-table-col-3">
-                {{web-components/vl-form-label
-                  value=(t "file-type")
-                }}
+                <WebComponents::AuLabel>
+                  {{t "file-type"}}
+                </WebComponents::AuLabel>
               </th>
               <th class="vl-data-table-col-3">
-                {{web-components/vl-form-label
-                  value=(t "publicity")
-                }}
+                <WebComponents::AuLabel>
+                  {{t "publicity"}}
+                </WebComponents::AuLabel>
               </th>
               <th class="vl-data-table-col-1">
-                {{web-components/vl-form-label
-                  value=(t "confidential")
-                }}
+                <WebComponents::AuLabel>
+                  {{t "confidential"}}
+                </WebComponents::AuLabel>
               </th>
               <th class="vl-data-table-col-1"></th>
             </tr>

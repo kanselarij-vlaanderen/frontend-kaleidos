@@ -194,7 +194,7 @@
     @title={{t "new-document-piece"}}>
     <div class="vl-modal-dialog__content">
       {{#if this.newPiece}}
-        <WebComponents::VlFormLabel @value={{t "name"}} />
+        <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
         <WebComponents::VlFormInput
           @value={{this.newPiece.name}}/>
         <Documents::DocumentUpload

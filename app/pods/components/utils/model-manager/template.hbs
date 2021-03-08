@@ -65,7 +65,7 @@
   {{#if isAdding}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
+        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=title}}
       </div>
     </div>
@@ -80,7 +80,7 @@
   {{#if isEditing}}
     <div class="vl-modal-dialog__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
+        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=title}}
       </div>
     </div>

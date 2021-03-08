@@ -29,14 +29,14 @@
   </div>
 {{else}}
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "first-name")}}
+    <WebComponents::AuLabel>{{t "first-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-create-person-firstname
       value=firstName
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "name")}}
+    <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-create-person-lastname
       value=lastName

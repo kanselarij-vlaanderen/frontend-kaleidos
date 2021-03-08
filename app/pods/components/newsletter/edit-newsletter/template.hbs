@@ -1,7 +1,7 @@
 <div class="vl-modal-dialog__content">
   <div class="auk-u-flex--align-end auk-u-mb-2">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "date-publication")}}
+      <WebComponents::AuLabel>{{t "date-publication"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
         enableTime=true
         selectedDate=date
@@ -11,7 +11,7 @@
       }}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "newsletter-doc-date")}}
+      <WebComponents::AuLabel>{{t "newsletter-doc-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
         enableTime=true
         selectedDate=docDate
