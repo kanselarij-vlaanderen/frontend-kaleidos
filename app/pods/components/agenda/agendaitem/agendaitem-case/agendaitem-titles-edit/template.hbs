@@ -2,7 +2,7 @@
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "confidential")}}
+        <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
         {{web-components/vl-toggle
           data-test-agendaitem-titles-edit-confidential
           value=@subcase.confidential
@@ -10,7 +10,7 @@
       </div>
     {{/if}}
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "name-subcase")}}
+      <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-shorttitle
         rows="2"
@@ -21,7 +21,7 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "title-subcase")}}
+      <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-title
         rows="4"
@@ -32,7 +32,7 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "remark-title")}}
+      <WebComponents::AuLabel>{{t "remark-title"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-explanation
         rows="2"
@@ -45,13 +45,13 @@
     <div class="auk-u-mb-4">
       <div class="vlc-input-field-block">
         {{#if this.newsletterInfo}}
-          {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
           {{web-components/vl-toggle
             data-test-agendaitem-titles-edit-showInNewsletter
             value=this.newsletterInfo.inNewsletter
           }}
         {{else}}
-          {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
           {{t "no-newsletter-info"}}
         {{/if}}
       </div>

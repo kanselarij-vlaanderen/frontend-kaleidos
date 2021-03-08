@@ -1,9 +1,9 @@
-<div class="vl-form__group vl-u-bg-porcelain">
+<div class="vlc-box">
   {{!-- Editor with annotated decision  text will come somwhere around here in the future --}}
   <div class="vlc-input-field vlc-input-field-block auk-u-mb-4"
       data-test-decision-edit-power-select-container
   >
-    <WebComponents::VlFormLabel @value={{t "result-decision"}}/>
+    <WebComponents::AuLabel>{{t "result-decision"}}</WebComponents::AuLabel>
     <Decision::DecisionResultSelect
       @selected={{this.treatment.decisionResultCode}}
       @onChange={{this.changeDecisionResultCode}}

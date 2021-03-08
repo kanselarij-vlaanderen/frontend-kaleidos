@@ -8,12 +8,12 @@
 
     <div class="auk-u-mb-4">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "confidential")}}
+        <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
         {{web-components/vl-toggle value=confidential}}
       </div>
     </div>
     <div class="vlc-input-field-block {{getClassForShortTitle}}" data-test-metadata-form>
-      {{web-components/vl-form-label value=(t "short-title-case")}}
+      <WebComponents::AuLabel>{{t "short-title-case"}}</WebComponents::AuLabel>
       {{textarea class="auk-textarea" rows="2" value=shortTitle}}
     </div>
   </div>

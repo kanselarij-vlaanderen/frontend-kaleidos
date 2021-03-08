@@ -1,4 +1,4 @@
-<form class="vl-form" onsubmit={{action "createSubCase"}}>
+<form onsubmit={{action "createSubCase"}}>
   <div class="auk-modal__content">
     <div class="auk-u-flex auk-u-flex--justify-between">
       {{web-components/vl-radio-button-list
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "name-subcase")}}
+      <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
       {{textarea
         rows="2"
         class="auk-textarea"
@@ -26,11 +26,11 @@
       }}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "title-subcase")}}
+      <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
       {{textarea rows="4" class="auk-textarea" value=title}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
+      <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
       {{utils/model-selector
         modelName="subcase-type"
         searchField="label"
@@ -41,7 +41,7 @@
       }}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "subcase-name")}}
+      <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
       <div class="auk-u-flex auk-u-flex--vertical-center">
         {{#if (not isEditing)}}
           {{utils/model-selector

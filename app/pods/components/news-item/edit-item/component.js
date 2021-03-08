@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   intl: inject(),
-  classNames: ['vl-form__group vl-u-bg-porcelain'],
+  classNames: ['vlc-box'],
 
   isTryingToSave: false,
   isExpanded: false,

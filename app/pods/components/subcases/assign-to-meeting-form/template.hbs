@@ -1,6 +1,6 @@
 <div class="auk-modal__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "propose-for")}}
+    <WebComponents::AuLabel>{{t "propose-for"}}</WebComponents::AuLabel>
     {{#if (is-pending dateObjectsToEnable)}}
       {{web-components/vl-loader
         text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))

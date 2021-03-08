@@ -4,7 +4,7 @@
       data-test-system-alert-form-from-date
       class="vlc-input-field-block"
     >
-      {{web-components/vl-form-label value=(t "start-date")}}
+      <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
         date=(array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ"))
         dateChanged=(action "selectBeginDate")
@@ -15,7 +15,7 @@
       data-test-system-alert-form-to-date
       class="vlc-input-field-block auk-u-mb-3"
     >
-      {{web-components/vl-form-label value=(t "end-date")}}
+      <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
         date=(array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ"))
         dateChanged=(action "selectEndDate")
@@ -27,14 +27,14 @@
     data-test-system-alert-form-title
     class="vlc-input-field-block"
   >
-    {{web-components/vl-form-label value=(t "title")}}
+    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=this.alert.title}}
   </div>
   <div
     data-test-system-alert-form-message
     class="vlc-input-field-block"
   >
-    {{web-components/vl-form-label value=(t "message")}}
+    <WebComponents::AuLabel>{{t "message"}}</WebComponents::AuLabel>
     {{textarea
       rows="2"
       class="auk-textarea"
@@ -42,7 +42,7 @@
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "severity")}}
+    <WebComponents::AuLabel>{{t "severity"}}</WebComponents::AuLabel>
     {{utils/model-selector
       modelName="alert-type"
       searchField="label"

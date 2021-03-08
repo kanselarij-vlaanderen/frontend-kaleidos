@@ -9,36 +9,36 @@
 {{/if}}
 <div class="auk-modal__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "title")}}
+    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=title}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "nick-name")}}
+    <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=nickName}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "add-people")}}
+    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
     {{utils/create-person-selector
       selectedItems=mandateeToEdit.person
       selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "start-date")}}
+    <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
     {{web-components/vl-datepicker
       selectedDate=startDate
       dateChanged=(action "selectStartDate")
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "end-date")}}
+    <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
     {{web-components/vl-datepicker
       selectedDate=endDate
       dateChanged=(action "selectEndDate")
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "ise-code")}}
+    <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
     {{utils/model-selector
       data-test-model-selector-iseCodes
       modelName="ise-code"

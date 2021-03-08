@@ -19,9 +19,9 @@
     <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
       <div class="vlc-input-field-block auk-o-grid-col-4">
         <div class="auk-u-flex auk-u-flex--align-baseline">
-          <label class="vl-form__label u-padding--right--tinier" for="dossierId">
+          <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
             {{capitalize (t "keyword")}}
-          </label>
+          </WebComponents::AuLabel>
           <span>
             <i
               class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
@@ -52,7 +52,7 @@
         />
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <WebComponents::VlFormLabel @value={{t "from"}}/>
+        <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
           @dateChanged={{fn (mut this.dateFromBuffer)}}
@@ -69,7 +69,7 @@
         {{/if}}
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <WebComponents::VlFormLabel @value={{t "until-inclusive"}}/>
+        <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
           @dateChanged={{fn (mut this.dateToBuffer)}}
@@ -85,9 +85,9 @@
         {{/if}}
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <label class="vl-form__label" for="ministerName">
+        <WebComponents::AuLabel for="ministerName">
           {{t "minister"}}
-        </label>
+        </WebComponents::AuLabel>
         <Input
           type="text"
           class="auk-input auk-input--block"
