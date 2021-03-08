@@ -123,7 +123,7 @@ context('Subcase tests', () => {
     cy.get('.vl-button--icon-before')
       .contains('Acties')
       .click();
-    cy.get('.vlc-dropdown-menu__item > .vl-link')
+    cy.get('.vlc-dropdown-menu__item > .auk-button-link')
       .contains('Procedurestap verwijderen')
       .should('not.exist');
   });

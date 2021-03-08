@@ -47,7 +47,7 @@
                   >
                     <ul class="vlc-dropdown-menu">
                       <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
+                        <button class="auk-button-link auk-button-link--block" type="button"
                           data-test-document-upload-new-piece
                           {{on "click" attacher.hide}}
                           {{on "click" (fn this.openUploadModal)}}
@@ -56,7 +56,7 @@
                         </button>
                       </li>
                       <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
+                        <button class="auk-button-link auk-button-link--block" type="button"
                           {{on "click" attacher.hide}}
                           {{on "click" this.enableEditPieceName}}
                         >
@@ -65,7 +65,7 @@
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                       <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="vl-link vl-link--block vl-u-text--error" type="button"
+                        <button class="auk-button-link auk-button-link--block vl-u-text--error" type="button"
                           {{on "click" attacher.hide}}
                           {{on "click" this.deleteDocumentContainer}}
                         >
@@ -154,7 +154,7 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
         <button
-          class="vl-toggle vl-link vl-link--bold"
+          class="vl-toggle auk-button-link"
           type="button"
           disabled={{this.loadPieceRelatedData.isRunning}}
           data-test-show-pieces-history

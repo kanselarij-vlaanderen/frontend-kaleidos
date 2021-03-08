@@ -5,7 +5,7 @@
     </h3>
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
-        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -90,7 +90,7 @@
                 (await latestMeetingId)
                 (await latestAgendaId)
                 (await latestAgendaitemId)
-                class="vl-link"
+                class="auk-button-link"
               }}
                 {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
               {{/link-to}}
@@ -174,7 +174,7 @@
     </div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__right">
-        <a href="" class="vl-link" {{action "cancelEditing"}}>
+        <a href="" class="auk-button-link" {{action "cancelEditing"}}>
           {{t "cancel"}}
         </a>
       </div>
