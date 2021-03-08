@@ -40,7 +40,7 @@ function createCase(confidential, shortTitle) {
   // Set short title
   cy.get('@newCaseForm').eq(1)
     .within(() => {
-      cy.get('.vl-textarea').click()
+      cy.get('.auk-textarea').click()
         .type(shortTitle);
     });
 
@@ -102,7 +102,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   if (newShortTitle) {
     cy.get('.vlc-input-field-block').eq(1)
       .within(() => {
-        cy.get('.vl-textarea').click()
+        cy.get('.auk-textarea').click()
           .clear()
           .type(newShortTitle);
       });
@@ -112,7 +112,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   if (longTitle) {
     cy.get('.vlc-input-field-block').eq(2)
       .within(() => {
-        cy.get('.vl-textarea').click()
+        cy.get('.auk-textarea').click()
           .clear()
           .type(longTitle);
       });

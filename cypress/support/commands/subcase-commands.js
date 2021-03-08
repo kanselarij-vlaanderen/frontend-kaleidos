@@ -118,7 +118,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
       if (newLongTitle) {
         cy.get('@editCaseForm').eq(2)
           .within(() => {
-            cy.get('.vl-textarea').click()
+            cy.get('.auk-textarea').click()
               .clear()
               .type(newLongTitle);
           });
@@ -137,7 +137,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     if (newShortTitle) {
       cy.get('@editCaseForm').eq(1)
         .within(() => {
-          cy.get('.vl-textarea').click()
+          cy.get('.auk-textarea').click()
             .clear()
             .type(newShortTitle);
         });
@@ -145,7 +145,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     if (newLongTitle) {
       cy.get('@editCaseForm').eq(2)
         .within(() => {
-          cy.get('.vl-textarea').click()
+          cy.get('.auk-textarea').click()
             .clear()
             .type(newLongTitle);
         });
