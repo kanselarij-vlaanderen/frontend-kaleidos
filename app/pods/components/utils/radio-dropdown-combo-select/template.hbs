@@ -1,35 +1,21 @@
-<div class="vlc-radio-inline">
+<WebComponents::AuRadioList @layout="inline">
   {{#each this.radioOptions as |opt index|}}
-    {{#let (concat this.radioName "-" index) as |radioId|}}
-      <label class="vl-radio" for={{radioId}}>
-        <Input
-          class="vl-radio__toggle"
-          id={{radioId}}
-          name={{this.radioName}}
-          @type="radio"
-          value={{get opt this.labelKey}}
-          checked={{eq opt this.selectedOption}}
-          {{on "input" (fn this.select opt)}}
-        />
-        <div class="vl-radio__label">{{get opt this.labelKey}}</div>
-      </label>
-    {{/let}}
+    <WebComponents::AuRadio
+      @label={{get opt this.labelKey}}
+      name={{this.radioName}}
+      value={{get opt this.labelKey}}
+      checked={{eq opt this.selectedOption}}
+      {{on "input" (fn this.select opt)}}
+    />
   {{/each}}
-  {{#let (concat this.radioName "-" "others") as |radioId|}}
-    <label class="vl-radio" for={{radioId}}>
-      <Input
-        class="vl-radio__toggle"
-        id={{radioId}}
-        name={{this.radioName}}
-        @type="radio"
-        value="Andere"
-        checked={{this.selectedIsInOthers}}
-        {{on "input" this.showOthers}}
-      />
-      <div class="vl-radio__label">{{t "option-others"}}</div>
-    </label>
-  {{/let}}
-</div>
+  <WebComponents::AuRadio
+    @label={{t "option-others"}}
+    name={{this.radioName}}
+    value="Andere"
+    checked={{this.selectedIsInOthers}}
+    {{on "input" this.showOthers}}
+  />
+</WebComponents::AuRadioList>
 {{#if this.othersShown}}
   <PowerSelect
     @options={{this.otherOptions}}
