@@ -14,7 +14,7 @@ module.exports = function(environment) {
     metricsAdapters: [
       {
         name: 'Matomo',
-        environments: ['development', 'test', 'cypress-test', 'production'],
+        environments: ['production'],
         config: {
           scriptUrl: 'https://dev-kaleidos-matomo.redpencil.io', // Can optionally be CDN-sourced
           trackerUrl: 'https://dev-kaleidos-matomo.redpencil.io',

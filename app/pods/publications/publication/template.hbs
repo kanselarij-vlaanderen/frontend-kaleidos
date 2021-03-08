@@ -10,7 +10,14 @@
               this.casePath
             }}
           </span>
-          <WebComponents::AuAbbreviatedText @text={{this.titleText}} @size="150" @custom="true" />
+          <WebComponents::AuAbbreviatedText
+            data-test-publication-detail-menu-short-title
+            @text={{this.titleText}}
+            @size="150"
+            @custom="true"
+            @customTextClass="auk-toolbar-complex__title"
+          >
+          </WebComponents::AuAbbreviatedText>
           <WebComponents::AuTabs @reversed="true">
             <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
             <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>

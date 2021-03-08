@@ -472,7 +472,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
 
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
-    cy.wait(200);
+    cy.wait(1000);
     cy.get('.vl-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
@@ -523,6 +523,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
   }).wait('@putRestoreAgendaitems', {
     timeout: 20000,
   });
+  cy.wait(2000); // TODO, wait for loadpieces to happen
   cy.log('/deleteSinglePiece');
 }
 

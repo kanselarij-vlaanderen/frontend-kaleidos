@@ -703,6 +703,7 @@
   "organization": "Organisatie",
   "add-organization": "Organisatie toevoegen",
   "search-organization": "Zoek een organisatie",
+  "organizations-empty-result": "Geen organisaties gevonden",
   "contacts": "Contactpersonen",
   "add-contact-persons": "Contactpersonen toevoegen",
   "no-added-contact-persons": "Er zijn nog geen contactpersonen toegevoegd",
@@ -752,7 +753,7 @@
   "translation-mail-header": "Bericht",
   "files": "Bijlages",
   "no-translation-requests": "Er zijn nog geen vertalingsaanvragen.",
-  "translation-requests": "Vertalingsaanvragen.",
+  "translation-requests": "Vertalingsaanvragen",
   "no-publishpreview-requests": "Er zijn nog geen drukproefaanvragen.",
   "no-corrections": "Er zijn nog geen verbeteringen toegevoegd.",
   "add-correction": "Verbetering toevoegen",
@@ -809,5 +810,6 @@
   "filter-plural": "Filteren",
   "reset": "Reset",
   "to-case": "Naar dossier",
-  "submission-activity": "Indieningsactiviteit"
+  "submission-activity": "Indieningsactiviteit",
+  "config": "Instelling"
 }
