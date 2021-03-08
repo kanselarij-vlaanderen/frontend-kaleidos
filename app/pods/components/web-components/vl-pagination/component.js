@@ -15,17 +15,11 @@ export default Component.extend({
   firstPage: alias('pageOffset'),
 
   disabledNext: computed('isLastPage', function() {
-    if (this.get('isLastPage')) {
-      return 'disabled auk-u-muted';
-    }
-    return null;
+    return this.get('isLastPage');
   }),
 
   disabledPrev: computed('isFirstPage', function() {
-    if (this.get('isFirstPage')) {
-      return 'disabled auk-u-muted';
-    }
-    return null;
+    return this.get('isFirstPage');
   }),
 
   totalNbOfItems: computed('total', function() {
