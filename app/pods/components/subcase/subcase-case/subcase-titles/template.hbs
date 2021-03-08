@@ -51,11 +51,9 @@
     data-test-agenda-subcasehidden-pill
   >
     {{#if (await subcase.confidential)}}
-      <i class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
+      <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
     {{else}}
-      <i
-        class="vlc-pill auk-u-mr-2 vl-icon vlc-pill--success ki-lock-open"
-      ></i>
+      <WebComponents::AuPill @skin="success" @layout="icon-only" @icon="lock-open"/>
     {{/if}}
   </div>
 </div>
