@@ -166,7 +166,10 @@ export default ModelWithModifier.extend({
 
   onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
-    return latestMeeting.plannedStart;
+    if (latestMeeting) {
+      return latestMeeting.plannedStart;
+    }
+    return null;
   }),
 
   approved: computed('treatments', 'treatments.@each.decisionResultCode', function() {

@@ -79,9 +79,9 @@
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                     {{/if}}
-                    <li class="vlc-dropdown-menu__item">
-                      {{#if (not currentSession.isFinal)}}
-                        {{#if (await isSessionClosable)}}
+                    {{#if (not currentSession.isFinal)}}
+                      {{#if (await isSessionClosable)}}
+                        <li class="vlc-dropdown-menu__item">
                           <a href=""
                             data-test-agenda-header-lockAgenda
                             class="vl-link vl-link--block vl-u-text--error"
@@ -90,8 +90,11 @@
                           >
                             {{t "agenda-close"}}
                           </a>
-                        {{/if}}
-                      {{else}}
+                        </li>
+                        <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                      {{/if}}
+                    {{else}}
+                      <li class="vlc-dropdown-menu__item">
                         <a href=""
                           data-test-agenda-header-unlockAgenda
                           class="vl-link vl-link--block"
@@ -100,13 +103,12 @@
                         >
                           {{t "agenda-reopen"}}
                         </a>
-                      {{/if}}
-                    </li>
-                    
+                      </li>
+                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                    {{/if}}
                   {{/if}}
                   {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
                   {{#if (await canDeleteSelectedAgenda)}}
-                    <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                     <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                       <a href=""
                         data-test-agenda-header-deleteAgenda
