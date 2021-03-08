@@ -1,5 +1,5 @@
 <WebComponents::AuRadioList @layout="inline">
-  {{#each this.radioOptions as |opt index|}}
+  {{#each this.radioOptions}}
     <WebComponents::AuRadio
       @label={{get opt this.labelKey}}
       name={{this.radioName}}
