@@ -3,25 +3,17 @@
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__justified">
         <div class="vlc-toolbar__item vlc-u-box-model-maximize-width">
-          <div class="vl-input-field--inline auk-u-flex auk-u-flex--vertical-center auk-u-flex--justify-between">
-            <WebComponents::AuInput @icon="search"
-                   class="auk-input--block"
-                   type="text"
-                   data-test-trigger-search-input
-                   id="defaultInput"
-                   @placeholder={{t "search-placeholder"}}
-                   @value={{this.searchText}}
-                   {{on "input" this.debouncedSearch}}
-                   @enter={{this.search}}
+          <div class="auk-form-group">
+            <WebComponents::AuInput
+              @icon="search"
+              type="text"
+              @block="true"
+              @placeholder={{t "search-placeholder"}}
+              @value={{this.searchText}}
+              {{on "input" this.debouncedSearch}}
+              @enter={{this.search}}
+              data-test-trigger-search-input
             />
-            <button
-              type="button"
-              data-test-trigger-search-input-trigger
-              class="vl-input-field__submit vl-button"
-              {{on "click" this.search}}
-            >
-              <i class="ki-search"></i>
-            </button>
           </div>
         </div>
         {{#if this.debouncedSearchTask.isRunning}}

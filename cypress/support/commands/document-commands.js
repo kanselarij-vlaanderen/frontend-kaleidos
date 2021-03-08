@@ -35,7 +35,7 @@ function addNewDocumentsInUploadModal(files, model) {
           if (file.newFileName) {
             cy.get('.vlc-input-field-block').eq(0)
               .within(() => {
-                cy.get('.vl-input-field').clear()
+                cy.get('.auk-input').clear()
                   .type(file.newFileName);
               });
           }
