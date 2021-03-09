@@ -145,11 +145,11 @@
             {{#if (not selectedAgendaitem)}}
               {{#if overheidCanViewDocuments}}
                 {{#if renderDetails}}
-                  {{#if (await @agendaitem.sortedPieces)}}
+                  {{#if (await @agendaitem.pieces)}}
                     <div class="vlc-hr"></div>
                     <Utils::PiecesListForItem
                       @isClickable={{true}}
-                      @agendaitemOrSubcase={{@agendaitem}}
+                      @pieces={{await @agendaitem.pieces}}
                     />
                   {{else}}
                     {{#if (await @agendaitem.pieceNames)}}

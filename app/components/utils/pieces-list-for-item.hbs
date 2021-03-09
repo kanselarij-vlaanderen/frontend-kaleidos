@@ -1,21 +1,19 @@
 
-{{#if (is-pending @agendaitemOrSubcase.sortedPieces)}}
+{{#if (is-pending @pieces)}}
   {{web-components/vl-loader text=(t "documents-loading-text")}}
 {{else}}
   <div class="grid-container">
     {{#if (and this.moreThan20 (not this.isShowingAll))}}
       {{#each (await this.piecesLimited) as |piece|}}
         {{item-document
-          item=@agendaitemOrSubcase
           piece=piece
           isClickable=@isClickable
           useNewIcons=useNewIcons
         }}
       {{/each}}
     {{else}}
-      {{#each (await @agendaitemOrSubcase.sortedPieces) as |piece|}}
+      {{#each (await this.sortedPieces) as |piece|}}
         {{item-document
-          item=@agendaitemOrSubcase
           piece=piece
           isClickable=@isClickable
           useNewIcons=useNewIcons
