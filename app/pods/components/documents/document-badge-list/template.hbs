@@ -1,0 +1,9 @@
+<Documents::DocumentList
+  @pieces={{@pieces}}
+as |documents|>
+  <div class="grid-container">
+    {{#each documents as |doc|}}
+      <ItemDocument @piece={{doc}} />
+    {{/each}}
+  </div>
+</Documents::DocumentList>

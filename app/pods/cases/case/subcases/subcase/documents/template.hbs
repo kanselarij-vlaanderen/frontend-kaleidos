@@ -23,9 +23,8 @@
           @onCloseEdit={{this.disablePieceEdit}}
         />
       {{else}}
-        <Documents::DocumentList
+        <Documents::DocumentCardList
           @pieces={{this.model.pieces}}
-          @onOpenUploadModal={{this.ensureFreshData}}
           @onAddPiece={{perform this.addPiece}}
           @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
           @didDeleteContainer={{this.refresh}}
