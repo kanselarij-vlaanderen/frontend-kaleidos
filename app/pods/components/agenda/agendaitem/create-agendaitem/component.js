@@ -218,43 +218,36 @@ export default Component.extend(DataTableRouteMixin, {
     async addSubcasesToAgenda() {
       this.set('loading', true);
       const {
-        selectedAgenda,
         availableSubcases,
         postponedSubcases,
-        agendaService,
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
-
-      // These counters are needed to set an init counter for the agendaitems that are being added to an empty agenda.
-      let index;
-      let agendaitemCounter = -1;
-      let announcementCounter = -1;
-
-      const promise = Promise.all(
-        subcasesToAdd.map(async(subcase) => {
-          if (subcase.selected) {
-            if (subcase.showAsRemark) {
-              announcementCounter++;
-              index = announcementCounter;
-            } else {
-              agendaitemCounter++;
-              index = agendaitemCounter;
-            }
-            return await agendaService.createNewAgendaitem(selectedAgenda, subcase, index);
-          }
-        })
-      );
-
-      promise.then(async() => {
-        this.set('loading', false);
-        this.set('isAddingAgendaitems', false);
-        this.set('sessionService.selectedAgendaitem', null);
-        const anyAddedSubcase = subcasesToAdd.get('firstObject');
-        const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
-        if (this.onCreate) {
-          this.onCreate(newAgendaitem.id);
+      for (const subcase of subcasesToAdd) {
+        let submissionActivities = await this.store.query('submission-activity', {
+          'filter[subcase][:id:]': subcase.id,
+          'filter[:has-no:agenda-activity]': true,
+        });
+        submissionActivities = submissionActivities.toArray();
+        if (!submissionActivities.length) {
+          const now = new Date();
+          const submissionActivity = this.store.createRecord('submission-activity', {
+            startDate: now,
+            subcase,
+          });
+          await submissionActivity.save();
+          submissionActivities = [submissionActivity];
         }
-      });
+        await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivities);
+      }
+
+      this.set('loading', false);
+      this.set('isAddingAgendaitems', false);
+      this.set('sessionService.selectedAgendaitem', null);
+      const anyAddedSubcase = subcasesToAdd.get('firstObject');
+      const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
+      if (this.onCreate) {
+        this.onCreate(newAgendaitem.id);
+      }
     },
   },
 });

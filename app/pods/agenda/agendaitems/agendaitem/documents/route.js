@@ -12,7 +12,6 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
       include: 'document-container',
     });
     pieces = pieces.toArray();
-
     const sortedPieces = sortPieces(pieces);
     return {
       pieces: sortedPieces,

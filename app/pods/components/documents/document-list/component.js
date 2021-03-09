@@ -46,6 +46,7 @@ export default class DocumentsDocumentListComponent extends Component {
       }
     }
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
+
     for (const key of this.documentsByContainer.keys()) {
       const documents = this.documentsByContainer.get(key);
       const sortedDocuments = sortPieces(documents);
