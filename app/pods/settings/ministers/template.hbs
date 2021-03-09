@@ -14,10 +14,10 @@
   {{#if (await model)}}
   {{!-- "tbody" tagname in the "sortable-group"-helper --}}
   {{!-- template-lint-disable table-groups  --}}
-    <table class="vl-data-table vl-data-table--zebra vl-data-table--align-middle">
+    <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th class="vl-data-table-col-6 vl-data-table__header-title">
+          <th class="auk-table__col--6 vl-data-table__header-title">
             <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
                href="#"
             ></a>
@@ -29,7 +29,7 @@
               </div>
             </a>
           </th>
-          <th class="vl-data-table-col-3 vl-data-table__header-title">
+          <th class="auk-table__col--3 vl-data-table__header-title">
             <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
                href="#"
             ></a>
@@ -41,7 +41,7 @@
               </div>
             </a>
           </th>
-          <th class="vl-data-table-col-1 vl-data-table__header-title">
+          <th class="auk-table__col--1 vl-data-table__header-title">
             <a class="vl-data-table__header-title--sortable vl-data-table__header-title--sortable-active"
                href="#"
             ></a>
@@ -53,7 +53,7 @@
               </div>
             </a>
           </th>
-          <th class="vl-data-table-col-2"></th>
+          <th class="auk-table__col--2"></th>
         </tr>
       </thead>
       {{#sortable-group
