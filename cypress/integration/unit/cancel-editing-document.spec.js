@@ -336,16 +336,15 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,
-      });
-      cy.wait('@createNewSubmissionActivity', {
+      }).wait('@createNewSubmissionActivity', {
         timeout: 12000,
-      });
-      cy.wait('@patchAgendaitem', {
-        timeout: 12000,
-      });
-      cy.wait('@putPiece', {
-        timeout: 12000,
-      });
+      })
+        .wait('@patchAgendaitem', {
+          timeout: 12000,
+        })
+        .wait('@putPiece', {
+          timeout: 12000,
+        });
       cy.wait('@loadPiecesAgendaitemQuater');
     });
 

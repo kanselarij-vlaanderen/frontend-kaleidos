@@ -120,7 +120,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.route('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
-      cy.route('PATCH', '/subcases/**').as('patchSubcase');
+      // cy.route('PATCH', '/subcases/**').as('patchSubcase'); // TODO we post or patch submission activity instead?
       cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
       cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
@@ -162,9 +162,11 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
-      cy.wait('@patchSubcase', {
-        timeout: 12000,
-      }).wait('@patchAgendaitem', {
+      // TODO we post or patch submission activity instead?
+      // cy.wait('@patchSubcase', {
+      //   timeout: 12000,
+      // })
+      cy.wait('@patchAgendaitem', {
         timeout: 12000,
       })
         .wait('@putAgendaitemDocuments', {
@@ -175,10 +177,11 @@ function addNewPiece(oldFileName, file, modelToPatch) {
         timeout: 12000,
       }).wait('@patchAgendaitem', {
         timeout: 12000,
-      })
-        .wait('@patchSubcase', {
-          timeout: 12000,
-        });
+      });
+      // TODO we post or patch submission activity instead?
+      // .wait('@patchSubcase', {
+      //   timeout: 12000,
+      // });
     } else {
       cy.wait('@patchSpecificModel', {
         timeout: 12000,

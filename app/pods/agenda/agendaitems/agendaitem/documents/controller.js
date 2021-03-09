@@ -141,16 +141,18 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @task
   *updateRelatedAgendaitemsAndSubcase(pieces) {
     const agendaActivity = yield this.agendaitem.agendaActivity;
-    const subcase = yield agendaActivity.subcase;
-
-    // Create new submission activity for pieces added after initial submission
-    const submissionActivity = this.store.createRecord('submission-activity', {
-      startDate: new Date(),
-      subcase,
-      agendaActivity,
-      pieces,
-    });
-    submissionActivity.save();
+    if (agendaActivity) {
+      // There is no agendaActivity/subcase on isApproval agendaitems
+      const subcase = yield agendaActivity.subcase;
+      // Create new submission activity for pieces added after initial submission
+      const submissionActivity = this.store.createRecord('submission-activity', {
+        startDate: new Date(),
+        subcase,
+        agendaActivity,
+        pieces,
+      });
+      submissionActivity.save();
+    }
 
     // Link piece to agendaitem
     setNotYetFormallyOk(this.agendaitem);
