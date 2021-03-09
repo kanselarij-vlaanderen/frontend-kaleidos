@@ -1,0 +1,46 @@
+{{#if (not await dateObjectsToEnable)}}
+  {{ember-flatpickr
+    data-test-vl-datepicker-input=true
+    classNames="vl-input-field vl-input-field--block"
+    locale="nl"
+    enableTime=enableTime
+    time_24hr=true
+    date=(readonly selectedDate)
+    dateFormat=(if enableTime "d-m-Y H:i" "d-m-Y")
+    onChange=(action "dateChanged")
+    defaultHour=defaultHour
+    defaultMinute=defaultMinute
+    getFlatpickrRef=(action (mut flatpickrRef))
+  }}
+  <button data-test-vlc-vl-datepickerButton
+          class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
+          type="button"
+    {{action "toggleCalendar"}}
+  >
+    <div class='auk-icon'>
+      <i class="ki ki-calendar" aria-hidden="true"></i>
+    </div>
+  </button>
+{{else}}
+  {{ember-flatpickr
+    data-test-vl-datepicker-input=true
+    classNames="vl-input-field vl-input-field--block"
+    locale="nl"
+    enable=datesToEnable
+    enableTime=enableTime
+    time_24hr=true
+    date=(readonly selectedDate)
+    dateFormat=(if enableTime "d-m-Y H:i" "d-m-Y")
+    onChange=(action "dateChanged")
+    defaultHour=defaultHour
+    defaultMinute=defaultMinute
+    getFlatpickrRef=(action (mut flatpickrRef))
+  }}
+  <button
+          class="vl-input-addon js-vl-datepicker-toggle js-vl-tooltip"
+          type="button"
+    {{action "toggleCalendar"}}
+  >
+    <i class="ki-calendar" aria-hidden="true"></i>
+  </button>
+{{/if}}

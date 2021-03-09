@@ -139,8 +139,13 @@ export default Service.extend({
     return 1;
   },
 
-  async putSubmissionOnAgenda(meeting, submissionActivity) {
-    const subcase = await submissionActivity.get('subcase');
+  /**
+   * @argument meeting
+   * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
+   * In the case where an agenda-item was deleted after multiple submissions occurred, one can put on agenda again with multiple submissions
+   */
+  async putSubmissionOnAgenda(meeting, submissionActivities) {
+    const subcase = await submissionActivities[0].get('subcase');
     const lastAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
       'filter[status][:uri:]': CONFIG.agendaStatusDesignAgenda.uri,
@@ -163,8 +168,10 @@ export default Service.extend({
       subcase,
     });
     await agendaActivity.save();
-    submissionActivity.set('agendaActivity', agendaActivity);
-    await submissionActivity.save();
+    for (const submissionActivity of submissionActivities) {
+      submissionActivity.set('agendaActivity', agendaActivity);
+      await submissionActivity.save();
+    }
 
     // load code-list item
     const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
@@ -181,11 +188,14 @@ export default Service.extend({
     });
     await agendaItemTreatment.save();
 
-    const submissionActivity2 = await this.store.queryOne('submission-activity', {
-      'filter[:id:]': submissionActivity.id,
-      include: 'pieces',
-    });
-    const submittedPieces = await submissionActivity2.pieces;
+    let submittedPieces = [];
+    for (const submissionActivity of submissionActivities) {
+      const submissionActivity2 = await this.store.queryOne('submission-activity', {
+        'filter[:id:]': submissionActivity.id,
+        include: 'pieces', // query with include to avoid pagination issues
+      });
+      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
+    }
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
       titlePress: subcase.shortTitle,

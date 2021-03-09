@@ -1,0 +1,96 @@
+<div class="auk-u-mb-4" data-agenda-item-news-edit>
+  <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--align-end auk-u-mb-2 auk-u-flex--justify-end">
+    {{#if (not (is-pending agendaitem.nota))}}
+      {{#if (not (await agendaitem.nota))}}
+        <button type="button" class="vl-button vl-button--secondary vl-button--icon-before vl-button--disabled"
+        >
+          <i class="vl-button__icon vl-button__icon--before ki-document"
+          ></i>
+          {{t "no-nota"}}
+        </button>
+      {{else}}
+        <button type="button" class="vl-button vl-button--secondary vl-button--icon-before"
+          {{action "openDocument" agendaitem bubbles=false}}
+        >
+          <i class="vl-button__icon vl-button__icon--before ki-document"
+          ></i>
+          {{t "open-note"}}
+        </button>
+      {{/if}}
+    {{else}}
+      <div class="vl-loader" role="alert" aria-busy="true">
+        <div class="vl-loader" role="alert" aria-busy="true">
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "nota-loading-text"}}
+          </EmberTooltip>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "title")}}
+    <p>
+      {{agendaitem.title}}
+    </p>
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "short-title")}}
+    {{web-components/vl-form-input value=newsletterInfo.title}}
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "mandatee-proposal")}}
+    <p>
+      {{#if (await newsletterInfo.newsletterProposal)}}
+        {{await newsletterInfo.newsletterProposal}}
+      {{else}}
+        {{t "not-applicable"}}
+      {{/if}}
+    </p>
+  </div>
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "decision-in-newsletter")}}
+    {{web-components/vl-rdfa-editor
+      data-test-rdfa-editor=true
+      isLarge=isExpanded
+      richtext=(await newsletterInfo.richtext)
+      handleRdfaEditorInit=(action "handleRdfaEditorInit")
+    }}
+  </div>
+
+  <div class="vlc-input-field-block vl-u-text--capitalize">
+    {{web-components/vl-form-label value=(t "remark")}}
+    {{web-components/vl-form-input value=newsletterInfo.remark}}
+  </div>
+
+  <div class="vlc-input-field-block">
+    {{web-components/vl-form-label value=(t "finished")}}
+    {{web-components/vl-toggle value=newsletterInfo.finished}}
+  </div>
+  <div class="vlc-input-field-block" data-test-themes-selector>
+    {{web-components/vl-form-label value=(t "themes")}}
+    {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
+  </div>
+
+</div>
+<div class="vl-action-group vl-action-group--align-right">
+  <a href="" class="vl-link" {{action "cancelEditing"}}>
+    {{t "cancel"}}
+  </a>
+  {{web-components/vl-save-button
+    data-test-newsletter-edit-save=true
+    text=(t "save")
+    isLoading=isLoading
+    saveAction=(action "trySaveChanges")
+  }}
+</div>
+{{#if isTryingToSave}}
+  {{web-components/vl-modal-verify
+    title=(t "no-themes-selected")
+    message=(t "no-themes-selected-message")
+    cancel=(action "cancelSaveChanges")
+    verify=(action "saveChanges")
+    buttonText="save"
+    buttonType="warning"
+    showIcon=false
+  }}
+{{/if}}

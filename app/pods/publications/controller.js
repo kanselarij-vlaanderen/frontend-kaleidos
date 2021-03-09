@@ -4,9 +4,6 @@ import {
   action, set
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { timeout } from 'ember-concurrency';
-import { restartableTask } from 'ember-concurrency-decorators';
-import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class PublicationsController extends Controller {
   @service publicationService;
@@ -15,9 +12,6 @@ export default class PublicationsController extends Controller {
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed = false;
   @tracked isCreatingPublication = false;
-  @tracked searchText;
-  @tracked showSearchResults = false;
-  @tracked searchResults;
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
@@ -39,37 +33,6 @@ export default class PublicationsController extends Controller {
     shortTitle: null,
     longTitle: null,
   };
-
-  @restartableTask
-  *debouncedSearchTask(event) {
-    this.searchText = event.target.value;
-    yield timeout(500);
-    yield this.search(this.searchText);
-  }
-
-  @action
-  async search() {
-    const filter = {
-      ':has:publicationFlowNumber': 1,
-    };
-    if (this.searchText.length === 0 || this.searchText === '') {
-      this.showSearchResults = false;
-    } else {
-      this.textSearchFields = ['title', 'publicationFlowNumber', 'publicationFlowRemark', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle', 'publicationFlowNumacNumbers', 'publicationFlowId'];
-      const searchModifier = ':phrase_prefix:';
-      const textSearchKey = this.textSearchFields.join(',');
-      filter[`${searchModifier}${textSearchKey}`] = `${this.searchText}*`;
-      this.showSearchResults = true;
-      this.searchResults = await search('cases', 0, 10, null, filter, (item) => {
-        const entry = item.attributes;
-        entry.id = item.id;
-        return entry;
-      });
-      if (this.searchResults.length === 0) {
-        this.searchResults = false;
-      }
-    }
-  }
 
   get getError() {
     return this.hasError;

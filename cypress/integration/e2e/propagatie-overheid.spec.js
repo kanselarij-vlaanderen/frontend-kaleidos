@@ -50,15 +50,7 @@ context('Propagation to other graphs', () => {
     cy.closeAgenda();
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
-    cy.get(agenda.agendaitemDecisionTab).click();
-    cy.get(agenda.addDecision).click();
-    cy.get(agenda.uploadDecisionFile).click();
-    cy.contains('Document opladen').click();
-    cy.get('.vl-modal-dialog').as('fileUploadDialog');
-
-    cy.get('@fileUploadDialog').within(() => {
-      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    });
+    cy.addDocumentToTreatment(file);
 
     cy.get(form.formSave).click();
     cy.get(agenda.accessLevelPill).click();

@@ -129,6 +129,7 @@ export default ModelWithModifier.extend({
   latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
+      await latestActivity.hasMany('agendaitems').reload();
       const latestAgendaitem = await latestActivity.get('latestAgendaitem');
       return latestAgendaitem;
     }
@@ -137,7 +138,10 @@ export default ModelWithModifier.extend({
 
   onAgendaInfo: computed('latestMeeting', async function() {
     const latestMeeting = await this.get('latestMeeting');
-    return latestMeeting.plannedStart;
+    if (latestMeeting) {
+      return latestMeeting.plannedStart;
+    }
+    return null;
   }),
 
   approved: computed('treatments', 'treatments.@each.decisionResultCode', function() {
