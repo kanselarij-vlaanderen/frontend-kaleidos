@@ -259,11 +259,6 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
         }
       }
     }
-    // Link piece to subcase
-    const currentSubcasePieces = yield this.subcase.hasMany('pieces').reload();
-    const subcasePieces = currentSubcasePieces.pushObjects(pieces);
-    this.subcase.set('pieces', subcasePieces);
-    yield this.subcase.save();
     this.send('reloadModel');
   }
 
