@@ -57,7 +57,7 @@
         </tr>
       </thead>
       {{#sortable-group
-        data-test-ministers-sortable-group
+        data-test-ministers-sortable-group=true
         tagName="tbody"
         onChange=(action "reorderItems" model)
       as |sortableGroup|
