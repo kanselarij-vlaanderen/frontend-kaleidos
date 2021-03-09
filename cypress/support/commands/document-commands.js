@@ -18,6 +18,7 @@ import modal from '../../selectors/modal.selectors';
  * @memberOf Cypress.Chainable#
  * @function
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
+ * @param {String} model - The name of the model
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
@@ -77,6 +78,7 @@ function addNewDocumentsInUploadModal(files, model) {
   // Click save
   cy.route('POST', 'pieces').as('createNewPiece');
   cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get('@fileUploadDialog').within(() => {
     cy.get('.vl-button').contains('Documenten toevoegen')
@@ -88,9 +90,18 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.wait('@createNewPiece', {
     timeout: 24000,
   });
-  cy.wait(`@loadPieces${model}`, {
-    timeout: 24000 + (6000 * files.length),
-  });
+  // TODO seperate command for subcase / split this command / do calls in higher commands
+
+  if (model === 'subcase') {
+    cy.wait('@createNewSubmissionActivity', {
+      timeout: 24000 + (6000 * files.length),
+    });
+  } else {
+    cy.wait(`@loadPieces${model}`, {
+      timeout: 24000 + (6000 * files.length),
+    });
+  }
+
   cy.log('/addNewDocumentsInUploadModal');
 }
 

@@ -129,6 +129,7 @@ export default ModelWithModifier.extend({
   latestAgendaitem: computed('latestActivity.agendaitems.@each', 'agendaActivities.@each.agendaitems', async function() {
     const latestActivity = await this.get('latestActivity');
     if (latestActivity) {
+      await latestActivity.hasMany('agendaitems').reload();
       const latestAgendaitem = await latestActivity.get('latestAgendaitem');
       return latestAgendaitem;
     }
