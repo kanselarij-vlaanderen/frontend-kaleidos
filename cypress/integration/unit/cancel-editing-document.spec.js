@@ -323,21 +323,27 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
 
     cy.log('uploadFileToCancel 4');
-    cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
     cy.get(modal.baseModal.dialogWindow).within(() => {
       cy.get(form.formSave).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
       cy.route('POST', '/pieces').as('createNewPiece');
+      cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
+      cy.route('PATCH', '/submission-activities').as('patchAgendaitem');
+      cy.route('PUT', '/pieces').as('putPiece');
+      cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
       cy.get(form.formSave).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,
       });
-      cy.wait('@patchSubcase', {
+      cy.wait('@createNewSubmissionActivity', {
         timeout: 12000,
       });
       cy.wait('@patchAgendaitem', {
+        timeout: 12000,
+      });
+      cy.wait('@putPiece', {
         timeout: 12000,
       });
       cy.wait('@loadPiecesAgendaitemQuater');

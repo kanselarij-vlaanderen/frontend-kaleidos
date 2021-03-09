@@ -29,29 +29,47 @@ export default Component.extend({
     });
   }),
 
+  fetchSubcasePieces: async function(subcase) {
+    // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
+    // work since the inverse isn't present in API config
+    const submissionActivities = await this.store.query('submission-activity', {
+      'filter[subcase][:id:]': subcase.id,
+      'page[size]': 500,
+      include: 'pieces', // Make sure we have all pieces, unpaginated
+    });
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
+    return pieces;
+  },
+
   async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
-    const mandatees = await latestSubcase.get('mandatees');
-    const iseCodes = await latestSubcase.get('iseCodes');
-    const showAsRemark = await latestSubcase.get('showAsRemark');
-
-    const requestedBy = await latestSubcase.get('requestedBy');
-    const pieces = await latestSubcase.get('pieces');
-
+    const pieces = await this.fetchSubcasePieces(latestSubcase);
     if (copyFullSubcase) {
       const subcaseName = await latestSubcase.get('subcaseName');
       const linkedPieces = await latestSubcase.get('linkedPieces');
       const accessLevel = await latestSubcase.get('accessLevel');
-      subcase.set('pieces', pieces);
       subcase.set('linkedPieces', linkedPieces);
       subcase.set('subcaseName', subcaseName);
       subcase.set('accessLevel', accessLevel);
-      subcase.set('showAsRemark', showAsRemark);
+      subcase.set('showAsRemark', latestSubcase.showAsRemark);
+      const submissionActivity = this.store.createRecord('submission-activity', {
+        startDate: new Date(),
+        pieces,
+      });
+      await submissionActivity.save();
+      subcase.get('submissionActivities').pushObject(submissionActivity);
     } else {
       subcase.set('linkedPieces', pieces);
     }
-
+    const mandatees = await latestSubcase.get('mandatees');
     subcase.set('mandatees', mandatees);
+    const iseCodes = await latestSubcase.get('iseCodes');
     subcase.set('iseCodes', iseCodes);
+    const requestedBy = await latestSubcase.get('requestedBy');
     subcase.set('requestedBy', requestedBy);
     return await subcase.save();
   },

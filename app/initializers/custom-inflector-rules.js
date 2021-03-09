@@ -6,6 +6,7 @@ export function initialize() {
   inflector.irregular('person', 'persons');
   inflector.irregular('contactPerson', 'contactPersons');
   inflector.irregular('contact-person', 'contact-persons');
+  inflector.irregular('submission-activity', 'submission-activities');
 }
 
 export default {
