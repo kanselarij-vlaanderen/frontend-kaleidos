@@ -334,7 +334,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
       .within(() => {
         cy.contains('Acties').should('exist');
         cy.contains('Wijzigen').click();
-        cy.get('.vl-data-table > tbody > tr').as('mandatees');
+        cy.get('.auk-table > tbody > tr').as('mandatees');
         cy.get('@mandatees').each((item) => {
           cy.get(item).within(() => {
             cy.get('.vl-checkbox', {
