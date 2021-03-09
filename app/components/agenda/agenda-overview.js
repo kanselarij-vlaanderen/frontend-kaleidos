@@ -1,4 +1,4 @@
-import AgendaSidebar from 'frontend-kaleidos/pods/components/agenda/agenda-detail/sidebar/component';
+import AgendaSidebar from 'frontend-kaleidos/components/agenda/agenda-detail/sidebar';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
