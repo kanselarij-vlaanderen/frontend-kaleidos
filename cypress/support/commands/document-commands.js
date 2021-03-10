@@ -22,7 +22,7 @@ import modal from '../../selectors/modal.selectors';
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
-  cy.get('.vl-modal-dialog').as('fileUploadDialog');
+  cy.get('.auk-modal').as('fileUploadDialog');
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {

@@ -36,7 +36,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.visit('');
   cy.get(agenda.createNewAgendaButton).click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('.vlc-input-field-block').as('newAgendaForm')
         .should('have.length', 4);
@@ -461,7 +461,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       if (postponed) {
         cy.get('[data-test-postponed-checkbox]')

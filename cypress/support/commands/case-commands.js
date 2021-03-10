@@ -23,7 +23,7 @@ function createCase(confidential, shortTitle) {
     .contains('Nieuw dossier aanmaken')
     .click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('.vlc-input-field-block').as('newCaseForm')
         .should('have.length', 2);

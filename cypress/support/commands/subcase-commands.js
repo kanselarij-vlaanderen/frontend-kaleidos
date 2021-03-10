@@ -381,7 +381,7 @@ function deleteSubcase() {
     .contains('Procedurestap verwijderen')
     .click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
