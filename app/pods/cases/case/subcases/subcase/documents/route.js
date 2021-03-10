@@ -17,10 +17,8 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const pieces = [];
     for (const submissionActivity of submissionActivities.toArray()) {
       let submissionPieces = await submissionActivity.pieces;
-      if (submissionPieces) {
-        submissionPieces = submissionPieces.toArray();
-        pieces.push(...submissionPieces);
-      }
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
     }
 
     const sortedPieces = sortPieces(pieces);
