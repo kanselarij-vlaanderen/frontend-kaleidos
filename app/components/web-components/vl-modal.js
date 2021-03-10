@@ -48,16 +48,6 @@ export default Component.extend({
     }
   },
 
-  backdropClass: computed('isOverlay', function() {
-    const {
-      isOverlay,
-    } = this;
-    if (isOverlay) {
-      return 'vl-modal__backdrop';
-    }
-    return null;
-  }),
-
   sizeClass: computed('isDocumentViewer', function() {
     const {
       isDocumentViewer,
