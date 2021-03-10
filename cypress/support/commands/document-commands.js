@@ -164,13 +164,13 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
       // we always POST submission activity here
-      cy.wait('@patchAgendaitem', {
+      cy.wait('createNewSubmissionActivity', {
         timeout: 12000,
       })
-        .wait('@putAgendaitemDocuments', {
+        .wait('@patchAgendaitem', {
           timeout: 12000,
         })
-        .wait('createNewSubmissionActivity', {
+        .wait('@putAgendaitemDocuments', {
           timeout: 12000,
         })
         .wait('@getSubmissionActivity', {
