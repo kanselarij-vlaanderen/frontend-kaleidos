@@ -91,6 +91,8 @@ context('Tests of pieces on agendaitems', () => {
       cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
         .click();
       cy.clickReverseTab('Documenten');
+      cy.reload(); // TODO error in subcase/documents route right after delete a piece that needed version restoring on agendaitem, Ok after reload
+      cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
       cy.get('.vlc-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');
