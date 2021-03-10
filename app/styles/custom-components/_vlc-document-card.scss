@@ -98,7 +98,10 @@
   display: flex;
   align-items: center;
 
-  .vl-title {
+  .auk-h1,
+  .auk-h2,
+  .auk-h3,
+  .auk-h4 {
     margin-right: 0.5em;
   }
 }

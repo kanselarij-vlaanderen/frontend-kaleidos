@@ -68,8 +68,13 @@
     display: none;
   }
 
-  .vl-title span {
-    display: none;
+  .auk-h1,
+  .auk-h2,
+  .auk-h3,
+  .auk-h4 {
+    span {
+      display: none;
+    }
   }
 
   .vlc-side-nav-item__meta--small {
