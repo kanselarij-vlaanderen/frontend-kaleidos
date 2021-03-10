@@ -76,9 +76,11 @@ function addNewDocumentsInUploadModal(files, model) {
     }
   });
   // Click save
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as('createNewPiece');
   cy.route('POST', 'document-containers').as('createNewDocumentContainer');
   cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
+  cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get('@fileUploadDialog').within(() => {
     cy.get('.vl-button').contains('Documenten toevoegen')
@@ -91,10 +93,12 @@ function addNewDocumentsInUploadModal(files, model) {
     timeout: 24000,
   });
   // TODO seperate command for subcase / split this command / do calls in higher commands
-
+  // Pieces are loaded differently in the subcase/documents route
   if (model === 'subcase') {
     cy.wait('@createNewSubmissionActivity', {
       timeout: 24000 + (6000 * files.length),
+    }).wait(`@getSubmissionActivity_${randomInt}`, {
+      timeout: 24000,
     });
   } else {
     cy.wait(`@loadPieces${model}`, {
@@ -172,10 +176,10 @@ function addNewPiece(oldFileName, file, modelToPatch) {
         })
         .wait('@putAgendaitemDocuments', {
           timeout: 12000,
-        })
-        .wait('@getSubmissionActivity', {
-          timeout: 12000,
         });
+      // .wait('@getSubmissionActivity', {
+      //   timeout: 12000,
+      // });
     } else if (modelToPatch === 'subcases') {
       // TODO these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
       // cy.wait('@putAgendaitemDocuments', {
@@ -194,7 +198,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       });
     }
   }
-  cy.wait(`@loadPieces_${randomInt}`);
+  cy.wait(`@loadPieces_${randomInt}`); // This call does not happen when loading subcase/documents route, but when loading the documents in that route
   cy.wait(1000); // Cypress is too fast
   // TODO Check if the modal is gone, had 1 flaky where the modal was still showing after the patches
   cy.log('/addNewPiece');
