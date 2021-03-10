@@ -330,7 +330,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.route('POST', '/pieces').as('createNewPiece');
       cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
       cy.route('PATCH', '/submission-activities').as('patchAgendaitem');
-      cy.route('PUT', '/pieces').as('putPiece');
+      cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
       cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
       cy.get(form.formSave).should('not.be.disabled')
         .click();
@@ -342,7 +342,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         .wait('@patchAgendaitem', {
           timeout: 12000,
         })
-        .wait('@putPiece', {
+        .wait('@putAgendaitemDocuments', {
           timeout: 12000,
         });
       cy.wait('@loadPiecesAgendaitemQuater');
