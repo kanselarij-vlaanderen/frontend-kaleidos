@@ -6,12 +6,20 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 export default class DocumentsSubcaseSubcasesRoute extends Route {
   async model() {
     const subcase = this.modelFor('cases.case.subcases.subcase');
-    let pieces = await this.store.query('piece', {
+    // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
+    // work since the inverse isn't present in API config
+    const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500, // TODO add pagination when sorting is done in the backend
-      include: 'document-container',
+      'page[size]': 500,
+      include: 'pieces', // Make sure we have all pieces, unpaginated
     });
-    pieces = pieces.toArray();
+
+    const pieces = [];
+    for (const submissionActivity of submissionActivities.toArray()) {
+      let submissionPieces = await submissionActivity.pieces;
+      submissionPieces = submissionPieces.toArray();
+      pieces.push(...submissionPieces);
+    }
 
     const sortedPieces = sortPieces(pieces);
     return {
@@ -35,6 +43,8 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     super.setupController(...arguments);
     const subcase = this.modelFor('cases.case.subcases.subcase');
     controller.set('subcase', subcase);
+    const _case = this.modelFor('cases.case');
+    controller.set('case', _case);
     controller.set('defaultAccessLevel', this.defaultAccessLevel);
   }
 

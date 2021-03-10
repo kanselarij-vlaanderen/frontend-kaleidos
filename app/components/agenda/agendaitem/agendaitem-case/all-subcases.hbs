@@ -1,0 +1,25 @@
+<div class="auk-u-mb-2">
+  <div class="auk-u-flex auk-u-flex--align-baseline">
+    <h4 class="vl-title vl-title--h4">
+      {{t "subcases"}}
+    </h4>
+  </div>
+</div>
+{{#if (is-pending @subcases)}}
+  {{web-components/vl-loader text=(t "all-subcases-loading-text")}}
+{{else if @subcases.length}}
+  {{#each @subcases as |subcase|}}
+    <Subcases::SubcaseItem @subcase={{await subcase}} as |subcase|>
+      <hr class="vlc-hr"/>
+      <div class="auk-u-mb-4">
+        <p>
+          {{subcase.title}}
+        </p>
+      </div>
+    </Subcases::SubcaseItem>
+  {{/each}}
+{{else}}
+  <div class="auk-u-mt-2">
+    {{web-components/vl-alert message=(t "no-subcases-yet")}}
+  </div>
+{{/if}}

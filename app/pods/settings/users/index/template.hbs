@@ -9,7 +9,7 @@
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <Input
-          data-test-user-search-input
+          data-test-user-search-input=""
           class="auk-input"
           type="search"
           @value={{this.filter}}
@@ -28,7 +28,7 @@
 
   {{#if (await model)}}
     {{#data-table
-      data-test-settings-user-table
+      data-test-settings-user-table=true
       content=(await model)
       class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
       isLoading=isLoadingModel

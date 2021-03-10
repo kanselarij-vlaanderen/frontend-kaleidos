@@ -1,0 +1,47 @@
+<div class="auk-modal__content">
+  <div class="vlc-input-field-block">
+    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+    {{web-components/vl-form-input
+      data-test-mandatee-title-container=true
+      value=title
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
+    {{web-components/vl-form-input
+      data-test-mandatee-nick-name=true
+      value=nickName
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
+    {{utils/create-person-selector
+      selectedItems=selectedPerson
+      selectModel=(action "personSelected")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
+    {{utils/model-selector
+      data-test-ise-code-dropdown-container=true
+      modelName="ise-code"
+      searchField="name"
+      propertyToShow="name"
+      sortField="name"
+      multiSelect=true
+      selectedItems=iseCodes
+      selectModel=(action "chooseIseCodes")
+    }}
+  </div>
+  <div class="vlc-input-field-block">
+    <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+    {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
+  </div>
+</div>
+{{web-components/vl-modal-footer
+  isLoading=isLoading
+  cancelButtonText=(t "cancel")
+  saveButtonText=(t "create-mandatee")
+  cancelAction=(action "closeModal")
+  saveAction=(action "createMandatee")
+}}

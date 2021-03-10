@@ -26,17 +26,6 @@ context('Full test', () => {
   it('Scenario where a complete agenda is created', () => {
     testId = `testId=${currentTimestamp()}: `;
 
-    // #region routes to be reused
-    cy.route('GET', '/subcases?**').as('getSubcases');
-    cy.route('GET', '/mandatees?**').as('getMandatees');
-    cy.route('POST', '/meetings').as('createNewMeeting');
-    cy.route('POST', '/agendas').as('createNewAgenda');
-    cy.route('POST', '/cases').as('createNewCase');
-    cy.route('POST', '/subcases').as('createNewSubcase');
-    cy.route('PATCH', '/subcases/*').as('patchSubcase');
-
-    // #endregion
-
     const agendaDate = Cypress.moment().add(2, 'weeks')
       .day(3); // Next friday
 

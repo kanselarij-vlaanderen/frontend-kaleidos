@@ -1,0 +1,22 @@
+<div class="auk-u-m-8">
+  {{#each @subcases as |subcase|}}
+    <Subcases::SubcaseItem @subcase={{subcase}} as |subcase|>
+      <hr class="vlc-hr"/>
+      <div class="auk-u-mb-2">
+        <p class="vlc-subline">
+          {{await subcase.case.type.label}}
+        </p>
+      </div>
+      <div class="auk-u-mb-2">
+        <div class="vl-title vl-title--h5">
+          {{subcase.shortTitle}}
+        </div>
+      </div>
+      <div class="auk-u-mb-4">
+        <p>
+          {{subcase.title}}
+        </p>
+      </div>
+    </Subcases::SubcaseItem>
+  {{/each}}
+</div>
