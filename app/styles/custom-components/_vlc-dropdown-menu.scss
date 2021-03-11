@@ -6,20 +6,6 @@
   border-bottom-width: 0;
 }
 
-.vl-link-list {
-  padding: .5rem 0;
-  max-height: inherit;
-  overflow-y: auto;
-
-  &__item {
-    .auk-button-link {
-      .vl-popover & {
-        padding: .8rem 1.5rem;
-      }
-    }
-  }
-}
-
 .vlc-dropdown-menu {
   padding: .5rem 0;
   max-height: inherit;
