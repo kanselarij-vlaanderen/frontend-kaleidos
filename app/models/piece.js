@@ -42,6 +42,7 @@ export default Model.extend({
     inverse: null,
   }),
   submissionActivity: belongsTo('submission-activity', {
+    inverse: null,
     serialize: false,
   }),
   // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
