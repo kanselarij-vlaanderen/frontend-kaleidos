@@ -1,10 +1,8 @@
 import Service, { inject as service } from '@ember/service';
-
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import moment from 'moment';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
@@ -113,76 +111,99 @@ export default Service.extend({
       });
   },
 
-  async createNewAgendaitem(selectedAgenda, subcase, index) {
-    await selectedAgenda.hasMany('agendaitems').reload();
-    let priorityToAssign = 0;
+  async computeNextItemNumber(agenda, isAnnouncement) {
+    const lastItem = await this.store.queryOne('agendaitem', {
+      'filter[agenda][:id:]': agenda.id,
+      'filter[show-as-remark]': isAnnouncement,
+      sort: '-priority',
+    });
+    if (lastItem) {
+      return lastItem.priority + 1;
+    }
+    return 1;
+  },
+
+  /**
+   * @argument meeting
+   * @argument submissionActivities: Array of submission activities. Mostly only one exists before submission.
+   * In the case where an agenda-item was deleted after multiple submissions occurred, one can put on agenda again with multiple submissions
+   */
+  async putSubmissionOnAgenda(meeting, submissionActivities) {
+    const subcase = await submissionActivities[0].get('subcase');
+    const lastAgenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': meeting.id,
+      'filter[status][:uri:]': CONFIG.agendaStatusDesignAgenda.uri,
+      sort: '-created', // serialnumber
+    });
+    const isAnnouncement = subcase.get('showAsRemark');
+    const priorityToAssign = await this.computeNextItemNumber(lastAgenda, isAnnouncement);
+
+    // Generate press text
     const mandatees = await subcase.get('mandatees');
     const sortedMandatees = await mandatees.sortBy('priority');
     const titles = sortedMandatees.map((mandatee) => mandatee.get('title'));
     const pressText = `${subcase.get('shortTitle')}\n${titles.join('\n')}`;
-    const isAnnouncement = subcase.get('showAsRemark');
-    if (isAnnouncement) {
-      priorityToAssign = (await selectedAgenda.get('lastAnnouncementPriority')) + 1;
-    } else {
-      priorityToAssign = (await selectedAgenda.get('lastAgendaitemPriority')) + 1;
-    }
 
-    if (Number.isNaN(priorityToAssign)) {
-      priorityToAssign = 1;
-    }
-
-    if (index) {
-      priorityToAssign += index;
-    }
-
-    const creationDate = moment().utc()
-      .toDate();
+    const now = new Date();
 
     // Placement on agenda activity
     const agendaActivity = await this.store.createRecord('agenda-activity', {
-      startDate: creationDate,
+      startDate: now,
       subcase,
     });
     await agendaActivity.save();
+    for (const submissionActivity of submissionActivities) {
+      submissionActivity.set('agendaActivity', agendaActivity);
+      await submissionActivity.save();
+    }
+
+    // load code-list item
+    const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    const decisionResultCode = await this.store.queryOne('decision-result-code', {
+      'filter[:uri:]': defaultDecisionResultCodeUri,
+    });
 
     // Treatment of agenda-item / decision activity
     const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
-      created: creationDate,
-      modified: creationDate,
+      created: now,
+      modified: now,
       subcase,
+      decisionResultCode,
     });
-    const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    const defaultDecisionResultCode = (await this.store.query('decision-result-code', {
-      'filter[:uri:]': defaultDecisionResultCodeUri,
-    })).firstObject;
-    agendaItemTreatment.decisionResultCode = defaultDecisionResultCode;
     await agendaItemTreatment.save();
 
+    let submittedPieces = [];
+    for (const submissionActivity of submissionActivities) {
+      const submissionActivity2 = await this.store.queryOne('submission-activity', {
+        'filter[:id:]': submissionActivity.id,
+        include: 'pieces', // query with include to avoid pagination issues
+      });
+      submittedPieces = submittedPieces.concat((await submissionActivity2.pieces).toArray());
+    }
     const agendaitem = await this.store.createRecord('agendaitem', {
       retracted: false,
-      titlePress: subcase.get('shortTitle'),
+      titlePress: subcase.shortTitle,
       textPress: pressText,
-      created: creationDate,
+      created: now,
       priority: priorityToAssign,
-      agenda: selectedAgenda,
-      title: subcase.get('title'),
-      shortTitle: subcase.get('shortTitle'),
+      agenda: lastAgenda,
+      title: subcase.title,
+      shortTitle: subcase.shortTitle,
       formallyOk: CONFIG.notYetFormallyOk,
       showAsRemark: isAnnouncement,
       mandatees,
-      pieces: await subcase.get('pieces'),
-      linkedPieces: await subcase.get('linkedPieces'),
+      pieces: submittedPieces,
+      linkedPieces: await subcase.linkedPieces,
       agendaActivity,
       treatments: A([agendaItemTreatment]),
     });
     await agendaitem.save();
-    const meeting = await selectedAgenda.get('createdFor');
-    await selectedAgenda.hasMany('agendaitems').reload();
-    subcase.set('requestedForMeeting', meeting);
+    await lastAgenda.hasMany('agendaitems').reload();
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('treatments').reload();
+    subcase.set('requestedForMeeting', meeting);
     await subcase.save();
-    updateModifiedProperty(selectedAgenda);
+    updateModifiedProperty(lastAgenda);
 
     // Create default newsletterInfo for announcements with inNewsLetter = true
     if (agendaitem.showAsRemark) {

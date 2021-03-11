@@ -1,0 +1,20 @@
+<Documents::DocumentList
+  @pieces={{@pieces}}
+  @onOpenUploadModal={{@onOpenUploadModal}}
+  @onAddPiece={{@onAddPiece}}
+  @didDeletePiece={{@didDeletePiece}}
+  @didDeleteContainer={{@didDeleteContainer}}
+as |documents|>
+  {{#each documents as |doc|}}
+    <Documents::DocumentCard
+      @piece={{doc}}
+      @didDeletePiece={{@didDeletePiece}}
+      @didDeleteContainer={{@didDeleteContainer}}
+      @onOpenUploadModal={{@onOpenUploadModal}}
+      @onAddPiece={{@onAddPiece}} />
+  {{else}}
+    <div class="auk-u-mt-2">
+      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+    </div>
+  {{/each}}
+</Documents::DocumentList>

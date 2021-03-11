@@ -18,6 +18,7 @@ import modal from '../../selectors/modal.selectors';
  * @memberOf Cypress.Chainable#
  * @function
  * @param {{folder: String, fileName: String, fileExtension: String, [newFileName]: String, [fileType]: String}[]} files
+ * @param {String} model - The name of the model
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
@@ -75,8 +76,11 @@ function addNewDocumentsInUploadModal(files, model) {
     }
   });
   // Click save
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as('createNewPiece');
   cy.route('POST', 'document-containers').as('createNewDocumentContainer');
+  cy.route('POST', 'submission-activities').as('createNewSubmissionActivity');
+  cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get('@fileUploadDialog').within(() => {
     cy.get('.vl-button').contains('Documenten toevoegen')
@@ -88,9 +92,20 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.wait('@createNewPiece', {
     timeout: 24000,
   });
-  cy.wait(`@loadPieces${model}`, {
-    timeout: 24000 + (6000 * files.length),
-  });
+  // TODO seperate command for subcase / split this command / do calls in higher commands
+  // Pieces are loaded differently in the subcase/documents route
+  if (model === 'subcase') {
+    cy.wait('@createNewSubmissionActivity', {
+      timeout: 24000 + (6000 * files.length),
+    }).wait(`@getSubmissionActivity_${randomInt}`, {
+      timeout: 24000,
+    });
+  } else {
+    cy.wait(`@loadPieces${model}`, {
+      timeout: 24000 + (6000 * files.length),
+    });
+  }
+
   cy.log('/addNewDocumentsInUploadModal');
 }
 
@@ -109,7 +124,8 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.route('GET', '/pieces?filter**').as(`loadPieces_${randomInt}`);
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems' || modelToPatch === 'subcases') {
-      cy.route('PATCH', '/subcases/**').as('patchSubcase');
+      cy.route('GET', '/submission-activities?filter**').as('getSubmissionActivity');
+      cy.route('POST', '/submission-activities').as('createNewSubmissionActivity');
       cy.route('PATCH', '/agendaitems/**').as('patchAgendaitem');
       cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
     } else {
@@ -151,30 +167,38 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   // for agendaitems and subcases both are patched, not waiting causes flaky tests
   if (modelToPatch) {
     if (modelToPatch === 'agendaitems') {
-      cy.wait('@patchSubcase', {
-        timeout: 12000,
-      }).wait('@patchAgendaitem', {
+      // we always POST submission activity here
+      cy.wait('@createNewSubmissionActivity', {
         timeout: 12000,
       })
+        .wait('@patchAgendaitem', {
+          timeout: 12000,
+        })
         .wait('@putAgendaitemDocuments', {
           timeout: 12000,
         });
+      // .wait('@getSubmissionActivity', {
+      //   timeout: 12000,
+      // });
     } else if (modelToPatch === 'subcases') {
-      cy.wait('@putAgendaitemDocuments', {
+      // TODO these 2 awaits don't happen for subcase not proposed for a meeting / no agenda-activity
+      // cy.wait('@putAgendaitemDocuments', {
+      //   timeout: 12000,
+      // }).wait('@patchAgendaitem', {
+      //   timeout: 12000,
+      // });
+      // TODO we POST OR PATCH submission activity
+      // We always get the submission activities after post or patch
+      cy.wait('@getSubmissionActivity', {
         timeout: 12000,
-      }).wait('@patchAgendaitem', {
-        timeout: 12000,
-      })
-        .wait('@patchSubcase', {
-          timeout: 12000,
-        });
+      });
     } else {
       cy.wait('@patchSpecificModel', {
         timeout: 12000,
       });
     }
   }
-  cy.wait(`@loadPieces_${randomInt}`);
+  cy.wait(`@loadPieces_${randomInt}`); // This call does not happen when loading subcase/documents route, but when loading the documents in that route
   cy.wait(1000); // Cypress is too fast
   // TODO Check if the modal is gone, had 1 flaky where the modal was still showing after the patches
   cy.log('/addNewPiece');
@@ -472,7 +496,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
 
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
-    cy.wait(200);
+    cy.wait(1000);
     cy.get('.vl-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
@@ -523,6 +547,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
   }).wait('@putRestoreAgendaitems', {
     timeout: 20000,
   });
+  cy.wait(2000); // TODO, wait for loadpieces to happen
   cy.log('/deleteSinglePiece');
 }
 
@@ -562,54 +587,7 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('/isPieceDeletable');
 }
 
-/**
- * Add an extra version.
- *
- * @param file object.
- */
-function addExtraDocumentVersion(file) {
-  cy.log('addExtraDocumentVersion');
-  cy.get('[data-test-documents-show-more]').click();
-  cy.server();
-  cy.route('/subcases?**').as('subcasesExtraFileversionupload');
-  cy.get('[data-test-document-upload-new-piece]').click();
-  cy.wait('@subcasesExtraFileversionupload');
-
-  const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
-
-  cy.route('PATCH', '**').as('patchModel');
-
-  cy.get('.vl-modal-dialog').as('fileUploadDialog');
-  cy.get('@fileUploadDialog').within(() => {
-    const index = 0;
-    cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get('.vl-uploaded-document', {
-      timeout: 10000,
-    }).should('have.length', index + 1);
-  });
-
-  cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Toevoegen')
-      .click();
-  });
-
-  cy.wait(`@createNewPiece_${randomInt}`, {
-    timeout: 24000,
-  });
-
-  cy.get(modal.modalDialog).should('not.exist');
-  cy.wait('@patchModel', {
-    timeout: 12000 + (6000 * 1),
-  });
-
-  cy.get(modal.modalDialog).should('not.exist');
-  cy.wait(3000);
-  cy.log('/addExtraDocumentVersion');
-}
-
 Cypress.Commands.add('addNewDocumentsInUploadModal', addNewDocumentsInUploadModal);
-Cypress.Commands.add('addExtraDocumentVersion', addExtraDocumentVersion);
 Cypress.Commands.add('addDocumentsToSubcase', addDocumentsToSubcase); // same code, goes to reverse tab to add docs
 Cypress.Commands.add('addDocumentsToAgenda', addDocumentsToAgenda); // TODO rename to addDocumentsToMeeting
 Cypress.Commands.add('addDocumentToTreatment', addDocumentToTreatment);

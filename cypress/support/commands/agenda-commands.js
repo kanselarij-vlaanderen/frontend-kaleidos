@@ -496,17 +496,17 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
       cy.get(utils.saveButton).contains('Agendapunt toevoegen')
         .click();
     });
 
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
+  });
+  cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
+  cy.wait('@createNewAgendaitem', {
+    timeout: 20000,
   })
-    .wait('@createNewAgendaitem', {
-      timeout: 20000,
-    })
     .wait('@patchSubcase', {
       timeout: 20000,
     })

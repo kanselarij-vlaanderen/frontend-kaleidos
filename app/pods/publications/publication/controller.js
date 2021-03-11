@@ -170,6 +170,13 @@ export default class PublicationController extends Controller {
 
   @action
   allowedTranslationDate(date) {
+    // If translateBefore has expired, show that date (input is empty without this)
+    const translateBefore = this.model.publicationFlow.get('translateBefore');
+    if (translateBefore && moment(translateBefore).isBefore(moment())) {
+      if (moment(date).isSame(translateBefore)) {
+        return true;
+      }
+    }
     const end = moment(this.model.publicationFlow.get('publishBefore'));
     if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(moment())) {
       return true;
@@ -181,8 +188,9 @@ export default class PublicationController extends Controller {
   allowedPublicationDate(date) {
     const end = moment().add(360, 'days');
     let startRange;
-    if (this.model.publicationFlow.get('translateBefore')) {
-      startRange = moment(this.model.publicationFlow.get('translateBefore'));
+    const translateBefore = this.model.publicationFlow.get('translateBefore');
+    if (translateBefore && moment(translateBefore).isSameOrAfter(moment())) {
+      startRange = moment(translateBefore);
     } else {
       startRange = moment();
     }

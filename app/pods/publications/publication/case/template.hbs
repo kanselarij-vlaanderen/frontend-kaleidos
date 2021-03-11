@@ -356,7 +356,7 @@
                     @search={{this.customPowerSelectSearchFunction}}
                     @options={{await this.allOrganizations}}
                     @selected={{this.selectedOrganizations}}
-                    @noMatchesMessage={{t "search-organization"}}
+                    @noMatchesMessage={{t "organizations-empty-result"}}
                     @placeholder={{t "search-organization"}}
                     @onchange={{this.selectOrganization}}
                     as |organization|>
@@ -405,7 +405,7 @@
       />
       <WebComponents::AuModal::Body>
         {{utils/mandatee-selector
-          data-test-mandatee-selector
+          data-test-mandatee-selector=true
           singleSelect=true
           selectedMandatees=selectedMandatee
           chooseMandatee=(action "mandateeSelectedForPublication")

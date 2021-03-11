@@ -8,7 +8,7 @@
 <div class="vlc-scroll-wrapper__body">
   {{#if (gt (await model.subcases.length) 0)}}
 
-    {{subcases/subcases-process subcases=(await model.subcases)}}
+    <Subcases::SubcasesProcess @subcases={{await model.subcases}}/>
 
   {{else}}
     <div class="auk-u-m-8">
