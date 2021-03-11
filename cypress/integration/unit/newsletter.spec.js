@@ -52,7 +52,7 @@ context('Test the KB functionality', () => {
     cy.addDocumentsToSubcase([file]);
 
     // Extra Document Version
-    cy.addExtraDocumentVersion(file);
+    cy.addNewPieceToSubcase('Document dossier 1', file);
 
     const case2TitleShort = `${testId}Cypress test dossier 2`;
     const type2 = 'Nota';
