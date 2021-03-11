@@ -503,7 +503,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   });
-  cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
+  cy.route('GET', '/agendaitems?fields**').as(`loadAgendaitemFields${randomInt}`);
   cy.wait('@createNewAgendaitem', {
     timeout: 20000,
   })
@@ -513,7 +513,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
-  cy.wait(`@loadAgendaitemFilter${randomInt}`);
+  cy.wait(`@loadAgendaitemFields${randomInt}`);
   cy.log('/addAgendaitemToAgenda');
 }
 
@@ -526,7 +526,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  */
 function toggleShowChanges(refresh) {
   cy.log('toggleShowChanges');
-  cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
+  cy.route('GET', '/agendaitems?fields**').as('getAgendaitems');
 
   if (refresh) {
     cy.get('.vlc-side-nav-item', {
