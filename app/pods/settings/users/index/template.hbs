@@ -30,7 +30,7 @@
     {{#data-table
       data-test-settings-user-table=true
       content=(await model)
-      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+      class="auk-table auk-table--striped"
       isLoading=isLoadingModel
       page=page
       size=size
@@ -41,35 +41,35 @@
       {{#table.content as |c|}}
         {{#c.header}}
           {{th-sortable
-            class="vl-data-table-col-3 vl-data-table__header-title"
+            class="auk-table__col--3 vl-data-table__header-title"
             currentSorting=sort
             field="first-name"
             label=(t "first-name")
           }}
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 vl-data-table__header-title"
             currentSorting=sort
             field="last-name"
             label=(t "last-name")
           }}
           <th
-                  class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+                  class="auk-table__col--2 vl-data-table__header-title table-header-unsortable"
           >
             {{t "email"}}
           </th>
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 vl-data-table__header-title"
             currentSorting=sort
             field="organization.identifier"
             label=(t "ovo-code")
           }}
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 vl-data-table__header-title"
             currentSorting=sort
             field="group.name"
             label=(t "group")
           }}
-          <th class="vl-data-table-col-1"></th>
+          <th class="auk-table__col--1"></th>
         {{/c.header}}
         {{#c.body as |user|}}
           <td>

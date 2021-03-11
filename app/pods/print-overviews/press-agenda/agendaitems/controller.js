@@ -13,8 +13,8 @@ export default Controller.extend({
       valuePath: 'priority',
     }, {
       label: this.intl.t('title-and-content'),
-      classNames: ['vl-data-table-col-7 vl-data-table__header-title'],
-      cellClassNames: ['vl-data-table-col-7'],
+      classNames: ['auk-table__col--7 vl-data-table__header-title'],
+      cellClassNames: ['auk-table__col--7'],
       sortable: false,
       width: '58.33%',
       breakpoints: ['mobile', 'tablet', 'desktop'],
@@ -22,8 +22,8 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('ministers'),
-      classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-      cellClassNames: ['vl-data-table-col-2'],
+      classNames: ['auk-table__col--2 vl-data-table__header-title'],
+      cellClassNames: ['auk-table__col--2'],
       sortable: false,
       width: '16.66%',
       breakpoints: ['mobile', 'tablet', 'desktop'],
@@ -32,8 +32,8 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('for-press'),
-      classNames: ['vl-data-table-col-1 vl-data-table__header-title'],
-      cellClassNames: ['vl-data-table-col-1'],
+      classNames: ['auk-table__col--1 vl-data-table__header-title'],
+      cellClassNames: ['auk-table__col--1'],
       breakpoints: ['mobile', 'tablet', 'desktop'],
       sortable: false,
       width: '8.33%',
@@ -42,8 +42,8 @@ export default Controller.extend({
     },
     {
       label: this.intl.t('latest-modified'),
-      classNames: ['vl-data-table-col-2 vl-data-table__header-title'],
-      cellClassNames: ['vl-data-table-col-2'],
+      classNames: ['auk-table__col--2 vl-data-table__header-title'],
+      cellClassNames: ['auk-table__col--2'],
       breakpoints: ['mobile', 'tablet', 'desktop'],
       valuePath: 'modified',
       sortable: true,

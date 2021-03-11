@@ -49,16 +49,16 @@
             <th><span class="">{{t "created-on"}}</span></th>
           {{/c.header}}
           {{#c.body as |row|}}
-            <td class="vl-data-table-col-1">
+            <td class="auk-table__col--1">
               {{web-components/vl-checkbox
                 value=row.selected
                 toggle=(action "select" row)
               }}
             </td>
-            <td class="vl-data-table-col-8">
+            <td class="auk-table__col--8">
               {{row.name}}
             </td>
-            <td class="vl-data-table-col-3">
+            <td class="auk-table__col--3">
               {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
             </td>
           {{/c.body}}
