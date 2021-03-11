@@ -6,9 +6,7 @@
 >
   <div class="vlc-agenda-items__body ">
     <h4 class="vlc-agenda-items__subject">
-      {{#if
-        (and this.currentSessionService.isEditor @currentAgenda.isDesignAgenda)
-      }}
+      {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
           <WebComponents::AuButton class="auk-u-p-0" @skin="borderless">
             <WebComponents::AuIcon @name="drag-handle-2" @grab={{true}}/>
