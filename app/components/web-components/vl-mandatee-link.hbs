@@ -15,14 +15,15 @@
   </div>
   {{#if (gt fields.length 0)}}
     <div class="js-vl-accordion js-vl-accordion--open" data-test-mandatee-link-fields-show>
-      <button type="button" class="vl-toggle auk-button-link"
+      <WebComponents::AuButton
+        @skin="borderless"
+        @icon={{if this.showDetails "chevron-down" "chevron-right"}}
+        data-vl-accordion-toggle=""
+        data-vl-accordion-dressed="true"
         {{action "toggleShowDetails"}}
       >
-        <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-           aria-hidden="true"
-        ></i>
         {{t "collapse"}}
-      </button>
+      </WebComponents::AuButton>
       {{#if showDetails}}
         <div class="vl-accordion__content js-vl-accordion__content">
           <div class="vl-accordion__panel">

@@ -62,24 +62,15 @@
   {{yield @subcase}}
   {{#if this.hasDocumentsToShow}}
     <div class="js-vl-accordion">
-      <button class="vl-toggle vl-link vl-link--bold"
-              data-vl-accordion-toggle=""
-              data-vl-accordion-dressed="true"
-              aria-expanded="false"
-              type="button"
+      <WebComponents::AuButton
+        @skin="borderless"
+        @icon={{if this.isShowingDocuments "chevron-down" "chevron-right"}}
+        data-vl-accordion-toggle=""
+        data-vl-accordion-dressed="true"
         {{on "click" this.toggleIsShowingDocuments}}
       >
-        {{#if this.isShowingDocuments}}
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-down"
-             aria-hidden="true"
-          ></i>
-        {{else}}
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-             aria-hidden="true"
-          ></i>
-        {{/if}}
         {{t "documents"}}
-      </button>
+      </WebComponents::AuButton>
     </div>
     {{#if this.isShowingDocuments}}
       <div class="vl-accordion__panel">

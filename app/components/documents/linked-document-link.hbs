@@ -53,16 +53,14 @@
   {{#if this.reverseSortedPieces.length}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-        <button
-          class="vl-toggle auk-button-link"
-          type="button"
+        <WebComponents::AuButton
+          @skin="borderless"
+          @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           data-test-show-pieces-history
           {{on "click" this.toggleVersionHistory}}
         >
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-          ></i>
           {{t "show-pieces"}}
-        </button>
+        </WebComponents::AuButton>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
