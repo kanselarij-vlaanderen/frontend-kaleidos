@@ -1,14 +1,12 @@
-<label data-test-vl-checkbox-label class="vl-checkbox {{if this.single "vl-checkbox--single"}}">
+<label data-test-vl-checkbox-label class="auk-checkbox">
   {{input
-    class="vl-checkbox__toggle"
+    class="auk-checkbox__toggle"
     type="checkbox"
     checked=value
     disabled=disabled
     data-test-vl-checkbox=true
     input=(action "toggle")
   }}
-  <div class="vl-checkbox__label" aria-hidden={{if this.single "true" "false"}}>
-    <i class="vl-checkbox__box"></i>
-    {{label}}
-  </div>
+  {{label}}
+  <span class="auk-checkbox__box"></span>
 </label>
