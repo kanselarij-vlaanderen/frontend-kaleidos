@@ -7,8 +7,8 @@
   border: 0.1rem solid $border-color;
   padding: 1.8rem;
 
-  .js-vl-accordion .vl-toggle {
-    margin: 0.8rem 4.6rem 0;
+  .js-vl-accordion > .auk-button {
+    margin: 0.8rem 3.4rem 0;
   }
 
   .auk-h4 {
@@ -24,7 +24,7 @@
     border-top: 1px solid $border-color;
   }
 
-  .js-vl-accordion--open .vl-toggle {
+  .js-vl-accordion--open > .auk-button {
     margin-bottom: 4rem;
   }
 }
