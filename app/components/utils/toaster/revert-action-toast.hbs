@@ -1,26 +1,23 @@
-<div class="vl-modal" data-test-vl-modal>
-  {{!-- TODO: revise custom CSS classes that get loaded on top of generic alert classes --}}
-  <WebComponents::VlAlert
-    class="vl-alert-relative vl-alert-relative--center-mid"
-    aria-live="assertive"
-    @type="warning"
-    @title="Document verwijderen"
-    @closeable={{false}}
-  >
-    <div class="vl-alert__message vl-u-text--capitalize">
-      <p>
-        {{@message}}
-      </p>
-      <button
-        type="button"
-        class="vl-button vl-button--link vl-button--icon-before"
-        {{action @options.onUndo}}
-      >
-        <i class="vl-button__icon vl-button__icon--before ki-redo"
-           aria-hidden="true"
-        ></i>
-        {{t "undo"}}
-      </button>
-    </div>
-  </WebComponents::VlAlert>
-</div>
+<WebComponents::VlAlert
+  class="vl-alert-relative vl-alert-relative--center-mid"
+  aria-live="assertive"
+  @type="warning"
+  @title="Document verwijderen"
+  @closeable={{false}}
+>
+  <div class="vl-alert__message vl-u-text--capitalize">
+    <p>
+      {{@message}}
+    </p>
+    <button
+      type="button"
+      class="vl-button vl-button--link vl-button--icon-before"
+      {{action @options.onUndo}}
+    >
+      <i class="vl-button__icon vl-button__icon--before ki-redo"
+          aria-hidden="true"
+      ></i>
+      {{t "undo"}}
+    </button>
+  </div>
+</WebComponents::VlAlert>
