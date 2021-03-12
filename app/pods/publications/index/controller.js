@@ -10,7 +10,7 @@ export default class PublicationsIndexController extends Controller {
     || {
       caseNameFilterOption: true,
       publicationNumberFilterOption: true,
-      derivedPublicationTypeFilterOption: true,
+      RegulationTypeFilterOption: true,
       onMeetingFilterOption: true,
       requestedPublicationDateFilterOption: true,
       finalPublicationDateFilterOption: true,

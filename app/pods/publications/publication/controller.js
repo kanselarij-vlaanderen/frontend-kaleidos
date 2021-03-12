@@ -27,7 +27,7 @@ export default class PublicationController extends Controller {
   @tracked showPublicationDatePicker = true;
   @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
-  @tracked selectedDocumentType;
+  @tracked selectedRegulatonType;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
@@ -71,18 +71,18 @@ export default class PublicationController extends Controller {
     }
   ];
 
-  get sortedDocumentTypes() {
-    return this.model.documentTypes.sortBy('priority');
+  get sortedRegulationTypes() {
+    return this.model.regulationTypes;
   }
 
   @action
-  selectDocumentType(documentType) {
-    this.model.publicationFlow.set('deducedType', documentType);
+  setRegulationType(regulationType) {
+    this.model.publicationFlow.set('regulationType', regulationType);
     this.model.publicationFlow.save();
   }
 
-  get getSelectedDocumentType() {
-    return this.model.documentTypes.find((documentType) => documentType.id === this.model.publicationFlow.get('deducedType.id'));
+  get getRegulationType() {
+    return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
   }
 
   get getPublicationStatus() {
