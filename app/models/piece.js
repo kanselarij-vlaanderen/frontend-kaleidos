@@ -31,6 +31,10 @@ export default Model.extend({
   previousPiece: belongsTo('piece', {
     inverse: 'nextPiece',
   }),
+  // Below relationship only defined in frontend.
+  // This definition is merely here to help ember-data with relationship bookkeeping,
+  // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
+  submissionActivity: belongsTo('submission-activity'),
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
