@@ -70,13 +70,13 @@
     </table>
   </div>
 {{else if isAdding}}
-  {{mandatees/minister-modal
+  {{mandatees/mandatees-domains-selector-modal
     isAddingMinister=true
     cancel=(action "cancel")
     saveChanges=(action "saveChanges")
   }}
 {{else if isEditingMandateeRow}}
-  {{mandatees/minister-modal
+  {{mandatees/mandatees-domains-selector-modal
     rowToShow=rowToShow
     isAddingMinister=false
     selectedMandatee=rowToShow.mandatee
