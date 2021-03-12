@@ -25,4 +25,43 @@
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
 </WebComponents::AuToolbar>
-<Agenda::Agendaitem::AgendaitemCase @agendaitem={{this.model}} @subcase={{await this.subcase}}/>
+{{!-- TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing --}}
+{{#if this.isEditingAgendaItemTitles}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+  />
+{{else}}
+  {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+  />
+{{/if}}
+{{#if this.model.showAsRemark}}
+  {{!-- TODO refactor mandatees to a glimmer component --}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+  />
+{{else}}
+  {{#if this.subcase}}
+    <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
+      @agendaitem={{this.model}}
+      @subcase={{this.subcase}}
+    />
+    {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
+    {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
+    <Agenda::Agendaitem::AgendaitemCase::SubcaseIseCodes
+      @item={{this.model}}
+    />
+    <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
+      @agendaitem={{this.model}}
+    />
+  {{/if}}
+{{/if}}

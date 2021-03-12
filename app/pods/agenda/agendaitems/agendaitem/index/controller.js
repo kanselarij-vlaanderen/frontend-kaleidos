@@ -1,20 +1,18 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
+  @service store;
   @service currentSession;
 
-  @service store;
+  @tracked agenda;
+  @tracked subcase;
+  @tracked newsletterInfo;
 
-  get subcase() {
-    const agendaActivity = this.model.get('agendaActivity');
-    if (agendaActivity) {
-      return agendaActivity.get('subcase');
-    }
-    return null;
-  }
+  @tracked isEditingAgendaItemTitles = false;
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
@@ -43,5 +41,10 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
     await this.reassignPrioritiesForAgendaitems();
     await this.navigateToNeighbouringItem(this.model);
+  }
+
+  @action
+  async toggleIsEditingAgendaItemTitles() {
+    this.isEditingAgendaItemTitles = !this.isEditingAgendaItemTitles;
   }
 }

@@ -5,12 +5,20 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     return this.modelFor('agenda.agendaitems.agendaitem');
   }
 
-  setupController(controller, model) {
+  async setupController(controller, model) {
     super.setupController(...arguments);
     const {
       agenda,
     } = this.modelFor('agenda');
-    controller.set('agenda', agenda);
-    controller.set('model', model);
+    controller.agenda = agenda;
+    const agendaActivity = await model.agendaActivity;
+    if (agendaActivity) {
+      controller.subcase = await agendaActivity.subcase;
+    }
+    const agendaItemTreatment = await model.treatments;
+    const anyTreatment = agendaItemTreatment.firstObject;
+    if (anyTreatment) {
+      controller.newsletterInfo = await anyTreatment.newsletterInfo;
+    }
   }
 }
