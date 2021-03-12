@@ -1,69 +1,62 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  routing: inject('-routing'),
-  sessionService: inject(),
-  currentSession: inject(),
-  tagName: 'ul',
-  classNames: ['vlc-toolbar__item'],
+export default class SessionsSessionAgendaNavComponent extends Component {
+  /**
+   * @argument currentAgenda
+   * @argument compareAgendas: action handler
+   * @argument clearSelectedAgendaitem: action handler
+   * @argument navigateToDocuments: action handler
+   */
+  @service('-routing') routing;
+  @service sessionService;
+  @service currentSession;
 
-  firstAgendaitemOfAgenda: computed('currentAgenda.firstAgendaitem', function() {
-    return this.get('currentAgenda.firstAgendaitem');
-  }),
+  get firstAgendaitemOfAgenda() {
+    return this.args.currentAgenda.firstAgendaitem;
+  }
 
-  selectedAgendaitemClass: computed('routing.currentRouteName', function() {
-    const {
-      routing,
-    } = this;
-    if (routing.get('currentRouteName').includes('agenda.agendaitems.agendaitem.')) {
+  get selectedAgendaitemClass() {
+    if (this.routing.currentRouteName.includes('agenda.agendaitems.agendaitem.')) {
       return 'vlc-tabs-reverse__link--active';
     }
     return null;
-  }),
+  }
 
-  selectedOverviewClass: computed('routing.currentRouteName', function() {
-    const {
-      routing,
-    } = this;
-    if (routing.get('currentRouteName') === 'agenda.agendaitems.index') {
+  get selectedOverviewClass() {
+    if (this.routing.currentRouteName === 'agenda.agendaitems.index') {
       return 'vlc-tabs-reverse__link--active';
     }
     return null;
-  }),
+  }
 
-  selectedCompareClass: computed('routing.currentRouteName', function() {
-    const {
-      routing,
-    } = this;
-    if (routing.get('currentRouteName') === 'agenda.compare') {
+  get selectedCompareClass() {
+    if (this.routing.currentRouteName === 'agenda.compare') {
       return 'vlc-tabs-reverse__link--active';
     }
     return null;
-  }),
+  }
 
-  selectedDocumentClass: computed('routing.currentRouteName', function() {
-    const {
-      routing,
-    } = this;
-    if (routing.get('currentRouteName') === 'agenda.documents') {
+  get selectedDocumentClass() {
+    if (this.routing.currentRouteName === 'agenda.documents') {
       return 'vlc-tabs-reverse__link--active';
     }
     return null;
-  }),
+  }
 
-  actions: {
-    compareAgendas() {
-      this.compareAgendas();
-    },
+  @action
+  compareAgendas() {
+    this.args.compareAgendas();
+  }
 
-    goToOverview() {
-      this.clearSelectedAgendaitem();
-    },
+  @action
+  goToOverview() {
+    this.args.clearSelectedAgendaitem();
+  }
 
-    navigateToDocuments() {
-      this.navigateToDocuments();
-    },
-  },
-});
+  @action
+  navigateToDocuments() {
+    this.args.navigateToDocuments();
+  }
+}

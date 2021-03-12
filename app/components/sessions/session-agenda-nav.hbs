@@ -1,36 +1,32 @@
-<ul class="vlc-tabs-reverse" role="tablist">
-  <li class="vlc-tabs-reverse__item">
-    <a href="" class="border-left vlc-tabs-reverse__link {{selectedOverviewClass}}"
-      {{action "goToOverview"}}
-    >
-      {{t "overview"}}
-    </a>
-  </li>
-  <li class="vlc-tabs-reverse__item">
-    {{#if sessionService.selectedAgendaitem}}
-      <a href="" class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}">
-        {{t "detail"}}
-      </a>
-    {{else}}
-      {{#link-to
-        "agenda.agendaitems.agendaitem"
-        (await firstAgendaitemOfAgenda.id)
-        class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
-      }}
-        {{t "detail"}}
-      {{/link-to}}
-    {{/if}}
-  </li>
-  {{#if currentSession.isEditor}}
+<ul class="vlc-toolbar-item">
+  <ul class="vlc-tabs-reverse" role="tablist">
     <li class="vlc-tabs-reverse__item">
-      <a href="" class="vlc-tabs-reverse__link {{selectedCompareClass}}" {{action "compareAgendas"}}>
-        {{t "compare"}}
+      <a href="" class="border-left vlc-tabs-reverse__link {{this.selectedOverviewClass}}"
+        {{action "goToOverview"}}
+      >
+        {{t "overview"}}
       </a>
     </li>
-  {{/if}}
-  <li class="vlc-tabs-reverse__item">
-    <a href="" class="vlc-tabs-reverse__link {{selectedDocumentClass}}" {{action "navigateToDocuments"}}>
-      {{t "documents"}}
-    </a>
-  </li>
+    <li class="vlc-tabs-reverse__item">
+      <LinkTo
+        @route="agenda.agendaitems.agendaitem"
+        @model={{unless sessionService.selectedAgendaitem (await firstAgendaitemOfAgenda.id)}}
+        class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
+      >
+        {{t "detail"}}
+      </LinkTo>
+    </li>
+    {{#if currentSession.isEditor}}
+      <li class="vlc-tabs-reverse__item">
+        <a href="javascript://" class="vlc-tabs-reverse__link {{this.selectedCompareClass}}" {{action "compareAgendas"}}>
+          {{t "compare"}}
+        </a>
+      </li>
+    {{/if}}
+    <li class="vlc-tabs-reverse__item">
+      <a href="javascript://" class="vlc-tabs-reverse__link {{this.selectedDocumentClass}}" {{action "navigateToDocuments"}}>
+        {{t "documents"}}
+      </a>
+    </li>
+  </ul>
 </ul>
