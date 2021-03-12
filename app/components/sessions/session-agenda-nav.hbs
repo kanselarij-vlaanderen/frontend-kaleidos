@@ -10,14 +10,21 @@
       </LinkTo>
     </li>
     <li class="vlc-tabs-reverse__item">
-      <LinkTo
-        class="vlc-tabs-reverse__link"
-        @route="agenda.agendaitems.agendaitem"
-        @model={{unless sessionService.selectedAgendaitem (await firstAgendaitemOfAgenda.id)}}
-        @activeClass="vlc-tabs-reverse__link--active"
-      >
-        {{t "detail"}}
-      </LinkTo>
+      {{!-- TODO: get rid of async computed, so this wrapping if and the await can go --}}
+      {{#if (await firstAgendaitemOfAgenda.id)}}
+        <Link
+          @route="agenda.agendaitems.agendaitem"
+          @model={{if this.isInAgendaItemDetailRoute null (await firstAgendaitemOfAgenda.id)}}
+        as |l|>
+          <a
+            href={{l.url}}
+            class="vlc-tabs-reverse__link {{if l.isActiveWithoutModels "vlc-tabs-reverse__link--active"}}"
+            {{on "click" l.transitionTo}}
+          >
+            {{t "detail"}}
+          </a>
+        </Link>
+      {{/if}}
     </li>
     {{#if currentSession.isEditor}}
       <li class="vlc-tabs-reverse__item">

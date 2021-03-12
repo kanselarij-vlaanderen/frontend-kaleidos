@@ -60,7 +60,6 @@ export default class AgendaitemControls extends Component {
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
-    set(this.sessionService, 'selectedAgendaitem', null);
 
     if (this.args.onDeleteAgendaitem) {
       await this.args.onDeleteAgendaitem();

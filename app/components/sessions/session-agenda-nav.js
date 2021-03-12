@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class SessionsSessionAgendaNavComponent extends Component {
   /**
@@ -12,5 +11,9 @@ export default class SessionsSessionAgendaNavComponent extends Component {
 
   get firstAgendaitemOfAgenda() {
     return this.args.currentAgenda.firstAgendaitem;
+  }
+
+  get isInAgendaItemDetailRoute() {
+    return this.routing.currentRouteName.startsWith('agenda.agendaitems.agendaitem');
   }
 }

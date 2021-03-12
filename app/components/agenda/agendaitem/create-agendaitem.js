@@ -242,7 +242,6 @@ export default Component.extend(DataTableRouteMixin, {
 
       this.set('loading', false);
       this.set('isAddingAgendaitems', false);
-      this.set('sessionService.selectedAgendaitem', null);
       const anyAddedSubcase = subcasesToAdd.get('firstObject');
       const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
       if (this.onCreate) {

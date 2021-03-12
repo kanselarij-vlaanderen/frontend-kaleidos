@@ -37,8 +37,6 @@ export default class AgendaItemsAgendaRoute extends Route {
     const notas = agendaitems.filter((item) => parentModel.notas.includes(item));
     const announcements = agendaitems.filter((item) => parentModel.announcements.includes(item));
 
-    this.set('sessionService.selectedAgendaitem', null);
-
     return hash({
       notas,
       announcements,

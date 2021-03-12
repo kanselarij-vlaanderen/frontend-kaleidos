@@ -60,8 +60,6 @@ export default class AgendaAgendaitemsRoute extends Route {
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
 
-    this.set('sessionService.selectedAgendaitem', null);
-
     return hash({
       notas,
       announcements,

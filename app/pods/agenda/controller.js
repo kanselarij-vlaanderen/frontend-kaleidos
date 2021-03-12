@@ -24,7 +24,6 @@ export default Controller.extend({
 
   actions: {
     selectAgenda(agenda) {
-      this.set('sessionService.selectedAgendaitem', null);
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
     },
 

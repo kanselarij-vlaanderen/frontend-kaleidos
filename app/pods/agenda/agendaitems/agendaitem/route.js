@@ -10,10 +10,6 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     });
   }
 
-  afterModel(model) {
-    this.set('sessionService.selectedAgendaitem', model); // TODO: get rid of this global state
-  }
-
   setupController(controller) {
     super.setupController(...arguments);
     const {
