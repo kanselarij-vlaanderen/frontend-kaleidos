@@ -34,7 +34,9 @@ export default Model.extend({
   // Below relationship only defined in frontend.
   // This definition is merely here to help ember-data with relationship bookkeeping,
   // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
-  submissionActivity: belongsTo('submission-activity'),
+  submissionActivity: belongsTo('submission-activity', {
+    serialize: false,
+  }),
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
@@ -44,10 +46,6 @@ export default Model.extend({
   }),
   cases: hasMany('case', {
     inverse: null,
-  }),
-  submissionActivity: belongsTo('submission-activity', {
-    inverse: null,
-    serialize: false,
   }),
   // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
   agendaitems: hasMany('agendaitem', {
