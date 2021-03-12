@@ -1,32 +1,43 @@
 <ul class="vlc-toolbar-item">
   <ul class="vlc-tabs-reverse" role="tablist">
     <li class="vlc-tabs-reverse__item">
-      <a href="" class="border-left vlc-tabs-reverse__link {{this.selectedOverviewClass}}"
-        {{action "goToOverview"}}
+      <LinkTo
+        class="border-left vlc-tabs-reverse__link"
+        @route="agenda.agendaitems.index"
+        @activeClass="vlc-tabs-reverse__link--active"
       >
         {{t "overview"}}
-      </a>
+      </LinkTo>
     </li>
     <li class="vlc-tabs-reverse__item">
       <LinkTo
+        class="vlc-tabs-reverse__link"
         @route="agenda.agendaitems.agendaitem"
         @model={{unless sessionService.selectedAgendaitem (await firstAgendaitemOfAgenda.id)}}
-        class="vlc-tabs-reverse__link {{selectedAgendaitemClass}}"
+        @activeClass="vlc-tabs-reverse__link--active"
       >
         {{t "detail"}}
       </LinkTo>
     </li>
     {{#if currentSession.isEditor}}
       <li class="vlc-tabs-reverse__item">
-        <a href="javascript://" class="vlc-tabs-reverse__link {{this.selectedCompareClass}}" {{action "compareAgendas"}}>
+        <LinkTo
+          class="vlc-tabs-reverse__link"
+          @route="agenda.compare"
+          @activeClass="vlc-tabs-reverse__link--active"
+        >
           {{t "compare"}}
-        </a>
+        </LinkTo>
       </li>
     {{/if}}
     <li class="vlc-tabs-reverse__item">
-      <a href="javascript://" class="vlc-tabs-reverse__link {{this.selectedDocumentClass}}" {{action "navigateToDocuments"}}>
+      <LinkTo
+        class="vlc-tabs-reverse__link"
+        @route="agenda.documents"
+        @activeClass="vlc-tabs-reverse__link--active"
+      >
         {{t "documents"}}
-      </a>
+      </LinkTo>
     </li>
   </ul>
 </ul>

@@ -559,16 +559,8 @@ export default Component.extend(FileSaverMixin, {
       this.toggleProperty('isShowingAgendaActions');
     },
 
-    compareAgendas() {
-      this.compareAgendas();
-    },
-
     addAgendaitemsAction() {
       this.set('isAddingAgendaitems', true);
-    },
-
-    navigateToDocuments() {
-      this.navigateToDocuments();
     },
 
     async downloadAllDocuments() {

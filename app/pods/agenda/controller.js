@@ -28,11 +28,6 @@ export default Controller.extend({
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
     },
 
-    navigateToOverview() {
-      this.set('sessionService.selectedAgendaitem', null);
-      this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, this.model.agenda.id);
-    },
-
     navigateToDecisions(currentSessionId, currentAgendaId) {
       this.transitionToRoute(
         'print-overviews.decisions.agendaitems',
@@ -58,14 +53,6 @@ export default Controller.extend({
 
     navigateToAgenda(selectedAgendaId) {
       this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
-    },
-
-    compareAgendas() {
-      this.transitionToRoute('agenda.compare');
-    },
-
-    navigateToDocuments() {
-      this.transitionToRoute('agenda.documents');
     },
 
     loadingAgendaitems() {
