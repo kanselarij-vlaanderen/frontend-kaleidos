@@ -1,46 +1,46 @@
-{{#web-components/vl-modal
-  closeModal=(action "cancel")
-  isOverlay=true
-  title=title
-}}
+<WebComponents::VlModal
+  @closeModal={{this.cancel}}
+  @isOverlay={{true}}
+  @title={{this.title}}
+>
   <div class="vl-modal-dialog__content">
     <label>{{t "select-minister"}}</label>
     <div class="auk-u-mb-8">
-      {{#if isAddingMinister}}
-        {{utils/mandatee-selector
-          data-test-mandatee-selector=true
-          singleSelect=true
-          selectedMandatees=selectedMandatee
-          chooseMandatee=(action "mandateeSelected")
-        }}
+      {{#if this.isAddingMinister}}
+        <Utils:MandateeSelector
+          data-test-mandatee-selector={{true}}
+          @singleSelect={{true}}
+          @selectedMandatees={{this.selectedMandatee}}
+          @chooseMandatee={{this.mandateeSelected}}
+        />
       {{else}}
-        {{utils/mandatee-selector
-          singleSelect=true
-          readOnly=true
-          selectedMandatees=selectedMandatee
-        }}
+        <Utils:MandateeSelector
+          @singleSelect={{true}}
+          @readOnly={{true}}
+          @selectedMandatees={{this.selectedMandatee}}
+        />
       {{/if}}
     </div>
-    {{#if (and isLoading and isAddingMinister)}}
-      {{web-components/vl-loader text=(t "please-be-patient")}}
+    {{#if (and this.isLoading this.isAddingMinister)}}
+      <WebComponents::VlLoader @text={{t "please-be-patient"}}/>
     {{else}}
-      {{#each rowToShow.domains as |domain|}}
+      {{#each @rowToShow.domains as |domain|}}
         <ul class="vlc-checkbox-tree">
           <li>
-            {{web-components/vl-checkbox
-              value=domain.selected
-              label=domain.label
-              toggle=(action "selectDomain" domain)
-            }}
+            <WebComponents::VlCheckbox
+              @value={{domain.selected}}
+              @label={{domain.label}}
+              @toggle={{fn this.selectDomain domain}}
+            />
             <ul>
-              {{#each rowToShow.fields as |field|}}
+              {{#each @rowToShow.fields as |field|}}
                 {{#if (eq (await field.domain.id) domain.id)}}
                   <li>
-                    {{web-components/vl-checkbox
-                      value=field.selected
-                      label=field.label
-                      toggle=(action "selectField" domain)
-                    }}
+                    <WebComponents::VlCheckbox
+                      @value={{field.selected}}
+                      @label={{field.label}}
+                      toggle={{fn this.selectField domain}}
+                    />
                     {{field.name}}
                   </li>
                 {{/if}}
@@ -52,12 +52,12 @@
       {{/each}}
     {{/if}}
   </div>
-  {{web-components/vl-modal-footer
-    isLoading=isLoading
-    nonBordered=true
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "add")
-    cancelAction=(action "cancel")
-    saveAction=(action "saveChanges")
-  }}
-{{/web-components/vl-modal}}
+  <WebComponents::VlModalFooter
+    @isLoading={{this.isLoading}}
+    @nonBordered={{true}}
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "add"}}
+    @cancelAction={{this.cancel}}
+    @saveAction={{this.saveChanges}}
+  />
+</WebComponents::VlModal>

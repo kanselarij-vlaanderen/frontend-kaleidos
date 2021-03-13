@@ -70,17 +70,16 @@
     </table>
   </div>
 {{else if isAdding}}
-  {{mandatees/mandatees-domains-selector-modal
-    isAddingMinister=true
-    cancel=(action "cancel")
-    saveChanges=(action "saveChanges")
-  }}
+  <Mandatees::MandateesDomainsSelectorModal
+    @cancel={{this.cancel}}
+    @saveChanges={{this.saveChanges}}
+  />
 {{else if isEditingMandateeRow}}
-  {{mandatees/mandatees-domains-selector-modal
-    rowToShow=rowToShow
-    isAddingMinister=false
-    selectedMandatee=rowToShow.mandatee
-    cancel=(action "cancel")
-    saveChanges=(action "saveChanges")
-  }}
+  <Mandatees::MandateesDomainsSelectorModal
+    @rowToShow={{rowToShow}}
+    @isAddingMinister={{false}}
+    @mandatee={{rowToShow.mandatee}}
+    @cancel={{this.cancel}}
+    @saveChanges={{this.saveChanges}}
+  />
 {{/if}}
