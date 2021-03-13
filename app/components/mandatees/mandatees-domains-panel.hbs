@@ -1,0 +1,29 @@
+<div
+  class="auk-u-mb-8"
+  {{did-update this.initializeBuffers @mandatees}}
+  {{did-update this.initializeBuffers @submitter}}
+>
+  {{#if this.isEditing}}
+    <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelEdit
+      @mandatees={{this.mandateesBuffer}}
+      @submitter={{this.submitterBuffer}}
+      @onAddMandatee={{this.addMandatee}}
+      @onRemoveMandatee={{this.removeMandatee}}
+      @onChangeSubmitter={{this.setSubmitter}}
+      @onCancel={{this.cancelEditing}}
+      @onSave={{perform this.save}}
+    />
+  {{else}}
+    <div
+      class="auk-u-mb-3"
+      data-test-publication-case-panel-mandatees=""
+    >
+      <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelView
+        @mandatees={{@mandatees}}
+        @submitter={{@submitter}}
+        @showEditButton={{@allowEditing}}
+        @onClickEdit={{this.startEditing}}
+      />
+    </div>
+  {{/if}}
+</div>

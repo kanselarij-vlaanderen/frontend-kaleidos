@@ -1,0 +1,109 @@
+<div class="vlc-box">
+  <div class="vlc-input-field-block">
+    <div class="auk-u-mb-8">
+      <table class="vl-data-table vl-data-table--align-middle">
+        <thead>
+          <tr>
+            <th class="vl-data-table-col-2">
+              {{t "minister"}}
+            </th>
+            <th class="vl-data-table-col-3">
+              {{t "government-domain"}}
+            </th>
+            <th class="vl-data-table-col-5">
+              {{t "government-field"}}
+            </th>
+            <th class="vl-data-table-col-1">
+              {{t "submitter"}}
+            </th>
+            <th class="vl-data-table-col-1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each @mandatees as |mandatee|}}
+            <tr data-test-mandatees-edit-row>
+              <td>
+                {{mandatee.person.nameToDisplay}}
+              </td>
+              <td>
+                {{!-- TODO: implement domains --}}
+              </td>
+              <td>
+                {{!-- TODO: implement fields --}}
+              </td>
+              <td data-test-mandatees-edit-row-submitter>
+                {{!-- TODO: implement change handler --}}
+                {{log mandatee @submitter (eq mandatee @submitter)}}
+                <WebComponents::VlToggle
+                  @value={{eq mandatee @submitter}}
+                  @valueChanged={{fn this.toggleIsSubmitter mandatee}}
+                />
+              </td>
+              <td class="auk-u-text-align--right auk-u-flex--vertical-center">
+                {{!-- TODO: disable button on load --}}
+                {{!-- TODO: modify mandatee domains picker --}}
+                <button
+                  type="button"
+                  class="vl-button vl-button--link vl-button--icon"
+                >
+                  <i class="ki-pencil" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    {{t "edit"}}
+                  </span>
+                </button>
+                <button
+                  data-test-mandatees-edit-row-delete
+                  type="button"
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{on "click" (fn @onRemoveMandatee mandatee)}}
+                >
+                  <i class="ki-delete" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    {{t "delete"}}
+                  </span>
+                </button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <a
+        data-test-subcase-mandatees-add-mandatee
+        href="javascript://"
+        class="vl-button vl-button--tertiary vl-button--icon-before"
+        {{on "click" this.showAddMandateeModal}}
+      >
+        <i
+          class="vl-button__icon vl-button__icon--before ki-add"
+          aria-hidden="true"
+        ></i>
+        {{t "add-minister"}}
+      </a>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vl-action-group vl-action-group--align-right">
+        <a
+          data-test-subcase-mandatees-edit-cancel
+          href="javascript://"
+          class="vl-button vl-button--tertiary"
+          {{on "click" @onCancel}}
+        >
+          {{t "cancel"}}
+        </a>
+        <WebComponents::VlSaveButton
+          test-data-vl-save-button={{true}}
+          @text={{t "save"}}
+          @isLoading={{this.save.isRunning}}
+          @saveAction={{perform this.save}}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+{{#if this.isShowingAddMandateeModal}}
+  {{!-- utils/minister-modal --}}
+{{/if}}

@@ -1,0 +1,88 @@
+<WebComponents::AuPanel>
+  <WebComponents::AuPanel::Header>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      {{#if @showEditButton}}
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton
+              @skin="tertiary"
+              @icon="settings"
+              data-test-subcase-mandatees-edit
+              {{on "click" @onClickEdit}}
+            >
+              {{t "edit-2"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      {{/if}}
+    </WebComponents::AuToolbar>
+  </WebComponents::AuPanel::Header>
+  {{#if @mandatees.length }}
+    <WebComponents::AuPanel::Body @noPadding="true">
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th>{{t "minister"}}</th>
+            <th>{{t "policy-domain-policy-fields"}}</th>
+            <th>{{t "submitter"}}</th>
+            {{!-- <th></th> --}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each @mandatees as |mandatee|}}
+            <tr data-test-mandatee-link-list-item >
+              <td class="auk-table__col--4">
+                <div class="auk-u-flex auk-u-flex--vertical-center">
+                  <WebComponents::AuBadge @icon="user"/>
+                  <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                </div>
+              </td>
+              <td>
+                {{!-- TODO: implement fields list <ul data-test-agendaitem-mandatees-fields-list> --}}
+                {{t "dash"}}
+              </td>
+              <td>
+                {{#if (eq mandatee @submitter)}}
+                  <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              </td>
+              {{!-- TODO implement actions --}}
+              {{!-- <td class="auk-u-text-align--right">
+                <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                  <AttachPopover
+                          @renderInPlace={{true}}
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="left"
+                  >
+                    <WebComponents::AuDropdown>
+                      <WebComponents::AuDropdown::Item>
+                        {{t "edit-2"}}
+                      </WebComponents::AuDropdown::Item>
+                      <WebComponents::AuDropdown::Item @skin="danger">
+                        {{t "delete"}}
+                      </WebComponents::AuDropdown::Item>
+                    </WebComponents::AuDropdown>
+                  </AttachPopover>
+                </WebComponents::AuButton>
+              </td> --}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </WebComponents::AuPanel::Body>
+  {{else}}
+    <WebComponents::AuPanel::Body>
+      <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+    </WebComponents::AuPanel::Body>
+  {{/if}}
+</WebComponents::AuPanel>

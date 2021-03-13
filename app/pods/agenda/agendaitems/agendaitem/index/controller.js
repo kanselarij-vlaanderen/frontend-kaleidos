@@ -47,4 +47,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async toggleIsEditingAgendaItemTitles() {
     this.isEditingAgendaItemTitles = !this.isEditingAgendaItemTitles;
   }
+
+  @action
+  async saveMandateeData(mandateeData) {
+    this.model.mandatees = mandateeData.mandatees;
+    this.subcase.requestedBy = mandateeData.submitter;
+    await this.model.save();
+    await this.subcase.save();
+  }
 }

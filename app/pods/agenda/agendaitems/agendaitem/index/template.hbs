@@ -44,16 +44,19 @@
   />
 {{/if}}
 {{#if this.model.showAsRemark}}
-  {{!-- TODO refactor mandatees to a glimmer component --}}
-  <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
-    @agendaitem={{this.model}}
-    @subcase={{this.subcase}}
+  <Mandatees::MandateesDomainsPanel
+    @mandatees={{this.model.mandatees}}
+    @allowEditing={{false}}
+    @onSave={{this.saveMandatees}}
   />
 {{else}}
   {{#if this.subcase}}
-    <Agenda::Agendaitem::AgendaitemCase::AgendaitemMandatees
-      @agendaitem={{this.model}}
-      @subcase={{this.subcase}}
+  {{!-- TODO: get rid of the submitter await. It doesn't update properly --}}
+    <Mandatees::MandateesDomainsPanel
+      @mandatees={{this.model.mandatees}}
+      @submitter={{await this.subcase.requestedBy}}
+      @allowEditing={{true}}
+      @onSave={{this.saveMandateeData}}
     />
     {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
     {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
