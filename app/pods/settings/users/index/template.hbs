@@ -1,8 +1,11 @@
 {{#utils/settings-header title=(t 'manage-users')}}
-  <div data-test-settings-user-file-upload
-       class="vl-action-group vl-action-group--align-right u-padding--right">
-    {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
-  </div>
+  <WebComponents::AuToolbar data-test-settings-user-file-upload>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item class="u-padding--right">
+        {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 {{/utils/settings-header}}
 <div class="auk-u-m-8">
   <div class="vlc-input-field-group vlc-input-field-group--gmeeting">

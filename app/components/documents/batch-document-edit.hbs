@@ -40,15 +40,21 @@
           </tbody>
         </table>
       </div>
-      <div class="vl-action-group vl-action-group--align-right">
-        <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
-          {{t "cancel"}}
-        </button>
-        <WebComponents::VlSaveButton
-          @text={{t "save"}}
-          @isLoading={{this.saveEditPieces.isRunning}}
-          @saveAction={{perform this.saveEditPieces}} />
-      </div>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
+              {{t "cancel"}}
+            </button>
+          </WebComponents::AuToolbar::Item>
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::VlSaveButton
+              @text={{t "save"}}
+              @isLoading={{this.saveEditPieces.isRunning}}
+              @saveAction={{perform this.saveEditPieces}} />
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
     </div>
   {{/if}}
 </div>

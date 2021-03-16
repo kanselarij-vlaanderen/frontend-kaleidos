@@ -9,19 +9,25 @@
       @onChange={{this.changeDecisionResultCode}}
     />
   </div>
-  <div class="vl-action-group vl-action-group--align-right">
-    {{!-- TODO: replace by link-styled button once css available --}}
-    <a
-      href="javascript://"
-      class="auk-button-link"
-      {{on "click" this.cancelEdit}}
-    >
-      {{t "cancel"}}
-    </a>
-    <WebComponents::VlSaveButton
-      @text={{t "save"}}
-      @isLoading={{this.saveTreatment.isRunning}}
-      @saveAction={{perform this.saveTreatment}}
-    />
-  </div>
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        {{!-- TODO: replace by link-styled button once css available --}}
+        <a
+          href="javascript://"
+          class="auk-button-link"
+          {{on "click" this.cancelEdit}}
+        >
+          {{t "cancel"}}
+        </a>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::VlSaveButton
+          @text={{t "save"}}
+          @isLoading={{this.saveTreatment.isRunning}}
+          @saveAction={{perform this.saveTreatment}}
+        />
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 </div>

@@ -70,17 +70,23 @@
   </div>
 
 </div>
-<div class="vl-action-group vl-action-group--align-right">
-  <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-    {{t "cancel"}}
-  </a>
-  {{web-components/vl-save-button
-    data-test-newsletter-edit-save=true
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "trySaveChanges")
-  }}
-</div>
+<WebComponents::AuToolbar>
+  <WebComponents::AuToolbar::Group @position="right">
+    <WebComponents::AuToolbar::Item>
+      <a href="" class="auk-button-link" {{action "cancelEditing"}}>
+        {{t "cancel"}}
+      </a>
+    </WebComponents::AuToolbar::Item>
+    <WebComponents::AuToolbar::Item>
+      {{web-components/vl-save-button
+        data-test-newsletter-edit-save=true
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "trySaveChanges")
+      }}
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>
 {{#if isTryingToSave}}
   {{web-components/vl-modal-verify
     title=(t "no-themes-selected")

@@ -54,22 +54,28 @@
         </a>
       </div>
       <div class="vlc-toolbar__right">
-        <div class="vl-action-group vl-action-group--align-right">
-          <a
-            data-test-subcase-mandatees-edit-cancel
-            href=""
-            class="vl-button vl-button--tertiary"
-            {{action "cancelEditing"}}
-          >
-            {{t "cancel"}}
-          </a>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            test-data-vl-save-button=true
-            saveAction=(action "saveChanges")
-          }}
-        </div>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <a
+                data-test-subcase-mandatees-edit-cancel
+                href=""
+                class="vl-button vl-button--tertiary"
+                {{action "cancelEditing"}}
+              >
+                {{t "cancel"}}
+              </a>
+            </WebComponents::AuToolbar::Item>
+            <WebComponents::AuToolbar::Item>
+              {{web-components/vl-save-button
+                text=(t "save")
+                isLoading=isLoading
+                test-data-vl-save-button=true
+                saveAction=(action "saveChanges")
+              }}
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
       </div>
     </div>
   </div>

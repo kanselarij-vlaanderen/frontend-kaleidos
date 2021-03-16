@@ -16,13 +16,19 @@
     {{web-components/vl-toggle value=agendaitem.forPress}}
   </div>
 </div>
-<div class="vl-action-group vl-action-group--align-right">
-  <a href="" class="auk-button-link" {{action "cancelEditing" agendaitem}}>
-    {{t "cancel"}}
-  </a>
-  {{web-components/vl-save-button
-    text=(t "save")
-    isLoading=isLoading
-    saveAction=(action "saveChanges" agendaitem)
-  }}
-</div>
+<WebComponents::AuToolbar>
+  <WebComponents::AuToolbar::Group @position="right">
+    <WebComponents::AuToolbar::Item>
+      <a href="" class="auk-button-link" {{action "cancelEditing" agendaitem}}>
+        {{t "cancel"}}
+      </a>
+    </WebComponents::AuToolbar::Item>
+    <WebComponents::AuToolbar::Item>
+      {{web-components/vl-save-button
+        text=(t "save")
+        isLoading=isLoading
+        saveAction=(action "saveChanges" agendaitem)
+      }}
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>

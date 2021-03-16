@@ -57,17 +57,23 @@
       </div>
     </div>
   {{/if}}
-  <div class="vl-action-group vl-action-group--align-right">
-    <a href="" class="vl-button vl-button--tertiary"
-      {{action this.cancelEditing}}
-    >
-      {{t "cancel"}}
-    </a>
-    {{web-components/vl-save-button
-      data-test-agendaitem-titles-edit-save=true
-      text=(t "save")
-      isLoading=this.isLoading
-      saveAction=(action this.saveChanges)
-    }}
-  </div>
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <a href="" class="vl-button vl-button--tertiary"
+          {{action this.cancelEditing}}
+        >
+          {{t "cancel"}}
+        </a>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        {{web-components/vl-save-button
+          data-test-agendaitem-titles-edit-save=true
+          text=(t "save")
+          isLoading=this.isLoading
+          saveAction=(action this.saveChanges)
+        }}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 </div>

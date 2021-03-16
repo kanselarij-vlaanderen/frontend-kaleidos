@@ -91,32 +91,40 @@
               {{await mandatee.priority}}
             </td>
             <td class="auk-u-text-align--center">
-              <div class="vl-action-group vl-action-group--align-center">
-                <button data-test-mandatee-edit={{index}}
-                        type="button"
-                        class="vl-button vl-button--link vl-button--icon"
-                  {{action "toggleProperty" "isEditingMandatee" mandatee}}
-                >
-                  <i class="vl-button__icon ki-pencil"></i>
-                </button>
-                <button type="button"
-                        data-test-mandatee-resign={{index}}
-                        class="vl-button vl-button--link vl-button--icon"
-                  {{action "toggleProperty" "isResigningMandatee" mandatee}}
-                >
-                  <i class="vl-button__icon ki-settings"></i>
-                  <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-                    {{t "resign"}}
-                  </EmberTooltip>
-                </button>
-                <button type="button"
-                        data-test-mandatee-delete={{index}}
-                        class="vl-button vl-button--link vl-button--icon vl-u-text--error"
-                  {{action "toggleProperty" "isDeletingMandatee" mandatee}}
-                >
-                  <i class="vl-button__icon ki-delete"></i>
-                </button>
-              </div>
+              <WebComponents::AuToolbar>
+                <WebComponents::AuToolbar::Group @position="center">
+                  <WebComponents::AuToolbar::Item>
+                    <button data-test-mandatee-edit={{index}}
+                            type="button"
+                            class="vl-button vl-button--link vl-button--icon"
+                      {{action "toggleProperty" "isEditingMandatee" mandatee}}
+                    >
+                      <i class="vl-button__icon ki-pencil"></i>
+                    </button>
+                  </WebComponents::AuToolbar::Item>
+                  <WebComponents::AuToolbar::Item>
+                    <button type="button"
+                            data-test-mandatee-resign={{index}}
+                            class="vl-button vl-button--link vl-button--icon"
+                      {{action "toggleProperty" "isResigningMandatee" mandatee}}
+                    >
+                      <i class="vl-button__icon ki-settings"></i>
+                      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+                        {{t "resign"}}
+                      </EmberTooltip>
+                    </button>
+                  </WebComponents::AuToolbar::Item>
+                  <WebComponents::AuToolbar::Item>
+                    <button type="button"
+                            data-test-mandatee-delete={{index}}
+                            class="vl-button vl-button--link vl-button--icon vl-u-text--error"
+                      {{action "toggleProperty" "isDeletingMandatee" mandatee}}
+                    >
+                      <i class="vl-button__icon ki-delete"></i>
+                    </button>
+                  </WebComponents::AuToolbar::Item>
+                </WebComponents::AuToolbar::Group>
+              </WebComponents::AuToolbar>
             </td>
           {{/sortable-item}}
         {{/each}}
