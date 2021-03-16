@@ -33,7 +33,7 @@ function createCase(confidential, shortTitle) {
   if (confidential) {
     cy.get('@newCaseForm').eq(0)
       .within(() => {
-        cy.get('.vl-checkbox--switch__label').click();
+        cy.get('.vl-toggle__label').click();
       });
   }
 

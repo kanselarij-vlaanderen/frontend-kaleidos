@@ -131,7 +131,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     if (confidentialityChange) {
       cy.get('@editCaseForm').eq(0)
         .within(() => {
-          cy.get('.vl-checkbox--switch__label').click();
+          cy.get('.vl-toggle__label').click();
         });
     }
     if (newShortTitle) {

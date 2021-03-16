@@ -466,7 +466,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
       if (postponed) {
         cy.get('[data-test-postponed-checkbox]')
           .within(() => {
-            cy.get('.vl-checkbox--switch__label').click();
+            cy.get('.vl-toggle__label').click();
           });
       }
       cy.get('.auk-loader', {

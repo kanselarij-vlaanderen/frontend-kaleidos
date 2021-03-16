@@ -30,7 +30,7 @@ const selectors = {
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },
   item: {
-    checkBoxLabel: 'label.vl-checkbox--switch__label',
+    checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.vl-action-group button',
     themes: '[data-test-agenda-news-item-themes]',
     news: {
