@@ -26,4 +26,19 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
     this.subcase.set('confidential', isConfidential);
     // TODO: save?
   }
+
+  @action
+  async saveMandateeData(mandateeData) {
+    // TODO: save mandatees on required entities
+    // this.agendaItem.mandatees = mandateeData.mandatees;
+    // await this.agendaItem.save();
+    // TODO: reset formally OK status
+    this.subcase.requestedBy = mandateeData.submitter;
+    // fields to ise
+    const correspondingIseCodes = await this.store.query('ise-code', {
+      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
+    });
+    this.subcase.iseCodes = correspondingIseCodes;
+    await this.subcase.save();
+  }
 }
