@@ -18,6 +18,11 @@ export default class MandateesMandateesDomainsPanelComponent extends Component {
     this.isEditing = true;
   }
 
+  @action
+  cancelEditing() {
+    this.isEditing = false;
+  }
+
   @task
   *save() {
     if (this.args.onSave) {
