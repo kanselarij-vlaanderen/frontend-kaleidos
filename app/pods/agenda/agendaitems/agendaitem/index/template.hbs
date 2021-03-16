@@ -58,11 +58,7 @@
       @allowEditing={{true}}
       @onSave={{this.saveMandateeData}}
     />
-    {{!-- TODO an agendaitem does not have isecodes, the only ones you ever see are set to model but lost after refresh --}}
-    {{!-- TODO it would be as easy as setting item=subcase to get a accurate list, but this feature is not used at the moment --}}
-    <DomainFieldIse::IseCodesPanel
-      @item={{this.subcase}}
-    />
+    <DomainFieldIse::IseCodesPanel @iseCodes={{this.subcase.iseCodes}}/>
     <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
       @agendaitem={{this.model}}
     />

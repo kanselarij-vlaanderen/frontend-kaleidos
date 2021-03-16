@@ -27,6 +27,6 @@
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
 {{else}}
   {{subcase/subcase-case/subcase-mandatees subcase=subcase}}
-  <DomainFieldIse::IseCodesPanel @item={{subcase}}/>
+  <DomainFieldIse::IseCodesPanel @iseCodes={{subcase.iseCodes}}/>
   {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
 {{/if}}
