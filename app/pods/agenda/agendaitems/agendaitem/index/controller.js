@@ -51,8 +51,13 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async saveMandateeData(mandateeData) {
     this.model.mandatees = mandateeData.mandatees;
-    this.subcase.requestedBy = mandateeData.submitter;
     await this.model.save();
+    this.subcase.requestedBy = mandateeData.submitter;
+    // fields to ise
+    const correspondingIseCodes = await this.store.query('ise-code', {
+      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
+    });
+    this.subcase.iseCodes = correspondingIseCodes;
     await this.subcase.save();
   }
 }

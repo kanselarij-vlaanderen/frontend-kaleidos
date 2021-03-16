@@ -42,10 +42,33 @@
                   <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                 </div>
               </td>
-              <td>
-                {{!-- TODO: implement fields list <ul data-test-agendaitem-mandatees-fields-list> --}}
-                {{t "dash"}}
-              </td>
+              <Mandatees::DomainsFieldsForMandatee
+                @mandatee={{mandatee}}
+                @fields={{array}}
+              as |mandateeDomainsFields|>
+                <td>
+                  {{#if mandateeDomainsFields.domains.length}}
+                    <ul>
+                      {{#each mandateeDomainsFields.domains as |domain|}}
+                        <li>{{domain.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{#if mandateeDomainsFields.fields.length}}
+                    <ul data-test-agendaitem-mandatees-fields-list>
+                      {{#each mandateeDomainsFields.fields as |field|}}
+                        <li>{{field.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+              </Mandatees::DomainsFieldsForMandatee>
               <td>
                 {{#if (eq mandatee @submitter)}}
                   <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
