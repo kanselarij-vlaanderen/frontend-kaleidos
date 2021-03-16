@@ -1,7 +1,35 @@
 {{#if model}}
-  {{subcases/subcase-description subcase=model}}
+  <Subcases::SubcaseDescription @subcase={{this.subcase}}/>
   <div class="auk-u-mb-8">
     <div class="vlc-hr"></div>
   </div>
-  {{subcase/subcase-case subcase=model}}
+  {{#if authentication.isEditor}}
+    <div class="confidentialities">
+      <div class="confidential">
+        <WebComponents::VlCheckbox
+          data-test-vl-subcase-titles-edit-confidentiality={{true}}
+          @value={{this.subcase.confidential}}
+          @disabled={{true}}
+          @label={{t "confidential"}}
+          @toggle={{this.setConfidentiality}}
+        />
+      </div>
+    </div>
+  {{/if}}
+  {{#if (not this.isEditingTitles)}}
+    <Subcase::SubcaseCase::SubcaseTitles
+      @subcase={{this.subcase}}
+      @toggleIsEditing={{this.toggleIsEditing}}
+    />
+  {{else}}
+    <Subcase::SubcaseCase::SubcaseTitlesEdit
+      @subcase={{this.subcase}}
+      @isEditing={{this.isEditingTitles}}
+    />
+  {{/if}}
+  <Subcase::SubcaseCase::SubcaseMandatees @subcase={{this.subcase}}/>
+  {{#unless this.subcase.showAsRemark}}
+    <DomainFieldIse::IseCodesPanel @iseCodes={{this.subcase.iseCodes}}/>
+  {{/unless}}
+  <Agenda::Agendaitem::AgendaitemCase::AllSubcases @subcases={{this.allSubcases}}/>
 {{/if}}
