@@ -1,15 +1,11 @@
 <div
   class="auk-u-mb-8"
-  {{did-update this.initializeBuffers @mandatees}}
-  {{did-update this.initializeBuffers @submitter}}
 >
   {{#if this.isEditing}}
     <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelEdit
-      @mandatees={{this.mandateesBuffer}}
-      @submitter={{this.submitterBuffer}}
-      @onAddMandatee={{this.addMandatee}}
-      @onRemoveMandatee={{this.removeMandatee}}
-      @onChangeSubmitter={{this.setSubmitter}}
+      @mandatees={{@mandatees}}
+      @submitter={{@submitter}}
+      @fields={{@fields}}
       @onCancel={{this.cancelEditing}}
       @onSave={{perform this.save}}
     />

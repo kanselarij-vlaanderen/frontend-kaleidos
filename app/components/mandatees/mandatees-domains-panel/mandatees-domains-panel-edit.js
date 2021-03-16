@@ -8,17 +8,54 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   /**
    * @argument mandatees
    * @argument submitter
-   * @argument onAddMandatee
-   * @argument onRemoveMandatee
-   * @argument onChangeSubmitter: The submitter is at least 0 people and at most 1 person per item. Hands <Mandatee> or null to the action
+   * @argument fields
    * @argument onCancel
    * @argument onSave
    */
-  @tracked isShowingAddMandateeModal = false;
+  @service store;
+
+  @tracked mandateesBuffer;
+  @tracked submitterBuffer;
+  @tracked fieldsBuffer;
+
+  @tracked isShowingEditMandateeModal = false;
+  @tracked mandateeUnderEdit;
+
+  constructor() {
+    super(...arguments);
+    this.initBuffers();
+    this.loadDisplayData.perform() // also needed in view-component => renderless MandateeDomainsFields
+  }
+
+  initBuffers() {
+    this.mandateesBuffer = this.args.mandatees.slice(); // Shallow copy
+    this.submitterBuffer = this.args.submitter;
+    this.fieldsBuffer = this.args.fields.slice(); // Shallow copy
+  }
+
 
   @action
-  showAddMandateeModal() {
-    this.isShowingAddMandateeModal = true;
+  startEditingMandatee(mandatee) {
+    this.isShowingEditMandateeModal = true;
+    this.mandateeUnderEdit = mandatee;
+  }
+
+  @action
+  cancelEditingMandatee() {
+    this.isShowingEditMandateeModal = false;
+    this.mandateeUnderEdit = null;
+  }
+
+  removeMandatee(mandatee) {
+    this.mandateesBuffer = this.mandateesBuffer.filter((item) => item !== mandatee);
+    // eslint-disable-next-line no-self-assign
+    this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
+  }
+
+  @action
+  toggleIsSubmitter(mandatee, flag) {
+    this.submitterBuffer = flag ? mandatee : null;
+  }
   }
 
   @task
@@ -30,10 +67,9 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
     this.mandateesBuffer = [];
   }
 
-  @action
-  toggleIsSubmitter(mandatee, flag) {
-    if (this.args.onChangeSubmitter) {
-      this.args.onChangeSubmitter(flag ? mandatee : null);
+  @action cancel() {
+    if (this.args.onCancel) {
+      this.args.onCancel();
     }
   }
 }
