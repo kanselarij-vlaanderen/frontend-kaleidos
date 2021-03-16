@@ -31,7 +31,7 @@ const selectors = {
   },
   item: {
     checkBoxLabel: 'label.vl-toggle__label',
-    actionButton: '.vl-action-group button',
+    actionButton: '.auk-toolbar-complex__item button',
     themes: '[data-test-agenda-news-item-themes]',
     news: {
       editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',

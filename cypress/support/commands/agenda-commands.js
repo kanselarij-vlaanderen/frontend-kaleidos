@@ -344,7 +344,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
           });
         });
 
-        cy.get('.vl-action-group > .vl-button')
+        cy.get('.auk-toolbar-complex__item > .vl-button')
           .contains('Opslaan')
           .click();
       });

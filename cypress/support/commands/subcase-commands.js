@@ -151,7 +151,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
         });
     }
 
-    cy.get('.vl-action-group > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .vl-button')
       .contains('Opslaan')
       .click();
   });
@@ -192,7 +192,7 @@ function addSubcaseThemes(themes) {
           .click();
       }
     });
-    cy.get('.vl-action-group > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .vl-button')
       .contains('Opslaan')
       .click();
   });
