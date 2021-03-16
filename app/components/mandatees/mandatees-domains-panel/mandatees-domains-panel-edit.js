@@ -24,7 +24,6 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   constructor() {
     super(...arguments);
     this.initBuffers();
-    this.loadDisplayData.perform() // also needed in view-component => renderless MandateeDomainsFields
   }
 
   initBuffers() {
