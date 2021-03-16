@@ -337,7 +337,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
         cy.get('.auk-table > tbody > tr').as('mandatees');
         cy.get('@mandatees').each((item) => {
           cy.get(item).within(() => {
-            cy.get('.vl-checkbox', {
+            cy.get('.auk-checkbox', {
               timeout: 10000,
             }).should('exist')
               .click();

@@ -213,7 +213,7 @@ context('Search tests', () => {
     wordsFromPdf.forEach((searchTerm) => {
       cy.get('[data-test-searchfield]').clear();
       cy.get('[data-test-searchfield]').type(searchTerm);
-      cy.get('[data-test-decisions-only-check] .vl-checkbox__label').click();
+      cy.get('[data-test-decisions-only-check] .auk-checkbox').click();
 
       cy.server();
       cy.route('GET', '/casesByDecisionText/search?**').as('decisionsSearchCall');

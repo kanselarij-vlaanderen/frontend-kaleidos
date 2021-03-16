@@ -179,16 +179,16 @@ function addSubcaseThemes(themes) {
   cy.get('@subcaseTheme').within(() => {
     cy.get('a').click();
     // cy.wait('@getThemes', { timeout: 12000 });
-    cy.get('.vl-checkbox', {
+    cy.get('.auk-checkbox', {
       timeout: 12000,
     }).should('exist')
       .end();
     themes.forEach((element) => {
       if (Number.isNaN(element)) {
-        cy.get('.vl-checkbox').contains(element)
+        cy.get('.auk-checkbox').contains(element)
           .click();
       } else {
-        cy.get('.vl-checkbox').eq(element)
+        cy.get('.auk-checkbox').eq(element)
           .click();
       }
     });
@@ -277,7 +277,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }).should('exist')
       .eq(fieldNumber)
       .within(() => {
-        cy.get('.vl-checkbox').eq(domainNumber)
+        cy.get('.auk-checkbox').eq(domainNumber)
           .click();
       });
   }
