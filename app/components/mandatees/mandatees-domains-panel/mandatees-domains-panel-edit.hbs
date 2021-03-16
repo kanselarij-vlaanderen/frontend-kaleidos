@@ -25,12 +25,33 @@
               <td>
                 {{mandatee.person.nameToDisplay}}
               </td>
-              <td>
-                {{!-- TODO: implement domains --}}
-              </td>
-              <td>
-                {{!-- TODO: implement fields --}}
-              </td>
+              <Mandatees::DomainsFieldsForMandatee
+                @mandatee={{mandatee}}
+                @fields={{this.fieldsBuffer}}
+              as |mandateeDomainsFields|>
+                <td>
+                  {{#if mandateeDomainsFields.domains.length}}
+                    <ul>
+                      {{#each mandateeDomainsFields.domains as |domain|}}
+                        <li>{{domain.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{#if mandateeDomainsFields.fields.length}}
+                    <ul data-test-agendaitem-mandatees-fields-list>
+                      {{#each mandateeDomainsFields.fields as |field|}}
+                        <li>{{field.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+              </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatees-edit-row-submitter>
                 {{!-- TODO: implement change handler --}}
                 {{log mandatee @submitter (eq mandatee @submitter)}}
