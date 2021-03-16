@@ -46,24 +46,17 @@
                 @mandatee={{mandatee}}
                 @fields={{array}}
               as |mandateeDomainsFields|>
+                {{!-- TODO: the design here currently isn't entirely adapted to the content.
+                Only one collumn for domains as well as fields seems off --}}
                 <td>
                   {{#if mandateeDomainsFields.domains.length}}
-                    <ul>
-                      {{#each mandateeDomainsFields.domains as |domain|}}
-                        <li>{{domain.label}}</li>
-                      {{/each}}
-                    </ul>
-                  {{else}}
-                    {{t "dash"}}
-                  {{/if}}
-                </td>
-                <td>
-                  {{#if mandateeDomainsFields.fields.length}}
-                    <ul data-test-agendaitem-mandatees-fields-list>
-                      {{#each mandateeDomainsFields.fields as |field|}}
-                        <li>{{field.label}}</li>
-                      {{/each}}
-                    </ul>
+                    {{#each mandateeDomainsFields.domains as |domain|}}
+                      {{domain.label}}
+                    {{/each}}
+                    :
+                    {{#each mandateeDomainsFields.fields as |field|}}
+                      {{field.label}}
+                    {{/each}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
