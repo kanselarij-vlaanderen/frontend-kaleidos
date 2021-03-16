@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each @mandatees as |mandatee|}}
+          {{#each this.mandateesBuffer as |mandatee|}}
             <tr data-test-mandatees-edit-row>
               <td>
                 {{mandatee.person.nameToDisplay}}
