@@ -77,7 +77,7 @@
                   data-test-mandatees-edit-row-delete
                   type="button"
                   class="vl-button vl-button--link vl-button--icon"
-                  {{on "click" (fn @onRemoveMandatee mandatee)}}
+                  {{on "click" (fn this.removeMandatee mandatee)}}
                 >
                   <i class="ki-delete" aria-hidden="true"></i>
                   <span class="vl-u-visually-hidden">

@@ -51,6 +51,7 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
     this.mandateeUnderEdit = null;
   }
 
+  @action
   removeMandatee(mandatee) {
     this.mandateesBuffer = this.mandateesBuffer.filter((item) => item !== mandatee);
     // eslint-disable-next-line no-self-assign
