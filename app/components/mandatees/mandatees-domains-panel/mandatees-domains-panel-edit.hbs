@@ -105,6 +105,11 @@
     </div>
   </div>
 </div>
-{{#if this.isShowingAddMandateeModal}}
-  {{!-- utils/minister-modal --}}
+{{#if this.isShowingEditMandateeModal}}
+  <Mandatees::MandateesDomainsSelectorModal
+    @mandatee={{this.mandateeUnderEdit}}
+    @fields={{this.fieldsBuffer}}
+    @onSave={{this.modifyMandateeAndFields}}
+    @onCancel={{this.cancelEditingMandatee}}
+  />
 {{/if}}

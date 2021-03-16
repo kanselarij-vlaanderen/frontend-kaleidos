@@ -35,6 +35,11 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
 
 
   @action
+  startCreatingMandatee() {
+    this.isShowingEditMandateeModal = true;
+  }
+
+  @action
   startEditingMandatee(mandatee) {
     this.isShowingEditMandateeModal = true;
     this.mandateeUnderEdit = mandatee;
@@ -56,15 +61,40 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   toggleIsSubmitter(mandatee, flag) {
     this.submitterBuffer = flag ? mandatee : null;
   }
+
+  @action
+  async modifyMandateeAndFields(mandateeAndFields) {
+    // potential mandatee addition
+    if (!this.mandateeUnderEdit) { // if none was existant yet, we expect one to have been added
+      this.mandateesBuffer.push(mandateeAndFields.mandatee);
+      // eslint-disable-next-line no-self-assign
+      this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
+    }
+    // Fields modifications
+    let mandateeFields = await this.store.query('government-field', {
+      'filter[ise-code][mandatees][:id:]': mandateeAndFields.mandatee.id,
+    });
+    mandateeFields = mandateeFields.toArray();
+    const fieldsToRemove = this.fieldsBuffer.filter((field) => !this.fieldsBuffer.includes(field) && mandateeFields.includes(field));
+    const fieldsToAdd = mandateeAndFields.fields.filter((field) => !this.fieldsBuffer.includes(field));
+    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !fieldsToRemove.includes(field));
+    this.fieldsBuffer = this.fieldsBuffer.concat(fieldsToAdd);
+    // Reset interface state
+    this.isShowingEditMandateeModal = false;
+    this.mandateeUnderEdit = null;
   }
 
   @task
   *save() {
     if (this.args.onSave) {
-      yield this.args.onSave(this.mandateesBuffer);
+      yield this.args.onSave({
+        mandatees: this.mandateesBuffer,
+        submitter: this.submitterBuffer,
+        fields: this.fieldsBuffer,
+      });
     }
     this.isEditing = false;
-    this.mandateesBuffer = [];
+    this.initBuffers();
   }
 
   @action cancel() {
