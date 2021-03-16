@@ -28,11 +28,10 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   }
 
   initBuffers() {
-    this.mandateesBuffer = this.args.mandatees.slice(); // Shallow copy
+    this.mandateesBuffer = this.args.mandatees ? this.args.mandatees.slice() : []; // Shallow copy
     this.submitterBuffer = this.args.submitter;
-    this.fieldsBuffer = this.args.fields.slice(); // Shallow copy
+    this.fieldsBuffer = this.args.fields ? this.args.fields.slice() : []; // Shallow copy
   }
-
 
   @action
   startCreatingMandatee() {
