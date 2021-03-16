@@ -1,73 +1,79 @@
 import Component from '@glimmer/component';
-import {
-  refreshData,
-  selectDomain,
-  selectField,
-  prepareMandateeRowAfterEdit
-} from 'frontend-kaleidos/utils/manage-minister-util';
-import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class MandateesMandateesDomainsSelectorModalComponent extends Component {
-  @service intl;
+  /**
+   * @argument mandatee: mandatee we want to select fields for, or undefined when a mandatee needs to be selected too
+   * @argument fields: fields to mark as selected
+   * @argument onSave
+   * @argument onCancel
+   */
+  @service store;
 
-  @tracked selectedMandatee;
-  @tracked rowToShow;
+  @tracked mandateeBuffer;
+  @tracked availableFields; // selectableFields
+  @tracked fieldsBuffer; // selectedFields
 
   @tracked isLoading;
 
   get isAddingMinister() {
-    return !this.args.mandatee;
+    return !this.mandateeBuffer;
   }
 
-  get title() {
-    if (this.isAddingMinister) {
-      return this.intl.t('add-minister');
-    }
-    return this.intl.t('edit-minister');
-  }
-
-  consttructor() {
+  constructor() {
     super(...arguments);
-    this.selectedMandatee = this.args.mandatee;
+    this.mandateeBuffer = this.args.mandatee;
+    if (this.args.fields) {
+      this.fieldsBuffer = [...this.args.fields]; // Shallow copy array
+    } else {
+      this.fieldsBuffer = [];
+    }
+    if (!this.isAddingMinister) {
+      this.loadAvailableFieldsForMandatee.perform();
+    }
+  }
+
+  @task
+  *loadAvailableFieldsForMandatee() {
+    const fields = yield this.store.query('government-field', {
+      'filter[ise-code][mandatees][:id:]': this.mandateeBuffer.id,
+    });
+    this.availableFields = fields.toArray();
+  }
+
+  @task
+  *save() {
+    if (this.args.onSave) {
+      yield this.args.onSave({
+        mandatee: this.mandateeBuffer,
+        fields: this.fieldsBuffer,
+      });
+    }
   }
 
   @action
-  async saveChanges() {
-    this.isLoading = true;
-    const {
-      selectedMandatee, rowToShow,
-    } = this;
-    const newMinisterRow = await prepareMandateeRowAfterEdit(selectedMandatee, rowToShow);
-    this.args.saveChanges(selectedMandatee, newMinisterRow);
-    this.isLoading = false;
-    this.cancel();
+  selectMandatee(mandatee) {
+    this.mandateeBuffer = mandatee;
+    this.loadAvailableFieldsForMandatee.perform();
   }
 
   @action
-  async selectField(domain, value) {
-    const foundDomain = await this.rowToShow.domains;
-    await selectField(foundDomain, domain, value);
+  selectFields(fields) {
+    this.fieldsBuffer = this.fieldsBuffer.concat(fields);
   }
 
   @action
-  async mandateeSelected(mandatee) {
-    this.selectedMandatee = mandatee;
-    this.isLoading = true;
-    const rowsToShow = await refreshData(mandatee, await this.get('mandateeRows'));
-    this.rowToShow = rowsToShow;
-    this.isLoading = false;
-  }
-
-  @action
-  async selectDomain(domain, value) {
-    const rowToShowFields = await this.rowToShow.fields;
-    await selectDomain(rowToShowFields, domain, value);
+  unSelectFields(fields) {
+    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !fields.includes(field));
   }
 
   @action
   cancel() {
-    this.args.cancel();
+    if (this.args.onCancel) {
+      this.args.onCancel();
+    }
   }
 }
