@@ -40,6 +40,7 @@
 }
 
 .auk-toolbar-complex__left,
+.auk-toolbar-complex__center,
 .auk-toolbar-complex__right {
   flex: 1 1 auto;
   display: flex;
@@ -57,6 +58,19 @@
 }
 
 .auk-toolbar-complex__left .auk-toolbar-complex__item:only-child {
+  margin: 0;
+}
+
+.auk-toolbar-complex__center {
+  justify-content: center;
+}
+
+.auk-toolbar-complex__center .auk-toolbar-complex__item {
+  margin-right: 1rem;
+  max-width: 100%;
+}
+
+.auk-toolbar-complex__center .auk-toolbar-complex__item:only-child {
   margin: 0;
 }
 
