@@ -22,11 +22,8 @@
     isEditing=isEditing
   }}
 {{/if}}
-{{#if subcase.showAsRemark}}
-  {{subcase/subcase-case/subcase-mandatees subcase=subcase}}
-  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
-{{else}}
-  {{subcase/subcase-case/subcase-mandatees subcase=subcase}}
+{{subcase/subcase-case/subcase-mandatees subcase=subcase}}
+{{#unless subcase.showAsRemark}}
   <DomainFieldIse::IseCodesPanel @iseCodes={{subcase.iseCodes}}/>
-  {{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
-{{/if}}
+{{/unless}}
+{{agenda/agendaitem/agendaitem-case/all-subcases subcases=(await subcases)}}
