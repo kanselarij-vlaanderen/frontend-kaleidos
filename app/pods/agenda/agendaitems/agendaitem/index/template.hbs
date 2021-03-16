@@ -55,6 +55,7 @@
     <Mandatees::MandateesDomainsPanel
       @mandatees={{this.model.mandatees}}
       @submitter={{await this.subcase.requestedBy}}
+      @fields={{this.governmentFields}}
       @allowEditing={{true}}
       @onSave={{this.saveMandateeData}}
     />
