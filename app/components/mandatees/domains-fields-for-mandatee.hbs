@@ -1,0 +1,17 @@
+{{!-- TODO: This span is here merely to have something to attach the render-modifiers to
+This renderless component feels like a good fit to get replaced by a Resource (https://github.com/pzuraq/ember-could-get-used-to-this#resources),
+but we need to get our ember version up for that first --}}
+<span
+  style="display: none;"
+  {{did-update (perform this.loadData) @mandatee}}
+  {{did-update (perform this.loadData) @fields}}
+></span>
+{{#if this.loadData.lastSuccessful}}
+  {{yield this.loadData.lastSuccessful.value}}
+{{else}}
+  {{yield
+    (hash
+    isLoading=true
+    )
+  }}
+{{/if}}
