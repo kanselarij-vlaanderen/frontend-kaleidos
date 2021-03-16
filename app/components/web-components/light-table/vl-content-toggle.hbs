@@ -1,13 +1,13 @@
 {{#if isLoading}}
   <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{else}}
-  <input class="vl-checkbox--switch"
+  <input class="vl-toggle"
          type="checkbox"
          value="1"
          checked={{await value}}
   />
 
-  <label class="vl-checkbox--switch__label"
+  <label class="vl-toggle__label"
     {{action "valueChanged" row bubbles=false}}
   >
     <span aria-hidden="true"></span>
