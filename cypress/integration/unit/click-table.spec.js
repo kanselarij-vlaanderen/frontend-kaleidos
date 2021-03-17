@@ -65,13 +65,13 @@ context('Table Row Click tests', () => {
     cy.get('.auk-input').as('inputField')
       .click()
       .type('02/2019');
-    cy.get('.vl-button.vl-button--secondary.vl-button--icon').as('searchButton')
+    cy.get('.auk-button.auk-button--secondary.vl-button--icon').as('searchButton')
       .click();
     cy.get('.vl-alert__content').should('exist')
       .contains('Deze data is gefilterd.');
-    cy.get('.vl-button.vl-button--reset').should('exist')
+    cy.get('.auk-button.auk-button--warning-primary').should('exist')
       .contains('Reset filter');
-    cy.get('.vl-button.vl-button--reset').contains('Reset filter')
+    cy.get('.auk-button.auk-button--warning-primary').contains('Reset filter')
       .click();
     cy.get('td').contains('No data')
       .should('not.exist');
