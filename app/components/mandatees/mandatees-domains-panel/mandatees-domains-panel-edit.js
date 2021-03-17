@@ -74,7 +74,7 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
       'filter[ise-code][mandatees][:id:]': mandateeAndFields.mandatee.id,
     });
     mandateeFields = mandateeFields.toArray();
-    const fieldsToRemove = this.fieldsBuffer.filter((field) => !this.fieldsBuffer.includes(field) && mandateeFields.includes(field));
+    const fieldsToRemove = this.fieldsBuffer.filter((field) => !mandateeAndFields.fields.includes(field) && mandateeFields.includes(field));
     const fieldsToAdd = mandateeAndFields.fields.filter((field) => !this.fieldsBuffer.includes(field));
     this.fieldsBuffer = this.fieldsBuffer.filter((field) => !fieldsToRemove.includes(field));
     this.fieldsBuffer = this.fieldsBuffer.concat(fieldsToAdd);
