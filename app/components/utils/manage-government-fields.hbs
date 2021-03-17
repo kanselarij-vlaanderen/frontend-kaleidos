@@ -20,7 +20,7 @@
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
-            <button type="button" class="vl-button vl-button--link"
+            <button type="button" class="auk-button auk-button--borderless"
                     data-test-vl-model-manager-close
               {{action "close"}}
             >
@@ -30,7 +30,7 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+            <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
                     data-test-vl-model-manager-add
               {{action "toggleIsAdding"}}
             >
@@ -40,7 +40,7 @@
             </button>
             {{#if item}}
               <button type="button"
-                      class="vl-button vl-button--tertiary vl-button--icon-before"
+                      class="auk-button auk-button--tertiary vl-button--icon-before"
                       data-test-vl-model-manager-edit
                 {{action "toggleIsEditing"}}
               >
@@ -49,7 +49,7 @@
                 {{t "edit"}}
               </button>
               <button type="button"
-                      class="vl-button vl-button--tertiary vl-button--icon-before"
+                      class="auk-button auk-button--tertiary vl-button--icon-before"
                       data-test-vl-model-manager-delete
                 {{action "removeModel"}}
               >

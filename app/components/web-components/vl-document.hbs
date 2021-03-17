@@ -25,39 +25,45 @@
       {{#if (await this.piece.downloadFileLink)}}
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless vl-button--icon"
           {{on "click" this.showPieceViewer}}
         >
-          <i class="ki-book vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-book"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </button>
         <a
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless vl-button--icon"
           href={{await this.piece.downloadFileLink}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
           the filename received in the "Content-Disposition HTTP header" }}
         >
-          <i class="ki-download vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-download"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </a>
       {{/if}}
 
       {{#if (and this.currentSession.isEditor @enableDelete)}}
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon vl-button-icon--error"
+          class="auk-button auk-button--borderless vl-button--icon vl-button-icon--error"
           data-test-delete-piece-from-history
           {{on "click" (fn this.deletePiece piece)}}
         >
-          <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-delete"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "delete"}}
-          </span>
+          </div>
         </button>
       {{/if}}
     </div>

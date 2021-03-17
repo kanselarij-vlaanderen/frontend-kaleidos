@@ -31,7 +31,7 @@
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless vl-button--icon"
                   data-test-documents-show-more
                   type="button"
                 >
@@ -100,7 +100,7 @@
                   @value={{this.pieceNameBuffer}}
                 />
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless vl-button--icon"
                   type="button"
                   {{on "click" (perform this.savePieceName)}}
                 >
@@ -108,12 +108,12 @@
                     class="ki-check vl-button__icon"
                     aria-hidden="true"
                   ></i>
-                  <span class="vl-u-visually-hidden">
+                  <div class="auk-u-sr-only">
                     {{t "more-options"}}
-                  </span>
+                  </div>
                 </button>
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless vl-button--icon"
                   type="button"
                   {{on "click" this.cancelEditPieceName}}
                 >
@@ -121,9 +121,9 @@
                     class="ki-cross vl-button__icon"
                     aria-hidden="true"
                   ></i>
-                  <span class="vl-u-visually-hidden">
+                  <div class="auk-u-sr-only">
                     {{t "more-options"}}
-                  </span>
+                  </div>
                 </button>
               </div>
             {{else}}

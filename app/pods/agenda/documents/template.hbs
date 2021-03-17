@@ -31,9 +31,11 @@
       {{/if}}
       {{#if this.currentSession.isEditor}}
         <div class="auk-u-mb-4">
-          <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+          <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
             {{on "click" this.openPieceUploadModal}}>
-            <i class="vl-button__icon vl-button__icon--before ki-add"></i>
+            <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-add"></i>
+</div>
             {{t "documents-add"}}
           </button>
         </div>

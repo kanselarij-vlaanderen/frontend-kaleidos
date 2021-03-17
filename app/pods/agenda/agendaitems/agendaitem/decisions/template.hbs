@@ -9,11 +9,13 @@
       <WebComponents::AuToolbar::Item>
         <button
           type="button"
-          class="vl-button vl-button--secondary vl-button--icon-before"
+          class="auk-button auk-button--secondary vl-button--icon-before"
           data-test-add-decision
           {{on "click" this.addTreatment}}
         >
-          <i class="vl-button__icon vl-button__icon--before ki-add"></i>
+          <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-add"></i>
+</div>
           {{t "add-decision"}}
         </button>
       </WebComponents::AuToolbar::Item>

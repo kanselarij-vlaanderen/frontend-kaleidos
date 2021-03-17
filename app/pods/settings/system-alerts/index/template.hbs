@@ -22,7 +22,7 @@
           <LinkTo
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--link"
+            class="auk-button auk-button--borderless"
             @route="settings.overview"
           >
             {{t "cancel"}}
@@ -35,10 +35,12 @@
             data-test-add-system-alert
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--tertiary vl-button--icon-before"
+            class="auk-button auk-button--tertiary vl-button--icon-before"
             @route="settings.system-alerts.new"
           >
-            <i class="vl-button__icon vl-button__icon--before ki-add"></i>
+            <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-add"></i>
+</div>
             {{t "message"}}
             {{t "add"}}
           </LinkTo>
@@ -47,18 +49,20 @@
               data-test-edit-system-alert
               @tagName="button"
               @type="button"
-              class="vl-button vl-button--tertiary vl-button--icon-before"
+              class="auk-button auk-button--tertiary vl-button--icon-before"
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-pencil"></i>
+              <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-pencil"></i>
+</div>
               {{t "message"}}
               {{t "edit"}}
             </LinkTo>
             <button
               data-test-remove-system-alert
               type="button"
-              class="vl-button vl-button--tertiary vl-button--icon-before"
+              class="auk-button auk-button--tertiary vl-button--icon-before"
               {{on "click" (perform remove this.selectedAlert)}}
             >
               <i class="vl-button__icon vl-button__icon--before ki-delete"

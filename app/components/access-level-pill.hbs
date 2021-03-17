@@ -27,24 +27,28 @@
         </div>
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless vl-button--icon"
           data-test-access-level-save
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
-          <i class="ki-check vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-check"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "more-options"}}
-          </span>
+          </div>
         </button>
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless vl-button--icon"
           {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
-          <i class="ki-cross vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-cross"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "more-options"}}
-          </span>
+          </div>
         </button>
       {{/if}}
     {{/if}}

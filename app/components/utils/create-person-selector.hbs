@@ -19,12 +19,14 @@
     <div class="auk-u-mr-2"></div>
     <button data-test-create-person-container
             type="button"
-            class="vl-button vl-button--secondary vl-button--icon"
+            class="auk-button auk-button--secondary vl-button--icon"
       {{action "toggleIsCreatingPerson"}}>
-      <i class="vl-button__icon ki-add"></i>
-      <span class="vl-u-visually-hidden">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-add"></i>
+      </div>
+      <div class="auk-u-sr-only">
         {{t "create"}}
-      </span>
+      </div>
     </button>
   </div>
 {{else}}

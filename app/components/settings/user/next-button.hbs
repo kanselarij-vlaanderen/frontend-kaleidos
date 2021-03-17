@@ -2,7 +2,9 @@
     data-test-agenda-overview-sub-item
     @route="settings.users.user"
     @model={{await @row.account.user.id}}
-    @class="vl-button vl-button--link vl-button--icon"
+    @class="auk-button auk-button--borderless vl-button--icon"
 >
-  <i class="vl-button__icon ki-nav-right"></i>
+  <div class="auk-icon auk-icon--default">
+  <i class="ki ki-nav-right"></i>
+</div>
 </LinkTo>

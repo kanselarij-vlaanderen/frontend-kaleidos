@@ -24,10 +24,12 @@ as |tab|
   {{/tab.body}}
 {{/light-table}}
 {{#if isScrolling}}
-  <button type="button" class="vl-button vl-button--secondary vl-button--icon">
-    <i class="vl-button__icon ki-add" aria-hidden="true"></i>
-    <span class="vl-u-visually-hidden">
+  <button type="button" class="auk-button auk-button--secondary vl-button--icon">
+    <div class="auk-icon auk-icon--default">
+      <i class="ki ki-add" aria-hidden="true"></i>
+    </div>
+    <div class="auk-u-sr-only">
       {{t "back"}}
-    </span>
+    </div>
   </button>
 {{/if}}

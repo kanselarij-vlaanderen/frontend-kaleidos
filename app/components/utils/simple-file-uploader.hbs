@@ -3,13 +3,15 @@
   @accept=".csv"
   @onfileadd={{action "uploadFile"}} as |queue|>
 
-  <span class="vl-button vl-button--tertiary vl-button--icon-before">
+  <span class="auk-button auk-button--tertiary vl-button--icon-before">
     {{#if queue.files.length}}
-      <a href="javascript://" class="vl-button vl-button--tertiary vl-button--icon-before">
+      <a href="javascript://" class="auk-button auk-button--tertiary vl-button--icon-before">
         {{t "import-users-text"}}
       </a>
     {{else}}
-      <i class="vl-button__icon vl-button__icon--before ki-import"></i>
+      <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-import"></i>
+</div>
       {{t "import-users"}}
     {{/if}}
   </span>

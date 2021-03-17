@@ -9,13 +9,15 @@
         {{name}}
       </h6>
       {{#if view}}
-        <button type="button" class="vl-button vl-button--link vl-button--icon"
+        <button type="button" class="auk-button auk-button--borderless vl-button--icon"
           {{action "view"}}
         >
-          <i class="ki-book vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-book"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "show-piece"}}
-          </span>
+          </div>
         </button>
       {{/if}}
       {{#if download}}
@@ -25,33 +27,35 @@
           <i class="ki-download vl-button__icon"
              aria-hidden="true"
           ></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </button>
       {{else if downloadLink}}
-        <a class="vl-button vl-button--link vl-button--icon"
+        <a class="auk-button auk-button--borderless vl-button--icon"
            href={{downloadLink}}
            download={{if downloadName downloadName name}}
         >
           <i class="ki-download vl-button__icon"
              aria-hidden="true"
           ></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </a>
       {{/if}}
       {{#if delete}}
         <button type="button"
                 data-test-vl-uploaded-document-deletepiece
-                class="vl-button vl-button--link vl-button--icon"
+                class="auk-button auk-button--borderless vl-button--icon"
           {{action "delete"}}
         >
-          <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-delete"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "delete"}}
-          </span>
+          </div>
         </button>
       {{/if}}
     </div>

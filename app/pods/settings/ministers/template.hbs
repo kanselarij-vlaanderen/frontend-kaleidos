@@ -7,7 +7,9 @@
             class="vl-button vl-button--icon-before"
       {{action "toggleIsAdding"}}
     >
-      <i class="vl-button__icon vl-button__icon--before ki-add"></i>
+      <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-add"></i>
+</div>
       {{t "create-mandatee"}}
     </button>
   </div>
@@ -96,19 +98,23 @@
                   <WebComponents::AuToolbar::Item>
                     <button data-test-mandatee-edit={{index}}
                             type="button"
-                            class="vl-button vl-button--link vl-button--icon"
+                            class="auk-button auk-button--borderless vl-button--icon"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
                     >
-                      <i class="vl-button__icon ki-pencil"></i>
+                      <div class="auk-icon auk-icon--default">
+  <i class="ki ki-pencil"></i>
+</div>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
                     <button type="button"
                             data-test-mandatee-resign={{index}}
-                            class="vl-button vl-button--link vl-button--icon"
+                            class="auk-button auk-button--borderless vl-button--icon"
                       {{action "toggleProperty" "isResigningMandatee" mandatee}}
                     >
-                      <i class="vl-button__icon ki-settings"></i>
+                      <div class="auk-icon auk-icon--default">
+  <i class="ki ki-settings"></i>
+</div>
                       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
                         {{t "resign"}}
                       </EmberTooltip>
@@ -117,10 +123,12 @@
                   <WebComponents::AuToolbar::Item>
                     <button type="button"
                             data-test-mandatee-delete={{index}}
-                            class="vl-button vl-button--link vl-button--icon vl-u-text--error"
+                            class="auk-button auk-button--borderless vl-button--icon vl-u-text--error"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                     >
-                      <i class="vl-button__icon ki-delete"></i>
+                      <div class="auk-icon auk-icon--default">
+  <i class="ki ki-delete"></i>
+</div>
                     </button>
                   </WebComponents::AuToolbar::Item>
                 </WebComponents::AuToolbar::Group>

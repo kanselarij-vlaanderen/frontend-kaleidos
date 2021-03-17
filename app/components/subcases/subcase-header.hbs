@@ -13,7 +13,7 @@
         {{#if (or (is-pending canPropose) isLoading)}}
           <div class="auk-loader" role="alert" aria-busy="true"></div>
         {{else if (await canPropose)}}
-          <button type="button" class="vl-button">
+          <button type="button" class="auk-button auk-button--primary">
             {{t "propose-for-agenda"}}
           </button>
           {{#attach-popover
@@ -58,7 +58,7 @@
       </div>
       <div class="vlc-toolbar__item">
         <button type="button"
-                class="vl-button vl-button--icon-before vl-button--secondary"
+                class="auk-button auk-button--secondary vl-button--icon-before"
           {{action "showMultipleOptions" bubbles=false}}
         >
           {{#if isShowingOptions}}

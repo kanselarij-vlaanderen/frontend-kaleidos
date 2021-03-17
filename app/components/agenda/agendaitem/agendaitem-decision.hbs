@@ -10,8 +10,10 @@
           {{t "edit"}}
         </a>
         {{#if @allowDelete}}
-          <button type="button" class="vl-button vl-button--link vl-button--icon">
-            <i class="vl-button__icon  ki-more"></i>
+          <button type="button" class="auk-button auk-button--borderless vl-button--icon">
+            <div class="auk-icon auk-icon--default">
+  <i class=" ki-more"></i>
+</div>
             <AttachPopover
               @class="ember-attacher-popper"
               @hideOn="clickout click"
@@ -55,7 +57,7 @@
       />
     {{else}}
       {{#if this.currentSession.isEditor}}
-        <button type="button" class="vl-button vl-button--tertiary"
+        <button type="button" class="auk-button auk-button--tertiary"
           data-test-upload-decision-file
           {{on "click" this.toggleIsAddingReport}}
         >

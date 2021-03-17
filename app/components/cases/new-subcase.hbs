@@ -12,9 +12,11 @@
             <WebComponents::AuToolbar::Item>
               <button type="button"
                       data-test-clone-previous-subcase
-                      class="vl-button vl-button--secondary vl-button--icon-before" {{action
+                      class="auk-button auk-button--secondary vl-button--icon-before" {{action
                       "copyFullSubcase"}}>
-                <i class="vl-button__icon vl-button__icon--before ki-copy-paste" aria-hidden="true"></i>{{t
+                <div class="auk-icon auk-icon--default">
+  <i class="ki vl-button__icon--before ki-copy-paste" aria-hidden="true"></i>
+</div>{{t
                   "clone-previous-subcase"
                 }}
               </button>
@@ -61,13 +63,15 @@
             selectModel=(action "selectModel")
           }}
           <button type="button"
-                  class="vl-button vl-button--secondary vl-button--icon"
+                  class="auk-button auk-button--secondary vl-button--icon"
             {{action "toggleIsEditing"}}
           >
-            <i class="vl-button__icon ki-pencil"></i>
-            <span class="vl-u-visually-hidden">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-pencil"></i>
+            </div>
+            <div class="auk-u-sr-only">
               {{t "edit"}}
-            </span>
+            </div>
           </button>
         {{else}}
           {{input
@@ -76,14 +80,16 @@
             class="auk-input auk-input--block"
             value=subcaseName
           }}
-          <button class="vl-button vl-button--secondary vl-button--icon"
+          <button class="auk-button auk-button--secondary vl-button--icon"
                   type="button"
             {{action "toggleIsEditing"}}
           >
-            <i class="ki-cross vl-button__icon" aria-hidden="true"></i>
-            <span class="vl-u-visually-hidden">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-cross"></i>
+            </div>
+            <div class="auk-u-sr-only">
               {{t "cancel"}}
-            </span>
+            </div>
           </button>
         {{/if}}
       </div>
@@ -94,7 +100,7 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <button type="button"
-                  class="vl-button vl-button--link"
+                  class="auk-button auk-button--borderless"
             {{action "closeModal"}}
           >
             {{t "cancel"}}
@@ -106,7 +112,7 @@
           {{web-components/vl-save-button
             text=(t "new-subcase")
             type="submit"
-            class="vl-button"
+            class="auk-button auk-button--primary"
             loadingText=(t "creating-subcase")
             isLoading=isLoading
             disabled=isLoading

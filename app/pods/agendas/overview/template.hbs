@@ -47,7 +47,7 @@
                   }}
                 </div>
                 <div class="vlc-input-field-group">
-                  <button class="vl-button vl-button--secondary vl-button--icon"
+                  <button class="auk-button auk-button--secondary vl-button--icon"
                           type="submit"
                           data-test-agendas-filter-button
                           onclick={{action "setDateFilter" dateFilter}}
@@ -142,9 +142,11 @@
                           "agenda.agendaitems"
                           meeting.id
                           (await meeting.latestAgenda.id)
-                          class="vl-button vl-button--link vl-button--icon"
+                          class="auk-button auk-button--borderless vl-button--icon"
                         }}
-                          <i class="vl-button__icon ki-nav-right"></i>
+                          <div class="auk-icon auk-icon--default">
+  <i class="ki ki-nav-right"></i>
+</div>
                         {{/link-to}}
                       </td>
                     {{/if}}
