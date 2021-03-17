@@ -133,3 +133,15 @@
 .auk-button--size-s {
   font-size: 1.3rem;
 }
+
+/* Temporary overrides
+   ========================================================================== */
+
+.auk-button--warning-primary {
+  color: $au-gray-800;
+  background: $au-yellow-400;
+  &:hover,
+  &:active {
+    background: $au-yellow-300;
+  }
+}
