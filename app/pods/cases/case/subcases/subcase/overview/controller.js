@@ -3,6 +3,7 @@ import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
   @service sessionService;
@@ -29,16 +30,25 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
 
   @action
   async saveMandateeData(mandateeData) {
-    // TODO: save mandatees on required entities
-    // this.agendaItem.mandatees = mandateeData.mandatees;
-    // await this.agendaItem.save();
-    // TODO: reset formally OK status
-    this.subcase.requestedBy = mandateeData.submitter;
     // fields to ise
-    const correspondingIseCodes = await this.store.query('ise-code', {
-      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
-    });
-    this.subcase.iseCodes = correspondingIseCodes;
-    await this.subcase.save();
+    let correspondingIseCodes = [];
+    if (mandateeData.fields.length) {
+      correspondingIseCodes = await this.store.query('ise-code', {
+        'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
+      });
+    }
+    const propertiesToSetOnAgendaitem = {
+      mandatees: mandateeData.mandatees,
+    };
+    const propertiesToSetOnSubcase = {
+      mandatees: mandateeData.mandatees,
+      requestedBy: mandateeData.submitter,
+      iseCodes: correspondingIseCodes,
+    };
+    await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    for (const agendaItem of this.agendaItems) {
+      await saveChanges(agendaItem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    }
+    // TODO: Although the method signature suggests it, agenda-item doesn't get saved?
   }
 }
