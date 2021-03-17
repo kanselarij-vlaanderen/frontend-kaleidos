@@ -54,6 +54,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.model.mandatees = mandateeData.mandatees;
     await this.model.save();
     this.subcase.requestedBy = mandateeData.submitter;
+    this.governmentFields = mandateeData.fields; // Changes state here locally. If a interface update in other places is needed, a route reload may be required
     // fields to ise
     const correspondingIseCodes = await this.store.query('ise-code', {
       'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
