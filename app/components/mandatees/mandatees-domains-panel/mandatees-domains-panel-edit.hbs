@@ -54,7 +54,7 @@
               </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatees-edit-row-submitter>
                 <WebComponents::VlToggle
-                  @value={{eq mandatee @submitter}}
+                  @value={{eq mandatee this.submitterBuffer}}
                   @valueChanged={{fn this.toggleIsSubmitter mandatee}}
                 />
               </td>
