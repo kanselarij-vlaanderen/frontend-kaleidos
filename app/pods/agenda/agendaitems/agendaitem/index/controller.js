@@ -10,6 +10,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @tracked agenda;
   @tracked subcase;
+  @tracked governmentFields;
   @tracked newsletterInfo;
 
   @tracked isEditingAgendaItemTitles = false;
