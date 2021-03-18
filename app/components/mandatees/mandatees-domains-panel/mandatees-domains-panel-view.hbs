@@ -51,11 +51,10 @@
                 <td>
                   {{#if mandateeDomainsFields.domains.length}}
                     {{#each mandateeDomainsFields.domains as |domain|}}
-                      {{domain.label}}
+                      {{domain.label}}:
                     {{/each}}
-                    :
-                    {{#each mandateeDomainsFields.fields as |field|}}
-                      {{field.label}}
+                    {{#each mandateeDomainsFields.fields as |field index|}}
+                      {{unless (eq index 0) ", "}}{{field.label}}
                     {{/each}}
                   {{else}}
                     {{t "dash"}}
