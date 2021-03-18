@@ -38,12 +38,14 @@
   {{/if}}
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
+      <button type="button" class="auk-button auk-button--tertiary"
         {{on "click" this.openPieceUploadModal}}>
         <div class="auk-icon auk-icon--default">
-  <i class="ki vl-button__icon--before ki-add"></i>
-</div>
-        {{t "documents-add"}}
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "documents-add"}}
+        </div>
       </button>
     </div>
   {{/if}}

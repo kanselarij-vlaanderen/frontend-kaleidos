@@ -12,13 +12,16 @@
         {{#if currentSession.isEditor}}
           <div class="vlc-toolbar__item">
             <button data-test-vlc-agenda-createnewagendabutton
-                    type="button"
-                    class="vl-button vl-button--icon-before"
-              {{action "createNewSession"}}>
+              type="button"
+              class="auk-button auk-button--primary"
+              {{action "createNewSession"}}
+            >
               <div class="auk-icon auk-icon--default">
-  <i class="ki vl-button__icon--before ki-add"></i>
-</div>
-              {{t "new-agenda"}}
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "new-agenda"}}
+              </div>
             </button>
           </div>
         {{/if}}

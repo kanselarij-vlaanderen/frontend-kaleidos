@@ -3,14 +3,16 @@
   <div class="auk-u-flex auk-u-flex--justify-between">
     <h4 class="auk-h3"></h4>
     <button data-test-minister-add
-            type="button"
-            class="vl-button vl-button--icon-before"
+      type="button"
+      class="auk-button auk-button--primary"
       {{action "toggleIsAdding"}}
     >
       <div class="auk-icon auk-icon--default">
-  <i class="ki vl-button__icon--before ki-add"></i>
-</div>
-      {{t "create-mandatee"}}
+        <i class="ki ki-add"></i>
+      </div>
+      <div class="auk-button__label">
+        {{t "create-mandatee"}}
+      </div>
     </button>
   </div>
   {{#if (await model)}}
@@ -97,24 +99,24 @@
                 <WebComponents::AuToolbar::Group @position="center">
                   <WebComponents::AuToolbar::Item>
                     <button data-test-mandatee-edit={{index}}
-                            type="button"
-                            class="auk-button auk-button--borderless vl-button--icon"
+                      type="button"
+                      class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
                     >
                       <div class="auk-icon auk-icon--default">
-  <i class="ki ki-pencil"></i>
-</div>
+                        <i class="ki ki-pencil"></i>
+                      </div>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
                     <button type="button"
-                            data-test-mandatee-resign={{index}}
-                            class="auk-button auk-button--borderless vl-button--icon"
+                      data-test-mandatee-resign={{index}}
+                      class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isResigningMandatee" mandatee}}
                     >
                       <div class="auk-icon auk-icon--default">
-  <i class="ki ki-settings"></i>
-</div>
+                        <i class="ki ki-settings"></i>
+                      </div>
                       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
                         {{t "resign"}}
                       </EmberTooltip>
@@ -122,13 +124,13 @@
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
                     <button type="button"
-                            data-test-mandatee-delete={{index}}
-                            class="auk-button auk-button--borderless vl-button--icon vl-u-text--error"
+                      data-test-mandatee-delete={{index}}
+                      class="auk-button auk-button--borderless auk-button--icon vl-u-text--error"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                     >
                       <div class="auk-icon auk-icon--default">
-  <i class="ki ki-delete"></i>
-</div>
+                        <i class="ki ki-delete"></i>
+                      </div>
                     </button>
                   </WebComponents::AuToolbar::Item>
                 </WebComponents::AuToolbar::Group>

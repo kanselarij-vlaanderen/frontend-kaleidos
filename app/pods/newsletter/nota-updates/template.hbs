@@ -56,15 +56,15 @@
                 </p>
               </td>
               <td class="auk-u-text-align--right">
-                <button type="button" class="auk-button auk-button--borderless vl-button--icon"
+                <button type="button" class="auk-button auk-button--borderless auk-button--icon"
                   {{on "click" (fn this.showPieceViewer row.documentId)}}
                 >
                   <div class="auk-icon auk-icon--default">
-  <i class="ki ki-book"></i>
-</div>
+                    <i class="ki ki-book"></i>
+                  </div>
                 </button>
                 <LinkTo
-                  class="auk-button auk-button--borderless vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   @route="agenda.agendaitems.agendaitem.documents"
                   @models={{array
                     (await row.meetingId)
@@ -73,8 +73,8 @@
                   }}
                 >
                   <div class="auk-icon auk-icon--default">
-  <i class="ki ki-nav-right"></i>
-</div>
+                    <i class="ki ki-nav-right"></i>
+                  </div>
                 </LinkTo>
               </td>
             </c.body>

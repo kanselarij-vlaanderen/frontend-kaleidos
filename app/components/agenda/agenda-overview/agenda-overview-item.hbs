@@ -185,26 +185,28 @@
                 <div class="vlc-agenda-items__icons">
                   <div class="auk-u-flex vlc-agenda-items__icons">
                     {{#if (not newsletterInfo.inNewsletter)}}
-                      <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                      <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                        <i class="ki ki-hide"></i>
                         <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                           <p>
                             {{t "not-visible-in-newsletter"}}
                           </p>
                         </EmberTooltip>
-                      </i>
+                      </div>
                     {{/if}}
                     {{#if (await @agendaitem.checkAdded)}}
-                      <i class="auk-button-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
+                      <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
+                        <i class="ki ki-calendar-plus"></i>
                         <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                           <p>
                             {{t "added-agendaitem-text"}}
                           </p>
                         </EmberTooltip>
-                      </i>
+                      </div>
                     {{/if}}
                   </div>
                   {{#if subcase.confidential}}
-                    <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
+                    <span class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
                       <div class="auk-icon auk-icon--default vlc-agenda-items__icons" data-test-icon-agenda-confidentiality-locked>
                         <i class="ki ki-lock-closed"></i>
                       </div>

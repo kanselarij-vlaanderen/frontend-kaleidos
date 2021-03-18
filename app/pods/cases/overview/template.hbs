@@ -57,9 +57,10 @@
           <td class="auk-u-text-align--right">
             {{#if currentSession.isEditor}}
               <button type="button"
-                      class="auk-button auk-button--borderless vl-button--icon">
-                <i class="vl-button__icon ki-more"
-                ></i>
+                class="auk-button auk-button--borderless auk-button--icon">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-more"></i>
+                </div>
                 {{#attach-popover
                   renderInPlace=true
                   class="ember-attacher-popper"
@@ -102,11 +103,11 @@
             {{#link-to
               "cases.case.subcases"
               row.id
-              class="auk-button auk-button--borderless vl-button--icon"
+              class="auk-button auk-button--borderless auk-button--icon"
             }}
               <div class="auk-icon auk-icon--default">
-  <i class="ki ki-nav-right"></i>
-</div>
+                <i class="ki ki-nav-right"></i>
+              </div>
             {{/link-to}}
           </td>
         {{/c.body}}

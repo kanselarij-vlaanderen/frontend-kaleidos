@@ -25,7 +25,7 @@
       {{#if (await this.piece.downloadFileLink)}}
         <button
           type="button"
-          class="auk-button auk-button--borderless vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           {{on "click" this.showPieceViewer}}
         >
           <div class="auk-icon auk-icon--default">
@@ -36,7 +36,7 @@
           </div>
         </button>
         <a
-          class="auk-button auk-button--borderless vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           href={{await this.piece.downloadFileLink}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
@@ -54,7 +54,7 @@
       {{#if (and this.currentSession.isEditor @enableDelete)}}
         <button
           type="button"
-          class="auk-button auk-button--borderless vl-button--icon vl-button-icon--error"
+          class="auk-button auk-button--borderless auk-button--icon vl-button-icon--error"
           data-test-delete-piece-from-history
           {{on "click" (fn this.deletePiece piece)}}
         >

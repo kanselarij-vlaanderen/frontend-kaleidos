@@ -61,12 +61,12 @@
           <button
             data-test-searchbutton
             type="button"
-            class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+            class="vl-button vl-button--link-muted vlc-button-in-input auk-button--icon"
             {{on "click" (fn (mut this.dateFromBuffer) null)}}
           >
             <div class="auk-icon auk-icon--default">
-  <i class="ki ki-close" aria-hidden="true"></i>
-</div>
+              <i class="ki ki-close" aria-hidden="true"></i>
+            </div>
           </button>
         {{/if}}
       </div>
@@ -79,12 +79,12 @@
         {{#if this.dateToBuffer}}
           <button
             type="button"
-            class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+            class="vlc-button-in-input vl-button vl-button--link-muted auk-button--icon"
             {{on "click" (fn (mut this.dateToBuffer) null)}}
           >
             <div class="auk-icon auk-icon--default">
-  <i class="ki ki-close" aria-hidden="true"></i>
-</div>
+              <i class="ki ki-close" aria-hidden="true"></i>
+            </div>
           </button>
         {{/if}}
       </div>

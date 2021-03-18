@@ -11,13 +11,15 @@
     </p>
     <button
       type="button"
-      class="auk-button auk-button--borderless vl-button--icon-before"
+      class="auk-button auk-button--borderless"
       {{action @options.onUndo}}
     >
-      <i class="vl-button__icon vl-button__icon--before ki-redo"
-          aria-hidden="true"
-      ></i>
-      {{t "undo"}}
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-redo"></i>
+      </div>
+      <div class="auk-button__label">
+        {{t "undo"}}
+      </div>
     </button>
   </div>
 </WebComponents::VlAlert>

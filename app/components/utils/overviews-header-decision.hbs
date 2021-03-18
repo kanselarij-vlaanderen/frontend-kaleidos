@@ -41,13 +41,15 @@
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
         {{#if shouldShowPrintButton}}
-          <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
+          <button type="button" class="auk-button auk-button--tertiary"
             {{action "print"}}
           >
-            <i class="vl-button__icon vl-button__icon--before ki-printer-view"
-                aria-hidden="true"
-            ></i>
-            {{t "print"}}
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-printer-view"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "print"}}
+            </div>
           </button>
         {{/if}}
       </div>

@@ -19,11 +19,13 @@
         />
         <button
           data-test-user-search-button
-          class="auk-button auk-button--secondary vl-button--icon"
+          class="auk-button auk-button--secondary auk-button--icon"
           type="submit"
           {{on "click" (action "refreshRoute")}}
         >
-          <i class="ki-search"></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-search"></i>
+          </div>
         </button>
       </div>
     </div>
