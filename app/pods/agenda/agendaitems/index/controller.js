@@ -38,9 +38,4 @@ export default class AgendaitemsAgendaController extends Controller {
   toggleShowModifiedOnly() {
     set(this.agendaitemsController, 'showModifiedOnly', !this.agendaitemsController.showModifiedOnly);
   }
-
-  @action
-  refresh() {
-    this.send('reloadModel');
-  }
 }
