@@ -226,6 +226,7 @@ export default Service.extend({
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
+    return agendaitem;
   },
 
   async groupAgendaitemsOnGroupName(agendaitems) {
