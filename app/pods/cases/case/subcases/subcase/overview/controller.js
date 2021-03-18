@@ -48,9 +48,5 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
       iseCodes: correspondingIseCodes,
     };
     await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    for (const agendaItem of this.agendaItems) {
-      await saveChanges(agendaItem, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    }
-    // TODO: Although the method signature suggests it, agenda-item doesn't get saved?
   }
 }

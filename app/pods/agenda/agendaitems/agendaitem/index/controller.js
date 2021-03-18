@@ -2,7 +2,10 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
+import {
+  saveChanges,
+  reorderAgendaitemsOnAgenda
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -51,15 +54,17 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   @action
   async saveMandateeData(mandateeData) {
-    this.model.mandatees = mandateeData.mandatees;
-    await this.model.save();
-    this.subcase.requestedBy = mandateeData.submitter;
-    this.governmentFields = mandateeData.fields; // Changes state here locally. If a interface update in other places is needed, a route reload may be required
-    // fields to ise
+    const propertiesToSetOnAgendaitem = {
+      mandatees: mandateeData.mandatees,
+    };
     const correspondingIseCodes = await this.store.query('ise-code', {
       'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
     });
-    this.subcase.iseCodes = correspondingIseCodes;
-    await this.subcase.save();
+    const propertiesToSetOnSubcase = {
+      mandatees: mandateeData.mandatees,
+      requestedBy: mandateeData.submitter,
+      iseCodes: correspondingIseCodes,
+    };
+    await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }
