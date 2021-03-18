@@ -9,6 +9,8 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @service sessionService;
 
   @alias('model') subcase;
+  @tracked allSubcases;
+  @tracked governmentFields;
 
   @tracked isEditingTitles = false;
 
