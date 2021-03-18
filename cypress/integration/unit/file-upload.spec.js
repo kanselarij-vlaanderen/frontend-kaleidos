@@ -37,7 +37,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
     // cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
     // cy.get('@fileUploadDialog').within(() => {
-    //   cy.get('.vl-button').contains('Documenten toevoegen')
+    //   cy.get('.auk-button').contains('Documenten toevoegen')
     //     .click();
     // });
     // cy.wait('@createNewDocumentContainer', {
@@ -120,7 +120,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
     // cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
     // cy.get('@fileUploadDialog').within(() => {
-    //   cy.get('.vl-button').contains('Documenten toevoegen')
+    //   cy.get('.auk-button').contains('Documenten toevoegen')
     //     .click();
     // });
     // cy.wait('@createNewDocumentContainer', {

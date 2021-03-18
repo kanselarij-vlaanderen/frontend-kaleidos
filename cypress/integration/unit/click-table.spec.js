@@ -65,7 +65,7 @@ context('Table Row Click tests', () => {
     cy.get('.auk-input').as('inputField')
       .click()
       .type('02/2019');
-    cy.get('.auk-button.auk-button--secondary.vl-button--icon').as('searchButton')
+    cy.get('.auk-button.auk-button--secondary.auk-button--icon').as('searchButton')
       .click();
     cy.get('.vl-alert__content').should('exist')
       .contains('Deze data is gefilterd.');

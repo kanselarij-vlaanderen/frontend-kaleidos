@@ -181,7 +181,7 @@ function openAgendaForDate(agendaDate) {
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .vl-button > .vl-button__icon').click();
+  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-icon').click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
@@ -344,7 +344,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
           });
         });
 
-        cy.get('.auk-toolbar-complex__item > .vl-button')
+        cy.get('.auk-toolbar-complex__item > .auk-button')
           .contains('Opslaan')
           .click();
       });
@@ -676,7 +676,7 @@ function releaseDecisions() {
     force: true,
   });
   cy.get(modal.modal).within(() => {
-    cy.get('.vl-button').contains('Vrijgeven')
+    cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
   cy.get(modal.modal, {
@@ -696,7 +696,7 @@ function releaseDocuments() {
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.releaseDocuments).click();
   cy.get(modal.modal).within(() => {
-    cy.get('.vl-button').contains('Vrijgeven')
+    cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
   cy.get(modal.modal, {

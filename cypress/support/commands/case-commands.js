@@ -19,7 +19,7 @@ function createCase(confidential, shortTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
-  cy.get('.vlc-page-header .vl-button')
+  cy.get('.vlc-page-header .auk-button')
     .contains('Nieuw dossier aanmaken')
     .click();
 
@@ -45,7 +45,7 @@ function createCase(confidential, shortTitle) {
     });
 
   cy.get('@dialog').within(() => {
-    cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken')
+    cy.get('.vlc-toolbar__item > .auk-button').contains('Dossier aanmaken')
       .click();
   });
 

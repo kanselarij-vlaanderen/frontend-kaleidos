@@ -83,7 +83,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Documenten toevoegen')
+    cy.get('.auk-button').contains('Documenten toevoegen')
       .click();
   });
   cy.wait('@createNewDocumentContainer', {
@@ -310,7 +310,7 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
   // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
   // cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
   // cy.get('@fileUploadDialog').within(() => {
-  //   cy.get('.vl-button').contains('Documenten toevoegen')
+  //   cy.get('.auk-button').contains('Documenten toevoegen')
   //     .click();
   // });
   // cy.wait('@createNewDocumentContainer', {

@@ -151,7 +151,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
         });
     }
 
-    cy.get('.auk-toolbar-complex__item > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .auk-button')
       .contains('Opslaan')
       .click();
   });
@@ -192,7 +192,7 @@ function addSubcaseThemes(themes) {
           .click();
       }
     });
-    cy.get('.auk-toolbar-complex__item > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .auk-button')
       .contains('Opslaan')
       .click();
   });
@@ -337,10 +337,10 @@ function proposeSubcaseForAgenda(agendaDate) {
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
   cy.get('.vlc-page-header').within(() => {
-    cy.get('.vl-button', {
+    cy.get('.auk-button', {
       timeout: 12000,
     }).should('have.length', 2);
-    cy.get('.vl-button').contains('Indienen voor agendering')
+    cy.get('.auk-button').contains('Indienen voor agendering')
       .should('exist')
       .click();
   });
@@ -374,7 +374,7 @@ function proposeSubcaseForAgenda(agendaDate) {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get('.vl-button--icon-before')
+  cy.get('.auk-button')
     .contains('Acties')
     .click();
   cy.get(cases.deleteSubcase)
