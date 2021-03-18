@@ -47,6 +47,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
       requestedBy: mandateeData.submitter,
       iseCodes: correspondingIseCodes,
     };
+    this.governmentFields = mandateeData.fields;
     await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }
