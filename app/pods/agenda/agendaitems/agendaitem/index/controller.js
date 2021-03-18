@@ -65,6 +65,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       requestedBy: mandateeData.submitter,
       iseCodes: correspondingIseCodes,
     };
+    this.governmentFields = mandateeData.fields;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }

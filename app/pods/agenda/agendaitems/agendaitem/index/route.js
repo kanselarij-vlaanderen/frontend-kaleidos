@@ -5,28 +5,44 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     return this.modelFor('agenda.agendaitems.agendaitem');
   }
 
-  async setupController(controller, model) {
-    super.setupController(...arguments);
-    const {
-      agenda,
-    } = this.modelFor('agenda');
-    controller.agenda = agenda;
-    const agendaActivity = await model.agendaActivity;
-    if (agendaActivity) {
-      controller.subcase = await agendaActivity.subcase;
-      if (controller.subcase) {
-        // TODO: below query doesn't return the expected results. (returns none) To be investigated
-        let governmentFields = await this.store.query('government-field', {
-          'filter[ise-code][subcases][:id:]': controller.subcase.id,
+  async afterModel(model) {
+    this.agendaActivity = await model.agendaActivity;
+    if (this.agendaActivity) {
+      this.subcase = await this.agendaActivity.subcase;
+      if (this.subcase) {
+        // Below fetching of government-fields, could be rewritten shorter as
+        // let governmentFields = await this.store.query('government-field', {
+        //   'filter[ise-code][subcases][:id:]': controller.subcase.id,
+        // });
+        // This however results in a request that once in mu-cache, doesn't get invalidated properly.
+        // mu-cl-resources:1.20.0
+        // Querying the ise-codes with fields included, is used as a workaround.
+        const iseCodes = await this.store.query('ise-code', {
+          'filter[subcases][:id:]': this.subcase.id,
+          include: 'field', // FIXME: singular naming of a n-relationship
         });
-        governmentFields = governmentFields.toArray();
-        controller.governmentFields = governmentFields;
+        let governmentFields = [];
+        for (const iseCode of iseCodes.toArray()) {
+          const fieldForCode = await iseCode.field;
+          governmentFields.push(fieldForCode);
+        }
+        governmentFields = [...new Set(governmentFields)]; // Uniquify
+        this.governmentFields = governmentFields;
       }
     }
     const agendaItemTreatment = await model.treatments;
     const anyTreatment = agendaItemTreatment.firstObject;
     if (anyTreatment) {
-      controller.newsletterInfo = await anyTreatment.newsletterInfo;
+      this.newsletterInfo = await anyTreatment.newsletterInfo;
     }
+  }
+
+  async setupController(controller) {
+    super.setupController(...arguments);
+    controller.agenda = this.modelFor('agenda');
+    controller.agendaActivity = this.agendaActivity;
+    controller.subcase = this.subcase;
+    controller.governmentFields = this.governmentFields;
+    controller.newsletterInfo = this.newsletterInfo;
   }
 }
