@@ -78,21 +78,27 @@
         {{#if currentSession.isEditor}}
         {{/if}}
         <button type="button"
-          class="auk-button auk-button--secondary vl-button--icon-before"
+          class="auk-button auk-button--secondary"
           {{action "showMultipleOptions"}}
         >
           {{#if (not isShowingOptions)}}
-            <i
-              class="vl-button__icon vl-button__icon--before ki-chevron-down"
-              {{action "showMultipleOptions" bubbles=false}}
-            ></i>
+            <div class="auk-icon auk-icon--default">
+              <i
+                class="ki ki-chevron-down"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            </div>
           {{else}}
-            <i
-              class="vl-button__icon vl-button__icon--before ki-chevron-up"
-              {{action "showMultipleOptions" bubbles=false}}
-            ></i>
+            <div class="auk-icon auk-icon--default">
+              <i
+                class="ki ki-chevron-up"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            </div>
           {{/if}}
-          {{t "actions"}}
+          <div class="auk-button__label">
+            {{t "actions"}}
+          </div>
           {{#attach-popover
             renderInPlace=true
             class="ember-attacher-popper vlc-hide-on-print"

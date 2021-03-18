@@ -11,14 +11,16 @@
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
               <button type="button"
-                      data-test-clone-previous-subcase
-                      class="auk-button auk-button--secondary vl-button--icon-before" {{action
-                      "copyFullSubcase"}}>
+                data-test-clone-previous-subcase
+                class="auk-button auk-button--secondary"
+                {{action "copyFullSubcase"}}
+              >
                 <div class="auk-icon auk-icon--default">
-  <i class="ki vl-button__icon--before ki-copy-paste" aria-hidden="true"></i>
-</div>{{t
-                  "clone-previous-subcase"
-                }}
+                  <i class="ki ki-copy-paste"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "clone-previous-subcase"}}
+                </div>
               </button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
@@ -63,7 +65,7 @@
             selectModel=(action "selectModel")
           }}
           <button type="button"
-                  class="auk-button auk-button--secondary vl-button--icon"
+            class="auk-button auk-button--secondary auk-button--icon"
             {{action "toggleIsEditing"}}
           >
             <div class="auk-icon auk-icon--default">
@@ -80,8 +82,8 @@
             class="auk-input auk-input--block"
             value=subcaseName
           }}
-          <button class="auk-button auk-button--secondary vl-button--icon"
-                  type="button"
+          <button class="auk-button auk-button--secondary auk-button--icon"
+            type="button"
             {{action "toggleIsEditing"}}
           >
             <div class="auk-icon auk-icon--default">
@@ -100,7 +102,7 @@
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <button type="button"
-                  class="auk-button auk-button--borderless"
+            class="auk-button auk-button--borderless"
             {{action "closeModal"}}
           >
             {{t "cancel"}}

@@ -39,26 +39,32 @@
             <td class="auk-u-text-align--right auk-u-flex--vertical-center">
               {{#if isLoading}}
                 <button type="button"
-                        class="auk-button auk-button--borderless vl-button--icon"
-                        disabled>
+                  class="auk-button-loading"
+                  disabled
+                >
                   <div class="auk-loader" role="alert" aria-busy="true"></div>
                 </button>
               {{else}}
                 <button type="button"
-                        class="auk-button auk-button--borderless vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   {{action "editRow" mandateeRow}}
                 >
-                  <i class="ki-pencil" aria-hidden="true"></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
                   <div class="auk-u-sr-only">
                     {{t "edit"}}
                   </div>
                 </button>
               {{/if}}
               <button data-test-mandatees-edit-row-delete
-                      type="button"
-                      class="auk-button auk-button--borderless vl-button--icon"
-                {{action "deleteRow" mandateeRow}}>
-                <i class="ki-delete" aria-hidden="true"></i>
+                type="button"
+                class="auk-button auk-button--borderless auk-button--icon"
+                {{action "deleteRow" mandateeRow}}
+              >
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-delete"></i>
+                </div>
                 <div class="auk-u-sr-only">
                   {{t "delete"}}
                 </div>

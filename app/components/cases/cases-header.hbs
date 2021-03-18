@@ -11,14 +11,16 @@
       <div class="vlc-toolbar__item">
         {{#if currentSession.isEditor}}
           <button type="button"
-                  data-test-cases-header-add-case
-                  class="vl-button vl-button--icon-before"
+            data-test-cases-header-add-case
+            class="auk-button auk-button--primary"
             {{action "toggleAddingCase"}}
           >
-            <i class="vl-button__icon vl-button__icon--before ki-add"
-                aria-hidden="true"
-            ></i>
-            {{t "add-case"}}
+            <div class="auk-icon auk-icon--default ">
+              <i class="ki ki-add"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "add-case"}}
+            </div>
           </button>
         {{/if}}
       </div>

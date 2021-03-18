@@ -37,14 +37,18 @@
       {{#if currentSessionService.isEditor}}
         <div class="vlc-toolbar__item">
           <button type="button"
-                  data-test-agenda-header-showAgendaOptions
-                  class="vl-button vl-button--icon-before"
+            data-test-agenda-header-showAgendaOptions
+            class="auk-button auk-button--primary"
             {{action "showAgendaActions"}}
           >
-            {{t "agenda-actions"}}
-            <i class="vl-button__icon vl-button__icon--after {{if (not isShowingAgendaActions) "ki-chevron-down" "ki-chevron-up"}}"
+            <div class="auk-button__label">
+              {{t "agenda-actions"}}
+            </div>
+            <div class="auk-icon auk-icon--default">
+              <i class="ki {{if (not isShowingAgendaActions) "ki-chevron-down" "ki-chevron-up"}}"
                 {{action "showAgendaActions" bubbles=false}}
               ></i>
+            </div>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper vlc-hide-on-print"
@@ -141,14 +145,18 @@
       {{/if}}
       <div class="vlc-toolbar__item">
         <button type="button"
-                data-test-agenda-header-showActionOptions
-                class="auk-button auk-button--secondary vl-button--icon-before"
+          data-test-agenda-header-showActionOptions
+          class="auk-button auk-button--secondary"
           {{action "showMultipleOptions"}}
         >
-          {{t "actions"}}
-          <i class="vl-button__icon vl-button__icon--after {{if (not isShowingOptions) "ki-chevron-down" "ki-chevron-up"}}"
-            {{action "showMultipleOptions" bubbles=false}}
-          ></i>
+          <div class="auk-button__label">
+            {{t "actions"}}
+          </div>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki {{if (not isShowingOptions) "ki-chevron-down" "ki-chevron-up"}}"
+              {{action "showMultipleOptions" bubbles=false}}
+            ></i>
+          </div>
           {{#attach-popover
             renderInPlace=true
             class="ember-attacher-popper vlc-hide-on-print"

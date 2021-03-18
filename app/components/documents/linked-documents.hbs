@@ -13,13 +13,16 @@
   {{/unless}}
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
+      <button type="button" class="auk-button auk-button--tertiary"
         data-test-add-linked-documents
-        {{on "click" this.openLinkedPieceModal}}>
+        {{on "click" this.openLinkedPieceModal}}
+      >
         <div class="auk-icon auk-icon--default">
-  <i class="ki vl-button__icon--before ki-add"></i>
-</div>
-        {{t "document-link-old"}}
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "document-link-old"}}
+        </div>
       </button>
     </div>
   {{/if}}

@@ -29,28 +29,39 @@
         </div>
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
-            <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
-                    data-test-vl-model-manager-add
-             {{action "toggleIsAdding"}}
+            <button type="button" class="auk-button auk-button--tertiary"
+              data-test-vl-model-manager-add
+              {{action "toggleIsAdding"}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-add"
-              ></i>
-              {{t "add"}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "add"}}
+              </div>
             </button>
             {{#if item}}
-              <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
+              <button type="button"
+                class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-pencil"
-                ></i>
-                {{t "edit"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "edit"}}
+                </div>
               </button>
-              <button type="button" class="auk-button auk-button--tertiary vl-button--icon-before"
+              <button type="button"
+                class="auk-button auk-button--tertiary"
                 {{action "removeModel"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-delete"
-                ></i>
-                {{t "delete"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-delete"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "delete"}}
+                </div>
               </button>
             {{/if}}
           </div>

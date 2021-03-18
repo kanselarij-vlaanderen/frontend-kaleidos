@@ -12,17 +12,21 @@
           </div>
           <div class="vlc-toolbar__right">
             {{#if agendaMenuOpened}}
-              <button type="button" class="auk-button auk-button--borderless vl-button--icon default"
+              <button type="button" class="auk-button auk-button--borderless auk-button--icon default"
                 {{action "collapseSideMenu"}}>
-                <i class="ki-chevron-right"></i>
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-chevron-right"></i>
+                </div>
                 <div class="auk-u-sr-only">
                   {{t "toggle"}}
                 </div>
               </button>
             {{else}}
-              <button type="button" class="auk-button auk-button--borderless vl-button--icon collapsed"
+              <button type="button" class="auk-button auk-button--borderless auk-button--icon collapsed"
                 {{action "collapseSideMenu"}}>
-                <i class="ki-chevron-left"></i>
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-chevron-left"></i>
+                </div>
                 <div class="auk-u-sr-only">
                   {{t "toggle"}}
                 </div>

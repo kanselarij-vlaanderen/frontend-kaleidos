@@ -9,7 +9,7 @@
         {{name}}
       </h6>
       {{#if view}}
-        <button type="button" class="auk-button auk-button--borderless vl-button--icon"
+        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "view"}}
         >
           <div class="auk-icon auk-icon--default">
@@ -21,24 +21,24 @@
         </button>
       {{/if}}
       {{#if download}}
-        <button type="button" class="vl-button vl-button--^link vl-button--icon"
+        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "download"}}
         >
-          <i class="ki-download vl-button__icon"
-             aria-hidden="true"
-          ></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-download"></i>
+          </div>
           <div class="auk-u-sr-only">
             {{t "download"}}
           </div>
         </button>
       {{else if downloadLink}}
-        <a class="auk-button auk-button--borderless vl-button--icon"
-           href={{downloadLink}}
-           download={{if downloadName downloadName name}}
+        <a class="auk-button auk-button--borderless auk-button--icon"
+          href={{downloadLink}}
+          download={{if downloadName downloadName name}}
         >
-          <i class="ki-download vl-button__icon"
-             aria-hidden="true"
-          ></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-download"></i>
+          </div>
           <div class="auk-u-sr-only">
             {{t "download"}}
           </div>
@@ -46,8 +46,8 @@
       {{/if}}
       {{#if delete}}
         <button type="button"
-                data-test-vl-uploaded-document-deletepiece
-                class="auk-button auk-button--borderless vl-button--icon"
+          data-test-vl-uploaded-document-deletepiece
+          class="auk-button auk-button--borderless auk-button--icon"
           {{action "delete"}}
         >
           <div class="auk-icon auk-icon--default">

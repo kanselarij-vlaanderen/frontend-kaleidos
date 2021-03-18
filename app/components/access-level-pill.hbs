@@ -27,7 +27,7 @@
         </div>
         <button
           type="button"
-          class="auk-button auk-button--borderless vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           data-test-access-level-save
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
@@ -40,7 +40,7 @@
         </button>
         <button
           type="button"
-          class="auk-button auk-button--borderless vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
           <div class="auk-icon auk-icon--default">
@@ -54,7 +54,7 @@
     {{/if}}
     <button
       type="button"
-      class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+      class="vl-button vl-button--link-muted auk-button--icon vlc-toolbar__item"
       disabled={{not this.session.isEditor}}
       {{on "click" (perform this.changeConfidentiality)}}
     >

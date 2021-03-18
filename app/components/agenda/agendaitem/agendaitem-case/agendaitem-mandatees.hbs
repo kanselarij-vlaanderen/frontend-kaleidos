@@ -109,16 +109,17 @@
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
         <a
-                href=""
-                data-test-subcase-mandatees-add-mandatee
-                class="auk-button auk-button--tertiary vl-button--icon-before"
+          href=""
+          data-test-subcase-mandatees-add-mandatee
+          class="auk-button auk-button--tertiary"
           {{action "addRow"}}
         >
-          <i
-                  class="vl-button__icon vl-button__icon--before ki-add"
-                  aria-hidden="true"
-          ></i>
-          {{t "add-minister"}}
+          <div class="auk-icon auk-icon--default ">
+            <i class="ki ki-add"></i>
+          </div>
+          <div class="auk-button__label">
+            {{t "add-minister"}}
+          </div>
         </a>
       </div>
       <div class="vlc-toolbar__right">

@@ -31,11 +31,13 @@
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}
                 <button
-                  class="auk-button auk-button--borderless vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   data-test-documents-show-more
                   type="button"
                 >
-                  <i class="ki-more"></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-more"></i>
+                  </div>
                   <AttachPopover
                     @renderInPlace={{true}}
                     @class="ember-attacher-popper"
@@ -100,27 +102,25 @@
                   @value={{this.pieceNameBuffer}}
                 />
                 <button
-                  class="auk-button auk-button--borderless vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
                   {{on "click" (perform this.savePieceName)}}
                 >
-                  <i
-                    class="ki-check vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-check"></i>
+                  </div>
                   <div class="auk-u-sr-only">
                     {{t "more-options"}}
                   </div>
                 </button>
                 <button
-                  class="auk-button auk-button--borderless vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
                   {{on "click" this.cancelEditPieceName}}
                 >
-                  <i
-                    class="ki-cross vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-cross"></i>
+                  </div>
                   <div class="auk-u-sr-only">
                     {{t "more-options"}}
                   </div>

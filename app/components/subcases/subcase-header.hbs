@@ -58,17 +58,21 @@
       </div>
       <div class="vlc-toolbar__item">
         <button type="button"
-                class="auk-button auk-button--secondary vl-button--icon-before"
+          class="auk-button auk-button--secondary"
           {{action "showMultipleOptions" bubbles=false}}
         >
           {{#if isShowingOptions}}
-            <i class="vl-button__icon vl-button__icon--before ki-chevron-up"
-            ></i>
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-chevron-up"></i>
+            </div>
           {{else}}
-            <i class="vl-button__icon vl-button__icon--before ki-chevron-down"
-            ></i>
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-chevron-down"></i>
+            </div>
           {{/if}}
-          {{t "actions"}}
+          <div class="auk-button__label">
+            {{t "actions"}}
+          </div>
           {{#attach-popover
             renderInPlace=true
             class="ember-attacher-popper"
