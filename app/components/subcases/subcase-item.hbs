@@ -1,13 +1,13 @@
 <div class="vlc-procedure-step {{if @isMinimal "vlc-procedure-step--minimal"}}">
   <div class="vlc-procedure-step__badge-wrapper">
     {{#if (is-pending @subcase.approved)}}
-      <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium"></div>
+      <div class="auk-badge auk-badge--default auk-badge--medium"></div>
     {{else if (await @subcase.approved)}}
-      <div class="vl-badge vl-badge--icon vl-badge--success vlc-procedure-step__badge vl-badge--alt vl-badge--small-medium">
+      <div class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
         <i class="vl-badge__icon ki-check" aria-hidden="true"></i>
       </div>
     {{else}}
-      <div class="vl-badge vl-badge--icon vl-badge--warning vlc-procedure-step__badge vl-badge--medium vl-badge--small-medium">
+      <div class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
         <i class="vl-badge__icon ki-sitemap" aria-hidden="true"></i>
       </div>
     {{/if}}
