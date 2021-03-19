@@ -177,7 +177,13 @@ export default class PublicationController extends Controller {
         return true;
       }
     }
-    const end = moment(this.model.publicationFlow.get('publishBefore'));
+    // If there is no publishBefore, allow all future dates
+    const publishBefore = this.model.publicationFlow.get('publishBefore');
+    if (!publishBefore && moment(date).isSameOrAfter(moment())) {
+      return true;
+    }
+    // If there is a publishbefore, only allow dates between now and that date
+    const end = moment(publishBefore);
     if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(moment())) {
       return true;
     }
@@ -312,7 +318,7 @@ export default class PublicationController extends Controller {
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const translateBefore = this.model.publicationFlow.get('translateBefore');
-    if (typeof translateBefore !== undefined && !moment(translateBefore).isSameOrBefore(date, 'minutes')) {
+    if (translateBefore !== undefined && !moment(translateBefore).isSameOrBefore(date, 'minutes')) {
       this.publicationNotAfterTranslationForPublication = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
         timeOut: 5000,
@@ -351,7 +357,7 @@ export default class PublicationController extends Controller {
     set(this, 'showTranslationDatePicker', false);
     const date = moment(new Date(event));
     const publishBefore = this.model.publicationFlow.get('publishBefore');
-    if (typeof publishBefore !== undefined && !moment(date).isSameOrBefore(publishBefore)) {
+    if (publishBefore !== undefined && !moment(date).isSameOrBefore(publishBefore)) {
       this.publicationNotAfterTranslationForTranslation = true;
       this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
         timeOut: 5000,
