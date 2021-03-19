@@ -60,11 +60,11 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <a href="" class="auk-button auk-button--tertiary"
+        <button type="button" class="auk-button auk-button--tertiary"
           {{action this.cancelEditing}}
         >
           {{t "cancel"}}
-        </a>
+        </button>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         {{web-components/vl-save-button
