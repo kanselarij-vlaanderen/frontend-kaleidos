@@ -54,7 +54,7 @@
       {{#if (and this.currentSession.isEditor @enableDelete)}}
         <button
           type="button"
-          class="auk-button auk-button--borderless auk-button--icon vl-button-icon--error"
+          class="auk-button auk-button--warning-borderless auk-button--icon"
           data-test-delete-piece-from-history
           {{on "click" (fn this.deletePiece piece)}}
         >
