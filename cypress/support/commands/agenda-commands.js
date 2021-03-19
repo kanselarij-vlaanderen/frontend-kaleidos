@@ -157,6 +157,21 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 }
 
 /**
+ * @description basic visit to agenda with some data loading
+ * @name visitAgendaWithLink
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {*} link The link to visit, should be "/vergadering/id/agenda/id/agendapunten" or "/vergadering/id/agenda/id/agendapunten/id"
+ */
+function visitAgendaWithLink(link) {
+  cy.log('visitAgendaWithLink');
+  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  cy.visit(link);
+  cy.wait('@loadAgendaitems');
+  cy.log('/visitAgendaWithLink');
+}
+
+/**
  * @description Searches for the agendaDate in the history view of the agenda page, or uses the meetingId to open the meeting directly using the route 'agenda/meetingId/agendapunten'
  * @name openAgendaForDate
  * @memberOf Cypress.Chainable#
@@ -222,6 +237,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
+  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
 
   cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
@@ -240,6 +256,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
     cy.get(modal.auModal.container, {
       timeout: 20000,
     }).should('not.exist');
+    cy.wait('@loadAgendaitems');
   }
 
   cy.log('/deleteAgenda');
@@ -720,6 +737,7 @@ function clickAgendaitemTab(selector) {
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
+Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
 Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
