@@ -113,31 +113,40 @@
       </div>
     </div>
 
-    <ul class="auk-tabs auk-u-mb-6">
-      {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
-            to go back and forth between search results for the different types while keeping the
-            page-number. --}}
-      <li class="auk-tabs__tab">
-        <LinkTo
-          @route="search.agenda-items"
-          @current-when="search.agenda-items"
-          @activeClass="active"
-          @query={{hash page=0}}
-        >
-          <span class="auk-tabs__tab-inner">{{t "agendaitems"}}</span>
-        </LinkTo>
-      </li>
-      <li class="auk-tabs__tab">
-        <LinkTo
-          @route="search.cases"
-          @current-when="search.cases"
-          @activeClass="active"
-          @query={{hash page=0}}
-        >
-          <span class="auk-tabs__tab-inner">{{t "cases"}}</span>
-        </LinkTo>
-      </li>
-    </ul>
+    <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--white auk-u-p-0 auk-u-mb-6">
+      <div class="auk-toolbar-complex">
+        <div class="auk-toolbar-complex__left">
+          <div class="auk-toolbar-complex__item">
+            <ul class="auk-tabs">
+              {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
+                    to go back and forth between search results for the different types while keeping the
+                    page-number. --}}
+              <li class="auk-tabs__tab">
+                <LinkTo
+                  @route="search.agenda-items"
+                  @current-when="search.agenda-items"
+                  @activeClass="active"
+                  @query={{hash page=0}}
+                >
+                  <span class="auk-tabs__tab-inner">{{t "agendaitems"}}</span>
+                </LinkTo>
+              </li>
+              <li class="auk-tabs__tab">
+                <LinkTo
+                  @route="search.cases"
+                  @current-when="search.cases"
+                  @activeClass="active"
+                  @query={{hash page=0}}
+                >
+                  <span class="auk-tabs__tab-inner">{{t "cases"}}</span>
+                </LinkTo>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {{outlet}}
   </div>
 </div>
