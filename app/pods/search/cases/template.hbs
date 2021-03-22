@@ -4,19 +4,23 @@
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="vlc-box">
-      <WebComponents::AuLabel>{{t "type"}}</WebComponents::AuLabel>
-      <WebComponents::VlCheckbox
-        data-test-decisions-only-check
-        @value={{this.decisionsOnly}}
-        @label={{t "search-in-decisions-only"}}
-        @toggle={{this.toggleDecisionsOnly}}
-      />
-      <WebComponents::AuLabel>{{t "archive"}}</WebComponents::AuLabel>
-      <WebComponents::VlCheckbox
-        @value={{this.includeArchived}}
-        @label={{t "search-include-archived"}}
-        @toggle={{this.toggleIncludeArchived}}
-      />
+      <div class="auk-u-mb-2">
+        <WebComponents::AuLabel>{{t "type"}}</WebComponents::AuLabel>
+        <WebComponents::VlCheckbox
+          data-test-decisions-only-check
+          @value={{this.decisionsOnly}}
+          @label={{t "search-in-decisions-only"}}
+          @toggle={{this.toggleDecisionsOnly}}
+        />
+      </div>
+      <div>
+        <WebComponents::AuLabel>{{t "archive"}}</WebComponents::AuLabel>
+        <WebComponents::VlCheckbox
+          @value={{this.includeArchived}}
+          @label={{t "search-include-archived"}}
+          @toggle={{this.toggleIncludeArchived}}
+        />
+      </div>
     </div>
   </div>
   <div class="auk-o-grid-col-10">
