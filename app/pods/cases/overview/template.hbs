@@ -12,7 +12,7 @@
       <div class="vlc-toolbar__right">
         {{#if this.currentSession.isEditor}}
           <div class="vlc-toolbar__item auk-u-flex auk-u-flex--vertical-center">
-            <WebComponents::AuLabel class="auk-u-text-nowrap" for="isArchived">{{t "show-archived"}}</WebComponents::AuLabel>
+            <WebComponents::AuLabel class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="isArchived">{{t "show-archived"}}</WebComponents::AuLabel>
             {{web-components/vl-toggle value=this.showArchived}}
           </div>
         {{/if}}

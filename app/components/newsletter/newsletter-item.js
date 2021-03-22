@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['auk-u-mb-4'],
+  classNames: ['auk-u-mb-8'],
   isEditing: false,
   itemIndex: 0,
   showIndex: false,
