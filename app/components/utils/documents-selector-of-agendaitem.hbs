@@ -24,11 +24,10 @@
             <tr>
               <td class="auk-u-flex vlc-document-list__item">
                 <a href="" {{action "downloadFile" piece}}>
-                  <div class="auk-badge auk-badge--medium auk-badge--default"
-                  >
-                    <i class="vl-badge__icon ki-document"
-                       aria-hidden="true"
-                    ></i>
+                  <div class="auk-badge auk-badge--medium auk-badge--default">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-document"></i>
+                    </div>
                   </div>
                   <p>
                     {{await piece.name}}

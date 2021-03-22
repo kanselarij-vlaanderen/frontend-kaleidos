@@ -4,11 +4,15 @@
       <div class="auk-badge auk-badge--default auk-badge--medium"></div>
     {{else if (await @subcase.approved)}}
       <div class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
-        <i class="vl-badge__icon ki-check" aria-hidden="true"></i>
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-check"></i>
+        </div>
       </div>
     {{else}}
       <div class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
-        <i class="vl-badge__icon ki-sitemap" aria-hidden="true"></i>
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-sitemap"></i>
+        </div>
       </div>
     {{/if}}
   </div>

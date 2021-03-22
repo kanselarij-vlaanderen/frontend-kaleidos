@@ -3,7 +3,9 @@
     {{#each this.pieceNamesLimited as |pieceName|}}
       <li class="vlc-document-list__item vlc-document-list__item--loading">
         <span>
-          <i class="vl-badge__icon ki-synchronize"></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-synchronize"></i>
+          </div>
           {{pieceName}}
         </span>
       </li>
@@ -12,7 +14,9 @@
     {{#each (await @pieceNames) as |pieceName|}}
       <li class="vlc-document-list__item vlc-document-list__item--loading">
         <span>
-          <i class="vl-badge__icon ki-synchronize"></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-synchronize"></i>
+          </div>
           {{pieceName}}
         </span>
       </li>
