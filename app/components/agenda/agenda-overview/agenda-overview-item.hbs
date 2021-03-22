@@ -27,7 +27,7 @@
               @route="agenda.agendaitems.agendaitem"
               @model={{@agendaitem}}
             >
-              <pre>
+              <pre class="auk-u-text-pre-line">
                 {{#if @agendaitem.shortTitle}}
                   {{@agendaitem.shortTitle}}
                 {{else}}
@@ -41,7 +41,7 @@
             {{#if (not selectedAgendaitem)}}
               {{#if (not @agendaitem.isApproval)}}
                 {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-                  <pre class="vl-u-text vlc-agenda-items__body-padding">
+                  <pre class="vl-u-text vlc-agenda-items__body-padding auk-u-text-pre-line">
                     {{@agendaitem.title}}
                   </pre>
                 {{/if}}
