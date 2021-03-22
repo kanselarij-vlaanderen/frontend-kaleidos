@@ -22,7 +22,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_accordion';
 @import 'govflanders/components/_alert';
-@import 'govflanders/components/_badge';
 @import 'govflanders/components/_toggle';
 @import 'govflanders/components/_data-table';
 @import 'govflanders/components/_datepicker';
@@ -40,7 +39,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 ========================================================================== */
 
 // Additions to existing components
-@import 'govflanders/additions/_badge';
 @import 'govflanders/additions/_checkbox';
 @import 'govflanders/additions/_data-table';
 @import 'govflanders/additions/_not-supported';
@@ -127,7 +125,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 
 // Fixes to the framework
 @import 'fixes/fix-auk-modal-ember-select';
-@import 'fixes/fix-badge-avatars';
 @import 'fixes/fix-full-height';
 @import 'fixes/fix-light-table';
 @import 'fixes/fix-icon-positioning';
