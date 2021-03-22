@@ -496,6 +496,20 @@ export default Component.extend(FileSaverMixin, {
     }
   },
 
+  /**
+   * ensureAgendaDataIsRecent
+   *
+   * This method will reload the agendaitems of the current agenda and show a loader while in progress
+   * Any new agendaitem or changed formallity is picked up by this, preventing the triggering the relevant agenda actions with stale date
+   * created by concurrent edits of agendaitem formally ok status by other uses
+   *
+   */
+  async ensureAgendaDataIsRecent() {
+    this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
+    await this.currentAgenda.hasMany('agendaitems').reload();
+    this.toggleLoadingOverlayWithMessage(null);
+  },
+
   actions: {
     print() {
       window.print();
@@ -656,7 +670,8 @@ export default Component.extend(FileSaverMixin, {
       this.toggleProperty('editingSession');
     },
 
-    openConfirmApproveAgenda() {
+    async openConfirmApproveAgenda() {
+      await this.ensureAgendaDataIsRecent();
       this.set('showConfirmForApprovingAgenda', true);
     },
 
@@ -669,7 +684,8 @@ export default Component.extend(FileSaverMixin, {
       this.set('showConfirmForApprovingAgenda', false);
     },
 
-    openConfirmApproveAgendaAndCloseMeeting() {
+    async openConfirmApproveAgendaAndCloseMeeting() {
+      await this.ensureAgendaDataIsRecent();
       this.set('showConfirmForApprovingAgendaAndClosingMeeting', true);
     },
 
