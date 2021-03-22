@@ -41,7 +41,7 @@
               {{#if this.renderDetails}}
                 {{#if (await @agendaitem.checkAdded)}}
                   <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-calendar-plus"></i>
+                    <WebComponents::AuIcon @name="calendar-plus" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "added-agendaitem-text"}}
@@ -52,7 +52,7 @@
 
                 {{#if (not newsletterInfo.inNewsletter)}}
                   <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                    <WebComponents::AuIcon @name="hide" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -62,7 +62,9 @@
                 {{/if}}
 
                 {{#if (await subcase.confidential)}}
-                  <WebComponents::AuIcon @name="lock-closed" data-test-icon-agenda-confidentiality-locked />
+                  <span>
+                    <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked />
+                  </span>
                 {{/if}}
               {{/if}}
             </div>
