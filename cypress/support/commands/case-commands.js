@@ -87,7 +87,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     .contains('Procedurestap toevoegen')
     .click();
 
-  cy.get('.vlc-input-field-block').should('have.length', 5);
+  cy.get('.vlc-input-field-block').should('have.length', 4);
 
   // Set the type
   if (type) {
