@@ -126,8 +126,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get('.vlc-toolbar__item').contains('Toevoegen')
-      .click();
+    cy.get(modal.modalFooterSaveButton).click();
   });
 
   let meetingId;
