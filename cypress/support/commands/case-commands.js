@@ -91,7 +91,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the type
   if (type) {
-    cy.get('.vlc-input-field-block').eq(0)
+    cy.get('.auk-radio-list')
       .within(() => {
         cy.contains(type).scrollIntoView()
           .click();
@@ -100,7 +100,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the short title
   if (newShortTitle) {
-    cy.get('.vlc-input-field-block').eq(1)
+    cy.get('.vlc-input-field-block').eq(0)
       .within(() => {
         cy.get('.auk-textarea').click()
           .clear()
@@ -110,7 +110,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the long title
   if (longTitle) {
-    cy.get('.vlc-input-field-block').eq(2)
+    cy.get('.vlc-input-field-block').eq(1)
       .within(() => {
         cy.get('.auk-textarea').click()
           .clear()
@@ -120,7 +120,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step type
   if (step) {
-    cy.get('.vlc-input-field-block').eq(3)
+    cy.get('.vlc-input-field-block').eq(2)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
@@ -140,7 +140,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step name
   if (stepName) {
-    cy.get('.vlc-input-field-block').eq(4)
+    cy.get('.vlc-input-field-block').eq(3)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
