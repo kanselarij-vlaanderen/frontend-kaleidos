@@ -1,21 +1,37 @@
-<WebComponents::AuRadioList @layout="inline">
-  {{#each this.radioOptions}}
-    <WebComponents::AuRadio
-      @label={{get opt this.labelKey}}
-      name={{this.radioName}}
-      value={{get opt this.labelKey}}
-      checked={{eq opt this.selectedOption}}
-      {{on "input" (fn this.select opt)}}
-    />
+<div class="auk-radio-list auk-radio-list--inline">
+  {{#each this.radioOptions as |opt index|}}
+    {{#let (concat this.radioName "-" index) as |radioId|}}
+      <label class="auk-radio" data-children-count="1" for={{radioId}}>
+        <input
+          type="radio"
+          class="auk-radio__toggle"
+          id={{radioId}}
+          name={{this.radioName}}
+          checked={{eq opt this.selectedOption}}
+          value={{get opt this.labelKey}}
+          {{on "input" (fn this.select opt)}}
+        />
+        {{get opt this.labelKey}}
+        <span class="auk-radio__box"></span>
+      </label>
+    {{/let}}
   {{/each}}
-  <WebComponents::AuRadio
-    @label={{t "option-others"}}
-    name={{this.radioName}}
-    value="Andere"
-    checked={{this.selectedIsInOthers}}
-    {{on "input" this.showOthers}}
-  />
-</WebComponents::AuRadioList>
+  {{#let (concat this.radioName "-" "others") as |radioId|}}
+    <label class="auk-radio" data-children-count="1" for={{radioId}}>
+      <input
+        type="radio"
+        class="auk-radio__toggle"
+        id={{radioId}}
+        name={{this.radioName}}
+        checked={{this.selectedIsInOthers}}
+        value="Andere"
+        {{on "input" this.showOthers}}
+      />
+      {{t "option-others"}}
+      <span class="auk-radio__box"></span>
+    </label>
+  {{/let}}
+</div>
 {{#if this.othersShown}}
   <PowerSelect
     @options={{this.otherOptions}}
