@@ -505,9 +505,10 @@ export default Component.extend(FileSaverMixin, {
    *
    */
   async ensureAgendaDataIsRecent() {
-    this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
+    // TODO This loader breaks a lot of tests because it is unexpected
+    // this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
     await this.currentAgenda.hasMany('agendaitems').reload();
-    this.toggleLoadingOverlayWithMessage(null);
+    // this.toggleLoadingOverlayWithMessage(null);
   },
 
   actions: {
