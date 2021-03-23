@@ -1,3 +1,10 @@
+/* ==========================================================================
+   Styleguide CSS file
+   ========================================================================== */
+
+// Color variables (from npm package)
+@import 'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/s-colors';
+
 // Styleguide
 @import "custom-application/styleguide/_br-prototype-wrapper";
 @import "custom-application/styleguide/_br-styleguide-bordered-list";
