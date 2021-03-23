@@ -1,12 +1,13 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
+  @service store;
   @service currentSession;
 
-  @service store;
+  @controller('agenda.agendaitems') agendaitemsController;
 
   get subcase() {
     const agendaActivity = this.model.get('agendaActivity');
@@ -42,6 +43,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
     await this.reassignPrioritiesForAgendaitems();
+    this.agendaitemsController.send('reloadModel');
     await this.navigateToNeighbouringItem(this.model);
   }
 }
