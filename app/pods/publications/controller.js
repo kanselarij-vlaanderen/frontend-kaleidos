@@ -1,8 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import {
-  action, set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsController extends Controller {
@@ -14,7 +12,6 @@ export default class PublicationsController extends Controller {
   @tracked isCreatingPublication = false;
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
-
 
   @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
     || {
@@ -33,6 +30,7 @@ export default class PublicationsController extends Controller {
     shortTitle: null,
     longTitle: null,
   };
+
 
   get getError() {
     return this.hasError;
@@ -106,16 +104,6 @@ export default class PublicationsController extends Controller {
     this.isShowPublicationFilterModal = true;
   }
 
-  @action
-  closeFilterModal() {
-    const localeFilterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
-    if (localeFilterOptionKeys !== null) {
-      localStorage.setItem('filterOptions', JSON.stringify(localeFilterOptionKeys));
-    } else {
-      localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-    }
-    this.isShowPublicationFilterModal = false;
-  }
 
   get shouldShowPublicationHeader() {
     return this.routing.currentRouteName.startsWith('publications.index');
@@ -131,7 +119,18 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  resetModelFilterOptions() {
+  onCancel() {
+    const localeFilterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
+    if (localeFilterOptionKeys !== null) {
+      localStorage.setItem('filterOptions', JSON.stringify(localeFilterOptionKeys));
+    } else {
+      localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+    }
+    this.isShowPublicationFilterModal = false;
+  }
+
+  @action
+  onReset() {
     this.filterOptionKeys = {
       ministerFilterOption: true,
       notMinisterFilterOption: true,
@@ -145,17 +144,9 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  filterModel() {
+  onSave() {
     localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
     this.isShowPublicationFilterModal = false;
-    // this.refreshModel();
     this.send('refreshModel');
-  }
-
-  @action
-  toggleFilterOption(event) {
-    const tempArr = this.get('filterOptionKeys');
-    set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.set('filterOptionKeys', tempArr);
   }
 }

@@ -2,7 +2,7 @@
   (t "publications")
 }}
 {{#if shouldShowPublicationHeader}}
-{{!-- TODO auk-panel-layout gebruiken, component ? --}}
+  {{!-- TODO auk-panel-layout gebruiken, component ? --}}
   <div class="vlc-panel-layout__main-content">
     <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
       <WebComponents::AuToolbar>
@@ -16,22 +16,18 @@
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuDropdown>
-              <Publications::PublicationCaseSearch/>
+              <Publications::PublicationCaseSearch />
             </WebComponents::AuDropdown>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-                    @skin="secondary"
-                    @icon="filter"
-                    {{on "click" (fn this.showFilterModal)}}
-            >
+            <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
               {{t "filter-content"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
 
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary"
-              {{on "click" (fn this.showNewPublicationModal)}}>
+            <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
+              (fn this.onCancel)}}>
               {{t "publications-new"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
@@ -41,21 +37,14 @@
     <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
       {{#if isShowingPublicationModal}}
         <WebComponents::AuModal data-test-au-modal-publication-new>
-          <WebComponents::AuModal::Header
-                  @title={{t "publications-new-not-minister"}}
-                  @closeModal={{this.closePublicationModal}}
-          />
+          <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{this.onCancel}} />
           <WebComponents::AuModal::Body>
             {{#if hasError}}
-              <WebComponents::AuAlert data-test-auk-alert-error
-                                      @title={{t "modal-error-alert-title"}}
-                                      @skin="error"
-                                      @message={{t "modal-error-alert-message"}}
-                                      @icon="alert-triangle"/>
+              <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
+                @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
             {{else}}
-              <WebComponents::AuAlert data-test-auk-alert-info
-                                      @message={{t "publications-new-warning-message"}}
-                                      @icon="circle-info"/>
+              <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message" }}
+                @icon="circle-info" />
             {{/if}}
             <div class="auk-form-group-layout auk-form-group-layout--standard">
               <div class='auk-form-group {{getClassForGroupNumber}}'>
@@ -63,11 +52,8 @@
                   {{t "publications-number"}}
                 </WebComponents::AuLabel>
                 <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width"
-                                        @block="true"
-                                        @value={{mut publication.number}}
-                                        data-test-create-publication-modal-number-input
-                                        {{on "change" (await isPublicationNumberAlreadyTaken)}}
-                />
+                  @block="true" @value={{mut publication.number}} data-test-create-publication-modal-number-input
+                  {{on "change" (await isPublicationNumberAlreadyTaken)}} />
                 {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
                   <WebComponents::AuLabelError>
                     {{t "input-error-message"}}
@@ -84,31 +70,23 @@
                   {{t "publications-suffix"}}
                 </WebComponents::AuLabel>
                 <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width"
-                                        @block="true"
-                                        @value={{mut publication.suffix}}
-                                        data-test-create-publication-modal-suffix-input
-                  {{on "change" (await isPublicationNumberAlreadyTaken)}}
-                />
+                  @block="true" @value={{mut publication.suffix}} data-test-create-publication-modal-suffix-input
+                  {{on "change" (await isPublicationNumberAlreadyTaken)}} />
               </div>
               <div class='auk-form-group {{getClassForGroupShortTitle}}'>
-                <WebComponents::AuLabel for="shortTitleInput"
-                                        @isRequired={{true}}>
+                <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
                   {{t "name-subcase"}}
                 </WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="shortTitleInput"
-                                           @rows="2"
-                                           @value={{mut publication.shortTitle}}
-                                           data-test-create-publication-modal-short-title-textarea/>
+                <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut publication.shortTitle}}
+                  data-test-create-publication-modal-short-title-textarea />
                 {{#if getClassForGroupShortTitle}}
                   <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
                 {{/if}}
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-                <WebComponents::AuTextarea id="longTitleInput"
-                                           @rows="4"
-                                           @value={{mut publication.longTitle}}
-                                           data-test-create-publication-modal-long-title-textarea/>
+                <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut publication.longTitle}}
+                  data-test-create-publication-modal-long-title-textarea />
               </div>
             </div>
           </WebComponents::AuModal::Body>
@@ -117,9 +95,8 @@
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="left">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="borderless"
-                                          {{on "click" this.closePublicationModal}}
-                                           data-test-publication-button-cancel>
+                  <WebComponents::AuButton @skin="borderless" {{on "click" this.onCancel}}
+                    data-test-publication-button-cancel>
                     {{t "cancel"}}
                   </WebComponents::AuButton>
                 </WebComponents::AuToolbar::Item>
@@ -127,8 +104,8 @@
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
                   {{#if (not this.isCreatingPublication)}}
-                    <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new
-                      {{on "click" this.createNewPublication}}>
+                    <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click"
+                      this.createNewPublication}}>
                       {{t "publications-new-button-text"}}
                     </WebComponents::AuButton>
                   {{else}}
@@ -140,83 +117,8 @@
           </WebComponents::AuModal::Footer>
         </WebComponents::AuModal>
       {{/if}}
-      {{#if isShowPublicationFilterModal}}
-        <WebComponents::AuModal data-test-au-modal-publication-new>
-          <WebComponents::AuModal::Header
-                  @size="medium"
-                  @title={{t "publications-filter"}}
-                  @closeModal={{this.closeFilterModal}}
-          />
-          <WebComponents::AuModal::Body>
-            <div class="auk-form-group-layout auk-form-group-layout--grid">
-              <div class="auk-o-grid">
-                <div class="auk-o-grid-col-4">
-                  <div class="auk-form-group">
-                    <WebComponents::AuLabel for="defaultInput">{{t "source"}}</WebComponents::AuLabel>
-                  </div>
-                  <div class="auk-form-group">
-                    <WebComponents::AuLabel for="defaultInput">{{t "status"}}</WebComponents::AuLabel>
-                  </div>
-                </div>
-                <div class="auk-o-grid-col-4">
-                  <div class="auk-form-group">
-                    <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label={{t "via-cabinet"}} @name="ministerFilterOption" @checked={{this.filterOptionKeys.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
-                    </WebComponents::AuCheckboxList>
-                  </div>
-                  <div class="auk-form-group">
-                    <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label={{t "publications-published"}} @name="publishedFilterOption" @checked={{this.filterOptionKeys.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
-                      <WebComponents::AuCheckbox @label={{t "publications-paused"}} @name="pausedFilterOption" @checked={{this.filterOptionKeys.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
-                    </WebComponents::AuCheckboxList>
-                  </div>
-                </div>
-                <div class="auk-o-grid-col-4">
-                  <div class="auk-form-group">
-                    <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label={{t "not-via-cabinet"}} @name="notMinisterFilterOption" @checked={{this.filterOptionKeys.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
-                    </WebComponents::AuCheckboxList>
-                  </div>
-                  <div class="auk-form-group">
-                    <WebComponents::AuCheckboxList>
-                      <WebComponents::AuCheckbox @label={{t "publications-to-publish"}} @name="toPublishFilterOption" @checked={{this.filterOptionKeys.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
-                      <WebComponents::AuCheckbox @label={{t "discharged"}} @name="withdrawnFilterOption" @checked={{this.filterOptionKeys.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}}  />
-                    </WebComponents::AuCheckboxList>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </WebComponents::AuModal::Body>
-          {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
-          <WebComponents::AuModal::Footer @custom={{true}}>
-            <WebComponents::AuToolbar>
-              <WebComponents::AuToolbar::Group @position="left">
-                <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="borderless"
-                    {{on "click" this.closeFilterModal}}
-                                           data-test-publication-button-cancel>
-                    {{t "cancel"}}
-                  </WebComponents::AuButton>
-                </WebComponents::AuToolbar::Item>
-              </WebComponents::AuToolbar::Group>
-              <WebComponents::AuToolbar::Group @position="right">
-                <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters
-                    {{on "click" this.resetModelFilterOptions}}>
-                    {{t "clear-filter-plural"}}
-                  </WebComponents::AuButton>
-                </WebComponents::AuToolbar::Item>
-                <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
-                    {{on "click" this.filterModel}}>
-                    {{t "filter-content"}}
-                  </WebComponents::AuButton>
-                </WebComponents::AuToolbar::Item>
-              </WebComponents::AuToolbar::Group>
-            </WebComponents::AuToolbar>
-          </WebComponents::AuModal::Footer>
-        </WebComponents::AuModal>
-      {{/if}}
+      <Publications::PublicationsFilter @filter={{this.filterOptionKeys}} @onCancel={{this.onCancel}}
+        @onReset={{this.onReset}} @onSave={{this.onSave}} @isShown={{this.isShowPublicationFilterModal}} />
       {{outlet}}
     </div>
   </div>
@@ -225,5 +127,5 @@
 {{/if}}
 {{!-- LOADER --}}
 {{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
+  <WebComponents::AuLoadingOverlay />
 {{/if}}
