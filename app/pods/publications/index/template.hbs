@@ -33,7 +33,7 @@
           <th>{{t "publications-table-numacnummer-bs"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.RegulationTypeFilterOption}}
+        {{#if this.filterTableColumnOptionKeys.regulationTypeFilterOption}}
           <ThSortable
                   @currentSorting={{this.sort}}
                   @field="regulationType.position"
@@ -160,7 +160,7 @@
             {{/each}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.RegulationTypeFilterOption}}
+        {{#if this.filterTableColumnOptionKeys.regulationTypeFilterOption}}
           <td>
             {{#if row.regulationType}}
               {{row.regulationType.label}}
@@ -360,7 +360,7 @@
                 <WebComponents::AuCheckbox @name="caseNameFilterOption" @label={{t "publications-table-case-name"}} @checked={{this.filterTableColumnOptionKeys.caseNameFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="numacNumberFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="RegulationTypeFilterOption" @label={{t "publications-table-regulation-type"}} @checked={{this.filterTableColumnOptionKeys.RegulationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
+                <WebComponents::AuCheckbox @name="regulationTypeFilterOption" @label={{t "publications-table-regulation-type"}} @checked={{this.filterTableColumnOptionKeys.regulationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
                 <WebComponents::AuCheckbox @name="finalPublicationDateFilterOption" @label={{t "publications-table-final-publication-date"}} @checked={{this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
