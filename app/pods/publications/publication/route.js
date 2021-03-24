@@ -59,7 +59,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const documentCount = pieces.length;
 
     const regulationTypes = await this.store.query('regulation-type', {
-      sort: 'priority', 'page[size]': 50,
+      sort: 'position', 'page[size]': 50,
     });
 
     return hash({
