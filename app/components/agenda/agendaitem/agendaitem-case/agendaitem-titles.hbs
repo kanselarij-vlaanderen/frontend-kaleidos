@@ -44,10 +44,12 @@
         <h4>
           {{@agendaitem.shortTitle}}
         </h4>
-        {{#if @agendaitem.title }}
-          <p>
-            {{@agendaitem.title}}
-          </p>
+        {{#if @agendaitem.title}}
+          <div class="auk-u-mb-2">
+            <pre class="auk-u-flex--inline auk-u-text-pre-line">
+              {{@agendaitem.title}}
+            </pre>
+          </div>
         {{/if}}
         <WebComponents::AuPillList>
           {{#if (not @agendaitem.showAsRemark) }}
