@@ -1,6 +1,6 @@
 {{#if @isShown}}
   <WebComponents::AuModal data-test-au-modal-publication-new>
-    <WebComponents::AuModal::Header @size="medium" @title={{t "publications-filter" }} @closeModal={{this.onCancel}} />
+    <WebComponents::AuModal::Header @size="medium" @title={{t "publications-filter" }} @closeModal={{this.cancel}} />
     <WebComponents::AuModal::Body>
       <div class="auk-form-group-layout auk-form-group-layout--grid">
         <div class="auk-o-grid">
@@ -52,8 +52,7 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.onCancel}}
-              data-test-publication-button-cancel>
+            <WebComponents::AuButton @skin="borderless" {{on "click" this.cancel}} data-test-publication-button-cancel>
               {{t "cancel"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
@@ -61,13 +60,13 @@
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters {{on "click"
-              this.onReset}}>
+              this.reset}}>
               {{t "clear-filter-plural"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
-              {{on "click" this.onSave}}>
+              {{on "click" this.save}}>
               {{t "filter-content"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>

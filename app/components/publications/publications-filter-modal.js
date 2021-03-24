@@ -2,20 +2,32 @@ import Component from '@glimmer/component';
 import {
   action, set
 } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class PublicationsFilter extends Component {
+  @tracked filter;
+
+  constructor() {
+    super(...arguments);
+    this.initBuffers();
+  }
+
+  initBuffers() {
+    this.filter = this.args.filter;
+  }
+
   @action
-  onCancel() {
+  cancel() {
     this.args.onCancel();
   }
 
   @action
-  onSave() {
-    this.args.onSave();
+  save() {
+    this.args.onSave(this.filter);
   }
 
   @action
-  onReset() {
+  reset() {
     this.args.onReset();
   }
 
@@ -23,6 +35,6 @@ export default class PublicationsFilter extends Component {
   toggleFilterOption(event) {
     const tempArr = this.args.filter;
     set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.args.filter = tempArr;
+    this.filter = tempArr;
   }
 }

@@ -118,7 +118,7 @@
           </WebComponents::AuModal::Footer>
         </WebComponents::AuModal>
       {{/if}}
-      <Publications::PublicationsFilter @filter={{this.filterOptionKeys}} @onCancel={{this.onCancel}}
+      <Publications::PublicationsFilterModal @filter={{this.filterOptionKeys}} @onCancel={{this.onCancel}}
         @onReset={{this.onReset}} @onSave={{this.onSave}} @isShown={{this.isShowPublicationFilterModal}} />
       {{outlet}}
     </div>
