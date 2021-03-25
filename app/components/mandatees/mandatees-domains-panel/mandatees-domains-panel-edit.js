@@ -66,6 +66,9 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
     // potential mandatee addition
     if (!this.mandateeUnderEdit) { // if none was existant yet, we expect one to have been added
       this.mandateesBuffer.push(mandateeAndFields.mandatee);
+      if (this.mandateesBuffer.length === 1) { // if this was the first mandatee added, make this one submitter by default
+        this.submitterBuffer = mandateeAndFields.mandatee;
+      }
       // eslint-disable-next-line no-self-assign
       this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
     }
