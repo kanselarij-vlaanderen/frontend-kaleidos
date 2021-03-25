@@ -472,7 +472,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         timeout: 12000,
       }).should('not.exist');
       if (caseTitle) {
-        cy.get('.auk-input').clear()
+        cy.get('.vl-input-field').clear()
           .type(caseTitle, {
             force: true,
           });
