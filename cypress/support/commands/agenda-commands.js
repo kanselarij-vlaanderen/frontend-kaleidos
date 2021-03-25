@@ -495,8 +495,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
-        .click();
+      cy.get(modal.modalFooterSaveButton).click();
     });
 
   cy.wait('@createAgendaActivity', {
