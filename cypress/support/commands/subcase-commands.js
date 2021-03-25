@@ -234,8 +234,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.get(cases.editSubcaseMandatees).click();
   });
 
-  cy.get('.vlc-box a').contains('Minister toevoegen')
-    .click();
+  cy.get(cases.addMandateeToSubcaseMandatees).click();
   cy.get('.mandatee-selector-container').children('.ember-power-select-trigger')
     .click();
   // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
