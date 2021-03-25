@@ -112,6 +112,37 @@ export default Service.extend({
       });
   },
 
+  async newAgendaItems(currentAgendaId, comparedAgendaId) {
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const itemsFromStore = [];
+    for (const item of payload.data) {
+      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      if (!itemFromStore) {
+        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+      }
+      itemsFromStore.push(itemFromStore);
+    }
+    return itemsFromStore;
+  },
+
+  async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
+    // scopefields specify which fields to base upon for determining if an item was modified
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(',')}`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const itemsFromStore = [];
+    for (const item of payload.data) {
+      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      if (!itemFromStore) {
+        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+      }
+      itemsFromStore.push(itemFromStore);
+    }
+    return itemsFromStore;
+  },
+
   async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);

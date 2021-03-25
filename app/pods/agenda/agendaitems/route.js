@@ -42,9 +42,13 @@ export default class AgendaAgendaitemsRoute extends Route {
     });
 
     if (params.showModifiedOnly) {
-      // agendaService.agendaWithChanges is called by parent route
-      const matchingIds = this.agendaService.addedAgendaitems;
-      agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
+      // "modified" here is interpreted as "new item or existing item with changes in its related documents"
+      const previousAgenda = await agenda.previousVersion;
+      if (previousAgenda) {
+        const newItems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
+        const modItems = await this.agendaService.modifiedAgendaItems(agenda.id, previousAgenda.id, ['documents']);
+        agendaitems = agendaitems.filter((item) => [...new Set(newItems.concat(modItems))].includes(item));
+      }
     }
 
     if (params.filter) {
