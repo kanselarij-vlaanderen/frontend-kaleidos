@@ -87,7 +87,7 @@
                       <li class="vlc-dropdown-menu__item">
                         <a href=""
                           data-test-agenda-header-lockAgenda
-                          class="auk-button-link auk-button-link--block vl-u-text--error"
+                          class="auk-button-link auk-button-link--block auk-u-text-error"
                           {{action "openConfirmCloseMeeting"}}
                           {{action attacher.hide}}
                         >
@@ -115,7 +115,7 @@
                   <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                     <a href=""
                       data-test-agenda-header-deleteAgenda
-                      class="auk-button-link vl-u-text--error"
+                      class="auk-button-link auk-u-text-error"
                       {{action "openConfirmDeleteSelectedAgenda"}}
                       {{action attacher.hide}}
                     >
@@ -130,7 +130,7 @@
                     >
                     <a href=""
                         data-test-agenda-header-reopen-previous-version
-                        class="auk-button-link auk-button-link--block vl-u-text--error"
+                        class="auk-button-link auk-button-link--block auk-u-text-error"
                         {{action "openConfirmReopenPreviousAgenda"}}
                         {{action attacher.hide}}
                       >
@@ -291,7 +291,7 @@
                   {{#if currentSession.canReleaseDecisions}}
                     <a href=""
                         data-test-agenda-header-releaseDecisions
-                        class="auk-button-link auk-button-link--block vl-u-text--error"
+                        class="auk-button-link auk-button-link--block auk-u-text-error"
                       {{action "releaseDecisions"}}
                       {{action attacher.hide}}
                     >
@@ -300,7 +300,7 @@
                   {{else if currentSession.canReleaseDocuments}}
                     <a href=""
                         data-test-agenda-header-releaseDocuments
-                        class="auk-button-link auk-button-link--block vl-u-text--error"
+                        class="auk-button-link auk-button-link--block auk-u-text-error"
                       {{action "releaseDocuments"}}
                       {{action attacher.hide}}
                     >

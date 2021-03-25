@@ -184,7 +184,7 @@ context('Add files to an agenda', () => { // At the meeting-level
         cy.get('.ki-more').click();
       });
     cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.vl-u-text--error').contains('Document verwijderen')
+      cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
     cy.route('DELETE', 'files/*').as('deleteFile');

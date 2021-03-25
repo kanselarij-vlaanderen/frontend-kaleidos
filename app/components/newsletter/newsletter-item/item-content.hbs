@@ -72,7 +72,7 @@
 </div>
 {{#if allowEditing}}
   {{#if (await newsletterInfo.remark)}}
-    <p class="auk-u-muted vl-u-text--capitalize vl-u-text--small">
+    <p class="auk-u-muted auk-u-text-capitalize auk-u-text-small">
       {{t "remark"}}: {{await newsletterInfo.remark}}
     </p>
   {{/if}}
@@ -94,7 +94,7 @@
   </div>
 {{else if (and allowEditing newsletterInfo.richtext)}}
   <div class="auk-u-mb-2">
-    <p class="auk-u-muted vl-u-text--capitalize">
+    <p class="auk-u-muted auk-u-text-capitalize">
       {{t "no-themes-agendaitem"}}
     </p>
   </div>

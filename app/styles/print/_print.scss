@@ -17,10 +17,6 @@
     height: auto !important;
   }
 
-  .vl-u-spacer-extended-l {
-    margin: 1rem !important;
-  }
-
   // Hide top nav and side nav
   #c-main-nav {
     display: none;
@@ -31,7 +27,6 @@
   }
 
   // Remove backgrounds
-  .vl-u-bg-alt,
   .vlc-navbar--bg-alt,
   .auk-u-bg-alt {
     background: #fff;

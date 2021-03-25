@@ -135,3 +135,25 @@
 .auk-table--interaction-cursor {
   cursor: pointer;
 }
+
+
+/* Utilities
+   ========================================================================== */
+
+.auk-u-text-uppercase {
+  text-transform: uppercase;
+}
+
+.auk-u-text-capitalize {
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.auk-u-text-success {
+  color: $success-text-color;
+}
+
+.auk-u-text-error {
+  color: $error-text-color;
+}

@@ -136,7 +136,7 @@ context('Add files to an agenda', () => {
 
     // Delete the document-container + all pieces
     cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.vl-u-text--error').contains('Document verwijderen')
+      cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
     cy.get(modal.modal).within(() => {
