@@ -7,6 +7,7 @@ export default class AgendaOverview extends AgendaSidebar {
   /**
    * @argument notas
    * @argument announcements
+   * @argument newItems: items to be marked as "new on this agenda"
    * @argument currentAgenda
    * @argument previousAgenda
    */

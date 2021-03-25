@@ -10,6 +10,7 @@ export default class AgendaAgendaitemsAgendaitemController extends Controller {
   @tracked agenda;
   @tracked notas;
   @tracked announcements;
+  @tracked newItems;
 
   @controller('agenda.agendaitems') agendaitemsController;
 

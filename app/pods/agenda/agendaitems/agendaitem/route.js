@@ -26,10 +26,12 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     const {
       notas,
       announcements,
+      newItems,
     } = this.modelFor('agenda.agendaitems');
     controller.meeting = meeting;
     controller.agenda = agenda;
     controller.notas = notas;
     controller.announcements = announcements;
+    controller.newItems = newItems;
   }
 }

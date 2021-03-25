@@ -41,11 +41,17 @@ export default class AgendaAgendaitemsRoute extends Route {
       sort: 'show-as-remark,priority',
     });
 
+    const previousAgenda = await agenda.previousVersion;
+    let newItems;
+    if (previousAgenda) {
+      newItems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
+    } else {
+      newItems = agendaitems;
+    }
+
     if (params.showModifiedOnly) {
       // "modified" here is interpreted as "new item or existing item with changes in its related documents"
-      const previousAgenda = await agenda.previousVersion;
       if (previousAgenda) {
-        const newItems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
         const modItems = await this.agendaService.modifiedAgendaItems(agenda.id, previousAgenda.id, ['documents']);
         agendaitems = agendaitems.filter((item) => [...new Set(newItems.concat(modItems))].includes(item));
       }
@@ -63,10 +69,13 @@ export default class AgendaAgendaitemsRoute extends Route {
 
     const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    const filteredNewItems = newItems.filter((agendaitem) => agendaitems.includes(agendaitem));
 
+    this.previousAgenda = previousAgenda; // for use in setupController
     return hash({
       notas,
       announcements,
+      newItems: filteredNewItems,
     });
   }
 
@@ -78,7 +87,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     } = this.modelFor('agenda');
     controller.meeting = meeting;
     controller.agenda = agenda;
-    controller.previousAgenda = await agenda.previousVersion;
+    controller.previousAgenda = this.previousAgenda;
   }
 
   @action

@@ -15,6 +15,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    * @argument agendaitem
    * @argument currentAgenda: both agenda's for determining changed documents
    * @argument previousAgenda
+   * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isEditingFormallyOkStatus
    * @argument showDragHandle: whether to show the drag-handle for changing item order
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status

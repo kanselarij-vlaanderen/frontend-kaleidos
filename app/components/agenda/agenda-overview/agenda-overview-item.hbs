@@ -181,7 +181,7 @@
                   </EmberTooltip>
                 </i>
               {{/if}}
-              {{#if (await @agendaitem.checkAdded)}}
+              {{#if @isNew}}
                 <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>

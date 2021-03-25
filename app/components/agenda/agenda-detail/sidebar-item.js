@@ -12,6 +12,7 @@ import {
 export default class SidebarItem extends Component {
   /**
    * @argument agendaitem
+   * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
    * @argument isActive: boolean indicating if the component should be highlighted as the active item
    * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */

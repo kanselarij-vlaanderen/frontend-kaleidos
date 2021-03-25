@@ -44,7 +44,7 @@
 
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              {{#if (await @agendaitem.checkAdded)}}
+              {{#if @isNew}}
                 <span class="added-tag vlc-agenda-meta__recently-added">
                   <i class="ki-calendar-plus"></i>
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">

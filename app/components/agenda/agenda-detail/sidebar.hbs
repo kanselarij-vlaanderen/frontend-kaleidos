@@ -29,6 +29,7 @@
           class="vlc-agenda-detail-sidebar__sub-item">
           <Agenda::AgendaDetail::SidebarItem
             @agendaitem={{agendaitem}}
+            @isNew={{includes agendaitem @newItems}}
             @isActive={{eq @activeItem agendaitem}}
             @showFormallyOkStatus={{this.isDesignAgenda}}
           />

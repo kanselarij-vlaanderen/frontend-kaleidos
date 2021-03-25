@@ -35,10 +35,12 @@ export default class AgendaItemsAgendaRoute extends Route {
     const parentModel = this.modelFor('agenda.agendaitems');
     const notas = agendaitems.filter((item) => parentModel.notas.includes(item));
     const announcements = agendaitems.filter((item) => parentModel.announcements.includes(item));
+    const newItems = agendaitems.filter((item) => parentModel.newItems.includes(item));
 
     return hash({
       notas,
       announcements,
+      newItems,
     });
   }
 
