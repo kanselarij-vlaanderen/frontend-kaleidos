@@ -28,6 +28,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
         }
         governmentFields = [...new Set(governmentFields)]; // Uniquify
         this.governmentFields = governmentFields;
+
+        this.submitter = await this.subcase.requestedBy;
       }
     }
     const agendaItemTreatment = await model.treatments;
@@ -44,5 +46,6 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.subcase = this.subcase;
     controller.governmentFields = this.governmentFields;
     controller.newsletterInfo = this.newsletterInfo;
+    controller.submitter = this.submitter;
   }
 }

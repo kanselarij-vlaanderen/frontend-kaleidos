@@ -14,6 +14,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked agenda;
   @tracked subcase;
   @tracked governmentFields;
+  @tracked submitter;
   @tracked newsletterInfo;
 
   @tracked isEditingAgendaItemTitles = false;
@@ -66,6 +67,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       iseCodes: correspondingIseCodes,
     };
     this.governmentFields = mandateeData.fields;
+    this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }

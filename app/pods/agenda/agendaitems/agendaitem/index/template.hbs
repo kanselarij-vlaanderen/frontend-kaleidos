@@ -51,10 +51,9 @@
   />
 {{else}}
   {{#if this.subcase}}
-  {{!-- TODO: get rid of the submitter await. It doesn't update properly --}}
     <Mandatees::MandateesDomainsPanel
       @mandatees={{this.model.mandatees}}
-      @submitter={{await this.subcase.requestedBy}}
+      @submitter={{this.submitter}}
       @fields={{this.governmentFields}}
       @allowEditing={{true}}
       @onSave={{this.saveMandateeData}}
