@@ -64,7 +64,7 @@
             {{#if (await model)}}
               {{#data-table
                 content=(await model)
-                class="auk-table auk-table--striped vl-data-table--no-scroll"
+                class="auk-table auk-table--striped auk-table--no-scroll"
                 page=page
                 size=size
                 sort=sort
@@ -76,36 +76,36 @@
                 {{#table.content as |c|}}
                   {{#c.header}}
                     {{th-sortable
-                      class="auk-table__col--3 vl-data-table__header-title"
+                      class="auk-table__col--3 auk-table__header-title"
                       currentSorting=sort
                       field="planned-start,number-representation"
                       label=(t "agenda")
                     }}
                     {{th-sortable
-                      class="auk-table__col--2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       field="agendas"
                       label=(t "agenda-version")
                     }}
                     <th
-                      class="auk-table__col--2 vl-data-table__header-title table-header-unsortable"
+                      class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
                     >
                       {{t "latest-modified"}}
                     </th>
                     {{th-sortable
-                      class="auk-table__col--2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       currentSorting=sort
                       field="is-final"
                       label=(t "status")
                     }}
                     {{th-sortable
-                      class="auk-table__col--2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       currentSorting=sort
                       field="kind"
                       label=(t "kind")
                     }}
                     <th class="auk-table__col--1"></th>
                   {{/c.header}}
-                  {{#c.body class="tr-hover" as |meeting|}}
+                  {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
                     {{#if (not meeting.alreadyShown)}}
                       <td>
                         {{t "agenda-for"}}

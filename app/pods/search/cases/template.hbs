@@ -39,24 +39,24 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--8 vl-data-table__header-title">
+              <th class="auk-table__col--8 auk-table__header-title">
                 {{t "case-name"}}
               </th>
               <ThSortable
-                @class="auk-table__col--2 vl-data-table__header-title"
+                @class="auk-table__col--2 auk-table__header-title"
                 @currentSorting={{this.sort}}
                 @field="created"
                 @label={{t "created-on"}}
               />
               <ThSortable
-                @class="auk-table__col--1 vl-data-table__header-title"
+                @class="auk-table__col--1 auk-table__header-title"
                 @currentSorting={{this.sort}}
                 @field="sessionDates"
                 @label={{t "on-agenda-of"}}
               />
               <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body class="tr-hover" as |row|>
+            <c.body class="auk-table--interaction-cursor" as |row|>
               <td>
                 <p>
                   {{#if row.shortTitle}}

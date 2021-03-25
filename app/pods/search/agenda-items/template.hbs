@@ -43,24 +43,24 @@
         >
           <table.content as |c|>
             <c.header>
-              <th class="auk-table__col--7 vl-data-table__header-title">
+              <th class="auk-table__col--7 auk-table__header-title">
                 {{t "agendaitem-table-header"}}
               </th>
-              <th class="auk-table__col--1 vl-data-table__header-title">
+              <th class="auk-table__col--1 auk-table__header-title">
                 {{t "agendaitem-type"}}
               </th>
-              <th class="auk-table__col--1 vl-data-table__header-title">
+              <th class="auk-table__col--1 auk-table__header-title">
                 {{t "agenda-version"}}
               </th>
               <ThSortable
-                @class="auk-table__col--1 vl-data-table__header-title"
+                @class="auk-table__col--1 auk-table__header-title"
                 @currentSorting={{this.sort}}
                 @field="sessionDates"
                 @label={{t "on-agenda-of"}}
               />
               <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body class="tr-hover" as |row|>
+            <c.body class="auk-table--interaction-cursor" as |row|>
               <td>
                 <p>
                   {{#if row.shortTitle}}

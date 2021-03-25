@@ -46,30 +46,30 @@
       {{#table.content as |c|}}
         {{#c.header}}
           {{th-sortable
-            class="auk-table__col--3 vl-data-table__header-title"
+            class="auk-table__col--3 auk-table__header-title"
             currentSorting=sort
             field="first-name"
             label=(t "first-name")
           }}
           {{th-sortable
-            class="auk-table__col--2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="last-name"
             label=(t "last-name")
           }}
           <th
-                  class="auk-table__col--2 vl-data-table__header-title table-header-unsortable"
+                  class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             {{t "email"}}
           </th>
           {{th-sortable
-            class="auk-table__col--2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="organization.identifier"
             label=(t "ovo-code")
           }}
           {{th-sortable
-            class="auk-table__col--2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="group.name"
             label=(t "group")

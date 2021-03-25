@@ -11,18 +11,18 @@
     {{#if isLoading}}
       <WebComponents::VlLoader @text={{t "please-be-patient"}} />
     {{else}}
-      <table class="auk-table tr-hover auk-table--striped">
+      <table class="auk-table auk-table--striped">
         <thead>
           <tr>
-            <th class="auk-table__col--9 vl-data-table__header-title">
+            <th class="auk-table__col--9 auk-table__header-title">
               {{t "case-name"}}
             </th>
-            <th class="auk-table__col--2 vl-data-table__header-title">
+            <th class="auk-table__col--2 auk-table__header-title">
               {{t "created-on"}}
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="auk-table--interaction-cursor">
           {{#each (await results) as |row|}}
             <tr>
               <td onclick={{action "selectCase" row}}>

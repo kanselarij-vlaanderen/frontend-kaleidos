@@ -30,18 +30,18 @@
     }}
       {{#table.content as |c|}}
         {{#c.header}}
-          <th class="auk-table__col--9 vl-data-table__header-title">
+          <th class="auk-table__col--9 auk-table__header-title">
             {{t "case-name"}}
           </th>
           {{th-sortable
-            class="auk-table__col--1 vl-data-table__header-title"
+            class="auk-table__col--1 auk-table__header-title"
             currentSorting=this.sort
             field="created"
             label=(t "created-on")
           }}
           <th class="auk-table__col--1"></th>
         {{/c.header}}
-        {{#c.body class="tr-hover" as |row|}}
+        {{#c.body class="auk-table--interaction-cursor" as |row|}}
           <td onclick={{action "navigateToCase" row}}>
             <p>
               {{#if row.shortTitle}}

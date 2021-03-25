@@ -19,22 +19,22 @@
           {{#table.content as |c|}}
             {{#c.header}}
               {{th-sortable
-                class="auk-table__col--5 vl-data-table__header-title"
+                class="auk-table__col--5 auk-table__header-title"
                 currentSorting=sort
                 field="planned-start,number-representation"
                 label=(t "newsletter")
               }}
-              <th class="auk-table__col--3 vl-data-table__header-title table-header-unsortable">
+              <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
                 {{!TODO: should sort on field agendas but does not return all 10 results }}
                 {{concat (t "newsletter") " " (t "sent-at")}}
               </th>
-              <th class="auk-table__col--3 vl-data-table__header-title table-header-unsortable">
+              <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
                 {{!TODO: should sort on latest modified agenda }}
                 {{t "latest-modified"}}
               </th>
               <th class="auk-table__col--1"></th>
             {{/c.header}}
-            {{#c.body class="tr-hover" as |meeting|}}
+            {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
               <td>
                 {{#if (is-pending meeting)}}
                   <div

@@ -1,13 +1,13 @@
 {{#light-table
   table
-  tableClassNames="auk-table auk-table vl-data-table--hover auk-table--striped"
+  tableClassNames="auk-table auk-table auk-table--hover auk-table--striped"
 as |tab|
 }}
   {{tab.head
     onColumnClick=(action "onColumnClick")
-    iconSortable="vl-data-table__header-title__sort-icon ki-expand-vertical"
-    iconAscending="vl-data-table__header-title__sort-icon ki-arrow-down"
-    iconDescending="vl-data-table__header-title__sort-icon ki-arrow-up"
+    iconSortable="auk-table__header-title__sort-icon ki-expand-vertical"
+    iconAscending="auk-table__header-title__sort-icon ki-arrow-down"
+    iconDescending="auk-table__header-title__sort-icon ki-arrow-up"
   }}
   {{#tab.body
     canExpand=true
