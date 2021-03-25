@@ -28,14 +28,14 @@
     />
   {{/if}}
   <Mandatees::MandateesDomainsPanel
-    @mandatees={{this.subcase.mandatees}}
-    @submitter={{await this.subcase.requestedBy}}
+    @mandatees={{this.mandatees}}
+    @submitter={{this.submitter}}
     @fields={{this.governmentFields}}
     @allowEditing={{true}}
     @onSave={{this.saveMandateeData}}
   />
   {{#unless this.subcase.showAsRemark}}
-    <DomainFieldIse::IseCodesPanel @iseCodes={{this.subcase.iseCodes}}/>
+    <DomainFieldIse::IseCodesPanel @iseCodes={{this.iseCodes}}/>
   {{/unless}}
   <Agenda::Agendaitem::AgendaitemCase::AllSubcases @subcases={{this.allSubcases}}/>
 {{/if}}

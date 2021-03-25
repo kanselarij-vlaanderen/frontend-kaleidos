@@ -10,7 +10,10 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
 
   @alias('model') subcase;
   @tracked allSubcases;
+  @tracked mandatees;
+  @tracked submitter;
   @tracked governmentFields;
+  @tracked iseCodes;
 
   @tracked isEditingTitles = false;
 
@@ -47,7 +50,9 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
       requestedBy: mandateeData.submitter,
       iseCodes: correspondingIseCodes,
     };
-    this.governmentFields = mandateeData.fields;
+    this.mandatees = mandateeData.mandatees;
+    this.submitter = mandateeData.submitter;
+    this.iseCodes = correspondingIseCodes;
     await saveChanges(this.subcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
   }
 }

@@ -23,11 +23,17 @@ export default class CasesCaseSubcasesSubcaseOverviewRoute extends Route {
     }
     governmentFields = [...new Set(governmentFields)]; // Uniquify
     this.governmentFields = governmentFields;
+    this.mandatees = (await model.mandatees).sortBy('priority');
+    this.submitter = await model.requestedBy;
+    this.iseCodes = await model.iseCodes;
   }
 
   async setupController(controller) {
     super.setupController(...arguments);
     controller.allSubcases = this.allSubcases;
     controller.governmentFields = this.governmentFields;
+    controller.mandatees = this.mandatees;
+    controller.submitter = this.submitter;
+    controller.iseCodes = this.iseCodes;
   }
 }
