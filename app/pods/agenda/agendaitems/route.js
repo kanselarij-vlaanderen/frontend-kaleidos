@@ -19,15 +19,12 @@ export default class AgendaAgendaitemsRoute extends Route {
   @service sessionService;
   @service agendaService;
 
-  async model(params, transition) {
+  async model(params) {
     const {
       agenda,
       meeting,
     } = this.modelFor('agenda');
-    console.log(params);
-    if (transition.from) {
-      console.log('From transition', transition.from);
-    }
+    // Could be optimized not to make below query again when only query params changed
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       include: [
