@@ -37,6 +37,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     if (anyTreatment) {
       this.newsletterInfo = await anyTreatment.newsletterInfo;
     }
+    this.mandatees = (await model.mandatees).sortBy('priority');
   }
 
   async setupController(controller) {
@@ -47,6 +48,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.governmentFields = this.governmentFields;
     controller.iseCodes = this.iseCodes;
     controller.newsletterInfo = this.newsletterInfo;
+    controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
   }
 }
