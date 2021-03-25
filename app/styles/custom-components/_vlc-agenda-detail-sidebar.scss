@@ -26,19 +26,10 @@
   border-bottom: 0.01rem solid $ghost;
 }
 
-.vl-u-text-color-agenda-list {
-  color: $mine-shaft;
-}
-
 .vlc-agenda-detail-sidebar__sub-item a {
   &:hover,
   &:focus {
     background: $blue-gray-lighter;
-    color: $blue-dark;
-
-    span {
-      color: $blue-dark;
-    }
 
     .auk-badge--default {
       background-color: $blue-gray-lightest;
@@ -86,6 +77,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:focus {
   justify-content: flex-start;
   font-size: 1.4rem;
   line-height: 130%;
+  color: $text-color;
 }
 
 .vlc-agenda-detail-sidebar__text-container {
