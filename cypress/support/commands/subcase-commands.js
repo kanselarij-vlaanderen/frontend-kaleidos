@@ -5,6 +5,7 @@
 // Commands
 
 import cases from '../../selectors/case.selectors';
+import modal from '../../selectors/modal.selectors';
 
 // ***********************************************
 // Functions
@@ -280,9 +281,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
           .click();
       });
   }
-  cy.get('.vlc-toolbar').within(() => {
-    cy.contains('Toevoegen').click();
-  });
+  cy.get(modal.modalFooterSaveButton).click();
   cy.get('@subcaseMandatees').within(() => {
     cy.get('.vlc-toolbar')
       .contains('Opslaan')
