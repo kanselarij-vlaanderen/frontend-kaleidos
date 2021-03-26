@@ -12,7 +12,7 @@
             <WebComponents::AuButton
               @skin="tertiary"
               @icon="settings"
-              data-test-subcase-mandatees-edit
+              data-test-mandatee-panel-view-edit
               {{on "click" @onClickEdit}}
             >
               {{t "edit-2"}}
@@ -35,8 +35,8 @@
         </thead>
         <tbody>
           {{#each @mandatees as |mandatee|}}
-            <tr data-test-mandatee-link-list-item >
-              <td class="auk-table__col--4">
+            <tr data-test-mandatee-panel-view-mandatee-row>
+              <td class="auk-table__col--4" data-test-mandatee-panel-view-row-name>
                 <div class="auk-u-flex auk-u-flex--vertical-center">
                   <WebComponents::AuBadge @icon="user"/>
                   <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
@@ -48,7 +48,7 @@
               as |mandateeDomainsFields|>
                 {{!-- TODO: the design here currently isn't entirely adapted to the content.
                 Only one collumn for domains as well as fields seems off --}}
-                <td>
+                <td data-test-mandatee-panel-view-row-domains>
                   {{#if mandateeDomainsFields.domains.length}}
                     {{#each mandateeDomainsFields.domains as |domain|}}
                       {{domain.label}}:
@@ -61,7 +61,7 @@
                   {{/if}}
                 </td>
               </Mandatees::DomainsFieldsForMandatee>
-              <td>
+              <td data-test-mandatee-panel-view-row-submitter>
                 {{#if (eq mandatee @submitter)}}
                   <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
                 {{else}}

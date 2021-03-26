@@ -21,8 +21,8 @@
         </thead>
         <tbody>
           {{#each this.mandateesBuffer as |mandatee|}}
-            <tr data-test-mandatees-edit-row>
-              <td>
+            <tr data-test-mandatee-panel-edit-mandatee-row>
+              <td data-test-mandatee-panel-edit-row-name>
                 {{mandatee.person.nameToDisplay}}
               </td>
               <Mandatees::DomainsFieldsForMandatee
@@ -31,7 +31,7 @@
               as |mandateeDomainsFields|>
                 <td>
                   {{#if mandateeDomainsFields.domains.length}}
-                    <ul>
+                    <ul data-test-mandatee-panel-edit-row-domains>
                       {{#each mandateeDomainsFields.domains as |domain|}}
                         <li>{{domain.label}}</li>
                       {{/each}}
@@ -42,7 +42,7 @@
                 </td>
                 <td>
                   {{#if mandateeDomainsFields.fields.length}}
-                    <ul data-test-agendaitem-mandatees-fields-list>
+                    <ul data-test-mandatee-panel-edit-row-fields>
                       {{#each mandateeDomainsFields.fields as |field|}}
                         <li>{{field.label}}</li>
                       {{/each}}
@@ -52,7 +52,7 @@
                   {{/if}}
                 </td>
               </Mandatees::DomainsFieldsForMandatee>
-              <td data-test-mandatees-edit-row-submitter>
+              <td data-test-mandatee-panel-edit-row-submitter>
                 <WebComponents::VlToggle
                   @value={{eq mandatee this.submitterBuffer}}
                   @valueChanged={{fn this.toggleIsSubmitter mandatee}}
@@ -62,6 +62,7 @@
                 {{!-- TODO: disable button on load --}}
                 {{!-- TODO: modify mandatee domains picker --}}
                 <button
+                  data-test-mandatee-panel-edit-row-edit
                   type="button"
                   class="vl-button vl-button--link vl-button--icon"
                   {{on "click" (fn this.startEditingMandatee mandatee)}}
@@ -72,7 +73,7 @@
                   </span>
                 </button>
                 <button
-                  data-test-mandatees-edit-row-delete
+                  data-test-mandatee-panel-edit-row-delete
                   type="button"
                   class="vl-button vl-button--link vl-button--icon"
                   {{on "click" (fn this.removeMandatee mandatee)}}
@@ -92,7 +93,7 @@
   <div class="vlc-toolbar vlc-toolbar--auto">
     <div class="vlc-toolbar__left">
       <a
-        data-test-subcase-mandatees-add-mandatee
+        data-test-mandatee-panel-edit-add-mandatee
         href="javascript://"
         class="vl-button vl-button--tertiary vl-button--icon-before"
         {{on "click" this.startCreatingMandatee}}
@@ -107,7 +108,7 @@
     <div class="vlc-toolbar__right">
       <div class="vl-action-group vl-action-group--align-right">
         <a
-          data-test-subcase-mandatees-edit-cancel
+          data-test-mandatee-panel-edit-cancel
           href="javascript://"
           class="vl-button vl-button--tertiary"
           {{on "click" @onCancel}}
@@ -115,7 +116,7 @@
           {{t "cancel"}}
         </a>
         <WebComponents::VlSaveButton
-          test-data-vl-save-button={{true}}
+          data-test-mandatee-panel-edit-save={{true}}
           @text={{t "save"}}
           @isLoading={{this.save.isRunning}}
           @saveAction={{perform this.save}}

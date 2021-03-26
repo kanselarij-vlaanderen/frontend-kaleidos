@@ -50,6 +50,7 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
       requestedBy: mandateeData.submitter,
       iseCodes: correspondingIseCodes,
     };
+    this.governmentFields = mandateeData.fields;
     this.mandatees = mandateeData.mandatees;
     this.submitter = mandateeData.submitter;
     this.iseCodes = correspondingIseCodes;

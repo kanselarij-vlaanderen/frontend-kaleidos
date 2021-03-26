@@ -40,11 +40,11 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
+    cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
     cy.get(settings.addMinister).should('exist')
       .should('be.visible')
       .click();
-    cy.wait('@getIseCodes', {
+    cy.wait('@getGovernmentFieldDomains', {
       timeout: 30000,
     });
     cy.get(mandatee.addMandateeTitleContainer).should('exist')

@@ -42,7 +42,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async setupController(controller) {
     super.setupController(...arguments);
-    controller.agenda = this.modelFor('agenda');
+    // modelFor('agenda') contains agenda and meeting object.
+    controller.agenda = this.modelFor('agenda').agenda;
     controller.agendaActivity = this.agendaActivity;
     controller.subcase = this.subcase;
     controller.governmentFields = this.governmentFields;
