@@ -1,57 +1,63 @@
 <div class="vl-uploaded-document__title">
-  <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt">
-    <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
+  <div class="auk-badge auk-badge--medium auk-badge--default">
+    <div class="auk-icon auk-icon--default">
+      <i class="ki ki-document"></i>
+    </div>
   </div>
   <div class="vl-uploaded-document__title-container">
     <div class="title">
-      <h6 class="vl-title vl-title--h6"
+      <h6 class="auk-h4 auk-u-m-0"
         data-test-vl-uploaded-document-filename>
         {{name}}
       </h6>
       {{#if view}}
-        <button type="button" class="vl-button vl-button--link vl-button--icon"
+        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "view"}}
         >
-          <i class="ki-book vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-book"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "show-piece"}}
-          </span>
+          </div>
         </button>
       {{/if}}
       {{#if download}}
-        <button type="button" class="vl-button vl-button--^link vl-button--icon"
+        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "download"}}
         >
-          <i class="ki-download vl-button__icon"
-             aria-hidden="true"
-          ></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-download"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </button>
       {{else if downloadLink}}
-        <a class="vl-button vl-button--link vl-button--icon"
-           href={{downloadLink}}
-           download={{if downloadName downloadName name}}
+        <a class="auk-button auk-button--borderless auk-button--icon"
+          href={{downloadLink}}
+          download={{if downloadName downloadName name}}
         >
-          <i class="ki-download vl-button__icon"
-             aria-hidden="true"
-          ></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-download"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "download"}}
-          </span>
+          </div>
         </a>
       {{/if}}
       {{#if delete}}
         <button type="button"
-                data-test-vl-uploaded-document-deletepiece
-                class="vl-button vl-button--link vl-button--icon"
+          data-test-vl-uploaded-document-deletepiece
+          class="auk-button auk-button--borderless auk-button--icon"
           {{action "delete"}}
         >
-          <i class="ki-delete vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-delete"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "delete"}}
-          </span>
+          </div>
         </button>
       {{/if}}
     </div>

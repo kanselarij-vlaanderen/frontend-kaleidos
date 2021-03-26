@@ -12,7 +12,7 @@
         <a
           data-test-subcase-titles-edit
           href=""
-          class="vl-link"
+          class="auk-button-link"
           {{action "toggleIsEditingAction"}}
         >
           {{t "edit"}}
@@ -23,8 +23,8 @@
 </div>
 
 <div class="auk-u-mb-2">
-  <h4 class="vl-title vl-title--h4">
-    <pre>
+  <h4 class="auk-h3">
+    <pre class="auk-u-text-pre-line">
       {{await subcase.shortTitle}}
     </pre>
   </h4>
@@ -51,11 +51,9 @@
     data-test-agenda-subcasehidden-pill
   >
     {{#if (await subcase.confidential)}}
-      <i class="vlc-pill vl-icon vlc-pill--error ki-lock-closed"></i>
+      <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
     {{else}}
-      <i
-        class="vlc-pill auk-u-mr-2 vl-icon vlc-pill--success ki-lock-open"
-      ></i>
+      <WebComponents::AuPill @skin="success" @layout="icon-only" @icon="lock-open"/>
     {{/if}}
   </div>
 </div>

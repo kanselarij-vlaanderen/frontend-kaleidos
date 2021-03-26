@@ -16,8 +16,8 @@ const selectors = {
   navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
-  dataTable: '.vl-data-table',
-  dataTableZebra: '.vl-data-table--zebra',
+  dataTable: '.auk-table',
+  dataTableZebra: '.auk-table--striped',
   toProcedureStapLink: '.vlc-panel-layout__main-content a',
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   agendaitemControlsActions: '[data-test-agendaitem-controls-actions]',
@@ -30,8 +30,8 @@ const selectors = {
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },
   item: {
-    checkBoxLabel: 'label.vl-checkbox--switch__label',
-    actionButton: '.vl-action-group button',
+    checkBoxLabel: 'label.vl-toggle__label',
+    actionButton: '.auk-toolbar-complex__item button',
     themes: '[data-test-agenda-news-item-themes]',
     news: {
       editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',

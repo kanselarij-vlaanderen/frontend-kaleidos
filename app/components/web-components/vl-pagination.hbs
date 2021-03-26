@@ -1,41 +1,27 @@
-<div class="vl-pager vl-pager--align-center">
-  <ul class="vl-pager__list">
-    <li class="vl-pager__element">
-      <span class="vl-u-visually-hidden">
-        {{t "row"}}
-      </span>
-      <strong>
-        {{startItem}}
-        -
-        {{endItem}}
-      </strong>
-      {{t "of"}}
-      {{totalNbOfItems}}
+<div class="auk-pagination">
+  <ul class="auk-pagination__list">
+    <li class="auk-pagination__element">
+      <p><strong>{{startItem}}-{{endItem}}</strong> {{t "of"}} {{totalNbOfItems}}</p>
     </li>
     {{#if hasMultiplePages}}
-      <li class="vl-pager__element">
-        <a href="" class="vl-pager__element__cta vl-link vl-link--bold {{disabledPrev}}"
+      <li class="auk-pagination__element">
+        <WebComponents::AuButtonLink
+          @icon="chevron-left"
+          disabled={{disabledPrev}}
           {{action "prevPage"}}
         >
-          <i class="vl-link__icon vl-link__icon--before ki-chevron-left"
-             aria-hidden="true"
-          ></i>
           {{t "previous"}}
-          <span class="vl-u-visually-hidden">
-          </span>
-        </a>
+        </WebComponents::AuButtonLink>
       </li>
-      <li class="vl-pager__element">
-        <a href="" class="vl-pager__element__cta vl-link vl-link--bold {{disabledNext}}"
+      <li class="auk-pagination__element">
+        <WebComponents::AuButtonLink
+          @icon="chevron-right"
+          @layout="icon-right"
+          disabled={{disabledNext}}
           {{action "nextPage"}}
         >
           {{t "next"}}
-          <span class="vl-u-visually-hidden">
-          </span>
-          <i class="vl-link__icon vl-link__icon--after ki-chevron-right"
-             aria-hidden="true"
-          ></i>
-        </a>
+        </WebComponents::AuButtonLink>
       </li>
     {{/if}}
   </ul>

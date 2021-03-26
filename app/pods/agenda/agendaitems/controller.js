@@ -50,7 +50,7 @@ export default class AgendaitemsAgendaController extends Controller {
     if (this.routing.currentRouteName.startsWith('agenda.agendaitems.agendaitem')) {
       return 'vlc-panel-layout__agenda-items';
     }
-    return 'vlc-panel-layout-agenda__detail vl-u-bg-porcelain';
+    return 'vlc-panel-layout-agenda__detail auk-u-bg-alt';
   }
 
   get isOverviewWindow() {

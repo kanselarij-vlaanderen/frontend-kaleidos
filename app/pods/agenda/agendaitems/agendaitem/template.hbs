@@ -2,12 +2,10 @@
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     <div class="vlc-scroll-wrapper__header">
       <div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--tabs vlc-navbar--tabs-bottom">
-        <div class="vl-tabs__wrapper">
-          <Agenda::Agendaitem::AgendaitemNav
-            @agendaitem={{this.model}}
-            @meetingIsConcluded={{this.meeting.isFinal}}
-          />
-        </div>
+        <Agenda::Agendaitem::AgendaitemNav
+          @agendaitem={{this.model}}
+          @meetingIsConcluded={{this.meeting.isFinal}}
+        />
       </div>
     </div>
     <div class="vlc-scroll-wrapper__body">

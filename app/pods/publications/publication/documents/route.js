@@ -1,4 +1,3 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { A } from '@ember/array';
@@ -6,7 +5,7 @@ import {
   set, action
 } from '@ember/object';
 
-export default class PublicationDocumentsRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class PublicationDocumentsRoute extends Route {
   async model() {
     const parentHash = this.modelFor('publications.publication');
     const publicationFlow = parentHash.publicationFlow;

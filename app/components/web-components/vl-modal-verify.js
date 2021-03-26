@@ -24,13 +24,11 @@ export default Component.extend({
     return this.buttonType !== 'warning';
   }),
 
-  buttonClass: computed('buttonType', function() {
-    if (this.buttonType === 'warning') {
-      return 'vl-button';
-    } if (this.buttonType === 'danger') {
-      return 'vl-button vl-button--error';
+  buttonSkin: computed('buttonType', function() {
+    if (this.buttonType === 'danger') {
+      return 'danger-primary';
     }
-    return null;
+    return 'primary';
   }),
 
   keyDown(event) {

@@ -1,12 +1,13 @@
 <div class="auk-u-mr-2">
-  <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper"
-  >
-    <i class="vl-badge__icon ki-user" aria-hidden="true"></i>
+  <div class="auk-badge auk-badge--default auk-badge--medium">
+    <div class="auk-icon auk-icon--default">
+      <i class="ki ki-user"></i>
+    </div>
   </div>
 </div>
 <div>
   <div class="vlc-minister-item__title">
-    <h6 class="vl-title vl-title--h6">
+    <h6 class="auk-h4 auk-u-m-0">
       <p>
         {{await titleToShow}}
         {{if submitter (t "submitted-by") }}
@@ -15,18 +16,19 @@
   </div>
   {{#if (gt fields.length 0)}}
     <div class="js-vl-accordion js-vl-accordion--open" data-test-mandatee-link-fields-show>
-      <button type="button" class="vl-toggle vl-link vl-link--bold"
+      <WebComponents::AuButton
+        @skin="borderless"
+        @icon={{if this.showDetails "chevron-down" "chevron-right"}}
+        data-vl-accordion-toggle=""
+        data-vl-accordion-dressed="true"
         {{action "toggleShowDetails"}}
       >
-        <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-           aria-hidden="true"
-        ></i>
         {{t "collapse"}}
-      </button>
+      </WebComponents::AuButton>
       {{#if showDetails}}
         <div class="vl-accordion__content js-vl-accordion__content">
           <div class="vl-accordion__panel">
-            <div class="vl-typography">
+            <div class="auk-content">
               <ul>
                 {{#each fields as |field|}}
                   <li>

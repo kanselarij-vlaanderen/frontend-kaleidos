@@ -811,5 +811,7 @@
   "reset": "Reset",
   "to-case": "Naar dossier",
   "submission-activity": "Indieningsactiviteit",
-  "config": "Instelling"
+  "config": "Instelling",
+  "type": "Type",
+  "archive": "Archief"
 }

@@ -120,10 +120,10 @@ context('Subcase tests', () => {
     cy.addSubcase(type, shortSubcaseTitle, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(agendaDate);
-    cy.get('.vl-button--icon-before')
+    cy.get('.auk-button')
       .contains('Acties')
       .click();
-    cy.get('.vlc-dropdown-menu__item > .vl-link')
+    cy.get('.vlc-dropdown-menu__item > .auk-button-link')
       .contains('Procedurestap verwijderen')
       .should('not.exist');
   });

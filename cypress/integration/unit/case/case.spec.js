@@ -51,7 +51,7 @@ context('Create case as Admin user', () => {
     cy.get(modal.publication.alertError).contains('Kijk het formulier na');
     cy.get('.vlc-input-field-block').eq(1)
       .within(() => {
-        cy.get('.vl-textarea').click()
+        cy.get('.auk-textarea').click()
           .clear()
           .type(newShortTitle);
       });

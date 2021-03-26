@@ -3,56 +3,52 @@
   <div class="vlc-toolbar vlc-toolbar--auto vlc-toolbar--slide-in">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <ul class="vl-tabs auk-u-m-0">
+        <ul class="auk-tabs">
           {{#if hasPublicationsEnabled}}
-            <li class="vl-tab" data-test-m-header-publications>
+            <li class="auk-tabs__tab" data-test-m-header-publications>
               {{#link-to
                 "publications"
-                class="vl-tab__link"
               }}
-                {{t "publications"}}
+                <span class="auk-tabs__tab-inner">{{t "publications"}}</span>
               {{/link-to}}
             </li>
           {{/if}}
-          <li class="vl-tab" data-test-m-header-agendas>
+          <li class="auk-tabs__tab" data-test-m-header-agendas>
             {{#link-to
               "agendas.overview"
-              class="vl-tab__link"
               current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
             }}
-              {{t "agendas"}}
+              <span class="auk-tabs__tab-inner">{{t "agendas"}}</span>
             {{/link-to}}
           </li>
-          <li class="vl-tab" data-test-m-header-cases>
-            {{#link-to "cases" class="vl-tab__link"}}
-              {{t "cases"}}
+          <li class="auk-tabs__tab" data-test-m-header-cases>
+            {{#link-to "cases"}}
+              <span class="auk-tabs__tab-inner">{{t "cases"}}</span>
             {{/link-to}}
           </li>
           {{#if currentSession.isViewer }}
-            <li class="vl-tab" data-test-m-header-newsletters>
+            <li class="auk-tabs__tab" data-test-m-header-newsletters>
               {{#link-to
                 "newsletters"
-                class="vl-tab__link"
                 current-when="newsletters newsletter print-overviews.newsletter"
               }}
-                {{t "newsletter"}}
+                <span class="auk-tabs__tab-inner">{{t "newsletter"}}</span>
               {{/link-to}}
             </li>
           {{/if}}
-          <li class="vl-tab" data-test-m-header-search>
+          <li class="auk-tabs__tab" data-test-m-header-search>
             <LinkTo
-              class="vl-tab__link"
               @route="search.index"
               @current-when="search"
             >
               {{!-- TODO: magnifying glass icon --}}
-              {{capitalize (t "search")}}
+              <span class="auk-tabs__tab-inner">{{capitalize (t "search")}}</span>
             </LinkTo>
           </li>
           {{#if currentSession.isEditor}}
-            <li class="vl-tab" data-test-m-header-settings>
-              {{#link-to "settings.overview" class="vl-tab__link"}}
-                {{t "settings"}}
+            <li class="auk-tabs__tab" data-test-m-header-settings>
+              {{#link-to "settings.overview"}}
+                <span class="auk-tabs__tab-inner">{{t "settings"}}</span>
               {{/link-to}}
             </li>
           {{/if}}

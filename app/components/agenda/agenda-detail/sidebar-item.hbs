@@ -16,7 +16,7 @@
     </span>
     <div class="vlc-agenda-detail-sidebar__text-container">
       <h4 class="vlc-agenda-detail-sidebar__subject">
-        <pre class="vl-u-text-color-agenda-list">
+        <pre class="auk-u-text-pre-line">
           {{#if @agendaitem.shortTitle}}
             {{@agendaitem.shortTitle}}
           {{else}}
@@ -40,8 +40,8 @@
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
               {{#if this.renderDetails}}
                 {{#if (await @agendaitem.checkAdded)}}
-                  <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-calendar-plus"></i>
+                  <span class="vlc-agenda-meta__recently-added">
+                    <WebComponents::AuIcon @name="calendar-plus" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "added-agendaitem-text"}}
@@ -51,8 +51,8 @@
                 {{/if}}
 
                 {{#if (not newsletterInfo.inNewsletter)}}
-                  <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                  <span class="vlc-agenda-meta__recently-added">
+                    <WebComponents::AuIcon @name="hide" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -62,10 +62,9 @@
                 {{/if}}
 
                 {{#if (await subcase.confidential)}}
-                  <i
-                    class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                    data-test-icon-agenda-confidentiality-locked
-                  ></i>
+                  <span>
+                    <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked />
+                  </span>
                 {{/if}}
               {{/if}}
             </div>

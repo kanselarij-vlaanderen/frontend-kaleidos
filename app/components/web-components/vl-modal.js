@@ -48,27 +48,14 @@ export default Component.extend({
     }
   },
 
-  backdropClass: computed('isOverlay', function() {
+  sizeClass: computed('isDocumentViewer', function() {
     const {
-      isOverlay,
+      isDocumentViewer,
     } = this;
-    if (isOverlay) {
-      return 'vl-modal__backdrop';
-    }
-    return null;
-  }),
-
-  sizeClass: computed('large', 'isDocumentViewer', function() {
-    const {
-      large, isDocumentViewer,
-    } = this;
-    if (large) {
-      return 'vl-modal-dialog--large';
-    }
     if (isDocumentViewer) {
-      return 'vl-modal-dialog full-height';
+      return 'auk-modal--full-screen';
     }
-    return null;
+    return 'auk-modal--large';
   }),
 
   getFocusableNodes() {

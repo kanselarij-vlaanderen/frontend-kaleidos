@@ -1,12 +1,12 @@
 {{!-- TODO code duplication with agendaitem-case/agendaitem-mandatees --}}
 <div class="auk-u-mb-2">
-  <div class="auk-u-flex auk-u-flex--vertical-center">
-    <h4 class="vl-title vl-title--h4">
+  <div class="auk-u-flex auk-u-flex--align-baseline">
+    <h4 class="auk-h3 auk-u-m-0">
       {{t "manage-ministers-title"}}
     </h4>
     {{#if (and currentSession.isEditor (not isEditing))}}
       <div class="auk-u-ml-2">
-        <a href="" data-test-subcase-mandatees-edit class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" data-test-subcase-mandatees-edit class="auk-button-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
@@ -40,36 +40,43 @@
     }}
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__left">
-        <a
-          href=""
+        <button
+          type="button"
           data-test-subcase-mandatees-add-mandatee
-          class="vl-button vl-button--tertiary vl-button--icon-before"
+          class="auk-button auk-button--tertiary"
           {{action "addRow"}}
         >
-          <i
-            class="vl-button__icon vl-button__icon--before ki-add"
-            aria-hidden="true"
-          ></i>
-          {{t "add-minister"}}
-        </a>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-add"></i>
+          </div>
+          <div class="auk-button__label">
+            {{t "add-minister"}}
+          </div>
+        </button>
       </div>
       <div class="vlc-toolbar__right">
-        <div class="vl-action-group vl-action-group--align-right">
-          <a
-            data-test-subcase-mandatees-edit-cancel
-            href=""
-            class="vl-button vl-button--tertiary"
-            {{action "cancelEditing"}}
-          >
-            {{t "cancel"}}
-          </a>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            test-data-vl-save-button=true
-            saveAction=(action "saveChanges")
-          }}
-        </div>
+        <WebComponents::AuToolbar>
+          <WebComponents::AuToolbar::Group @position="right">
+            <WebComponents::AuToolbar::Item>
+              <button
+                type="button"
+                data-test-subcase-mandatees-edit-cancel
+                class="auk-button auk-button--tertiary"
+                {{action "cancelEditing"}}
+              >
+                {{t "cancel"}}
+              </button>
+            </WebComponents::AuToolbar::Item>
+            <WebComponents::AuToolbar::Item>
+              {{web-components/vl-save-button
+                text=(t "save")
+                isLoading=isLoading
+                test-data-vl-save-button=true
+                saveAction=(action "saveChanges")
+              }}
+            </WebComponents::AuToolbar::Item>
+          </WebComponents::AuToolbar::Group>
+        </WebComponents::AuToolbar>
       </div>
     </div>
   </div>

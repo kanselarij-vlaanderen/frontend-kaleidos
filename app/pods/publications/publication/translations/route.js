@@ -1,9 +1,8 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { hash } from 'rsvp';
 
-export default class PublicationTranslationRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class PublicationTranslationRoute extends Route {
   async model() {
     const parentHash = this.modelFor('publications.publication');
     const publicationFlow = parentHash.publicationFlow;
