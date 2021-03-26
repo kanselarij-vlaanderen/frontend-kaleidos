@@ -262,7 +262,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
   });
 
-  it.only('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
+  it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
     cy.openAgendaForDate(agendaDate);
     cy.clickReverseTab('Detail');
 
