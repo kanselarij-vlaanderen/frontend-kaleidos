@@ -9,10 +9,10 @@ export default class PublicationsFilter extends Component {
 
   constructor() {
     super(...arguments);
-    this.initBuffers();
+    this.filter = this.args.filter;
   }
 
-  initBuffers() {
+  initialize() {
     this.filter = this.args.filter;
   }
 
@@ -33,7 +33,7 @@ export default class PublicationsFilter extends Component {
 
   @action
   toggleFilterOption(event) {
-    const tempArr = this.args.filter;
+    const tempArr = this.filter;
     set(tempArr, event.target.name, !tempArr[event.target.name]);
     this.filter = tempArr;
   }

@@ -140,7 +140,6 @@ export default class PublicationsController extends Controller {
       withdrawnFilterOption: true,
     };
     localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-    this.send('refreshModel');
   }
 
   @action
