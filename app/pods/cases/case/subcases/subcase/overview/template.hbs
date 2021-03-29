@@ -3,7 +3,8 @@
   <div class="auk-u-mb-8">
     <div class="vlc-hr"></div>
   </div>
-  {{#if authentication.isEditor}}
+  {{#if this.currentSession.isEditor}}
+   {{!-- TODO these classes do not exist and do nothing --}}
     <div class="confidentialities">
       <div class="confidential">
         <WebComponents::VlCheckbox
@@ -11,7 +12,6 @@
           @value={{this.subcase.confidential}}
           @disabled={{true}}
           @label={{t "confidential"}}
-          @toggle={{this.setConfidentiality}}
         />
       </div>
     </div>

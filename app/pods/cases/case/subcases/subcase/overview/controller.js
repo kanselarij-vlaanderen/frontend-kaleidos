@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { saveChanges } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class CasesCaseSubcasesSubcaseOverviewController extends Controller {
-  @service sessionService;
+  @service currentSession;
 
   @alias('model') subcase;
   @tracked allSubcases;
@@ -25,12 +25,6 @@ export default class CasesCaseSubcasesSubcaseOverviewController extends Controll
   @action
   toggleIsEditing() {
     this.isEditingTitles = !this.isEditingTitles;
-  }
-
-  @action
-  setConfidentiality(isConfidential) {
-    this.subcase.set('confidential', isConfidential);
-    // TODO: save?
   }
 
   @action

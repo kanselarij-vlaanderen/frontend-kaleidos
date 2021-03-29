@@ -7,7 +7,7 @@ import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import modal from '../../selectors/modal.selectors';
 
-context('Full test', () => {
+context('Full test for creating mandatees', () => {
   /**
    * @description returns the current time in unix timestamp
    * @name currentTimestamp
@@ -24,7 +24,7 @@ context('Full test', () => {
     cy.login('Admin');
   });
 
-  it('should Add new minister', () => {
+  it('should add new minister', () => {
     cy.visit('/');
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaitem'); // not used ..
     const KIND = 'Ministerraad';
@@ -40,11 +40,11 @@ context('Full test', () => {
     cy.get(toolbar.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
+    cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.addMinister).should('exist')
       .should('be.visible')
       .click();
-    cy.wait('@getGovernmentFieldDomains', {
+    cy.wait('@getIseCodes', {
       timeout: 30000,
     });
     cy.get(mandatee.addMandateeTitleContainer).should('exist')
