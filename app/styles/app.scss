@@ -100,16 +100,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-decision-result-select';
 @import 'custom-components/vlc-numac-nummer-list';
 
-
-// Kitchen sink
-@import 'custom-components/_vlc-kitchensink-code-block';
-@import 'custom-components/_vlc-kitchensink-container';
-@import 'custom-components/_vlc-kitchensink-header';
-@import 'custom-components/_vlc-kitchensink-navigation';
-@import 'custom-components/_vlc-kitchensink-page-header';
-@import 'custom-components/_vlc-kitchensink-sample-header';
-@import 'custom-components/_vlc-kitchensink-sample';
-
 // Imports utilities (loaded from node_modules)
 // @import 'node_modules/@govflanders/vl-ui-util/src/scss/util';
 
