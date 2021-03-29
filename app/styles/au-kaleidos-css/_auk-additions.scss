@@ -136,6 +136,32 @@
   cursor: pointer;
 }
 
+.auk-table {
+  .data-table,
+  &.data-table {
+    tbody {
+      tr:hover {
+        background: $au-gray-100;
+      }
+    }
+  }
+}
+
+.auk-table--striped {
+  .data-table,
+  &.data-table {
+    tbody {
+      tr:hover {
+        background: $au-gray-200;
+
+        td {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
 
 /* Utilities
    ========================================================================== */
