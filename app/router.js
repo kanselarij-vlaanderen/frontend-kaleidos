@@ -135,21 +135,6 @@ Router.map(function() {
     this.route('upload');
   });
 
-  this.route('styleguide', function() {
-    this.route('alerts');
-    this.route('buttons');
-    this.route('documents');
-    this.route('icons');
-    this.route('inputs');
-    this.route('panels');
-    this.route('pills');
-    this.route('typography');
-    this.route('selects');
-    this.route('brand');
-    this.route('checkbox');
-    this.route('dropdown');
-  });
-
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
