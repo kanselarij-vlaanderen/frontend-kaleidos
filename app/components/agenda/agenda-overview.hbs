@@ -33,6 +33,7 @@
           {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
               <WebComponents::AuButtonLink
+                data-test-agenda-edit-formally-ok-button={{true}}
                 class="vlc-agenda-items-section-header__link"
                 {{on "click" this.toggleIsEditingOverview}}
               >

@@ -211,9 +211,10 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     // check if only 'Geen toekenning' is a header
     cy.get(agenda.agendaOverviewItemHeader)
-      .should('have.length', 1);
-    cy.get(agenda.agendaOverviewItemHeader).eq(0)
-      .should('contain.text', 'Geen toekenning');
+      .should('have.length', 0);
+    // TODO CHECK WITH USERS, should there be a mandatee header between approval and first item without mandatee
+    // cy.get(agenda.agendaOverviewItemHeader).eq(0)
+    //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
     cy.addAgendaitemMandatee(0, -1, 0, 'Minister-president van de Vlaamse Regering');
     cy.clickReverseTab('Overzicht');

@@ -237,7 +237,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
-  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
 
   cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
@@ -256,7 +256,9 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
     cy.get(modal.auModal.container, {
       timeout: 20000,
     }).should('not.exist');
-    cy.wait('@loadAgendaitems');
+    if (!lastAgenda) {
+      cy.wait('@loadAgendaitems');
+    }
   }
 
   cy.log('/deleteAgenda');
@@ -274,15 +276,9 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   // TODO set only some items to formally ok with list as parameter
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
-
-    cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
-      .last()
-      .as('editFormality');
-
-    cy.get('@editFormality').click();
-  } else {
-    cy.get(agendaOverview.agendaEditFormallyOkButton).click();
   }
+  cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  cy.wait(2000); // TODO await data loading after clicking this button?
 
   cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem)
@@ -545,27 +541,29 @@ function toggleShowChanges(refresh) {
   cy.log('toggleShowChanges');
   cy.route('GET', '/agendaitems?fields**').as('getAgendaitems');
 
+  // TODO, refresh is no longer needed
   if (refresh) {
-    cy.get('.vlc-side-nav-item', {
-      timeout: 12000,
-    })
-      .last({
-        timeout: 12000,
-      })
-      .click();
-    cy.wait('@getAgendaitems', {
-      timeout: 20000,
-    });
-    cy.get('.vlc-side-nav-item', {
-      timeout: 12000,
-    })
-      .first({
-        timeout: 12000,
-      })
-      .click();
-    cy.wait(2000); // a lot of data is being reloaded
-  } else {
+  //   cy.get('.vlc-side-nav-item', {
+  //     timeout: 12000,
+  //   })
+  //     .last({
+  //       timeout: 12000,
+  //     })
+  //     .click();
+  //   cy.wait('@getAgendaitems', {
+  //     timeout: 20000,
+  //   });
+  //   cy.get('.vlc-side-nav-item', {
+  //     timeout: 12000,
+  //   })
+  //     .first({
+  //       timeout: 12000,
+  //     })
+  //     .click();
+  //   cy.wait(2000); // a lot of data is being reloaded
+  // } else {
     cy.clickReverseTab('Overzicht');
+    cy.wait(2500); // data loading after switching to overzicht
   }
 
   cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
@@ -657,6 +655,7 @@ function changeSelectedAgenda(agendaName) {
     })
     .should('exist')
     .click();
+  cy.wait(2000); // TODO await calls after switch
 }
 
 /**
