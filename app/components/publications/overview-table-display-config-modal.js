@@ -4,6 +4,7 @@ import {
   set
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class OverviewTableDisplayConfigModalComponent extends Component {
   /**
@@ -17,6 +18,15 @@ export default class OverviewTableDisplayConfigModalComponent extends Component 
   constructor() {
     super(...arguments);
     this.options = this.args.options;
+  }
+
+  get optionColumns() {
+    const columnSize = 10; // amount of options per column
+    const columns = [];
+    for (let i = 0; i < configElements.length; i += columnSize) { // eslint-disable-line id-length
+      columns.push(configElements.slice(i, i + columnSize));
+    }
+    return columns;
   }
 
   @action

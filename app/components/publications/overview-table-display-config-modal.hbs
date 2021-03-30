@@ -7,132 +7,22 @@
   <WebComponents::AuModal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--grid">
       <div class="auk-o-grid">
-        <div class="auk-o-grid-col-6">
-          <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox
-                @name="caseNameFilterOption"
-                @label={{t "publications-table-case-name"}}
-                @checked={{this.options.caseNameFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="publicationNumberFilterOption"
-                @label={{t "publications-table-publication-number"}}
-                @checked={{this.options.publicationNumberFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="numacNumberFilterOption"
-                @label={{t "publications-table-numacnummer-bs"}}
-                @checked={{this.options.numacNumberFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="derivedPublicationTypeFilterOption"
-                @label={{t "publications-table-derived-publicationtype"}}
-                @checked={{this.options.derivedPublicationTypeFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="onMeetingFilterOption"
-                @label={{t "publications-table-on-meeting"}}
-                @checked={{this.options.onMeetingFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="requestedPublicationDateFilterOption"
-                @label={{t "publications-table-requested-publication-date"}}
-                @checked={{this.options.requestedPublicationDateFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="finalPublicationDateFilterOption"
-                @label={{t "publications-table-final-publication-date"}}
-                @checked={{this.options.finalPublicationDateFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="publicationDateFilterOption"
-                @label={{t "publications-table-publication-date"}}
-                @checked={{this.options.publicationDateFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="lastEditedFilterOption"
-                @label={{t "publications-table-last-edited"}}
-                @checked={{this.options.lastEditedFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-            </WebComponents::AuCheckboxList>
+        {{#each this.optionColumns as |column|}}
+          <div class="auk-o-grid-col-6">
+            <div class="auk-form-group">
+              <WebComponents::AuCheckboxList>
+                {{#each column as |option|}}
+                  <WebComponents::AuCheckbox
+                    @name={{option.keyName}}
+                    @label={{t option.translationKey}}
+                    @checked={{get this.options option.keyName}}
+                    @toggle={{this.toggleOption}}
+                  />
+                {{/each}}
+              </WebComponents::AuCheckboxList>
+            </div>
           </div>
-        </div>
-        <div class="auk-o-grid-col-6">
-          <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox
-                @name="caseManagerFilterOption"
-                @label={{t "publications-table-case-manager"}}
-                @checked={{this.options.caseManagerFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="lastEditedByFilterOption"
-                @label={{t "publications-table-last-edited-by"}}
-                @checked={{this.options.lastEditedByFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="withdrawnDateFilterOption"
-                @label={{t "publications-table-withdrawn-date"}}
-                @checked={{this.options.withdrawnDateFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="pauseDateFilterOption"
-                @label={{t "publications-table-pause-date"}}
-                @checked={{this.options.pauseDateFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="translateRequestsFilterOption"
-                @label={{t "publications-table-translate-requests"}}
-                @checked={{this.options.translateRequestsFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="signRequestsFilterOption"
-                @label={{t "publications-table-sign-requests"}}
-                @checked={{this.options.signRequestsFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="publishPreviewRequestsFilterOption"
-                @label={{t "publications-table-publish-preview-requests"}}
-                @checked={{this.options.publishPreviewRequestsFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="speedProcedureFilterOption"
-                @label={{t "publications-table-speed-procedure"}}
-                @checked={{this.options.speedProcedureFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="commentFilterOption"
-                @label={{t "publications-table-comment"}}
-                @checked={{this.options.commentFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-              <WebComponents::AuCheckbox
-                @name="fromDesignAgendaFilterOption"
-                @label={{t "publications-table-from-designagenda"}}
-                @checked={{this.options.fromDesignAgendaFilterOption}}
-                @toggle={{this.toggleOption}}
-              />
-            </WebComponents::AuCheckboxList>
-          </div>
-        </div>
+        {{/each}}
       </div>
     </div>
   </WebComponents::AuModal::Body>
