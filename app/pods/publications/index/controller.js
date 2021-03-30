@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsIndexController extends Controller {
-  @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
+  @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
     || configElements.reduce((accumulator, currentValue) => {
       accumulator[currentValue.keyName] = currentValue.showByDefault;
       return accumulator;
@@ -36,14 +36,14 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   closeFilterTableModal() {
-    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
     this.showTableDisplayOptions = false;
   }
 
   @action
   changeColumnDisplayOptions(options) {
-    this.filterTableColumnOptionKeys = options;
-    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
+    this.tableColumnDisplayOptions = options;
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
   }
 
   @action

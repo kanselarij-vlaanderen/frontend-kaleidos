@@ -16,12 +16,12 @@
       <c.header>
         {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
 
-        {{#if this.filterTableColumnOptionKeys.caseName}}
+        {{#if this.tableColumnDisplayOptions.caseName}}
           <th style="min-width: 50rem">
             {{t "publications-table-case-name"}}
           </th>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationNumber}}
+        {{#if this.tableColumnDisplayOptions.publicationNumber}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field="publication-number"
@@ -29,11 +29,11 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.numacNumber}}
+        {{#if this.tableColumnDisplayOptions.numacNumber}}
           <th>{{t "publications-table-numacnummer-bs"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.derivedPublicationType}}
+        {{#if this.tableColumnDisplayOptions.derivedPublicationType}}
           <ThSortable
                   @currentSorting={{this.sort}}
                   @field="deducedType.priority"
@@ -47,11 +47,11 @@
           </EmberTooltip>--}}
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.meetingDate}}
+        {{#if this.tableColumnDisplayOptions.meetingDate}}
           <th>{{t "publications-table-on-meeting"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.requestedPublicationDate}}
+        {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field="publishBefore"
@@ -59,14 +59,14 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.finalPublicationDate}}
+        {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field=""
             @label={{t "publications-table-final-publication-date"}}
           />
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDate}}
+        {{#if this.tableColumnDisplayOptions.publicationDate}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field="publishedAt"
@@ -74,11 +74,11 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.caseManager}}
+        {{#if this.tableColumnDisplayOptions.caseManager}}
           <th>{{t "publications-table-case-manager"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.lastEdited}}
+        {{#if this.tableColumnDisplayOptions.lastEdited}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field="modified"
@@ -86,11 +86,11 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.lastEditedBy}}
+        {{#if this.tableColumnDisplayOptions.lastEditedBy}}
           <th>{{t "publications-table-last-edited-by"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.withdrawnDate}}
+        {{#if this.tableColumnDisplayOptions.withdrawnDate}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field=""
@@ -98,7 +98,7 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.pauseDate}}
+        {{#if this.tableColumnDisplayOptions.pauseDate}}
           <ThSortable
             @currentSorting={{this.sort}}
             @field=""
@@ -106,27 +106,27 @@
           />
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.translateRequests}}
+        {{#if this.tableColumnDisplayOptions.translateRequests}}
           <th class="auk-u-text-align--center">{{t "publications-table-translate-requests"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.signRequests}}
+        {{#if this.tableColumnDisplayOptions.signRequests}}
           <th class="auk-u-text-align--center">{{t "publications-table-sign-requests"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.publishPreviewRequests}}
+        {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
           <th class="auk-u-text-align--center">{{t "publications-table-publish-preview-requests"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.speedProcedure}}
+        {{#if this.tableColumnDisplayOptions.speedProcedure}}
           <th class="auk-u-text-align--center">{{t "publications-table-speed-procedure"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.comment}}
+        {{#if this.tableColumnDisplayOptions.comment}}
           <th class="auk-u-text-align--center">{{t "publications-table-comment"}}</th>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.fromDesignAgenda}}
+        {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
           <th>{{t "publications-table-from-designagenda"}}</th>
         {{/if}}
         <th>
@@ -134,7 +134,7 @@
         </th>
       </c.header>
       <c.body class="tr-hover" as |row|>
-        {{#if this.filterTableColumnOptionKeys.caseName}}
+        {{#if this.tableColumnDisplayOptions.caseName}}
         {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
           <td class="auk-table__col--6">
             {{#if row.case.shortTitle}}
@@ -148,7 +148,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationNumber}}
+        {{#if this.tableColumnDisplayOptions.publicationNumber}}
           <td>
             {{#if row.publicationNumber}}
               {{row.publicationNumberToDisplay}}
@@ -157,7 +157,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.numacNumber}}
+        {{#if this.tableColumnDisplayOptions.numacNumber}}
           <td>
             {{#each row.numacNumbers as |numac|}}
               <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
@@ -166,7 +166,7 @@
             {{/each}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.derivedPublicationType}}
+        {{#if this.tableColumnDisplayOptions.derivedPublicationType}}
           <td>
             {{#if row.deducedType}}
               {{row.deducedType.label}}
@@ -175,12 +175,12 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.meetingDate}}
+        {{#if this.tableColumnDisplayOptions.meetingDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.requestedPublicationDate}}
+        {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
           <td class="auk-u-text-nowrap">
             {{#if row.publishDateRequested}}
               {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
@@ -189,7 +189,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.finalPublicationDate}}
+        {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
           <td class="auk-u-text-nowrap">
             {{#if row.publishBefore}}
             {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
@@ -215,7 +215,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDate}}
+        {{#if this.tableColumnDisplayOptions.publicationDate}}
           <td class="auk-u-text-nowrap">
             {{if
               row.publishedAt
@@ -225,13 +225,13 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.caseManager}}
+        {{#if this.tableColumnDisplayOptions.caseManager}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.lastEdited}}
+        {{#if this.tableColumnDisplayOptions.lastEdited}}
           <td class="auk-u-text-nowrap">
             {{moment-format row.modified "DD-MM-YYYY"}}<br/>
             <span class="auk-u-text-small auk-u-muted">
@@ -241,25 +241,25 @@
         {{/if}}
 
 
-        {{#if this.filterTableColumnOptionKeys.lastEditedBy}}
+        {{#if this.tableColumnDisplayOptions.lastEditedBy}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.withdrawnDate}}
+        {{#if this.tableColumnDisplayOptions.withdrawnDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.pauseDate}}
+        {{#if this.tableColumnDisplayOptions.pauseDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.translateRequests}}
+        {{#if this.tableColumnDisplayOptions.translateRequests}}
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.translationRequestsTotal) 0)}}
               {{#if
@@ -281,12 +281,12 @@
 
 
 
-        {{#if this.filterTableColumnOptionKeys.signRequests}}
+        {{#if this.tableColumnDisplayOptions.signRequests}}
           <td class="auk-u-text-align--center">
             {{t "dash"}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publishPreviewRequests}}
+        {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
               {{#if
@@ -306,7 +306,7 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.speedProcedure}}
+        {{#if this.tableColumnDisplayOptions.speedProcedure}}
           <td class="auk-u-text-align--center">
             {{#if row.hasPriority}}
               <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
@@ -321,7 +321,7 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.comment}}
+        {{#if this.tableColumnDisplayOptions.comment}}
           <td class="auk-u-text-align--center">
             {{#if row.remark}}
               <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
@@ -335,7 +335,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.fromDesignAgenda}}
+        {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
           <td class="auk-u-text-align--center">
             {{t "dash"}}
           </td>
@@ -352,7 +352,7 @@
 
 {{#if this.showTableDisplayOptions}}
   <Publications::OverviewTableDisplayConfigModal
-    @options={{this.filterTableColumnOptionKeys}}
+    @options={{this.tableColumnDisplayOptions}}
     @onChange={{this.changeColumnDisplayOptions}}
     @onClose={{this.closeColumnDisplayOptionsModal}}
   />
