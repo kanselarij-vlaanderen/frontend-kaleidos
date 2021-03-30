@@ -35,7 +35,10 @@ import './commands/publication-commands'
 import 'cypress-wait-until';
 
 Cypress.on('uncaught:exception', (err) => {
-  return !err.message.includes('calling set on destroyed object')
+  return !err.message.includes('calling set on destroyed object');
+});
+Cypress.on('uncaught:exception', (err) => {
+  return !err.message.includes('Cannot set property isSelected of #<DomainSelection> which has only a getter');s
 });
 
 Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {

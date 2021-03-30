@@ -1,0 +1,42 @@
+<WebComponents::VlModal
+  @closeModal={{this.cancel}}
+  @isOverlay={{true}}
+  @title={{if this.isAddingMinister (t "add-minister") (t "edit-minister")}}
+>
+  <div class="vl-modal-dialog__content">
+    <label>{{t "select-minister"}}</label>
+    <div class="auk-u-mb-8">
+      <Utils::MandateeSelector
+        data-test-mandatee-selector={{true}}
+        @singleSelect={{true}}
+        @readOnly={{not this.isAddingMinister}}
+        @selectedMandatees={{this.mandateeBuffer}}
+        @chooseMandatee={{this.selectMandatee}}
+      />
+    </div>
+    {{#unless this.isAddingMinister}}
+      {{#if
+        (or
+        (not this.loadAvailableFieldsForMandatee.lastSuccessful)
+        this.loadAvailableFieldsForMandatee.isRunnning)
+      }}
+        {{t "loading"}}
+      {{else}}
+        <DomainFieldIse::DomainsFieldsSelectorForm
+          @availableFields={{this.availableFields}}
+          @selectedFields={{this.fieldsBuffer}}
+          @onSelectFields={{this.selectFields}}
+          @onUnSelectFields={{this.unSelectFields}}
+        />
+      {{/if}}
+    {{/unless}}
+  </div>
+  <WebComponents::VlModalFooter
+    @isLoading={{this.save.isRunning}}
+    @nonBordered={{true}}
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "add"}}
+    @cancelAction={{this.cancel}}
+    @saveAction={{perform this.save}}
+  />
+</WebComponents::VlModal>

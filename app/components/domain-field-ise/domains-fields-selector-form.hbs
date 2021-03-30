@@ -1,0 +1,28 @@
+<div {{did-update (perform this.calculateDomainSelections) @selectedFields}}>
+  {{#each this.domainSelections as |domainSelection index|}}
+    <ul class="vlc-checkbox-tree">
+      <li>
+        {{#unless (eq index 0)}}
+          <div class="vlc-hr"></div>
+        {{/unless}}
+        <WebComponents::VlCheckbox
+          @value={{domainSelection.isSelected}}
+          @label={{domainSelection.domain.label}}
+          @toggle={{fn this.toggleDomainSelection domainSelection}}
+        />
+        <ul>
+          {{#each domainSelection.availableFields as |field|}}
+            <li>
+              <WebComponents::VlCheckbox
+                @value={{includes field domainSelection.selectedFields}}
+                @label={{field.label}}
+                @toggle={{fn this.toggleFieldSelection field}}
+              />
+              {{field.name}}
+            </li>
+          {{/each}}
+        </ul>
+      </li>
+    </ul>
+  {{/each}}
+</div>
