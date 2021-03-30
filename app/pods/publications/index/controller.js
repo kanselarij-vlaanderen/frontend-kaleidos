@@ -1,33 +1,14 @@
 import Controller from '@ember/controller';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsIndexController extends Controller {
   @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
-    || {
-      caseNameFilterOption: true,
-      publicationNumberFilterOption: true,
-      derivedPublicationTypeFilterOption: true,
-      onMeetingFilterOption: true,
-      requestedPublicationDateFilterOption: true,
-      finalPublicationDateFilterOption: true,
-      publicationDateFilterOption: true,
-      numacNumberFilterOption: true,
-      caseManagerFilterOption: true,
-      lastEditedFilterOption: true,
-      lastEditedByFilterOption: true,
-      withdrawnDateFilterOption: true,
-      pauseDateFilterOption: true,
-      translateRequestsFilterOption: true,
-      signRequestsFilterOption: true,
-      publishPreviewRequestsFilterOption: true,
-      speedProcedureFilterOption: true,
-      commentFilterOption: true,
-      fromDesignAgendaFilterOption: true,
-    };
+    || configElements.reduce((accumulator, currentValue) => {
+      accumulator[currentValue.keyName] = currentValue.showByDefault;
+      return accumulator;
+    }, {});
 
   @tracked showFilterTableModal = false;
   queryParams = {
