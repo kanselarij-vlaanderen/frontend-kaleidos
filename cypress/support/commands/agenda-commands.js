@@ -592,6 +592,8 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
+        cy.log('data needs to be loaded now, waiting a few seconds');
+        cy.wait(2500); // TODO data loading must be awaited  '/agendaitem?fields**' or next get() fails
       }
       cy.get(agenda.agendaOverviewSubitem)
         .contains(agendaitemName, {
