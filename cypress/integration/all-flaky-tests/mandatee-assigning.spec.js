@@ -4,7 +4,6 @@
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import isecodes from '../../selectors/isecodes/isecodesSelectors';
 import agenda from '../../selectors/agenda.selectors';
-import caze from '../../selectors/case.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selector';
 import modal from '../../selectors/modal.selectors';
@@ -17,6 +16,8 @@ function currentTimestamp() {
 context('Assigning a mandatee to agendaitem or subcase should update linked subcase/agendaitems, KAS-1291', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks')
     .day(4); // Next friday
+  // This variable is used multiple times to check if data is properly loaded
+  const nameToCheck = 'Geert';
   // const caseTitle = 'Cypress test: mandatee sync - 1594023300';  // The case is in the default data set with id 5F02DD8A7DE3FC0008000001
 
   before(() => {
@@ -45,16 +46,20 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addSubcaseMandatee(0, -1, -1); // -1 means select nothing
     cy.addSubcaseMandatee(1, 0, 0);
 
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 2, {
+      timeout: 5000,
+    });
 
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
     cy.get(isecodes.isecodesList).should('exist');
@@ -66,16 +71,20 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 2, {
+      timeout: 5000,
+    });
 
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
   });
 
@@ -93,19 +102,26 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // Dependency: We should already have 2 mandatees that we inherit from previous subcase, now we add 1 more
 
     cy.addSubcaseMandatee(2, 0, 0);
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 3, {
+      timeout: 5000,
+    });
+
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(2)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
     cy.get(isecodes.isecodesList).should('exist');
@@ -115,20 +131,25 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 3, {
+      timeout: 5000,
+    });
 
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(2)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
   });
 
@@ -148,78 +169,93 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // Dependency: We should already have 3 mandatees that we inherit from previous subcase, now we add 1 more
 
     cy.addSubcaseMandatee(3, 0, 0);
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 4);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 4, {
+      timeout: 5000,
+    });
+
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(2)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(3)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
-    cy.reload();
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
 
     // Add 1 more
     cy.addSubcaseMandatee(5, -1, -1);
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 5, {
+      timeout: 5000,
+    });
+
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(2)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(3)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(4)
       .within(() => {
-        cy.get(mandatee.agendaitemMandateeFieldsList).should('not.exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
-
     // Check if subcase has the same amount of mandatees
     cy.visit('/dossiers/5F02DD8A7DE3FC0008000001/deeldossiers');
     cy.openSubcase(0);
 
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
+    cy.get('@listItems').should('have.length', 5, {
+      timeout: 5000,
+    });
     cy.get('@listItems').eq(0)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
+        // Checking if name of first mandatee is present ensures data is loaded
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(2)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(3)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(4)
       .within(() => {
-        cy.get(mandatee.mandateeLinkFieldsToggle).should('not.exist');
+        cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
 
     cy.get(isecodes.isecodesList).should('exist');
@@ -234,60 +270,75 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);
 
+    cy.log('in non-edit view, check if mandatees of last selected agendaitem are correctly ordered');
+    cy.get(mandatee.mandateePanelView.row.name).as('mandateeNames');
+    cy.get('@mandateeNames').eq(0)
+      .should('contain', nameToCheck);
+    cy.get('@mandateeNames').eq(1)
+      .should('contain', 'Hilde');
+    cy.get('@mandateeNames').eq(2)
+      .should('contain', 'Liesbeth');
+    cy.get('@mandateeNames').eq(3)
+      .should('contain', 'Ben Weyts');
+    cy.get('@mandateeNames').eq(4)
+      .should('contain', 'Phillipe');
+
     cy.log('when edit is open, check if mandatees are correct (in reverse order)');
-    cy.get(caze.editSubcaseMandatees).click();
-    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
     cy.get('@editItems').should('have.length', 5);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
     cy.get('@editItems').should('have.length', 3);
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
     cy.get('@editItems').should('have.length', 2);
 
     cy.log('when edit is cancelled, check the non-edit view again');
-    cy.get(caze.cancelEditSubcaseMandatees).click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelEdit.actions.cancel).click();
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);
 
     cy.log('changing the submitter and saving, check the non-edit view again (in reverse order)');
-    cy.get(caze.editSubcaseMandatees).click();
-    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
     cy.get('@editItems').eq(2)
       .within(() => {
-        cy.get(mandatee.mandateesEditRowSubmitter).click();
+        cy.get(mandatee.mandateePanelEdit.row.submitter).click();
       });
-    cy.get(utils.saveButton).click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelEdit.actions.save).click();
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
 
     cy.log('adding a mandatee and saving, check the non-edit view again');
@@ -296,39 +347,45 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addAgendaitemMandatee(6, -1, -1);
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 4);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);
 
     cy.log('deleting a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(caze.editSubcaseMandatees).click();
-    cy.get(mandatee.mandateesEditRow).as('editItems');
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
     cy.get('@editItems').eq(2)
       .within(() => {
-        cy.get(mandatee.mandateesEditRowDelete).click();
+        cy.get(mandatee.mandateePanelEdit.row.delete).click();
       });
-    cy.get(utils.saveButton).click();
+    // await saves subcase/agendaitem/agenda, awaiting only the last save for now, then wait a few seconds for data loading
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    cy.route('PATCH', '/agendas/*').as(`patchAgenda${randomInt}`);
+    cy.get(mandatee.mandateePanelEdit.actions.save).click();
+    cy.wait(`@patchAgenda${randomInt}`);
+    cy.wait(2000);
 
+    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateeLinkListItem).as('listItems');
+    cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);
   });
 

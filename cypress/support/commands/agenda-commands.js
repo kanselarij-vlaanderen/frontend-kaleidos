@@ -329,16 +329,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
  */
 function approveCoAgendaitem(agendaitemShortTitle) {
   cy.log('approveCoAgendaitem');
-  cy.route('GET', '/ise-codes/**').as('getIseCodes');
-  cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+  cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
   cy.route('PATCH', '/approvals/**').as('patchApprovals');
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.contains(agendaitemShortTitle).click();
-  cy.wait('@getIseCodes', {
-    timeout: 50000,
-  });
-  cy.wait('@getGovernmentFields', {
+  cy.wait('@getGovernmentFieldDomains', {
     timeout: 50000,
   });
   cy.get('.vlc-panel-layout__main-content').within(() => {

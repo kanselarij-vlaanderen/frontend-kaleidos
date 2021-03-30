@@ -7,7 +7,7 @@ import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import modal from '../../selectors/modal.selectors';
 
-context('Full test', () => {
+context('Full test for creating mandatees', () => {
   /**
    * @description returns the current time in unix timestamp
    * @name currentTimestamp
@@ -24,7 +24,7 @@ context('Full test', () => {
     cy.login('Admin');
   });
 
-  it('should Add new minister', () => {
+  it('should add new minister', () => {
     cy.visit('/');
     cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaitem'); // not used ..
     const KIND = 'Ministerraad';
