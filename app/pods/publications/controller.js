@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsController extends Controller {
   @service publicationService;
@@ -13,15 +14,7 @@ export default class PublicationsController extends Controller {
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
-  @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
-    || {
-      ministerFilterOption: true,
-      notMinisterFilterOption: true,
-      publishedFilterOption: true,
-      toPublishFilterOption: true,
-      pausedFilterOption: true,
-      withdrawnFilterOption: true,
-    };
+  @tracked filterOptionKeys = new PublicationFilter(JSON.parse(localStorage.getItem('filterOptions')) || {});
 
   @tracked
   publication = {
@@ -119,32 +112,14 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  onCancel() {
-    const localeFilterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
-    if (localeFilterOptionKeys !== null) {
-      localStorage.setItem('filterOptions', JSON.stringify(localeFilterOptionKeys));
-    } else {
-      localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-    }
+  cancelPublicationsFilter() {
     this.isShowPublicationFilterModal = false;
   }
 
   @action
-  onReset() {
-    this.filterOptionKeys = {
-      ministerFilterOption: true,
-      notMinisterFilterOption: true,
-      publishedFilterOption: true,
-      toPublishFilterOption: true,
-      pausedFilterOption: true,
-      withdrawnFilterOption: true,
-    };
-    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-  }
-
-  @action
-  onSave() {
-    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+  savePublicationsFilter(filterOptions) {
+    this.filterOptionKeys = filterOptions;
+    localStorage.setItem('filterOptions', this.filterOptionKeys.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
   }

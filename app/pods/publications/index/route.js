@@ -2,7 +2,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
-
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
   queryParams = {
@@ -21,15 +21,7 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
   }
 
   async model(params) {
-    const filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
-      || {
-        ministerFilterOption: false,
-        notMinisterFilterOption: false,
-        publishedFilterOption: false,
-        toPublishFilterOption: false,
-        pausedFilterOption: false,
-        withdrawnFilterOption: false,
-      };
+    const filterOptionKeys = new PublicationFilter(JSON.parse(localStorage.getItem('filterOptions')) || {});
     const ids = [];
     let ministerFilter = {};
 

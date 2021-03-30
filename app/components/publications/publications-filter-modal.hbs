@@ -16,15 +16,15 @@
             <div class="auk-form-group">
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @label={{t "via-cabinet" }} @name="ministerFilterOption"
-                  @checked={{@filter.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
               </WebComponents::AuCheckboxList>
             </div>
             <div class="auk-form-group">
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @label={{t "publications-published" }} @name="publishedFilterOption"
-                  @checked={{@filter.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @label={{t "publications-paused" }} @name="pausedFilterOption"
-                  @checked={{@filter.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
               </WebComponents::AuCheckboxList>
             </div>
           </div>
@@ -32,15 +32,15 @@
             <div class="auk-form-group">
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @label={{t "not-via-cabinet" }} @name="notMinisterFilterOption"
-                  @checked={{@filter.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
               </WebComponents::AuCheckboxList>
             </div>
             <div class="auk-form-group">
               <WebComponents::AuCheckboxList>
                 <WebComponents::AuCheckbox @label={{t "publications-to-publish" }} @name="toPublishFilterOption"
-                  @checked={{@filter.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
                 <WebComponents::AuCheckbox @label={{t "discharged" }} @name="withdrawnFilterOption"
-                  @checked={{@filter.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}} />
+                  @checked={{this.filter.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}} />
               </WebComponents::AuCheckboxList>
             </div>
           </div>
@@ -66,7 +66,7 @@
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
-              {{on "click" this.save}}>
+              {{on "click" (fn @onSave this.filter)}}>
               {{t "filter-content"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>
