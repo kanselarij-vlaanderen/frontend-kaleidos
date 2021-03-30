@@ -50,10 +50,16 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
   }
 
   @action
-  removeMandatee(mandatee) {
+  async removeMandatee(mandatee) {
     this.mandateesBuffer = this.mandateesBuffer.filter((item) => item !== mandatee);
     // eslint-disable-next-line no-self-assign
     this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
+    // Fields modifications
+    let mandateeFields = await this.store.query('government-field', {
+      'filter[ise-code][mandatees][:id:]': mandatee.id,
+    });
+    mandateeFields = mandateeFields.toArray();
+    this.fieldsBuffer = this.fieldsBuffer.filter((field) => !mandateeFields.includes(field));
   }
 
   @action
