@@ -54,20 +54,24 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  filterTables() {
-    this.showFilterTableModal = true;
-  }
-
-  @action
   closeFilterTableModal() {
     localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
     this.showFilterTableModal = false;
   }
 
   @action
-  toggleFilterOption(event) {
-    const tempArr = this.get('filterTableColumnOptionKeys');
-    set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.set('filterTableColumnOptionKeys', tempArr);
+  changeColumnDisplayOptions(options) {
+    this.filterTableColumnOptionKeys = options;
+    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
+  }
+
+  @action
+  openColumnDisplayOptionsModal() {
+    this.showFilterTableModal = true;
+  }
+
+  @action
+  closeColumnDisplayOptionsModal() {
+    this.showFilterTableModal = false;
   }
 }
