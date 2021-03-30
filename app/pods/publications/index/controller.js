@@ -10,7 +10,7 @@ export default class PublicationsIndexController extends Controller {
       return accumulator;
     }, {});
 
-  @tracked showFilterTableModal = false;
+  @tracked showTableDisplayOptions = false;
   queryParams = {
     page: {
       type: 'number',
@@ -37,7 +37,7 @@ export default class PublicationsIndexController extends Controller {
   @action
   closeFilterTableModal() {
     localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
-    this.showFilterTableModal = false;
+    this.showTableDisplayOptions = false;
   }
 
   @action
@@ -48,11 +48,11 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   openColumnDisplayOptionsModal() {
-    this.showFilterTableModal = true;
+    this.showTableDisplayOptions = true;
   }
 
   @action
   closeColumnDisplayOptionsModal() {
-    this.showFilterTableModal = false;
+    this.showTableDisplayOptions = false;
   }
 }
