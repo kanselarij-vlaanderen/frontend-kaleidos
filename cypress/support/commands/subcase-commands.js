@@ -225,7 +225,8 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.route('GET', '/mandatees?**').as('getMandatees');
   }
 
-  cy.route('GET', '/ise-codes/**').as('getIseCodes');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.route('GET', '/ise-codes/**').as(`getIseCodes${randomInt}`);
   cy.route('GET', '/government-fields/**').as('getGovernmentFields');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
@@ -265,7 +266,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
       }
     });
   // TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait('@getIseCodes', {
+  cy.wait(`@getIseCodes${randomInt}`, {
     timeout: 50000,
   });
   cy.wait('@getGovernmentFields', {
