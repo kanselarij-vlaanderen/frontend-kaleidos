@@ -118,11 +118,12 @@
           </WebComponents::AuModal::Footer>
         </WebComponents::AuModal>
       {{/if}}
-      <Publications::PublicationsFilterModal
-        @filter={{this.filterOptionKeys}}
-        @onCancel={{this.cancelPublicationsFilter}}
-        @onSave={{this.savePublicationsFilter}}
-        @isShown={{this.isShowPublicationFilterModal}} />
+      {{#if this.isShowPublicationFilterModal}}
+        <Publications::PublicationsFilterModal
+          @filter={{this.filterOptionKeys}}
+          @onCancel={{this.cancelPublicationsFilter}}
+          @onSave={{this.savePublicationsFilter}} />
+      {{/if}}
       {{outlet}}
     </div>
   </div>

@@ -17,7 +17,6 @@ export default class PublicationsFilterModal extends Component {
 
   @action
   cancel() {
-    this.filter = this.args.filter.clone(); // restore current applied state
     this.args.onCancel();
   }
 
