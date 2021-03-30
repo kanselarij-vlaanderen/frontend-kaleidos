@@ -1,9 +1,9 @@
 import { tracked } from '@glimmer/tracking';
 
 class PublicationFilter {
-  @tracked ministerFilterOption = false;
+  @tracked ministerFilterOption = true;
   @tracked notMinisterFilterOption = true;
-  @tracked publishedFilterOption = false;
+  @tracked publishedFilterOption = true;
   @tracked toPublishFilterOption = true;
   @tracked pausedFilterOption = true;
   @tracked withdrawnFilterOption = true;
