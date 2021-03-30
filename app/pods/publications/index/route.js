@@ -21,29 +21,29 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
   }
 
   async model(params) {
-    const filterOptionKeys = new PublicationFilter(JSON.parse(localStorage.getItem('filterOptions')) || {});
+    const publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
     const ids = [];
     let ministerFilter = {};
 
-    if (filterOptionKeys.publishedFilterOption) {
+    if (publicationFilter.publishedFilterOption) {
       ids.push(CONFIG.publicationStatusPublished.id);
     }
-    if (filterOptionKeys.pausedFilterOption) {
+    if (publicationFilter.pausedFilterOption) {
       ids.push(CONFIG.publicationStatusPauzed.id);
     }
-    if (filterOptionKeys.withdrawnFilterOption) {
+    if (publicationFilter.withdrawnFilterOption) {
       ids.push(CONFIG.publicationStatusWithdrawn.id);
     }
-    if (filterOptionKeys.toPublishFilterOption) {
+    if (publicationFilter.toPublishFilterOption) {
       ids.push(CONFIG.publicationStatusToPublish.id);
     }
-    if (!(filterOptionKeys.ministerFilterOption && filterOptionKeys.notMinisterFilterOption)) {
-      if (filterOptionKeys.ministerFilterOption) {
+    if (!(publicationFilter.ministerFilterOption && publicationFilter.notMinisterFilterOption)) {
+      if (publicationFilter.ministerFilterOption) {
         ministerFilter = {
           ':has:subcases': 'yes',
         };
       }
-      if (filterOptionKeys.notMinisterFilterOption) {
+      if (publicationFilter.notMinisterFilterOption) {
         ministerFilter = {
           ':has-no:subcases': 'yes',
         };

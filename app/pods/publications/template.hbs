@@ -120,7 +120,7 @@
       {{/if}}
       {{#if this.isShowPublicationFilterModal}}
         <Publications::PublicationsFilterModal
-          @filter={{this.filterOptionKeys}}
+          @filter={{this.publicationFilter}}
           @onCancel={{this.cancelPublicationsFilter}}
           @onSave={{this.savePublicationsFilter}} />
       {{/if}}

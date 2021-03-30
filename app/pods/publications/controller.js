@@ -14,7 +14,7 @@ export default class PublicationsController extends Controller {
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
-  @tracked filterOptionKeys = new PublicationFilter(JSON.parse(localStorage.getItem('filterOptions')) || {});
+  @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
   @tracked
   publication = {
@@ -117,9 +117,9 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  savePublicationsFilter(filterOptions) {
-    this.filterOptionKeys = filterOptions;
-    localStorage.setItem('filterOptions', this.filterOptionKeys.toString());
+  savePublicationsFilter(publicationFilter) {
+    this.publicationFilter = publicationFilter;
+    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
   }
