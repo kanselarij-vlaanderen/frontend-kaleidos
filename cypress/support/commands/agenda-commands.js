@@ -10,6 +10,7 @@ import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
+import auComponents from '../../selectors/au-component-selectors';
 
 // ***********************************************
 // Functions
@@ -581,6 +582,9 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
+  cy.get(auComponents.auLoading, {
+    timeout: 20000,
+  }).should('not.exist');
   cy.get('.vlc-tabs-reverse__link--active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
@@ -592,8 +596,11 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
+        // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
-        cy.wait(2500); // TODO data loading must be awaited  '/agendaitem?fields**' or next get() fails
+        cy.get(auComponents.auLoading, {
+          timeout: 20000,
+        }).should('not.exist');
       }
       cy.get(agenda.agendaOverviewSubitem)
         .contains(agendaitemName, {

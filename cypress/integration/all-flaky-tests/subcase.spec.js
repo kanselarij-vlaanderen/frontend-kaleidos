@@ -93,7 +93,6 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
 
     cy.openAgendaForDate(agendaDate);
-    cy.contains(SubcaseTitleShort).click();
     cy.openAgendaitemDossierTab(SubcaseTitleShort);
     cy.get(agenda.agendaitemTitlesToSubcase).should('exist');
   });
