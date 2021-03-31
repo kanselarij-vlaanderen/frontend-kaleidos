@@ -6,7 +6,8 @@
     />
     <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
       <Agenda::AgendaOverview
-        @notas={{this.model.notas}}
+        @notaGroups={{this.notaGroups}}
+        @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
         @announcements={{this.model.announcements}}
         @newItems={{this.model.newItems}}
         @currentAgenda={{this.agenda}}

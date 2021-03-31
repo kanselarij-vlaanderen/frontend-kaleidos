@@ -5,8 +5,15 @@ import {
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
-import { setAgendaitemsPriority } from 'frontend-kaleidos/utils/agendaitem-utils';
+import {
+  task,
+  lastValue
+} from 'ember-concurrency-decorators';
+import {
+  setAgendaitemsPriority,
+  AgendaitemGroup
+} from 'frontend-kaleidos/utils/agendaitem-utils';
+import { animationFrame } from 'ember-concurrency';
 
 export default class AgendaitemsAgendaController extends Controller {
   @service sessionService;
@@ -15,6 +22,7 @@ export default class AgendaitemsAgendaController extends Controller {
   @tracked filter;
   @tracked showModifiedOnly;
 
+  @lastValue('groupNotasOnGroupName') notaGroups = [];
   @tracked meeting;
   @tracked agenda;
   @tracked previousAgenda;
@@ -32,6 +40,24 @@ export default class AgendaitemsAgendaController extends Controller {
     const reorderedAgendaitemsOfCategory = reorderedAgendaitems.filter((item) => item.showAsRemark === draggedAgendaItem.showAsRemark);
     yield setAgendaitemsPriority(reorderedAgendaitemsOfCategory, true, true); // permissions guarded in template (and backend)
     this.refresh();
+  }
+
+  @task
+  *groupNotasOnGroupName(agendaitems) {
+    const agendaitemsArray = agendaitems.toArray();
+    const agendaitemGroups = [];
+    let currentAgendaitemGroup;
+    for (const agendaitem of agendaitemsArray) {
+      yield animationFrame(); // Computationally heavy task. This keeps the interface alive
+      if (currentAgendaitemGroup && (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))) {
+        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
+      } else {
+        const mandatees = yield agendaitem.get('mandatees');
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
+        agendaitemGroups.push(currentAgendaitemGroup);
+      }
+    }
+    return agendaitemGroups;
   }
 
   @action

@@ -30,7 +30,7 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     } = this.modelFor('agenda.agendaitems');
     controller.meeting = meeting;
     controller.agenda = agenda;
-    controller.notas = notas;
+    controller.groupNotasOnGroupName.perform(notas);
     controller.announcements = announcements;
     controller.newItems = newItems;
   }

@@ -44,7 +44,7 @@ export default class AgendaItemsAgendaRoute extends Route {
     });
   }
 
-  async setupController(controller) {
+  async setupController(controller, model) {
     super.setupController(...arguments);
     const {
       agenda,
@@ -53,5 +53,6 @@ export default class AgendaItemsAgendaRoute extends Route {
     controller.meeting = meeting;
     controller.agenda = agenda;
     controller.previousAgenda = await agenda.previousVersion;
+    controller.groupNotasOnGroupName.perform(model.notas);
   }
 }
