@@ -10,11 +10,12 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     });
   }
 
-  afterModel(model) {
+  afterModel(model, transition) {
     const arrayToSearch = model.showAsRemark ? this.modelFor('agenda.agendaitems').announcements : this.modelFor('agenda.agendaitems').notas;
     if (!arrayToSearch.includes(model) && arrayToSearch.length) { // This can happen when the selected item no longer is visible in the sidebar after filtering
       this.transitionTo('agenda.agendaitems.agendaitem', arrayToSearch[0]);
     }
+    this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
   }
 
   setupController(controller) {
@@ -30,7 +31,10 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     } = this.modelFor('agenda.agendaitems');
     controller.meeting = meeting;
     controller.agenda = agenda;
-    controller.groupNotasOnGroupName.perform(notas);
+    controller.notas = notas;
+    if (!(this.transition && this.transition.from && this.transition.from.name.startsWith('agenda.agendaitems.agendaitem'))) {
+      controller.groupNotasOnGroupName.perform(notas);
+    }
     controller.announcements = announcements;
     controller.newItems = newItems;
   }
