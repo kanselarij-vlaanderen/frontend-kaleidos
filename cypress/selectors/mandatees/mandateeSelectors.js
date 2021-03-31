@@ -1,18 +1,45 @@
 const selectors = {
-  mandateeLinkFieldsToggle: '[data-test-mandatee-link-fields-show]',
-  mandateeLinkListItem: '[data-test-mandatee-link-list-item]',
-  agendaitemMandateeFieldsList: '[data-test-agendaitem-mandatees-fields-list]',
+  // mandatees-domains-panel-view
+  mandateePanelView: {
+    rows: '[data-test-mandatee-panel-view-mandatee-row]',
+    row: {
+      name: '[data-test-mandatee-panel-view-row-name]',
+      domains: '[data-test-mandatee-panel-view-row-domains]',
+      submitter: '[data-test-mandatee-panel-view-row-submitter]',
+    },
+    actions: {
+      edit: '[data-test-mandatee-panel-view-edit]',
+    },
+  },
+  // mandatees-domains-panel-edit
+  mandateePanelEdit: {
+    rows: '[data-test-mandatee-panel-edit-mandatee-row]',
+    row: {
+      name: '[data-test-mandatee-panel-edit-row-name]',
+      domains: '[data-test-mandatee-panel-edit-row-domains]',
+      fields: '[data-test-mandatee-panel-edit-row-fields]',
+      submitter: '[data-test-mandatee-panel-edit-row-submitter]',
+      edit: '[data-test-mandatee-panel-edit-row-edit]',
+      delete: '[data-test-mandatee-panel-edit-row-delete]',
+    },
+    actions: {
+      add: '[data-test-mandatee-panel-edit-add-mandatee]',
+      cancel: '[data-test-mandatee-panel-edit-cancel]',
+      save: '[data-test-mandatee-panel-edit-save]',
+    },
+  },
+  // create-mandatee
   addMandateeTitleContainer: '[data-test-mandatee-title-container]',
   addMandateeNicknameContainer: '[data-test-mandatee-nick-name]',
-  addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
   addMandateeIseCodeDropdownContainer: '[data-test-ise-code-dropdown-container]',
+  // create-person-selector
+  addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
   createPerson: '[data-test-create-person]',
   createPersonLastnameContainer: '[data-test-create-person-firstname]',
   createPersonfirstnameContainer: '[data-test-create-person-lastname]',
+  // edit-mandatees
   mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
+  // manage-mandatees
   manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
-  mandateesEditRow: '[data-test-mandatees-edit-row]',
-  mandateesEditRowSubmitter: '[data-test-mandatees-edit-row-submitter]',
-  mandateesEditRowDelete: '[data-test-mandatees-edit-row-delete]',
 };
 export default selectors;
