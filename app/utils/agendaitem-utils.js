@@ -1,6 +1,7 @@
 import CONFIG from 'frontend-kaleidos/utils/config';
 import EmberObject from '@ember/object';
 import moment from 'moment';
+import { A } from '@ember/array';
 
 /**
  * Cancel the Edit.
@@ -247,3 +248,34 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
   await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
 };
+
+
+export class AgendaitemGroup {
+  sortedMandatees;
+  mandateeGroupId;
+  agendaitems;
+
+  constructor(mandatees, firstAgendaItem) {
+    this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
+    this.agendaitems = A([firstAgendaItem]);
+  }
+
+  static sortedMandatees(mandatees) {
+    // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
+    const copiedMandatees = A(mandatees.toArray());
+    return copiedMandatees.sortBy('priority');
+  }
+
+  static generateMandateeGroupId(sortedMandatees) {
+    // Assumes mandatees to be sorted
+    return sortedMandatees.mapBy('id').join();
+  }
+
+  async itemBelongsToThisGroup(agendaitem) {
+    const mandatees = await agendaitem.mandatees;
+    const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
+    return mandateeGroupId === this.mandateeGroupId;
+  }
+}
