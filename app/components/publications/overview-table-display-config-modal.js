@@ -32,7 +32,6 @@ export default class OverviewTableDisplayConfigModalComponent extends Component 
   @action
   toggleOption(event) {
     set(this.options, event.target.name, !this.options[event.target.name]);
-    // this.options[event.target.name] = !this.options[event.target.name];
     if (this.args.onChange) {
       this.args.onChange(this.options);
     }
