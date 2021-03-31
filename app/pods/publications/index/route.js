@@ -2,7 +2,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
-
+import { dasherize } from '@ember/string';
 
 export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
   queryParams = {
@@ -71,17 +71,38 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
         id: ids.join(','),
       };
     }
-    let sort;
-    if (typeof params.sort === 'string' && params.sort.includes('publication-number')) {
-      // Specifically requested by Johan, because Suffix needs to be string and Quater...
-      sort = `${params.sort},-created`;
-    } else {
-      sort = params.sort;
+
+    let apiSort;
+    let qpSort = params.sort;
+    let descending;
+    if (qpSort) {
+      if (qpSort.startsWith('-')) {
+        descending = true;
+        qpSort = qpSort.replace(/(^\+)|(^-)/g, '');
+      } else {
+        descending = false;
+      }
+      // note that the "dasherize" here is used in order to keep the original column keyName's
+      if (qpSort === dasherize('publicationNumber')) {
+        // Specifically requested by Johan, because Suffix needs to be string and Quater...
+        apiSort = 'publication-number,-created';
+      } else if (qpSort === dasherize('derivedPublicationType')) {
+        apiSort = 'deduced-type.priority';
+      } else if (qpSort === dasherize('requestedPublicationDate')) {
+        apiSort = 'publish-before';
+      } else if (qpSort === dasherize('publicationDate')) {
+        apiSort = 'published-at';
+      } else if (qpSort === dasherize('lastEdited')) {
+        apiSort = 'modified';
+      }
+      if (apiSort && descending) {
+        apiSort = `-${apiSort}`;
+      }
     }
 
     return this.store.query('publication-flow', {
       filter: filter,
-      sort: sort,
+      sort: apiSort,
       page: {
         number: params.page,
         size: params.size,

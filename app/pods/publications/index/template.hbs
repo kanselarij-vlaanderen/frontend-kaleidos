@@ -14,121 +14,27 @@
     as |table|>
     <table.content as |c|>
       <c.header>
-        {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
-
-        {{#if this.tableColumnDisplayOptions.caseName}}
-          <th style="min-width: 50rem">
-            {{t "publications-table-case-name"}}
-          </th>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.publicationNumber}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publication-number"
-            @label={{t "publications-table-publication-number"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.numacNumber}}
-          <th>{{t "publications-table-numacnummer-bs"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.derivedPublicationType}}
-          <ThSortable
+        {{#each this.tableColumns as |column|}}
+          {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+            {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
+            {{#if (eq column.keyName "caseName")}}
+              {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
+              <th style="min-width: 50rem">
+                {{t column.translationKey}}
+              </th>
+            {{else}}
+              {{#if column.sortable}}
+                <ThSortable
                   @currentSorting={{this.sort}}
-                  @field="deducedType.priority"
-                  @label={{t "deduced-publication-type"}}
-          />
-          {{!--<WebComponents::AuIcon @name="circle-info"/>
-          <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-            <p>
-              {{t "publications-table-derived-publicationtype-info"}}
-            </p>
-          </EmberTooltip>--}}
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.meetingDate}}
-          <th>{{t "publications-table-on-meeting"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publishBefore"
-            @label={{t "publications-table-requested-publication-date"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-final-publication-date"}}
-          />
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.publicationDate}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publishedAt"
-            @label={{t "publications-table-publication-date"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.caseManager}}
-          <th>{{t "publications-table-case-manager"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.lastEdited}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="modified"
-            @label={{t "publications-table-last-edited"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.lastEditedBy}}
-          <th>{{t "publications-table-last-edited-by"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.withdrawnDate}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-withdrawn-date"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.pauseDate}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-pause-date"}}
-          />
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.translateRequests}}
-          <th class="auk-u-text-align--center">{{t "publications-table-translate-requests"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.signRequests}}
-          <th class="auk-u-text-align--center">{{t "publications-table-sign-requests"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
-          <th class="auk-u-text-align--center">{{t "publications-table-publish-preview-requests"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.speedProcedure}}
-          <th class="auk-u-text-align--center">{{t "publications-table-speed-procedure"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.comment}}
-          <th class="auk-u-text-align--center">{{t "publications-table-comment"}}</th>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
-          <th>{{t "publications-table-from-designagenda"}}</th>
-        {{/if}}
+                  @field={{column.keyName}}
+                  @label={{t column.translationKey}}
+                />
+              {{else}}
+                <th>{{t column.translationKey}}</th>
+              {{/if}}
+            {{/if}}
+          {{/if}}
+        {{/each}}
         <th>
           &nbsp;
         </th>

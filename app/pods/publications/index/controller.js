@@ -1,14 +1,15 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
+import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsIndexController extends Controller {
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
-    || configElements.reduce((accumulator, currentValue) => {
+    || tableColumns.reduce((accumulator, currentValue) => {
       accumulator[currentValue.keyName] = currentValue.showByDefault;
       return accumulator;
     }, {});
+  tableColumns = tableColumns;
 
   @tracked showTableDisplayOptions = false;
   queryParams = {

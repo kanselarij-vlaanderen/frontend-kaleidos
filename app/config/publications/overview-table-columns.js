@@ -8,6 +8,7 @@ export default [
     keyName: 'publicationNumber',
     translationKey: 'publications-table-publication-number',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'numacNumber',
@@ -18,6 +19,7 @@ export default [
     keyName: 'derivedPublicationType',
     translationKey: 'publications-table-derived-publicationtype',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'meetingDate',
@@ -28,26 +30,30 @@ export default [
     keyName: 'requestedPublicationDate',
     translationKey: 'publications-table-requested-publication-date',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'finalPublicationDate',
     translationKey: 'publications-table-final-publication-date',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'publicationDate',
     translationKey: 'publications-table-publication-date',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
+    keyName: 'caseManager',
+    translationKey: 'publications-table-case-manager',
     showByDefault: true,
   },
   {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     showByDefault: true,
-  },
-  {
-    keyName: 'caseManager',
-    translationKey: 'publications-table-case-manager',
-    showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'lastEditedBy',
@@ -58,11 +64,13 @@ export default [
     keyName: 'withdrawnDate',
     translationKey: 'publications-table-withdrawn-date',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'pauseDate',
     translationKey: 'publications-table-pause-date',
     showByDefault: true,
+    sortable: true,
   },
   {
     keyName: 'translateRequests',
