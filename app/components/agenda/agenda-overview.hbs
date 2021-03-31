@@ -45,13 +45,13 @@
       </div>
     </div>
   </div>
-  {{#if this.groupNotasOnGroupName.isIdle}}
-    {{#if this.groupedNotas.length}}
+  {{#if (not @isLoadingNotaGroups)}}
+    {{#if @notaGroups.length}}
       <div>
         <ul
           {{sortable-group onChange=@onReorderAgendaitems}}
           {{did-update (perform this.groupNotasOnGroupName @notas) @notas}}>
-          {{#each this.groupedNotas as |agendaitemGroup index|}}
+          {{#each @notaGroups as |agendaitemGroup index|}}
             {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
               <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
             {{/unless}}

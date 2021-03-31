@@ -5,7 +5,8 @@ import { tracked } from '@glimmer/tracking';
 
 export default class AgendaOverview extends AgendaSidebar {
   /**
-   * @argument notas
+   * @argument notaGroups: Array of AgendaitemGroup-objects
+   * @argument isLoadingNotaGroups: boolean indicating whether to show the loading state for nota's
    * @argument announcements
    * @argument newItems: items to be marked as "new on this agenda"
    * @argument currentAgenda
