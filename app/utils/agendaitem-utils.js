@@ -249,12 +249,19 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
 };
 
-
+/**
+ * Class representing a list of agenda-items related to a certain group of mandatees.
+ */
 export class AgendaitemGroup {
   sortedMandatees;
   mandateeGroupId;
   agendaitems;
 
+  /**
+   * Create an AgendaitemGroup.
+   * @param {EmberArray} mandatees - The group of mandatees.
+   * @param {Agendaitem} firstAgendaItem - A first agenda-item to initialize the list of items with.
+   */
   constructor(mandatees, firstAgendaItem) {
     this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
     this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
@@ -272,6 +279,11 @@ export class AgendaitemGroup {
     return sortedMandatees.mapBy('id').join();
   }
 
+  /**
+   * Determine if a given agenda-item belongs in this group (can be used before adding it to this.agendaitems)
+   * @param {Agendaitem} agendaitem
+   * @return {boolean}
+   */
   async itemBelongsToThisGroup(agendaitem) {
     const mandatees = await agendaitem.mandatees;
     const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
