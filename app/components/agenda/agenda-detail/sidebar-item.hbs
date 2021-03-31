@@ -28,7 +28,7 @@
         {{#if (not selectedAgendaitem)}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="vl-u-text">
+              <pre class="auk-u-text-pre-line">
                 {{@agendaitem.title}}
               </pre>
             {{/if}}

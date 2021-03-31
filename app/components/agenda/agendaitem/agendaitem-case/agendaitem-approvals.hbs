@@ -48,7 +48,7 @@
               {{#if (not isEditing)}}
                 {{#if (await mandateeApproval.approval)}}
                   <WebComponents::AuIcon @name="check" @iconSkinColor="success" />
-                  <span class="vl-annotation auk-u-text-success">
+                  <span class="auk-u-text-success">
                     {{t "approval-mandatee"}}
                   </span>
                 {{else}}
