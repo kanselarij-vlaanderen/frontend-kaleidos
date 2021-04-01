@@ -59,7 +59,15 @@
                 />
               </td>
               <td class="auk-u-text-align--right auk-u-flex--vertical-center">
-                {{!-- TODO: disable button on load --}}
+                {{!-- TODO: disable button on load
+                  Loading-state HTML should look like:
+                  <button type="button"
+                    class="auk-button-loading"
+                    disabled
+                  >
+                    <div class="auk-loader" role="alert" aria-busy="true"></div>
+                  </button>
+                 --}}
                 {{!-- TODO: modify mandatee domains picker --}}
                 <button
                   data-test-mandatee-panel-edit-row-edit
