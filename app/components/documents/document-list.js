@@ -5,14 +5,11 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentsDocumentListComponent extends Component {
   /**
-   * A list of document cards.
+   * A renderless component yielding a list of pieces.
    * In the case where multiple pieces are provided that belong to the same container,
-   * only one card per container will be shown, featuring the most recent of the provided versions.
+   * only one piece per container will be yielded, featuring the most recent of the provided versions.
    *
    * @argument pieces: a regular JS Array of Piece objects
-   * @argument didDeletePiece: action triggered when a piece from the list has been removed
-   * @argument onOpenUploadModal: action triggered when the modal to upload a new version is being opened
-   * @argument onAddPiece: action triggered when a new version has been uploaded
    */
 
   @tracked documentsByContainer;

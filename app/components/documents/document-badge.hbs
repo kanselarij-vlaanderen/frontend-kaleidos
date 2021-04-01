@@ -1,0 +1,13 @@
+<li class="vlc-document-list__item {{if @isHighlighted "vlc-document-list__item--active"}}">
+  {{#if @isClickable}}
+    <a href={{@piece.viewDocumentURL}} target="_blank" rel="noreferrer noopener">
+      <i class="vl-badge__icon {{this.documentIconClass}}"></i>
+      {{@piece.name}}
+    </a>
+  {{else}}
+    <span>
+      <i class="vl-badge__icon {{this.documentIconClass}}"></i>
+      {{@piece.name}}
+    </span>
+  {{/if}}
+</li>

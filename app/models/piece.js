@@ -51,6 +51,10 @@ export default Model.extend({
     inverse: null,
   }),
 
+  viewDocumentURL: computed('id', function() {
+    return `/document/${this.id}`;
+  }),
+
   downloadFilename: computed('name', 'file.extension', async function() {
     const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
     return sanitize(filename, { // file-system-safe

@@ -1,4 +1,4 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
@@ -11,6 +11,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service store;
   @service currentSession;
 
+  @controller('agenda.agendaitems') agendaitemsController;
+  @controller('agenda.agendaitems.agendaitem') agendaitemController;
   @tracked agenda;
   @tracked subcase;
   @tracked governmentFields;
@@ -47,6 +49,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
     await this.reassignPrioritiesForAgendaitems();
+    this.agendaitemsController.send('reloadModel');
     await this.navigateToNeighbouringItem(this.model);
   }
 
@@ -73,5 +76,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.iseCodes = correspondingIseCodes;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);
   }
 }

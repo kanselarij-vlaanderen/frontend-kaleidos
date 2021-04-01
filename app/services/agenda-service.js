@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import { singularize } from 'ember-inflector';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
@@ -111,6 +112,52 @@ export default Service.extend({
       });
   },
 
+  async newAgendaItems(currentAgendaId, comparedAgendaId) {
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const itemsFromStore = [];
+    for (const item of payload.data) {
+      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      if (!itemFromStore) {
+        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+      }
+      itemsFromStore.push(itemFromStore);
+    }
+    return itemsFromStore;
+  },
+
+  async modifiedAgendaItems(currentAgendaId, comparedAgendaId, scopeFields) {
+    // scopefields specify which fields to base upon for determining if an item was modified
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items?changeset=modified&scope=${scopeFields.join(',')}`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const itemsFromStore = [];
+    for (const item of payload.data) {
+      let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
+      if (!itemFromStore) {
+        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+      }
+      itemsFromStore.push(itemFromStore);
+    }
+    return itemsFromStore;
+  },
+
+  async changedPieces(currentAgendaId, comparedAgendaId, agendaItemId) {
+    const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
+    const response = await fetch(url);
+    const payload = await response.json();
+    const piecesFromStore = [];
+    for (const piece of payload.data) {
+      let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
+      if (!pieceFromStore) {
+        pieceFromStore = this.store.queryRecord(singularize(piece.type), piece.id);
+      }
+      piecesFromStore.push(pieceFromStore);
+    }
+    return piecesFromStore;
+  },
+
   async computeNextItemNumber(agenda, isAnnouncement) {
     const lastItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
@@ -210,6 +257,7 @@ export default Service.extend({
       const newsItem = await this.newsletterService.createNewsItemForAgendaitem(agendaitem, true);
       newsItem.save();
     }
+    return agendaitem;
   },
 
   async groupAgendaitemsOnGroupName(agendaitems) {

@@ -56,23 +56,20 @@
           <th class="vl-data-table-col-2"></th>
         </tr>
       </thead>
-      {{#sortable-group
-        data-test-ministers-sortable-group=true
-        tagName="tbody"
-        onChange=(action "reorderItems" model)
+      <SortableGroup
+        data-test-ministers-sortable-group
+        @tagName="tbody"
+        @model={{model}}
+        @onChange={{action "reorderItems" model}}
       as |sortableGroup|
-      }}
-        {{#each
-          model
-        as |mandatee index|
-        }}
-          {{#sortable-item
-            tagName="tr"
-            model=mandatee
-            data-test-ministers-sortable-group-row=index
-            group=sortableGroup
-            handle=".mandatee-draggable-row"
-          }}
+      >
+        {{#each sortableGroup.model as |mandatee index|}}
+          <sortableGroup.item
+            @tagName="tr"
+            @model={{mandatee}}
+            data-test-ministers-sortable-group-row="index"
+            @handle=".mandatee-draggable-row"
+          >
             <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.fullDisplayName)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -118,9 +115,9 @@
                 </button>
               </div>
             </td>
-          {{/sortable-item}}
+          </sortableGroup.item>
         {{/each}}
-      {{/sortable-group}}
+      </SortableGroup>
     </table>
   {{!-- template-lint-enable table-groups --}}
   {{/if}}

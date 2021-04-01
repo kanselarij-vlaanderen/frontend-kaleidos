@@ -72,10 +72,10 @@
             {{/each}}
           </td>
         {{/if}}
-        {{#if this.tableColumnDisplayOptions.derivedPublicationType}}
+        {{#if this.tableColumnDisplayOptions.regulationType}}
           <td>
-            {{#if row.deducedType}}
-              {{row.deducedType.label}}
+            {{#if row.regulationType}}
+              {{row.regulationType.label}}
             {{else}}
               {{t "dash"}}
             {{/if}}

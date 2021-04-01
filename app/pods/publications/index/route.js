@@ -3,6 +3,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { dasherize } from '@ember/string';
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
   queryParams = {
@@ -21,37 +22,29 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
   }
 
   async model(params) {
-    const filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
-      || {
-        ministerFilterOption: false,
-        notMinisterFilterOption: false,
-        publishedFilterOption: false,
-        toPublishFilterOption: false,
-        pausedFilterOption: false,
-        withdrawnFilterOption: false,
-      };
+    const publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
     const ids = [];
     let ministerFilter = {};
 
-    if (filterOptionKeys.publishedFilterOption) {
+    if (publicationFilter.publishedFilterOption) {
       ids.push(CONFIG.publicationStatusPublished.id);
     }
-    if (filterOptionKeys.pausedFilterOption) {
+    if (publicationFilter.pausedFilterOption) {
       ids.push(CONFIG.publicationStatusPauzed.id);
     }
-    if (filterOptionKeys.withdrawnFilterOption) {
+    if (publicationFilter.withdrawnFilterOption) {
       ids.push(CONFIG.publicationStatusWithdrawn.id);
     }
-    if (filterOptionKeys.toPublishFilterOption) {
+    if (publicationFilter.toPublishFilterOption) {
       ids.push(CONFIG.publicationStatusToPublish.id);
     }
-    if (!(filterOptionKeys.ministerFilterOption && filterOptionKeys.notMinisterFilterOption)) {
-      if (filterOptionKeys.ministerFilterOption) {
+    if (!(publicationFilter.ministerFilterOption && publicationFilter.notMinisterFilterOption)) {
+      if (publicationFilter.ministerFilterOption) {
         ministerFilter = {
           ':has:subcases': 'yes',
         };
       }
-      if (filterOptionKeys.notMinisterFilterOption) {
+      if (publicationFilter.notMinisterFilterOption) {
         ministerFilter = {
           ':has-no:subcases': 'yes',
         };
@@ -86,8 +79,8 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
       if (qpSort === dasherize('publicationNumber')) {
         // Specifically requested by Johan, because Suffix needs to be string and Quater...
         apiSort = 'publication-number,-created';
-      } else if (qpSort === dasherize('derivedPublicationType')) {
-        apiSort = 'deduced-type.priority';
+      } else if (qpSort === dasherize('regulationType')) {
+        apiSort = 'regulation-type.position';
       } else if (qpSort === dasherize('requestedPublicationDate')) {
         apiSort = 'publish-before';
       } else if (qpSort === dasherize('publicationDate')) {

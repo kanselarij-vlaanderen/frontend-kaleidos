@@ -16,8 +16,8 @@ export default [
     showByDefault: true,
   },
   {
-    keyName: 'derivedPublicationType',
-    translationKey: 'publications-table-derived-publicationtype',
+    keyName: 'regulationType',
+    translationKey: 'publications-table-regulation-type',
     showByDefault: true,
     sortable: true,
   },

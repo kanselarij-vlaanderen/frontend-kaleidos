@@ -102,11 +102,11 @@
                 />
               </div>
               <div class="auk-form-group">
-                <WebComponents::AuLabel for="blockInput">{{t "deduced-publication-type"}}</WebComponents::AuLabel>
-                <Utils::RadioDropdownComboSelect @radioOptionsSize="3"
-                                                 @options={{this.sortedDocumentTypes}}
-                                                 @onSelect={{this.selectDocumentType}}
-                                                 @selected={{this.getSelectedDocumentType}}
+                <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
+                <WebComponents::AuPowerSelect @options={{this.model.regulationTypes}}
+                                              @isSearchable={{false}}
+                                              @onchange={{this.setRegulationType}}
+                                              @selected={{this.getRegulationType}}
                 />
               </div>
               <div class="auk-form-group">
