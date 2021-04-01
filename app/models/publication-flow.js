@@ -29,7 +29,7 @@ export default class PublicationFlow extends Model {
   }) status;
 
   @belongsTo('publication-type') type;
-  @belongsTo('document-type') deducedType;
+  @belongsTo('regulation-type') regulationType;
 
   // Has many .
   @hasMany('numac-number', {

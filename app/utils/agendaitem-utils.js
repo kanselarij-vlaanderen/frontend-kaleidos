@@ -1,6 +1,7 @@
 import CONFIG from 'frontend-kaleidos/utils/config';
 import EmberObject from '@ember/object';
 import moment from 'moment';
+import { A } from '@ember/array';
 
 /**
  * Cancel the Edit.
@@ -229,8 +230,10 @@ export const sortByPriority = (groupedAgendaitems, allowEmptyGroups) => {
 export const setAgendaitemsPriority = async(agendaitems, isEditor, isDesignAgenda) => {
   if (isEditor && isDesignAgenda) {
     return await Promise.all(agendaitems.map(async(agendaitem, index) => {
-      agendaitem.set('priority', index + 1);
-      return await agendaitem.save();
+      if (agendaitem.priority !== index + 1) {
+        agendaitem.set('priority', index + 1);
+        return agendaitem.save();
+      }
     }));
   }
 };
@@ -245,3 +248,46 @@ export const reorderAgendaitemsOnAgenda = async(agenda, isEditor) => {
   await setAgendaitemsPriority(actualAgendaitems, isEditor, true);
   await setAgendaitemsPriority(actualAnnouncements, isEditor, true);
 };
+
+/**
+ * Class representing a list of agenda-items related to a certain group of mandatees.
+ */
+export class AgendaitemGroup {
+  sortedMandatees;
+  mandateeGroupId;
+  agendaitems;
+
+  /**
+   * Create an AgendaitemGroup.
+   * @param {EmberArray} mandatees - The group of mandatees.
+   * @param {Agendaitem} firstAgendaItem - A first agenda-item to initialize the list of items with.
+   */
+  constructor(mandatees, firstAgendaItem) {
+    this.sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    this.mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(this.sortedMandatees);
+    this.agendaitems = A([firstAgendaItem]);
+  }
+
+  static sortedMandatees(mandatees) {
+    // Copy array by value. Manipulating the by-reference array would trigger changes when mandatees is an array from the store
+    const copiedMandatees = A(mandatees.toArray());
+    return copiedMandatees.sortBy('priority');
+  }
+
+  static generateMandateeGroupId(sortedMandatees) {
+    // Assumes mandatees to be sorted
+    return sortedMandatees.mapBy('id').join();
+  }
+
+  /**
+   * Determine if a given agenda-item belongs in this group (can be used before adding it to this.agendaitems)
+   * @param {Agendaitem} agendaitem
+   * @return {boolean}
+   */
+  async itemBelongsToThisGroup(agendaitem) {
+    const mandatees = await agendaitem.mandatees;
+    const sortedMandatees = AgendaitemGroup.sortedMandatees(mandatees);
+    const mandateeGroupId = AgendaitemGroup.generateMandateeGroupId(sortedMandatees);
+    return mandateeGroupId === this.mandateeGroupId;
+  }
+}

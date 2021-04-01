@@ -1,22 +1,19 @@
 <div class="vlc-input-field-block vlc-input-field-power-select">
-  {{#if (not hideLabel)}}
-    <WebComponents::AuLabel>{{t "status"}}</WebComponents::AuLabel>
-  {{/if}}
-  {{#if isLoading}}
+  {{#if this.onChange.isRunning}}
     <div class="auk-u-muted">
       {{t "please-be-patient"}}
       <div class="auk-loader" role="alert" aria-busy="true"></div>
     </div>
-  {{else}}
-    <PowerSelect
-      @options={{options}}
-      @searchEnabled={{false}}
-      @selected={{selectedFormallyOk}}
-      @onchange={{action "setAction"}} as |option|>
-      {{#if option.svg }}
-        <WebComponents::AuIcon @name={{option.svg.icon}} @iconSkinColor={{option.svg.color}}/>
-      {{/if}}
-      {{option.label}}
-    </PowerSelect>
   {{/if}}
+  <PowerSelect
+    @options={{this.options}}
+    @selected={{this.selectedStatus}}
+    @onchange={{perform this.onChange}}
+    @disabled={{this.onChange.isRunning}}
+  as |option|>
+    {{#if option.svg }}
+      <WebComponents::AuIcon @name={{option.svg.icon}} @iconSkinColor={{option.svg.color}}/>
+    {{/if}}
+    {{option.label}}
+  </PowerSelect>
 </div>

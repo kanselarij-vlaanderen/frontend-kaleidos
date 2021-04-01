@@ -3,7 +3,11 @@
 as |documents|>
   <div class="grid-container">
     {{#each documents as |doc|}}
-      <ItemDocument @piece={{doc}} />
+      <Documents::DocumentBadge
+        @piece={{doc}}
+        @isHighlighted={{includes doc @highlightedPieces}}
+        @isClickable={{true}}
+      />
     {{/each}}
   </div>
 </Documents::DocumentList>
