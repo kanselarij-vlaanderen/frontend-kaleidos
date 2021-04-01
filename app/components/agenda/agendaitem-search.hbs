@@ -4,15 +4,15 @@
       <div class="vlc-toolbar__justified">
         <div class="vlc-toolbar__item vlc-u-box-model-maximize-width">
           <div class="vl-input-field--inline auk-u-flex auk-u-flex--vertical-center auk-u-flex--justify-between">
-            <WebComponents::AuInput @icon="search"
-                   class="auk-input--block"
-                   type="text"
-                   data-test-trigger-search-input
-                   id="defaultInput"
-                   @placeholder={{t "search-placeholder"}}
-                   @value={{this.searchText}}
-                   {{on "input" this.debouncedSearch}}
-                   @enter={{this.search}}
+            <WebComponents::AuInput
+              @icon="search"
+              class="auk-input--block"
+              type="text"
+              data-test-trigger-search-input
+              @placeholder={{t "search-placeholder"}}
+              value={{this.searchText}}
+              @enter={{this.search}}
+              {{on "input" this.debouncedSearch}}
             />
             <button
               type="button"

@@ -1,0 +1,10 @@
+<div class="vlc-list-section-header" data-test-agenda-overview-agenda-item-header>
+  <span class={{if (eq @mandatees.length 0) "vlc-list-section-header-title"}}>
+    {{#each @mandatees as |mandatee index|}}
+      {{#if (not-eq index 0)}}<br>{{/if}}
+      {{mandatee.title}}
+    {{else}}
+      {{t 'no-mandatee-assigned'}}
+    {{/each}}
+  </span>
+</div>

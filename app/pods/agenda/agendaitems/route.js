@@ -1,57 +1,90 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import { isEmpty } from '@ember/utils';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import CONFIG from 'frontend-kaleidos/utils/config';
+import search from 'frontend-kaleidos/utils/mu-search';
 
-export default class AgendaItemsAgendaRoute extends Route {
+export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
     filter: {
-      refreshModel: false,
+      refreshModel: true,
+    },
+    showModifiedOnly: {
+      refreshModel: true,
+      as: 'toon_enkel_gewijzigd',
     },
   };
 
   @service sessionService;
   @service agendaService;
 
-  async model() {
+  async model(params) {
     const {
       agenda,
+      meeting,
     } = this.modelFor('agenda');
-    const agendaitems = await this.store.query('agendaitem', {
+    // Could be optimized not to make below query again when only query params changed
+    let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      include: 'mandatees',
+      include: [
+        'mandatees'
+      ].join(','),
+      'fields[mandatees]': [
+        'title', // Display group header per agendaitems group
+        'priority' // Sorting agendaitems on minister protocol order
+      ].join(','),
+      'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
+      sort: 'show-as-remark,priority',
     });
 
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
-
-    this.set('sessionService.selectedAgendaitem', null);
-
-    return hash({
-      currentAgenda: agenda, // TODO: figure out where this still gets used and remove. This can be fetched from parent routes' model
-      announcements,
-      agendaitems,
-    });
-  }
-
-  afterModel(_, transition) { // eslint-disable-line
-    if (!isEmpty(transition.to.queryParams.filter)) {
-      const controller = this.controllerFor('agenda.agendaitems');
-      controller.filterTask.perform();
+    const previousAgenda = await agenda.previousVersion;
+    let newItems;
+    if (previousAgenda) {
+      newItems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
+    } else {
+      newItems = agendaitems;
     }
+
+    if (params.showModifiedOnly) {
+      // "modified" here is interpreted as "new item or existing item with changes in its related documents"
+      if (previousAgenda) {
+        const modItems = await this.agendaService.modifiedAgendaItems(agenda.id, previousAgenda.id, ['documents']);
+        agendaitems = agendaitems.filter((item) => [...new Set(newItems.concat(modItems))].includes(item));
+      }
+    }
+
+    if (params.filter) {
+      const filter = {
+        ':phrase_prefix:title,shortTitle': `${params.filter}`,
+        meetingId: meeting.id,
+        agendaId: agenda.id,
+      };
+      const matchingIds = await search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
+      agendaitems = agendaitems.filter((ai) => matchingIds.includes(ai.id));
+    }
+
+    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
+    const filteredNewItems = newItems.filter((agendaitem) => agendaitems.includes(agendaitem));
+
+    this.previousAgenda = previousAgenda; // for use in setupController
+    return hash({
+      notas,
+      announcements,
+      newItems: filteredNewItems,
+    });
   }
 
-  setupController(controller, model) {
+  async setupController(controller) {
     super.setupController(...arguments);
     const {
       agenda,
       meeting,
     } = this.modelFor('agenda');
-    controller.set('meeting', meeting);
-    controller.set('agenda', agenda);
-
-    controller.set('filteredAgendaitems', model.agendaitems);
-    controller.set('filteredAnnouncements', model.announcements);
+    controller.meeting = meeting;
+    controller.agenda = agenda;
+    controller.previousAgenda = this.previousAgenda;
   }
 
   @action

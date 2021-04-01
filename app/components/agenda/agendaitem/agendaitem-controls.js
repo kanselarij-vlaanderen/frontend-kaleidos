@@ -1,8 +1,5 @@
 import Component from '@glimmer/component';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -60,7 +57,6 @@ export default class AgendaitemControls extends Component {
     } else {
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
     }
-    set(this.sessionService, 'selectedAgendaitem', null);
 
     if (this.args.onDeleteAgendaitem) {
       await this.args.onDeleteAgendaitem();

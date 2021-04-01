@@ -1,0 +1,24 @@
+<div class="vlc-panel-layout-agenda__detail vl-u-bg-porcelain">
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    <Agenda::AgendaitemSearch
+      @searchText={{readonly this.agendaitemsController.filter}}
+      @onSearch={{this.searchAgendaitems}}
+    />
+    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
+      <Agenda::AgendaOverview
+        @notaGroups={{this.notaGroups}}
+        @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
+        @announcements={{this.model.announcements}}
+        @newItems={{this.model.newItems}}
+        @currentAgenda={{this.agenda}}
+        @previousAgenda={{this.previousAgenda}}
+        @onReorderAgendaitems={{perform this.assignNewPriorities}}
+        @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
+        @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+      />
+      {{#if this.assignNewPriorities.isRunning}}
+        <WebComponents::AuLoadingOverlay/>
+      {{/if}}
+    </div>
+  </div>
+</div>

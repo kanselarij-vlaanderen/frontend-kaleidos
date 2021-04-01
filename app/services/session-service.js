@@ -12,7 +12,6 @@ export default Service.extend({
   store: inject(),
   router: inject(),
   currentSession: null,
-  selectedAgendaitem: null,
 
   agendas: computed('currentSession.agendas.@each', function() {
     if (!this.get('currentSession')) {

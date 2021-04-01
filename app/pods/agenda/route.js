@@ -12,7 +12,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
     const meeting = await this.store.findRecord('meeting', meetingId, {
       include: 'agendas,agendas.status', reload: true,
     });
-    this.set('sessionService.selectedAgendaitem', null);
     this.set('sessionService.currentSession', meeting);
     const agendaId = params.agenda_id;
     const agenda = await meeting.get('agendas').findBy('id', agendaId);
