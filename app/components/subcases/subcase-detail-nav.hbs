@@ -1,35 +1,44 @@
 <div class="vlc-toolbar vlc-toolbar--auto">
   <div class="vlc-toolbar__left">
     <div class="vlc-toolbar__item">
-      {{#link-to
-        "cases.case.subcases"
-        data-test-navigation-walk-up=true
+      <LinkTo
+        data-test-navigation-walk-up
+        @route="cases.case.subcases"
         class="vlc-backlink vl-link vl-link--bold"
-      }}
+      >
       {{!-- template-lint-disable no-bare-strings  --}}
         &#8629;
       {{!-- template-lint-enable no-bare-strings  --}}
-      {{/link-to}}
+      </LinkTo>
     </div>
     <div class="vlc-toolbar__item">
       <ul class="vlc-tabs-reverse" role="tablist">
         <li class="vlc-tabs-reverse__item">
-          {{#link-to
-            "cases.case.subcases.subcase.overview"
+          <LinkTo
+            @route="cases.case.subcases.subcase.overview"
             class="border-left vlc-tabs-reverse__link"
-            activeClass="vlc-tabs-reverse__link--active"
-          }}
+            @activeClass="vlc-tabs-reverse__link--active"
+          >
             {{t "overview"}}
-          {{/link-to}}
+          </LinkTo>
         </li>
         <li class="vlc-tabs-reverse__item">
-          {{#link-to
-            "cases.case.subcases.subcase.documents"
+          <LinkTo
+            @route="cases.case.subcases.subcase.documents"
             class="vlc-tabs-reverse__link"
-            activeClass="vlc-tabs-reverse__link--active"
-          }}
+            @activeClass="vlc-tabs-reverse__link--active"
+          >
             {{t "documents"}}
-          {{/link-to}}
+          </LinkTo>
+        </li>
+        <li class="vlc-tabs-reverse__item">
+          <LinkTo
+            @route="cases.case.subcases.subcase.decision"
+            class="vlc-tabs-reverse__link"
+            @activeClass="vlc-tabs-reverse__link--active"
+          >
+            {{capitalize (t "decision")}}
+          </LinkTo>
         </li>
       </ul>
     </div>
