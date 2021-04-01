@@ -99,7 +99,7 @@
           </WebComponents::AuPill>
         {{else}}
           {{!--  TODO: Only here because required for alignment of flex items --}}
-          <WebComponents::AuPill class="vlc-agenda-meta__times-passed auk-u-text-capitalize"></WebComponents::AuPill>
+          <span class="vlc-agenda-meta__times-passed auk-u-text-capitalize"></span>
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
