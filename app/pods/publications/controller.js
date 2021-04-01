@@ -1,9 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
-import {
-  action, set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsController extends Controller {
   @service publicationService;
@@ -15,16 +14,7 @@ export default class PublicationsController extends Controller {
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
-
-  @tracked filterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'))
-    || {
-      ministerFilterOption: true,
-      notMinisterFilterOption: true,
-      publishedFilterOption: true,
-      toPublishFilterOption: true,
-      pausedFilterOption: true,
-      withdrawnFilterOption: true,
-    };
+  @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
   @tracked
   publication = {
@@ -33,6 +23,7 @@ export default class PublicationsController extends Controller {
     shortTitle: null,
     longTitle: null,
   };
+
 
   get getError() {
     return this.hasError;
@@ -106,16 +97,6 @@ export default class PublicationsController extends Controller {
     this.isShowPublicationFilterModal = true;
   }
 
-  @action
-  closeFilterModal() {
-    const localeFilterOptionKeys = JSON.parse(localStorage.getItem('filterOptions'));
-    if (localeFilterOptionKeys !== null) {
-      localStorage.setItem('filterOptions', JSON.stringify(localeFilterOptionKeys));
-    } else {
-      localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-    }
-    this.isShowPublicationFilterModal = false;
-  }
 
   get shouldShowPublicationHeader() {
     return this.routing.currentRouteName.startsWith('publications.index');
@@ -131,31 +112,15 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  resetModelFilterOptions() {
-    this.filterOptionKeys = {
-      ministerFilterOption: true,
-      notMinisterFilterOption: true,
-      publishedFilterOption: true,
-      toPublishFilterOption: true,
-      pausedFilterOption: true,
-      withdrawnFilterOption: true,
-    };
-    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
-    this.send('refreshModel');
-  }
-
-  @action
-  filterModel() {
-    localStorage.setItem('filterOptions', JSON.stringify(this.filterOptionKeys));
+  cancelPublicationsFilter() {
     this.isShowPublicationFilterModal = false;
-    // this.refreshModel();
-    this.send('refreshModel');
   }
 
   @action
-  toggleFilterOption(event) {
-    const tempArr = this.get('filterOptionKeys');
-    set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.set('filterOptionKeys', tempArr);
+  savePublicationsFilter(publicationFilter) {
+    this.publicationFilter = publicationFilter;
+    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
+    this.isShowPublicationFilterModal = false;
+    this.send('refreshModel');
   }
 }
