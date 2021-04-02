@@ -7,8 +7,7 @@ import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 export default class PublicationsController extends Controller {
   @service publicationService;
   @service('-routing') routing;
-  @tracked isShowingPublicationModal = false; // createPublicationModal ? more accurate
-  @tracked hasError = false;
+  @tracked isShowPublicationModal = false;
   @tracked numberIsAlreadyUsed = false;
   @tracked isCreatingPublication = false;
   @tracked showLoader = false;
@@ -16,80 +15,44 @@ export default class PublicationsController extends Controller {
 
   @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
-  @tracked
-  publication = {
-    number: null,
-    suffix: null,
-    shortTitle: null,
-    longTitle: null,
-  };
-
-
-  get getError() {
-    return this.hasError;
-  }
-
-  get getClassForGroupNumber() {
-    if (this.numberIsAlreadyUsed || (this.hasError && (!this.publication.number || this.publication.number < 1))) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
-  get getClassForGroupShortTitle() {
-    if (this.hasError && (!this.publication.shortTitle || this.publication.shortTitle < 1)) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
   @action
   async startPublicationFromCaseId(_caseId) {
     this.showLoader = true;
     const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
     const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
-    this.showLoader = false;
+
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
+    this.showLoader = false;
   }
 
   @action
-  async isPublicationNumberAlreadyTaken() {
-    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publication.number, this.publication.suffix);
-    if (isPublicationNumberTaken) {
-      this.numberIsAlreadyUsed = true;
-    } else {
-      this.numberIsAlreadyUsed = false;
-    }
+  async isPublicationNumberAlreadyTaken(publication) {
+    return await this.publicationService.publicationNumberAlreadyTaken(publication.number, publication.suffix);
   }
 
   @action
-  async createNewPublication() {
-    if (this.numberIsAlreadyUsed || !this.publication.number || this.publication.number.length < 1 || !this.publication.shortTitle || this.publication.shortTitle.length < 1) {
-      this.hasError = true;
-    } else {
-      this.hasError = false;
-    }
-
-    if (!this.hasError) {
-      this.isCreatingPublication = true;
-      const newPublication = await this.publicationService.createNewPublication(this.publication.number, this.publication.suffix, false, this.publication.longTitle, this.publication.shortTitle);
-      this.closePublicationModal();
-      this.transitionToRoute('publications.publication', newPublication.get('id'));
-    }
+  async createNewPublication(publication) {
+    this.isCreatingPublication = true;
+    const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
+    this.closePublicationModal();
+    this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
 
   @action
   closePublicationModal() {
-    this.isShowingPublicationModal = false;
+    this.isShowPublicationModal = false;
     this.isCreatingPublication = false;
-    this.resetPublication();
   }
 
   @action
-  async showNewPublicationModal() {
-    this.isShowingPublicationModal = true;
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    this.set('publication.number', newPublicationNumber);
+  async showPublicationModal() {
+    this.isShowPublicationModal = true;
+  }
+
+  @action
+  async getPublicationNumber() {
+    const publicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    return publicationNumber;
   }
 
   @action
@@ -97,18 +60,8 @@ export default class PublicationsController extends Controller {
     this.isShowPublicationFilterModal = true;
   }
 
-
   get shouldShowPublicationHeader() {
     return this.routing.currentRouteName.startsWith('publications.index');
-  }
-
-  resetPublication() {
-    this.publication = {
-      number: null,
-      shortTitle: null,
-      longTitle: null,
-    };
-    this.hasError = false;
   }
 
   @action
