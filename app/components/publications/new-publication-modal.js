@@ -35,11 +35,6 @@ export default class NewPublicationModal extends Component {
   }
 
   @action
-  cancel() {
-    this.args.onCancel();
-  }
-
-  @action
   async validatePublicationNumber() {
     this.numberIsAlreadyUsed = await this.args.isPublicationNumberAlreadyTaken(this.toObject());
   }

@@ -1,5 +1,5 @@
 <WebComponents::AuModal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{this.cancel}} />
+  <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
     {{#if hasError}}
       <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
@@ -57,7 +57,7 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" this.cancel}} data-test-publication-button-cancel>
+          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel>
             {{t "cancel"}}
           </WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>

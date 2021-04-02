@@ -16,11 +16,6 @@ export default class PublicationsFilterModal extends Component {
   }
 
   @action
-  cancel() {
-    this.args.onCancel();
-  }
-
-  @action
   toggleFilterOption(event) {
     this.filter[event.target.name] = event.target.checked;
   }
