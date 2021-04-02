@@ -37,7 +37,6 @@
     <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
       {{#if this.isShowPublicationModal}}
         <Publications::NewPublicationModal
-          @filter={{this.filterOptionKeys}}
           @onCancel={{this.closePublicationModal}}
           @onSave={{this.saveNewPublication}}
           @isPublicationNumberAlreadyTaken={{isPublicationNumberAlreadyTaken}}

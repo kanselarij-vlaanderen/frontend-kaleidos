@@ -1,7 +1,5 @@
 import Component from '@glimmer/component';
-import {
-  action, set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class NewPublicationModal extends Component {
@@ -38,10 +36,6 @@ export default class NewPublicationModal extends Component {
 
   @action
   cancel() {
-    this.number = null;
-    this.shortTitle = null;
-    this.longTitle = null;
-    this.hasError = false;
     this.args.onCancel();
   }
 

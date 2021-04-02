@@ -20,9 +20,9 @@ export default class PublicationsController extends Controller {
     this.showLoader = true;
     const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
     const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
+    this.showLoader = false;
 
     this.transitionToRoute('publications.publication.case', newPublication.get('id'));
-    this.showLoader = false;
   }
 
   @action

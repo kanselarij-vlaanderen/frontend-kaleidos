@@ -1,78 +1,78 @@
-  <WebComponents::AuModal data-test-au-modal-publication-new>
-    <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{this.cancel}} />
-    <WebComponents::AuModal::Body>
-      {{#if hasError}}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
-          @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
-      {{else}}
-        <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message" }}
-          @icon="circle-info" />
-      {{/if}}
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group {{this.getClassForGroupNumber}}'>
-          <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
-            {{t "publications-number"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
-            @value={{mut this.number}} data-test-create-publication-modal-number-input {{on "change" (await
-            this.validatePublicationNumber)}} />
-          {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
-            <WebComponents::AuLabelError>
-              {{t "input-error-message"}}
-            </WebComponents::AuLabelError>
-          {{/if}}
-          {{#if this.numberIsAlreadyUsed}}
-            <WebComponents::AuLabelError>
-              {{t "publication-number-already-taken"}}
-            </WebComponents::AuLabelError>
-          {{/if}}
-        </div>
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="publicationSuffixInput">
-            {{t "publications-suffix"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
-            @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" (await
-            validatePublicationNumber)}} />
-        </div>
-        <div class='auk-form-group {{this.getClassForGroupShortTitle}}'>
-          <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
-            {{t "name-subcase"}}
-          </WebComponents::AuLabel>
-          <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            data-test-create-publication-modal-short-title-textarea />
-          {{#if this.getClassForGroupShortTitle}}
-            <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
-          {{/if}}
-        </div>
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-          <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            data-test-create-publication-modal-long-title-textarea />
-        </div>
+<WebComponents::AuModal data-test-au-modal-publication-new>
+  <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{this.cancel}} />
+  <WebComponents::AuModal::Body>
+    {{#if hasError}}
+      <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
+        @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
+    {{else}}
+      <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message" }}
+        @icon="circle-info" />
+    {{/if}}
+    <div class="auk-form-group-layout auk-form-group-layout--standard">
+      <div class='auk-form-group {{this.getClassForGroupNumber}}'>
+        <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
+          {{t "publications-number"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
+          @value={{mut this.number}} data-test-create-publication-modal-number-input {{on "change" (await
+          this.validatePublicationNumber)}} />
+        {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
+          <WebComponents::AuLabelError>
+            {{t "input-error-message"}}
+          </WebComponents::AuLabelError>
+        {{/if}}
+        {{#if this.numberIsAlreadyUsed}}
+          <WebComponents::AuLabelError>
+            {{t "publication-number-already-taken"}}
+          </WebComponents::AuLabelError>
+        {{/if}}
       </div>
-    </WebComponents::AuModal::Body>
-    {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
-    <WebComponents::AuModal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.cancel}} data-test-publication-button-cancel>
-              {{t "cancel"}}
+      <div class='auk-form-group'>
+        <WebComponents::AuLabel for="publicationSuffixInput">
+          {{t "publications-suffix"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
+          @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" (await
+          validatePublicationNumber)}} />
+      </div>
+      <div class='auk-form-group {{this.getClassForGroupShortTitle}}'>
+        <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
+          {{t "name-subcase"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
+          data-test-create-publication-modal-short-title-textarea />
+        {{#if this.getClassForGroupShortTitle}}
+          <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+        {{/if}}
+      </div>
+      <div class="auk-form-group">
+        <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+        <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
+          data-test-create-publication-modal-long-title-textarea />
+      </div>
+    </div>
+  </WebComponents::AuModal::Body>
+  {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
+  <WebComponents::AuModal::Footer @custom={{true}}>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="borderless" {{on "click" this.cancel}} data-test-publication-button-cancel>
+            {{t "cancel"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          {{#if (not this.isCreatingPublication)}}
+            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" this.save}}>
+              {{t "publications-new-button-text"}}
             </WebComponents::AuButton>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            {{#if (not this.isCreatingPublication)}}
-              <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" this.save}}>
-                {{t "publications-new-button-text"}}
-              </WebComponents::AuButton>
-            {{else}}
-              <Utils::SimpleSpinner></Utils::SimpleSpinner>
-            {{/if}}
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+          {{else}}
+            <Utils::SimpleSpinner></Utils::SimpleSpinner>
+          {{/if}}
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuModal::Footer>
+</WebComponents::AuModal>
