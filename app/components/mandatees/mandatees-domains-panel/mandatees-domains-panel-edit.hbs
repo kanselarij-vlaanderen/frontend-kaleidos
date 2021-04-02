@@ -106,7 +106,6 @@
     <div class="vlc-toolbar__left">
       <button
         type="button"
-        data-test-subcase-mandatees-add-mandatee
         data-test-mandatee-panel-edit-add-mandatee
         class="auk-button auk-button--tertiary"
         {{on "click" this.startCreatingMandatee}}
@@ -125,7 +124,7 @@
           <WebComponents::AuToolbar::Item>
             <button
               type="button"
-              data-test-subcase-mandatees-edit-cancel
+              data-test-mandatee-panel-edit-cancel
               class="auk-button auk-button--tertiary"
               {{on "click" @onCancel}}
             >

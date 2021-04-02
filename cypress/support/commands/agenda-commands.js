@@ -284,7 +284,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
-      cy.get('.auk-u-mb-2').click();
+      cy.get(agenda.agendaOverviewItemFormallyok).click();
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
