@@ -594,6 +594,8 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
+        cy.get(agenda.agendaOverviewSubitem); // changing from detail to overview = new url, this check will only work after the url has changed
+        // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
         cy.get(auComponents.auLoading, {
