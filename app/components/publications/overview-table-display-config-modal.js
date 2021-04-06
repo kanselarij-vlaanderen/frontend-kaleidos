@@ -3,22 +3,13 @@ import {
   action,
   set
 } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import configElements from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class OverviewTableDisplayConfigModalComponent extends Component {
   /**
-   * @argument options: a hash containing the display options as keys and booleans indicating
-   * if the column needs to be displayed as values.
    * @argument onChange: action used to handle a new options config
    * @argument onClose: action, fired when the 'X' is clicked
    */
-  @tracked options;
-
-  constructor() {
-    super(...arguments);
-    this.options = this.args.options;
-  }
 
   get optionColumns() {
     const columnSize = 10; // amount of options per column
@@ -31,9 +22,9 @@ export default class OverviewTableDisplayConfigModalComponent extends Component 
 
   @action
   toggleOption(event) {
-    set(this.options, event.target.name, !this.options[event.target.name]);
+    set(this.args.options, event.target.name, event.target.checked);
     if (this.args.onChange) {
-      this.args.onChange(this.options);
+      this.args.onChange(this.args.options);
     }
   }
 }

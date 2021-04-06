@@ -15,7 +15,7 @@
                   <WebComponents::AuCheckbox
                     @name={{option.keyName}}
                     @label={{t option.translationKey}}
-                    @checked={{get this.options option.keyName}}
+                    @checked={{get @options option.keyName}}
                     @toggle={{this.toggleOption}}
                   />
                 {{/each}}
