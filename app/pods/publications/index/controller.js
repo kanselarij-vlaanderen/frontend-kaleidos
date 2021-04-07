@@ -1,35 +1,9 @@
 import Controller from '@ember/controller';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 
 export default class PublicationsIndexController extends Controller {
-  @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
-    || {
-      caseNameFilterOption: true,
-      publicationNumberFilterOption: true,
-      regulationTypeFilterOption: true,
-      onMeetingFilterOption: true,
-      requestedPublicationDateFilterOption: true,
-      finalPublicationDateFilterOption: true,
-      publicationDateFilterOption: true,
-      numacNumberFilterOption: true,
-      caseManagerFilterOption: true,
-      lastEditedFilterOption: true,
-      lastEditedByFilterOption: true,
-      withdrawnDateFilterOption: true,
-      pauseDateFilterOption: true,
-      translateRequestsFilterOption: true,
-      signRequestsFilterOption: true,
-      publishPreviewRequestsFilterOption: true,
-      speedProcedureFilterOption: true,
-      commentFilterOption: true,
-      fromDesignAgendaFilterOption: true,
-    };
-
-  @tracked showFilterTableModal = false;
   queryParams = {
     page: {
       type: 'number',
@@ -44,6 +18,14 @@ export default class PublicationsIndexController extends Controller {
 
   sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
 
+  @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
+    || tableColumns.reduce((accumulator, currentValue) => {
+      accumulator[currentValue.keyName] = currentValue.showByDefault;
+      return accumulator;
+    }, {});
+  tableColumns = tableColumns;
+
+  @tracked showTableDisplayOptions = false;
   @tracked page = 0;
   @tracked size = 25;
   @tracked sort = '-created';
@@ -54,20 +36,24 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  filterTables() {
-    this.showFilterTableModal = true;
-  }
-
-  @action
   closeFilterTableModal() {
-    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
-    this.showFilterTableModal = false;
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
+    this.showTableDisplayOptions = false;
   }
 
   @action
-  toggleFilterOption(event) {
-    const tempArr = this.get('filterTableColumnOptionKeys');
-    set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.set('filterTableColumnOptionKeys', tempArr);
+  changeColumnDisplayOptions(options) {
+    this.tableColumnDisplayOptions = options;
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
+  }
+
+  @action
+  openColumnDisplayOptionsModal() {
+    this.showTableDisplayOptions = true;
+  }
+
+  @action
+  closeColumnDisplayOptionsModal() {
+    this.showTableDisplayOptions = false;
   }
 }
