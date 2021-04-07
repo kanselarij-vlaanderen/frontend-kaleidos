@@ -15,7 +15,7 @@ export default class ApplicationSerializer extends JSONAPISerializer.extend(Data
   serializeBelongsTo(snapshot, json, relationship) {
     // If serialization option specified and set to false, don't serialize.
     // Otherwise use Ember Data defaults which will always serialize a belongsTo
-    if (relationship.options && (typeof relationship.options.serialize !== 'undefined')) {
+    if (relationship.options && relationship.options.serialize === false) {
       return;
     }
     super.serializeBelongsTo(...arguments);
