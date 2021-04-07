@@ -16,7 +16,8 @@ export default Component.extend({
 
   browserIsSupported: computed('userAgent.browser', function() {
     const browser = this.userAgent.get('browser');
-    return (browser.isFirefox
+    return (window.Cypress
+      || browser.isFirefox
       || browser.isChrome
       || browser.isChromeHeadless); // Headless in order not to break automated tests.
   }),
