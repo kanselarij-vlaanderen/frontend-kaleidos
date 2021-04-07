@@ -12,6 +12,16 @@ export default DS.JSONAPISerializer.extend(DataTableSerializerMixin, {
     return this._super(...arguments);
   },
 
+  // eslint-disable-next-line no-unused-vars
+  serializeBelongsTo(snapshot, json, relationship) {
+    // If serialization option specified and set to false, don't serialize.
+    // Otherwise use Ember Data defaults which will always serialize a belongsTo
+    if (relationship.options && (typeof relationship.options.serialize !== 'undefined')) {
+      return;
+    }
+    this._super(...arguments);
+  },
+
   serialize() {
     const payload = this._super(...arguments);
     if (payload && payload.data && payload.data.attributes) {
