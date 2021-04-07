@@ -9,39 +9,38 @@
         @icon="circle-info" />
     {{/if}}
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class='auk-form-group {{this.getClassForGroupNumber}}'>
+      <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
         <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
           {{t "publications-number"}}
         </WebComponents::AuLabel>
         <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
-          @value={{mut this.number}} data-test-create-publication-modal-number-input {{on "change" (await
-          this.validatePublicationNumber)}} />
-        {{#if (and this.getClassForGroupNumber (not this.numberIsAlreadyUsed))}}
-          <WebComponents::AuLabelError>
-            {{t "input-error-message"}}
-          </WebComponents::AuLabelError>
-        {{/if}}
+          @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
+          {{on "change" this.isPublicationNumberAlreadyTaken}} />
         {{#if this.numberIsAlreadyUsed}}
           <WebComponents::AuLabelError>
             {{t "publication-number-already-taken"}}
           </WebComponents::AuLabelError>
+        {{else if this.hasPublicationNumberError}}
+          <WebComponents::AuLabelError>
+            {{t "input-error-message"}}
+          </WebComponents::AuLabelError>
         {{/if}}
+
       </div>
       <div class='auk-form-group'>
         <WebComponents::AuLabel for="publicationSuffixInput">
           {{t "publications-suffix"}}
         </WebComponents::AuLabel>
         <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
-          @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" (await
-          validatePublicationNumber)}} />
+          @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
       </div>
-      <div class='auk-form-group {{this.getClassForGroupShortTitle}}'>
+      <div class='auk-form-group {{if this.hasShortTitleError 'auk-form-group--error' }}'>
         <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
           {{t "name-subcase"}}
         </WebComponents::AuLabel>
         <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
           data-test-create-publication-modal-short-title-textarea />
-        {{#if this.getClassForGroupShortTitle}}
+        {{#if this.hasShortTitleError}}
           <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
         {{/if}}
       </div>
@@ -64,12 +63,12 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          {{#if (not this.isCreatingPublication)}}
-            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" this.save}}>
+          {{#if this.save.isRunning}}
+            <Utils::SimpleSpinner></Utils::SimpleSpinner>
+          {{else}}
+            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}>
               {{t "publications-new-button-text"}}
             </WebComponents::AuButton>
-          {{else}}
-            <Utils::SimpleSpinner></Utils::SimpleSpinner>
           {{/if}}
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>

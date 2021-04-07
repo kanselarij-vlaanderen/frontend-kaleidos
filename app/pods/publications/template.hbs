@@ -38,9 +38,7 @@
       {{#if this.isShowPublicationModal}}
         <Publications::NewPublicationModal
           @onCancel={{this.closePublicationModal}}
-          @onSave={{this.saveNewPublication}}
-          @isPublicationNumberAlreadyTaken={{isPublicationNumberAlreadyTaken}}
-          @getPublicationNumber={{getPublicationNumber}} />
+          @onSave={{this.saveNewPublication}} />
       {{/if}}
       {{#if this.isShowPublicationFilterModal}}
         <Publications::PublicationsFilterModal

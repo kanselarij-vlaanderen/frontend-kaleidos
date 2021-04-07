@@ -8,8 +8,6 @@ export default class PublicationsController extends Controller {
   @service publicationService;
   @service('-routing') routing;
   @tracked isShowPublicationModal = false;
-  @tracked numberIsAlreadyUsed = false;
-  @tracked isCreatingPublication = false;
   @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
@@ -26,42 +24,25 @@ export default class PublicationsController extends Controller {
   }
 
   @action
-  async isPublicationNumberAlreadyTaken(publication) {
-    return await this.publicationService.publicationNumberAlreadyTaken(publication.number, publication.suffix);
+  showPublicationModal() {
+    this.isShowPublicationModal = true;
   }
 
   @action
-  async createNewPublication(publication) {
-    this.isCreatingPublication = true;
+  closePublicationModal() {
+    this.isShowPublicationModal = false;
+  }
+
+  @action
+  async saveNewPublication(publication) {
     const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
 
   @action
-  closePublicationModal() {
-    this.isShowPublicationModal = false;
-    this.isCreatingPublication = false;
-  }
-
-  @action
-  async showPublicationModal() {
-    this.isShowPublicationModal = true;
-  }
-
-  @action
-  async getPublicationNumber() {
-    const publicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    return publicationNumber;
-  }
-
-  @action
   showFilterModal() {
     this.isShowPublicationFilterModal = true;
-  }
-
-  get shouldShowPublicationHeader() {
-    return this.routing.currentRouteName.startsWith('publications.index');
   }
 
   @action
@@ -75,5 +56,9 @@ export default class PublicationsController extends Controller {
     localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
+  }
+
+  get shouldShowPublicationHeader() {
+    return this.routing.currentRouteName.startsWith('publications.index');
   }
 }

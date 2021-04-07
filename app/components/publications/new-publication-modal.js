@@ -1,9 +1,11 @@
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 
 export default class NewPublicationModal extends Component {
-  @tracked numberIsAlreadyUsed;
+  @service publicationService;
 
   @tracked number = null;
   @tracked suffix = null;
@@ -11,62 +13,51 @@ export default class NewPublicationModal extends Component {
   @tracked longTitle = null;
 
   @tracked hasError = false;
+  @tracked numberIsAlreadyUsed;
 
   constructor() {
     super(...arguments);
-    this.initPublicationNumber();
+    this.initPublicationNumber.perform();
   }
 
-  async initPublicationNumber() {
-    this.number = await this.args.getPublicationNumber();
+  get isPublicationNumberValid() {
+    return this.number && this.number > 0 && !this.numberIsAlreadyUsed;
   }
 
-  @action
-  save() {
-    if (this.numberIsAlreadyUsed || !this.isPublicationNumberValid()  || !this.isShortTitleValid()) {
-      this.hasError = true;
-    } else {
-      this.hasError = false;
-    }
-
-    if (!this.hasError) {
-      this.args.onSave(this.toObject());
-    }
-  }
-
-  @action
-  async validatePublicationNumber() {
-    this.numberIsAlreadyUsed = await this.args.isPublicationNumberAlreadyTaken(this.toObject());
-  }
-
-  get getClassForGroupNumber() {
-    if (this.numberIsAlreadyUsed || (this.hasError && !this.isPublicationNumberValid())) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
-  get getClassForGroupShortTitle() {
-    if (this.hasError && !this.isShortTitleValid()) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
-  isPublicationNumberValid() {
-    return this.number && this.number > 0;
-  }
-
-  isShortTitleValid() {
+  get isShortTitleValid() {
     return this.shortTitle && this.shortTitle.length > 0;
   }
 
-  toObject() {
-    return {
-      number: this.number,
-      suffix: this.suffix,
-      shortTitle: this.shortTitle,
-      longTitle: this.longTitle,
-    };
+  get hasPublicationNumberError() {
+    return this.hasError && !this.isPublicationNumberValid;
+  }
+
+  get hasShortTitleError() {
+    return this.hasError && !this.isShortTitleValid;
+  }
+
+  @task
+  *initPublicationNumber() {
+    this.number = yield this.publicationService.getNewPublicationNextNumber();
+  }
+
+  @task
+  *save() {
+    this.hasError = !this.isPublicationNumberValid || !this.isShortTitleValid;
+
+    if (!this.hasError) {
+      yield this.args.onSave(
+        {
+          number: this.number,
+          suffix: this.suffix,
+          shortTitle: this.shortTitle,
+          longTitle: this.longTitle,
+        });
+    }
+  }
+
+  @action
+  async isPublicationNumberAlreadyTaken() {
+    this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
   }
 }
