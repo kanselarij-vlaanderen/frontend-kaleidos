@@ -189,7 +189,7 @@
             {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
               <TextWidgets::DeadlineDate
                 @date={{row.publishBefore}}
-                @warningPeriod={{-172800}}
+                @warningPeriod={{-172800}} {{!-- 2 days in seconds --}}
                 @errorPeriod={{0}}
               />
             {{else}}
