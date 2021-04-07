@@ -52,7 +52,7 @@ export default class PublicationsPublicationCaseSearchComponent extends Componen
   @action
   hideResults(event) {
     // only hide when focusout was triggered clicking *outside* the result list
-    if (!this.resultListDomElement.contains(event.relatedTarget)) {
+    if (this.resultListDomElement && !this.resultListDomElement.contains(event.relatedTarget)) {
       this.isShowingResults = false;
     }
   }
