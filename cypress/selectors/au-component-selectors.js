@@ -9,5 +9,7 @@ const selectors = {
     close: '[data-test-au-alert-close]',
   },
   auLabelError: '[data-test-au-label-error]',
+  auLoading: '[data-test-auk-loader]',
+  auLoadingWrapper: '[data-test-auk-loader-wrapper]',
 };
 export default selectors;

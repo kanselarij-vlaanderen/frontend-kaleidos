@@ -5,15 +5,12 @@
 }}
 <div class="vl-u-bg-alt">
   {{agenda/agenda-header
-    compareAgendas=(action "compareAgendas")
     loading=(action "loadingAgendaitems")
     onCreateAgendaitem=(action "refresh")
     onApproveAgenda=(action "navigateToAgenda")
-    clearSelectedAgendaitem=(action "navigateToOverview")
     navigateToPressAgenda=(action "navigateToPressAgenda")
     navigateToDecisions=(action "navigateToDecisions")
     navigateToNewsletter=(action "navigateToNewsletter")
-    navigateToDocuments=(action "navigateToDocuments")
     showPrintButton=showPrintButton
   }}
 </div>

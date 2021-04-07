@@ -3,11 +3,10 @@
     <ChangesAlert
       @message={{t "editing-agenda-overview"}}
       @buttonText={{t "end-editing-overview"}}
-      @clearAction={{action "toggleIsEditingOverview"}} />
+      @clearAction={{this.toggleIsEditingOverview}}
+    />
   {{/if}}
-
   <div class="vlc-toolbar vlc-agenda-items-section-header">
-
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
         <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
@@ -15,182 +14,112 @@
         </h3>
       </div>
     </div>
-    {{#if (not this.isEditingOverview)}}
-      <div class="vlc-toolbar__right">
-        <div class="vlc-toolbar__item">
-          <a href=""
-             class="vlc-agenda-items-section-header__link"
-             {{action "toggleChangesOnly"}}
-          >
-            {{#if (not this.isShowingChanges)}}
-              {{t "show-changes"}}
-            {{else}}
-              {{t "show-all"}}
-            {{/if}}
-          </a>
-        </div>
-        <div class="vlc-toolbar__item">
-          {{#if
-            (and
-              currentSessionService.isEditor
-              (await @currentAgenda.isDesignAgenda)
-            )
-          }}
+    <div class="vlc-toolbar__right">
+      <div class="vlc-toolbar__item">
+        <WebComponents::AuButtonLink
+          class="vlc-agenda-items-section-header__link"
+          {{on "click" @toggleShowModifiedOnly}}
+        >
+          {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
+        </WebComponents::AuButtonLink>
+      </div>
+      <div class="vlc-toolbar__item">
+        {{#if
+          (and
+            this.currentSessionService.isEditor
+            this.isDesignAgenda
+          )
+        }}
+          {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
-              <a href=""
-                 data-test-agenda-edit-formally-ok-button
-                 class="vlc-agenda-items-section-header__link"
-                {{action "toggleIsEditingOverview"}}
+              <WebComponents::AuButtonLink
+                data-test-agenda-edit-formally-ok-button={{true}}
+                class="vlc-agenda-items-section-header__link"
+                {{on "click" this.toggleIsEditingOverview}}
               >
                 {{t "edit"}}
-              </a>
+              </WebComponents::AuButtonLink>
             </div>
-          {{/if}}
-        </div>
+          {{/unless}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  {{#if (not @isLoadingNotaGroups)}}
+    {{#if @notaGroups.length}}
+      <div>
+        <ul
+          {{sortable-group onChange=@onReorderAgendaitems}}
+          {{did-update (perform this.groupNotasOnGroupName @notas) @notas}}>
+          {{#each @notaGroups as |agendaitemGroup index|}}
+            {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
+              <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
+            {{/unless}}
+            {{#each agendaitemGroup.agendaitems as |agendaitem|}}
+              <li
+                class="vlc-agenda-items__sub-item"
+                {{sortable-item
+                  model=agendaitem
+                  distance="30"
+                  handle=this.dragHandleClass
+                  isDraggingDisabled=(not this.isDraggingEnabled)
+                }}
+              >
+                <Agenda::AgendaOverview::AgendaOverviewItem
+                  @agendaitem={{agendaitem}}
+                  @currentAgenda={{@currentAgenda}}
+                  @previousAgenda={{@previousAgenda}}
+                  @isNew={{includes agendaitem @newItems}}
+                  @showFormallyOkStatus={{this.isDesignAgenda}}
+                  @isEditingFormallyOkStatus={{this.isEditingOverview}}
+                  @showDragHandle={{this.isDraggingEnabled}}
+                />
+              </li>
+            {{/each}}
+          {{/each}}
+        </ul>
+      </div>
+    {{else}}
+      <div class="auk-u-mt-2">
+        <WebComponents::VlAlert @message={{t "no-agendaitems-yet"}}/>
       </div>
     {{/if}}
-  </div>
-
-  {{#if (is-empty @agendaitems)}}
-    <div class="auk-u-mt-2">
-      {{web-components/vl-alert message=(t "no-agendaitems-yet")}}
-    </div>
+  {{else}}
+    <WebComponents::AuLoadingPage/>
   {{/if}}
-  <div>
-    {{#if
-      (and currentSessionService.isEditor (not this.isShowingChanges) @currentAgenda.isDesignAgenda)
-    }}
-      {{#sortable-group
-        tagName="ul"
-        onChange=(action "reorderItems")
-      as |sortableGroup|
-      }}
-        {{#each
-          @agendaitems
-        as |agendaitem|
-        }}
-          {{#if agendaitem.groupName}}
-            <div class="vlc-list-section-header" data-test-agenda-overview-agenda-item-header>
-              {{#if (eq agendaitem.groupName (t 'no-mandatee-assigned'))}}
-              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-              {{!-- template-lint-disable no-triple-curlies  --}}
-                <span class="vlc-list-section-header-title">{{{agendaitem.groupName}}}</span>
-              {{!-- template-lint-enable no-triple-curlies  --}}
-              {{else}}
-                {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                  These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-                {{!-- template-lint-disable no-triple-curlies  --}}
-                <span>{{{agendaitem.groupName}}}</span>
-                {{!-- template-lint-enable no-triple-curlies  --}}
-              {{/if}}
-            </div>
-          {{/if}}
-          {{#sortable-item
-            tagName="li"
-            class="vlc-agenda-items__sub-item"
-            model=agendaitem
-            group=sortableGroup
-            distance=30
-            handle=dragHandleClass
-          }}
-            <Agenda::AgendaOverview::AgendaOverviewItem
-              @agendaitem={{agendaitem}}
-              @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
-              @isEditingOverview={{this.isEditingOverview}}
-            />
-          {{/sortable-item}}
-        {{/each}}
-      {{/sortable-group}}
-    {{else}}
-      <ul>
-        {{#each
-          @agendaitems
-        as |agendaitem|
-        }}
-          {{#if (and agendaitem.groupName (not this.isShowingChanges))}}
-            <div class="vlc-list-section-header" data-test-agenda-overview-agenda-item-header>
-              {{!-- TODO: these triple curlies are used for displaying a computed string with br tags in it.
-                These items concatenated by <br> should become a list that is iterated over in a .hbs template --}}
-              {{!-- template-lint-disable no-triple-curlies  --}}
-              {{{agendaitem.groupName}}}
-              {{!-- template-lint-enable no-triple-curlies  --}}
-            </div>
-          {{/if}}
-          {{#if
-            (or (not this.isShowingChanges) (and this.isShowingChanges (await agendaitem.hasChanges)))
-          }}
-            <li class="vlc-agenda-items__sub-item">
-              <Agenda::AgendaOverview::AgendaOverviewItem
-                @agendaitem={{agendaitem}}
-                @setFormallyOkAction={{action this.setFormallyOkAction agendaitem}}
-                @isEditingOverview={{this.isEditingOverview}}
-              />
-            </li>
-          {{/if}}
-        {{/each}}
-      </ul>
-    {{/if}}
-  </div>
   <div class="vlc-agenda-items-section-header">
     <h3 class="vl-title--h3 vlc-agenda-items-section-header__title">
       {{t "announcements-subtitle"}}
     </h3>
   </div>
   <div class="auk-u-mb-4">
-    {{#if (gt (await @announcements.length) 0)}}
-      {{#if
-        (and currentSessionService.isEditor (not this.isShowingChanges) @currentAgenda.isDesignAgenda)
-      }}
-        {{#sortable-group
-          tagName="ul"
-          onChange=(action "reorderItems")
-        as |sortableAnnouncements|
-        }}
-          {{#each
-            (await @announcements)
-          as |announcement|
-          }}
-            {{#sortable-item
-              tagName="li"
-              class="vlc-agenda-items__sub-item"
+    {{#if @announcements.length}}
+      <ul {{sortable-group onChange=@onReorderAgendaitems}} >
+        {{#each @announcements as |announcement|}}
+          <li
+            class="vlc-agenda-items__sub-item"
+            {{sortable-item
               model=announcement
-              group=sortableAnnouncements
-              distance=30
-              handle=dragHandleClass
+              distance="30"
+              handle=this.dragHandleClass
+              isDraggingDisabled=(not this.isDraggingEnabled)
             }}
-              <Agenda::AgendaOverview::AgendaOverviewItem
-                @agendaitem={{announcement}}
-                @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
-                @isEditingOverview={{this.isEditingOverview}}
-              />
-            {{/sortable-item}}
-          {{/each}}
-        {{/sortable-group}}
-      {{else}}
-        {{#each
-          (await @announcements)
-        as |announcement|
-        }}
-          {{#if
-            (or (not this.isShowingChanges) (and this.isShowingChanges (await announcement.hasChanges)))
-          }}
-            <div class="vlc-agenda-items__sub-item">
-              <Agenda::AgendaOverview::AgendaOverviewItem
-                @agendaitem={{announcement}}
-                @setFormallyOkAction={{action this.setFormallyOkAction announcement}}
-                @isEditingOverview={{this.isEditingOverview}}
-              />
-            </div>
-          {{/if}}
+          >
+            <Agenda::AgendaOverview::AgendaOverviewItem
+              @agendaitem={{announcement}}
+              @currentAgenda={{@currentAgenda}}
+              @previousAgenda={{@previousAgenda}}
+              @showFormallyOkStatus={{this.isDesignAgenda}}
+              @isEditingFormallyOkStatus={{this.isEditingOverview}}
+            />
+          </li>
         {{/each}}
-      {{/if}}
+      </ul>
     {{else}}
       <WebComponents::VlAlert @message={{t "no-announcements-yet"}} />
     {{/if}}
   </div>
-
-  {{#if (await this.showLoader)}}
+  {{#if this.showLoader}}
     <WebComponents::AuLoadingOverlay/>
   {{/if}}
 </div>

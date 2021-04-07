@@ -30,7 +30,7 @@ context('meeting actions tests', () => {
   it('should perform action close agenda with agendaitems on designagenda', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: close agenda - 1588775338';
-    cy.visit('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
+    cy.visitAgendaWithLink('/vergadering/5EB2C9CBF5E1260009000005/agenda/74e87383-80a4-4616-8814-5883cafa6da0/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.contains('Naar procedurestap', {
       timeout: 12000,
@@ -54,7 +54,7 @@ context('meeting actions tests', () => {
   it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - 1588775768';
     cy.login('Kanselarij');
-    cy.visit('/vergadering/5EB2CB8FF5E126000900000D/agenda/5EB2CB91F5E126000900000E/agendapunten');
+    cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/5EB2CB91F5E126000900000E/agendapunten');
     cy.changeSelectedAgenda('Ontwerpagenda');
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
@@ -65,7 +65,7 @@ context('meeting actions tests', () => {
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
     cy.login('Admin');
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
-    cy.visit('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
+    cy.visitAgendaWithLink('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
     cy.agendaitemExists(SubcaseTitleShort); // this makes sure the page is reloaded after approving the agenda
     // Verify agendaitem exists and has subcase on design agenda and agenda A
     cy.changeSelectedAgenda('Agenda A');
@@ -78,6 +78,7 @@ context('meeting actions tests', () => {
     cy.contains('Naar procedurestap', {
       timeout: 12000,
     });
+    cy.wait(1000); // controls buttons is not clickable yet
 
     cy.get(agenda.agendaitemControlsActions).click();
     cy.get(agenda.agendaitemControlsActionDelete).click();

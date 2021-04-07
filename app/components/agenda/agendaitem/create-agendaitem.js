@@ -222,6 +222,7 @@ export default Component.extend(DataTableRouteMixin, {
         postponedSubcases,
       } = this;
       const subcasesToAdd = [...new Set([...postponedSubcases, ...availableSubcases])];
+      const agendaItems = [];
       for (const subcase of subcasesToAdd) {
         let submissionActivities = await this.store.query('submission-activity', {
           'filter[subcase][:id:]': subcase.id,
@@ -237,16 +238,14 @@ export default Component.extend(DataTableRouteMixin, {
           await submissionActivity.save();
           submissionActivities = [submissionActivity];
         }
-        await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivities);
+        const newItem = await this.agendaService.putSubmissionOnAgenda(this.currentSession, submissionActivities);
+        agendaItems.push(newItem);
       }
 
       this.set('loading', false);
       this.set('isAddingAgendaitems', false);
-      this.set('sessionService.selectedAgendaitem', null);
-      const anyAddedSubcase = subcasesToAdd.get('firstObject');
-      const newAgendaitem = await anyAddedSubcase.get('latestAgendaitem');
       if (this.onCreate) {
-        this.onCreate(newAgendaitem.id);
+        this.onCreate(agendaItems);
       }
     },
   },

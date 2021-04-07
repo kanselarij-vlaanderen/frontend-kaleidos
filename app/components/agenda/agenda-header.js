@@ -52,7 +52,6 @@ export default Component.extend(FileSaverMixin, {
   currentSession: alias('sessionService.currentSession'),
   currentAgenda: alias('sessionService.currentAgenda'),
   agendas: alias('sessionService.agendas'), // This list is reverse sorted on serialnumber
-  selectedAgendaitem: alias('sessionService.selectedAgendaitem'),
 
   /**
    * @computed isSessionClosable
@@ -290,7 +289,6 @@ export default Component.extend(FileSaverMixin, {
     }
 
     if (this.onApproveAgenda) {
-      this.set('sessionService.selectedAgendaitem', null);
       this.toggleLoadingOverlayWithMessage(null);
       this.onApproveAgenda(newAgenda.get('id'));
     }
@@ -537,10 +535,6 @@ export default Component.extend(FileSaverMixin, {
       this.navigateToDecisions(currentSession.get('id'), currentAgenda.get('id'));
     },
 
-    clearSelectedAgendaitem() {
-      this.clearSelectedAgendaitem();
-    },
-
     cancel() {
       this.set('releasingDecisions', false);
       this.set('releasingDocuments', false);
@@ -574,16 +568,8 @@ export default Component.extend(FileSaverMixin, {
       this.toggleProperty('isShowingAgendaActions');
     },
 
-    compareAgendas() {
-      this.compareAgendas();
-    },
-
     addAgendaitemsAction() {
       this.set('isAddingAgendaitems', true);
-    },
-
-    navigateToDocuments() {
-      this.navigateToDocuments();
     },
 
     async downloadAllDocuments() {

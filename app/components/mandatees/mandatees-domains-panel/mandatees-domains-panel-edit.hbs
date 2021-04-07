@@ -1,0 +1,135 @@
+<div class="vlc-box">
+  <div class="vlc-input-field-block">
+    <div class="auk-u-mb-8">
+      <table class="vl-data-table vl-data-table--align-middle">
+        <thead>
+          <tr>
+            <th class="vl-data-table-col-2">
+              {{t "minister"}}
+            </th>
+            <th class="vl-data-table-col-3">
+              {{t "government-domain"}}
+            </th>
+            <th class="vl-data-table-col-5">
+              {{t "government-field"}}
+            </th>
+            <th class="vl-data-table-col-1">
+              {{t "submitter"}}
+            </th>
+            <th class="vl-data-table-col-1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.mandateesBuffer as |mandatee|}}
+            <tr data-test-mandatee-panel-edit-mandatee-row>
+              <td data-test-mandatee-panel-edit-row-name>
+                {{mandatee.person.nameToDisplay}}
+              </td>
+              <Mandatees::DomainsFieldsForMandatee
+                @mandatee={{mandatee}}
+                @fields={{this.fieldsBuffer}}
+              as |mandateeDomainsFields|>
+                <td>
+                  {{#if mandateeDomainsFields.domains.length}}
+                    <ul data-test-mandatee-panel-edit-row-domains>
+                      {{#each mandateeDomainsFields.domains as |domain|}}
+                        <li>{{domain.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{#if mandateeDomainsFields.fields.length}}
+                    <ul data-test-mandatee-panel-edit-row-fields>
+                      {{#each mandateeDomainsFields.fields as |field|}}
+                        <li>{{field.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+              </Mandatees::DomainsFieldsForMandatee>
+              <td data-test-mandatee-panel-edit-row-submitter>
+                <WebComponents::VlToggle
+                  @value={{eq mandatee this.submitterBuffer}}
+                  @valueChanged={{fn this.toggleIsSubmitter mandatee}}
+                />
+              </td>
+              <td class="auk-u-text-align--right auk-u-flex--vertical-center">
+                {{!-- TODO: disable button on load --}}
+                {{!-- TODO: modify mandatee domains picker --}}
+                <button
+                  data-test-mandatee-panel-edit-row-edit
+                  type="button"
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{on "click" (fn this.startEditingMandatee mandatee)}}
+                >
+                  <i class="ki-pencil" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    {{t "edit"}}
+                  </span>
+                </button>
+                <button
+                  data-test-mandatee-panel-edit-row-delete
+                  type="button"
+                  class="vl-button vl-button--link vl-button--icon"
+                  {{on "click" (fn this.removeMandatee mandatee)}}
+                >
+                  <i class="ki-delete" aria-hidden="true"></i>
+                  <span class="vl-u-visually-hidden">
+                    {{t "delete"}}
+                  </span>
+                </button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <a
+        data-test-mandatee-panel-edit-add-mandatee
+        href="javascript://"
+        class="vl-button vl-button--tertiary vl-button--icon-before"
+        {{on "click" this.startCreatingMandatee}}
+      >
+        <i
+          class="vl-button__icon vl-button__icon--before ki-add"
+          aria-hidden="true"
+        ></i>
+        {{t "add-minister"}}
+      </a>
+    </div>
+    <div class="vlc-toolbar__right">
+      <div class="vl-action-group vl-action-group--align-right">
+        <a
+          data-test-mandatee-panel-edit-cancel
+          href="javascript://"
+          class="vl-button vl-button--tertiary"
+          {{on "click" @onCancel}}
+        >
+          {{t "cancel"}}
+        </a>
+        <WebComponents::VlSaveButton
+          data-test-mandatee-panel-edit-save={{true}}
+          @text={{t "save"}}
+          @isLoading={{this.save.isRunning}}
+          @saveAction={{perform this.save}}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+{{#if this.isShowingEditMandateeModal}}
+  <Mandatees::MandateesDomainsSelectorModal
+    @mandatee={{this.mandateeUnderEdit}}
+    @fields={{this.fieldsBuffer}}
+    @onSave={{this.modifyMandateeAndFields}}
+    @onCancel={{this.cancelEditingMandatee}}
+  />
+{{/if}}

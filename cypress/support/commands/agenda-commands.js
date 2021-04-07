@@ -10,6 +10,7 @@ import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
+import auComponents from '../../selectors/au-component-selectors';
 
 // ***********************************************
 // Functions
@@ -157,6 +158,21 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 }
 
 /**
+ * @description basic visit to agenda with some data loading
+ * @name visitAgendaWithLink
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {*} link The link to visit, should be "/vergadering/id/agenda/id/agendapunten" or "/vergadering/id/agenda/id/agendapunten/id"
+ */
+function visitAgendaWithLink(link) {
+  cy.log('visitAgendaWithLink');
+  cy.route('GET', '/agendaitems/*/agenda-activity').as('loadAgendaitems');
+  cy.visit(link);
+  cy.wait('@loadAgendaitems');
+  cy.log('/visitAgendaWithLink');
+}
+
+/**
  * @description Searches for the agendaDate in the history view of the agenda page, or uses the meetingId to open the meeting directly using the route 'agenda/meetingId/agendapunten'
  * @name openAgendaForDate
  * @memberOf Cypress.Chainable#
@@ -222,6 +238,7 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
+  cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
 
   cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
@@ -240,6 +257,9 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
     cy.get(modal.auModal.container, {
       timeout: 20000,
     }).should('not.exist');
+    if (!lastAgenda) {
+      cy.wait('@loadAgendaitems');
+    }
   }
 
   cy.log('/deleteAgenda');
@@ -257,15 +277,9 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   // TODO set only some items to formally ok with list as parameter
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
-
-    cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
-      .last()
-      .as('editFormality');
-
-    cy.get('@editFormality').click();
-  } else {
-    cy.get(agendaOverview.agendaEditFormallyOkButton).click();
   }
+  cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  cy.wait(2000); // TODO await data loading after clicking this button?
 
   cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
   cy.get('@agendaitems').eq(indexOfItem)
@@ -316,16 +330,12 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
  */
 function approveCoAgendaitem(agendaitemShortTitle) {
   cy.log('approveCoAgendaitem');
-  cy.route('GET', '/ise-codes/**').as('getIseCodes');
-  cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+  cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
   cy.route('PATCH', '/approvals/**').as('patchApprovals');
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.contains(agendaitemShortTitle).click();
-  cy.wait('@getIseCodes', {
-    timeout: 50000,
-  });
-  cy.wait('@getGovernmentFields', {
+  cy.wait('@getGovernmentFieldDomains', {
     timeout: 50000,
   });
   cy.get('.vlc-panel-layout__main-content').within(() => {
@@ -503,7 +513,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   });
-  cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitemFilter${randomInt}`);
+  cy.route('GET', '/agendaitems?fields**').as(`loadAgendaitemFields${randomInt}`);
   cy.wait('@createNewAgendaitem', {
     timeout: 20000,
   })
@@ -513,7 +523,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
-  cy.wait(`@loadAgendaitemFilter${randomInt}`);
+  cy.wait(`@loadAgendaitemFields${randomInt}`);
   cy.log('/addAgendaitemToAgenda');
 }
 
@@ -526,29 +536,31 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  */
 function toggleShowChanges(refresh) {
   cy.log('toggleShowChanges');
-  cy.route('GET', '/agendaitems?filter**').as('getAgendaitems');
+  cy.route('GET', '/agendaitems?fields**').as('getAgendaitems');
 
+  // TODO, refresh is no longer needed
   if (refresh) {
-    cy.get('.vlc-side-nav-item', {
-      timeout: 12000,
-    })
-      .last({
-        timeout: 12000,
-      })
-      .click();
-    cy.wait('@getAgendaitems', {
-      timeout: 20000,
-    });
-    cy.get('.vlc-side-nav-item', {
-      timeout: 12000,
-    })
-      .first({
-        timeout: 12000,
-      })
-      .click();
-    cy.wait(2000); // a lot of data is being reloaded
-  } else {
+  //   cy.get('.vlc-side-nav-item', {
+  //     timeout: 12000,
+  //   })
+  //     .last({
+  //       timeout: 12000,
+  //     })
+  //     .click();
+  //   cy.wait('@getAgendaitems', {
+  //     timeout: 20000,
+  //   });
+  //   cy.get('.vlc-side-nav-item', {
+  //     timeout: 12000,
+  //   })
+  //     .first({
+  //       timeout: 12000,
+  //     })
+  //     .click();
+  //   cy.wait(2000); // a lot of data is being reloaded
+  // } else {
     cy.clickReverseTab('Overzicht');
+    cy.wait(2500); // data loading after switching to overzicht
   }
 
   cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
@@ -570,6 +582,9 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
+  cy.get(auComponents.auLoading, {
+    timeout: 20000,
+  }).should('not.exist');
   cy.get('.vlc-tabs-reverse__link--active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
@@ -581,6 +596,11 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
+        // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
+        cy.log('data needs to be loaded now, waiting a few seconds');
+        cy.get(auComponents.auLoading, {
+          timeout: 20000,
+        }).should('not.exist');
       }
       cy.get(agenda.agendaOverviewSubitem)
         .contains(agendaitemName, {
@@ -640,6 +660,7 @@ function changeSelectedAgenda(agendaName) {
     })
     .should('exist')
     .click();
+  cy.wait(2000); // TODO await calls after switch
 }
 
 /**
@@ -720,6 +741,7 @@ function clickAgendaitemTab(selector) {
 
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
+Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
 Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
 Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
