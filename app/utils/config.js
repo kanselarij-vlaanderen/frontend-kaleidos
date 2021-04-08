@@ -107,7 +107,7 @@ export default EmberObject.create({
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items__status vl-u-text--error auk-u-text-bold auk-u-flex',
+      classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-u-flex',
       pillClassNames: 'vlc-pill vlc-pill--error',
       iconClassNames: 'ki-cross formally-ok-icon',
       svg: {

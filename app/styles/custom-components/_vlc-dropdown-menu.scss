@@ -6,20 +6,6 @@
   border-bottom-width: 0;
 }
 
-.vl-link-list {
-  padding: .5rem 0;
-  max-height: inherit;
-  overflow-y: auto;
-
-  &__item {
-    .vl-link {
-      .vl-popover & {
-        padding: .8rem 1.5rem;
-      }
-    }
-  }
-}
-
 .vlc-dropdown-menu {
   padding: .5rem 0;
   max-height: inherit;
@@ -37,7 +23,7 @@
 
 .vlc-dropdown-menu__item {
   display: flex;
-  .vl-link {
+  .auk-button-link {
     padding: .8rem 1.5rem;
     font-size: 1.5rem;
     line-height: 1.2;
@@ -54,7 +40,7 @@
   }
 }
 
-.vlc-dropdown-menu__item--action-danger .vl-link {
+.vlc-dropdown-menu__item--action-danger .auk-button-link {
   color: $red;
   &:hover {
     color: $red;

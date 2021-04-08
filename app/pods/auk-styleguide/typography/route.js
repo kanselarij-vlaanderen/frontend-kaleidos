@@ -14,15 +14,11 @@ export default class TypographyRoute extends Route.extend(AuthenticatedRouteMixi
       },
       {
         name: 'Heading 3',
-        code: '<h3 class="auk-h3">A third level heading</h2>',
+        code: '<h3 class="auk-h3">A third level heading</h3>',
       },
       {
         name: 'Heading 4',
-        code: '<h4 class="auk-h4">A fourth level heading</h2>',
-      },
-      {
-        name: 'Heading 5',
-        code: '<h5 class="auk-h5">A fourth level heading</h2>',
+        code: '<h4 class="auk-h4">A fourth level heading</h4>',
       },
       {
         name: 'Overline',

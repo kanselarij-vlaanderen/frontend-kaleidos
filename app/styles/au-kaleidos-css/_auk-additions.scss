@@ -1,0 +1,159 @@
+/* Badge
+   ========================================================================== */
+
+.auk-badge--medium {
+  width: 3rem;
+  height: 3rem;
+  .auk-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+
+
+/* Button
+   ========================================================================== */
+
+.auk-button--warning-primary {
+  color: $au-gray-800;
+  background: $au-yellow-400;
+  &:hover,
+  &:active {
+    background: $au-yellow-300;
+  }
+}
+
+.auk-button--muted-borderless {
+  color: $au-gray-600;
+  background: none;
+  &:hover,
+  &:active {
+    color: $au-gray-800;
+  }
+}
+
+.auk-button--warning-borderless {
+  color: $au-red-600;
+  background: none;
+  &:hover,
+  &:active {
+    color: $au-red-500;
+  }
+}
+
+.auk-button[disabled] {
+  cursor: auto;
+}
+
+.auk-button--primary[disabled] {
+  background: $au-gray-400;
+}
+
+.auk-button--secondary[disabled] {
+  box-shadow: inset 0 0 0 0.2rem $au-gray-400;
+  color: $au-gray-400;
+}
+
+.auk-button--tertiary[disabled] {
+  box-shadow: inset 0 0 0 0.1rem $au-gray-200;
+  color: $au-gray-400;
+
+}
+
+.auk-button--borderless[disabled],
+.auk-button--muted-borderless[disabled] {
+  color: $au-gray-400;
+  background: none;
+}
+
+
+/* Modal
+   ========================================================================== */
+
+.auk-modal-backdrop > .ember-view {
+  height: 100%;
+}
+
+
+/* Table
+   ========================================================================== */
+
+.auk-table th {
+  white-space: nowrap;
+}
+
+// Data table header title
+.auk-table__header-title {
+  // Data table header title sortable modifier
+  &--sortable {
+    text-decoration: none;
+
+    .auk-table__header-title__sort-icon {
+      opacity: 0;
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+
+      .auk-table__header-title__sort-icon {
+        opacity: 0.5;
+      }
+    }
+
+    // Data table header title sortable modifier active
+    &-active {
+      .auk-table__header-title__sort-icon {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.auk-table--no-scroll {
+  .data-table-content {
+    overflow: hidden;
+  }
+}
+
+.auk-table--hover {
+  tbody {
+    tr {
+      transition: background 0.2s ease-in-out;
+
+      &:hover {
+        background: $porcelain;
+      }
+    }
+  }
+}
+
+.auk-table__header-title--unsortable {
+  color: $dove-gray;
+}
+
+.auk-table--interaction-cursor {
+  cursor: pointer;
+}
+
+
+/* Utilities
+   ========================================================================== */
+
+.auk-u-text-uppercase {
+  text-transform: uppercase;
+}
+
+.auk-u-text-capitalize {
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.auk-u-text-success {
+  color: $success-text-color;
+}
+
+.auk-u-text-error {
+  color: $error-text-color;
+}

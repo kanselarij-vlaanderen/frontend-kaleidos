@@ -2,32 +2,32 @@
   {{#if this.loadData.isRunning}}
     <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
   {{else}}
-    <div class="vl-form__group vl-u-bg-porcelain">
+    <div class="vlc-box">
       <div class="auk-u-mb-4">
-        <table class="vl-data-table vl-data-table--align-middle">
+        <table class="auk-table">
           <thead>
             <tr>
-              <th class="vl-data-table-col-4">
-                {{web-components/vl-form-label
-                  value=(t "document-name")
-                }}
+              <th class="auk-table__col--4">
+                <WebComponents::AuLabel>
+                  {{t "document-name"}}
+                </WebComponents::AuLabel>
               </th>
-              <th class="vl-data-table-col-3">
-                {{web-components/vl-form-label
-                  value=(t "file-type")
-                }}
+              <th class="auk-table__col--3">
+                <WebComponents::AuLabel>
+                  {{t "file-type"}}
+                </WebComponents::AuLabel>
               </th>
-              <th class="vl-data-table-col-3">
-                {{web-components/vl-form-label
-                  value=(t "publicity")
-                }}
+              <th class="auk-table__col--3">
+                <WebComponents::AuLabel>
+                  {{t "publicity"}}
+                </WebComponents::AuLabel>
               </th>
-              <th class="vl-data-table-col-1">
-                {{web-components/vl-form-label
-                  value=(t "confidential")
-                }}
+              <th class="auk-table__col--1">
+                <WebComponents::AuLabel>
+                  {{t "confidential"}}
+                </WebComponents::AuLabel>
               </th>
-              <th class="vl-data-table-col-1"></th>
+              <th class="auk-table__col--1"></th>
             </tr>
           </thead>
           <tbody>
@@ -40,15 +40,21 @@
           </tbody>
         </table>
       </div>
-      <div class="vl-action-group vl-action-group--align-right">
-        <button type="button" class="vl-link" {{on "click" (perform this.cancelEditPieces)}}>
-          {{t "cancel"}}
-        </button>
-        <WebComponents::VlSaveButton
-          @text={{t "save"}}
-          @isLoading={{this.saveEditPieces.isRunning}}
-          @saveAction={{perform this.saveEditPieces}} />
-      </div>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
+              {{t "cancel"}}
+            </button>
+          </WebComponents::AuToolbar::Item>
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::VlSaveButton
+              @text={{t "save"}}
+              @isLoading={{this.saveEditPieces.isRunning}}
+              @saveAction={{perform this.saveEditPieces}} />
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
     </div>
   {{/if}}
 </div>

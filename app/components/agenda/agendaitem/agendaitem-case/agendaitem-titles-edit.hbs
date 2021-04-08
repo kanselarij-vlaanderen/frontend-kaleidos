@@ -2,7 +2,7 @@
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "confidential")}}
+        <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
         {{web-components/vl-toggle
           data-test-agendaitem-titles-edit-confidential=true
           value=@subcase.confidential
@@ -10,33 +10,33 @@
       </div>
     {{/if}}
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "name-subcase")}}
+      <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-shorttitle=true
         rows="2"
-        class="vl-textarea vl-textarea--block"
+        class="auk-textarea"
         value=@agendaitem.shortTitle
       }}
     </div>
   </div>
   <div class="auk-u-mb-4">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "title-subcase")}}
+      <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-title=true
         rows="4"
-        class="vl-textarea vl-textarea--block"
+        class="auk-textarea"
         value=@agendaitem.title
       }}
     </div>
   </div>
   <div class="auk-u-mb-4">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "remark-title")}}
+      <WebComponents::AuLabel>{{t "remark-title"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-explanation=true
         rows="2"
-        class="vl-textarea vl-textarea--block"
+        class="auk-textarea"
         value=@agendaitem.explanation
       }}
     </div>
@@ -45,29 +45,35 @@
     <div class="auk-u-mb-4">
       <div class="vlc-input-field-block">
         {{#if this.newsletterInfo}}
-          {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
           {{web-components/vl-toggle
             data-test-agendaitem-titles-edit-showInNewsletter=true
             value=this.newsletterInfo.inNewsletter
           }}
         {{else}}
-          {{web-components/vl-form-label value=(t "show-in-newsletter")}}
+          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
           {{t "no-newsletter-info"}}
         {{/if}}
       </div>
     </div>
   {{/if}}
-  <div class="vl-action-group vl-action-group--align-right">
-    <a href="" class="vl-button vl-button--tertiary"
-      {{action this.cancelEditing}}
-    >
-      {{t "cancel"}}
-    </a>
-    {{web-components/vl-save-button
-      data-test-agendaitem-titles-edit-save=true
-      text=(t "save")
-      isLoading=this.isLoading
-      saveAction=(action this.saveChanges)
-    }}
-  </div>
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <button type="button" class="auk-button auk-button--tertiary"
+          {{action this.cancelEditing}}
+        >
+          {{t "cancel"}}
+        </button>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        {{web-components/vl-save-button
+          data-test-agendaitem-titles-edit-save=true
+          text=(t "save")
+          isLoading=this.isLoading
+          saveAction=(action this.saveChanges)
+        }}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 </div>

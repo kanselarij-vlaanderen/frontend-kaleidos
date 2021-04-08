@@ -1,8 +1,10 @@
 <div class="vlc-document-card auk-u-mb-2" data-test-document-card>
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__badge">
-      <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
-        <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
+      <div class="auk-badge auk-badge--default auk-badge--medium">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-document"></i>
+        </div>
       </div>
     </div>
     <div class="vlc-document-card__content">
@@ -29,18 +31,17 @@
           </div>
           <div class="vlc-toolbar__item">
             {{#if currentSession.isEditor}}
-              <button class="vl-button vl-button--link-muted vl-button--icon"
+              <button class="auk-button auk-button--muted-borderless auk-button--icon"
                 type="button"
                 {{on "click" this.deletePieceLink}}
               >
-                <i class="vl-icon ki-link-broken vl-u-text--error"
-                ></i>
+                <WebComponents::AuIcon @name="link-broken" @iconSkinColor="danger" />
               </button>
             {{/if}}
           </div>
         </div>
       </div>
-      <h6 class="vl-title vl-title--h6">
+      <h6 class="auk-h4">
         {{this.lastPiece.name}}
       </h6>
       <div class="vlc-document-card-content__meta">
@@ -54,16 +55,14 @@
   {{#if this.reverseSortedPieces.length}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-        <button
-          class="vl-toggle vl-link vl-link--bold"
-          type="button"
+        <WebComponents::AuButton
+          @skin="borderless"
+          @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           data-test-show-pieces-history
           {{on "click" this.toggleVersionHistory}}
         >
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-right"
-          ></i>
           {{t "show-pieces"}}
-        </button>
+        </WebComponents::AuButton>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">

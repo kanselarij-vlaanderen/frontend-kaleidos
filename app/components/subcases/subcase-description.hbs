@@ -1,18 +1,18 @@
 {{#if (not isEditing)}}
   <div class="auk-u-flex auk-u-flex--align-baseline">
-    <h3 class="vl-title vl-title--h3">
+    <h3 class="auk-h2">
       {{t "subcase"}}
     </h3>
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
-        <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+        <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
           {{t "edit"}}
         </a>
       </div>
     {{/if}}
   </div>
   <div class="auk-u-mb-4">
-    <p class="vl-u-text--capitalize">
+    <p class="auk-u-text-capitalize">
       {{await subcase.subcaseName}}
     </p>
     <ul class="vlc-status-timeline">
@@ -36,23 +36,23 @@
 
   <div class="vlc-subcase-description-grid">
     <div class="auk-u-flex auk-u-flex--vertical auk-u-maximize-width auk-u-mt">
-      <div class="auk-u-mb-2">
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "number-session"}}
-        </span>
-        <span data-test-meeting-number class="vl-description-data__value">
+        </div>
+        <div data-test-meeting-number class="auk-key-value-item__value">
           {{#if (await subcase.latestMeeting.number)}}
             {{await subcase.latestMeeting.number}}
           {{else}}
             {{t "no-number-yet"}}
           {{/if}}
-        </span>
+        </div>
       </div>
-      <div class="auk-u-mt-2">
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "requested-for-session"}}
-        </span>
-        <span data-test-meeting-plannedStart class="vl-description-data__value">
+        </div>
+        <div data-test-meeting-plannedStart class="auk-key-value-item__value">
           {{#if (await subcase.requestedForMeeting.plannedStart)}}
             {{t "requested-for-agenda"}}
             {{moment-format
@@ -62,22 +62,22 @@
           {{else}}
             <p>{{t "not-yet-requested"}}</p>
           {{/if}}
-        </span>
+        </div>
       </div>
     </div>
     <div class="auk-u-flex auk-u-maximize-width auk-u-flex--vertical auk-u-maximize-width auk-u-mt auk-u-ml-3">
-      <div class="auk-u-mb-2" >
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "is-on-agenda"}}
-        </span>
-        <span class="vl-description-data__value" data-test-subcase-agenda-link>
+        </div>
+        <div class="auk-key-value-item__value" data-test-subcase-agenda-link>
           {{#if
             (or
                (is-pending isRetracted)
                (is-pending subcase.onAgendaInfo)
             )
           }}
-            <div class="vl-loader"></div>
+            <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else}}
             {{#if (await subcase.onAgendaInfo)}}
               {{#if
@@ -90,7 +90,7 @@
                 (await latestMeetingId)
                 (await latestAgendaId)
                 (await latestAgendaitemId)
-                class="vl-link"
+                class="auk-button-link"
               }}
                 {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
               {{/link-to}}
@@ -98,23 +98,23 @@
               {{t "not-yet-on-agenda"}}
             {{/if}}
           {{/if}}
-        </span>
+        </div>
       </div>
-      <div class="auk-u-mt-2">
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "date-last-edited"}}
-        </span>
-        <span data-test-subcase-modified class="vl-description-data__value">
+        </div>
+        <div data-test-subcase-modified class="auk-key-value-item__value">
           {{moment-format subcase.modified "DD MMMM YYYY"}}
-        </span>
+        </div>
       </div>
     </div>
     <div class=" auk-u-flexauk-u-maximize-width auk-u-flex--vertical auk-u-maximize-width auk-u-mt">
-      <div class="auk-u-mb-2">
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "decided-on"}}
-        </span>
-        <span data-test-subcase-decided-on class="vl-description-data__value">
+        </div>
+        <div data-test-subcase-decided-on class="auk-key-value-item__value">
           {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if (await subcase.approved)}}
@@ -122,13 +122,13 @@
           {{else}}
             {{t "not-yet-decided"}}
           {{/if}}
-        </span>
+        </div>
       </div>
-      <div class="auk-u-mt-2">
-        <span class="vl-description-data__label">
+      <div class="auk-key-value-item">
+        <div class="auk-key-value-item__label">
           {{t "requested-by"}}
-        </span>
-        <span data-test-subcase-requested-by class="vl-description-data__value">
+        </div>
+        <div data-test-subcase-requested-by class="auk-key-value-item__value">
           {{#if
             (or
                 (is-pending subcase.requestedBy)
@@ -141,7 +141,7 @@
           {{else}}
             {{t "not-yet-requested"}}
           {{/if}}
-        </span>
+        </div>
       </div>
     </div>
   </div>
@@ -157,7 +157,7 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-type-dropdown")}}
+        <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="subcase-type"
           searchField="label"
@@ -168,13 +168,13 @@
         }}
       </div>
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "subcase-name")}}
+        <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__right">
-        <a href="" class="vl-link" {{action "cancelEditing"}}>
+        <a href="" class="auk-button-link" {{action "cancelEditing"}}>
           {{t "cancel"}}
         </a>
       </div>

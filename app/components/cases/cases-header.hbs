@@ -9,20 +9,20 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <div class="vl-action-group">
-          {{#if currentSession.isEditor}}
-            <button type="button"
-                    data-test-cases-header-add-case
-                    class="vl-button vl-button--icon-before"
-              {{action "toggleAddingCase"}}
-            >
-              <i class="vl-button__icon vl-button__icon--before ki-add"
-                 aria-hidden="true"
-              ></i>
+        {{#if currentSession.isEditor}}
+          <button type="button"
+            data-test-cases-header-add-case
+            class="auk-button auk-button--primary"
+            {{action "toggleAddingCase"}}
+          >
+            <div class="auk-icon auk-icon--default ">
+              <i class="ki ki-add"></i>
+            </div>
+            <div class="auk-button__label">
               {{t "add-case"}}
-            </button>
-          {{/if}}
-        </div>
+            </div>
+          </button>
+        {{/if}}
       </div>
     </div>
   </div>

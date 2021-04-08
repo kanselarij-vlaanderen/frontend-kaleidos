@@ -1,21 +1,21 @@
-<div class="vl-modal-dialog__content">
+<div class="auk-modal__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "add-people")}}
+    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
     {{utils/create-person-selector
       selectedItems=selectedPerson
       selectModel=(action "personSelected")
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "name")}}
+    <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=name}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "signature-function")}}
+    <WebComponents::AuLabel>{{t "signature-function"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=function}}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "signature-file")}}
+    <WebComponents::AuLabel>{{t "signature-file"}}</WebComponents::AuLabel>
     {{#if (not uploadedFile)}}
       {{file-uploader
         multipleFiles=false
