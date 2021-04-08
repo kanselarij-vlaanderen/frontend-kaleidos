@@ -3,8 +3,8 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  classNames: ['vl-typography'],
-  classNameBindings: ['isFlandersArt:vl-typography--definite'],
+  classNames: ['auk-content'],
+  classNameBindings: ['isFlandersArt:auk-content--definite'],
   newsletterService: inject(),
   currentSession: inject(),
   allowEditing: false,

@@ -24,11 +24,11 @@
       color: $blue-dark;
     }
 
-    .vl-badge--alt {
+    .auk-badge--default {
       background-color: $blue-gray-lightest;
     }
 
-    .vlc-document-list__item--active .vl-badge--alt {
+    .vlc-document-list__item--active .auk-badge--default {
       background-color: $green-light;
     }
   }
@@ -59,10 +59,6 @@ a.vlc-agenda-items__sub-item--active:focus {
 
 .vlc-agenda-meta {
   padding-left: 3rem;
-}
-
-.vlc-agenda-meta__times-passed {
-  opacity: 0.65;
 }
 
 // Subject: the “title”
@@ -211,11 +207,6 @@ $i: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .vl-link__icon {
-    color: $dove-gray;
-    font-size: 1.7rem;
-  }
 
   .vlc-agenda-item__icons--margin {
     margin-left: 1rem;

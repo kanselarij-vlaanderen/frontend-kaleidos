@@ -1,5 +1,9 @@
-{{#if text}}
-  {{textToDisplay}}
+{{#if (not isLoading)}}
+  {{#if text}}
+    {{text}}
+  {{else}}
+    {{yield}}
+  {{/if}}
 {{else}}
-  {{yield}}
+  <div class="auk-loader" role="alert" aria-busy="true"></div>
 {{/if}}

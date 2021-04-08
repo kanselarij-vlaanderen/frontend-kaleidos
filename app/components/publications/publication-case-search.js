@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { guidFor } from '@ember/object/internals';
 import { timeout } from 'ember-concurrency';
 import { restartableTask } from 'ember-concurrency-decorators';
 import search from 'frontend-kaleidos/utils/mu-search';
@@ -35,14 +36,25 @@ export default class PublicationsPublicationCaseSearchComponent extends Componen
     }
   }
 
+  get resultListId() {
+    return `${guidFor(this)}-results-list`;
+  }
+
+  get resultListDomElement() {
+    return document.getElementById(this.resultListId);
+  }
+
   @action
   showResults() {
     this.isShowingResults = true;
   }
 
   @action
-  hideResults() {
-    this.isShowingResults = false;
+  hideResults(event) {
+    // only hide when focusout was triggered clicking *outside* the result list
+    if (this.resultListDomElement && !this.resultListDomElement.contains(event.relatedTarget)) {
+      this.isShowingResults = false;
+    }
   }
 
   @restartableTask

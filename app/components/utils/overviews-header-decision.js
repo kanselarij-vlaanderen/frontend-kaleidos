@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 export default Component.extend({
-  classNames: ['vl-u-bg-alt'],
+  classNames: ['auk-u-bg-alt'],
   routing: inject('-routing'),
   currentSession: inject(),
   title: null,

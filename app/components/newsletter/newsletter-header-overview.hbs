@@ -16,7 +16,7 @@
             <div class="vlc-toolbar__item">
               <LinkTo
                 @route="newsletters"
-                class="vlc-backlink vl-link vl-link--bold" >
+                class="vlc-backlink auk-button-link" >
               {{!-- template-lint-disable no-bare-strings  --}}
                 &#8629;
               {{!-- template-lint-enable no-bare-strings  --}}
@@ -75,130 +75,134 @@
   <div class="vlc-toolbar__right">
     <div class="vlc-toolbar__item">
       <div class="vlc-toolbar__item">
-        <div class="vl-action-group">
-          {{#if currentSession.isEditor}}
+        {{#if currentSession.isEditor}}
+        {{/if}}
+        <button type="button"
+          class="auk-button auk-button--secondary"
+          {{action "showMultipleOptions"}}
+        >
+          {{#if (not isShowingOptions)}}
+            <div class="auk-icon auk-icon--default">
+              <i
+                class="ki ki-chevron-down"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            </div>
+          {{else}}
+            <div class="auk-icon auk-icon--default">
+              <i
+                class="ki ki-chevron-up"
+                {{action "showMultipleOptions" bubbles=false}}
+              ></i>
+            </div>
           {{/if}}
-          <button type="button"
-            class="vl-button vl-button--icon-before vl-button--secondary"
-            {{action "showMultipleOptions"}}
-          >
-            {{#if (not isShowingOptions)}}
-              <i
-                class="vl-button__icon vl-button__icon--before ki-chevron-down"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
-            {{else}}
-              <i
-                class="vl-button__icon vl-button__icon--before ki-chevron-up"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
-            {{/if}}
+          <div class="auk-button__label">
             {{t "actions"}}
-            {{#attach-popover
-              renderInPlace=true
-              class="ember-attacher-popper vlc-hide-on-print"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#if currentSession.isEditor}}
-                  {{#if
-                    (or (is-pending agenda.createdFor.mailCampaign) isLoading)
-                  }}
+          </div>
+          {{#attach-popover
+            renderInPlace=true
+            class="ember-attacher-popper vlc-hide-on-print"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom"
+          as |attacher|
+          }}
+            <ul class="vlc-dropdown-menu">
+              {{#if currentSession.isEditor}}
+                {{#if
+                  (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                }}
+                  <li class="vlc-dropdown-menu__item">
+                    <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-p-2">
+                      <div
+                        class="auk-loader"
+                        role="alert"
+                        aria-busy="true"
+                      ></div>
+                      {{t "newsletter-loading-text"}}
+                    </div>
+                  </li>
+                {{else if (await agenda.createdFor.mailCampaign)}}
+                  {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
                     <li class="vlc-dropdown-menu__item">
-                      <div class="vl-loader-link">
-                        <div
-                          class="vl-loader"
-                          role="alert"
-                          aria-busy="true"
-                        ></div>
-                        {{t "newsletter-loading-text"}}
-                      </div>
-                    </li>
-                  {{else if (await agenda.createdFor.mailCampaign)}}
-                    {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
-                      <li class="vlc-dropdown-menu__item">
-                        <a href=""
-                           class="vl-link vl-link--block"
-                          {{action attacher.hide}}
-                          {{action "sendTestCampaign"}}
-                        >
-                          {{t "send-test-campaign"}}
-                        </a>
-                      </li>
-                      <li class="vlc-dropdown-menu__item">
-                        <a href=""
-                           class="vl-link vl-link--block"
-                          {{action attacher.hide}}
-                          {{action "toggleIsVerifying"}}
-                        >
-                          {{t "send-campaign"}}
-                        </a>
-                      </li>
-                      <li
-                              class="vlc-dropdown-menu__separator"
-                              aria-hidden="true"
-                      ></li>
-                    {{/if}}
-                    <li class="vlc-dropdown-menu__item">
-                      <a
-                        class="vl-link vl-link--block"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={{concat
-                          "/newsletter/xml-newsletter/"
-                          agenda.id
-                        }}
-                        download={{concat
-                          "/newsletter/xml-newsletter/"
-                          agenda.id
-                        }}
+                      <a href=""
+                          class="auk-button-link auk-button-link--block"
+                        {{action attacher.hide}}
+                        {{action "sendTestCampaign"}}
                       >
-                        {{t "generate-xml"}}
+                        {{t "send-test-campaign"}}
+                      </a>
+                    </li>
+                    <li class="vlc-dropdown-menu__item">
+                      <a href=""
+                          class="auk-button-link auk-button-link--block"
+                        {{action attacher.hide}}
+                        {{action "toggleIsVerifying"}}
+                      >
+                        {{t "send-campaign"}}
                       </a>
                     </li>
                     <li
                             class="vlc-dropdown-menu__separator"
                             aria-hidden="true"
                     ></li>
-                    <li class="vlc-dropdown-menu__item">
-                      <a href=""
-                         class="vl-link vl-link--block vl-u-text--error"
-                        {{action attacher.hide}}
-                        {{action "deleteCampaign"}}
-                      >
-                        {{t "delete-campaign"}}
-                      </a>
-                    </li>
-                  {{else}}
-                    <li class="vlc-dropdown-menu__item">
-                      <a href=""
-                         class="vl-link vl-link--block"
-                        {{action "createCampaign"}}
-                      >
-                        {{t "create-campaign"}}
-                      </a>
-                    </li>
                   {{/if}}
-                {{/if}}
-                {{#if shouldShowPrintButton}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a
+                      class="auk-button-link auk-button-link--block"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={{concat
+                        "/newsletter/xml-newsletter/"
+                        agenda.id
+                      }}
+                      download={{concat
+                        "/newsletter/xml-newsletter/"
+                        agenda.id
+                      }}
+                    >
+                      {{t "generate-xml"}}
+                    </a>
+                  </li>
+                  <li
+                          class="vlc-dropdown-menu__separator"
+                          aria-hidden="true"
+                  ></li>
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
-                       class="vl-link vl-link--block"
+                        class="auk-button-link auk-button-link--block auk-u-text-error"
                       {{action attacher.hide}}
-                      {{action "print"}}
+                      {{action "deleteCampaign"}}
                     >
-                      {{t "print"}}
+                      {{t "delete-campaign"}}
+                    </a>
+                  </li>
+                {{else}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a href=""
+                        class="auk-button-link auk-button-link--block"
+                      {{action "createCampaign"}}
+                    >
+                      {{t "create-campaign"}}
                     </a>
                   </li>
                 {{/if}}
-              </ul>
-            {{/attach-popover}}
-          </button>
-        </div>
+              {{/if}}
+              {{#if shouldShowPrintButton}}
+                <li class="vlc-dropdown-menu__item">
+                  <a href=""
+                      class="auk-button-link auk-button-link--block"
+                    {{action attacher.hide}}
+                    {{action "print"}}
+                  >
+                    {{t "print"}}
+                  </a>
+                </li>
+              {{/if}}
+            </ul>
+          {{/attach-popover}}
+        </button>
       </div>
     </div>
   </div>
@@ -218,7 +222,7 @@
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
     @closeModal={{action "clearNewsletterHTML"}} >
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       {{#if testCampaignIsLoading}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}

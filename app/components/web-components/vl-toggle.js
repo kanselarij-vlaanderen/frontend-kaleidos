@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['vl-checkbox--switch__wrapper'],
+  classNames: ['vl-toggle__wrapper'],
   value: null,
 
   actions: {

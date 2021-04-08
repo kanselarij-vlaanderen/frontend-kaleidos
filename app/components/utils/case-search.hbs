@@ -1,28 +1,28 @@
-<div class="vlc-scroll-wrapper__body vl-modal-dialog__content">
+<div class="auk-modal__content">
   <div class="auk-u-m-8">
     <div class="auk-u-flex auk-u-flex--vertical-center">
       <Input
         @value={{searchText}}
         @placeholder={{t "search-placeholder"}}
-        @class="vl-input-field vl-input-field__input vlc-u-box-model-maximize-width"
+        @class="auk-input vlc-u-box-model-maximize-width"
         @input={{action "updateSearchText"}} />
     </div>
 
     {{#if isLoading}}
       <WebComponents::VlLoader @text={{t "please-be-patient"}} />
     {{else}}
-      <table class="vl-data-table tr-hover vl-data-table--zebra">
+      <table class="auk-table auk-table--striped">
         <thead>
           <tr>
-            <th class="vl-data-table-col-9 vl-data-table__header-title">
+            <th class="auk-table__col--9 auk-table__header-title">
               {{t "case-name"}}
             </th>
-            <th class="vl-data-table-col-2 vl-data-table__header-title">
+            <th class="auk-table__col--2 auk-table__header-title">
               {{t "created-on"}}
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="auk-table--interaction-cursor">
           {{#each (await results) as |row|}}
             <tr>
               <td onclick={{action "selectCase" row}}>

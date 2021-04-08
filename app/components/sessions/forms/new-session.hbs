@@ -1,10 +1,10 @@
-<div class="vl-modal-dialog__content">
+<div class="auk-modal__content">
   {{utils/kind-selector kind=kind setAction=(action "setKind")}}
 
   {{#if this.isAnnexMeeting}}
     <div class="auk-u-mb-2">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "related-main-meeting-field-label")}}
+        <WebComponents::AuLabel>{{t "related-main-meeting-field-label"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="meeting"
           searchField="numberRepresentation"
@@ -18,7 +18,7 @@
   {{else}}
     <div class="auk-u-mb-2">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "start-date")}}
+        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
         {{web-components/vl-datepicker
           enableTime=true
           defaultHour=10
@@ -30,7 +30,7 @@
   {{/if}}
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block" style="display: flex; flex-direction: column">
-      {{web-components/vl-form-label value=(t "meeting-number")}}
+      <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
       <div class="vlc-new-session__flex">
         {{#unless this.isAnnexMeeting}}
           {{web-components/vl-form-input
@@ -43,7 +43,7 @@
         <div class="vlc-new-session vlc-new-session__flex">
           <span class="vlc-new-session__label">
             <span class="vlc-new-session__identifier" data-test-meeting-formattedMeetingIdentifier>{{formattedMeetingIdentifier}}</span>
-            <button type="button" class="vl-link"
+            <button type="button" class="auk-button-link"
               data-test-meeting-edit-identifier-button
               {{action "editFormattedMeetingIdentifier"}}
             >
@@ -72,7 +72,7 @@
   {{#unless this.isAnnexMeeting}}
     <div class="auk-u-mb-2">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "meeting-location")}}
+        <WebComponents::AuLabel>{{t "meeting-location"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=extraInfo}}
       </div>
     </div>

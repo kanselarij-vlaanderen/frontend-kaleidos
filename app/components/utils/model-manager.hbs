@@ -4,7 +4,7 @@
   closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       <div class="vlc-input-field-block">
         {{utils/model-selector
           modelName=modelName
@@ -16,12 +16,12 @@
         }}
       </div>
     </div>
-    <div class="vlc-navbar vlc-navbar--bordered-top">
+    <div class="vlc-navbar vlc-navbar--white vlc-navbar--bordered-top">
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
             <button type="button" data-test-vl-model-manager-close
-                    class="vl-button vl-button--link"
+                    class="auk-button auk-button--borderless"
               {{action "close"}}
             >
               {{t "cancel"}}
@@ -31,30 +31,39 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             <button type="button" data-test-vl-model-manager-add
-                    class="vl-button vl-button--tertiary vl-button--icon-before"
+              class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-add"
-              ></i>
-              {{t "add"}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "add"}}
+              </div>
             </button>
             {{#if item}}
               <button type="button"
-                      data-test-vl-model-manager-edit
-                      class="vl-button vl-button--tertiary vl-button--icon-before"
+                data-test-vl-model-manager-edit
+                class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-pencil"
-                ></i>
-                {{t "edit"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "edit"}}
+                </div>
               </button>
               <button type="button" data-test-vl-model-manager-delete
-                      class="vl-button vl-button--tertiary vl-button--icon-before"
+                class="auk-button auk-button--tertiary"
                 {{action "removeModel"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-delete"
-                ></i>
-                {{t "delete"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-delete"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "delete"}}
+                </div>
               </button>
             {{/if}}
           </div>
@@ -63,9 +72,9 @@
     </div>
   {{/if}}
   {{#if isAdding}}
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
+        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=title}}
       </div>
     </div>
@@ -78,9 +87,9 @@
     }}
   {{/if}}
   {{#if isEditing}}
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "title")}}
+        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=title}}
       </div>
     </div>

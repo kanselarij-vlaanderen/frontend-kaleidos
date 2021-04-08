@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   newsletterService: inject(),
-  classNames: ['vl-checkbox--switch__wrapper'],
+  classNames: ['vl-toggle__wrapper'],
   value: null,
   isLoading: false,
 
