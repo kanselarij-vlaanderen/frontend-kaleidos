@@ -1,86 +1,20 @@
 import Controller from '@ember/controller';
-import {
-  computed,
-  action
-} from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import { tracked } from '@glimmer/tracking';
-import search from 'frontend-kaleidos/utils/mu-search';
-import { task } from 'ember-concurrency';
-import { isEmpty } from '@ember/utils';
+// import { tracked } from '@glimmer/tracking';
 
-export default class AgendaitemsAgendaController extends Controller {
-  queryParams = ['filter'];
+export default class AgendaAgendaitemsController extends Controller {
+  queryParams = [{
+    filter: {
+      type: 'string',
+    },
+    showModifiedOnly: {
+      type: 'boolean',
+    },
+  }];
 
-  @service('-routing') routing;
   @service sessionService;
   @service agendaService;
 
-  @alias('model.agendaitems') agendaitems;
-  @alias('model.announcements') announcements;
-  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
-  @alias('sessionService.currentAgenda') currentAgenda;
-  @alias('sessionService.currentSession') currentSession;
-
-  @tracked filter;
-
-  meeting;
-  agenda;
-  @tracked filteredAgendaitems;
-  @tracked filteredAnnouncements;
-
-  @computed('filteredAgendaitems.@each.{priority,isDeleted}')
-  get sortedAgendaitems() {
-    const actualAgendaitems = this.filteredAgendaitems.filter((agendaitem) => !agendaitem.showAsRemark && !agendaitem.isDeleted)
-      .sortBy('priority');
-    return this.agendaService.groupAgendaitemsOnGroupName(actualAgendaitems).then(() => actualAgendaitems);
-  }
-
-  @computed('filteredAnnouncements.@each.{priority,isDeleted}')
-  get sortedAnnouncements() {
-    const announcements = this.filteredAnnouncements;
-    if (announcements) {
-      return announcements.filter((announcement) => !announcement.isDeleted).sortBy('priority');
-    }
-    return [];
-  }
-
-  get agendaitemsClass() {
-    if (this.routing.currentRouteName.startsWith('agenda.agendaitems.agendaitem')) {
-      return 'vlc-panel-layout__agenda-items';
-    }
-    return 'vlc-panel-layout-agenda__detail auk-u-bg-alt';
-  }
-
-  get isOverviewWindow() {
-    return this.routing.currentRouteName === 'agenda.agendaitems.index';
-  }
-
-  @(task(function *() {
-    if (isEmpty(this.filter)) {
-      this.filteredAgendaitems = this.model.agendaitems;
-      this.filteredAnnouncements = this.model.announcements;
-    } else {
-      const filter = {
-        ':phrase_prefix:title,shortTitle': `${this.filter}`,
-        meetingId: this.meeting.id,
-        agendaId: this.agenda.id,
-      };
-      const matchingIds = yield search('agendaitems', 0, 500, null, filter, (agendaitem) => agendaitem.id);
-      this.filteredAgendaitems = this.model.agendaitems.filter((ai) => matchingIds.includes(ai.id));
-      this.filteredAnnouncements = this.model.announcements.filter((ai) => matchingIds.includes(ai.id));
-    }
-  })) filterTask;
-
-  @action
-  async searchAgendaitems(value) {
-    this.filter = value;
-    await this.filterTask.perform();
-  }
-
-  @action
-  refresh() {
-    this.send('reloadModel');
-  }
+  // @tracked filter; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  // @tracked showModifiedOnly;
 }

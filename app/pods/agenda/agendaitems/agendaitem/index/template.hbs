@@ -25,4 +25,42 @@
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
 </WebComponents::AuToolbar>
-<Agenda::Agendaitem::AgendaitemCase @agendaitem={{this.model}} @subcase={{await this.subcase}}/>
+{{!-- TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing --}}
+{{#if this.isEditingAgendaItemTitles}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+  />
+{{else}}
+  {{!-- shouldShowDetails should only be false when the agendaitem is to approve minutes --}}
+  <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitles
+    @agendaitem={{this.model}}
+    @subcase={{this.subcase}}
+    @shouldShowDetails={{or @agendaitem.showAsRemark this.subcase}}
+    @newsletterInfo={{this.newsletterInfo}}
+    @toggleIsEditing={{this.toggleIsEditingAgendaItemTitles}}
+  />
+{{/if}}
+{{#if this.model.showAsRemark}}
+  <Mandatees::MandateesDomainsPanel
+    @mandatees={{this.mandatees}}
+    @allowEditing={{false}}
+    @onSave={{this.saveMandatees}}
+  />
+{{else}}
+  {{#if this.subcase}}
+    <Mandatees::MandateesDomainsPanel
+      @mandatees={{this.mandatees}}
+      @submitter={{this.submitter}}
+      @fields={{this.governmentFields}}
+      @allowEditing={{true}}
+      @onSave={{this.saveMandateeData}}
+    />
+    <DomainFieldIse::IseCodesPanel @iseCodes={{this.subcase.iseCodes}}/>
+    <Agenda::Agendaitem::AgendaitemCase::AgendaitemApprovals
+      @agendaitem={{this.model}}
+    />
+  {{/if}}
+{{/if}}

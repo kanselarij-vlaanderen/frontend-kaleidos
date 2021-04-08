@@ -1,24 +1,26 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { alias } from '@ember/object/computed';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 
 export default class AgendaSidebar extends Component {
-  @service sessionService;
-  @service('current-session') currentSessionService;
-  @service agendaService;
-  @alias('sessionService.selectedAgendaitem') selectedAgendaitem;
-
+  /**
+   * @argument notaGroups: Array of AgendaitemGroup-objects
+   * @argument isLoadingNotaGroups: boolean indicating whether to show the loading state for nota's
+   * @argument announcements
+   * @argument newItems: items to be marked as "new on this agenda"
+   */
   @tracked isShowingChanges = false;
+  @tracked groupedNotas;
+  @tracked isDesignAgenda;
 
-  @action
-  selectAgendaitemAction(agendaitem) {
-    this.args.selectAgendaitem(agendaitem);
+  constructor() {
+    super(...arguments);
+    this.determineIfDesignAgenda.perform();
   }
 
-  @action
-  toggleChangesOnly() {
-    this.isShowingChanges = !this.isShowingChanges;
+  @task
+  *determineIfDesignAgenda() {
+    const agendaStatus = yield this.args.currentAgenda.status;
+    this.isDesignAgenda = agendaStatus.isDesignAgenda;
   }
 }

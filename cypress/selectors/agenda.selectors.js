@@ -95,6 +95,7 @@ const selectors = {
     announcementRight: '[data-test-compare-announcement-right]',
   },
   agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
+  agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
 };
 export default selectors;

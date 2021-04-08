@@ -1,4 +1,4 @@
-<div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+<div class="auk-u-mb-3">
   <WebComponents::AuPanel>
     <WebComponents::AuPanel::Header>
       <WebComponents::AuToolbar>
@@ -11,10 +11,10 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuPanel::Header>
-    {{#if (gt (await @item.iseCodes.length) 0) }}
+    {{#if @iseCodes.length }}
       <WebComponents::AuPanel::Body>
         <WebComponents::AuPillList data-test-subcase-ise-codes-list>
-          {{#each (await @item.iseCodes) as |iseCode|}}
+          {{#each @iseCodes as |iseCode|}}
             <WebComponents::AuPill data-test-subcase-ise-codes-list-item>
               {{iseCode.name}}
             </WebComponents::AuPill>

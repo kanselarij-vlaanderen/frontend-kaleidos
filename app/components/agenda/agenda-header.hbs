@@ -7,7 +7,7 @@
         {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
         {{t "at"}}
         {{moment-format currentSession.plannedStart "HH:mm"}}
-        <span class="vlc-page-header__subtitle vl-u-text auk-u-muted" style="font-size:1.6rem;">
+        <span class="vlc-page-header__subtitle auk-u-muted" style="font-size:1.6rem;">
           - {{await currentSession.kindToShow.label}}
         </span>
       </h1>
@@ -23,10 +23,7 @@
               {{!-- template-lint-enable no-bare-strings  --}}
             </div>
             <Sessions::SessionAgendaNav
-              @currentAgenda={{currentAgenda}}
-              @compareAgendas={{action "compareAgendas"}}
-              @navigateToDocuments={{action "navigateToDocuments"}}
-              @clearSelectedAgendaitem={{action "clearSelectedAgendaitem"}} />
+              @currentAgenda={{currentAgenda}} />
           </div>
         </div>
       </div>

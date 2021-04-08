@@ -15,7 +15,6 @@ export default Route.extend({
   async model() {
     this.set('agendaService.addedPieces', []);
     this.set('agendaService.addedAgendaitems', []);
-    this.set('sessionService.selectedAgendaitem', null);
     const agenda = await this.get('sessionService.currentAgenda');
     const session = this.modelFor('agenda').meeting;
     const agendas = await session.get('agendas');

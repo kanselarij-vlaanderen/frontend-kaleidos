@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
+import { A } from '@ember/array';
 
 export default Component.extend({
   store: service(),
@@ -65,9 +66,23 @@ export default Component.extend({
   },
 
   async createAgendaitemToApproveMinutes(agenda, closestMeeting) {
-    const fallBackDate = this.formatter.formatDate(null);
+    const now = new Date();
+
+    // load code-list item
+    const decisionResultCode = await this.store.queryOne('decision-result-code', {
+      'filter[:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+    });
+
+    // Treatment of agenda-item / decision activity
+    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      decisionResultCode,
+    });
+    await agendaItemTreatment.save();
+
     const agendaitem = this.store.createRecord('agendaitem', {
-      created: fallBackDate,
+      created: now,
       agenda,
       priority: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
@@ -78,6 +93,7 @@ export default Component.extend({
       pieces: [],
       approvals: [],
       isApproval: true,
+      treatments: A([agendaItemTreatment]),
     });
     return await agendaitem.save();
   },

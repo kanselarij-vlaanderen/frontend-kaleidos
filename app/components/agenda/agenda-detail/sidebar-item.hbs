@@ -1,12 +1,18 @@
 <LinkTo
-  class={{classNameBindings}}
+  class={{this.class}}
   @route={{this.router.currentRouteName}}
   @model={{@agendaitem.id}}
 >
   {{!-- Long term, I think we rather want this component to trigger an action when the "active" status toggles.
     With that, a higher-level component can decide if it wants to scroll this element in to view. Currently, because the active status
     is set right from the beginning and the component is rendered only once, scrolling on "did-insert" works just fine --}}
-  <div class="auk-u-flex" {{did-insert this.conditionallyScrollIntoView}} {{in-viewport onEnter=this.onEnter onExit=this.onExit}}>
+  <div class="auk-u-flex"
+    {{did-insert this.conditionallyScrollIntoView}}
+    {{in-viewport
+      onEnter=(perform this.lazyLoadSideData)
+      onExit=(fn this.cancelLazyLoad)
+    }}
+  >
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
@@ -25,32 +31,32 @@
         </pre>
       </h4>
       {{#if (not @agendaitem.aboutToDelete)}}
-        {{#if (not selectedAgendaitem)}}
+        {{#unless @isActive}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="vl-u-text">
+              <pre class="auk-u-text-pre-line">
                 {{@agendaitem.title}}
               </pre>
             {{/if}}
           {{/if}}
-        {{/if}}
+        {{/unless}}
         <div>
 
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
-              {{#if this.renderDetails}}
-                {{#if (await @agendaitem.checkAdded)}}
-                  <span class="vlc-agenda-meta__recently-added">
-                    <WebComponents::AuIcon @name="calendar-plus" @size="small" />
-                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-                      <p>
-                        {{t "added-agendaitem-text"}}
-                      </p>
-                    </EmberTooltip>
-                  </span>
-                {{/if}}
+              {{#if @isNew}}
+                <span class="vlc-agenda-meta__recently-added">
+                  <WebComponents::AuIcon @name="calendar-plus" @size="small" />
+                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "added-agendaitem-text"}}
+                    </p>
+                  </EmberTooltip>
+                </span>
+              {{/if}}
 
-                {{#if (not newsletterInfo.inNewsletter)}}
+              {{#if this.loadNewsletterVisibility.lastSuccessful}}
+                {{#if (not this.newsletterIsVisible)}}
                   <span class="vlc-agenda-meta__recently-added">
                     <WebComponents::AuIcon @name="hide" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
@@ -59,20 +65,35 @@
                       </p>
                     </EmberTooltip>
                   </span>
+                {{else}}
+                  {{!-- TODO: this icon is merely here as an invisible placeholder.
+                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
+                    This should be tackled differently through modified design --}}
+                  <i
+                    class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"
+                    style="color: #f3f5f6;"
+                  ></i>
                 {{/if}}
+              {{else}}
+                {{!-- TODO: design loading state for newsletter visibility --}}
+                <i class="ki-circle-question vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50">
+                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "loading"}}
+                    </p>
+                  </EmberTooltip>
+                </i>
+              {{/if}}
 
-                {{#if (await subcase.confidential)}}
-                  <span>
-                    <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked />
-                  </span>
-                {{/if}}
+              {{#if this.subcase.confidential}}
+                <span>
+                  <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true"/>
+                </span>
               {{/if}}
             </div>
 
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-u-flex--align-end">
-              {{#if
-                (and currentSessionService.isEditor (await currentAgenda.isDesignAgenda))
-              }}
+              {{#if @showFormallyOkStatus}}
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
                 <p class="{{@agendaitem.formallyOkToShow.classNames}}">
                   {{@agendaitem.formallyOkToShow.label}}

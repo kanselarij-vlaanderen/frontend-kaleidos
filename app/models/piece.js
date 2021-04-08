@@ -31,10 +31,14 @@ export default Model.extend({
   previousPiece: belongsTo('piece', {
     inverse: 'nextPiece',
   }),
-  // Below relationship only defined in frontend.
+  // Below relationship is only defined in frontend.
   // This definition is merely here to help ember-data with relationship bookkeeping,
   // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
-  submissionActivity: belongsTo('submission-activity'),
+  // The submission activity should never be sent to the backend from the piece-side
+  // as long as the relationship is not defined in the backend.
+  submissionActivity: belongsTo('submission-activity', {
+    serialize: false,
+  }),
   treatment: belongsTo('agenda-item-treatment', {
     inverse: null,
   }),
@@ -49,6 +53,10 @@ export default Model.extend({
   agendaitems: hasMany('agendaitem', {
     serialize: false,
     inverse: null,
+  }),
+
+  viewDocumentURL: computed('id', function() {
+    return `/document/${this.id}`;
   }),
 
   downloadFilename: computed('name', 'file.extension', async function() {

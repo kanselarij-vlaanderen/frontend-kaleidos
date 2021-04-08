@@ -1,57 +1,63 @@
-/* eslint-disable no-dupe-class-members */
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import AgendaSidebarItem from 'frontend-kaleidos/components/agenda/agenda-detail/sidebar-item';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { timeout } from 'ember-concurrency';
+import {
+  dropTask,
+  task
+} from 'ember-concurrency-decorators';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
-export default class AgendaOverviewItem extends Component {
+export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
-   * INFO arguments from parent.
    *
-   * @agendaitem={{agendaitem}}
-   * @isEditingOverview={{isEditingOverview}}
+   * @argument agendaitem
+   * @argument currentAgenda: both agenda's for determining changed documents
+   * @argument previousAgenda
+   * @argument isNew: boolean indicating if the item should be marked with the "new agenda-item"-icon
+   * @argument isEditingFormallyOkStatus
+   * @argument showDragHandle: whether to show the drag-handle for changing item order
+   * @argument showFormallyOkStatus: boolean indicating whether to show the formally ok status
    */
 
   @service store;
-
+  @service toaster;
   @service sessionService;
-
+  @service agendaService;
   @service publicationService;
-
   @service router;
-
   @service('current-session') currentSessionService;
 
-  @alias('sessionService.currentAgenda') currentAgenda;
+  @tracked agendaitemDocuments;
+  @tracked newAgendaitemDocuments;
 
-  @alias('sessionService.currentSession') currentSession;
+  @tracked isShowingAllDocuments = false;
 
-  @alias('args.agendaitem.checkAdded') isNew;
+  constructor() {
+    super(...arguments);
+    this.agendaitemDocuments = [];
+    this.newAgendaitemDocuments = [];
+    this.loadDocuments.perform();
+  }
 
-  @alias('args.agendaitem.agendaActivity.subcase') subcase;
+  get documentsAreReleased() {
+    return this.sessionService.currentSession.releasedDocuments > new Date();
+  }
 
-  @alias('args.agendaitem.treatments.firstObject.newsletterInfo') newsletterInfo;
+  get documentListSize() {
+    return 20;
+  }
 
-  hideLabel = true;
+  get limitedAgendaitemDocuments() {
+    if (this.isShowingAllDocuments) {
+      return this.agendaitemDocuments;
+    }
+    return this.agendaitemDocuments.slice(0, this.documentListSize);
+  }
 
-  isShowingChanges = null;
-
-  @tracked renderDetails = null;
-
-  @tracked showLoader = false;
-
-  @tracked retracted = this.args.agendaitem.retracted || false;
-
-  @tracked aboutToDelete = this.args.agendaitem.aboutToDelete || null;
-
-  @tracked formallyOk = this.args.agendaitem.formallyOk || null;
-
-  get overheidCanViewDocuments() {
-    const isOverheid = this.currentSessionService.isOverheid;
-    const documentsAreReleased = this.currentSession.releasedDocuments;
-
-    return !(isOverheid && !documentsAreReleased);
+  get enableShowMore() {
+    return this.agendaitemDocuments.length > this.documentListSize;
   }
 
   @action
@@ -64,37 +70,51 @@ export default class AgendaOverviewItem extends Component {
     this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
-  @action
-  onEnter() {
-    setTimeout(() => {
-      this.renderDetails = true;
-    }, 500);
+  @task
+  *setFormallyOkStatus(status) {
+    yield this.args.setFormallyOkAction(status.uri);
   }
 
-  @action
-  onExit() {
-    this.renderDetails = false;
+  @task
+  *loadDocuments() {
+    let pieces = yield this.args.agendaitem.pieces;
+    pieces = pieces.toArray();
+    const sortedPieces = sortPieces(pieces);
+    this.agendaitemDocuments = sortedPieces;
   }
 
-  get isActive() {
-    if (!this.args.agendaitem.isDestroyed && this.selectedAgendaitem) {
-      return this.args.agendaitem === this.selectedAgendaitem.id;
+  @dropTask
+  *lazyLoadSideData() {
+    yield timeout(350);
+    const tasks = [
+      this.loadNewsletterVisibility,
+      this.loadSubcase,
+      this.loadNewDocuments
+    ].filter((task) => task.performCount === 0);
+    yield Promise.all(tasks.map((task) => task.perform()));
+  }
+
+  @task
+  *loadNewDocuments() { // Documents to be highlighted
+    if (this.args.previousAgenda) { // Highlighting everything on the first agenda-version as "new" doesn't add a lot of value.
+      this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
+        this.args.previousAgenda.id, this.args.agendaitem.id);
     }
-    return null;
-  }
-
-  get classNameBindings() {
-    return `
-    ${this.isActive ? 'vlc-agenda-items__sub-item--active' : ''}
-    ${this.isClickable ? '' : 'not-clickable'}
-    ${this.retracted ? 'vlc-u-opacity-lighter' : ''}
-    ${this.isNew ? 'vlc-agenda-items__sub-item--added-item' : ''}
-    `;
   }
 
   @action
-  async setAction(agendaitem) {
-    const uri = agendaitem.get('uri');
-    this.args.setFormallyOkAction(uri);
+  toggleShowingAllDocuments() {
+    this.isShowingAllDocuments = !this.isShowingAllDocuments;
+  }
+
+  @action
+  async setAndSaveFormallyOkStatus(newFormallyOkUri) {
+    this.args.agendaitem.formallyOk = newFormallyOkUri;
+    await this.args.agendaitem
+      .save()
+      .catch(() => {
+        this.args.agendaitem.rollbackAttributes();
+        this.toaster.error();
+      });
   }
 }

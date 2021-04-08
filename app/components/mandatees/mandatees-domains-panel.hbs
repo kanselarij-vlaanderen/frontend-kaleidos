@@ -1,0 +1,23 @@
+<div
+  class="auk-u-mb-8"
+>
+  {{#if this.isEditing}}
+    <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelEdit
+      @mandatees={{@mandatees}}
+      @submitter={{@submitter}}
+      @fields={{@fields}}
+      @onCancel={{this.cancelEditing}}
+      @onSave={{perform this.save}}
+    />
+  {{else}}
+    <div class="auk-u-mb-3">
+      <Mandatees::MandateesDomainsPanel::MandateesDomainsPanelView
+        @mandatees={{@mandatees}}
+        @submitter={{@submitter}}
+        @fields={{@fields}}
+        @showEditButton={{@allowEditing}}
+        @onClickEdit={{this.startEditing}}
+      />
+    </div>
+  {{/if}}
+</div>

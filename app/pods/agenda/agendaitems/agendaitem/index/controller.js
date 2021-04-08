@@ -1,20 +1,27 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
+import {
+  saveChanges,
+  reorderAgendaitemsOnAgenda
+} from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
+  @service store;
   @service currentSession;
 
-  @service store;
+  @controller('agenda.agendaitems') agendaitemsController;
+  @controller('agenda.agendaitems.agendaitem') agendaitemController;
+  @tracked agenda;
+  @tracked subcase;
+  @tracked governmentFields;
+  @tracked iseCodes;
+  @tracked submitter;
+  @tracked newsletterInfo;
+  @tracked mandatees;
 
-  get subcase() {
-    const agendaActivity = this.model.get('agendaActivity');
-    if (agendaActivity) {
-      return agendaActivity.get('subcase');
-    }
-    return null;
-  }
+  @tracked isEditingAgendaItemTitles = false;
 
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
@@ -42,6 +49,33 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @action
   async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
     await this.reassignPrioritiesForAgendaitems();
+    this.agendaitemsController.send('reloadModel');
     await this.navigateToNeighbouringItem(this.model);
+  }
+
+  @action
+  async toggleIsEditingAgendaItemTitles() {
+    this.isEditingAgendaItemTitles = !this.isEditingAgendaItemTitles;
+  }
+
+  @action
+  async saveMandateeData(mandateeData) {
+    const propertiesToSetOnAgendaitem = {
+      mandatees: mandateeData.mandatees,
+    };
+    const correspondingIseCodes = await this.store.query('ise-code', {
+      'filter[field][:id:]': mandateeData.fields.map((field) => field.id).join(','),
+    });
+    const propertiesToSetOnSubcase = {
+      mandatees: mandateeData.mandatees,
+      requestedBy: mandateeData.submitter,
+      iseCodes: correspondingIseCodes,
+    };
+    this.governmentFields = mandateeData.fields;
+    this.mandatees = mandateeData.mandatees;
+    this.iseCodes = correspondingIseCodes;
+    this.submitter = mandateeData.submitter;
+    await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
+    this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);
   }
 }

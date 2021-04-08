@@ -1,0 +1,154 @@
+<div class="vlc-box">
+  <div class="vlc-input-field-block">
+    <div class="auk-u-mb-8">
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th class="auk-table__col--2">
+              {{t "minister"}}
+            </th>
+            <th class="auk-table__col--3">
+              {{t "government-domain"}}
+            </th>
+            <th class="auk-table__col--5">
+              {{t "government-field"}}
+            </th>
+            <th class="auk-table__col--1">
+              {{t "submitter"}}
+            </th>
+            <th class="auk-table__col--1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.mandateesBuffer as |mandatee|}}
+            <tr data-test-mandatee-panel-edit-mandatee-row>
+              <td data-test-mandatee-panel-edit-row-name>
+                {{mandatee.person.nameToDisplay}}
+              </td>
+              <Mandatees::DomainsFieldsForMandatee
+                @mandatee={{mandatee}}
+                @fields={{this.fieldsBuffer}}
+              as |mandateeDomainsFields|>
+                <td>
+                  {{#if mandateeDomainsFields.domains.length}}
+                    <ul data-test-mandatee-panel-edit-row-domains>
+                      {{#each mandateeDomainsFields.domains as |domain|}}
+                        <li>{{domain.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{#if mandateeDomainsFields.fields.length}}
+                    <ul data-test-mandatee-panel-edit-row-fields>
+                      {{#each mandateeDomainsFields.fields as |field|}}
+                        <li>{{field.label}}</li>
+                      {{/each}}
+                    </ul>
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+              </Mandatees::DomainsFieldsForMandatee>
+              <td data-test-mandatee-panel-edit-row-submitter>
+                <WebComponents::VlToggle
+                  @value={{eq mandatee this.submitterBuffer}}
+                  @valueChanged={{fn this.toggleIsSubmitter mandatee}}
+                />
+              </td>
+              <td class="auk-u-text-align--right auk-u-flex--vertical-center">
+                {{!-- TODO: disable button on load
+                  Loading-state HTML should look like:
+                  <button type="button"
+                    class="auk-button-loading"
+                    disabled
+                  >
+                    <div class="auk-loader" role="alert" aria-busy="true"></div>
+                  </button>
+                 --}}
+                {{!-- TODO: modify mandatee domains picker --}}
+                <button
+                  data-test-mandatee-panel-edit-row-edit
+                  type="button"
+                  class="auk-button auk-button--borderless auk-button--icon"
+                  {{on "click" (fn this.startEditingMandatee mandatee)}}
+                >
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-u-sr-only">
+                    {{t "edit"}}
+                  </div>
+                </button>
+                <button
+                  data-test-mandatee-panel-edit-row-delete
+                  type="button"
+                  class="auk-button auk-button--borderless auk-button--icon"
+                  {{on "click" (fn this.removeMandatee mandatee)}}
+                >
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-delete"></i>
+                  </div>
+                  <div class="auk-u-sr-only">
+                    {{t "delete"}}
+                  </div>
+                </button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="vlc-toolbar vlc-toolbar--auto">
+    <div class="vlc-toolbar__left">
+      <button
+        type="button"
+        data-test-mandatee-panel-edit-add-mandatee
+        class="auk-button auk-button--tertiary"
+        {{on "click" this.startCreatingMandatee}}
+      >
+        <div class="auk-icon auk-icon--default ">
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "add-minister"}}
+        </div>
+      </button>
+    </div>
+    <div class="vlc-toolbar__right">
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <button
+              type="button"
+              data-test-mandatee-panel-edit-cancel
+              class="auk-button auk-button--tertiary"
+              {{on "click" @onCancel}}
+            >
+              {{t "cancel"}}
+            </button>
+          </WebComponents::AuToolbar::Item>
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::VlSaveButton
+              data-test-mandatee-panel-edit-save={{true}}
+              @text={{t "save"}}
+              @isLoading={{this.save.isRunning}}
+              @saveAction={{perform this.save}}
+            />
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </div>
+  </div>
+</div>
+{{#if this.isShowingEditMandateeModal}}
+  <Mandatees::MandateesDomainsSelectorModal
+    @mandatee={{this.mandateeUnderEdit}}
+    @fields={{this.fieldsBuffer}}
+    @onSave={{this.modifyMandateeAndFields}}
+    @onCancel={{this.cancelEditingMandatee}}
+  />
+{{/if}}

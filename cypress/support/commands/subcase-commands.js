@@ -6,6 +6,8 @@
 
 import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
+import utils from '../../selectors/utils.selectors';
+import mandatee from '../../selectors/mandatees/mandateeSelectors';
 
 // ***********************************************
 // Functions
@@ -225,17 +227,14 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     cy.route('GET', '/mandatees?**').as('getMandatees');
   }
 
-  cy.route('GET', '/ise-codes/**').as('getIseCodes');
-  cy.route('GET', '/government-fields/**').as('getGovernmentFields');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.route('GET', '/government-fields/**/domain').as(`getGovernmentFieldDomains${randomInt}`);
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.contains('Ministers en beleidsvelden').parents('.auk-u-mb-8')
-    .as('subcaseMandatees');
-  cy.get('@subcaseMandatees').within(() => {
-    cy.get(cases.editSubcaseMandatees).click();
-  });
+  cy.get(mandatee.mandateePanelView.actions.edit).click();
 
-  cy.get(cases.addMandateeToSubcaseMandatees).click();
+  cy.get(mandatee.mandateePanelEdit.actions.add).contains('Minister toevoegen')
+    .click();
   cy.get('.mandatee-selector-container').children('.ember-power-select-trigger')
     .click();
   // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
@@ -265,10 +264,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
       }
     });
   // TODO loading the isecodes and government fields takes time, are they not cacheble ?
-  cy.wait('@getIseCodes', {
-    timeout: 50000,
-  });
-  cy.wait('@getGovernmentFields', {
+  cy.wait(`@getGovernmentFieldDomains${randomInt}`, {
     timeout: 20000,
   });
   if (fieldNumber >= 0) {
@@ -277,16 +273,14 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }).should('exist')
       .eq(fieldNumber)
       .within(() => {
-        cy.get('.auk-checkbox').eq(domainNumber)
+        cy.get(utils.checkboxLabel).eq(domainNumber)
           .click();
       });
   }
   cy.get(modal.modalFooterSaveButton).click();
-  cy.get('@subcaseMandatees').within(() => {
-    cy.get('.vlc-toolbar')
-      .contains('Opslaan')
-      .click();
-  });
+  cy.get(mandatee.mandateePanelEdit.actions.save)
+    .contains('Opslaan')
+    .click();
   cy.wait('@patchSubcase', {
     timeout: 40000,
   });

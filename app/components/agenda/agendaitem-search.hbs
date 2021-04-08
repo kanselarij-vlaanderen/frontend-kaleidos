@@ -8,11 +8,11 @@
               @icon="search"
               type="text"
               @block="true"
-              @placeholder={{t "search-placeholder"}}
-              @value={{this.searchText}}
-              {{on "input" this.debouncedSearch}}
-              @enter={{this.search}}
               data-test-trigger-search-input
+              @placeholder={{t "search-placeholder"}}
+              value={{this.searchText}}
+              @enter={{this.search}}
+              {{on "input" this.debouncedSearch}}
             />
           </div>
         </div>

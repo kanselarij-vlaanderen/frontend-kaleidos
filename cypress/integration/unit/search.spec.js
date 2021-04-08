@@ -231,12 +231,12 @@ context('Search tests', () => {
     cy.get('.vlc-agenda-items').contains('titel for search');
 
     cy.server();
-    cy.route('GET', '/agendaitems/**').as('searchCallOverview');
+    cy.route('GET', '/agendaitems/search?**IKBESTANIET**').as('searchCallOverview-IKBESTANIET');
 
     cy.get('[data-test-trigger-search-input]').clear();
     cy.get('[data-test-trigger-search-input]').type('IKBESTANIET');
     cy.wait(200);
-    cy.wait('@searchCallOverview');
+    cy.wait('@searchCallOverview-IKBESTANIET');
 
     // Should find nothing.
     cy.get('.vlc-agenda-items').contains('Er zijn nog geen agendapunten in deze agenda.');
@@ -267,15 +267,19 @@ context('Search tests', () => {
       'accénten'
     ];
     wordsToCheck1.forEach((searchTerm) => {
+      cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get('[data-test-trigger-search-input]').clear();
       cy.get('[data-test-trigger-search-input]').type(searchTerm);
       cy.wait(200);
+      cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for batterij');
     });
     wordsToCheck2.forEach((searchTerm) => {
+      cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
       cy.get('[data-test-trigger-search-input]').clear();
       cy.get('[data-test-trigger-search-input]').type(searchTerm);
       cy.wait(200);
+      cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for search');
     });
   });

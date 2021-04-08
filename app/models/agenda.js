@@ -27,6 +27,12 @@ export default Model.extend(LoadableModel, {
   created: attr('datetime'),
   modified: attr('datetime'),
 
+  previousVersion: belongsTo('agenda', {
+    inverse: 'nextVersion',
+  }),
+  nextVersion: belongsTo('agenda', {
+    inverse: 'previousVersion',
+  }),
   isDesignAgenda: computed('status.isDesignAgenda', function() {
     return this.get('status.isDesignAgenda');
   }),
