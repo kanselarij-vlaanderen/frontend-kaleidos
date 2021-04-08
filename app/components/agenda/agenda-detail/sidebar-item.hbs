@@ -83,11 +83,12 @@
                     </p>
                   </EmberTooltip>
                 </i>
-                {{#if this.subcase.confidential}}
-                  <span>
-                    <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true"/>
-                  </span>
-                {{/if}}
+              {{/if}}
+
+              {{#if this.subcase.confidential}}
+                <span>
+                  <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true"/>
+                </span>
               {{/if}}
             </div>
 
