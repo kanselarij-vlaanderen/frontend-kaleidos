@@ -1,23 +1,31 @@
 <div class="auk-u-flex auk-u-flex--justify-between">
-  <h3 class="vl-title vl-title--h3">
+  <h3 class="auk-h2">
     {{t "decision-title"}}
   </h3>
 </div>
 {{#if this.currentSession.isEditor}}
-  <div class="vl-action-group">
-    <button
-      type="button"
-      class="vl-button vl-button--secondary vl-button--icon-before"
-      data-test-add-decision
-      {{on "click" this.addTreatment}}
-    >
-      <i class="vl-button__icon vl-button__icon--before ki-add"></i>
-      {{t "add-decision"}}
-    </button>
-  </div>
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <button
+          type="button"
+          class="auk-button auk-button--secondary"
+          data-test-add-decision
+          {{on "click" this.addTreatment}}
+        >
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-add"></i>
+          </div>
+          <div class="auk-button__label">
+            {{t "add-decision"}}
+          </div>
+        </button>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 {{/if}}
 {{#each this.treatments as |treatment|}}
-  <div class ="auk-u-mb-4">
+  <div class="auk-u-mb-4">
     {{!-- As long as we see DecisionActivity & AgendaItemTreatment as 1 entity,
     we need to ensure at least 1 treatment for a relationship path to newsletterInfo --}}
     <Agenda::Agendaitem::AgendaitemDecision

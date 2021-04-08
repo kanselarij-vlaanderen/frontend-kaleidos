@@ -1,7 +1,7 @@
 {{#if (not await dateObjectsToEnable)}}
   {{ember-flatpickr
     data-test-vl-datepicker-input=true
-    classNames="vl-input-field vl-input-field--block"
+    classNames="auk-input auk-input--block"
     locale="nl"
     enableTime=enableTime
     time_24hr=true
@@ -24,7 +24,7 @@
 {{else}}
   {{ember-flatpickr
     data-test-vl-datepicker-input=true
-    classNames="vl-input-field vl-input-field--block"
+    classNames="auk-input auk-input--block"
     locale="nl"
     enable=datesToEnable
     enableTime=enableTime

@@ -24,9 +24,9 @@ context('NewsletterInfo: Switching the finished switch', () => {
   it('Should check the box "in kort bestek"', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .click()
       .wait('@patchNewsletterInfo');
   });
@@ -34,14 +34,14 @@ context('NewsletterInfo: Switching the finished switch', () => {
   it('Should check the box "in kort bestek" and uncheck ik afterward', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .click()
       .wait('@patchNewsletterInfo');
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .scrollIntoView();
-    cy.get('.vl-checkbox__label').last()
+    cy.get('.auk-checkbox').last()
       .click()
       .wait('@patchNewsletterInfo');
   });

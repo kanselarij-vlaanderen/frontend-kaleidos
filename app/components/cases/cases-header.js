@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 export default class CasesHeader extends Component {
   @service currentSession;
 
-  classNames = ['vlc-page-header', 'vl-u-bg-alt'];
+  classNames = ['vlc-page-header', 'auk-u-bg-alt'];
 
   isAddingCase = false;
 

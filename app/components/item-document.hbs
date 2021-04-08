@@ -7,21 +7,24 @@
     <div class="skeletal-loader" role="alert" aria-busy="true"></div>
   {{else if isClickable}}
     <a href="" {{action "showPieceViewer" @piece}}>
-      <i class="vl-badge__icon
-      {{if
-        (and (not (await this.checkAdded)) (not @piece.confidential))
-        "ki-document"
-      }}
-      {{if (await this.checkAdded) "ki-document-added"}}
-      {{if (await @piece.confidential) "ki-lock-closed"}}">
-      </i>
+      <div class="auk-icon auk-icon--default">
+        <i class="ki
+          {{if
+            (and (not (await this.checkAdded)) (not @piece.confidential))
+            "ki-document"
+          }}
+          {{if (await this.checkAdded) "ki-document-added"}}
+          {{if (await @piece.confidential) "ki-lock-closed"}}"
+        >
+        </i>
+      </div>
       {{await @piece.name}}
     </a>
   {{else}}
     <span>
-      <i class="vl-badge__icon
-        {{if (await this.checkAdded) "ki-document-added" "ki-document"}}">
-      </i>
+      <div class="auk-icon auk-icon--default">
+        <i class="ki {{if (await this.checkAdded) "ki-document-added" "ki-document"}}"></i>
+      </div>
       {{await @piece.name}}
     </span>
   {{/if}}

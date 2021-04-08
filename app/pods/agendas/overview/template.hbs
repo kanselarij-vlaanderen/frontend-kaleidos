@@ -41,18 +41,18 @@
                     type="text"
                     id=id
                     data-test-agendas-filter-input=true
-                    class="vl-input-field"
+                    class="auk-input"
                     value=dateFilter
                     placeholder="bv. 01/2020"
                   }}
                 </div>
                 <div class="vlc-input-field-group">
-                  <button class="vl-button vl-button--secondary vl-button--icon"
-                          type="submit"
-                          data-test-agendas-filter-button
-                          onclick={{action "setDateFilter" dateFilter}}
+                  <button class="auk-button auk-button--secondary auk-button--icon"
+                    type="submit"
+                    data-test-agendas-filter-button
+                    onclick={{action "setDateFilter" dateFilter}}
                   >
-                    <div class='auk-icon'>
+                    <div class="auk-icon auk-icon--default">
                       <i class="ki ki-search"></i>
                     </div>
                   </button>
@@ -64,7 +64,7 @@
             {{#if (await model)}}
               {{#data-table
                 content=(await model)
-                class="vl-data-table vl-data-table--zebra vl-data-table--align-middle vl-data-table--no-scroll"
+                class="auk-table auk-table--striped auk-table--no-scroll"
                 page=page
                 size=size
                 sort=sort
@@ -76,36 +76,36 @@
                 {{#table.content as |c|}}
                   {{#c.header}}
                     {{th-sortable
-                      class="vl-data-table-col-3 vl-data-table__header-title"
+                      class="auk-table__col--3 auk-table__header-title"
                       currentSorting=sort
                       field="planned-start,number-representation"
                       label=(t "agenda")
                     }}
                     {{th-sortable
-                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       field="agendas"
                       label=(t "agenda-version")
                     }}
                     <th
-                      class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+                      class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
                     >
                       {{t "latest-modified"}}
                     </th>
                     {{th-sortable
-                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       currentSorting=sort
                       field="is-final"
                       label=(t "status")
                     }}
                     {{th-sortable
-                      class="vl-data-table-col-2 vl-data-table__header-title"
+                      class="auk-table__col--2 auk-table__header-title"
                       currentSorting=sort
                       field="kind"
                       label=(t "kind")
                     }}
-                    <th class="vl-data-table-col-1"></th>
+                    <th class="auk-table__col--1"></th>
                   {{/c.header}}
-                  {{#c.body class="tr-hover" as |meeting|}}
+                  {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
                     {{#if (not meeting.alreadyShown)}}
                       <td>
                         {{t "agenda-for"}}
@@ -142,9 +142,11 @@
                           "agenda.agendaitems"
                           meeting.id
                           (await meeting.latestAgenda.id)
-                          class="vl-button vl-button--link vl-button--icon"
+                          class="auk-button auk-button--borderless auk-button--icon"
                         }}
-                          <i class="vl-button__icon ki-nav-right"></i>
+                          <div class="auk-icon auk-icon--default">
+                            <i class="ki ki-nav-right"></i>
+                          </div>
                         {{/link-to}}
                       </td>
                     {{/if}}
