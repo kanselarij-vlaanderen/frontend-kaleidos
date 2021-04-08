@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
+import { isEmpty } from '@ember/utils';
 
 export default Component.extend({
   currentSession: service(),
@@ -31,7 +32,7 @@ export default Component.extend({
     }
   },
 
-  hasPublicationsEnabled: ENV.APP.ENABLE_PUBLICATIONS_TAB,
+  hasPublicationsEnabled: !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB),
 
   showEnvironmentName: computed('environmentName', function() {
     return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;

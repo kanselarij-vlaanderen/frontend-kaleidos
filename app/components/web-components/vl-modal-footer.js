@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['vlc-navbar vlc-navbar--no-padding'],
+  classNames: ['auk-modal__footer auk-modal__footer--bordered'],
   isLoading: null,
   disableSave: false,
 

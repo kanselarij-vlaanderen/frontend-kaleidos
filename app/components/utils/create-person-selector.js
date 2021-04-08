@@ -8,7 +8,7 @@ import { computed } from '@ember/object';
 export default Component.extend({
   classNames: ['vlc-input-field-block'],
   classNameBindings: [
-    'isCreatingPerson:vl-u-bg-alt',
+    'isCreatingPerson:auk-u-bg-alt',
     'isCreatingPerson:auk-u-m-0',
     'isCreatingPerson:auk-u-p-4',
     'classes'

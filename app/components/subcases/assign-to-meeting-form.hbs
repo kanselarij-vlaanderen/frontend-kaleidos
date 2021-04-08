@@ -1,6 +1,6 @@
-<div class="vl-modal-dialog__content">
+<div class="auk-modal__content">
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "propose-for")}}
+    <WebComponents::AuLabel>{{t "propose-for"}}</WebComponents::AuLabel>
     {{#if (is-pending dateObjectsToEnable)}}
       {{web-components/vl-loader
         text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))
@@ -14,11 +14,11 @@
     {{/if}}
   </div>
 </div>
-<div class="vlc-navbar vlc-navbar--bordered-top">
+<div class="vlc-navbar vlc-navbar--white vlc-navbar--bordered-top">
   <div class="vlc-toolbar">
     <div class="vlc-toolbar__left">
       <div class="vlc-toolbar__item">
-        <button type="button" class="vl-button vl-button--link"
+        <button type="button" class="auk-button auk-button--borderless"
           {{action "cancel"}}
         >
           {{t "cancel"}}
@@ -27,7 +27,7 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <button type="button" class="vl-button"
+        <button type="button" class="auk-button auk-button--primary"
           {{action "assignToMeeting" subcase}}
         >
           {{t "propose"}}

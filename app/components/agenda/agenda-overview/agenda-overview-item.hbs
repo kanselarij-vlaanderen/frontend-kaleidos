@@ -26,7 +26,7 @@
               @route="agenda.agendaitems.agendaitem"
               @model={{@agendaitem.id}}
             >
-              <pre>
+              <pre class="auk-u-text-pre-line">
                 {{#if @agendaitem.shortTitle}}
                   {{@agendaitem.shortTitle}}
                 {{else}}
@@ -38,7 +38,7 @@
 
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="vl-u-text vlc-agenda-items__body-padding">
+              <pre class="vlc-agenda-items__body-padding auk-u-text-pre-line">
                 {{@agendaitem.title}}
               </pre>
             {{/if}}
@@ -94,17 +94,18 @@
 
       <div class="auk-u-flex auk-u-flex--justify-between">
         {{#if this.subcase.subcaseName}}
-          <span class="vlc-agenda-meta__times-passed vl-pill vlc-pill__text vl-u-text--capitalize">
+          <WebComponents::AuPill class="vlc-agenda-meta__times-passed auk-u-text-capitalize">
             {{this.subcase.subcaseName}}
-          </span>
+          </WebComponents::AuPill>
         {{else}}
           {{!--  TODO: Only here because required for alignment of flex items --}}
-          <span class="vlc-agenda-meta__times-passed  vl-u-text--capitalize"></span>
+          <span class="vlc-agenda-meta__times-passed auk-u-text-capitalize"></span>
         {{/if}}
         <div class="vlc-agenda-meta__status-holder">
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
             {{#if @isEditingFormallyOkStatus}}
               <Utils::FormallyOkSelector
+                data-test-agenda-overview-item-formallyok=""
                 @formallyOkStatusUri={{@agendaitem.formallyOk}}
                 @onChange={{this.setAndSaveFormallyOkStatus}}
               />
@@ -128,8 +129,8 @@
         </div>
         {{#if this.enableShowMore}}
           <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
-            <i class="{{if this.isShowingAllDocuments "ki-remove" "ki-plus"}} vl-icon vlc-document-show-more-button__icon "/>
-            <p  class="vlc-document-show-more-button__text">
+            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "plus"}} />
+            <p class="vlc-document-show-more-button__text auk-u-ml">
               {{#if this.isShowingAllDocuments }}
                 {{t "show-less"}}
               {{else}}
@@ -155,47 +156,49 @@
             >
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
-                  <i class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                  <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                    <i class="ki ki-hide"></i>
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
                       </p>
                     </EmberTooltip>
-                  </i>
+                  </div>
                 {{else}}
                   {{!-- TODO: this icon is merely here as an invisible placeholder.
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
-                  <i
-                    class="vl-button__icon ki-hide vlc-u-opacity-50 auk-u-ml-2 opacity-lighter"
-                    style="color: white;"
-                  ></i>
+                  <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter" style="color: white;">
+                    <i class="ki ki-hide"></i>
+                  </div>
                 {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}
-                <i class="vl-button__icon ki-circle-question vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
+                  <i class="ki ki-circle-question"></i>
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "loading"}}
                     </p>
                   </EmberTooltip>
-                </i>
+                </div>
               {{/if}}
               {{#if @isNew}}
-                <i class="vl-link__icon ki-calendar-plus vlc-agenda-item__icons--margin">
+                <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
+                  <i class="ki ki-calendar-plus"></i>
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
                     </p>
                   </EmberTooltip>
-                </i>
+                </div>
               {{/if}}
             </div>
             {{#if this.subcase.confidential}}
-              <span type="button" class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
-                <i class="vl-icon ki-lock-closed vlc-agenda-items__icons"
-                   data-test-icon-agenda-confidentiality-locked
-                ></i>
+              <span class="vlc-agenda-items__confidentiality-button vlc-pill vlc-pill--error">
+                <div class="auk-icon auk-icon--default vlc-agenda-items__icons" data-test-icon-agenda-confidentiality-locked>
+                  <i class="ki ki-lock-closed"></i>
+                </div>
                 {{t "confidential"}}
               </span>
             {{/if}}

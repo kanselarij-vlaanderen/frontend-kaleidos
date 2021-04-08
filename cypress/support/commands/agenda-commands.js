@@ -37,7 +37,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.visit('');
   cy.get(agenda.createNewAgendaButton).click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('.vlc-input-field-block').as('newAgendaForm')
         .should('have.length', 4);
@@ -77,13 +77,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.get('@newAgendaForm').eq(2)
     .within(() => {
       if (meetingNumber) {
-        cy.get('.vl-input-field').click({
+        cy.get('.auk-input').click({
           force: true,
         })
           .clear()
           .type(meetingNumber);
       } else {
-        cy.get('.vl-input-field').click({
+        cy.get('.auk-input').click({
           force: true,
         })
           .invoke('val')
@@ -120,15 +120,14 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the location
   cy.get('@newAgendaForm').eq(3)
     .within(() => {
-      cy.get('.vl-input-field').click({
+      cy.get('.auk-input').click({
         force: true,
       })
         .type(location);
     });
 
   cy.get('@dialog').within(() => {
-    cy.get('.vlc-toolbar__item').contains('Toevoegen')
-      .click();
+    cy.get(modal.modalFooterSaveButton).click();
   });
 
   let meetingId;
@@ -197,7 +196,7 @@ function openAgendaForDate(agendaDate) {
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .vl-button > .vl-button__icon').click();
+  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-icon').click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
@@ -285,7 +284,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
-      cy.get('.auk-u-mb-2').click();
+      cy.get(agenda.agendaOverviewItemFormallyok).click();
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
@@ -344,17 +343,17 @@ function approveCoAgendaitem(agendaitemShortTitle) {
       .within(() => {
         cy.contains('Acties').should('exist');
         cy.contains('Wijzigen').click();
-        cy.get('.vl-data-table > tbody > tr').as('mandatees');
+        cy.get('.auk-table > tbody > tr').as('mandatees');
         cy.get('@mandatees').each((item) => {
           cy.get(item).within(() => {
-            cy.get('.vl-checkbox', {
+            cy.get('.auk-checkbox', {
               timeout: 10000,
             }).should('exist')
               .click();
           });
         });
 
-        cy.get('.vl-action-group > .vl-button')
+        cy.get('.auk-toolbar-complex__item > .auk-button')
           .contains('Opslaan')
           .click();
       });
@@ -471,15 +470,15 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       if (postponed) {
         cy.get('[data-test-postponed-checkbox]')
           .within(() => {
-            cy.get('.vl-checkbox--switch__label').click();
+            cy.get('.vl-toggle__label').click();
           });
       }
-      cy.get('.vl-loader', {
+      cy.get('.auk-loader', {
         timeout: 12000,
       }).should('not.exist');
       if (caseTitle) {
@@ -491,7 +490,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         cy.wait('@getSubcasesFiltered', {
           timeout: 12000,
         });
-        cy.get('.vl-loader').should('not.exist');
+        cy.get('.auk-loader').should('not.exist');
         cy.get('table > tbody > tr').as('rows');
       } else {
         cy.get('table > tbody > tr').as('rows');
@@ -499,15 +498,14 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
           timeout: 12000,
         }).should('not.have.length', 1);
       }
-      cy.get('.vl-loader').should('not.exist');
+      cy.get('.auk-loader').should('not.exist');
       cy.get('@rows', {
         timeout: 12000,
       }).eq(0)
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(utils.saveButton).contains('Agendapunt toevoegen')
-        .click();
+      cy.get(modal.modalFooterSaveButton).click();
     });
 
   cy.wait('@createAgendaActivity', {
@@ -596,6 +594,8 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
+        cy.get(agenda.agendaOverviewSubitem); // changing from detail to overview = new url, this check will only work after the url has changed
+        // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
         cy.get(auComponents.auLoading, {
@@ -628,7 +628,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
     .click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
-  cy.get('.vl-tabs__wrapper .vl-tabs .active').then((element) => {
+  cy.get('[data-test-agenda-agendaitem] .active').then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
@@ -697,7 +697,7 @@ function releaseDecisions() {
     force: true,
   });
   cy.get(modal.modal).within(() => {
-    cy.get('.vl-button').contains('Vrijgeven')
+    cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
   cy.get(modal.modal, {
@@ -717,7 +717,7 @@ function releaseDocuments() {
   cy.get(actionModel.showActionOptions).click();
   cy.get(actionModel.releaseDocuments).click();
   cy.get(modal.modal).within(() => {
-    cy.get('.vl-button').contains('Vrijgeven')
+    cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
   cy.get(modal.modal, {

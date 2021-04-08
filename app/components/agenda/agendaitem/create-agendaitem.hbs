@@ -5,7 +5,7 @@
   title=(t "add-agendaitems")
 }}
   {{#if (or (is-pending model) loading)}}
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       {{#if (is-pending model)}}
         {{web-components/vl-loader
           text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
@@ -17,7 +17,7 @@
       {{/if}}
     </div>
   {{else}}
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2"
       >
         <div class="auk-o-grid-col-8">
@@ -34,7 +34,7 @@
                     class="vl-input-field vl-input-field__input"
                   }}
                   <button type="button"
-                          class="vl-input-field__submit vl-button"
+                          class="vl-input-field__submit auk-button auk-button--primary"
                           onclick={{perform searchTask}}
                   >
                     <i class="ki-search"></i>
@@ -46,7 +46,7 @@
         </div>
         <div class="auk-o-grid-col-4">
           <div class="vlc-input-field-block">
-            {{web-components/vl-form-label value=(t "title-postponed-subcases")}}
+            <WebComponents::AuLabel>{{t "title-postponed-subcases"}}</WebComponents::AuLabel>
             {{web-components/vl-checkbox
               data-test-postponed-checkbox=true
               value=showPostponed
@@ -83,16 +83,16 @@
                   <th></th>
                 {{/c.header}}
                 {{#c.body as |subcase|}}
-                  <td class="vl-data-table-col-1">
+                  <td class="auk-table__col--1">
                     {{web-components/vl-checkbox
                       value=subcase.selected
                       toggle=(action "selectAvailableSubcase" subcase)
                     }}
                   </td>
-                  <td class="vl-data-table-col-11">
+                  <td class="auk-table__col--11">
                     {{subcase.shortTitle}}
                     <br>
-                    <p class="vl-u-text--muted">
+                    <p class="auk-u-muted">
                       {{subcase.subcaseName}}
                     </p>
                   </td>

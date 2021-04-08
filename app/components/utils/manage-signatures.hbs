@@ -1,5 +1,5 @@
 {{#if (not isAdding)}}
-  <div class="vl-modal-dialog__content">
+  <div class="auk-modal__content">
     {{utils/model-selector
       modelName="signature"
       searchField="name"
@@ -20,11 +20,11 @@
       closeModal=(action "toggleIsEditing")
     }}
   {{else}}
-    <div class="vlc-navbar vlc-navbar--bordered-top">
+    <div class="vlc-navbar vlc-navbar--white vlc-navbar--bordered-top">
       <div class="vlc-toolbar">
         <div class="vlc-toolbar__left">
           <div class="vlc-toolbar__item">
-            <button type="button" class="vl-button vl-button--link"
+            <button type="button" class="auk-button auk-button--borderless"
               {{action "closeModal"}}
             >
               {{t "cancel"}}
@@ -34,27 +34,36 @@
         <div class="vlc-toolbar__right">
           <div class="vlc-toolbar__item">
             {{#if selectedSignature}}
-              <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+              <button type="button" class="auk-button auk-button--tertiary"
                 {{action "setDefaultSignature"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-pencil"
-                ></i>
-                {{t "signature-set-default"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "signature-set-default"}}
+                </div>
               </button>
-              <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+              <button type="button" class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <i class="vl-button__icon vl-button__icon--before ki-pencil"
-                ></i>
-                {{t "signature-edit"}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "signature-edit"}}
+                </div>
               </button>
             {{/if}}
-            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
+            <button type="button" class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-add"
-              ></i>
-              {{t "signature-add"}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "signature-add"}}
+              </div>
             </button>
           </div>
         </div>

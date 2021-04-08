@@ -219,22 +219,4 @@ context('Publications tests', () => {
 
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
   });
-
-  it('publications:dossiers:Create publication via ministerraad', () => {
-    // prepare agenda data.
-    cy.logoutFlow();
-    cy.login('Admin');
-    cy.route('/agenda-item-treatments/**').as('publicationagendapuntentreatments');
-    cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
-    cy.wait('@publicationagendapuntentreatments');
-    cy.approveAndCloseDesignAgenda();
-    // TODO this test does not do wat it says it does, no publications are created
-
-    // cy.wait(6000); // 6000 is 6 seconds. Must wait for this case to index.
-
-    // make sure the agenda is approved and calls are not cancelled
-    // cy.get(modal.auModal.container, {
-    //   timeout: 60000,
-    // }).should('not.exist');
-  });
 });

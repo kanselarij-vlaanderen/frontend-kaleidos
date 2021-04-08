@@ -13,7 +13,7 @@
         @allowEditing={{not this.showDraft}}
         @meeting={{this.meeting}}
       />
-      <h2 class="vl-title vl-title--h2">
+      <h2 class="auk-h1">
         {{t "agendaitems-subtitle"}}
       </h2>
       {{#each (await model.notas) as |agendaitem index|}}
@@ -28,7 +28,7 @@
         {{/let}}
       {{/each}}
       {{#if (await model.announcements.length)}}
-        <h2 class="vl-title vl-title--h2">
+        <h2 class="auk-h1">
           {{t "announcements-subtitle"}}
         </h2>
         {{#each (await model.announcements) as |agendaitem|}}
