@@ -2,6 +2,7 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
@@ -156,7 +157,7 @@ Router.map(function() {
     this.route('agenda-items', { path: '/agendapunten', });
   });
 
-  if (ENV.APP.ENABLE_PUBLICATIONS_TAB) {
+  if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossiers', });
