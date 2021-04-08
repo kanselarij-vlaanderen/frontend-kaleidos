@@ -1,25 +1,24 @@
-<div class="vlc-toolbar vlc-toolbar--spaced vlc-toolbar--bordered-top">
-  <div class="vlc-toolbar__left">
-    <div class="vlc-toolbar__item">
-      <button type="button" data-test-vl-modal-footer-cancel
-              class="vl-button vl-button--link"
-        {{action "cancelAction"}}
-      >
+<WebComponents::AuToolbar>
+  <WebComponents::AuToolbar::Group @position="left">
+    <WebComponents::AuToolbar::Item>
+      <WebComponents::AuButton @skin="borderless" {{action "cancelAction"}} data-test-vl-modal-footer-cancel>
         {{cancelButtonText}}
-      </button>
-    </div>
-  </div>
-  <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
-      {{web-components/vl-save-button
-        text=saveButtonText
-        loadingText=(t "please-be-patient")
-        isLoading=isLoading
-        data-test-vl-save=true
-        data-test-vl-modal-footer-save=true
-        disabled=disableSave
-        saveAction=(action "saveAction")
-      }}
-    </div>
-  </div>
-</div>
+      </WebComponents::AuButton>
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+  <WebComponents::AuToolbar::Group @position="right">
+    <WebComponents::AuToolbar::Item>
+      <WebComponents::AuButton
+        @skin="primary"
+        disabled={{disableSave}}
+        {{!-- loadingText=(t "please-be-patient")
+        isLoading=isLoading --}}
+        data-test-vl-save={{true}}
+        data-test-vl-modal-footer-save={{true}}
+        {{action "saveAction"}}
+      >
+        {{saveButtonText}}
+      </WebComponents::AuButton>
+    </WebComponents::AuToolbar::Item>
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>

@@ -2,7 +2,7 @@
         @closeModal={{@cancelAction}}
         @isOverlay={{true}}
         @title={{t "document-edit"}}>
-  <div class="vl-modal-dialog__content">
+  <div class="auk-modal__content">
     <div class="auk-form-group-layout auk-form-group-layout--horizontal">
       {{#if @piece}}
         <div class="auk-form-group">
@@ -11,7 +11,7 @@
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="extension">{{t "file-extension"}}</WebComponents::AuLabel>
-          <span class="vl-pill">{{await @piece.file.extension}}</span>
+          <WebComponents::AuPill>{{await @piece.file.extension}}</WebComponents::AuPill>
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>

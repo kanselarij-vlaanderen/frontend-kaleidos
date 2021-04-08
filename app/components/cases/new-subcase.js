@@ -8,7 +8,6 @@ import { trimText } from 'frontend-kaleidos/utils/trim-util';
 export default Component.extend({
   store: inject(),
   newsletterService: inject(),
-  classNames: ['vl-custom'],
   confidentiality: null,
   title: null,
   shortTitle: null,

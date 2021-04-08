@@ -1,19 +1,9 @@
 @media print {
-  // Helper classes
-  .vl-u-hide-on-print {
-    display: none;
-  }
-
-  .vl-u-show-on-print {
-    display: block;
-  }
-
   // Generic removals
   header,
   footer {
     display: none;
 
-    .vl-main-content &,
     [role="main"] &,
     main & {
       display: block;

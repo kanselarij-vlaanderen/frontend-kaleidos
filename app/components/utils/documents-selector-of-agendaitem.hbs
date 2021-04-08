@@ -1,20 +1,20 @@
 {{!-- TODO unused template --}}
 {{#if (await agendaitem.documentContainers)}}
   <div class="auk-u-mb-4">
-    <h2 class="vl-title vl-title--h3">
+    <h2 class="auk-h2">
       {{title}}
     </h2>
-    <table class="vl-data-table vl-data-table--align-middle">
+    <table class="auk-table">
       <thead>
         <tr>
-          <th class="vl-data-table-col-6">
-            {{web-components/vl-form-label value=(t "document-name")}}
+          <th class="auk-table__col--6">
+            <WebComponents::AuLabel>{{t "document-name"}}</WebComponents::AuLabel>
           </th>
-          <th class="vl-data-table-col-4">
-            {{web-components/vl-form-label value=(t "file-type")}}
+          <th class="auk-table__col--4">
+            <WebComponents::AuLabel>{{t "file-type"}}</WebComponents::AuLabel>
           </th>
-          <th class="vl-data-table-col-2">
-            {{web-components/vl-form-label value=(t "select")}}
+          <th class="auk-table__col--2">
+            <WebComponents::AuLabel>{{t "select"}}</WebComponents::AuLabel>
           </th>
         </tr>
       </thead>
@@ -24,11 +24,10 @@
             <tr>
               <td class="auk-u-flex vlc-document-list__item">
                 <a href="" {{action "downloadFile" piece}}>
-                  <div class="vl-badge vl-badge--icon vl-badge--small-medium vl-badge--alt"
-                  >
-                    <i class="vl-badge__icon ki-document"
-                       aria-hidden="true"
-                    ></i>
+                  <div class="auk-badge auk-badge--medium auk-badge--default">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-document"></i>
+                    </div>
                   </div>
                   <p>
                     {{await piece.name}}

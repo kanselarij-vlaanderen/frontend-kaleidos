@@ -3,7 +3,7 @@
   @title={{t "manage-alerts"}}
   @closeModal={{action "cancel"}}
 >
-  <div class="vl-modal-dialog__content">
+  <div class="auk-modal__content">
     <div class="vlc-input-field-block">
       {{#power-select
         options=this.model
@@ -15,14 +15,14 @@
       {{/power-select}}
     </div>
   </div>
-  <div class="vlc-navbar vlc-navbar--bordered-top">
+  <div class="vlc-navbar vlc-navbar--white vlc-navbar--bordered-top">
     <div class="vlc-toolbar">
       <div class="vlc-toolbar__left">
         <div class="vlc-toolbar__item">
           <LinkTo
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--link"
+            class="auk-button auk-button--borderless"
             @route="settings.overview"
           >
             {{t "cancel"}}
@@ -35,36 +35,47 @@
             data-test-add-system-alert
             @tagName="button"
             @type="button"
-            class="vl-button vl-button--tertiary vl-button--icon-before"
+            class="auk-button auk-button--tertiary"
             @route="settings.system-alerts.new"
           >
-            <i class="vl-button__icon vl-button__icon--before ki-add"></i>
-            {{t "message"}}
-            {{t "add"}}
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-add"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "message"}}
+              {{t "add"}}
+            </div>
           </LinkTo>
           {{#if this.selectedAlert}}
             <LinkTo
               data-test-edit-system-alert
               @tagName="button"
               @type="button"
-              class="vl-button vl-button--tertiary vl-button--icon-before"
+              class="auk-button auk-button--tertiary"
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-pencil"></i>
-              {{t "message"}}
-              {{t "edit"}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-pencil"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "message"}}
+                {{t "edit"}}
+              </div>
             </LinkTo>
             <button
               data-test-remove-system-alert
               type="button"
-              class="vl-button vl-button--tertiary vl-button--icon-before"
+              class="auk-button auk-button--tertiary"
               {{on "click" (perform remove this.selectedAlert)}}
             >
-              <i class="vl-button__icon vl-button__icon--before ki-delete"
-              ></i>
-              {{t "message"}}
-              {{t "delete"}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-delete"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "message"}}
+                {{t "delete"}}
+              </div>
             </button>
           {{/if}}
         </div>

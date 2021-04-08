@@ -7,11 +7,11 @@
   border: 0.1rem solid $border-color;
   padding: 1.8rem;
 
-  .js-vl-accordion .vl-toggle {
-    margin: 0.8rem 4.6rem 0;
+  .js-vl-accordion > .auk-button {
+    margin: 0.8rem 3.4rem 0;
   }
 
-  .vl-title {
+  .auk-h4 {
     margin: 0.5rem 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -24,7 +24,7 @@
     border-top: 1px solid $border-color;
   }
 
-  .js-vl-accordion--open .vl-toggle {
+  .js-vl-accordion--open > .auk-button {
     margin-bottom: 4rem;
   }
 }
@@ -55,7 +55,7 @@
 .vlc-document-card-item__icon {
   position: absolute;
   left: -4rem;
-  top: 0.3rem;
+  top: 0.6rem;
   color: $primary-blue;
 }
 
@@ -98,7 +98,10 @@
   display: flex;
   align-items: center;
 
-  .vl-title {
+  .auk-h1,
+  .auk-h2,
+  .auk-h3,
+  .auk-h4 {
     margin-right: 0.5em;
   }
 }

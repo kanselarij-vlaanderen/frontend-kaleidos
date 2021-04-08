@@ -8,9 +8,10 @@ RUN CYPRESS_INSTALL_BINARY=0 npm install
 COPY . .
 RUN DEPLOY_ENV=test ember build --environment=cypress-test
 
-FROM semtech/ember-proxy-service:1.4.0
+FROM semtech/ember-proxy-service:1.5.1
 
-ENV STATIC_FOLDERS_REGEX "^/(assets|fonts|files|ember-pdfjs-wrapper)/"
+ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|ember-pdfjs-wrapper)/"
+ENV EMBER_OAUTH_LOGOUT_URL="/mock-login"
 
 COPY ./proxy/torii-authorization.conf /config/torii-authorization.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf

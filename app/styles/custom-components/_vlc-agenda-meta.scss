@@ -69,20 +69,5 @@
 }
 
 .vlc-agenda-meta__recently-added {
-  opacity: 0.5;
   margin-right: 1rem;
-  i {
-    font-size: 1em;
-    display: inline;
-    font-weight: 500;
-
-    &:before {
-      position: relative;
-      top: 1.2px;
-    }
-  }
-}
-
-.vlc-agenda-meta__recently-added:hover {
-  opacity: 1;
 }

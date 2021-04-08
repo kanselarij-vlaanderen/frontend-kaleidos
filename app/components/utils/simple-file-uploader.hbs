@@ -3,15 +3,20 @@
   @accept=".csv"
   @onfileadd={{action "uploadFile"}} as |queue|>
 
-  <span class="vl-button vl-button--tertiary vl-button--icon-before">
-    {{#if queue.files.length}}
-      <a href="javascript://" class="vl-button vl-button--tertiary vl-button--icon-before">
-        {{t "import-users-text"}}
-      </a>
-    {{else}}
-      <i class="vl-button__icon vl-button__icon--before ki-import"></i>
-      {{t "import-users"}}
-    {{/if}}
-  </span>
+  {{!-- refactored the strucutre below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
+  {{#if queue.files.length}}
+    <button type="button" class="auk-button auk-button--tertiary" disabled>
+      {{t "import-users-text"}}
+    </button>
+  {{else}}
+    <span class="auk-button auk-button--tertiary">
+      <span class="auk-icon auk-icon--default">
+        <i class="ki ki-import"></i>
+      </span>
+      <span class="auk-button__label">
+        {{t "import-users"}}
+      </span>
+    </span>
+  {{/if}}
 
 </FileUpload>
