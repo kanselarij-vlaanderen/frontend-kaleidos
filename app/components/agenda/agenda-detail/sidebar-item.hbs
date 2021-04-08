@@ -65,7 +65,24 @@
                       </p>
                     </EmberTooltip>
                   </span>
+                {{else}}
+                  {{!-- TODO: this icon is merely here as an invisible placeholder.
+                    This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
+                    This should be tackled differently through modified design --}}
+                  <i
+                    class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"
+                    style="color: #f3f5f6;"
+                  ></i>
                 {{/if}}
+              {{else}}
+                {{!-- TODO: design loading state for newsletter visibility --}}
+                <i class="ki-circle-question vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50">
+                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <p>
+                      {{t "loading"}}
+                    </p>
+                  </EmberTooltip>
+                </i>
               {{/if}}
 
               {{#if this.subcase.confidential}}
