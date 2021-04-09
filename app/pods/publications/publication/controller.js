@@ -75,6 +75,7 @@ export default class PublicationController extends Controller {
     return this.model.regulationTypes;
   }
 
+
   @action
   setRegulationType(regulationType) {
     this.model.publicationFlow.set('regulationType', regulationType);
@@ -83,6 +84,10 @@ export default class PublicationController extends Controller {
 
   get getRegulationType() {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
+  }
+
+  get getUrgencyLevel() {
+    return this.model.urgencyLevels.find((level) => level.id === this.model.publicationFlow.get('level.id'));
   }
 
   get getPublicationStatus() {
@@ -302,13 +307,10 @@ export default class PublicationController extends Controller {
     this.set('showLoader', false);
   }
 
+  // TODO
   @action
-  togglePriorityProcedure() {
-    if (this.model.publicationFlow.get('hasPriority')) {
-      this.model.publicationFlow.set('priority', 0);
-    } else {
-      this.model.publicationFlow.set('priority', 1);
-    }
+  toggleUrgencyLevel(urgencyLevel) {
+    this.model.publicationFlow.urgencyLevel = urgencyLevel;
     this.model.publicationFlow.save();
   }
 

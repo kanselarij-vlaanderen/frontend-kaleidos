@@ -284,6 +284,10 @@ export default EmberObject.create({
       id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
     },
   },
+  URGENCY_LEVELS: {
+    spoedprocedure:  'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
+    standaard: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
+  },
   EMAIL: {
     OUTBOX: {
       ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',

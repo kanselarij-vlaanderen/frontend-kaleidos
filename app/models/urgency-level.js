@@ -4,6 +4,7 @@ import Model, {
 
 export default class UrgencyLevel extends Model {
   @attr('string') uri;
-  @attr('string') name;
+  @attr('string') label;
+  @attr('string') position;
   @hasMany('publication-flow') publications;
 }

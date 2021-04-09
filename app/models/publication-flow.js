@@ -39,11 +39,6 @@ export default class PublicationFlow extends Model {
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
 
-  @computed('priority')
-  get hasPriority() {
-    return this.priority > 0;
-  }
-
   @computed('publicationNumber,publicationSuffix')
   get publicationNumberToDisplay() {
     if (this.publicationSuffix && this.publicationSuffix !== '') {
