@@ -118,11 +118,19 @@
 
 .auk-table--hover {
   tbody {
-    tr {
-      transition: background 0.2s ease-in-out;
+    tr:hover {
+      background: $au-gray-100;
+    }
+  }
 
-      &:hover {
-        background: $porcelain;
+  &.auk-table--striped {
+    tbody {
+      tr:hover {
+        background: $au-gray-200;
+
+        td {
+          background-color: transparent;
+        }
       }
     }
   }
@@ -134,6 +142,32 @@
 
 .auk-table--interaction-cursor {
   cursor: pointer;
+}
+
+.auk-table {
+  .data-table,
+  &.data-table {
+    tbody {
+      tr:hover {
+        background: $au-gray-100;
+      }
+    }
+  }
+}
+
+.auk-table--striped {
+  .data-table,
+  &.data-table {
+    tbody {
+      tr:hover {
+        background: $au-gray-200;
+
+        td {
+          background-color: transparent;
+        }
+      }
+    }
+  }
 }
 
 
