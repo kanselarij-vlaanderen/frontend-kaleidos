@@ -1,0 +1,20 @@
+/* ==========================================================================
+  auk-button-loading
+   ========================================================================== */
+
+.auk-button-loading {
+  font-family: flanders-sans, sans-serif;
+  background: $au-gray-200;
+  font-size: 1.6rem;
+  border: none;
+  appearance: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: top;
+  padding: 0.9rem 1.2rem;
+}
+
+.auk-button-loading svg path {
+  fill: currentColor;
+}
