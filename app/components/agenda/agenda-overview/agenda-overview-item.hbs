@@ -45,51 +45,6 @@
           {{/if}}
 
         </div>
-
-        {{!--  TODO: Commented out section triggers many requests that slow down agenda overview
-        <div class="vlc-u-flex-float-right">
-        {{#if currentSessionService.isOvrb}}
-
-                   PUBLICATION FLOW CALL TO ACTION
-
-          <div class="vlc-u-flex-float-right">
-
-                     PUBLICATION FLOW CALL TO ACTION
-
-            {{#if (not @isEditingFormallyOkStatus)}}
-              <div class="auk-button-toolbar">
-                {{#if (await @agendaitem.publicationFlow)}}
-                  <LinkTo
-                          class=""
-                          @route="publications.publication"
-                          @model={{ await @agendaitem.publicationFlowId }}
-                  >
-                    {{t "publications-to" }}
-                  </LinkTo>
-                {{else}}
-                  {{#if (await @agendaitem.case)}}
-                    <WebComponents::AuButton
-                            @skin="tertiary"
-                            @layout="icon-only"
-                            @disabled={{this.startPublication.isRunning}}
-                            data-test-start-publication
-                      {{on "click" (perform this.startPublication)}}>
-                      {{t "start-publication"}}
-                    </WebComponents::AuButton>
-                  {{/if}}
-                {{/if}}
-              </div>
-            {{/if}}
-
-                   END  PUBLICATION FLOW CALL TO ACTION
-
-          </div>
-        {{/if}}
-
-                 END  PUBLICATION FLOW CALL TO ACTION
-
-        </div>
-        --}}
       </div>
 
       <div class="auk-u-flex auk-u-flex--justify-between">

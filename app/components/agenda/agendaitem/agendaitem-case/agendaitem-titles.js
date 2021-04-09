@@ -11,8 +11,6 @@ export default class AgendaitemTitles extends Component {
 
   @service currentSession;
 
-  @service publicationService;
-
   @service router;
 
   @action
@@ -26,15 +24,5 @@ export default class AgendaitemTitles extends Component {
     const _case = await subcase.get('case');
     const subcaseId = subcase.id;
     this.router.transitionTo('cases.case.subcases.subcase.overview', _case.id, subcaseId);
-  }
-
-  @action
-  async startPublication() {
-    this.showLoader = true;
-    const _case = await this.subcase.get('case');
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _case.id);
-    this.showLoader = false;
-    this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 }
