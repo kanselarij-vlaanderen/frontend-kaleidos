@@ -3,20 +3,24 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
+
 
 export default class UrgencyLevelCheckboxComponent extends Component {
-  @tracked urgencyLevels;
+  @tracked urgencyLevels = null;
   @tracked checkboxValue;
 
   @service store;
 
+
   constructor() {
     super(...arguments);
-    this.loadData();
+    this.loadData.perform();
   }
 
-  async loadData() {
-    this.urgencyLevels = await this.store.query('urgency-level', {});
+  @task
+  *loadData() {
+    this.urgencyLevels = yield this.store.query('urgency-level', {});
     this.initializeUrgency(this.args.urgencyLevel);
   }
 

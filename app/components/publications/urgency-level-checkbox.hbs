@@ -1,6 +1,8 @@
 <div class="auk-form-group">
-  <WebComponents::VlCheckbox
-          @value={{this.checkboxValue}}
-          @toggle={{this.toggleUrgency}}
-          @label={{t "priority-procedure"}}/>
+  {{#if this.urgencyLevels}}
+    <WebComponents::VlCheckbox
+            @value={{this.checkboxValue}}
+            @toggle={{this.toggleUrgency}}
+            @label={{t "priority-procedure"}}/>
+  {{/if}}
 </div>
