@@ -4,7 +4,7 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import { dasherize } from '@ember/string';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
-export default class PublicationsIndexRoute extends Route  {
+export default class PublicationsIndexRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
