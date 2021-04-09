@@ -1,8 +1,8 @@
-<div class="vl-modal-dialog__content">
+<div class="auk-modal__content">
   {{utils/kind-selector kind=kind setAction=(action "setKind")}}
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "start-date")}}
+      <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
         enableTime=true
         date=date
@@ -12,7 +12,7 @@
   </div>
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "meeting-number")}}
+      <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
       {{web-components/vl-form-input
         type="number"
         value=meetingNumber
@@ -22,9 +22,9 @@
   </div>
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label
-        value=(t "meeting-number-visual-representation")
-      }}
+      <WebComponents::AuLabel>
+        {{t "meeting-number-visual-representation"}}
+      </WebComponents::AuLabel>
       {{web-components/vl-form-input
         value=numberRepresentation
       }}
@@ -32,9 +32,9 @@
   </div>
   <div class="auk-u-mb-2">
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label
-        value=(t "meeting-location")
-      }}
+      <WebComponents::AuLabel>
+        {{t "meeting-location"}}
+      </WebComponents::AuLabel>
       {{web-components/vl-form-input
         value=extraInfo
       }}

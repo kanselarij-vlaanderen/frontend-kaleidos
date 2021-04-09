@@ -31,11 +31,13 @@
             <div class="vlc-toolbar__item">
               {{#if this.currentSession.isEditor}}
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   data-test-documents-show-more
                   type="button"
                 >
-                  <i class="ki-more"></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-more"></i>
+                  </div>
                   <AttachPopover
                     @renderInPlace={{true}}
                     @class="ember-attacher-popper"
@@ -47,7 +49,7 @@
                   >
                     <ul class="vlc-dropdown-menu">
                       <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
+                        <button class="auk-button-link auk-button-link--block" type="button"
                           data-test-document-upload-new-piece
                           {{on "click" attacher.hide}}
                           {{on "click" (fn this.openUploadModal)}}
@@ -56,7 +58,7 @@
                         </button>
                       </li>
                       <li class="vlc-dropdown-menu__item">
-                        <button class="vl-link vl-link--block" type="button"
+                        <button class="auk-button-link auk-button-link--block" type="button"
                           {{on "click" attacher.hide}}
                           {{on "click" this.enableEditPieceName}}
                         >
@@ -65,7 +67,7 @@
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                       <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="vl-link vl-link--block vl-u-text--error" type="button"
+                        <button class="auk-button-link auk-button-link--block auk-u-text-error" type="button"
                           {{on "click" attacher.hide}}
                           {{on "click" this.deleteDocumentContainer}}
                         >
@@ -87,47 +89,47 @@
               "vlc-document-list__item vlc-document-list__item--active"
             }}"
           >
-            <div class="vl-badge vl-badge--icon vl-badge--alt vl-badge--small-medium vl-icon-wrapper">
-              <i class="vl-badge__icon ki-document" aria-hidden="true"></i>
+            <div class="auk-badge auk-badge--default auk-badge--medium">
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-document"></i>
+              </div>
             </div>
           </div>
           <div class="auk-u-flex auk-u-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-u-flex auk-u-flex--vertical-center">
                 <Input
-                  class="vl-input-field vl-input-field--block"
+                  class="auk-input auk-input--block"
                   @type="text"
                   @value={{this.pieceNameBuffer}}
                 />
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
                   {{on "click" (perform this.savePieceName)}}
                 >
-                  <i
-                    class="ki-check vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-check"></i>
+                  </div>
+                  <div class="auk-u-sr-only">
                     {{t "more-options"}}
-                  </span>
+                  </div>
                 </button>
                 <button
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
                   {{on "click" this.cancelEditPieceName}}
                 >
-                  <i
-                    class="ki-cross vl-button__icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="vl-u-visually-hidden">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-cross"></i>
+                  </div>
+                  <div class="auk-u-sr-only">
                     {{t "more-options"}}
-                  </span>
+                  </div>
                 </button>
               </div>
             {{else}}
-              <h6 class="vl-title vl-title--h6">
+              <h6 class="auk-h4">
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
@@ -153,20 +155,18 @@
     </div>
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-        <button
-          class="vl-toggle vl-link vl-link--bold"
-          type="button"
+        <WebComponents::AuButton
+          @skin="borderless"
+          @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           disabled={{this.loadPieceRelatedData.isRunning}}
           data-test-show-pieces-history
           {{on "click" (if this.isExpandedVersionHistory this.collapseVersionHistory (perform this.expandVersionHistory))}}
         >
-          <i class="vl-link__icon vl-link__icon--before vl-toggle__icon ki-chevron-{{if this.isExpandedVersionHistory "down" "right"}}"
-          ></i>
           {{t "show-pieces"}}
           {{#if this.expandVersionHistory.isRunning}}
             <WebComponents::AuLoader/>
           {{/if}}
-        </button>
+        </WebComponents::AuButton>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">
@@ -192,9 +192,9 @@
     @closeModal={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
     @title={{t "new-document-piece"}}>
-    <div class="vl-modal-dialog__content">
+    <div class="auk-modal__content">
       {{#if this.newPiece}}
-        <WebComponents::VlFormLabel @value={{t "name"}} />
+        <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
         <WebComponents::VlFormInput
           @value={{this.newPiece.name}}/>
         <Documents::DocumentUpload

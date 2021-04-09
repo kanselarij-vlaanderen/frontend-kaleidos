@@ -94,7 +94,7 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/BIS/);
+        cy.get('.auk-h4 > span').contains(/BIS/);
       });
 
     // Delete the TER piece, the BIS should then become the report
@@ -105,7 +105,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/TER/);
+        cy.get('.auk-h4 > span').contains(/TER/);
         cy.get(document.showPiecesHistory).click();
         cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
@@ -130,13 +130,13 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(/BIS/);
+        cy.get('.auk-h4 > span').contains(/BIS/);
         cy.get('.ki-more').click();
       });
 
     // Delete the document-container + all pieces
     cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.vl-u-text--error').contains('Document verwijderen')
+      cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
     cy.get(modal.modal).within(() => {
@@ -202,7 +202,7 @@ context('Add files to an agenda', () => {
 
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
     cy.contains('Wijzigen').click();
-    cy.get('.vl-form__group').within(() => {
+    cy.get('.vlc-box').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
         .within(() => {

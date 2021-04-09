@@ -1,6 +1,6 @@
 <div class="auk-u-flex auk-u-flex--vertical-center">
   {{#if this.isLoading}}
-    <div class="vl-loader" role="alert" aria-busy="true"></div>
+    <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{else}}
     {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
@@ -27,30 +27,34 @@
         </div>
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           data-test-access-level-save
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
-          <i class="ki-check vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-check"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "more-options"}}
-          </span>
+          </div>
         </button>
         <button
           type="button"
-          class="vl-button vl-button--link vl-button--icon"
+          class="auk-button auk-button--borderless auk-button--icon"
           {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
-          <i class="ki-cross vl-button__icon" aria-hidden="true"></i>
-          <span class="vl-u-visually-hidden">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-cross"></i>
+          </div>
+          <div class="auk-u-sr-only">
             {{t "more-options"}}
-          </span>
+          </div>
         </button>
       {{/if}}
     {{/if}}
     <button
       type="button"
-      class="vl-button vl-button--link-muted vl-button--icon vlc-toolbar__item"
+      class="auk-button auk-button--muted-borderless auk-button--icon vlc-toolbar__item"
       disabled={{not this.session.isEditor}}
       {{on "click" (perform this.changeConfidentiality)}}
     >
@@ -60,10 +64,9 @@
             {{t "document-is-confidential"}}
           </p>
         </EmberTooltip>
-        <i class="vl-icon ki-lock-closed vl-u-text--error"
-        ></i>
+        <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="danger" />
       {{else}}
-        <i class="vl-icon ki-lock-open"></i>
+        <WebComponents::AuIcon @name="lock-open" />
       {{/if}}
     </button>
   {{/if}}

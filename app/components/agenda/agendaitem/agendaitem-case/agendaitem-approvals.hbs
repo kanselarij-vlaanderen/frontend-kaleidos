@@ -1,12 +1,12 @@
 {{#if (gt (await agendaitem.mandatees.length) 1)}}
   <div class="auk-u-mb-2">
     <div class="auk-u-flex auk-u-flex--align-baseline">
-      <h4 class="vl-title vl-title--h4">
+      <h4 class="auk-h3">
         {{t "actions"}}
       </h4>
       {{#if currentSession.isEditor}}
         <div class="auk-u-ml-2">
-          <a href="" class="vl-link" {{action "toggleIsEditing"}}>
+          <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
             {{t "edit"}}
           </a>
         </div>
@@ -14,12 +14,12 @@
     </div>
   </div>
   <div class="auk-u-mb-2">
-    <h5 class="vl-title vl-title--h6">
+    <h5 class="auk-h4">
       {{t "mandatee-approval"}}
     </h5>
   </div>
   <div class="auk-u-mb-4">
-    <table class="vl-data-table">
+    <table class="auk-table">
       <thead>
         <tr>
           <th>
@@ -37,7 +37,7 @@
         {{#each (await mandateeApprovals) as |mandateeApproval|}}
           <tr>
             <td>
-              <h6 class="vl-title vl-title--h6">
+              <h6 class="auk-h4">
                 {{await mandateeApproval.mandatee.person.nameToDisplay}}
               </h6>
             </td>
@@ -47,21 +47,15 @@
             <td>
               {{#if (not isEditing)}}
                 {{#if (await mandateeApproval.approval)}}
-                  <p class="vl-icon-wrapper vl-u-text--success">
-                    <span class="vl-icon vl-icon--before ki-check" aria-hidden="true"></span>
-                    <span class="vl-annotation">
-                      {{t "approval-mandatee"}}
-                    </span>
-                  </p>
+                  <WebComponents::AuIcon @name="check" @iconSkinColor="success" />
+                  <span class="auk-u-text-success">
+                    {{t "approval-mandatee"}}
+                  </span>
                 {{else}}
-                  <p class="vl-icon-wrapper vl-u-text--muted">
-                    <i class="vl-icon vl-icon--before ki-remove"
-                          aria-hidden="true"
-                    ></i>
-                    <span>
-                      {{t "not-yet-approval-mandatee"}}
-                    </span>
-                  </p>
+                  <WebComponents::AuIcon @name="remove" @iconSkinColor="muted" />
+                  <span class="auk-u-muted">
+                    {{t "not-yet-approval-mandatee"}}
+                  </span>
                 {{/if}}
               {{else}}
                 <div class="vlc-input-field-block">
@@ -79,17 +73,23 @@
     </table>
   </div>
   {{#if isEditing}}
-    <div class="vl-action-group vl-action-group--align-right">
-      <a href="" class="vl-button vl-button--tertiary"
-        {{action "cancelEditing"}}
-      >
-        {{t "cancel"}}
-      </a>
-      {{web-components/vl-save-button
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "saveChanges" agendaitem.approvals)
-      }}
-    </div>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <button type="button" class="auk-button auk-button--tertiary"
+            {{action "cancelEditing"}}
+          >
+            {{t "cancel"}}
+          </button>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          {{web-components/vl-save-button
+            text=(t "save")
+            isLoading=isLoading
+            saveAction=(action "saveChanges" agendaitem.approvals)
+          }}
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
   {{/if}}
 {{/if}}

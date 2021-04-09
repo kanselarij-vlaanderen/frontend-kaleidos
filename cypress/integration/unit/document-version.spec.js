@@ -227,7 +227,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
 
@@ -240,7 +240,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
 
@@ -254,7 +254,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
         });
     });
     // Verify formally ok is reset
@@ -265,7 +265,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
         });
     });
   });
@@ -284,7 +284,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
 
@@ -294,7 +294,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}BIS`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
@@ -310,7 +310,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
         });
     });
 
@@ -320,7 +320,7 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains(`${file.newFileName}`);
+          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
         });
     });
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')

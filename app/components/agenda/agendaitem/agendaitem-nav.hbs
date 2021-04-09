@@ -1,22 +1,6 @@
-<ul class="vl-tabs auk-u-m-0" {{did-update this.checkExistance this.agendaitem}}>
-  <li class="vl-tab"  data-test-agenda-agendaitem-tab="agendaitem-case">
-    <LinkTo
-      class="vl-tab__link"
-      @route="agenda.agendaitems.agendaitem.index"
-      @activeClass="active"
-    >
-      {{capitalize (t "case")}}
-    </LinkTo>
-  </li>
-  <li class="vl-tab" data-test-agenda-agendaitem-tab="documents">
-    <LinkTo
-      class="vl-tab__link"
-      @route="agenda.agendaitems.agendaitem.documents"
-      @activeClass="active"
-    >
-      {{capitalize (t "documents")}}
-    </LinkTo>
-  </li>
+<WebComponents::AuTabs {{did-update this.checkExistance this.agendaitem}} data-test-agenda-agendaitem>
+  <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.index" data-test-agenda-agendaitem-tab="agendaitem-case">{{capitalize (t "case")}}</WebComponents::AuTab>
+  <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.documents" data-test-agenda-agendaitem-tab="documents">{{capitalize (t "documents")}}</WebComponents::AuTab>
   {{#if (not this.agendaitem.isApproval) }}
     {{#if
       (or
@@ -24,45 +8,21 @@
         (and @meetingIsConcluded this.decisionsExist)
       )
     }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-decision">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.decisions"
-          @activeClass="active"
-        >
-          {{capitalize (t "decision")}}
-        </LinkTo>
-      </li>
+      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.decisions" data-test-agenda-agendaitem-tab="agendaitem-decision">{{capitalize (t "decision")}}</WebComponents::AuTab>
     {{/if}}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.newsItemExists))
     }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-bestek">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.news-item"
-          @activeClass="active"
-        >
-          {{capitalize (t "newsletter")}}
-        </LinkTo>
-      </li>
+      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.news-item" data-test-agenda-agendaitem-tab="agendaitem-bestek">{{capitalize (t "newsletter")}}</WebComponents::AuTab>
     {{/if}}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.pressAgendaitemExists))
     }}
-      <li class="vl-tab" data-test-agenda-agendaitem-tab="agendaitem-press-agenda">
-        <LinkTo
-          class="vl-tab__link"
-          @route="agenda.agendaitems.agendaitem.press-agenda"
-          @activeClass="active"
-        >
-          {{capitalize (t "agendaitem-press-agenda")}}
-        </LinkTo>
-      </li>
+      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.press-agenda" data-test-agenda-agendaitem-tab="agendaitem-press-agenda">{{capitalize (t "agendaitem-press-agenda")}}</WebComponents::AuTab>
     {{/if}}
   {{/if}}
-</ul>
+</WebComponents::AuTabs>

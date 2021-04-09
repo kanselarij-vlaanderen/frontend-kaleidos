@@ -1,8 +1,11 @@
 {{#utils/settings-header title=(t 'manage-users')}}
-  <div data-test-settings-user-file-upload
-       class="vl-action-group vl-action-group--align-right u-padding--right">
-    {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
-  </div>
+  <WebComponents::AuToolbar data-test-settings-user-file-upload>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item class="u-padding--right">
+        {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 {{/utils/settings-header}}
 <div class="auk-u-m-8">
   <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
@@ -10,17 +13,19 @@
       <div class="vlc-toolbar__left">
         <Input
           data-test-user-search-input=""
-          class="vl-input-field"
+          class="auk-input"
           type="search"
           @value={{this.filter}}
         />
         <button
           data-test-user-search-button
-          class="vl-button vl-button--secondary vl-button--icon"
+          class="auk-button auk-button--secondary auk-button--icon"
           type="submit"
           {{on "click" (action "refreshRoute")}}
         >
-          <i class="ki-search"></i>
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-search"></i>
+          </div>
         </button>
       </div>
     </div>
@@ -30,7 +35,7 @@
     {{#data-table
       data-test-settings-user-table=true
       content=(await model)
-      class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+      class="auk-table auk-table--striped"
       isLoading=isLoadingModel
       page=page
       size=size
@@ -41,35 +46,35 @@
       {{#table.content as |c|}}
         {{#c.header}}
           {{th-sortable
-            class="vl-data-table-col-3 vl-data-table__header-title"
+            class="auk-table__col--3 auk-table__header-title"
             currentSorting=sort
             field="first-name"
             label=(t "first-name")
           }}
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="last-name"
             label=(t "last-name")
           }}
           <th
-                  class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+                  class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             {{t "email"}}
           </th>
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="organization.identifier"
             label=(t "ovo-code")
           }}
           {{th-sortable
-            class="vl-data-table-col-2 vl-data-table__header-title"
+            class="auk-table__col--2 auk-table__header-title"
             currentSorting=sort
             field="group.name"
             label=(t "group")
           }}
-          <th class="vl-data-table-col-1"></th>
+          <th class="auk-table__col--1"></th>
         {{/c.header}}
         {{#c.body as |user|}}
           <td>

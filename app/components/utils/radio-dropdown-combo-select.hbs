@@ -1,32 +1,34 @@
-<div class="vlc-radio-inline">
+<div class="auk-radio-list auk-radio-list--inline">
   {{#each this.radioOptions as |opt index|}}
     {{#let (concat this.radioName "-" index) as |radioId|}}
-      <label class="vl-radio" for={{radioId}}>
-        <Input
-          class="vl-radio__toggle"
+      <label class="auk-radio" data-children-count="1" for={{radioId}}>
+        <input
+          type="radio"
+          class="auk-radio__toggle"
           id={{radioId}}
           name={{this.radioName}}
-          @type="radio"
-          value={{get opt this.labelKey}}
           checked={{eq opt this.selectedOption}}
+          value={{get opt this.labelKey}}
           {{on "input" (fn this.select opt)}}
         />
-        <div class="vl-radio__label">{{get opt this.labelKey}}</div>
+        {{get opt this.labelKey}}
+        <span class="auk-radio__box"></span>
       </label>
     {{/let}}
   {{/each}}
   {{#let (concat this.radioName "-" "others") as |radioId|}}
-    <label class="vl-radio" for={{radioId}}>
-      <Input
-        class="vl-radio__toggle"
+    <label class="auk-radio" data-children-count="1" for={{radioId}}>
+      <input
+        type="radio"
+        class="auk-radio__toggle"
         id={{radioId}}
         name={{this.radioName}}
-        @type="radio"
-        value="Andere"
         checked={{this.selectedIsInOthers}}
+        value="Andere"
         {{on "input" this.showOthers}}
       />
-      <div class="vl-radio__label">{{t "option-others"}}</div>
+      {{t "option-others"}}
+      <span class="auk-radio__box"></span>
     </label>
   {{/let}}
 </div>
