@@ -285,7 +285,7 @@ export default EmberObject.create({
     },
   },
   URGENCY_LEVELS: {
-    spoedprocedure:  'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
+    spoedprocedure: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
     standaard: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
   },
   EMAIL: {

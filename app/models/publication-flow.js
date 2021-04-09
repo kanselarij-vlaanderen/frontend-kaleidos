@@ -47,6 +47,11 @@ export default class PublicationFlow extends Model {
     return `${this.publicationNumber}`;
   }
 
+  @computed('urgencyLevel')
+  get hasUrgencyLevel() {
+    return this.urgencyLevel.get('uri') === CONFIG.URGENCY_LEVELS.spoedprocedure ;
+  }
+
   get translationRequestsTotal() {
     return this.publicationService.getPublicationCounts(this.id).then((totals) => {
       const openVertalingen = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.vertalen.url, CONFIG.ACTIVITY_STATUSSES.open.url);
