@@ -307,7 +307,6 @@ export default class PublicationController extends Controller {
     this.set('showLoader', false);
   }
 
-  // TODO
   @action
   toggleUrgencyLevel(urgencyLevel) {
     this.model.publicationFlow.urgencyLevel = urgencyLevel;
