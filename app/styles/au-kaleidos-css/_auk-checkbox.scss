@@ -1,0 +1,82 @@
+/* ==========================================================================
+  auk-checkbox
+   ========================================================================== */
+
+.auk-checkbox {
+  display: block;
+  position: relative;
+  padding: .5rem 0 .5rem 2.8rem;
+  min-height: 3rem;
+  line-height: 1.3;
+}
+
+.auk-checkbox__table{
+  display: block;
+  position: relative;
+  height: 3rem;
+}
+
+.auk-checkbox--flipped {
+  padding: .5rem 2.8rem .5rem 0;
+  .auk-checkbox__box {
+    right: 0;
+    left: auto;
+  }
+}
+
+.auk-checkbox__toggle {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.auk-checkbox__box {
+  position: absolute;
+  top: .6rem;
+  left: 0;
+  height: 1.8rem;
+  width: 1.8rem;
+  border: .1rem solid $au-gray-300;
+  background: #FFF;
+}
+
+/* When the checkbox is checked, add a blue background */
+.auk-checkbox input:checked ~ .auk-checkbox__box {
+  background-color: $au-blue-700;
+  border: .1rem solid $au-blue-700;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.auk-checkbox__box:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.auk-checkbox input:checked ~ .auk-checkbox__box:after {
+  display: block;
+  left: .5rem;
+  top: 0;
+  width: .6rem;
+  height: 1.2rem;
+  border: solid white;
+  border-width: 0 .2rem .2rem 0;
+  transform: rotate(45deg);
+}
+
+.auk-checkbox input[type='checkbox']:focus ~ .auk-checkbox__box,
+.auk-checkbox input[type='checkbox']:active ~ .auk-checkbox__box {
+  border-color: $au-yellow-400;
+  box-shadow: inset 0 0 0 0.1rem $au-yellow-400;
+}
+
+.auk-checkbox-list--inline {
+  display: flex;
+  align-items: center;
+  .auk-checkbox:not(:last-of-type) {
+    margin-right: 2rem;
+  }
+}

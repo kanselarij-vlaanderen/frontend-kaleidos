@@ -1,0 +1,44 @@
+/* ==========================================================================
+  auk-form-help-text
+  ---
+  Help text + Errors on forms
+   ========================================================================== */
+
+.auk-form-help-text {
+  color: $au-gray-600;
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  .auk-input + &,
+  .auk-input-with-icon + &  {
+    margin-top: 0.5rem;
+  }
+  .auk-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+.auk-form-help-text--danger {
+  color: $au-red-700;
+  .auk-icon {
+    color: $au-red-500;
+  }
+}
+
+.auk-form-help-text--success {
+  color: $au-green-700;
+  .auk-icon {
+    color: $au-green-500;
+  }
+}
+
+.auk-form-help-text--warning {
+  color: $au-yellow-600;
+  .auk-icon {
+    color: $au-yellow-400;
+  }
+}
+
+.auk-form-help-text + .auk-form-help-text {
+  margin-top: 0.5rem;
+}
