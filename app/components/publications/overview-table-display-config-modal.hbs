@@ -1,0 +1,29 @@
+<WebComponents::AuModal data-test-au-modal-publication-new>
+  <WebComponents::AuModal::Header
+    @size="medium"
+    @title={{t "publications-setting-show-columns-modal-title"}}
+    @closeModal={{@onClose}}
+  />
+  <WebComponents::AuModal::Body>
+    <div class="auk-form-group-layout auk-form-group-layout--grid">
+      <div class="auk-o-grid">
+        {{#each this.optionColumns as |column|}}
+          <div class="auk-o-grid-col-6">
+            <div class="auk-form-group">
+              <WebComponents::AuCheckboxList>
+                {{#each column as |option|}}
+                  <WebComponents::AuCheckbox
+                    @name={{option.keyName}}
+                    @label={{t option.translationKey}}
+                    @checked={{get @options option.keyName}}
+                    @toggle={{this.toggleOption}}
+                  />
+                {{/each}}
+              </WebComponents::AuCheckboxList>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </WebComponents::AuModal::Body>
+</WebComponents::AuModal>
