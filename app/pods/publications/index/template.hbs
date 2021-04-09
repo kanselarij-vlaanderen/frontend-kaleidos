@@ -112,9 +112,9 @@
         {{#if this.tableColumnDisplayOptions.publicationDate}}
           <td class="auk-u-text-nowrap">
             {{if
-                row.publishedAt
-                (moment-format row.publishedAt "DD-MM-YYYY")
-                (t "dash")
+              row.publishedAt
+              (moment-format row.publishedAt "DD-MM-YYYY")
+              (t "dash")
             }}
           </td>
         {{/if}}
@@ -157,7 +157,7 @@
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.translationRequestsTotal) 0)}}
               {{#if
-                   (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
+                (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
               }}
                 <WebComponents::AuStatusPill @status="done">
                   {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
@@ -184,7 +184,7 @@
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
               {{#if
-                   (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
+                (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
               }}
                 <WebComponents::AuStatusPill @status="done">
                   {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
