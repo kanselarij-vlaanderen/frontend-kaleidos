@@ -1,7 +1,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexController extends Controller {
   queryParams = {
@@ -16,6 +18,11 @@ export default class PublicationsIndexController extends Controller {
     },
   };
 
+  @service publicationService;
+
+  page = 0;
+  size = 25;
+  sort = '-created';
   sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
@@ -26,9 +33,11 @@ export default class PublicationsIndexController extends Controller {
   tableColumns = tableColumns;
 
   @tracked showTableDisplayOptions = false;
-  @tracked page = 0;
-  @tracked size = 25;
-  @tracked sort = '-created';
+  @tracked isShowPublicationModal = false;
+  @tracked showLoader = false;
+  @tracked isShowPublicationFilterModal = false;
+
+  @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
   @action
   navigateToPublication(publicationFlowRow) {
@@ -55,5 +64,50 @@ export default class PublicationsIndexController extends Controller {
   @action
   closeColumnDisplayOptionsModal() {
     this.showTableDisplayOptions = false;
+  }
+
+  @action
+  async startPublicationFromCaseId(_caseId) {
+    this.showLoader = true;
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
+    this.showLoader = false;
+
+    this.transitionToRoute('publications.publication.case', newPublication.get('id'));
+  }
+
+  @action
+  showPublicationModal() {
+    this.isShowPublicationModal = true;
+  }
+
+  @action
+  closePublicationModal() {
+    this.isShowPublicationModal = false;
+  }
+
+  @action
+  async saveNewPublication(publication) {
+    const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
+    this.closePublicationModal();
+    this.transitionToRoute('publications.publication', newPublication.get('id'));
+  }
+
+  @action
+  showFilterModal() {
+    this.isShowPublicationFilterModal = true;
+  }
+
+  @action
+  cancelPublicationsFilter() {
+    this.isShowPublicationFilterModal = false;
+  }
+
+  @action
+  savePublicationsFilter(publicationFilter) {
+    this.publicationFilter = publicationFilter;
+    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
+    this.isShowPublicationFilterModal = false;
+    this.send('refreshModel');
   }
 }
