@@ -292,11 +292,11 @@
 </div>
 
 {{#if this.showTableDisplayOptions}}
-<Publications::OverviewTableDisplayConfigModal
-  @options={{this.tableColumnDisplayOptions}}
-  @onChange={{this.changeColumnDisplayOptions}}
-  @onClose={{this.closeColumnDisplayOptionsModal}}
-/>
+  <Publications::OverviewTableDisplayConfigModal
+    @options={{this.tableColumnDisplayOptions}}
+    @onChange={{this.changeColumnDisplayOptions}}
+    @onClose={{this.closeColumnDisplayOptionsModal}}
+  />
 {{/if}}
 
 {{!-- LOADER --}}
