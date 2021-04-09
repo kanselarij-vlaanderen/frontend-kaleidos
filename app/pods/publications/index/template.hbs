@@ -1,3 +1,50 @@
+{{!-- TODO auk-panel-layout gebruiken, component ? --}}
+<div class="vlc-panel-layout__main-content">
+  <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
+            <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
+          </div>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuDropdown>
+            <Publications::PublicationCaseSearch />
+          </WebComponents::AuDropdown>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
+            {{t "filter-content"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
+            (fn this.showPublicationModal)}}>
+            {{t "publications-new"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    {{#if this.isShowPublicationModal}}
+      <Publications::NewPublicationModal
+        @onCancel={{this.closePublicationModal}}
+        @onSave={{this.saveNewPublication}} />
+    {{/if}}
+    {{#if this.isShowPublicationFilterModal}}
+      <Publications::PublicationsFilterModal
+        @filter={{this.publicationFilter}}
+        @onCancel={{this.cancelPublicationsFilter}}
+        @onSave={{this.savePublicationsFilter}} />
+    {{/if}}
+    {{outlet}}
+  </div>
+</div>
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
   <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
     {{on "click" this.openColumnDisplayOptionsModal}}
@@ -262,4 +309,8 @@
     @onChange={{this.changeColumnDisplayOptions}}
     @onClose={{this.closeColumnDisplayOptionsModal}}
   />
+{{/if}}
+{{!-- LOADER --}}
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay />
 {{/if}}
