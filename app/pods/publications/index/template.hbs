@@ -1,6 +1,53 @@
+{{!-- TODO auk-panel-layout gebruiken, component ? --}}
+<div class="vlc-panel-layout__main-content">
+  <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
+            <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
+          </div>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuDropdown>
+            <Publications::PublicationCaseSearch />
+          </WebComponents::AuDropdown>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
+            {{t "filter-content"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
+            (fn this.showPublicationModal)}}>
+            {{t "publications-new"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </WebComponents::AuNavbar>
+  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+    {{#if this.isShowPublicationModal}}
+      <Publications::NewPublicationModal
+        @onCancel={{this.closePublicationModal}}
+        @onSave={{this.saveNewPublication}} />
+    {{/if}}
+    {{#if this.isShowPublicationFilterModal}}
+      <Publications::PublicationsFilterModal
+        @filter={{this.publicationFilter}}
+        @onCancel={{this.cancelPublicationsFilter}}
+        @onSave={{this.savePublicationsFilter}} />
+    {{/if}}
+    {{outlet}}
+  </div>
+</div>
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
   <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-    {{on "click" this.filterTables}}
+    {{on "click" this.openColumnDisplayOptionsModal}}
   />
   <DataTable
     @content={{this.model}}
@@ -14,121 +61,33 @@
     as |table|>
     <table.content as |c|>
       <c.header>
-        {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
-
-        {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
-          <th style="min-width: 50rem">
-            {{t "publications-table-case-name"}}
-          </th>
-        {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publication-number"
-            @label={{t "publications-table-publication-number"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
-          <th>{{t "publications-table-numacnummer-bs"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.regulationTypeFilterOption}}
-          <ThSortable
+        {{#each this.tableColumns as |column|}}
+          {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+            {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
+            {{#if (eq column.keyName "caseName")}}
+              {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
+              <th style="min-width: 50rem">
+                {{t column.translationKey}}
+              </th>
+            {{else}}
+              {{#if column.sortable}}
+                <ThSortable
                   @currentSorting={{this.sort}}
-                  @field="regulationType.position"
-                  @label={{t "regulation-type"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
-          <th>{{t "publications-table-on-meeting"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publishBefore"
-            @label={{t "publications-table-requested-publication-date"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-final-publication-date"}}
-          />
-        {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="publishedAt"
-            @label={{t "publications-table-publication-date"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
-          <th>{{t "publications-table-case-manager"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field="modified"
-            @label={{t "publications-table-last-edited"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.lastEditedByFilterOption}}
-          <th>{{t "publications-table-last-edited-by"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-withdrawn-date"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
-          <ThSortable
-            @currentSorting={{this.sort}}
-            @field=""
-            @label={{t "publications-table-pause-date"}}
-          />
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
-          <th class="auk-u-text-align--center">{{t "publications-table-translate-requests"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.signRequestsFilterOption}}
-          <th class="auk-u-text-align--center">{{t "publications-table-sign-requests"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
-          <th class="auk-u-text-align--center">{{t "publications-table-publish-preview-requests"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
-          <th class="auk-u-text-align--center">{{t "publications-table-speed-procedure"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
-          <th class="auk-u-text-align--center">{{t "publications-table-comment"}}</th>
-        {{/if}}
-
-        {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
-          <th>{{t "publications-table-from-designagenda"}}</th>
-        {{/if}}
+                  @field={{column.keyName}}
+                  @label={{t column.translationKey}}
+                />
+              {{else}}
+                <th>{{t column.translationKey}}</th>
+              {{/if}}
+            {{/if}}
+          {{/if}}
+        {{/each}}
         <th>
           &nbsp;
         </th>
       </c.header>
       <c.body class="auk-table--interaction-cursor" as |row|>
-        {{#if this.filterTableColumnOptionKeys.caseNameFilterOption}}
+        {{#if this.tableColumnDisplayOptions.caseName}}
         {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
           <td class="auk-table__col--6">
             {{#if row.case.shortTitle}}
@@ -142,7 +101,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationNumberFilterOption}}
+        {{#if this.tableColumnDisplayOptions.publicationNumber}}
           <td>
             {{#if row.publicationNumber}}
               {{row.publicationNumberToDisplay}}
@@ -151,7 +110,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.numacNumberFilterOption}}
+        {{#if this.tableColumnDisplayOptions.numacNumber}}
           <td>
             {{#each row.numacNumbers as |numac|}}
               <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
@@ -160,7 +119,7 @@
             {{/each}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.regulationTypeFilterOption}}
+        {{#if this.tableColumnDisplayOptions.regulationType}}
           <td>
             {{#if row.regulationType}}
               {{row.regulationType.label}}
@@ -169,12 +128,12 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.onMeetingFilterOption}}
+        {{#if this.tableColumnDisplayOptions.meetingDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}}
+        {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
           <td class="auk-u-text-nowrap">
             {{#if row.publishDateRequested}}
               {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
@@ -183,10 +142,10 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}}
+        {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
           <td class="auk-u-text-nowrap">
             {{#if row.publishBefore}}
-            {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
+              {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
               <TextWidgets::DeadlineDate
                 @date={{row.publishBefore}}
                 @warningPeriod={{-172800}} {{!-- 2 days in seconds --}}
@@ -197,7 +156,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publicationDateFilterOption}}
+        {{#if this.tableColumnDisplayOptions.publicationDate}}
           <td class="auk-u-text-nowrap">
             {{if
               row.publishedAt
@@ -207,13 +166,13 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.caseManagerFilterOption}}
+        {{#if this.tableColumnDisplayOptions.caseManager}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.lastEditedFilterOption}}
+        {{#if this.tableColumnDisplayOptions.lastEdited}}
           <td class="auk-u-text-nowrap">
             {{moment-format row.modified "DD-MM-YYYY"}}<br/>
             <span class="auk-u-text-small auk-u-muted">
@@ -223,25 +182,25 @@
         {{/if}}
 
 
-        {{#if this.filterTableColumnOptionKeys.lastEditedByFilterOption}}
+        {{#if this.tableColumnDisplayOptions.lastEditedBy}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.withdrawnDateFilterOption}}
+        {{#if this.tableColumnDisplayOptions.withdrawnDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.pauseDateFilterOption}}
+        {{#if this.tableColumnDisplayOptions.pauseDate}}
           <td>
             {{t "dash"}}
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.translateRequestsFilterOption}}
+        {{#if this.tableColumnDisplayOptions.translateRequests}}
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.translationRequestsTotal) 0)}}
               {{#if
@@ -263,12 +222,12 @@
 
 
 
-        {{#if this.filterTableColumnOptionKeys.signRequestsFilterOption}}
+        {{#if this.tableColumnDisplayOptions.signRequests}}
           <td class="auk-u-text-align--center">
             {{t "dash"}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}}
+        {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
           <td class="auk-u-text-align--center">
             {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
               {{#if
@@ -288,7 +247,7 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
+        {{#if this.tableColumnDisplayOptions.speedProcedure}}
           <td class="auk-u-text-align--center">
             {{#if row.hasPriority}}
               <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
@@ -303,7 +262,7 @@
           </td>
         {{/if}}
 
-        {{#if this.filterTableColumnOptionKeys.commentFilterOption}}
+        {{#if this.tableColumnDisplayOptions.comment}}
           <td class="auk-u-text-align--center">
             {{#if row.remark}}
               <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
@@ -317,7 +276,7 @@
             {{/if}}
           </td>
         {{/if}}
-        {{#if this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}}
+        {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
           <td class="auk-u-text-align--center">
             {{t "dash"}}
           </td>
@@ -332,49 +291,15 @@
   </DataTable>
 </div>
 
-{{#if showFilterTableModal}}
-  <WebComponents::AuModal data-test-au-modal-publication-new>
-    <WebComponents::AuModal::Header
-      @size="medium"
-      @title={{t "publications-setting-show-columns-modal-title"}}
-      @closeModal={{this.closeFilterTableModal}}
-    />
-    <WebComponents::AuModal::Body>
-      <div class="auk-form-group-layout auk-form-group-layout--grid">
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col-6">
-            <div class="auk-form-group">
-              <WebComponents::AuCheckboxList>
-                <WebComponents::AuCheckbox @name="caseNameFilterOption" @label={{t "publications-table-case-name"}} @checked={{this.filterTableColumnOptionKeys.caseNameFilterOption}} @toggle={{this.toggleFilterOption}} />
-                <WebComponents::AuCheckbox @name="publicationNumberFilterOption" @label={{t "publications-table-publication-number"}} @checked={{this.filterTableColumnOptionKeys.publicationNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="numacNumberFilterOption" @label={{t "publications-table-numacnummer-bs"}} @checked={{this.filterTableColumnOptionKeys.numacNumberFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="regulationTypeFilterOption" @label={{t "publications-table-regulation-type"}} @checked={{this.filterTableColumnOptionKeys.regulationTypeFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="onMeetingFilterOption" @label={{t "publications-table-on-meeting"}} @checked={{this.filterTableColumnOptionKeys.onMeetingFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="requestedPublicationDateFilterOption" @label={{t "publications-table-requested-publication-date"}} @checked={{this.filterTableColumnOptionKeys.requestedPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="finalPublicationDateFilterOption" @label={{t "publications-table-final-publication-date"}} @checked={{this.filterTableColumnOptionKeys.finalPublicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="publicationDateFilterOption" @label={{t "publications-table-publication-date"}} @checked={{this.filterTableColumnOptionKeys.publicationDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="lastEditedFilterOption" @label={{t "publications-table-last-edited"}} @checked={{this.filterTableColumnOptionKeys.lastEditedFilterOption}} @toggle={{this.toggleFilterOption}}/>
-              </WebComponents::AuCheckboxList>
-            </div>
-          </div>
-          <div class="auk-o-grid-col-6">
-            <div class="auk-form-group">
-              <WebComponents::AuCheckboxList>
-                <WebComponents::AuCheckbox @name="caseManagerFilterOption" @label={{t "publications-table-case-manager"}} @checked={{this.filterTableColumnOptionKeys.caseManagerFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="lastEditedByFilterOption" @label={{t "publications-table-last-edited-by"}} @checked={{this.filterTableColumnOptionKeys.lastEditedByFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="withdrawnDateFilterOption" @label={{t "publications-table-withdrawn-date"}} @checked={{this.filterTableColumnOptionKeys.withdrawnDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="pauseDateFilterOption" @label={{t "publications-table-pause-date"}} @checked={{this.filterTableColumnOptionKeys.pauseDateFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="translateRequestsFilterOption" @label={{t "publications-table-translate-requests"}} @checked={{this.filterTableColumnOptionKeys.translateRequestsFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="signRequestsFilterOption" @label={{t "publications-table-sign-requests"}} @checked={{this.filterTableColumnOptionKeys.signRequestsFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="publishPreviewRequestsFilterOption" @label={{t "publications-table-publish-preview-requests"}} @checked={{this.filterTableColumnOptionKeys.publishPreviewRequestsFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="speedProcedureFilterOption" @label={{t "publications-table-speed-procedure"}} @checked={{this.filterTableColumnOptionKeys.speedProcedureFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="commentFilterOption" @label={{t "publications-table-comment"}} @checked={{this.filterTableColumnOptionKeys.commentFilterOption}} @toggle={{this.toggleFilterOption}}/>
-                <WebComponents::AuCheckbox @name="fromDesignAgendaFilterOption" @label={{t "publications-table-from-designagenda"}} @checked={{this.filterTableColumnOptionKeys.fromDesignAgendaFilterOption}} @toggle={{this.toggleFilterOption}}/>
-              </WebComponents::AuCheckboxList>
-            </div>
-          </div>
-        </div>
-      </div>
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+{{#if this.showTableDisplayOptions}}
+  <Publications::OverviewTableDisplayConfigModal
+    @options={{this.tableColumnDisplayOptions}}
+    @onChange={{this.changeColumnDisplayOptions}}
+    @onClose={{this.closeColumnDisplayOptionsModal}}
+  />
+{{/if}}
+
+{{!-- LOADER --}}
+{{#if this.showLoader}}
+  <WebComponents::AuLoadingOverlay />
 {{/if}}

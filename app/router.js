@@ -99,7 +99,7 @@ Router.map(function() {
   this.route('help');
   this.route('manual', { path: '/handleiding', });
 
-  this.route('auk-styleguide', function() {
+  this.route('styleguide', function() {
     this.route('accordion');
     this.route('alert-skins');
     this.route('alert-types');
@@ -135,21 +135,6 @@ Router.map(function() {
     this.route('modal');
     this.route('typography');
     this.route('upload');
-  });
-
-  this.route('styleguide', function() {
-    this.route('alerts');
-    this.route('buttons');
-    this.route('documents');
-    this.route('icons');
-    this.route('inputs');
-    this.route('panels');
-    this.route('pills');
-    this.route('typography');
-    this.route('selects');
-    this.route('brand');
-    this.route('checkbox');
-    this.route('dropdown');
   });
 
   this.route('search', { path: '/zoeken', }, function() {

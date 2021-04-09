@@ -1,9 +1,36 @@
-<h1 class="vlc-kitchensink-header">{{t "style-guide-brand"}}</h1>
-<Styleguide::KitchensinkSample
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro
         @title="Brand"
-        @code='<WebComponents::AuBrand @logotype="Kaleidos" />'
 >
-  {{!-- BEGIN-SNIPPET loading --}}
-  <WebComponents::AuBrand @logotype="Kaleidos"/>
+  <p>The Vlaanderen logo + Kaleidos brand.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Default"
+        @snippet="brand.hbs"
+>
+  {{!-- BEGIN-SNIPPET brand --}}
+  <WebComponents::AuBrand @logotype="Kaleidos" />
   {{!-- END-SNIPPET --}}
-</Styleguide::KitchensinkSample>
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@logotype</code></td>
+    <td>string</td>
+    <td></td>
+    <td>Determines the name of the app.</td>
+  </tr>
+  </tbody>
+</table>
