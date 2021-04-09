@@ -8,8 +8,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
       reload: true,
-    }, {
-      include: 'case,contact-person,status,type,numac-number,regulation-type',
+      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
     });
     await publicationFlow.get('regulationType');
     const _case = await publicationFlow.get('case');
@@ -62,9 +61,12 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       sort: 'position', 'page[size]': 50,
     });
 
+    const publicationModes = await this.store.peekAll('publication-mode').sortBy('priority');
+
     return hash({
       publicationFlow,
       regulationTypes,
+      publicationModes: publicationModes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {

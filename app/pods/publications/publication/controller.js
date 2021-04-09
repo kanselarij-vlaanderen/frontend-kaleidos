@@ -61,16 +61,6 @@ export default class PublicationController extends Controller {
     },
   }];
 
-  typeOptions = [
-    {
-      id: CONFIG.PUBLICATION_TYPES.extenso.id,
-      label: 'Extenso',
-    }, {
-      id: CONFIG.PUBLICATION_TYPES.bijUitreksel.id,
-      label: 'Bij uitreksel',
-    }
-  ];
-
   get sortedRegulationTypes() {
     return this.model.regulationTypes;
   }
@@ -89,8 +79,8 @@ export default class PublicationController extends Controller {
     return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
   }
 
-  get getPublicationType() {
-    return this.typeOptions.find((typeOption) => typeOption.id === this.model.publicationFlow.get('type.id'));
+  get getPublicationMode() {
+    return this.model.publicationModes.find((mode) => mode.id === this.model.publicationFlow.get('mode.id'));
   }
 
   get getTranslationDate() {
@@ -404,9 +394,8 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  async setPublicationType(event) {
-    const publicationType = await this.store.findRecord('publication-type', event.id);
-    this.model.publicationFlow.set('type', publicationType);
+  async setPublicationMode(publicationMode) {
+    this.model.publicationFlow.mode = publicationMode;
     this.model.publicationFlow.save();
   }
 

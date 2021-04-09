@@ -28,7 +28,7 @@ export default class PublicationFlow extends Model {
     inverse: null,
   }) status;
 
-  @belongsTo('publication-type') type;
+  @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
 
   // Has many .
