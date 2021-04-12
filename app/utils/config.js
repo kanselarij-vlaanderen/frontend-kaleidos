@@ -274,16 +274,6 @@ export default EmberObject.create({
       url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
     },
   },
-  PUBLICATION_TYPES: {
-    extenso: {
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
-      id: '5fcca4a7-3e1f-44ec-b854-e21ad092c524',
-    },
-    bijUitreksel: {
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5423c83d-ae5c-4973-8cb7-baefdc3e4949',
-      id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
-    },
-  },
   EMAIL: {
     OUTBOX: {
       ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
