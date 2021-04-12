@@ -8,16 +8,6 @@ export default class PublicationsRoute extends Route.extend(AuthenticatedRouteMi
   @inject store;
 
   @action
-  refreshModel() {
-    this.refresh();
-  }
-
-  @action
-  refresh() {
-    super.refresh();
-  }
-
-  @action
   async model() {
     // caching for use in publication detail
     const publicationModes = this.store.findAll('publication-mode');
