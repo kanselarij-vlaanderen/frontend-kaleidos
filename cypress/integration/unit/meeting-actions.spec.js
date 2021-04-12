@@ -84,7 +84,7 @@ context('meeting actions tests', () => {
     cy.get(agenda.agendaitemControlsActionDelete).click();
 
     cy.get(modal.modal).within(() => {
-      cy.get('.vl-button').contains('Verwijderen')
+      cy.get('.auk-button').contains('Verwijderen')
         .click();
     });
     cy.route('DELETE', 'agendaitems/**').as('deleteAgendaitem');

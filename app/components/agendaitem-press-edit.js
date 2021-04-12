@@ -4,7 +4,7 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default Component.extend({
-  classNames: ['vl-form__group vl-u-bg-porcelain'],
+  classNames: ['vlc-box'],
   isTableRow: false,
   store: inject(),
   actions: {

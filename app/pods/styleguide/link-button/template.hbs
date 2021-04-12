@@ -1,0 +1,99 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Button (link)">
+  <p>These are variants of button types using <code>ButtonLink</code>. For regular buttons, see <a href="/styleguide/button-types">this page</a>.</p>
+</ComponentPageIntro>
+
+<StyleguideSample
+        @title="Button Link"
+        @snippet="link-button.hbs"
+>
+  {{!-- BEGIN-SNIPPET link-button --}}
+  <WebComponents::AuButtonLink @route="styleguide.link-button" @models={{@model}}>Link button</WebComponents::AuButtonLink>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Button link muted"
+        @snippet="link-button-muted.hbs"
+>
+
+  {{!-- BEGIN-SNIPPET link-button-muted --}}
+  <WebComponents::AuButtonLink @route="styleguide.link-button" @skin="muted" @models={{@model}}>Link button muted</WebComponents::AuButtonLink>
+  {{!-- END-SNIPPET --}}
+
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Button link muted (with icon left)"
+        @snippet="link-button-muted-icon.hbs"
+>
+  {{!-- BEGIN-SNIPPET link-button-muted-icon --}}
+  <WebComponents::AuButtonLink @route="styleguide.link-button" @skin="muted" @icon="add" @models={{@model}}>Link button muted</WebComponents::AuButtonLink>
+  {{!-- END-SNIPPET --}}
+
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Button link muted (with icon right)"
+        @snippet="link-button-muted-icon-right.hbs"
+>
+  {{!-- BEGIN-SNIPPET link-button-muted-icon-right --}}
+  <WebComponents::AuButtonLink @route="styleguide.link-button" @skin="muted" @icon="add" @layout="icon-right" @models={{@model}}>Link button muted</WebComponents::AuButtonLink>
+  {{!-- END-SNIPPET --}}
+
+</StyleguideSample>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@skin</code></td>
+    <td>string</td>
+    <td><code>muted</code></td>
+    <td>Mutes the link.</td>
+  </tr>
+  <tr>
+    <td><code>@padded</code></td>
+    <td>string</td>
+    <td><code>padded</code>, <code>padded-y</code></td>
+    <td>Determines full padding or padding on y-axis.</td>
+  </tr>
+  <tr>
+    <td><code>@icon</code></td>
+    <td>string</td>
+    <td></td>
+    <td>Determines the icon used.</td>
+  </tr>
+  <tr>
+    <td><code>@layout</code></td>
+    <td>string</td>
+    <td><code>icon-only</code>, <code>icon-right</code></td>
+    <td>Determines the layout of the button. The layout is automatically determined from the existence of @icon, unless <code>icon-only</code> is specified this will result in a button layout with icon on the left.</td>
+  </tr>
+  <tr>
+    <td><code>@route</code></td>
+    <td>string</td>
+    <td>Example: <code>styleguide.buttons</code></td>
+    <td>Links to an internal route</td>
+  </tr>
+  <tr>
+    <td><code>@href</code></td>
+    <td>string</td>
+    <td>Example: <code>https://mono.company</code></td>
+    <td>Links to an external URL</td>
+  </tr>
+  <tr>
+    <td><code>@block</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>true</code>, <code>false</code></td>
+    <td>Determines whether the button is rendered as a block.</td>
+  </tr>
+  </tbody>
+</table>

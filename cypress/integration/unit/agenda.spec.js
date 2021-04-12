@@ -329,7 +329,7 @@ context('Agenda tests', () => {
     // TODO is deze not exists wel goed ?
     cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
     // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
-    // cy.get('.vl-loader', {
+    // cy.get('.auk-loader', {
     //   timeout: 60000,
     // }).should('not.exist');
     cy.contains(newSubcase2TitleShort).should('not.exist');

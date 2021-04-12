@@ -18,38 +18,47 @@
     {{/power-select}}
     <div class="auk-u-mr-2"></div>
     <button data-test-create-person-container
-            type="button"
-            class="vl-button vl-button--secondary vl-button--icon"
-      {{action "toggleIsCreatingPerson"}}>
-      <i class="vl-button__icon ki-add"></i>
-      <span class="vl-u-visually-hidden">
+      type="button"
+      class="auk-button auk-button--secondary auk-button--icon"
+      {{action "toggleIsCreatingPerson"}}
+    >
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-add"></i>
+      </div>
+      <div class="auk-u-sr-only">
         {{t "create"}}
-      </span>
+      </div>
     </button>
   </div>
 {{else}}
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "first-name")}}
+    <WebComponents::AuLabel>{{t "first-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-create-person-firstname=true
       value=firstName
     }}
   </div>
   <div class="vlc-input-field-block">
-    {{web-components/vl-form-label value=(t "name")}}
+    <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
       data-test-create-person-lastname=true
       value=lastName
     }}
   </div>
-  <div class="vl-action-group vl-action-group--align-right">
-    <a href="" class="vl-link" {{action "resetValuesAndCancelCreation"}}>
-      {{t "cancel"}}
-    </a>
-    {{web-components/vl-save-button
-      text=(t "save")
-      isLoading=isLoading
-      saveAction=(action "createPerson")
-    }}
-  </div>
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <a href="" class="auk-button-link" {{action "resetValuesAndCancelCreation"}}>
+          {{t "cancel"}}
+        </a>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        {{web-components/vl-save-button
+          text=(t "save")
+          isLoading=isLoading
+          saveAction=(action "createPerson")
+        }}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 {{/if}}

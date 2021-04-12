@@ -7,19 +7,11 @@
   border-right: 1px solid $ghost;
   height: 100%;
 
-  .vl-title {
+  .auk-h4 {
     display: flex;
     align-items: center;
     margin-right: .8rem;
-
-    .vl-icon {
-      &:before {
-        position: relative;
-        top: 2.2px;
-      }
-      font-size: 1.8rem;
-      margin-right: .4rem;
-    }
+    margin-bottom: 0;
   }
 
   // Small fix to center icon in toggle
@@ -76,8 +68,13 @@
     display: none;
   }
 
-  .vl-title span {
-    display: none;
+  .auk-h1,
+  .auk-h2,
+  .auk-h3,
+  .auk-h4 {
+    span {
+      display: none;
+    }
   }
 
   .vlc-side-nav-item__meta--small {

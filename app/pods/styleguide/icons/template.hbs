@@ -1,7 +1,42 @@
-{{!-- template-lint-disable  --}}
-<h1 class="vlc-kitchensink-header">Kaleidos-icons</h1>
-<div class="vlc-kitchensink-sample">
-  <div class="vl-typography">
-    <Styleguide::ScriptIcons/>
-  </div>
-</div>
+{{!-- template-lint-disable --}}
+
+<ComponentPageIntro @title="Icons">
+  <p>To implement an icon on its own, use <code>&lt;Icon @name=&quot;icon-name&quot; /&gt;</code></p>
+</ComponentPageIntro>
+
+<ul class="br-styleguide-icon-list">
+  {{#each model as |icon|}}
+    <li>
+      <WebComponents::AuIcon @name="{{icon}}" /> {{icon}}
+    </li>
+  {{/each}}
+</ul>
+
+<h3 class="auk-h3 auk-u-my-3">Usage</h3>
+<p>Add your icons to the <code>public/icons</code> folder as <code>.svg</code>. Make sure to export your svg's without fill or stroke colors so we can style these with CSS.</p>
+
+<h3 class="auk-h3 auk-u-my-3">Arguments</h3>
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@name</code></td>
+    <td>string</td>
+    <td>Name of the icon</td>
+    <td>Determines the icon</td>
+  </tr>
+  <tr>
+    <td><code>@size</code></td>
+    <td>string</td>
+    <td><code>small</code>, <code>large</code></td>
+    <td>Overrides the default icon size.</td>
+  </tr>
+  </tbody>
+</table>

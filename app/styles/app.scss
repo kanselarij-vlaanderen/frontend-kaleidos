@@ -21,31 +21,13 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 
 // Components (loaded locally to easily read source)
 @import 'govflanders/components/_accordion';
-@import 'govflanders/components/_action-group';
 @import 'govflanders/components/_alert';
-@import 'govflanders/components/_badge';
-@import 'govflanders/components/_button';
-@import 'govflanders/components/_checkbox';
-@import 'govflanders/components/_data-table';
+@import 'govflanders/components/_toggle';
 @import 'govflanders/components/_datepicker';
-@import 'govflanders/components/_description-data';
 @import 'govflanders/components/_document';
-@import 'govflanders/components/_form-message';
-@import 'govflanders/components/_form-structure';
-@import 'govflanders/components/_icon';
 @import 'govflanders/components/_input-addon';
 @import 'govflanders/components/_input-field';
 @import 'govflanders/components/_input-group';
-@import 'govflanders/components/_link';
-@import 'govflanders/components/_loader';
-@import 'govflanders/components/_modal';
-@import 'govflanders/components/_pager';
-@import 'govflanders/components/_pill';
-@import 'govflanders/components/_radio';
-@import 'govflanders/components/_tabs';
-@import 'govflanders/components/_textarea';
-@import 'govflanders/components/_titles';
-@import 'govflanders/components/_typography';
 @import 'govflanders/components/_upload';
 
 // Interdependent components (loaded from node_modules)
@@ -56,18 +38,7 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 ========================================================================== */
 
 // Additions to existing components
-@import 'govflanders/additions/_badge';
-@import 'govflanders/additions/_button';
 @import 'govflanders/additions/_checkbox';
-@import 'govflanders/additions/_data-table';
-@import 'govflanders/additions/_loader';
-@import 'govflanders/additions/_modal';
-@import 'govflanders/additions/_pill';
-@import 'govflanders/additions/_tabs';
-
-// Additions to existing utilities
-@import 'govflanders/additions/_background';
-@import 'govflanders/additions/_typography';
 
 // Custom components
 @import 'custom-components/vlc-agenda-detail-sidebar';
@@ -109,7 +80,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/_vlc-publication-overview';
 @import 'custom-components/vlc-publication-status-pill';
-@import 'custom-components/vlc-radio-inline';
 @import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-scroll-wrapper';
 @import 'custom-components/vlc-search';
@@ -130,16 +100,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-decision-result-select';
 @import 'custom-components/vlc-numac-nummer-list';
 
-
-// Kitchen sink
-@import 'custom-components/_vlc-kitchensink-code-block';
-@import 'custom-components/_vlc-kitchensink-container';
-@import 'custom-components/_vlc-kitchensink-header';
-@import 'custom-components/_vlc-kitchensink-navigation';
-@import 'custom-components/_vlc-kitchensink-page-header';
-@import 'custom-components/_vlc-kitchensink-sample-header';
-@import 'custom-components/_vlc-kitchensink-sample';
-
 // Imports utilities (loaded from node_modules)
 // @import 'node_modules/@govflanders/vl-ui-util/src/scss/util';
 
@@ -148,12 +108,10 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 
 // Fixes to the framework
 @import 'fixes/fix-auk-modal-ember-select';
-@import 'fixes/fix-badge-avatars';
 @import 'fixes/fix-full-height';
 @import 'fixes/fix-light-table';
 @import 'fixes/fix-icon-positioning';
 @import 'fixes/fix-kaleidos-viewer';
-@import 'fixes/fix-pre';
 @import 'fixes/fix-sortable-item';
 @import 'fixes/fix-power-select';
 @import 'fixes/fix-ember-data-table';
@@ -182,16 +140,4 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 
 // Components (from npm package)
 @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
-
-// Styleguide
-@import "custom-application/styleguide/_br-prototype-wrapper";
-@import "custom-application/styleguide/_br-styleguide-bordered-list";
-@import "custom-application/styleguide/_br-styleguide-bordered-list-header";
-@import "custom-application/styleguide/_br-styleguide-code-block";
-@import "custom-application/styleguide/_br-styleguide-color-swatch";
-@import "custom-application/styleguide/_br-styleguide-color-swatch-list";
-@import "custom-application/styleguide/_br-styleguide-columns";
-@import "custom-application/styleguide/_br-styleguide-grid-documentation";
-@import "custom-application/styleguide/_br-styleguide-icon-list";
-@import "custom-application/styleguide/_br-styleguide-sample";
-@import "custom-application/styleguide/_br-styleguide-type-sample";
+@import "au-kaleidos-css/auk-additions";

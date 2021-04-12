@@ -1,7 +1,7 @@
 {{ page-title
   (t "search")
 }}
-<div class="vl-u-bg-alt">
+<div class="auk-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__item">
@@ -19,9 +19,9 @@
     <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
       <div class="vlc-input-field-block auk-o-grid-col-4">
         <div class="auk-u-flex auk-u-flex--align-baseline">
-          <label class="vl-form__label u-padding--right--tinier" for="dossierId">
+          <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
             {{capitalize (t "keyword")}}
-          </label>
+          </WebComponents::AuLabel>
           <span>
             <i
               class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
@@ -43,7 +43,7 @@
         </div>
         <Input
           data-test-searchfield=""
-          class="vl-input-field vl-input-field--block"
+          class="auk-input auk-input--block"
           type="text"
           id="dossierId"
           @placeholder={{t "search-placeholder"}}
@@ -52,7 +52,7 @@
         />
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <WebComponents::VlFormLabel @value={{t "from"}}/>
+        <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
           @dateChanged={{fn (mut this.dateFromBuffer)}}
@@ -61,15 +61,17 @@
           <button
             data-test-searchbutton
             type="button"
-            class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+            class="auk-button auk-button--muted-borderless vlc-button-in-input auk-button--icon"
             {{on "click" (fn (mut this.dateFromBuffer) null)}}
           >
-            <i class="vl-button__icon ki-close" aria-hidden="true"></i>
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-close" aria-hidden="true"></i>
+            </div>
           </button>
         {{/if}}
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <WebComponents::VlFormLabel @value={{t "until-inclusive"}}/>
+        <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
           @dateChanged={{fn (mut this.dateToBuffer)}}
@@ -77,20 +79,22 @@
         {{#if this.dateToBuffer}}
           <button
             type="button"
-            class="vlc-button-in-input vl-button vl-button--link-muted vl-button--icon"
+            class="vlc-button-in-input auk-button auk-button--muted-borderless auk-button--icon"
             {{on "click" (fn (mut this.dateToBuffer) null)}}
           >
-            <i class="vl-button__icon ki-close" aria-hidden="true"></i>
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-close" aria-hidden="true"></i>
+            </div>
           </button>
         {{/if}}
       </div>
       <div class="vlc-input-field-block auk-o-grid-col-2">
-        <label class="vl-form__label" for="ministerName">
+        <WebComponents::AuLabel for="ministerName">
           {{t "minister"}}
-        </label>
+        </WebComponents::AuLabel>
         <Input
           type="text"
-          class="vl-input-field vl-input-field--block"
+          class="auk-input auk-input--block"
           id="ministerName"
           @value={{this.mandateesBuffer}}
           @enter={{fn this.search}}
@@ -109,34 +113,40 @@
       </div>
     </div>
 
+    <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--white auk-u-p-0 auk-u-mb-6">
+      <div class="auk-toolbar-complex">
+        <div class="auk-toolbar-complex__left">
+          <div class="auk-toolbar-complex__item">
+            <ul class="auk-tabs">
+              {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
+                    to go back and forth between search results for the different types while keeping the
+                    page-number. --}}
+              <li class="auk-tabs__tab">
+                <LinkTo
+                  @route="search.agenda-items"
+                  @current-when="search.agenda-items"
+                  @activeClass="active"
+                  @query={{hash page=0}}
+                >
+                  <span class="auk-tabs__tab-inner">{{t "agendaitems"}}</span>
+                </LinkTo>
+              </li>
+              <li class="auk-tabs__tab">
+                <LinkTo
+                  @route="search.cases"
+                  @current-when="search.cases"
+                  @activeClass="active"
+                  @query={{hash page=0}}
+                >
+                  <span class="auk-tabs__tab-inner">{{t "cases"}}</span>
+                </LinkTo>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <ul class="vl-tabs">
-      {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
-            to go back and forth between search results for the different types while keeping the
-            page-number. --}}
-      <li class="vl-tab">
-        <LinkTo
-          class="vl-tab__link"
-          @route="search.agenda-items"
-          @current-when="search.agenda-items"
-          @activeClass="active"
-          @query={{hash page=0}}
-        >
-          {{t "agendaitems"}}
-        </LinkTo>
-      </li>
-      <li class="vl-tab">
-        <LinkTo
-          class="vl-tab__link"
-          @route="search.cases"
-          @current-when="search.cases"
-          @activeClass="active"
-          @query={{hash page=0}}
-        >
-          {{t "cases"}}
-        </LinkTo>
-      </li>
-    </ul>
     {{outlet}}
   </div>
 </div>

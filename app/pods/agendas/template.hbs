@@ -1,5 +1,5 @@
 {{page-title (t "agenda-title")}}
-<div class="vl-u-bg-alt">
+<div class="auk-u-bg-alt">
   <div class="vlc-page-header">
     <div class="vlc-toolbar vlc-toolbar--auto">
       <div class="vlc-toolbar__item">
@@ -12,11 +12,16 @@
         {{#if currentSession.isEditor}}
           <div class="vlc-toolbar__item">
             <button data-test-vlc-agenda-createnewagendabutton
-                    type="button"
-                    class="vl-button vl-button--icon-before"
-              {{action "createNewSession"}}>
-              <i class="vl-button__icon vl-button__icon--before ki-add"></i>
-              {{t "new-agenda"}}
+              type="button"
+              class="auk-button auk-button--primary"
+              {{action "createNewSession"}}
+            >
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "new-agenda"}}
+              </div>
             </button>
           </div>
         {{/if}}

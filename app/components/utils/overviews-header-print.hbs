@@ -9,7 +9,7 @@
           <div class="vlc-toolbar vlc-toolbar--auto">
             <div class="vlc-toolbar__left">
               <div class="vlc-toolbar__item">
-                <a href="" class="vlc-backlink vl-link vl-link--bold"
+                <a href="" class="vlc-backlink auk-button-link"
                   {{action "navigateBackToAgenda"}}
                 >
                   {{!-- template-lint-disable no-bare-strings  --}}
@@ -62,18 +62,18 @@
     </div>
     <div class="vlc-toolbar__right">
       <div class="vlc-toolbar__item">
-        <div class="vl-action-group">
-          {{#if shouldShowPrintButton}}
-            <button type="button" class="vl-button vl-button--tertiary vl-button--icon-before"
-              {{action "print"}}
-            >
-              <i class="vl-button__icon vl-button__icon--before ki-printer-view"
-                 aria-hidden="true"
-              ></i>
+        {{#if shouldShowPrintButton}}
+          <button type="button" class="auk-button auk-button--tertiary"
+            {{action "print"}}
+          >
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-printer-view"></i>
+            </div>
+            <div class="auk-button__label">
               {{t "print"}}
-            </button>
-          {{/if}}
-        </div>
+            </div>
+          </button>
+        {{/if}}
       </div>
     </div>
   </div>

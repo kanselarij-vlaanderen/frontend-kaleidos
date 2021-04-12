@@ -2,6 +2,7 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
@@ -98,7 +99,7 @@ Router.map(function() {
   this.route('help');
   this.route('manual', { path: '/handleiding', });
 
-  this.route('auk-styleguide', function() {
+  this.route('styleguide', function() {
     this.route('accordion');
     this.route('alert-skins');
     this.route('alert-types');
@@ -136,27 +137,12 @@ Router.map(function() {
     this.route('upload');
   });
 
-  this.route('styleguide', function() {
-    this.route('alerts');
-    this.route('buttons');
-    this.route('documents');
-    this.route('icons');
-    this.route('inputs');
-    this.route('panels');
-    this.route('pills');
-    this.route('typography');
-    this.route('selects');
-    this.route('brand');
-    this.route('checkbox');
-    this.route('dropdown');
-  });
-
   this.route('search', { path: '/zoeken', }, function() {
     this.route('cases', { path: '/dossiers', });
     this.route('agenda-items', { path: '/agendapunten', });
   });
 
-  if (ENV.APP.ENABLE_PUBLICATIONS_TAB) {
+  if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
       this.route('publication', { path: ':publication_id', }, function() {
         this.route('case', { path: '/dossiers', });

@@ -1,6 +1,6 @@
 <div class="vlc-container-center">
   <div class="auk-u-mt-8 no-print">
-    <h3 class="vl-title vl-title--h3" data-test-print-overview-decisions-title>
+    <h3 class="auk-h2" data-test-print-overview-decisions-title>
       {{await title}}
       <br/>
     </h3>
@@ -17,7 +17,7 @@
                  alt={{t "flemish-government"}}
             />
 
-            <p class="auk-u-text-bold vl-u-text--capitalized">
+            <p class="auk-u-text-bold auk-u-text-capitalized">
               {{await title}}
             </p>
             <hr class="vlc-hr"/>
@@ -26,7 +26,7 @@
         <div style="page-break-after:always;">
           <div class="auk-u-mb-8">
             <div class="auk-u-mb-2">
-              <h3 class="vl-title vl-title--h5">
+              <h3 class="auk-h4">
                 {{agendaitem.number}}
                 .
                 {{agendaitem.shortTitle}}
@@ -35,7 +35,7 @@
                 {{agendaitem.title}}
               </pre>
             </div>
-            <div class="vl-typography">
+            <div class="auk-content">
               <ul>
                 {{#if (gt agendaitem.treatments.length 0)}}
                   {{#each (await agendaitem.treatments) as |treatment|}}
@@ -49,7 +49,7 @@
                     {{else if session.isEditor}}
                       <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--align-end">
                         {{#if allowEditing}}
-                          <a href="" class="vl-link"
+                          <a href="" class="auk-button-link"
                             {{action "toggleIsEditing" treatment}}
                           >
                             {{t "edit"}}
@@ -60,13 +60,13 @@
                   {{/each}}
                 {{else}}
                   <li>
-                    <p class="vl-u-text--muted">
+                    <p class="auk-u-muted">
                       {{t "no-decision"}}
                     </p>
                   </li>
                 {{/if}}
               </ul>
-              <p class="vl-u-text--capitalize">
+              <p class="auk-u-text-capitalize">
                 {{!-- KAS-1420 await nodig ? --}}
                 {{agendaitem.agendaActivity.subcase.subcaseName}}
               </p>

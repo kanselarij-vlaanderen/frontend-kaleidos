@@ -22,7 +22,7 @@
     </span>
     <div class="vlc-agenda-detail-sidebar__text-container">
       <h4 class="vlc-agenda-detail-sidebar__subject">
-        <pre class="vl-u-text-color-agenda-list">
+        <pre class="auk-u-text-pre-line">
           {{#if @agendaitem.shortTitle}}
             {{@agendaitem.shortTitle}}
           {{else}}
@@ -34,7 +34,7 @@
         {{#unless @isActive}}
           {{#if (not @agendaitem.isApproval)}}
             {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="vl-u-text">
+              <pre class="auk-u-text-pre-line">
                 {{@agendaitem.title}}
               </pre>
             {{/if}}
@@ -45,8 +45,8 @@
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
               {{#if @isNew}}
-                <span class="added-tag vlc-agenda-meta__recently-added">
-                  <i class="ki-calendar-plus"></i>
+                <span class="vlc-agenda-meta__recently-added">
+                  <WebComponents::AuIcon @name="calendar-plus" @size="small" />
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
@@ -57,8 +57,8 @@
 
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
-                  <span class="added-tag vlc-agenda-meta__recently-added">
-                    <i class="ki-hide vlc-agenda-detail-sidebar-item__icon--margin-right vlc-u-opacity-50"></i>
+                  <span class="vlc-agenda-meta__recently-added">
+                    <WebComponents::AuIcon @name="hide" @size="small" />
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -86,10 +86,9 @@
               {{/if}}
 
               {{#if this.subcase.confidential}}
-                <i
-                  class="vl-icon ki-lock-closed vlc-u-opacity-50"
-                  data-test-icon-agenda-confidentiality-locked
-                ></i>
+                <span>
+                  <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true"/>
+                </span>
               {{/if}}
             </div>
 
