@@ -280,24 +280,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     });
   }
 
-  @action
-  setNumacNummer(event) {
-    this.newNumacNumber = event.target.value;
+  @task
+  *addNumacNumber() {
+    const numacNumber = yield this.store.createRecord('numac-number', {
+      name: this.newNumacNumber,
+      publicationFlow: this.publicationFlow,
+    });
+    yield numacNumber.save();
+    this.newNumacNumber = '';
   }
 
-  @action
-  async addNumacNumber() {
-    this.set('showLoader', true);
-    await this.publicationService.createNumacNumber(this.newNumacNumber, this.publicationFlow);
-    this.set('newNumacNumber', '');
-    this.set('showLoader', false);
-  }
-
-  @action
-  async deleteNumacNumber(numacNumber) {
-    this.set('showLoader', true);
-    await this.publicationService.unlinkNumacNumber(numacNumber, this.publicationFlow);
-    this.set('showLoader', false);
+  @task
+  *unlinkNumacNumber(numacNumber) {
+    yield numacNumber.destroyRecord();
   }
 
   @action

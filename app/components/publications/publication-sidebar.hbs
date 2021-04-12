@@ -81,7 +81,7 @@
                         @skin="borderless"
                         @icon="close"
                         @layout="icon-only"
-                        {{on "click" (fn this.deleteNumacNumber numac)}}
+                        {{on "click" (perform this.unlinkNumacNumber numac)}}
                         data-test-cases-backlink/>
                     </div>
                   </div>
@@ -92,15 +92,13 @@
             </div>
             <WebComponents::AuInput
               type="text"
-              id="newNumacNumber"
-              value={{mut this.newNumacNumber}}
-              onchange={{action "setNumacNummer"}}
+              @value={{this.newNumacNumber}}
             />
 
             <WebComponents::AuButton
               @skin="borderless"
-              {{on "click"
-               this.addNumacNumber}}>
+              {{on "click" (perform this.addNumacNumber)}}
+            >
               {{t "add"}}
             </WebComponents::AuButton>
           </div>
