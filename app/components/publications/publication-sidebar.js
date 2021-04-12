@@ -138,7 +138,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     } else {
       const publicationStatus = await this.store.findRecord('publication-status', pojoStatus.id);
       this.publicationFlow.set('status', publicationStatus);
-      this.publicationFlow.save();
+      if (this.args.didChange) {
+        await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
+      }
     }
   }
 
@@ -412,7 +414,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   async withdrawPublicationFlow() {
     const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
     this.publicationFlow.set('status', publicationStatus);
-    await this.publicationFlow.save();
+    if (this.args.didChange) {
+      await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
+    }
     this.showConfirmWithdraw = false;
   }
 
