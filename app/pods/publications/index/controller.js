@@ -72,5 +72,4 @@ export default class PublicationsIndexController extends Controller {
     set(tempArr, event.target.name, !tempArr[event.target.name]);
     this.set('filterTableColumnOptionKeys', tempArr);
   }
-
 }
