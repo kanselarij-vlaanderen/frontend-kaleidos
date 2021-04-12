@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationsIndexController extends Controller {
   queryParams = {
@@ -67,16 +68,6 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  async startPublicationFromCaseId(_caseId) {
-    this.showLoader = true;
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
-    this.showLoader = false;
-
-    this.transitionToRoute('publications.publication.case', newPublication.get('id'));
-  }
-
-  @action
   showPublicationModal() {
     this.isShowPublicationModal = true;
   }
@@ -88,7 +79,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
@@ -109,5 +100,45 @@ export default class PublicationsIndexController extends Controller {
     localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
+  }
+
+  @action
+  async getNewPublicationNextNumber() {
+    // Deze query possibly breaks if publication-flows without number exist
+    const publications = await this.store.query('publication-flow', {
+      sort: '-publication-number',
+      size: 1, // we only want the last result
+    });
+    const latestPublication = publications.get('firstObject');
+    if (latestPublication) {
+      return latestPublication.publicationNumber + 1;
+    }
+    // This should only be a "no-data" issue, in that case we have to default to number 1
+    return 1;
+  }
+
+  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
+    const creationDatetime = new Date().getTime();
+    const caze = this.store.createRecord('case', {
+      title,
+      shortTitle,
+      created: creationDatetime,
+    });
+    await caze.save();
+
+    const toPublishStatus = (await this.store.query('publication-status',  {
+      'filter[:id:]': CONFIG.publicationStatusToPublish.id,
+    })).firstObject;
+
+    const publicationFlow = this.store.createRecord('publication-flow', {
+      publicationNumber,
+      publicationSuffix,
+      case: caze,
+      created: creationDatetime,
+      status: toPublishStatus,
+      modified: creationDatetime,
+    });
+    await publicationFlow.save();
+    return publicationFlow;
   }
 }

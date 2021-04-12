@@ -38,7 +38,7 @@ export default class NewPublicationModal extends Component {
 
   @task
   *initPublicationNumber() {
-    this.number = yield this.publicationService.getNewPublicationNextNumber();
+    this.number = yield this.args.getPublicationNumber();
   }
 
   @task
