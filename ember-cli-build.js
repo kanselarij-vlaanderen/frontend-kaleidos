@@ -19,7 +19,13 @@ module.exports = function (defaults) {
       outputFormat: 'L',
       allowEmpty: true,
     },
-
+    outputPaths: {
+      app: {
+        css: {
+          'styleguide': '/assets/styleguide.css'
+        }
+      }
+    },
     'ember-cli-babel': {
       includePolyfill: true,
       plugins: [

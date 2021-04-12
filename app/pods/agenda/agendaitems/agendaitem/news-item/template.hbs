@@ -1,20 +1,20 @@
 <div data-test-agenda-news-item-view>
   <div class="auk-u-mb-4">
     <div class="auk-u-flex auk-u-flex--align-baseline">
-      <h3 class="vl-title vl-title--h3">
+      <h3 class="auk-h2">
         {{t "newsletter-title"}}
       </h3>
       {{#if this.currentSession.isEditor}}
         <div class="auk-u-ml-2">
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
              {{on "click" this.startEditing}}>
               {{t "edit"}}
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="vl-link"
+            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
              {{on "click" this.createAndStartEditing}}>
               {{t "create"}}
             </a>

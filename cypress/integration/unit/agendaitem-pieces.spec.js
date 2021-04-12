@@ -81,11 +81,11 @@ context('Tests of pieces on agendaitems', () => {
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains('VR 2020 1212 DOC.0001-1BIS');
+          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-1BIS');
         });
       cy.get('@docCards').eq(1)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains('VR 2020 1212 DOC.0001-2');
+          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-2');
         });
       cy.openDetailOfAgendaitem(part1Title);
       cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
@@ -100,7 +100,7 @@ context('Tests of pieces on agendaitems', () => {
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
         .within(() => {
-          cy.get('.vl-title--h6 > span').contains('VR 2020 1212 DOC.0001-1');
+          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-1');
         });
       cy.clickReverseTab('Overzicht');
       cy.get(agenda.subcase.agendaLink).click();

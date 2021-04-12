@@ -1,0 +1,93 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Tabs" />
+
+<StyleguideSample
+        @title="Default"
+        @snippet="tabs.hbs"
+>
+  {{!-- BEGIN-SNIPPET tabs --}}
+  <WebComponents::AuTabs>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide.tabs">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+  </WebComponents::AuTabs>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Reversed tabs"
+        @snippet="tabs-reversed.hbs"
+>
+  {{!-- BEGIN-SNIPPET tabs-reversed --}}
+  <WebComponents::AuTabs @reversed="true">
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide.tabs">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+  </WebComponents::AuTabs>
+  {{!-- END-SNIPPET tabs-reversed --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Tabs with icon"
+        @snippet="tabs-icon.hbs"
+>
+  {{!-- BEGIN-SNIPPET tabs-icon --}}
+  <WebComponents::AuTabs>
+    <WebComponents::AuTab @route="styleguide" @icon="search">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide.tabs" @icon="search">Nav Item</WebComponents::AuTab>
+  </WebComponents::AuTabs>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Tabs icon right"
+        @snippet="tabs-icon-right.hbs"
+>
+  {{!-- BEGIN-SNIPPET tabs-icon-right --}}
+  <WebComponents::AuTabs>
+    <WebComponents::AuTab @route="styleguide" @icon="search" @layout="icon-right">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</WebComponents::AuTab>
+  </WebComponents::AuTabs>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Tabs counter"
+        @snippet="tabs-counter.hbs"
+>
+  {{!-- BEGIN-SNIPPET tabs-counter --}}
+  <WebComponents::AuTabs>
+    <WebComponents::AuTab @route="styleguide" @counter="3">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide.tabs" @counter="12">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+  </WebComponents::AuTabs>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>@icon</td>
+    <td>string</td>
+    <td>name of the icon, see <LinkTo @route="styleguide.icons">list</LinkTo></td>
+    <td>Displays the tab with an icon</td>
+  </tr>
+  <tr>
+    <td>@layout</td>
+    <td>string</td>
+    <td><code>icon-right</code></td>
+    <td>Positions the icon on the right</td>
+  </tr>
+  </tbody>
+</table>

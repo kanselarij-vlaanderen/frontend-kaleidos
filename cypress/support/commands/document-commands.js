@@ -22,7 +22,7 @@ import modal from '../../selectors/modal.selectors';
  */
 function addNewDocumentsInUploadModal(files, model) {
   cy.log('addNewDocumentsInUploadModal');
-  cy.get('.vl-modal-dialog').as('fileUploadDialog');
+  cy.get('.auk-modal').as('fileUploadDialog');
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
@@ -36,7 +36,7 @@ function addNewDocumentsInUploadModal(files, model) {
           if (file.newFileName) {
             cy.get('.vlc-input-field-block').eq(0)
               .within(() => {
-                cy.get('.vl-input-field').clear()
+                cy.get('.auk-input').clear()
                   .type(file.newFileName);
               });
           }
@@ -48,7 +48,7 @@ function addNewDocumentsInUploadModal(files, model) {
         cy.get('.vl-uploaded-document').eq(index)
           .within(() => {
             cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-            cy.get('.vlc-input-field-block').eq(1)
+            cy.get('.vlc-input-field-block')
               .within(($t) => {
                 if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
                   cy.get('input[type="radio"]').check(file.fileType, {
@@ -83,7 +83,7 @@ function addNewDocumentsInUploadModal(files, model) {
   cy.route('GET', '/submission-activities?filter**').as(`getSubmissionActivity_${randomInt}`);
   cy.route('GET', `/pieces?filter\\[${model}\\]\\[:id:\\]=*`).as(`loadPieces${model}`);
   cy.get('@fileUploadDialog').within(() => {
-    cy.get('.vl-button').contains('Documenten toevoegen')
+    cy.get('.auk-button').contains('Documenten toevoegen')
       .click();
   });
   cy.wait('@createNewDocumentContainer', {
@@ -133,7 +133,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     }
   }
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(oldFileName, {
@@ -310,7 +310,7 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
   // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
   // cy.route('GET', '/pieces?filter\\[agendaitem\\]\\[:id:\\]=*').as('loadPieces');
   // cy.get('@fileUploadDialog').within(() => {
-  //   cy.get('.vl-button').contains('Documenten toevoegen')
+  //   cy.get('.auk-button').contains('Documenten toevoegen')
   //     .click();
   // });
   // cy.wait('@createNewDocumentContainer', {
@@ -448,7 +448,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.route('POST', 'pieces').as(`createNewPiece_${randomInt}`);
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(oldFileName, {
@@ -497,7 +497,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
   filenames.forEach((name) => {
     cy.get(document.searchForLinkedDocumentsInput).type(name);
     cy.wait(1000);
-    cy.get('.vl-modal .data-table [data-test-vl-checkbox-label]').click({
+    cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
     cy.get(document.searchForLinkedDocumentsInput).clear();
@@ -519,7 +519,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
   cy.route('PUT', '/agendaitems/**/pieces/restore').as('putRestoreAgendaitems');
   cy.log('deleteSinglePiece');
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(fileName, {
@@ -563,7 +563,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
 function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
   cy.log('isPieceDeletable');
 
-  cy.get('.vlc-document-card__content .vl-title--h6', {
+  cy.get('.vlc-document-card__content .auk-h4', {
     timeout: 12000,
   })
     .contains(fileName, {

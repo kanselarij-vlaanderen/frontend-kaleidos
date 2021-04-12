@@ -16,24 +16,4 @@
   ul li:first-child {
     margin-top: 1rem;
   }
-
-  .vl-checkbox {
-    &__toggle {
-      &:indeterminate {
-          + .vl-checkbox__label {
-            .vl-checkbox__box {
-              &::before {
-                transform: translateZ(0) translate(-50%, -50%) scale(1);
-                content: url("data:image/svg+xml, %3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 8H11.8' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
-              }
-              &::after {
-                background: $action-color;
-                color: $action-color;
-                border: 0.1rem $action-color solid;
-              }
-            }
-          }
-        }
-    }
-  }
 }

@@ -1,13 +1,13 @@
 {{#light-table
   table
-  tableClassNames="vl-data-table vl-data-table vl-data-table--hover vl-data-table--zebra"
+  tableClassNames="auk-table auk-table auk-table--hover auk-table--striped"
 as |tab|
 }}
   {{tab.head
     onColumnClick=(action "onColumnClick")
-    iconSortable="vl-data-table__header-title__sort-icon ki-expand-vertical"
-    iconAscending="vl-data-table__header-title__sort-icon ki-arrow-down"
-    iconDescending="vl-data-table__header-title__sort-icon ki-arrow-up"
+    iconSortable="auk-table__header-title__sort-icon ki-expand-vertical"
+    iconAscending="auk-table__header-title__sort-icon ki-arrow-down"
+    iconDescending="auk-table__header-title__sort-icon ki-arrow-up"
   }}
   {{#tab.body
     canExpand=true
@@ -24,10 +24,12 @@ as |tab|
   {{/tab.body}}
 {{/light-table}}
 {{#if isScrolling}}
-  <button type="button" class="vl-button vl-button--secondary vl-button--icon">
-    <i class="vl-button__icon ki-add" aria-hidden="true"></i>
-    <span class="vl-u-visually-hidden">
+  <button type="button" class="auk-button auk-button--secondary auk-button--icon">
+    <div class="auk-icon auk-icon--default">
+      <i class="ki ki-add"></i>
+    </div>
+    <div class="auk-u-sr-only">
       {{t "back"}}
-    </span>
+    </div>
   </button>
 {{/if}}

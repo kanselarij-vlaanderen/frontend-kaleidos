@@ -3,18 +3,18 @@
 </h2>
 {{#if (not (is-pending hasActiveAgendas))}}
   {{#if (await hasActiveAgendas)}}
-    <table class="data-table vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+    <table class="data-table auk-table auk-table--striped"
            data-test-future-agenda-table>
       <thead>
         <tr>
-          <th class="vl-data-table-col-3 vl-data-table__header-title table-header-unsortable">
+          <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
             <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
                 {{t "agenda"}}
               </span>
             </div>
           </th>
-          <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
@@ -22,7 +22,7 @@
               </span>
             </div>
           </th>
-          <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
@@ -30,7 +30,7 @@
               </span>
             </div>
           </th>
-          <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
@@ -38,7 +38,7 @@
               </span>
             </div>
           </th>
-          <th class="vl-data-table-col-2 vl-data-table__header-title table-header-unsortable"
+          <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             <div class="auk-u-flex auk-u-flex--vertical-center">
               <span>
@@ -46,17 +46,16 @@
               </span>
             </div>
           </th>
-          <th class="vl-data-table-col-1"></th>
+          <th class="auk-table__col--1"></th>
         </tr>
       </thead>
-      <tbody class="tr-hover" data-test-future-agenda-table-body>
+      <tbody class="auk-table--interaction-cursor" data-test-future-agenda-table-body>
         {{#each (await items) as |meeting|}}
           {{#link-to
             "agenda.agendaitems"
             meeting.id
             meeting.latestAgenda.id
             tagName="tr"
-            classNames="tr-hover"
           }}
             <td>
               {{#if (is-pending meeting)}}
@@ -100,10 +99,12 @@
                 "agenda.agendaitems"
                 meeting.id
                 meeting.latestAgenda.id
-                class="vl-button vl-button--link vl-button--icon"
+                class="auk-button auk-button--borderless auk-button--icon"
                 bubbles=false
               }}
-                <i class="vl-button__icon ki-nav-right"></i>
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-nav-right"></i>
+                </div>
               {{/link-to}}
             </td>
           {{/link-to}}

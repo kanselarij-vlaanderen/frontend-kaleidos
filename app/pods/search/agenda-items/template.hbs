@@ -4,23 +4,27 @@
 <div class="auk-o-grid auk-u-mb-2">
   <div class="auk-o-grid-col-2">
     <div class="vlc-box">
-      <WebComponents::VlFormLabel @value="Type"/>
-      <WebComponents::VlCheckbox
-        @value={{this.includeNotas}}
-        @label="Nota"
-        @toggle={{this.toggleIncludeNotas}}
-      />
-      <WebComponents::VlCheckbox
-        @value={{this.includeMededelingen}}
-        @label="Mededeling"
-        @toggle={{this.toggleIncludeMededelingen}}
-      />
-      <WebComponents::VlFormLabel @value={{t "version"}}/>
-      <WebComponents::VlCheckbox
-        @value={{this.latestOnly}}
-        @label={{t "only-on-final-agenda"}}
-        @toggle={{this.toggleLatestOnly}}
-      />
+      <div class="auk-u-mb-2">
+        <WebComponents::AuLabel>{{t "type"}}</WebComponents::AuLabel>
+        <WebComponents::VlCheckbox
+          @value={{this.includeNotas}}
+          @label="Nota"
+          @toggle={{this.toggleIncludeNotas}}
+        />
+        <WebComponents::VlCheckbox
+          @value={{this.includeMededelingen}}
+          @label="Mededeling"
+          @toggle={{this.toggleIncludeMededelingen}}
+        />
+      </div>
+      <div>
+        <WebComponents::AuLabel>{{t "version"}}</WebComponents::AuLabel>
+        <WebComponents::VlCheckbox
+          @value={{this.latestOnly}}
+          @label={{t "only-on-final-agenda"}}
+          @toggle={{this.toggleLatestOnly}}
+        />
+      </div>
     </div>
   </div>
   <div class="auk-o-grid-col-10">
@@ -32,31 +36,31 @@
           @noDataMessage={{t "no-results-found"}}
           @size={{this.size}}
           @sort={{this.sort}}
-          @class="vl-data-table vl-data-table--zebra vl-data-table--align-middle"
+          @class="auk-table auk-table--striped"
           @isLoading={{this.isLoadingModel}}
           @onClickRow={{this.navigateToAgendaitem}}
         as |table|
         >
           <table.content as |c|>
             <c.header>
-              <th class="vl-data-table-col-7 vl-data-table__header-title">
+              <th class="auk-table__col--7 auk-table__header-title">
                 {{t "agendaitem-table-header"}}
               </th>
-              <th class="vl-data-table-col-1 vl-data-table__header-title">
+              <th class="auk-table__col--1 auk-table__header-title">
                 {{t "agendaitem-type"}}
               </th>
-              <th class="vl-data-table-col-1 vl-data-table__header-title">
+              <th class="auk-table__col--1 auk-table__header-title">
                 {{t "agenda-version"}}
               </th>
               <ThSortable
-                @class="vl-data-table-col-1 vl-data-table__header-title"
+                @class="auk-table__col--1 auk-table__header-title"
                 @currentSorting={{this.sort}}
                 @field="sessionDates"
                 @label={{t "on-agenda-of"}}
               />
-              <th class="vl-data-table-col-1"></th>
+              <th class="auk-table__col--1"></th>
             </c.header>
-            <c.body class="tr-hover" as |row|>
+            <c.body class="auk-table--interaction-cursor" as |row|>
               <td>
                 <p>
                   {{#if row.shortTitle}}
@@ -86,11 +90,13 @@
               <td class="auk-u-text-align--right">
                 <LinkTo
                   data-test-trigger-search
-                  class="vl-button vl-button--link vl-button--icon"
+                  class="auk-button auk-button--borderless auk-button--icon"
                   @route="agenda.agendaitems.agendaitem"
                   @models={{array row.meetingId row.agendaId row.id}}
                 >
-                  <i class="vl-button__icon ki-nav-right"></i>
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-nav-right"></i>
+                  </div>
                 </LinkTo>
               </td>
             </c.body>

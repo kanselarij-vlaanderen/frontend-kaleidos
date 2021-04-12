@@ -6,7 +6,7 @@
   }}
 {{/if}}
 {{#if isResigning}}
-  <div class="vl-modal-dialog__content">
+  <div class="auk-modal__content">
     {{#if showVerificationPopup}}
       {{changes-alert
         data-test-manage-mandatee-changes-alert=true
@@ -16,11 +16,11 @@
       }}
     {{/if}}
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "end-date")}}
+      <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
     </div>
     <div class="vlc-input-field-block">
-      {{web-components/vl-form-label value=(t "new-person")}}
+      <WebComponents::AuLabel>{{t "new-person"}}</WebComponents::AuLabel>
       {{utils/create-person-selector
         selectedItems=selectedPerson
         selectModel=(action "personSelected")
@@ -29,7 +29,7 @@
 
     {{#if selectedPerson}}
       <div class="vlc-input-field-block">
-        {{web-components/vl-form-label value=(t "start-date")}}
+        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
         {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
       </div>
     {{/if}}

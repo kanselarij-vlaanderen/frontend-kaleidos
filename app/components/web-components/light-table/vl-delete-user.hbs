@@ -1,8 +1,10 @@
-<button type="button" data-test-delete-user class="vl-button vl-button--link vl-button--icon vlc-link-pointer" {{action "toggleIsVerifying" bubbles=false}}>
-  <i class="ki-delete" aria-hidden="true"></i>
-  <span class="vl-u-visually-hidden">
+<button type="button" data-test-delete-user class="auk-button auk-button--borderless auk-button--icon vlc-link-pointer" {{action "toggleIsVerifying" bubbles=false}}>
+  <div class="auk-icon auk-icon--default">
+    <i class="ki ki-delete"></i>
+  </div>
+  <div class="auk-u-sr-only">
     {{t "delete"}}
-  </span>
+  </div>
 </button>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify

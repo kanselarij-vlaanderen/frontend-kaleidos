@@ -12,7 +12,7 @@
   @autocomplete="off"
 />
 {{#if this.isShowingResults}}
-  <div class="autocomplete-results auk-search-results-list">
+  <div id={{this.resultListId}} class="autocomplete-results auk-search-results-list">
     {{#each this.searchResults as |result|}}
       <WebComponents::AuDropdown::Item @class="auk-search-results-list__item">
         <LinkTo

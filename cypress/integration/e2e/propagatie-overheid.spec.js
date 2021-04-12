@@ -60,7 +60,7 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.accessLevelSave).click();
 
     cy.contains('Wijzigen').click();
-    cy.get('.vl-form__group').as('editDecision');
+    cy.get('.vlc-box').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
@@ -104,7 +104,7 @@ context('Propagation to other graphs', () => {
     cy.get(agenda.agendaitemDecisionTab).click();
     cy.get(document.documentCard).eq(0)
       .within(() => {
-        cy.get('.vl-title--h6 > span').contains(file.fileName);
+        cy.get('.auk-h4 > span').contains(file.fileName);
       });
     cy.get(agenda.agendaitemDocumentsTab).click();
     cy.get('.vlc-scroll-wrapper__body').within(() => {

@@ -5,7 +5,7 @@ import moment from 'moment';
 import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
 export default Component.extend({
-  classNames: ['vlc-page-header', 'vl-u-bg-alt', 'no-print'],
+  classNames: ['vlc-page-header', 'auk-u-bg-alt', 'no-print'],
 
   intl: service(),
   store: service(),

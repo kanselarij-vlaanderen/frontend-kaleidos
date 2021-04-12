@@ -5,6 +5,7 @@
 // Commands
 
 import cases from '../../selectors/case.selectors';
+import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 
@@ -69,7 +70,7 @@ function openSubcase(index = 0) {
   cy.get('@subcasesList').eq(index)
     .within(() => {
       cy.wait(1000); // sorry, link is not loaded most of the time
-      cy.get('.vl-title').eq(0)
+      cy.get('.auk-h4').eq(0)
         .click();
     });
   // cy.wait('@getCaseSubcases', { timeout: 12000 });
@@ -94,13 +95,13 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
   cy.log('changeSubcaseAccessLevel');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get('.vl-title--h4').contains(shortTitle)
+  cy.get('.auk-h3').contains(shortTitle)
     .parents('.auk-u-mb-8')
     .within(() => {
       cy.get('a').click();
     });
 
-  cy.get('.vl-form__group').as('subcaseAccessLevel');
+  cy.get('.vlc-box').as('subcaseAccessLevel');
 
   if (accessLevel) {
     cy.get('@subcaseAccessLevel').within(() => {
@@ -120,7 +121,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
       if (newLongTitle) {
         cy.get('@editCaseForm').eq(2)
           .within(() => {
-            cy.get('.vl-textarea').click()
+            cy.get('.auk-textarea').click()
               .clear()
               .type(newLongTitle);
           });
@@ -133,13 +134,13 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     if (confidentialityChange) {
       cy.get('@editCaseForm').eq(0)
         .within(() => {
-          cy.get('.vl-checkbox--switch__label').click();
+          cy.get('.vl-toggle__label').click();
         });
     }
     if (newShortTitle) {
       cy.get('@editCaseForm').eq(1)
         .within(() => {
-          cy.get('.vl-textarea').click()
+          cy.get('.auk-textarea').click()
             .clear()
             .type(newShortTitle);
         });
@@ -147,13 +148,13 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     if (newLongTitle) {
       cy.get('@editCaseForm').eq(2)
         .within(() => {
-          cy.get('.vl-textarea').click()
+          cy.get('.auk-textarea').click()
             .clear()
             .type(newLongTitle);
         });
     }
 
-    cy.get('.vl-action-group > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .auk-button')
       .contains('Opslaan')
       .click();
   });
@@ -174,27 +175,27 @@ function addSubcaseThemes(themes) {
   cy.log('addSubcaseThemes');
   cy.route('GET', '/themes').as('getThemes');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
-  cy.get('.vl-title--h4').contains('Thema\'s')
+  cy.get('.auk-h3').contains('Thema\'s')
     .parents('.auk-u-mb-8')
     .as('subcaseTheme');
 
   cy.get('@subcaseTheme').within(() => {
     cy.get('a').click();
     // cy.wait('@getThemes', { timeout: 12000 });
-    cy.get('.vl-checkbox', {
+    cy.get('.auk-checkbox', {
       timeout: 12000,
     }).should('exist')
       .end();
     themes.forEach((element) => {
       if (Number.isNaN(element)) {
-        cy.get('.vl-checkbox').contains(element)
+        cy.get('.auk-checkbox').contains(element)
           .click();
       } else {
-        cy.get('.vl-checkbox').eq(element)
+        cy.get('.auk-checkbox').eq(element)
           .click();
       }
     });
-    cy.get('.vl-action-group > .vl-button')
+    cy.get('.auk-toolbar-complex__item > .auk-button')
       .contains('Opslaan')
       .click();
   });
@@ -276,9 +277,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
           .click();
       });
   }
-  cy.get('.vlc-toolbar').within(() => {
-    cy.contains('Toevoegen').click();
-  });
+  cy.get(modal.modalFooterSaveButton).click();
   cy.get(mandatee.mandateePanelEdit.actions.save)
     .contains('Opslaan')
     .click();
@@ -330,10 +329,10 @@ function proposeSubcaseForAgenda(agendaDate) {
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
   cy.get('.vlc-page-header').within(() => {
-    cy.get('.vl-button', {
+    cy.get('.auk-button', {
       timeout: 12000,
     }).should('have.length', 2);
-    cy.get('.vl-button').contains('Indienen voor agendering')
+    cy.get('.auk-button').contains('Indienen voor agendering')
       .should('exist')
       .click();
   });
@@ -367,14 +366,14 @@ function proposeSubcaseForAgenda(agendaDate) {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get('.vl-button--icon-before')
+  cy.get('.auk-button')
     .contains('Acties')
     .click();
   cy.get(cases.deleteSubcase)
     .contains('Procedurestap verwijderen')
     .click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('button').contains('Verwijderen')
         .click();

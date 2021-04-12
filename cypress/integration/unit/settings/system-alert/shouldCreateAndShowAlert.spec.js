@@ -1,7 +1,8 @@
 /* global context, it, cy,before,beforeEach */
 // / <reference types="Cypress" />
-import * as alert from '../../../../selectors/system-wide/alert.selectors';
-import * as systemAlert from '../../../../selectors/settings/system-alert.selectors';
+import alert from '../../../../selectors/system-wide/alert.selectors';
+import systemAlert from '../../../../selectors/settings/system-alert.selectors';
+import form from '../../../../selectors/form.selectors';
 
 const ALERT_POLL_INTERVAL = 70000;
 
@@ -26,7 +27,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(systemAlert.formFields.message).type('System alert message');
 
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.get('[data-test-save-button]').click();
+    cy.get(form.formSave).click();
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
@@ -41,7 +42,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
 
-    cy.get(alert.alertMessageCloseButton).each((button) => {
+    cy.get(alert.closeButton).each((button) => {
       button.click();
     });
     cy.get(systemAlert.alert).should('not.exist');
@@ -62,7 +63,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get('[data-test-vl-modal-dialogwindow] .vlc-input-field-block').click();
     cy.get('.ember-power-select-option').click();
     cy.route('GET', '/alerts**').as('getAlerts');
-    cy.get('[data-test-remove-system-alert]').click();
+    cy.get(systemAlert.managementModal.remove).click();
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
