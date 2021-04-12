@@ -19,6 +19,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
+   * @argument didChange: should take arguments (modifiedObject, keyName, newValue)
    */
   @service store;
   @service intl;
@@ -415,8 +416,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @restartableTask
   *setRemark(event) {
-    this.publicationFlow.set('remark', event.target.value);
+    const newValue = event.target.value;
+    this.publicationFlow.set('remark', newValue);
     yield timeout(1000);
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'remark', newValue);
+    }
   }
 }

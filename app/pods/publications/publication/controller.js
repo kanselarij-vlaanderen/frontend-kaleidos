@@ -40,6 +40,11 @@ export default class PublicationController extends Controller {
     this.sidebarIsOpen = !this.sidebarIsOpen;
   }
 
+  @action
+  saveSidebarProperty(modifiedObject) {
+    modifiedObject.save();
+  }
+
   get showStatusForTranslations() {
     const totalTranslations = this.model.counts.totalTranslations;
     const closedOrWithdrawn = this.model.counts.closedOrWithdrawnTranslationRequests;
