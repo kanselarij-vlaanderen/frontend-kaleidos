@@ -4,6 +4,7 @@ import {
   set
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationsIndexController extends Controller {
   @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
@@ -43,6 +44,7 @@ export default class PublicationsIndexController extends Controller {
   };
 
   sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+  urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked page = 0;
   @tracked size = 25;
@@ -70,4 +72,5 @@ export default class PublicationsIndexController extends Controller {
     set(tempArr, event.target.name, !tempArr[event.target.name]);
     this.set('filterTableColumnOptionKeys', tempArr);
   }
+
 }

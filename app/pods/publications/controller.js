@@ -97,7 +97,6 @@ export default class PublicationsController extends Controller {
     this.isShowPublicationFilterModal = true;
   }
 
-
   get shouldShowPublicationHeader() {
     return this.routing.currentRouteName.startsWith('publications.index');
   }

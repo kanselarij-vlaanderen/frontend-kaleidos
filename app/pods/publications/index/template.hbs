@@ -299,10 +299,9 @@
             {{/if}}
           </td>
         {{/if}}
-
         {{#if this.filterTableColumnOptionKeys.speedProcedureFilterOption}}
           <td class="auk-u-text-align--center">
-            {{#if row.hasUrgencyLevel}}
+            {{#if (eq row.urgencyLevel.uri urgencyLevels.spoedprocedure)}}
               <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
               <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
                 <p>

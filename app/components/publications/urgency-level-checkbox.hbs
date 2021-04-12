@@ -1,5 +1,5 @@
 <div class="auk-form-group">
-  {{#if this.urgencyLevels}}
+  {{#if loadData.last.isSuccessful}}
     <WebComponents::VlCheckbox
             @value={{this.checkboxValue}}
             @toggle={{this.toggleUrgency}}

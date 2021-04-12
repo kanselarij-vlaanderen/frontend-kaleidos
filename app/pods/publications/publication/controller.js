@@ -75,7 +75,6 @@ export default class PublicationController extends Controller {
     return this.model.regulationTypes;
   }
 
-
   @action
   setRegulationType(regulationType) {
     this.model.publicationFlow.set('regulationType', regulationType);
@@ -308,7 +307,7 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  toggleUrgencyLevel(urgencyLevel) {
+  setUrgencyLevel(urgencyLevel) {
     this.model.publicationFlow.urgencyLevel = urgencyLevel;
     this.model.publicationFlow.save();
   }
