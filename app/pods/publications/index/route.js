@@ -1,11 +1,10 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { dasherize } from '@ember/string';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
-export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class PublicationsIndexRoute extends Route {
   queryParams = {
     page: {
       refreshModel: true,
@@ -21,30 +20,33 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
     },
   }
 
+  beforeModel() {
+    this.publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
+  }
+
   async model(params) {
-    const publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
     const ids = [];
     let ministerFilter = {};
 
-    if (publicationFilter.publishedFilterOption) {
+    if (this.publicationFilter.publishedFilterOption) {
       ids.push(CONFIG.publicationStatusPublished.id);
     }
-    if (publicationFilter.pausedFilterOption) {
+    if (this.publicationFilter.pausedFilterOption) {
       ids.push(CONFIG.publicationStatusPauzed.id);
     }
-    if (publicationFilter.withdrawnFilterOption) {
+    if (this.publicationFilter.withdrawnFilterOption) {
       ids.push(CONFIG.publicationStatusWithdrawn.id);
     }
-    if (publicationFilter.toPublishFilterOption) {
+    if (this.publicationFilter.toPublishFilterOption) {
       ids.push(CONFIG.publicationStatusToPublish.id);
     }
-    if (!(publicationFilter.ministerFilterOption && publicationFilter.notMinisterFilterOption)) {
-      if (publicationFilter.ministerFilterOption) {
+    if (!(this.publicationFilter.ministerFilterOption && this.publicationFilter.notMinisterFilterOption)) {
+      if (this.publicationFilter.ministerFilterOption) {
         ministerFilter = {
           ':has:subcases': 'yes',
         };
       }
-      if (publicationFilter.notMinisterFilterOption) {
+      if (this.publicationFilter.notMinisterFilterOption) {
         ministerFilter = {
           ':has-no:subcases': 'yes',
         };
@@ -77,7 +79,7 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
       }
       // note that the "dasherize" here is used in order to keep the original column keyName's
       if (qpSort === dasherize('publicationNumber')) {
-        // Specifically requested by Johan, because Suffix needs to be string and Quater...
+        // show the most recent publication first if publication-number is the same
         apiSort = 'publication-number,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
@@ -107,16 +109,5 @@ export default class PublicationsIndexRoute extends Route.extend(AuthenticatedRo
   @action
   refreshModel() {
     this.refresh();
-  }
-
-  @action
-  refresh() {
-    super.refresh();
-  }
-
-  setupController(controller, model) {
-    super.setupController(controller, model);
-    const params = this.paramsFor('publications.index');
-    controller.page = params.page;
   }
 }
