@@ -51,7 +51,7 @@
           @enter={{fn this.search}}
         />
       </div>
-      <div class="vlc-input-field-block auk-o-grid-col-2">
+      <div class="vlc-input-field-block auk-o-grid-col-2 auk-u-position-relative">
         <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
@@ -61,7 +61,7 @@
           <button
             data-test-searchbutton
             type="button"
-            class="auk-button auk-button--muted-borderless vlc-button-in-input auk-button--icon"
+            class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
             {{on "click" (fn (mut this.dateFromBuffer) null)}}
           >
             <div class="auk-icon auk-icon--default">
@@ -70,7 +70,7 @@
           </button>
         {{/if}}
       </div>
-      <div class="vlc-input-field-block auk-o-grid-col-2">
+      <div class="vlc-input-field-block auk-o-grid-col-2 auk-u-position-relative">
         <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
@@ -79,7 +79,7 @@
         {{#if this.dateToBuffer}}
           <button
             type="button"
-            class="vlc-button-in-input auk-button auk-button--muted-borderless auk-button--icon"
+            class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
             {{on "click" (fn (mut this.dateToBuffer) null)}}
           >
             <div class="auk-icon auk-icon--default">
