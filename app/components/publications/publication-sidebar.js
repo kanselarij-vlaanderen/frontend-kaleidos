@@ -128,12 +128,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  async setPublicationStatus(status) {
+  async setPublicationStatus(pojoStatus) {
     if (status.id === CONFIG.publicationStatusWithdrawn.id) {
       // Show popup and do nothing.
       this.showConfirmWithdraw = true;
     } else {
-      this.publicationFlow.set('status', status);
+      const publicationStatus = await this.store.findRecord('publication-status', pojoStatus.id);
+      this.publicationFlow.set('status', publicationStatus);
       this.publicationFlow.save();
     }
   }
