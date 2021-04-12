@@ -144,6 +144,21 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
+  @action
+  cancelWithdraw() {
+    this.showConfirmWithdraw = false;
+  }
+
+  @action
+  async withdrawPublicationFlow() {
+    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
+    this.publicationFlow.set('status', publicationStatus);
+    if (this.args.didChange) {
+      await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
+    }
+    this.showConfirmWithdraw = false;
+  }
+
   get getTranslationDate() {
     if (!this.publicationFlow.get('translateBefore')) {
       return null;
@@ -399,25 +414,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  @action
-  cancelWithdraw() {
-    this.showConfirmWithdraw = false;
-  }
-
   // Overwrite from datepicker cant be renamed
   @action
   toggle() {
     this.showPicker = !this.showPicker;
-  }
-
-  @action
-  async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
-    this.publicationFlow.set('status', publicationStatus);
-    if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
-    }
-    this.showConfirmWithdraw = false;
   }
 
   @restartableTask
