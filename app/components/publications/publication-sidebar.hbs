@@ -195,3 +195,33 @@
     </div>
   {{/if}}
 </WebComponents::AuSidebar>
+
+{{#if this.showConfirmWithdraw}}
+  <WebComponents::AuModal @size="small">
+    <WebComponents::AuModal::Header
+            @title={{t "discharge-publication"}}
+            @hideCloseButton={{true}}
+    />
+    <WebComponents::AuModal::Body>
+      {{t "discharge-publication-flow-confirm"}}
+    </WebComponents::AuModal::Body>
+    <WebComponents::AuModal::Footer @custom={{true}}>
+      <WebComponents::AuToolbar>
+        <WebComponents::AuToolbar::Group @position="left"n>
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelWithdraw}}>
+              {{t "cancel"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
+              {{t "discharge"}}
+            </WebComponents::AuButton>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </WebComponents::AuModal::Footer>
+  </WebComponents::AuModal>
+{{/if}}

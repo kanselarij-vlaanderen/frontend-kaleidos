@@ -36,6 +36,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
+  @tracked showConfirmWithdraw = false;
+
   @lastValue('loadRegulationTypes') regulationTypes;
 
   statusOptions = [
@@ -130,7 +132,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async setPublicationStatus(pojoStatus) {
-    if (status.id === CONFIG.publicationStatusWithdrawn.id) {
+    if (pojoStatus.id === CONFIG.publicationStatusWithdrawn.id) {
       // Show popup and do nothing.
       this.showConfirmWithdraw = true;
     } else {

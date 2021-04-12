@@ -9,7 +9,6 @@ export default class PublicationController extends Controller {
   @service media;
 
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
-  @tracked showConfirmWithdraw = false;
   @tracked showLoader = false;
 
   get casePath() {
