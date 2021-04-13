@@ -11,13 +11,13 @@
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
               {{#if (await agendaitem.checkAdded)}}
-                <WebComponents::AuIcon @name="calendar-plus" @iconSkinColor="muted"/>
+                <WebComponents::AuIcon @name="calendar-new" @iconSkinColor="muted"/>
               {{/if}}
               {{!-- This does not seem to work properly without the #let, newsletterInfo.inNewsletter is undefined --}}
               {{#if (await agendaitem.newsletterInfo)}}
                 {{#let (await agendaitem.newsletterInfo) as |newsletterInfo|}}
                   {{#if (eq (await newsletterInfo.inNewsletter) false)}}
-                    <WebComponents::AuIcon @name="hide" @iconSkinColor="muted"/>
+                    <WebComponents::AuIcon @name="not-visible" @iconSkinColor="muted"/>
                   {{/if}}
                 {{/let}}
               {{/if}}
