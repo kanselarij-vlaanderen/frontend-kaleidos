@@ -102,23 +102,8 @@ export default class PublicationsIndexController extends Controller {
     this.send('refreshModel');
   }
 
-  @action
-  async getNewPublicationNextNumber() {
-    // Deze query possibly breaks if publication-flows without number exist
-    const publications = await this.store.query('publication-flow', {
-      sort: '-publication-number',
-      size: 1, // we only want the last result
-    });
-    const latestPublication = publications.get('firstObject');
-    if (latestPublication) {
-      return latestPublication.publicationNumber + 1;
-    }
-    // This should only be a "no-data" issue, in that case we have to default to number 1
-    return 1;
-  }
-
   async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
-    const creationDatetime = new Date().getTime();
+    const creationDatetime = new Date();
     const caze = this.store.createRecord('case', {
       title,
       shortTitle,
@@ -126,9 +111,9 @@ export default class PublicationsIndexController extends Controller {
     });
     await caze.save();
 
-    const toPublishStatus = (await this.store.query('publication-status',  {
+    const toPublishStatus = (await this.store.queryOne('publication-status',  {
       'filter[:id:]': CONFIG.publicationStatusToPublish.id,
-    })).firstObject;
+    }));
 
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,

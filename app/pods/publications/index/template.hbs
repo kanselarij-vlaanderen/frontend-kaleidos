@@ -33,7 +33,6 @@
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     {{#if this.isShowPublicationModal}}
       <Publications::NewPublicationModal
-        @getPublicationNumber={{this.getNewPublicationNextNumber}}
         @onCancel={{this.closePublicationModal}}
         @onSave={{this.saveNewPublication}} />
     {{/if}}
