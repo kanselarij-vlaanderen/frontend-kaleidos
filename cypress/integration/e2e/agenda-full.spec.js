@@ -119,7 +119,7 @@ context('Full test', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     cy.clickReverseTab('Overzicht');
-    cy.addAgendaitemToAgenda();
+    cy.addAgendaitemToAgenda(); // TODO don't just pick a random subcase to add.
     cy.setFormalOkOnItemWithIndex(3); // new agendaitem
     cy.approveDesignAgenda();
     // #endregion
