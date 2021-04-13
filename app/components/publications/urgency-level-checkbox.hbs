@@ -1,7 +1,7 @@
 <div class="auk-form-group">
   {{#unless this.loadData.isRunning}}
     <WebComponents::VlCheckbox
-            @value={{this.checkboxValue}}
+            @value={{this.isUrgent}}
             @toggle={{this.toggleUrgency}}
             @label={{t "priority-procedure"}}/>
   {{/unless}}
