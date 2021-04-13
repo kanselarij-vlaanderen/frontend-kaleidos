@@ -21,14 +21,14 @@ export default class AgendaitemTitles extends Component {
     this.loadCase.perform();
   }
 
-  @action
-  toggleIsEditingAction() {
-    this.args.toggleIsEditing();
-  }
-
   @task
   *loadCase() {
     const _case = yield this.args.subcase.case;
     return _case;
+  }
+
+  @action
+  startEditing() {
+    this.args.toggleIsEditing();
   }
 }
