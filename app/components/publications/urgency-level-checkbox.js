@@ -21,22 +21,14 @@ export default class UrgencyLevelCheckboxComponent extends Component {
   @task
   *loadData() {
     this.urgencyLevels = yield this.store.query('urgency-level', {});
-    this.initializeUrgency(this.args.urgencyLevel);
-  }
-
-  initializeUrgency(urgencylevel) {
-    if (urgencylevel.get('uri') === CONFIG.URGENCY_LEVELS.spoedprocedure) {
-      this.checkboxValue = true;
-    } else {
-      this.checkboxValue = false;
-    }
+    const urgencyLevel = yield this.args.urgencyLevel;
+    this.checkboxValue = urgencyLevel.uri === CONFIG.URGENCY_LEVELS.spoedprocedure;
   }
 
   @action
   toggleUrgency(value) {
     const uri = value ? CONFIG.URGENCY_LEVELS.spoedprocedure : CONFIG.URGENCY_LEVELS.standaard;
     const urgencyLevel = this.urgencyLevels.find((level) => level.uri === uri);
-
     this.args.onChange(urgencyLevel);
   }
 }

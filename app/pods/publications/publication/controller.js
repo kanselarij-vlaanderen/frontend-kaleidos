@@ -85,10 +85,6 @@ export default class PublicationController extends Controller {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
   }
 
-  get getUrgencyLevel() {
-    return this.model.urgencyLevels.find((level) => level.id === this.model.publicationFlow.get('level.id'));
-  }
-
   get getPublicationStatus() {
     return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
   }

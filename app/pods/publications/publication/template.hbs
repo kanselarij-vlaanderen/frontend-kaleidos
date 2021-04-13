@@ -117,11 +117,9 @@
                                               @selected={{this.getPublicationType}}
                 />
               </div>
-
               <Publications::UrgencyLevelCheckbox
                       @urgencyLevel={{ this.model.publicationFlow.urgencyLevel }}
                       @onChange={{ this.setUrgencyLevel }} />
-
               <div class="auk-form-group">
                 <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
                 <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
