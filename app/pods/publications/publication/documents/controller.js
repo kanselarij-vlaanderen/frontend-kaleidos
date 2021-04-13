@@ -408,12 +408,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async resetFilter() {
-    this.selectedPieces = [];
-    this.selectedFileExtensions = [];
-    this.selectedPieceTypes = [];
-    this.pieceName = '';
-    this.renderPieces = true;
-    //this._resetFilterState();
+    this._resetFilterState();
     await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
