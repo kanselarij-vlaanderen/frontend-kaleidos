@@ -20,7 +20,6 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  // @tracked selectedAll = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -97,22 +96,12 @@ export default class PublicationDocumentsController extends Controller {
     return this.documentTypes.sortBy('priority');
   }
 
-  @action
-  toggleUploadModalSize() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  get areSelectedAll() {
+  get areAllDocumentsSelected() {
     return this.model.case.pieces.length === this.selectedPieces.length;
   }
 
   @action
   changePieceSelection(selectedPiece) {
-    // const tempPieces = [...this.filteredSortedPieces];
-    // const tempSelectedPiece = tempPieces.find((piece) => piece.id === selectedPiece.id);
-
-    // set(tempSelectedPiece, 'selectedForPublicationActivity', !selectedPiece.selectedForPublicationActivity);
-
     const isPieceSelected = this.selectedPieces.includes(selectedPiece);
 
     if (isPieceSelected) {
@@ -120,24 +109,25 @@ export default class PublicationDocumentsController extends Controller {
     } else {
       this.selectedPieces.pushObject(selectedPiece);
     }
-    // this.filteredSortedPieces = tempPieces;
   }
 
-  @action selectAllDocuments() {
-    // this.selectedAll = !this.selectedAll;
-
-    if (!this.areSelectedAll) {
-      // this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', true));
-      this.selectedPieces = this.filteredSortedPieces;
+  @action
+  selectAllDocuments() {
+    if (!this.areAllDocumentsSelected) {
+      this.selectedPieces = [];
     } else {
-      // this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
-      this.selectedPieces = A([]);
+      this.selectedPieces = [...this.filteredSortedPieces];
     }
   }
 
   @action
   openPieceUploadModal() {
     this.isOpenPieceUploadModal = true;
+  }
+
+  @action
+  toggleUploadModalSize() {
+    this.isExpanded = !this.isExpanded;
   }
 
   @action
@@ -427,39 +417,36 @@ export default class PublicationDocumentsController extends Controller {
     this.pieceName = '';
     this.renderPieces = false;
     this.selectedPieces = A([]);
-    this.selectedAll = false;
-    await this.sortedFilteredPieces();
+    await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
   @computed('model.case.sortedPieces')
   get initialDocumentLoad() {
-    this.sortedFilteredPieces();
+    this.sortAndFilterPieces();
     return true;
   }
 
   @action
   async filterDocumentsAction() {
     this.renderPieces = false;
-    this.selectedAll = false;
     this.selectedPieces = A([]);
-    await this.sortedFilteredPieces();
+    await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
-  async sortedFilteredPieces() {
+  async sortAndFilterPieces() {
     this.showLoader = true;
     const filteredPieces =  [...this.model.case.sortedPieces];
-    filteredPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
     this.filteredSortedPieces = null;
     this.filteredSortedPieces = A([]);
 
     for (let index = 0; index < filteredPieces.length; index++) {
       const piece = filteredPieces[index];
-      if (!await this.fileTypeAllowed(piece)) {
+      if (!await this.filterFileType(piece)) {
         continue;
       }
-      if (!await this.pieceTypeAllowed(piece)) {
+      if (!await this.filterPieceType(piece)) {
         continue;
       }
 
@@ -475,7 +462,7 @@ export default class PublicationDocumentsController extends Controller {
     return piece.name.toLowerCase().includes(this.pieceName.toLowerCase());
   }
 
-  async fileTypeAllowed(piece) {
+  async filterFileType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
     if (this.selectedFileExtensions.length === 0) {
       return true;
@@ -485,7 +472,7 @@ export default class PublicationDocumentsController extends Controller {
     return this.selectedFileExtensions.includes(ext);
   }
 
-  async pieceTypeAllowed(piece) {
+  async filterPieceType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
     if (this.selectedPieceTypes.length === 0) {
       return true;
