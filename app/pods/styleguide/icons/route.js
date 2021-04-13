@@ -20,6 +20,8 @@ export default class IconsRoute extends Route.extend(AuthenticatedRouteMixin) {
       'circle-check',
       'circle-error',
       'circle-info',
+      'circle-more',
+      'circle-pause',
       'circle-question',
       'clock',
       'close',
