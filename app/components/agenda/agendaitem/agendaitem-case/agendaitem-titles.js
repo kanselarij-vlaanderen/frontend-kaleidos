@@ -4,13 +4,11 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class AgendaitemTitles extends Component {
-  @tracked showLoader = false;
-
   @service currentSession;
-
   @service publicationService;
-
   @service router;
+
+  @tracked showLoader = false;
 
   @action
   toggleIsEditingAction() {

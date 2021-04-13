@@ -82,7 +82,7 @@
           {{/if}}
           {{#if
             (and @agendaitem.isDesignAgenda
-                    (and currentSession.isEditor @agendaitem.formallyOkToShow))
+                    (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
           }}
             <WebComponents::AuPill
               @skin={{@agendaitem.formallyOkToShow.svg.color}}
