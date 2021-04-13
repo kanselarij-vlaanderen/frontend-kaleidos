@@ -39,7 +39,16 @@ export default class NewPublicationModal extends Component {
 
   @task
   *initPublicationNumber() {
-    this.number = yield this.getNextPublicationNumber();
+    // Deze query possibly breaks if publication-flows without number exist
+    const latestPublication = yield this.store.queryOne('publication-flow', {
+      sort: '-publication-number',
+    });
+    if (latestPublication) {
+      this.number = latestPublication.publicationNumber + 1;
+    } else {
+    // This should only be a "no-data" issue, in that case we have to default to number 1
+      this.number = 1;
+    }
   }
 
   @task
@@ -60,18 +69,5 @@ export default class NewPublicationModal extends Component {
   @action
   async isPublicationNumberAlreadyTaken() {
     this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
-  }
-
-  @action
-  async getNextPublicationNumber() {
-    // Deze query possibly breaks if publication-flows without number exist
-    const latestPublication = await this.store.queryOne('publication-flow', {
-      sort: '-publication-number',
-    });
-    if (latestPublication) {
-      return latestPublication.publicationNumber + 1;
-    }
-    // This should only be a "no-data" issue, in that case we have to default to number 1
-    return 1;
   }
 }
