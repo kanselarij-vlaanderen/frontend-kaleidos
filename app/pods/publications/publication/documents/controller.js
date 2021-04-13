@@ -29,21 +29,21 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
-  @tracked filteredSortedPieces = A([]);
+  @tracked filteredSortedPieces = [];
   @tracked documentTypes = [];
 
   @tracked translateActivity = {
-    /* @tracked */ mailContent: '',
-    /* @tracked */ mailSubject: '',
-    /* @tracked */ finalTranslationDate: '',
-    /* @tracked */ pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked finalTranslationDate: '',
+    @tracked pieces: A([]),
   };
   @tracked previewActivity = {
-    /* @tracked */ mailContent: '',
-    /* @tracked */ mailSubject: '',
-    /* @tracked */ pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked pieces: A([]),
   };
-  @tracked selectedPieces = A([]);
+  @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
@@ -60,18 +60,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked selectedFileExtensions = [];
   @tracked selectedPieceTypes = [];
 
-  concatNames(pieces) {
-    return pieces.map((piece) => piece.name).join('\n');
-  }
-
-  async getConfig(name, defaultValue) {
-    return await this.configService.get(name, defaultValue);
-  }
-
   constructor() {
     super(...arguments);
     this.loadData.perform();
     this.loadExtensionData.perform();
+  }
+
+  reset() {
+    this._resetFilterState();
   }
 
   @task
@@ -112,8 +108,8 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  selectAllPieces() {
-    if (!this.areAllPiecesSelected) {
+  changeAllPiecesSelection() {
+    if (this.areAllPiecesSelected) {
       this.selectedPieces = [];
     } else {
       this.selectedPieces = [...this.filteredSortedPieces];
@@ -321,7 +317,7 @@ export default class PublicationDocumentsController extends Controller {
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
 
     // Visual stuff.
-    this.selectedPieces = A([]);
+    this.selectedPieces = [];
 
     // Reset local activity to empty state.
     this.previewActivity = {
@@ -379,7 +375,7 @@ export default class PublicationDocumentsController extends Controller {
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
 
     // Visual stuff.
-    this.selectedPieces = A([]);
+    this.selectedPieces = [];
 
     // Reset local activity to empty state.
     this.translateActivity = {
@@ -412,11 +408,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async resetFilter() {
-    this.selectedFileExtensions = [];
-    this.selectedPieceTypes = [];
-    this.pieceName = '';
-    this.renderPieces = false;
-    this.selectedPieces = A([]);
+    this._resetFilterState();
     await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
@@ -430,17 +422,19 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async filterDocumentsAction() {
     this.renderPieces = false;
-    this.selectedPieces = A([]);
+    this.selectedPieces = [];
     await this.sortAndFilterPieces();
     this.renderPieces = true;
+  }
+
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
   }
 
   async sortAndFilterPieces() {
     this.showLoader = true;
     const filteredPieces =  [...this.model.case.sortedPieces];
-    this.filteredSortedPieces = null;
-    this.filteredSortedPieces = A([]);
-
+    this.filteredSortedPieces = [];
     for (let index = 0; index < filteredPieces.length; index++) {
       const piece = filteredPieces[index];
       if (!await this.filterFileType(piece)) {
@@ -488,5 +482,13 @@ export default class PublicationDocumentsController extends Controller {
       return false;
     }
     return false;
+  }
+
+  _resetFilterState() {
+    this.selectedPieces = [];
+    this.selectedFileExtensions = [];
+    this.selectedPieceTypes = [];
+    this.pieceName = '';
+    this.renderPieces = true;
   }
 }

@@ -21,11 +21,6 @@ export default class PublicationDocumentsRoute extends Route {
 
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
-    controller.selectedPieces = A([]);
-    controller.selectedFileExtensions = [];
-    controller.selectedPieceTypes = [];
-    controller.pieceName = '';
-    controller.renderPieces = true;
-    controller.selectedAll = false;
+    controller.reset();
   }
 }
