@@ -31,14 +31,4 @@ export default class AgendaitemTitles extends Component {
     const _case = yield this.args.subcase.case;
     return _case;
   }
-
-  @action
-  async startPublication() {
-    this.showLoader = true;
-    const _case = await this.args.subcase.get('case');
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _case.id);
-    this.showLoader = false;
-    this.router.transitionTo('publications.publication.case', newPublication.id);
-  }
 }
