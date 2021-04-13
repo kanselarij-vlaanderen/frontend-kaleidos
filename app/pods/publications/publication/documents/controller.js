@@ -96,7 +96,7 @@ export default class PublicationDocumentsController extends Controller {
     return this.documentTypes.sortBy('priority');
   }
 
-  get areAllDocumentsSelected() {
+  get areAllPiecesSelected() {
     return this.model.case.pieces.length === this.selectedPieces.length;
   }
 
@@ -112,8 +112,8 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  selectAllDocuments() {
-    if (!this.areAllDocumentsSelected) {
+  selectAllPieces() {
+    if (!this.areAllPiecesSelected) {
       this.selectedPieces = [];
     } else {
       this.selectedPieces = [...this.filteredSortedPieces];
