@@ -20,11 +20,6 @@ export default class UrgencyLevelCheckboxComponent extends Component {
     this.urgencyLevels = yield this.store.query('urgency-level', {});
   }
 
-  get isUrgent() {
-    const urgencyLevel = this.args.urgencyLevel;
-    return urgencyLevel.uri === CONFIG.URGENCY_LEVELS.spoedprocedure;
-  }
-
   @action
   toggleUrgency(value) {
     const uri = value ? CONFIG.URGENCY_LEVELS.spoedprocedure : CONFIG.URGENCY_LEVELS.standaard;
