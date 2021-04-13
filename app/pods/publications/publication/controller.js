@@ -28,6 +28,7 @@ export default class PublicationController extends Controller {
   @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
   @tracked selectedRegulatonType;
+  @tracked urgencyLevel;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
