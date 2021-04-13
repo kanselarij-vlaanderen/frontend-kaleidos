@@ -1,33 +1,24 @@
-<div class="vlc-input-field-block">
-  <label class="vl-form__label auk-u-block">
-    {{title}}
-  </label>
-  <div class="vlc-radio-inline">
+<fieldset>
+  <legend class="auk-label">{{title}}</legend>
+  <WebComponents::AuRadioList @layout="inline">
     {{#each optionList as |option index|}}
-      <label class="vl-radio">
-        {{#if selectedModel}}
-          <input
-            class="vl-radio__toggle"
-            value={{option.id}}
-            type="radio"
-            name={{title}}
-            checked={{eq option.id selectedModel.id}}
-            onchange={{action "modelChanged"}}
-          />
-        {{else}}
-          <input
-            class="vl-radio__toggle"
-            value={{option.id}}
-            type="radio"
-            name={{title}}
-            checked={{eq index 0}}
-            onchange={{action "modelChanged"}}
-          />
-        {{/if}}
-        <div class="vl-radio__label">
-          {{option.label}}
-        </div>
-      </label>
+      {{#if selectedModel}}
+        <WebComponents::AuRadio
+          value={{option.id}}
+          name={{title}}
+          checked={{eq option.id selectedModel.id}}
+          onchange={{action "modelChanged"}}
+          @label={{option.label}}
+        />
+      {{else}}
+        <WebComponents::AuRadio
+          value={{option.id}}
+          name={{title}}
+          checked={{eq index 0}}
+          onchange={{action "modelChanged"}}
+          @label={{option.label}}
+        />
+      {{/if}}
     {{/each}}
-  </div>
-</div>
+  </WebComponents::AuRadioList>
+</fieldset>

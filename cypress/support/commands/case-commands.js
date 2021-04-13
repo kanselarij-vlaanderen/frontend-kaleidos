@@ -19,11 +19,11 @@ function createCase(confidential, shortTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
-  cy.get('.vlc-page-header .vl-button')
+  cy.get('.vlc-page-header .auk-button')
     .contains('Nieuw dossier aanmaken')
     .click();
 
-  cy.get('.vl-modal-dialog').as('dialog')
+  cy.get('.auk-modal').as('dialog')
     .within(() => {
       cy.get('.vlc-input-field-block').as('newCaseForm')
         .should('have.length', 2);
@@ -33,19 +33,19 @@ function createCase(confidential, shortTitle) {
   if (confidential) {
     cy.get('@newCaseForm').eq(0)
       .within(() => {
-        cy.get('.vl-checkbox--switch__label').click();
+        cy.get('.vl-toggle__label').click();
       });
   }
 
   // Set short title
   cy.get('@newCaseForm').eq(1)
     .within(() => {
-      cy.get('.vl-textarea').click()
+      cy.get('.auk-textarea').click()
         .type(shortTitle);
     });
 
   cy.get('@dialog').within(() => {
-    cy.get('.vlc-toolbar__item > .vl-button').contains('Dossier aanmaken')
+    cy.get('.vlc-toolbar__item > .auk-button').contains('Dossier aanmaken')
       .click();
   });
 
@@ -87,11 +87,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
     .contains('Procedurestap toevoegen')
     .click();
 
-  cy.get('.vlc-input-field-block').should('have.length', 5);
+  cy.get('.vlc-input-field-block').should('have.length', 4);
 
   // Set the type
   if (type) {
-    cy.get('.vlc-input-field-block').eq(0)
+    cy.get('.auk-radio-list')
       .within(() => {
         cy.contains(type).scrollIntoView()
           .click();
@@ -100,9 +100,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the short title
   if (newShortTitle) {
-    cy.get('.vlc-input-field-block').eq(1)
+    cy.get('.vlc-input-field-block').eq(0)
       .within(() => {
-        cy.get('.vl-textarea').click()
+        cy.get('.auk-textarea').click()
           .clear()
           .type(newShortTitle);
       });
@@ -110,9 +110,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the long title
   if (longTitle) {
-    cy.get('.vlc-input-field-block').eq(2)
+    cy.get('.vlc-input-field-block').eq(1)
       .within(() => {
-        cy.get('.vl-textarea').click()
+        cy.get('.auk-textarea').click()
           .clear()
           .type(longTitle);
       });
@@ -120,7 +120,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step type
   if (step) {
-    cy.get('.vlc-input-field-block').eq(3)
+    cy.get('.vlc-input-field-block').eq(2)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
@@ -140,7 +140,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step name
   if (stepName) {
-    cy.get('.vlc-input-field-block').eq(4)
+    cy.get('.vlc-input-field-block').eq(3)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });

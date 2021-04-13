@@ -23,8 +23,8 @@
   </div>
   {{#if this.moreThan20}}
     <button class="vlc-document-show-more-button" type="button" {{action "toggleShowingAll"}}>
-      <i class="{{if isShowingAll "ki-remove" "ki-plus"}} vl-icon vlc-document-show-more-button__icon "/>
-      <p  class="vlc-document-show-more-button__text">
+      <WebComponents::AuIcon @name={{if isShowingAll "remove" "plus"}} />
+      <p class="vlc-document-show-more-button__text auk-u-ml">
         {{#if isShowingAll }}
           {{t "show-less"}}
         {{else}}

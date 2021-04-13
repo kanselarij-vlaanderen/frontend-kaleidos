@@ -1,36 +1,12 @@
 import Controller from '@ember/controller';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
+import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexController extends Controller {
-  @tracked filterTableColumnOptionKeys = JSON.parse(localStorage.getItem('filterTableColumnOptionKeys'))
-    || {
-      caseNameFilterOption: true,
-      publicationNumberFilterOption: true,
-      regulationTypeFilterOption: true,
-      onMeetingFilterOption: true,
-      requestedPublicationDateFilterOption: true,
-      finalPublicationDateFilterOption: true,
-      publicationDateFilterOption: true,
-      numacNumberFilterOption: true,
-      caseManagerFilterOption: true,
-      lastEditedFilterOption: true,
-      lastEditedByFilterOption: true,
-      withdrawnDateFilterOption: true,
-      pauseDateFilterOption: true,
-      translateRequestsFilterOption: true,
-      signRequestsFilterOption: true,
-      publishPreviewRequestsFilterOption: true,
-      speedProcedureFilterOption: true,
-      commentFilterOption: true,
-      fromDesignAgendaFilterOption: true,
-    };
-
-  @tracked showFilterTableModal = false;
   queryParams = {
     page: {
       type: 'number',
@@ -43,12 +19,27 @@ export default class PublicationsIndexController extends Controller {
     },
   };
 
+  @service publicationService;
+
+  page = 0;
+  size = 25;
+  sort = '-created';
   sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
-  @tracked page = 0;
-  @tracked size = 25;
-  @tracked sort = '-created';
+  @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
+    || tableColumns.reduce((accumulator, currentValue) => {
+      accumulator[currentValue.keyName] = currentValue.showByDefault;
+      return accumulator;
+    }, {});
+  tableColumns = tableColumns;
+
+  @tracked showTableDisplayOptions = false;
+  @tracked isShowPublicationModal = false;
+  @tracked showLoader = false;
+  @tracked isShowPublicationFilterModal = false;
+
+  @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
   @action
   navigateToPublication(publicationFlowRow) {
@@ -56,20 +47,69 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  filterTables() {
-    this.showFilterTableModal = true;
-  }
-
-  @action
   closeFilterTableModal() {
-    localStorage.setItem('filterTableColumnOptionKeys', JSON.stringify(this.filterTableColumnOptionKeys));
-    this.showFilterTableModal = false;
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
+    this.showTableDisplayOptions = false;
   }
 
   @action
-  toggleFilterOption(event) {
-    const tempArr = this.get('filterTableColumnOptionKeys');
-    set(tempArr, event.target.name, !tempArr[event.target.name]);
-    this.set('filterTableColumnOptionKeys', tempArr);
+  changeColumnDisplayOptions(options) {
+    this.tableColumnDisplayOptions = options;
+    localStorage.setItem('tableColumnDisplayOptions', JSON.stringify(this.tableColumnDisplayOptions));
+  }
+
+  @action
+  openColumnDisplayOptionsModal() {
+    this.showTableDisplayOptions = true;
+  }
+
+  @action
+  closeColumnDisplayOptionsModal() {
+    this.showTableDisplayOptions = false;
+  }
+
+  @action
+  async startPublicationFromCaseId(_caseId) {
+    this.showLoader = true;
+    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
+    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
+    this.showLoader = false;
+
+    this.transitionToRoute('publications.publication.case', newPublication.get('id'));
+  }
+
+  @action
+  showPublicationModal() {
+    this.isShowPublicationModal = true;
+  }
+
+  @action
+  closePublicationModal() {
+    this.isShowPublicationModal = false;
+  }
+
+  @action
+  async saveNewPublication(publication) {
+    const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
+    this.closePublicationModal();
+    this.transitionToRoute('publications.publication', newPublication.get('id'));
+  }
+
+  @action
+  showFilterModal() {
+    this.isShowPublicationFilterModal = true;
+  }
+
+  @action
+  cancelPublicationsFilter() {
+    this.isShowPublicationFilterModal = false;
+  }
+
+  @action
+  savePublicationsFilter(publicationFilter) {
+    this.publicationFilter = publicationFilter;
+    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
+    this.isShowPublicationFilterModal = false;
+    this.send('refreshModel');
   }
 }
