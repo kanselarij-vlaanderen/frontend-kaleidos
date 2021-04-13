@@ -2,11 +2,8 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
 
 export default class AgendaitemTitles extends Component {
-  @alias('args.agendaitem.agendaActivity.subcase') subcase;
-
   @tracked showLoader = false;
 
   @service currentSession;
@@ -31,7 +28,7 @@ export default class AgendaitemTitles extends Component {
   @action
   async startPublication() {
     this.showLoader = true;
-    const _case = await this.subcase.get('case');
+    const _case = await this.args.subcase.get('case');
     const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
     const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _case.id);
     this.showLoader = false;
