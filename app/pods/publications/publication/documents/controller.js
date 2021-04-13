@@ -20,7 +20,6 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  @tracked selectedAll = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -30,9 +29,8 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
-  @tracked filteredSortedPieces = A([]);
+  @tracked filteredSortedPieces = [];
   @tracked documentTypes = [];
-
 
   @tracked translateActivity = {
     @tracked mailContent: '',
@@ -45,7 +43,7 @@ export default class PublicationDocumentsController extends Controller {
     @tracked mailSubject: '',
     @tracked pieces: A([]),
   };
-  @tracked selectedPieces = A([]);
+  @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
 
@@ -62,17 +60,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked selectedFileExtensions = [];
   @tracked selectedPieceTypes = [];
 
-  concatNames(pieces) {
-    return pieces.map((piece) => piece.name).join('\n');
-  }
-
-  async getConfig(name, defaultValue) {
-    return await this.configService.get(name, defaultValue);
-  }
   constructor() {
     super(...arguments);
     this.loadData.perform();
     this.loadExtensionData.perform();
+  }
+
+  reset() {
+    this._resetFilterState();
   }
 
   @task
@@ -97,37 +92,27 @@ export default class PublicationDocumentsController extends Controller {
     return this.documentTypes.sortBy('priority');
   }
 
-  @action
-  toggleUploadModalSize() {
-    this.isExpanded = !this.isExpanded;
+  get areAllPiecesSelected() {
+    return this.filteredSortedPieces.length === this.selectedPieces.length;
   }
 
   @action
   changePieceSelection(selectedPiece) {
-    const tempPieces = [...this.filteredSortedPieces];
-    const tempSelectedPiece = tempPieces.find((piece) => piece.id === selectedPiece.id);
+    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
 
-    set(tempSelectedPiece, 'selectedForPublicationActivity', !selectedPiece.selectedForPublicationActivity);
-
-    const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
-
-    if (foundPiece) {
+    if (isPieceSelected) {
       this.selectedPieces.removeObject(selectedPiece);
     } else {
       this.selectedPieces.pushObject(selectedPiece);
     }
-    this.filteredSortedPieces = tempPieces;
   }
 
-  @action selectAllDocuments() {
-    this.selectedAll = !this.selectedAll;
-
-    if (this.selectedAll) {
-      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', true));
-      this.selectedPieces = this.filteredSortedPieces;
+  @action
+  changeAllPiecesSelection() {
+    if (this.areAllPiecesSelected) {
+      this.selectedPieces = [];
     } else {
-      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
-      this.selectedPieces = A([]);
+      this.selectedPieces = [...this.filteredSortedPieces];
     }
   }
 
@@ -137,7 +122,11 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  // eslint-disable-next-line class-methods-use-this
+  toggleUploadModalSize() {
+    this.isExpanded = !this.isExpanded;
+  }
+
+  @action
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
@@ -328,7 +317,7 @@ export default class PublicationDocumentsController extends Controller {
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
 
     // Visual stuff.
-    this.selectedPieces = A([]);
+    this.selectedPieces = [];
 
     // Reset local activity to empty state.
     this.previewActivity = {
@@ -386,7 +375,7 @@ export default class PublicationDocumentsController extends Controller {
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
 
     // Visual stuff.
-    this.selectedPieces = A([]);
+    this.selectedPieces = [];
 
     // Reset local activity to empty state.
     this.translateActivity = {
@@ -419,44 +408,39 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async resetFilter() {
-    this.selectedFileExtensions = [];
-    this.selectedPieceTypes = [];
-    this.pieceName = '';
-    this.renderPieces = false;
-    this.selectedPieces = A([]);
-    this.selectedAll = false;
-    await this.sortedFilteredPieces();
+    this._resetFilterState();
+    await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
   @computed('model.case.sortedPieces')
   get initialDocumentLoad() {
-    this.sortedFilteredPieces();
+    this.sortAndFilterPieces();
     return true;
   }
 
   @action
   async filterDocumentsAction() {
     this.renderPieces = false;
-    this.selectedAll = false;
-    this.selectedPieces = A([]);
-    await this.sortedFilteredPieces();
+    this.selectedPieces = [];
+    await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
-  async sortedFilteredPieces() {
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
+  }
+
+  async sortAndFilterPieces() {
     this.showLoader = true;
     const filteredPieces =  [...this.model.case.sortedPieces];
-    filteredPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
-    this.filteredSortedPieces = null;
-    this.filteredSortedPieces = A([]);
-
+    this.filteredSortedPieces = [];
     for (let index = 0; index < filteredPieces.length; index++) {
       const piece = filteredPieces[index];
-      if (!await this.fileTypeAllowed(piece)) {
+      if (!await this.filterFileType(piece)) {
         continue;
       }
-      if (!await this.pieceTypeAllowed(piece)) {
+      if (!await this.filterPieceType(piece)) {
         continue;
       }
 
@@ -472,7 +456,7 @@ export default class PublicationDocumentsController extends Controller {
     return piece.name.toLowerCase().includes(this.pieceName.toLowerCase());
   }
 
-  async fileTypeAllowed(piece) {
+  async filterFileType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
     if (this.selectedFileExtensions.length === 0) {
       return true;
@@ -482,7 +466,7 @@ export default class PublicationDocumentsController extends Controller {
     return this.selectedFileExtensions.includes(ext);
   }
 
-  async pieceTypeAllowed(piece) {
+  async filterPieceType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
     if (this.selectedPieceTypes.length === 0) {
       return true;
@@ -498,5 +482,13 @@ export default class PublicationDocumentsController extends Controller {
       return false;
     }
     return false;
+  }
+
+  _resetFilterState() {
+    this.selectedPieces = [];
+    this.selectedFileExtensions = [];
+    this.selectedPieceTypes = [];
+    this.pieceName = '';
+    this.renderPieces = true;
   }
 }
