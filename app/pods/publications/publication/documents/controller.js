@@ -93,7 +93,7 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   get areAllPiecesSelected() {
-    return this.model.case.pieces.length === this.selectedPieces.length;
+    return this.filteredSortedPieces.length === this.selectedPieces.length;
   }
 
   @action
@@ -408,7 +408,12 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async resetFilter() {
-    this._resetFilterState();
+    this.selectedPieces = [];
+    this.selectedFileExtensions = [];
+    this.selectedPieceTypes = [];
+    this.pieceName = '';
+    this.renderPieces = true;
+    //this._resetFilterState();
     await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
