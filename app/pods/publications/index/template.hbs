@@ -249,7 +249,7 @@
 
         {{#if this.tableColumnDisplayOptions.speedProcedure}}
           <td class="auk-u-text-align--center">
-            {{#if (eq row.urgencyLevel.uri urgencyLevels.spoedprocedure)}}
+            {{#if row.urgencyLevel.isUrgent}}
               <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
               <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
                 <p>

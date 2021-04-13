@@ -306,6 +306,7 @@ export default class PublicationController extends Controller {
   @action
   setUrgencyLevel(urgencyLevel) {
     this.model.publicationFlow.urgencyLevel = urgencyLevel;
+    this.urgencyLevel = urgencyLevel;
     this.model.publicationFlow.save();
   }
 
