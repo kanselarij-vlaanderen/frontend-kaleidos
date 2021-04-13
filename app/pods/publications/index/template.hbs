@@ -30,19 +30,6 @@
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
   </WebComponents::AuNavbar>
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    {{#if this.isShowPublicationModal}}
-      <Publications::NewPublicationModal
-        @onCancel={{this.closePublicationModal}}
-        @onSave={{this.saveNewPublication}} />
-    {{/if}}
-    {{#if this.isShowPublicationFilterModal}}
-      <Publications::PublicationsFilterModal
-        @filter={{this.publicationFilter}}
-        @onCancel={{this.cancelPublicationsFilter}}
-        @onSave={{this.savePublicationsFilter}} />
-    {{/if}}
-  </div>
 </div>
 <div class="auk-u-m-2 auk-u-scroll-scrollable">
   <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
@@ -290,6 +277,17 @@
   </DataTable>
 </div>
 
+{{#if this.isShowPublicationModal}}
+  <Publications::NewPublicationModal
+    @onCancel={{this.closePublicationModal}}
+    @onSave={{this.saveNewPublication}} />
+{{/if}}
+{{#if this.isShowPublicationFilterModal}}
+  <Publications::PublicationsFilterModal
+    @filter={{this.publicationFilter}}
+    @onCancel={{this.cancelPublicationsFilter}}
+    @onSave={{this.savePublicationsFilter}} />
+{{/if}}
 {{#if this.showTableDisplayOptions}}
   <Publications::OverviewTableDisplayConfigModal
     @options={{this.tableColumnDisplayOptions}}
