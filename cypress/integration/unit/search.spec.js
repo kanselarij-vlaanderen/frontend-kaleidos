@@ -94,7 +94,7 @@ context('Search tests', () => {
     };
     const files = [file];
     cy.addDocumentsToAgendaitem(newSubcase2TitleShort, files);
-    cy.addDocumentToTreatment(file);
+    cy.addDocumentToTreatment(file); // TODO is this saved? Command does not include saving
 
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.contains('dit is de korte titel for search').click();
