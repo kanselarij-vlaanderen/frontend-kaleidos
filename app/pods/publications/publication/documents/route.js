@@ -1,9 +1,6 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { A } from '@ember/array';
-import {
-  set, action
-} from '@ember/object';
 
 export default class PublicationDocumentsRoute extends Route {
   async model() {
@@ -30,10 +27,5 @@ export default class PublicationDocumentsRoute extends Route {
     controller.pieceName = '';
     controller.renderPieces = true;
     controller.selectedAll = false;
-  }
-
-  @action
-  willTransition(transition) {
-    this.controller.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
   }
 }
