@@ -20,7 +20,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  @tracked selectedAll = false;
+  // @tracked selectedAll = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -33,17 +33,16 @@ export default class PublicationDocumentsController extends Controller {
   @tracked filteredSortedPieces = A([]);
   @tracked documentTypes = [];
 
-
   @tracked translateActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked finalTranslationDate: '',
-    @tracked pieces: A([]),
+    /* @tracked */ mailContent: '',
+    /* @tracked */ mailSubject: '',
+    /* @tracked */ finalTranslationDate: '',
+    /* @tracked */ pieces: A([]),
   };
   @tracked previewActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked pieces: A([]),
+    /* @tracked */ mailContent: '',
+    /* @tracked */ mailSubject: '',
+    /* @tracked */ pieces: A([]),
   };
   @tracked selectedPieces = A([]);
   @tracked pieceToDelete = null;
@@ -69,6 +68,7 @@ export default class PublicationDocumentsController extends Controller {
   async getConfig(name, defaultValue) {
     return await this.configService.get(name, defaultValue);
   }
+
   constructor() {
     super(...arguments);
     this.loadData.perform();
@@ -102,31 +102,35 @@ export default class PublicationDocumentsController extends Controller {
     this.isExpanded = !this.isExpanded;
   }
 
+  get areSelectedAll() {
+    return this.model.case.pieces.length === this.selectedPieces.length;
+  }
+
   @action
   changePieceSelection(selectedPiece) {
-    const tempPieces = [...this.filteredSortedPieces];
-    const tempSelectedPiece = tempPieces.find((piece) => piece.id === selectedPiece.id);
+    // const tempPieces = [...this.filteredSortedPieces];
+    // const tempSelectedPiece = tempPieces.find((piece) => piece.id === selectedPiece.id);
 
-    set(tempSelectedPiece, 'selectedForPublicationActivity', !selectedPiece.selectedForPublicationActivity);
+    // set(tempSelectedPiece, 'selectedForPublicationActivity', !selectedPiece.selectedForPublicationActivity);
 
-    const foundPiece = this.selectedPieces.find((piece) => piece.id === selectedPiece.id);
+    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
 
-    if (foundPiece) {
+    if (isPieceSelected) {
       this.selectedPieces.removeObject(selectedPiece);
     } else {
       this.selectedPieces.pushObject(selectedPiece);
     }
-    this.filteredSortedPieces = tempPieces;
+    // this.filteredSortedPieces = tempPieces;
   }
 
   @action selectAllDocuments() {
-    this.selectedAll = !this.selectedAll;
+    // this.selectedAll = !this.selectedAll;
 
-    if (this.selectedAll) {
-      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', true));
+    if (!this.areSelectedAll) {
+      // this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', true));
       this.selectedPieces = this.filteredSortedPieces;
     } else {
-      this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
+      // this.filteredSortedPieces.forEach((piece) => set(piece, 'selectedForPublicationActivity', false));
       this.selectedPieces = A([]);
     }
   }
@@ -137,7 +141,6 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  // eslint-disable-next-line class-methods-use-this
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
