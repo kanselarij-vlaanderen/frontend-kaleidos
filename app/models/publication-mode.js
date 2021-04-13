@@ -5,7 +5,7 @@ import Model, {
 export default class PublicationMode extends Model {
   @attr('string') uri;
   @attr('string') label;
-  @attr('number') priority;
+  @attr('number') position;
 
   @hasMany('publication-flow') publicationFlow;
 }

@@ -61,7 +61,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     });
 
     // cached in publications route
-    const publicationModes = this.store.peekAll('publication-mode').sortBy('priority');
+    const publicationModes = this.store.peekAll('publication-mode').sortBy('position');
 
     return hash({
       publicationFlow,
