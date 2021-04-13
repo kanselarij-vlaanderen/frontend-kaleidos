@@ -125,7 +125,7 @@
               {{#each this.filteredSortedPieces as |piece|}}
                 <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
                   <td>
-                    <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}} @checked={{piece.selectedForPublicationActivity}}/>
+                    <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}} @checked={{includes piece this.selectedPieces}}/>
                   </td>
                   <td>
                     {{#if (gt (await piece.agendaitems.length) 0)}}
