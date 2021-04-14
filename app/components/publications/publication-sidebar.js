@@ -296,13 +296,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       name: this.newNumacNumber,
       publicationFlow: this.publicationFlow,
     });
-    yield numacNumber.save();
+    if (this.args.didChange) {
+      this.args.didChange(numacNumber);
+    }
     this.newNumacNumber = '';
   }
 
   @task
   *unlinkNumacNumber(numacNumber) {
-    yield numacNumber.destroyRecord();
+    numacNumber.deleteRecord();
+    if (this.args.didChange) {
+      yield this.args.didChange(numacNumber);
+    }
   }
 
   @action
