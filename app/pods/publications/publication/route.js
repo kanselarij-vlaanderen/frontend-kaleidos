@@ -91,7 +91,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     controller.numberIsAlreadyUsed = false;
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
     controller.urgencyLevel = this.urgencyLevel;
   }
