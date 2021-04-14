@@ -105,7 +105,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setRegulationType(regulationType) {
-    this.publicationFlow.set('regulationType', regulationType);
+    this.publicationFlow.regulationType = regulationType;
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'regulationType', regulationType);
     }
@@ -118,7 +118,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   async setPublicationType(pojoType) {
     const publicationType = await this.store.findRecord('publication-type', pojoType.id);
-    this.publicationFlow.set('type', publicationType);
+    this.publicationFlow.type = publicationType;
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'type', publicationType);
     }
@@ -135,7 +135,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       this.showConfirmWithdraw = true;
     } else {
       const publicationStatus = await this.store.findRecord('publication-status', pojoStatus.id);
-      this.publicationFlow.set('status', publicationStatus);
+      this.publicationFlow.status = publicationStatus;
       if (this.args.didChange) {
         await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
       }
@@ -150,7 +150,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   async withdrawPublicationFlow() {
     const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
-    this.publicationFlow.set('status', publicationStatus);
+    this.publicationFlow.status = publicationStatus;
     if (this.args.didChange) {
       await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
     }
@@ -169,7 +169,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       });
       return;
     }
-    const publicationSuffix = this.publicationFlow.get('publicationSuffix');
+    const publicationSuffix = this.publicationFlow.publicationSuffix;
     this.publicationService.publicationNumberAlreadyTaken(event.target.value, publicationSuffix, this.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
@@ -184,10 +184,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
           timeOut: 20000,
         });
         // rollback the value in the view
-        event.target.value = this.publicationFlow.get('publicationNumber') || '';
+        event.target.value = this.publicationFlow.publicationNumber || '';
       } else {
         const number = parseInt(event.target.value, 10);
-        this.publicationFlow.set('publicationNumber', number);
+        this.publicationFlow.publicationNumber = number;
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
           this.args.didChange(this.publicationFlow, 'publicationNumber', number);
@@ -200,7 +200,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *setPublicationSuffix(event) {
     yield timeout(1000);
     this.numberIsAlreadyUsed = false;
-    const publicationNumber = this.publicationFlow.get('publicationNumber');
+    const publicationNumber = this.publicationFlow.publicationNumber;
     this.publicationService.publicationNumberAlreadyTaken(publicationNumber, event.target.value, this.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
@@ -215,13 +215,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
           timeOut: 20000,
         });
         // rollback the value in the view
-        event.target.value = this.publicationFlow.get('publicationSuffix') || '';
+        event.target.value = this.publicationFlow.publicationSuffix || '';
       } else {
         // TODO trimText here to remove spaces, enters ?
         if (event.target.value !== '') {
-          this.publicationFlow.set('publicationSuffix', event.target.value);
+          this.publicationFlow.publicationSuffix = event.target.value;
         } else {
-          this.publicationFlow.set('publicationSuffix', undefined);
+          this.publicationFlow.publicationSuffix = undefined;
         }
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
@@ -263,14 +263,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   allowedTranslationDate(date) {
     // If translateBefore has expired, show that date (input is empty without this)
-    const translateBefore = this.publicationFlow.get('translateBefore');
+    const translateBefore = this.publicationFlow.translateBefore;
     if (translateBefore && moment(translateBefore).isBefore(moment())) {
       if (moment(date).isSame(translateBefore)) {
         return true;
       }
     }
     // If there is no publishBefore, allow all future dates
-    const publishBefore = this.publicationFlow.get('publishBefore');
+    const publishBefore = this.publicationFlow.publishBefore;
     if (!publishBefore && moment(date).isSameOrAfter(moment())) {
       return true;
     }
@@ -286,7 +286,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   allowedPublicationDate(date) {
     const end = moment().add(360, 'days');
     let startRange;
-    const translateBefore = this.publicationFlow.get('translateBefore');
+    const translateBefore = this.publicationFlow.translateBefore;
     if (translateBefore && moment(translateBefore).isSameOrAfter(moment())) {
       startRange = moment(translateBefore);
     } else {
@@ -327,13 +327,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setRequestedPublicationDate(event) {
-    this.publicationFlow.set('publishDateRequested', new Date(event));
+    this.publicationFlow.publishDateRequested = new Date(event);
     this.publicationFlow.save();
   }
 
   @action
   setPublicationDate(event) {
-    this.publicationFlow.set('publishedAt', new Date(event));
+    this.publicationFlow.publishedAt = new Date(event);
     this.publicationFlow.save();
   }
 
@@ -367,7 +367,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @restartableTask
   *setRemark(event) {
     const newValue = event.target.value;
-    this.publicationFlow.set('remark', newValue);
+    this.publicationFlow.remark = newValue;
     yield timeout(1000);
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'remark', newValue);
