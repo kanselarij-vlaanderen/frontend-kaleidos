@@ -199,21 +199,23 @@ export default EmberObject.create({
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
-  publicationStatusToPublish: {
-    id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-  },
-  publicationStatusPublished: {
-    id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-  },
-  publicationStatusPauzed: {
-    id: 'bc294fde-45c8-11eb-b378-0242ac130002',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/bc294fde-45c8-11eb-b378-0242ac130002',
-  },
-  publicationStatusWithdrawn: {
-    id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+  PUBLICATION_STATUSES: {
+    pending: {
+      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    },
+    published: {
+      id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+    },
+    paused: {
+      id: 'bc294fde-45c8-11eb-b378-0242ac130002',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/bc294fde-45c8-11eb-b378-0242ac130002',
+    },
+    withdrawn: {
+      id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+    },
   },
   LANGUAGE_NL: {
     uri: 'http://publications.europa.eu/resource/authority/language/NLD',

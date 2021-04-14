@@ -1,0 +1,8 @@
+<div class="auk-form-group">
+  <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
+  <WebComponents::AuPowerSelect @options={{this.statusOptions}}
+                                @isSearchable={{false}}
+                                @onchange={{this.setPublicationStatus}}
+                                @selected={{this.getPublicationStatus}}
+  />
+</div>

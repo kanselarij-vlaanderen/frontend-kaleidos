@@ -31,35 +31,6 @@ export default class PublicationController extends Controller {
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
-  statusOptions = [{
-    id: CONFIG.publicationStatusToPublish.id,
-    label: 'Te publiceren',
-    icon: {
-      svg: 'clock',
-      color: 'warning',
-    },
-  }, {
-    id: CONFIG.publicationStatusPublished.id,
-    label: 'Gepubliceerd',
-    icon: {
-      svg: 'circle-check',
-      color: 'success',
-    },
-  }, {
-    id: CONFIG.publicationStatusPauzed.id,
-    label: 'Gepauzeerd',
-    icon: {
-      svg: 'circle-pause',
-      color: 'muted',
-    },
-  }, {
-    id: CONFIG.publicationStatusWithdrawn.id,
-    label: 'Afgevoerd',
-    icon: {
-      svg: 'circle-error',
-      color: 'danger',
-    },
-  }];
 
   typeOptions = [
     {
@@ -83,10 +54,6 @@ export default class PublicationController extends Controller {
 
   get getRegulationType() {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
-  }
-
-  get getPublicationStatus() {
-    return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
   }
 
   get getPublicationType() {
@@ -385,22 +352,10 @@ export default class PublicationController extends Controller {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
+    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
     this.model.publicationFlow.set('status', publicationStatus);
     await this.model.publicationFlow.save();
     this.showConfirmWithdraw = false;
-  }
-
-  @action
-  async setPublicationStatus(event) {
-    if (event.id === CONFIG.publicationStatusWithdrawn.id) {
-      // Show popup and do nothing.
-      this.showConfirmWithdraw = true;
-    } else {
-      const publicationStatus = await this.store.findRecord('publication-status', event.id);
-      this.model.publicationFlow.set('status', publicationStatus);
-      this.model.publicationFlow.save();
-    }
   }
 
   @action
