@@ -294,7 +294,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   setTranslationDate(selectedDates) {
     const date = selectedDates[0];
-    this.publicationFlow.publishBefore = date;
+    this.publicationFlow.translateBefore = date;
     this.publicationFlow.save();
   }
 
