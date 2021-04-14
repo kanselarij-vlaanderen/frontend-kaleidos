@@ -16,7 +16,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument didChange: should take arguments (modifiedObject, keyName, newValue)
+   * @argument didChange: should take arguments (modifiedObject, keyName)
    */
   @service store;
   @service intl;
@@ -100,7 +100,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'regulationType', regulationType);
+      this.args.didChange(this.publicationFlow, 'regulationType');
     }
   }
 
@@ -113,7 +113,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const publicationType = await this.store.findRecord('publication-type', pojoType.id);
     this.publicationFlow.type = publicationType;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'type', publicationType);
+      this.args.didChange(this.publicationFlow, 'type');
     }
   }
 
@@ -130,7 +130,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       const publicationStatus = await this.store.findRecord('publication-status', pojoStatus.id);
       this.publicationFlow.status = publicationStatus;
       if (this.args.didChange) {
-        await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
+        await this.args.didChange(this.publicationFlow, 'status');
       }
     }
   }
@@ -145,7 +145,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
     this.publicationFlow.status = publicationStatus;
     if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, 'status', publicationStatus);
+      await this.args.didChange(this.publicationFlow, 'status');
     }
     this.showConfirmWithdraw = false;
   }
@@ -183,7 +183,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
         this.publicationFlow.publicationNumber = number;
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationNumber', number);
+          this.args.didChange(this.publicationFlow, 'publicationNumber');
         }
       }
     });
@@ -218,7 +218,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
         }
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationSuffix', event.target.value);
+          this.args.didChange(this.publicationFlow, 'publicationSuffix');
         }
       }
     });
@@ -249,7 +249,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const priorityNumber = this.publicationFlow.hasPriority ? 0 : 1;
     this.publicationFlow.priority = priorityNumber;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'priority', priorityNumber);
+      this.args.didChange(this.publicationFlow, 'priority');
     }
   }
 
@@ -268,7 +268,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishBefore', this.publicationFlow.publishBefore);
+      this.args.didChange(this.publicationFlow, 'publishBefore');
     }
   }
 
@@ -276,7 +276,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishDateRequested', this.publicationFlow.publishDateRequested);
+      this.args.didChange(this.publicationFlow, 'publishDateRequested');
     }
   }
 
@@ -284,7 +284,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishedAt', this.publicationFlow.publishedAt);
+      this.args.didChange(this.publicationFlow, 'publishedAt');
     }
   }
 
@@ -302,7 +302,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'translateBefore', this.publicationFlow.translateBefore);
+      this.args.didChange(this.publicationFlow, 'translateBefore');
     }
   }
 
@@ -312,7 +312,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'remark', newValue);
+      this.args.didChange(this.publicationFlow, 'remark');
     }
   }
 }
