@@ -427,16 +427,15 @@ export default class PublicationDocumentsController extends Controller {
       return true;
     }
     const container = await piece.get('documentContainer');
-    if (container) {
-      const containerType = await container.get('type');
-      if (containerType) {
-        const typeId = await containerType.get('id');
-        const listOfTypeIds = this.filter.documentTypes.map((type) => type.id);
-        return listOfTypeIds.includes(typeId);
-      }
+    if (!container) {
       return false;
     }
-    return false;
+    const containerType = await container.get('type');
+    if (!containerType) {
+      return false;
+    }
+    const typeId = await containerType.get('id');
+    return this.filter.documentTypes.some((type) => typeId === type.id);
   }
 
   _resetFilterState() {
