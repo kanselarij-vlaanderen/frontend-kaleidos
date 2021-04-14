@@ -326,14 +326,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setRequestedPublicationDate(event) {
-    this.publicationFlow.publishDateRequested = new Date(event);
+  setRequestedPublicationDate(selectedDates) {
+    this.publicationFlow.publishDateRequested = selectedDates[0];
     this.publicationFlow.save();
   }
 
   @action
-  setPublicationDate(event) {
-    this.publicationFlow.publishedAt = new Date(event);
+  setPublicationDate(selectedDates) {
+    this.publicationFlow.publishedAt = selectedDates[0];
     this.publicationFlow.save();
   }
 
