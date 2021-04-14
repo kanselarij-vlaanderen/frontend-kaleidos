@@ -164,21 +164,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.showConfirmWithdraw = false;
   }
 
-  get expiredPublicationBeforeDate() {
-    return this.publicationFlow.publishBefore
-      && moment(this.publicationFlow.publishBefore).isBefore(moment());
-  }
-
-  get expiredPublicationDate() {
-    return this.publicationFlow.publishedAt
-      && moment(this.publicationFlow.publishedAt).isBefore(moment());
-  }
-
-  get expiredTranslationDate() {
-    return this.publicationFlow.translateBefore
-      && moment(this.publicationFlow.translateBefore).isBefore(moment());
-  }
-
   @restartableTask
   *setPublicationNumber(event) {
     yield timeout(1000);

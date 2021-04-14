@@ -4,6 +4,7 @@ import Model, {
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import moment from 'moment';
 
 export default class PublicationFlow extends Model {
   // Attributes.
@@ -48,6 +49,21 @@ export default class PublicationFlow extends Model {
       return `${this.publicationNumber} ${this.publicationSuffix}`;
     }
     return `${this.publicationNumber}`;
+  }
+
+  get publicationBeforeDateHasExpired() {
+    return this.publishBefore
+      && moment(this.publishBefore).isBefore(moment());
+  }
+
+  get publicationDateHasExpired() {
+    return this.publishedAt
+      && moment(this.publishedAt).isBefore(moment());
+  }
+
+  get translationDateHasExpired() {
+    return this.translateBefore
+      && moment(this.translateBefore).isBefore(moment());
   }
 
   get translationRequestsTotal() {
