@@ -32,6 +32,11 @@ export default class Datepicker extends Component {
   }
 
   @action
+  updateEnable() { // in order to make the ember-component work in a DDAU fashion (update view when the enable arg changes)
+    this.flatpickrRef.set('enable', this.enable);
+  }
+
+  @action
   openDatepicker() {
     this.flatpickrRef.toggle();
   }
