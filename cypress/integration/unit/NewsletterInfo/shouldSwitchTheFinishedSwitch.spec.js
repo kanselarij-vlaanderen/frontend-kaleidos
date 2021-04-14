@@ -31,7 +31,7 @@ context('NewsletterInfo: Switching the finished switch', () => {
       .wait('@patchNewsletterInfo');
   });
 
-  it('Should check the box "in kort bestek" and uncheck ik afterward', () => {
+  it('Should check the box "in kort bestek" and uncheck it afterward', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
     cy.get('.auk-checkbox').last()
