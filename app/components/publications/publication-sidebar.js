@@ -423,12 +423,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  // Overwrite from datepicker cant be renamed
-  @action
-  toggle() {
-    this.showPicker = !this.showPicker;
-  }
-
   @restartableTask
   *setRemark(event) {
     const newValue = event.target.value;
