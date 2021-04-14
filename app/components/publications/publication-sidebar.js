@@ -1,8 +1,5 @@
 import Component from '@glimmer/component';
-import {
-  action,
-  set
-} from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import {
   task,
@@ -27,8 +24,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @service publicationService;
 
   // Tracked props.
-  @tracked publicationNotAfterTranslationForPublication = false;
-  @tracked showPublicationDatePicker = true;
   @tracked showRequestedPublicationDatePicker = true;
   @tracked selectedRegulatonType;
   @tracked newNumacNumber = '';
@@ -258,47 +253,21 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  @action
-  allowedPublicationDate(date) {
-    const end = moment().add(360, 'days');
-    let startRange;
-    const translateBefore = this.publicationFlow.translateBefore;
-    if (translateBefore && moment(translateBefore).isSameOrAfter(moment())) {
-      startRange = moment(translateBefore);
-    } else {
-      startRange = moment();
-    }
-    if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(startRange)) {
-      return true;
-    }
-    return false;
+  get allowedUltimatePublicationDates() {
+    const rangeStart = this.publicationFlow.translateBefore || new Date();
+    return [
+      {
+        from: rangeStart,
+        to: moment(rangeStart).add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
+      }
+    ];
   }
 
   @action
-  setPublicationBeforeDate(event) {
-    set(this, 'showPublicationDatePicker', false);
-    set(this, 'showTranslationDatePicker', false);
-    const date = moment(new Date(event));
-    const translateBefore = this.publicationFlow.get('translateBefore');
-    if (translateBefore !== undefined && !moment(translateBefore).isSameOrBefore(date, 'minutes')) {
-      this.publicationNotAfterTranslationForPublication = true;
-      this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
-        timeOut: 5000,
-      });
-      set(this, 'showPublicationDatePicker', true);
-      set(this, 'showTranslationDatePicker', true);
-    } else {
-      this.publicationFlow.set('publishBefore', new Date(event));
-      this.publicationFlow.save().then(() => {
-        set(this, 'showPublicationDatePicker', true);
-        set(this, 'showTranslationDatePicker', true);
-      }).
-        catch(() => {
-          set(this, 'showPublicationDatePicker', true);
-          set(this, 'showTranslationDatePicker', true);
-        });
-      this.publicationNotAfterTranslationForPublication = false;
-    }
+  setPublicationBeforeDate(selectedDates) {
+    const date = selectedDates[0];
+    this.publicationFlow.publishBefore = date;
+    this.publicationFlow.save();
   }
 
   @action
