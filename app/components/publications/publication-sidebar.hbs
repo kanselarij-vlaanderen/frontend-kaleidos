@@ -141,7 +141,7 @@
               {{#if this.showTranslationDatePicker}}
                 <WebComponents::AuDatepicker
                         @defaultDate={{this.publicationFlow.translateBefore}}
-                        @enabledDatesFunction={{action this.allowedTranslationDate}}
+                        @enable={{this.allowedUltimateTranslationDates}}
                         @onChange={{this.setTranslationDate}}/>
               {{else}}
                 <Utils::SimpleSpinner></Utils::SimpleSpinner>
@@ -150,12 +150,6 @@
                 <div class="auk-form-help-text auk-form-help-text--warning">
                   <WebComponents::AuIcon @name="alert-triangle"/>
                   {{t "date-expired"}}
-                </div>
-              {{/if}}
-              {{#if this.publicationNotAfterTranslationForTranslation}}
-                <div class="auk-form-help-text auk-form-help-text--danger">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "publication-date-after-translation-date"}}
                 </div>
               {{/if}}
             </div>

@@ -28,8 +28,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   // Tracked props.
   @tracked publicationNotAfterTranslationForPublication = false;
-  @tracked publicationNotAfterTranslationForTranslation = false;
-  @tracked showTranslationDatePicker = true;
   @tracked showPublicationDatePicker = true;
   @tracked showRequestedPublicationDatePicker = true;
   @tracked selectedRegulatonType;
@@ -261,28 +259,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  allowedTranslationDate(date) {
-    // If translateBefore has expired, show that date (input is empty without this)
-    const translateBefore = this.publicationFlow.translateBefore;
-    if (translateBefore && moment(translateBefore).isBefore(moment())) {
-      if (moment(date).isSame(translateBefore)) {
-        return true;
-      }
-    }
-    // If there is no publishBefore, allow all future dates
-    const publishBefore = this.publicationFlow.publishBefore;
-    if (!publishBefore && moment(date).isSameOrAfter(moment())) {
-      return true;
-    }
-    // If there is a publishbefore, only allow dates between now and that date
-    const end = moment(publishBefore);
-    if (moment(date).isSameOrBefore(end) && moment(date).isSameOrAfter(moment())) {
-      return true;
-    }
-    return false;
-  }
-
-  @action
   allowedPublicationDate(date) {
     const end = moment().add(360, 'days');
     let startRange;
@@ -337,31 +313,20 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.save();
   }
 
+  get allowedUltimateTranslationDates() {
+    return [
+      {
+        from: new Date(),
+        to: this.publicationFlow.publishBefore || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
+      }
+    ];
+  }
+
   @action
-  setTranslationDate(event) {
-    set(this, 'showPublicationDatePicker', false);
-    set(this, 'showTranslationDatePicker', false);
-    const date = moment(new Date(event));
-    const publishBefore = this.publicationFlow.get('publishBefore');
-    if (publishBefore !== undefined && !moment(date).isSameOrBefore(publishBefore)) {
-      this.publicationNotAfterTranslationForTranslation = true;
-      this.toaster.error(this.intl.t('publication-date-after-translation-date'), this.intl.t('warning-title'), {
-        timeOut: 5000,
-      });
-      set(this, 'showPublicationDatePicker', true);
-      set(this, 'showTranslationDatePicker', true);
-    } else {
-      this.publicationFlow.set('translateBefore', new Date(event));
-      this.publicationFlow.save().then(() => {
-        set(this, 'showPublicationDatePicker', true);
-        set(this, 'showTranslationDatePicker', true);
-      }).
-        catch(() => {
-          set(this, 'showPublicationDatePicker', true);
-          set(this, 'showTranslationDatePicker', true);
-        });
-      this.publicationNotAfterTranslationForTranslation = false;
-    }
+  setTranslationDate(selectedDates) {
+    const date = selectedDates[0];
+    this.publicationFlow.publishBefore = date;
+    this.publicationFlow.save();
   }
 
   @restartableTask
