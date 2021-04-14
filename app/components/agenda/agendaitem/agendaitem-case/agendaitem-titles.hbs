@@ -20,6 +20,7 @@
             <WebComponents::AuToolbar::Item>
               <LinkTo
                 class="auk-button auk-button--tertiary"
+                data-test-agendaitem-titles-to-subcase={{true}}
                 @route="cases.case.subcases.subcase.overview"
                 @models={{array this.case.id @subcase.id}}
               >
