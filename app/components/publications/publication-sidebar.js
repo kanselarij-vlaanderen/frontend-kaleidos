@@ -245,9 +245,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
         // rollback the value in the view
         event.target.value = this.publicationFlow.get('publicationNumber') || '';
       } else {
-        this.publicationFlow.set('publicationNumber', parseInt(event.target.value, 10));
+        const number = parseInt(event.target.value, 10);
+        this.publicationFlow.set('publicationNumber', number);
         this.numberIsAlreadyUsed = false;
-        this.publicationFlow.save();
+        if (this.args.didChange) {
+          this.args.didChange(this.publicationFlow, 'publicationNumber', number);
+        }
       }
     });
   }
@@ -280,7 +283,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
           this.publicationFlow.set('publicationSuffix', undefined);
         }
         this.numberIsAlreadyUsed = false;
-        this.publicationFlow.save();
+        if (this.args.didChange) {
+          this.args.didChange(this.publicationFlow, 'publicationSuffix', event.target.value);
+        }
       }
     });
   }
