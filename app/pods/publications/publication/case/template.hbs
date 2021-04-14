@@ -380,7 +380,7 @@
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="primary" @icon="plus" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
+              <WebComponents::AuButton @skin="primary" @icon="add" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
                 {{t "add"}}
               </WebComponents::AuButton>
             </WebComponents::AuToolbar::Item>
@@ -427,7 +427,7 @@
             <WebComponents::AuToolbar::Item>
               <WebComponents::AuButton
                 @skin="primary"
-                @icon="plus"
+                @icon="add"
                 @size="small"
                 {{on "click" this.addSelectedMandateeToPublicationFlow}}
                 data-test-add-contactperson-submit-button
@@ -478,7 +478,7 @@
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton
                     @skin="primary"
-                    @icon="plus"
+                    @icon="add"
                     @size="small"
               {{on "click" this.addOrganisation}}
                     data-test-add-organization-submit-button
