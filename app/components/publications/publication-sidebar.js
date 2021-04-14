@@ -264,7 +264,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationBeforeDate(selectedDates) {
+  setUltimatePublicationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
     this.publicationFlow.save();
@@ -292,7 +292,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setTranslationDate(selectedDates) {
+  setUltimateTranslationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
     this.publicationFlow.save();
