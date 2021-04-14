@@ -69,7 +69,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       id: CONFIG.publicationStatusWithdrawn.id,
       label: 'Afgevoerd',
       icon: {
-        svg: 'circle-close',
+        svg: 'circle-error',
         color: 'danger',
       },
     }
