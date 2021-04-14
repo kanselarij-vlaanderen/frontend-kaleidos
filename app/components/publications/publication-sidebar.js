@@ -267,19 +267,25 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimatePublicationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'publishBefore', this.publicationFlow.publishBefore);
+    }
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'publishDateRequested', this.publicationFlow.publishDateRequested);
+    }
   }
 
   @action
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'publishedAt', this.publicationFlow.publishedAt);
+    }
   }
 
   get allowedUltimateTranslationDates() {
@@ -295,7 +301,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimateTranslationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'translateBefore', this.publicationFlow.translateBefore);
+    }
   }
 
   @restartableTask
