@@ -24,8 +24,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @service publicationService;
 
   // Tracked props.
-  @tracked showRequestedPublicationDatePicker = true;
-  @tracked selectedRegulatonType;
   @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;

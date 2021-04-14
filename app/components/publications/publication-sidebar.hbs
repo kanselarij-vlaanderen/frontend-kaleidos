@@ -105,13 +105,9 @@
           {{#if @publicationFlow.status.isToBePublished}}
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
-              {{#if this.showRequestedPublicationDatePicker}}
-                <WebComponents::AuDatepicker
-                        @defaultDate={{this.publicationFlow.publishDateRequested}}
-                        @onChange={{this.setRequestedPublicationDate}}/>
-              {{else}}
-                <Utils::SimpleSpinner></Utils::SimpleSpinner>
-              {{/if}}
+              <WebComponents::AuDatepicker
+                      @defaultDate={{this.publicationFlow.publishDateRequested}}
+                      @onChange={{this.setRequestedPublicationDate}}/>
             </div>
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
