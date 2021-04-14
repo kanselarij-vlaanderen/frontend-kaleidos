@@ -165,27 +165,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   get expiredPublicationBeforeDate() {
-    if (this.publicationFlow.get('publishBefore')) {
-      return moment(this.publicationFlow.get('publishBefore'))
-        .isBefore(moment());
-    }
-    return false;
+    return this.publicationFlow.publishBefore
+      && moment(this.publicationFlow.publishBefore).isBefore(moment());
   }
 
   get expiredPublicationDate() {
-    if (this.publicationFlow.get('publishedAt')) {
-      return moment(this.publicationFlow.get('publishedAt'))
-        .isBefore(moment());
-    }
-    return false;
+    return this.publicationFlow.publishedAt
+      && moment(this.publicationFlow.publishedAt).isBefore(moment());
   }
 
   get expiredTranslationDate() {
-    if (this.publicationFlow.get('translateBefore')) {
-      return moment(this.publicationFlow.get('translateBefore'))
-        .isBefore(moment());
-    }
-    return false;
+    return this.publicationFlow.translateBefore
+      && moment(this.publicationFlow.translateBefore).isBefore(moment());
   }
 
   @restartableTask
