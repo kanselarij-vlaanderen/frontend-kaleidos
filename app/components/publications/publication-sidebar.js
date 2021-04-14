@@ -164,34 +164,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.showConfirmWithdraw = false;
   }
 
-  get getTranslationDate() {
-    if (!this.publicationFlow.get('translateBefore')) {
-      return null;
-    }
-    return this.publicationFlow.get('translateBefore');
-  }
-
-  get getPublicationBeforeDate() {
-    if (!this.publicationFlow.get('publishBefore')) {
-      return null;
-    }
-    return this.publicationFlow.get('publishBefore');
-  }
-
-  get getRequestedPublicationDate() {
-    if (!this.publicationFlow.get('publishDateRequested')) {
-      return null;
-    }
-    return this.publicationFlow.get('publishDateRequested');
-  }
-
-  get getPublicationDate() {
-    if (!this.publicationFlow.get('publishedAt')) {
-      return null;
-    }
-    return this.publicationFlow.get('publishedAt');
-  }
-
   get expiredPublicationBeforeDate() {
     if (this.publicationFlow.get('publishBefore')) {
       return moment(this.publicationFlow.get('publishBefore'))
