@@ -109,10 +109,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     });
     return regulationTypes;
   }
+
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.set('regulationType', regulationType);
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'regulationType', regulationType);
+    }
   }
 
   get getPublicationType() {
@@ -123,7 +126,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   async setPublicationType(pojoType) {
     const publicationType = await this.store.findRecord('publication-type', pojoType.id);
     this.publicationFlow.set('type', publicationType);
-    this.publicationFlow.save();
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'type', publicationType);
+    }
   }
 
   get getPublicationStatus() {
