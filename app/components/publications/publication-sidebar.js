@@ -312,12 +312,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   togglePriorityProcedure() {
-    if (this.publicationFlow.get('hasPriority')) {
-      this.publicationFlow.set('priority', 0);
-    } else {
-      this.publicationFlow.set('priority', 1);
+    const priorityNumber = this.publicationFlow.hasPriority ? 0 : 1;
+    this.publicationFlow.priority = priorityNumber;
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'priority', priorityNumber);
     }
-    this.publicationFlow.save();
   }
 
   @action
