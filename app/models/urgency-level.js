@@ -7,7 +7,6 @@ export default class UrgencyLevel extends Model {
   @attr('string') label;
   @attr('number') position;
   @hasMany('publication-flow') publications;
-
   get isUrgent() {
     return this.uri === CONFIG.URGENCY_LEVELS.spoedprocedure;
   }
