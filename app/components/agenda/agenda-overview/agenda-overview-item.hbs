@@ -129,7 +129,7 @@
         </div>
         {{#if this.enableShowMore}}
           <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
-            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "plus"}} />
+            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "add"}} />
             <p class="vlc-document-show-more-button__text auk-u-ml">
               {{#if this.isShowingAllDocuments }}
                 {{t "show-less"}}
@@ -157,7 +157,7 @@
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
                   <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                    <i class="ki ki-hide"></i>
+                    <i class="ki ki-not-visible"></i>
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -169,7 +169,7 @@
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
                   <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter" style="color: white;">
-                    <i class="ki ki-hide"></i>
+                    <i class="ki ki-not-visible"></i>
                   </div>
                 {{/if}}
               {{else}}
@@ -185,7 +185,7 @@
               {{/if}}
               {{#if @isNew}}
                 <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
-                  <i class="ki ki-calendar-plus"></i>
+                  <i class="ki ki-calendar-new"></i>
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}

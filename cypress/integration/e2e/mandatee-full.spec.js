@@ -129,6 +129,7 @@ context('Full test for creating mandatees', () => {
       .within(() => {
         cy.get(settings.mandateeEdit).click();
       });
+    // TODO make this agendaDate minus x days or weeks, no set date
     const enddateForMandatee = Cypress.moment('2020-03-02').set({
       hour: 10, minute: 10,
     });
@@ -141,6 +142,7 @@ context('Full test for creating mandatees', () => {
       .should('be.visible')
       .click();
     cy.wait(3000);
+    // TODO Fix grammar einddatum
     cy.get(modal.verify.save).should('exist')
       .should('be.visible')
       .contains('Eindatum aanpassen');
@@ -157,6 +159,7 @@ context('Full test for creating mandatees', () => {
     // TODO index is risky business
     cy.get('[data-test-mandatee-resign="0"]').click();
     cy.wait(3000);
+    // TODO Fix grammar of popup ?
     cy.get(mandatee.manageMandateeChangesAlert).should('exist')
       .should('be.visible');
     cy.get(form.formCancelButton).click();
