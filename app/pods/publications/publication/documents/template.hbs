@@ -54,56 +54,8 @@
   </div>
 
   <div class="auk-u-mb-2">
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Body class="auk-panel--editing">
-        <div class="auk-u-flex">
-          <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
-            <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
-            <WebComponents::AuInput @value={{pieceName}} type="text" id="blockInput" @block="true" {{on "change" this.onFilterByPieceNameNameChange}}/>
-          </div>
-          <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
-            <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
-            <PowerSelectMultiple
-                    @searchEnabled={{true}}
-                    @selected={{this.selectedFileExtensions}}
-                    @options={{this.fileExtensions}}
-                    @onchange={{fn (mut this.selectedFileExtensions)}} as |selectedFileExtensions|>
-              {{selectedFileExtensions}}
-            </PowerSelectMultiple>
-          </div>
-          <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
-            <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
-            {{#unless this.loadData.isRunning}}
-              <PowerSelectMultiple @options={{this.sortedDocumentTypes}}
-                                  @isSearchable={{false}}
-                                  @selected={{this.selectedPieceTypes}}
-                                  @onchange={{fn (mut this.selectedPieceTypes)}} as |selectedPieceType|>
-                {{get selectedPieceType "label"}}
-              </PowerSelectMultiple>
-            {{/unless}}
-          </div>
-        </div>
-        <div class="auk-u-flex auk-u-flex--justify-end">
-          <div>
-            <WebComponents::AuButton
-                    data-test-publication-filter-reset
-                    @skin="secondary"
-                    {{on "click" this.resetFilter}}
-            >
-              {{t "reset"}}
-            </WebComponents::AuButton>
-            <WebComponents::AuButton
-                    @icon="filter"
-                    data-test-publication-filter
-                    @skin="primary"
-                    {{on "click" this.filterDocumentsAction}}
-            >
-              {{t "filter-plural"}}
-            </WebComponents::AuButton>
-          </div>
-        </div>
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
+    <Publications::Publication::Documents::DocumentsFilter
+      @filter={{this.filter}} @onChange={{this.onPerformFiltering}} />
   </div>
 
   {{#if (await this.initialDocumentLoad)}}
