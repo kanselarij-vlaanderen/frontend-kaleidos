@@ -95,13 +95,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     return this.args.publicationFlow;
   }
 
-  get getClassForPublicationNumber() {
-    if (this.numberIsAlreadyUsed) {
-      return 'auk-form-group--error';
-    }
-    return null;
-  }
-
   @task
   *loadRegulationTypes() {
     const regulationTypes = yield this.store.query('regulation-type', {

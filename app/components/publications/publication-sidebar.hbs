@@ -16,7 +16,7 @@
     <div class="auk-scroll-wrapper">
       <div class="auk-scroll-wrapper__body">
         <div class="auk-u-m-3">
-          <div class="auk-form-group {{getClassForPublicationNumber}}">
+          <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
             <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
             <WebComponents::AuInput type="number" value={{@publicationFlow.publicationNumber}}
               {{on "input" (perform this.setPublicationNumber)}} />
