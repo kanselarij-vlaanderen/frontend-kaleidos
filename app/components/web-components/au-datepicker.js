@@ -2,9 +2,11 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 export default class Datepicker extends Component {
-  get enabledDatesFunction() {
-    if (this.args.enabledDatesFunction) {
+  get enable() {
+    if (this.args.enabledDatesFunction) { // reverse compatibility
       return [this.args.enabledDatesFunction];
+    } else if (this.args.enable) { // same interface a flatpickr
+      return this.args.enable;
     }
     return null;
   }
