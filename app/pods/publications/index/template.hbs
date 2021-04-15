@@ -233,7 +233,7 @@
 
           {{#if this.tableColumnDisplayOptions.speedProcedure}}
             <td class="auk-u-text-align--center">
-              {{#if row.hasPriority}}
+              {{#if row.urgencyLevel.isUrgent}}
                 <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
                 <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
                   <p>

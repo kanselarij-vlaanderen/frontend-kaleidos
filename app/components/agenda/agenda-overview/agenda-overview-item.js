@@ -25,7 +25,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @service toaster;
   @service sessionService;
   @service agendaService;
-  @service publicationService;
   @service router;
   @service('current-session') currentSessionService;
 
@@ -58,16 +57,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   get enableShowMore() {
     return this.agendaitemDocuments.length > this.documentListSize;
-  }
-
-  @action
-  async startPublication() {
-    this.showLoader = true;
-    const _case = await this.subcase.get('case');
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _case.id);
-    this.showLoader = false;
-    this.router.transitionTo('publications.publication.case', newPublication.id);
   }
 
   @task
