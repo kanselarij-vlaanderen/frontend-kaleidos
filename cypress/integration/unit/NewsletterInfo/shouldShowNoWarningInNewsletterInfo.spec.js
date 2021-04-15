@@ -18,6 +18,8 @@ context('Show no warning in Newsletterinfo', () => {
     cy.login('Admin');
   });
 
+  // TODO so much setup for 1 assert
+
   it('Should show no warning in kortbestek view', () => {
     const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;
     const agendaDate = Cypress.moment().add(3, 'weeks')

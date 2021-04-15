@@ -2,27 +2,33 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
+import {
+  task,
+  lastValue
+} from 'ember-concurrency-decorators';
 
 export default class AgendaitemTitles extends Component {
-  @alias('args.agendaitem.agendaActivity.subcase') subcase;
+  @service currentSession;
+  @service publicationService;
+  @service router;
+
+  @lastValue('loadCase') case;
 
   @tracked showLoader = false;
 
-  @service currentSession;
+  constructor() {
+    super(...arguments);
+    this.loadCase.perform();
+  }
 
-  @service router;
-
-  @action
-  toggleIsEditingAction() {
-    this.args.toggleIsEditing();
+  @task
+  *loadCase() {
+    const _case = yield this.args.subcase.case;
+    return _case;
   }
 
   @action
-  async redirectToSubcase() {
-    const subcase = this.args.subcase;
-    const _case = await subcase.get('case');
-    const subcaseId = subcase.id;
-    this.router.transitionTo('cases.case.subcases.subcase.overview', _case.id, subcaseId);
+  startEditing() {
+    this.args.toggleIsEditing();
   }
 }
