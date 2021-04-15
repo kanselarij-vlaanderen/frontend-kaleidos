@@ -61,11 +61,9 @@
             />
           </div>
           <div class="auk-form-group">
-            {{web-components/vl-checkbox
-              value=(gt @publicationFlow.priority 0)
-              label=(t "priority-procedure")
-              toggle=this.togglePriorityProcedure
-            }}
+            <Publications::UrgencyLevelCheckbox
+                    @urgencyLevel={{this.urgencyLevel}}
+                    @onChange={{this.setUrgencyLevel}} />
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>

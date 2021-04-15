@@ -15,7 +15,6 @@ export default class PublicationFlow extends Model {
   @attr('datetime') publishDateRequested;
   @attr('datetime') publishedAt;
   @attr('string') remark;
-  @attr('number') priority;
   @attr('datetime') created;
   @attr('datetime') modified;
 
@@ -31,17 +30,13 @@ export default class PublicationFlow extends Model {
 
   @belongsTo('publication-type') type;
   @belongsTo('regulation-type') regulationType;
+  @belongsTo('urgency-level') urgencyLevel;
 
   // Has many .
   @hasMany('numac-number') numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
-
-  @computed('priority')
-  get hasPriority() {
-    return this.priority > 0;
-  }
 
   @computed('publicationNumber,publicationSuffix')
   get publicationNumberToDisplay() {

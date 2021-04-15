@@ -115,6 +115,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
+  @action
+  setUrgencyLevel(urgencyLevel) {
+    this.model.publicationFlow.urgencyLevel = urgencyLevel;
+    this.urgencyLevel = urgencyLevel;
+    this.model.publicationFlow.save();
+  }
+
   get getPublicationStatus() {
     return this.statusOptions.find((statusOption) => statusOption.id === this.publicationFlow.get('status.id'));
   }
@@ -239,15 +246,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     numacNumber.deleteRecord();
     if (this.args.didChange) {
       yield this.args.didChange(numacNumber);
-    }
-  }
-
-  @action
-  togglePriorityProcedure() {
-    const priorityNumber = this.publicationFlow.hasPriority ? 0 : 1;
-    this.publicationFlow.priority = priorityNumber;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'priority');
     }
   }
 
