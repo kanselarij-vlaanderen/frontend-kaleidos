@@ -18,9 +18,7 @@ export default Model.extend({
   isArchived: attr('boolean'),
   confidential: attr('boolean'),
 
-  publicationFlow: belongsTo('publication-flow', {
-    inverse: null,
-  }),
+  publicationFlow: belongsTo('publication-flow'),
 
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
