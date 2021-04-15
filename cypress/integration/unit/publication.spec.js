@@ -34,6 +34,7 @@ context('Publications tests', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.auModal.container).as('publicationModal');
+    cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
     cy.get('@publicationModal').within(() => {
       // No errors on initial view, just info
       cy.get(modalSelectors.publication.alertInfo, {
@@ -71,6 +72,9 @@ context('Publications tests', () => {
       cy.get(modalSelectors.publication.alertInfo, {
         timeout: 5000,
       }).should('exist');
+    });
+    cy.wait('@createNewPublicationFlow', {
+      timeout: 20000,
     });
   });
 
@@ -128,8 +132,11 @@ context('Publications tests', () => {
     cy.visit(publicationOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
-    cy.get(publicationSelectors.goToPublication).first()
-      .click();
+    cy.contains('200').parents('tr')
+      .within(() => {
+        cy.get(publicationSelectors.goToPublication)
+          .click();
+      });
     cy.wait('@getNewPublicationDetail');
     // TODO This test is VERY dependent on existing data from previous test, fixing this for now but this will break at some point
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
@@ -140,8 +147,11 @@ context('Publications tests', () => {
     cy.visit(publicationOverviewUrl);
 
     cy.route('/publication-flows/**').as('getNewPublicationDetail');
-    cy.get(publicationSelectors.goToPublication).first()
-      .click();
+    cy.contains('200').parents('tr')
+      .within(() => {
+        cy.get(publicationSelectors.goToPublication)
+          .click();
+      });
     cy.wait('@getNewPublicationDetail');
 
     cy.get(publicationSelectors.editInscriptionButton).click();
