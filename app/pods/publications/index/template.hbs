@@ -1,296 +1,292 @@
-{{!-- TODO auk-panel-layout gebruiken, component ? --}}
-<div class="vlc-panel-layout__main-content">
-  <WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
-          <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
-            <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
-          </div>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
-          <WebComponents::AuDropdown>
-            <Publications::PublicationCaseSearch />
-          </WebComponents::AuDropdown>
-        </WebComponents::AuToolbar::Item>
-        <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
-            {{t "filter-content"}}
-          </WebComponents::AuButton>
-        </WebComponents::AuToolbar::Item>
+<WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <div class="auk-u-flex auk-u-flex--vertical">
+          <h4 class="auk-toolbar-complex__title">{{t "publications" }}</h4>
+        </div>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuDropdown>
+          <Publications::PublicationCaseSearch />
+        </WebComponents::AuDropdown>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
+          {{t "filter-content"}}
+        </WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
 
-        <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
-            (fn this.showPublicationModal)}}>
-            {{t "publications-new"}}
-          </WebComponents::AuButton>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    {{#if this.isShowPublicationModal}}
-      <Publications::NewPublicationModal
-        @onCancel={{this.closePublicationModal}}
-        @onSave={{this.saveNewPublication}} />
-    {{/if}}
-    {{#if this.isShowPublicationFilterModal}}
-      <Publications::PublicationsFilterModal
-        @filter={{this.publicationFilter}}
-        @onCancel={{this.cancelPublicationsFilter}}
-        @onSave={{this.savePublicationsFilter}} />
-    {{/if}}
-    {{outlet}}
-  </div>
-</div>
-<div class="auk-u-m-2 auk-u-scroll-scrollable">
-  <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-    {{on "click" this.openColumnDisplayOptionsModal}}
-  />
-  <DataTable
-    @content={{this.model}}
-    @page={{this.page}}
-    @noDataMessage={{t "no-results-found"}}
-    @size={{this.size}}
-    @sort={{this.sort}}
-    @isLoading={{this.isLoadingModel}}
-    @onClickRow={{this.navigateToPublication}}
-    @class="auk-table auk-table--disable-bottom-border"
-    as |table|>
-    <table.content as |c|>
-      <c.header>
-        {{#each this.tableColumns as |column|}}
-          {{#if (get this.tableColumnDisplayOptions column.keyName)}}
-            {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
-            {{#if (eq column.keyName "caseName")}}
-              {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
-              <th style="min-width: 50rem">
-                {{t column.translationKey}}
-              </th>
-            {{else}}
-              {{#if column.sortable}}
-                <ThSortable
-                  @currentSorting={{this.sort}}
-                  @field={{column.keyName}}
-                  @label={{t column.translationKey}}
-                />
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
+          (fn this.showPublicationModal)}}>
+          {{t "publications-new"}}
+        </WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
+<div class="auk-scroll-wrapper__body auk-u-m-0">
+  <div class="auk-u-m-4">
+    <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+      {{on "click" this.openColumnDisplayOptionsModal}}
+    />
+    <DataTable
+      @content={{this.model}}
+      @page={{this.page}}
+      @noDataMessage={{t "no-results-found"}}
+      @size={{this.size}}
+      @sort={{this.sort}}
+      @isLoading={{this.isLoadingModel}}
+      @onClickRow={{this.navigateToPublication}}
+      @class="auk-table auk-table--disable-bottom-border"
+      as |table|>
+      <table.content as |c|>
+        <c.header>
+          {{#each this.tableColumns as |column|}}
+            {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+              {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
+              {{#if (eq column.keyName "caseName")}}
+                {{!-- TODO not a clean solution using style inline, need an auk-u class for this --}}
+                <th style="min-width: 50rem">
+                  {{t column.translationKey}}
+                </th>
               {{else}}
-                <th>{{t column.translationKey}}</th>
+                {{#if column.sortable}}
+                  <ThSortable
+                    @currentSorting={{this.sort}}
+                    @field={{column.keyName}}
+                    @label={{t column.translationKey}}
+                  />
+                {{else}}
+                  <th>{{t column.translationKey}}</th>
+                {{/if}}
               {{/if}}
             {{/if}}
+          {{/each}}
+          <th>
+            &nbsp;
+          </th>
+        </c.header>
+        <c.body class="auk-table--interaction-cursor" as |row|>
+          {{#if this.tableColumnDisplayOptions.caseName}}
+          {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
+            <td class="auk-table__col--6">
+              {{#if row.case.shortTitle}}
+                <WebComponents::AuAbbreviatedText @text={{row.case.shortTitle}} @size="150"/>
+              {{else}}
+                {{#if row.case.title}}
+                  <WebComponents::AuAbbreviatedText @text={{row.case.title}} @size="150"/>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
+              {{/if}}
+            </td>
           {{/if}}
-        {{/each}}
-        <th>
-          &nbsp;
-        </th>
-      </c.header>
-      <c.body class="auk-table--interaction-cursor" as |row|>
-        {{#if this.tableColumnDisplayOptions.caseName}}
-        {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
-          <td class="auk-table__col--6">
-            {{#if row.case.shortTitle}}
-              <WebComponents::AuAbbreviatedText @text={{row.case.shortTitle}} @size="150"/>
-            {{else}}
-              {{#if row.case.title}}
-                <WebComponents::AuAbbreviatedText @text={{row.case.title}} @size="150"/>
+          {{#if this.tableColumnDisplayOptions.publicationNumber}}
+            <td>
+              {{#if row.publicationNumber}}
+                {{row.publicationNumberToDisplay}}
               {{else}}
                 {{t "dash"}}
               {{/if}}
-            {{/if}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.publicationNumber}}
-          <td>
-            {{#if row.publicationNumber}}
-              {{row.publicationNumberToDisplay}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.numacNumber}}
-          <td>
-            {{#each row.numacNumbers as |numac|}}
-              <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
-            {{else}}
-              {{t "dash"}}
-            {{/each}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.regulationType}}
-          <td>
-            {{#if row.regulationType}}
-              {{row.regulationType.label}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.meetingDate}}
-          <td>
-            {{t "dash"}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
-          <td class="auk-u-text-nowrap">
-            {{#if row.publishDateRequested}}
-              {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
-          <td class="auk-u-text-nowrap">
-            {{#if row.publishBefore}}
-              {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
-              <TextWidgets::DeadlineDate
-                @date={{row.publishBefore}}
-                @warningPeriod={{-172800}} {{!-- 2 days in seconds --}}
-                @errorPeriod={{0}}
-              />
-            {{else}}
-              {{t "dash"}}
-            {{/if}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.publicationDate}}
-          <td class="auk-u-text-nowrap">
-            {{if
-              row.publishedAt
-              (moment-format row.publishedAt "DD-MM-YYYY")
-              (t "dash")
-            }}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.caseManager}}
-          <td>
-            {{t "dash"}}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.lastEdited}}
-          <td class="auk-u-text-nowrap">
-            {{moment-format row.modified "DD-MM-YYYY"}}<br/>
-            <span class="auk-u-text-small auk-u-muted">
-              {{moment-format row.modified "HH:mm"}}
-            </span>
-          </td>
-        {{/if}}
-
-
-        {{#if this.tableColumnDisplayOptions.lastEditedBy}}
-          <td>
-            {{t "dash"}}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.withdrawnDate}}
-          <td>
-            {{t "dash"}}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.pauseDate}}
-          <td>
-            {{t "dash"}}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.translateRequests}}
-          <td class="auk-u-text-align--center">
-            {{#if (gt (await row.translationRequestsTotal) 0)}}
-              {{#if
-                (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
-              }}
-                <WebComponents::AuStatusPill @status="done">
-                  {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                </WebComponents::AuStatusPill>
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.numacNumber}}
+            <td>
+              {{#each row.numacNumbers as |numac|}}
+                <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
               {{else}}
-                <WebComponents::AuStatusPill @status="in-progress">
-                  {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                </WebComponents::AuStatusPill>
-              {{/if}}
-            {{else}}
-              <WebComponents::AuStatusPill @status="not-started" />
-            {{/if}}
-          </td>
-        {{/if}}
-
-
-
-        {{#if this.tableColumnDisplayOptions.signRequests}}
-          <td class="auk-u-text-align--center">
-            {{t "dash"}}
-          </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
-          <td class="auk-u-text-align--center">
-            {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-              {{#if
-                (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
-              }}
-                <WebComponents::AuStatusPill @status="done">
-                  {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                </WebComponents::AuStatusPill>
+                {{t "dash"}}
+              {{/each}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.regulationType}}
+            <td>
+              {{#if row.regulationType}}
+                {{row.regulationType.label}}
               {{else}}
-                <WebComponents::AuStatusPill @status="in-progress">
-                  {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                </WebComponents::AuStatusPill>
+                {{t "dash"}}
               {{/if}}
-            {{else}}
-              <WebComponents::AuStatusPill @status="not-started" />
-            {{/if}}
-          </td>
-        {{/if}}
-
-        {{#if this.tableColumnDisplayOptions.speedProcedure}}
-          <td class="auk-u-text-align--center">
-            {{#if row.hasPriority}}
-              <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
-              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                <p>
-                  {{t "priority-procedure"}}
-                </p>
-              </EmberTooltip>
-            {{else}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.meetingDate}}
+            <td>
               {{t "dash"}}
-            {{/if}}
-          </td>
-        {{/if}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.publishDateRequested}}
+                {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.finalPublicationDate}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.publishBefore}}
+                {{!-- TODO We want to check if the publication is still ongoing, no warnings for published/withdrawn --}}
+                <TextWidgets::DeadlineDate
+                  @date={{row.publishBefore}}
+                  @warningPeriod={{-172800}} {{!-- 2 days in seconds --}}
+                  @errorPeriod={{0}}
+                />
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.publicationDate}}
+            <td class="auk-u-text-nowrap">
+              {{if
+                row.publishedAt
+                (moment-format row.publishedAt "DD-MM-YYYY")
+                (t "dash")
+              }}
+            </td>
+          {{/if}}
 
-        {{#if this.tableColumnDisplayOptions.comment}}
-          <td class="auk-u-text-align--center">
-            {{#if row.remark}}
-              <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
-              <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                <p>
-                  {{row.remark}}
-                </p>
-              </EmberTooltip>
-            {{else}}
+          {{#if this.tableColumnDisplayOptions.caseManager}}
+            <td>
               {{t "dash"}}
-            {{/if}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.lastEdited}}
+            <td class="auk-u-text-nowrap">
+              {{moment-format row.modified "DD-MM-YYYY"}}<br/>
+              <span class="auk-u-text-small auk-u-muted">
+                {{moment-format row.modified "HH:mm"}}
+              </span>
+            </td>
+          {{/if}}
+
+
+          {{#if this.tableColumnDisplayOptions.lastEditedBy}}
+            <td>
+              {{t "dash"}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.withdrawnDate}}
+            <td>
+              {{t "dash"}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.pauseDate}}
+            <td>
+              {{t "dash"}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.translateRequests}}
+            <td class="auk-u-text-align--center">
+              {{#if (gt (await row.translationRequestsTotal) 0)}}
+                {{#if
+                  (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
+                }}
+                  <WebComponents::AuStatusPill @status="done">
+                    {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
+                  </WebComponents::AuStatusPill>
+                {{else}}
+                  <WebComponents::AuStatusPill @status="in-progress">
+                    {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
+                  </WebComponents::AuStatusPill>
+                {{/if}}
+              {{else}}
+                <WebComponents::AuStatusPill @status="not-started" />
+              {{/if}}
+            </td>
+          {{/if}}
+
+
+
+          {{#if this.tableColumnDisplayOptions.signRequests}}
+            <td class="auk-u-text-align--center">
+              {{t "dash"}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
+            <td class="auk-u-text-align--center">
+              {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
+                {{#if
+                  (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
+                }}
+                  <WebComponents::AuStatusPill @status="done">
+                    {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
+                  </WebComponents::AuStatusPill>
+                {{else}}
+                  <WebComponents::AuStatusPill @status="in-progress">
+                    {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
+                  </WebComponents::AuStatusPill>
+                {{/if}}
+              {{else}}
+                <WebComponents::AuStatusPill @status="not-started" />
+              {{/if}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.speedProcedure}}
+            <td class="auk-u-text-align--center">
+              {{#if row.urgencyLevel.isUrgent}}
+                <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
+                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                  <p>
+                    {{t "priority-procedure"}}
+                  </p>
+                </EmberTooltip>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </td>
+          {{/if}}
+
+          {{#if this.tableColumnDisplayOptions.comment}}
+            <td class="auk-u-text-align--center">
+              {{#if row.remark}}
+                <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
+                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                  <p>
+                    {{row.remark}}
+                  </p>
+                </EmberTooltip>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
+            </td>
+          {{/if}}
+          {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
+            <td class="auk-u-text-align--center">
+              {{t "dash"}}
+            </td>
+          {{/if}}
+          <td>
+            <WebComponents::AuButtonToolbar>
+              <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" data-test-publications-button-go-to-publication/>
+            </WebComponents::AuButtonToolbar>
           </td>
-        {{/if}}
-        {{#if this.tableColumnDisplayOptions.fromDesignAgenda}}
-          <td class="auk-u-text-align--center">
-            {{t "dash"}}
-          </td>
-        {{/if}}
-        <td>
-          <WebComponents::AuButtonToolbar>
-            <WebComponents::AuButton {{on "click" (fn this.navigateToPublication row)}} @skin="borderless" @layout="icon-only" @icon="chevron-right" data-test-publications-button-go-to-publication/>
-          </WebComponents::AuButtonToolbar>
-        </td>
-      </c.body>
-    </table.content>
-  </DataTable>
+        </c.body>
+      </table.content>
+    </DataTable>
+  </div>
 </div>
 
+{{#if this.isShowPublicationModal}}
+  <Publications::NewPublicationModal
+    @onCancel={{this.closePublicationModal}}
+    @onSave={{this.saveNewPublication}} />
+{{/if}}
+{{#if this.isShowPublicationFilterModal}}
+  <Publications::PublicationsFilterModal
+    @filter={{this.publicationFilter}}
+    @onCancel={{this.cancelPublicationsFilter}}
+    @onSave={{this.savePublicationsFilter}} />
+{{/if}}
 {{#if this.showTableDisplayOptions}}
   <Publications::OverviewTableDisplayConfigModal
     @options={{this.tableColumnDisplayOptions}}

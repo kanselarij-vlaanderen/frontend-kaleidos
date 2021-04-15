@@ -51,16 +51,18 @@ context('Propagation to other graphs', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
-
     cy.get(form.formSave).click();
+
+    // TODO We are clicking the pill inside the document card of treatment report
     cy.get(agenda.accessLevelPill).click();
     cy.existsAndVisible('.ember-power-select-trigger').click();
     cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid')
       .click();
     cy.get(agenda.accessLevelSave).click();
 
+    // TODO verify if this is needed, default treatments for agendaitem is approved anyway
     cy.contains('Wijzigen').click();
-    cy.get('.vlc-box').as('editDecision');
+    cy.get('.auk-box').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
@@ -90,7 +92,7 @@ context('Propagation to other graphs', () => {
     cy.url().should('contain', '/overzicht');
     cy.contains('Wijzigen').should('not.exist');
     cy.contains('Acties').should('not.exist');
-    cy.contains('Indienen voor agendering').should('not.exist');
+    cy.contains('Indienen voor agendering').should('not.exist'); // TODO this subcase is already on agenda so the button does not exist regardless of profile
     cy.clickReverseTab('Documenten');
     cy.contains('Wijzigen').should('not.exist');
     cy.contains('Documenten toevoegen').should('not.exist');

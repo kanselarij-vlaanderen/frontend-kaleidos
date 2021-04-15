@@ -45,51 +45,6 @@
           {{/if}}
 
         </div>
-
-        {{!--  TODO: Commented out section triggers many requests that slow down agenda overview
-        <div class="vlc-u-flex-float-right">
-        {{#if currentSessionService.isOvrb}}
-
-                   PUBLICATION FLOW CALL TO ACTION
-
-          <div class="vlc-u-flex-float-right">
-
-                     PUBLICATION FLOW CALL TO ACTION
-
-            {{#if (not @isEditingFormallyOkStatus)}}
-              <div class="auk-button-toolbar">
-                {{#if (await @agendaitem.publicationFlow)}}
-                  <LinkTo
-                          class=""
-                          @route="publications.publication"
-                          @model={{ await @agendaitem.publicationFlowId }}
-                  >
-                    {{t "publications-to" }}
-                  </LinkTo>
-                {{else}}
-                  {{#if (await @agendaitem.case)}}
-                    <WebComponents::AuButton
-                            @skin="tertiary"
-                            @layout="icon-only"
-                            @disabled={{this.startPublication.isRunning}}
-                            data-test-start-publication
-                      {{on "click" (perform this.startPublication)}}>
-                      {{t "start-publication"}}
-                    </WebComponents::AuButton>
-                  {{/if}}
-                {{/if}}
-              </div>
-            {{/if}}
-
-                   END  PUBLICATION FLOW CALL TO ACTION
-
-          </div>
-        {{/if}}
-
-                 END  PUBLICATION FLOW CALL TO ACTION
-
-        </div>
-        --}}
       </div>
 
       <div class="auk-u-flex auk-u-flex--justify-between">
@@ -129,7 +84,7 @@
         </div>
         {{#if this.enableShowMore}}
           <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
-            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "plus"}} />
+            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "add"}} />
             <p class="vlc-document-show-more-button__text auk-u-ml">
               {{#if this.isShowingAllDocuments }}
                 {{t "show-less"}}
@@ -157,7 +112,7 @@
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
                   <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                    <i class="ki ki-hide"></i>
+                    <i class="ki ki-not-visible"></i>
                     <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -169,7 +124,7 @@
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
                   <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter" style="color: white;">
-                    <i class="ki ki-hide"></i>
+                    <i class="ki ki-not-visible"></i>
                   </div>
                 {{/if}}
               {{else}}
@@ -185,7 +140,7 @@
               {{/if}}
               {{#if @isNew}}
                 <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
-                  <i class="ki ki-calendar-plus"></i>
+                  <i class="ki ki-calendar-new"></i>
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
