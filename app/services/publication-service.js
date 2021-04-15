@@ -45,7 +45,7 @@ export default class PublicationService extends Service {
         reload: true,
       });
     }
-    const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusToPublish.id);
+    const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.PUBLICATION_STATUSES.pending.id);
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
       publicationSuffix,

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import {tracked} from "@glimmer/tracking";
+import { tracked } from '@glimmer/tracking';
 export default class PublicationStatusSelector extends Component {
   @service store;
   @tracked showConfirmWithdraw = false;
