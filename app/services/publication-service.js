@@ -15,49 +15,6 @@ export default class PublicationService extends Service {
   // Tracked.
   @tracked cachedData = A([]);
 
-  async createNewPublication(publicationNumber, publicationSuffix, _caseId, title, shortTitle) {
-    // Work with the case.
-    // Test if dossier already had publication (index not up to date).
-    // For people that dont refresh and we're in a SPA.
-    const pubFlows = await this.store.query('publication-flow', {
-      filter: {
-        case: {
-          id: _caseId,
-        },
-      },
-    });
-    if (pubFlows.content.length > 0) {
-      return await this.store.findRecord('publication-flow', pubFlows.content[0].id);
-    }
-
-    const creationDatetime = moment().utc()
-      .toDate();
-    let caze;
-    if (!_caseId) {
-      caze = this.store.createRecord('case', {
-        title,
-        shortTitle,
-        created: creationDatetime,
-      });
-      await caze.save();
-    } else {
-      caze = await this.store.findRecord('case', _caseId, {
-        reload: true,
-      });
-    }
-    const toPublishStatus = await this.store.findRecord('publication-status', CONFIG.PUBLICATION_STATUSES.pending.id);
-    const publicationFlow = this.store.createRecord('publication-flow', {
-      publicationNumber,
-      publicationSuffix,
-      case: caze,
-      created: creationDatetime,
-      status: toPublishStatus,
-      modified: creationDatetime,
-    });
-    await publicationFlow.save();
-    await caze.belongsTo('publicationFlow').reload();
-    return publicationFlow;
-  }
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
@@ -101,20 +58,6 @@ export default class PublicationService extends Service {
     // filter own model from data or we can't save our own number
     const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
     return publicationNumberTakenList.toArray().length !== 0;
-  }
-
-  async getNewPublicationNextNumber() {
-    // Deze query possibly breaks if publication-flows without number exist
-    const publications = await this.store.query('publication-flow', {
-      sort: '-publication-number',
-      size: 1, // we only want the last result
-    });
-    const latestPublication = publications.get('firstObject');
-    if (latestPublication) {
-      return latestPublication.publicationNumber + 1;
-    }
-    // This should only be a "no-data" issue, in that case we have to default to number 1
-    return 1;
   }
 
   getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {

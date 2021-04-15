@@ -28,6 +28,7 @@ export default class PublicationController extends Controller {
   @tracked showRequestedPublicationDatePicker = true;
   @tracked showConfirmWithdraw = false;
   @tracked selectedRegulatonType;
+  @tracked urgencyLevel;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
@@ -270,12 +271,9 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  togglePriorityProcedure() {
-    if (this.model.publicationFlow.get('hasPriority')) {
-      this.model.publicationFlow.set('priority', 0);
-    } else {
-      this.model.publicationFlow.set('priority', 1);
-    }
+  setUrgencyLevel(urgencyLevel) {
+    this.model.publicationFlow.urgencyLevel = urgencyLevel;
+    this.urgencyLevel = urgencyLevel;
     this.model.publicationFlow.save();
   }
 

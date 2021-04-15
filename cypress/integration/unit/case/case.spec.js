@@ -15,7 +15,10 @@ context('Create case as Admin user', () => {
     cy.logout();
   });
 
+  // TODO missing asserts? Clicking a button does not mean it works, maybe there is a verify modal or an error
+
   it('Create a case with confidentiality and short title', () => {
+    // TODO use the createCase command, use data selectors
     cy.visit('/dossiers');
     cy.get(cases.casesHeaderAddCase).click();
     cy.get(form.formVlToggle).eq(0)
@@ -37,6 +40,8 @@ context('Create case as Admin user', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeaderAddCase).click();
     cy.get(form.formCancelButton).click();
+    // TODO assert modal is gone ?
+    // TODO assert there is no state when cancelling en recreating ?
   });
 
   it('Een lege procedurestap kopieëren in een dossier zou geen fouten mogen geven.', () => {
@@ -47,6 +52,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeaderAddCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
+    // TODO testing without title is done in next it, DUPLICATE test
     cy.get(modal.publication.alertError).should('be.visible');
     cy.get(modal.publication.alertError).contains('Kijk het formulier na');
     cy.get('.vlc-input-field-block').eq(1)
