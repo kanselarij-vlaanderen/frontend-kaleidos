@@ -14,23 +14,29 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
-          {{#if @subcase.case.id}}
+          {{!-- TODO: for now the link-button is hidden while loading.
+          A disabled state would be better to avoid flashing a new button in view once loaded. --}}
+          {{#if (and @subcase this.loadCase.isIdle)}}
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                data-test-agendaitem-titles-to-subcase
-                {{on "click" this.redirectToSubcase}}
-                      @skin="tertiary"
-                      @layout="icon-right"
-                      @icon="chevron-right"
+              <LinkTo
+                class="auk-button auk-button--tertiary"
+                data-test-agendaitem-titles-to-subcase={{true}}
+                @route="cases.case.subcases.subcase.overview"
+                @models={{array this.case.id @subcase.id}}
               >
-                {{t "to-subcase"}}
-              </WebComponents::AuButton>
+                <span class="auk-button__content">
+                  <span class="auk-button__label">{{t "to-subcase"}}</span>
+                  <div class="auk-icon auk-icon--default auk-icon--chevron-right">
+                    <i class="ki ki-chevron-right"></i>
+                  </div>
+                </span>
+              </LinkTo>
             </WebComponents::AuToolbar::Item>
           {{/if}}
           <WebComponents::AuToolbar::Item>
             <WebComponents::AuButton
               data-test-agendaitem-titles-edit
-              {{on "click" this.toggleIsEditingAction}}
+              {{on "click" this.startEditing}}
                     @skin="tertiary"
                     @icon="edit"
                     @layout="icon-only"
@@ -82,7 +88,7 @@
           {{/if}}
           {{#if
             (and @agendaitem.isDesignAgenda
-                    (and currentSession.isEditor @agendaitem.formallyOkToShow))
+                    (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
           }}
             <WebComponents::AuPill
               @skin={{@agendaitem.formallyOkToShow.svg.color}}
