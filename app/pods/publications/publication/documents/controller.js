@@ -5,7 +5,6 @@ import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import {
   action,
   set,
@@ -23,7 +22,6 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
-  @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
   @tracked isExpanded = false;
@@ -33,15 +31,15 @@ export default class PublicationDocumentsController extends Controller {
   @tracked documentTypes = [];
 
   @tracked translateActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked finalTranslationDate: '',
-    @tracked pieces: A([]),
+    /* @tracked*/ mailContent: '',
+    /* @tracked*/ mailSubject: '',
+    /* @tracked*/ finalTranslationDate: '',
+    /* @tracked*/ pieces: A([]),
   };
   @tracked previewActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked pieces: A([]),
+    /* @tracked*/ mailContent: '',
+    /* @tracked*/ mailSubject: '',
+    /* @tracked*/ pieces: A([]),
   };
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
@@ -60,25 +58,8 @@ export default class PublicationDocumentsController extends Controller {
   @tracked selectedFileExtensions = [];
   @tracked selectedPieceTypes = [];
 
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-    this.loadExtensionData.perform();
-  }
-
   reset() {
     this._resetFilterState();
-  }
-
-  @task
-  *loadData() {
-    if (!this.documentTypes.length) {
-      this.documentTypes = yield this.store.query('document-type', {
-        page: {
-          size: 50,
-        },
-      });
-    }
   }
 
   @task
@@ -122,11 +103,6 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  toggleUploadModalSize() {
-    this.isExpanded = !this.isExpanded;
-  }
-
-  @action
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
@@ -137,27 +113,13 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-    this.newPieces.pushObject(piece);
+  async onSave(newPieces) {
+    await this.savePieces.perform(newPieces);
   }
 
   @task
-  *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+  *savePieces(newPieces) {
+    const savePromises = newPieces.map(async(piece) => {
       try {
         await this.savePiece.perform(piece);
       } catch (error) {
@@ -165,16 +127,13 @@ export default class PublicationDocumentsController extends Controller {
         throw error;
       }
     });
-    this.showLoader = true;
-    this.isOpenPieceUploadModal = false;
     yield all(savePromises);
-    this.showLoader = false;
-    this.newPieces = A();
+    this.isOpenPieceUploadModal = false;
   }
 
   /**
-   * Save a new document container and the piece it wraps
-   */
+ * Save a new document container and the piece it wraps
+ */
   @task
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
@@ -185,89 +144,9 @@ export default class PublicationDocumentsController extends Controller {
     yield this.model.case.save();
   }
 
-  @task
-  *cancelUploadPieces() {
-    this.showLoader = true;
-    const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
-    yield all(deletePromises);
-    this.newPieces = A();
+  @action
+  onCancel() {
     this.isOpenPieceUploadModal = false;
-    this.showLoader = false;
-  }
-
-  @task
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
-
-  @action
-  cancelDeleteExistingPiece() {
-    this.pieceToDelete = null;
-    this.isVerifyingDelete = false;
-  }
-
-  @action
-  async editExistingPiece(piece) {
-    this.pieceBeingEdited = piece;
-    this.showPieceEditor = true;
-  }
-
-  @action
-  async cancelEditPiece() {
-    this.pieceBeingEdited.rollbackAttributes();
-    const dc = await this.pieceBeingEdited.get('documentContainer');
-    if (dc) {
-      dc.rollbackAttributes();
-      dc.belongsTo('type').reload();
-    }
-    this.pieceBeingEdited = null;
-    this.showPieceEditor = false;
-  }
-
-  @action
-  async saveEditedPiece() {
-    this.showPieceEditor = false;
-    this.showLoader = true;
-    await this.pieceBeingEdited.save();
-    const dc = await this.pieceBeingEdited.get('documentContainer');
-    await dc.save();
-    this.showLoader = false;
-  }
-
-  @action
-  deleteExistingPiece(piece) {
-    this.pieceToDelete = piece;
-    this.isVerifyingDelete = true;
-  }
-
-  @task
-  *verifyDeleteExistingPiece() {
-    const agendaitems = yield this.pieceToDelete.get('agendaitems');
-    // TODO reverse if else, do we need the else in this case ?
-    if (agendaitems && agendaitems.length > 0) {
-      // Possible unreachable code, failsafe. Do we want to show a toast ?
-    } else {
-      // TODO delete with undo ?
-      this.showLoader = true;
-      this.isVerifyingDelete = false;
-      const documentContainer = yield this.pieceToDelete.get('documentContainer');
-      const piecesFromContainer = yield documentContainer.get('pieces');
-      if (piecesFromContainer.length < 2) {
-        // Cleanup documentContainer if we are deleting the last piece in the container
-        // Must revise if we link docx and pdf as multiple files in 1 piece
-        yield this.fileService.deleteDocumentContainer(documentContainer);
-      } else {
-        yield this.fileService.deletePiece(this.pieceToDelete);
-      }
-      yield this.model.case.hasMany('pieces').reload();
-      this.showLoader = false;
-      this.pieceToDelete = null;
-    }
   }
 
   /** PUBLISH PREVIEW ACTIVITIES **/

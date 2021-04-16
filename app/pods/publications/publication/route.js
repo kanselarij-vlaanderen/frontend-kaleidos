@@ -25,7 +25,6 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'mandatees',
     });
 
-
     const totalTranslations = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
       'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
