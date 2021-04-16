@@ -12,6 +12,10 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
+          <WebComponents::AuCheckbox @label={{"show-filter"}}
+            @checked={{this.showFilterPanel}} @toggle={{this.toggleFilterPanel}} />
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
           <WebComponents::AuButton
                   @skin="secondary"
                   @icon="chevron-down"
@@ -53,10 +57,12 @@
     </WebComponents::AuToolbar>
   </div>
 
-  <div class="auk-u-mb-2">
-    <Publications::Publication::Documents::DocumentsFilter
-      @filter={{this.filter}} @onChange={{this.onPerformFiltering}} />
-  </div>
+  {{#if this.showFilterPanel}}
+    <div class="auk-u-mb-2">
+      <Publications::Publication::Documents::DocumentsFilter
+        @filter={{this.filter}} @onChange={{this.onPerformFilter}} />
+    </div>
+  {{/if}}
 
   {{#if (await this.initialDocumentLoad)}}
     <div class="auk-u-mb-3">

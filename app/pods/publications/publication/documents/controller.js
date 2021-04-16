@@ -30,6 +30,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
+  @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
 
   @tracked translateActivity = {
@@ -366,6 +367,9 @@ export default class PublicationDocumentsController extends Controller {
     this.translateActivity.finalTranslationDate = dates[0];
   }
 
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
+  }
 
   @computed('model.case.sortedPieces')
   get initialDocumentLoad() {
@@ -374,16 +378,17 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  async onPerformFiltering(filter) {
+  async toggleFilterPanel() {
+    this.showFilterPanel = !this.showFilterPanel;
+  }
+
+  @action
+  async onPerformFilter(filter) {
     this.renderPieces = false;
     this.selectedPieces = [];
     this.filter = filter;
     await this.sortAndFilterPieces();
     this.renderPieces = true;
-  }
-
-  async getConfig(name, defaultValue) {
-    return await this.configService.get(name, defaultValue);
   }
 
   async sortAndFilterPieces() {
@@ -416,8 +421,11 @@ export default class PublicationDocumentsController extends Controller {
     if (this.filter.fileTypes.length === 0) {
       return true;
     }
-    const file = await piece.get('file');
-    const ext = await file.get('extension');
+
+    const ext = await piece.get('file.extension');
+    if (!ext) {
+      return false
+    }
     return this.filter.fileTypes.includes(ext);
   }
 
@@ -426,16 +434,12 @@ export default class PublicationDocumentsController extends Controller {
     if (this.filter.documentTypes.length === 0) {
       return true;
     }
-    const container = await piece.get('documentContainer');
-    if (!container) {
+
+    const typeId = await piece.get('documentContainer.type.id');
+    if (!typeId) {
       return false;
     }
-    const containerType = await container.get('type');
-    if (!containerType) {
-      return false;
-    }
-    const typeId = await containerType.get('id');
-    return this.filter.documentTypes.some((type) => typeId === type.id);
+    return this.filter.documentTypes.some(type => type.id === typeId);
   }
 
   _resetFilterState() {
