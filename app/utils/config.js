@@ -202,19 +202,19 @@ export default EmberObject.create({
   PUBLICATION_STATUSES: {
     pending: {
       id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
     },
     published: {
       id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
     },
     paused: {
       id: 'bc294fde-45c8-11eb-b378-0242ac130002',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/bc294fde-45c8-11eb-b378-0242ac130002',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
     },
     withdrawn: {
       id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
     },
   },
   LANGUAGE_NL: {
