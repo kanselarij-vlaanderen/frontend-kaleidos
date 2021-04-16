@@ -30,6 +30,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked showConfirmWithdraw = false;
 
   @lastValue('loadRegulationTypes') regulationTypes;
+  @tracked publicationModes;
 
   statusOptions = [
     {
@@ -66,20 +67,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   ];
 
-  typeOptions = [
-    {
-      id: CONFIG.PUBLICATION_TYPES.extenso.id,
-      label: 'Extenso',
-    },
-    {
-      id: CONFIG.PUBLICATION_TYPES.bijUitreksel.id,
-      label: 'Bij uitreksel',
-    }
-  ];
-
   constructor() {
     super(...arguments);
     this.loadRegulationTypes.perform();
+    this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
   }
 
   get publicationFlow() {
@@ -102,16 +93,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  get getPublicationType() {
-    return this.typeOptions.find((typeOption) => typeOption.id === this.publicationFlow.get('type.id'));
-  }
-
   @action
-  async setPublicationType(pojoType) {
-    const publicationType = await this.store.findRecord('publication-type', pojoType.id);
-    this.publicationFlow.type = publicationType;
+  async setPublicationMode(publicationMode) {
+    this.publicationFlow.mode = publicationMode;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'type');
+      this.args.didChange(this.publicationFlow, 'mode');
     }
   }
 
