@@ -6,7 +6,7 @@ import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 const {
-  attr, hasMany, belongsTo, PromiseArray, PromiseObject,
+  attr, hasMany, belongsTo, PromiseArray,
 } = DS;
 
 export default ModelWithModifier.extend({
@@ -144,25 +144,26 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  approved: computed('treatments', 'treatments.@each.decisionResultCode', function() {
-    return PromiseObject.create({
-      promise: this.get('treatments').then((treatments) => {
-        if (treatments && treatments.get('length') > 0) {
-          const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
-          const drcIds = ['56312c4b-9d2a-4735-b0b1-2ff14bb524fd', '9f342a88-9485-4a83-87d9-245ed4b504bf'].join(',');
-          return this.store.query('agenda-item-treatment', {
-            filter: {
-              id: treatmentIds,
-              'decision-result-code': {
-                id: drcIds,
-              },
+  approved: computed('treatments', 'treatments.@each.decisionResultCode', async function() {
+    const meeting = await this.get('requestedForMeeting');
+    if (meeting.isFinal) {
+      const treatments = await this.get('treatments');
+      if (treatments && treatments.get('length') > 0) {
+        const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
+        const drcIds = ['56312c4b-9d2a-4735-b0b1-2ff14bb524fd', '9f342a88-9485-4a83-87d9-245ed4b504bf'].join(',');
+        const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
+          filter: {
+            id: treatmentIds,
+            'decision-result-code': {
+              id: drcIds,
             },
-            include: 'decision-result-code',
-          }).then((treatments) => treatments.get('firstObject'));
-        }
-        return null;
-      }),
-    });
+          },
+          include: 'decision-result-code',
+        });
+        return !!approvedTreatment;
+      }
+    }
+    return false;
   }),
 
   subcasesFromCase: computed('case.subcases.@each', function() {
