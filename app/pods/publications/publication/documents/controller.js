@@ -34,15 +34,15 @@ export default class PublicationDocumentsController extends Controller {
   @tracked filteredSortedPieces = [];
 
   @tracked translateActivity = {
-    mailContent: '',
-    mailSubject: '',
-    finalTranslationDate: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked finalTranslationDate: '',
+    @tracked pieces: A([]),
   };
   @tracked previewActivity = {
-    mailContent: '',
-    mailSubject: '',
-    pieces: A([]),
+    @tracked mailContent: '',
+    @tracked mailSubject: '',
+    @tracked pieces: A([]),
   };
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
