@@ -5,10 +5,6 @@
 }
 
 @media print {
-  .vlc-navbar.vlc-navbar--bordered-bottom.vlc-navbar--bg-alt.vlc-navbar--large {
-    display: none;
-  }
-
   html {
     font-size: 50%;
   }
@@ -27,7 +23,8 @@
   }
 
   // Remove backgrounds
-  .vlc-navbar--bg-alt,
+  .auk-navbar--gray-100,
+  .auk-navbar--gray-200,
   .auk-u-bg-alt {
     background: #fff;
   }
@@ -47,7 +44,7 @@
     display: none !important;
   }
 
-  .vlc-toolbar__right {
+  .auk-toolbar-complex__right {
     display: none;
   }
 
