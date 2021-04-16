@@ -1,6 +1,6 @@
-<div class="vlc-toolbar">
-  <div class="vlc-toolbar__left">
-    <div class="vlc-toolbar__item">
+<div class="auk-toolbar-complex">
+  <div class="auk-toolbar-complex__left">
+    <div class="auk-toolbar-complex__item">
       <h1
         class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width auk-u-pb"
         data-test-newsletter-overview-header-title
@@ -11,9 +11,9 @@
         {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
       </h1>
       <div class="vlc-page-header__sub">
-        <div class="vlc-toolbar vlc-toolbar--auto">
-          <div class="vlc-toolbar__left">
-            <div class="vlc-toolbar__item">
+        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+          <div class="auk-toolbar-complex__left">
+            <div class="auk-toolbar-complex__item">
               <LinkTo
                 @route="newsletters"
                 class="vlc-backlink auk-button-link" >
@@ -23,7 +23,7 @@
               </LinkTo>
             </div>
             {{#if currentSession.isEditor}}
-              <div class="vlc-toolbar__item">
+              <div class="auk-toolbar-complex__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
                   <li class="vlc-tabs-reverse__item">
                     <LinkTo
@@ -72,9 +72,9 @@
       </div>
     </div>
   </div>
-  <div class="vlc-toolbar__right">
-    <div class="vlc-toolbar__item">
-      <div class="vlc-toolbar__item">
+  <div class="auk-toolbar-complex__right">
+    <div class="auk-toolbar-complex__item">
+      <div class="auk-toolbar-complex__item">
         {{#if currentSession.isEditor}}
         {{/if}}
         <button type="button"
