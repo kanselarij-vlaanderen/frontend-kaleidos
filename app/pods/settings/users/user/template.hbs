@@ -7,12 +7,12 @@
 
 <div class="auk-o-grid auk-o-grid-col-6">
   <div class="auk-o-grid-col-6 auk-u-m">
-    <div class="auk-u-mt-3 auk-u-ml-2 auk-u-mb-4">
-      <Panel as |pl|>
-        <pl.Header>
-          <h4 class="vlc-panel__title">{{t 'manage-users-general-info'}}</h4>
-        </pl.Header>
-        <pl.Body>
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <h4 class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
           <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
               <dt class="auk-key-value-item__label">{{t 'manage-users-full-name'}}</dt>
@@ -37,15 +37,15 @@
               <dd class="auk-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</dd>
             </div>
           </dl>
-        </pl.Body>
-      </Panel>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
     </div>
-    <div class="auk-u-m-3 auk-u-ml-2">
-      <Panel as |pl|>
-        <pl.Header>
-          <h4 class="vlc-panel__title">{{t 'manage-users-technical-info'}}</h4>
-        </pl.Header>
-        <pl.Body>
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <h4 class="auk-panel__title">{{t 'manage-users-technical-info'}}</h4>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
           <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
               <dt class="auk-key-value-item__label">{{t 'manage-users-void'}}</dt>
@@ -58,8 +58,8 @@
               <dd class="auk-key-value-item__value">{{if model.organization.identifier model.organization.identifier "-"}}</dd>
             </div>
           </dl>
-        </pl.Body>
-      </Panel>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
     </div>
   </div>
 </div>
