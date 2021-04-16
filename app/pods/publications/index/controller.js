@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -24,6 +25,7 @@ export default class PublicationsIndexController extends Controller {
   size = 25;
   sort = '-created';
   sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+  urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
     || tableColumns.reduce((accumulator, currentValue) => {
@@ -67,16 +69,6 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  async startPublicationFromCaseId(_caseId) {
-    this.showLoader = true;
-    const newPublicationNumber = await this.publicationService.getNewPublicationNextNumber();
-    const newPublication = await this.publicationService.createNewPublication(newPublicationNumber, '', _caseId);
-    this.showLoader = false;
-
-    this.transitionToRoute('publications.publication.case', newPublication.get('id'));
-  }
-
-  @action
   showPublicationModal() {
     this.isShowPublicationModal = true;
   }
@@ -88,7 +80,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.publicationService.createNewPublication(publication.number, publication.suffix, false, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
@@ -109,5 +101,30 @@ export default class PublicationsIndexController extends Controller {
     localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
+  }
+
+  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
+    const creationDatetime = new Date();
+    const caze = this.store.createRecord('case', {
+      title,
+      shortTitle,
+      created: creationDatetime,
+    });
+    await caze.save();
+
+    const toPublishStatus = (await this.store.queryOne('publication-status',  {
+      'filter[:id:]': CONFIG.publicationStatusToPublish.id,
+    }));
+
+    const publicationFlow = this.store.createRecord('publication-flow', {
+      publicationNumber,
+      publicationSuffix,
+      case: caze,
+      created: creationDatetime,
+      status: toPublishStatus,
+      modified: creationDatetime,
+    });
+    await publicationFlow.save();
+    return publicationFlow;
   }
 }
