@@ -424,7 +424,7 @@ export default class PublicationDocumentsController extends Controller {
 
     const ext = await piece.get('file.extension');
     if (!ext) {
-      return false
+      return false;
     }
     return this.filter.fileTypes.includes(ext);
   }
@@ -439,7 +439,7 @@ export default class PublicationDocumentsController extends Controller {
     if (!typeId) {
       return false;
     }
-    return this.filter.documentTypes.some(type => type.id === typeId);
+    return this.filter.documentTypes.some((type) => type.id === typeId);
   }
 
   _resetFilterState() {
