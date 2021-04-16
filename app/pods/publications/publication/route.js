@@ -82,11 +82,20 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     });
   }
 
+  async afterModel(model) {
+    this.urgencyLevel = await model.publicationFlow.urgencyLevel;
+  }
+
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
     controller.numberIsAlreadyUsed = false;
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.urgencyLevel = this.urgencyLevel;
   }
 
   @action

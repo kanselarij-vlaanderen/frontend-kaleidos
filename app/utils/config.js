@@ -274,6 +274,20 @@ export default EmberObject.create({
       url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
     },
   },
+  PUBLICATION_TYPES: {
+    extenso: {
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+      id: '5fcca4a7-3e1f-44ec-b854-e21ad092c524',
+    },
+    bijUitreksel: {
+      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5423c83d-ae5c-4973-8cb7-baefdc3e4949',
+      id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
+    },
+  },
+  URGENCY_LEVELS: {
+    spoedprocedure: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
+    standaard: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
+  },
   EMAIL: {
     OUTBOX: {
       ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
