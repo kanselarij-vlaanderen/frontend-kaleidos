@@ -4,17 +4,15 @@
   {{else}}
     {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
-        <div
-          class="pill-wrap"
+        <span
+          class={{this.pillClass}}
           data-test-access-level-pill
           {{on "click" this.toggleEdit}}
         >
-          <span class={{this.pillClass}}>
-            {{this.accessLevelLabel}}
-          </span>
-        </div>
+          {{this.accessLevelLabel}}
+        </span>
       {{else}}
-        <div class="" style="width:75%">
+        <div style="width:75%">
           <Utils::ModelSelector
             data-test-model-selector
             @modelName="access-level"

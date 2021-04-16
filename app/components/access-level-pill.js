@@ -32,7 +32,7 @@ export default class AccessLevelPillComponent extends Component {
   }
 
   get pillClass() {
-    const baseClass = 'vlc-pill';
+    const baseClass = 'auk-pill';
     const classes = [baseClass];
     let modifier;
     if (this.args.accessLevel) {
@@ -44,14 +44,14 @@ export default class AccessLevelPillComponent extends Component {
           modifier = 'warning';
           break;
         case CONFIG.internRegeringAccessLevelId:
-          modifier = 'error';
+          modifier = 'danger';
           break;
       }
       if (modifier) {
         classes.push(`${baseClass}--${modifier}`);
       }
     }
-    return classes.join(' ');
+    return `${classes.join(' ')} auk-u-cursor-pointer`;
   }
 
   get accessLevelLabel() {
