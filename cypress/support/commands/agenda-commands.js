@@ -490,7 +490,9 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         cy.wait('@getSubcasesFiltered', {
           timeout: 12000,
         });
-        cy.get('.auk-loader').should('not.exist');
+        cy.get('.auk-loader', {
+          timeout: 12000,
+        }).should('not.exist');
         cy.get('table > tbody > tr').as('rows');
       } else {
         cy.get('table > tbody > tr').as('rows');
