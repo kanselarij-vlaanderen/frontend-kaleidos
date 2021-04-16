@@ -1,56 +1,64 @@
 import Component from '@glimmer/component';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+
 export default class PublicationStatusSelector extends Component {
   @service store;
-  @tracked showConfirmWithdraw = false;
 
-  statusOptions = [{
-    id: CONFIG.PUBLICATION_STATUSES.pending.id,
-    label: 'Te publiceren',
-    icon: {
-      svg: 'clock',
-      color: 'warning',
-    },
-  }, {
-    id: CONFIG.PUBLICATION_STATUSES.published.id,
-    label: 'Gepubliceerd',
-    icon: {
-      svg: 'circle-check',
-      color: 'success',
-    },
-  }, {
-    id: CONFIG.PUBLICATION_STATUSES.paused.id,
-    label: 'Gepauzeerd',
-    icon: {
-      svg: 'circle-pause',
-      color: 'muted',
-    },
-  }, {
-    id: CONFIG.PUBLICATION_STATUSES.withdrawn.id,
-    label: 'Afgevoerd',
-    icon: {
-      svg: 'circle-error',
-      color: 'danger',
-    },
-  }];
+  @tracked publicationStatusses
+  @tracked statusOptions = [];
 
-  get getPublicationStatus() {
-    return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
+  constructor() {
+    super(...arguments);
+    this.publicationStatusses = this.store.peekAll('publication-status').sortBy('position');
+    this.fillStatusOptions();
   }
 
+  fillStatusOptions() {
+    for (const publicationStatus of this.publicationStatusses) {
+      let icon;
+      if (publicationStatus.isPending) {
+        icon =  {
+          svg: 'clock',
+          color: 'warning',
+        };
+      } else if (publicationStatus.isPublished) {
+        icon =   {
+          svg: 'circle-check',
+          color: 'success',
+        };
+      } else if (publicationStatus.isPaused) {
+        icon =  {
+          svg: 'circle-pause',
+          color: 'muted',
+        };
+      } else if (publicationStatus.isWithdrawn) {
+        icon =   {
+          svg: 'circle-error',
+          color: 'danger',
+        };
+      } else {
+        icon =  {
+          color: 'muted',
+        };
+      }
+      const option = {
+        id: publicationStatus.id,
+        label: publicationStatus.label,
+        icon: icon,
+      };
+      this.statusOptions.push(option);
+    }
+  }
+  get getPublicationStatus() {
+    return this.statusOptions.find(
+      (statusOption) => statusOption.id === this.args.publicationStatus.id);
+  }
 
   @action
-  async setPublicationStatus(event) {
-    if (event.id === CONFIG.PUBLICATION_STATUSES.withdrawn.id) {
-      // Show popup and do nothing.
-      this.showConfirmWithdraw = true;
-    } else {
-      const publicationStatus = await this.store.findRecord('publication-status', event.id);
-      this.model.publicationFlow.set('status', publicationStatus);
-      this.model.publicationFlow.save();
-    }
+  setPublicationStatus(event) {
+    const publicationStatus = this.store.peekRecord('publication-status', event.id);
+    this.args.onChange(publicationStatus);
   }
 }

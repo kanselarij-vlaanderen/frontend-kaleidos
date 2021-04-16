@@ -29,6 +29,7 @@ export default class PublicationController extends Controller {
   @tracked showConfirmWithdraw = false;
   @tracked selectedRegulatonType;
   @tracked urgencyLevel;
+  @tracked publicationStatus;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
@@ -100,6 +101,7 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+
   get titleText() {
     const shortTitle = this.model.publicationFlow.case.get('shortTitle');
     if (shortTitle) {
@@ -278,6 +280,17 @@ export default class PublicationController extends Controller {
   }
 
   @action
+  setPublicationStatus(status) {
+    if (status.isWithdrawn) {
+      this.showConfirmWithdraw = true;
+    } else {
+      this.model.publicationFlow.status = status;
+      this.publicationStatus = status;
+      this.model.publicationFlow.save();
+    }
+  }
+
+  @action
   setPublicationBeforeDate(event) {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
@@ -334,8 +347,8 @@ export default class PublicationController extends Controller {
       this.model.publicationFlow.save().then(() => {
         set(this, 'showPublicationDatePicker', true);
         set(this, 'showTranslationDatePicker', true);
-      }).
-        catch(() => {
+      })
+        .catch(() => {
           set(this, 'showPublicationDatePicker', true);
           set(this, 'showTranslationDatePicker', true);
         });
@@ -350,8 +363,9 @@ export default class PublicationController extends Controller {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
-    this.model.publicationFlow.set('status', publicationStatus);
+    const publicationStatus = this.store.peekRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
+    this.model.publicationFlow.status = publicationStatus;
+    this.publicationStatus = publicationStatus;
     await this.model.publicationFlow.save();
     this.showConfirmWithdraw = false;
   }
@@ -387,6 +401,7 @@ export default class PublicationController extends Controller {
     }
     return null;
   }
+
   get documentsCount() {
     return `(${this.model.counts.documentCount})`;
   }
