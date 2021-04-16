@@ -45,7 +45,7 @@ function createCase(confidential, shortTitle) {
     });
 
   cy.get('@dialog').within(() => {
-    cy.get('.vlc-toolbar__item > .auk-button').contains('Dossier aanmaken')
+    cy.get('.auk-toolbar-complex__item > .auk-button').contains('Dossier aanmaken')
       .click();
   });
 
@@ -158,7 +158,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       });
   }
 
-  cy.get('.vlc-toolbar').within(() => {
+  cy.get('.auk-toolbar-complex').within(() => {
     cy.contains('Procedurestap aanmaken').click();
   });
 

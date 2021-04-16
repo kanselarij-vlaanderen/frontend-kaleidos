@@ -1,14 +1,14 @@
 <div class="vlc-page-header">
-  <div class="vlc-toolbar">
-    <div class="vlc-toolbar__left">
-      <div class="vlc-toolbar__item">
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
         <h1 class="vlc-page-header__title auk-u-pb" data-test-print-overview-template-header-title>
           {{await title}}
         </h1>
         <div class="vlc-page-header__sub">
-          <div class="vlc-toolbar vlc-toolbar--auto">
-            <div class="vlc-toolbar__left">
-              <div class="vlc-toolbar__item">
+          <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+            <div class="auk-toolbar-complex__left">
+              <div class="auk-toolbar-complex__item">
                 <a href="" class="vlc-backlink auk-button-link"
                   {{action "navigateBackToAgenda"}}
                 >
@@ -17,7 +17,7 @@
                   {{!-- template-lint-enable no-bare-strings  --}}
                 </a>
               </div>
-              <div class="vlc-toolbar__item">
+              <div class="auk-toolbar-complex__item">
                 <ul class="vlc-tabs-reverse" role="tablist">
                   {{#if currentSession.isEditor}}
                     <li class="vlc-tabs-reverse__item">
@@ -60,8 +60,8 @@
         </div>
       </div>
     </div>
-    <div class="vlc-toolbar__right">
-      <div class="vlc-toolbar__item">
+    <div class="auk-toolbar-complex__right">
+      <div class="auk-toolbar-complex__item">
         {{#if shouldShowPrintButton}}
           <button type="button" class="auk-button auk-button--tertiary"
             {{action "print"}}

@@ -62,7 +62,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
 @import 'custom-components/vlc-mock-login';
-@import 'custom-components/vlc-navbar';
 @import 'custom-components/vlc-new-session';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-pagination';
@@ -84,7 +83,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-tabs';
 @import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toaster-button';
-@import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
 @import 'custom-components/vlc-user-management-table';
 @import 'custom-components/vlc-link-actions';
@@ -135,3 +133,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
 @import "au-kaleidos-css/auk-standalone";
 @import "au-kaleidos-css/auk-additions";
+
+// (not sure about naming/location)
+@import 'custom-application/m-header';
