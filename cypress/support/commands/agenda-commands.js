@@ -384,7 +384,7 @@ function approveDesignAgenda(shouldConfirm = true) {
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
-  cy.get('.vlc-toolbar').within(() => {
+  cy.get('.auk-toolbar-complex').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.approveAgenda).click();
@@ -427,7 +427,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
-  cy.get('.vlc-toolbar').within(() => {
+  cy.get('.auk-toolbar-complex').within(() => {
     cy.get(agenda.agendaHeaderShowAgendaOptions).click();
   });
   cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
@@ -561,7 +561,7 @@ function toggleShowChanges(refresh) {
     cy.wait(2500); // data loading after switching to overzicht
   }
 
-  cy.get('.vlc-agenda-items .vlc-toolbar__right > .vlc-toolbar__item')
+  cy.get('.vlc-agenda-items .auk-toolbar-complex__right > .auk-toolbar-complex__item')
     .first()
     .click();
   cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
