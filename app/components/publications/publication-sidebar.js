@@ -103,9 +103,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setUrgencyLevel(urgencyLevel) {
-    this.model.publicationFlow.urgencyLevel = urgencyLevel;
-    this.urgencyLevel = urgencyLevel;
-    this.model.publicationFlow.save();
+    this.publicationFlow.urgencyLevel = urgencyLevel;
+    if (this.args.didChange) {
+      this.args.didChange(this.publicationFlow, 'urgencyLevel');
+    }
   }
 
   get getPublicationStatus() {
