@@ -44,16 +44,16 @@ export default class PublicationStatusSelector extends Component {
         };
       }
       const option = {
-        id: publicationStatus.id,
+        status: publicationStatus,
         label: publicationStatus.label,
         icon: icon,
       };
       this.statusOptions.push(option);
     }
   }
-  get getPublicationStatus() {
+  get publicationStatus() {
     return this.statusOptions.find(
-      (statusOption) => statusOption.id === this.args.publicationStatus.id);
+      (statusOption) => statusOption.status === this.args.publicationStatus);
   }
 
   @action
