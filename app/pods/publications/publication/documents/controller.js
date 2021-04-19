@@ -18,6 +18,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
+  @tracked showLoader = false;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationModal = false;
   @tracked showPublishPreviewRequestModal = false;
