@@ -11,11 +11,6 @@ export default class PublicationStatusSelector extends Component {
     this.publicationStatusses = this.store.peekAll('publication-status').sortBy('position');
   }
 
-  get publicationStatus() {
-    return this.publicationStatusses.find(
-      (status) => status.uri === this.args.publicationStatus.uri);
-  }
-
   @action
   setPublicationStatus(event) {
     const publicationStatus = this.store.peekRecord('publication-status', event.id);
