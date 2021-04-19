@@ -21,9 +21,6 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
-  @tracked isSavingPieces = false;
-  @tracked showLoader = false;
-  @tracked showTranslationModal = false;
   @tracked filteredSortedPieces = [];
   @tracked documentTypes = [];
 

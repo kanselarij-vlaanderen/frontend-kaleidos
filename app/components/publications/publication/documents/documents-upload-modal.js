@@ -11,19 +11,7 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
   @inject store;
 
   @tracked isExpanded = false;
-  @tracked isSaving = false;
   @tracked newPieces = [];
-
-  @task
-  *loadDocumentTypes() {
-    if (!this.documentTypes.length) {
-      this.documentTypes = yield this.store.query('document-type', {
-        page: {
-          size: 50,
-        },
-      });
-    }
-  }
 
   @action
   toggleSize() {
