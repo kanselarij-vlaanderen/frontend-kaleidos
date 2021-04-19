@@ -14,6 +14,8 @@ context('Testing the toolbar as Overheid user', () => {
     cy.visit('/');
   });
 
+  // TODO test url after clicking instead of other titles not existing
+
   it('Should have meeting, Case, Newsletter in toolbar', () => {
     cy.get(toolbar.agenda).should('exist');
     cy.get(toolbar.cases).should('exist');
@@ -32,6 +34,7 @@ context('Testing the toolbar as Overheid user', () => {
   it('Should switch to cases tab when cases is clicked as overheid', () => {
     cy.get(toolbar.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
+    // TODO this test is wrong (should fail on this not.exist) but doesn't because not.exist also works whne page is not loaded
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
