@@ -7,9 +7,8 @@ import { action } from '@ember/object';
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
+      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
       reload: true,
-    }, {
-      include: 'case,contact-person,status,type,numac-number,regulation-type',
     });
     await publicationFlow.get('regulationType');
     const _case = await publicationFlow.get('case');
@@ -57,13 +56,17 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const pieces = await _case.get('pieces');
     const documentCount = pieces.length;
 
-    const regulationTypes = await this.store.query('regulation-type', {
+    const regulationTypes = this.store.query('regulation-type', {
       sort: 'position', 'page[size]': 50,
     });
+
+    // cached in publications route
+    const publicationModes = this.store.peekAll('publication-mode').sortBy('position');
 
     return hash({
       publicationFlow,
       regulationTypes,
+      publicationModes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {

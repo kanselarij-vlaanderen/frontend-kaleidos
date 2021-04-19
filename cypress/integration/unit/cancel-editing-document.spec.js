@@ -95,7 +95,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.showPiecesHistory).click();
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').each(() => {
-      cy.get('.vlc-pill').contains('Intern Regering');
+      cy.get('.auk-pill').contains('Intern Regering');
     });
 
     // Cancel/save of document-type and access-level in editing view
@@ -138,7 +138,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.showPiecesHistory).click();
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').each(() => {
-      cy.get('.vlc-pill').contains('Intern Regering');
+      cy.get('.auk-pill').contains('Intern Regering');
     });
 
     cy.get('.auk-u-ml-2 > .auk-button-link').contains('Wijzigen')
@@ -170,11 +170,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Overheid');
+        cy.get('.auk-pill').contains('Intern Overheid');
       });
     cy.get('@pieces').eq(1)
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Regering');
+        cy.get('.auk-pill').contains('Intern Regering');
       });
     cy.get('.js-vl-accordion > button').click();
 
@@ -206,18 +206,18 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Overheid');
+        cy.get('.auk-pill').contains('Intern Overheid');
       });
     cy.get('@pieces').eq(1)
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Regering');
+        cy.get('.auk-pill').contains('Intern Regering');
       });
     cy.get('.js-vl-accordion > button').click();
 
     // Cancel/save access-level in document card
-    cy.get('.vlc-document-card__content > .vlc-toolbar > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
+    cy.get('.vlc-document-card__content > .auk-toolbar-complex > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Overheid')
+        cy.get('.auk-pill').contains('Intern Overheid')
           .click();
         cy.get('.ember-power-select-trigger').click();
       });
@@ -227,7 +227,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       });
     cy.get('@accessLevelToolbar').within(() => {
       cy.get('.ki-cross').click();
-      cy.get('.vlc-pill').contains('Intern Overheid')
+      cy.get('.auk-pill').contains('Intern Overheid')
         .click();
       cy.get('.ember-power-select-trigger').click();
     });
@@ -238,7 +238,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('@accessLevelToolbar').within(() => {
       cy.get('.ki-check').click();
       // TODO patch happens
-      cy.get('.vlc-pill').contains('Publiek')
+      cy.get('.auk-pill').contains('Publiek')
         .click();
     });
 
@@ -247,11 +247,11 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.singlePieceHistory).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
-        cy.get('.vlc-pill').contains('Publiek');
+        cy.get('.auk-pill').contains('Publiek');
       });
     cy.get('@pieces').eq(1)
       .within(() => {
-        cy.get('.vlc-pill').contains('Intern Regering');
+        cy.get('.auk-pill').contains('Intern Regering');
       });
     cy.get('.js-vl-accordion > button').click();
   });

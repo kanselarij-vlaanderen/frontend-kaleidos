@@ -1,7 +1,9 @@
 <div class="auk-u-m-8">
   {{#each @subcases as |subcase|}}
     <Subcases::SubcaseItem @subcase={{subcase}} as |subcase|>
-      <hr class="vlc-hr"/>
+      <div class="auk-hr">
+        <hr/>
+      </div>
       <div class="auk-u-mb-2">
         <p class="vlc-subline">
           {{await subcase.case.type.label}}

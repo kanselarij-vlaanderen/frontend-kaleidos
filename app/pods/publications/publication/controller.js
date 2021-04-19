@@ -34,16 +34,6 @@ export default class PublicationController extends Controller {
   @tracked showLoader = false;
 
 
-  typeOptions = [
-    {
-      id: CONFIG.PUBLICATION_TYPES.extenso.id,
-      label: 'Extenso',
-    }, {
-      id: CONFIG.PUBLICATION_TYPES.bijUitreksel.id,
-      label: 'Bij uitreksel',
-    }
-  ];
-
   get sortedRegulationTypes() {
     return this.model.regulationTypes;
   }
@@ -371,9 +361,8 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  async setPublicationType(event) {
-    const publicationType = await this.store.findRecord('publication-type', event.id);
-    this.model.publicationFlow.set('type', publicationType);
+  async setPublicationMode(publicationMode) {
+    this.model.publicationFlow.mode = publicationMode;
     this.model.publicationFlow.save();
   }
 

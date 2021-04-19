@@ -1,16 +1,16 @@
 {{page-title (t "agenda-title")}}
 <div class="auk-u-bg-alt">
   <div class="vlc-page-header">
-    <div class="vlc-toolbar vlc-toolbar--auto">
-      <div class="vlc-toolbar__item">
+    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+      <div class="auk-toolbar-complex__item">
         <h1 class="vlc-page-header__title vlc-page-header__title--bordered auk-u-pb"
             data-test-agendas-title>
           {{t "agenda-title"}}
         </h1>
       </div>
-      <div class="vlc-toolbar__right">
+      <div class="auk-toolbar-complex__right">
         {{#if currentSession.isEditor}}
-          <div class="vlc-toolbar__item">
+          <div class="auk-toolbar-complex__item">
             <button data-test-vlc-agenda-createnewagendabutton
               type="button"
               class="auk-button auk-button--primary"
