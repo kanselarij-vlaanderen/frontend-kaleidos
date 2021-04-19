@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 
-export default class DocumentUpload extends Component {
+export default class UploadedDocument extends Component {
   @service store;
 
   @tracked documentTypes = [];

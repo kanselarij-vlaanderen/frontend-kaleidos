@@ -197,7 +197,7 @@
         <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
         <WebComponents::VlFormInput
           @value={{this.newPiece.name}}/>
-        <Documents::DocumentUpload
+        <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}} />
       {{else}}
