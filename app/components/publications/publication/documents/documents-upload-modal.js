@@ -10,6 +10,7 @@ import moment from 'moment';
 export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
   @inject store;
 
+  @tracked isExpanded = false;
   @tracked isSaving = false;
   @tracked newPieces = [];
 
@@ -71,15 +72,15 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     this.isVerifyingDelete = false;
   }
 
-  @task
-  *onSavePieces() {
-    yield* this.savePieces.perform(this.newPieces);
+  @action
+  async savePieces() {
+    await this.savePiecesTask.perform(this.newPieces);
     this.args.onSave(this.newPieces);
     this.newPieces = A([]);
   }
 
   @task
-  *savePieces(newPieces) {
+  *savePiecesTask(newPieces) {
     const savePromises = newPieces.map(async(piece) => {
       try {
         await this.savePiece.perform(piece);

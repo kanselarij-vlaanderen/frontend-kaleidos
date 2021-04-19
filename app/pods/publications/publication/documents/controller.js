@@ -21,9 +21,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
-  @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
-  @tracked isExpanded = false;
   @tracked showLoader = false;
   @tracked showTranslationModal = false;
   @tracked filteredSortedPieces = [];
@@ -122,8 +120,8 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async onSave(pieces) {
     this.isOpenPieceUploadModal = false;
-    this.model.pieces.pushObjects(pieces);
-    await this.model.save();
+    this.model.case.pieces.pushObjects(pieces);
+    await this.model.case.save();
   }
 
   @action
