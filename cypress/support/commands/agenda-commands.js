@@ -585,7 +585,7 @@ function agendaitemExists(agendaitemName) {
   cy.get(auComponents.auLoading, {
     timeout: 20000,
   }).should('not.exist');
-  cy.get('.vlc-tabs-reverse__link--active').then((element) => {
+  cy.get('.active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
       cy.get(agenda.agendaDetailSidebarSubitem)
@@ -731,7 +731,7 @@ function releaseDocuments() {
 /**
  * @description Clicks on the specified agendaitem tab for navigating
  * @name clickAgendaitemTab
- * @if class="vlc-tabs"
+ * @if class="auk-tabs"
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} selector The name of the tab to click on, case sensitive
