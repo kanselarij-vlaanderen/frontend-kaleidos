@@ -383,7 +383,7 @@ export default class PublicationController extends Controller {
   @action
   async withdrawPublicationFlow() {
     this.model.publicationFlow.status = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
-    this.model.closingDate = moment(new Date());
+    this.model.closingDate = moment().toDate();
     await this.model.publicationFlow.save();
     this.showConfirmWithdraw = false;
   }
@@ -396,11 +396,11 @@ export default class PublicationController extends Controller {
     } else {
       const publicationStatus = await this.store.findRecord('publication-status', event.id);
       if (event.id === CONFIG.publicationStatusPublished.id) {
-        this.model.closingDate = moment(new Date());
+        this.model.publicationFlow.closingDate = moment().toDate();
       } else {
-        this.model.closingDate = null;
+        this.model.publicationFlow.closingDate = null;
       }
-      this.model.publicationFlow.set('status', publicationStatus);
+      this.model.publicationFlow.status = publicationStatus;
       this.model.publicationFlow.save();
     }
   }

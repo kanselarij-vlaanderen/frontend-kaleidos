@@ -122,7 +122,7 @@ export default class PublicationsIndexController extends Controller {
       publicationSuffix,
       case: caze,
       created: creationDatetime,
-      openingsDate: moment(new Date()),
+      openingDate: moment().toDate(),
       status: toPublishStatus,
       modified: creationDatetime,
     });
