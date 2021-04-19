@@ -1,31 +1,18 @@
 <div class="auk-toolbar-complex">
   <div class="auk-toolbar-complex__left">
     <div class="auk-toolbar-complex__item">
-      <h1 class="vlc-page-header__title auk-u-pb vlc-page-header__title--bordered"
-          data-test-agenda-header-title>
-        {{t "agenda-of"}}
-        {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
-        {{t "at"}}
-        {{moment-format currentSession.plannedStart "HH:mm"}}
-        <span class="vlc-page-header__subtitle auk-u-muted" style="font-size:1.6rem;">
-          - {{await currentSession.kindToShow.label}}
-        </span>
-      </h1>
-      <div class="vlc-page-header__sub">
-        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
-              {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
-              {{!-- template-lint-disable no-bare-strings  --}}
-              <LinkTo @route="agendas.overview" class="vlc-backlink auk-button-link">
-                &#8629;
-              </LinkTo>
-              {{!-- template-lint-enable no-bare-strings  --}}
-            </div>
-            <Sessions::SessionAgendaNav
-              @currentAgenda={{currentAgenda}} />
-          </div>
+      <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
+        <div class="auk-u-flex auk-u-flex--vertical-center">
+          <h4 class="auk-toolbar-complex__title" data-test-agenda-header-title>
+            {{t "agenda-of"}}
+            {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+            {{t "at"}}
+            {{moment-format currentSession.plannedStart "HH:mm"}}
+          </h4>
+          <span class="auk-u-muted auk-body-1 ">- {{await currentSession.kindToShow.label}}</span>
         </div>
+        <Sessions::SessionAgendaNav
+          @currentAgenda={{currentAgenda}} />
       </div>
     </div>
   </div>
