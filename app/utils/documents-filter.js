@@ -2,12 +2,9 @@ import { tracked } from '@glimmer/tracking';
 
 // state of the documents filter
 export default class DocumentsFilter {
-  @tracked
-  documentName;
-  @tracked
-  documentTypes;
-  @tracked
-  fileTypes;
+  @tracked documentName;
+  @tracked documentTypes;
+  @tracked fileTypes;
 
   constructor(optionalInitialState) {
     const initialState = optionalInitialState || this._emptyState();
