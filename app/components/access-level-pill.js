@@ -33,7 +33,7 @@ export default class AccessLevelPillComponent extends Component {
 
   get pillClass() {
     const baseClass = 'auk-pill';
-    const classes = [baseClass];
+    const classes = [baseClass, 'auk-u-cursor-pointer'];
     let modifier;
     if (this.args.accessLevel) {
       switch (this.args.accessLevel.id) {
@@ -51,7 +51,7 @@ export default class AccessLevelPillComponent extends Component {
         classes.push(`${baseClass}--${modifier}`);
       }
     }
-    return `${classes.join(' ')} auk-u-cursor-pointer`;
+    return classes.join(' ');
   }
 
   get accessLevelLabel() {
