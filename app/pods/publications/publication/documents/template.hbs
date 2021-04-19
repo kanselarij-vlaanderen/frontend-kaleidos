@@ -217,7 +217,7 @@
   {{!-- UPLOAD PIECE MODAL --}}
 
 
-  {{#if this.isOpenPieceUploadModal}}
+  {{#if this.showPieceUploadModal}}
     <Publications::Publication::Documents::DocumentsUploadModal
       @onSave={{this.onSave}} @onCancel={{this.onCancel}} />
   {{/if}}
@@ -327,7 +327,7 @@
 
 
 
-  {{#if this.isOpenPublishPreviewRequestModal}}
+  {{#if this.showPublishPreviewRequestModal}}
     <WebComponents::AuModal>
       <WebComponents::AuModal::Header
               @title={{t "request-publish-preview" }}

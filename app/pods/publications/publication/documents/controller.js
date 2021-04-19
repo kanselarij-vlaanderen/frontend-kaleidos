@@ -18,9 +18,9 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  @tracked isOpenPieceUploadModal = false;
-  @tracked isOpenTranslationRequestModal = false;
-  @tracked isOpenPublishPreviewRequestModal = false;
+  @tracked showPieceUploadModal = false;
+  @tracked showTranslationModal = false;
+  @tracked showPublishPreviewRequestModal = false;
   @tracked filteredSortedPieces = [];
   @tracked documentTypes = [];
 
@@ -111,19 +111,19 @@ export default class PublicationDocumentsController extends Controller {
   // open piece upload modal
   @action
   openPieceUploadModal() {
-    this.isOpenPieceUploadModal = true;
+    this.showPieceUploadModal = true;
   }
 
   @action
   async onSave(pieces) {
-    this.isOpenPieceUploadModal = false;
+    this.showPieceUploadModal = false;
     this.model.case.pieces.pushObjects(pieces);
     await this.model.case.save();
   }
 
   @action
   onCancel() {
-    this.isOpenPieceUploadModal = false;
+    this.showPieceUploadModal = false;
   }
 
   // document menu options
@@ -211,20 +211,20 @@ export default class PublicationDocumentsController extends Controller {
     const content = await this.getConfig('email:publishPreviewRequest:content', CONFIG.mail.publishPreviewRequest.content);
     set(this.previewActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
     set(this.previewActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
-    this.isOpenPublishPreviewRequestModal = true;
+    this.showPublishPreviewRequestModal = true;
   }
 
   @action
   cancelPublishPreviewRequestModal() {
     set(this.previewActivity, 'mailContent', '');
     set(this.previewActivity, 'mailSubject', '');
-    this.isOpenPublishPreviewRequestModal = false;
+    this.showPublishPreviewRequestModal = false;
   }
 
   @action
   async savePublishPreviewActivity() {
     this.showLoader = true;
-    this.isOpenPublishPreviewRequestModal = false;
+    this.showPublishPreviewRequestModal = false;
     this.previewActivity.pieces = this.selectedPieces;
 
     // publishPreviewActivityType.
