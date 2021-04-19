@@ -14,6 +14,8 @@ export default class PublicationFlow extends Model {
   @attr('datetime') publishDateRequested;
   @attr('datetime') publishedAt;
   @attr('string') remark;
+  @attr('date') closingDate;
+  @attr('date') openingDate;
   @attr('datetime') created;
   @attr('datetime') modified;
 
