@@ -111,10 +111,10 @@
               </div>
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
-                <WebComponents::AuPowerSelect @options={{this.typeOptions}}
+                <WebComponents::AuPowerSelect @options={{this.model.publicationModes}}
                                               @isSearchable={{false}}
-                                              @onchange={{this.setPublicationType}}
-                                              @selected={{this.getPublicationType}}
+                                              @onchange={{this.setPublicationMode}}
+                                              @selected={{this.getPublicationMode}}
                 />
               </div>
               <Publications::UrgencyLevelCheckbox
