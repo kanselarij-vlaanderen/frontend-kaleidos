@@ -62,7 +62,7 @@ context('Propagation to other graphs', () => {
 
     // TODO verify if this is needed, default treatments for agendaitem is approved anyway
     cy.contains('Wijzigen').click();
-    cy.get('.vlc-box').as('editDecision');
+    cy.get('.auk-box').as('editDecision');
     cy.get('@editDecision').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')

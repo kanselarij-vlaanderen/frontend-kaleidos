@@ -101,7 +101,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
       cy.get('a').click();
     });
 
-  cy.get('.vlc-box').as('subcaseAccessLevel');
+  cy.get('.auk-box').as('subcaseAccessLevel');
 
   if (accessLevel) {
     cy.get('@subcaseAccessLevel').within(() => {

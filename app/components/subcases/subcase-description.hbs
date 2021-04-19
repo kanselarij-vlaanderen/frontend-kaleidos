@@ -146,7 +146,7 @@
     </div>
   </div>
 {{else}}
-  <div class="vlc-box">
+  <div class="auk-box">
     <div class="auk-u-mb-4">
       <div class="vlc-input-field-block">
         {{web-components/vl-radio-button-list
@@ -172,13 +172,13 @@
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>
-    <div class="vlc-toolbar vlc-toolbar--auto">
-      <div class="vlc-toolbar__right">
+    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+      <div class="auk-toolbar-complex__right">
         <a href="" class="auk-button-link" {{action "cancelEditing"}}>
           {{t "cancel"}}
         </a>
       </div>
-      <div class="vlc-toolbar__left">
+      <div class="auk-toolbar-complex__left">
         {{web-components/vl-save-button
           text=(t "save")
           isLoading=isLoading
