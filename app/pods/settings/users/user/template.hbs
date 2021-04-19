@@ -7,32 +7,59 @@
 
 <div class="auk-o-grid auk-o-grid-col-6">
   <div class="auk-o-grid-col-6 auk-u-m">
-    <div class="auk-u-mt-3 auk-u-ml-2 auk-u-mb-4">
-      <Panel as |pl|>
-        <pl.Header>
-          <h4 class="vlc-panel__title">{{t 'manage-users-general-info'}}</h4>
-        </pl.Header>
-        <pl.Body>
-          <KeyValue @layout="horizontal" @key="{{t 'manage-users-full-name'}}" @value="{{model.firstName}} {{model.lastName}}"/>
-          <KeyValue @layout="horizontal" @key="{{t 'manage-users-email'}}" @value="{{if model.email model.email "-"}}"/>
-          <KeyValue @layout="horizontal" @key="{{t 'manage-users-telephone'}}" @value="{{if model.phone model.phone "-"}}"/>
-          <div class="vlc-key-value-item vlc-key-value-item--horizontal">
-            <div class="vlc-key-value-item__label">{{t 'manage-users-group'}}</div>
-            <div class="vlc-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</div>
-          </div>
-        </pl.Body>
-      </Panel>
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <h4 class="auk-panel__title">{{t 'manage-users-general-info'}}</h4>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-full-name'}}</dt>
+              <dd class="auk-key-value-item__value">{{model.firstName}} {{model.lastName}}</dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-email'}}</dt>
+              <dd class="auk-key-value-item__value">{{if model.email model.email "-"}}</dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-telephone'}}</dt>
+              <dd class="auk-key-value-item__value">{{if model.phone model.phone "-"}}</dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-group'}}</dt>
+              <dd class="auk-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</dd>
+            </div>
+          </dl>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
     </div>
-    <div class="auk-u-m-3 auk-u-ml-2">
-      <Panel as |pl|>
-        <pl.Header>
-          <h4 class="vlc-panel__title">{{t 'manage-users-technical-info'}}</h4>
-        </pl.Header>
-        <pl.Body>
-          <KeyValue @layout="horizontal" @key="{{t 'manage-users-void'}}" @value="{{model.account.voId}}"/>
-          <KeyValue @layout="horizontal" @key="{{t 'manage-users-ovo'}}" @value="{{if model.organization.identifier model.organization.identifier "-"}}"/>
-        </pl.Body>
-      </Panel>
+    <div class="auk-u-m-4 auk-u-mr-2 auk-u-ml-2">
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Header>
+          <h4 class="auk-panel__title">{{t 'manage-users-technical-info'}}</h4>
+        </WebComponents::AuPanel::Header>
+        <WebComponents::AuPanel::Body>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-void'}}</dt>
+              <dd class="auk-key-value-item__value">{{model.account.voId}}</dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="auk-key-value-item auk-key-value-item--horizontal">
+              <dt class="auk-key-value-item__label">{{t 'manage-users-ovo'}}</dt>
+              <dd class="auk-key-value-item__value">{{if model.organization.identifier model.organization.identifier "-"}}</dd>
+            </div>
+          </dl>
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
     </div>
   </div>
 </div>

@@ -32,6 +32,7 @@ context('Agenda reopen previous tests', () => {
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.setFormalOkOnItemWithIndex(0);
+    // TODO test existance of the action on design agenda A (not.exist)
     cy.approveDesignAgenda();
     cy.contains(designAgendaBTitle).should('exist');
     cy.contains(designAgendaATitle).should('not.exist');
@@ -51,6 +52,7 @@ context('Agenda reopen previous tests', () => {
     cy.wait('@getAgendas');
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.contains(designAgendaATitle).should('exist');
+    // TODO test if action does not exist on ontwerpagenda A
     cy.approveDesignAgenda();
   });
 
@@ -65,6 +67,7 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaCTitle).should('not.exist');
     cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
     cy.get(agendaSelector.reopenPreviousVersion).should('not.exist');
+    // TODO the rest of this test is not needed and does not add any value
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.deleteAgenda();
     cy.get(agendaSelector.agendaActions).click();

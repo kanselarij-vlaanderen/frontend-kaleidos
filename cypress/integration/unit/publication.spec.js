@@ -119,9 +119,11 @@ context('Publications tests', () => {
         .clear()
         .type(longTitle);
 
-      cy.route('/publication-flows/*/case').as('getNewPublicationDetail');
+      cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
+      cy.route('/publication-flows/*?include**').as('loadPublicationDetailView');
       cy.get(modalSelectors.publication.createButton).click();
-      cy.wait('@getNewPublicationDetail');
+      cy.wait('@createNewPublicationFlow');
+      cy.wait('@loadPublicationDetailView');
     });
 
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);

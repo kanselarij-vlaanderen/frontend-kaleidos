@@ -15,10 +15,14 @@ context('Settings overview page tests', () => {
     cy.url().should('include', 'instellingen/overzicht');
   });
 
+  // TODO test 2-9 testing opening modals is not enough, how can we be sure that the right one has been opened ?
+
   it('Should open settings page and see all fields from the general settings tab', () => {
     cy.get(settings.generalSettings).should('be.visible');
     cy.get(settings.manageMinisters).should('be.visible');
     cy.get(settings.manageUsers).should('be.visible');
+    // settings in this view
+    cy.get(settings.manageEmails).should('be.visible');
     cy.get(settings.manageGovermentDomains).should('be.visible');
     cy.get(settings.manageGovermentFields).should('be.visible');
     cy.get(settings.manageIseCodes).should('be.visible');
@@ -115,13 +119,15 @@ context('Settings overview page tests', () => {
       });
   });
 
-  it('Should test the search of a user', () => {
+  it('Should test the search of a user when typing', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(settings.userSearchInput).should('exist')
       .should('be.visible')
       .type('Minister');
+    // TODO, this next should can work regardless of search working on the unfiltered tabel
+    // wait for search api call, count the number of rows
     cy.get(settings.settingsUserTable).should('contain', 'Minister');
   });
 
@@ -174,18 +180,18 @@ context('Settings overview page tests', () => {
         .should('be.visible')
         .type('Minister');
       cy.get(settings.settingsUserTable).should('contain', 'Minister');
-      cy.wait(3000);
+      cy.wait(3000); // TODO this wait is not needed ?
       cy.get(settings.goToUserDetail).click();
       cy.contains('Gebruiker: Minister Test');
       cy.contains('Algemene informatie');
       cy.get(settings.emberPowerSelectTrigger).click();
       cy.get(agenda.emberPowerSelectOption).contains('kabinet')
         .click();
-      cy.wait(5000);
+      cy.wait(5000); // TODO await PATCH call instead
       cy.get(utils.generalBackButton).should('exist')
         .should('be.visible')
         .click();
-      cy.wait(3000);
+      cy.wait(3000); // TODO why wait ?
       cy.contains('kabinet');
     });
   });

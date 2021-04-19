@@ -2,16 +2,16 @@
 {{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="vlc-scroll-wrapper__body">
   <div class="auk-u-m-8">
-    <div class="vlc-toolbar">
-      <div class="vlc-toolbar__left">
-        <div class="vlc-toolbar__item">
-          <h2 class="auk-h2">{{t "my-cases"}}</h2>
+    <div class="auk-toolbar-complex">
+      <div class="auk-toolbar-complex__left">
+        <div class="auk-toolbar-complex__item">
+          <h2 class="auk-h2 auk-u-m-0">{{t "my-cases"}}</h2>
         </div>
       </div>
 
-      <div class="vlc-toolbar__right">
+      <div class="auk-toolbar-complex__right">
         {{#if this.currentSession.isEditor}}
-          <div class="vlc-toolbar__item auk-u-flex auk-u-flex--vertical-center">
+          <div class="auk-toolbar-complex__item auk-u-flex auk-u-flex--vertical-center">
             <WebComponents::AuLabel class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="isArchived">{{t "show-archived"}}</WebComponents::AuLabel>
             {{web-components/vl-toggle value=this.showArchived}}
           </div>

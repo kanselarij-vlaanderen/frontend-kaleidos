@@ -202,7 +202,7 @@ context('Add files to an agenda', () => {
 
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
     cy.contains('Wijzigen').click();
-    cy.get('.vlc-box').within(() => {
+    cy.get('.auk-box').within(() => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
         .within(() => {

@@ -1,6 +1,6 @@
-<div class="vlc-toolbar">
-  <div class="vlc-toolbar__left">
-    <div class="vlc-toolbar__item">
+<div class="auk-toolbar-complex">
+  <div class="auk-toolbar-complex__left">
+    <div class="auk-toolbar-complex__item">
       <h1 class="vlc-page-header__title auk-u-pb vlc-page-header__title--bordered"
           data-test-agenda-header-title>
         {{t "agenda-of"}}
@@ -12,9 +12,9 @@
         </span>
       </h1>
       <div class="vlc-page-header__sub">
-        <div class="vlc-toolbar vlc-toolbar--auto">
-          <div class="vlc-toolbar__left">
-            <div class="vlc-toolbar__item">
+        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+          <div class="auk-toolbar-complex__left">
+            <div class="auk-toolbar-complex__item">
               {{!-- TODO: Fix this symbol into a custom icon based of the figma file --}}
               {{!-- template-lint-disable no-bare-strings  --}}
               <LinkTo @route="agendas.overview" class="vlc-backlink auk-button-link">
@@ -30,9 +30,9 @@
     </div>
   </div>
   {{#if currentSessionService.isViewer}}
-    <div class="vlc-toolbar__right">
+    <div class="auk-toolbar-complex__right">
       {{#if currentSessionService.isEditor}}
-        <div class="vlc-toolbar__item">
+        <div class="auk-toolbar-complex__item">
           <button type="button"
             data-test-agenda-header-showAgendaOptions
             class="auk-button auk-button--primary"
@@ -140,7 +140,7 @@
           </button>
         </div>
       {{/if}}
-      <div class="vlc-toolbar__item">
+      <div class="auk-toolbar-complex__item">
         <button type="button"
           data-test-agenda-header-showActionOptions
           class="auk-button auk-button--secondary"
