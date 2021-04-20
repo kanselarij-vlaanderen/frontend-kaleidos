@@ -6,12 +6,12 @@ export default class DecisionResultPill extends Component {
     const codes = CONFIG.DECISION_RESULT_CODE_URIS;
     const selectedUri = this.args.decisionResultCode.get('uri');
     if (selectedUri === codes.GOEDGEKEURD) {
-      return 'vlc-pill--success';
+      return 'auk-pill--success';
     } else if (selectedUri === codes.UITGESTELD) {
-      return 'vlc-pill--warning';
+      return 'auk-pill--warning';
     }
     // } else if (selectedUri === codes.INGETROKKEN) {
-    //  return 'vlc-pill--error';
+    //  return 'auk-pill--danger';
     // }
     return '';
   }

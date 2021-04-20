@@ -10,6 +10,8 @@ context('Testing the toolbar as user user', () => {
     cy.visit('/');
   });
 
+  // TODO test url after clicking instead of other titles not existing
+
   it('Should have meeting, Case, Newsletter in toolbar', () => {
     cy.get(toolbar.agenda).should('exist');
     cy.get(toolbar.cases).should('exist');

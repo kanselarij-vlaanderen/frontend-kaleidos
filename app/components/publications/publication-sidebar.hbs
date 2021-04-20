@@ -36,14 +36,10 @@
               </div>
             {{/if}}
           </div>
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
-            <WebComponents::AuPowerSelect @options={{this.statusOptions}}
-                                          @isSearchable={{false}}
-                                          @onchange={{this.setPublicationStatus}}
-                                          @selected={{this.getPublicationStatus}}
-            />
-          </div>
+          <Publications::PublicationStatusSelector
+                  @publicationStatus={{this.publicationStatus}}
+                  @onChange={{this.setPublicationStatus}}
+          />
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
             <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
@@ -100,7 +96,7 @@
               {{t "add"}}
             </WebComponents::AuButton>
           </div>
-          {{#if @publicationFlow.status.isToBePublished}}
+          {{#if @publicationFlow.status.isPending}}
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker

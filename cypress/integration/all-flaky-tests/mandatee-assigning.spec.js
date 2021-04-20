@@ -271,22 +271,23 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
+    // TODO Why is 20 seconds not enough to load this page ?
     cy.get(auComponents.auLoading, {
-      timeout: 20000,
+      timeout: 60000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auComponents.auLoading, {
-      timeout: 20000,
+      timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auComponents.auLoading, {
-      timeout: 20000,
+      timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 5);

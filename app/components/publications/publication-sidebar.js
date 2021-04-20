@@ -30,46 +30,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked showConfirmWithdraw = false;
 
   @lastValue('loadRegulationTypes') regulationTypes;
+  @lastValue('loadPublicationStatus') publicationStatus;
   @tracked publicationModes;
-
-  statusOptions = [
-    {
-      id: CONFIG.publicationStatusToPublish.id,
-      label: 'Te publiceren',
-      icon: {
-        svg: 'clock',
-        color: 'warning',
-      },
-    },
-    {
-      id: CONFIG.publicationStatusPublished.id,
-      label: 'Gepubliceerd',
-      icon: {
-        svg: 'circle-check',
-        color: 'success',
-      },
-    },
-    {
-      id: CONFIG.publicationStatusPauzed.id,
-      label: 'Gepauzeerd',
-      icon: {
-        svg: 'circle-pause',
-        color: 'muted',
-      },
-    },
-    {
-      id: CONFIG.publicationStatusWithdrawn.id,
-      label: 'Afgevoerd',
-      icon: {
-        svg: 'circle-error',
-        color: 'danger',
-      },
-    }
-  ];
 
   constructor() {
     super(...arguments);
     this.loadRegulationTypes.perform();
+    this.loadPublicationStatus.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
   }
 
@@ -83,6 +50,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       sort: 'position',
     });
     return regulationTypes;
+  }
+
+  @task
+  *loadPublicationStatus() {
+    const publicationStatus = yield this.publicationFlow.status;
+    return publicationStatus;
   }
 
   @action
@@ -109,20 +82,15 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  get getPublicationStatus() {
-    return this.statusOptions.find((statusOption) => statusOption.id === this.publicationFlow.get('status.id'));
-  }
-
   @action
-  async setPublicationStatus(pojoStatus) {
-    if (pojoStatus.id === CONFIG.publicationStatusWithdrawn.id) {
-      // Show popup and do nothing.
+  setPublicationStatus(status) {
+    if (status.isWithdrawn) {
       this.showConfirmWithdraw = true;
     } else {
-      const publicationStatus = await this.store.findRecord('publication-status', pojoStatus.id);
-      this.publicationFlow.status = publicationStatus;
+      this.publicationFlow.status = status;
+      this.loadPublicationStatus.perform();
       if (this.args.didChange) {
-        await this.args.didChange(this.publicationFlow, 'status');
+        this.args.didChange(this.publicationFlow, 'status');
       }
     }
   }

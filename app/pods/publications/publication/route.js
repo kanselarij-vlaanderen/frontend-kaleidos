@@ -84,6 +84,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
 
   async afterModel(model) {
     this.urgencyLevel = await model.publicationFlow.urgencyLevel;
+    await this.store.query('publication-status', {});
   }
 
   /* eslint-disable id-length,no-unused-vars */
