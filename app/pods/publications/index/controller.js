@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
-import moment from 'moment';
 
 export default class PublicationsIndexController extends Controller {
   queryParams = {
