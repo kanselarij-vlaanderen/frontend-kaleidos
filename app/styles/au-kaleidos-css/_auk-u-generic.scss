@@ -1,0 +1,45 @@
+
+/* ==========================================================================
+  Utilities: generic (no category)
+  ========================================================================== */
+
+.auk-u-maximize-width {
+  width: 100% !important;
+}
+
+.auk-u-maximize-height {
+  height: 100% !important;
+}
+
+.auk-u-block {
+  display: block !important;
+}
+
+.auk-u-inline {
+  display: inline !important;
+}
+
+.auk-u-align-middle {
+  vertical-align: middle !important;
+}
+
+.auk-u-sr-only {
+  position: absolute !important;
+  left: -10000px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+.auk-u-overflow-hidden {
+  overflow: hidden !important;
+}
+
+.auk-u-bg-alt {
+  background-color: $au-gray-100 !important;
+}
+
+.auk-u-position-relative {
+  position: relative !important;
+}
