@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   action,
   set
@@ -353,7 +353,7 @@ export default class PublicationController extends Controller {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = this.store.peekRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
+    const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.model.publicationFlow.status = publicationStatus;
     this.publicationStatus = publicationStatus;
     await this.model.publicationFlow.save();
