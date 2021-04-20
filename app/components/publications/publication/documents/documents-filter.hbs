@@ -1,0 +1,42 @@
+<WebComponents::AuPanel>
+  <WebComponents::AuPanel::Body class="auk-panel--editing">
+    <div class="auk-u-flex">
+      <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
+        <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
+        <WebComponents::AuInput @value={{this.filter.documentName}} type="text" id="blockInput" @block="true" />
+      </div>
+      <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
+        <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
+        <PowerSelectMultiple @options={{this.fileTypes}} @searchEnabled={{true}}
+          @selected={{this.filter.fileTypes}}
+          @onchange={{fn (mut this.filter.fileTypes)}}
+          as
+          |fileExtension|>
+          {{fileExtension}}
+        </PowerSelectMultiple>
+      </div>
+      <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
+        <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
+        {{#unless this.loadDocumentTypes.isRunning}}
+          <PowerSelectMultiple @options={{this.documentTypes}} @isSearchable={{false}}
+            @selected={{this.filter.documentTypes}}
+            @onchange={{fn (mut this.filter.documentTypes)}}
+            as |pieceType|>
+            {{get pieceType "label"}}
+          </PowerSelectMultiple>
+        {{/unless}}
+      </div>
+    </div>
+    <div class="auk-u-flex auk-u-flex--justify-end">
+      <div>
+        <WebComponents::AuButton data-test-publication-filter-reset @skin="secondary" {{on "click" this.reset}}>
+          {{t "reset"}}
+        </WebComponents::AuButton>
+        <WebComponents::AuButton @icon="filter" data-test-publication-filter @skin="primary"
+          {{on "click" this.apply}}>
+          {{t "filter-plural"}}
+        </WebComponents::AuButton>
+      </div>
+    </div>
+  </WebComponents::AuPanel::Body>
+</WebComponents::AuPanel>
