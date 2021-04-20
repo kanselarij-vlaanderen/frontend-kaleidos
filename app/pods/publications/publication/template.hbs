@@ -93,14 +93,10 @@
                   </div>
                 {{/if}}
               </div>
-              <div class="auk-form-group">
-                <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
-                <WebComponents::AuPowerSelect @options={{this.statusOptions}}
-                                              @isSearchable={{false}}
-                                              @onchange={{this.setPublicationStatus}}
-                                              @selected={{this.getPublicationStatus}}
-                />
-              </div>
+              <Publications::PublicationStatusSelector
+                      @publicationStatus={{this.publicationStatus}}
+                      @onChange={{this.setPublicationStatus}}
+              />
               <div class="auk-form-group">
                 <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
                 <WebComponents::AuPowerSelect @options={{this.model.regulationTypes}}
@@ -114,7 +110,7 @@
                 <WebComponents::AuPowerSelect @options={{this.model.publicationModes}}
                                               @isSearchable={{false}}
                                               @onchange={{this.setPublicationMode}}
-                                              @selected={{this.getPublicationMode}}
+                                              @selected={{this.model.publicationFlow.mode}}
                 />
               </div>
               <Publications::UrgencyLevelCheckbox
@@ -157,7 +153,7 @@
                   {{t "add"}}
                 </WebComponents::AuButton>
               </div>
-              {{#if this.model.publicationFlow.status.isToBePublished}}
+              {{#if this.model.publicationFlow.status.isPending}}
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
                   {{#if this.showRequestedPublicationDatePicker}}

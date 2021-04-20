@@ -271,7 +271,7 @@ context('Subcase tests', () => {
     // Go via kort-bestek view
     cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
     cy.route('GET', '/meetings?**').as('getMeetingsfilter');
-    cy.get('.vlc-toolbar').contains('Kort bestek')
+    cy.get('.auk-toolbar-complex').contains('Kort bestek')
       .click();
     cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');

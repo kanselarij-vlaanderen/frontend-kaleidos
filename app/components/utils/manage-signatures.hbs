@@ -20,10 +20,10 @@
       closeModal=(action "toggleIsEditing")
     }}
   {{else}}
-    <div class="vlc-navbar vlc-navbar--white vlc-navbar--bordered-top">
-      <div class="vlc-toolbar">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
+    <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+      <div class="auk-toolbar-complex">
+        <div class="auk-toolbar-complex__left">
+          <div class="auk-toolbar-complex__item">
             <button type="button" class="auk-button auk-button--borderless"
               {{action "closeModal"}}
             >
@@ -31,8 +31,8 @@
             </button>
           </div>
         </div>
-        <div class="vlc-toolbar__right">
-          <div class="vlc-toolbar__item">
+        <div class="auk-toolbar-complex__right">
+          <div class="auk-toolbar-complex__item">
             {{#if selectedSignature}}
               <button type="button" class="auk-button auk-button--tertiary"
                 {{action "setDefaultSignature"}}

@@ -8,16 +8,16 @@
       </div>
     </div>
     <div class="vlc-document-card__content">
-      <div class="vlc-toolbar vlc-toolbar--auto">
-        <div class="vlc-toolbar__left">
-          <div class="vlc-toolbar__item">
+      <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+        <div class="auk-toolbar-complex__left">
+          <div class="auk-toolbar-complex__item">
             <p class="vlc-subline" data-test-linkeddocument-type-label>
               {{@documentContainer.type.label}}
             </p>
           </div>
         </div>
         <div class="vlc-document-card-toolbar__right">
-          <div class="vlc-toolbar__item">
+          <div class="auk-toolbar-complex__item">
             {{#if this.lastPiece}}
               <AccessLevelPill
                 @accessLevel={{this.accessLevel}}
@@ -29,7 +29,7 @@
               />
             {{/if}}
           </div>
-          <div class="vlc-toolbar__item">
+          <div class="auk-toolbar-complex__item">
             {{#if currentSession.isEditor}}
               <button class="auk-button auk-button--muted-borderless auk-button--icon"
                 type="button"

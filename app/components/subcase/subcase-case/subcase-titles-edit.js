@@ -10,7 +10,7 @@ import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class SubcaseTitlesEdit extends Component {
   @service store;
-  classNames = ['vlc-box', 'auk-u-mt-4'];
+  classNames = ['auk-box', 'auk-u-mt-4'];
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'accessLevel', 'confidential']);
 
   @action

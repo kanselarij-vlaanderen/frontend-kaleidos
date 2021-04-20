@@ -96,7 +96,7 @@ export default EmberObject.create({
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
       classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-u-flex',
       approved: true,
-      pillClassNames: 'vlc-pill vlc-pill--success',
+      pillClassNames: 'auk-pill auk-pill--success',
       iconClassNames: 'ki-check formally-ok-icon',
       svg: {
         icon: 'check',
@@ -108,7 +108,7 @@ export default EmberObject.create({
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
       classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-u-flex',
-      pillClassNames: 'vlc-pill vlc-pill--error',
+      pillClassNames: 'auk-pill auk-pill--danger',
       iconClassNames: 'ki-cross formally-ok-icon',
       svg: {
         icon: 'cross',
@@ -120,7 +120,7 @@ export default EmberObject.create({
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
       classNames: 'vlc-agenda-items__status auk-u-text-bold auk-u-flex',
-      pillClassNames: 'vlc-pill',
+      pillClassNames: 'auk-pill',
       iconClassNames: 'ki-question-mark formally-ok-icon',
       svg: {
         icon: 'question-mark',
@@ -196,21 +196,23 @@ export default EmberObject.create({
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
-  publicationStatusToPublish: {
-    id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-  },
-  publicationStatusPublished: {
-    id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-  },
-  publicationStatusPauzed: {
-    id: 'bc294fde-45c8-11eb-b378-0242ac130002',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/bc294fde-45c8-11eb-b378-0242ac130002',
-  },
-  publicationStatusWithdrawn: {
-    id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
-    uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-statussen/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+  PUBLICATION_STATUSES: {
+    pending: {
+      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    },
+    published: {
+      id: '2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+    },
+    paused: {
+      id: 'bc294fde-45c8-11eb-b378-0242ac130002',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
+    },
+    withdrawn: {
+      id: '9b9b0b5e-45c8-11eb-b378-0242ac130002',
+      uri: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+    },
   },
   LANGUAGE_NL: {
     uri: 'http://publications.europa.eu/resource/authority/language/NLD',
