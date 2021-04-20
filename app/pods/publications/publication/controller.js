@@ -366,7 +366,7 @@ export default class PublicationController extends Controller {
   async withdrawPublicationFlow() {
     const publicationStatus = this.store.peekRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
     this.model.publicationFlow.status = publicationStatus;
-    this.model.closingDate = new Date();
+    this.model.publicationFlow.closingDate = new Date();
     this.publicationStatus = publicationStatus;
     await this.model.publicationFlow.save();
     this.showConfirmWithdraw = false;
