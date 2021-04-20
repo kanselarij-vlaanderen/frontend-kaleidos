@@ -67,7 +67,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  async setPublicationMode(publicationMode) {
+  setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'mode');
