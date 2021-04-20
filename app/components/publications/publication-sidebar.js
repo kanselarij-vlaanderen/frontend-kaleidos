@@ -102,7 +102,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
+    const publicationStatus = await this.store.findRecordByUri('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.uri);
     this.publicationFlow.status = publicationStatus;
     if (this.args.didChange) {
       await this.args.didChange(this.publicationFlow, 'status');
