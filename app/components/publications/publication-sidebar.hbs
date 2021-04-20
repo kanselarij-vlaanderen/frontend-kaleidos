@@ -96,7 +96,7 @@
               {{t "add"}}
             </WebComponents::AuButton>
           </div>
-          {{#if @publicationFlow.status.isPending}}
+          {{#if this.publicationStatus.isPending}}
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker
@@ -130,7 +130,7 @@
               {{/if}}
             </div>
           {{/if}}
-          {{#if @publicationFlow.status.isPublished}}
+          {{#if this.publicationStatus.isPublished}}
             <div class="auk-form-group">
               <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker
