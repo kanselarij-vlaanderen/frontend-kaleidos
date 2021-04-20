@@ -5,6 +5,7 @@ import {
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { A } from '@ember/array';
 import moment from 'moment';
 import { task } from 'ember-concurrency-decorators';
@@ -78,7 +79,7 @@ export default class PublicationPublishPreviewController extends Controller {
   @task
   *uploadPublishPreview(file) {
     if (!this.defaultAccessLevel) {
-      this.defaultAccessLevel = yield this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
+      this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
     }
     const now = moment()
       .utc()
@@ -110,7 +111,7 @@ export default class PublicationPublishPreviewController extends Controller {
       }
     }
     if (!this.defaultAccessLevel) {
-      this.defaultAccessLevel = yield this.store.findRecord('access-level', CONFIG.internRegeringAccessLevelId);
+      this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
     }
     const previousAccessLevel = yield lastVersionOfPublishPreview.accessLevel;
     const documentContainer = yield lastVersionOfPublishPreview.documentContainer;

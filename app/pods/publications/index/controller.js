@@ -114,7 +114,7 @@ export default class PublicationsIndexController extends Controller {
     await caze.save();
 
     const toPublishStatus = (await this.store.queryOne('publication-status',  {
-      'filter[:id:]': CONFIG.publicationStatusToPublish.id,
+      'filter[:id:]': CONFIG.PUBLICATION_STATUSES.pending.id,
     }));
 
     const publicationFlow = this.store.createRecord('publication-flow', {

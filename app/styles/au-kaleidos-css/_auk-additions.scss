@@ -67,6 +67,16 @@
 }
 
 
+/* Button in input
+   ========================================================================== */
+
+.auk-button-in-input {
+  position: absolute;
+  bottom: 0;
+  right: 3.6rem;
+}
+
+
 /* Modal
    ========================================================================== */
 
@@ -190,4 +200,20 @@
 
 .auk-u-text-error {
   color: $error-text-color;
+}
+
+.auk-u-border-top {
+  border-top: .1rem solid $au-gray-300 !important;
+}
+
+.auk-u-border-right {
+  border-right: .1rem solid $au-gray-300 !important;
+}
+
+.auk-u-border-bottom {
+  border-bottom: .1rem solid $au-gray-300 !important;
+}
+
+.auk-u-border-left {
+  border-left: .1rem solid $au-gray-300 !important;
 }

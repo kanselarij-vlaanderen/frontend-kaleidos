@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import config from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
@@ -29,14 +29,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
   }
 
   async afterModel() {
-    this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
-    if (!this.defaultAccessLevel) {
-      const accessLevels = await this.store.query('access-level', {
-        'page[size]': 1,
-        'filter[:id:]': config.internRegeringAccessLevelId,
-      });
-      this.defaultAccessLevel = accessLevels.firstObject;
-    }
+    this.defaultAccessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
   }
 
   setupController(controller) {

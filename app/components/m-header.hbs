@@ -1,8 +1,8 @@
-<div class="vlc-navbar vlc-navbar--bordered-bottom vlc-navbar--no-padding vlc-navbar--bg-alt vlc-navbar--auto"
+<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--no-pad auk-navbar--auto l-main-header"
      id="c-main-nav">
-  <div class="vlc-toolbar vlc-toolbar--auto vlc-toolbar--slide-in">
-    <div class="vlc-toolbar__left">
-      <div class="vlc-toolbar__item">
+  <div class="auk-toolbar-complex auk-toolbar-complex--auto l-main-header__toolbar">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
         <ul class="auk-tabs">
           {{#if hasPublicationsEnabled}}
             <li class="auk-tabs__tab" data-test-m-header-publications>
@@ -55,8 +55,8 @@
         </ul>
       </div>
     </div>
-    <div class="vlc-toolbar__right">
-      <div class="vlc-toolbar__right">
+    <div class="auk-toolbar-complex__right">
+      <div class="auk-toolbar-complex__right">
         {{#if showEnvironmentName}}
           <div class="vlc-environment-pill {{environmentClass}}">
             {{environmentName}}
@@ -64,7 +64,7 @@
           </div>
         {{/if}}
       </div>
-      <div class="vlc-toolbar__item">
+      <div class="auk-toolbar-complex__item">
         {{#if currentSession.userContent}}
           <div class="vlc-user">
             <div class="vlc-user__username">

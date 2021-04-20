@@ -1,13 +1,15 @@
-<div class="vlc-toolbar vlc-toolbar--bordered-top vlc-toolbar--bordered-bottom">
-  <div class="vlc-toolbar__left">
-    {{#if showBackButton}}
-      {{utils/back-button}}
-    {{/if}}
-    <div class="vlc-toolbar__item u-padding--left">
-      <h4 class="vlc-toolbar__title">{{title}}</h4>
+<div class="auk-u-border-top auk-u-border-bottom">
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left">
+      {{#if showBackButton}}
+        {{utils/back-button}}
+      {{/if}}
+      <div class="auk-toolbar-complex__item u-padding--left">
+        <h4 class="auk-toolbar-complex__title">{{title}}</h4>
+      </div>
     </div>
-  </div>
-  <div class="vlc-toolbar__right">
-    {{yield}}
+    <div class="auk-toolbar-complex__right">
+      {{yield}}
+    </div>
   </div>
 </div>

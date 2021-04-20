@@ -7,9 +7,8 @@ import { action } from '@ember/object';
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
+      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
       reload: true,
-    }, {
-      include: 'case,contact-person,status,type,numac-number,regulation-type',
     });
     await publicationFlow.get('regulationType');
     const _case = await publicationFlow.get('case');
@@ -24,7 +23,6 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       sort: '-created',
       include: 'mandatees',
     });
-
 
     const totalTranslations = await this.store.query('activity', {
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
@@ -58,13 +56,17 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const pieces = await _case.get('pieces');
     const documentCount = pieces.length;
 
-    const regulationTypes = await this.store.query('regulation-type', {
+    const regulationTypes = this.store.query('regulation-type', {
       sort: 'position', 'page[size]': 50,
     });
+
+    // cached in publications route
+    const publicationModes = this.store.peekAll('publication-mode').sortBy('position');
 
     return hash({
       publicationFlow,
       regulationTypes,
+      publicationModes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {
@@ -82,6 +84,8 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
 
   async afterModel(model) {
     this.urgencyLevel = await model.publicationFlow.urgencyLevel;
+    await this.store.query('publication-status', {});
+    this.publicationStatus = await model.publicationFlow.status;
   }
 
   /* eslint-disable id-length,no-unused-vars */
@@ -94,6 +98,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   setupController(controller) {
     super.setupController(...arguments);
     controller.urgencyLevel = this.urgencyLevel;
+    controller.publicationStatus = this.publicationStatus;
   }
 
   @action
