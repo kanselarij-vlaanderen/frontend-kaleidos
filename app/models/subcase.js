@@ -150,17 +150,15 @@ export default ModelWithModifier.extend({
       const treatments = await this.get('treatments');
       if (treatments && treatments.get('length') > 0) {
         const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
-        const drcIds = ['56312c4b-9d2a-4735-b0b1-2ff14bb524fd', '9f342a88-9485-4a83-87d9-245ed4b504bf'].join(',');
         const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
-          filter: {
-            id: treatmentIds,
-            'decision-result-code': {
-              id: drcIds,
-            },
-          },
-          include: 'decision-result-code',
+          'filter[id]': treatmentIds,
+          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
         });
-        return !!approvedTreatment;
+        const acknowledgedTreatment = await this.store.queryOne('agenda-item-treatment', {
+          'filter[id]': treatmentIds,
+          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME,
+        });
+        return !!approvedTreatment || !!acknowledgedTreatment;
       }
     }
     return false;
