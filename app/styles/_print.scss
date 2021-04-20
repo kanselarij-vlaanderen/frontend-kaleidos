@@ -28,7 +28,8 @@
   }
 
   // Remove backgrounds
-  .vlc-navbar--bg-alt,
+  .auk-navbar--gray-100,
+  .auk-navbar--gray-200,
   .auk-u-bg-alt {
     background: #fff;
   }
@@ -48,7 +49,7 @@
     display: none !important;
   }
 
-  .vlc-toolbar__right {
+  .auk-toolbar-complex__right {
     display: none;
   }
 

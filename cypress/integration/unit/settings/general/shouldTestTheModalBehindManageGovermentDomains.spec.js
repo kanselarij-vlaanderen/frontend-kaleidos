@@ -44,6 +44,7 @@ context('Settings page tests', () => {
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
   });
 
+  // TODO this test is duplicated by the next two
   it('Should open the dropdown in the modal', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
@@ -64,16 +65,16 @@ context('Settings page tests', () => {
     }
   });
 
-  it('Should open the dropdown in the modal and selecting the first element should show advanced model', () => {
+  it('Should open the dropdown in the modal and selecting the first element should show advanced modal', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
     cy.get('.ember-power-select-option').eq(0)
-      .should('contain.text', 'Cultuur, jeugd, sport & media');
+      .should('contain.text', govermentDomains[0]);
     cy.get('.ember-power-select-option').eq(0)
       .click();
-    cy.get('.ember-power-select-selected-item').should('contain.text', 'Cultuur, jeugd, sport & media')
+    cy.get('.ember-power-select-selected-item').should('contain.text', govermentDomains[0])
       .wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
     cy.get(modal.manageInSettingsModal.edit).should('be.visible');
@@ -81,7 +82,7 @@ context('Settings page tests', () => {
     cy.get(modal.baseModal.close).should('be.visible');
   });
 
-  it('Should open the dropdown in the modal and selecting the each element should show advanced model with that element in the dropdown span', () => {
+  it('Should open the dropdown in the modal and selecting the each element should show advanced modal with that element in the dropdown span', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     for (let index = 0; index < govermentDomains.length; index++) {
@@ -100,7 +101,7 @@ context('Settings page tests', () => {
     // cy.resetCache(); //TODO this does nothing
   });
 
-  it('Should open the modal, select the first element and edit it to Edited then edit it back to the standard', () => {
+  it('Should open the modal, select the new domain and edit it', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get('.ember-power-select-trigger').click();
@@ -113,9 +114,11 @@ context('Settings page tests', () => {
     cy.get(form.formInput).clear();
     cy.get(form.formInput).type('Test Input');
     cy.get(form.formSave).click();
+    // TODO await patch call
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
     cy.get('.ember-power-select-option').should('contain.text', 'Test Input');
     cy.get('.ember-power-select-option').should('not.contain.text', 'Andere zaken');
   });
+  // TODO delete this new domain
 });

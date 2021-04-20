@@ -1,0 +1,13 @@
+.l-main-header {
+  //
+}
+
+.l-main-header__toolbar {
+  position: absolute;
+  top: 0;
+  right: 18rem;
+  left: 18rem;
+  max-height: 4rem;
+  z-index: 3200;
+  width: calc(100% - 37rem);
+}

@@ -5,9 +5,9 @@
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
       <div class="vlc-document-card__content">
-        <div class="vlc-toolbar vlc-toolbar--auto">
-          <div class="vlc-toolbar__left">
-            <div class="vlc-toolbar__item">
+        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+          <div class="auk-toolbar-complex__left">
+            <div class="auk-toolbar-complex__item">
               <p class="vlc-subline vlc-document-card__subline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="vlc-document-card-toolbar__right">
-            <div class="vlc-toolbar__item auk-u-flex">
+            <div class="auk-toolbar-complex__item auk-u-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
@@ -28,7 +28,7 @@
                 />
               {{/unless}}
             </div>
-            <div class="vlc-toolbar__item">
+            <div class="auk-toolbar-complex__item">
               {{#if this.currentSession.isEditor}}
                 <button
                   class="auk-button auk-button--borderless auk-button--icon"

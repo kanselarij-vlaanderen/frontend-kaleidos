@@ -3,7 +3,9 @@
     <ul class="vlc-checkbox-tree">
       <li>
         {{#unless (eq index 0)}}
-          <div class="vlc-hr"></div>
+          <div class="auk-hr">
+            <hr/>
+          </div>
         {{/unless}}
         <WebComponents::VlCheckbox
           @value={{domainSelection.isSelected}}

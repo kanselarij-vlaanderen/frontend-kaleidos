@@ -29,38 +29,10 @@ export default class PublicationController extends Controller {
   @tracked showConfirmWithdraw = false;
   @tracked selectedRegulatonType;
   @tracked urgencyLevel;
+  @tracked publicationStatus;
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
-  statusOptions = [{
-    id: CONFIG.publicationStatusToPublish.id,
-    label: 'Te publiceren',
-    icon: {
-      svg: 'clock',
-      color: 'warning',
-    },
-  }, {
-    id: CONFIG.publicationStatusPublished.id,
-    label: 'Gepubliceerd',
-    icon: {
-      svg: 'circle-check',
-      color: 'success',
-    },
-  }, {
-    id: CONFIG.publicationStatusPauzed.id,
-    label: 'Gepauzeerd',
-    icon: {
-      svg: 'circle-pause',
-      color: 'muted',
-    },
-  }, {
-    id: CONFIG.publicationStatusWithdrawn.id,
-    label: 'Afgevoerd',
-    icon: {
-      svg: 'circle-error',
-      color: 'danger',
-    },
-  }];
 
   get sortedRegulationTypes() {
     return this.model.regulationTypes;
@@ -76,12 +48,8 @@ export default class PublicationController extends Controller {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
   }
 
-  get getPublicationStatus() {
-    return this.statusOptions.find((statusOption) => statusOption.id === this.model.publicationFlow.get('status.id'));
-  }
-
-  get getPublicationMode() {
-    return this.model.publicationModes.find((mode) => mode.id === this.model.publicationFlow.get('mode.id'));
+  get getPublicationType() {
+    return this.typeOptions.find((typeOption) => typeOption.id === this.model.publicationFlow.get('type.id'));
   }
 
   get getTranslationDate() {
@@ -123,6 +91,7 @@ export default class PublicationController extends Controller {
     }
     return false;
   }
+
   get titleText() {
     const shortTitle = this.model.publicationFlow.case.get('shortTitle');
     if (shortTitle) {
@@ -301,6 +270,17 @@ export default class PublicationController extends Controller {
   }
 
   @action
+  setPublicationStatus(status) {
+    if (status.isWithdrawn) {
+      this.showConfirmWithdraw = true;
+    } else {
+      this.model.publicationFlow.status = status;
+      this.publicationStatus = status;
+      this.model.publicationFlow.save();
+    }
+  }
+
+  @action
   setPublicationBeforeDate(event) {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
@@ -357,8 +337,8 @@ export default class PublicationController extends Controller {
       this.model.publicationFlow.save().then(() => {
         set(this, 'showPublicationDatePicker', true);
         set(this, 'showTranslationDatePicker', true);
-      }).
-        catch(() => {
+      })
+        .catch(() => {
           set(this, 'showPublicationDatePicker', true);
           set(this, 'showTranslationDatePicker', true);
         });
@@ -373,22 +353,11 @@ export default class PublicationController extends Controller {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecord('publication-status', CONFIG.publicationStatusWithdrawn.id);
-    this.model.publicationFlow.set('status', publicationStatus);
+    const publicationStatus = this.store.peekRecord('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.id);
+    this.model.publicationFlow.status = publicationStatus;
+    this.publicationStatus = publicationStatus;
     await this.model.publicationFlow.save();
     this.showConfirmWithdraw = false;
-  }
-
-  @action
-  async setPublicationStatus(event) {
-    if (event.id === CONFIG.publicationStatusWithdrawn.id) {
-      // Show popup and do nothing.
-      this.showConfirmWithdraw = true;
-    } else {
-      const publicationStatus = await this.store.findRecord('publication-status', event.id);
-      this.model.publicationFlow.set('status', publicationStatus);
-      this.model.publicationFlow.save();
-    }
   }
 
   @action
@@ -421,6 +390,7 @@ export default class PublicationController extends Controller {
     }
     return null;
   }
+
   get documentsCount() {
     return `(${this.model.counts.documentCount})`;
   }

@@ -4,7 +4,7 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   intl: inject(),
-  classNames: ['vlc-box'],
+  classNames: ['auk-box'],
 
   isTryingToSave: false,
   isExpanded: false,

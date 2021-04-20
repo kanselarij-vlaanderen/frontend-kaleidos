@@ -29,16 +29,16 @@ export default class PublicationsIndexRoute extends Route {
     let ministerFilter = {};
 
     if (this.publicationFilter.publishedFilterOption) {
-      ids.push(CONFIG.publicationStatusPublished.id);
+      ids.push(CONFIG.PUBLICATION_STATUSES.published.id);
     }
     if (this.publicationFilter.pausedFilterOption) {
-      ids.push(CONFIG.publicationStatusPauzed.id);
+      ids.push(CONFIG.PUBLICATION_STATUSES.paused.id);
     }
     if (this.publicationFilter.withdrawnFilterOption) {
-      ids.push(CONFIG.publicationStatusWithdrawn.id);
+      ids.push(CONFIG.PUBLICATION_STATUSES.withdrawn.id);
     }
     if (this.publicationFilter.toPublishFilterOption) {
-      ids.push(CONFIG.publicationStatusToPublish.id);
+      ids.push(CONFIG.PUBLICATION_STATUSES.pending.id);
     }
     if (!(this.publicationFilter.ministerFilterOption && this.publicationFilter.notMinisterFilterOption)) {
       if (this.publicationFilter.ministerFilterOption) {
