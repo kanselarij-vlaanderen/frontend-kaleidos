@@ -6,6 +6,7 @@ const {
 } = DS;
 
 export default DS.Model.extend({
+  uri: attr('string'),
   label: attr('string'),
   priority: attr('string'),
   altLabel: attr('string'),

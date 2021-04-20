@@ -172,9 +172,6 @@ export default EmberObject.create({
   kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
   ovrbId: '600d9d07-3368-4e6b-abbb-f5be5c2531a5',
-  internRegeringAccessLevelId: 'd335f7e3-aefd-4f93-81a2-1629c2edafa3',
-  internOverheidAccessLevelId: 'abe4c18d-13a9-45f0-8cdd-c493eabbbe29',
-  publiekAccessLevelId: '6ca49d86-d40f-46c9-bde3-a322aa7e5c8e',
   mockLoginServiceProvider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
   developerWhitelistIds: {
     frederik: 'fa59bba0-52e3-11ea-8bfc-e35431e140ef',

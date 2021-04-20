@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AccessLevelPillComponent extends Component {
   /**
@@ -36,14 +36,14 @@ export default class AccessLevelPillComponent extends Component {
     const classes = [baseClass, 'auk-u-cursor-pointer'];
     let modifier;
     if (this.args.accessLevel) {
-      switch (this.args.accessLevel.id) {
-        case CONFIG.publiekAccessLevelId:
+      switch (this.args.accessLevel.uri) {
+        case CONSTANTS.ACCESS_LEVELS.PUBLIEK:
           modifier = 'success';
           break;
-        case CONFIG.internOverheidAccessLevelId:
+        case CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID:
           modifier = 'warning';
           break;
-        case CONFIG.internRegeringAccessLevelId:
+        case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
           modifier = 'danger';
           break;
       }
