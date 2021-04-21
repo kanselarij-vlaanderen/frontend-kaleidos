@@ -29,43 +29,44 @@
     </div>
   {{/if}}
   <div class="auk-u-mb-2">
-    <div class="auk-form-group" style="display: flex; flex-direction: column">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
-      <div class="vlc-new-session__flex">
+      <div class="auk-u-flex">
         {{#unless this.isAnnexMeeting}}
           {{web-components/vl-form-input
             type="number"
             value=meetingNumber
             input=(action "meetingNumberChangedAction" meetingNumber)
-            class="auk-input--w-medium"
+            class="auk-input--w-medium auk-u-mr-2"
           }}
         {{/unless}}
-        <div class="vlc-new-session vlc-new-session__flex">
-          <span class="vlc-new-session__label">
-            <span class="vlc-new-session__identifier" data-test-meeting-formattedMeetingIdentifier>{{formattedMeetingIdentifier}}</span>
-            <button type="button" class="auk-button-link"
-              data-test-meeting-edit-identifier-button
-              {{action "editFormattedMeetingIdentifier"}}
-            >
-              <small>{{t "edit"}}</small>
-            </button>
-          </span>
+        <div class="auk-u-flex__item">
+          <div
+            class="auk-u-text-condensed-line-height"
+            data-test-meeting-formattedMeetingIdentifier
+          >
+            {{formattedMeetingIdentifier}}
+          </div>
+          <button type="button" class="auk-button-link"
+            data-test-meeting-edit-identifier-button
+            {{action "editFormattedMeetingIdentifier"}}
+          >
+            <small>{{t "edit"}}</small>
+          </button>
         </div>
       </div>
     </div>
     {{#if isEditingFormattedMeetingIdentifier}}
-      <div class="vlc-new-session__meetingNumberPrefix">
-        <div class="vlc-new-session__flex">
-          {{web-components/vl-form-input
-            data-test-meeting-formattedMeetingIdentifier-edit-value=true
-            value=formattedMeetingIdentifier
-            class="vlc-new-session__meetingNumberPrefix__container auk-input--w-medium"
-          }}
-          {{web-components/vl-save-button
-            text=(t "save")
-            saveAction=(action "saveAction")
-          }}
-        </div>
+      <div class="auk-u-flex">
+        {{web-components/vl-form-input
+          data-test-meeting-formattedMeetingIdentifier-edit-value=true
+          value=formattedMeetingIdentifier
+          class="auk-input--w-medium auk-u-mr-2"
+        }}
+        {{web-components/vl-save-button
+          text=(t "save")
+          saveAction=(action "saveAction")
+        }}
       </div>
     {{/if}}
   </div>
