@@ -1,9 +1,12 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
+import { inject as service } from '@ember/service';
 
 export default class PublicationNavigation extends Component {
-  @tracked documentsCount
+  @service store;
+
+  @tracked documentsCount = 0;
 
   constructor() {
     super(...arguments);
@@ -12,7 +15,11 @@ export default class PublicationNavigation extends Component {
 
   @task
   *loadData() {
-    const pieces = yield this.args.publicationFlow.case.get('pieces');
-    this.documentsCount = pieces.length;
+    yield this.store.query('piece',
+      {
+        'filter[cases][publication-flow][:uri:]': this.args.publicationFlow.uri,
+        'page[size]': 1,
+      }
+    ).then((documents) => this.documentsCount = documents.meta.count);
   }
 }
