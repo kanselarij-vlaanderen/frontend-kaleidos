@@ -9,7 +9,7 @@ import {
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
   /**
@@ -89,8 +89,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     } else {
       this.publicationFlow.status = status;
       this.loadPublicationStatus.perform();
+      this.publicationFlow.closingDate = status.isPublished ? new Date() : null;
       if (this.args.didChange) {
-        this.args.didChange(this.publicationFlow, 'status');
+        this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
       }
     }
   }
@@ -102,11 +103,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecordByUri('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.uri);
+    const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.publicationFlow.status = publicationStatus;
+    this.publicationFlow.closingDate = new Date();
     this.loadPublicationStatus.perform();
     if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, 'status');
+      await this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
     }
     this.showConfirmWithdraw = false;
   }
