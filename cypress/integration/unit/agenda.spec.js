@@ -38,7 +38,8 @@ context('Agenda tests', () => {
       .day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.deleteAgenda(result.meetingId, true, false);
+      cy.get(actionModel.showAgendaOptions).click();
+      cy.get(actionModel.agendaHeaderDeleteAgenda).click();
       cy.get(modal.auModal.body).within(() => {
         // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
         cy.get(auComponent.auAlert.container).should('exist');
@@ -48,6 +49,7 @@ context('Agenda tests', () => {
       cy.get(modal.auModal.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(result.meetingId, true);
+      // TODO assert we go back to agendas overview
     });
   });
 
@@ -69,6 +71,8 @@ context('Agenda tests', () => {
   it('should add an agendaitem to an agenda', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(false);
+    // TODO don't select a random subcase
+    // TODO assert that agendaitem was added in view without refresh
   });
 
   it('Ontwerpagenda goedkeuren en afsluiten...', () => {
@@ -129,15 +133,18 @@ context('Agenda tests', () => {
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
 
+    // TODO, case 2 is not used for further testing in this spec, maybe other specs use this subcase?
     cy.createCase(false, case2TitleShort);
     cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
     cy.openSubcase(0);
     cy.proposeSubcaseForAgenda(dateToCreateAgenda);
 
     cy.openAgendaForDate(dateToCreateAgenda);
+    // overview
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('dit is de korte titel').click();
+    // detail view
     cy.get(agenda.agendaitemTitlesEdit).should('exist')
       .should('be.visible')
       .click();
@@ -168,11 +175,13 @@ context('Agenda tests', () => {
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
     const agendaDate = Cypress.moment().add(1, 'week')
       .day(6);
+    // TODO does agenda 1 already exist? Are there multiple agenda's with ID 1 after this?
     cy.createAgenda('Ministerraad', agendaDate, 'Brussel', 1);
     cy.createAgenda('Ministerraad', agendaDate, 'Brussel', null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(actionModel.showActionOptions).click();
       cy.get(actionModel.toggleeditingsession).click();
+      // TODO data tag
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
       cy.get(form.formInput).eq(1)
         .should('have.value', `${result.meetingNumberVisualRepresentation}`);
@@ -269,7 +278,7 @@ context('Agenda tests', () => {
     });
   });
 
-  it('Should add agendaitems to an agenda and set one of them to formally NOK and close the agenda', () => {
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
@@ -335,7 +344,7 @@ context('Agenda tests', () => {
     cy.contains(newSubcase2TitleShort).should('not.exist');
   });
 
-  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
+  it('Should add agendaitems to an agenda and set one of them to formally NOK and approve the agenda', () => {
     const testId = `testId=${currentTimestamp()}: `;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1)
