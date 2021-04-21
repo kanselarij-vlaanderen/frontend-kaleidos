@@ -56,17 +56,8 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const pieces = await _case.get('pieces');
     const documentCount = pieces.length;
 
-    const regulationTypes = this.store.query('regulation-type', {
-      sort: 'position', 'page[size]': 50,
-    });
-
-    // cached in publications route
-    const publicationModes = this.store.peekAll('publication-mode').sortBy('position');
-
     return hash({
       publicationFlow,
-      regulationTypes,
-      publicationModes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {
@@ -82,23 +73,15 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     });
   }
 
-  async afterModel(model) {
-    this.urgencyLevel = await model.publicationFlow.urgencyLevel;
+  async afterModel() {
     await this.store.query('publication-status', {});
-    this.publicationStatus = await model.publicationFlow.status;
+    await this.store.query('regulation-type', {});
   }
 
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
-    controller.numberIsAlreadyUsed = false;
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.urgencyLevel = this.urgencyLevel;
-    controller.publicationStatus = this.publicationStatus;
   }
 
   @action

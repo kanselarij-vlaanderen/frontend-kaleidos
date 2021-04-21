@@ -1,7 +1,7 @@
 import Model, {
   attr, hasMany
 } from '@ember-data/model';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationStatus extends Model {
   @attr('string') uri;
@@ -10,15 +10,15 @@ export default class PublicationStatus extends Model {
   @hasMany('publication-flow') publicaties;
 
   get isPending() {
-    return this.uri === CONFIG.PUBLICATION_STATUSES.pending.uri;
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PENDING;
   }
   get isPublished() {
-    return this.uri === CONFIG.PUBLICATION_STATUSES.published.uri;
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PUBLISHED;
   }
   get isWithdrawn() {
-    return this.uri === CONFIG.PUBLICATION_STATUSES.withdrawn.uri;
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN;
   }
   get isPaused() {
-    return this.uri === CONFIG.PUBLICATION_STATUSES.paused.uri;
+    return this.uri === CONSTANTS.PUBLICATION_STATUSES.PAUSED;
   }
 }

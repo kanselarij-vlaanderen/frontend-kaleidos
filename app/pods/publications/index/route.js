@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { dasherize } from '@ember/string';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -20,26 +20,28 @@ export default class PublicationsIndexRoute extends Route {
     },
   }
 
+  statusFilters = Object.freeze({ // map filter name to concept uri
+    publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
+    pausedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PAUSED,
+    withdrawnFilterOption: CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN,
+    toPublishFilterOption: CONSTANTS.PUBLICATION_STATUSES.PENDING,
+  });
+
   beforeModel() {
     this.publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
   }
 
   async model(params) {
-    const ids = [];
+    const statusIds = [];
     let ministerFilter = {};
 
-    if (this.publicationFilter.publishedFilterOption) {
-      ids.push(CONFIG.PUBLICATION_STATUSES.published.id);
+    for (const statusFilter of Object.keys(this.statusFilters)) {
+      if (this.publicationFilter[statusFilter]) {
+        const status = await this.store.findRecordByUri('publication-status', this.statusFilters[statusFilter]);
+        statusIds.push(status.id);
+      }
     }
-    if (this.publicationFilter.pausedFilterOption) {
-      ids.push(CONFIG.PUBLICATION_STATUSES.paused.id);
-    }
-    if (this.publicationFilter.withdrawnFilterOption) {
-      ids.push(CONFIG.PUBLICATION_STATUSES.withdrawn.id);
-    }
-    if (this.publicationFilter.toPublishFilterOption) {
-      ids.push(CONFIG.PUBLICATION_STATUSES.pending.id);
-    }
+
     if (!(this.publicationFilter.ministerFilterOption && this.publicationFilter.notMinisterFilterOption)) {
       if (this.publicationFilter.ministerFilterOption) {
         ministerFilter = {
@@ -61,9 +63,9 @@ export default class PublicationsIndexRoute extends Route {
       filter.case = ministerFilter;
     }
 
-    if (ids.length > 0) {
+    if (statusIds.length > 0) {
       filter.status = {
-        id: ids.join(','),
+        ':id:': statusIds.join(','),
       };
     }
 

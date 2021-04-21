@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -112,9 +113,7 @@ export default class PublicationsIndexController extends Controller {
     });
     await caze.save();
 
-    const toPublishStatus = (await this.store.queryOne('publication-status',  {
-      'filter[:id:]': CONFIG.PUBLICATION_STATUSES.pending.id,
-    }));
+    const toPublishStatus = await this.store.findByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
 
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
