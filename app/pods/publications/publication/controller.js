@@ -276,13 +276,6 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  async setPublicationType(event) {
-    const publicationType = await this.store.findRecord('publication-type', event.id);
-    this.model.publicationFlow.set('type', publicationType);
-    this.model.publicationFlow.save();
-  }
-
-  @action
   setPublicationBeforeDate(event) {
     set(this, 'showPublicationDatePicker', false);
     set(this, 'showTranslationDatePicker', false);
