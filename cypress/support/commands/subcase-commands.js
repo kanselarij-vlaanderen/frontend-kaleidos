@@ -117,7 +117,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
   cy.get('@subcaseAccessLevel').within(() => {
     if (isRemark) {
-      cy.get('.vlc-input-field-block').as('editCaseForm');
+      cy.get('.auk-form-group').as('editCaseForm');
       if (newLongTitle) {
         cy.get('@editCaseForm').eq(2)
           .within(() => {
@@ -127,7 +127,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
           });
       }
     } else {
-      cy.get('.vlc-input-field-block').as('editCaseForm')
+      cy.get('.auk-form-group').as('editCaseForm')
         .should('have.length', 3);
     }
 

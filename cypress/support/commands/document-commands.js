@@ -34,7 +34,7 @@ function addNewDocumentsInUploadModal(files, model) {
         .eq(index)
         .within(() => {
           if (file.newFileName) {
-            cy.get('.vlc-input-field-block').eq(0)
+            cy.get('.auk-form-group').eq(0)
               .within(() => {
                 cy.get('.auk-input').clear()
                   .type(file.newFileName);
@@ -48,7 +48,7 @@ function addNewDocumentsInUploadModal(files, model) {
         cy.get('.vl-uploaded-document').eq(index)
           .within(() => {
             cy.get('input[type="radio"]').should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-            cy.get('.vlc-input-field-block')
+            cy.get('.auk-form-group')
               .within(($t) => {
                 if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
                   cy.get('input[type="radio"]').check(file.fileType, {

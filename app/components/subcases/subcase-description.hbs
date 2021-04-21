@@ -148,7 +148,7 @@
 {{else}}
   <div class="auk-box">
     <div class="auk-u-mb-4">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         {{web-components/vl-radio-button-list
           title=(t "subcase-type")
           optionList=(await caseTypes)
@@ -156,7 +156,7 @@
           modelChanged=(action "selectRemarkType")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="subcase-type"
@@ -167,7 +167,7 @@
           selectModel=(action "selectType")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=subcaseName}}
       </div>

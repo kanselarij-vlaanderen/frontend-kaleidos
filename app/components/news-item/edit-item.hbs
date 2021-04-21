@@ -30,17 +30,17 @@
       </div>
     {{/if}}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     <p>
       {{agendaitem.title}}
     </p>
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=newsletterInfo.title}}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "mandatee-proposal"}}</WebComponents::AuLabel>
     <p>
       {{#if (await newsletterInfo.newsletterProposal)}}
@@ -50,7 +50,7 @@
       {{/if}}
     </p>
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "decision-in-newsletter"}}</WebComponents::AuLabel>
     {{web-components/vl-rdfa-editor
       data-test-rdfa-editor=true
@@ -60,16 +60,16 @@
     }}
   </div>
 
-  <div class="vlc-input-field-block auk-u-text-capitalize">
+  <div class="auk-form-group auk-u-text-capitalize">
     <WebComponents::AuLabel>{{t "remark"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=newsletterInfo.remark}}
   </div>
 
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "finished"}}</WebComponents::AuLabel>
     {{web-components/vl-toggle value=newsletterInfo.finished}}
   </div>
-  <div class="vlc-input-field-block" data-test-themes-selector>
+  <div class="auk-form-group" data-test-themes-selector>
     <WebComponents::AuLabel>{{t "themes"}}</WebComponents::AuLabel>
     {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
   </div>
