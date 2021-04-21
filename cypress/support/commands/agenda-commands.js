@@ -39,7 +39,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   cy.get('.auk-modal').as('dialog')
     .within(() => {
-      cy.get('.vlc-input-field-block').as('newAgendaForm')
+      cy.get('.auk-form-group').as('newAgendaForm')
         .should('have.length', 4);
     });
 
