@@ -9,7 +9,7 @@ import {
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
   /**
@@ -102,7 +102,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecordByUri('publication-status', CONFIG.PUBLICATION_STATUSES.withdrawn.uri);
+    const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.publicationFlow.status = publicationStatus;
     this.loadPublicationStatus.perform();
     if (this.args.didChange) {
