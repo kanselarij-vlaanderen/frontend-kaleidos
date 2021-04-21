@@ -37,7 +37,6 @@ export default class PublicationService extends Service {
       // if a valid suffix is given, we check if the number + suffix combo has been taken instead
       publicationsFromQuery = await this.store.query('publication-flow', {
         filter: {
-          // :exact: does not work on numbers.
           ':exact:publication-number': `"${publicationNumber}"`, // Needs quotes because of bug in mu-cl-resources
           ':exact:publication-suffix': publicationSuffix,
         },
@@ -47,7 +46,6 @@ export default class PublicationService extends Service {
       // filtering on non-existing attributes, is this possible in a query?
       const publicationsFromQueryWithSameNumber = await this.store.query('publication-flow', {
         filter: {
-          // :exact: does not work on numbers.
           ':exact:publication-number': `"${publicationNumber}"`, // Needs quotes because of bug in mu-cl-resources
         },
       });
