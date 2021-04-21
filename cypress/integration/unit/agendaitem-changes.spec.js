@@ -31,11 +31,24 @@ context('Agendaitem changes tests', () => {
   const files = [file];
   const waitTime = 3000;
 
+  // The setup of this test:
+  /*
+    agenda A:
+    -punt 1: verslag van de vorige vergadering (formeel ok)
+    -punt 2: geagendeerde procedurestap (formeel ok)
+    ontwerpagenda B:
+    -punt 1: idem (geen changes)
+    -punt 2: idem (geen changes)
+    -punt 3 (nieuw agendapunt met 1 document) (nog niet formeel ok)
+  */
+
   it('should add a document to an agenda and should highlight as added', () => {
     cy.visitAgendaWithLink(agendaURL);
     cy.addDocumentsToAgendaitem(subcaseTitle1, files);
     cy.setFormalOkOnItemWithIndex(1);
+    // TODO change not needed, already on ontwerpagenda (is this to change away from detail to overview?)
     cy.changeSelectedAgenda('Ontwerpagenda');
+    // TODO refresh true has been disabled, no longer needed
     cy.toggleShowChanges(true);
     cy.agendaitemExists(subcaseTitle1);
   });
@@ -44,27 +57,30 @@ context('Agendaitem changes tests', () => {
     cy.visitAgendaWithLink(agendaURL);
     // when toggling show changes  the agendaitem added since current agenda should show
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
-    cy.setFormalOkOnItemWithIndex(2);
+    cy.setFormalOkOnItemWithIndex(2); // punt 3
     cy.toggleShowChanges(true);
+    // TODO don't use then here, cypress awaits each command anyway
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 3)
       .then(() => {
         cy.agendaitemExists(subcaseTitle2);
-        cy.setFormalOkOnItemWithIndex(2);
+        cy.setFormalOkOnItemWithIndex(2); // punt 4
         cy.approveDesignAgenda();
       });
   });
+
   it('should add a piece to an item and highlight it as changed', () => {
     cy.visit(agendaURL);
-    cy.changeSelectedAgenda('Ontwerpagenda');
+    cy.changeSelectedAgenda('Ontwerpagenda'); // switch from agenda B to ontwerpagenda C
+    // TODO check "toon aangepaste punten" shows no agendaitems ?
     // when toggling show changes  the agendaitem with a new document version should show
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.setFormalOkOnItemWithIndex(1);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
+    // TODO change not needed, already on ontwerpagenda
     cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaitemExists(subcaseTitle1);
   });
-
 
   it('should add an agendaitem of type remark and highlight it as added', () => {
     cy.wait(1000); // flaky, page not loading ?
