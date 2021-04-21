@@ -113,7 +113,7 @@ export default class PublicationsIndexController extends Controller {
     });
     await caze.save();
 
-    const toPublishStatus = await this.store.findByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
 
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
