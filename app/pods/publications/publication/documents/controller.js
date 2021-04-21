@@ -3,15 +3,12 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
-import CONFIG from 'frontend-kaleidos/utils/config';
+// import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import {
-  action,
-  set,
-  computed
-} from '@ember/object';
+import { action } from '@ember/object';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -34,15 +31,15 @@ export default class PublicationDocumentsController extends Controller {
   @tracked filteredSortedPieces = [];
 
   @tracked translateActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked finalTranslationDate: '',
-    @tracked pieces: A([]),
+    mailContent: '',
+    mailSubject: '',
+    finalTranslationDate: '',
+    pieces: [],
   };
   @tracked previewActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked pieces: A([]),
+    mailContent: '',
+    mailSubject: '',
+    pieces: [],
   };
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
@@ -144,10 +141,9 @@ export default class PublicationDocumentsController extends Controller {
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
+    this.model.pieces.pushObject(piece);
+    piece.cases.pushObject(this.model.case);
     yield piece.save();
-    const pieces = yield this.model.case.hasMany('pieces').reload();
-    pieces.pushObject(piece);
-    yield this.model.case.save();
   }
 
   @task
@@ -185,10 +181,10 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async cancelEditPiece() {
     this.pieceBeingEdited.rollbackAttributes();
-    const dc = await this.pieceBeingEdited.get('documentContainer');
-    if (dc) {
-      dc.rollbackAttributes();
-      dc.belongsTo('type').reload();
+    const documentContainer = this.pieceBeingEdited.documentContainer;
+    if (documentContainer) {
+      documentContainer.rollbackAttributes();
+      documentContainer.belongsTo('type').reload();
     }
     this.pieceBeingEdited = null;
     this.showPieceEditor = false;
@@ -199,8 +195,8 @@ export default class PublicationDocumentsController extends Controller {
     this.showPieceEditor = false;
     this.showLoader = true;
     await this.pieceBeingEdited.save();
-    const dc = await this.pieceBeingEdited.get('documentContainer');
-    await dc.save();
+    const documentContainer = this.pieceBeingEdited.get('documentContainer');
+    await documentContainer.save();
     this.showLoader = false;
   }
 
@@ -235,7 +231,18 @@ export default class PublicationDocumentsController extends Controller {
     }
   }
 
-  /** PUBLISH PREVIEW ACTIVITIES **/
+  @action
+  openTranslationRequestModal() {
+    alert('Not implemented yet.');
+  }
+
+  @action
+  openPublishPreviewRequestModal() {
+    alert('Not implemented yet.');
+  }
+
+  /** temporarily disabled
+  // PUBLISH PREVIEW ACTIVITIES
   @action
   setPreviewMailSubject(event) {
     set(this.previewActivity, 'mailSubject', event.target.value);
@@ -295,7 +302,7 @@ export default class PublicationDocumentsController extends Controller {
     this.model.refreshAction();
   }
 
-  /** TRANSLATION ACTIVITIES **/
+  // TRANSLATION ACTIVITIES
   @action
   setTranslationMailSubject(event) {
     set(this.translateActivity, 'mailSubject', event.target.value);
@@ -370,11 +377,10 @@ export default class PublicationDocumentsController extends Controller {
   async getConfig(name, defaultValue) {
     return await this.configService.get(name, defaultValue);
   }
+  */
 
-  @computed('model.case.sortedPieces')
   get initialDocumentLoad() {
-    this.sortAndFilterPieces();
-    return true;
+    return this.sortAndFilterPieces().then(() => true);
   }
 
   @action
@@ -393,10 +399,10 @@ export default class PublicationDocumentsController extends Controller {
 
   async sortAndFilterPieces() {
     this.showLoader = true;
-    const pieces = this.model.case.sortedPieces;
+    const sortedPieces = sortPieces(this.model.pieces);
     this.filteredSortedPieces = [];
-    for (let index = 0; index < pieces.length; index++) {
-      const piece = pieces[index];
+    for (let index = 0; index < sortedPieces.length; index++) {
+      const piece = sortedPieces[index];
       // sync filter first
       if (!this.filterTitle(piece)) {
         continue;
