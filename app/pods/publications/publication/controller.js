@@ -48,10 +48,6 @@ export default class PublicationController extends Controller {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
   }
 
-  get getPublicationType() {
-    return this.typeOptions.find((typeOption) => typeOption.id === this.model.publicationFlow.get('type.id'));
-  }
-
   get getTranslationDate() {
     if (!this.model.publicationFlow.get('translateBefore')) {
       return null;
