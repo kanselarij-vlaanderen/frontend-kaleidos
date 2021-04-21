@@ -16,30 +16,8 @@
             @size="150"
             @custom="true"
             @customTextClass="auk-toolbar-complex__title"
-          >
-          </WebComponents::AuAbbreviatedText>
-          <WebComponents::AuTabs @reversed="true">
-            <WebComponents::AuTab @isHierarchicalBack="true" @route="publications" data-test-publication-case-nav-go-back></WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>{{t "agendaitem-case"}}</WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>
-              <div class="auk-u-flex auk-u-flex--center">
-                <span class="auk-u-mr-2">{{t "documents"}}</span>
-                <p>{{this.documentsCount}}</p>
-              </div>
-            </WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
-              <div class="auk-u-flex auk-u-flex--center">
-                <span class="auk-u-mr-2">{{t "translations"}}</span>
-                <WebComponents::AuStatusPill @status={{this.showStatusForTranslations.status}}>{{this.showStatusForTranslations.value}}</WebComponents::AuStatusPill>
-              </div>
-            </WebComponents::AuTab>
-            <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
-              <div class="auk-u-flex auk-u-flex--center">
-                <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
-                <WebComponents::AuStatusPill @status={{this.showStatusForPublicationPreviews.status}}>{{this.showStatusForPublicationPreviews.value}}</WebComponents::AuStatusPill>
-              </div>
-            </WebComponents::AuTab>
-          </WebComponents::AuTabs>
+          />
+          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model.publicationFlow}} />
         </div>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
