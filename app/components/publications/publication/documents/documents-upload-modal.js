@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
-import { A } from '@ember/array';
 import moment from 'moment';
 
 export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
@@ -60,16 +59,9 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     this.isVerifyingDelete = false;
   }
 
-  @action
-  async savePieces() {
-    await this.savePiecesTask.perform(this.newPieces);
-    this.args.onSave(this.newPieces);
-    this.newPieces = A([]);
-  }
-
   @task
-  *savePiecesTask(newPieces) {
-    const savePromises = newPieces.map(async(piece) => {
+  *savePieces() {
+    const savePromises = this.newPieces.map(async(piece) => {
       try {
         await this.savePiece.perform(piece);
       } catch (error) {
@@ -78,6 +70,8 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
       }
     });
     yield all(savePromises);
+    yield this.args.onSaveTask.perform(this.newPieces);
+    this.newPieces = [];
   }
 
   /**

@@ -115,11 +115,11 @@ export default class PublicationDocumentsController extends Controller {
     this.showPieceUploadModal = true;
   }
 
-  @action
-  async onSave(pieces) {
-    this.showPieceUploadModal = false;
+  @task
+  *onSavePiecesTask(pieces) {
     this.model.case.pieces.pushObjects(pieces);
-    await this.model.case.save();
+    yield this.model.case.save();
+    this.showPieceUploadModal = false;
   }
 
   @action

@@ -15,11 +15,11 @@
     </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer @cancelModal={{perform this.cancelUploadPieces}}>
-    {{#if this.savePiecesTask.isRunning}}
+    {{#if this.savePieces.isRunning}}
       <Utils::SimpleSpinner></Utils::SimpleSpinner>
     {{else}}
       <WebComponents::AuButton data-test-au-modal-footer-save @skin="primary" @disabled={{eq this.newPieces.length 0}}
-        {{on "click" savePieces}}>
+        {{on "click" (perform savePieces)}}>
         {{t "documents-add"}}
       </WebComponents::AuButton>
     {{/if}}
