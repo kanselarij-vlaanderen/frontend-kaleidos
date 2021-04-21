@@ -19,88 +19,96 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="auk-u-m-8 auk-u-mt-4 vlc-u-box-model-maximize-height">
     <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
-      <div class="auk-form-group auk-o-grid-col-4">
-        <div class="auk-u-flex auk-u-flex--align-baseline">
-          <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
-            {{capitalize (t "keyword")}}
-          </WebComponents::AuLabel>
-          <span>
-            <i
-              class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
-              aria-hidden="true"
-              {{on "click" this.openPopover}}
-            >
-            </i>
-            <AttachPopover
-              @class="auk-popover"
-              @showOn="click"
-              @placement="right"
-              @hideOn="clickout"
-              @isShown={{this.popoverShown}}
-              @renderInPlace={{true}}
-            >
-              <Utils::SearchLegend @userClickedClose={{this.closePopover}}/>
-            </AttachPopover>
-          </span>
+      <div class="auk-o-grid-col-4">
+        <div class="auk-form-group">
+          <div class="auk-u-flex auk-u-flex--align-baseline">
+            <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
+              {{capitalize (t "keyword")}}
+            </WebComponents::AuLabel>
+            <span>
+              <i
+                class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
+                aria-hidden="true"
+                {{on "click" this.openPopover}}
+              >
+              </i>
+              <AttachPopover
+                @class="auk-popover"
+                @showOn="click"
+                @placement="right"
+                @hideOn="clickout"
+                @isShown={{this.popoverShown}}
+                @renderInPlace={{true}}
+              >
+                <Utils::SearchLegend @userClickedClose={{this.closePopover}}/>
+              </AttachPopover>
+            </span>
+          </div>
+          <Input
+            data-test-searchfield=""
+            class="auk-input auk-input--block"
+            type="text"
+            id="dossierId"
+            @placeholder={{t "search-placeholder"}}
+            @value={{this.searchTextBuffer}}
+            @enter={{fn this.search}}
+          />
         </div>
-        <Input
-          data-test-searchfield=""
-          class="auk-input auk-input--block"
-          type="text"
-          id="dossierId"
-          @placeholder={{t "search-placeholder"}}
-          @value={{this.searchTextBuffer}}
-          @enter={{fn this.search}}
-        />
       </div>
-      <div class="auk-form-group auk-o-grid-col-2 auk-u-position-relative">
-        <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
-        <WebComponents::VlDatepicker
-          @selectedDate={{array this.dateFromBuffer}}
-          @dateChanged={{fn (mut this.dateFromBuffer)}}
-        />
-        {{#if this.dateFromBuffer}}
-          <button
-            data-test-searchbutton
-            type="button"
-            class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
-            {{on "click" (fn (mut this.dateFromBuffer) null)}}
-          >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-close" aria-hidden="true"></i>
-            </div>
-          </button>
-        {{/if}}
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative">
+          <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
+          <WebComponents::VlDatepicker
+            @selectedDate={{array this.dateFromBuffer}}
+            @dateChanged={{fn (mut this.dateFromBuffer)}}
+          />
+          {{#if this.dateFromBuffer}}
+            <button
+              data-test-searchbutton
+              type="button"
+              class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
+              {{on "click" (fn (mut this.dateFromBuffer) null)}}
+            >
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-close" aria-hidden="true"></i>
+              </div>
+            </button>
+          {{/if}}
+        </div>
       </div>
-      <div class="auk-form-group auk-o-grid-col-2 auk-u-position-relative">
-        <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
-        <WebComponents::VlDatepicker
-          @selectedDate={{array this.dateToBuffer}}
-          @dateChanged={{fn (mut this.dateToBuffer)}}
-        />
-        {{#if this.dateToBuffer}}
-          <button
-            type="button"
-            class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
-            {{on "click" (fn (mut this.dateToBuffer) null)}}
-          >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-close" aria-hidden="true"></i>
-            </div>
-          </button>
-        {{/if}}
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group auk-u-position-relative">
+          <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
+          <WebComponents::VlDatepicker
+            @selectedDate={{array this.dateToBuffer}}
+            @dateChanged={{fn (mut this.dateToBuffer)}}
+          />
+          {{#if this.dateToBuffer}}
+            <button
+              type="button"
+              class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
+              {{on "click" (fn (mut this.dateToBuffer) null)}}
+            >
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-close" aria-hidden="true"></i>
+              </div>
+            </button>
+          {{/if}}
+        </div>
       </div>
-      <div class="auk-form-group auk-o-grid-col-2">
-        <WebComponents::AuLabel for="ministerName">
-          {{t "minister"}}
-        </WebComponents::AuLabel>
-        <Input
-          type="text"
-          class="auk-input auk-input--block"
-          id="ministerName"
-          @value={{this.mandateesBuffer}}
-          @enter={{fn this.search}}
-        />
+      <div class="auk-o-grid-col-2">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="ministerName">
+            {{t "minister"}}
+          </WebComponents::AuLabel>
+          <Input
+            type="text"
+            class="auk-input auk-input--block"
+            id="ministerName"
+            @value={{this.mandateesBuffer}}
+            @enter={{fn this.search}}
+          />
+        </div>
       </div>
       <div class="auk-o-grid-col-1">
         <WebComponents::AuButton
