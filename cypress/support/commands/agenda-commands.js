@@ -225,9 +225,8 @@ function openAgendaitemKortBestekTab(agendaitemTitle) {
  * @function
  * @param {number} [meetingId] - The id of the meeting to delete to monitor if the DELETE call is made.
  * @param {boolean} [lastAgenda] - Wether the meeting will be deleted when this agenda is deleted.
- * @param {Boolean} shouldConfirm - Default true, should the command click the confirm button? false is used if you want to check the message in the modal
  */
-function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
+function deleteAgenda(meetingId, lastAgenda) {
   cy.log('deleteAgenda');
   if (meetingId) {
     cy.route('DELETE', `/meetings/${meetingId}`).as('deleteMeeting');
@@ -241,24 +240,22 @@ function deleteAgenda(meetingId, lastAgenda, shouldConfirm = true) {
 
   cy.get(actionModel.showAgendaOptions).click();
   cy.get(actionModel.agendaHeaderDeleteAgenda).click();
-  if (shouldConfirm) {
-    cy.get(modal.auModal.container).within(() => {
-      cy.get(modal.auModal.save).click();
-    });
-    if (lastAgenda) {
-      cy.wait('@deleteNewsletter', {
-        timeout: 20000,
-      })
-        .wait('@deleteMeeting', {
-          timeout: 20000,
-        });
-    }
-    cy.get(modal.auModal.container, {
+  cy.get(modal.auModal.container).within(() => {
+    cy.get(modal.auModal.save).click();
+  });
+  if (lastAgenda) {
+    cy.wait('@deleteNewsletter', {
       timeout: 20000,
-    }).should('not.exist');
-    if (!lastAgenda) {
-      cy.wait('@loadAgendaitems');
-    }
+    })
+      .wait('@deleteMeeting', {
+        timeout: 20000,
+      });
+  }
+  cy.get(modal.auModal.container, {
+    timeout: 20000,
+  }).should('not.exist');
+  if (!lastAgenda) {
+    cy.wait('@loadAgendaitems');
   }
 
   cy.log('/deleteAgenda');
