@@ -174,16 +174,18 @@
     </div>
     <div class="auk-toolbar-complex auk-toolbar-complex--auto">
       <div class="auk-toolbar-complex__right">
-        <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-          {{t "cancel"}}
-        </a>
-      </div>
-      <div class="auk-toolbar-complex__left">
-        {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "saveChanges")
-        }}
+        <div class="auk-toolbar-complex__item">
+          <a href="" class="auk-button-link" {{action "cancelEditing"}}>
+            {{t "cancel"}}
+          </a>
+        </div>
+        <div class="auk-toolbar-complex__item">
+          {{web-components/vl-save-button
+            text=(t "save")
+            isLoading=isLoading
+            saveAction=(action "saveChanges")
+          }}
+        </div>
       </div>
     </div>
   </div>
