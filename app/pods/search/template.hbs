@@ -19,7 +19,7 @@
 <div class="vlc-scroll-wrapper__body">
   <div class="auk-u-m-8 auk-u-mt-4 vlc-u-box-model-maximize-height">
     <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2">
-      <div class="vlc-input-field-block auk-o-grid-col-4">
+      <div class="auk-form-group auk-o-grid-col-4">
         <div class="auk-u-flex auk-u-flex--align-baseline">
           <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
             {{capitalize (t "keyword")}}
@@ -53,7 +53,7 @@
           @enter={{fn this.search}}
         />
       </div>
-      <div class="vlc-input-field-block auk-o-grid-col-2 auk-u-position-relative">
+      <div class="auk-form-group auk-o-grid-col-2 auk-u-position-relative">
         <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateFromBuffer}}
@@ -72,7 +72,7 @@
           </button>
         {{/if}}
       </div>
-      <div class="vlc-input-field-block auk-o-grid-col-2 auk-u-position-relative">
+      <div class="auk-form-group auk-o-grid-col-2 auk-u-position-relative">
         <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
         <WebComponents::VlDatepicker
           @selectedDate={{array this.dateToBuffer}}
@@ -90,7 +90,7 @@
           </button>
         {{/if}}
       </div>
-      <div class="vlc-input-field-block auk-o-grid-col-2">
+      <div class="auk-form-group auk-o-grid-col-2">
         <WebComponents::AuLabel for="ministerName">
           {{t "minister"}}
         </WebComponents::AuLabel>
