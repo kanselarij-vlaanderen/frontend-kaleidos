@@ -32,11 +32,6 @@ export default class PublicationController extends Controller {
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
-
-  get sortedRegulationTypes() {
-    return this.model.regulationTypes;
-  }
-
   @action
   setRegulationType(regulationType) {
     this.model.publicationFlow.set('regulationType', regulationType);
@@ -45,10 +40,6 @@ export default class PublicationController extends Controller {
 
   get getRegulationType() {
     return this.model.regulationTypes.find((regulationType) => regulationType.id === this.model.publicationFlow.get('regulationType.id'));
-  }
-
-  get getPublicationType() {
-    return this.typeOptions.find((typeOption) => typeOption.id === this.model.publicationFlow.get('type.id'));
   }
 
   get getTranslationDate() {
