@@ -33,11 +33,6 @@ export default class PublicationController extends Controller {
   @tracked newNumacNumber = '';
   @tracked showLoader = false;
 
-
-  get sortedRegulationTypes() {
-    return this.model.regulationTypes;
-  }
-
   @action
   setRegulationType(regulationType) {
     this.model.publicationFlow.set('regulationType', regulationType);
