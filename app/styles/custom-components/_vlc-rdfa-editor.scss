@@ -1,3 +1,7 @@
+// Import custom config before 'ember-rdfa-editor' to overwrite !default's
+@import '../fixes/fix-ember-rdfa-editor';
+@import '../ember-rdfa-editor';
+
 .rdfa-editor {
   height: 30rem;
   border: .1rem solid #BFC8D1;
