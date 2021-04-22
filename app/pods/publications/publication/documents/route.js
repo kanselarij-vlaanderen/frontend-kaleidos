@@ -13,6 +13,7 @@ export default class PublicationDocumentsRoute extends Route {
         },
       },
     });
+    // use array to allow add/delete
     return modelData.toArray();
   }
 
