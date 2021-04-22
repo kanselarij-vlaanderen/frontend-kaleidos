@@ -31,17 +31,7 @@
         </pre>
       </h4>
       {{#if (not @agendaitem.aboutToDelete)}}
-        {{#unless @isActive}}
-          {{#if (not @agendaitem.isApproval)}}
-            {{#if @agendaitem.shortTitle}} {{!-- Avoid rendering the same thing twice if no "shortTitle" exists --}}
-              <pre class="auk-u-text-pre-line">
-                {{@agendaitem.title}}
-              </pre>
-            {{/if}}
-          {{/if}}
-        {{/unless}}
         <div>
-
           <div class="auk-u-flex auk-u-flex--justify-between">
             <div class="auk-u-flex auk-u-flex--align-end vlc-agenda-detail-sidebar-item__icon">
               {{#if @isNew}}
