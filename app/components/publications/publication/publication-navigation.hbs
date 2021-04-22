@@ -4,14 +4,14 @@
   <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>
     {{t "agendaitem-case"}}
   </WebComponents::AuTab>
-  {{#unless this.loadData.isRunning}}
-    <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>
-      <div class="auk-u-flex auk-u-flex--center">
-        <span class="auk-u-mr-2">{{t "documents"}}</span>
+  <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>
+    <div class="auk-u-flex auk-u-flex--center">
+      <span class="auk-u-mr-2">{{t "documents"}}</span>
+      {{#unless this.loadData.isRunning}}
         <p>{{this.documentsCount}}</p>
-      </div>
-    </WebComponents::AuTab>
-  {{/unless}}
+      {{/unless}}
+    </div>
+  </WebComponents::AuTab>
   <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
     <div class="auk-u-flex auk-u-flex--center">
       <span class="auk-u-mr-2">{{t "translations"}}</span>

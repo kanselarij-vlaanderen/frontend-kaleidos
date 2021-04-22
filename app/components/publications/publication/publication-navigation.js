@@ -15,11 +15,12 @@ export default class PublicationNavigation extends Component {
 
   @task
   *loadData() {
-    yield this.store.query('piece',
+    const pieces = yield this.store.query('piece',
       {
         'filter[cases][publication-flow][:uri:]': this.args.publicationFlow.uri,
         'page[size]': 1,
       }
-    ).then((documents) => this.documentsCount = documents.meta.count);
+    );
+    this.documentsCount = pieces.meta.count;
   }
 }
