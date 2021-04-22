@@ -5,7 +5,7 @@ export default class SessionsSessionAgendaNavComponent extends Component {
   /**
    * @argument currentAgenda
    */
-  @service('-routing') routing;
+  @service router;
   @service sessionService;
   @service currentSession;
 
@@ -14,6 +14,6 @@ export default class SessionsSessionAgendaNavComponent extends Component {
   }
 
   get isInAgendaItemDetailRoute() {
-    return this.routing.currentRouteName.startsWith('agenda.agendaitems.agendaitem');
+    return this.router.currentRouteName.startsWith('agenda.agendaitems.agendaitem');
   }
 }
