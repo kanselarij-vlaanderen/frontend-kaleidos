@@ -1,8 +1,5 @@
 @import 'ember-power-select';
 @import 'ember-vo-webuniversum-data-table';
-// TODO: Deze fix is om ervoor te zetten dat de variabelen voor de ember-rdfa-editor op voorhand gezet worden zodat ze niett overschreven worden door de !default
-@import 'fixes/fix-ember-rdfa-editor';
-@import 'ember-rdfa-editor';
 /* ==========================================================================
    CSS file for Digikan
    ========================================================================== */
