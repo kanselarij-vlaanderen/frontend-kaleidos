@@ -18,6 +18,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
+  @tracked isLoaded = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenTranslationRequestModal = false;
   @tracked isOpenPublishPreviewRequestModal = false;
@@ -54,9 +55,18 @@ export default class PublicationDocumentsController extends Controller {
 
   @tracked filter = new DocumentsFilter();
 
+  async setup({
+    _case,
+  }) {
+    this.case = _case;
+    await this.sortAndFilterPieces();
+    this.isLoaded = true;
+  }
+
   // called from route (to share logic)
   reset() {
     this._resetFilterState();
+    this.isLoaded = false;
   }
 
   get areAllPiecesSelected() {
@@ -130,6 +140,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = true;
     this.isOpenPieceUploadModal = false;
     yield all(savePromises);
+    yield this.sortAndFilterPieces();
     this.showLoader = false;
     this.newPieces = A();
   }
@@ -141,8 +152,8 @@ export default class PublicationDocumentsController extends Controller {
   *savePiece(piece) {
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
-    this.model.pieces.pushObject(piece);
-    piece.cases.pushObject(this.model.case);
+    this.model.pushObject(piece);
+    piece.cases.pushObject(this.case);
     yield piece.save();
   }
 
@@ -181,7 +192,7 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async cancelEditPiece() {
     this.pieceBeingEdited.rollbackAttributes();
-    const documentContainer = this.pieceBeingEdited.documentContainer;
+    const documentContainer = await this.pieceBeingEdited.documentContainer;
     if (documentContainer) {
       documentContainer.rollbackAttributes();
       documentContainer.belongsTo('type').reload();
@@ -195,7 +206,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showPieceEditor = false;
     this.showLoader = true;
     await this.pieceBeingEdited.save();
-    const documentContainer = this.pieceBeingEdited.get('documentContainer');
+    const documentContainer = await this.pieceBeingEdited.documentContainer;
     await documentContainer.save();
     this.showLoader = false;
   }
@@ -208,7 +219,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
-    const agendaitems = yield this.pieceToDelete.get('agendaitems');
+    const agendaitems = yield this.pieceToDelete.agendaitems;
     // TODO reverse if else, do we need the else in this case ?
     if (agendaitems && agendaitems.length > 0) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
@@ -216,8 +227,8 @@ export default class PublicationDocumentsController extends Controller {
       // TODO delete with undo ?
       this.showLoader = true;
       this.isVerifyingDelete = false;
-      const documentContainer = yield this.pieceToDelete.get('documentContainer');
-      const piecesFromContainer = yield documentContainer.get('pieces');
+      const documentContainer = yield this.pieceToDelete.documentContainer;
+      const piecesFromContainer = yield documentContainer.pieces;
       if (piecesFromContainer.length < 2) {
         // Cleanup documentContainer if we are deleting the last piece in the container
         // Must revise if we link docx and pdf as multiple files in 1 piece
@@ -225,7 +236,8 @@ export default class PublicationDocumentsController extends Controller {
       } else {
         yield this.fileService.deletePiece(this.pieceToDelete);
       }
-      yield this.model.case.hasMany('pieces').reload();
+      this.model.removeObject(this.pieceToDelete);
+      yield this.sortAndFilterPieces();
       this.showLoader = false;
       this.pieceToDelete = null;
     }
@@ -379,10 +391,6 @@ export default class PublicationDocumentsController extends Controller {
   }
   */
 
-  get initialDocumentLoad() {
-    return this.sortAndFilterPieces().then(() => true);
-  }
-
   @action
   async toggleFilterPanel() {
     this.showFilterPanel = !this.showFilterPanel;
@@ -399,7 +407,7 @@ export default class PublicationDocumentsController extends Controller {
 
   async sortAndFilterPieces() {
     this.showLoader = true;
-    const sortedPieces = sortPieces(this.model.pieces);
+    const sortedPieces = sortPieces(this.model);
     this.filteredSortedPieces = [];
     for (let index = 0; index < sortedPieces.length; index++) {
       const piece = sortedPieces[index];
