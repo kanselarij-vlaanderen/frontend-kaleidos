@@ -14,11 +14,19 @@ import {
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { animationFrame } from 'ember-concurrency';
+import { guidFor } from '@ember/object/internals';
 
 export default class AgendaitemsAgendaController extends Controller {
+  queryParams = [{
+    anchor: {
+      type: 'string',
+    },
+  }];
+
   @service sessionService;
   @service agendaService;
 
+  // @tracked anchor; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   @tracked filter;
   @tracked showModifiedOnly;
 
@@ -28,6 +36,14 @@ export default class AgendaitemsAgendaController extends Controller {
   @tracked previousAgenda;
 
   @controller('agenda.agendaitems') agendaitemsController;
+
+  get id() {
+    return guidFor(this);
+  }
+
+  get element() {
+    return document.getElementById(this.id);
+  }
 
   @action
   searchAgendaitems(value) {
@@ -63,5 +79,14 @@ export default class AgendaitemsAgendaController extends Controller {
   @action
   toggleShowModifiedOnly() {
     set(this.agendaitemsController, 'showModifiedOnly', !this.agendaitemsController.showModifiedOnly);
+  }
+
+  scrollToAnchor() {
+    if (this.anchor) {
+      const itemCardLink = this.element.querySelector(`a[href*='anchor=${this.anchor}']`);
+      itemCardLink.scrollIntoView({
+        block: 'center',
+      });
+    }
   }
 }
