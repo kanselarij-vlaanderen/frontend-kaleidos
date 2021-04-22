@@ -3,10 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
+import EmberObject, { action } from '@ember/object';
 // import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { action } from '@ember/object';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
@@ -53,12 +53,20 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
-  @tracked filter = new DocumentsFilter();
+  @tracked filter;
+  filterQueryParams = EmberObject.create();
 
-  async setup({
-    _case,
-  }) {
+  async setup(
+    {
+      _case,
+    },
+    filter,
+    reloadModel,
+  ) {
     this.case = _case;
+    this.reloadModel = reloadModel;
+    this.filter = new DocumentsFilter(filter);
+    console.log(this.filter);
     await this.sortAndFilterPieces();
     this.isLoaded = true;
   }
@@ -401,7 +409,9 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = false;
     this.selectedPieces = [];
     this.filter = filter;
-    await this.sortAndFilterPieces();
+    this.filterQueryParams.set('documentTypes', this.filter.documentTypes.map((it) => it.id).join(','));
+    this.reloadModel();
+    // await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
