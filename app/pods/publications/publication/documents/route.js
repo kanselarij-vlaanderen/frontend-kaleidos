@@ -1,7 +1,15 @@
 import Route from '@ember/routing/route';
+import task from 'ember-concurrency';
 
 export default class PublicationDocumentsRoute extends Route {
-  async model() {
+  queryParams = {
+    documentTypes : {
+      type: 'array',
+      as: 'document-type',
+    },
+  }
+
+  async model(params) {
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
     const modelData = await this.store.query('piece', {
@@ -20,6 +28,24 @@ export default class PublicationDocumentsRoute extends Route {
   async afterModel() {
     const parentHash = this.modelFor('publications.publication');
     this.case = parentHash.case;
+    this.loadDocumentTypesTask.perform();
+    this.loadFileTypesTask.perform();
+  }
+
+  @task
+  *loadDocumentTypesTask() {
+    this.documentTypes = yield this.store.query('document-type', {
+      page: {
+        size: 50,
+      },
+      sort: 'priority',
+    });
+    return this.documentTypes;
+  }
+
+  @task
+  *loadFileTypesTask() {
+    this.fileTypes = yield this.fileService.getFileExtensions();
   }
 
   setupController(controller) {
