@@ -328,7 +328,7 @@ function proposeSubcaseForAgenda(agendaDate) {
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
-  cy.get('.vlc-page-header').within(() => {
+  cy.get('.auk-navbar').within(() => {
     cy.get('.auk-button', {
       timeout: 12000,
     }).should('have.length', 2);
