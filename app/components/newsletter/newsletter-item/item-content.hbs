@@ -1,7 +1,7 @@
 {{#if allowEditing}}
   <div class="auk-u-mb-2">
     <div class="auk-u-flex auk-u-flex--justify-between">
-      <h4>
+      <h3>
         {{#if this.showIndex}}
           {{this.itemIndex}}.
         {{/if}}
@@ -10,7 +10,7 @@
         {{else}}
           {{newsletterInfo.title}}
         {{/if}}
-      </h4>
+      </h3>
       {{!-- No possibility to create a new newsletterInfo when not existent yet --}}
       {{#if
         (and
@@ -35,13 +35,13 @@
   </div>
 {{else}}
   <div>
-    <h4>
+    <h3>
       {{#if (not newsletterInfo)}}
         {{agendaitem.shortTitle}}
       {{else}}
         {{newsletterInfo.title}}
       {{/if}}
-    </h4>
+    </h3>
     {{#if (not newsletterInfo)}}
       <p>
         {{agendaitem.title}}
