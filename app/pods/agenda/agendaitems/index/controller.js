@@ -85,7 +85,7 @@ export default class AgendaitemsAgendaController extends Controller {
     if (this.anchor) {
       const itemCardLink = this.element.querySelector(`a[href*='anchor=${this.anchor}']`);
       itemCardLink.scrollIntoView({
-        block: 'center',
+        block: 'nearest',
       });
     }
   }
