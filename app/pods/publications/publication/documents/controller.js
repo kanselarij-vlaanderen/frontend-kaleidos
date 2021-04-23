@@ -50,7 +50,6 @@ export default class PublicationDocumentsController extends Controller {
   // eslint-disable-next-line object-curly-newline
   async setup({ _case, documentTypes, }, filter) {
     this.case = _case;
-    console.log(documentTypes);
     this.documentTypes = documentTypes;
 
     this.filter = new DocumentsFilter(filter);
