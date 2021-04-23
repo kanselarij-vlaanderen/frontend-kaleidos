@@ -3,22 +3,22 @@
     {{#if (is-pending @subcase.approved)}}
       <div class="auk-badge auk-badge--default auk-badge--medium"></div>
     {{else if (await @subcase.approved)}}
-      <div class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
+      <div data-test-case-overview-subcase-approved class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
         <div class="auk-icon auk-icon--default">
           <i class="ki ki-check"></i>
         </div>
       </div>
     {{else}}
-      <div class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
+      <div data-test-case-overview-subcase-not-approved class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
         <div class="auk-icon auk-icon--default">
           <i class="ki ki-sitemap"></i>
         </div>
       </div>
     {{/if}}
   </div>
-  <div class="vlc-toolbar vlc-toolbar--auto">
-    <div class="vlc-toolbar__left">
-      <div class="vlc-toolbar__item">
+  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
         <div class="auk-u-mb-2">
           {{#if (not (is-pending @subcase))}}
             <LinkTo

@@ -2,9 +2,11 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 export default class Datepicker extends Component {
-  get enabledDatesFunction() {
-    if (this.args.enabledDatesFunction) {
+  get enable() {
+    if (this.args.enabledDatesFunction) { // reverse compatibility
       return [this.args.enabledDatesFunction];
+    } else if (this.args.enable) { // same interface a flatpickr
+      return this.args.enable;
     }
     return null;
   }
@@ -27,6 +29,11 @@ export default class Datepicker extends Component {
   // eslint-disable-next-line no-unused-vars
   onReady(_selectedDates, _dateStr, instance) {
     this.flatpickrRef = instance;
+  }
+
+  @action
+  updateEnable() { // in order to make the ember-component work in a DDAU fashion (update view when the enable arg changes)
+    this.flatpickrRef.set('enable', this.enable);
   }
 
   @action

@@ -14,6 +14,8 @@ export default class PublicationFlow extends Model {
   @attr('datetime') publishDateRequested;
   @attr('datetime') publishedAt;
   @attr('string') remark;
+  @attr('date') closingDate;
+  @attr('date') openingDate;
   @attr('datetime') created;
   @attr('datetime') modified;
 
@@ -27,14 +29,12 @@ export default class PublicationFlow extends Model {
     inverse: null,
   }) status;
 
-  @belongsTo('publication-type') type;
+  @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
 
   // Has many .
-  @hasMany('numac-number', {
-    inverse: null,
-  }) numacNumbers;
+  @hasMany('numac-number') numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
@@ -45,6 +45,21 @@ export default class PublicationFlow extends Model {
       return `${this.publicationNumber} ${this.publicationSuffix}`;
     }
     return `${this.publicationNumber}`;
+  }
+
+  get publicationBeforeDateHasExpired() {
+    return this.publishBefore
+      && this.publishBefore < new Date();
+  }
+
+  get publicationDateHasExpired() {
+    return this.publishedAt
+      && this.publishedAt < new Date();
+  }
+
+  get translationDateHasExpired() {
+    return this.translateBefore
+      && this.translateBefore < new Date();
   }
 
   get translationRequestsTotal() {

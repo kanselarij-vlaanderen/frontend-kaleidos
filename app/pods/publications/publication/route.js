@@ -7,9 +7,8 @@ import { action } from '@ember/object';
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
+      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
       reload: true,
-    }, {
-      include: 'case,contact-person,status,type,numac-number,regulation-type',
     });
     await publicationFlow.get('regulationType');
     const _case = await publicationFlow.get('case');
@@ -57,13 +56,8 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     const pieces = await _case.get('pieces');
     const documentCount = pieces.length;
 
-    const regulationTypes = await this.store.query('regulation-type', {
-      sort: 'position', 'page[size]': 50,
-    });
-
     return hash({
       publicationFlow,
-      regulationTypes,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
       counts: {
@@ -79,20 +73,15 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     });
   }
 
-  async afterModel(model) {
-    this.urgencyLevel = await model.publicationFlow.urgencyLevel;
+  async afterModel() {
+    await this.store.query('publication-status', {});
+    await this.store.query('regulation-type', {});
   }
 
   /* eslint-disable id-length,no-unused-vars */
   resetController(controller, _, transition) {
     controller.publicationNotAfterTranslationForPublication = false;
     controller.publicationNotAfterTranslationForTranslation = false;
-    controller.numberIsAlreadyUsed = false;
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.urgencyLevel = this.urgencyLevel;
   }
 
   @action

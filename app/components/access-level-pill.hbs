@@ -4,17 +4,15 @@
   {{else}}
     {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
-        <div
-          class="pill-wrap"
+        <span
+          class={{this.pillClass}}
           data-test-access-level-pill
           {{on "click" this.toggleEdit}}
         >
-          <span class={{this.pillClass}}>
-            {{this.accessLevelLabel}}
-          </span>
-        </div>
+          {{this.accessLevelLabel}}
+        </span>
       {{else}}
-        <div class="" style="width:75%">
+        <div style="width:75%">
           <Utils::ModelSelector
             data-test-model-selector
             @modelName="access-level"
@@ -54,7 +52,7 @@
     {{/if}}
     <button
       type="button"
-      class="auk-button auk-button--muted-borderless auk-button--icon vlc-toolbar__item"
+      class="auk-button auk-button--muted-borderless auk-button--icon auk-toolbar-complex__item"
       disabled={{not this.session.isEditor}}
       {{on "click" (perform this.changeConfidentiality)}}
     >

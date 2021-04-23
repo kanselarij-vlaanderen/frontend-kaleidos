@@ -1,15 +1,15 @@
-<div class="vlc-toolbar">
-  <div class="vlc-toolbar__left">
-    <div class="vlc-toolbar__item">
+<div class="auk-toolbar-complex">
+  <div class="auk-toolbar-complex__left">
+    <div class="auk-toolbar-complex__item">
       <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width auk-u-text-capitalize auk-u-pb">
         {{subcase.shortTitle}}
       </h1>
       <Subcases::SubcaseDetailNav/>
     </div>
   </div>
-  <div class="vlc-toolbar__right">
+  <div class="auk-toolbar-complex__right">
     {{#if currentSession.isEditor}}
-      <div class="vlc-toolbar__item">
+      <div class="auk-toolbar-complex__item">
         {{#if (or (is-pending canPropose) isLoading)}}
           <div class="auk-loader" role="alert" aria-busy="true"></div>
         {{else if (await canPropose)}}
@@ -56,7 +56,7 @@
           {{/attach-popover}}
         {{/if}}
       </div>
-      <div class="vlc-toolbar__item">
+      <div class="auk-toolbar-complex__item">
         <button type="button"
           class="auk-button auk-button--secondary"
           {{action "showMultipleOptions" bubbles=false}}

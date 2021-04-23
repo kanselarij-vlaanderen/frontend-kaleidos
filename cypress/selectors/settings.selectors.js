@@ -3,6 +3,7 @@ const selectors = {
   settingsUserTable: '[data-test-settings-user-table]',
   manageMinisters: '[data-test-settings-manageMinisters]',
   manageUsers: '[data-test-settings-manageUsers]',
+  manageEmails: '[data-test-manage-emails]',
   manageGovermentDomains: '[data-test-manage-government-domains]',
   manageGovermentFields: '[data-test-manage-government-fields]',
   manageIseCodes: '[data-test-manage-ise-codes]',
