@@ -21,14 +21,11 @@ export default class PublicationDocumentsController extends Controller {
 
   @tracked isLoaded = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked isOpenTranslationRequestModal = false;
-  @tracked isOpenPublishPreviewRequestModal = false;
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
   @tracked isExpanded = false;
   @tracked showLoader = false;
-  @tracked showTranslationModal = false;
   @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
 
