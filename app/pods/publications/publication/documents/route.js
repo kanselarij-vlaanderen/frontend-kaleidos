@@ -22,9 +22,9 @@ export default class PublicationDocumentsRoute extends Route {
   }
 
   deserializeQueryParams(params) {
-    const documentTypeIds = params.documentTypes?.split('&') ?? [];
+    const documentTypeIds = params.documentTypes?.split(',') ?? [];
     const documentName = params.documentName ?? '';
-    const fileTypeIds = params.fileTypes?.split('&') ?? [];
+    const fileTypeIds = params.fileTypes?.split(',') ?? [];
 
     const deserializedParams = {
       documentTypes: documentTypeIds,
@@ -51,8 +51,8 @@ export default class PublicationDocumentsRoute extends Route {
   filterToQueryParams(filter) {
     const params = {
       documentName: filter.documentName,
-      documentTypes: filter.documentTypes.map((it) => it.id).join('&'),
-      fileTypes: filter.fileTypes.map((it) => it.id).join('&'),
+      documentTypes: filter.documentTypes.map((it) => it.id).join(','),
+      fileTypes: filter.fileTypes.map((it) => it.id).join(','),
     };
 
     return params;
@@ -60,10 +60,9 @@ export default class PublicationDocumentsRoute extends Route {
 
   reloadModel() {
     const params = this.filterToQueryParams(this.controller.filter);
-    Object.assign(this.controller.filterQueryParams, params);
-    // for (const [key, value] in Object.entries(params)) {
-    //   this.controller.filterQueryParams[key] = value;
-    // }
+    for (const [key, value] in Object.entries(params)) {
+      set(this.controller.filterQueryParams, key, value);
+    }
   }
 
   async model(params) {
