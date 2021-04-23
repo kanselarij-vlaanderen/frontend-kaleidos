@@ -61,7 +61,7 @@ export default class PublicationDocumentsController extends Controller {
       _case,
     },
     filter,
-    reloadModel,
+    reloadModel
   ) {
     this.case = _case;
     this.reloadModel = reloadModel;
