@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
-import { set } from '@ember/object';
-import { all as allPromises } from 'rsvp';
-// import task, { all as allTasks } from 'ember-concurrency';
+import QueryParams from './filter-query-params';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
@@ -14,97 +12,30 @@ export default class PublicationDocumentsRoute extends Route {
     fileTypes: 'filterQueryParams$fileTypes',
   }
 
-  queryParams = {
-    [this.queryParamConstants.documentName]: {
-      as: 'naam',
-      refreshModel: true,
-    },
-    [this.queryParamConstants.fileTypes]: {
-      as: 'bestandstype',
-      refreshModel: true,
-    },
-    [this.queryParamConstants.documentTypes]: {
-      as: 'type',
-      refreshModel: true,
-    },
-  }
+  queryParams = QueryParams.queryParams;
 
   controllerArgs = {}
-
-  deserializeQueryParams(params) {
-    const KEY_DOCUMENT_TYPES = this.queryParamConstants.documentTypes;
-    const KEY_DOCUMENT_NAME = this.queryParamConstants.documentName;
-    const KEY_FILE_TYPES = this.queryParamConstants.fileTypes;
-
-    const documentTypeIds = params[KEY_DOCUMENT_TYPES] ? params[KEY_DOCUMENT_TYPES].split(',') : [];
-    const documentName = params[KEY_DOCUMENT_NAME];
-    const fileExtensions = params[KEY_FILE_TYPES] ? params[KEY_FILE_TYPES].split(',') : [];
-
-    const deserializedParams = {
-      documentTypes: documentTypeIds,
-      documentName,
-      fileTypes: fileExtensions,
-    };
-
-    return deserializedParams;
-  }
-
-  async queryParamsToFilter(params) {
-    const documentTypes = params.documentTypes.map((id) => this.store.findRecord('document-type', id));
-
-    const filter = {
-      documentName: params.documentName,
-      fileTypes: params.fileTypes,
-      documentTypes: await allPromises(documentTypes),
-    };
-
-    return filter;
-  }
-
-  filterToQueryParams(filter) {
-    const params = {
-      documentName: filter.documentName,
-      documentTypes: filter.documentTypes.map((it) => it.id).join(','),
-      fileTypes: filter.fileTypes.join(','),
-    };
-
-    return params;
-  }
-
-  reloadModel() {
-    const params = this.filterToQueryParams(this.controller.filter);
-    for (const [key, value] of Object.entries(this.queryParamConstants)) {
-      set(this.controller, value, params[key]);
-    }
-  }
 
   async model(params) {
     this.documentTypes = await this.loadDocumentTypes();
     this.fileTypes = await this.loadFileTypes();
 
-    const deserializedParams = this.deserializeQueryParams(params);
-    const filter = await this.queryParamsToFilter(deserializedParams);
+    const deserializedParams = QueryParams.deserializeQueryParams(params);
+    const filter = await QueryParams.queryParamsToFilter(this.store, deserializedParams);
 
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
 
-    // const storeQueryFilter = {
-    //   cases: {
-    //     id: _case.get('id'),
-    //   },
-    // };
     const storeQueryFilter = {};
     storeQueryFilter['filter[cases][:id:]'] = _case.get('id');
     if (filter.documentTypes.length) {
       storeQueryFilter['filter[document-container][type][:id:]'] = filter.documentTypes.map((it) => it.id).join(',');
     }
-    if (filter.fileTypes.length) {
-      // TODO: FIGURE OUT. THIS DOES NOT WORK YET FOR MULTIPLE FILE TYPES
-      storeQueryFilter['filter[file][extension]'] = filter.fileTypes.join(',');
-      // storeQueryFilter.file = {
-      //   extension: ,
-      // };
-    }
+    // TODO: FIGURE OUT. THIS DOES NOT WORK YET FOR MULTIPLE FILE TYPES
+    // temporary solution: frontend filtering in controller.sortAndFilterPieces
+    // if (filter.fileTypes.length) {
+    //   storeQueryFilter['filter[file][extension]'] = filter.fileTypes.join(',');
+    // }
     if (filter.documentName) {
       storeQueryFilter['filter[name]'] = filter.documentName;
     }
@@ -166,8 +97,7 @@ export default class PublicationDocumentsRoute extends Route {
       {
         _case: this.controllerArgs.case,
       },
-      this.controllerArgs.filter,
-      this.reloadModel.bind(this)
+      this.controllerArgs.filter
     );
   }
 

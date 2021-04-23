@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 import moment from 'moment';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -416,29 +417,21 @@ export default class PublicationDocumentsController extends Controller {
     this.selectedPieces = [];
     this.filter = filter;
     // this.filterQueryParams.set('documentTypes', this.filter.documentTypes.map((it) => it.id).join(','));
-    this.reloadModel(this.filter);
+    FilterQueryParams.updateQueryParams(this, filter);
     // await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
   async sortAndFilterPieces() {
     this.showLoader = true;
-    this.filteredSortedPieces = sortPieces(this.model);
-    // this.filteredSortedPieces = [];
-    // for (let index = 0; index < sortedPieces.length; index++) {
-    //   const piece = sortedPieces[index];
-    //   // sync filter first
-    //   if (!this.filterTitle(piece)) {
-    //     continue;
-    //   }
-    //   if (!await this.filterFileType(piece)) {
-    //     continue;
-    //   }
-    //   if (!await this.filterPieceType(piece)) {
-    //     continue;
-    //   }
-    //   this.filteredSortedPieces.pushObject(piece);
-    // }
+    const sortedPieces = sortPieces(this.model);
+    this.filteredSortedPieces = sortedPieces.filter((piece) => {
+      if (!this.filterFileType(piece)) {
+        return false;
+      }
+      return true;
+    });
+
     this.showLoader = false;
   }
 
@@ -446,34 +439,22 @@ export default class PublicationDocumentsController extends Controller {
   //   return piece.name.toLowerCase().includes(this.filter.documentName.toLowerCase());
   // }
 
-  // async filterFileType(piece) {
-  //   // Als we geen types hebben geselecteerd, laten we alles zien.
-  //   if (this.filter.fileTypes.length === 0) {
-  //     return true;
-  //   }
+  async filterFileType(piece) {
+    // Als we geen types hebben geselecteerd, laten we alles zien.
+    if (this.filter.fileTypes.length === 0) {
+      return true;
+    }
 
-  //   const ext = await piece.get('file.extension');
-  //   if (!ext) {
-  //     return false;
-  //   }
-  //   return this.filter.fileTypes.includes(ext);
-  // }
-
-  // async filterPieceType(piece) {
-  //   // Als we geen types hebben geselecteerd, laten we alles zien.
-  //   if (this.filter.documentTypes.length === 0) {
-  //     return true;
-  //   }
-
-  //   const typeId = await piece.get('documentContainer.type.id');
-  //   if (!typeId) {
-  //     return false;
-  //   }
-  //   return this.filter.documentTypes.some((type) => type.id === typeId);
-  // }
+    const ext = await piece.get('file.extension');
+    if (!ext) {
+      return false;
+    }
+    return this.filter.fileTypes.includes(ext);
+  }
 
   _resetFilterState() {
     this.filter.reset();
+    FilterQueryParams.updateQueryParams(this, this.filter);
     this.selectedPieces = [];
   }
 }
