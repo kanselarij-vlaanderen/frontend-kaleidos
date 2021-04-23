@@ -4,7 +4,6 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   classNames: ['auk-content'],
-  classNameBindings: ['isFlandersArt:auk-content--definite'],
   newsletterService: inject(),
   currentSession: inject(),
   allowEditing: false,
