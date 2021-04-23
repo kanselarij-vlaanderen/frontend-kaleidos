@@ -31,7 +31,6 @@ export default class FilterQueryParams {
     return filterState;
   }
 
-  // triggers a reload
   static updateFromFilterAndReload(controller, filter) {
     const params = this._filterToQueryParams(filter);
     for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {

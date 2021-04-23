@@ -252,7 +252,7 @@
     />
   {{/if}}
 
-  {{#if (or this.showLoader this.loadData.isRunning)}}
+  {{#if this.showLoader}}
     <WebComponents::AuLoadingOverlay
             @title={{t "loading-text"}}
             @message={{t "loading-text"}}

@@ -4,7 +4,6 @@ import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
 import { action } from '@ember/object';
-// import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
@@ -26,7 +25,6 @@ export default class PublicationDocumentsController extends Controller {
   @tracked isSavingPieces = false;
   @tracked isExpanded = false;
   @tracked showLoader = false;
-  @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
 
   @tracked documentTypes;
@@ -41,6 +39,7 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
+  @tracked showFilterPanel = true;
   @tracked filter;
   // It would be cleaner in a separate object, but Ember requires the queryParams on the controller
   @tracked filterQueryParams$documentName = '';
@@ -291,7 +290,6 @@ export default class PublicationDocumentsController extends Controller {
 
   _resetFilterState() {
     this.filter.reset();
-    FilterQueryParams.updateFromFilterAndReload(this, this.filter);
     this.selectedPieces = [];
   }
 }

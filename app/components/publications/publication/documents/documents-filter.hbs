@@ -17,14 +17,12 @@
       </div>
       <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
         <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
-        {{#unless this.loadDocumentTypes.isRunning}}
-          <PowerSelectMultiple @options={{this.documentTypes}} @isSearchable={{false}}
-            @selected={{this.filter.documentTypes}}
-            @onchange={{fn (mut this.filter.documentTypes)}}
-            as |pieceType|>
-            {{get pieceType "label"}}
-          </PowerSelectMultiple>
-        {{/unless}}
+        <PowerSelectMultiple @options={{this.documentTypes}} @isSearchable={{false}}
+          @selected={{this.filter.documentTypes}}
+          @onchange={{fn (mut this.filter.documentTypes)}}
+          as |pieceType|>
+          {{get pieceType "label"}}
+        </PowerSelectMultiple>
       </div>
     </div>
     <div class="auk-u-flex auk-u-flex--justify-end">
