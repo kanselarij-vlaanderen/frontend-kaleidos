@@ -1,4 +1,4 @@
-<div class="vlc-page-header auk-u-bg-alt">
+<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group>
@@ -11,13 +11,15 @@
             data-test-cases-backlink/>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <span class="auk-overline auk-u-block">
-            {{t "case"}}
-          </span>
-          <WebComponents::AuAbbreviatedText
-            @text={{this.caseTitleFromCase}}
-            @size="250"
-          />
+          <div class="auk-u-my">
+            <span class="auk-overline auk-u-block">
+              {{t "case"}}
+            </span>
+            <WebComponents::AuAbbreviatedText
+              @text={{this.caseTitleFromCase}}
+              @size="250"
+            />
+          </div>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       {{#if currentSession.isEditor}}
