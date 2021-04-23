@@ -55,7 +55,7 @@
       @mandatees={{this.mandatees}}
       @submitter={{this.submitter}}
       @fields={{this.governmentFields}}
-      @allowEditing={{true}}
+      @allowEditing={{this.currentSession.isEditor}}
       @onSave={{this.saveMandateeData}}
     />
     <DomainFieldIse::IseCodesPanel @iseCodes={{this.subcase.iseCodes}}/>
