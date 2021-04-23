@@ -1,7 +1,6 @@
 import { set } from '@ember/object';
 import { all as allPromises } from 'rsvp';
 
-
 // utility class to centralize filter query parameter read and write
 // cache document-types for performance (this class uses findRecord('document-type', id))
 export default class FilterQueryParams {
@@ -26,7 +25,21 @@ export default class FilterQueryParams {
     },
   }
 
-  static deserializeQueryParams(params) {
+  static async readToFilter(store, params) {
+    const deserializedParams = this._deserializeQueryParams(params);
+    const filterState = this._deserializedQueryParamsToFilter(store, deserializedParams);
+    return filterState;
+  }
+
+  // triggers a reload
+  static updateFromFilterAndReload(controller, filter) {
+    const params = FilterQueryParams._filterToQueryParams(filter);
+    for (const [key, value] of Object.entries(FilterQueryParams.queryParamConstants)) {
+      set(controller, value, params[key]);
+    }
+  }
+
+  static _deserializeQueryParams(params) {
     const KEY_DOCUMENT_TYPES = this.queryParamConstants.documentTypes;
     const KEY_DOCUMENT_NAME = this.queryParamConstants.documentName;
     const KEY_FILE_TYPES = this.queryParamConstants.fileTypes;
@@ -44,7 +57,7 @@ export default class FilterQueryParams {
     return deserializedParams;
   }
 
-  static async queryParamsToFilter(store, params) {
+  static async _deserializedQueryParamsToFilter(store, params) {
     const documentTypes = params.documentTypes.map((id) => store.findRecord('document-type', id));
 
     const filter = {
@@ -56,7 +69,7 @@ export default class FilterQueryParams {
     return filter;
   }
 
-  static filterToQueryParams(filter) {
+  static _filterToQueryParams(filter) {
     const params = {
       documentName: filter.documentName,
       documentTypes: filter.documentTypes.map((it) => it.id).join(','),
@@ -64,13 +77,5 @@ export default class FilterQueryParams {
     };
 
     return params;
-  }
-
-  // triggers a reload
-  static updateQueryParams(controller, filter) {
-    const params = FilterQueryParams.filterToQueryParams(filter);
-    for (const [key, value] of Object.entries(FilterQueryParams.queryParamConstants)) {
-      set(controller, value, params[key]);
-    }
   }
 }

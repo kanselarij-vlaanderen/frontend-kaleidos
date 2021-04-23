@@ -55,24 +55,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked renderPieces = true;
 
   @tracked filter;
-  // filterQueryParams = EmberObject.create({
-  //   documentName: '',
-  //   fileTypes: '',
-  //   documentTypes: '',
-  // });
+  // It would be better in a separate object, but Ember requires the queryParams on the controller
   @tracked filterQueryParams$documentName = '';
   @tracked filterQueryParams$fileTypes = '';
   @tracked filterQueryParams$documentTypes = '';
 
-  async setup(
-    {
-      _case,
-    },
-    filter,
-    reloadModel
-  ) {
+  // eslint-disable-next-line object-curly-newline
+  async setup({ _case, }, filter) {
     this.case = _case;
-    this.reloadModel = reloadModel;
     this.filter = new DocumentsFilter(filter);
     await this.sortAndFilterPieces();
     this.isLoaded = true;
@@ -413,38 +403,32 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async onPerformFilter(filter) {
-    this.renderPieces = false;
-    this.selectedPieces = [];
-    this.filter = filter;
-    // this.filterQueryParams.set('documentTypes', this.filter.documentTypes.map((it) => it.id).join(','));
-    FilterQueryParams.updateQueryParams(this, filter);
-    // await this.sortAndFilterPieces();
-    this.renderPieces = true;
+    FilterQueryParams.updateFromFilterAndReload(this, filter);
   }
 
   async sortAndFilterPieces() {
     this.showLoader = true;
     const sortedPieces = sortPieces(this.model);
-    this.filteredSortedPieces = sortedPieces.filter((piece) => {
-      if (!this.filterFileType(piece)) {
-        return false;
+
+    // Als we geen types hebben geselecteerd, laten we alles zien.
+    if (!this.filter.fileTypes.length) {
+      this.filteredSortedPieces = sortedPieces;
+    } else {
+      const filteredSortedPieces = [];
+      for (const piece of sortedPieces) {
+        if (!await this.filterFileType(piece)) {
+          continue;
+        }
+        filteredSortedPieces.push(piece);
       }
-      return true;
-    });
+
+      this.filteredSortedPieces = filteredSortedPieces;
+    }
 
     this.showLoader = false;
   }
 
-  // filterTitle(piece) {
-  //   return piece.name.toLowerCase().includes(this.filter.documentName.toLowerCase());
-  // }
-
   async filterFileType(piece) {
-    // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (this.filter.fileTypes.length === 0) {
-      return true;
-    }
-
     const ext = await piece.get('file.extension');
     if (!ext) {
       return false;
@@ -454,7 +438,7 @@ export default class PublicationDocumentsController extends Controller {
 
   _resetFilterState() {
     this.filter.reset();
-    FilterQueryParams.updateQueryParams(this, this.filter);
+    FilterQueryParams.updateFromFilterAndReload(this, this.filter);
     this.selectedPieces = [];
   }
 }

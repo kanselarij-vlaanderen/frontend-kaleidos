@@ -1,27 +1,21 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
-import QueryParams from './filter-query-params';
+import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
   @inject fileService;
 
-  queryParamConstants = {
-    documentTypes: 'filterQueryParams$documentTypes',
-    documentName: 'filterQueryParams$documentName',
-    fileTypes: 'filterQueryParams$fileTypes',
-  }
-
-  queryParams = QueryParams.queryParams;
+  queryParams = FilterQueryParams.queryParams;
 
   controllerArgs = {}
 
   async model(params) {
-    this.documentTypes = await this.loadDocumentTypes();
-    this.fileTypes = await this.loadFileTypes();
+    // caching for use in QueryParams.queryParamsToFilter
+    // and use them in DocumentsFilterComponent
+    const documentTypes = await this._loadDocumentTypes();
 
-    const deserializedParams = QueryParams.deserializeQueryParams(params);
-    const filter = await QueryParams.queryParamsToFilter(this.store, deserializedParams);
+    const filter = await FilterQueryParams.readToFilter(this.store, params);
 
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
@@ -41,11 +35,12 @@ export default class PublicationDocumentsRoute extends Route {
     }
 
     const modelData = await this.store.query('piece', {
-      include: 'cases,document-container,document-container.type,file,agendaitems',
+      include: 'cases,document-container,document-container.type',
       reload: true,
       ...storeQueryFilter,
     });
 
+    this.controllerArgs.documentTypes = documentTypes;
     this.controllerArgs.filter = filter;
     // use array to allow add/delete
     return modelData.toArray();
@@ -54,42 +49,7 @@ export default class PublicationDocumentsRoute extends Route {
   async afterModel() {
     const parentHash = this.modelFor('publications.publication');
     this.controllerArgs.case = parentHash.case;
-    // const documentTypes = this.LoadDocumentTypesTask();
-    // const fileTypesTask = this.LoadFileTypesTask();
-
-    const documentTypes = this.loadDocumentTypes();
-    const fileTypesTask = this.loadFileTypes();
-
-    await Promise.all([documentTypes, fileTypesTask]);
   }
-
-  async loadDocumentTypes() {
-    this.documentTypes = await this.store.query('document-type', {
-      page: {
-        size: 50,
-      },
-      sort: 'priority',
-    });
-  }
-
-  async loadFileTypes() {
-    this.fileTypes = await this.fileService.getFileExtensions();
-  }
-
-  // @task
-  // *LoadDocumentTypesTask() {
-  //   this.documentTypes = yield this.store.query('document-type', {
-  //     page: {
-  //       size: 50,
-  //     },
-  //     sort: 'priority',
-  //   });
-  // }
-
-  // @task
-  // *LoadFileTypesTask() {
-  //   this.fileTypes = yield this.fileService.getFileExtensions();
-  // }
 
   setupController(controller) {
     super.setupController(...arguments);
@@ -103,5 +63,14 @@ export default class PublicationDocumentsRoute extends Route {
 
   resetController(controller) {
     controller.reset();
+  }
+
+  async _loadDocumentTypes() {
+    this.documentTypes = await this.store.query('document-type', {
+      page: {
+        size: 50,
+      },
+      sort: 'priority',
+    });
   }
 }
