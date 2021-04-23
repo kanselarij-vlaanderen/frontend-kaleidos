@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
-import EmberObject, { action } from '@ember/object';
+import { action } from '@ember/object';
 // import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 import moment from 'moment';

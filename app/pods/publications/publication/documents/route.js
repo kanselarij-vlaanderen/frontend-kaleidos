@@ -11,7 +11,7 @@ export default class PublicationDocumentsRoute extends Route {
   queryParamConstants = {
     documentTypes: 'filterQueryParams$documentTypes',
     documentName: 'filterQueryParams$documentName',
-    fileTypes: 'filterQueryParams$fileTypes'
+    fileTypes: 'filterQueryParams$fileTypes',
   }
 
   queryParams = {
