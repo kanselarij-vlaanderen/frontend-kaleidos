@@ -1,30 +1,42 @@
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
+import { set } from '@ember/object';
+import { all as allPromises } from 'rsvp';
 // import task, { all as allTasks } from 'ember-concurrency';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
   @inject fileService;
 
+  queryParamConstants = {
+    documentTypes: 'filterQueryParams$documentTypes',
+    documentName: 'filterQueryParams$documentName',
+    fileTypes: 'filterQueryParams$fileTypes'
+  }
+
   queryParams = {
-    ['filterQueryParams.documentName']: {
+    [this.queryParamConstants.documentName]: {
       as: 'naam',
       refreshModel: true,
     },
-    ['filterQueryParams.fileTypes']: {
+    [this.queryParamConstants.fileTypes]: {
       as: 'bestandstype',
       refreshModel: true,
     },
-    ['filterQueryParams.documentTypes']: {
+    [this.queryParamConstants.documentTypes]: {
       as: 'type',
       refreshModel: true,
     },
   }
 
   deserializeQueryParams(params) {
-    const documentTypeIds = params.documentTypes?.split(',') ?? [];
-    const documentName = params.documentName ?? '';
-    const fileTypeIds = params.fileTypes?.split(',') ?? [];
+    const KEY_DOCUMENT_TYPES = this.queryParamConstants.documentTypes;
+    const KEY_DOCUMENT_NAME = this.queryParamConstants.documentName;
+    const KEY_FILE_TYPES = this.queryParamConstants.fileTypes;
+
+    const documentTypeIds = params[KEY_DOCUMENT_TYPES] ? params[KEY_DOCUMENT_TYPES].split(',') : [];
+    const documentName = params[KEY_DOCUMENT_NAME];
+    const fileTypeIds = params[KEY_FILE_TYPES] ? params[KEY_FILE_TYPES].split(',') : [];
 
     const deserializedParams = {
       documentTypes: documentTypeIds,
@@ -35,14 +47,14 @@ export default class PublicationDocumentsRoute extends Route {
     return deserializedParams;
   }
 
-  queryParamsToFilter(params) {
-    const documentTypes = params.documentTypes.map((it) => this.store.findRecord(it.id));
-    const fileTypes = params.fileTypes.map((it) => this.store.findRecord(it.id));
+  async queryParamsToFilter(params) {
+    const documentTypes = params.documentTypes.map((id) => this.store.findRecord('document-type', id));
+    const fileTypes = params.fileTypes.map((id) => this.store.findRecord('file-type', id));
 
     const filter = {
       documentName: params.documentName,
-      fileTypes: fileTypes,
-      documentTypes: documentTypes,
+      fileTypes: await allPromises(fileTypes),
+      documentTypes: await allPromises(documentTypes),
     };
 
     return filter;
@@ -60,28 +72,38 @@ export default class PublicationDocumentsRoute extends Route {
 
   reloadModel() {
     const params = this.filterToQueryParams(this.controller.filter);
-    for (const [key, value] in Object.entries(params)) {
-      set(this.controller.filterQueryParams, key, value);
+    for (const key in this.queryParamConstants) {
+      set(this.controller, key, params.documentTypes);
     }
   }
 
   async model(params) {
-    console.log(params);
     this.documentTypes = await this.loadDocumentTypes();
     this.fileTypes = await this.loadFileTypes();
 
-    this.filter = this.deserializeQueryParams(params);
+    const deserializedParams = this.deserializeQueryParams(params);
+    this.filter = await this.queryParamsToFilter(deserializedParams);
 
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
-    const modelData = await this.store.query('piece', {
-      include: 'cases,document-container,document-container.type',
-      reload: true,
-      filter: {
-        cases: {
-          id: _case.get('id'),
-        },
+
+    const storeQueryFilter = {
+      cases: {
+        id: _case.get('id'),
       },
+    };
+    if (this.filter.documentTypes.length) {
+      storeQueryFilter['document-container'] = {
+        type: {
+          id: this.filter.documentTypes.map((it) => it.id).join(','),
+        },
+      };
+    }
+
+    const modelData = await this.store.query('piece', {
+      include: 'cases,document-container,document-container.type,file,agendaitems',
+      reload: true,
+      filter: storeQueryFilter,
     });
     // use array to allow add/delete
     return modelData.toArray();

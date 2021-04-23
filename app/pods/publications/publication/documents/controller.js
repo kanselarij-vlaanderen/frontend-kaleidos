@@ -54,7 +54,14 @@ export default class PublicationDocumentsController extends Controller {
   @tracked renderPieces = true;
 
   @tracked filter;
-  filterQueryParams = EmberObject.create();
+  // filterQueryParams = EmberObject.create({
+  //   documentName: '',
+  //   fileTypes: '',
+  //   documentTypes: '',
+  // });
+  @tracked filterQueryParams$documentName = '';
+  @tracked filterQueryParams$fileTypes = '';
+  @tracked filterQueryParams$documentTypes = '';
 
   async setup(
     {
@@ -66,7 +73,6 @@ export default class PublicationDocumentsController extends Controller {
     this.case = _case;
     this.reloadModel = reloadModel;
     this.filter = new DocumentsFilter(filter);
-    console.log(this.filter);
     await this.sortAndFilterPieces();
     this.isLoaded = true;
   }
@@ -409,8 +415,8 @@ export default class PublicationDocumentsController extends Controller {
     this.renderPieces = false;
     this.selectedPieces = [];
     this.filter = filter;
-    this.filterQueryParams.set('documentTypes', this.filter.documentTypes.map((it) => it.id).join(','));
-    this.reloadModel();
+    // this.filterQueryParams.set('documentTypes', this.filter.documentTypes.map((it) => it.id).join(','));
+    this.reloadModel(this.filter);
     // await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
