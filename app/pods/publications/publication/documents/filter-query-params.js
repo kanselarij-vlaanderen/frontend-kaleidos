@@ -4,22 +4,22 @@ import { all as allPromises } from 'rsvp';
 // utility class to centralize filter query parameter read and write
 // cache document-types for performance (this class uses findRecord('document-type', id))
 export default class FilterQueryParams {
-  static queryParamConstants = {
+  static queryParamMapping = {
     documentTypes: 'filterQueryParams$documentTypes',
     documentName: 'filterQueryParams$documentName',
     fileTypes: 'filterQueryParams$fileTypes',
   }
 
   static queryParams = {
-    [this.queryParamConstants.documentName]: {
+    [this.queryParamMapping.documentName]: {
       as: 'naam',
       refreshModel: true,
     },
-    [this.queryParamConstants.fileTypes]: {
+    [this.queryParamMapping.fileTypes]: {
       as: 'bestandstype',
       refreshModel: true,
     },
-    [this.queryParamConstants.documentTypes]: {
+    [this.queryParamMapping.documentTypes]: {
       as: 'type',
       refreshModel: true,
     },
@@ -33,16 +33,16 @@ export default class FilterQueryParams {
 
   // triggers a reload
   static updateFromFilterAndReload(controller, filter) {
-    const params = FilterQueryParams._filterToQueryParams(filter);
-    for (const [key, value] of Object.entries(FilterQueryParams.queryParamConstants)) {
+    const params = this._filterToQueryParams(filter);
+    for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {
       set(controller, value, params[key]);
     }
   }
 
   static _deserializeQueryParams(params) {
-    const KEY_DOCUMENT_TYPES = this.queryParamConstants.documentTypes;
-    const KEY_DOCUMENT_NAME = this.queryParamConstants.documentName;
-    const KEY_FILE_TYPES = this.queryParamConstants.fileTypes;
+    const KEY_DOCUMENT_TYPES = this.queryParamMapping.documentTypes;
+    const KEY_DOCUMENT_NAME = this.queryParamMapping.documentName;
+    const KEY_FILE_TYPES = this.queryParamMapping.fileTypes;
 
     const documentTypeIds = params[KEY_DOCUMENT_TYPES] ? params[KEY_DOCUMENT_TYPES].split(',') : [];
     const documentName = params[KEY_DOCUMENT_NAME];

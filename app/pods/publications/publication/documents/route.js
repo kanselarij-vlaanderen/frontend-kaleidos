@@ -40,15 +40,12 @@ export default class PublicationDocumentsRoute extends Route {
       ...storeQueryFilter,
     });
 
+    this.controllerArgs.case = _case;
     this.controllerArgs.documentTypes = documentTypes;
     this.controllerArgs.filter = filter;
+
     // use array to allow add/delete
     return modelData.toArray();
-  }
-
-  async afterModel() {
-    const parentHash = this.modelFor('publications.publication');
-    this.controllerArgs.case = parentHash.case;
   }
 
   setupController(controller) {
@@ -56,6 +53,7 @@ export default class PublicationDocumentsRoute extends Route {
     controller.setup(
       {
         _case: this.controllerArgs.case,
+        documentTypes: this.controllerArgs.documentTypes,
       },
       this.controllerArgs.filter
     );
@@ -66,7 +64,7 @@ export default class PublicationDocumentsRoute extends Route {
   }
 
   async _loadDocumentTypes() {
-    this.documentTypes = await this.store.query('document-type', {
+    return await this.store.query('document-type', {
       page: {
         size: 50,
       },

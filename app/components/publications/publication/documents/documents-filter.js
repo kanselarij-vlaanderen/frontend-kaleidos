@@ -18,20 +18,8 @@ export default class PublicationsPublicationDocumentsFilterComponent extends Com
     // clone for internal use
     this.filter = this.args.filter.clone();
 
-    this.loadDocumentTypes.perform();
+    this.documentTypes = this.args.types.documentTypes;
     this.loadFileTypes.perform();
-  }
-
-  @task
-  *loadDocumentTypes() {
-    if (!this.documentTypes.length) {
-      this.documentTypes = yield this.store.query('document-type', {
-        page: {
-          size: 50,
-        },
-        sort: 'priority',
-      });
-    }
   }
 
   @task

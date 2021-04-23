@@ -32,17 +32,7 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
 
-  @tracked translateActivity = {
-    mailContent: '',
-    mailSubject: '',
-    finalTranslationDate: '',
-    pieces: [],
-  };
-  @tracked previewActivity = {
-    mailContent: '',
-    mailSubject: '',
-    pieces: [],
-  };
+  @tracked documentTypes;
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;
@@ -55,16 +45,20 @@ export default class PublicationDocumentsController extends Controller {
   @tracked renderPieces = true;
 
   @tracked filter;
-  // It would be better in a separate object, but Ember requires the queryParams on the controller
+  // It would be cleaner in a separate object, but Ember requires the queryParams on the controller
   @tracked filterQueryParams$documentName = '';
   @tracked filterQueryParams$fileTypes = '';
   @tracked filterQueryParams$documentTypes = '';
 
   // eslint-disable-next-line object-curly-newline
-  async setup({ _case, }, filter) {
+  async setup({ _case, documentTypes, }, filter) {
     this.case = _case;
+    console.log(documentTypes);
+    this.documentTypes = documentTypes;
+
     this.filter = new DocumentsFilter(filter);
     await this.sortAndFilterPieces();
+
     this.isLoaded = true;
   }
 
@@ -258,144 +252,6 @@ export default class PublicationDocumentsController extends Controller {
     alert('Not implemented yet.');
   }
 
-  /** temporarily disabled
-  // PUBLISH PREVIEW ACTIVITIES
-  @action
-  setPreviewMailSubject(event) {
-    set(this.previewActivity, 'mailSubject', event.target.value);
-  }
-
-  @action
-  async openPublishPreviewRequestModal() {
-    set(this.previewActivity, 'pieces', this.selectedPieces);
-    const subject = await this.getConfig('email:publishPreviewRequest:subject', CONFIG.mail.publishPreviewRequest.subject);
-    const content = await this.getConfig('email:publishPreviewRequest:content', CONFIG.mail.publishPreviewRequest.content);
-    set(this.previewActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
-    set(this.previewActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
-    this.isOpenPublishPreviewRequestModal = true;
-  }
-
-  @action
-  cancelPublishPreviewRequestModal() {
-    set(this.previewActivity, 'mailContent', '');
-    set(this.previewActivity, 'mailSubject', '');
-    this.isOpenPublishPreviewRequestModal = false;
-  }
-
-  @action
-  async savePublishPreviewActivity() {
-    this.showLoader = true;
-    this.isOpenPublishPreviewRequestModal = false;
-    this.previewActivity.pieces = this.selectedPieces;
-
-    // publishPreviewActivityType.
-    const publishPreviewSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.drukproef.id);
-
-    // TODO take from other subcase maybe?
-    const shortTitle = await this.model.case.shortTitle;
-    const title = await this.model.case.title;
-
-    // Find or Create subase.
-    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishPreviewSubCaseType, this.model.publicationFlow, title, shortTitle);
-
-    // Create activity in subcase.
-    this.renderPieces = false;
-    await this.activityService.createNewPublishPreviewActivity(this.previewActivity.mailContent, this.previewActivity.mailSubject, this.previewActivity.pieces, subcase);
-
-    // Send email
-    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishpreviewEmail, this.previewActivity.mailSubject, this.previewActivity.mailContent, this.previewActivity.pieces);
-
-    // Visual stuff.
-    this.selectedPieces = [];
-
-    // Reset local activity to empty state.
-    this.previewActivity = {
-      mailContent: '',
-      mailSubject: '',
-      pieces: A([]),
-    };
-    this.showLoader = false;
-    this.renderPieces = true;
-    this.model.refreshAction();
-  }
-
-  // TRANSLATION ACTIVITIES
-  @action
-  setTranslationMailSubject(event) {
-    set(this.translateActivity, 'mailSubject', event.target.value);
-  }
-
-  @action
-  async openTranslationRequestModal() {
-    this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
-    this.translateActivity.pieces = this.selectedPieces;
-    const subject = await this.getConfig('email:translationRequest:subject', CONFIG.mail.translationRequest.subject);
-    const content = await this.getConfig('email:translationRequest:content', CONFIG.mail.translationRequest.content);
-    set(this.translateActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
-    set(this.translateActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
-    this.showTranslationModal = true;
-  }
-
-  get getTranslateActivityBeforeDate() {
-    if (this.model.publicationFlow.translateBefore) {
-      return this.model.publicationFlow.translateBefore;
-    }
-    return new Date();
-  }
-
-  @action
-  async saveTranslationActivity() {
-    this.showLoader = true;
-    this.showTranslationModal = false;
-
-    // Fetch the type.
-    const translateSubCaseType = await this.store.findRecord('subcase-type', CONFIG.SUBCASE_TYPES.vertalen.id);
-
-    // TODO take from other subcase maybe?
-    const shortTitle = await this.model.case.shortTitle;
-    const title = await this.model.case.title;
-
-    // Find or Create subase.
-    const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(translateSubCaseType, this.model.publicationFlow, title, shortTitle);
-
-    // Create activity in subcase.
-    await this.activityService.createNewTranslationActivity(this.translateActivity.finalTranslationDate, this.translateActivity.mailContent, this.translateActivity.mailSubject, this.translateActivity.pieces, subcase);
-
-    // Send the email
-    this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.translationsEmail, this.translateActivity.mailSubject, this.translateActivity.mailContent, this.translateActivity.pieces);
-
-    // Visual stuff.
-    this.selectedPieces = [];
-
-    // Reset local activity to empty state.
-    this.translateActivity = {
-      mailContent: '',
-      mailSubject: '',
-      finalTranslationDate: '',
-      pieces: A([]),
-    };
-    this.showLoader = false;
-    this.renderPieces = true;
-    this.model.refreshAction();
-  }
-
-  @action
-  cancelTranslationModal() {
-    set(this.translateActivity, 'mailContent', '');
-    set(this.translateActivity, 'mailSubject', '');
-    this.showTranslationModal = false;
-  }
-
-  @action
-  setTranslateActivityBeforeDate(dates) {
-    this.translateActivity.finalTranslationDate = dates[0];
-  }
-
-  async getConfig(name, defaultValue) {
-    return await this.configService.get(name, defaultValue);
-  }
-  */
-
   @action
   async toggleFilterPanel() {
     this.showFilterPanel = !this.showFilterPanel;
@@ -414,6 +270,7 @@ export default class PublicationDocumentsController extends Controller {
     if (!this.filter.fileTypes.length) {
       this.filteredSortedPieces = sortedPieces;
     } else {
+      // Filtering of file extensions is not yet possible in the backend, so we do it here.
       const filteredSortedPieces = [];
       for (const piece of sortedPieces) {
         if (!await this.filterFileType(piece)) {
