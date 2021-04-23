@@ -2,33 +2,31 @@
 // / <reference types="Cypress" />
 
 context('Authentication tests', () => {
-  it('should logout using authentication.vlaanderen', () => {
+  it('should login/logout using xhr request (api call)', () => {
     cy.server();
-    // cy.route('GET', "https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success").as('logoutURL')
     cy.login('Admin');
+    // TODO verify url to check if we can see agenda's page ?
     cy.logout();
     cy.visit('/');
     cy.contains('Meld u aan');
-    // cy.url().should('contain', 'https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success', {timeout : 5000 });
   });
 
-  it('should logout using the logout button', () => {
+  it('should login/logout using the mock-login and logout button', () => {
     cy.server();
-    // cy.route('GET', "https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success").as('logoutURL')
     cy.loginFlow('Admin');
+    // TODO verify url to check if we can see agenda's page ?
     cy.logoutFlow();
     cy.visit('/');
     cy.contains('Meld u aan');
-    // cy.url().should('contain', 'https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success', {timeout : 5000 });
   });
 
   it('Logging in as user should redirect to /accountless-users', () => {
     cy.server();
-    // cy.route('GET', "https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success").as('logoutURL')
     cy.login('User');
+    // TODO after logging in, the user can see the agenda overview (empty).
+    // Only after a first attempt at opening a different page results in seeing the unauthorized user page
     cy.visit('/');
     cy.contains('U heeft zich aangemeld om binnen Kaleidos gebruiksrechten te bekomen.');
     cy.url().should('contain', '/onbevoegde-gebruiker');
-    // cy.url().should('contain', 'https://authenticatie-ti.vlaanderen.be/stb/html/pages?TAM_OP=logout_success', {timeout : 5000 });
   });
 });
