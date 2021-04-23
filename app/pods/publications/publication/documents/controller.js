@@ -423,54 +423,54 @@ export default class PublicationDocumentsController extends Controller {
 
   async sortAndFilterPieces() {
     this.showLoader = true;
-    const sortedPieces = sortPieces(this.model);
-    this.filteredSortedPieces = [];
-    for (let index = 0; index < sortedPieces.length; index++) {
-      const piece = sortedPieces[index];
-      // sync filter first
-      if (!this.filterTitle(piece)) {
-        continue;
-      }
-      if (!await this.filterFileType(piece)) {
-        continue;
-      }
-      if (!await this.filterPieceType(piece)) {
-        continue;
-      }
-      this.filteredSortedPieces.pushObject(piece);
-    }
+    this.filteredSortedPieces = sortPieces(this.model);
+    // this.filteredSortedPieces = [];
+    // for (let index = 0; index < sortedPieces.length; index++) {
+    //   const piece = sortedPieces[index];
+    //   // sync filter first
+    //   if (!this.filterTitle(piece)) {
+    //     continue;
+    //   }
+    //   if (!await this.filterFileType(piece)) {
+    //     continue;
+    //   }
+    //   if (!await this.filterPieceType(piece)) {
+    //     continue;
+    //   }
+    //   this.filteredSortedPieces.pushObject(piece);
+    // }
     this.showLoader = false;
   }
 
-  filterTitle(piece) {
-    return piece.name.toLowerCase().includes(this.filter.documentName.toLowerCase());
-  }
+  // filterTitle(piece) {
+  //   return piece.name.toLowerCase().includes(this.filter.documentName.toLowerCase());
+  // }
 
-  async filterFileType(piece) {
-    // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (this.filter.fileTypes.length === 0) {
-      return true;
-    }
+  // async filterFileType(piece) {
+  //   // Als we geen types hebben geselecteerd, laten we alles zien.
+  //   if (this.filter.fileTypes.length === 0) {
+  //     return true;
+  //   }
 
-    const ext = await piece.get('file.extension');
-    if (!ext) {
-      return false;
-    }
-    return this.filter.fileTypes.includes(ext);
-  }
+  //   const ext = await piece.get('file.extension');
+  //   if (!ext) {
+  //     return false;
+  //   }
+  //   return this.filter.fileTypes.includes(ext);
+  // }
 
-  async filterPieceType(piece) {
-    // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (this.filter.documentTypes.length === 0) {
-      return true;
-    }
+  // async filterPieceType(piece) {
+  //   // Als we geen types hebben geselecteerd, laten we alles zien.
+  //   if (this.filter.documentTypes.length === 0) {
+  //     return true;
+  //   }
 
-    const typeId = await piece.get('documentContainer.type.id');
-    if (!typeId) {
-      return false;
-    }
-    return this.filter.documentTypes.some((type) => type.id === typeId);
-  }
+  //   const typeId = await piece.get('documentContainer.type.id');
+  //   if (!typeId) {
+  //     return false;
+  //   }
+  //   return this.filter.documentTypes.some((type) => type.id === typeId);
+  // }
 
   _resetFilterState() {
     this.filter.reset();

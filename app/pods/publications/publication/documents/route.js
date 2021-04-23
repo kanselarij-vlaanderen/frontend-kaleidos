@@ -29,6 +29,8 @@ export default class PublicationDocumentsRoute extends Route {
     },
   }
 
+  controllerArgs = {}
+
   deserializeQueryParams(params) {
     const KEY_DOCUMENT_TYPES = this.queryParamConstants.documentTypes;
     const KEY_DOCUMENT_NAME = this.queryParamConstants.documentName;
@@ -36,12 +38,12 @@ export default class PublicationDocumentsRoute extends Route {
 
     const documentTypeIds = params[KEY_DOCUMENT_TYPES] ? params[KEY_DOCUMENT_TYPES].split(',') : [];
     const documentName = params[KEY_DOCUMENT_NAME];
-    const fileTypeIds = params[KEY_FILE_TYPES] ? params[KEY_FILE_TYPES].split(',') : [];
+    const fileExtensions = params[KEY_FILE_TYPES] ? params[KEY_FILE_TYPES].split(',') : [];
 
     const deserializedParams = {
       documentTypes: documentTypeIds,
       documentName,
-      fileTypes: fileTypeIds,
+      fileTypes: fileExtensions,
     };
 
     return deserializedParams;
@@ -49,11 +51,10 @@ export default class PublicationDocumentsRoute extends Route {
 
   async queryParamsToFilter(params) {
     const documentTypes = params.documentTypes.map((id) => this.store.findRecord('document-type', id));
-    const fileTypes = params.fileTypes.map((id) => this.store.findRecord('file-type', id));
 
     const filter = {
       documentName: params.documentName,
-      fileTypes: await allPromises(fileTypes),
+      fileTypes: params.fileTypes,
       documentTypes: await allPromises(documentTypes),
     };
 
@@ -64,7 +65,7 @@ export default class PublicationDocumentsRoute extends Route {
     const params = {
       documentName: filter.documentName,
       documentTypes: filter.documentTypes.map((it) => it.id).join(','),
-      fileTypes: filter.fileTypes.map((it) => it.id).join(','),
+      fileTypes: filter.fileTypes.join(','),
     };
 
     return params;
@@ -72,8 +73,8 @@ export default class PublicationDocumentsRoute extends Route {
 
   reloadModel() {
     const params = this.filterToQueryParams(this.controller.filter);
-    for (const key in this.queryParamConstants) {
-      set(this.controller, key, params.documentTypes);
+    for (const [key, value] of Object.entries(this.queryParamConstants)) {
+      set(this.controller, value, params[key]);
     }
   }
 
@@ -82,36 +83,46 @@ export default class PublicationDocumentsRoute extends Route {
     this.fileTypes = await this.loadFileTypes();
 
     const deserializedParams = this.deserializeQueryParams(params);
-    this.filter = await this.queryParamsToFilter(deserializedParams);
+    const filter = await this.queryParamsToFilter(deserializedParams);
 
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
 
-    const storeQueryFilter = {
-      cases: {
-        id: _case.get('id'),
-      },
-    };
-    if (this.filter.documentTypes.length) {
-      storeQueryFilter['document-container'] = {
-        type: {
-          id: this.filter.documentTypes.map((it) => it.id).join(','),
-        },
-      };
+    // const storeQueryFilter = {
+    //   cases: {
+    //     id: _case.get('id'),
+    //   },
+    // };
+    const storeQueryFilter = {};
+    storeQueryFilter['filter[cases][:id:]'] = _case.get('id');
+    if (filter.documentTypes.length) {
+      storeQueryFilter['filter[document-container][type][:id:]'] = filter.documentTypes.map((it) => it.id).join(',');
+    }
+    if (filter.fileTypes.length) {
+      // TODO: FIGURE OUT. THIS DOES NOT WORK YET FOR MULTIPLE FILE TYPES
+      storeQueryFilter['filter[file][extension]'] = filter.fileTypes.join(',');
+      // storeQueryFilter.file = {
+      //   extension: ,
+      // };
+    }
+    if (filter.documentName) {
+      storeQueryFilter['filter[name]'] = filter.documentName;
     }
 
     const modelData = await this.store.query('piece', {
       include: 'cases,document-container,document-container.type,file,agendaitems',
       reload: true,
-      filter: storeQueryFilter,
+      ...storeQueryFilter,
     });
+
+    this.controllerArgs.filter = filter;
     // use array to allow add/delete
     return modelData.toArray();
   }
 
   async afterModel() {
     const parentHash = this.modelFor('publications.publication');
-    this.case = parentHash.case;
+    this.controllerArgs.case = parentHash.case;
     // const documentTypes = this.LoadDocumentTypesTask();
     // const fileTypesTask = this.LoadFileTypesTask();
 
@@ -153,9 +164,9 @@ export default class PublicationDocumentsRoute extends Route {
     super.setupController(...arguments);
     controller.setup(
       {
-        _case: this.case,
+        _case: this.controllerArgs.case,
       },
-      this.filter,
+      this.controllerArgs.filter,
       this.reloadModel.bind(this)
     );
   }
