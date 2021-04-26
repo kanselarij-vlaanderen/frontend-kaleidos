@@ -19,8 +19,7 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
 
   @action
   uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
