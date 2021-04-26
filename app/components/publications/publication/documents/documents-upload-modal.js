@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
-import moment from 'moment';
 
 export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
   @inject store;
