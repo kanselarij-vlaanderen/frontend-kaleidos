@@ -2,7 +2,6 @@ import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
@@ -24,6 +23,7 @@ export default class PublicationFlow extends Model {
 
   // Belongs To.
   @belongsTo('case') case;
+  @belongsTo('identification') identification;
 
   @belongsTo('publication-status', {
     inverse: null,
@@ -38,14 +38,6 @@ export default class PublicationFlow extends Model {
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
-
-  @computed('publicationNumber,publicationSuffix')
-  get publicationNumberToDisplay() {
-    if (this.publicationSuffix && this.publicationSuffix !== '') {
-      return `${this.publicationNumber} ${this.publicationSuffix}`;
-    }
-    return `${this.publicationNumber}`;
-  }
 
   get publicationBeforeDateHasExpired() {
     return this.publishBefore

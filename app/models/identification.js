@@ -1,9 +1,13 @@
-import DS from 'ember-data';
+import Model, {
+  attr, belongsTo
+} from '@ember-data/model';
 
-const {
-  Model, attr,
-} = DS;
+export default class Identification extends Model {
+  // Attributes.
+  @attr('string') idName;
+  @attr('string') agency;
 
-export default Model.extend({
-  identification: attr('string'),
-});
+   // Belongs To.
+   @belongsTo('structured-identifier') structuredIdentifier;
+}
+
