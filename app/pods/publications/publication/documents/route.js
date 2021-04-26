@@ -63,7 +63,7 @@ export default class PublicationDocumentsRoute extends Route {
     // TODO: FIGURE OUT. THIS DOES NOT WORK YET FOR MULTIPLE FILE TYPES
     // temporary solution: frontend filtering in controller.sortAndFilterPieces
     // if (filter.fileTypes.length) {
-    //   storeQueryFilter['filter[file][extension]'] = filter.fileTypes.join(',');
+    //   storeQueryFilter['filter[file][extension]'] = ?
     // }
     if (filter.documentName) {
       storeQueryFilter['filter[name]'] = filter.documentName;

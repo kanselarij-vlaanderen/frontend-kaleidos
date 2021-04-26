@@ -1,5 +1,5 @@
 import { set } from '@ember/object';
-import { all as allPromises } from 'rsvp';
+import EmberPromise from 'rsvp';
 
 // utility class to centralize filter query parameter read and write
 // cache document-types for performance (this class uses findRecord('document-type', id))
@@ -34,6 +34,7 @@ export default class FilterQueryParams {
   static updateFromFilterAndReload(controller, filter) {
     const params = this._filterToQueryParams(filter);
     for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {
+      // set would be more performant than setting query parameters with @tracked
       set(controller, value, params[key]);
     }
   }
@@ -62,7 +63,7 @@ export default class FilterQueryParams {
     const filter = {
       documentName: params.documentName,
       fileTypes: params.fileTypes,
-      documentTypes: await allPromises(documentTypes),
+      documentTypes: await EmberPromise.all(documentTypes),
     };
 
     return filter;

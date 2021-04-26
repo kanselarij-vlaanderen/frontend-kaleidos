@@ -65,7 +65,7 @@
 
   {{#if this.isLoaded}}
     <div class="auk-u-mb-3">
-      {{#if (gt (await this.filteredSortedPieces.length) 0 )}}
+      {{#if this.filteredSortedPieces.length}}
         {{#if this.renderPieces}}
           <table class="auk-table">
             <thead>
@@ -88,13 +88,13 @@
                     {{#if (gt (await piece.agendaitems.length) 0)}}
                       <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
                     {{/if}}
-                    {{await piece.name}}
+                    {{piece.name}}
                   </td>
                   <td colspan="2">
                     {{await piece.file.extension}}
                   </td>
                   <td colspan="2">
-                    {{await piece.documentContainer.type.label}}
+                    {{piece.documentContainer.type.label}}
                   </td>
                   <td>
                     {{moment-format piece.created}}

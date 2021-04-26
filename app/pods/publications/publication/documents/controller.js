@@ -42,9 +42,10 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showFilterPanel = true;
   @tracked filter;
   // It would be cleaner in a separate object, but Ember requires the queryParams on the controller
-  @tracked filterQueryParams$documentName = '';
-  @tracked filterQueryParams$fileTypes = '';
-  @tracked filterQueryParams$documentTypes = '';
+  // no @tracked for performance
+  filterQueryParams$documentName = '';
+  filterQueryParams$fileTypes = '';
+  filterQueryParams$documentTypes = '';
 
   // eslint-disable-next-line object-curly-newline
   async setup({ _case, documentTypes, }, filter) {
@@ -186,10 +187,10 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async cancelEditPiece() {
     this.pieceBeingEdited.rollbackAttributes();
-    const documentContainer = await this.pieceBeingEdited.documentContainer;
-    if (documentContainer) {
-      documentContainer.rollbackAttributes();
-      documentContainer.belongsTo('type').reload();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    if (dc) {
+      dc.rollbackAttributes();
+      dc.belongsTo('type').reload();
     }
     this.pieceBeingEdited = null;
     this.showPieceEditor = false;
@@ -200,8 +201,8 @@ export default class PublicationDocumentsController extends Controller {
     this.showPieceEditor = false;
     this.showLoader = true;
     await this.pieceBeingEdited.save();
-    const documentContainer = await this.pieceBeingEdited.documentContainer;
-    await documentContainer.save();
+    const dc = await this.pieceBeingEdited.get('documentContainer');
+    await dc.save();
     this.showLoader = false;
   }
 
@@ -213,7 +214,7 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *verifyDeleteExistingPiece() {
-    const agendaitems = yield this.pieceToDelete.agendaitems;
+    const agendaitems = yield this.pieceToDelete.get('agendaitems');
     // TODO reverse if else, do we need the else in this case ?
     if (agendaitems && agendaitems.length > 0) {
       // Possible unreachable code, failsafe. Do we want to show a toast ?
@@ -221,8 +222,8 @@ export default class PublicationDocumentsController extends Controller {
       // TODO delete with undo ?
       this.showLoader = true;
       this.isVerifyingDelete = false;
-      const documentContainer = yield this.pieceToDelete.documentContainer;
-      const piecesFromContainer = yield documentContainer.pieces;
+      const documentContainer = yield this.pieceToDelete.get('documentContainer');
+      const piecesFromContainer = yield documentContainer.get('pieces');
       if (piecesFromContainer.length < 2) {
         // Cleanup documentContainer if we are deleting the last piece in the container
         // Must revise if we link docx and pdf as multiple files in 1 piece
@@ -262,7 +263,7 @@ export default class PublicationDocumentsController extends Controller {
     const sortedPieces = sortPieces(this.model);
 
     // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (!this.filter.fileTypes.length) {
+    if (!this.isFilterFileTypeActive()) {
       this.filteredSortedPieces = sortedPieces;
     } else {
       // Filtering of file extensions is not yet possible in the backend, so we do it here.
@@ -280,8 +281,14 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = false;
   }
 
+  isFilterFileTypeActive() {
+    return !!this.filter.fileTypes.length;
+  }
+
   async filterFileType(piece) {
-    const ext = await piece.get('file.extension');
+    // await since not "include"-ed in query
+    const file = await piece.get('file');
+    const ext = file.extension;
     if (!ext) {
       return false;
     }
