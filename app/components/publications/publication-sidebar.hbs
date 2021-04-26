@@ -42,8 +42,23 @@
           <Publications::PublicationStatusSelector
                   @publicationStatus={{this.publicationStatus}}
                   @onChange={{this.setPublicationStatus}}
-                  @disabled={{this.publicationStatus.isPublished}}
+                  @disabled={{or this.publicationStatus.isPublished this.publicationStatus.isWithdrawn}}
           />
+
+          {{!-- TODO: do the same for isPaused --}}
+          {{#if this.publicationStatus.isWithdrawn}}
+            <div class="auk-form-group">
+              <WebComponents::AuLabel>
+                {{t "withdrawn-on"}}
+              </WebComponents::AuLabel>
+              <div class="auk-u-muted">
+                {{moment-format
+                    this.publicationFlow.closingDate
+                    "DD-MM-YYYY"
+                }}
+              </div>
+            </div>
+          {{/if}}
 
           {{!-- Type regelgeving --}}
           {{#if (not this.publicationStatus.isWithdrawn)}}
