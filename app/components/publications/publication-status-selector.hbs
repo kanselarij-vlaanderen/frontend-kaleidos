@@ -4,7 +4,9 @@
           @options={{this.publicationStatusses}}
           @searchEnabled={{false}}
           @selected={{@publicationStatus}}
-          @onchange={{this.setPublicationStatus}} as |status|>
+          @onchange={{this.setPublicationStatus}}
+          @disabled={{@disabled}}
+            as |status|>
     {{#if status.isPending }}
       <WebComponents::AuIcon @name="clock" @iconSkinColor="warning"/>
     {{else if status.isPublished }}

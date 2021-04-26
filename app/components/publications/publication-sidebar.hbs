@@ -37,10 +37,12 @@
               </div>
             {{/if}}
           </div>
+
           {{!-- Status --}}
           <Publications::PublicationStatusSelector
                   @publicationStatus={{this.publicationStatus}}
                   @onChange={{this.setPublicationStatus}}
+                  @disabled={{this.publicationStatus.isPublished}}
           />
 
           {{!-- Type regelgeving --}}
@@ -160,7 +162,7 @@
           {{/if}}
 
           {{!-- Publicatiedatum --}}
-          {{#if this.publicationStatus.isPublished}}
+          {{#if (not this.publicationStatus.isPublished)}}
             <div class="auk-form-group">
               <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker
