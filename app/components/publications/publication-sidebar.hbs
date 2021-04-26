@@ -180,7 +180,7 @@
           {{/if}}
 
           {{!-- Publicatiedatum --}}
-          {{#if (not this.publicationStatus.isPublished)}}
+          {{#if this.publicationStatus.isPublished}}
             <div class="auk-form-group">
               <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker
