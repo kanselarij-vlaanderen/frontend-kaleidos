@@ -50,6 +50,7 @@
                                           @isSearchable={{false}}
                                           @onchange={{this.setRegulationType}}
                                           @selected={{@publicationFlow.regulationType}}
+                                          @disabled={{this.publicationStatus.isPublished}}
             />
           </div>
 
@@ -61,10 +62,12 @@
                                             @isSearchable={{false}}
                                             @onchange={{this.setPublicationMode}}
                                             @selected={{this.publicationFlow.mode}}
+                                            @disabled={{this.publicatieStatus.isPublished}}
               />
             </div>
           {{/if}}
 
+          {{!-- Spoedprocedure --}}
           {{#if this.publicationStatus.isPending}}
             <div class="auk-form-group">
               <Publications::UrgencyLevelCheckbox
