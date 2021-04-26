@@ -221,3 +221,9 @@
 .auk-u-text-family-serif {
   font-family: flanders-serif, serif !important;
 }
+
+@media print {
+  .auk-u-m-0\@print {
+    margin: 0 !important;
+  }
+}
