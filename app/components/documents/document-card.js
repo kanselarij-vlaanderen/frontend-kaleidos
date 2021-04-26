@@ -6,7 +6,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
-import config from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class DocumentsDocumentCardComponent extends Component {
@@ -52,16 +52,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadCodelists() {
-    this.defaultAccessLevel = this.store.peekRecord('access-level', config.internRegeringAccessLevelId);
-    if (!this.defaultAccessLevel) {
-      const accessLevels = yield this.store.query('access-level', {
-        page: {
-          size: 1,
-        },
-        'filter[:id:]': config.internRegeringAccessLevelId,
-      });
-      this.defaultAccessLevel = accessLevels.firstObject;
-    }
+    this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
   }
 
   @task

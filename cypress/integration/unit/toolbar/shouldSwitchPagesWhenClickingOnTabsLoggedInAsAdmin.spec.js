@@ -14,11 +14,14 @@ context('Testing the toolbar as Admin user', () => {
     cy.visit('/');
   });
 
+  // TODO test url after clicking instead of other titles not existing
+
   it('Should have meeting, Case, Newsletter and Settings in toolbar', () => {
     cy.get(toolbar.agenda).should('exist');
     cy.get(toolbar.cases).should('exist');
     cy.get(toolbar.newsletters).should('exist');
     cy.get(toolbar.settings).should('exist');
+    // TODO publications, search
   });
 
   it('Should switch to Agenda tab when agenda is clicked', () => {
@@ -50,6 +53,7 @@ context('Testing the toolbar as Admin user', () => {
     cy.get(agenda.overviewTitle).should('not.exist');
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
+    // TODO checking the existance here is duplicate
     cy.get(settings.generalSettings).should('exist');
     cy.get(settings.manageMinisters).should('exist');
     cy.get(settings.manageUsers).should('exist');

@@ -14,6 +14,8 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.visit('/');
   });
 
+  // TODO test url after clicking instead of other titles not existing
+
   it('Should have meeting, Case, Newsletter, Settings in toolbar', () => {
     cy.get(toolbar.agenda).should('exist');
     cy.get(toolbar.cases).should('exist');

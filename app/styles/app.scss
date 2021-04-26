@@ -1,8 +1,5 @@
 @import 'ember-power-select';
 @import 'ember-vo-webuniversum-data-table';
-// TODO: Deze fix is om ervoor te zetten dat de variabelen voor de ember-rdfa-editor op voorhand gezet worden zodat ze niett overschreven worden door de !default
-@import 'fixes/fix-ember-rdfa-editor';
-@import 'ember-rdfa-editor';
 /* ==========================================================================
    CSS file for Digikan
    ========================================================================== */
@@ -49,32 +46,22 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-backlink';
 @import 'custom-components/vlc-block-link';
-@import 'custom-components/vlc-box';
-@import 'custom-components/vlc-button';
-@import 'custom-components/vlc-button-in-input';
 @import 'custom-components/vlc-button-link';
 @import 'custom-components/vlc-button-toolbar';
 @import 'custom-components/vlc-subcase-description';
-@import 'custom-components/vlc-container';
 @import 'custom-components/vlc-date-range';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-dropdown-menu';
-@import 'custom-components/vlc-hr';
 @import 'custom-components/vlc-input-field-block';
-@import 'custom-components/vlc-input';
-@import 'custom-components/vlc-key-value';
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-minister';
 @import 'custom-components/vlc-mock-login';
-@import 'custom-components/vlc-navbar';
 @import 'custom-components/vlc-new-session';
 @import 'custom-components/vlc-page-header';
 @import 'custom-components/vlc-pagination';
 @import 'custom-components/vlc-panel-layout';
-@import 'custom-components/vlc-panel';
-@import 'custom-components/vlc-pill';
 @import 'custom-components/vlc-printable-agenda-list';
 @import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
@@ -90,7 +77,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-tabs';
 @import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toaster-button';
-@import 'custom-components/vlc-toolbar';
 @import 'custom-components/vlc-user';
 @import 'custom-components/vlc-user-management-table';
 @import 'custom-components/vlc-link-actions';
@@ -140,3 +126,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 // Components (from npm package)
 @import "node_modules/@kanselarij-vlaanderen/au-kaleidos-css/auk-standalone";
 @import "au-kaleidos-css/auk-additions";
+
+// (not sure about naming/location)
+@import 'custom-application/m-header';

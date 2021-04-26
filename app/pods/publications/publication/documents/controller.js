@@ -9,6 +9,7 @@ import {
   set,
   computed
 } from '@ember/object';
+import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -22,8 +23,8 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showPieceUploadModal = false;
   @tracked showTranslationModal = false;
   @tracked showPublishPreviewRequestModal = false;
+  @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
-  @tracked documentTypes = [];
 
   @tracked translateActivity = {
     mailContent: '',
@@ -47,42 +48,11 @@ export default class PublicationDocumentsController extends Controller {
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
 
-  @tracked fileExtensions = [];
-  @tracked filterIsActive = false;
-  @tracked pieceName = '';
-  @tracked selectedFileExtensions = [];
-  @tracked selectedPieceTypes = [];
+  @tracked filter = new DocumentsFilter();
 
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-    this.loadExtensionData.perform();
-  }
-
+  // called from route (to share logic)
   reset() {
     this._resetFilterState();
-  }
-
-  @task
-  *loadData() {
-    if (!this.documentTypes.length) {
-      this.documentTypes = yield this.store.query('document-type', {
-        page: {
-          size: 50,
-        },
-      });
-    }
-  }
-
-  @task
-  *loadExtensionData() {
-    if (!this.fileExtensions.length) {
-      this.fileExtensions = yield this.fileService.getFileExtensions();
-    }
-  }
-
-  get sortedDocumentTypes() {
-    return this.documentTypes.sortBy('priority');
   }
 
   get areAllPiecesSelected() {
@@ -264,6 +234,7 @@ export default class PublicationDocumentsController extends Controller {
   setTranslationMailSubject(event) {
     set(this.translateActivity, 'mailSubject', event.target.value);
   }
+
   @action
   async openTranslationRequestModal() {
     this.translateActivity.finalTranslationDate = ((this.model.publicationFlow.translateBefore) ? this.model.publicationFlow.translateBefore : new Date());
@@ -330,16 +301,8 @@ export default class PublicationDocumentsController extends Controller {
     this.translateActivity.finalTranslationDate = dates[0];
   }
 
-  @action
-  onFilterByPieceNameNameChange(event) {
-    this.pieceName = event.target.value;
-  }
-
-  @action
-  async resetFilter() {
-    this._resetFilterState();
-    await this.sortAndFilterPieces();
-    this.renderPieces = true;
+  async getConfig(name, defaultValue) {
+    return await this.configService.get(name, defaultValue);
   }
 
   @computed('model.case.sortedPieces')
@@ -349,31 +312,33 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  async filterDocumentsAction() {
+  async toggleFilterPanel() {
+    this.showFilterPanel = !this.showFilterPanel;
+  }
+
+  @action
+  async onPerformFilter(filter) {
     this.renderPieces = false;
     this.selectedPieces = [];
+    this.filter = filter;
     await this.sortAndFilterPieces();
     this.renderPieces = true;
   }
 
-  async getConfig(name, defaultValue) {
-    return await this.configService.get(name, defaultValue);
-  }
-
   async sortAndFilterPieces() {
     this.showLoader = true;
-    const filteredPieces =  [...this.model.case.sortedPieces];
+    const pieces = this.model.case.sortedPieces;
     this.filteredSortedPieces = [];
-    for (let index = 0; index < filteredPieces.length; index++) {
-      const piece = filteredPieces[index];
+    for (let index = 0; index < pieces.length; index++) {
+      const piece = pieces[index];
+      // sync filter first
+      if (!this.filterTitle(piece)) {
+        continue;
+      }
       if (!await this.filterFileType(piece)) {
         continue;
       }
       if (!await this.filterPieceType(piece)) {
-        continue;
-      }
-
-      if (!this.filterTitle(piece)) {
         continue;
       }
       this.filteredSortedPieces.pushObject(piece);
@@ -382,42 +347,37 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   filterTitle(piece) {
-    return piece.name.toLowerCase().includes(this.pieceName.toLowerCase());
+    return piece.name.toLowerCase().includes(this.filter.documentName.toLowerCase());
   }
 
   async filterFileType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (this.selectedFileExtensions.length === 0) {
+    if (this.filter.fileTypes.length === 0) {
       return true;
     }
-    const file = await piece.get('file');
-    const ext = await file.get('extension');
-    return this.selectedFileExtensions.includes(ext);
+
+    const ext = await piece.get('file.extension');
+    if (!ext) {
+      return false;
+    }
+    return this.filter.fileTypes.includes(ext);
   }
 
   async filterPieceType(piece) {
     // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (this.selectedPieceTypes.length === 0) {
+    if (this.filter.documentTypes.length === 0) {
       return true;
     }
-    const container = await piece.get('documentContainer');
-    if (container) {
-      const containerType = await container.get('type');
-      if (containerType) {
-        const typeId = await containerType.get('id');
-        const listOfTypeIds = this.selectedPieceTypes.map((type) => type.id);
-        return listOfTypeIds.includes(typeId);
-      }
+
+    const typeId = await piece.get('documentContainer.type.id');
+    if (!typeId) {
       return false;
     }
-    return false;
+    return this.filter.documentTypes.some((type) => type.id === typeId);
   }
 
   _resetFilterState() {
+    this.filter.reset();
     this.selectedPieces = [];
-    this.selectedFileExtensions = [];
-    this.selectedPieceTypes = [];
-    this.pieceName = '';
-    this.renderPieces = true;
   }
 }

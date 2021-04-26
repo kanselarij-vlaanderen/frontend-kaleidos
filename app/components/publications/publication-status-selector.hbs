@@ -1,0 +1,19 @@
+<div class="auk-form-group">
+  <WebComponents::AuLabel for="blockInput">{{t 'status'}}</WebComponents::AuLabel>
+  <PowerSelect
+          @options={{this.publicationStatusses}}
+          @searchEnabled={{false}}
+          @selected={{@publicationStatus}}
+          @onchange={{this.setPublicationStatus}} as |status|>
+    {{#if status.isPending }}
+      <WebComponents::AuIcon @name="clock" @iconSkinColor="warning"/>
+    {{else if status.isPublished }}
+      <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
+    {{else if status.isPaused}}
+      <WebComponents::AuIcon @name="circle-pause" @iconSkinColor="muted"/>
+    {{else if status.isWithdrawn }}
+      <WebComponents::AuIcon @name="circle-error" @iconSkinColor="danger"/>
+    {{/if}}
+    {{status.label}}
+  </PowerSelect>
+</div>

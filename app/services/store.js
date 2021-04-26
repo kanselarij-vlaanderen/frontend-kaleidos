@@ -15,4 +15,14 @@ export default class ExtendedStoreService extends Store {
     }
     return null;
   }
+
+  findRecordByUri(modelName, uri) {
+    const cachedRecord = this.peekAll(modelName).findBy('uri', uri);
+    if (cachedRecord) {
+      return cachedRecord;
+    }
+    return this.queryOne(modelName, {
+      'filter[:uri:]': uri,
+    });
+  }
 }
