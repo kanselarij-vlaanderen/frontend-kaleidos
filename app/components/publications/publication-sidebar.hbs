@@ -44,15 +44,17 @@
           />
 
           {{!-- Type regelgeving --}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
-            <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
-                                          @isSearchable={{false}}
-                                          @onchange={{this.setRegulationType}}
-                                          @selected={{@publicationFlow.regulationType}}
-                                          @disabled={{this.publicationStatus.isPublished}}
-            />
-          </div>
+          {{#if (not this.publicationStatus.isWithdrawn)}}
+            <div class="auk-form-group">
+              <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
+              <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
+                                            @isSearchable={{false}}
+                                            @onchange={{this.setRegulationType}}
+                                            @selected={{@publicationFlow.regulationType}}
+                                            @disabled={{this.publicationStatus.isPublished}}
+              />
+            </div>
+          {{/if}}
 
           {{!-- Publicatiewijze --}}
           {{#if (not this.publicationStatus.isWithdrawn)}}
