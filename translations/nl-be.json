@@ -813,5 +813,6 @@
   "submission-activity": "Indieningsactiviteit",
   "config": "Instelling",
   "type": "Type",
-  "archive": "Archief"
+  "archive": "Archief",
+  "not-entered-yet": "Nog niet ingevuld"
 }
