@@ -143,7 +143,10 @@
           {{/if}}
 
           {{!-- Uiterste vertaaldatum --}}
-          {{#if (and this.publicationFlow.translateBefore (or this.publicationStatus.isPending this.publicationStatus.isPaused))}}
+          {{#if
+            (and this.publicationFlow.translateBefore
+              (or this.publicationStatus.isPending this.publicationStatus.isPaused))
+          }}
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
               <div class="auk-u-muted">
