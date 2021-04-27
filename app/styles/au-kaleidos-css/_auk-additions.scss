@@ -205,6 +205,18 @@
 }
 
 
+/* Scroll wrapper
+   ========================================================================== */
+
+.auk-scroll-wrapper__body--horizontal {
+  overflow-y: hidden;
+}
+
+.auk-scroll-wrapper__body--vertical {
+  overflow-x: hidden;
+}
+
+
 /* Form-group: power-select alternative (to be removed)
    ========================================================================== */
 
