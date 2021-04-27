@@ -12,6 +12,7 @@ module.exports = function (defaults) {
       extension: 'scss',
       sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
       includePaths: [
+        'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/',
         'node_modules/@lblod/ember-rdfa-editor/app/styles/', // as a workaround for https://github.com/ember-cli/ember-cli/issues/8026#issuecomment-420245390
       ],
     },
