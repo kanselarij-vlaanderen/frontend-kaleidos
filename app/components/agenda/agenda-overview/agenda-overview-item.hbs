@@ -25,6 +25,7 @@
               data-test-agenda-overview-sub-item
               @route="agenda.agendaitems.agendaitem"
               @model={{@agendaitem.id}}
+              @query={{hash anchor=@agendaitem.id}}
             >
               <pre class="auk-u-text-pre-line">
                 {{#if @agendaitem.shortTitle}}
