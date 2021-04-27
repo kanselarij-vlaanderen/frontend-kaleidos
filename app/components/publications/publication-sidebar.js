@@ -89,7 +89,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       this.loadPublicationStatus.perform();
       this.publicationFlow.closingDate = status.isPublished ? new Date() : null;
 
-      await this.setStatusChange();
+      await this.setPublicationStatusChange();
 
       if (this.args.didChange) {
         this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
@@ -107,11 +107,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.status = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.publicationFlow.closingDate = new Date();
 
-    await this.setStatusChange();
+    await this.setPublicationStatusChange();
 
     this.loadPublicationStatus.perform();
     if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, ['status', 'closingDate', 'statusChange']);
+      await this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
     }
     this.showConfirmWithdraw = false;
   }
@@ -273,11 +273,15 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  async setStatusChange() {
-    const statusChange = this.store.createRecord('publication-status-change', {
+  async setPublicationStatusChange() {
+    const publicationStatusChange = this.store.createRecord('publication-status-change', {
       startedAt: new Date(),
+      publication: this.publicationFlow,
     });
-    await statusChange.save();
-    this.publicationFlow.statusChange = statusChange;
+
+    this.publicationFlow.publicationStatusChange = publicationStatusChange;
+    if (this.args.didChange) {
+      await this.args.didChange(publicationStatusChange);
+    }
   }
 }

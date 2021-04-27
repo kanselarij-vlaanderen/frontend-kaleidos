@@ -18,7 +18,7 @@
   </PowerSelect>
   {{#if (or @publicationStatus.isPaused @publicationStatus.isWithdrawn) }}
     <div class="vlc-publication-status-change-small-text">
-      {{t "latest-modified-on"}} {{moment-format @publicationFlow.statusChange.startedAt "dd DD/MM/YYYY HH:mm"}}
+      {{t "latest-modified-on"}}  {{moment-format @publicationStatusChange.startedAt "dd DD/MM/YYYY HH:mm"}}
     </div>
   {{/if}}
 </div>

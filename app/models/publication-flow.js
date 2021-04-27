@@ -32,7 +32,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
-  @belongsTo('publication-status-change') statusChange;
+  @belongsTo('publication-status-change') publicationStatusChange;
 
   // Has many .
   @hasMany('numac-number') numacNumbers;
