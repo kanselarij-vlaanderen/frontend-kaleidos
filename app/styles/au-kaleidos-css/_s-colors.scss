@@ -39,13 +39,13 @@ $au-blue-900    : #073261;
 $au-yellow-100  : #FFF9D5;
 $au-yellow-200  : #FFF29B;
 $au-yellow-300  : #FEE539;
-$au-yellow-400  : #FFC515;
-$au-yellow-600  : #7F6E3B;
+$au-yellow-500  : #FFC515;
+$au-yellow-700  : #997300;
 $au-yellow-900  : #473D21;
 
 $au-red-100     : #FCF3F3;
 $au-red-200     : #F7E3E3;
-$au-red-500     : #FF4141;
+$au-red-500     : #DB3434;
 $au-red-600     : #D92626;
 $au-red-700     : #AB1F1F;
 $au-red-900     : #470000;
@@ -54,5 +54,14 @@ $au-green-100   : #F7FAE5;
 $au-green-200   : #ECF2CD;
 $au-green-400   : #B3E000;
 $au-green-500   : #8BAE00;
-$au-green-700   : #5F750B;
-$au-green-900   : #323D08;
+$au-green-700   : #238000;
+$au-green-900   : #030303;
+
+/* Semantic colors
+ ========================================================================== */
+
+$color-primary: $au-blue-600;
+$color-header:$au-gray-900;
+$color-text: $au-gray-800;
+$color-muted: $au-gray-600;
+$color-border: $au-gray-300;
