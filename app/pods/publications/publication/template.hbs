@@ -17,7 +17,7 @@
             @custom="true"
             @customTextClass="auk-toolbar-complex__title"
           />
-          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model.publicationFlow}} />
+          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
@@ -36,7 +36,7 @@
       @isOpen={{this.sidebarIsOpen}}
       @onCollapse={{this.toggleSidebar}}
       @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{this.model.publicationFlow}}
+      @publicationFlow={{this.model}}
       @didChange={{this.saveSidebarProperty}}
     />
   </div>

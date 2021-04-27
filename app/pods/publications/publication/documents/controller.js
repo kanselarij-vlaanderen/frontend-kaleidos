@@ -292,7 +292,7 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-    this.model.refreshAction();
+    this.send('refreshPublicationFlow');
   }
 
   /** TRANSLATION ACTIVITIES **/
@@ -352,7 +352,7 @@ export default class PublicationDocumentsController extends Controller {
     };
     this.showLoader = false;
     this.renderPieces = true;
-    this.model.refreshAction();
+    this.send('refreshPublicationFlow');
   }
 
   @action

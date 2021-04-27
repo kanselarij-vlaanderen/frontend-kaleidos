@@ -3,8 +3,7 @@ import { hash } from 'rsvp';
 
 export default class CaseRoute extends Route {
   async model() {
-    const parentHash = this.modelFor('publications.publication');
-    const publicationFlow = parentHash.publicationFlow;
+    const publicationFlow = this.modelFor('publications.publication');
     const _case = await publicationFlow.get('case');
     const contactPersons = await publicationFlow.get('contactPersons');
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
@@ -19,7 +18,6 @@ export default class CaseRoute extends Route {
       publicationFlow,
       case: _case,
       contactPersons: contactPersons,
-      refreshAction: parentHash.refreshAction,
       organizations: filteredOrganizations.toArray(),
     });
   }

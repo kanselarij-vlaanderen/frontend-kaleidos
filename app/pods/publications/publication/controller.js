@@ -14,20 +14,20 @@ export default class PublicationController extends Controller {
   get casePath() {
     let title = this.intl.t('publication-flow');
     // TODO use publicationNumberToDisplay here, but doesn't seem to update when changing suffix
-    if (!this.model.latestSubcaseOnMeeting) {
-      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
+    if (!this.latestSubcaseOnMeeting) {
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationNumber, ' ', this.model.publicationSuffix || '');
     } else {
-      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationNumber, ' ', this.model.publicationSuffix || '');
     }
     return title;
   }
 
   get titleText() {
-    const shortTitle = this.model.publicationFlow.case.get('shortTitle');
+    const shortTitle = this.model.case.get('shortTitle');
     if (shortTitle) {
       return shortTitle;
     }
-    return this.model.publicationFlow.case.get('title');
+    return this.model.case.get('title');
   }
 
   @action
@@ -38,12 +38,5 @@ export default class PublicationController extends Controller {
   @action
   saveSidebarProperty(modifiedObject) {
     modifiedObject.save();
-  }
-
-  get getClassForPublicationNumber() {
-    if (this.numberIsAlreadyUsed) {
-      return 'auk-form-group--error';
-    }
-    return null;
   }
 }

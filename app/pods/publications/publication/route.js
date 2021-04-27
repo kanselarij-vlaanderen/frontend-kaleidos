@@ -1,6 +1,5 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
 import { action } from '@ember/object';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
@@ -10,12 +9,17 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       reload: true,
     });
     await publicationFlow.get('regulationType');
-    const _case = await publicationFlow.get('case');
+    await publicationFlow.get('case');
 
+    return publicationFlow;
+  }
+
+  async afterModel(model) {
     const subcasesOnMeeting = await this.store.query('subcase', {
       filter: {
         case: {
-          id: _case.id,
+          // cannot access yet without get(...)
+          id: model.case.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
@@ -23,17 +27,16 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'mandatees',
     });
 
-    return hash({
-      publicationFlow,
-      latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
-      case: _case,
-      refreshAction: this.refreshModel,
-    });
-  }
-
-  async afterModel() {
     await this.store.query('publication-status', {});
     await this.store.query('regulation-type', {});
+
+    this.subcasesOnMeeting = subcasesOnMeeting;
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+
+    controller.subcasesOnMeeting = this.subcasesOnMeeting;
   }
 
   /* eslint-disable id-length,no-unused-vars */
@@ -42,8 +45,10 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     controller.publicationNotAfterTranslationForTranslation = false;
   }
 
+  // actions in routers are "fall through":
+  //  they can be called using sent in controllers of subroutes
   @action
-  refreshModel() {
+  refreshPublicationFlow() {
     this.refresh();
   }
 }
