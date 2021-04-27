@@ -109,8 +109,7 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-application/loader';
 
 // Components
-// @import "auk-standalone"; // sourced from "au-kaleidos-css" npm package
-@import "au-kaleidos-css/auk-standalone";
+@import "auk-standalone"; // sourced from "au-kaleidos-css" npm package
 @import "au-kaleidos-css/auk-additions"; // sourced locally
 
 // (not sure about naming/location)
