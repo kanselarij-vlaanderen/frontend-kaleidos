@@ -68,8 +68,7 @@ export default class PublicationFlow extends Model {
       const openVertalingen = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.vertalen.url, CONFIG.ACTIVITY_STATUSSES.open.url);
       const closedVertalingen = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.vertalen.url, CONFIG.ACTIVITY_STATUSSES.closed.url);
       const withdrawnVertalingen = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.vertalen.url, CONFIG.ACTIVITY_STATUSSES.withdrawn.url);
-      const total = openVertalingen + closedVertalingen + withdrawnVertalingen;
-      return total;
+      return openVertalingen + closedVertalingen + withdrawnVertalingen;
     });
   }
 
@@ -78,8 +77,7 @@ export default class PublicationFlow extends Model {
       const openDrukproeven = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.drukproeven.url, CONFIG.ACTIVITY_STATUSSES.open.url);
       const closedDrukproeven = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.drukproeven.url, CONFIG.ACTIVITY_STATUSSES.closed.url);
       const withdrawnDrukproeven = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.drukproeven.url, CONFIG.ACTIVITY_STATUSSES.withdrawn.url);
-      const total = openDrukproeven + closedDrukproeven + withdrawnDrukproeven;
-      return total;
+      return openDrukproeven + closedDrukproeven + withdrawnDrukproeven;
     });
   }
 
