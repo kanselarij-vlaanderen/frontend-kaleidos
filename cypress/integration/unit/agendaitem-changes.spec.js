@@ -236,5 +236,6 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaOverviewItemHeader).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');
     cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
+    // TODO check second header for "Geen toekenning"?
   });
 });

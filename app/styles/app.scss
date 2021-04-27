@@ -1,8 +1,5 @@
 @import 'ember-power-select';
 @import 'ember-vo-webuniversum-data-table';
-// TODO: Deze fix is om ervoor te zetten dat de variabelen voor de ember-rdfa-editor op voorhand gezet worden zodat ze niett overschreven worden door de !default
-@import 'fixes/fix-ember-rdfa-editor';
-@import 'ember-rdfa-editor';
 /* ==========================================================================
    CSS file for Digikan
    ========================================================================== */
@@ -112,10 +109,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-utilities/_text';
 @import 'custom-utilities/_transparency';
 
-// Print
-@import 'print/print';
-@import 'print';
-
 //custom css added
 @import 'custom-application/toast';
 @import 'custom-application/compare';
@@ -132,3 +125,7 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 
 // (not sure about naming/location)
 @import 'custom-application/m-header';
+
+// Print
+@import 'print/print';
+@import 'print';

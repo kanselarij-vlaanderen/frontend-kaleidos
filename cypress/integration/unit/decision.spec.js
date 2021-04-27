@@ -114,6 +114,7 @@ context('Add files to an agenda', () => {
           });
       });
 
+    // verify modal
     cy.get(modal.modal).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
@@ -194,6 +195,7 @@ context('Add files to an agenda', () => {
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
 
+    // TODO why go to press agenda ?
     cy.get(agenda.agendaitemPersagendaTab).click();
     cy.url().should('contain', '/persagenda');
 
