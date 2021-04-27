@@ -67,3 +67,9 @@
   </FileDropzone>
 </div>
 
+{{#if this.isLoading}}
+  <WebComponents::AuLoadingOverlay
+          @title={{t "upload-file"}}
+          @message={{t "upload-file"}}
+  />
+{{/if}}
