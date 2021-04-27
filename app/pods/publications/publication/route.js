@@ -8,7 +8,6 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
       reload: true,
     });
-    await publicationFlow.get('regulationType');
     await publicationFlow.get('case');
 
     return publicationFlow;
