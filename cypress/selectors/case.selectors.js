@@ -11,5 +11,10 @@ const selectors = {
   subcaseRequestedBy: '[data-test-subcase-requested-by]',
   subcaseMeetingNumber: '[data-test-meeting-number]',
   subcaseMeetingPlannedStart: '[data-test-meeting-plannedStart]',
+
+  overviewSubcaseInfo: {
+    approved: '[data-test-case-overview-subcase-approved]',
+    notApproved: '[data-test-case-overview-subcase-not-approved]',
+  },
 };
 export default selectors;

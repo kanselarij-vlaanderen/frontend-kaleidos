@@ -33,15 +33,17 @@
               </LinkTo>
             </WebComponents::AuToolbar::Item>
           {{/if}}
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-              data-test-agendaitem-titles-edit
-              {{on "click" this.startEditing}}
-                    @skin="tertiary"
-                    @icon="edit"
-                    @layout="icon-only"
-            />
-          </WebComponents::AuToolbar::Item>
+          {{#if this.currentSession.isEditor}}
+            <WebComponents::AuToolbar::Item>
+              <WebComponents::AuButton
+                data-test-agendaitem-titles-edit
+                {{on "click" this.startEditing}}
+                      @skin="tertiary"
+                      @icon="edit"
+                      @layout="icon-only"
+              />
+            </WebComponents::AuToolbar::Item>
+          {{/if}}
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuPanel::Header>

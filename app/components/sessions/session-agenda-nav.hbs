@@ -4,6 +4,7 @@
       class="border-left vlc-tabs-reverse__link"
       @route="agenda.agendaitems.index"
       @activeClass="vlc-tabs-reverse__link--active"
+      @query={{if this.currentAgendaItemId (hash anchor=this.currentAgendaItemId)}}
     >
       {{t "overview"}}
     </LinkTo>

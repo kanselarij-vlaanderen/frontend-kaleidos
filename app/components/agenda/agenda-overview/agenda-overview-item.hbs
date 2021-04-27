@@ -25,6 +25,7 @@
               data-test-agenda-overview-sub-item
               @route="agenda.agendaitems.agendaitem"
               @model={{@agendaitem.id}}
+              @query={{hash anchor=@agendaitem.id}}
             >
               <pre class="auk-u-text-pre-line">
                 {{#if @agendaitem.shortTitle}}
@@ -115,7 +116,7 @@
                 {{#if (not this.newsletterIsVisible)}}
                   <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
                     <i class="ki ki-not-visible"></i>
-                    <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                    <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
                       </p>
@@ -143,7 +144,7 @@
               {{#if @isNew}}
                 <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
                   <i class="ki ki-calendar-new"></i>
-                  <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+                  <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
                     </p>

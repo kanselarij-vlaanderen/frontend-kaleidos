@@ -74,10 +74,7 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
-    const realmonth = agendaDate.month() + 1; // Js month start at 0.
-    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
     cy.get('.vlc-status-timeline > li').eq(0)
@@ -87,7 +84,9 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
     cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
     cy.get(agenda.subcase.agendaLink).contains(dateFormat);
-    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
+    // The "decided on" field was already filled in right after proposing for agenda for a long time
+    // this field has been changed to take in account if the relevant meeting is final to show this info
+    cy.get(cases.subcaseDecidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
     cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
@@ -139,17 +138,16 @@ context('Subcase tests', () => {
     cy.proposeSubcaseForAgenda(agendaDate);
 
     const monthDutch = getTranslatedMonth(agendaDate.month());
-    const realmonth = agendaDate.month() + 1; // Js month start at 0.
-    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
-    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
     cy.get(cases.subcaseMeetingNumber);
     cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
     cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
     cy.get(agenda.subcase.agendaLink).contains(dateFormat);
-    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
+    // The "decided on" field was already filled in right after proposing for agenda for a long time
+    // this field has been changed to take in account if the relevant meeting is final to show this info
+    cy.get(cases.subcaseDecidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
     cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
@@ -353,5 +351,20 @@ context('Subcase tests', () => {
       .should('not.exist');
     cy.get(agenda.item.themes).contains('Wonen')
       .should('not.exist');
+  });
+
+  it('After finalizing agenda, subcase info should change to the approved status', () => {
+    const realmonth = agendaDate.month() + 1; // Js month start at 0.
+    const paddedMonth = realmonth < 10 ? `0${realmonth}` : realmonth;
+    const dateFormatDotted = `${agendaDate.date()}.${paddedMonth}.${agendaDate.year()}`;
+
+    cy.openAgendaForDate(agendaDate);
+    cy.setAllItemsFormallyOk(5);
+    cy.approveAndCloseDesignAgenda(true);
+
+    cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
+    cy.get(cases.overviewSubcaseInfo.approved).should('have.length', 3);
+    cy.openSubcase(2);
+    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
   });
 });
