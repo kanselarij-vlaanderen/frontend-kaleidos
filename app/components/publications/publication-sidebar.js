@@ -2,9 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import {
-  task,
-  restartableTask,
-  lastValue
+  lastValue, restartableTask, task
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
@@ -94,7 +92,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       await this.setStatusChange();
 
       if (this.args.didChange) {
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate', 'statusChange']);
+        this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
       }
     }
   }
@@ -106,8 +104,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
-    this.publicationFlow.status = publicationStatus;
+    this.publicationFlow.status = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.publicationFlow.closingDate = new Date();
 
     await this.setStatusChange();

@@ -173,14 +173,27 @@
           {{/if}}
 
           {{#if this.tableColumnDisplayOptions.withdrawnDate}}
-            <td>
-              {{t "dash"}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.status.isWithdrawn }}
+                {{t "dash"}}
+                {{moment-format @publicationFlow.statusChange.startedAt "DD-MM-YYYY"}}
+                <br/>
+                <span class="auk-u-text-small auk-u-muted">
+                  {{moment-format @publicationFlow.statusChange.startedAt "HH:mm"}}
+                </span>
+              {{/if}}
             </td>
           {{/if}}
 
           {{#if this.tableColumnDisplayOptions.pauseDate}}
-            <td>
-              {{t "dash"}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.status.isPaused}}
+                {{moment-format @publicationFlow.statusChange.startedAt "DD-MM-YYYY"}}
+                <br/>
+                <span class="auk-u-text-small auk-u-muted">
+                  {{moment-format @publicationFlow.statusChange.startedAt "HH:mm"}}
+                </span>
+              {{/if}}
             </td>
           {{/if}}
 

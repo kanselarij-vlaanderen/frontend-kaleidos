@@ -37,6 +37,7 @@
             {{/if}}
           </div>
           <Publications::PublicationStatusSelector
+                  @publicationFlow={{@publicationFlow}}
                   @publicationStatus={{this.publicationStatus}}
                   @onChange={{this.setPublicationStatus}}
           />
