@@ -12,6 +12,7 @@
     <LinkTo
       @route="agenda.agendaitems.index"
       @activeClass="active"
+      @query={{if this.currentAgendaItemId (hash anchor=this.currentAgendaItemId)}}
     >
       <span class="auk-tabs__tab-inner">
         {{t "overview"}}

@@ -483,14 +483,15 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
 
 /**
  * @description Adds documents to the already delivered documents list
- * @name addLinkedDocumentToAgendaitem
+ * @name addLinkedDocument
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String[]} filenames - The relative path to the file in the cypress/fixtures folder excluding the fileName
  */
-function addLinkedDocumentToAgendaitem(filenames) {
+function addLinkedDocument(filenames) {
+  // TODO, this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
-  cy.log('addLinkedDocumentToAgendaitem');
+  cy.log('addLinkedDocument');
   cy.get(document.addLinkedDocuments).click();
   cy.get(document.searchForLinkedDocumentsInput).click();
 
@@ -503,7 +504,7 @@ function addLinkedDocumentToAgendaitem(filenames) {
     cy.get(document.searchForLinkedDocumentsInput).clear();
   });
   cy.get(form.formSave).click();
-  cy.log('/addLinkedDocumentToAgendaitem');
+  cy.log('/addLinkedDocument');
 }
 
 /**
@@ -601,6 +602,6 @@ Cypress.Commands.add('uploadFile', uploadFile);
 Cypress.Commands.add('uploadUsersFile', uploadUsersFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
-Cypress.Commands.add('addLinkedDocumentToAgendaitem', addLinkedDocumentToAgendaitem);
+Cypress.Commands.add('addLinkedDocument', addLinkedDocument);
 Cypress.Commands.add('deleteSinglePiece', deleteSinglePiece);
 Cypress.Commands.add('isPieceDeletable', isPieceDeletable);
