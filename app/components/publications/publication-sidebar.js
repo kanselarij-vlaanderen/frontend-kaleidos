@@ -125,7 +125,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       });
       return;
     }
-    const publicationSuffix = this.publicationFlow.publicationSuffix;
+    const identification = yield this.publicationFlow.identification;
+    const structuredIdentifier = yield identification.structuredIdentifier;
+    const publicationNumber = structuredIdentifier.localIdentifier;
+    const publicationSuffix = structuredIdentifier.versionIdentifier;
     this.publicationService.publicationNumberAlreadyTaken(event.target.value, publicationSuffix, this.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
@@ -140,13 +143,15 @@ export default class PublicationsPublicationSidebarComponent extends Component {
           timeOut: 20000,
         });
         // rollback the value in the view
-        event.target.value = this.publicationFlow.publicationNumber || '';
+        event.target.value = publicationNumber || '';
       } else {
         const number = parseInt(event.target.value, 10);
-        this.publicationFlow.publicationNumber = number;
+        structuredIdentifier.localIdentifier = number;
+        identification.idName = `${number} ${publicationSuffix}`;
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationNumber');
+          this.args.didChange(identification, 'idName');
+          this.args.didChange(structuredIdentifier, 'localIdentifier');
         }
       }
     });
@@ -156,7 +161,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *setPublicationSuffix(event) {
     yield timeout(1000);
     this.numberIsAlreadyUsed = false;
-    const publicationNumber = this.publicationFlow.publicationNumber;
+    const identification = yield this.publicationFlow.identification;
+    const structuredIdentifier = yield identification.structuredIdentifier;
+    const publicationNumber = structuredIdentifier.localIdentifier;
+    const publicationSuffix = structuredIdentifier.versionIdentifier;
     this.publicationService.publicationNumberAlreadyTaken(publicationNumber, event.target.value, this.publicationFlow.id).then((isPublicationNumberTaken) => {
       if (isPublicationNumberTaken) {
         this.numberIsAlreadyUsed = true;
@@ -171,17 +179,20 @@ export default class PublicationsPublicationSidebarComponent extends Component {
           timeOut: 20000,
         });
         // rollback the value in the view
-        event.target.value = this.publicationFlow.publicationSuffix || '';
+        event.target.value = publicationSuffix || '';
       } else {
         // TODO trimText here to remove spaces, enters ?
         if (event.target.value !== '') {
-          this.publicationFlow.publicationSuffix = event.target.value;
+          structuredIdentifier.versionIdentifier = event.target.value;
+          identification.idName = `${publicationNumber} ${event.target.value}`;
         } else {
-          this.publicationFlow.publicationSuffix = undefined;
+          structuredIdentifier.versionIdentifier = undefined;
+          identification.idName = `${publicationNumber}`;
         }
         this.numberIsAlreadyUsed = false;
         if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationSuffix');
+          this.args.didChange(identification, 'idName');
+          this.args.didChange(structuredIdentifier, 'versionIdentifier');
         }
       }
     });

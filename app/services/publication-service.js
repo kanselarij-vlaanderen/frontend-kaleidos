@@ -36,13 +36,14 @@ export default class PublicationService extends Service {
     if (publicationSuffix && publicationSuffix.length > 0) {
       identificationNumber += ` ${publicationSuffix}`;
     }
-    const publicationsFromQueryWithSameNumber = await this.store.query('publication-flow', {
+
+    const publicationsFromQuery = await this.store.query('publication-flow', {
       filter: {
-        // :exact: does not work on numbers.
-        'identification.id-name': identificationNumber,
+        identification: {
+          ':exact:id-name': identificationNumber,
+        },
       },
     });
-    const publicationsFromQuery = publicationsFromQueryWithSameNumber.filter((publicationFlow) => !publicationFlow.publicationSuffix);
 
     // filter own model from data or we can't save our own number
     const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);

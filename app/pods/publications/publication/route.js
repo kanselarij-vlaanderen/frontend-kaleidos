@@ -12,6 +12,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     });
     await publicationFlow.get('regulationType');
     const _case = await publicationFlow.get('case');
+    const identification = await publicationFlow.get('identification');
 
     const subcasesOnMeeting = await this.store.query('subcase', {
       filter: {
@@ -60,6 +61,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       publicationFlow,
       latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
       case: _case,
+      identification: identification,
       counts: {
         documentCount: documentCount,
         totalTranslations: totalTranslations.length,

@@ -82,7 +82,7 @@ export default class PublicationsIndexRoute extends Route {
       // note that the "dasherize" here is used in order to keep the original column keyName's
       if (qpSort === dasherize('publicationNumber')) {
         // show the most recent publication first if publication-number is the same
-        apiSort = 'identificator.structured-identifier.local-identifier,-created';
+        apiSort = 'identification.structured-identifier.local-identifier,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
       } else if (qpSort === dasherize('requestedPublicationDate')) {
@@ -104,7 +104,7 @@ export default class PublicationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      include: 'case,status',
+      include: 'case,status,identification,identification.structured-identifier',
     });
   }
 

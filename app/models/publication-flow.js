@@ -6,8 +6,6 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
   // Attributes.
-  @attr('number') publicationNumber;
-  @attr('string') publicationSuffix;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
