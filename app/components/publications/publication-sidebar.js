@@ -83,15 +83,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationStatus(status) {
+  async setPublicationStatus(status) {
     if (status.isWithdrawn) {
       this.showConfirmWithdraw = true;
     } else {
       this.publicationFlow.status = status;
       this.loadPublicationStatus.perform();
       this.publicationFlow.closingDate = status.isPublished ? new Date() : null;
+
+      await this.setStatusChange();
+
       if (this.args.didChange) {
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
+        this.args.didChange(this.publicationFlow, ['status', 'closingDate', 'statusChange']);
       }
     }
   }
@@ -106,9 +109,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     this.publicationFlow.status = publicationStatus;
     this.publicationFlow.closingDate = new Date();
+
+    await this.setStatusChange();
+
     this.loadPublicationStatus.perform();
     if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
+      await this.args.didChange(this.publicationFlow, ['status', 'closingDate', 'statusChange']);
     }
     this.showConfirmWithdraw = false;
   }
@@ -268,5 +274,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'remark');
     }
+  }
+
+  async setStatusChange() {
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: new Date(),
+    });
+    await statusChange.save();
+    this.publicationFlow.statusChange = statusChange;
   }
 }

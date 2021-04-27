@@ -32,6 +32,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
+  @belongsTo('publication-status-change') statusChange;
 
   // Has many .
   @hasMany('numac-number') numacNumbers;
@@ -113,5 +114,15 @@ export default class PublicationFlow extends Model {
       const withdrawnPublications = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.publiceren.url, CONFIG.ACTIVITY_STATUSSES.withdrawn.url);
       return closedPublications + withdrawnPublications;
     });
+  }
+
+  get latestStatusChange() {
+    const statusChanges = this.store.query('publication-status-change', {
+      sort: '-startedAt',
+      filter: {
+        publication: this,
+      },
+    });
+    return statusChanges.get('firstObject');
   }
 }
