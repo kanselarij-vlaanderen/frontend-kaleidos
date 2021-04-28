@@ -8,6 +8,7 @@ import {
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { isBlank } from '@ember/utils';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -23,21 +24,23 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @service toaster;
   @service publicationService;
 
-  // Tracked props.
   @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;
+  @tracked publicationModes;
+  @tracked publicationNumber;
+  @tracked publicationNumberSuffix;
 
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
-  @tracked publicationModes;
 
   constructor() {
     super(...arguments);
     this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
+    this.initializePublicationNumber.perform();
   }
 
   get publicationFlow() {
@@ -56,6 +59,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *loadPublicationStatus() {
     const publicationStatus = yield this.publicationFlow.status;
     return publicationStatus;
+  }
+
+  @task
+  *initializePublicationNumber() {
+    const identification = yield this.publicationFlow.identification;
+    const structuredIdentifier = yield identification.structuredIdentifier;
+    this.publicationNumber = structuredIdentifier.localIdentifier;
+    this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
   }
 
   @action
@@ -115,87 +126,53 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @restartableTask
   *setPublicationNumber(event) {
+    this.publicationNumber = event.target.value;
     yield timeout(1000);
     this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
-    if (event.target.value === '') {
+    if (isBlank(this.publicationNumber)) {
       this.numberIsRequired = true;
       this.toaster.error(this.intl.t('publication-number-required'), this.intl.t('warning-title'), {
         timeOut: 5000,
       });
-      return;
+    } else {
+      this.setStructuredIdentifier();
     }
-    const identification = yield this.publicationFlow.identification;
-    const structuredIdentifier = yield identification.structuredIdentifier;
-    const publicationNumber = structuredIdentifier.localIdentifier;
-    const publicationSuffix = structuredIdentifier.versionIdentifier;
-    this.publicationService.publicationNumberAlreadyTaken(event.target.value, publicationSuffix, this.publicationFlow.id).then((isPublicationNumberTaken) => {
-      if (isPublicationNumberTaken) {
-        this.numberIsAlreadyUsed = true;
-        let suffixText = this.intl.t('without-suffix');
-        if (publicationSuffix && publicationSuffix !== '') {
-          suffixText = `${this.intl.t('with-suffix')} '${publicationSuffix}'`;
-        }
-        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-          number: event.target.value,
-          suffix: suffixText,
-        }), this.intl.t('warning-title'), {
-          timeOut: 20000,
-        });
-        // rollback the value in the view
-        event.target.value = publicationNumber || '';
-      } else {
-        const number = parseInt(event.target.value, 10);
-        structuredIdentifier.localIdentifier = number;
-        identification.idName = `${number} ${publicationSuffix}`;
-        this.numberIsAlreadyUsed = false;
-        if (this.args.didChange) {
-          this.args.didChange(identification, 'idName');
-          this.args.didChange(structuredIdentifier, 'localIdentifier');
-        }
-      }
-    });
   }
 
   @restartableTask
-  *setPublicationSuffix(event) {
+  *setPublicationNumberSuffix(event) {
+    this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
     yield timeout(1000);
+    this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
-    const identification = yield this.publicationFlow.identification;
-    const structuredIdentifier = yield identification.structuredIdentifier;
-    const publicationNumber = structuredIdentifier.localIdentifier;
-    const publicationSuffix = structuredIdentifier.versionIdentifier;
-    this.publicationService.publicationNumberAlreadyTaken(publicationNumber, event.target.value, this.publicationFlow.id).then((isPublicationNumberTaken) => {
-      if (isPublicationNumberTaken) {
-        this.numberIsAlreadyUsed = true;
-        let suffixText = this.intl.t('without-suffix');
-        if (event.target.value !== '') {
-          suffixText = `${this.intl.t('with-suffix')} '${event.target.value}'`;
-        }
-        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-          number: publicationNumber,
-          suffix: suffixText,
-        }), this.intl.t('warning-title'), {
-          timeOut: 20000,
-        });
-        // rollback the value in the view
-        event.target.value = publicationSuffix || '';
-      } else {
-        // TODO trimText here to remove spaces, enters ?
-        if (event.target.value !== '') {
-          structuredIdentifier.versionIdentifier = event.target.value;
-          identification.idName = `${publicationNumber} ${event.target.value}`;
-        } else {
-          structuredIdentifier.versionIdentifier = undefined;
-          identification.idName = `${publicationNumber}`;
-        }
-        this.numberIsAlreadyUsed = false;
-        if (this.args.didChange) {
-          this.args.didChange(identification, 'idName');
-          this.args.didChange(structuredIdentifier, 'versionIdentifier');
-        }
+    this.setStructuredIdentifier();
+  }
+
+  async setStructuredIdentifier() {
+    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix, this.publicationFlow.id);
+    if (isPublicationNumberTaken) {
+      this.numberIsAlreadyUsed = true;
+      this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
+        number: this.publicationNumber,
+        suffix: isBlank(this.publicationNumberSuffix) ? this.intl.t('without-suffix') : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
+      }), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+    } else {
+      const identification = await this.publicationFlow.identification;
+      const structuredIdentifier = await identification.structuredIdentifier;
+      const number = parseInt(this.publicationNumber, 10);
+      structuredIdentifier.localIdentifier = number;
+      structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
+      identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
+      this.numberIsAlreadyUsed = false;
+      if (this.args.didChange) {
+        this.args.didChange(identification, 'idName');
+        this.args.didChange(structuredIdentifier, 'localIdentifier');
+        this.args.didChange(structuredIdentifier, 'versionIdentifier');
       }
-    });
+    }
   }
 
   @task

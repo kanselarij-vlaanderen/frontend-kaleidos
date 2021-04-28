@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
+import { isBlank } from '@ember/utils';
 
 export default class NewPublicationModal extends Component {
   @service publicationService;
@@ -60,7 +61,7 @@ export default class NewPublicationModal extends Component {
       yield this.args.onSave(
         {
           number: this.number,
-          suffix: this.suffix,
+          suffix: isBlank(this.suffix) ? undefined : this.suffix,
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
         });
