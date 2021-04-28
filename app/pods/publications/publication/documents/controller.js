@@ -16,15 +16,12 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  loadId = 0;
-  @tracked isLoaded = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
   @tracked isExpandedPieceView = false;
   @tracked isSavingPieces = false;
   @tracked isExpanded = false;
   @tracked showLoader = false;
-  @tracked filteredSortedPieces = [];
 
   @tracked documentTypes;
   @tracked selectedPieces = [];
@@ -48,7 +45,7 @@ export default class PublicationDocumentsController extends Controller {
   filterQueryParams$documentTypes = [];
 
   get areAllPiecesSelected() {
-    return this.filteredSortedPieces.length === this.selectedPieces.length;
+    return this.model.length === this.selectedPieces.length;
   }
 
   @action
@@ -67,7 +64,7 @@ export default class PublicationDocumentsController extends Controller {
     if (this.areAllPiecesSelected) {
       this.selectedPieces = [];
     } else {
-      this.selectedPieces = [...this.filteredSortedPieces];
+      this.selectedPieces = [...this.model];
     }
   }
 

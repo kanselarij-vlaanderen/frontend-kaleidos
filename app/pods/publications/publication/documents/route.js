@@ -23,7 +23,9 @@ export default class PublicationDocumentsRoute extends Route {
     const modelData = await this._loadModel(this.case, this.filter);
 
     // use array to allow iteration (for sorting)
-    return modelData.toArray();
+    const model = await this.sortAndFilterPieces(modelData.toArray());
+
+    return model;
   }
 
   async _loadModel(_case, filter) {
@@ -63,18 +65,9 @@ export default class PublicationDocumentsRoute extends Route {
   async setupController(controller) {
     super.setupController(...arguments);
 
-    const loadId = controller.loadId;
     controller.case = this.case;
     controller.documentTypes = this.documentTypes;
     controller.filter = new DocumentsFilter(this.filter);
-
-    controller.showLoader = true;
-    const sortedFilteredPieces = await controller.sortAndFilterPieces();
-    if (loadId === controller.loadId) {
-      controller.isLoaded = true;
-      controller.sortedFilteredPieces = sortedFilteredPieces;
-      controller.showLoader = false;
-    }
   }
 
   resetController(controller) {
@@ -82,7 +75,6 @@ export default class PublicationDocumentsRoute extends Route {
     controller.filter.reset();
     controller.selectedPieces = [];
     controller.filteredSortedPices = [];
-    ++controller.loadId;
     controller.isLoaded = false;
     controller.showLoader = false;
   }
