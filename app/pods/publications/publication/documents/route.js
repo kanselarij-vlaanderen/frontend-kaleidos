@@ -61,8 +61,7 @@ export default class PublicationDocumentsRoute extends Route {
     });
   }
 
-  // note: setupController is not awaited by Ember
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
 
     controller.case = this.case;
