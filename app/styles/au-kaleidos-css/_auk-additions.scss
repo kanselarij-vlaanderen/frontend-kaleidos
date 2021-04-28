@@ -225,6 +225,33 @@
 }
 
 
+/* Printable agenda list
+   ========================================================================== */
+
+.auk-printable-agenda-list {
+  //
+}
+
+.auk-printable-agenda-list__item-number,
+.auk-printable-agenda-list__item-letter {
+  min-width: 3rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.auk-printable-agenda-list__item-list {
+  //
+}
+
+.auk-printable-agenda-list__document-list {
+  list-style: none !important;
+}
+
+.auk-printable-agenda-list__item-indented {
+  padding-left: 3rem;
+}
+
+
 /* Utilities
    ========================================================================== */
 
