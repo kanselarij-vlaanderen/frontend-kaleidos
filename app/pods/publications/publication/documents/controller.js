@@ -263,14 +263,16 @@ export default class PublicationDocumentsController extends Controller {
       this.filteredSortedPieces = sortedPieces;
     } else {
       // Filtering of file extensions is not yet possible in the backend, so we do it here.
-      const filteredSortedPieces = [];
-      for (const piece of sortedPieces) {
+      // in parallel
+      const filterResultPromises = sortedPieces.map(async(piece) => {
         if (!await this.filterFileType(piece)) {
-          continue;
+          return undefined;
         }
-        filteredSortedPieces.push(piece);
-      }
+        return piece;
+      });
 
+      const filterResult = await Promise.all(filterResultPromises);
+      const filteredSortedPieces = filterResult.compact();
       this.filteredSortedPieces = filteredSortedPieces;
     }
 
