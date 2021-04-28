@@ -6,7 +6,6 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsController extends Controller {
@@ -17,6 +16,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
+  loadId = 0;
   @tracked isLoaded = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked newPieces = A([]);
@@ -40,6 +40,12 @@ export default class PublicationDocumentsController extends Controller {
 
   @tracked showFilterPanel = true;
   @tracked filter;
+
+  // no @tracked for performance
+  // necessary to make parameter defaults not appear in the url
+  filterQueryParams$documentName = '';
+  filterQueryParams$fileTypes = [];
+  filterQueryParams$documentTypes = [];
 
   get areAllPiecesSelected() {
     return this.filteredSortedPieces.length === this.selectedPieces.length;
@@ -228,44 +234,5 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async onPerformFilter(filter) {
     FilterQueryParams.updateFromFilterAndReload(this, filter);
-  }
-
-  async sortAndFilterPieces() {
-    this.showLoader = true;
-    const sortedPieces = sortPieces(this.model);
-
-    // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (!this.isFilterFileTypeActive()) {
-      this.filteredSortedPieces = sortedPieces;
-    } else {
-      // Filtering of file extensions is not yet possible in the backend, so we do it here.
-      // in parallel
-      const filterResultPromises = sortedPieces.map(async(piece) => {
-        if (!await this.filterFileType(piece)) {
-          return undefined;
-        }
-        return piece;
-      });
-
-      const filterResult = await Promise.all(filterResultPromises);
-      const filteredSortedPieces = filterResult.compact();
-      this.filteredSortedPieces = filteredSortedPieces;
-    }
-
-    this.showLoader = false;
-  }
-
-  isFilterFileTypeActive() {
-    return !!this.filter.fileTypes.length;
-  }
-
-  async filterFileType(piece) {
-    // await since not "include"-ed in query
-    const file = await piece.get('file');
-    const ext = file.extension;
-    if (!ext) {
-      return false;
-    }
-    return this.filter.fileTypes.includes(ext);
   }
 }

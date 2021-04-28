@@ -53,14 +53,10 @@ export default class FilterQueryParams {
     const KEY_DOCUMENT_NAME = this.queryParamMapping.documentName;
     const KEY_FILE_TYPES = this.queryParamMapping.fileTypes;
 
-    const documentTypes = params[KEY_DOCUMENT_TYPES] || [];
-    const documentName = params[KEY_DOCUMENT_NAME] || '';
-    const fileExtensions = params[KEY_FILE_TYPES] || [];
-
     const deserializedParams = {
-      documentTypes: documentTypes,
-      documentName,
-      fileTypes: fileExtensions,
+      documentTypes: params[KEY_DOCUMENT_TYPES],
+      documentName: params[KEY_DOCUMENT_NAME],
+      fileTypes: params[KEY_FILE_TYPES],
     };
 
     return deserializedParams;
