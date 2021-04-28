@@ -14,7 +14,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   }
 
   async afterModel(model) {
-    const subcasesOnMeeting = await this.store.query('subcase', {
+    const subcasesOnMeetingPromise = this.store.query('subcase', {
       filter: {
         case: {
           // cannot access yet without get(...)
@@ -26,8 +26,10 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'mandatees',
     });
 
-    await this.store.query('publication-status', {});
-    await this.store.query('regulation-type', {});
+    const publicationStatusPromise = this.store.query('publication-status', {});
+    const regulationTypePromise = this.store.query('regulation-type', {});
+
+    const [subcasesOnMeeting] = await Promise.all([subcasesOnMeetingPromise, publicationStatusPromise, regulationTypePromise]);
 
     this.subcasesOnMeeting = subcasesOnMeeting;
   }
