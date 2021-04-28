@@ -1,68 +1,34 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
+import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
   @inject fileService;
 
-  queryParams = FilterQueryParams.queryParams;
-
-  controllerArgs = {}
+  queryParams = {
+    ...FilterQueryParams.queryParams,
+  };
 
   async model(params) {
     // caching for use in QueryParams.queryParamsToFilter
     // and use them in DocumentsFilterComponent
-    const documentTypes = await this._loadDocumentTypes();
+    this.documentTypes = await this._loadDocumentTypes();
+    this.filter = await FilterQueryParams.readToFilter(this.store, params);
+    this.case  = this.modelFor('publications.publication').case;
 
-    const filter = await FilterQueryParams.readToFilter(this.store, params);
-
-    const parentHash = this.modelFor('publications.publication');
-    const _case = parentHash.case;
-
-    const modelData = await this._loadModel(_case, filter);
-
-    this.controllerArgs.case = _case;
-    this.controllerArgs.documentTypes = documentTypes;
-    this.controllerArgs.filter = filter;
+    const modelData = await this._loadModel(this.case, this.filter);
 
     // use array to allow iteration (for sorting)
     return modelData.toArray();
   }
 
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.setup(
-      {
-        _case: this.controllerArgs.case,
-        documentTypes: this.controllerArgs.documentTypes,
-      },
-      this.controllerArgs.filter
-    );
-  }
-
-  resetController(controller) {
-    controller.reset();
-  }
-
-  @action
-  refresh() {
-    super.refresh();
-  }
-
-  async _loadDocumentTypes() {
-    return await this.store.query('document-type', {
-      page: {
-        size: 50,
-      },
-      sort: 'priority',
-    });
-  }
-
   async _loadModel(_case, filter) {
-    const storeQueryFilter = {};
-    storeQueryFilter['filter[cases][:id:]'] = _case.get('id');
+    const storeQueryFilter = {
+      'filter[cases][:id:]': _case.id,
+    };
     if (filter.documentTypes.length) {
       storeQueryFilter['filter[document-container][type][:id:]'] = filter.documentTypes.map((it) => it.id).join(',');
     }
@@ -77,10 +43,41 @@ export default class PublicationDocumentsRoute extends Route {
 
     const modelData = await this.store.query('piece', {
       include: 'cases,document-container,document-container.type',
-      reload: true,
       ...storeQueryFilter,
     });
 
     return modelData;
+  }
+
+  async _loadDocumentTypes() {
+    return await this.store.query('document-type', {
+      page: {
+        size: 50,
+      },
+      sort: 'priority',
+    });
+  }
+
+  // note: setupController is not awaited by Ember
+  async setupController(controller) {
+    super.setupController(...arguments);
+    controller.case = this.case;
+    controller.documentTypes = this.documentTypes;
+    controller.filter = new DocumentsFilter(this.filter);
+    await controller.sortAndFilterPieces();
+    controller.isLoaded = true;
+  }
+
+  resetController(controller) {
+    controller.newPieces = [];
+    controller.filter.reset();
+    controller.selectedPieces = [];
+    controller.filteredSortedPices = [];
+    controller.isLoaded = false;
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }

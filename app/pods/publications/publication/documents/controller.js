@@ -6,7 +6,6 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import FilterQueryParams from './filter-query-params';
 
@@ -41,29 +40,6 @@ export default class PublicationDocumentsController extends Controller {
 
   @tracked showFilterPanel = true;
   @tracked filter;
-  // It would be cleaner in a separate object, but Ember requires the queryParams on the controller
-  // no @tracked for performance
-  filterQueryParams$documentName = '';
-  filterQueryParams$fileTypes = '';
-  filterQueryParams$documentTypes = '';
-
-  // eslint-disable-next-line object-curly-newline
-  async setup({ _case, documentTypes, }, filter) {
-    this.case = _case;
-    this.documentTypes = documentTypes;
-    this.newPieces = [];
-
-    this.filter = new DocumentsFilter(filter);
-    await this.sortAndFilterPieces();
-
-    this.isLoaded = true;
-  }
-
-  // called from route (to share logic)
-  reset() {
-    this._resetFilterState();
-    this.isLoaded = false;
-  }
 
   get areAllPiecesSelected() {
     return this.filteredSortedPieces.length === this.selectedPieces.length;
@@ -291,10 +267,5 @@ export default class PublicationDocumentsController extends Controller {
       return false;
     }
     return this.filter.fileTypes.includes(ext);
-  }
-
-  _resetFilterState() {
-    this.filter.reset();
-    this.selectedPieces = [];
   }
 }
