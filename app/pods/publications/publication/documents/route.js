@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject } from '@ember/service';
 import FilterQueryParams from './filter-query-params';
 
@@ -26,7 +27,7 @@ export default class PublicationDocumentsRoute extends Route {
     this.controllerArgs.documentTypes = documentTypes;
     this.controllerArgs.filter = filter;
 
-    // use array to allow add/delete
+    // use array to allow iteration (for sorting)
     return modelData.toArray();
   }
 
@@ -43,6 +44,11 @@ export default class PublicationDocumentsRoute extends Route {
 
   resetController(controller) {
     controller.reset();
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 
   async _fetchDocumentTypes() {

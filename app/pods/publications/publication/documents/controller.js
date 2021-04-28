@@ -56,6 +56,7 @@ export default class PublicationDocumentsController extends Controller {
     await this.sortAndFilterPieces();
 
     this.isLoaded = true;
+    this.newPieces = [];
   }
 
   // called from route (to share logic)
@@ -135,9 +136,7 @@ export default class PublicationDocumentsController extends Controller {
     this.showLoader = true;
     this.isOpenPieceUploadModal = false;
     yield all(savePromises);
-    yield this.sortAndFilterPieces();
-    this.showLoader = false;
-    this.newPieces = A();
+    this.send('refresh');
   }
 
   /**
@@ -203,7 +202,7 @@ export default class PublicationDocumentsController extends Controller {
     await this.pieceBeingEdited.save();
     const dc = await this.pieceBeingEdited.get('documentContainer');
     await dc.save();
-    this.showLoader = false;
+    this.send('refresh');
   }
 
   @action
@@ -231,10 +230,7 @@ export default class PublicationDocumentsController extends Controller {
       } else {
         yield this.fileService.deletePiece(this.pieceToDelete);
       }
-      this.model.removeObject(this.pieceToDelete);
-      yield this.sortAndFilterPieces();
-      this.showLoader = false;
-      this.pieceToDelete = null;
+      this.send('refresh');
     }
   }
 
