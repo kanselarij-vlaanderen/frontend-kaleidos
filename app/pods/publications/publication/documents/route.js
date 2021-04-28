@@ -14,14 +14,14 @@ export default class PublicationDocumentsRoute extends Route {
   async model(params) {
     // caching for use in QueryParams.queryParamsToFilter
     // and use them in DocumentsFilterComponent
-    const documentTypes = await this._fetchDocumentTypes();
+    const documentTypes = await this._loadDocumentTypes();
 
     const filter = await FilterQueryParams.readToFilter(this.store, params);
 
     const parentHash = this.modelFor('publications.publication');
     const _case = parentHash.case;
 
-    const modelData = await this._fetchModel(_case, filter);
+    const modelData = await this._loadModel(_case, filter);
 
     this.controllerArgs.case = _case;
     this.controllerArgs.documentTypes = documentTypes;
@@ -51,7 +51,7 @@ export default class PublicationDocumentsRoute extends Route {
     super.refresh();
   }
 
-  async _fetchDocumentTypes() {
+  async _loadDocumentTypes() {
     return await this.store.query('document-type', {
       page: {
         size: 50,
@@ -60,7 +60,7 @@ export default class PublicationDocumentsRoute extends Route {
     });
   }
 
-  async _fetchModel(_case, filter) {
+  async _loadModel(_case, filter) {
     const storeQueryFilter = {};
     storeQueryFilter['filter[cases][:id:]'] = _case.get('id');
     if (filter.documentTypes.length) {
