@@ -51,12 +51,12 @@ export default class PublicationDocumentsController extends Controller {
   async setup({ _case, documentTypes, }, filter) {
     this.case = _case;
     this.documentTypes = documentTypes;
+    this.newPieces = [];
 
     this.filter = new DocumentsFilter(filter);
     await this.sortAndFilterPieces();
 
     this.isLoaded = true;
-    this.newPieces = [];
   }
 
   // called from route (to share logic)
