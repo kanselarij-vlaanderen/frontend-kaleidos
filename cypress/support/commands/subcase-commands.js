@@ -328,19 +328,15 @@ function proposeSubcaseForAgenda(agendaDate) {
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
-  cy.get('.auk-navbar').within(() => {
-    cy.get('.auk-button', {
-      timeout: 12000,
-    }).should('have.length', 2);
-    cy.get('.auk-button').contains('Indienen voor agendering')
-      .should('exist')
-      .click();
-  });
+  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
+    .contains('Indienen voor agendering')
+    .should('exist')
+    .click();
 
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
-  cy.contains('Indienen voor agendering')
+  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
     .should('not.exist');
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
@@ -366,10 +362,10 @@ function proposeSubcaseForAgenda(agendaDate) {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get('.auk-button')
+  cy.get(cases.subcaseHeader.actionsDropdown)
     .contains('Acties')
     .click();
-  cy.get(cases.deleteSubcase)
+  cy.get(cases.subcaseHeader.actions.deleteSubcase)
     .contains('Procedurestap verwijderen')
     .click();
 
