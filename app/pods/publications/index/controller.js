@@ -25,7 +25,7 @@ export default class PublicationsIndexController extends Controller {
   page = 0;
   size = 25;
   sort = '-created';
-  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+  sizeOptions = [10, 25, 50, 100, 200];
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
