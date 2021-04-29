@@ -55,7 +55,7 @@ context('Create case as Admin user', () => {
     // TODO testing without title is done in next it, DUPLICATE test
     cy.get(modal.publication.alertError).should('be.visible');
     cy.get(modal.publication.alertError).contains('Kijk het formulier na');
-    cy.get('.vlc-input-field-block').eq(1)
+    cy.get('.auk-form-group').eq(1)
       .within(() => {
         cy.get('.auk-textarea').click()
           .clear()

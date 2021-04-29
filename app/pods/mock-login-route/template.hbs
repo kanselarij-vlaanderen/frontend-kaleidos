@@ -26,9 +26,9 @@
                 {{/if}}
                 <ul>
                   {{#login.each-account accounts=model as |account|}}
-                    <BlockLink>
+                    <div class="auk-block-link">
                       {{account.user.firstName}} {{account.user.lastName}}
-                    </BlockLink>
+                    </div>
                   {{/login.each-account}}
                 </ul>
                 {{number-pagination

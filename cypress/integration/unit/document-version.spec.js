@@ -199,7 +199,7 @@ context('Tests for KAS-1076', () => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', files.length);
     });
-    cy.get('.vlc-backlink').click();
+    cy.get('.auk-tabs__hierarchical-back > a').click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';

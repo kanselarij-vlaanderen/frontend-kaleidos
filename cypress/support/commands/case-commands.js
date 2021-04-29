@@ -19,13 +19,13 @@ function createCase(confidential, shortTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
-  cy.get('.vlc-page-header .auk-button')
+  cy.get('.auk-navbar .auk-button')
     .contains('Nieuw dossier aanmaken')
     .click();
 
   cy.get('.auk-modal').as('dialog')
     .within(() => {
-      cy.get('.vlc-input-field-block').as('newCaseForm')
+      cy.get('.auk-form-group').as('newCaseForm')
         .should('have.length', 2);
     });
 
@@ -83,11 +83,11 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   cy.wait(2000);
 
-  cy.get('.vlc-page-header .auk-button')
+  cy.get('.auk-navbar .auk-button')
     .contains('Procedurestap toevoegen')
     .click();
 
-  cy.get('.vlc-input-field-block').should('have.length', 4);
+  cy.get('.auk-form-group').should('have.length', 4);
 
   // Set the type
   if (type) {
@@ -100,7 +100,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the short title
   if (newShortTitle) {
-    cy.get('.vlc-input-field-block').eq(0)
+    cy.get('.auk-form-group').eq(0)
       .within(() => {
         cy.get('.auk-textarea').click()
           .clear()
@@ -110,7 +110,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the long title
   if (longTitle) {
-    cy.get('.vlc-input-field-block').eq(1)
+    cy.get('.auk-form-group').eq(1)
       .within(() => {
         cy.get('.auk-textarea').click()
           .clear()
@@ -120,7 +120,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step type
   if (step) {
-    cy.get('.vlc-input-field-block').eq(2)
+    cy.get('.auk-form-group').eq(2)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
@@ -140,7 +140,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 
   // Set the step name
   if (stepName) {
-    cy.get('.vlc-input-field-block').eq(3)
+    cy.get('.auk-form-group').eq(3)
       .within(() => {
         cy.get('.ember-power-select-trigger').click();
       });
