@@ -33,8 +33,4 @@ export default class PowerSelect extends Component {
     }
     return null;
   }
-
-  get disabled() {
-    return !!this.args.disabled;
-  }
 }
