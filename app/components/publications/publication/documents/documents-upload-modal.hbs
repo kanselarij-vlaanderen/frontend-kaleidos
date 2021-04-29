@@ -1,0 +1,46 @@
+<WebComponents::AuModal @resized={{this.isExpanded}}>
+  <WebComponents::AuModal::Header
+    @resizeable={{true}}
+    @title={{t "documents-add"}}
+    @changeIcon={{this.isExpanded}}
+    @toggleSize={{this.toggleSize}}
+    @closeModal={{perform this.cancelUploadPieces}}
+  />
+  <WebComponents::AuModal::Body>
+    {{#if this.savePieces.isRunning}}
+      <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+    {{else}}
+      <WebComponents::AuFileUploader
+        @fullHeight={{eq this.newPieces.length 0}}
+        @multipleFiles={{true}}
+        @uploadedFileAction={{this.uploadPiece}}
+      />
+      {{! TODO vervangen met correct design (nog in flux), au css en componenten }}
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @onDelete={{perform this.deleteUploadedPiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </WebComponents::AuModal::Body>
+  <WebComponents::AuModal::Footer
+    @cancelModal={{perform this.cancelUploadPieces}}
+  >
+    {{#if this.savePieces.isRunning}}
+      <Utils::SimpleSpinner />
+    {{else}}
+      <WebComponents::AuButton
+        data-test-au-modal-footer-save
+        @skin="primary"
+        @disabled={{eq this.newPieces.length 0}}
+        {{on "click" (perform this.savePieces)}}
+      >
+        {{t "documents-add"}}
+      </WebComponents::AuButton>
+    {{/if}}
+  </WebComponents::AuModal::Footer>
+</WebComponents::AuModal>
