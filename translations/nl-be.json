@@ -816,5 +816,6 @@
   "type": "Type",
   "archive": "Archief",
   "not-entered-yet": "Nog niet ingevuld",
-  "withdrawn-on": "Ingetrokken op"
+  "withdrawn-on": "Afgevoerd op",
+  "paused-on": "Gepauzeerd op"
 }

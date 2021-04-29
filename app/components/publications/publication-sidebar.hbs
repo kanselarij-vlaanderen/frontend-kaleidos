@@ -40,22 +40,21 @@
 
           {{!-- Status --}}
           <Publications::PublicationStatusSelector
-                  @publicationStatusChange={{this.publicationStatusChange}}
-                  @publicationStatus={{this.publicationStatus}}
-                  @onChange={{this.selectPublicationStatus}}
+            @publicationStatus={{this.publicationStatus}}
+            @onChange={{this.selectPublicationStatus}}
           />
 
-          {{!-- TODO: do the same for isPaused --}}
-          {{#if this.publicationStatus.isWithdrawn}}
+          {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
             <div class="auk-form-group">
               <WebComponents::AuLabel>
-                {{t "withdrawn-on"}}
+                {{#if this.publicationStatus.isWithdrawn}}
+                  {{t "withdrawn-on"}}
+                {{else if this.publicationStatus.isPaused}}
+                  {{t "paused-on"}}
+                {{/if}}
               </WebComponents::AuLabel>
               <div class="auk-u-muted">
-                {{moment-format
-                    this.publicationFlow.closingDate
-                    "DD-MM-YYYY"
-                }}
+                {{moment-format this.publicationStatusChange.startedAt "DD-MM-YYYY \o\m HH:mm"}}
               </div>
             </div>
           {{/if}}
