@@ -81,19 +81,34 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  async setPublicationStatus(status) {
+  async selectPublicationStatus(status) {
     if (status.isWithdrawn) {
       this.showConfirmWithdraw = true;
     } else {
-      this.publicationFlow.status = status;
-      this.loadPublicationStatus.perform();
-      this.publicationFlow.closingDate = status.isPublished ? new Date() : null;
+      this.setPublicationStatus(status);
+    }
+  }
 
-      await this.setPublicationStatusChange();
-
-      if (this.args.didChange) {
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
-      }
+  @action
+  async setPublicationStatus(status) {
+    const now = new Date();
+    this.publicationFlow.status = status;
+    this.loadPublicationStatus.perform();
+    if (status.isPublished || status.isWithdrawn) {
+      this.publicationFlow.closingDate = now;
+    } else {
+      this.publicationFlow.closingDate = null;
+    }
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: now,
+      publication: this.publicationFlow,
+    });
+    if (this.args.didChange) {
+      await Promise.all([
+        this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
+        this.args.didChange(statusChange)
+      ]);
+      return status;
     }
   }
 
@@ -104,15 +119,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    this.publicationFlow.status = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
-    this.publicationFlow.closingDate = new Date();
-
-    await this.setPublicationStatusChange();
-
-    this.loadPublicationStatus.perform();
-    if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
-    }
+    const withdrawn = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
+    await this.setPublicationStatus(withdrawn);
     this.showConfirmWithdraw = false;
   }
 
@@ -270,18 +278,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     yield timeout(1000);
     if (this.args.didChange) {
       this.args.didChange(this.publicationFlow, 'remark');
-    }
-  }
-
-  async setPublicationStatusChange() {
-    const publicationStatusChange = this.store.createRecord('publication-status-change', {
-      startedAt: new Date(),
-      publication: this.publicationFlow,
-    });
-
-    this.publicationFlow.publicationStatusChange = publicationStatusChange;
-    if (this.args.didChange) {
-      await this.args.didChange(publicationStatusChange);
     }
   }
 }

@@ -39,7 +39,7 @@
           <Publications::PublicationStatusSelector
                   @publicationStatusChange={{@publicationFlow.publicationStatusChange}}
                   @publicationStatus={{this.publicationStatus}}
-                  @onChange={{this.setPublicationStatus}}
+                  @onChange={{this.selectPublicationStatus}}
           />
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
