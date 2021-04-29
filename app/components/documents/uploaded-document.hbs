@@ -7,13 +7,13 @@
   @delete={{@onDelete}}>
   {{#if @allowDocumentContainerEdit}}
     <div class="metadata-container">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "document-name"}}</WebComponents::AuLabel>
         <WebComponents::VlFormInput
           @value={{mut @piece.name}} />
       </div>
       {{#unless this.loadData.isRunning}}
-        <div class="vlc-input-field-block">
+        <div class="auk-form-group">
           <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
           <Utils::RadioDropdownComboSelect
             @options={{this.sortedDocumentTypes}}
