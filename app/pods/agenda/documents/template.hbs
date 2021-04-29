@@ -56,7 +56,7 @@
             @uploadedFileAction={{this.uploadPiece}} />
           <div class="upload-container">
             {{#each this.newPieces as |piece|}}
-              <Documents::DocumentUpload
+              <Documents::UploadedDocument
                 @piece={{piece}}
                 @allowDocumentContainerEdit={{true}}
                 @onDelete={{perform this.deletePiece piece}} />
