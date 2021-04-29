@@ -91,7 +91,7 @@ function addPublicationDocuments(files) {
         .eq(index)
         .within(() => {
           if (file.newFileName) {
-            cy.get('.vlc-input-field-block').eq(0)
+            cy.get('.auk-form-group').eq(0)
               .within(() => {
                 cy.get('.auk-input').clear()
                   .type(file.newFileName);

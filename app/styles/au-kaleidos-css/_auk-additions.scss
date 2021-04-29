@@ -181,6 +181,38 @@
 }
 
 
+/* Block-link (to be removed in favor of list element)
+   ========================================================================== */
+
+.auk-block-link {
+  padding: 1.5rem;
+  border: .1rem solid $au-gray-300;
+  text-decoration: none;
+  color: $au-gray-800;
+  margin: 0 0 1.5rem;
+  display: block;
+
+  &:hover {
+    background: $au-gray-100;
+    border-color: $au-gray-500;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: $au-yellow-400;
+    box-shadow: inset 0 0 0 0.1rem $au-yellow-400;
+  }
+}
+
+
+/* Form-group: power-select alternative (to be removed)
+   ========================================================================== */
+
+.auk-form-group--power-select {
+  width: 23rem;
+}
+
+
 /* Utilities
    ========================================================================== */
 
@@ -192,6 +224,10 @@
   &::first-letter {
     text-transform: uppercase;
   }
+}
+
+.auk-u-text-condensed-line-height { // (to be removed)
+  line-height: 1.2 !important;
 }
 
 .auk-u-text-success {

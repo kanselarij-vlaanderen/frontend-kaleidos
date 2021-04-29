@@ -1,10 +1,12 @@
 <div class="auk-toolbar-complex">
   <div class="auk-toolbar-complex__left">
     <div class="auk-toolbar-complex__item">
-      <h1 class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width auk-u-text-capitalize auk-u-pb">
-        {{subcase.shortTitle}}
-      </h1>
-      <Subcases::SubcaseDetailNav/>
+      <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
+        <div class="auk-u-flex auk-u-flex--vertical-center">
+          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{subcase.shortTitle}}</h4>
+        </div>
+        <Subcases::SubcaseDetailNav/>
+      </div>
     </div>
   </div>
   <div class="auk-toolbar-complex__right">
@@ -13,7 +15,9 @@
         {{#if (or (is-pending canPropose) isLoading)}}
           <div class="auk-loader" role="alert" aria-busy="true"></div>
         {{else if (await canPropose)}}
-          <button type="button" class="auk-button auk-button--primary">
+          <button type="button"
+            data-test-subcase-header-action-propose-for-agenda
+            class="auk-button auk-button--primary">
             {{t "propose-for-agenda"}}
           </button>
           {{#attach-popover
@@ -58,6 +62,7 @@
       </div>
       <div class="auk-toolbar-complex__item">
         <button type="button"
+          data-test-subcase-header-actions-dropdown
           class="auk-button auk-button--secondary"
           {{action "showMultipleOptions" bubbles=false}}
         >
@@ -86,7 +91,7 @@
               {{#if (await canDelete)}}
                 <li class="vlc-dropdown-menu__item">
                   <a href="" class="auk-button-link"
-                     data-test-delete-subcase
+                    data-test-subcase-header-action-delete-subcase
                     {{action attacher.hide}}
                     {{action "requestDeleteSubcase" subcase}}
                   >
@@ -96,7 +101,8 @@
               {{/if}}
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                   class="auk-button-link auk-button-link--block"
+                  data-test-subcase-header-action-move-subcase
+                  class="auk-button-link auk-button-link--block"
                   {{action attacher.hide}}
                   {{action "triggerMoveSubcaseDialog" }}
                 >

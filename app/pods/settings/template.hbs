@@ -1,36 +1,32 @@
 {{page-title (t "settings")}}
 <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-  <div class="auk-u-bg-alt">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
-              <ul class="auk-tabs">
-                <li class="auk-tabs__tab" data-test-settings-generalSettings>
-                  {{#link-to
-                    "settings.overview"
-                  }}
-                    <span class="auk-tabs__tab-inner">{{t "general-settings"}}</span>
-                  {{/link-to}}
-                </li>
-                <li class="auk-tabs__tab" data-test-settings-manageMinisters>
-                  {{#link-to
-                    "settings.ministers"
-                  }}
-                    <span class="auk-tabs__tab-inner">{{t "manage-ministers"}}</span>
-                  {{/link-to}}
-                </li>
-                <li class="auk-tabs__tab" data-test-settings-manageUsers>
-                  {{#link-to
-                    "settings.users"
-                  }}
-                    <span class="auk-tabs__tab-inner">{{t "manage-users"}}</span>
-                  {{/link-to}}
-                </li>
-              </ul>
-            </div>
-          </div>
+  <div class="auk-navbar auk-navbar--bordered-bottom">
+    <div class="auk-toolbar-complex">
+      <div class="auk-toolbar-complex__left">
+        <div class="auk-toolbar-complex__item">
+          <ul class="auk-tabs">
+            <li class="auk-tabs__tab" data-test-settings-generalSettings>
+              {{#link-to
+                "settings.overview"
+              }}
+                <span class="auk-tabs__tab-inner">{{t "general-settings"}}</span>
+              {{/link-to}}
+            </li>
+            <li class="auk-tabs__tab" data-test-settings-manageMinisters>
+              {{#link-to
+                "settings.ministers"
+              }}
+                <span class="auk-tabs__tab-inner">{{t "manage-ministers"}}</span>
+              {{/link-to}}
+            </li>
+            <li class="auk-tabs__tab" data-test-settings-manageUsers>
+              {{#link-to
+                "settings.users"
+              }}
+                <span class="auk-tabs__tab-inner">{{t "manage-users"}}</span>
+              {{/link-to}}
+            </li>
+          </ul>
         </div>
       </div>
     </div>

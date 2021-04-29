@@ -40,9 +40,9 @@
 
           {{!-- Status --}}
           <Publications::PublicationStatusSelector
+                  @publicationStatusChange={{this.publicationStatusChange}}
                   @publicationStatus={{this.publicationStatus}}
-                  @onChange={{this.setPublicationStatus}}
-                  @disabled={{or this.publicationStatus.isPublished this.publicationStatus.isWithdrawn}}
+                  @onChange={{this.selectPublicationStatus}}
           />
 
           {{!-- TODO: do the same for isPaused --}}

@@ -8,36 +8,36 @@
   }}
 {{/if}}
 <div class="auk-modal__content">
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=title}}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=nickName}}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
     {{utils/create-person-selector
       selectedItems=mandateeToEdit.person
       selectModel=(action "personSelected")
     }}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
     {{web-components/vl-datepicker
       selectedDate=startDate
       dateChanged=(action "selectStartDate")
     }}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
     {{web-components/vl-datepicker
       selectedDate=endDate
       dateChanged=(action "selectEndDate")
     }}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
     {{utils/model-selector
       data-test-model-selector-iseCodes=true

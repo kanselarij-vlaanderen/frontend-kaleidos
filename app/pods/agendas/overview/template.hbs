@@ -18,147 +18,142 @@
         }}
       {{/if}}
 
-
       <div class="auk-u-mb-8">
-        <div class="auk-u-mb-8">
-          <div class="auk-u-flex auk-u-flex--justify-between">
-            <h2 class="auk-h3">
-              {{t "history"}}
-              {{#if (or from to)}}
-                (
-                {{moment-format from "DD-MM-YYYY"}}
-                -
-                {{moment-format to "DD-MM-YYYY"}}
-                )
-              {{/if}}
-            </h2>
-            <div class="auk-u-mb-2">
-              <div class="vlc-input-field-group-wrapper vlc-input-field-group-wrapper--inline"
-              >
-                <div class="vlc-input-field-group vlc-input-field-group--gmeeting"
-                >
-                  {{input
-                    type="text"
-                    id=id
-                    data-test-agendas-filter-input=true
-                    class="auk-input"
-                    value=dateFilter
-                    placeholder="bv. 01/2020"
-                  }}
-                </div>
-                <div class="vlc-input-field-group">
-                  <button class="auk-button auk-button--secondary auk-button--icon"
-                    type="submit"
-                    data-test-agendas-filter-button
-                    onclick={{action "setDateFilter" dateFilter}}
-                  >
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-search"></i>
-                    </div>
-                  </button>
-                </div>
-              </div>
+        <div class="auk-toolbar-complex">
+          <div class="auk-toolbar-complex__left">
+            <div class="auk-toolbar-complex__item">
+              <h2 class="auk-h3">
+                {{t "history"}}
+                {{#if (or from to)}}
+                  (
+                  {{moment-format from "DD-MM-YYYY"}}
+                  -
+                  {{moment-format to "DD-MM-YYYY"}}
+                  )
+                {{/if}}
+              </h2>
             </div>
           </div>
-          <div class="auk-u-mb-8">
-            {{#if (await model)}}
-              {{#data-table
-                content=(await model)
-                class="auk-table auk-table--striped auk-table--no-scroll"
-                page=page
-                size=size
-                sort=sort
-                isLoading=isLoadingModel
-                noDataMessage=(t "no-results-found")
-                onClickRow=(action "onClickRow")
-              as |table|
+          <div class="auk-toolbar-complex__right">
+            <div class="auk-toolbar-complex__item" data-test-agendas-filter data-children-count="1">
+              {{input
+                type="text"
+                id=id
+                data-test-agendas-filter-input=true
+                class="auk-input"
+                value=dateFilter
+                placeholder="bv. 01/2020"
               }}
-                {{#table.content as |c|}}
-                  {{#c.header}}
-                    {{th-sortable
-                      class="auk-table__col--3 auk-table__header-title"
-                      currentSorting=sort
-                      field="planned-start,number-representation"
-                      label=(t "agenda")
-                    }}
-                    {{th-sortable
-                      class="auk-table__col--2 auk-table__header-title"
-                      field="agendas"
-                      label=(t "agenda-version")
-                    }}
-                    <th
-                      class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
-                    >
-                      {{t "latest-modified"}}
-                    </th>
-                    {{th-sortable
-                      class="auk-table__col--2 auk-table__header-title"
-                      currentSorting=sort
-                      field="is-final"
-                      label=(t "status")
-                    }}
-                    {{th-sortable
-                      class="auk-table__col--2 auk-table__header-title"
-                      currentSorting=sort
-                      field="kind"
-                      label=(t "kind")
-                    }}
-                    <th class="auk-table__col--1"></th>
-                  {{/c.header}}
-                  {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
-                    {{#if (not meeting.alreadyShown)}}
-                      <td>
-                        {{t "agenda-for"}}
-                        {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
-                      </td>
-                      <td>
-                        {{await meeting.latestAgendaName}}
-                      </td>
-                      <td>
-                        {{#if (is-pending meeting.latestAgenda)}}
-                          <div class="skeletal-loader"
-                               role="alert"
-                               aria-busy="true"
-                          ></div>
-                        {{else}}
-                          {{moment-format
-                            (await meeting.latestAgenda.modified)
-                            "DD-MM-YYYY HH:mm"
-                          }}
-                        {{/if}}
-                      </td>
-                      <td>
-                        {{#if meeting.isFinal}}
-                          {{t "closed"}}
-                        {{else}}
-                          {{t "opened"}}
-                        {{/if}}
-                      </td>
-                      <td>
-                        {{meeting.kindToShow.label}}
-                      </td>
-                      <td class="auk-u-text-align--center">
-                        {{#link-to
-                          "agenda.agendaitems"
-                          meeting.id
-                          (await meeting.latestAgenda.id)
-                          class="auk-button auk-button--borderless auk-button--icon"
-                        }}
-                          <div class="auk-icon auk-icon--default">
-                            <i class="ki ki-nav-right"></i>
-                          </div>
-                        {{/link-to}}
-                      </td>
-                    {{/if}}
-                  {{/c.body}}
-                {{/table.content}}
-              {{/data-table}}
-            {{else}}
-              <div>
-                {{web-components/vl-alert message=(t "no-historical-agenda")}}
-              </div>
-            {{/if}}
+              <button class="auk-button auk-button--secondary auk-button--icon"
+                type="submit"
+                data-test-agendas-filter-button
+                onclick={{action "setDateFilter" dateFilter}}
+              >
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-search"></i>
+                </div>
+              </button>
+            </div>
           </div>
+        </div>
+        <div class="auk-u-mb-8">
+          {{#if (await model)}}
+            {{#data-table
+              content=(await model)
+              class="auk-table auk-table--striped auk-table--no-scroll"
+              page=page
+              size=size
+              sort=sort
+              isLoading=isLoadingModel
+              noDataMessage=(t "no-results-found")
+              onClickRow=(action "onClickRow")
+            as |table|
+            }}
+              {{#table.content as |c|}}
+                {{#c.header}}
+                  {{th-sortable
+                    class="auk-table__col--3 auk-table__header-title"
+                    currentSorting=sort
+                    field="planned-start,number-representation"
+                    label=(t "agenda")
+                  }}
+                  {{th-sortable
+                    class="auk-table__col--2 auk-table__header-title"
+                    field="agendas"
+                    label=(t "agenda-version")
+                  }}
+                  <th
+                    class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
+                  >
+                    {{t "latest-modified"}}
+                  </th>
+                  {{th-sortable
+                    class="auk-table__col--2 auk-table__header-title"
+                    currentSorting=sort
+                    field="is-final"
+                    label=(t "status")
+                  }}
+                  {{th-sortable
+                    class="auk-table__col--2 auk-table__header-title"
+                    currentSorting=sort
+                    field="kind"
+                    label=(t "kind")
+                  }}
+                  <th class="auk-table__col--1"></th>
+                {{/c.header}}
+                {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
+                  {{#if (not meeting.alreadyShown)}}
+                    <td>
+                      {{t "agenda-for"}}
+                      {{moment-format meeting.plannedStart "DD.MM.YYYY"}}
+                    </td>
+                    <td>
+                      {{await meeting.latestAgendaName}}
+                    </td>
+                    <td>
+                      {{#if (is-pending meeting.latestAgenda)}}
+                        <div class="skeletal-loader"
+                              role="alert"
+                              aria-busy="true"
+                        ></div>
+                      {{else}}
+                        {{moment-format
+                          (await meeting.latestAgenda.modified)
+                          "DD-MM-YYYY HH:mm"
+                        }}
+                      {{/if}}
+                    </td>
+                    <td>
+                      {{#if meeting.isFinal}}
+                        {{t "closed"}}
+                      {{else}}
+                        {{t "opened"}}
+                      {{/if}}
+                    </td>
+                    <td>
+                      {{meeting.kindToShow.label}}
+                    </td>
+                    <td class="auk-u-text-align--center">
+                      {{#link-to
+                        "agenda.agendaitems"
+                        meeting.id
+                        (await meeting.latestAgenda.id)
+                        class="auk-button auk-button--borderless auk-button--icon"
+                      }}
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-nav-right"></i>
+                        </div>
+                      {{/link-to}}
+                    </td>
+                  {{/if}}
+                {{/c.body}}
+              {{/table.content}}
+            {{/data-table}}
+          {{else}}
+            <div>
+              {{web-components/vl-alert message=(t "no-historical-agenda")}}
+            </div>
+          {{/if}}
         </div>
       </div>
     </div>
