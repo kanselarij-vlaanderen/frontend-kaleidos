@@ -67,7 +67,6 @@
                                             @isSearchable={{false}}
                                             @onchange={{this.setRegulationType}}
                                             @selected={{@publicationFlow.regulationType}}
-                                            @disabled={{this.publicationStatus.isPublished}}
               />
             </div>
           {{/unless}}
@@ -80,7 +79,6 @@
                                             @isSearchable={{false}}
                                             @onchange={{this.setPublicationMode}}
                                             @selected={{this.publicationFlow.mode}}
-                                            @disabled={{this.publicationStatus.isPublished}}
               />
             </div>
           {{/unless}}
