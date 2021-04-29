@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
+import { all } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -65,14 +66,20 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @task
-  *onSavePiecesTask(pieces) {
-    this.case.pieces.pushObjects(pieces);
-    yield this.case.save();
+  *saveAndLinkPieces(pieces) {
+    const savePromises = pieces.map(async(piece) => {
+      piece.cases = [this.case];
+      const documentContainer = await piece.documentContainer;
+      await documentContainer.save();
+      return piece.save();
+    });
+    yield all(savePromises);
     this.showPieceUploadModal = false;
+    this.send('refresh'); // only required because of "inverse: null" on piece-cases relationship.
   }
 
   @action
-  onCancel() {
+  hidePieceUploadModal() {
     this.showPieceUploadModal = false;
   }
 

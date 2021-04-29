@@ -175,7 +175,8 @@
 
   {{#if this.showPieceUploadModal}}
     <Publications::Publication::Documents::DocumentsUploadModal
-      @onSaveTask={{this.onSavePiecesTask}} @onCancel={{this.onCancel}} />
+      @onSave={{perform this.saveAndLinkPieces}}
+      @onCancel={{this.hidePieceUploadModal}} />
   {{/if}}
 
 
