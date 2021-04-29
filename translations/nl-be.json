@@ -669,6 +669,7 @@
   "table-previous-with-arrow": "< Vorige",
   "table-next-with-arrow": "Volgende >",
   "publication-flow": "Publicatie",
+  "publication-status-change": "Publicatie status wijziging",
   "mandatee-without-priority-message": "{name} heeft geen geldige prioriteit. Gelieve dit aan te passen in ministerbeheer of contacteer de administrator.",
   "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
   "publications-new-button-text": "Publicatie aanmaken",
@@ -813,5 +814,8 @@
   "submission-activity": "Indieningsactiviteit",
   "config": "Instelling",
   "type": "Type",
-  "archive": "Archief"
+  "archive": "Archief",
+  "not-entered-yet": "Nog niet ingevuld",
+  "withdrawn-on": "Afgevoerd op",
+  "paused-on": "Gepauzeerd op"
 }

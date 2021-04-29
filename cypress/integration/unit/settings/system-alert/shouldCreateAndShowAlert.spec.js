@@ -61,7 +61,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     }); // Wait for a polling-cycle to pass
     cy.get(systemAlert.alert).should('exist');
 
-    cy.get('[data-test-vl-modal-dialogwindow] .vlc-input-field-block').click();
+    cy.get('[data-test-vl-modal-dialogwindow] .auk-form-group').click();
     cy.get('.ember-power-select-option').click();
     cy.route('GET', '/alerts**').as('getAlerts');
     cy.get(systemAlert.managementModal.remove).click();

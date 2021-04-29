@@ -148,7 +148,7 @@
 {{else}}
   <div class="auk-box">
     <div class="auk-u-mb-4">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         {{web-components/vl-radio-button-list
           title=(t "subcase-type")
           optionList=(await caseTypes)
@@ -156,7 +156,7 @@
           modelChanged=(action "selectRemarkType")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="subcase-type"
@@ -167,23 +167,25 @@
           selectModel=(action "selectType")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>
     <div class="auk-toolbar-complex auk-toolbar-complex--auto">
       <div class="auk-toolbar-complex__right">
-        <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-          {{t "cancel"}}
-        </a>
-      </div>
-      <div class="auk-toolbar-complex__left">
-        {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          saveAction=(action "saveChanges")
-        }}
+        <div class="auk-toolbar-complex__item">
+          <a href="" class="auk-button-link" {{action "cancelEditing"}}>
+            {{t "cancel"}}
+          </a>
+        </div>
+        <div class="auk-toolbar-complex__item">
+          {{web-components/vl-save-button
+            text=(t "save")
+            isLoading=isLoading
+            saveAction=(action "saveChanges")
+          }}
+        </div>
       </div>
     </div>
   </div>

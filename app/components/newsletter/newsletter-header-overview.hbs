@@ -1,74 +1,74 @@
 <div class="auk-toolbar-complex">
   <div class="auk-toolbar-complex__left">
     <div class="auk-toolbar-complex__item">
-      <h1
-        class="vlc-page-header__title vlc-page-header__title--bordered vlc-page-header__title--max-width auk-u-pb"
-        data-test-newsletter-overview-header-title
-      >
-        {{t "newsletter-overview-pdf-name"}}
-         -
-        {{await agenda.createdFor.kindToShow.label}}
-        {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
-      </h1>
-      <div class="vlc-page-header__sub">
-        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
-              <LinkTo
-                @route="newsletters"
-                class="vlc-backlink auk-button-link" >
-              {{!-- template-lint-disable no-bare-strings  --}}
-                &#8629;
-              {{!-- template-lint-enable no-bare-strings  --}}
-              </LinkTo>
-            </div>
-            {{#if currentSession.isEditor}}
-              <div class="auk-toolbar-complex__item">
-                <ul class="vlc-tabs-reverse" role="tablist">
-                  <li class="vlc-tabs-reverse__item">
-                    <LinkTo
-                      class="border-left vlc-tabs-reverse__link"
-                      @route="newsletter.index"
-                      @model={{await agenda.createdFor.id}}
-                      @activeClass="vlc-tabs-reverse__link--active"
-                    >
-                      {{t "overview"}}
-                    </LinkTo>
-                  </li>
-                  <li class="vlc-tabs-reverse__item">
-                    <LinkTo
-                      @route="newsletter.print"
-                      @model={{await agenda.createdFor.id}}
-                      @query={{hash showDraft=true}}
-                      class="vlc-tabs-reverse__link"
-                      @activeClass="vlc-tabs-reverse__link--active" >
-                      {{t "design"}}
-                    </LinkTo>
-                  </li>
-                  <li class="vlc-tabs-reverse__item">
-                    <LinkTo
-                      @route="newsletter.print"
-                      @model={{await agenda.createdFor.id}}
-                      @query={{hash showDraft=false}}
-                      class="vlc-tabs-reverse__link"
-                      @activeClass="vlc-tabs-reverse__link--active" >
-                      {{t "definite"}}
-                    </LinkTo>
-                  </li>
-                  <li class="vlc-tabs-reverse__item">
-                    <LinkTo
-                      data-test-nota-updates
-                      @route="newsletter.nota-updates"
-                      class="vlc-tabs-reverse__link"
-                      @activeClass="vlc-tabs-reverse__link--active" >
-                      {{t "newsletter-update-notas"}}
-                    </LinkTo>
-                  </li>
-                </ul>
-              </div>
-            {{/if}}
-          </div>
+      <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
+        <div class="auk-u-flex auk-u-flex--vertical-center">
+          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-overview-header-title>
+            {{t "newsletter-overview-pdf-name"}}
+            -
+            {{await agenda.createdFor.kindToShow.label}}
+            {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+          </h4>
         </div>
+        <ul class="auk-tabs auk-tabs--reversed" role="tablist">
+          <li class="auk-tabs__tab auk-tabs__hierarchical-back">
+            <LinkTo @route="newsletters">
+              <span class="auk-tabs__tab-inner">
+                <div class="auk-icon auk-icon--hierarchical-back auk-icon--default">
+                  <i class="ki ki-hierarchical-back"></i>
+                </div>
+              </span>
+            </LinkTo>
+          </li>
+          {{#if currentSession.isEditor}}
+            <li class="auk-tabs__tab">
+              <LinkTo
+                @route="newsletter.index"
+                @model={{await agenda.createdFor.id}}
+                @activeClass="active"
+              >
+                <span class="auk-tabs__tab-inner">
+                  {{t "overview"}}
+                </span>
+              </LinkTo>
+            </li>
+            <li class="auk-tabs__tab">
+              <LinkTo
+                @route="newsletter.print"
+                @model={{await agenda.createdFor.id}}
+                @query={{hash showDraft=true}}
+                @activeClass="active"
+              >
+                <span class="auk-tabs__tab-inner">
+                  {{t "design"}}
+                </span>
+              </LinkTo>
+            </li>
+            <li class="auk-tabs__tab">
+              <LinkTo
+                @route="newsletter.print"
+                @model={{await agenda.createdFor.id}}
+                @query={{hash showDraft=false}}
+                @activeClass="active"
+              >
+                <span class="auk-tabs__tab-inner">
+                  {{t "definite"}}
+                </span>
+              </LinkTo>
+            </li>
+            <li class="auk-tabs__tab">
+              <LinkTo
+                data-test-nota-updates
+                @route="newsletter.nota-updates"
+                @activeClass="active"
+              >
+                <span class="auk-tabs__tab-inner">
+                  {{t "newsletter-update-notas"}}
+                </span>
+              </LinkTo>
+            </li>
+          {{/if}}
+        </ul>
       </div>
     </div>
   </div>

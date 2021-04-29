@@ -2,7 +2,18 @@ const selectors = {
   casesOverviewTitle: '[data-test-cases-header-title]',
   casesHeaderAddCase: '[data-test-cases-header-add-case]',
   metadataForm: '[data-test-metadata-form]',
-  deleteSubcase: '[data-test-delete-subcase]',
+
+  // subcase-header
+  subcaseHeader: {
+    actionsDropdown: '[data-test-subcase-header-actions-dropdown]',
+    actions: {
+      proposeForAgenda: '[data-test-subcase-header-action-propose-for-agenda]',
+      // only after opening dropdown
+      deleteSubcase: '[data-test-subcase-header-action-delete-subcase]',
+      moveSubcase: '[data-test-subcase-header-action-move-subcase]',
+    },
+  },
+
   createSubcaseButton: '[data-test-case-create-subcase-button]',
   clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
   subcaseType: '[data-test-subcase-type]',
