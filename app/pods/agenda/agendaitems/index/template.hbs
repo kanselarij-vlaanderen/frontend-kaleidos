@@ -1,4 +1,7 @@
-<div class="vlc-panel-layout-agenda__detail auk-u-bg-alt">
+<div
+  id={{this.id}}
+  class="vlc-panel-layout-agenda__detail auk-u-bg-alt"
+>
   <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
     <Agenda::AgendaitemSearch
       @searchText={{readonly this.agendaitemsController.filter}}

@@ -201,6 +201,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('@documentName').contains(savedName);
     });
 
+    // TODO duplicate asserts, we want to check name here
     // Verify only 1 piece is affected by change
     cy.get(document.showPiecesHistory).click();
     cy.get(document.singlePieceHistory).as('pieces');
@@ -215,6 +216,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.js-vl-accordion > button').click();
 
     // Cancel/save access-level in document card
+    // TODO use test selector
     cy.get('.vlc-document-card__content > .auk-toolbar-complex > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid')
