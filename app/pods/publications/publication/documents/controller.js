@@ -15,6 +15,7 @@ export default class PublicationDocumentsController extends Controller {
   @service store;
 
   @tracked isLoaded = false;
+  @tracked showPieceUploadModal = false;
   @tracked showLoader = false;
   @tracked filteredSortedPieces = [];
 
@@ -65,8 +66,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @task
   *onSavePiecesTask(pieces) {
-    this.model.case.pieces.pushObjects(pieces);
-    yield this.model.case.save();
+    this.case.pieces.pushObjects(pieces);
+    yield this.case.save();
     this.showPieceUploadModal = false;
   }
 
