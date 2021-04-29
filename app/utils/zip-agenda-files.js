@@ -7,7 +7,7 @@ function registerJobToStore(job, store) {
 }
 
 function prettifyAgendaName(agenda) {
-  if (agenda.get('isDesignAgenda')) {
+  if (agenda.isDesignAgenda) { // async computed!
     return 'ontwerpagenda';
   }
   return `agenda_${agenda.serialnumber}`;
@@ -46,7 +46,7 @@ async function fileDownloadUrlFromJob(job, archiveName) {
   let file = job.belongsTo('generated').value();
   if (!file) {
     await job.reload();
-    file = await job.get('generated');
+    file = await job.generated;
   }
   return `${file.downloadLink}?name=${archiveName}`;
 }
