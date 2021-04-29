@@ -60,7 +60,7 @@
           {{/if}}
 
           {{!-- Type regelgeving --}}
-          {{#if (not this.publicationStatus.isWithdrawn)}}
+          {{#unless this.publicationStatus.isWithdrawn}}
             <div class="auk-form-group">
               <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
               <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
@@ -70,10 +70,10 @@
                                             @disabled={{this.publicationStatus.isPublished}}
               />
             </div>
-          {{/if}}
+          {{/unless}}
 
           {{!-- Publicatiewijze --}}
-          {{#if (not this.publicationStatus.isWithdrawn)}}
+          {{#unless this.publicationStatus.isWithdrawn}}
             <div class="auk-form-group">
               <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
               <WebComponents::AuPowerSelect @options={{this.publicationModes}}
@@ -83,7 +83,7 @@
                                             @disabled={{this.publicationStatus.isPublished}}
               />
             </div>
-          {{/if}}
+          {{/unless}}
 
           {{!-- Spoedprocedure --}}
           {{#if this.publicationStatus.isPending}}
@@ -140,7 +140,7 @@
           {{/if}}
 
           {{!-- Uiterste publicatiedatum --}}
-          {{#if (not this.publicationStatus.isWithdrawn)}}
+          {{#unless this.publicationStatus.isWithdrawn}}
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
               <WebComponents::AuDatepicker
@@ -154,7 +154,7 @@
                 </div>
               {{/if}}
             </div>
-          {{/if}}
+          {{/unless}}
 
           {{!-- Uiterste vertaaldatum --}}
           {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
