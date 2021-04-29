@@ -6,8 +6,9 @@ function registerJobToStore(job, store) {
   return store.peekRecord('file-bundling-job', job.data.id);
 }
 
-function prettifyAgendaName(agenda) {
-  if (agenda.isDesignAgenda) { // async computed!
+async function prettifyAgendaName(agenda) {
+  const agendaStatus = await agenda.status;
+  if (agendaStatus.isDesignAgenda) {
     return 'ontwerpagenda';
   }
   return `agenda_${agenda.serialnumber}`;
@@ -16,7 +17,7 @@ function prettifyAgendaName(agenda) {
 async function constructArchiveName(agenda) {
   const date = (await agenda.createdFor).plannedStart;
   const formattedDate = moment(date).format('DD_MM_YYYY');
-  const agendaName = prettifyAgendaName(agenda);
+  const agendaName = await prettifyAgendaName(agenda);
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }
 
