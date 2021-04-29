@@ -14,7 +14,7 @@ function prettifyAgendaName(agenda) {
 }
 
 async function constructArchiveName(agenda) {
-  const date = await agenda.get('createdFor.plannedStart');
+  const date = (await agenda.createdFor).plannedStart;
   const formattedDate = moment(date).format('DD_MM_YYYY');
   const agendaName = prettifyAgendaName(agenda);
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
