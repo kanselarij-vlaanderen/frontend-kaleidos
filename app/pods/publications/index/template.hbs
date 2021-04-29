@@ -180,6 +180,8 @@
                 <span class="auk-u-text-small auk-u-muted">
                   {{moment-format row.publicationStatusChange.startedAt "HH:mm"}}
                 </span>
+              {{else}}
+                {{t "dash"}}
               {{/if}}
             </td>
           {{/if}}
@@ -192,6 +194,8 @@
                 <span class="auk-u-text-small auk-u-muted">
                   {{moment-format row.publicationStatusChange.startedAt "HH:mm"}}
                 </span>
+              {{else}}
+                {{t "dash"}}
               {{/if}}
             </td>
           {{/if}}
