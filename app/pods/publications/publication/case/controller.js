@@ -10,6 +10,11 @@ import { task } from 'ember-concurrency-decorators';
 export default class CaseController extends Controller {
   @service publicationService;
 
+  @tracked publicationFlow;
+  @tracked contactPersons;
+  @tracked latestSubcaseOnMeeting;
+  @tracked organizations;
+
   @tracked showLoader = false;
   @tracked personModalOpen = false;
   @tracked mandateeModalOpen = false;
