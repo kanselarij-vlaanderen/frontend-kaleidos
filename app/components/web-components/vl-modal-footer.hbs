@@ -10,7 +10,10 @@
     <WebComponents::AuToolbar::Item>
       <WebComponents::AuButton
         @skin="primary"
-        disabled={{disableSave}}
+        {{!-- also disable button when 'isLoading', since no loading state on button is available.
+          Disabling the button while in loading state is important in order to avoid multiple
+          action calls when clicking multiple times on the same confirm-button --}}
+        disabled={{or this.disableSave this.isLoading}}
         {{!-- loadingText=(t "please-be-patient")
         isLoading=isLoading --}}
         data-test-vl-save={{true}}
