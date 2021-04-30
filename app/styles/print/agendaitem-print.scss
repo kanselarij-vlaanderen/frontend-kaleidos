@@ -29,20 +29,16 @@
 
   // Hide elements in page header & simplify page header
 
-  .vlc-page-header {
+  .auk-navbar {
     padding: 1rem;
     background: none;
-  }
-
-  .vlc-page-header__sub {
-    display: none !important;
   }
 
   .auk-toolbar-complex__right {
     display: none;
   }
 
-  .vlc-page-header .vlc-page-header__title--bordered {
-    border: none;
+  .auk-navbar--bordered-bottom {
+    border-bottom: none;
   }
 }

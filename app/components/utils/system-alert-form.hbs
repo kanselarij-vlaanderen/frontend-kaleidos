@@ -1,8 +1,8 @@
-<div class="vlc-input-field-block">
+<div class="auk-form-group">
   <div class="auk-u-flex--align-end auk-u-mb-2">
     <div
       data-test-system-alert-form-from-date
-      class="vlc-input-field-block"
+      class="auk-form-group"
     >
       <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
@@ -13,7 +13,7 @@
     </div>
     <div
       data-test-system-alert-form-to-date
-      class="vlc-input-field-block auk-u-mb-3"
+      class="auk-form-group auk-u-mb-3"
     >
       <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker
@@ -25,14 +25,14 @@
   </div>
   <div
     data-test-system-alert-form-title
-    class="vlc-input-field-block"
+    class="auk-form-group"
   >
     <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input value=this.alert.title}}
   </div>
   <div
     data-test-system-alert-form-message
-    class="vlc-input-field-block"
+    class="auk-form-group"
   >
     <WebComponents::AuLabel>{{t "message"}}</WebComponents::AuLabel>
     {{textarea
@@ -41,7 +41,7 @@
       value=this.alert.message
     }}
   </div>
-  <div class="vlc-input-field-block">
+  <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "severity"}}</WebComponents::AuLabel>
     {{utils/model-selector
       modelName="alert-type"
