@@ -54,8 +54,8 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-mock-login';
 @import 'custom-components/vlc-pagination';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/_vlc-publication-overview';
-@import 'custom-components/_vlc-publication-status-selector';
+@import 'custom-components/vlc-publication-overview';
+@import 'custom-components/vlc-publication-status-selector';
 @import 'custom-components/vlc-publication-status-pill';
 @import 'custom-components/vlc-rdfa-editor';
 @import 'custom-components/vlc-scroll-wrapper';
