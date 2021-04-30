@@ -71,10 +71,7 @@ export default class PublicationDocumentsRoute extends Route {
 
   resetController(controller) {
     controller.newPieces = [];
-    controller.filter.reset();
     controller.selectedPieces = [];
-    controller.filteredSortedPices = [];
-    controller.isLoaded = false;
     controller.showLoader = false;
   }
 
@@ -86,7 +83,7 @@ export default class PublicationDocumentsRoute extends Route {
     if (!this.isFilterFileTypeActive()) {
       filteredSortedPieces = sortedPieces;
     } else {
-      // Filtering of file extensions is not yet possible in the backend, so we do it here.
+      // Filtering of file types is not yet possible in the backend, so we do it here.
       // in parallel
       const filterResultPromises = sortedPieces.map(async(piece) => {
         if (!await this.filterFileType(piece)) {

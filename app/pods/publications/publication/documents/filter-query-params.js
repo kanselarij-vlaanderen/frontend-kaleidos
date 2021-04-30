@@ -35,34 +35,20 @@ export default class FilterQueryParams {
   }
 
   static async readToFilter(store, params) {
-    const deserializedParams = this._deserializeQueryParams(params);
-    const filterState = this._deserializedQueryParamsToFilter(store, deserializedParams);
+    const normalizedParams = this._readQueryParams(params);
+    const filterState = this._normalizedParamsToFilter(store, normalizedParams);
     return filterState;
   }
 
-  static updateFromFilterAndReload(controller, filter) {
-    const params = this._filterToQueryParams(filter);
-    for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {
-      // set would be more performant than setting query parameters with @tracked
-      set(controller, value, params[key]);
+  static _readQueryParams(params) {
+    const normalizedParams = {};
+    for (const [queryParam, filterParam] of Object.entries(this.queryParamMapping)) {
+      normalizedParams[queryParam] = params[filterParam];
     }
+    return normalizedParams;
   }
 
-  static _deserializeQueryParams(params) {
-    const KEY_DOCUMENT_TYPES = this.queryParamMapping.documentTypes;
-    const KEY_DOCUMENT_NAME = this.queryParamMapping.documentName;
-    const KEY_FILE_TYPES = this.queryParamMapping.fileTypes;
-
-    const deserializedParams = {
-      documentTypes: params[KEY_DOCUMENT_TYPES],
-      documentName: params[KEY_DOCUMENT_NAME],
-      fileTypes: params[KEY_FILE_TYPES],
-    };
-
-    return deserializedParams;
-  }
-
-  static async _deserializedQueryParamsToFilter(store, params) {
+  static async _normalizedParamsToFilter(store, params) {
     const documentTypePromises = params.documentTypes.map((id) => store.findRecord('document-type', id));
 
     const documentTypes = await EmberPromise.all(documentTypePromises);
@@ -75,7 +61,12 @@ export default class FilterQueryParams {
     return filter;
   }
 
-  static _filterToQueryParams(filter) {
+  static updateFromFilterAndReload(controller, filter) {
+    const params = this._filterToNormalizedQueryParams(filter);
+    this._writeQueryParams(controller, params);
+  }
+
+  static _filterToNormalizedQueryParams(filter) {
     const params = {
       documentName: filter.documentName,
       documentTypes: filter.documentTypes.map((it) => it.id),
@@ -83,5 +74,12 @@ export default class FilterQueryParams {
     };
 
     return params;
+  }
+
+  static _writeQueryParams(controller, normalizedParams) {
+    for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {
+      // set would be more performant than setting query parameters with @tracked
+      set(controller, value, normalizedParams[key]);
+    }
   }
 }
