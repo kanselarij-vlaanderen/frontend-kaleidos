@@ -334,7 +334,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
   cy.wait('@getGovernmentFieldDomains', {
     timeout: 50000,
   });
-  cy.get('.vlc-panel-layout__main-content').within(() => {
+  cy.get('.auk-panel-layout__main-content').within(() => {
     cy.get('.auk-u-mb-8').as('detailBlocks');
     cy.get('@detailBlocks').eq(4)
       .within(() => {
@@ -537,7 +537,7 @@ function toggleShowChanges(refresh) {
 
   // TODO, refresh is no longer needed
   if (refresh) {
-  //   cy.get('.vlc-side-nav-item', {
+  //   cy.get('.auk-sidebar__item', {
   //     timeout: 12000,
   //   })
   //     .last({
@@ -547,7 +547,7 @@ function toggleShowChanges(refresh) {
   //   cy.wait('@getAgendaitems', {
   //     timeout: 20000,
   //   });
-  //   cy.get('.vlc-side-nav-item', {
+  //   cy.get('.auk-sidebar__item', {
   //     timeout: 12000,
   //   })
   //     .first({
@@ -653,7 +653,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
  * @param {string} agendaName - name of the agenda item
  */
 function changeSelectedAgenda(agendaName) {
-  cy.get('.vlc-side-nav-item').children()
+  cy.get('.auk-sidebar__item').children()
     .contains(agendaName, {
       timeout: 12000,
     })

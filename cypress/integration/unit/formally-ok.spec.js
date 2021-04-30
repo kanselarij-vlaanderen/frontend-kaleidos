@@ -26,7 +26,7 @@ context('Formally ok/nok tests', () => {
     // TODO optional, check if there is no au-alert in the new pop?
     cy.get(modal.auModal.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
-    cy.get('.vlc-side-nav-item').as('agendas');
+    cy.get('.auk-sidebar__item').as('agendas');
     cy.get('@agendas').eq(1)
       .click();
     cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)

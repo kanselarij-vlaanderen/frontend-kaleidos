@@ -1,11 +1,12 @@
 <WebComponents::AuSidebar
-  class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--right auk-sidebar--large auk-sidebar--responsive {{if  (not @isOpen) 'auk-sidebar--collapsed'}}"
+  class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--large auk-sidebar--responsive auk-sidebar--collapsible auk-scroll-wrapper"
   @position="right"
+  data-collapsed={{if (not @isOpen) "true" "false"}}
 >
   <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
-        <WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-u-flex auk-u-flex--horizontal-center"}}">
           <WebComponents::AuButton @skin="borderless" @icon={{if @isOpen "chevron-right" "chevron-left"}}
                                    @layout="icon-only" {{on "click" (if @isOpen @onCollapse @onOpen)}} />
         </WebComponents::AuToolbar::Item>
@@ -13,36 +14,35 @@
     </WebComponents::AuToolbar>
   </WebComponents::AuNavbar>
   {{#if @isOpen}}
-    <div class="auk-scroll-wrapper">
-      <div class="auk-scroll-wrapper__body">
+    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
         {{!--Publicatienummer --}}
-        <div class="auk-u-m-3">
-          <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
-            <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-            <WebComponents::AuInput type="number" value={{@publicationFlow.publicationNumber}}
-              {{on "input" (perform this.setPublicationNumber)}} />
-            <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.publicationSuffix}}
-              {{on "input" (perform this.setPublicationSuffix)}} />
+      <div class="auk-u-m-3">
+        <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
+          <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
+          <WebComponents::AuInput type="number" value={{@publicationFlow.publicationNumber}}
+            {{on "input" (perform this.setPublicationNumber)}} />
+          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.publicationSuffix}}
+            {{on "input" (perform this.setPublicationSuffix)}} />
 
-            {{#if this.numberIsAlreadyUsed}}
-              <div class="auk-form-help-text auk-form-help-text--danger">
-                <WebComponents::AuIcon @name="alert-triangle"/>
-                {{t "publication-number-already-taken"}}
-              </div>
-            {{/if}}
-            {{#if this.numberIsRequired}}
-              <div class="auk-form-help-text auk-form-help-text--danger">
-                <WebComponents::AuIcon @name="alert-triangle"/>
-                {{t "publication-number-required"}}
-              </div>
-            {{/if}}
-          </div>
+          {{#if this.numberIsAlreadyUsed}}
+            <div class="auk-form-help-text auk-form-help-text--danger">
+              <WebComponents::AuIcon @name="alert-triangle"/>
+              {{t "publication-number-already-taken"}}
+            </div>
+          {{/if}}
+          {{#if this.numberIsRequired}}
+            <div class="auk-form-help-text auk-form-help-text--danger">
+              <WebComponents::AuIcon @name="alert-triangle"/>
+              {{t "publication-number-required"}}
+            </div>
+          {{/if}}
+        </div>
 
           {{!-- Status --}}
-          <Publications::PublicationStatusSelector
+        <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
             @onChange={{this.selectPublicationStatus}}
-          />
+        />
 
           {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
             <div class="auk-form-group">
@@ -93,71 +93,71 @@
           {{/if}}
 
           {{!-- Werknummer --}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-            <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
-              {{#each @publicationFlow.numacNumbers as |numac|}}
-                <div class="vlc-numac-number-wrapper">
-                  <div class="vlc-numac-number">
-                    <span>{{ numac.name }}</span>
-                  </div>
-                  <div class="vlc-numac-number-delete-button-wrapper">
-                    <WebComponents::AuButton class="auk-button--nopadding"
-                      @skin="borderless"
-                      @icon="close"
-                      @layout="icon-only"
-                      {{on "click" (perform this.unlinkNumacNumber numac)}}
-                      data-test-cases-backlink/>
-                  </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
+          <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
+            {{#each @publicationFlow.numacNumbers as |numac|}}
+              <div class="vlc-numac-number-wrapper">
+                <div class="vlc-numac-number">
+                  <span>{{ numac.name }}</span>
                 </div>
-              {{else}}
-                <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-              {{/each}}
-            </div>
-            <WebComponents::AuInput
-              type="text"
-              @value={{this.newNumacNumber}}
-            />
-
-            <WebComponents::AuButton
-              @skin="borderless"
-              {{on "click" (perform this.addNumacNumber)}}
-            >
-              {{t "add"}}
-            </WebComponents::AuButton>
+                <div class="vlc-numac-number-delete-button-wrapper">
+                  <WebComponents::AuButton class="auk-button--nopadding"
+                    @skin="borderless"
+                    @icon="close"
+                    @layout="icon-only"
+                    {{on "click" (perform this.unlinkNumacNumber numac)}}
+                    data-test-cases-backlink/>
+                </div>
+              </div>
+            {{else}}
+              <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
+            {{/each}}
           </div>
+          <WebComponents::AuInput
+            type="text"
+            @value={{this.newNumacNumber}}
+          />
+
+          <WebComponents::AuButton
+            @skin="borderless"
+            {{on "click" (perform this.addNumacNumber)}}
+          >
+            {{t "add"}}
+          </WebComponents::AuButton>
+        </div>
 
           {{!-- Gevraagde publicatiedatum --}}
-          {{#if this.publicationStatus.isPending}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker
-                      @defaultDate={{this.publicationFlow.publishDateRequested}}
-                      @onChange={{this.setRequestedPublicationDate}}/>
-            </div>
+        {{#if this.publicationStatus.isPending}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
+            <WebComponents::AuDatepicker
+                    @defaultDate={{this.publicationFlow.publishDateRequested}}
+                    @onChange={{this.setRequestedPublicationDate}}/>
+          </div>
           {{/if}}
 
           {{!-- Uiterste publicatiedatum --}}
           {{#unless this.publicationStatus.isWithdrawn}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker
-                      @defaultDate={{this.publicationFlow.publishBefore}}
-                      @enable={{this.allowedUltimatePublicationDates}}
-                      @onChange={{this.setUltimatePublicationDate}}/>
-              {{#if this.publicationFlow.publicationBeforeDateHasExpired}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
-                </div>
-              {{/if}}
-            </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
+            <WebComponents::AuDatepicker
+                    @defaultDate={{this.publicationFlow.publishBefore}}
+                    @enable={{this.allowedUltimatePublicationDates}}
+                    @onChange={{this.setUltimatePublicationDate}}/>
+            {{#if this.publicationFlow.publicationBeforeDateHasExpired}}
+              <div class="auk-form-help-text auk-form-help-text--warning">
+                <WebComponents::AuIcon @name="alert-triangle"/>
+                {{t "date-expired"}}
+              </div>
+            {{/if}}
+          </div>
           {{/unless}}
 
           {{!-- Uiterste vertaaldatum --}}
           {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
               <div class="auk-u-muted">
                 {{if
                   this.publicationFlow.translateBefore
@@ -167,49 +167,48 @@
                   (t "not-entered-yet")
                 }}
               </div>
-              {{#if this.publicationFlow.translationDateHasExpired}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
-                </div>
-              {{/if}}
-            </div>
-          {{/if}}
+            {{#if this.publicationFlow.translationDateHasExpired}}
+              <div class="auk-form-help-text auk-form-help-text--warning">
+                <WebComponents::AuIcon @name="alert-triangle"/>
+                {{t "date-expired"}}
+              </div>
+            {{/if}}
+          </div>
+        {{/if}}
 
           {{!-- Publicatiedatum --}}
-          {{#if this.publicationStatus.isPublished}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
-              <WebComponents::AuDatepicker
-                @defaultDate={{this.publicationFlow.publishedAt}}
-                @onChange={{this.setPublicationDate}}
-              />
-              {{#if this.publicationFlow.publicationDateHasExpired}}
-                <div class="auk-form-help-text auk-form-help-text--warning">
-                  <WebComponents::AuIcon @name="alert-triangle"/>
-                  {{t "date-expired"}}
-                </div>
-              {{/if}}
-            </div>
-          {{/if}}
+        {{#if this.publicationStatus.isPublished}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
+            <WebComponents::AuDatepicker
+              @defaultDate={{this.publicationFlow.publishedAt}}
+              @onChange={{this.setPublicationDate}}
+            />
+            {{#if this.publicationFlow.publicationDateHasExpired}}
+              <div class="auk-form-help-text auk-form-help-text--warning">
+                <WebComponents::AuIcon @name="alert-triangle"/>
+                {{t "date-expired"}}
+              </div>
+            {{/if}}
+          </div>
+        {{/if}}
 
           {{!-- Opmerking --}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>
-              <div class="auk-u-flex auk-u-flex--vertical-center">
-                <span class="auk-u-mr">{{t "remark-title"}}</span>
-                <div>
-                  <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted"/>
-                  <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                    <p>
-                      {{t "publication-sidebar-tooltip"}}
-                    </p>
-                  </EmberTooltip>
-                </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>
+            <div class="auk-u-flex auk-u-flex--vertical-center">
+              <span class="auk-u-mr">{{t "remark-title"}}</span>
+              <div>
+                <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted"/>
+                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                  <p>
+                    {{t "publication-sidebar-tooltip"}}
+                  </p>
+                </EmberTooltip>
               </div>
-            </WebComponents::AuLabel>
-            <WebComponents::AuTextarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
-          </div>
+            </div>
+          </WebComponents::AuLabel>
+          <WebComponents::AuTextarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
         </div>
       </div>
     </div>
