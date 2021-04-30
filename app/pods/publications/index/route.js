@@ -58,18 +58,14 @@ export default class PublicationsIndexRoute extends Route {
         };
       }
     }
-
-
     if (ministerFilter) {
       this.filter.case = ministerFilter;
     }
-
     if (statusIds.length > 0) {
       this.filter.status = {
         ':id:': statusIds.join(','),
       };
     }
-
     let qpSort = this.params.sort;
     let descending;
     if (qpSort) {
@@ -95,8 +91,10 @@ export default class PublicationsIndexRoute extends Route {
         // TODO: might want to sort on status too, since bot withdrawal & pause use the same sort field behind the scenes
         this.apiSort = 'publication-status-change.started-at';
       }
+      if (this.apiSort && descending) {
+        this.apiSort = `-${this.apiSort}`;
+      }
     }
-
     return this.getPublications();
   }
 

@@ -10,20 +10,6 @@ Component for aligning multiple sub components on a horizontal axis
     }
 }
 .vlc-case-name-header{
-  min-width: 30rem
+  min-width: 25rem
 }
-.vlc-publication-grid-header-lg{
-  display:table-cell;
-}
-.vlc-publication-grid-header-sm{
-  display:none;
-}
-@media screen and (max-width: 1200px) {
-  .vlc-publication-grid-header-lg{
-    display:none;
-  }
 
-  .vlc-publication-grid-header-sm{
-    display:table-cell;
-  }
-}
