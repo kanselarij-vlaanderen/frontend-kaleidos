@@ -21,7 +21,7 @@
 
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click"
-                                                                                                          (fn this.showPublicationModal)}}>
+          (fn this.showPublicationModal)}}>
           {{t "publications-new"}}
         </WebComponents::AuButton>
       </WebComponents::AuToolbar::Item>
@@ -288,27 +288,26 @@
   </div>
 </div>
 
-
 {{#if this.isShowPublicationModal}}
   <Publications::NewPublicationModal
-          @onCancel={{this.closePublicationModal}}
-          @onSave={{this.saveNewPublication}} />
+    @onCancel={{this.closePublicationModal}}
+    @onSave={{this.saveNewPublication}} />
 {{/if}}
 {{#if this.isShowPublicationFilterModal}}
   <Publications::PublicationsFilterModal
-          @filter={{this.publicationFilter}}
-          @onCancel={{this.cancelPublicationsFilter}}
-          @onSave={{this.savePublicationsFilter}} />
+    @filter={{this.publicationFilter}}
+    @onCancel={{this.cancelPublicationsFilter}}
+    @onSave={{this.savePublicationsFilter}} />
 {{/if}}
 {{#if this.showTableDisplayOptions}}
   <Publications::OverviewTableDisplayConfigModal
-          @options={{this.tableColumnDisplayOptions}}
-          @onChange={{this.changeColumnDisplayOptions}}
-          @onClose={{this.closeColumnDisplayOptionsModal}}
+    @options={{this.tableColumnDisplayOptions}}
+    @onChange={{this.changeColumnDisplayOptions}}
+    @onClose={{this.closeColumnDisplayOptionsModal}}
   />
 {{/if}}
 
 {{!-- LOADER --}}
 {{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
+  <WebComponents::AuLoadingOverlay />
 {{/if}}

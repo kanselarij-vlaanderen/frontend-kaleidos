@@ -3,17 +3,15 @@
   " van "
   (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
 }}
-<div class="auk-u-bg-alt">
-  {{agenda/agenda-header
-    loading=(action "loadingAgendaitems")
-    onCreateAgendaitem=(action "refresh")
-    onApproveAgenda=(action "navigateToAgenda")
-    navigateToPressAgenda=(action "navigateToPressAgenda")
-    navigateToDecisions=(action "navigateToDecisions")
-    navigateToNewsletter=(action "navigateToNewsletter")
-    showPrintButton=showPrintButton
-  }}
-</div>
+{{agenda/agenda-header
+  loading=(action "loadingAgendaitems")
+  onCreateAgendaitem=(action "refresh")
+  onApproveAgenda=(action "navigateToAgenda")
+  navigateToPressAgenda=(action "navigateToPressAgenda")
+  navigateToDecisions=(action "navigateToDecisions")
+  navigateToNewsletter=(action "navigateToNewsletter")
+  showPrintButton=showPrintButton
+}}
 {{#if (not isLoading)}}
   <div class="vlc-panel-layout">
     {{#unless shouldHideNav}}

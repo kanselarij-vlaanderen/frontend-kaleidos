@@ -6,7 +6,7 @@ import {
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  classNames: ['vlc-input-field-block'],
+  classNames: ['auk-form-group'],
   classNameBindings: [
     'isCreatingPerson:auk-u-bg-alt',
     'isCreatingPerson:auk-u-m-0',

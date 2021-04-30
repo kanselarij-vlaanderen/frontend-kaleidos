@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['vlc-page-header', 'auk-u-bg-alt'],
+  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100'],
   isAddingSingleNewsLetter: false,
 
   actions: {
