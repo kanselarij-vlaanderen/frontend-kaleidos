@@ -1,6 +1,7 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import RSVP from 'rsvp';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model(params) {
@@ -13,7 +14,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   }
 
   async afterModel(model) {
-    const lastestSubcaseOnMeeting = this.store.query('subcase', {
+    const latestSubcaseOnMeetingPromise = this.store.query('subcase', {
       filter: {
         case: {
           // cannot access yet without get(...)
@@ -23,13 +24,12 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       },
       sort: '-created',
       include: 'mandatees',
-    }).then((subcase) =>
-    subcase.firstObject);
+    }).then((subcase) => subcase.firstObject);
 
     const publicationStatusPromise = this.store.query('publication-status', {});
     const regulationTypePromise = this.store.query('regulation-type', {});
 
-    const [latestSubcaseOnMeeting] = await Promise.all([lastestSubcaseOnMeeting, publicationStatusPromise, regulationTypePromise]);
+    const [latestSubcaseOnMeeting] = await RSVP.all([latestSubcaseOnMeetingPromise, publicationStatusPromise, regulationTypePromise]);
 
     this.latestSubcaseOnMeeting = latestSubcaseOnMeeting;
   }

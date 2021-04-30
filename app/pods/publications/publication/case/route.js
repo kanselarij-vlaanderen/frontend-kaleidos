@@ -1,16 +1,26 @@
 import Route from '@ember/routing/route';
+import RSVP from 'rsvp';
 
 export default class CaseRoute extends Route {
   async model() {
     return this.modelFor('publications.publication').case;
   }
 
-  async afterModel() {
+  async afterModel(model) {
     this.publicationFlow = this.modelFor('publications.publication');
     this.contactPersons = this.publicationFlow.contactPersons;
 
-    const publicationController = this.controllerFor('publications.publication');
-    this.latestSubcaseOnMeeting = publicationController.latestSubcaseOnMeeting;
+    const latestSubcaseOnMeetingPromise = this.store.query('subcase', {
+      filter: {
+        case: {
+          // cannot access yet without get(...)
+          id: model.get('id'),
+        },
+        ':has:agenda-activities': 'yes',
+      },
+      sort: '-created',
+      include: 'mandatees',
+    }).then((subcase) => subcase.firstObject);
 
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
     // TODO need a better filter, add a boolean to model maybe ?
@@ -20,7 +30,9 @@ export default class CaseRoute extends Route {
       },
     }).then((organizations) => organizations.filter((org) => org.name));
 
-    this.organizations = await organizationsPromise;
+    const [organizations, latestSubcaseOnMeeting] = await RSVP.all([organizationsPromise, latestSubcaseOnMeetingPromise]);
+    this.organizations = organizations;
+    this.latestSubcaseOnMeeting = latestSubcaseOnMeeting;
   }
 
   async setupController(controller) {
