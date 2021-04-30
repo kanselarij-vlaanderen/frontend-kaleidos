@@ -6,14 +6,14 @@ export default class CaseRoute extends Route {
     return this.modelFor('publications.publication').case;
   }
 
-  async afterModel() {
+  async afterModel(model) {
     this.publicationFlow = this.modelFor('publications.publication');
     this.contactPersons = this.publicationFlow.contactPersons;
 
     const latestSubcaseOnMeetingPromise = this.store.query('subcase', {
       filter: {
         case: {
-          id: this.publicationFlow.case.get('id'),
+          id: model.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
