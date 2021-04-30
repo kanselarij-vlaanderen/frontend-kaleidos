@@ -8,6 +8,8 @@ export default class PublicationController extends Controller {
   @service intl;
   @service media;
 
+  @tracked latestSubcaseOnMeeting;
+
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
 
   get casePath() {

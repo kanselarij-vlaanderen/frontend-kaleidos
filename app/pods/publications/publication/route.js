@@ -23,10 +23,8 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       },
       sort: '-created',
       include: 'mandatees',
-      page: {
-        size: 1,
-      },
-    }).then((subcase) => subcase.firstObject);
+    }).then((subcase) =>
+    subcase.firstObject);
 
     const publicationStatusPromise = this.store.query('publication-status', {});
     const regulationTypePromise = this.store.query('regulation-type', {});
