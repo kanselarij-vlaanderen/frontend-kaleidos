@@ -15,7 +15,7 @@
   </WebComponents::AuNavbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-        {{!--Publicatienummer --}}
+      {{!--Publicatienummer --}}
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
           <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
@@ -38,61 +38,61 @@
           {{/if}}
         </div>
 
-          {{!-- Status --}}
+        {{!-- Status --}}
         <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
             @onChange={{this.selectPublicationStatus}}
         />
 
-          {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel>
-                {{#if this.publicationStatus.isWithdrawn}}
-                  {{t "withdrawn-on"}}
-                {{else if this.publicationStatus.isPaused}}
-                  {{t "paused-on"}}
-                {{/if}}
-              </WebComponents::AuLabel>
-              <div class="auk-u-muted">
-                {{moment-format this.publicationStatusChange.startedAt "DD-MM-YYYY \o\m HH:mm"}}
-              </div>
+        {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>
+              {{#if this.publicationStatus.isWithdrawn}}
+                {{t "withdrawn-on"}}
+              {{else if this.publicationStatus.isPaused}}
+                {{t "paused-on"}}
+              {{/if}}
+            </WebComponents::AuLabel>
+            <div class="auk-u-muted">
+              {{moment-format this.publicationStatusChange.startedAt "DD-MM-YYYY \o\m HH:mm"}}
             </div>
-          {{/if}}
+          </div>
+        {{/if}}
 
-          {{!-- Type regelgeving --}}
-          {{#unless this.publicationStatus.isWithdrawn}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
-              <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
-                                            @isSearchable={{false}}
-                                            @onchange={{this.setRegulationType}}
-                                            @selected={{@publicationFlow.regulationType}}
-              />
-            </div>
-          {{/unless}}
+        {{!-- Type regelgeving --}}
+        {{#unless this.publicationStatus.isWithdrawn}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
+            <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
+                                          @isSearchable={{false}}
+                                          @onchange={{this.setRegulationType}}
+                                          @selected={{@publicationFlow.regulationType}}
+            />
+          </div>
+        {{/unless}}
 
-          {{!-- Publicatiewijze --}}
-          {{#unless this.publicationStatus.isWithdrawn}}
-            <div class="auk-form-group">
-              <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
-              <WebComponents::AuPowerSelect @options={{this.publicationModes}}
-                                            @isSearchable={{false}}
-                                            @onchange={{this.setPublicationMode}}
-                                            @selected={{this.publicationFlow.mode}}
-              />
-            </div>
-          {{/unless}}
+        {{!-- Publicatiewijze --}}
+        {{#unless this.publicationStatus.isWithdrawn}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
+            <WebComponents::AuPowerSelect @options={{this.publicationModes}}
+                                          @isSearchable={{false}}
+                                          @onchange={{this.setPublicationMode}}
+                                          @selected={{this.publicationFlow.mode}}
+            />
+          </div>
+        {{/unless}}
 
-          {{!-- Spoedprocedure --}}
-          {{#if this.publicationStatus.isPending}}
-            <div class="auk-form-group">
-              <Publications::UrgencyLevelCheckbox
-                      @urgencyLevel={{this.publicationFlow.urgencyLevel}}
-                      @onChange={{this.setUrgencyLevel}} />
-            </div>
-          {{/if}}
+        {{!-- Spoedprocedure --}}
+        {{#if this.publicationStatus.isPending}}
+          <div class="auk-form-group">
+            <Publications::UrgencyLevelCheckbox
+                    @urgencyLevel={{this.publicationFlow.urgencyLevel}}
+                    @onChange={{this.setUrgencyLevel}} />
+          </div>
+        {{/if}}
 
-          {{!-- Werknummer --}}
+        {{!-- Werknummer --}}
         <div class="auk-form-group">
           <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
           <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
@@ -127,7 +127,7 @@
           </WebComponents::AuButton>
         </div>
 
-          {{!-- Gevraagde publicatiedatum --}}
+        {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
@@ -135,10 +135,10 @@
                     @defaultDate={{this.publicationFlow.publishDateRequested}}
                     @onChange={{this.setRequestedPublicationDate}}/>
           </div>
-          {{/if}}
+        {{/if}}
 
-          {{!-- Uiterste publicatiedatum --}}
-          {{#unless this.publicationStatus.isWithdrawn}}
+        {{!-- Uiterste publicatiedatum --}}
+        {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
@@ -152,21 +152,21 @@
               </div>
             {{/if}}
           </div>
-          {{/unless}}
+        {{/unless}}
 
-          {{!-- Uiterste vertaaldatum --}}
-          {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
+        {{!-- Uiterste vertaaldatum --}}
+        {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
-              <div class="auk-u-muted">
-                {{if
+            <div class="auk-u-muted">
+              {{if
+                this.publicationFlow.translateBefore
+                (moment-format
                   this.publicationFlow.translateBefore
-                  (moment-format
-                    this.publicationFlow.translateBefore
-                    "DD-MM-YYYY")
-                  (t "not-entered-yet")
-                }}
-              </div>
+                  "DD-MM-YYYY")
+                (t "not-entered-yet")
+              }}
+            </div>
             {{#if this.publicationFlow.translationDateHasExpired}}
               <div class="auk-form-help-text auk-form-help-text--warning">
                 <WebComponents::AuIcon @name="alert-triangle"/>
@@ -176,7 +176,7 @@
           </div>
         {{/if}}
 
-          {{!-- Publicatiedatum --}}
+        {{!-- Publicatiedatum --}}
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
@@ -193,7 +193,7 @@
           </div>
         {{/if}}
 
-          {{!-- Opmerking --}}
+        {{!-- Opmerking --}}
         <div class="auk-form-group">
           <WebComponents::AuLabel>
             <div class="auk-u-flex auk-u-flex--vertical-center">
