@@ -1,12 +1,11 @@
 import Route from '@ember/routing/route';
-import RSVP from 'rsvp';
 
 export default class CaseRoute extends Route {
   async model() {
     return this.modelFor('publications.publication').case;
   }
 
-  async afterModel(model) {
+  async afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
     this.contactPersons = this.publicationFlow.contactPersons;
 
