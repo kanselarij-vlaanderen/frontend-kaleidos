@@ -21,15 +21,6 @@ export default class PublicationController extends Controller {
     }
     return title;
   }
-
-  get titleText() {
-    const shortTitle = this.model.case.get('shortTitle');
-    if (shortTitle) {
-      return shortTitle;
-    }
-    return this.model.case.get('title');
-  }
-
   @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;
