@@ -1,6 +1,6 @@
 {{page-title this.model.name}}
-<div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-  <div class="vlc-scroll-wrapper__body full-height">
+<div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body full-height">
     {{#if this.fileFormatIsSupported}}
       <PdfView @filePath={{await this.model.downloadFileLink}}/>
     {{else}}
