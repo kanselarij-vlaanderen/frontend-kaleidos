@@ -9,7 +9,6 @@ export default class PublicationController extends Controller {
   @service media;
 
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
-  @tracked showLoader = false;
 
   get casePath() {
     let title = this.intl.t('publication-flow');
@@ -21,6 +20,7 @@ export default class PublicationController extends Controller {
     }
     return title;
   }
+
   @action
   toggleSidebar() {
     this.sidebarIsOpen = !this.sidebarIsOpen;

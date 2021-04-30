@@ -10,10 +10,10 @@
           </span>
           <WebComponents::AuAbbreviatedText
             data-test-publication-detail-menu-short-title
-            @text={{
-              if this.model.case.shortTitle
-                this.model.case.shortTitle
-                this.model.case.title
+            @text={{if
+              this.model.case.shortTitle
+              this.model.case.shortTitle
+              this.model.case.title
             }}
             @size="150"
             @custom="true"

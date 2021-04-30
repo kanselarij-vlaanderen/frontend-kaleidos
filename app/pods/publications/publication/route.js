@@ -13,7 +13,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   }
 
   async afterModel(model) {
-    const subcasesOnMeetingPromise = this.store.query('subcase', {
+    const lastestSubcaseOnMeeting = this.store.query('subcase', {
       filter: {
         case: {
           // cannot access yet without get(...)
@@ -26,20 +26,20 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       page: {
         size: 1,
       },
-    });
+    }).then((subcase) => subcase.firstObject);
 
     const publicationStatusPromise = this.store.query('publication-status', {});
     const regulationTypePromise = this.store.query('regulation-type', {});
 
-    const [subcasesOnMeeting] = await Promise.all([subcasesOnMeetingPromise, publicationStatusPromise, regulationTypePromise]);
+    const [latestSubcaseOnMeeting] = await Promise.all([lastestSubcaseOnMeeting, publicationStatusPromise, regulationTypePromise]);
 
-    this.subcasesOnMeeting = subcasesOnMeeting;
+    this.latestSubcaseOnMeeting = latestSubcaseOnMeeting;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
 
-    controller.subcasesOnMeeting = this.subcasesOnMeeting;
+    controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
   }
 
   /* eslint-disable id-length,no-unused-vars */
