@@ -2,10 +2,8 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
-import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsController extends Controller {
@@ -16,11 +14,7 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  @tracked isOpenPieceUploadModal = false;
-  @tracked newPieces = A([]);
-  @tracked isExpandedPieceView = false;
-  @tracked isSavingPieces = false;
-  @tracked isExpanded = false;
+  @tracked showPieceUploadModal = false;
   @tracked showLoader = false;
 
   @tracked documentTypes;
@@ -68,94 +62,38 @@ export default class PublicationDocumentsController extends Controller {
     }
   }
 
+  // open piece upload modal
   @action
   openPieceUploadModal() {
-    this.isOpenPieceUploadModal = true;
+    this.showPieceUploadModal = true;
+  }
+
+  @task
+  *saveAndLinkPieces(pieces) {
+    const savePromises = pieces.map(async(piece) => {
+      piece.cases = [this.case];
+      const documentContainer = await piece.documentContainer;
+      await documentContainer.save();
+      return piece.save();
+    });
+    yield all(savePromises);
+    this.showPieceUploadModal = false;
+    this.send('refresh'); // only required because of "inverse: null" on piece-cases relationship.
   }
 
   @action
-  toggleUploadModalSize() {
-    this.isExpanded = !this.isExpanded;
+  hidePieceUploadModal() {
+    this.showPieceUploadModal = false;
   }
 
+  // document menu options
+  // - option: view
   @action
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
 
-  @action
-  uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-    this.newPieces.pushObject(piece);
-  }
-
-  @task
-  *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
-      try {
-        await this.savePiece.perform(piece);
-      } catch (error) {
-        await this.deleteUploadedPiece.perform(piece);
-        throw error;
-      }
-    });
-    this.showLoader = true;
-    this.isOpenPieceUploadModal = false;
-    yield all(savePromises);
-    this.send('refresh');
-  }
-
-  /**
-   * Save a new document container and the piece it wraps
-   */
-  @task
-  *savePiece(piece) {
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    this.model.pushObject(piece);
-    piece.cases.pushObject(this.case);
-    yield piece.save();
-  }
-
-  @task
-  *cancelUploadPieces() {
-    this.showLoader = true;
-    const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
-    yield all(deletePromises);
-    this.newPieces = A();
-    this.isOpenPieceUploadModal = false;
-    this.showLoader = false;
-  }
-
-  @task
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
-
-  @action
-  cancelDeleteExistingPiece() {
-    this.pieceToDelete = null;
-    this.isVerifyingDelete = false;
-  }
-
+  // - option: edit
   @action
   async editExistingPiece(piece) {
     this.pieceBeingEdited = piece;
@@ -177,17 +115,23 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async saveEditedPiece() {
     this.showPieceEditor = false;
-    this.showLoader = true;
     await this.pieceBeingEdited.save();
     const dc = await this.pieceBeingEdited.get('documentContainer');
     await dc.save();
     this.send('refresh');
   }
 
+  // - option: delete
   @action
   deleteExistingPiece(piece) {
     this.pieceToDelete = piece;
     this.isVerifyingDelete = true;
+  }
+
+  @action
+  cancelDeleteExistingPiece() {
+    this.pieceToDelete = null;
+    this.isVerifyingDelete = false;
   }
 
   @task
