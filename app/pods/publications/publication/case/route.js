@@ -1,44 +1,49 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
+import RSVP from 'rsvp';
 
 export default class CaseRoute extends Route {
   async model() {
-    const publicationFlow = this.modelFor('publications.publication');
-    const _case = await publicationFlow.get('case');
-    const contactPersons = await publicationFlow.get('contactPersons');
-    // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
-    // TODO need a better filter, add a boolean to model maybe ?
-    const organizations = await this.store.query('organization', {
-      page: {
-        size: 200,
-      },
-    });
-    const filteredOrganizations = organizations.filter((orgs) => orgs.name);
-    return hash({
-      publicationFlow,
-      case: _case,
-      contactPersons: contactPersons,
-      organizations: filteredOrganizations.toArray(),
-    });
-  }
-  async afterModel(model) {
-    model.contactPersons.map((contactperson) => contactperson.get('organizations'));
+    return this.modelFor('publications.publication').case;
   }
 
-  async setupController(controller, model) {
-    super.setupController(...arguments);
-    const subcasesOnMeeting = await this.store.query('subcase', {
+  async afterModel() {
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.contactPersons = this.publicationFlow.contactPersons;
+
+    const latestSubcaseOnMeetingPromise = this.store.query('subcase', {
       filter: {
         case: {
-          id: model.case.id,
+          id: this.publicationFlow.case.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
       sort: '-created',
       include: 'mandatees',
-    });
-    if (subcasesOnMeeting) {
-      controller.set('latestSubcaseOnMeeting', subcasesOnMeeting.get('firstObject'));
-    }
+      page: {
+        size: 1,
+      },
+    }).then((subcases) => subcases.firstObject);
+
+    // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
+    // TODO need a better filter, add a boolean to model maybe ?
+    const organizationsPromise = this.store.query('organization', {
+      page: {
+        size: 200,
+      },
+    }).then((organizations) => organizations.filter((org) => org.name));
+
+    const [latestSubcaseOnMeeting, organizations] = await RSVP.all([latestSubcaseOnMeetingPromise, organizationsPromise]);
+
+    this.latestSubcaseOnMeeting = latestSubcaseOnMeeting;
+    this.organizations = organizations;
+  }
+
+  async setupController(controller) {
+    super.setupController(...arguments);
+
+    controller.publicationFlow = this.publicationFlow;
+    controller.contactPersons = this.contactPersons;
+    controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
+    controller.organizations = this.organizations;
   }
 }

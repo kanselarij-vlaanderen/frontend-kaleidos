@@ -8,7 +8,6 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
       reload: true,
     });
-    await publicationFlow.get('case');
 
     return publicationFlow;
   }
@@ -24,6 +23,9 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       },
       sort: '-created',
       include: 'mandatees',
+      page: {
+        size: 1,
+      },
     });
 
     const publicationStatusPromise = this.store.query('publication-status', {});
