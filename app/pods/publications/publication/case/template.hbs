@@ -130,7 +130,7 @@
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         {{#if (not this.latestSubcaseOnMeeting)}}
-          {{#if (gt this.publicationFlow.mandatees.length 0) }}
+          {{#if publicationFlow.mandatees }}
             <WebComponents::AuPanel::Body @noPadding="true">
               <table class="auk-table" data-test-table-mandatees>
                 <thead>
@@ -145,7 +145,7 @@
                       <td>
                         <div class="auk-u-flex auk-u-flex--vertical-center">
                           <WebComponents::AuBadge @icon="user"/>
-                          <span class="auk-u-mx-2">{{await mandatee.person.nameToDisplay}}</span>
+                          <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                         </div>
                       </td>
                       <td class="auk-u-text-align--right">
@@ -270,10 +270,10 @@
                       <div class="auk-u-flex auk-u-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
                         <div class="auk-u-mx-2">
-                          <span>{{ await contactPerson.nameToDisplay }}</span>
+                          <span>{{contactPerson.nameToDisplay}}</span>
                           {{#if contactPerson.organization}}
                             <div class="auk-u-muted auk-u-text-small">
-                              {{await contactPerson.organization.name}}
+                              {{contactPerson.organization.name}}
                             </div>
                           {{/if}}
                         </div>
@@ -354,7 +354,7 @@
             <PowerSelect
                     @searchField="name"
                     @search={{this.customPowerSelectSearchFunction}}
-                    @options={{await this.allOrganizations}}
+                    @options={{this.allOrganizations}}
                     @selected={{this.selectedOrganizations}}
                     @noMatchesMessage={{t "organizations-empty-result"}}
                     @placeholder={{t "search-organization"}}
