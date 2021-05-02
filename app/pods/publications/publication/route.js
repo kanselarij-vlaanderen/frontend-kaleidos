@@ -18,7 +18,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       filter: {
         case: {
           // cannot access yet without get(...)
-          id: model.case.get('id'),
+          [':id:']: model.case.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
