@@ -82,7 +82,7 @@
                 <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}} @checked={{includes piece this.selectedPieces}}/>
               </td>
               <td>
-                {{#if (gt (await piece.agendaitems.length) 0)}}
+                {{#if piece.agendaitems}}
                   <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted" @layout="icon-only"/>
                 {{/if}}
                 {{piece.name}}
@@ -123,12 +123,12 @@
                     {{!-- TODO the rules for editing documents are not clear. OVRB should not be able to edit documents that
                     have been released by kanselarij
                     Offering this as an option should be very restrictive --}}
-                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                      {{#if (not piece.agendaitems)}}
                         <WebComponents::AuDropdown::Item {{on "click" (fn this.editExistingPiece piece)}}>
                           {{t "edit"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
-                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                      {{#if (not piece.agendaitems)}}
                         <WebComponents::AuDropdown::Item @href={{await piece.downloadFileLink}} download={{await piece.downloadFilename}}>
                           {{t "download"}}
                         </WebComponents::AuDropdown::Item>
@@ -137,7 +137,7 @@
                     {{!-- TODO the rules for deleting documents are not clear. OVRB should not be able to delete documents
                     that have been released by kanselarij
                     Offering this as an option should be very restrictive --}}
-                      {{#if (not (gt (await piece.agendaitems.length) 0))}}
+                      {{#if (not piece.agendaitems)}}
                         <WebComponents::AuDropdown::Item
                                 data-test-pub-case-doc-row-action-delete
                                 @skin="danger"
