@@ -14,7 +14,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
   }
 
   async afterModel(model) {
-    const latestSubcaseOnMeetingPromise = this.store.query('subcase', {
+    const latestSubcaseOnMeetingPromise = this.store.queryOne('subcase', {
       filter: {
         case: {
           // cannot access yet without get(...)
@@ -24,7 +24,7 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       },
       sort: '-created',
       include: 'mandatees',
-    }).then((subcase) => subcase.firstObject);
+    });
 
     const publicationStatusPromise = this.store.query('publication-status', {});
     const regulationTypePromise = this.store.query('regulation-type', {});
