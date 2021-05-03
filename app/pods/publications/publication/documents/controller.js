@@ -17,7 +17,6 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showPieceUploadModal = false;
   @tracked showLoader = false;
 
-  @tracked documentTypes;
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
   @tracked isVerifyingDelete = false;

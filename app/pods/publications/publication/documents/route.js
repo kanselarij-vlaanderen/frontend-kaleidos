@@ -15,8 +15,7 @@ export default class PublicationDocumentsRoute extends Route {
 
   async model(params) {
     // caching for use in QueryParams.queryParamsToFilter
-    // and use them in DocumentsFilterComponent
-    this.documentTypes = await this._loadDocumentTypes();
+    await this._loadDocumentTypes();
     this.filter = await FilterQueryParams.readToFilter(this.store, params);
     this.case  = this.modelFor('publications.publication').case;
 

@@ -10,7 +10,6 @@ export default class PublicationsPublicationDocumentsFilterComponent extends Com
 
   @tracked documentTypes = [];
   @tracked fileTypes = [];
-  @tracked state;
 
   constructor(owner, args) {
     super(owner, args);
@@ -18,15 +17,18 @@ export default class PublicationsPublicationDocumentsFilterComponent extends Com
     // clone for internal use
     this.filter = this.args.filter.clone();
 
-    this.documentTypes = this.args.types.documentTypes;
+    this.loadDocumentTypes.perform();
     this.loadFileTypes.perform();
   }
 
   @task
+  *loadDocumentTypes() {
+    this.documentTypes = yield this.store.peekAll('document-type');
+  }
+
+  @task
   *loadFileTypes() {
-    if (!this.fileTypes.length) {
-      this.fileTypes = yield this.fileService.getFileExtensions();
-    }
+    this.fileTypes = yield this.fileService.getFileExtensions();
   }
 
   @action
