@@ -28,6 +28,14 @@
 
       </div>
       <div class='auk-form-group'>
+        <WebComponents::AuLabel for="finalPublicationDate">
+          {{t "final-publication-date"}}
+        </WebComponents::AuLabel>
+        <WebComponents::AuDatepicker
+                @defaultDate={{this.publicationDate}}
+                @onChange={{this.setPublicationDate}}/>
+      </div>
+      <div class='auk-form-group'>
         <WebComponents::AuLabel for="publicationSuffixInput">
           {{t "publications-suffix"}}
         </WebComponents::AuLabel>

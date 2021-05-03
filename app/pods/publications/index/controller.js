@@ -81,7 +81,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle, publication.publishBefore);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
@@ -104,7 +104,7 @@ export default class PublicationsIndexController extends Controller {
     this.send('refreshModel');
   }
 
-  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
+  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle, publishBefore) {
     const creationDatetime = new Date();
     const caze = this.store.createRecord('case', {
       title,
@@ -127,6 +127,7 @@ export default class PublicationsIndexController extends Controller {
       openingDate: new Date(),
       status: toPublishStatus,
       modified: creationDatetime,
+      publishBefore: publishBefore,
     });
     await publicationFlow.save();
     return publicationFlow;

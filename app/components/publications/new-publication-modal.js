@@ -12,6 +12,7 @@ export default class NewPublicationModal extends Component {
   @tracked suffix = null;
   @tracked shortTitle = null;
   @tracked longTitle = null;
+  @tracked publicationDate = null;
 
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed;
@@ -62,6 +63,7 @@ export default class NewPublicationModal extends Component {
           suffix: this.suffix,
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
+          publishBefore: this.publicationDate,
         });
     }
   }
@@ -69,5 +71,11 @@ export default class NewPublicationModal extends Component {
   @action
   async isPublicationNumberAlreadyTaken() {
     this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
+  }
+
+  @action
+  setPublicationDate(selectedDates) {
+    console.log(selectedDates);
+    this.publicationDate = selectedDates[0];
   }
 }
