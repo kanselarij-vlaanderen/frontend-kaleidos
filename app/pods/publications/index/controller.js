@@ -22,8 +22,8 @@ export default class PublicationsIndexController extends Controller {
 
   @service publicationService;
 
-  page = 0;
-  size = 25;
+  @tracked page = 0;
+  @tracked size = 10;
   sort = '-created';
   sizeOptions = [10, 25, 50, 100, 200];
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
@@ -130,5 +130,22 @@ export default class PublicationsIndexController extends Controller {
     });
     await publicationFlow.save();
     return publicationFlow;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.page = this.page - 1;
+    }
+  }
+
+  @action
+  nextPage() {
+    this.page = this.page + 1;
+  }
+
+  @action
+  setSizeOption(size) {
+    this.size = size;
   }
 }

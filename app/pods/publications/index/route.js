@@ -19,10 +19,6 @@ export default class PublicationsIndexRoute extends Route {
       as: 'sorteer',
     },
   }
-  filter = {
-    ':has:case': 'yes',
-  };
-  apiSort;
   params;
   statusFilters = Object.freeze({ // map filter name to concept uri
     publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
@@ -39,6 +35,10 @@ export default class PublicationsIndexRoute extends Route {
     const statusIds = [];
     let ministerFilter = {};
     this.params = params;
+    let apiSort;
+    const filter = {
+      ':has:case': 'yes',
+    };
     for (const statusFilter of Object.keys(this.statusFilters)) {
       if (this.publicationFilter[statusFilter]) {
         const status = await this.store.findRecordByUri('publication-status', this.statusFilters[statusFilter]);
@@ -59,10 +59,10 @@ export default class PublicationsIndexRoute extends Route {
       }
     }
     if (ministerFilter) {
-      this.filter.case = ministerFilter;
+      filter.case = ministerFilter;
     }
     if (statusIds.length > 0) {
-      this.filter.status = {
+      filter.status = {
         ':id:': statusIds.join(','),
       };
     }
@@ -78,31 +78,26 @@ export default class PublicationsIndexRoute extends Route {
       // note that the "dasherize" here is used in order to keep the original column keyName's
       if (qpSort === dasherize('publicationNumber')) {
         // show the most recent publication first if publication-number is the same
-        this.apiSort = 'publication-number,-created';
+        apiSort = 'publication-number,-created';
       } else if (qpSort === dasherize('regulationType')) {
-        this.apiSort = 'regulation-type.position';
+        apiSort = 'regulation-type.position';
       } else if (qpSort === dasherize('requestedPublicationDate')) {
-        this.apiSort = 'publish-before';
+        apiSort = 'publish-before';
       } else if (qpSort === dasherize('publicationDate')) {
-        this.apiSort = 'published-at';
+        apiSort = 'published-at';
       } else if (qpSort === dasherize('lastEdited')) {
-        this.apiSort = 'modified';
+        apiSort = 'modified';
       } else if (qpSort === dasherize('withdrawnDate') || qpSort === dasherize('pauseDate')) {
         // TODO: might want to sort on status too, since bot withdrawal & pause use the same sort field behind the scenes
-        this.apiSort = 'publication-status-change.started-at';
+        apiSort = 'publication-status-change.started-at';
       }
-      if (this.apiSort && descending) {
-        this.apiSort = `-${this.apiSort}`;
+      if (apiSort && descending) {
+        apiSort = `-${apiSort}`;
       }
     }
-    return this.getPublications();
-  }
-
-
-  getPublications() {
     return this.store.query('publication-flow', {
-      filter: this.filter,
-      sort: this.apiSort,
+      filter: filter,
+      sort: apiSort,
       page: {
         number: this.params.page,
         size: this.params.size,
@@ -111,19 +106,6 @@ export default class PublicationsIndexRoute extends Route {
     });
   }
 
-  @action
-  prevPage() {
-    if (this.params.page > 0) {
-      this.params.page = this.params.age - 1;
-      this.getPublications();
-    }
-  }
-
-  @action
-  nextPage() {
-    this.params.page = this.params.page + 1;
-    this.getPublications();
-  }
   @action
   refreshModel() {
     this.refresh();
