@@ -21,7 +21,7 @@
           @selected={{this.filter.documentTypes}}
           @onchange={{fn (mut this.filter.documentTypes)}}
           as |pieceType|>
-          {{get pieceType "label"}}
+          {{pieceType.label}}
         </PowerSelectMultiple>
       </div>
     </div>
