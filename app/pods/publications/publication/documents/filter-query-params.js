@@ -1,5 +1,5 @@
 import { set } from '@ember/object';
-import EmberPromise from 'rsvp';
+import RSVP from 'rsvp';
 
 // rationale:
 // conventional Ember method of assigning queryParams to controller properties could not be used for two reasons:
@@ -11,50 +11,35 @@ import EmberPromise from 'rsvp';
 // when using this class
 //   cache document-types for performance (this class uses findRecord('document-type', id))
 export default class FilterQueryParams {
-  static queryParamMapping = {
-    documentTypes: 'filterQueryParams$documentTypes',
-    documentName: 'filterQueryParams$documentName',
-    fileTypes: 'filterQueryParams$fileTypes',
-  }
-
   static queryParams = {
-    [this.queryParamMapping.documentName]: {
+    filterName: {
       as: 'naam',
       refreshModel: true,
+      type: 'string',
+      // for own use, not supported by Ember
+      _default: '',
     },
-    [this.queryParamMapping.fileTypes]: {
-      as: 'bestandstype',
+    filterExtensions: {
+      as: 'extensies',
       refreshModel: true,
       type: 'array',
+      _default: [],
     },
-    [this.queryParamMapping.documentTypes]: {
+    filterDocumentTypeIds: {
       as: 'type',
       refreshModel: true,
       type: 'array',
+      _default: [],
     },
   }
 
   static async readToFilter(store, params) {
-    const normalizedParams = this._readQueryParams(params);
-    const filterState = this._normalizedParamsToFilter(store, normalizedParams);
-    return filterState;
-  }
+    const documentTypePromises = params.filterDocumentTypeIds.map((id) => store.findRecord('document-type', id));
 
-  static _readQueryParams(params) {
-    const normalizedParams = {};
-    for (const [queryParam, filterParam] of Object.entries(this.queryParamMapping)) {
-      normalizedParams[queryParam] = params[filterParam];
-    }
-    return normalizedParams;
-  }
-
-  static async _normalizedParamsToFilter(store, params) {
-    const documentTypePromises = params.documentTypes.map((id) => store.findRecord('document-type', id));
-
-    const documentTypes = await EmberPromise.all(documentTypePromises);
+    const documentTypes = await RSVP.all(documentTypePromises);
     const filter = {
-      documentName: params.documentName,
-      fileTypes: params.fileTypes,
+      documentName: params.filterName,
+      fileTypes: params.filterExtensions,
       documentTypes: documentTypes,
     };
 
@@ -62,24 +47,32 @@ export default class FilterQueryParams {
   }
 
   static updateFromFilterAndReload(controller, filter) {
-    const params = this._filterToNormalizedQueryParams(filter);
-    this._writeQueryParams(controller, params);
+    const params = this._mapToParamsFormat(filter);
+    this._setQueryParams(controller, params);
   }
 
-  static _filterToNormalizedQueryParams(filter) {
+  static initialize(controller) {
+    // no @tracked for performance
+    // necessary to make parameter defaults not appear in the url
+    for (const [key, value] of Object.entries(this.queryParams)) {
+      set(controller, key, value._default);
+    }
+  }
+
+  static _mapToParamsFormat(filter) {
     const params = {
-      documentName: filter.documentName,
-      documentTypes: filter.documentTypes.map((it) => it.id),
-      fileTypes: filter.fileTypes,
+      filterName: filter.documentName,
+      filterDocumentTypeIds: filter.documentTypes.map((it) => it.id),
+      filterExtensions: filter.fileTypes,
     };
 
     return params;
   }
 
-  static _writeQueryParams(controller, normalizedParams) {
-    for (const [key, value] of Object.entries(FilterQueryParams.queryParamMapping)) {
+  static _setQueryParams(controller, params) {
+    for (const [key, value] of Object.entries(params)) {
       // set would be more performant than setting query parameters with @tracked
-      set(controller, value, normalizedParams[key]);
+      set(controller, key, value);
     }
   }
 }

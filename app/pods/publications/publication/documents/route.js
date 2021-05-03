@@ -22,7 +22,7 @@ export default class PublicationDocumentsRoute extends Route {
     const modelData = await this._loadModel(this.case, this.filter);
 
     // use array to allow iteration (for sorting)
-    const model = await this.sortAndFilterPieces(modelData.toArray());
+    const model = await this._sortAndFilterPieces(modelData.toArray());
 
     return model;
   }
@@ -64,17 +64,17 @@ export default class PublicationDocumentsRoute extends Route {
     super.setupController(...arguments);
 
     controller.case = this.case;
-    controller.documentTypes = this.documentTypes;
     controller.filter = new DocumentsFilter(this.filter);
   }
 
-  resetController(controller) {
+  // eslint-disable-next-line no-unused-vars
+  resetController(controller, isExiting, transition) {
     controller.newPieces = [];
     controller.selectedPieces = [];
     controller.showLoader = false;
   }
 
-  async sortAndFilterPieces(pieces) {
+  async _sortAndFilterPieces(pieces) {
     const sortedPieces = sortPieces(pieces);
 
     let filteredSortedPieces;

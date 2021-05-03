@@ -31,11 +31,10 @@ export default class PublicationDocumentsController extends Controller {
   @tracked showFilterPanel = true;
   @tracked filter;
 
-  // no @tracked for performance
-  // necessary to make parameter defaults not appear in the url
-  filterQueryParams$documentName = '';
-  filterQueryParams$fileTypes = [];
-  filterQueryParams$documentTypes = [];
+  constructor() {
+    super(...arguments);
+    FilterQueryParams.initialize(this);
+  }
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
