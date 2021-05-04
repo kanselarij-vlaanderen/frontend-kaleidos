@@ -1,33 +1,37 @@
-<div data-test-agenda-printContainer class="auk-container auk-container--center auk-content vlc-printable-agenda-list">
-  {{utils/logo-header}}
+<div class="auk-u-m-8 auk-u-m-0@print">
+  <div class="auk-container auk-container--center auk-printable-agenda-list" data-test-agenda-printContainer>
+    {{utils/logo-header}}
 
-  <h4 class="vlc-printable-agenda-list__session-title" data-test-agenda-print-header-title>
-    {{t "agenda-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}} - {{this.meeting.kindToShow.altLabel}}
-  </h4>
+    <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-align--center" data-test-agenda-print-header-title>
+      {{t "agenda-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}} - {{this.meeting.kindToShow.altLabel}}
+    </h2>
 
-  {{#if (gt this.notas.length 0)}}
-    {{#agenda/printable-agenda/list-section
-      letter="A"
-      title=(t "agendaitems")
-    }}
-      {{#each this.notas as |notaGroup|}}
-        {{agenda/printable-agenda/list-section/item-group
-          items=notaGroup
+    <div class="auk-content">
+      {{#if (gt this.notas.length 0)}}
+        {{#agenda/printable-agenda/list-section
+          letter="A"
+          title=(t "agendaitems")
         }}
-      {{/each}}
-    {{/agenda/printable-agenda/list-section}}
-  {{/if}}
+          {{#each this.notas as |notaGroup|}}
+            {{agenda/printable-agenda/list-section/item-group
+              items=notaGroup
+            }}
+          {{/each}}
+        {{/agenda/printable-agenda/list-section}}
+      {{/if}}
 
-  {{#if (gt announcements.length 0)}}
-    {{#agenda/printable-agenda/list-section
-      letter="B"
-      title=(t "announcements-subtitle")
-    }}
-      {{#each announcements as |announcement|}}
-        {{agenda/printable-agenda/list-section/item-group/item
-          item=announcement
+      {{#if (gt announcements.length 0)}}
+        {{#agenda/printable-agenda/list-section
+          letter="B"
+          title=(t "announcements-subtitle")
         }}
-      {{/each}}
-    {{/agenda/printable-agenda/list-section}}
-  {{/if}}
+          {{#each announcements as |announcement|}}
+            {{agenda/printable-agenda/list-section/item-group/item
+              item=announcement
+            }}
+          {{/each}}
+        {{/agenda/printable-agenda/list-section}}
+      {{/if}}
+    </div>
+  </div>
 </div>

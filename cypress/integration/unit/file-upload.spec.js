@@ -33,7 +33,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     }], 'meeting');
 
     // Check the name of the document we just uploaded
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains('test pdf');
@@ -45,7 +45,7 @@ context('Add files to an agenda', () => { // At the meeting-level
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(/BIS/);
@@ -57,7 +57,7 @@ context('Add files to an agenda', () => { // At the meeting-level
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(/TER/);
@@ -100,7 +100,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     );
 
     // Test if documents are listed in the correct sorting order
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
       cy.get('@docCards').eq(0)
         .within(() => {
@@ -140,7 +140,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Test if the documents we're looking for are present
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
     });
     cy.get('@docCards').should('have.length', 2);

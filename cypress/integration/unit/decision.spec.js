@@ -82,7 +82,7 @@ context('Add files to an agenda', () => {
       timeout: 12000,
     });
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards');
     });
 

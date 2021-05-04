@@ -1,76 +1,78 @@
-<div class="vlc-scroll-wrapper__body">
-  <div class="auk-u-m-8">
-    <div class="auk-u-mb-10">
-      <div class="auk-u-mb-4">
-        <div class="auk-u-flex auk-u-flex--vertical-center">
-          <h4 class="auk-h3 auk-u-m-0">
-            {{t "documents"}}
-          </h4>
-          {{#if (and this.currentSession.isEditor this.model.length)}}
-            <div class="auk-u-ml-2">
-              <button data-test-subcase-documents-edit class="auk-button-link" type="button"
-                {{on "click" this.enablePieceEdit}}>
-                {{t "edit"}}
-              </button>
-            </div>
-          {{/if}}
-        </div>
-      </div>
-      {{#if this.isEnabledPieceEdit}}
-        <Documents::BatchDocumentEdit
-          @pieces={{this.model}}
-          @onCloseEdit={{this.disablePieceEdit}}
-        />
-      {{else}}
-        <Documents::DocumentCardList
-          @pieces={{this.model}}
-          @onAddPiece={{perform this.addPiece}}
-          @didDeletePiece={{this.refresh}}
-          @didDeleteContainer={{this.refresh}}
-        />
-      {{/if}}
-      {{#if this.currentSession.isEditor}}
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-m-8">
+      <div class="auk-u-mb-10">
         <div class="auk-u-mb-4">
-          <button type="button" class="auk-button auk-button--tertiary"
-            {{on "click" this.openPieceUploadModal}}>
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-add"></i>
-            </div>
-            <div class="auk-button__label">
-              {{t "documents-add"}}
-            </div>
-          </button>
-        </div>
-      {{/if}}
-    </div>
-
-    {{#if this.isOpenPieceUploadModal}}
-      <WebComponents::VlModal
-        @closeModal={{perform this.cancelUploadPieces}}
-        @isOverlay={{true}}
-        @large={{true}}
-        @title={{t "documents-add"}} >
-        <div class="auk-modal__content">
-          <FileUploader
-            @multipleFiles={{true}}
-            @uploadedFileAction={{this.uploadPiece}} />
-          <div class="upload-container">
-            {{#each this.newPieces as |piece|}}
-              <Documents::UploadedDocument
-                @piece={{piece}}
-                @allowDocumentContainerEdit={{true}}
-                @onDelete={{perform this.deletePiece piece}} />
-            {{/each}}
+          <div class="auk-u-flex auk-u-flex--vertical-center">
+            <h4 class="auk-h3 auk-u-m-0">
+              {{t "documents"}}
+            </h4>
+            {{#if (and this.currentSession.isEditor this.model.length)}}
+              <div class="auk-u-ml-2">
+                <button data-test-subcase-documents-edit class="auk-button-link" type="button"
+                  {{on "click" this.enablePieceEdit}}>
+                  {{t "edit"}}
+                </button>
+              </div>
+            {{/if}}
           </div>
         </div>
-        <WebComponents::VlModalFooter
-          @isLoading={{this.savePieces.isRunning}}
-          @cancelButtonText={{t "cancel"}}
-          @saveButtonText={{t "documents-add"}}
-          @cancelAction={{perform this.cancelUploadPieces}}
-          @saveAction={{perform this.savePieces}}
-          @disableSave={{eq this.newPieces.length 0}} />
-      </WebComponents::VlModal>
-    {{/if}}
+        {{#if this.isEnabledPieceEdit}}
+          <Documents::BatchDocumentEdit
+            @pieces={{this.model}}
+            @onCloseEdit={{this.disablePieceEdit}}
+          />
+        {{else}}
+          <Documents::DocumentCardList
+            @pieces={{this.model}}
+            @onAddPiece={{perform this.addPiece}}
+            @didDeletePiece={{this.refresh}}
+            @didDeleteContainer={{this.refresh}}
+          />
+        {{/if}}
+        {{#if this.currentSession.isEditor}}
+          <div class="auk-u-mb-4">
+            <button type="button" class="auk-button auk-button--tertiary"
+              {{on "click" this.openPieceUploadModal}}>
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "documents-add"}}
+              </div>
+            </button>
+          </div>
+        {{/if}}
+      </div>
+
+      {{#if this.isOpenPieceUploadModal}}
+        <WebComponents::VlModal
+          @closeModal={{perform this.cancelUploadPieces}}
+          @isOverlay={{true}}
+          @large={{true}}
+          @title={{t "documents-add"}} >
+          <div class="auk-modal__content">
+            <FileUploader
+              @multipleFiles={{true}}
+              @uploadedFileAction={{this.uploadPiece}} />
+            <div class="upload-container">
+              {{#each this.newPieces as |piece|}}
+                <Documents::UploadedDocument
+                    @piece={{piece}}
+                    @allowDocumentContainerEdit={{true}}
+                    @onDelete={{perform this.deletePiece piece}} />
+              {{/each}}
+            </div>
+          </div>
+          <WebComponents::VlModalFooter
+            @isLoading={{this.savePieces.isRunning}}
+            @cancelButtonText={{t "cancel"}}
+            @saveButtonText={{t "documents-add"}}
+            @cancelAction={{perform this.cancelUploadPieces}}
+            @saveAction={{perform this.savePieces}}
+            @disableSave={{eq this.newPieces.length 0}} />
+        </WebComponents::VlModal>
+      {{/if}}
+    </div>
   </div>
 </div>

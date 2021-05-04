@@ -1,13 +1,17 @@
-<div class="checkbox-list-selector">
-  {{#if findAll.isRunning}}
-    <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
-  {{else}}
+{{#if findAll.isRunning}}
+  <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
+{{else}}
+  <div class="auk-o-grid">
     {{#each this.selectedThemesReload as |theme|}}
-      <WebComponents::VlCheckbox
-        @value={{theme.selected}}
-        @label={{theme.label}}
-        @toggle={{action "selectModel" theme}}
-      />
+      <div class="auk-o-grid-col-4">
+        <div class="auk-u-mb">
+          <WebComponents::VlCheckbox
+            @value={{theme.selected}}
+            @label={{theme.label}}
+            @toggle={{action "selectModel" theme}}
+          />
+        </div>
+      </div>
     {{/each}}
-  {{/if}}
-</div>
+  </div>
+{{/if}}

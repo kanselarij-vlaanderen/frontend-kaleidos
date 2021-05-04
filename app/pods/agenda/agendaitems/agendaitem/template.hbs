@@ -1,34 +1,34 @@
-<div class="vlc-panel-layout__agenda-items">
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    <Agenda::AgendaitemSearch
-      @searchText={{readonly this.agendaitemsController.filter}}
-      @onSearch={{this.searchAgendaitems}}
-    />
-    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
-      <Agenda::AgendaDetail::Sidebar
-        @notaGroups={{this.notaGroups}}
-        @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
-        @announcements={{this.announcements}}
-        @newItems={{this.newItems}}
-        @currentAgenda={{this.agenda}}
-        @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
-        @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
-        @activeItem={{this.model}}
+<div class="auk-panel-layout__agenda-items">
+  <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
+    <div class="auk-scroll-wrapper">
+      <Agenda::AgendaitemSearch
+        @searchText={{readonly this.agendaitemsController.filter}}
+        @onSearch={{this.searchAgendaitems}}
       />
-    </div>
-  </div>
-</div>
-<div class="vlc-panel-layout__main-content">
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    <div class="vlc-scroll-wrapper__header">
-      <div class="auk-navbar auk-navbar--bordered-bottom">
-        <Agenda::Agendaitem::AgendaitemNav
-          @agendaitem={{this.model}}
-          @meetingIsConcluded={{this.meeting.isFinal}}
+      <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
+        <Agenda::AgendaDetail::Sidebar
+          @notaGroups={{this.notaGroups}}
+          @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
+          @announcements={{this.announcements}}
+          @newItems={{this.newItems}}
+          @currentAgenda={{this.agenda}}
+          @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
+          @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+          @activeItem={{this.model}}
         />
       </div>
     </div>
-    <div class="vlc-scroll-wrapper__body">
+  </div>
+</div>
+<div class="auk-panel-layout__main-content">
+  <div class="auk-scroll-wrapper">
+    <div class="auk-navbar auk-navbar--bordered-bottom">
+      <Agenda::Agendaitem::AgendaitemNav
+        @agendaitem={{this.model}}
+        @meetingIsConcluded={{this.meeting.isFinal}}
+      />
+    </div>
+    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <div class="auk-u-m-4">
         <div class="auk-u-mb-3">
           {{outlet}}

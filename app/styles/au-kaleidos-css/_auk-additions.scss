@@ -16,7 +16,7 @@
 
 .auk-button--warning-primary {
   color: $au-gray-800;
-  background: $au-yellow-400;
+  background: $au-yellow-500;
   &:hover,
   &:active {
     background: $au-yellow-300;
@@ -199,9 +199,21 @@
 
   &:focus {
     outline: 0;
-    border-color: $au-yellow-400;
-    box-shadow: inset 0 0 0 0.1rem $au-yellow-400;
+    border-color: $au-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem $au-yellow-500;
   }
+}
+
+
+/* Scroll wrapper
+   ========================================================================== */
+
+.auk-scroll-wrapper__body--horizontal {
+  overflow-y: hidden;
+}
+
+.auk-scroll-wrapper__body--vertical {
+  overflow-x: hidden;
 }
 
 
@@ -210,6 +222,54 @@
 
 .auk-form-group--power-select {
   width: 23rem;
+}
+
+
+/* Printable agenda list
+   ========================================================================== */
+
+.auk-printable-agenda-list {
+  //
+}
+
+.auk-printable-agenda-list__item-number,
+.auk-printable-agenda-list__item-letter {
+  min-width: 3rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.auk-printable-agenda-list__item-list {
+  //
+}
+
+.auk-printable-agenda-list__document-list {
+  list-style: none !important;
+}
+
+.auk-printable-agenda-list__item-indented {
+  padding-left: 3rem;
+}
+
+
+/* Preview container
+   ========================================================================== */
+
+.auk-preview-container {
+  img {
+    max-width: 20rem;
+    max-height: 20rem;
+  }
+}
+
+
+/* Publication overview navbar (to be removed)
+   ========================================================================== */
+
+.auk-publication-overview-navbar {
+  ul.auk-menu {
+    background-color: transparent !important;
+  }
 }
 
 

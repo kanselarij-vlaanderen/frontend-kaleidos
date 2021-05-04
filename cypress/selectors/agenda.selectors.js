@@ -18,7 +18,7 @@ const selectors = {
   printHeaderTitle: '[data-test-agenda-print-header-title]',
   dataTable: '.auk-table',
   dataTableZebra: '.auk-table--striped',
-  toProcedureStapLink: '.vlc-panel-layout__main-content a',
+  toProcedureStapLink: '.auk-panel-layout__main-content a',
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   agendaitemControlsActions: '[data-test-agendaitem-controls-actions]',
   agendaitemControlsActionDelete: '[data-test-agendaitem-controls-action-delete]',
