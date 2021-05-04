@@ -176,18 +176,27 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-  // eslint-disable-next-line require-yield
   *addNumacNumber() {
     const structuredIdentifier = this.store.createRecord('structured-identifier', {
       localIdentifier: this.newNumacNumber,
     });
     yield structuredIdentifier.save();
+    // const numacNumber = this.store.createRecord('identification', {
+    //   idName: this.newNumacNumber,
+    //   agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+    //   structuredIdentifier: structuredIdentifier,
+    //   publicationFlowAsNumac: this.publicationFlow,
+    // });
+    // yield numacNumber.save();
+
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
       agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
-      publicationFlowAsNumac: this.publicationFlow,
       structuredIdentifier: structuredIdentifier,
+      // publicationFlowAsNumac: this.publicationFlow,
     });
+    yield numacNumber.save();
+    this.publicationFlow.numacNumbers.pushObject(numacNumber);
     yield numacNumber.save();
     // if (this.args.didChange) {
     //   this.args.didChange(numacNumber);
