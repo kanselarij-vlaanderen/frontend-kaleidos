@@ -5,25 +5,22 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   sessionService: inject(),
-  classNames: ['vlc-panel-layout__agenda-history'],
+  classNames: ['auk-sidebar', 'auk-sidebar--gray-200', 'auk-sidebar--left', 'auk-sidebar--small', 'auk-sidebar--collapsible', 'auk-scroll-wrapper'],
 
-  classNameBindings: ['getClassNames'],
+  attributeBindings: ['getCollapsedAttribute:data-collapsed'],
 
-  getClassNames: computed('agendaMenuOpened', function() {
-    if (this.get('agendaMenuOpened')) {
-      return 'vlc-panel-layout__agenda-history--collapsed';
-    }
-    return null;
+  getCollapsedAttribute: computed('agendaMenuCollapsed', function() {
+    return this.get('agendaMenuCollapsed').toString();
   }),
 
-  agendaMenuOpened: false,
+  agendaMenuCollapsed: false,
 
   currentAgenda: alias('sessionService.currentAgenda'),
   currentSession: alias('sessionService.currentSession'),
 
   actions: {
     collapseSideMenu() {
-      this.toggleProperty('agendaMenuOpened');
+      this.toggleProperty('agendaMenuCollapsed');
     },
 
     compareAgendas() {

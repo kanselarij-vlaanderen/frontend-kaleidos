@@ -42,6 +42,8 @@ context('Search tests', () => {
     });
   };
 
+  // TODO cy.server is used alot throughout these tests, but the one in before should be enough.
+
   it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
     cy.visit('zoeken/agendapunten');
     searchFunction(options);
@@ -58,10 +60,12 @@ context('Search tests', () => {
     const PLACE = 'Lāna Hawaï eiland';
     const KIND = 'Ministerraad';
     cy.createAgenda(KIND, dateToCreateAgenda, PLACE);
+    // TODO opening agenda not needed yet
     cy.openAgendaForDate(dateToCreateAgenda);
 
     const case1TitleShort = `${testId}Cypress search dossier 1`;
     const type1 = 'Nota';
+    // TODO new lines will be stripped during saving, why have them here ?
     const newSubcase1TitleShort = 'dit is de korte titel for search 🔍 Lāna Hawaï eiland\n\n';
     const subcase1TitleLong = 'dit is de lange titel for search and searching 🔎 Principiële accénten\n\n';
     const subcase1Type = 'In voorbereiding';
@@ -87,6 +91,8 @@ context('Search tests', () => {
     cy.openAgendaForDate(dateToCreateAgenda);
     // cy.contains('dit is de korte titel for search 🔍').click();
     // UTF8 extende set  does not seem to work on database on test server.
+    // TODO use opendetailofagendaitem and newSubcase1TitleShort to open detail
+    // TODO, is also not needed because addDocumentsToAgendaitem already does opendetailofagendaitem
     cy.contains('dit is de korte titel for search').click();
 
     const file = {
@@ -97,11 +103,13 @@ context('Search tests', () => {
     cy.addDocumentToTreatment(file); // TODO is this saved? Command does not include saving
 
     cy.openAgendaForDate(dateToCreateAgenda);
+    // TODO use opendetailofagendaitem and newSubcase1TitleShort to open detail
     cy.contains('dit is de korte titel for search').click();
     cy.get(agenda.agendaitemTitlesEdit).should('exist')
       .should('be.visible')
       .click();
 
+    // TODO confidential toggle, use better selector ?
     cy.get(form.formVlToggle).should('exist')
       .click();
 
@@ -117,6 +125,7 @@ context('Search tests', () => {
     cy.get(agenda.agendaitemTitlesEditSave).should('exist')
       .should('be.visible')
       .click();
+    // TODO we don't await patch calls, is data saved properly ?
   });
 
   it('Search for non existing searchterm in agendaitems', () => {
@@ -124,16 +133,19 @@ context('Search tests', () => {
     cy.get('[data-test-searchfield]').clear();
     cy.get('[data-test-searchfield]').type('nietstezienhier');
 
-    cy.server();
+    cy.server(); // TODO server here not needed ?
     cy.route('GET', '/agendaitems/search?**').as('searchCall');
     cy.get('button[data-test-trigger-search]').click();
     cy.wait('@searchCall');
 
     cy.get('[data-table]').should('not.exist');
+    // TODO not existing of data table could have multiple reasons (still loading, error)
+    // TODO check auEmptyState and text instead "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan."
   });
 
   it('Search for funky searchterms in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
+    // TODO reenable to check if autocomplete works better now ? (+7 months later)
     const wordsToCheck1 = [
       'peerd',
       /* 'peer', // TODO autocomplete search does not yet work here.*/
@@ -149,12 +161,14 @@ context('Search tests', () => {
       cy.get('button[data-test-trigger-search]').click();
       cy.wait('@searchCall');
 
+      // TODO use newSubcase2TitleShort instead of fixed data
       cy.get('[data-table]').contains('korte titel for batterij');
     });
 
     cy.get('[data-test-m-header-settings]').click();
     cy.wait(1000);
     cy.get('[data-test-m-header-search]').click();
+    // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
     // cy.get('[data-test-searchfield]').should('have.value', '');
@@ -199,7 +213,9 @@ context('Search tests', () => {
       cy.get('button[data-test-trigger-search]').click();
       cy.wait('@casesSearchCall');
 
+      // TODO case1TitleShort instead of hardcoded text
       cy.get('[data-table]').contains('Cypress search dossier 1');
+      // TODO assert some of the words will aso yield dosser 2 as result, some don't. Assert we dont always show all cases
     });
   });
 
@@ -227,6 +243,7 @@ context('Search tests', () => {
   it('Search for funky searchterms in agenda overview', () => {
     cy.openAgendaForDate(dateToCreateAgenda);
 
+    // TODO use const data instead of harcoded text, better selectors
     cy.get('.vlc-agenda-items').contains('titel for batterij');
     cy.get('.vlc-agenda-items').contains('titel for search');
 
@@ -239,6 +256,7 @@ context('Search tests', () => {
     cy.wait('@searchCallOverview-IKBESTANIET');
 
     // Should find nothing.
+    // TODO why twice ?
     cy.get('.vlc-agenda-items').contains('Er zijn nog geen agendapunten in deze agenda.');
     cy.get('.vlc-agenda-items').contains('Er zijn nog geen mededelingen in deze agenda.');
 

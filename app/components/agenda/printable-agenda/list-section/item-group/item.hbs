@@ -1,24 +1,28 @@
 <div class="auk-u-mb-2">
-  <div class="auk-u-flex">
-    <div class="vlc-printable-agenda-list__item-number">
+  <div class="auk-u-flex auk-u-mb-2 auk-u-mt-4">
+    <div class="auk-printable-agenda-list__item-number">
       {{item.number}}.
     </div>
-    <h4 class="vlc-printable-agenda-list__title auk-u-m-0">
+    <h3 class="auk-u-m-0">
       {{sanitize-html
         raw=true
         value=(if this.item.shortTitle this.item.shortTitle this.item.title)
       }}
-    </h4>{{!-- Fallback for legacy data that doesn't have a short title --}}
+    </h3>{{!-- Fallback for legacy data that doesn't have a short title --}}
   </div>
-  <p class="vlc-printable-agenda-list__description indented">
+  <p class="auk-printable-agenda-list__description auk-printable-agenda-list__item-indented">
     {{sanitize-html
       raw=true
       value=this.item.title
     }}
   </p>
 </div>
-<ul class="vlc-printable-agenda-list__document-list indented">
-  {{#each this.item.sortedPieces as |piece|}}
-    <li>({{piece.name}})</li>
-  {{/each}}
-</ul>
+{{#if this.item.sortedPieces}}
+  <div class="auk-u-mb-2">
+    <ul class="auk-printable-agenda-list__document-list auk-printable-agenda-list__item-indented">
+      {{#each this.item.sortedPieces as |piece|}}
+        <li>({{piece.name}})</li>
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}

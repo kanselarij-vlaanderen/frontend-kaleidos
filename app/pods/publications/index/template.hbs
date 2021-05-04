@@ -1,4 +1,4 @@
-<WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
+<WebComponents::AuNavbar class="auk-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -173,14 +173,30 @@
           {{/if}}
 
           {{#if this.tableColumnDisplayOptions.withdrawnDate}}
-            <td>
-              {{t "dash"}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.status.isWithdrawn }}
+                {{moment-format row.publicationStatusChange.startedAt "DD-MM-YYYY"}}
+                <br/>
+                <span class="auk-u-text-small auk-u-muted">
+                  {{moment-format row.publicationStatusChange.startedAt "HH:mm"}}
+                </span>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
             </td>
           {{/if}}
 
           {{#if this.tableColumnDisplayOptions.pauseDate}}
-            <td>
-              {{t "dash"}}
+            <td class="auk-u-text-nowrap">
+              {{#if row.status.isPaused}}
+                {{moment-format row.publicationStatusChange.startedAt "DD-MM-YYYY"}}
+                <br/>
+                <span class="auk-u-text-small auk-u-muted">
+                  {{moment-format row.publicationStatusChange.startedAt "HH:mm"}}
+                </span>
+              {{else}}
+                {{t "dash"}}
+              {{/if}}
             </td>
           {{/if}}
 

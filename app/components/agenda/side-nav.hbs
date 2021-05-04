@@ -1,81 +1,56 @@
-<nav class="vlc-side-nav">
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
-    <div class="vlc-scroll-wrapper__header">
-      <div class="auk-navbar auk-navbar--bordered-bottom">
-        <div class="auk-toolbar-complex">
-          <div class="auk-toolbar-complex__left">
-            <h2 class="auk-h4">
-              <span>
-                {{t "nav-title"}}
-              </span>
-            </h2>
+<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-200">
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left" data-sidebar-expanded-only="">
+      <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
+    </div>
+    <div class="auk-toolbar-complex__{{if agendaMenuCollapsed "center" "right"}}">
+      <div class="auk-toolbar-complex__item {{if agendaMenuCollapsed "auk-u-flex auk-u-flex--horizontal-center"}}">
+        <button
+          class="auk-button auk-button--borderless auk-button--icon"
+          type="button"
+          {{action "collapseSideMenu"}}
+        >
+          <div class="auk-icon auk-icon--chevron-{{if agendaMenuCollapsed "right" "left"}} auk-icon--default">
+            <i class="ki ki-chevron-{{if agendaMenuCollapsed "right" "left"}}"></i>
           </div>
-          <div class="auk-toolbar-complex__right">
-            {{#if agendaMenuOpened}}
-              <button type="button" class="auk-button auk-button--borderless auk-button--icon default"
-                {{action "collapseSideMenu"}}>
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-chevron-right"></i>
-                </div>
-                <div class="auk-u-sr-only">
-                  {{t "toggle"}}
-                </div>
-              </button>
-            {{else}}
-              <button type="button" class="auk-button auk-button--borderless auk-button--icon collapsed"
-                {{action "collapseSideMenu"}}>
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-chevron-left"></i>
-                </div>
-                <div class="auk-u-sr-only">
-                  {{t "toggle"}}
-                </div>
-              </button>
-            {{/if}}
-          </div>
-        </div>
+          <span class="auk-u-sr-only">
+            {{t "toggle"}}
+          </span>
+        </button>
       </div>
     </div>
-    <div class="vlc-scroll-wrapper__body">
-      <ul>
-        {{#each (await agendas) as |agenda index|}}
-          <li data-test-agenda-sidenav-element={{index}} class="vlc-side-nav-item
-              {{active-class
-                agenda
-                currentAgenda
-                class="vlc-side-nav-item--active"
-              }}"
-          >
-            <a href="javascript://" {{action "setCurrentAgenda" agenda}}>
-              <div class="vlc-side-nav-item__label">
-                <span>
-                  {{await agenda.agendaName}}
-                </span>
-              </div>
-              <div class="vlc-side-nav-item__meta">
-                {{#if (not agenda.isDesignAgenda)}}
-                  {{t "approved-on"}}
-                  <br/>
-                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
-                {{else}}
-                  {{t "latest-modified-on"}}
-                  <br/>
-                  {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
-                {{/if}}
-              </div>
-              <div class="vlc-side-nav-item__meta--small">
-                <h3 class="auk-h4">
-                  {{#if (not agenda.isDesignAgenda)}}
-                    {{agenda.name}}
-                  {{else}}
-                    *
-                  {{/if}}
-                </h3>
-              </div>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-    </div>
   </div>
-</nav>
+</div>
+<ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
+  {{#each (await agendas) as |agenda index|}}
+    <li
+      data-test-agenda-sidenav-element={{index}}
+      class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}"
+    >
+      <a
+        href="#"
+        {{action "setCurrentAgenda" agenda}}
+      >
+        <div class="auk-sidebar__label">
+          <span data-sidebar-expanded-only="">{{await agenda.agendaName}}</span>
+          <span data-sidebar-collapsed-only="">
+            {{#if (not agenda.isDesignAgenda)}}
+              {{agenda.name}}
+            {{else}}
+              *
+            {{/if}}
+          </span>
+        </div>
+        <div class="auk-sidebar__sublabel" data-sidebar-expanded-only="">
+          {{#if (not agenda.isDesignAgenda)}}
+            {{t "approved-on"}}
+          {{else}}
+            {{t "latest-modified-on"}}
+          {{/if}}
+          <br/>
+          {{moment-format agenda.modified "dd DD/MM/YYYY HH:mm"}}
+        </div>
+      </a>
+    </li>
+  {{/each}}
+</ul>
