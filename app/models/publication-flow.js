@@ -32,7 +32,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('urgency-level') urgencyLevel;
 
   // Has many .
-  @hasMany('numac-number') numacNumbers;
+  @hasMany('identification') numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
