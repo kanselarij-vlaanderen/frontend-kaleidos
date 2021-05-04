@@ -181,23 +181,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       localIdentifier: this.newNumacNumber,
     });
     yield structuredIdentifier.save();
-    // const numacNumber = this.store.createRecord('identification', {
-    //   idName: this.newNumacNumber,
-    //   agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
-    //   structuredIdentifier: structuredIdentifier,
-    //   publicationFlowAsNumac: this.publicationFlow,
-    // });
-    // yield numacNumber.save();
 
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
       agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
       structuredIdentifier: structuredIdentifier,
-      // publicationFlowAsNumac: this.publicationFlow,
     });
     yield numacNumber.save();
+
     this.publicationFlow.numacNumbers.pushObject(numacNumber);
-    yield numacNumber.save();
+    yield this.publicationFlow.save();
+
     // if (this.args.didChange) {
     //   this.args.didChange(numacNumber);
     // }
@@ -206,10 +200,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *unlinkNumacNumber(numacNumber) {
-    numacNumber.deleteRecord();
-    if (this.args.didChange) {
-      yield this.args.didChange(numacNumber);
-    }
+    const structuredIdentifier = yield numacNumber.structuredIdentifier;
+    yield structuredIdentifier.destroyRecord();
+    yield numacNumber.destroyRecord();
+
+    // if (this.args.didChange) {
+    //   yield this.args.didChange(numacNumber);
+    // }
   }
 
   get allowedUltimatePublicationDates() {
