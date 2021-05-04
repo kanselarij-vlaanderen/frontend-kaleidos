@@ -194,13 +194,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *unlinkNumacNumber(numacNumber) {
-    const structuredIdentifier = yield numacNumber.structuredIdentifier;
-    yield structuredIdentifier.destroyRecord();
-    yield numacNumber.destroyRecord();
+    numacNumber.deleteRecord();
 
-    // if (this.args.didChange) {
-    //   yield this.args.didChange(numacNumber);
-    // }
+    if (this.args.didChange) {
+      yield this.args.didChange(numacNumber);
+    }
   }
 
   get allowedUltimatePublicationDates() {
