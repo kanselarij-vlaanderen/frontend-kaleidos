@@ -12,14 +12,13 @@ export default class PublicationController extends Controller {
   @tracked showLoader = false;
 
   get casePath() {
-    const title = this.intl.t('publication-flow');
-    // let title = this.intl.t('publication-flow');
-    // const publicationNumber = this.model.publicationFlow.identification.get('idName');
-    // if (!this.model.latestSubcaseOnMeeting) {
-    //   title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', publicationNumber || '');
-    // } else {
-    //   title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', publicationNumber || '');
-    // }
+    let title = this.intl.t('publication-flow');
+    const publicationNumber = this.model.publicationFlow.identification.get('idName');
+    if (!this.model.latestSubcaseOnMeeting) {
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', publicationNumber || '');
+    } else {
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', publicationNumber || '');
+    }
     return title;
   }
 

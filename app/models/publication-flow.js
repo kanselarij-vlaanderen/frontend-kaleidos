@@ -21,9 +21,7 @@ export default class PublicationFlow extends Model {
 
   // Belongs To.
   @belongsTo('case') case;
-  @belongsTo('identification', {
-    inverse: 'publicationFlow',
-  }) identification;
+  @belongsTo('identification') identification;
 
   @belongsTo('publication-status', {
     inverse: null,
@@ -34,9 +32,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('urgency-level') urgencyLevel;
 
   // Has many .
-  // @hasMany('identification', {
-  //   // inverse: 'publicationFlowAsNumac',
-  // }) numacNumbers;
+  @hasMany('identification') numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
