@@ -16,20 +16,16 @@ export default class FilterQueryParams {
       as: 'naam',
       refreshModel: true,
       type: 'string',
-      // for own use, not supported by Ember
-      _default: '',
     },
     filterExtensions: {
       as: 'extensies',
       refreshModel: true,
       type: 'array',
-      _default: [],
     },
     filterDocumentTypeIds: {
       as: 'type',
       refreshModel: true,
       type: 'array',
-      _default: [],
     },
   }
 
@@ -49,14 +45,6 @@ export default class FilterQueryParams {
   static updateFromFilterAndReload(controller, filter) {
     const params = this._mapToParamsFormat(filter);
     this._setQueryParams(controller, params);
-  }
-
-  static initialize(controller) {
-    // no @tracked for performance
-    // necessary to make parameter defaults not appear in the url
-    for (const [key, value] of Object.entries(this.queryParams)) {
-      set(controller, key, value._default);
-    }
   }
 
   static _mapToParamsFormat(filter) {

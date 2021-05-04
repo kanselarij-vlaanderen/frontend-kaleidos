@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import FilterQueryParams from './filter-query-params';
+import RSVP from 'rsvp';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
@@ -91,7 +92,7 @@ export default class PublicationDocumentsRoute extends Route {
         return piece;
       });
 
-      const filterResult = await Promise.all(filterResultPromises);
+      const filterResult = await RSVP.all(filterResultPromises);
       filteredSortedPieces = filterResult.compact();
     }
 
@@ -105,6 +106,7 @@ export default class PublicationDocumentsRoute extends Route {
   async filterFileType(piece) {
     // await since not "include"-ed in query
     const file = await piece.get('file');
+    console.log(file);
     const ext = file.extension;
     if (!ext) {
       return false;
