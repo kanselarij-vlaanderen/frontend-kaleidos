@@ -177,15 +177,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *addNumacNumber() {
-    const structuredIdentifier = this.store.createRecord('structured-identifier', {
-      localIdentifier: this.newNumacNumber,
-    });
-    yield structuredIdentifier.save();
-
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
       agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
-      structuredIdentifier: structuredIdentifier,
     });
     yield numacNumber.save();
 
