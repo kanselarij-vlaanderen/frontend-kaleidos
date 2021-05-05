@@ -75,20 +75,20 @@
     </div>
   </div>
   <div class="auk-toolbar-complex__right">
-    <div class="auk-toolbar-complex__right">
-      {{#if showEnvironmentName}}
+    {{#if showEnvironmentName}}
+      <div class="auk-toolbar-complex__item auk-u-mr-3">
         <div class="vlc-environment-pill {{environmentClass}}">
           {{environmentName}}
         </div>
-      {{/if}}
-    </div>
+      </div>
+    {{/if}}
     <div class="auk-toolbar-complex__item">
-      <WebComponents::AuButton
-              @skin="mute"
+      <WebComponents::AuButtonLink
+              @skin="muted"
               @icon="ki ki-circle-question"
               @layout="icon-left">
         {{t "help"}}
-      </WebComponents::AuButton>
+      </WebComponents::AuButtonLink>
       <AttachPopover
               @renderInPlace={{true}}
               @class="ember-attacher-popper"
@@ -112,12 +112,12 @@
     </div>
     <div class="auk-toolbar-complex__item auk-u-mr-3">
       {{#if currentSession.userContent}}
-        <WebComponents::AuButton
-                @skin="mute"
+        <WebComponents::AuButtonLink
+                @skin="muted"
                 @icon="chevron-down"
                 @layout="icon-right">
           {{currentSession.userContent.firstName}}
-        </WebComponents::AuButton>
+        </WebComponents::AuButtonLink>
         <AttachPopover
                 @renderInPlace={{true}}
                 @class="ember-attacher-popper"
