@@ -81,9 +81,9 @@ export default Service.extend({
       userRoleId,
     } = this;
     const {
-      priviligedId,
+      governmentId,
     } = CONFIG;
-    const roles = [priviligedId];
+    const roles = [governmentId];
     return roles.includes(userRoleId);
   },
 
@@ -92,9 +92,9 @@ export default Service.extend({
       userRoleId,
     } = this;
     const {
-      adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId,
+      adminId, kanselarijId, governmentId, ministerId, usersId, kabinetId,
     } = CONFIG;
-    const roles = [adminId, kanselarijId, priviligedId, ministerId, usersId, kabinetId];
+    const roles = [adminId, kanselarijId, governmentId, ministerId, usersId, kabinetId];
     return roles.includes(userRoleId);
   },
 
@@ -103,9 +103,9 @@ export default Service.extend({
       userRoleId,
     } = this;
     const {
-      adminId, kanselarijId, priviligedId, ministerId, kabinetId,
+      adminId, kanselarijId, governmentId, ministerId, kabinetId,
     } = CONFIG;
-    const roles = [adminId, kanselarijId, priviligedId, ministerId, kabinetId];
+    const roles = [adminId, kanselarijId, governmentId, ministerId, kabinetId];
     return roles.includes(userRoleId);
   },
 
