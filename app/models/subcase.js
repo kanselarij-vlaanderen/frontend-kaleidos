@@ -37,7 +37,19 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  publicationActivities: hasMany('activity', {
+  requestActivities: hasMany('request-activity', {
+    inverse: null,
+  }),
+  translationActivities: hasMany('translation-activity', {
+    inverse: null,
+  }),
+  proofingActivities: hasMany('proofing-activity', {
+    inverse: null,
+  }),
+  publicationActivities: hasMany('publication-activity', {
+    inverse: null,
+  }),
+  cancellationActivities: hasMany('cancellation-activity', {
     inverse: null,
   }),
 

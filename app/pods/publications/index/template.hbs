@@ -202,6 +202,7 @@
 
           {{#if this.tableColumnDisplayOptions.translateRequests}}
             <td class="auk-u-text-align--center">
+              {{!-- TODO implement new logic to count --}}
               {{#if (gt (await row.translationRequestsTotal) 0)}}
                 {{#if
                   (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
@@ -229,6 +230,7 @@
           {{/if}}
           {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
             <td class="auk-u-text-align--center">
+              {{!-- TODO implement new logic to count --}}
               {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
                 {{#if
                   (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
