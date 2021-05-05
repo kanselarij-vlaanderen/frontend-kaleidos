@@ -15,11 +15,11 @@
         clearAction=(action "close")
       }}
     {{/if}}
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
       {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
     </div>
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "new-person"}}</WebComponents::AuLabel>
       {{utils/create-person-selector
         selectedItems=selectedPerson
@@ -28,7 +28,7 @@
     </div>
 
     {{#if selectedPerson}}
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
         {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
       </div>

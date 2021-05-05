@@ -1,10 +1,13 @@
-<div class="vlc-panel-layout-agenda__detail auk-u-bg-alt">
-  <div class="vlc-u-box-model-maximize-height vlc-scroll-wrapper">
+<div
+  id={{this.id}}
+  class="auk-panel-layout__main-content auk-u-bg-alt"
+>
+  <div class="auk-scroll-wrapper">
     <Agenda::AgendaitemSearch
       @searchText={{readonly this.agendaitemsController.filter}}
       @onSearch={{this.searchAgendaitems}}
     />
-    <div class="vlc-scroll-wrapper__body vlc-hide-on-print">
+    <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
       <Agenda::AgendaOverview
         @notaGroups={{this.notaGroups}}
         @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}

@@ -1,25 +1,23 @@
-<div class="vlc-scroll-wrapper__header">
-  <div class="auk-navbar auk-navbar--bordered-bottom vlc-hide-on-print">
-    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item vlc-u-box-model-maximize-width">
-          <div class="auk-form-group">
-            <WebComponents::AuInput
-              @icon="search"
-              type="text"
-              @block="true"
-              data-test-trigger-search-input
-              @placeholder={{t "search-placeholder"}}
-              value={{this.searchText}}
-              @enter={{this.search}}
-              {{on "input" this.debouncedSearch}}
-            />
-          </div>
+<div class="auk-navbar auk-navbar--bordered-bottom vlc-hide-on-print">
+  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item vlc-u-box-model-maximize-width">
+        <div class="auk-form-group">
+          <WebComponents::AuInput
+            @icon="search"
+            type="text"
+            @block="true"
+            data-test-trigger-search-input
+            @placeholder={{t "search-placeholder"}}
+            value={{this.searchText}}
+            @enter={{this.search}}
+            {{on "input" this.debouncedSearch}}
+          />
         </div>
-        {{#if this.debouncedSearchTask.isRunning}}
-          <div class="auk-loader" role="alert" aria-busy="true"></div>
-        {{/if}}
       </div>
+      {{#if this.debouncedSearchTask.isRunning}}
+        <div class="auk-loader" role="alert" aria-busy="true"></div>
+      {{/if}}
     </div>
   </div>
 </div>

@@ -17,6 +17,7 @@ context('Formally ok/nok tests', () => {
   // This test could be replaced by checking that approved agenda is not showing formal ok's in existing testdata
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {
     cy.visit('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
+    // TODO this first part of the test could belong in meeting-actions.spec
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
@@ -26,7 +27,8 @@ context('Formally ok/nok tests', () => {
     // TODO optional, check if there is no au-alert in the new pop?
     cy.get(modal.auModal.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
-    cy.get('.vlc-side-nav-item').as('agendas');
+    cy.get('.auk-sidebar__item').as('agendas');
+    // Testing on approved agenda the formally ok status should not show
     cy.get('@agendas').eq(1)
       .click();
     cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)

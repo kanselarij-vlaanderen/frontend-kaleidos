@@ -77,7 +77,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
@@ -86,7 +86,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -201,6 +201,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('@documentName').contains(savedName);
     });
 
+    // TODO duplicate asserts, we want to check name here
     // Verify only 1 piece is affected by change
     cy.get(document.showPiecesHistory).click();
     cy.get(document.singlePieceHistory).as('pieces');
@@ -215,6 +216,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get('.js-vl-accordion > button').click();
 
     // Cancel/save access-level in document card
+    // TODO use test selector
     cy.get('.vlc-document-card__content > .auk-toolbar-complex > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid')
@@ -282,7 +284,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
@@ -296,7 +298,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -309,7 +311,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}TER`);
@@ -349,7 +351,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}QUATER`);

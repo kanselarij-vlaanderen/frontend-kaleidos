@@ -5,15 +5,15 @@
   (moment-format this.meeting.plannedStart "DD-MM-YYYY")
   replace=true
 }}
-<div class="vlc-scroll-wrapper__body vlc-hide-scrollbar-on-print">
-  <div class="auk-u-m-8">
+<div class="auk-scroll-wrapper__body vlc-hide-scrollbar-on-print">
+  <div class="auk-u-m-8 auk-u-m-0@print">
     <div class="auk-container auk-container--center">
       <Utils::LogoHeader/>
       <Newsletter::NewsletterMeeting
         @allowEditing={{not this.showDraft}}
         @meeting={{this.meeting}}
       />
-      <h2 class="auk-h1">
+      <h2 class="auk-h1 auk-u-text-family-serif">
         {{t "agendaitems-subtitle"}}
       </h2>
       {{#each (await model.notas) as |agendaitem index|}}

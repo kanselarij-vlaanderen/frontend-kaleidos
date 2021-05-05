@@ -65,17 +65,17 @@ context('Tests of pieces on agendaitems', () => {
       cy.addAgendaitemToAgenda(part1Title);
       cy.setAllItemsFormallyOk(2);
       cy.approveDesignAgenda();
-      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1', file);
-      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1BIS', file);
-      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-2', file);
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1', file); // add BIS to doc 1
+      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1BIS', file); // add TER to doc 1 BIS
+      cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-2', file); // add BIS to doc 2
+      cy.get('.auk-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
 
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1TER', 0);
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-2BIS', 0);
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.auk-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
@@ -91,10 +91,8 @@ context('Tests of pieces on agendaitems', () => {
       cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
         .click();
       cy.clickReverseTab('Documenten');
-      // cy.reload(); // TODO error in subcase/documents route right after delete a piece that needed version restoring on agendaitem, Ok after reload
-      // cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.auk-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);
@@ -106,7 +104,7 @@ context('Tests of pieces on agendaitems', () => {
       cy.get(agenda.subcase.agendaLink).click();
       cy.get(agenda.agendaitemDocumentsTab).click();
 
-      cy.get('.vlc-scroll-wrapper__body').within(() => {
+      cy.get('.auk-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');
       });
       cy.get('@docCards').should('have.length', 2);

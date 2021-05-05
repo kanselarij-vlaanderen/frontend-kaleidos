@@ -92,17 +92,18 @@ context('Tests for KAS-1076', () => {
     ];
 
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, files, false);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard, {
         timeout: 60000,
       }).as('docCards')
         .should('have.length', files.length);
     });
 
+    // TODO click agendatosubcase link
     cy.openCase(caseTitleSingle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard, {
         timeout: 80000,
       }).as('docCards')
@@ -112,13 +113,14 @@ context('Tests for KAS-1076', () => {
     const linkedDocumentsNames = files.slice(0, 3).map((file) => file.newFileName);
     const linkedDocumentTypes = files.slice(0, 3).map((file) => file.fileType);
 
-    cy.addLinkedDocumentToAgendaitem(linkedDocumentsNames);
+    cy.addLinkedDocument(linkedDocumentsNames);
     cy.get(document.linkeddocumentTypeLabel).eq(0)
       .contains(linkedDocumentTypes[0]);
     cy.get(document.linkeddocumentTypeLabel).eq(1)
       .contains(linkedDocumentTypes[1]);
     cy.get(document.linkeddocumentTypeLabel).eq(2)
       .contains(linkedDocumentTypes[2]);
+    // TODO are these documentes visible on agendaitem ?
   });
 
   it('Adding more then 20 pieces to subcase should show all', () => {
@@ -193,11 +195,11 @@ context('Tests for KAS-1076', () => {
       // }
     ];
     cy.addDocumentsToSubcase(files);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', files.length);
     });
-    cy.get('.vlc-backlink').click();
+    cy.get('.auk-tabs__hierarchical-back > a').click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -207,12 +209,14 @@ context('Tests for KAS-1076', () => {
 
     cy.clickReverseTab('Documenten');
     cy.get('[data-test-vl-loader]');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    // TODO make sure these are under "reeds bezorgde documenten"
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', files.length);
     });
   });
 
+  // TODO this test and the next verify that adding a new doc or new version resets formally ok, but done in reverse? first new version, then new doc
   it('Adding new document or piece to agendaitem on designagenda should reset formally ok and update the subcase', () => {
     const SubcaseTitleShort = 'Cypress test: new document version on agendaitem - 1589286212';
     const file = {
@@ -224,7 +228,7 @@ context('Tests for KAS-1076', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -236,8 +240,9 @@ context('Tests for KAS-1076', () => {
       .should('have.length', 1);
 
     // Verify subcase is updated
+    // TODO check subcase no longer needed (legacy subcase also had formal ok status)
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -251,7 +256,8 @@ context('Tests for KAS-1076', () => {
       .should('have.length', 0);
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    // TODO are we sure we are checking the newly added document or the pre-existing BIS ?
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
@@ -261,8 +267,9 @@ context('Tests for KAS-1076', () => {
     cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
       .should('have.length', 1);
     // Verify subcase is updated
+    // TODO check subcase no longer needed (legacy subcase also had formal ok status)
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
@@ -275,13 +282,14 @@ context('Tests for KAS-1076', () => {
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
+    // TODO does setup have agendaitem on "formeel ok" before start?
 
     // PART 1, adding new piece
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
     cy.addNewPieceToSubcase('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -291,7 +299,7 @@ context('Tests for KAS-1076', () => {
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -307,7 +315,7 @@ context('Tests for KAS-1076', () => {
       .should('have.length', 0);
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
     cy.addDocumentsToSubcase([file]);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
@@ -317,7 +325,7 @@ context('Tests for KAS-1076', () => {
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}`);

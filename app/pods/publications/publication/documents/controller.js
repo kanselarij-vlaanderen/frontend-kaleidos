@@ -1,11 +1,9 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { all } from 'ember-concurrency';
 import { A } from '@ember/array';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import {
   action,
   set,
@@ -21,28 +19,23 @@ export default class PublicationDocumentsController extends Controller {
   @service configService;
   @service store;
 
-  @tracked isOpenPieceUploadModal = false;
-  @tracked isOpenTranslationRequestModal = false;
-  @tracked isOpenPublishPreviewRequestModal = false;
-  @tracked newPieces = A([]);
-  @tracked isExpandedPieceView = false;
-  @tracked isSavingPieces = false;
-  @tracked isExpanded = false;
   @tracked showLoader = false;
+  @tracked showPieceUploadModal = false;
   @tracked showTranslationModal = false;
+  @tracked showPublishPreviewRequestModal = false;
   @tracked showFilterPanel = true;
   @tracked filteredSortedPieces = [];
 
   @tracked translateActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked finalTranslationDate: '',
-    @tracked pieces: A([]),
+    mailContent: '',
+    mailSubject: '',
+    finalTranslationDate: '',
+    pieces: [],
   };
   @tracked previewActivity = {
-    @tracked mailContent: '',
-    @tracked mailSubject: '',
-    @tracked pieces: A([]),
+    mailContent: '',
+    mailSubject: '',
+    pieces: [],
   };
   @tracked selectedPieces = [];
   @tracked pieceToDelete = null;
@@ -86,96 +79,32 @@ export default class PublicationDocumentsController extends Controller {
     }
   }
 
+  // open piece upload modal
   @action
   openPieceUploadModal() {
-    this.isOpenPieceUploadModal = true;
+    this.showPieceUploadModal = true;
+  }
+
+  @task
+  *onSavePiecesTask(pieces) {
+    this.model.case.pieces.pushObjects(pieces);
+    yield this.model.case.save();
+    this.showPieceUploadModal = false;
   }
 
   @action
-  toggleUploadModalSize() {
-    this.isExpanded = !this.isExpanded;
+  onCancel() {
+    this.showPieceUploadModal = false;
   }
 
+  // document menu options
+  // - option: view
   @action
   showPieceViewer(pieceId) {
     window.open(`/document/${pieceId}`);
   }
 
-  @action
-  uploadPiece(file) {
-    const now = moment().utc()
-      .toDate();
-    const documentContainer = this.store.createRecord('document-container', {
-      created: now,
-    });
-    const piece = this.store.createRecord('piece', {
-      created: now,
-      modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
-      confidential: false,
-      name: file.filenameWithoutExtension,
-      documentContainer: documentContainer,
-    });
-    this.newPieces.pushObject(piece);
-  }
-
-  @task
-  *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
-      try {
-        await this.savePiece.perform(piece);
-      } catch (error) {
-        await this.deleteUploadedPiece.perform(piece);
-        throw error;
-      }
-    });
-    this.showLoader = true;
-    this.isOpenPieceUploadModal = false;
-    yield all(savePromises);
-    this.showLoader = false;
-    this.newPieces = A();
-  }
-
-  /**
-   * Save a new document container and the piece it wraps
-   */
-  @task
-  *savePiece(piece) {
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    yield piece.save();
-    const pieces = yield this.model.case.hasMany('pieces').reload();
-    pieces.pushObject(piece);
-    yield this.model.case.save();
-  }
-
-  @task
-  *cancelUploadPieces() {
-    this.showLoader = true;
-    const deletePromises = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
-    yield all(deletePromises);
-    this.newPieces = A();
-    this.isOpenPieceUploadModal = false;
-    this.showLoader = false;
-  }
-
-  @task
-  *deleteUploadedPiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
-
-  @action
-  cancelDeleteExistingPiece() {
-    this.pieceToDelete = null;
-    this.isVerifyingDelete = false;
-  }
-
+  // - option: edit
   @action
   async editExistingPiece(piece) {
     this.pieceBeingEdited = piece;
@@ -197,17 +126,22 @@ export default class PublicationDocumentsController extends Controller {
   @action
   async saveEditedPiece() {
     this.showPieceEditor = false;
-    this.showLoader = true;
     await this.pieceBeingEdited.save();
     const dc = await this.pieceBeingEdited.get('documentContainer');
     await dc.save();
-    this.showLoader = false;
   }
 
+  // - option: delete
   @action
   deleteExistingPiece(piece) {
     this.pieceToDelete = piece;
     this.isVerifyingDelete = true;
+  }
+
+  @action
+  cancelDeleteExistingPiece() {
+    this.pieceToDelete = null;
+    this.isVerifyingDelete = false;
   }
 
   @task
@@ -248,20 +182,20 @@ export default class PublicationDocumentsController extends Controller {
     const content = await this.getConfig('email:publishPreviewRequest:content', CONFIG.mail.publishPreviewRequest.content);
     set(this.previewActivity, 'mailContent', await this.activityService.replaceTokens(content, this.model.publicationFlow, this.model.case));
     set(this.previewActivity, 'mailSubject', await this.activityService.replaceTokens(subject, this.model.publicationFlow, this.model.case));
-    this.isOpenPublishPreviewRequestModal = true;
+    this.showPublishPreviewRequestModal = true;
   }
 
   @action
   cancelPublishPreviewRequestModal() {
     set(this.previewActivity, 'mailContent', '');
     set(this.previewActivity, 'mailSubject', '');
-    this.isOpenPublishPreviewRequestModal = false;
+    this.showPublishPreviewRequestModal = false;
   }
 
   @action
   async savePublishPreviewActivity() {
     this.showLoader = true;
-    this.isOpenPublishPreviewRequestModal = false;
+    this.showPublishPreviewRequestModal = false;
     this.previewActivity.pieces = this.selectedPieces;
 
     // publishPreviewActivityType.

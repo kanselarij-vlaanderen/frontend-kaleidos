@@ -1,7 +1,7 @@
 <div class="auk-box">
   <div class="auk-u-mb-4">
     {{#if @subcase}}
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
         {{web-components/vl-toggle
           data-test-agendaitem-titles-edit-confidential=true
@@ -9,7 +9,7 @@
         }}
       </div>
     {{/if}}
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-shorttitle=true
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="auk-u-mb-4">
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-title=true
@@ -31,7 +31,7 @@
     </div>
   </div>
   <div class="auk-u-mb-4">
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "remark-title"}}</WebComponents::AuLabel>
       {{textarea
         data-test-agendaitem-titles-edit-explanation=true
@@ -43,7 +43,7 @@
   </div>
   {{#if @agendaitem.showAsRemark}}
     <div class="auk-u-mb-4">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         {{#if this.newsletterInfo}}
           <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
           {{web-components/vl-toggle

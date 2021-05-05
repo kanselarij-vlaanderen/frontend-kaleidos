@@ -15,6 +15,8 @@ context('Table Row Click tests', () => {
     cy.logout();
   });
 
+  // TODO add publication table row click test, make sure to have at least 1 publication in default set
+
   it('should open an agenda after clicking a row', () => {
     cy.route('GET', '/agendas/**/agendaitems').as('getAgendas');
 
@@ -57,6 +59,7 @@ context('Table Row Click tests', () => {
     cy.url().should('contain', '/kort-bestek');
   });
 
+  // TODO, this test does not belong in click-table spec
   it('should filter the agenda-page and remove the active filter afterwards', () => {
     cy.route('GET', '/meetings?**').as('getMeetings');
     cy.wait('@getMeetings', {
@@ -67,12 +70,15 @@ context('Table Row Click tests', () => {
       .type('02/2019');
     cy.get('.auk-button.auk-button--secondary.auk-button--icon').as('searchButton')
       .click();
+    // TODO filtering can fail (showing all agendas) but this message will always show when filtered. Count the agendas
     cy.get('.vl-alert__content').should('exist')
       .contains('Deze data is gefilterd.');
+    // TODO should('exist') is overkill, if it doesn't exist, we can't cy.get it anyway
     cy.get('.auk-button.auk-button--warning-primary').should('exist')
       .contains('Reset filter');
     cy.get('.auk-button.auk-button--warning-primary').contains('Reset filter')
       .click();
+    // TODO this assert proves nothing, this table row never exists. Check the number of agenda's before filter, and after resetting filter
     cy.get('td').contains('No data')
       .should('not.exist');
   });

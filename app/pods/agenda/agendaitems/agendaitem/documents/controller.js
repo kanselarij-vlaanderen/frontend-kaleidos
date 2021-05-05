@@ -151,7 +151,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         agendaActivity,
         pieces,
       });
-      submissionActivity.save();
+      submissionActivity.save(); // submission-act isn't needed further here. No yield. Can run in background.
     }
 
     // Link piece to agendaitem

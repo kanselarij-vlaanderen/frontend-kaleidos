@@ -19,11 +19,15 @@
   }
 
   // Hide top nav and side nav
+  #vlaanderen-header {
+    display: none;
+  }
+
   #c-main-nav {
     display: none !important;
   }
 
-  .vlc-side-nav {
+  .auk-sidebar {
     display: none;
   }
 
@@ -40,21 +44,17 @@
 
   // Hide elements in page header & simplify page header
 
-  .vlc-page-header {
+  .auk-navbar {
     padding: 1rem;
     background: none;
-  }
-
-  .vlc-page-header__sub {
-    display: none !important;
   }
 
   .auk-toolbar-complex__right {
     display: none;
   }
 
-  .vlc-page-header .vlc-page-header__title--bordered {
-    border: none;
+  .auk-navbar--bordered-bottom {
+    border-bottom: none;
   }
 
   .print-only {
@@ -73,7 +73,7 @@
   }
 
   // Fix an issue which causes Firefox to only print a single page
-  .vlc-scroll-wrapper {
+  .auk-scroll-wrapper {
     display: block;
   }
 
