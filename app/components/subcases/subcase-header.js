@@ -9,7 +9,7 @@ export default Component.extend({
   agendaService: inject(),
   router: inject(),
   currentSession: inject(),
-  classNames: ['vlc-page-header'],
+  classNames: ['auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100 auk-navbar--auto'],
   isAssigningToOtherAgenda: false,
   isAssigningToOtherCase: false,
   promptDeleteCase: false,

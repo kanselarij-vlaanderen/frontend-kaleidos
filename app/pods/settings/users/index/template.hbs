@@ -1,7 +1,7 @@
 {{#utils/settings-header title=(t 'manage-users')}}
   <WebComponents::AuToolbar data-test-settings-user-file-upload>
     <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item class="u-padding--right">
+      <WebComponents::AuToolbar::Item>
         {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>

@@ -54,8 +54,7 @@ context('meeting actions tests', () => {
   it('should not be able to delete approved agendaitem from designagenda with profile: Kanselarij', () => {
     const SubcaseTitleShort = 'Cypress test: delete approve agenda Kanselarij - 1588775768';
     cy.login('Kanselarij');
-    cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/5EB2CB91F5E126000900000E/agendapunten');
-    cy.changeSelectedAgenda('Ontwerpagenda');
+    cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/cd6b8ae7-0f00-451c-b4ad-fa236d5e6a20/agendapunten');
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaitemControlsActions).click();
@@ -99,10 +98,11 @@ context('meeting actions tests', () => {
     cy.wait('@patchSubcase', {
       timeout: 12000,
     });
+    // TODO this is no longer a vl modal? cypress test does not wait while loading modal is still present
     cy.get(modal.modal).should('not.be.visible');
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
-    cy.changeSelectedAgenda('Agenda A');
+    cy.changeSelectedAgenda('Ontwerpagenda');
     cy.clickReverseTab('Overzicht');
     cy.wait(1000);
     cy.get('li.vlc-agenda-items__sub-item h4')

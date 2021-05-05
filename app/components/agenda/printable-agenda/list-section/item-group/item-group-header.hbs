@@ -1,8 +1,10 @@
-<h4 class="auk-u-text-uppercase auk-u-text-decoration-underline indented">
-  {{#each this.mandatees as |mandatee|}}
-    {{mandatee.title}}
-    {{#if (not-eq mandatee this.mandatees.lastObject)}}
-      <br/>&
-    {{/if}}
-  {{/each}}
-</h4>
+{{#if this.mandatees}}
+  <h3 class="auk-u-text-uppercase auk-u-text-decoration-underline auk-printable-agenda-list__item-indented">
+    {{#each this.mandatees as |mandatee|}}
+      {{mandatee.title}}
+      {{#if (not-eq mandatee this.mandatees.lastObject)}}
+        <br/>&
+      {{/if}}
+    {{/each}}
+  </h3>
+{{/if}}

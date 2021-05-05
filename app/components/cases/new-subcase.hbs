@@ -27,7 +27,7 @@
         </WebComponents::AuToolbar>
       </div>
     </div>
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
       {{textarea
         rows="2"
@@ -35,11 +35,11 @@
         value=shortTitle
       }}
     </div>
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
       {{textarea rows="4" class="auk-textarea" value=title}}
     </div>
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
       {{utils/model-selector
         modelName="subcase-type"
@@ -50,7 +50,7 @@
         selectModel=(action "selectType")
       }}
     </div>
-    <div class="vlc-input-field-block">
+    <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
       <div class="auk-u-flex auk-u-flex--vertical-center">
         {{#if (not isEditing)}}

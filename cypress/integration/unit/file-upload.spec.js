@@ -32,24 +32,8 @@ context('Add files to an agenda', () => { // At the meeting-level
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }], 'meeting');
 
-    // Click save
-    // cy.route('POST', 'pieces').as('createNewPiece');
-    // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    // cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
-    // cy.get('@fileUploadDialog').within(() => {
-    //   cy.get('.auk-button').contains('Documenten toevoegen')
-    //     .click();
-    // });
-    // cy.wait('@createNewDocumentContainer', {
-    //   timeout: 24000,
-    // });
-    // cy.wait('@createNewPiece', {
-    //   timeout: 24000,
-    // });
-    // cy.wait('@loadPieces');
-
     // Check the name of the document we just uploaded
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains('test pdf');
@@ -61,7 +45,7 @@ context('Add files to an agenda', () => { // At the meeting-level
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(/BIS/);
@@ -73,7 +57,7 @@ context('Add files to an agenda', () => { // At the meeting-level
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(/TER/);
@@ -115,24 +99,8 @@ context('Add files to an agenda', () => { // At the meeting-level
       ], 'meeting'
     );
 
-    // Click save
-    // cy.route('POST', 'pieces').as('createNewPiece');
-    // cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-    // cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
-    // cy.get('@fileUploadDialog').within(() => {
-    //   cy.get('.auk-button').contains('Documenten toevoegen')
-    //     .click();
-    // });
-    // cy.wait('@createNewDocumentContainer', {
-    //   timeout: 24000,
-    // });
-    // cy.wait('@createNewPiece', {
-    //   timeout: 24000,
-    // });
-    // cy.wait('@loadPieces');
-
     // Test if documents are listed in the correct sorting order
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
       cy.get('@docCards').eq(0)
         .within(() => {
@@ -172,7 +140,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Test if the documents we're looking for are present
-    cy.get('.vlc-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
+    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
       cy.get(document.documentCard).as('docCards');
     });
     cy.get('@docCards').should('have.length', 2);

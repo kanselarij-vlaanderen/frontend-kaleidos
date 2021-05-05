@@ -91,6 +91,9 @@ export default class PublicationsIndexRoute extends Route {
         apiSort = 'published-at';
       } else if (qpSort === dasherize('lastEdited')) {
         apiSort = 'modified';
+      } else if (qpSort === dasherize('withdrawnDate') || qpSort === dasherize('pauseDate')) {
+        // TODO: might want to sort on status too, since bot withdrawal & pause use the same sort field behind the scenes
+        apiSort = 'publication-status-change.started-at';
       }
       if (apiSort && descending) {
         apiSort = `-${apiSort}`;

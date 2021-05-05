@@ -117,7 +117,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
   cy.get('@subcaseAccessLevel').within(() => {
     if (isRemark) {
-      cy.get('.vlc-input-field-block').as('editCaseForm');
+      cy.get('.auk-form-group').as('editCaseForm');
       if (newLongTitle) {
         cy.get('@editCaseForm').eq(2)
           .within(() => {
@@ -127,7 +127,7 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
           });
       }
     } else {
-      cy.get('.vlc-input-field-block').as('editCaseForm')
+      cy.get('.auk-form-group').as('editCaseForm')
         .should('have.length', 3);
     }
 
@@ -328,19 +328,15 @@ function proposeSubcaseForAgenda(agendaDate) {
   const monthDutch = getTranslatedMonth(agendaDate.month());
   const formattedDate = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
 
-  cy.get('.vlc-page-header').within(() => {
-    cy.get('.auk-button', {
-      timeout: 12000,
-    }).should('have.length', 2);
-    cy.get('.auk-button').contains('Indienen voor agendering')
-      .should('exist')
-      .click();
-  });
+  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
+    .contains('Indienen voor agendering')
+    .should('exist')
+    .click();
 
   cy.get('.ember-attacher-show').within(() => {
     cy.contains(formattedDate).click();
   });
-  cy.contains('Indienen voor agendering')
+  cy.get(cases.subcaseHeader.actions.proposeForAgenda)
     .should('not.exist');
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
@@ -366,10 +362,10 @@ function proposeSubcaseForAgenda(agendaDate) {
 function deleteSubcase() {
   cy.log('deleteSubcase');
   cy.route('DELETE', '/subcases/**').as('deleteSubcase');
-  cy.get('.auk-button')
+  cy.get(cases.subcaseHeader.actionsDropdown)
     .contains('Acties')
     .click();
-  cy.get(cases.deleteSubcase)
+  cy.get(cases.subcaseHeader.actions.deleteSubcase)
     .contains('Procedurestap verwijderen')
     .click();
 
