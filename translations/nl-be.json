@@ -817,5 +817,10 @@
   "archive": "Archief",
   "not-entered-yet": "Nog niet ingevuld",
   "withdrawn-on": "Afgevoerd op",
-  "paused-on": "Gepauzeerd op"
+  "paused-on": "Gepauzeerd op",
+  "help": "Help",
+  "bekijk-doc": "Bekijk documentatie website",
+  "contacteer": "Contacteer ons",
+  "email-serviced": "kaleidos.servicedesk@vlaanderen.be",
+  "mijn-profiel": "Mijn profiel"
 }

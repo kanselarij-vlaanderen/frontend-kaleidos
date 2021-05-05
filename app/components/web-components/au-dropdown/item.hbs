@@ -3,6 +3,10 @@
     <a class="auk-menu__item active {{this.skin}}" href={{@href}} ...attributes>
       {{yield}}
     </a>
+  {{else if @text}}
+    <div class="auk-menu__item--text-only" ...attributes>
+      {{yield}}
+    </div>
   {{else}}
     <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} ...attributes>
       {{yield}}

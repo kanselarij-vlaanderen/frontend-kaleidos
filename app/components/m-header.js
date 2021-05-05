@@ -6,6 +6,7 @@ import { isEmpty } from '@ember/utils';
 
 export default Component.extend({
   currentSession: service(),
+  router: service(),
   classNames: ['auk-u-block'],
 
   init() {
@@ -41,6 +42,9 @@ export default Component.extend({
   actions: {
     async logout() {
       await this.currentSession.logout();
+    },
+    navigateToUser() {
+      this.router.transitionTo('settings.users.user', this.currentSession.userContent.id);
     },
   },
 });

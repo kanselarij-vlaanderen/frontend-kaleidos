@@ -19,6 +19,13 @@
     <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
   {{/if}}
 
+  {{#if (eq @layout "icon-left")}}
+    <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+    <div class="auk-button__label">
+      {{yield}}
+    </div>
+  {{/if}}
+
 {{else}}
 
   {{yield}}
