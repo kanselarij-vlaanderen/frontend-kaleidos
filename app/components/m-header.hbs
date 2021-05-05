@@ -99,10 +99,10 @@
                 @placement="bottom" {{!-- as |attacher| --}}
         >
           <WebComponents::AuDropdown>
-            <WebComponents::AuDropdown::Item>
+            <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf" target="_blank">
               {{t "bekijk-doc"}}
             </WebComponents::AuDropdown::Item>
-            <WebComponents::AuDropdown::Item>
+            <WebComponents::AuDropdown::Item  @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contacteer"}}</span>
                 <span class="auk-u-muted auk-u-text-small">{{t "email-serviced"}}</span>
@@ -128,7 +128,7 @@
                   @placement="bottom" {{!-- as |attacher| --}}
           >
             <WebComponents::AuDropdown>
-              <WebComponents::AuDropdown::Item @text={{true}}>
+              <WebComponents::AuDropdown::Item @textOnly>
                 <div class="auk-avatar-and-text">
                   <div class="auk-avatar auk-avatar--default auk-avatar--regular">
                     <div class="auk-icon auk-icon--default auk-icon--regular">
@@ -142,7 +142,7 @@
                 </div>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider />
-              <WebComponents::AuDropdown::Item {{action "navigateToUser"}}>
+              <WebComponents::AuDropdown::Item>
                 {{t "mijn-profiel"}}
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item {{action "logout"}}>
