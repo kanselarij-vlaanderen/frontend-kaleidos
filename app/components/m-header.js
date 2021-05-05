@@ -7,7 +7,8 @@ import { isEmpty } from '@ember/utils';
 export default Component.extend({
   currentSession: service(),
   router: service(),
-  classNames: ['auk-u-block'],
+  elementId: 'c-main-nav',
+  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--white', 'auk-navbar--no-pad'],
 
   init() {
     this._super(...arguments);

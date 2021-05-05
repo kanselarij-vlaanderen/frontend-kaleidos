@@ -1,94 +1,122 @@
-<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--white auk-navbar--no-pad" id="c-main-nav">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        <WebComponents::AuBrand @logotype="Kaleidos" />
-      </div>
-      <div class="auk-toolbar-complex__item">
-        <ul class="auk-tabs">
-          {{#if hasPublicationsEnabled}}
-            <li class="auk-tabs__tab" data-test-m-header-publications>
-              <LinkTo @route="publications">
-                <span class="auk-tabs__tab-inner">
-                  <span class="auk-tabs__label">
-                    {{t "publications"}}
-                  </span>
-                </span>
-              </LinkTo>
-            </li>
-          {{/if}}
-          <li class="auk-tabs__tab" data-test-m-header-agendas>
-            <LinkTo @route="agendas.overview"
-                    @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda">
-              <span class="auk-tabs__tab-inner">
-                <span class="auk-tabs__label">
-                  {{t "agendas"}}
-                </span>
-              </span>
-            </LinkTo>
-          </li>
-          <li class="auk-tabs__tab" data-test-m-header-cases>
-            <LinkTo @route="cases">
-              <span class="auk-tabs__tab-inner">
-                <span class="auk-tabs__label">
-                  {{t "cases"}}
-                </span>
-              </span>
-            </LinkTo>
-          </li>
-          {{#if currentSession.isViewer }}
-            <li class="auk-tabs__tab" data-test-m-header-newsletters>
-              <LinkTo @route="newsletters"
-                      @current-when="newsletters newsletter print-overviews.newsletter">
-                <span class="auk-tabs__tab-inner">
-                  <span class="auk-tabs__label">
-                    {{t "newsletter"}}
-                  </span>
-                </span>
-              </LinkTo>
-            </li>
-          {{/if}}
-          <li class="auk-tabs__tab" data-test-m-header-search>
-            <LinkTo
-                    @route="search.index"
-                    @current-when="search"
-            >
-              <span class="auk-tabs__tab-inner">
-                <div class="auk-icon auk-icon--default auk-icon--search">
-                  <i class="ki ki-search"></i>
-                </div>
-                <span class="auk-tabs__label">{{capitalize (t "search")}}</span>
-              </span>
-            </LinkTo>
-          </li>
-          {{#if currentSession.isEditor}}
-            <li class="auk-tabs__tab" data-test-m-header-settings>
-              <LinkTo @route="settings.overview">
-                <span class="auk-tabs__tab-inner">
-                  <span class="auk-tabs__label">
-                    {{t "settings"}}
-                  </span>
-                </span>
-              </LinkTo>
-            </li>
-          {{/if}}
-        </ul>
-      </div>
+<div class="auk-toolbar-complex">
+  <div class="auk-toolbar-complex__left">
+    <div class="auk-toolbar-complex__item">
+      <WebComponents::AuBrand @logotype="Kaleidos" />
     </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__right">
-        {{#if showEnvironmentName}}
-          <div class="vlc-environment-pill {{environmentClass}}">
-            {{environmentName}}
-          </div>
+    <div class="auk-toolbar-complex__item">
+      <ul class="auk-tabs">
+        {{#if hasPublicationsEnabled}}
+          <li class="auk-tabs__tab" data-test-m-header-publications>
+            <LinkTo @route="publications">
+              <span class="auk-tabs__tab-inner">
+                <span class="auk-tabs__label">
+                  {{t "publications"}}
+                </span>
+              </span>
+            </LinkTo>
+          </li>
         {{/if}}
-      </div>
-      <div class="auk-toolbar-complex__item">
+        <li class="auk-tabs__tab" data-test-m-header-agendas>
+          <LinkTo @route="agendas.overview"
+                  @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda">
+            <span class="auk-tabs__tab-inner">
+              <span class="auk-tabs__label">
+                {{t "agendas"}}
+              </span>
+            </span>
+          </LinkTo>
+        </li>
+        <li class="auk-tabs__tab" data-test-m-header-cases>
+          <LinkTo @route="cases">
+            <span class="auk-tabs__tab-inner">
+              <span class="auk-tabs__label">
+                {{t "cases"}}
+              </span>
+            </span>
+          </LinkTo>
+        </li>
+        {{#if currentSession.isViewer }}
+          <li class="auk-tabs__tab" data-test-m-header-newsletters>
+            <LinkTo @route="newsletters"
+                    @current-when="newsletters newsletter print-overviews.newsletter">
+              <span class="auk-tabs__tab-inner">
+                <span class="auk-tabs__label">
+                  {{t "newsletter"}}
+                </span>
+              </span>
+            </LinkTo>
+          </li>
+        {{/if}}
+        <li class="auk-tabs__tab" data-test-m-header-search>
+          <LinkTo
+                  @route="search.index"
+                  @current-when="search"
+          >
+            <span class="auk-tabs__tab-inner">
+              <div class="auk-icon auk-icon--default auk-icon--search">
+                <i class="ki ki-search"></i>
+              </div>
+              <span class="auk-tabs__label">{{capitalize (t "search")}}</span>
+            </span>
+          </LinkTo>
+        </li>
+        {{#if currentSession.isEditor}}
+          <li class="auk-tabs__tab" data-test-m-header-settings>
+            <LinkTo @route="settings.overview">
+              <span class="auk-tabs__tab-inner">
+                <span class="auk-tabs__label">
+                  {{t "settings"}}
+                </span>
+              </span>
+            </LinkTo>
+          </li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+  <div class="auk-toolbar-complex__right">
+    <div class="auk-toolbar-complex__right">
+      {{#if showEnvironmentName}}
+        <div class="vlc-environment-pill {{environmentClass}}">
+          {{environmentName}}
+        </div>
+      {{/if}}
+    </div>
+    <div class="auk-toolbar-complex__item">
+      <WebComponents::AuButton
+              @skin="mute"
+              @icon="ki ki-circle-question"
+              @layout="icon-left">
+        {{t "help"}}
+      </WebComponents::AuButton>
+      <AttachPopover
+              @renderInPlace={{true}}
+              @class="ember-attacher-popper"
+              @hideOn="clickout click"
+              @showOn="click"
+              @animation="shift"
+              @placement="bottom" {{!-- as |attacher| --}}
+      >
+        <WebComponents::AuDropdown>
+          <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf" target="_blank">
+            {{t "bekijk-doc"}}
+          </WebComponents::AuDropdown::Item>
+          <WebComponents::AuDropdown::Item  @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+            <div>
+              <span>{{t "contacteer"}}</span>
+              <span class="auk-u-muted auk-u-text-small">{{t "email-serviced"}}</span>
+            </div>
+          </WebComponents::AuDropdown::Item>
+        </WebComponents::AuDropdown>
+      </AttachPopover>
+    </div>
+    <div class="auk-toolbar-complex__item auk-u-mr-3">
+      {{#if currentSession.userContent}}
         <WebComponents::AuButton
                 @skin="mute"
-                @icon="ki ki-circle-question"
-                @layout="icon-left">
-          {{t "help"}}
+                @icon="chevron-down"
+                @layout="icon-right">
+          {{currentSession.userContent.firstName}}
         </WebComponents::AuButton>
         <AttachPopover
                 @renderInPlace={{true}}
@@ -99,71 +127,41 @@
                 @placement="bottom" {{!-- as |attacher| --}}
         >
           <WebComponents::AuDropdown>
-            <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf" target="_blank">
-              {{t "bekijk-doc"}}
-            </WebComponents::AuDropdown::Item>
-            <WebComponents::AuDropdown::Item  @href="mailto:kaleidos.servicedesk@vlaanderen.be">
-              <div>
-                <span>{{t "contacteer"}}</span>
-                <span class="auk-u-muted auk-u-text-small">{{t "email-serviced"}}</span>
+            <WebComponents::AuDropdown::Item @textOnly>
+              <div class="auk-avatar-and-text">
+                <div class="auk-avatar auk-avatar--default auk-avatar--regular">
+                  <div class="auk-icon auk-icon--default auk-icon--regular">
+                    <i class="ki ki-user"></i>
+                  </div>
+                </div>
+                <div class="auk-avatar-and-text__text">
+                  <p>{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}</p>
+                  <p class="auk-u-muted auk-u-text-small">{{currentSession.userRole}}</p>
+                </div>
               </div>
+            </WebComponents::AuDropdown::Item>
+            <WebComponents::AuDropdown::Divider />
+            <WebComponents::AuDropdown::Item >
+              {{!-- TODO link naar mijn profiel => nog niet bestaande--}}
+              {{t "mijn-profiel"}}
+            </WebComponents::AuDropdown::Item>
+            <WebComponents::AuDropdown::Item {{action "logout"}}>
+              {{t "sign-out"}}
             </WebComponents::AuDropdown::Item>
           </WebComponents::AuDropdown>
         </AttachPopover>
-      </div>
-      <div class="auk-toolbar-complex__item auk-u-mr-3">
-        {{#if currentSession.userContent}}
-          <WebComponents::AuButton
-                  @skin="mute"
-                  @icon="chevron-down"
-                  @layout="icon-right">
-            {{currentSession.userContent.firstName}}
-          </WebComponents::AuButton>
-          <AttachPopover
-                  @renderInPlace={{true}}
-                  @class="ember-attacher-popper"
-                  @hideOn="clickout click"
-                  @showOn="click"
-                  @animation="shift"
-                  @placement="bottom" {{!-- as |attacher| --}}
-          >
-            <WebComponents::AuDropdown>
-              <WebComponents::AuDropdown::Item @textOnly>
-                <div class="auk-avatar-and-text">
-                  <div class="auk-avatar auk-avatar--default auk-avatar--regular">
-                    <div class="auk-icon auk-icon--default auk-icon--regular">
-                      <i class="ki ki-user"></i>
-                    </div>
-                  </div>
-                  <div class="auk-avatar-and-text__text">
-                    <p>{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}</p>
-                    <p class="auk-u-muted auk-u-text-small">{{currentSession.userRole}}</p>
-                  </div>
-                </div>
-              </WebComponents::AuDropdown::Item>
-              <WebComponents::AuDropdown::Divider />
-              <WebComponents::AuDropdown::Item >
-                {{!-- TODO link naar mijn profiel => nog niet bestaande--}}
-                {{t "mijn-profiel"}}
-              </WebComponents::AuDropdown::Item>
-              <WebComponents::AuDropdown::Item {{action "logout"}}>
-                {{t "sign-out"}}
-              </WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
-          </AttachPopover>
-        {{else}}
-          <LinkTo
-                  @route="login"
-                  @class="auk-button-link auk-button--muted auk-button-link--padded"
-                  @type="button"
-                  @data-menu-samewidth="true"
-          >
-            <span class="auk-button__content">
-              <span class="auk-button__label">{{t "login"}}</span>
-            </span>
-          </LinkTo>
-        {{/if}}
-      </div>
+      {{else}}
+        <LinkTo
+                @route="login"
+                @class="auk-button-link auk-button--muted auk-button-link--padded"
+                @type="button"
+                @data-menu-samewidth="true"
+        >
+          <span class="auk-button__content">
+            <span class="auk-button__label">{{t "login"}}</span>
+          </span>
+        </LinkTo>
+      {{/if}}
     </div>
   </div>
 </div>
