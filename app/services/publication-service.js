@@ -10,9 +10,7 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  // Tracked.
   @tracked cachedData = A([]);
-
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
@@ -37,7 +35,7 @@ export default class PublicationService extends Service {
       identificationNumber += ` ${publicationSuffix}`;
     }
 
-    const publicationsFromQuery = await this.store.query('publication-flow', {
+    const duplicates = await this.store.query('publication-flow', {
       filter: {
         identification: {
           ':exact:id-name': identificationNumber,
@@ -45,9 +43,8 @@ export default class PublicationService extends Service {
       },
     });
 
-    // filter own model from data or we can't save our own number
-    const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
-    return publicationNumberTakenList.toArray().length !== 0;
+    // our own publication should not be considered as duplicate
+    return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
 
   getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
