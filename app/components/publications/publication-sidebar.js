@@ -32,11 +32,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
-<<<<<<< HEAD
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
   @tracked publicationModes;
-=======
->>>>>>> 51ab72e9c72f7a31e2a90c693e2f03c9595bba3e
 
   constructor() {
     super(...arguments);
@@ -66,17 +63,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-<<<<<<< HEAD
   *loadPublicationStatusChange() {
     const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
     return publicationStatusChange;
-=======
+  }
+
+  @task
   *initializePublicationNumber() {
     const identification = yield this.publicationFlow.identification;
     const structuredIdentifier = yield identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
->>>>>>> 51ab72e9c72f7a31e2a90c693e2f03c9595bba3e
   }
 
   @action

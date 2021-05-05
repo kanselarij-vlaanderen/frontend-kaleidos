@@ -14,7 +14,6 @@
     </WebComponents::AuToolbar>
   </WebComponents::AuNavbar>
   {{#if @isOpen}}
-<<<<<<< HEAD
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       {{!--Publicatienummer --}}
       <div class="auk-u-m-3">
@@ -23,18 +22,7 @@
           <WebComponents::AuInput type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}} />
           <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
-            {{on "input" (perform this.setPublicationSuffix)}} />
-=======
-    <div class="auk-scroll-wrapper">
-      <div class="auk-scroll-wrapper__body">
-        <div class="auk-u-m-3">
-          <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
-            <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-            <WebComponents::AuInput type="number" value={{this.publicationNumber}}
-              {{on "input" (perform this.setPublicationNumber)}} />
-            <WebComponents::AuInput size="5" type="text" value={{this.publicationNumberSuffix}}
-              {{on "input" (perform this.setPublicationNumberSuffix)}} />
->>>>>>> 51ab72e9c72f7a31e2a90c693e2f03c9595bba3e
+            {{on "input" (perform this.setPublicationNumberSuffix)}} />
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">
