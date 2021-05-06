@@ -130,7 +130,7 @@
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         {{#if (not this.latestSubcaseOnMeeting)}}
-          {{#if publicationFlow.mandatees }}
+          {{#if this.publicationFlow.mandatees }}
             <WebComponents::AuPanel::Body @noPadding="true">
               <table class="auk-table" data-test-table-mandatees>
                 <thead>
