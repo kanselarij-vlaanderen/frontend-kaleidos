@@ -26,6 +26,8 @@ context('Different session kinds should show different titles', () => {
     cy.logout();
   });
 
+  // TODO PVV agenda
+
   it('should show the correct translations for normal session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
     cy.visit(regular);
@@ -68,7 +70,9 @@ context('Different session kinds should show different titles', () => {
     cy.visit(regular);
     cy.get(actionModal.showActionOptions).click();
     cy.get(actionModal.navigatetonewsletter).click();
+    // TODO testselector could include "header"
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
+    // TODO verify klad & definitief ?
   });
 
   it('should show the correct translations for special session in newsletter-info print overview', () => {

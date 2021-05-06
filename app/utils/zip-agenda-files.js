@@ -6,17 +6,18 @@ function registerJobToStore(job, store) {
   return store.peekRecord('file-bundling-job', job.data.id);
 }
 
-function prettifyAgendaName(agenda) {
-  if (agenda.get('isDesignAgenda')) {
+async function prettifyAgendaName(agenda) {
+  const agendaStatus = await agenda.status;
+  if (agendaStatus.isDesignAgenda) {
     return 'ontwerpagenda';
   }
   return `agenda_${agenda.serialnumber}`;
 }
 
 async function constructArchiveName(agenda) {
-  const date = await agenda.get('createdFor.plannedStart');
-  const formattedDate = moment(date).format('DD_MM_YYYY');
-  const agendaName = prettifyAgendaName(agenda);
+  const meeting = await agenda.createdFor;
+  const formattedDate = moment(meeting.plannedStart).format('DD_MM_YYYY');
+  const agendaName = await prettifyAgendaName(agenda);
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }
 
@@ -46,7 +47,7 @@ async function fileDownloadUrlFromJob(job, archiveName) {
   let file = job.belongsTo('generated').value();
   if (!file) {
     await job.reload();
-    file = await job.get('generated');
+    file = await job.generated;
   }
   return `${file.downloadLink}?name=${archiveName}`;
 }

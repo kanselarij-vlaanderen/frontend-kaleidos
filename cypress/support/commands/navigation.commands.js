@@ -5,14 +5,14 @@ import utils from '../../selectors/utils.selectors';
 /**
  * @description Clicks on the specified reverse tab for navigating
  * @name clickReverseTab
- * @if class="vlc-tabs-reverse"
+ * @if class="auk-tabs auk-tabs--reversed"
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} tabName The name of the tab to click on, case sensitive
  */
 function clickReverseTab(tabName) {
   cy.log('clickReverseTab');
-  cy.get('.vlc-tabs-reverse', {
+  cy.get('.auk-tabs--reversed', {
     timeout: 12000,
   }).should('exist')
     .within(() => {

@@ -3,25 +3,25 @@
   " van "
   (moment-format this.model.meeting.plannedStart 'DD/MM/YYYY HH:mm')
 }}
-<div class="auk-u-bg-alt">
-  {{agenda/agenda-header
-    loading=(action "loadingAgendaitems")
-    onCreateAgendaitem=(action "refresh")
-    onApproveAgenda=(action "navigateToAgenda")
-    navigateToPressAgenda=(action "navigateToPressAgenda")
-    navigateToDecisions=(action "navigateToDecisions")
-    navigateToNewsletter=(action "navigateToNewsletter")
-    showPrintButton=showPrintButton
-  }}
-</div>
+{{agenda/agenda-header
+  loading=(action "loadingAgendaitems")
+  onCreateAgendaitem=(action "refresh")
+  onApproveAgenda=(action "navigateToAgenda")
+  navigateToPressAgenda=(action "navigateToPressAgenda")
+  navigateToDecisions=(action "navigateToDecisions")
+  navigateToNewsletter=(action "navigateToNewsletter")
+  showPrintButton=showPrintButton
+}}
 {{#if (not isLoading)}}
-  <div class="vlc-panel-layout">
+  <div class="auk-panel-layout">
     {{#unless shouldHideNav}}
-      {{agenda/side-nav
-        agendas=this.model.meeting.sortedAgendas
-        currentAgenda=this.model.agenda
-        selectAgenda=(action "selectAgenda")
-      }}
+      <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
+        {{agenda/side-nav
+          agendas=this.model.meeting.sortedAgendas
+          currentAgenda=this.model.agenda
+          selectAgenda=(action "selectAgenda")
+        }}
+      </div>
     {{/unless}}
     {{outlet}}
   </div>

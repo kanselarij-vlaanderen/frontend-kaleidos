@@ -39,7 +39,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   cy.get('.auk-modal').as('dialog')
     .within(() => {
-      cy.get('.vlc-input-field-block').as('newAgendaForm')
+      cy.get('.auk-form-group').as('newAgendaForm')
         .should('have.length', 4);
     });
 
@@ -186,7 +186,7 @@ function openAgendaForDate(agendaDate) {
 
   cy.visit('');
   // cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get('.vlc-input-field-group-wrapper--inline', {
+  cy.get(agendaOverview.agendaFilter, {
     timeout: 10000,
   }).should('exist')
     .within(() => {
@@ -334,7 +334,7 @@ function approveCoAgendaitem(agendaitemShortTitle) {
   cy.wait('@getGovernmentFieldDomains', {
     timeout: 50000,
   });
-  cy.get('.vlc-panel-layout__main-content').within(() => {
+  cy.get('.auk-panel-layout__main-content').within(() => {
     cy.get('.auk-u-mb-8').as('detailBlocks');
     cy.get('@detailBlocks').eq(4)
       .within(() => {
@@ -537,7 +537,7 @@ function toggleShowChanges(refresh) {
 
   // TODO, refresh is no longer needed
   if (refresh) {
-  //   cy.get('.vlc-side-nav-item', {
+  //   cy.get('.auk-sidebar__item', {
   //     timeout: 12000,
   //   })
   //     .last({
@@ -547,7 +547,7 @@ function toggleShowChanges(refresh) {
   //   cy.wait('@getAgendaitems', {
   //     timeout: 20000,
   //   });
-  //   cy.get('.vlc-side-nav-item', {
+  //   cy.get('.auk-sidebar__item', {
   //     timeout: 12000,
   //   })
   //     .first({
@@ -582,7 +582,7 @@ function agendaitemExists(agendaitemName) {
   cy.get(auComponents.auLoading, {
     timeout: 20000,
   }).should('not.exist');
-  cy.get('.vlc-tabs-reverse__link--active').then((element) => {
+  cy.get('.active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
       cy.get(agenda.agendaDetailSidebarSubitem)
@@ -653,7 +653,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
  * @param {string} agendaName - name of the agenda item
  */
 function changeSelectedAgenda(agendaName) {
-  cy.get('.vlc-side-nav-item').children()
+  cy.get('.auk-sidebar__item').children()
     .contains(agendaName, {
       timeout: 12000,
     })
@@ -728,7 +728,7 @@ function releaseDocuments() {
 /**
  * @description Clicks on the specified agendaitem tab for navigating
  * @name clickAgendaitemTab
- * @if class="vlc-tabs"
+ * @if class="auk-tabs"
  * @memberOf Cypress.Chainable#
  * @function
  * @param {String} selector The name of the tab to click on, case sensitive

@@ -114,11 +114,15 @@ export default class PublicationsIndexController extends Controller {
     await caze.save();
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
-
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: new Date(),
+    });
+    await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
       publicationNumber,
       publicationSuffix,
       case: caze,
+      statusChange: statusChange,
       created: creationDatetime,
       openingDate: new Date(),
       status: toPublishStatus,

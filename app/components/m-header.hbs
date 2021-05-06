@@ -65,25 +65,22 @@
         {{/if}}
       </div>
       <div class="auk-toolbar-complex__item">
-        {{#if currentSession.userContent}}
-          <div class="vlc-user">
-            <div class="vlc-user__username">
+        <div class="auk-u-flex auk-u-flex--vertical-center auk-u-text-small auk-u-mx-2">
+          {{#if currentSession.userContent}}
+            <div class="auk-u-mr">
               {{currentSession.userContent.firstName}}
               {{currentSession.userContent.lastName}}
               ({{currentSession.userRole}})
             </div>
-            <a href="" class="vlc-user__action" {{action "logout"}}>
+            <a href="" {{action "logout"}}>
               {{t "sign-out"}}
             </a>
-          </div>
-        {{else}}
-          <div class="vlc-user">
-            <div class="vlc-user__username"></div>
-            {{#link-to "login" class="vlc-user__action"}}
+          {{else}}
+            {{#link-to "login"}}
               {{t "login"}}
             {{/link-to}}
-          </div>
-        {{/if}}
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>

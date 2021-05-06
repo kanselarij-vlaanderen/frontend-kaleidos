@@ -17,6 +17,7 @@
             @onChange={{@onChange}} {{!-- Required Option --}}
             @onReady={{this.onReady}}
             @shorthandCurrentMonth={{true}}
+            @disabled={{@disabled}}
             placeholder={{this.placeholder}}
     />
   {{else}}
@@ -33,6 +34,7 @@
             @onReady={{this.onReady}}
             @prevArrow="<"
             @shorthandCurrentMonth={{true}}
+            @disabled={{@disabled}}
             placeholder={{this.placeholder}}
     />
   {{/if}}

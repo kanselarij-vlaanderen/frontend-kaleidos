@@ -6,7 +6,7 @@ import {
 } from 'ember-concurrency';
 
 export default Component.extend({
-  classNames: ['vlc-input-field-block'],
+  classNames: ['auk-form-group'],
   classNameBindings: ['classes'],
   placeholder: null,
   sortField: null,
