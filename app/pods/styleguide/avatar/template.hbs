@@ -1,0 +1,51 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Avatar" />
+
+<StyleguideSample
+        @title="Small"
+        @snippet="avatar-small.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-small --}}
+  <div class="auk-avatar auk-avatar--default auk-avatar--small">
+    <WebComponents::AuIcon @name="user" @size="small" />
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Regular"
+        @snippet="avatar-regular.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-regular --}}
+  <div class="auk-avatar auk-avatar--default auk-avatar--regular">
+    <WebComponents::AuIcon @name="user" />
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Image"
+        @snippet="avatar-image.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-image --}}
+  <div class="auk-avatar auk-avatar--img auk-avatar--regular">
+    <img src="/assets/icons/avatar-hilde-crevits.jpg" alt="avatar" />
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Avatar & text"
+        @snippet="avatar-avatar-and-text.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-avatar-and-text --}}
+  <div class="auk-avatar-and-text">
+    <div class="auk-avatar auk-avatar--default auk-avatar--small">
+      <WebComponents::AuIcon @name="user" @size="small" />
+    </div>
+    <div class="auk-avatar-and-text__text">
+      <p>Jan Jambon</p>
+    </div>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
