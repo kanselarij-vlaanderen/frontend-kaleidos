@@ -2,9 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import {
-  task,
-  restartableTask,
-  lastValue
+  lastValue, restartableTask, task
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
@@ -34,11 +32,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
+  @lastValue('loadPublicationStatusChange') publicationStatusChange;
+  @tracked publicationModes;
 
   constructor() {
     super(...arguments);
     this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
+    this.loadPublicationStatusChange.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.initializePublicationNumber.perform();
   }
@@ -59,6 +60,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *loadPublicationStatus() {
     const publicationStatus = yield this.publicationFlow.status;
     return publicationStatus;
+  }
+
+  @task
+  *loadPublicationStatusChange() {
+    const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
+    return publicationStatusChange;
   }
 
   @task
@@ -94,16 +101,35 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationStatus(status) {
+  async selectPublicationStatus(status) {
     if (status.isWithdrawn) {
       this.showConfirmWithdraw = true;
     } else {
-      this.publicationFlow.status = status;
-      this.loadPublicationStatus.perform();
-      this.publicationFlow.closingDate = status.isPublished ? new Date() : null;
-      if (this.args.didChange) {
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
-      }
+      this.setPublicationStatus(status);
+    }
+  }
+
+  @action
+  async setPublicationStatus(status) {
+    const now = new Date();
+    this.publicationFlow.status = status;
+    this.loadPublicationStatus.perform();
+    if (status.isPublished || status.isWithdrawn) {
+      this.publicationFlow.closingDate = now;
+    } else {
+      this.publicationFlow.closingDate = null;
+    }
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: now,
+      publication: this.publicationFlow,
+    });
+    if (this.args.didChange) {
+      await Promise.all([
+        this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
+        this.args.didChange(statusChange)
+      ]);
+      this.loadPublicationStatusChange.perform();
+      return status;
     }
   }
 
@@ -114,13 +140,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   async withdrawPublicationFlow() {
-    const publicationStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
-    this.publicationFlow.status = publicationStatus;
-    this.publicationFlow.closingDate = new Date();
-    this.loadPublicationStatus.perform();
-    if (this.args.didChange) {
-      await this.args.didChange(this.publicationFlow, ['status', 'closingDate']);
-    }
+    const withdrawn = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
+    await this.setPublicationStatus(withdrawn);
     this.showConfirmWithdraw = false;
   }
 

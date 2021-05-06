@@ -19,6 +19,8 @@ context('Test print overviews', () => {
     cy.logout();
   });
 
+  // TODO assert something? also use the actions from the actions menu from agenda to ensure both visit and action go to the same place?
+
   it('should visit beslissingen print overview', () => {
     cy.visit(beslissingen);
     cy.wait(1500);

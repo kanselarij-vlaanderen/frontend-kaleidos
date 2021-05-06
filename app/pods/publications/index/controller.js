@@ -133,9 +133,14 @@ export default class PublicationsIndexController extends Controller {
     });
     await identifier.save();
 
+    const statusChange = this.store.createRecord('publication-status-change', {
+      startedAt: new Date(),
+    });
+    await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: caze,
+      statusChange: statusChange,
       created: creationDatetime,
       openingDate: new Date(),
       status: toPublishStatus,

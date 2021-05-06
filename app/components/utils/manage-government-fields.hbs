@@ -5,7 +5,7 @@
 }}
   {{#if (and (not isAdding) (not isEditing))}}
     <div class="auk-modal__content">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         {{utils/model-selector
           modelName="government-field"
           searchField="label"
@@ -74,11 +74,11 @@
   {{/if}}
   {{#if isAdding}}
     <div class="auk-modal__content">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=label}}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="government-domain"
@@ -89,7 +89,7 @@
           selectModel=(action "chooseDomain")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="ise-code"
@@ -111,11 +111,11 @@
   {{/if}}
   {{#if isEditing}}
     <div class="auk-modal__content">
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
         {{web-components/vl-form-input value=label}}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="government-domain"
@@ -126,7 +126,7 @@
           selectModel=(action "chooseDomain")
         }}
       </div>
-      <div class="vlc-input-field-block">
+      <div class="auk-form-group">
         <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
         {{utils/model-selector
           modelName="ise-code"
