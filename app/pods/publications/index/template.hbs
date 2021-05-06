@@ -39,7 +39,7 @@
       @noDataMessage={{t "no-results-found"}}
       @size={{this.size}}
       @sort={{this.sort}}
-      @isLoading={{this.isLoadingModel}}
+      @isLoading={{this.model.loading}}
       @onClickRow={{this.navigateToPublication}}
       @class="auk-table auk-table--disable-bottom-border"
       as |table|>
@@ -311,7 +311,3 @@
   />
 {{/if}}
 
-{{!-- LOADER --}}
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay />
-{{/if}}

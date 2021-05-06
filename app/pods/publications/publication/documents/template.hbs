@@ -171,19 +171,13 @@
     </div>
   {{/if}}
 
-
   {{!-- UPLOAD PIECE MODAL --}}
-
-
   {{#if this.showPieceUploadModal}}
     <Publications::Publication::Documents::DocumentsUploadModal
       @onSaveTask={{this.onSavePiecesTask}} @onCancel={{this.onCancel}} />
   {{/if}}
 
-
   {{!-- REQUEST TRANSLATION MODAL --}}
-
-
   {{#if this.showTranslationModal}}
     <WebComponents::AuModal>
       <WebComponents::AuModal::Header
@@ -282,9 +276,6 @@
 
 
   {{!-- REQUEST PUBLISH PREVIEW MODAL --}}
-
-
-
   {{#if this.showPublishPreviewRequestModal}}
     <WebComponents::AuModal>
       <WebComponents::AuModal::Header
@@ -373,19 +364,12 @@
     </WebComponents::AuModal>
   {{/if}}
 
-
   {{!-- LOADER --}}
-
-
-  {{#if this.showLoader}}
+  {{#if this.model.loading}}
     <WebComponents::AuLoadingOverlay/>
   {{/if}}
 
-
-
-
   {{!-- EDIT PIECE DETAILS --}}
-
   {{#if this.showPieceEditor}}
     <Utils::pieceDetailsEdit
             @piece={{this.pieceBeingEdited}}
@@ -394,11 +378,7 @@
     />
   {{/if}}
 
-
-
   {{!-- VERIFY DELETE PIECE MODAL --}}
-
-
   {{!-- TODO replace this with Au variant --}}
   {{#if this.isVerifyingDelete}}
     <WebComponents::VlModalVerify
@@ -409,7 +389,7 @@
     />
   {{/if}}
 
-  {{#if (or this.showLoader this.loadData.isRunning)}}
+  {{#if (or this.model.loading this.loadData.isRunning)}}
     <WebComponents::AuLoadingOverlay
             @title={{t "loading-text"}}
             @message={{t "loading-text"}}
