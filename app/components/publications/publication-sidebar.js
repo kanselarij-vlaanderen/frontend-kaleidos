@@ -189,12 +189,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.newNumacNumber = '';
   }
 
-  @task
-  *unlinkNumacNumber(numacNumber) {
+  @action
+  deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
 
     if (this.args.didChange) {
-      yield this.args.didChange(numacNumber);
+      this.args.didChange(numacNumber);
     }
   }
 

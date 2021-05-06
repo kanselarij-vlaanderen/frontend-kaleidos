@@ -74,7 +74,7 @@
                       @skin="borderless"
                       @icon="close"
                       @layout="icon-only"
-                      {{on "click" (perform this.unlinkNumacNumber numac)}}
+                      {{on "click" (fn this.deleteNumacNumber numac)}}
                       data-test-cases-backlink/>
                   </div>
                 </div>
