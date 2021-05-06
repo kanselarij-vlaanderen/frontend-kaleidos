@@ -9,5 +9,8 @@ export default class Identification extends Model {
   @belongsTo('publication-flow', {
     inverse: 'identification',
   }) publicationFlow;
+  @belongsTo('publication-flow', {
+    inverse: 'numacNumbers',
+  }) publicationFlowForNumac;
   @belongsTo('structured-identifier') structuredIdentifier;
 }

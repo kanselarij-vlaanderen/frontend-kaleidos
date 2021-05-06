@@ -175,20 +175,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  @task
-  *addNumacNumber() {
+  @action
+  addNumacNumber() {
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
       agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+      publicationFlowForNumac: this.publicationFlow,
     });
-    yield numacNumber.save();
 
-    this.publicationFlow.numacNumbers.pushObject(numacNumber);
-    yield this.publicationFlow.save();
-
-    // if (this.args.didChange) {
-    //   this.args.didChange(numacNumber);
-    // }
+    if (this.args.didChange) {
+      this.args.didChange(numacNumber);
+    }
     this.newNumacNumber = '';
   }
 
