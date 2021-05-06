@@ -104,6 +104,7 @@ Router.map(function() {
     this.route('alert-skins');
     this.route('alert-types');
     this.route('alert-stack');
+    this.route('avatar');
     this.route('brand');
     this.route('badge');
     this.route('button-loading');
