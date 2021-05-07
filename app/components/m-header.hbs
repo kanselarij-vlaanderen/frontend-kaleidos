@@ -1,4 +1,4 @@
-<div class="auk-toolbar-complex">
+<div class="auk-toolbar-complex" id="c-main-nav">
   <div class="auk-toolbar-complex__left">
     <div class="auk-toolbar-complex__item">
       <WebComponents::AuBrand @logotype="Kaleidos" />
@@ -99,12 +99,12 @@
       >
         <WebComponents::AuDropdown>
           <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf" target="_blank">
-            {{t "bekijk-doc"}}
+            {{t "look-at-documentation"}}
           </WebComponents::AuDropdown::Item>
           <WebComponents::AuDropdown::Item  @href="mailto:kaleidos.servicedesk@vlaanderen.be">
             <div>
-              <span>{{t "contacteer"}}</span>
-              <span class="auk-u-muted auk-u-text-small">{{t "email-serviced"}}</span>
+              <span>{{t "contact-us"}}</span>
+              <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
             </div>
           </WebComponents::AuDropdown::Item>
         </WebComponents::AuDropdown>
@@ -144,7 +144,7 @@
             <WebComponents::AuDropdown::Divider />
             <WebComponents::AuDropdown::Item >
               {{!-- TODO link naar mijn profiel => nog niet bestaande--}}
-              {{t "mijn-profiel"}}
+              {{t "my-profile"}}
             </WebComponents::AuDropdown::Item>
             <WebComponents::AuDropdown::Item data-test-m-header-user-action-logout {{action "logout"}}>
               {{t "sign-out"}}
