@@ -114,13 +114,31 @@ export default class PublicationsIndexController extends Controller {
     await caze.save();
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+
+    const structuredIdentifier = this.store.createRecord('structured-identifier', {
+      localIdentifier: publicationNumber,
+      versionIdentifier: publicationSuffix,
+    });
+    await structuredIdentifier.save();
+
+    let identificationNumber = publicationNumber;
+    if (publicationSuffix && publicationSuffix.length > 0) {
+      identificationNumber += ` ${publicationSuffix}`;
+    }
+
+    const identifier = this.store.createRecord('identification', {
+      idName: identificationNumber,
+      agency: 'ovrb',
+      structuredIdentifier: structuredIdentifier,
+    });
+    await identifier.save();
+
     const statusChange = this.store.createRecord('publication-status-change', {
       startedAt: new Date(),
     });
     await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
-      publicationNumber,
-      publicationSuffix,
+      identification: identifier,
       case: caze,
       statusChange: statusChange,
       created: creationDatetime,

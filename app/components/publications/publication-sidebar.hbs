@@ -19,10 +19,10 @@
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
           <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="number" value={{@publicationFlow.publicationNumber}}
+          <WebComponents::AuInput type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}} />
-          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.publicationSuffix}}
-            {{on "input" (perform this.setPublicationSuffix)}} />
+          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
+            {{on "input" (perform this.setPublicationNumberSuffix)}} />
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">

@@ -97,8 +97,8 @@
               {{/if}}
               {{#if this.tableColumnDisplayOptions.publicationNumber}}
                 <td>
-                  {{#if row.publicationNumber}}
-                    {{row.publicationNumberToDisplay}}
+                  {{#if row.identification.idName}}
+                    {{row.identification.idName}}
                   {{else}}
                     {{t "dash"}}
                   {{/if}}
