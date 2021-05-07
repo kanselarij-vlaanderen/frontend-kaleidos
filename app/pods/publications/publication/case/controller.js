@@ -10,6 +10,11 @@ import { task } from 'ember-concurrency-decorators';
 export default class CaseController extends Controller {
   @service publicationService;
 
+  @tracked publicationFlow;
+  @tracked contactPersons;
+  @tracked latestSubcaseOnMeeting;
+  @tracked organizations;
+
   @tracked showLoader = false;
   @tracked personModalOpen = false;
   @tracked mandateeModalOpen = false;
@@ -52,20 +57,6 @@ export default class CaseController extends Controller {
     this.contactPerson.email = event.target.value;
   }
 
-  get getShortTitle() {
-    if (this.model.case) {
-      return this.model.case.shortTitle;
-    }
-    return '';
-  }
-
-  get getLongTitle() {
-    if (this.model.case) {
-      return this.model.case.title;
-    }
-    return '';
-  }
-
   @action
   showContactPersonModal() {
     this.personModalOpen = true;
@@ -81,7 +72,7 @@ export default class CaseController extends Controller {
    * ZONE FOR THE ORGANIZATIONS
    */
   get allOrganizations() {
-    return this.model.organizations;
+    return this.organizations;
   }
 
   @action
@@ -97,7 +88,7 @@ export default class CaseController extends Controller {
       name: this.inputOrganization,
     });
     await newOrganization.save();
-    this.model.organizations.pushObject(newOrganization);
+    this.organizations.pushObject(newOrganization);
     this.inputOrganization = '';
     this.showAddOrganisationModal = false;
     this.showLoader = false;
@@ -132,7 +123,7 @@ export default class CaseController extends Controller {
 
   @action
   cancelEditingInscription() {
-    this.model.case.rollbackAttributes();
+    this.model.rollbackAttributes();
     this.putInscriptionInNonEditMode();
   }
 
@@ -144,7 +135,7 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.case.save();
+      yield this.model.save();
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work
@@ -156,7 +147,7 @@ export default class CaseController extends Controller {
     this.showLoader = true;
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.model.publicationFlow.id, contactPerson);
+    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
     this.contactPerson.organization = null;
     this.personModalOpen = false;
     this.showLoader = false;
@@ -193,10 +184,10 @@ export default class CaseController extends Controller {
     const mandatee = this.selectedMandatee;
     this.mandateeModalOpen = false;
     this.showLoader = true;
-    const mandatees = this.model.publicationFlow.get('mandatees').toArray();
+    const mandatees = this.publicationFlow.get('mandatees').toArray();
     mandatees.push(mandatee);
-    this.model.publicationFlow.set('mandatees', mandatees);
-    await this.model.publicationFlow.save();
+    this.publicationFlow.set('mandatees', mandatees);
+    await this.publicationFlow.save();
     this.selectedMandatee = null;
     this.showLoader = false;
   }
@@ -204,15 +195,15 @@ export default class CaseController extends Controller {
   @action
   async unlinkMandateeFromPublicationFlow(mandateeToUnlink) {
     this.showLoader = true;
-    const mandatees = this.model.publicationFlow.get('mandatees').toArray();
+    const mandatees = this.publicationFlow.get('mandatees').toArray();
     for (let index = 0; index < mandatees.length; index++) {
       const mandatee = mandatees[index];
       if (mandateeToUnlink.id === mandatee.id) {
         mandatees.splice(index, 1);
       }
     }
-    this.model.publicationFlow.set('mandatees', mandatees);
-    await this.model.publicationFlow.save();
+    this.publicationFlow.set('mandatees', mandatees);
+    await this.publicationFlow.save();
     this.mandateeModalOpen = false;
     this.showLoader = false;
   }

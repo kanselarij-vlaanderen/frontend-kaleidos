@@ -6,18 +6,20 @@
         <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
                   data-test-publication-detail-menu-publication-number>
-            {{uppercase
-              this.casePath
-            }}
+            {{uppercase this.casePath}}
           </span>
           <WebComponents::AuAbbreviatedText
             data-test-publication-detail-menu-short-title
-            @text={{this.titleText}}
+            @text={{if
+              this.model.case.shortTitle
+              this.model.case.shortTitle
+              this.model.case.title
+            }}
             @size="150"
             @custom="true"
             @customTextClass="auk-toolbar-complex__title"
           />
-          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model.publicationFlow}} />
+          <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
@@ -36,9 +38,8 @@
       @isOpen={{this.sidebarIsOpen}}
       @onCollapse={{this.toggleSidebar}}
       @onOpen={{this.toggleSidebar}}
-      @publicationFlow={{this.model.publicationFlow}}
+      @publicationFlow={{this.model}}
       @didChange={{this.saveSidebarProperty}}
     />
   </div>
 </div>
-
