@@ -113,6 +113,7 @@
     <div class="auk-toolbar-complex__item auk-u-mr-3">
       {{#if currentSession.userContent}}
         <WebComponents::AuButtonLink
+                data-test-m-header-user-actions
                 @skin="muted"
                 @icon="chevron-down"
                 @layout="icon-right">
@@ -145,7 +146,7 @@
               {{!-- TODO link naar mijn profiel => nog niet bestaande--}}
               {{t "mijn-profiel"}}
             </WebComponents::AuDropdown::Item>
-            <WebComponents::AuDropdown::Item {{action "logout"}}>
+            <WebComponents::AuDropdown::Item data-test-m-header-user-action-logout {{action "logout"}}>
               {{t "sign-out"}}
             </WebComponents::AuDropdown::Item>
           </WebComponents::AuDropdown>
