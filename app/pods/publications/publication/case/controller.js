@@ -57,20 +57,6 @@ export default class CaseController extends Controller {
     this.contactPerson.email = event.target.value;
   }
 
-  get getShortTitle() {
-    if (this.model) {
-      return this.model.shortTitle;
-    }
-    return '';
-  }
-
-  get getLongTitle() {
-    if (this.model) {
-      return this.model.title;
-    }
-    return '';
-  }
-
   @action
   showContactPersonModal() {
     this.personModalOpen = true;
