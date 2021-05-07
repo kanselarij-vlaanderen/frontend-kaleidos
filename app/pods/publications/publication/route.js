@@ -1,22 +1,24 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
 import { action } from '@ember/object';
+import RSVP from 'rsvp';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
-      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers',
+      include: 'case,status,mode,regulation-type,contact-persons,numac-numbers,identification',
       reload: true,
     });
-    await publicationFlow.get('regulationType');
-    const _case = await publicationFlow.get('case');
-    const identification = await publicationFlow.get('identification');
 
-    const subcasesOnMeeting = await this.store.query('subcase', {
+    return publicationFlow;
+  }
+
+  async afterModel(model) {
+    const latestSubcaseOnMeetingPromise = this.store.queryOne('subcase', {
       filter: {
         case: {
-          id: _case.id,
+          // cannot access yet without get(...)
+          [':id:']: model.case.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
@@ -24,18 +26,18 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
       include: 'mandatees',
     });
 
-    return hash({
-      publicationFlow,
-      latestSubcaseOnMeeting: subcasesOnMeeting.get('firstObject'),
-      case: _case,
-      identification: identification,
-      refreshAction: this.refreshModel,
-    });
+    const publicationStatusPromise = this.store.query('publication-status', {});
+    const regulationTypePromise = this.store.query('regulation-type', {});
+
+    const [latestSubcaseOnMeeting] = await RSVP.all([latestSubcaseOnMeetingPromise, publicationStatusPromise, regulationTypePromise]);
+
+    this.latestSubcaseOnMeeting = latestSubcaseOnMeeting;
   }
 
-  async afterModel() {
-    await this.store.query('publication-status', {});
-    await this.store.query('regulation-type', {});
+  setupController(controller) {
+    super.setupController(...arguments);
+
+    controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
   }
 
   /* eslint-disable id-length,no-unused-vars */
@@ -44,8 +46,10 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     controller.publicationNotAfterTranslationForTranslation = false;
   }
 
+  // actions in routers are "fall through":
+  //  they can be called using sent in controllers of subroutes
   @action
-  refreshModel() {
+  refreshPublicationFlow() {
     this.refresh();
   }
 }
