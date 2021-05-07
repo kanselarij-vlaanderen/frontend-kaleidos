@@ -233,8 +233,10 @@
                 </td>
               {{/if}}
               <td>
-                <LinkTo  @route="publications.publication"
-                         @model={{row.id}} class="auk-button auk-button--borderless auk-button--icon">
+                <LinkTo
+                  data-test-publications-button-go-to-publication
+                  @route="publications.publication"
+                  @model={{row.id}} class="auk-button auk-button--borderless auk-button--icon">
                   <i class="ki ki-chevron-right"></i>
                 </LinkTo>
               </td>
