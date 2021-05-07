@@ -819,8 +819,8 @@
   "withdrawn-on": "Afgevoerd op",
   "paused-on": "Gepauzeerd op",
   "help": "Help",
-  "bekijk-doc": "Bekijk documentatie website",
-  "contacteer": "Contacteer ons",
-  "email-serviced": "kaleidos.servicedesk@vlaanderen.be",
-  "mijn-profiel": "Mijn profiel"
+  "look-at-documentation": "Bekijk documentatie website",
+  "contact-us": "Contacteer ons",
+  "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
+  "my-profile": "Mijn profiel"
 }
