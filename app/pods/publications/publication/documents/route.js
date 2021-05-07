@@ -5,7 +5,6 @@ import { isPresent } from '@ember/utils';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import FilterQueryParams from './filter-query-params';
-import RSVP from 'rsvp';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
@@ -21,12 +20,11 @@ export default class PublicationDocumentsRoute extends Route {
     this.filter = await FilterQueryParams.readToFilter(this.store, params);
     this.case  = this.modelFor('publications.publication').case;
 
-    const modelData = await this._loadModel(this.case, this.filter);
+    let pieces = await this._loadModel(this.case, this.filter);
+    pieces = await this._filterPieces(pieces.toArray());
+    pieces = sortPieces(pieces);
 
-    // use array to allow iteration (for sorting)
-    const model = await this._sortAndFilterPieces(modelData.toArray());
-
-    return model;
+    return pieces;
   }
 
   async _loadModel(_case, filter) {
@@ -36,8 +34,7 @@ export default class PublicationDocumentsRoute extends Route {
     if (filter.documentTypes.length) {
       storeQueryFilter['filter[document-container][type][:id:]'] = filter.documentTypes.map((it) => it.id).join(',');
     }
-    // TODO: FIGURE OUT. THIS DOES NOT WORK YET FOR MULTIPLE FILE TYPES
-    // temporary solution: frontend filtering in controller.sortAndFilterPieces
+    // TODO: filtering on multiple string values currently isn't supported
     // if (filter.fileTypes.length) {
     //   storeQueryFilter['filter[file][extension]'] = ?
     // }
@@ -76,39 +73,27 @@ export default class PublicationDocumentsRoute extends Route {
     controller.showLoader = false;
   }
 
-  async _sortAndFilterPieces(pieces) {
-    const sortedPieces = sortPieces(pieces);
-
-    let filteredSortedPieces;
-    // Als we geen types hebben geselecteerd, laten we alles zien.
+  /*
+   * filtering based on multiple string values is not yet possible in the backend, so we do it here.
+   */
+  async _filterPieces(pieces) {
     if (isPresent(this.filter.fileTypes)) {
-      // Filtering of file types is not yet possible in the backend, so we do it here.
-      // in parallel
-      const filterResultPromises = sortedPieces.map(async(piece) => {
+      // async filter by mapping and compacting
+      const filterResultPromises = pieces.map(async(piece) => {
         if (!await this.filterFileType(piece)) {
           return undefined;
         }
         return piece;
       });
-
-      const filterResult = await RSVP.all(filterResultPromises);
-      filteredSortedPieces = filterResult.compact();
-    } else {
-      filteredSortedPieces = sortedPieces;
+      const filterResult = await Promise.all(filterResultPromises);
+      return filterResult.compact();
     }
-
-    return filteredSortedPieces;
+    return pieces;
   }
 
   async filterFileType(piece) {
-    // await since not "include"-ed in query
-    const file = await piece.get('file');
-    console.log(file);
-    const ext = file.extension;
-    if (!ext) {
-      return false;
-    }
-    return this.filter.fileTypes.includes(ext);
+    const file = await piece.file;
+    return this.filter.fileTypes.includes(file.extension);
   }
 
   @action
