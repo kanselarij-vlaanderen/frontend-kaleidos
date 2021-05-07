@@ -109,7 +109,7 @@ context('Propagation to other graphs', () => {
         cy.get('.auk-h4 > span').contains(file.fileName);
       });
     cy.get(agenda.agendaitemDocumentsTab).click();
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', 0);
     });
@@ -132,7 +132,7 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemDocumentsTab).click();
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', 2);
     });

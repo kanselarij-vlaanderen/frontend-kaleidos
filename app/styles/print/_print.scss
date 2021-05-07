@@ -22,7 +22,7 @@
     display: none;
   }
 
-  .vlc-side-nav {
+  .auk-sidebar {
     display: none;
   }
 
@@ -65,7 +65,7 @@
     display: none;
   }
 
-  .vlc-panel-layout__agenda-history {
+  .auk-panel-layout__agenda-history {
     display: none;
   }
 
@@ -74,7 +74,7 @@
   }
 
   // Firefox printable agenda requires the panel not to be display flex
-  .vlc-panel-layout {
+  .auk-panel-layout {
     display: block;
   }
 
