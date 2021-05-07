@@ -1,17 +1,24 @@
 import Component from '@ember/component';
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
+import {
+  computed, action
+} from '@ember/object';
 import { isEmpty } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
 
-export default Component.extend({
-  currentSession: service(),
-  router: service(),
-  elementId: 'c-main-nav',
-  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--white', 'auk-navbar--no-pad'],
 
-  init() {
-    this._super(...arguments);
+export default class UrgencyLevelCheckboxComponent extends Component {
+  @service currentSession;
+  @service router;
+
+  @tracked hasPublicationsEnabled = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  @tracked showEnvironmentName = computed('environmentName', function() {
+    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
+  });
+
+  constructor() {
+    super(...arguments);
     if (window.location.href.indexOf('http://localhost') === 0) {
       this.set('environmentName', 'LOCAL');
       this.set('environmentClass', 'vlc-environment-pill--local');
@@ -32,20 +39,14 @@ export default Component.extend({
       this.set('environmentName', 'PROD');
       this.set('environmentClass', 'vlc-environment-pill--prod');
     }
-  },
+  }
 
-  hasPublicationsEnabled: !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB),
-
-  showEnvironmentName: computed('environmentName', function() {
-    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
-  }),
-
-  actions: {
-    async logout() {
-      await this.currentSession.logout();
-    },
-    navigateToUser() {
-      this.router.transitionTo('settings.users.user', this.currentSession.userContent.id);
-    },
-  },
-});
+  @action
+  async logout() {
+    await this.currentSession.logout();
+  }
+  @action
+  navigateToUser() {
+    this.router.transitionTo('settings.users.user', this.currentSession.userContent.id);
+  }
+}
