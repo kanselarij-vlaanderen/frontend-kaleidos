@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
+import { isPresent } from '@ember/utils';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import FilterQueryParams from './filter-query-params';
@@ -80,9 +81,7 @@ export default class PublicationDocumentsRoute extends Route {
 
     let filteredSortedPieces;
     // Als we geen types hebben geselecteerd, laten we alles zien.
-    if (!this.isFilterFileTypeActive()) {
-      filteredSortedPieces = sortedPieces;
-    } else {
+    if (isPresent(this.filter.fileTypes)) {
       // Filtering of file types is not yet possible in the backend, so we do it here.
       // in parallel
       const filterResultPromises = sortedPieces.map(async(piece) => {
@@ -94,13 +93,11 @@ export default class PublicationDocumentsRoute extends Route {
 
       const filterResult = await RSVP.all(filterResultPromises);
       filteredSortedPieces = filterResult.compact();
+    } else {
+      filteredSortedPieces = sortedPieces;
     }
 
     return filteredSortedPieces;
-  }
-
-  isFilterFileTypeActive() {
-    return !!this.filter.fileTypes.length;
   }
 
   async filterFileType(piece) {
