@@ -10,9 +10,7 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  // Tracked.
   @tracked cachedData = A([]);
-
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
@@ -32,28 +30,21 @@ export default class PublicationService extends Service {
   }
 
   async publicationNumberAlreadyTaken(publicationNumber, publicationSuffix, publicationFlowId) {
-    let publicationsFromQuery;
-    if (publicationSuffix && !(publicationSuffix === '')) {
-      // if a valid suffix is given, we check if the number + suffix combo has been taken instead
-      publicationsFromQuery = await this.store.query('publication-flow', {
-        filter: {
-          ':exact:publication-number': `"${publicationNumber}"`, // Needs quotes because of bug in mu-cl-resources
-          ':exact:publication-suffix': publicationSuffix,
-        },
-      });
-    } else {
-      // if no suffix is given, we query only on same number but we have to filter out everything that has a suffix
-      // filtering on non-existing attributes, is this possible in a query?
-      const publicationsFromQueryWithSameNumber = await this.store.query('publication-flow', {
-        filter: {
-          ':exact:publication-number': `"${publicationNumber}"`, // Needs quotes because of bug in mu-cl-resources
-        },
-      });
-      publicationsFromQuery = publicationsFromQueryWithSameNumber.filter((publicationFlow) => !publicationFlow.publicationSuffix);
+    let identificationNumber = publicationNumber;
+    if (publicationSuffix && publicationSuffix.length > 0) {
+      identificationNumber += ` ${publicationSuffix}`;
     }
-    // filter own model from data or we can't save our own number
-    const publicationNumberTakenList = publicationsFromQuery.filter((publicationFlow) => publicationFlow.id !== publicationFlowId);
-    return publicationNumberTakenList.toArray().length !== 0;
+
+    const duplicates = await this.store.query('publication-flow', {
+      filter: {
+        identification: {
+          ':exact:id-name': identificationNumber,
+        },
+      },
+    });
+
+    // our own publication should not be considered as duplicate
+    return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
 
   getPublicationCounts(publicationId) {
