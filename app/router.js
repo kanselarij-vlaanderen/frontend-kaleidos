@@ -112,6 +112,7 @@ Router.map(function() {
     this.route('button-types');
     this.route('checkboxes-radio-buttons');
     this.route('colors');
+    this.route('color-badge');
     this.route('dropdown');
     this.route('empty-state');
     this.route('form-group');
