@@ -1,4 +1,4 @@
-<WebComponents::AuNavbar class="vlc-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
+<WebComponents::AuNavbar class="auk-publication-overview-navbar" @border="bottom" @skin="gray-100" @auto="true">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -28,7 +28,7 @@
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
 </WebComponents::AuNavbar>
-<div class="auk-scroll-wrapper vlc-publication-table">
+<div class="auk-scroll-wrapper auk-publication-table">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
       <table class="auk-table auk-table--styled auk-table--bordered js-data-table">
@@ -42,7 +42,7 @@
                         @currentSorting={{this.sort}}
                         @field={{column.keyName}}
                         @label={{t column.translationKeySmall}}
-                        @class="auk-u-text-nowrap vlc-case-name-header"/>
+                        @class="auk-u-text-nowrap auk-case-name-header"/>
                 {{else}}
                   {{#if column.sortable}}
                     <ThSortable
@@ -266,8 +266,8 @@
     </div>
     <div class="auk-toolbar-complex__right">
       <div class="auk-toolbar-complex__item">
-        <div class="vlc-pagination__container">
-          <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-showed"}}</p>
+        <div class="auk-pagination__container">
+          <p class="auk-pagination__fontsize auk-pagination-nowrap">{{t "amount-showed"}}</p>
           <PowerSelect
                     @searchEnabled={{false}}
                     @placeholder={{t "select-a-status"}}
