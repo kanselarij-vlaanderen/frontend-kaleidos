@@ -47,7 +47,7 @@ export default Model.extend({
     inverse: null,
   }),
   cases: hasMany('case', {
-    inverse: null,
+    inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),
   // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
   agendaitems: hasMany('agendaitem', {

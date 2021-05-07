@@ -19,10 +19,6 @@ export default class DocumentsFilter {
     return new DocumentsFilter(this._toObject());
   }
 
-  toString() {
-    return JSON.stringify(this.toObject());
-  }
-
   _emptyState() {
     return {
       documentName: '',
