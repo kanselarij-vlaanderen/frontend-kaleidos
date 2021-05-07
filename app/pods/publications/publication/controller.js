@@ -13,11 +13,11 @@ export default class PublicationController extends Controller {
 
   get casePath() {
     let title = this.intl.t('publication-flow');
-    // TODO use publicationNumberToDisplay here, but doesn't seem to update when changing suffix
+    const publicationNumber = this.model.publicationFlow.identification.get('idName');
     if (!this.model.latestSubcaseOnMeeting) {
-      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
+      title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', publicationNumber || '');
     } else {
-      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', this.model.publicationFlow.publicationNumber, ' ', this.model.publicationFlow.publicationSuffix || '');
+      title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', publicationNumber || '');
     }
     return title;
   }
