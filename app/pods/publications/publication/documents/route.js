@@ -4,50 +4,56 @@ import { inject } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import DocumentsFilter from 'frontend-kaleidos/utils/documents-filter';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsRoute extends Route {
   @inject store;
   @inject fileService;
 
   queryParams = {
-    ...FilterQueryParams.queryParams,
+    filterName: {
+      as: 'naam',
+      refreshModel: true,
+      type: 'string',
+    },
+    filterExtensions: {
+      as: 'extensies',
+      refreshModel: true,
+      type: 'array',
+    },
+    filterDocumentTypeIds: {
+      as: 'type',
+      refreshModel: true,
+      type: 'array',
+    },
   };
 
   async model(params) {
-    // caching for use in QueryParams.queryParamsToFilter
     await this._loadDocumentTypes();
-    this.filter = await FilterQueryParams.readToFilter(this.store, params);
-    this.case  = this.modelFor('publications.publication').case;
+    this.case  = await this.modelFor('publications.publication').case;
 
-    let pieces = await this._loadModel(this.case, this.filter);
-    pieces = await this._filterPieces(pieces.toArray());
+    const docQueryParams = {
+      include: 'cases,document-container,document-container.type',
+      'filter[cases][:id:]': this.case.id,
+    };
+    if (isPresent(params.filterDocumentTypeIds)) {
+      docQueryParams['filter[document-container][type][:id:]'] = params.filterDocumentTypeIds.join(',');
+    }
+    // TODO: filtering on multiple string values currently isn't supported
+    // if (isPresent(params.filterExtensions)) {
+    //   docQueryParams['filter[file][extension]'] = params.filterExtensions.join(',')
+    // }
+    if (isPresent(params.filterName)) {
+      docQueryParams['filter[name]'] = params.filterName;
+    }
+
+    let pieces = await this.store.query('piece', docQueryParams);
+    pieces = pieces.toArray();
+    if (isPresent(params.filterExtensions)) {
+      pieces = await this._filterPieces(pieces, params.filterExtensions);
+    }
     pieces = sortPieces(pieces);
 
     return pieces;
-  }
-
-  async _loadModel(_case, filter) {
-    const storeQueryFilter = {
-      'filter[cases][:id:]': _case.id,
-    };
-    if (filter.documentTypes.length) {
-      storeQueryFilter['filter[document-container][type][:id:]'] = filter.documentTypes.map((it) => it.id).join(',');
-    }
-    // TODO: filtering on multiple string values currently isn't supported
-    // if (filter.fileTypes.length) {
-    //   storeQueryFilter['filter[file][extension]'] = ?
-    // }
-    if (filter.documentName) {
-      storeQueryFilter['filter[name]'] = filter.documentName;
-    }
-
-    const modelData = await this.store.query('piece', {
-      include: 'cases,document-container,document-container.type',
-      ...storeQueryFilter,
-    });
-
-    return modelData;
   }
 
   async _loadDocumentTypes() {
@@ -61,9 +67,13 @@ export default class PublicationDocumentsRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-
+    const params = this.paramsFor('publications.publication.documents');
     controller.case = this.case;
-    controller.filter = new DocumentsFilter(this.filter);
+    controller.filter = new DocumentsFilter({
+      documentName: params.filterName,
+      fileTypes: params.filterExtensions,
+      documentTypes: params.filterDocumentTypeIds.map((id) => this.store.peekRecord('document-type', id)),
+    });
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -76,24 +86,21 @@ export default class PublicationDocumentsRoute extends Route {
   /*
    * filtering based on multiple string values is not yet possible in the backend, so we do it here.
    */
-  async _filterPieces(pieces) {
-    if (isPresent(this.filter.fileTypes)) {
-      // async filter by mapping and compacting
-      const filterResultPromises = pieces.map(async(piece) => {
-        if (!await this.filterFileType(piece)) {
-          return undefined;
-        }
-        return piece;
-      });
-      const filterResult = await Promise.all(filterResultPromises);
-      return filterResult.compact();
-    }
-    return pieces;
+  async _filterPieces(pieces, allowedExtensions) {
+    // async filter by mapping and compacting
+    const filterResultPromises = pieces.map(async(piece) => {
+      if (!await this.pieceHasExtension(piece, allowedExtensions)) {
+        return undefined;
+      }
+      return piece;
+    });
+    const filterResult = await Promise.all(filterResultPromises);
+    return filterResult.compact();
   }
 
-  async filterFileType(piece) {
+  async pieceHasExtension(piece, allowedExtensions) {
     const file = await piece.file;
-    return this.filter.fileTypes.includes(file.extension);
+    return allowedExtensions.includes(file.extension);
   }
 
   @action

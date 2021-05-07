@@ -2,9 +2,11 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
-import { action } from '@ember/object';
+import {
+  action,
+  set
+} from '@ember/object';
 import { inject as service } from '@ember/service';
-import FilterQueryParams from './filter-query-params';
 
 export default class PublicationDocumentsController extends Controller {
   @service activityService;
@@ -172,6 +174,8 @@ export default class PublicationDocumentsController extends Controller {
 
   @action
   async onPerformFilter(filter) {
-    FilterQueryParams.updateFromFilterAndReload(this, filter);
+    set(this, 'filterName', filter.documentName);
+    set(this, 'filterDocumentTypeIds', filter.documentTypes.map((it) => it.id));
+    set(this, 'filterExtensions', filter.fileTypes);
   }
 }
