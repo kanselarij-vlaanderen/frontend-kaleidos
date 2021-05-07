@@ -173,7 +173,7 @@ export default class PublicationDocumentsController extends Controller {
   }
 
   @action
-  async onPerformFilter(filter) {
+  setFilter(filter) {
     set(this, 'filterName', filter.documentName);
     set(this, 'filterDocumentTypeIds', filter.documentTypes.map((it) => it.id));
     set(this, 'filterExtensions', filter.fileTypes);

@@ -58,7 +58,7 @@
   {{#if this.showFilterPanel}}
     <div class="auk-u-mb-2">
       <Publications::Publication::Documents::DocumentsFilter
-        @filter={{this.filter}} @onChange={{this.onPerformFilter}} />
+        @filter={{this.filter}} @onChange={{this.setFilter}} />
     </div>
   {{/if}}
 
