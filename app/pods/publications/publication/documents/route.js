@@ -28,7 +28,6 @@ export default class PublicationDocumentsRoute extends Route {
   };
 
   async model(params) {
-    await this._loadDocumentTypes();
     this.case  = await this.modelFor('publications.publication').case;
 
     const docQueryParams = {
@@ -56,11 +55,9 @@ export default class PublicationDocumentsRoute extends Route {
     return pieces;
   }
 
-  async _loadDocumentTypes() {
-    return await this.store.query('document-type', {
-      page: {
-        size: 50,
-      },
+  async afterModel() {
+    await this.store.query('document-type', {
+      'page[size]': 50,
       sort: 'priority',
     });
   }
