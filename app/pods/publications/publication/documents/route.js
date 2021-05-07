@@ -3,8 +3,7 @@ import { hash } from 'rsvp';
 
 export default class PublicationDocumentsRoute extends Route {
   async model() {
-    const parentHash = this.modelFor('publications.publication');
-    const publicationFlow = parentHash.publicationFlow;
+    const publicationFlow = this.modelFor('publications.publication');
     const _case = await publicationFlow.get('case');
     const caze = await this.store.findRecord('case', _case.get('id'), {
       include: 'pieces,pieces.document-container,pieces.document-container.type',
@@ -14,7 +13,6 @@ export default class PublicationDocumentsRoute extends Route {
     return hash({
       publicationFlow,
       case: caze,
-      refreshAction: parentHash.refreshAction,
     });
   }
 

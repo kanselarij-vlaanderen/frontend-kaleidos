@@ -107,14 +107,4 @@ export default class PublicationFlow extends Model {
       return closedPublications + withdrawnPublications;
     });
   }
-
-  get latestStatusChange() {
-    const statusChanges = this.store.query('publication-status-change', {
-      sort: '-startedAt',
-      filter: {
-        publication: this,
-      },
-    });
-    return statusChanges.get('firstObject');
-  }
 }

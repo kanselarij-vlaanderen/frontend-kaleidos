@@ -8,26 +8,19 @@ export default class PublicationController extends Controller {
   @service intl;
   @service media;
 
+  @tracked latestSubcaseOnMeeting;
+
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
-  @tracked showLoader = false;
 
   get casePath() {
     let title = this.intl.t('publication-flow');
-    const publicationNumber = this.model.publicationFlow.identification.get('idName');
-    if (!this.model.latestSubcaseOnMeeting) {
+    const publicationNumber = this.model.identification.get('idName');
+    if (!this.latestSubcaseOnMeeting) {
       title = title.concat(' - ', this.intl.t('not-via-cabinet'), ' - ', publicationNumber || '');
     } else {
       title = title.concat(' - ', this.intl.t('via-cabinet'), ' - ', publicationNumber || '');
     }
     return title;
-  }
-
-  get titleText() {
-    const shortTitle = this.model.publicationFlow.case.get('shortTitle');
-    if (shortTitle) {
-      return shortTitle;
-    }
-    return this.model.publicationFlow.case.get('title');
   }
 
   @action
@@ -38,12 +31,5 @@ export default class PublicationController extends Controller {
   @action
   saveSidebarProperty(modifiedObject) {
     modifiedObject.save();
-  }
-
-  get getClassForPublicationNumber() {
-    if (this.numberIsAlreadyUsed) {
-      return 'auk-form-group--error';
-    }
-    return null;
   }
 }
