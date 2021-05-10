@@ -196,22 +196,25 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     }
   }
 
-  @task
-  *addNumacNumber(newNumacNumber) {
-    const numacNumber = yield this.store.createRecord('numac-number', {
-      name: newNumacNumber,
-      publicationFlow: this.publicationFlow,
+  @action
+  addNumacNumber(newNumacNumber) {
+    const numacNumber = this.store.createRecord('identification', {
+      idName: newNumacNumber,
+      agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+      publicationFlowForNumac: this.publicationFlow,
     });
+
     if (this.args.didChange) {
       this.args.didChange(numacNumber);
     }
   }
 
-  @task
-  *unlinkNumacNumber(numacNumber) {
+  @action
+  deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
+
     if (this.args.didChange) {
-      yield this.args.didChange(numacNumber);
+      this.args.didChange(numacNumber);
     }
   }
 

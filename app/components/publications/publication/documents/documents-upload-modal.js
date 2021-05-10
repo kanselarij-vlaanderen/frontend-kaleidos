@@ -6,6 +6,10 @@ import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 
 export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
+  /**
+   * @argument onSave: should take arguments (pieces)
+   * @argument onCancel
+   */
   @inject store;
 
   @tracked isExpanded = false;
@@ -59,26 +63,8 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
-      try {
-        await this.savePiece.perform(piece);
-      } catch (error) {
-        await this.deleteUploadedPiece.perform(piece);
-        throw error;
-      }
-    });
-    yield all(savePromises);
-    yield this.args.onSaveTask.perform(this.newPieces);
-    this.newPieces = [];
-  }
-
-  /**
-   * Save a new document container and the piece it wraps
-   */
-  @task
-  *savePiece(piece) {
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    yield piece.save();
+    if (this.args.onSave) {
+      yield this.args.onSave(this.newPieces);
+    }
   }
 }
