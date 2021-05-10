@@ -39,17 +39,4 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
 
     controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
   }
-
-  /* eslint-disable id-length,no-unused-vars */
-  resetController(controller, _, transition) {
-    controller.publicationNotAfterTranslationForPublication = false;
-    controller.publicationNotAfterTranslationForTranslation = false;
-  }
-
-  // actions in routers are "fall through":
-  //  they can be called using sent in controllers of subroutes
-  @action
-  refreshPublicationFlow() {
-    this.refresh();
-  }
 }
