@@ -12,6 +12,8 @@
   @extend .ember-power-select-trigger;
   @extend .ember-power-select-multiple-options;
 
+  background-image: none;
+
   .emberTagInput--readOnly {
     cursor: default;
   }
