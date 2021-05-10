@@ -7,6 +7,13 @@ export default [
     showByDefault: true,
   },
   {
+    keyName: 'comment',
+    translationKey: 'publications-table-comment',
+    translationKeySmall: 'publications-table-comment-small',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
     keyName: 'speedProcedure',
     translationKey: 'publications-table-speed-procedure',
     translationKeySmall: 'publications-table-speed-procedure-small',
@@ -49,23 +56,16 @@ export default [
     sortable: true,
   },
   {
+    keyName: 'requestedTranslationDate',
+    translationKey: 'publications-table-requested-translation',
+    translationKeySmall: 'publications-table-requested-translation-small',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
     keyName: 'publicationDate',
     translationKey: 'publications-table-publication-date',
     translationKeySmall: 'publications-table-publication-date-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
-    keyName: 'withdrawnDate',
-    translationKey: 'publications-table-withdrawn-date',
-    translationKeySmall: 'publications-table-withdrawn-date-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
-    keyName: 'pauseDate',
-    translationKey: 'publications-table-pause-date',
-    translationKeySmall: 'publications-table-pause-date-small',
     showByDefault: true,
     sortable: true,
   },
@@ -84,13 +84,6 @@ export default [
     sortable: true,
   },
   {
-    keyName: 'publishPreviewReady',
-    translationKey: 'publications-table-preview-ready',
-    translationKeySmall: 'publications-table-preview-ready-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',
@@ -104,11 +97,35 @@ export default [
     showByDefault: true,
     sortable: true,
   },
+
   {
-    keyName: 'comment',
-    translationKey: 'publications-table-comment',
-    translationKeySmall: 'publications-table-comment-small',
+    keyName: 'previewTranslator',
+    translationKey: 'publications-table-preview-translator',
+    translationKeySmall: 'publications-table-preview-translator-small',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
+    keyName: 'status',
+    translationKey: 'publications-table-status',
+    translationKeySmall: 'publications-table-status-small',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
+    keyName: 'source',
+    translationKey: 'publications-table-source',
+    translationKeySmall: 'publications-table-source-small',
+    showByDefault: true,
+    sortable: true,
+  },
+  {
+    keyName: 'signStatus',
+    translationKey: 'publications-table-sign-status',
+    translationKeySmall: 'publications-table-sign-status-small',
     showByDefault: true,
     sortable: true,
   }
+
+
 ];
