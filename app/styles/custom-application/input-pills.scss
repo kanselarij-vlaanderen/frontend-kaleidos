@@ -13,9 +13,12 @@
   @extend .ember-power-select-multiple-options;
 
   background-image: none;
+  // consistent with text input field
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
 
   .emberTagInput--readOnly {
-    cursor: default;
+    // cursor: default;
   }
 
   li, input {
@@ -75,9 +78,9 @@
   }
 
   input.emberTagInput-input {
-    @extend .ember-power-select-trigger-multiple-input;
     // border: none;
     // padding-left: 0;
+    @extend .ember-power-select-trigger-multiple-input;
   }
 
   input.emberTagInput-input:focus {
@@ -86,8 +89,6 @@
   }
 
   input.emberTagInput-input.is-disabled {
-    display: none;
+    // display: none;
   }
-
 }
-
