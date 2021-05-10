@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 
 /**
  * @template TItem
+ * @argument {ArrayProxy<TItem>} tags
  * @argument {textValue: string) => void} onCreate
  * @argument {(item: TItem) => void} onRemove
  */

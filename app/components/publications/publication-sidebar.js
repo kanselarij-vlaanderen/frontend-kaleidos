@@ -22,7 +22,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @service toaster;
   @service publicationService;
 
-  @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;

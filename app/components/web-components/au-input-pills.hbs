@@ -1,8 +1,6 @@
 <TagInput @tags={{@items}}
   @addTag={{this.onAdd}}
   @removeTagAtIndex={{this.onRemoveTagAtIndex}}
-  @placeholder={{@placeholder}}
-  @readOnly={{@disabled}}
   as |item|>
   {{yield item}}
 </TagInput>
