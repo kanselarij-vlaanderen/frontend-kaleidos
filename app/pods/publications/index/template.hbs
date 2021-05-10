@@ -28,10 +28,10 @@
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
 </WebComponents::AuNavbar>
-<div class="auk-scroll-wrapper auk-publication-table">
+<div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
-      <table class="auk-table auk-table--styled auk-table--bordered js-data-table">
+      <table class="auk-table">
         <thead>
           <tr>
             {{#each this.tableColumns as |column|}}
@@ -61,7 +61,7 @@
         </thead>
         <tbody>
           {{#each this.model as |row|}}
-            <tr >
+            <tr   class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
               {{#if this.tableColumnDisplayOptions.caseName}}
             {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
                 <td class="auk-table__col--6">

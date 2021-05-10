@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action, set
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
@@ -22,8 +24,8 @@ export default class PublicationsIndexController extends Controller {
 
   @service publicationService;
 
-  @tracked page = 0;
-  @tracked size = 10;
+  page = 0;
+  size = 10;
   sort = '-created';
   sizeOptions = [10, 25, 50, 100, 200];
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
@@ -153,17 +155,17 @@ export default class PublicationsIndexController extends Controller {
   @action
   prevPage() {
     if (this.page > 0) {
-      this.page = this.page - 1;
+      this.set('page', this.page - 1);
     }
   }
 
   @action
   nextPage() {
-    this.page = this.page + 1;
+    this.set('page', this.page + 1);
   }
 
   @action
   setSizeOption(size) {
-    this.size = size;
+    this.set('size', size);
   }
 }
