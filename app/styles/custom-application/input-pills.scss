@@ -17,7 +17,9 @@
   .emberTagInput--readOnly { }
   li { }
   emberTagInput-tag,
-  emberTagInput-input { }
+  emberTagInput-input {
+    display: flex;
+  }
 
   .emberTagInput-tag {
     @extend .ember-power-select-multiple-option;
@@ -42,14 +44,11 @@
   }
 
   .emberTagInput-new {
-    display: flex;
+    @extend .ember-power-select-trigger-multiple-input;
   }
 
   input.emberTagInput-input {
     @extend .ember-power-select-trigger-multiple-input;
-    // fix for ember-power-select not having a own container,
-    //    but having the input inside a <li />
-    width: 100%;
   }
 
   input.emberTagInput-input:focus {}
