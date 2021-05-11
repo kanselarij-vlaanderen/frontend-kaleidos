@@ -1,4 +1,3 @@
-
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -45,10 +44,5 @@ export default class MHeader extends Component {
   @action
   async logout() {
     await this.currentSession.logout();
-  }
-
-  @action
-  navigateToUser() {
-    this.router.transitionTo('settings.users.user', this.currentSession.userContent.id);
   }
 }
