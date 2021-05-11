@@ -16,6 +16,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument onCollapse
    * @argument onOpen
    * @argument {(model, changedKeys: string[]) => void} didChange
+   *  on create and delete no changedKeys are passed
    */
   @service store;
   @service intl;
@@ -79,25 +80,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['regulationType']);
-    }
+    this._notify(this.publicationFlow, ['regulationType']);
   }
 
   @action
   setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['mode']);
-    }
+    this._notify(this.publicationFlow, ['mode']);
   }
 
   @action
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['urgencyLevel']);
-    }
+    this._notify(this.publicationFlow, ['urgencyLevel']);
   }
 
   @action
@@ -123,11 +118,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       startedAt: now,
       publication: this.publicationFlow,
     });
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
-      this.args.didChange(statusChange);
-      return status;
-    }
+    this._notify(this.publicationFlow, ['status', 'closingDate']),
+    this._notify(statusChange);
   }
 
   @action
@@ -185,10 +177,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
       identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
       this.numberIsAlreadyUsed = false;
-      if (this.args.didChange) {
-        this.args.didChange(identification, ['idName']);
-        this.args.didChange(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
-      }
+      this._notify(identification, ['idName']);
+      this._notify(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
     }
   }
 
@@ -200,9 +190,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       publicationFlowForNumac: this.publicationFlow,
     });
 
-    if (this.args.didChange) {
-      this.args.didChange(numacNumber);
-    }
+    this._notify(numacNumber);
     this.newNumacNumber = '';
   }
 
@@ -210,9 +198,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
 
-    if (this.args.didChange) {
-      this.args.didChange(numacNumber);
-    }
+    this._notify(numacNumber);
   }
 
   get allowedUltimatePublicationDates() {
@@ -229,25 +215,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimatePublicationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['publishBefore']);
-    }
+    this._notify(this.publicationFlow, ['publishBefore']);
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['publishDateRequested']);
-    }
+    this._notify(this.publicationFlow, ['publishDateRequested']);
   }
 
   @action
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['publishedAt']);
-    }
+    this._notify(this.publicationFlow, ['publishedAt']);
   }
 
   get allowedUltimateTranslationDates() {
@@ -263,9 +243,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimateTranslationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['translateBefore']);
-    }
+    this._notify(this.publicationFlow, ['translateBefore']);
   }
 
   @restartableTask
@@ -273,8 +251,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const newValue = event.target.value;
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
+    this._notify(this.publicationFlow, ['remark']);
+  }
+
+  /**
+   *
+   * @param {Model} model
+   * @param {string[]} changedKeys
+   */
+  _notify(model, changedKeys) {
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, ['remark']);
+      this.args.didChange(model, changedKeys);
     }
   }
 }
