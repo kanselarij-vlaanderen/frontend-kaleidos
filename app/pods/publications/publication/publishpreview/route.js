@@ -3,6 +3,11 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import { hash } from 'rsvp';
 
 export default class PublicationPublishPreviewRoute extends Route {
+  beforeModel(transition) {
+    alert('Not implemented yet.');
+    transition.abort();
+  }
+
   async model() {
     const parentHash = this.modelFor('publications.publication');
     const publicationFlow = parentHash.publicationFlow;

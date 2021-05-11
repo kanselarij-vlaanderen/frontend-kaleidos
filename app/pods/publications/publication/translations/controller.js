@@ -8,6 +8,7 @@ import moment from 'moment';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { tracked } from '@glimmer/tracking';
 
+// TODO: temporarily disabled until new design + data model is ready
 export default class PublicationTranslationController extends Controller {
   @service publicationService;
   @service configService;
