@@ -149,13 +149,11 @@
               }}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.caseManager}}
             <td>
               {{t "dash"}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.lastEdited}}
             <td class="auk-u-text-nowrap">
               {{moment-format row.modified "DD-MM-YYYY"}}<br/>
@@ -164,14 +162,11 @@
               </span>
             </td>
           {{/if}}
-
-
           {{#if this.tableColumnDisplayOptions.lastEditedBy}}
             <td>
               {{t "dash"}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.withdrawnDate}}
             <td class="auk-u-text-nowrap">
               {{#if row.status.isWithdrawn }}
@@ -185,7 +180,6 @@
               {{/if}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.pauseDate}}
             <td class="auk-u-text-nowrap">
               {{#if row.status.isPaused}}
@@ -199,29 +193,11 @@
               {{/if}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.translateRequests}}
             <td class="auk-u-text-align--center">
-              {{#if (gt (await row.translationRequestsTotal) 0)}}
-                {{#if
-                  (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
-                }}
-                  <WebComponents::AuStatusPill @status="done">
-                    {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                  </WebComponents::AuStatusPill>
-                {{else}}
-                  <WebComponents::AuStatusPill @status="in-progress">
-                    {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                  </WebComponents::AuStatusPill>
-                {{/if}}
-              {{else}}
-                <WebComponents::AuStatusPill @status="not-started" />
-              {{/if}}
+              {{t "dash"}}
             </td>
           {{/if}}
-
-
-
           {{#if this.tableColumnDisplayOptions.signRequests}}
             <td class="auk-u-text-align--center">
               {{t "dash"}}
@@ -229,24 +205,9 @@
           {{/if}}
           {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
             <td class="auk-u-text-align--center">
-              {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-                {{#if
-                  (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
-                }}
-                  <WebComponents::AuStatusPill @status="done">
-                    {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                  </WebComponents::AuStatusPill>
-                {{else}}
-                  <WebComponents::AuStatusPill @status="in-progress">
-                    {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                  </WebComponents::AuStatusPill>
-                {{/if}}
-              {{else}}
-                <WebComponents::AuStatusPill @status="not-started" />
-              {{/if}}
+              {{t "dash"}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.speedProcedure}}
             <td class="auk-u-text-align--center">
               {{#if row.urgencyLevel.isUrgent}}
@@ -261,7 +222,6 @@
               {{/if}}
             </td>
           {{/if}}
-
           {{#if this.tableColumnDisplayOptions.comment}}
             <td class="auk-u-text-align--center">
               {{#if row.remark}}

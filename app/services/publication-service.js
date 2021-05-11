@@ -1,16 +1,11 @@
-/* eslint-disable no-duplicate-imports */
-import { inject as service } from '@ember/service';
-import Service from '@ember/service';
-import { ajax } from 'frontend-kaleidos/utils/ajax';
-import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
+import Service, { inject as service } from '@ember/service';
 
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
   @service intl;
 
-  @tracked cachedData = A([]);
+  _cachedData = {};
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
@@ -47,30 +42,8 @@ export default class PublicationService extends Service {
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
 
-  getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
-    for (let index = 0; index < totals.length; index++) {
-      const item = totals[index];
-      if (item.activityType === ActivityType) {
-        if (item.status === ActivityStatus) {
-          return parseInt(item.count, 10);
-        }
-      }
-    }
-    return 0;
-  }
-
-  getPublicationCounts(publicationId) {
-    if (this.cachedData[publicationId]) {
-      return this.cachedData[publicationId];
-    }
-    this.cachedData[publicationId] = ajax({
-      method: 'GET',
-      url: `/lazy-loading/getCountsForPublication?uuid=${publicationId}`,
-    }).then((result) => result.body.counts);
-    return this.cachedData[publicationId];
-  }
-
+  // kept while in refactor to new ProcedureStap data model
   invalidatePublicationCache() {
-    this.cachedData = A([]);
+    this._cachedData = {};
   }
 }
