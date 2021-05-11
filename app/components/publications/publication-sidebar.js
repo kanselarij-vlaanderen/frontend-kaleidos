@@ -15,7 +15,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument didChange: should take arguments (modifiedObject, keyName)
+   * @argument {(model, changedKeys: string[]) => void} didChange
    */
   @service store;
   @service intl;
@@ -80,7 +80,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'regulationType');
+      this.args.didChange(this.publicationFlow, ['regulationType']);
     }
   }
 
@@ -88,7 +88,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'mode');
+      this.args.didChange(this.publicationFlow, ['mode']);
     }
   }
 
@@ -96,7 +96,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'urgencyLevel');
+      this.args.didChange(this.publicationFlow, ['urgencyLevel']);
     }
   }
 
@@ -189,9 +189,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
       this.numberIsAlreadyUsed = false;
       if (this.args.didChange) {
-        this.args.didChange(identification, 'idName');
-        this.args.didChange(structuredIdentifier, 'localIdentifier');
-        this.args.didChange(structuredIdentifier, 'versionIdentifier');
+        this.args.didChange(identification, ['idName']);
+        this.args.didChange(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
       }
     }
   }
@@ -234,7 +233,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishBefore');
+      this.args.didChange(this.publicationFlow, ['publishBefore']);
     }
   }
 
@@ -242,7 +241,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishDateRequested');
+      this.args.didChange(this.publicationFlow, ['publishDateRequested']);
     }
   }
 
@@ -250,7 +249,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishedAt');
+      this.args.didChange(this.publicationFlow, ['publishedAt']);
     }
   }
 
@@ -268,7 +267,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'translateBefore');
+      this.args.didChange(this.publicationFlow, ['translateBefore']);
     }
   }
 
@@ -278,7 +277,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'remark');
+      this.args.didChange(this.publicationFlow, ['remark']);
     }
   }
 }
