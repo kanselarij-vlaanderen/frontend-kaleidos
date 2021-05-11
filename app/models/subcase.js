@@ -37,21 +37,11 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  requestActivities: hasMany('request-activity', {
-    inverse: null,
-  }),
-  translationActivities: hasMany('translation-activity', {
-    inverse: null,
-  }),
-  proofingActivities: hasMany('proofing-activity', {
-    inverse: null,
-  }),
-  publicationActivities: hasMany('publication-activity', {
-    inverse: null,
-  }),
-  cancellationActivities: hasMany('cancellation-activity', {
-    inverse: null,
-  }),
+  requestActivities: hasMany('request-activity'),
+  translationActivities: hasMany('translation-activity'),
+  proofingActivities: hasMany('proofing-activity'),
+  publicationActivities: hasMany('publication-activity'),
+  cancellationActivities: hasMany('cancellation-activity'),
 
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {
