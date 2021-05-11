@@ -12,4 +12,5 @@ export default {
     PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
     WITHDRAWN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
   },
+  NUMAC_SCHEMA_AGENCY: 'Belgisch Staatsblad',
 };
