@@ -124,11 +124,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       publication: this.publicationFlow,
     });
     if (this.args.didChange) {
-      await Promise.all([
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
-        this.args.didChange(statusChange)
-      ]);
-      this.loadPublicationStatusChange.perform();
+      this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
+      this.args.didChange(statusChange);
       return status;
     }
   }
