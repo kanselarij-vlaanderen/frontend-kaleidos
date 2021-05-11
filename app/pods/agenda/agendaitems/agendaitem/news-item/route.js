@@ -28,7 +28,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     return newsletterInfo;
   }
 
-  async setupController(controller, model) {
+  async setupController(controller) {
     super.setupController(...arguments);
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaitem', agendaitem);
@@ -38,8 +38,6 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
 
     controller.set('notaModifiedTime',
       await this.agendaService.retrieveModifiedDateFromNota(controller.get('agendaitem')));
-
-    controller.set('model', model);
   }
 
   /* eslint-disable id-length,no-unused-vars */
