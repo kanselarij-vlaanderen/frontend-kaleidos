@@ -1,9 +1,10 @@
-import Component from '@ember/component';
+
 import {
   get, action
 } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
+import Component from '@glimmer/component';
 
 export default class AuPagination extends Component {
   @tracked pageOffset = 0;
