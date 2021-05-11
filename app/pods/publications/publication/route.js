@@ -1,6 +1,5 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import RSVP from 'rsvp';
 
 export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
@@ -38,18 +37,5 @@ export default class PublicationRoute extends Route.extend(AuthenticatedRouteMix
     super.setupController(...arguments);
 
     controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
-  }
-
-  /* eslint-disable id-length,no-unused-vars */
-  resetController(controller, _, transition) {
-    controller.publicationNotAfterTranslationForPublication = false;
-    controller.publicationNotAfterTranslationForTranslation = false;
-  }
-
-  // actions in routers are "fall through":
-  //  they can be called using sent in controllers of subroutes
-  @action
-  refreshPublicationFlow() {
-    this.refresh();
   }
 }
