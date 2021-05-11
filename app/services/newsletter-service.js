@@ -95,9 +95,11 @@ export default Service.extend({
   // TODO title = shortTitle, inconsistenties fix/conversion needed if this is changed
   async createNewsItemForAgendaitem(agendaitem, inNewsletter = false) {
     if (this.currentSession.isEditor) {
-      const agendaItemTreatment = (await agendaitem.get('treatments')).firstObject;
+      // TODO: The relationship 'agendaitem' to 'agenda-item-treatment' is "inverse: null".
+      // When adding a new newsletterInfo immediately after adding a treatment, this can break data.
+      const agendaItemTreatments = await agendaitem.get('treatments');
       const news = this.store.createRecord('newsletter-info', {
-        agendaItemTreatment,
+        agendaItemTreatment: agendaItemTreatments,
         inNewsletter,
       });
       if (agendaitem.showAsRemark) {
