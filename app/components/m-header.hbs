@@ -144,7 +144,7 @@
                 </div>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
-              <WebComponents::AuDropdown::Item data-test-m-header-user-action-logout {{action "logout"}}>
+              <WebComponents::AuDropdown::Item @onClickAction={{this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
               </WebComponents::AuDropdown::Item>
             </WebComponents::AuDropdown>

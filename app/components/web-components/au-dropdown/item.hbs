@@ -7,6 +7,10 @@
     <div class="auk-menu__item--text-only" ...attributes>
       {{yield}}
     </div>
+  {{else if @onClickAction}}
+    <div {{on "click" @onClickAction}} class="auk-menu__item active {{this.skin}}"  ...attributes>
+      {{yield}}
+    </div>
   {{else}}
     <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} ...attributes>
       {{yield}}
