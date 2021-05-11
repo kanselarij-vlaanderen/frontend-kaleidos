@@ -36,7 +36,7 @@
               </span>
             </LinkTo>
           </li>
-          {{#if currentSession.isViewer }}
+          {{#if this.currentSession.isViewer }}
             <li class="auk-tabs__tab" data-test-m-header-newsletters>
               <LinkTo @route="newsletters"
                       @current-when="newsletters newsletter print-overviews.newsletter">
@@ -61,7 +61,7 @@
               </span>
             </LinkTo>
           </li>
-          {{#if currentSession.isEditor}}
+          {{#if this.currentSession.isEditor}}
             <li class="auk-tabs__tab" data-test-m-header-settings>
               <LinkTo @route="settings.overview">
                 <span class="auk-tabs__tab-inner">
@@ -78,8 +78,8 @@
     <div class="auk-toolbar-complex__right">
       {{#if this.showEnvironmentName}}
         <div class="auk-toolbar-complex__item auk-u-mr-3">
-          <div class="vlc-environment-pill {{environmentClass}}">
-            {{environmentName}}
+          <div class="vlc-environment-pill {{this.environmentClass}}">
+            {{this.environmentName}}
           </div>
         </div>
       {{/if}}
@@ -112,13 +112,13 @@
         </AttachPopover>
       </div>
       <div class="auk-toolbar-complex__item auk-u-mr-3">
-        {{#if currentSession.userContent}}
+        {{#if this.currentSession.userContent}}
           <WebComponents::AuButtonLink
                   data-test-m-header-user-actions
                   @skin="muted"
                   @icon="chevron-down"
                   @layout="icon-right">
-            {{currentSession.userContent.firstName}}
+            {{this.currentSession.userContent.firstName}}
           </WebComponents::AuButtonLink>
           <AttachPopover
                   @renderInPlace={{true}}
@@ -130,9 +130,9 @@
           >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <WebComponents::AuAvatar @icon="user" @size="small" @name="{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}">
-                  <p>{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}</p>
-                  <p class="auk-u-muted auk-u-text-small">{{currentSession.userRole}}</p>
+                <WebComponents::AuAvatar @icon="user" @size="small" @name="{{this.currentSession.userContent.firstName}} {{this.currentSession.userContent.lastName}}">
+                  <p>{{this.currentSession.userContent.firstName}} {{this.currentSession.userContent.lastName}}</p>
+                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.userRole}}</p>
                 </WebComponents::AuAvatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
