@@ -13,11 +13,6 @@ export default class MHeader extends Component {
   @service currentSession;
   @service router;
 
-  @tracked hasPublicationsEnabled = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
-  @tracked showEnvironmentName = computed('environmentName', function() {
-    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
-  });
-
   constructor() {
     super(...arguments);
     if (window.location.href.indexOf('http://localhost') === 0) {
@@ -42,10 +37,19 @@ export default class MHeader extends Component {
     }
   }
 
+  get hasPublicationsEnabled() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  }
+
+  get showEnvironmentName() {
+    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
+  }
+
   @action
   async logout() {
     await this.currentSession.logout();
   }
+
   @action
   navigateToUser() {
     this.router.transitionTo('settings.users.user', this.currentSession.userContent.id);
