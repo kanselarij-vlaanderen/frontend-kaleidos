@@ -19,7 +19,7 @@ export default class PublicationsIndexRoute extends Route {
       as: 'sorteer',
     },
   }
-  params;
+
   statusFilters = Object.freeze({ // map filter name to concept uri
     publishedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PUBLISHED,
     pausedFilterOption: CONSTANTS.PUBLICATION_STATUSES.PAUSED,
@@ -34,7 +34,6 @@ export default class PublicationsIndexRoute extends Route {
   async model(params) {
     const statusIds = [];
     let ministerFilter = {};
-    this.params = params;
     let apiSort;
     const filter = {
       ':has:case': 'yes',
@@ -66,7 +65,7 @@ export default class PublicationsIndexRoute extends Route {
         ':id:': statusIds.join(','),
       };
     }
-    let qpSort = this.params.sort;
+    let qpSort = params.sort;
     let descending;
     if (qpSort) {
       if (qpSort.startsWith('-')) {
@@ -78,7 +77,7 @@ export default class PublicationsIndexRoute extends Route {
       // note that the "dasherize" here is used in order to keep the original column keyName's
       if (qpSort === dasherize('publicationNumber')) {
         // show the most recent publication first if publication-number is the same
-        apiSort = 'publication-number,-created';
+        apiSort = 'identification.structured-identifier.local-identifier,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
       } else if (qpSort === dasherize('requestedPublicationDate')) {
@@ -99,10 +98,10 @@ export default class PublicationsIndexRoute extends Route {
       filter: filter,
       sort: apiSort,
       page: {
-        number: this.params.page,
-        size: this.params.size,
+        number: params.page,
+        size: params.size,
       },
-      include: 'case,status',
+      include: 'case,status,identification,identification.structured-identifier',
     });
   }
 

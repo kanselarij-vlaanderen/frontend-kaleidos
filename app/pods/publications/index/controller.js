@@ -22,8 +22,8 @@ export default class PublicationsIndexController extends Controller {
 
   @service publicationService;
 
-  @tracked page = 0;
-  @tracked size = 10;
+  page = 0;
+  size = 10;
   sort = '-created';
   sizeOptions = [10, 25, 50, 100, 200];
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
@@ -114,13 +114,31 @@ export default class PublicationsIndexController extends Controller {
     await caze.save();
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+
+    const structuredIdentifier = this.store.createRecord('structured-identifier', {
+      localIdentifier: publicationNumber,
+      versionIdentifier: publicationSuffix,
+    });
+    await structuredIdentifier.save();
+
+    let identificationNumber = publicationNumber;
+    if (publicationSuffix && publicationSuffix.length > 0) {
+      identificationNumber += ` ${publicationSuffix}`;
+    }
+
+    const identifier = this.store.createRecord('identification', {
+      idName: identificationNumber,
+      agency: 'ovrb',
+      structuredIdentifier: structuredIdentifier,
+    });
+    await identifier.save();
+
     const statusChange = this.store.createRecord('publication-status-change', {
       startedAt: new Date(),
     });
     await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
-      publicationNumber,
-      publicationSuffix,
+      identification: identifier,
       case: caze,
       statusChange: statusChange,
       created: creationDatetime,
@@ -135,17 +153,17 @@ export default class PublicationsIndexController extends Controller {
   @action
   prevPage() {
     if (this.page > 0) {
-      this.page = this.page - 1;
+      this.set('page', this.page - 1);
     }
   }
 
   @action
   nextPage() {
-    this.page = this.page + 1;
+    this.set('page', this.page + 1);
   }
 
   @action
   setSizeOption(size) {
-    this.size = size;
+    this.set('size', size);
   }
 }
