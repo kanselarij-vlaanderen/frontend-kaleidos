@@ -1,14 +1,14 @@
 <div class="auk-pagination">
   <ul class="auk-pagination__list">
     <li class="auk-pagination__element">
-      <p><strong>{{startItem}}-{{endItem}}</strong> {{t "of"}} {{totalNbOfItems}}</p>
+      <p><strong>{{this.startItem}}-{{this.endItem}}</strong> {{t "of"}} {{this.totalNbOfItems}}</p>
     </li>
-    {{#if hasMultiplePages}}
+    {{#if this.hasMultiplePages}}
       <li class="auk-pagination__element">
         <WebComponents::AuButtonLink
           @icon="chevron-left"
-          disabled={{disabledPrev}}
-          {{action "prevPage"}}
+          disabled={{this.disabledPrev}}
+          {{on "click" this.prevPage}}
         >
           {{t "previous"}}
         </WebComponents::AuButtonLink>
@@ -17,8 +17,8 @@
         <WebComponents::AuButtonLink
           @icon="chevron-right"
           @layout="icon-right"
-          disabled={{disabledNext}}
-          {{action "nextPage"}}
+          disabled={{this.disabledNext}}
+          {{on "click" this.nextPage}}
         >
           {{t "next"}}
         </WebComponents::AuButtonLink>
