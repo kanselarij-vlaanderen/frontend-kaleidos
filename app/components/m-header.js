@@ -1,11 +1,8 @@
 
 import ENV from 'frontend-kaleidos/config/environment';
 import { inject as service } from '@ember/service';
-import {
-  computed, action
-} from '@ember/object';
+import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 
 

@@ -130,17 +130,10 @@
           >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <div class="auk-avatar-and-text">
-                  <div class="auk-avatar auk-avatar--default auk-avatar--regular">
-                    <div class="auk-icon auk-icon--default auk-icon--regular">
-                      <i class="ki ki-user"></i>
-                    </div>
-                  </div>
-                  <div class="auk-avatar-and-text__text">
-                    <p>{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}</p>
-                    <p class="auk-u-muted auk-u-text-small">{{currentSession.userRole}}</p>
-                  </div>
-                </div>
+                <WebComponents::AuAvatar @icon="user" @size="small" @name="{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}">
+                  <p>{{currentSession.userContent.firstName}} {{currentSession.userContent.lastName}}</p>
+                  <p class="auk-u-muted auk-u-text-small">{{currentSession.userRole}}</p>
+                </WebComponents::AuAvatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
               <WebComponents::AuDropdown::Item @onClickAction={{this.logout}} data-test-m-header-user-action-logout>
