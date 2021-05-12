@@ -11,7 +11,7 @@ export default class TranslationActivity extends Model {
   @attr('datetime') targetEndDate;
 
   // Relations.
-  @belongsTo('subcase') subcase;
+  @belongsTo('translation-subcase') subcase;
   @belongsTo('language') language;
 
   @hasMany('piece') usedPieces;

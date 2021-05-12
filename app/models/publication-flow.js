@@ -32,12 +32,13 @@ export default class PublicationFlow extends Model {
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
   @belongsTo('publication-status-change') publicationStatusChange;
+  @belongsTo('publication-subcase') publicationSubcase;
+  @belongsTo('translation-subcase') translationSubcase;
 
   // Has many .
   @hasMany('identification', {
     inverse: 'publicationFlowForNumac',
   }) numacNumbers;
-  @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
 
