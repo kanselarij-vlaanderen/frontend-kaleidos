@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import { hash } from 'rsvp';
 
 export default class PublicationTranslationRoute extends Route {
@@ -11,10 +10,9 @@ export default class PublicationTranslationRoute extends Route {
       include: 'pieces,pieces.document-container,pieces.document-container.type',
       reload: true,
     });
-    const translationActivities = await this.store.query('activity', {
-      include: 'type,subcase,used-pieces',
+    const translationActivities = await this.store.query('translation-activity', {
+      include: 'subcase,used-pieces',
       'filter[subcase][publication-flow][:id:]': publicationFlow.id,
-      'filter[type][:id:]': CONFIG.ACTIVITY_TYPES.vertalen.id,
       sort: '-start-date',
     });
 

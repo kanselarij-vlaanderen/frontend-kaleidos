@@ -47,19 +47,8 @@ export default class PublicationService extends Service {
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
   }
 
-  getPublicationCountsPerTypePerStatus(totals, ActivityType, ActivityStatus) {
-    for (let index = 0; index < totals.length; index++) {
-      const item = totals[index];
-      if (item.activityType === ActivityType) {
-        if (item.status === ActivityStatus) {
-          return parseInt(item.count, 10);
-        }
-      }
-    }
-    return 0;
-  }
-
   getPublicationCounts(publicationId) {
+    // TODO unused method, lazy-loading endpoint needs to be updated to use the new models if we want this, if not: delete this
     if (this.cachedData[publicationId]) {
       return this.cachedData[publicationId];
     }

@@ -1,6 +1,6 @@
-<div class="auk-avatar auk-avatar--default {{this.type}} {{this.size}}" aria-label={{if @icon this.name}} role={{if @icon "img"}} ...attributes>
+<div class="auk-avatar {{this.type}} {{this.size}}" aria-label={{if @icon this.name}} role={{if @icon "img"}} ...attributes>
   {{#if @icon}}
-    <WebComponents::AuIcon class="auk-icon--default" @name={{@icon}} @size={{@size}}/>
+    <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
   {{else if @image}}
     <img src="{{@image}}" alt="{{this.name}}" />
   {{/if}}
