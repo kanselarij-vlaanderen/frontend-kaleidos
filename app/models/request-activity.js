@@ -11,7 +11,7 @@ export default class RequestActivity extends Model {
   // Relations.
   @belongsTo('subcase') subcase;
 
-  // TODO email relation belongsTo or hasMany ?
+  @belongsTo('email') email;
 
   @hasMany('piece') usedPieces;
 }
