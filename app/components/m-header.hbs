@@ -10,20 +10,20 @@
             <WebComponents::AuTab @route="publications" data-test-m-header-publications>{{t "publications"}}</WebComponents::AuTab>
           {{/if}}
           <WebComponents::AuTab @route="agendas.overview"
-                                @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
+                                @currentWhen="agendas agenda print-overviews.decisions print-overviews.press-agenda"
                                 data-test-m-header-agendas>
             {{t "agendas"}}
           </WebComponents::AuTab>
           <WebComponents::AuTab @route="cases" data-test-m-header-cases>{{t "cases"}}</WebComponents::AuTab>
           {{#if this.currentSession.isViewer}}
             <WebComponents::AuTab @route="newsletters"
-                                  @current-when="newsletters newsletter print-overviews.newsletter"
+                                  @currentWhen="newsletters newsletter print-overviews.newsletter"
                                   data-test-m-header-newsletters>
               {{t "newsletter"}}
             </WebComponents::AuTab>
           {{/if}}
           <WebComponents::AuTab   @route="search.index"
-                                  @current-when="search"
+                                  @currentWhen="search"
                                   data-test-m-header-search>
             <WebComponents::AuIcon @name="search" class="auk-icon--search" />
             {{capitalize (t "search")}}
@@ -45,7 +45,8 @@
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButtonLink
                 @skin="muted"
-                @icon="ki ki-circle-question">
+                @padded="padded"
+                @icon="circle-question">
           {{t "help"}}
         </WebComponents::AuButtonLink>
         <AttachPopover
@@ -54,7 +55,7 @@
                 @hideOn="clickout click"
                 @showOn="click"
                 @animation="shift"
-                @placement="bottom"
+                @placement="bottom-end"
         >
           <WebComponents::AuDropdown>
             <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf"
