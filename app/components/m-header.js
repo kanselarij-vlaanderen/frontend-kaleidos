@@ -37,6 +37,10 @@ export default class MHeader extends Component {
     return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
   }
 
+  get getFullUserName() {
+    return `${this.currentSession.userContent.firstName} ${this.currentSession.userContent.lastName}`;
+  }
+
   get showEnvironmentName() {
     return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
   }
