@@ -3,10 +3,9 @@
     <PowerSelect
           class="auk-select auk-select--block" id="selectItemsPerPage"
           @searchEnabled={{false}}
-          @placeholder={{t "select-a-size"}}
           @options={{this.sizeOptions}}
           @selected={{@selectedSize}}
-          @onchange={{this.setSizeOption}}
+          @onchange={{@setSizeOption}}
           as |option|>
       {{option}}
     </PowerSelect>
