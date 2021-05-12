@@ -7,7 +7,7 @@
       <li class="auk-pagination__element">
         <WebComponents::AuButtonLink
           @icon="chevron-left"
-          disabled={{this.disabledPrev}}
+          disabled={{this.isFirstPage}}
           {{on "click" this.prevPage}}
         >
           {{t "previous"}}
@@ -17,7 +17,7 @@
         <WebComponents::AuButtonLink
           @icon="chevron-right"
           @layout="icon-right"
-          disabled={{this.disabledNext}}
+          disabled={{this.isLastPage}}
           {{on "click" this.nextPage}}
         >
           {{t "next"}}

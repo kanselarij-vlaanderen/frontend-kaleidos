@@ -1,74 +1,53 @@
-
-import {
-  get, action
-} from '@ember/object';
-import { alias } from '@ember/object/computed';
-import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
-
+import { action } from '@ember/object';
 export default class AuPagination extends Component {
-  @tracked pageOffset = 0;
-  @tracked total = null;
-  @tracked page = null;
-  @tracked size = null;
-  @tracked nbOfItems = null;
+  currentPage= this.args.page;
+  firstPage= 0;
 
-  @tracked currentPage = alias('page');
-  @tracked firstPage = alias('pageOffset');
-
-  disabledNext() {
-    return this.isLastPage();
-  }
-
-  disabledPrev() {
-    return this.isFirstPage();
-  }
-
-  totalNbOfItems() {
-    if (!get(this, 'total')) {
+  get totalNbOfItems() {
+    if (!this.args.total) {
       return 0;
     }
-    return get(this, 'total');
+    return this.args.total;
   }
 
-  lastPage() {
-    return Math.ceil(this.total / this.size) - 1;
+  get lastPage() {
+    return Math.ceil(this.args.total / this.args.size) - 1;
   }
 
-  isFirstPage() {
+  get isFirstPage() {
     return this.firstPage === this.currentPage;
   }
 
-  isLastPage() {
-    return this.lastPage() === this.currentPage;
+  get isLastPage() {
+    return this.lastPage === this.currentPage;
   }
 
-  hasMultiplePages() {
-    return this.lastPage() > 0;
+  get hasMultiplePages() {
+    return this.lastPage > 0;
   }
 
-  startItem() {
-    if (this.nbOfItems === 0) {
+  get startItem() {
+    if (this.args.nbOfItems === 0) {
       return 0;
     }
-    return (this.size * this.currentPage) + 1;
+    return (this.args.size * this.currentPage) + 1;
   }
 
-  endItem() {
-    if (this.nbOfItems === 0) {
+  get endItem() {
+    if (this.args.nbOfItems === 0) {
       return 0;
     }
-    return (this.startItem() + this.nbOfItems) - 1;
+    return (this.startItem + this.args.nbOfItems) - 1;
   }
 
   @action
   nextPage() {
-    this.nextAction();
+    this.args.nextAction();
   }
 
   @action
   prevPage() {
-    this.previousAction();
+    this.args.previousAction();
   }
 }
-
