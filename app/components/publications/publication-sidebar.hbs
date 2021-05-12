@@ -19,10 +19,10 @@
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
           <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="number" value={{@publicationFlow.publicationNumber}}
+          <WebComponents::AuInput type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
             {{on "input" (perform this.setPublicationNumber)}} />
-          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.publicationSuffix}}
-            {{on "input" (perform this.setPublicationSuffix)}} />
+          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
+            {{on "input" (perform this.setPublicationNumberSuffix)}} />
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">
@@ -99,14 +99,14 @@
             {{#each @publicationFlow.numacNumbers as |numac|}}
               <div class="vlc-numac-number-wrapper">
                 <div class="vlc-numac-number">
-                  <span>{{ numac.name }}</span>
+                  <span>{{ numac.idName }}</span>
                 </div>
                 <div class="vlc-numac-number-delete-button-wrapper">
                   <WebComponents::AuButton class="auk-button--nopadding"
                     @skin="borderless"
                     @icon="close"
                     @layout="icon-only"
-                    {{on "click" (perform this.unlinkNumacNumber numac)}}
+                    {{on "click" (fn this.deleteNumacNumber numac)}}
                     data-test-cases-backlink/>
                 </div>
               </div>
@@ -121,7 +121,7 @@
 
           <WebComponents::AuButton
             @skin="borderless"
-            {{on "click" (perform this.addNumacNumber)}}
+            {{on "click" this.addNumacNumber}}
           >
             {{t "add"}}
           </WebComponents::AuButton>

@@ -73,7 +73,6 @@ function addPublicationDocuments(files) {
   cy.log('addPublicationDocuments');
   cy.route('POST', 'pieces').as('createNewPiece');
   cy.route('POST', 'document-containers').as('createNewDocumentContainer');
-  cy.route('PATCH', '**').as('patchModel');
 
   cy.get(publicationSelectors.publicationCase.addDocumentsButton).click();
   cy.get(modalSelectors.auModal.container).as('fileUploadDialog');
@@ -143,9 +142,7 @@ function addPublicationDocuments(files) {
   cy.wait('@createNewDocumentContainer', {
     timeout: 24000,
   });
-  cy.wait('@patchModel', {
-    timeout: 12000 + (6000 * files.length),
-  });
+  // patching of model case no longer happens, piece.case is set instead
   cy.get('@fileUploadDialog').should('not.exist');
   cy.log('/addPublicationDocuments');
 }

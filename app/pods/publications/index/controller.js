@@ -23,9 +23,9 @@ export default class PublicationsIndexController extends Controller {
   @service publicationService;
 
   page = 0;
-  size = 25;
+  size = 10;
   sort = '-created';
-  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+  sizeOptions = [10, 25, 50, 100, 200];
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
@@ -114,13 +114,31 @@ export default class PublicationsIndexController extends Controller {
     await caze.save();
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
+
+    const structuredIdentifier = this.store.createRecord('structured-identifier', {
+      localIdentifier: publicationNumber,
+      versionIdentifier: publicationSuffix,
+    });
+    await structuredIdentifier.save();
+
+    let identificationNumber = publicationNumber;
+    if (publicationSuffix && publicationSuffix.length > 0) {
+      identificationNumber += ` ${publicationSuffix}`;
+    }
+
+    const identifier = this.store.createRecord('identification', {
+      idName: identificationNumber,
+      agency: 'ovrb',
+      structuredIdentifier: structuredIdentifier,
+    });
+    await identifier.save();
+
     const statusChange = this.store.createRecord('publication-status-change', {
       startedAt: new Date(),
     });
     await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
-      publicationNumber,
-      publicationSuffix,
+      identification: identifier,
       case: caze,
       statusChange: statusChange,
       created: creationDatetime,
@@ -130,5 +148,22 @@ export default class PublicationsIndexController extends Controller {
     });
     await publicationFlow.save();
     return publicationFlow;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.set('page', this.page - 1);
+    }
+  }
+
+  @action
+  nextPage() {
+    this.set('page', this.page + 1);
+  }
+
+  @action
+  setSizeOption(size) {
+    this.set('size', size);
   }
 }

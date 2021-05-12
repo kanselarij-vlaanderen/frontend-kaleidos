@@ -2,13 +2,10 @@ import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { computed } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class PublicationFlow extends Model {
   // Attributes.
-  @attr('number') publicationNumber;
-  @attr('string') publicationSuffix;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
@@ -24,6 +21,9 @@ export default class PublicationFlow extends Model {
 
   // Belongs To.
   @belongsTo('case') case;
+  @belongsTo('identification', {
+    inverse: 'publicationFlow',
+  }) identification;
 
   @belongsTo('publication-status', {
     inverse: null,
@@ -35,18 +35,12 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-status-change') publicationStatusChange;
 
   // Has many .
-  @hasMany('numac-number') numacNumbers;
+  @hasMany('identification', {
+    inverse: 'publicationFlowForNumac',
+  }) numacNumbers;
   @hasMany('subcase') subcases;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
-
-  @computed('publicationNumber,publicationSuffix')
-  get publicationNumberToDisplay() {
-    if (this.publicationSuffix && this.publicationSuffix !== '') {
-      return `${this.publicationNumber} ${this.publicationSuffix}`;
-    }
-    return `${this.publicationNumber}`;
-  }
 
   get publicationBeforeDateHasExpired() {
     return this.publishBefore
@@ -112,15 +106,5 @@ export default class PublicationFlow extends Model {
       const withdrawnPublications = this.publicationService.getPublicationCountsPerTypePerStatus(totals, CONFIG.ACTIVITY_TYPES.publiceren.url, CONFIG.ACTIVITY_STATUSSES.withdrawn.url);
       return closedPublications + withdrawnPublications;
     });
-  }
-
-  get latestStatusChange() {
-    const statusChanges = this.store.query('publication-status-change', {
-      sort: '-startedAt',
-      filter: {
-        publication: this,
-      },
-    });
-    return statusChanges.get('firstObject');
   }
 }
