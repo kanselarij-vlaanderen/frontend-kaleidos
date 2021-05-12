@@ -30,8 +30,16 @@ export default class PublicationDocumentsRoute extends Route {
   async model(params) {
     this.case  = await this.modelFor('publications.publication').case;
 
+    const includes = [
+      'cases',
+      'document-container',
+      'document-container.type'
+    ];
+    if (isPresent(params.filterExtensions)) {
+      includes.push('file');
+    }
     const docQueryParams = {
-      include: 'cases,document-container,document-container.type',
+      include: includes.join(','),
       'filter[cases][:id:]': this.case.id,
     };
     if (isPresent(params.filterDocumentTypeIds)) {
