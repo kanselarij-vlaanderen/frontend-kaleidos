@@ -1,5 +1,5 @@
 import Model, {
-  attr, belongsTo
+  attr, belongsTo, hasMany
 } from '@ember-data/model';
 
 export default class PublicationSubcase extends Model {
@@ -10,7 +10,7 @@ export default class PublicationSubcase extends Model {
 
   @belongsTo('publication-flow') publicationFlow;
 
-  @belongsTo('request-activity') requestActivities;
-  @belongsTo('proofing-activity') proofingActivities;
-  @belongsTo('publication-activity') publicationActivities;
+  @hasMany('request-activity') requestActivities;
+  @hasMany('proofing-activity') proofingActivities;
+  @hasMany('publication-activity') publicationActivities;
 }
