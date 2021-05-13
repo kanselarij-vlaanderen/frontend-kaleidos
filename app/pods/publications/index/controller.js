@@ -152,7 +152,6 @@ export default class PublicationsIndexController extends Controller {
       modified: creationDatetime,
       publicationFlow,
     });
-    translationSubcase.save();
     const publicationSubcase = this.store.createRecord('publication-subcase', {
       created: creationDatetime,
       modified: creationDatetime,
