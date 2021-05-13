@@ -15,7 +15,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument {(model, changedKeys: string[]) => void} didChange
+   * @argument {(model, changedKeys: string[] or string) => void} didChange
    *  on create and delete no changedKeys are passed
    */
   @service store;
@@ -80,19 +80,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
-    this._notify(this.publicationFlow, ['regulationType']);
+    this._notify(this.publicationFlow, 'regulationType');
   }
 
   @action
   setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
-    this._notify(this.publicationFlow, ['mode']);
+    this._notify(this.publicationFlow, 'mode');
   }
 
   @action
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
-    this._notify(this.publicationFlow, ['urgencyLevel']);
+    this._notify(this.publicationFlow, 'urgencyLevel');
   }
 
   @action
@@ -215,19 +215,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimatePublicationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
-    this._notify(this.publicationFlow, ['publishBefore']);
+    this._notify(this.publicationFlow, 'publishBefore');
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
-    this._notify(this.publicationFlow, ['publishDateRequested']);
+    this._notify(this.publicationFlow, 'publishDateRequested');
   }
 
   @action
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
-    this._notify(this.publicationFlow, ['publishedAt']);
+    this._notify(this.publicationFlow, 'publishedAt');
   }
 
   get allowedUltimateTranslationDates() {
@@ -243,7 +243,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimateTranslationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
-    this._notify(this.publicationFlow, ['translateBefore']);
+    this._notify(this.publicationFlow, 'translateBefore');
   }
 
   @restartableTask
@@ -251,13 +251,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const newValue = event.target.value;
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
-    this._notify(this.publicationFlow, ['remark']);
+    this._notify(this.publicationFlow, 'remark');
   }
 
   /**
    *
    * @param {Model} model
-   * @param {string[]} changedKeys
+   * @param {string[] or string} changedKeys
    */
   _notify(model, changedKeys) {
     if (this.args.didChange) {
