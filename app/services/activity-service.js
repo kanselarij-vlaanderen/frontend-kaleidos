@@ -5,9 +5,7 @@ import moment from 'moment';
 
 export default class activityService extends Service {
   @service store;
-  @service toaster;
   @service configService;
-  @service publicationService;
   @service intl;
 
   /**
@@ -24,6 +22,7 @@ export default class activityService extends Service {
     return _case.title;
   }
 
+  // TODO email stuff, does this belong here ?
   /**
    * Replace activity Tokens.
    *
@@ -42,130 +41,35 @@ export default class activityService extends Service {
   }
 
   /**
-   * Create a new Translation Activity.
-   *
-   * @param finalTranslationDate
-   * @param mailContent
-   * @param mailSubject
-   * @param pieces
-   * @param subcase
-   * @returns {Promise<Model|any|Promise>}
-   */
-  async createNewTranslationActivity(finalTranslationDate, mailContent, mailSubject, pieces, subcase) {
-    const creationDatetime = moment()
-      .utc()
-      .toDate();
-
-    const requestTranslationActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.vertalen.id);
-    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
-
-    // Create activity.
-    const translateActivity = this.store.createRecord('activity', {
-      status: activityOpenStatus,
-      startDate: creationDatetime,
-      finalTranslationDate,
-      mailContent,
-      mailSubject,
-      subcase,
-      type: requestTranslationActivityType,
-      usedPieces: pieces,
-    });
-
-    // Persist to db.
-    await translateActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-    // Reload relation.
-    await subcase.hasMany('publicationActivities')
-      .reload();
-
-
-    return translateActivity;
-  }
-
-  /**
-   * Create a new Publish preview Activity.
-   *
-   * @param mailContent
-   * @param mailSubject
-   * @param pieces
-   * @param subcase
-   * @returns {Promise<Model|any|Promise>}
-   */
-  async createNewPublishPreviewActivity(mailContent, mailSubject, pieces, subcase) {
-    const creationDatetime = moment()
-      .utc()
-      .toDate();
-
-    // publishPreviewActivityType.
-    const requestPublishPreviewActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.drukproeven.id);
-    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
-
-    // Create activity.
-    const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: activityOpenStatus,
-      startDate: creationDatetime,
-      mailContent,
-      mailSubject,
-      subcase,
-      type: requestPublishPreviewActivityType,
-      usedPieces: pieces,
-    });
-
-    // Persist to db.
-    await PublishPreviewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-    // Reload relation.
-    await subcase.hasMany('publicationActivities')
-      .reload();
-
-    return PublishPreviewActivity;
-  }
-
-  /**
    * Create a publish to BS activity.
    *
    * @param mailContent
    * @param pieces
    * @param subcase
-   * @param activity
    * @returns {Promise<Model|any|Promise>}
    */
-  async createNewPublishActivity(mailContent, pieces, subcase, publishPreviewActivity) {
+  async createNewPublishActivity(mailContent, pieces, subcase) {
     const creationDatetime = moment()
       .utc()
       .toDate();
 
+    // TODO new logic needed with request-activity and email
     // publishActivityType.
-    const requestPublishActivityType = await this.store.findRecord('activity-type', CONFIG.ACTIVITY_TYPES.publiceren.id);
-    const activityOpenStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
 
     // Create activity.
-    const PublishPreviewActivity = this.store.createRecord('activity', {
-      status: activityOpenStatus,
+    // TODO rename variable if used in new logic
+    const PublishPreviewActivity = this.store.createRecord('publication-activity', {
       startDate: creationDatetime,
       mailContent,
       subcase,
-      type: requestPublishActivityType,
       usedPieces: pieces,
-      publishes: publishPreviewActivity,
     });
 
     // Persist to db.
     await PublishPreviewActivity.save();
 
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
     // Reload relations.
     await subcase.hasMany('publicationActivities')
-      .reload();
-    await publishPreviewActivity.hasMany('publishedBy')
       .reload();
 
     return PublishPreviewActivity;
