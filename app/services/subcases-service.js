@@ -127,33 +127,4 @@ export default Service.extend({
     }
     return phases;
   },
-
-  /**
-   * Finds or creates a subcase of type TYPE in your publicationFlow.
-   *
-   * @param requiredSubcaseType
-   * @param publicationFlow
-   * @param title
-   * @param shortTitle
-   * @returns SUBCASE
-   */
-  async findOrCreateSubcaseFromTypeInPublicationFlow(requiredSubcaseType, publicationFlow, title, shortTitle) {
-    // Load the subcase (should be just one).
-    const subcases = await this.store.query('subcase', {
-      filter: {
-        type: {
-          id: requiredSubcaseType.id,
-        },
-        'publication-flow': {
-          id: publicationFlow.id,
-        },
-      },
-      include: 'type',
-    });
-    if (subcases.length > 0) {
-      return subcases.firstObject;
-    }
-    return await this.createSubcaseForPublicationFlow(publicationFlow, requiredSubcaseType, shortTitle, title);
-  },
-
 });
