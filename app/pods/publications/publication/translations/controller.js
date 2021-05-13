@@ -69,10 +69,6 @@ export default class PublicationTranslationController extends Controller {
       .utc();
     await translationActivity.save();
 
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-
     const pieces = await translationActivity.get('usedPieces');
     // Send email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawTranslationsEmail, this.withdrawalSubject, this.withdrawalContent, pieces);

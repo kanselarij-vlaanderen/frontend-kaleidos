@@ -5,8 +5,6 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  _cachedData = {};
-
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
       include: 'contact-persons',
@@ -40,10 +38,5 @@ export default class PublicationService extends Service {
 
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
-  }
-
-  // kept while in refactor to new ProcedureStap data model
-  invalidatePublicationCache() {
-    this._cachedData = {};
   }
 }

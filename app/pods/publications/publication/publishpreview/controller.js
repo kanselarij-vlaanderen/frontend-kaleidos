@@ -314,10 +314,6 @@ export default class PublicationPublishPreviewController extends Controller {
       .utc();
     await previewActivity.save();
 
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-
     const pieces = await previewActivity.get('usedPieces');
     // Send email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.activityWithdrawPublishPreviewEmail, this.withdrawalSubject, this.withdrawalContent, pieces);

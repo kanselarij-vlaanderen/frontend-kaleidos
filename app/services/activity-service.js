@@ -72,9 +72,6 @@ export default class activityService extends Service {
     // Persist to db.
     await translateActivity.save();
 
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
     // Reload relation.
     await subcase.hasMany('translationActivities')
       .reload();
@@ -112,9 +109,6 @@ export default class activityService extends Service {
     // Persist to db.
     await PublishPreviewActivity.save();
 
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
     // Reload relation.
     await subcase.hasMany('proofingActivities')
       .reload();
@@ -149,9 +143,6 @@ export default class activityService extends Service {
 
     // Persist to db.
     await PublishPreviewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
 
     // Reload relations.
     await subcase.hasMany('publicationActivities')
