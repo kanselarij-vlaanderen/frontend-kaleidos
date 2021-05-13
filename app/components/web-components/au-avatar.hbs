@@ -1,0 +1,10 @@
+{{#if (has-block)}}
+  <div class="auk-avatar-and-text">
+    <WebComponents::AuAvatar::AuAvatarVisual @size={{@size}} @icon={{@icon}} @image={{@image}} @name={{@name}} />
+    <div class="auk-avatar-and-text__text">
+      {{yield}}
+    </div>
+  </div>
+{{else}}
+  <WebComponents::AuAvatar::AuAvatarVisual @size={{@size}} @icon={{@icon}} @image={{@image}} @name={{@name}} />
+{{/if}}

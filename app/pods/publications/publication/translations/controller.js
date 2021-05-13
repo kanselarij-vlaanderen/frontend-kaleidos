@@ -61,9 +61,9 @@ export default class PublicationTranslationController extends Controller {
     this.showWithdrawPopup = false;
     this.showLoader = true;
 
+    // TODO new logic with cancellation-activity
+
     // Update activity.
-    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
-    translationActivity.status = withDrawnStatus;
     translationActivity.withdrawReason = this.withdrawalReason;
     translationActivity.endDate = moment()
       .utc();
@@ -87,27 +87,10 @@ export default class PublicationTranslationController extends Controller {
   }
 
   @action
-  async markTranslationActivityDone(translationActivity) {
+  async markTranslationActivityDone() {
     this.showLoader = true;
-    const openStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
-    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-    const translationActivityStatus = await translationActivity.get('status');
-
-    if (translationActivityStatus.id === closedStatus.id) {
-      translationActivity.status = openStatus;
-      translationActivity.endDate = null;
-      await translationActivity.save();
-    } else {
-      translationActivity.status = closedStatus;
-      translationActivity.endDate = moment()
-        .utc();
-      await translationActivity.save();
-    }
-    this.model.refreshAction();
+    // TODO new logic or delete
+    alert('this action is implemented in another ticket');
     this.showLoader = false;
   }
 }

@@ -1,6 +1,10 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
+
+import toolbar from '../../selectors/toolbar.selectors';
+
+
 /**
  * @description Bypasses the mock-login and inserts a localstorage item
  * @name login
@@ -95,11 +99,10 @@ function logoutFlow() {
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.contains('Afmelden', {
-    timeout: 12000,
-  }).click({
-    force: true,
-  });
+  cy.get(toolbar.mHeader.userActions).click();
+  cy.get(toolbar.mHeader.userAction.logout)
+    .contains('Afmelden')
+    .click();
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
 }
