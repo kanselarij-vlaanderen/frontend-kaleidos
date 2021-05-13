@@ -80,19 +80,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
-    this._notify(this.publicationFlow, 'regulationType');
+    this.notifyChanges(this.publicationFlow, 'regulationType');
   }
 
   @action
   setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
-    this._notify(this.publicationFlow, 'mode');
+    this.notifyChanges(this.publicationFlow, 'mode');
   }
 
   @action
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
-    this._notify(this.publicationFlow, 'urgencyLevel');
+    this.notifyChanges(this.publicationFlow, 'urgencyLevel');
   }
 
   @action
@@ -118,8 +118,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       startedAt: now,
       publication: this.publicationFlow,
     });
-    this._notify(this.publicationFlow, ['status', 'closingDate']),
-    this._notify(statusChange);
+    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
+    this.notifyChanges(statusChange);
   }
 
   @action
@@ -177,8 +177,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
       identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
       this.numberIsAlreadyUsed = false;
-      this._notify(identification, ['idName']);
-      this._notify(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
+      this.notifyChanges(identification, ['idName']);
+      this.notifyChanges(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
     }
   }
 
@@ -190,7 +190,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       publicationFlowForNumac: this.publicationFlow,
     });
 
-    this._notify(numacNumber);
+    this.notifyChanges(numacNumber);
     this.newNumacNumber = '';
   }
 
@@ -198,7 +198,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
 
-    this._notify(numacNumber);
+    this.notifyChanges(numacNumber);
   }
 
   get allowedUltimatePublicationDates() {
@@ -215,19 +215,19 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimatePublicationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.publishBefore = date;
-    this._notify(this.publicationFlow, 'publishBefore');
+    this.notifyChanges(this.publicationFlow, 'publishBefore');
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
     this.publicationFlow.publishDateRequested = selectedDates[0];
-    this._notify(this.publicationFlow, 'publishDateRequested');
+    this.notifyChanges(this.publicationFlow, 'publishDateRequested');
   }
 
   @action
   setPublicationDate(selectedDates) {
     this.publicationFlow.publishedAt = selectedDates[0];
-    this._notify(this.publicationFlow, 'publishedAt');
+    this.notifyChanges(this.publicationFlow, 'publishedAt');
   }
 
   get allowedUltimateTranslationDates() {
@@ -243,7 +243,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setUltimateTranslationDate(selectedDates) {
     const date = selectedDates[0];
     this.publicationFlow.translateBefore = date;
-    this._notify(this.publicationFlow, 'translateBefore');
+    this.notifyChanges(this.publicationFlow, 'translateBefore');
   }
 
   @restartableTask
@@ -251,7 +251,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const newValue = event.target.value;
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
-    this._notify(this.publicationFlow, 'remark');
+    this.notifyChanges(this.publicationFlow, 'remark');
   }
 
   /**
@@ -259,7 +259,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @param {Model} model
    * @param {string[] or string} changedKeys
    */
-  _notify(model, changedKeys) {
+  notifyChanges(model, changedKeys) {
     if (this.args.didChange) {
       this.args.didChange(model, changedKeys);
     }
