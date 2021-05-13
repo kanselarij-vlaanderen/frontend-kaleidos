@@ -10,6 +10,7 @@ import { A } from '@ember/array';
 import moment from 'moment';
 import { task } from 'ember-concurrency-decorators';
 
+// TODO: temporarily disabled design + data model is ready
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
@@ -312,10 +313,6 @@ export default class PublicationPublishPreviewController extends Controller {
     previewActivity.endDate = moment()
       .utc();
     await previewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
 
     const pieces = await previewActivity.get('usedPieces');
     // Send email

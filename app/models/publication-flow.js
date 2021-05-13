@@ -1,7 +1,6 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
-import { inject as service } from '@ember/service';
 
 export default class PublicationFlow extends Model {
   // Attributes.
@@ -14,9 +13,6 @@ export default class PublicationFlow extends Model {
   @attr('date') openingDate;
   @attr('datetime') created;
   @attr('datetime') modified;
-
-  // Services.
-  @service publicationService;
 
   // Belongs To.
   @belongsTo('case') case;
@@ -54,35 +50,5 @@ export default class PublicationFlow extends Model {
   get translationDateHasExpired() {
     return this.translateBefore
       && this.translateBefore < new Date();
-  }
-
-  get translationRequestsTotal() {
-    // TODO new logic
-    return null;
-  }
-
-  get publishpreviewRequestsTotal() {
-    // TODO new logic
-    return null;
-  }
-
-  get translationRequestsFinished() {
-    // TODO new logic
-    return null;
-  }
-
-  get publishpreviewRequestsFinished() {
-    // TODO new logic
-    return null;
-  }
-
-  get publicationRequestsTotal() {
-    // TODO new logic
-    return null;
-  }
-
-  get publicationRequestsFinished() {
-    // TODO new logic
-    return null;
   }
 }
