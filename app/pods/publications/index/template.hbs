@@ -158,40 +158,12 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.translateRequests}}
                   <td class="auk-u-text-align--center">
-                    {{#if (gt (await row.translationRequestsTotal) 0)}}
-                      {{#if
-                        (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
-                      }}
-                        <WebComponents::AuStatusPill @status="done">
-                          {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{else}}
-                        <WebComponents::AuStatusPill @status="in-progress">
-                          {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{/if}}
-                    {{else}}
-                      <WebComponents::AuStatusPill @status="not-started"/>
-                    {{/if}}
+                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
                   <td class="auk-u-text-align--center">
-                    {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-                      {{#if
-                        (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
-                      }}
-                        <WebComponents::AuStatusPill @status="done">
-                          {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{else}}
-                        <WebComponents::AuStatusPill @status="in-progress">
-                          {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{/if}}
-                    {{else}}
-                      <WebComponents::AuStatusPill @status="not-started"/>
-                    {{/if}}
+                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.lastEdited}}

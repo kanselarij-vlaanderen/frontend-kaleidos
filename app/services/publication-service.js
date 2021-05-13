@@ -1,16 +1,9 @@
-/* eslint-disable no-duplicate-imports */
-import { inject as service } from '@ember/service';
-import Service from '@ember/service';
-import { ajax } from 'frontend-kaleidos/utils/ajax';
-import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
+import Service, { inject as service } from '@ember/service';
 
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
   @service intl;
-
-  @tracked cachedData = A([]);
 
   async linkContactPersonToPublication(publicationId, contactPerson) {
     const publicationFlow = await this.store.findRecord('publication-flow', publicationId, {
@@ -45,21 +38,5 @@ export default class PublicationService extends Service {
 
     // our own publication should not be considered as duplicate
     return duplicates.filter((publication) => publication.id !== publicationFlowId).length > 0;
-  }
-
-  getPublicationCounts(publicationId) {
-    // TODO unused method, lazy-loading endpoint needs to be updated to use the new models if we want this, if not: delete this
-    if (this.cachedData[publicationId]) {
-      return this.cachedData[publicationId];
-    }
-    this.cachedData[publicationId] = ajax({
-      method: 'GET',
-      url: `/lazy-loading/getCountsForPublication?uuid=${publicationId}`,
-    }).then((result) => result.body.counts);
-    return this.cachedData[publicationId];
-  }
-
-  invalidatePublicationCache() {
-    this.cachedData = A([]);
   }
 }
