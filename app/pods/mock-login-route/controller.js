@@ -1,39 +1,51 @@
 import Controller from '@ember/controller';
+import { timeout } from 'ember-concurrency';
 import {
-  task, timeout
-} from 'ember-concurrency';
+  lastValue,
+  restartableTask,
+  task
+} from 'ember-concurrency-decorators';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
-export default Controller.extend({
-  queryParams: ['role', 'page'],
-  role: '',
-  page: 0,
-  size: 10,
+export default class MockLoginController extends Controller {
+  role = '';
+  page = 0;
+  size = 10;
 
-  queryStore: task(function *() {
+  @lastValue('queryStore') accounts;
+
+  init() {
+    super.init(...arguments);
+    this.queryStore.perform();
+  }
+
+  @task
+  *queryStore() {
     const filter = {
       provider: CONFIG.mockLoginServiceProvider,
     };
     if (this.role) {
       filter.user = {
-        'last-name': this.role,
+        'first-name': this.role,
       };
     }
     const accounts = yield this.store.query('account', {
-      include: 'user,user.groups',
+      include: 'user,user.group',
       filter,
+      sort: 'user.last-name,user.first-name',
       page: {
-        size: this.size, number: this.page,
+        size: this.size,
+        number: this.page,
       },
-      sort: 'user.last-name',
     });
     return accounts;
-  }),
-  updateSearch: task(function *(value) {
+  }
+
+  @restartableTask
+  *updateSearch(value) {
     yield timeout(500);
     this.set('page', 0);
     this.set('role', value);
-    const model = yield this.queryStore.perform();
-    this.set('model', model);
-  }).restartable(),
-});
+    yield this.queryStore.perform();
+  }
+}

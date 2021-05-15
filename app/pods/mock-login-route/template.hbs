@@ -9,9 +9,9 @@
             <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
                   placeholder="Gebruikersnaam..."
                   value={{role}} autofocus
-                  oninput={{perform updateSearch value='target.value'}}>
-            {{#mock-login as |login|}}
-              {{#if queryStore.isRunning}}
+                  oninput={{perform this.updateSearch value='target.value'}}>
+            <MockLogin as |login|>
+              {{#if this.queryStore.isRunning}}
                 <div class="loader-wrapper">
                   <div class="loader">
                     <span class="u-visually-hidden">Aan het laden</span>
@@ -19,27 +19,30 @@
                 </div>
               {{else}}
                 {{#if login.errorMessage}}
-                  {{wu-alert
-                    title=login.errorMessage
-                    isWarning=true
-                  }}
+                  <WuAlert
+                      @title={{login.errorMessage}}
+                      @isWarning={{true}} />
                 {{/if}}
-                <ul>
-                  {{#login.each-account accounts=model as |account|}}
-                    <div class="auk-block-link">
-                      {{account.user.firstName}} {{account.user.lastName}}
-                    </div>
-                  {{/login.each-account}}
-                </ul>
-                {{number-pagination
-                  page=page
-                  size=size
-                  nbOfItems=model.length
-                  total=model.meta.count
-                  links=model.meta.pagination
-                }}
+                {{#if this.accounts.length}}
+                  <ul>
+                    <login.each-account @accounts={{this.accounts}} as |account|>
+                      <div class="auk-block-link">
+                        {{account.user.firstName}} {{account.user.lastName}}
+                      </div>
+                    </login.each-account>
+                  </ul>
+                  <NumberPagination
+                    @page={{this.page}}
+                    @size={{this.size}}
+                    @nbOfItems={{this.accounts.length}}
+                    @total={{this.accounts.meta.count}}
+                    @links={{this.accounts.meta.pagination}}
+                  />
+                {{else}}
+                  Geen account gevonden.
+                {{/if}}
               {{/if}}
-            {{/mock-login}}
+            </MockLogin>
           </div>
         </div>
       </div>

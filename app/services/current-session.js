@@ -1,10 +1,11 @@
 import Service, { inject as service } from '@ember/service';
-
 import {
-  get, computed
+  get,
+  computed
 } from '@ember/object';
 import {
-  task, waitForProperty
+  task,
+  waitForProperty
 } from 'ember-concurrency';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
@@ -12,10 +13,6 @@ export default Service.extend({
   session: service('session'),
   store: service('store'),
   router: service(),
-
-  async logout() {
-    await this.get('session').invalidate();
-  },
 
   async load() {
     if (this.get('session.isAuthenticated')) {
@@ -63,6 +60,10 @@ export default Service.extend({
       this.set('isOvrb', this.checkOvrbRights());
     }
   },
+
+  hasValidUserRole: computed('userRole', function() {
+    return this.userRole && this.userRole !== 'no-access' && this.userRole !== 'users';
+  }),
 
   checkOvrbRights() {
     const {

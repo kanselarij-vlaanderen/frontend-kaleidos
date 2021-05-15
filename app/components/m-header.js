@@ -4,8 +4,8 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 
-
 export default class MHeader extends Component {
+  @service session;
   @service currentSession;
   @service router;
 
@@ -46,7 +46,7 @@ export default class MHeader extends Component {
   }
 
   @action
-  async logout() {
-    await this.currentSession.logout();
+  logout() {
+    this.session.invalidate();
   }
 }
