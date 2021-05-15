@@ -7,9 +7,4 @@ export default class styleguideRoute extends Route {
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
-
-  model() {
-    // Normally we would query store here, but for now, we get the mocks
-    return null;
-  }
 }
