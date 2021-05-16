@@ -1,176 +1,103 @@
 import Service, { inject as service } from '@ember/service';
-import {
-  get,
-  computed
-} from '@ember/object';
-import {
-  task,
-  waitForProperty
-} from 'ember-concurrency';
+import { get } from '@ember/object';
+import { waitForProperty } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
+import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
-export default Service.extend({
-  session: service('session'),
-  store: service('store'),
-  router: service(),
+const {
+  adminId, kanselarijId, overheidId, ministerId, kabinetId, ovrbId, usersId,
+} = CONFIG;
+
+export default class CurrentSessionService extends Service {
+  @service session;
+  @service store;
+
+  @tracked userRole;
+  @tracked userRoleId;
+
+  @tracked account;
+  @tracked roles;
 
   async load() {
-    if (this.get('session.isAuthenticated')) {
-      const {
-        session,
-      } = this;
-      const account = await this.store.find(
-        'account',
-        get(session, 'data.authenticated.relationships.account.data.id')
-      );
-      const user = await account.get('user');
+    if (this.session.isAuthenticated) {
+      const accountId = get(this.session, 'data.authenticated.relationships.account.data.id');
+      this.account = await this.store.find('account', accountId);
+      const user = await this.account.get('user');
 
       let group = null;
-      const groupId = get(session, 'data.authenticated.relationships.group.data.id');
+      const groupId = get(this.session, 'data.authenticated.relationships.group.data.id');
       if (groupId) {
         group = await this.store.find('account-group', groupId);
       }
-      const roles = await get(session, 'data.authenticated.data.attributes.roles');
-      this.set('_account', account);
+
+      if (group && group.name) {
+        this.userRole = group.name;
+        this.userRoleId = group.id;
+      } else {
+        this.userRole = 'no-access';
+        this.userRoleId = null;
+      }
+
+      this.roles = get(this.session, 'data.authenticated.data.attributes.roles');
+
       this.set('_user', user);
-      this.set('_roles', roles);
       this.set('_group', group);
       // The naming is off, but account,user,roles are taken for the
       // promises in a currently public API.
       this.setProperties({
-        accountContent: account,
         userContent: user,
-        rolesContent: roles,
         groupContent: group,
       });
-
-      if (group && group.get('name')) {
-        this.set('userRole', group.get('name'));
-        this.set('userRoleId', group.get('id'));
-      } else {
-        this.set('userRole', 'no-access');
-        this.set('userRoleId', null);
-      }
-
-      this.set('isPublic', this.checkPublicRights());
-      this.set('isViewer', this.checkViewRights());
-      this.set('isEditor', this.checkEditRights());
-      this.set('isAdmin', this.checkAdminRights());
-      this.set('isOverheid', this.checkGovernmentRights());
-      this.set('isOvrb', this.checkOvrbRights());
     }
-  },
+  }
 
-  hasValidUserRole: computed('userRole', function() {
+  get hasValidUserRole() {
     return this.userRole && this.userRole !== 'no-access' && this.userRole !== 'users';
-  }),
+  }
 
-  hasNoAccess: computed('userRole', function() {
+  get hasNoAccess() {
     return !this.userRole || this.userRole === 'no-access';
-  }),
+  }
 
-  checkOvrbRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      ovrbId,
-      adminId,
-    } = CONFIG;
-    const roles = [ovrbId, adminId];
-    return roles.includes(userRoleId);
-  },
+  get isOvrb() {
+    return [ovrbId, adminId].includes(this.userRoleId);
+  }
 
-  checkGovernmentRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      overheidId,
-    } = CONFIG;
-    const roles = [overheidId];
-    return roles.includes(userRoleId);
-  },
+  get isOverheid() {
+    return [overheidId].includes(this.userRoleId);
+  }
 
-  checkPublicRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId];
-    return roles.includes(userRoleId);
-  },
+  get isAdmin() {
+    return [adminId].includes(this.userRoleId);
+  }
 
-  checkViewRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId, overheidId, ministerId, kabinetId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId, overheidId, ministerId, kabinetId];
-    return roles.includes(userRoleId);
-  },
+  get isPublic() {
+    return [adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId].includes(this.userRoleId);
+  }
 
-  checkEditRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId];
-    return roles.includes(userRoleId);
-  },
+  get isViewer() {
+    return [adminId, kanselarijId, overheidId, ministerId, kabinetId].includes(this.userRoleId);
+  }
 
-  checkAdminRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId,
-    } = CONFIG;
-    const roles = [adminId];
-    return roles.includes(userRoleId);
-  },
-
-  checkIsDeveloper() {
-    // The keys in this whitelist are only indicative
-    // They are not used, but use them to describe who the id belongs to
-    // Get these from https://kaleidos.vlaanderen.be, and then check the user id via the ember data tab
-    const whitelist = {
-      frederik: CONFIG.frederik,
-      ben: CONFIG.ben,
-      rafael: CONFIG.rafael,
-    };
-
-    const user = this.get('user');
-
-    return Object.keys(whitelist).some((developer) => {
-      const whitelistedDeveloperId = whitelist[developer];
-      const currentUserId = user.get('id');
-
-      return currentUserId === whitelistedDeveloperId;
-    });
-  },
+  get isEditor() {
+    return [kanselarijId, adminId].includes(this.userRoleId);
+  }
 
   // constructs a task which resolves in the promise
-  makePropertyPromise: task(function *(property) {
+  @task
+  *makePropertyPromise(property) {
     yield waitForProperty(this, property);
     return this.get(property);
-  }),
-  // this is a promise
-  account: computed('_account', function() {
-    return this.makePropertyPromise.perform('_account');
-  }),
+  }
+
   // this contains a promise
-  user: computed('_user', function() {
+  get user() {
     return this.makePropertyPromise.perform('_user');
-  }),
+  }
+
   // this contains a promise
-  group: computed('_group', function() {
+  get group() {
     return this.makePropertyPromise.perform('_group');
-  }),
-});
+  }
+}

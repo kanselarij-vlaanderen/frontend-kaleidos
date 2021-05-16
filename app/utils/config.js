@@ -173,11 +173,6 @@ export default EmberObject.create({
   usersId: '450915b2-4c64-4b03-9caa-71180400f831',
   ovrbId: '600d9d07-3368-4e6b-abbb-f5be5c2531a5',
   mockLoginServiceProvider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
-  developerWhitelistIds: {
-    frederik: 'fa59bba0-52e3-11ea-8bfc-e35431e140ef',
-    ben: '58177460-4e4a-11ea-a1d0-a99143fe0685',
-    rafael: 'cbdd9b60-3b97-11ea-a194-f970e0c7187e',
-  },
   agendaStatusDesignAgenda: {
     id: '2735d084-63d1-499f-86f4-9b69eb33727f',
     uri: 'http://kanselarij.vo.data.gift/id/agendastatus/2735d084-63d1-499f-86f4-9b69eb33727f',

@@ -26,8 +26,7 @@ export default class MHeader extends Component {
       this.environmentClass = 'vlc-environment-pill--test';
     }
 
-    if (window.location.href.indexOf('https://kaleidos.vlaanderen.be') === 0
-      && this.currentSession.checkIsDeveloper()) {
+    if (window.location.href.indexOf('https://kaleidos.vlaanderen.be') === 0) {
       this.environmentName = 'PROD';
       this.environmentClass = 'vlc-environment-pill--prod';
     }
