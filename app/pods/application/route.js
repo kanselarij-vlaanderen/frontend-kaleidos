@@ -41,7 +41,7 @@ export default class ApplicationRoute extends Route {
       this.session.invalidate();
     }
 
-    if (this.session.isAuthenticated && !this.currentSession.hasValidUserRole) {
+    if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
       this.transitionTo('accountless-users');
     }
   }
@@ -57,7 +57,7 @@ export default class ApplicationRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.session.isAuthenticated && !this.currentSession.hasValidUserRole) {
+    if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
       this.transitionTo('accountless-users');
     }
 

@@ -1,11 +1,17 @@
 import Service, { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
-  adminId, kanselarijId, overheidId, ministerId, kabinetId, ovrbId, usersId,
-} = CONFIG;
+  ADMIN,
+  KANSELARIJ,
+  OVRB,
+  MINISTER,
+  KABINET,
+  OVERHEID,
+  USER,
+} = CONSTANTS.ACCOUNT_GROUPS;
 
 export default class CurrentSessionService extends Service {
   @service session;
@@ -31,35 +37,35 @@ export default class CurrentSessionService extends Service {
     }
   }
 
-  get groupId() {
-    return this.group && this.group.id;
+  get groupUri() {
+    return this.group && this.group.uri;
   }
 
-  get hasValidUserRole() {
-    return this.groupId && this.groupId !== usersId;
-  }
-
-  get isOvrb() {
-    return [ovrbId, adminId].includes(this.groupId);
-  }
-
-  get isOverheid() {
-    return [overheidId].includes(this.groupId);
+  get hasValidGroup() {
+    return this.groupUri && this.groupUri !== USER;
   }
 
   get isAdmin() {
-    return [adminId].includes(this.groupId);
+    return [ADMIN].includes(this.groupUri);
+  }
+
+  get isOvrb() {
+    return [ADMIN, OVRB].includes(this.groupUri);
+  }
+
+  get isOverheid() {
+    return [OVERHEID].includes(this.groupUri);
   }
 
   get isPublic() {
-    return [adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId].includes(this.groupId);
+    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID, USER].includes(this.groupUri);
   }
 
   get isViewer() {
-    return [adminId, kanselarijId, overheidId, ministerId, kabinetId].includes(this.groupId);
+    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID].includes(this.groupUri);
   }
 
   get isEditor() {
-    return [kanselarijId, adminId].includes(this.groupId);
+    return [ADMIN, KANSELARIJ].includes(this.groupUri);
   }
 }
