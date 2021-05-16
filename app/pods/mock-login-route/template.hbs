@@ -57,7 +57,7 @@
           <div class="auk-panel auk-u-mb-8">
             <MockLogin as |login|>
               {{#if this.model.length}}
-                <ul class="auk-list auk-list--view">
+                <ul class="auk-list auk-list--view" data-test-mock-login-list>
                   <login.each-account @accounts={{this.model}} as |account|>
                     <li class="auk-list__item">
                       <div class="auk-u-mx-2">
