@@ -73,13 +73,13 @@
         </AttachPopover>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
-        {{#if this.currentSession.userContent}}
+        {{#if this.currentSession.user}}
           <WebComponents::AuButtonLink
             data-test-m-header-user-actions
             @skin="muted"
             @icon="chevron-down"
             @layout="icon-right">
-            {{this.currentSession.userContent.firstName}}
+            {{this.currentSession.user.firstName}}
           </WebComponents::AuButtonLink>
           <AttachPopover
                  @renderInPlace={{true}}
@@ -91,9 +91,9 @@
                >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <WebComponents::AuAvatar @icon="user" @name="{{this.getFullUserName}}">
-                  <p>{{this.getFullUserName}}</p>
-                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.userRole}}</p>
+                <WebComponents::AuAvatar @icon="user" @name={{this.currentSession.user.fullName}}>
+                  <p>{{this.currentSession.user.fullName}}</p>
+                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
                 </WebComponents::AuAvatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
