@@ -17,8 +17,8 @@
                                   --}}
     <Utils::Toaster @toasts={{array this.toaster.toasts.firstObject}} />
   {{/if}}
-  {{#if this.showHeader}}
+  {{#unless this.currentSession.hasNoAccess}}
     <MHeader />
-  {{/if}}
+  {{/unless}}
   {{outlet}}
 </div>

@@ -3,8 +3,6 @@ import { inject as service } from '@ember/service';
 
 export default class ApplicationController extends Controller {
   @service currentSession;
-  @service session;
-  @service router;
   @service systemAlert;
   @service toaster;
 
@@ -15,9 +13,5 @@ export default class ApplicationController extends Controller {
       capture: true,
       passive: true,
     });
-  }
-
-  get showHeader() {
-    return this.currentSession.hasValidUserRole;
   }
 }

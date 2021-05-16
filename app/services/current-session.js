@@ -65,6 +65,10 @@ export default Service.extend({
     return this.userRole && this.userRole !== 'no-access' && this.userRole !== 'users';
   }),
 
+  hasNoAccess: computed('userRole', function() {
+    return !this.userRole || this.userRole === 'no-access';
+  }),
+
   checkOvrbRights() {
     const {
       userRoleId,
