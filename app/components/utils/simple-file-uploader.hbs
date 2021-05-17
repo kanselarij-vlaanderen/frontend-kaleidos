@@ -6,15 +6,19 @@
   {{!-- refactored the strucutre below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
   {{#if queue.files.length}}
     <button type="button" class="auk-button auk-button--secondary" disabled>
-      {{t "import-users-text"}}
+      <span class="auk-button__content">
+        {{t "import-users-text"}}
+      </span>
     </button>
   {{else}}
     <span class="auk-button auk-button--secondary">
-      <span class="auk-icon auk-icon--default">
-        <i class="ki ki-import"></i>
-      </span>
-      <span class="auk-button__label">
-        {{t "import-users"}}
+      <span class="auk-button__content">
+        <span class="auk-icon auk-icon--default">
+          <i class="ki ki-import"></i>
+        </span>
+        <span class="auk-button__label">
+          {{t "import-users"}}
+        </span>
       </span>
     </span>
   {{/if}}

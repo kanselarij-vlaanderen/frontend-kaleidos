@@ -10,11 +10,13 @@
           type="button"
           {{action "collapseSideMenu"}}
         >
-          <div class="auk-icon auk-icon--chevron-{{if agendaMenuCollapsed "right" "left"}} auk-icon--default">
-            <i class="ki ki-chevron-{{if agendaMenuCollapsed "right" "left"}}"></i>
-          </div>
-          <span class="auk-u-sr-only">
-            {{t "toggle"}}
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--chevron-{{if agendaMenuCollapsed "right" "left"}} auk-icon--default">
+              <i class="ki ki-chevron-{{if agendaMenuCollapsed "right" "left"}}"></i>
+            </div>
+            <span class="auk-u-sr-only">
+              {{t "toggle"}}
+            </span>
           </span>
         </button>
       </div>

@@ -18,7 +18,9 @@
           <button type="button"
             data-test-subcase-header-action-propose-for-agenda
             class="auk-button auk-button--primary">
-            {{t "propose-for-agenda"}}
+            <span class="auk-button__content">
+              {{t "propose-for-agenda"}}
+            </span>
           </button>
           {{#attach-popover
             renderInPlace=true
@@ -66,51 +68,53 @@
           class="auk-button auk-button--secondary"
           {{action "showMultipleOptions" bubbles=false}}
         >
-          {{#if isShowingOptions}}
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-chevron-up"></i>
+          <span class="auk-button__content">
+            {{#if isShowingOptions}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-chevron-up"></i>
+              </div>
+            {{else}}
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-chevron-down"></i>
+              </div>
+            {{/if}}
+            <div class="auk-button__label">
+              {{t "actions"}}
             </div>
-          {{else}}
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-chevron-down"></i>
-            </div>
-          {{/if}}
-          <div class="auk-button__label">
-            {{t "actions"}}
-          </div>
-          {{#attach-popover
-            renderInPlace=true
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom"
-          as |attacher|
-          }}
-            <ul class="vlc-dropdown-menu">
-              {{#if (await canDelete)}}
+            {{#attach-popover
+              renderInPlace=true
+              class="ember-attacher-popper"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom"
+            as |attacher|
+            }}
+              <ul class="vlc-dropdown-menu">
+                {{#if (await canDelete)}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a href="" class="auk-button-link"
+                      data-test-subcase-header-action-delete-subcase
+                      {{action attacher.hide}}
+                      {{action "requestDeleteSubcase" subcase}}
+                    >
+                      {{t "delete-subcase"}}
+                    </a>
+                  </li>
+                {{/if}}
                 <li class="vlc-dropdown-menu__item">
-                  <a href="" class="auk-button-link"
-                    data-test-subcase-header-action-delete-subcase
+                  <a href=""
+                    data-test-subcase-header-action-move-subcase
+                    class="auk-button-link auk-button-link--block"
                     {{action attacher.hide}}
-                    {{action "requestDeleteSubcase" subcase}}
+                    {{action "triggerMoveSubcaseDialog" }}
                   >
-                    {{t "delete-subcase"}}
+                    {{t "move-subcase"}}
                   </a>
                 </li>
-              {{/if}}
-              <li class="vlc-dropdown-menu__item">
-                <a href=""
-                  data-test-subcase-header-action-move-subcase
-                  class="auk-button-link auk-button-link--block"
-                  {{action attacher.hide}}
-                  {{action "triggerMoveSubcaseDialog" }}
-                >
-                  {{t "move-subcase"}}
-                </a>
-              </li>
-            </ul>
-          {{/attach-popover}}
+              </ul>
+            {{/attach-popover}}
+          </span>
         </button>
       </div>
     {{/if}}

@@ -7,12 +7,14 @@
       class="auk-button auk-button--primary"
       {{action "toggleIsAdding"}}
     >
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-add"></i>
-      </div>
-      <div class="auk-button__label">
-        {{t "create-mandatee"}}
-      </div>
+      <span class="auk-button__content">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "create-mandatee"}}
+        </div>
+      </span>
     </button>
   </div>
   {{#if (await model)}}
@@ -100,9 +102,11 @@
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-pencil"></i>
-                      </div>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-pencil"></i>
+                        </div>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
@@ -111,12 +115,14 @@
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isResigningMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-settings"></i>
-                      </div>
-                      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-                        {{t "resign"}}
-                      </EmberTooltip>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-settings"></i>
+                        </div>
+                        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+                          {{t "resign"}}
+                        </EmberTooltip>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
@@ -125,9 +131,11 @@
                       class="auk-button auk-button--borderless auk-button--icon auk-u-text-error"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-delete"></i>
-                      </div>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-delete"></i>
+                        </div>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                 </WebComponents::AuToolbar::Group>

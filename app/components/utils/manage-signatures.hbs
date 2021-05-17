@@ -27,7 +27,9 @@
             <button type="button" class="auk-button auk-button--borderless"
               {{action "closeModal"}}
             >
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </div>
         </div>
@@ -37,33 +39,39 @@
               <button type="button" class="auk-button auk-button--tertiary"
                 {{action "setDefaultSignature"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "signature-set-default"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "signature-set-default"}}
+                  </div>
+                </span>
               </button>
               <button type="button" class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "signature-edit"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "signature-edit"}}
+                  </div>
+                </span>
               </button>
             {{/if}}
             <button type="button" class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "signature-add"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-add"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "signature-add"}}
+                </div>
+              </span>
             </button>
           </div>
         </div>

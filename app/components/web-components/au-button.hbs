@@ -4,7 +4,9 @@
   disabled={{@disabled}}
   ...attributes
 >
-  <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
-    {{yield}}
-  </WebComponents::AuButton::InnerLayout>
+  <span class="auk-button__content">
+    <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+      {{yield}}
+    </WebComponents::AuButton::InnerLayout>
+  </span>
 </button>

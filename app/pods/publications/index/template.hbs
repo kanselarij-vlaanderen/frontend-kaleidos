@@ -9,7 +9,7 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-          <Publications::PublicationCaseSearch/>
+        <Publications::PublicationCaseSearch/>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" (fn this.showFilterModal)}}>
@@ -212,7 +212,9 @@
                         data-test-publications-button-go-to-publication
                         @route="publications.publication"
                         @model={{row.id}} class="auk-button auk-button--borderless auk-button--icon">
-                    <i class="ki ki-chevron-right"></i>
+                    <span class="auk-button__content">
+                      <i class="ki ki-chevron-right"></i>
+                    </span>
                   </LinkTo>
                 </td>
               </tr>

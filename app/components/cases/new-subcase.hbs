@@ -15,12 +15,14 @@
                 class="auk-button auk-button--secondary"
                 {{action "copyFullSubcase"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-copy-paste"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "clone-previous-subcase"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-copy-paste"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "clone-previous-subcase"}}
+                  </div>
+                </span>
               </button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
@@ -68,12 +70,14 @@
             class="auk-button auk-button--secondary auk-button--icon"
             {{action "toggleIsEditing"}}
           >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-pencil"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "edit"}}
-            </div>
+            <span class="auk-button__content">
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-pencil"></i>
+              </div>
+              <div class="auk-u-sr-only">
+                {{t "edit"}}
+              </div>
+            </span>
           </button>
         {{else}}
           {{input
@@ -86,12 +90,14 @@
             type="button"
             {{action "toggleIsEditing"}}
           >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-cross"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "cancel"}}
-            </div>
+            <span class="auk-button__content">
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-cross"></i>
+              </div>
+              <div class="auk-u-sr-only">
+                {{t "cancel"}}
+              </div>
+            </span>
           </button>
         {{/if}}
       </div>
@@ -105,7 +111,9 @@
             class="auk-button auk-button--borderless"
             {{action "closeModal"}}
           >
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </button>
         </div>
       </div>

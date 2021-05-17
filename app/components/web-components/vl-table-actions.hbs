@@ -1,8 +1,10 @@
 <div class="auk-u-flex--justify-between">
   <button type="button" class="auk-button auk-button--borderless auk-button--icon">
-    <div class="auk-icon auk-icon--default">
-      <i class="ki ki-pencil"></i>
-    </div>
+    <span class="auk-button__content">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-pencil"></i>
+      </div>
+    </span>
   </button>
   {{#if (not (is-pending (await row.nota)))}}
     {{#if (not (await row.nota))}}
@@ -10,23 +12,27 @@
         style="opacity:0.3;"
         {{action "openDocument" row bubbles=false}}
       >
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-document"></i>
-        </div>
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-          {{t "no-nota"}}
-        </EmberTooltip>
+        <span class="auk-button__content">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-document"></i>
+          </div>
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "no-nota"}}
+          </EmberTooltip>
+        </span>
       </button>
     {{else}}
       <button type="button" class="auk-button auk-button--borderless auk-button--icon"
         {{action "openDocument" row bubbles=false}}
       >
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-document"></i>
-        </div>
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-          {{t "open-note"}}
-        </EmberTooltip>
+        <span class="auk-button__content">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-document"></i>
+          </div>
+          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+            {{t "open-note"}}
+          </EmberTooltip>
+        </span>
       </button>
     {{/if}}
   {{else}}
@@ -46,8 +52,10 @@
     bubbles=false
     class="auk-button auk-button--borderless auk-button--icon"
   }}
-    <div class="auk-icon auk-icon--default">
-      <i class="ki ki-nav-right"></i>
-    </div>
+    <span class="auk-button__content">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-nav-right"></i>
+      </div>
+    </span>
   {{/link-to}}
 </div>

@@ -23,7 +23,9 @@
             <button type="button" class="auk-button auk-button--borderless"
               {{action "close"}}
             >
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </div>
         </div>
@@ -33,35 +35,41 @@
               data-test-vl-model-manager-add
               {{action "toggleIsAdding"}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "add"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-add"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "add"}}
+                </div>
+              </span>
             </button>
             {{#if item}}
               <button type="button"
                 class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "edit"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "edit"}}
+                  </div>
+                </span>
               </button>
               <button type="button"
                 class="auk-button auk-button--tertiary"
                 {{action "removeModel"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-delete"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "delete"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-delete"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "delete"}}
+                  </div>
+                </span>
               </button>
             {{/if}}
           </div>

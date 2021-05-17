@@ -75,12 +75,14 @@
                   class="auk-button auk-button--borderless auk-button--icon"
                   {{on "click" (fn this.startEditingMandatee mandatee)}}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-pencil"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    {{t "edit"}}
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-pencil"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      {{t "edit"}}
+                    </div>
+                  </span>
                 </button>
                 <button
                   data-test-mandatee-panel-edit-row-delete
@@ -88,12 +90,14 @@
                   class="auk-button auk-button--borderless auk-button--icon"
                   {{on "click" (fn this.removeMandatee mandatee)}}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-delete"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    {{t "delete"}}
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-delete"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      {{t "delete"}}
+                    </div>
+                  </span>
                 </button>
               </td>
             </tr>
@@ -110,12 +114,14 @@
         class="auk-button auk-button--tertiary"
         {{on "click" this.startCreatingMandatee}}
       >
-        <div class="auk-icon auk-icon--default ">
-          <i class="ki ki-add"></i>
-        </div>
-        <div class="auk-button__label">
-          {{t "add-minister"}}
-        </div>
+        <span class="auk-button__content">
+          <div class="auk-icon auk-icon--default ">
+            <i class="ki ki-add"></i>
+          </div>
+          <div class="auk-button__label">
+            {{t "add-minister"}}
+          </div>
+        </span>
       </button>
     </div>
     <div class="auk-toolbar-complex__right">
@@ -128,7 +134,9 @@
               class="auk-button auk-button--tertiary"
               {{on "click" @onCancel}}
             >
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>

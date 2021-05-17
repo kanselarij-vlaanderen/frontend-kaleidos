@@ -3,23 +3,27 @@
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
         <button type="button" class="auk-button auk-button--secondary" disabled>
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "no-nota"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-document"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "no-nota"}}
+            </div>
+          </span>
         </button>
       {{else}}
         <button type="button" class="auk-button auk-button--secondary"
           {{action "openDocument" agendaitem bubbles=false}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "open-note"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-document"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "open-note"}}
+            </div>
+          </span>
         </button>
       {{/if}}
     {{else}}

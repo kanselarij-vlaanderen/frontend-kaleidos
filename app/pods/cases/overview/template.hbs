@@ -58,46 +58,48 @@
             {{#if currentSession.isEditor}}
               <button type="button"
                 class="auk-button auk-button--borderless auk-button--icon">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-more"></i>
-                </div>
-                {{#attach-popover
-                  renderInPlace=true
-                  class="ember-attacher-popper"
-                  hideOn="clickout click"
-                  showOn="click"
-                  animation="shift"
-                  placement="bottom"
-                as |attacher|
-                }}
-                  <ul class="vlc-dropdown-menu">
-                    <li class="vlc-dropdown-menu__item">
-                      <button type="button" class="auk-button-link"
-                        {{action attacher.hide}}
-                        {{action "editRow" row}}
-                      >
-                        {{t "edit-case"}}
-                      </button>
-                    </li>
-                    <li class="vlc-dropdown-menu__item">
-                      {{#if (not row.isArchived)}}
-                        <a href="" class="auk-button-link auk-button-link--block"
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-more"></i>
+                  </div>
+                  {{#attach-popover
+                    renderInPlace=true
+                    class="ember-attacher-popper"
+                    hideOn="clickout click"
+                    showOn="click"
+                    animation="shift"
+                    placement="bottom"
+                  as |attacher|
+                  }}
+                    <ul class="vlc-dropdown-menu">
+                      <li class="vlc-dropdown-menu__item">
+                        <button type="button" class="auk-button-link"
                           {{action attacher.hide}}
-                          {{action "requestArchiveCase" row}}
+                          {{action "editRow" row}}
                         >
-                          {{t "archive-case"}}
-                        </a>
-                      {{else}}
-                        <a href="" class="auk-button-link auk-button-link--block"
-                          {{action attacher.hide}}
-                          {{action "unarchiveCase" row}}
-                        >
-                          {{t "unarchive-case"}}
-                        </a>
-                      {{/if}}
-                    </li>
-                  </ul>
-                {{/attach-popover}}
+                          {{t "edit-case"}}
+                        </button>
+                      </li>
+                      <li class="vlc-dropdown-menu__item">
+                        {{#if (not row.isArchived)}}
+                          <a href="" class="auk-button-link auk-button-link--block"
+                            {{action attacher.hide}}
+                            {{action "requestArchiveCase" row}}
+                          >
+                            {{t "archive-case"}}
+                          </a>
+                        {{else}}
+                          <a href="" class="auk-button-link auk-button-link--block"
+                            {{action attacher.hide}}
+                            {{action "unarchiveCase" row}}
+                          >
+                            {{t "unarchive-case"}}
+                          </a>
+                        {{/if}}
+                      </li>
+                    </ul>
+                  {{/attach-popover}}
+                </span>
               </button>
             {{/if}}
             {{#link-to
@@ -105,9 +107,11 @@
               row.id
               class="auk-button auk-button--borderless auk-button--icon"
             }}
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-nav-right"></i>
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-nav-right"></i>
+                </div>
+              </span>
             {{/link-to}}
           </td>
         {{/c.body}}

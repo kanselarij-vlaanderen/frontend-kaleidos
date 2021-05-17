@@ -35,47 +35,49 @@
                   data-test-documents-show-more
                   type="button"
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-more"></i>
-                  </div>
-                  <AttachPopover
-                    @renderInPlace={{true}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="bottom"
-                    as |attacher|
-                  >
-                    <ul class="vlc-dropdown-menu">
-                      <li class="vlc-dropdown-menu__item">
-                        <button class="auk-button-link auk-button-link--block" type="button"
-                          data-test-document-upload-new-piece
-                          {{on "click" attacher.hide}}
-                          {{on "click" (fn this.openUploadModal)}}
-                        >
-                          {{t "new-version"}}
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__item">
-                        <button class="auk-button-link auk-button-link--block" type="button"
-                          {{on "click" attacher.hide}}
-                          {{on "click" this.enableEditPieceName}}
-                        >
-                          {{t "document-title-edit"}}
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                        <button class="auk-button-link auk-button-link--block auk-u-text-error" type="button"
-                          {{on "click" attacher.hide}}
-                          {{on "click" this.deleteDocumentContainer}}
-                        >
-                          {{t "document-delete"}}
-                        </button>
-                      </li>
-                    </ul>
-                  </AttachPopover>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-more"></i>
+                    </div>
+                    <AttachPopover
+                      @renderInPlace={{true}}
+                      @class="ember-attacher-popper"
+                      @hideOn="clickout click"
+                      @showOn="click"
+                      @animation="shift"
+                      @placement="bottom"
+                      as |attacher|
+                    >
+                      <ul class="vlc-dropdown-menu">
+                        <li class="vlc-dropdown-menu__item">
+                          <button class="auk-button-link auk-button-link--block" type="button"
+                            data-test-document-upload-new-piece
+                            {{on "click" attacher.hide}}
+                            {{on "click" (fn this.openUploadModal)}}
+                          >
+                            {{t "new-version"}}
+                          </button>
+                        </li>
+                        <li class="vlc-dropdown-menu__item">
+                          <button class="auk-button-link auk-button-link--block" type="button"
+                            {{on "click" attacher.hide}}
+                            {{on "click" this.enableEditPieceName}}
+                          >
+                            {{t "document-title-edit"}}
+                          </button>
+                        </li>
+                        <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                        <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                          <button class="auk-button-link auk-button-link--block auk-u-text-error" type="button"
+                            {{on "click" attacher.hide}}
+                            {{on "click" this.deleteDocumentContainer}}
+                          >
+                            {{t "document-delete"}}
+                          </button>
+                        </li>
+                      </ul>
+                    </AttachPopover>
+                  </span>
                 </button>
               {{/if}}
             </div>
@@ -108,24 +110,28 @@
                   type="button"
                   {{on "click" (perform this.savePieceName)}}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-check"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    {{t "more-options"}}
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-check"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      {{t "more-options"}}
+                    </div>
+                  </span>
                 </button>
                 <button
                   class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
                   {{on "click" this.cancelEditPieceName}}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-cross"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    {{t "more-options"}}
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-cross"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      {{t "more-options"}}
+                    </div>
+                  </span>
                 </button>
               </div>
             {{else}}

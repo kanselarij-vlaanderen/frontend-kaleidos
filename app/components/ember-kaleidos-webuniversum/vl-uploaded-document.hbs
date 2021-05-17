@@ -14,36 +14,42 @@
         <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "view"}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-book"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "show-piece"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-book"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "show-piece"}}
+            </div>
+          </span>
         </button>
       {{/if}}
       {{#if download}}
         <button type="button" class="auk-button auk-button--borderless auk-button--icon"
           {{action "download"}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-download"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "download"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-download"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "download"}}
+            </div>
+          </span>
         </button>
       {{else if downloadLink}}
         <a class="auk-button auk-button--borderless auk-button--icon"
           href={{downloadLink}}
           download={{if downloadName downloadName name}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-download"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "download"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-download"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "download"}}
+            </div>
+          </span>
         </a>
       {{/if}}
       {{#if delete}}
@@ -52,12 +58,14 @@
           class="auk-button auk-button--borderless auk-button--icon"
           {{action "delete"}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-delete"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "delete"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-delete"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "delete"}}
+            </div>
+          </span>
         </button>
       {{/if}}
     </div>

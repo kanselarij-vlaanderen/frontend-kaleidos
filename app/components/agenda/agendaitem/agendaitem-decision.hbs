@@ -11,30 +11,32 @@
         </a>
         {{#if @allowDelete}}
           <button type="button" class="auk-button auk-button--borderless auk-button--icon">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-more"></i>
-            </div>
-            <AttachPopover
-              @class="ember-attacher-popper"
-              @hideOn="clickout click"
-              @showOn="click"
-              @animation="shift"
-              @placement="bottom"
-            as |attacher|>
-              <ul class="vlc-dropdown-menu">
-                <li class="vlc-dropdown-menu__item">
-                  <button
-                    data-test-delete-decision
-                    type="button"
-                    class="auk-button-link auk-u-text-error"
-                    {{on "click" attacher.hide}}
-                    {{on "click" (fn this.promptDeleteTreatment @treatment)}}
-                  >
-                    {{t "delete-decision"}}
-                  </button>
-                </li>
-              </ul>
-            </AttachPopover>
+            <span class="auk-button__content">
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-more"></i>
+              </div>
+              <AttachPopover
+                @class="ember-attacher-popper"
+                @hideOn="clickout click"
+                @showOn="click"
+                @animation="shift"
+                @placement="bottom"
+              as |attacher|>
+                <ul class="vlc-dropdown-menu">
+                  <li class="vlc-dropdown-menu__item">
+                    <button
+                      data-test-delete-decision
+                      type="button"
+                      class="auk-button-link auk-u-text-error"
+                      {{on "click" attacher.hide}}
+                      {{on "click" (fn this.promptDeleteTreatment @treatment)}}
+                    >
+                      {{t "delete-decision"}}
+                    </button>
+                  </li>
+                </ul>
+              </AttachPopover>
+            </span>
           </button>
         {{/if}}
       {{/if}}
@@ -61,7 +63,9 @@
           data-test-upload-decision-file
           {{on "click" this.toggleIsAddingReport}}
         >
-          {{t "signed-decision-add"}}
+          <span class="auk-button__content">
+            {{t "signed-decision-add"}}
+          </span>
         </button>
       {{/if}}
     {{/if}}

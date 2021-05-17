@@ -1,9 +1,11 @@
-{{#if (not isLoading)}}
-  {{#if text}}
-    {{text}}
+<span class="auk-button__content">
+  {{#if (not isLoading)}}
+    {{#if text}}
+      {{text}}
+    {{else}}
+      {{yield}}
+    {{/if}}
   {{else}}
-    {{yield}}
+    <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{/if}}
-{{else}}
-  <div class="auk-loader" role="alert" aria-busy="true"></div>
-{{/if}}
+</span>
