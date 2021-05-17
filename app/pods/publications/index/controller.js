@@ -25,7 +25,7 @@ export default class PublicationsIndexController extends Controller {
   page = 0;
   size = 10;
   sort = '-created';
-  sizeOptions = [10, 25, 50, 100, 200];
+
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
@@ -164,17 +164,19 @@ export default class PublicationsIndexController extends Controller {
   @action
   prevPage() {
     if (this.page > 0) {
-      this.set('page', this.page - 1);
+      this.set('page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
     }
   }
 
   @action
   nextPage() {
-    this.set('page', this.page + 1);
+    this.set('page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   }
 
   @action
   setSizeOption(size) {
+    // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
     this.set('size', size);
+    this.set('page', 0);
   }
 }
