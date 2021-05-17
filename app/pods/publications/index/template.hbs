@@ -81,7 +81,7 @@
                   <td class="auk-u-text-align--center">
                     {{#if row.remark}}
                       <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
-                      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                      <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
                         <p>
                           {{row.remark}}
                         </p>
@@ -103,11 +103,6 @@
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.decisionDate}}
-                  <td>
-                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationNumber}}
@@ -148,22 +143,13 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedTranslationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
+                    {{if row.publishedAt (moment-format row.publishedAt "DD-MM-YYYY") (t "dash") }}
                   </td>
+
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
                     {{if row.publishedAt (moment-format row.publishedAt "DD-MM-YYYY") (t "dash") }}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.translateRequests}}
-                  <td class="auk-u-text-align--center">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
-                  <td class="auk-u-text-align--center">
-                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.lastEdited}}
@@ -172,16 +158,6 @@
                     <span class="auk-u-text-small auk-u-muted">
                       {{moment-format row.modified "HH:mm"}}
                     </span>
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.lastEditedBy}}
-                  <td>
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.previewTranslator}}
-                  <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.status}}
@@ -200,11 +176,6 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.source}}
-                  <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.signStatus}}
                   <td class="auk-u-text-nowrap">
                     {{t "dash"}}
                   </td>
