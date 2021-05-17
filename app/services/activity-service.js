@@ -5,9 +5,7 @@ import moment from 'moment';
 
 export default class activityService extends Service {
   @service store;
-  @service toaster;
   @service configService;
-  @service publicationService;
   @service intl;
 
   /**
@@ -43,86 +41,6 @@ export default class activityService extends Service {
   }
 
   /**
-   * Create a new Translation Activity.
-   *
-   * @param finalTranslationDate
-   * @param mailContent
-   * @param mailSubject
-   * @param pieces
-   * @param subcase
-   * @returns {Promise<Model|any|Promise>}
-   */
-  async createNewTranslationActivity(finalTranslationDate, mailContent, mailSubject, pieces, subcase) {
-    const creationDatetime = moment()
-      .utc()
-      .toDate();
-
-    // TODO new logic needed with request-activity and email
-
-    // Create activity.
-    const translateActivity = this.store.createRecord('translation-activity', {
-      startDate: creationDatetime,
-      finalTranslationDate,
-      mailContent,
-      mailSubject,
-      subcase,
-      usedPieces: pieces,
-    });
-
-    // Persist to db.
-    await translateActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-    // Reload relation.
-    await subcase.hasMany('translationActivities')
-      .reload();
-
-
-    return translateActivity;
-  }
-
-  /**
-   * Create a new Publish preview Activity.
-   *
-   * @param mailContent
-   * @param mailSubject
-   * @param pieces
-   * @param subcase
-   * @returns {Promise<Model|any|Promise>}
-   */
-  async createNewPublishPreviewActivity(mailContent, mailSubject, pieces, subcase) {
-    const creationDatetime = moment()
-      .utc()
-      .toDate();
-
-    // TODO new logic needed with request-activity and email
-    // publishPreviewActivityType.
-
-    // Create activity.
-    const PublishPreviewActivity = this.store.createRecord('proofing-activity', {
-      startDate: creationDatetime,
-      mailContent,
-      mailSubject,
-      subcase,
-      usedPieces: pieces,
-    });
-
-    // Persist to db.
-    await PublishPreviewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
-    // Reload relation.
-    await subcase.hasMany('proofingActivities')
-      .reload();
-
-    return PublishPreviewActivity;
-  }
-
-  /**
    * Create a publish to BS activity.
    *
    * @param mailContent
@@ -149,9 +67,6 @@ export default class activityService extends Service {
 
     // Persist to db.
     await PublishPreviewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
 
     // Reload relations.
     await subcase.hasMany('publicationActivities')

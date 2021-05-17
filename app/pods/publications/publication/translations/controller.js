@@ -8,6 +8,7 @@ import moment from 'moment';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { tracked } from '@glimmer/tracking';
 
+// TODO: temporarily disabled until new design + data model is ready
 export default class PublicationTranslationController extends Controller {
   @service publicationService;
   @service configService;
@@ -67,10 +68,6 @@ export default class PublicationTranslationController extends Controller {
     translationActivity.endDate = moment()
       .utc();
     await translationActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
 
     const pieces = await translationActivity.get('usedPieces');
     // Send email

@@ -158,40 +158,12 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.translateRequests}}
                   <td class="auk-u-text-align--center">
-                    {{#if (gt (await row.translationRequestsTotal) 0)}}
-                      {{#if
-                        (eq (await row.translationRequestsFinished) (await row.translationRequestsTotal))
-                      }}
-                        <WebComponents::AuStatusPill @status="done">
-                          {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{else}}
-                        <WebComponents::AuStatusPill @status="in-progress">
-                          {{await row.translationRequestsFinished}} / {{await row.translationRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{/if}}
-                    {{else}}
-                      <WebComponents::AuStatusPill @status="not-started"/>
-                    {{/if}}
+                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
                   <td class="auk-u-text-align--center">
-                    {{#if (gt (await row.publishpreviewRequestsTotal) 0)}}
-                      {{#if
-                        (eq (await row.publishpreviewRequestsFinished) (await row.publishpreviewRequestsTotal))
-                      }}
-                        <WebComponents::AuStatusPill @status="done">
-                          {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{else}}
-                        <WebComponents::AuStatusPill @status="in-progress">
-                          {{await row.publishpreviewRequestsFinished}} / {{await row.publishpreviewRequestsTotal}}
-                        </WebComponents::AuStatusPill>
-                      {{/if}}
-                    {{else}}
-                      <WebComponents::AuStatusPill @status="not-started"/>
-                    {{/if}}
+                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.lastEdited}}
@@ -263,42 +235,38 @@
   <hr>
 </div>
 <div class="auk-u-mx-4">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        {{!-- TODO Fix pagination --}}
-        <WebComponents::VlPagination
+  <WebComponents::AuToolbar >
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuPagination
                 @page={{this.page}}
                 @nbOfItems={{this.model.length}}
                 @size={{this.size}}
                 @nextAction={{this.nextPage}}
                 @previousAction={{this.prevPage}}
                 @total={{this.model.meta.count}} />
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
-        <div class="auk-pagination__container">
-          <p class="auk-pagination__fontsize auk-pagination-nowrap">{{t "amount-showed"}}</p>
-          <PowerSelect
-                  @searchEnabled={{false}}
-                  @placeholder={{t "select-a-status"}}
-                  @options={{this.sizeOptions}}
-                  @selected={{this.size}}
-                  @onchange={{ action 'setSizeOption'}}
-                  as |option|>
-            {{option}}
-          </PowerSelect>
-        </div>
-      </div>
-      <div class="auk-toolbar-complex__item">
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        {{t "amount-showed"}}
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuPageSize
+          @selectedSize={{this.size}}
+          @onChange={{this.setSizeOption}}
+        >
+        </WebComponents::AuPageSize>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
           {{on "click" this.openColumnDisplayOptionsModal}}
         />
-      </div>
-    </div>
-  </div>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 </div>
+
 
 {{#if this.isShowPublicationModal}}
   <Publications::NewPublicationModal

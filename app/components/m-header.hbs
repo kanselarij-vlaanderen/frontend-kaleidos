@@ -58,8 +58,9 @@
                 @placement="bottom-end"
         >
           <WebComponents::AuDropdown>
-            <WebComponents::AuDropdown::Item @href="https://kaleidos.vlaanderen.be/Kaleidos_Raadplegen_20200629.pdf"
-                                             target="_blank">
+            <WebComponents::AuDropdown::Item
+              @route="manual"
+              target="_blank">
               {{t "look-at-documentation"}}
             </WebComponents::AuDropdown::Item>
             <WebComponents::AuDropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
@@ -114,4 +115,3 @@
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
 </WebComponents::AuNavbar>
-

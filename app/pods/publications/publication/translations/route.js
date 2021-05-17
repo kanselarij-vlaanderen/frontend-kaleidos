@@ -2,6 +2,11 @@ import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 
 export default class PublicationTranslationRoute extends Route {
+  beforeModel(transition) {
+    alert('Not implemented yet.');
+    transition.abort();
+  }
+
   async model() {
     const parentHash = this.modelFor('publications.publication');
     const publicationFlow = parentHash.publicationFlow;
