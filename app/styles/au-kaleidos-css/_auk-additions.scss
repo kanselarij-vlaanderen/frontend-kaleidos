@@ -33,11 +33,11 @@
 }
 
 .auk-button--warning-borderless {
-  color: $au-red-600;
+  color: $au-red-500;
   background: none;
   &:hover,
   &:active {
-    color: $au-red-500;
+    color: $au-red-700;
   }
 }
 
