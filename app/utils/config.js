@@ -205,38 +205,6 @@ export default EmberObject.create({
   LANGUAGE_DE: {
     uri: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
-  ACTIVITY_TYPES: {
-    vertalen: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
-      id: 'e9a532a5-65c1-484f-9288-1720dcd1296c',
-    },
-    handtekenen: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
-      id: '6a43f78e-c835-40a2-bf32-81209ac6e42a',
-    },
-    drukproeven: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
-      id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
-    },
-    publiceren: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    },
-  },
-  ACTIVITY_STATUSSES: {
-    open: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/917349a2-4361-11eb-b378-0242ac130002',
-      id: '917349a2-4361-11eb-b378-0242ac130002',
-    },
-    withdrawn: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/b26eb1a0-4361-11eb-b378-0242ac130002',
-      id: 'b26eb1a0-4361-11eb-b378-0242ac130002',
-    },
-    closed: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/a6f7b9f2-4361-11eb-b378-0242ac130002',
-      id: 'a6f7b9f2-4361-11eb-b378-0242ac130002',
-    },
-  },
   SUBCASE_TYPES: {
     vertalen: {
       id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
@@ -255,6 +223,7 @@ export default EmberObject.create({
       url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
     },
   },
+  // TODO this is now called modes and is no longer used
   PUBLICATION_TYPES: {
     extenso: {
       uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',

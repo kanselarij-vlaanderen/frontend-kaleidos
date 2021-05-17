@@ -10,6 +10,7 @@ import { A } from '@ember/array';
 import moment from 'moment';
 import { task } from 'ember-concurrency-decorators';
 
+// TODO: temporarily disabled design + data model is ready
 export default class PublicationPublishPreviewController extends Controller {
   // Services.
   @service activityService;
@@ -280,7 +281,7 @@ export default class PublicationPublishPreviewController extends Controller {
     const subcase = await this.subcasesService.findOrCreateSubcaseFromTypeInPublicationFlow(publishSubCaseType, this.model.publicationFlow, title, shortTitle);
 
     // Create activity in subcase.
-    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase, this.publicationActivity.previewActivity);
+    await this.activityService.createNewPublishActivity(this.publicationActivity.mailContent, this.publicationActivity.pieces, subcase);
 
     // Send the email
     this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, CONFIG.EMAIL.TO.publishEmail, this.publicationActivity.mailSubject, this.publicationActivity.mailContent, this.publicationActivity.pieces);
@@ -301,21 +302,17 @@ export default class PublicationPublishPreviewController extends Controller {
 
   @action
   async cancelExistingPreviewActivity() {
-    const previewActivity = this.withdrawActivity;
     this.showLoader = true;
     this.showWithdrawPopup = false;
 
+    // TODO new logic with cancellation-activity
+    const previewActivity = null;
+
     // Update activity.
-    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
-    previewActivity.status = withDrawnStatus;
     previewActivity.withdrawReason = this.withdrawalReason;
     previewActivity.endDate = moment()
       .utc();
     await previewActivity.save();
-
-    // Invalidate local count cache.
-    this.publicationService.invalidatePublicationCache();
-
 
     const pieces = await previewActivity.get('usedPieces');
     // Send email
@@ -331,66 +328,26 @@ export default class PublicationPublishPreviewController extends Controller {
   }
 
   @action
-  async markPreviewActivityDone(previewActivity) {
+  async markPreviewActivityDone() {
     this.showLoader = true;
-    const openStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.open.id);
-    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-    const previewActivityActivityStatus = await previewActivity.get('status');
-
-    if (previewActivityActivityStatus.id === closedStatus.id) {
-      previewActivity.status = openStatus;
-      previewActivity.endDate = null;
-      await previewActivity.save();
-    } else {
-      previewActivity.status = closedStatus;
-      previewActivity.endDate = moment()
-        .utc();
-      await previewActivity.save();
-    }
-    this.publicationService.invalidatePublicationCache();
-    this.model.refreshAction();
+    // TODO new logic or delete
+    alert('this action is implemented in another ticket');
     this.showLoader = false;
   }
 
   @action
-  async cancelExistingPublicationActivity(previewActivity) {
+  async cancelExistingPublicationActivity() {
     this.showLoader = true;
-    const withDrawnStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.withdrawn.id);
-    const _this = this;
-    await previewActivity.get('publishedBy')
-      .filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id)
-      .map(async(publishingActivity) => {
-        publishingActivity.status = withDrawnStatus;
-        publishingActivity.endDate = moment()
-          .utc();
-        await publishingActivity.save();
-
-        // Invalidate local count cache.
-        this.publicationService.invalidatePublicationCache();
-
-        _this.model.refreshAction();
-      });
+    // TODO new logic or delete
+    alert('this action is implemented in another ticket');
     this.showLoader = false;
   }
 
   @action
-  async markPublicationActivityPublished(previewActivity) {
+  async markPublicationActivityPublished() {
     this.showLoader = true;
-    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-    const _this = this;
-    await previewActivity.get('publishedBy')
-      .filter((publishingActivity) => publishingActivity.get('status.id') === CONFIG.ACTIVITY_STATUSSES.open.id)
-      .map(async(publishingActivity) => {
-        publishingActivity.status = closedStatus;
-        publishingActivity.endDate = moment()
-          .utc();
-        await publishingActivity.save();
-
-        // Invalidate local count cache.
-        this.publicationService.invalidatePublicationCache();
-
-        _this.model.refreshAction();
-      });
+    // TODO new logic or delete
+    alert('this action is implemented in another ticket');
     this.showLoader = false;
   }
 
