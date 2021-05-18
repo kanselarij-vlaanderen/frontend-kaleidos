@@ -95,11 +95,6 @@
                   <td class="auk-u-text-align--center">
                     {{#if row.urgencyLevel.isUrgent}}
                       <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
-                      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                        <p>
-                          {{t "priority-procedure"}}
-                        </p>
-                      </EmberTooltip>
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -184,7 +179,11 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.source}}
                   <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
+                    {{#if row.subcases }}
+                      {{t "via-cabinet"}}
+                    {{else}}
+                      {{t "not-via-cabinet"}}
+                    {{/if}}
                   </td>
                 {{/if}}
                 <td>
