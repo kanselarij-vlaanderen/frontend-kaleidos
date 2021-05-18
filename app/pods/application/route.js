@@ -12,8 +12,8 @@ export default class ApplicationRoute extends Route {
   @service metrics;
   @service userAgent;
 
-  init() {
-    super.init(...arguments);
+  constructor() {
+    super(...arguments);
     this.setupTracking();
   }
 

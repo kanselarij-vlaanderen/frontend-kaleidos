@@ -6,8 +6,8 @@ export default class ApplicationController extends Controller {
   @service systemAlert;
   @service toaster;
 
-  init() {
-    super.init(...arguments);
+  constructor() {
+    super(...arguments);
     document.addEventListener('wheel', () => {
     }, {
       capture: true,
