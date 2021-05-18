@@ -51,7 +51,9 @@
                           {{action attacher.hide}}
                           {{action "openConfirmApproveAgenda"}}
                         >
-                          {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                          <span class="auk-button__content">
+                            {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                          </span>
                         </button>
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -60,7 +62,7 @@
                           {{action attacher.hide}}
                           {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                         >
-                          <span>
+                          <span class="auk-button__content">
                             {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
                           </span>
                         </button>
@@ -76,7 +78,9 @@
                             {{action "openConfirmCloseMeeting"}}
                             {{action attacher.hide}}
                           >
-                            {{t "agenda-close"}}
+                            <span class="auk-button__content">
+                              {{t "agenda-close"}}
+                            </span>
                           </a>
                         </li>
                         <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -89,7 +93,9 @@
                           {{action "unlockAgenda"}}
                           {{action attacher.hide}}
                         >
-                          {{t "agenda-reopen"}}
+                          <span class="auk-button__content">
+                            {{t "agenda-reopen"}}
+                          </span>
                         </a>
                       </li>
                       <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -104,7 +110,9 @@
                         {{action "openConfirmDeleteSelectedAgenda"}}
                         {{action attacher.hide}}
                       >
-                        {{t "agenda-delete"}}
+                        <span class="auk-button__content">
+                          {{t "agenda-delete"}}
+                        </span>
                       </a>
                     </li>
 
@@ -119,7 +127,9 @@
                           {{action "openConfirmReopenPreviousAgenda"}}
                           {{action attacher.hide}}
                         >
-                        {{t "agenda-reopen-previous-version"}}
+                        <span class="auk-button__content">
+                          {{t "agenda-reopen-previous-version"}}
+                        </span>
                       </a>
                     </li>
                   {{/if}}
@@ -162,7 +172,9 @@
                       {{action attacher.hide}}
                       {{action "addAgendaitemsAction"}}
                     >
-                      {{t "add-to-agenda"}}
+                      <span class="auk-button__content">
+                        {{t "add-to-agenda"}}
+                      </span>
                     </a>
                   </li>
                   <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -174,7 +186,9 @@
                     {{action attacher.hide}}
                     {{action "navigateToDecisions"}}
                   >
-                    {{t "print-decisions"}}
+                    <span class="auk-button__content">
+                      {{t "print-decisions"}}
+                    </span>
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">
@@ -184,7 +198,9 @@
                     {{action attacher.hide}}
                     {{action "navigateToNewsletter"}}
                   >
-                    {{t "print-newsletter"}}
+                    <span class="auk-button__content">
+                      {{t "print-newsletter"}}
+                    </span>
                   </a>
                 </li>
                 <li class="vlc-dropdown-menu__item">
@@ -194,7 +210,9 @@
                     {{action "navigateToPressAgenda"}}
                     {{action attacher.hide}}
                   >
-                    {{t "printable-press-agenda"}}
+                    <span class="auk-button__content">
+                      {{t "printable-press-agenda"}}
+                    </span>
                   </a>
                 </li>
                 {{#if showPrintButton}}
@@ -203,7 +221,9 @@
                       "agenda.agendaitems"
                       class="auk-button-link auk-button-link--block"
                     }}
-                      {{t "agenda-view"}}
+                      <span class="auk-button__content">
+                        {{t "agenda-view"}}
+                      </span>
                     {{/link-to}}
                   </li>
                   <li class="vlc-dropdown-menu__item">
@@ -213,7 +233,9 @@
                       {{action attacher.hide}}
                       {{action "print"}}
                     >
-                      {{t "print"}}
+                      <span class="auk-button__content">
+                        {{t "print"}}
+                      </span>
                     </a>
                   </li>
                 {{else}}
@@ -223,7 +245,9 @@
                       class="auk-button-link auk-button-link--block"
                       @route="agenda.print"
                     >
-                      {{t "printable-version"}}
+                      <span class="auk-button__content">
+                        {{t "printable-version"}}
+                      </span>
                     </LinkTo>
                   </li>
                 {{/if}}
@@ -236,7 +260,9 @@
                       {{action "toggleEditingSession"}}
                       {{action attacher.hide}}
                     >
-                      {{t "edit-session"}}
+                      <span class="auk-button__content">
+                        {{t "edit-session"}}
+                      </span>
                     </a>
                   </li>
                   <li class="vlc-dropdown-menu__item">
@@ -246,7 +272,9 @@
                       {{action "selectSignature"}}
                       {{action attacher.hide}}
                     >
-                      {{t "signature-edit"}}
+                      <span class="auk-button__content">
+                        {{t "signature-edit"}}
+                      </span>
                     </a>
                   </li>
                 {{/if}}
@@ -257,7 +285,9 @@
                     {{action attacher.hide}}
                     {{action "downloadAllDocuments"}}
                   >
-                    {{t "download-documents"}}
+                    <span class="auk-button__content">
+                      {{t "download-documents"}}
+                    </span>
                   </a>
                 </li>
                 {{#if currentAgenda.isDesignAgenda}}
@@ -268,7 +298,9 @@
                       {{action attacher.hide}}
                       {{action "showApproveAllAgendaitemsWarning"}}
                     >
-                      {{t "approve-all-agendaitems"}}
+                      <span class="auk-button__content">
+                        {{t "approve-all-agendaitems"}}
+                      </span>
                     </a>
                   </li>
                 {{/if}}
@@ -282,7 +314,9 @@
                         {{action "releaseDecisions"}}
                         {{action attacher.hide}}
                       >
-                        {{t "agenda-release-decisions"}}
+                        <span class="auk-button__content">
+                          {{t "agenda-release-decisions"}}
+                        </span>
                       </a>
                     {{else if currentSession.canReleaseDocuments}}
                       <a href=""
@@ -291,7 +325,9 @@
                         {{action "releaseDocuments"}}
                         {{action attacher.hide}}
                       >
-                        {{t "agenda-release-documents"}}
+                        <span class="auk-button__content">
+                          {{t "agenda-release-documents"}}
+                        </span>
                       </a>
                     {{/if}}
                   </li>
@@ -308,7 +344,9 @@
                         {{action "createNewDesignAgendaAction" currentSession}}
                         {{action attacher.hide}}
                       >
-                        {{t "agenda-add"}}
+                        <span class="auk-button__content">
+                          {{t "agenda-add"}}
+                        </span>
                       </a>
                     </li>
                   {{/if}}

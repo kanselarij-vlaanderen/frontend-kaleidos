@@ -55,7 +55,9 @@
                             {{on "click" attacher.hide}}
                             {{on "click" (fn this.openUploadModal)}}
                           >
-                            {{t "new-version"}}
+                            <span class="auk-button__content">
+                              {{t "new-version"}}
+                            </span>
                           </button>
                         </li>
                         <li class="vlc-dropdown-menu__item">
@@ -63,7 +65,9 @@
                             {{on "click" attacher.hide}}
                             {{on "click" this.enableEditPieceName}}
                           >
-                            {{t "document-title-edit"}}
+                            <span class="auk-button__content">
+                              {{t "document-title-edit"}}
+                            </span>
                           </button>
                         </li>
                         <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
@@ -72,7 +76,9 @@
                             {{on "click" attacher.hide}}
                             {{on "click" this.deleteDocumentContainer}}
                           >
-                            {{t "document-delete"}}
+                            <span class="auk-button__content">
+                              {{t "document-delete"}}
+                            </span>
                           </button>
                         </li>
                       </ul>

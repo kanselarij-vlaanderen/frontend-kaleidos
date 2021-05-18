@@ -132,7 +132,9 @@
                           {{action attacher.hide}}
                           {{action "sendTestCampaign"}}
                         >
-                          {{t "send-test-campaign"}}
+                          <span class="auk-button__content">
+                            {{t "send-test-campaign"}}
+                          </span>
                         </a>
                       </li>
                       <li class="vlc-dropdown-menu__item">
@@ -141,12 +143,14 @@
                           {{action attacher.hide}}
                           {{action "toggleIsVerifying"}}
                         >
-                          {{t "send-campaign"}}
+                          <span class="auk-button__content">
+                            {{t "send-campaign"}}
+                          </span>
                         </a>
                       </li>
                       <li
-                              class="vlc-dropdown-menu__separator"
-                              aria-hidden="true"
+                        class="vlc-dropdown-menu__separator"
+                        aria-hidden="true"
                       ></li>
                     {{/if}}
                     <li class="vlc-dropdown-menu__item">
@@ -163,12 +167,14 @@
                           agenda.id
                         }}
                       >
-                        {{t "generate-xml"}}
+                        <span class="auk-button__content">
+                          {{t "generate-xml"}}
+                        </span>
                       </a>
                     </li>
                     <li
-                            class="vlc-dropdown-menu__separator"
-                            aria-hidden="true"
+                      class="vlc-dropdown-menu__separator"
+                      aria-hidden="true"
                     ></li>
                     <li class="vlc-dropdown-menu__item">
                       <a href=""
@@ -176,7 +182,9 @@
                         {{action attacher.hide}}
                         {{action "deleteCampaign"}}
                       >
-                        {{t "delete-campaign"}}
+                        <span class="auk-button__content">
+                          {{t "delete-campaign"}}
+                        </span>
                       </a>
                     </li>
                   {{else}}
@@ -185,7 +193,9 @@
                           class="auk-button-link auk-button-link--block"
                         {{action "createCampaign"}}
                       >
-                        {{t "create-campaign"}}
+                        <span class="auk-button__content">
+                          {{t "create-campaign"}}
+                        </span>
                       </a>
                     </li>
                   {{/if}}
@@ -197,7 +207,9 @@
                       {{action attacher.hide}}
                       {{action "print"}}
                     >
-                      {{t "print"}}
+                      <span class="auk-button__content">
+                        {{t "print"}}
+                      </span>
                     </a>
                   </li>
                 {{/if}}

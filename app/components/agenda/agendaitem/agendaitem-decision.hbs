@@ -7,7 +7,9 @@
           class="auk-button-link"
           {{on "click" this.openEditingWindow}}
         >
-          {{t "edit"}}
+          <span class="auk-button__content">
+            {{t "edit"}}
+          </span>
         </a>
         {{#if @allowDelete}}
           <button type="button" class="auk-button auk-button--borderless auk-button--icon">
@@ -31,7 +33,9 @@
                       {{on "click" attacher.hide}}
                       {{on "click" (fn this.promptDeleteTreatment @treatment)}}
                     >
-                      {{t "delete-decision"}}
+                      <span class="auk-button__content">
+                        {{t "delete-decision"}}
+                      </span>
                     </button>
                   </li>
                 </ul>

@@ -9,14 +9,18 @@
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
             <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
-             {{on "click" this.startEditing}}>
-              {{t "edit"}}
+              {{on "click" this.startEditing}}>
+              <span class="auk-button__content">
+                {{t "edit"}}
+              </span>
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
             <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
-             {{on "click" this.createAndStartEditing}}>
-              {{t "create"}}
+              {{on "click" this.createAndStartEditing}}>
+              <span class="auk-button__content">
+                {{t "create"}}
+              </span>
             </a>
           {{/if}}
         </div>

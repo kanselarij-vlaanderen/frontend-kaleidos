@@ -41,9 +41,11 @@
                     {{action attacher.hide}}
                     {{action "proposeForAgenda" subcase meeting}}
                   >
-                    {{t "agenda-for"}}
-                    {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                    {{concat " - " meeting.numberRepresentation}}
+                    <span class="auk-button__content">
+                      {{t "agenda-for"}}
+                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                      {{concat " - " meeting.numberRepresentation}}
+                    </span>
                   </button>
                 </li>
               {{/each}}
@@ -55,7 +57,9 @@
                   {{action attacher.hide}}
                   {{action "proposeForOtherAgenda" subcase}}
                 >
-                  {{t "other-agenda"}}
+                  <span class="auk-button__content">
+                    {{t "other-agenda"}}
+                  </span>
                 </button>
               </li>
             </ul>
@@ -98,7 +102,9 @@
                       {{action attacher.hide}}
                       {{action "requestDeleteSubcase" subcase}}
                     >
-                      {{t "delete-subcase"}}
+                      <span class="auk-button__content">
+                        {{t "delete-subcase"}}
+                      </span>
                     </a>
                   </li>
                 {{/if}}
@@ -109,7 +115,9 @@
                     {{action attacher.hide}}
                     {{action "triggerMoveSubcaseDialog" }}
                   >
-                    {{t "move-subcase"}}
+                    <span class="auk-button__content">
+                      {{t "move-subcase"}}
+                    </span>
                   </a>
                 </li>
               </ul>

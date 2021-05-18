@@ -77,7 +77,9 @@
                           {{action attacher.hide}}
                           {{action "editRow" row}}
                         >
-                          {{t "edit-case"}}
+                          <span class="auk-button__content">
+                            {{t "edit-case"}}
+                          </span>
                         </button>
                       </li>
                       <li class="vlc-dropdown-menu__item">
@@ -86,14 +88,18 @@
                             {{action attacher.hide}}
                             {{action "requestArchiveCase" row}}
                           >
-                            {{t "archive-case"}}
+                            <span class="auk-button__content">
+                              {{t "archive-case"}}
+                            </span>
                           </a>
                         {{else}}
                           <a href="" class="auk-button-link auk-button-link--block"
                             {{action attacher.hide}}
                             {{action "unarchiveCase" row}}
                           >
-                            {{t "unarchive-case"}}
+                            <span class="auk-button__content">
+                              {{t "unarchive-case"}}
+                            </span>
                           </a>
                         {{/if}}
                       </li>
