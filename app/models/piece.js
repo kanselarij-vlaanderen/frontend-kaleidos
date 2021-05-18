@@ -46,6 +46,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
+  publicationFlow: belongsTo('publication-flow'),
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),
