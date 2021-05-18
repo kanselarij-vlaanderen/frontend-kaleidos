@@ -54,9 +54,9 @@
         </h4>
         {{#if @agendaitem.title}}
           <div class="auk-u-mb-2">
-            <pre class="auk-u-flex--inline auk-u-text-pre-line">
+            <span class="auk-o-flex--inline auk-u-text-pre-line">
               {{@agendaitem.title}}
-            </pre>
+            </span>
           </div>
         {{/if}}
         <WebComponents::AuPillList>
@@ -107,7 +107,7 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left"n>
             <WebComponents::AuToolbar::Item>
-              <pre class="auk-u-flex--inline auk-u-text-pre-line auk-u-italic">
+              <pre class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
                {{t "remark-title"}}: {{@agendaitem.explanation}}
               </pre>
             </WebComponents::AuToolbar::Item>

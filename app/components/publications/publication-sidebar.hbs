@@ -6,7 +6,7 @@
   <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
-        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-u-flex auk-u-flex--horizontal-center"}}">
+        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <WebComponents::AuButton @skin="borderless" @icon={{if @isOpen "chevron-right" "chevron-left"}}
                                    @layout="icon-only" {{on "click" (if @isOpen @onCollapse @onOpen)}} />
         </WebComponents::AuToolbar::Item>
@@ -196,7 +196,7 @@
         {{!-- Opmerking --}}
         <div class="auk-form-group">
           <WebComponents::AuLabel>
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span class="auk-u-mr">{{t "remark-title"}}</span>
               <div>
                 <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted"/>

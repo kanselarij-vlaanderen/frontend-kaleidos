@@ -31,7 +31,7 @@
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
-      <div class="auk-u-flex">
+      <div class="auk-o-flex">
         {{#unless this.isAnnexMeeting}}
           {{web-components/vl-form-input
             type="number"
@@ -40,7 +40,7 @@
             class="auk-input--w-medium auk-u-mr-2"
           }}
         {{/unless}}
-        <div class="auk-u-flex__item">
+        <div class="auk-o-flex__item">
           <div
             class="auk-u-text-condensed-line-height"
             data-test-meeting-formattedMeetingIdentifier
@@ -59,7 +59,7 @@
       </div>
     </div>
     {{#if isEditingFormattedMeetingIdentifier}}
-      <div class="auk-u-flex">
+      <div class="auk-o-flex">
         {{web-components/vl-form-input
           data-test-meeting-formattedMeetingIdentifier-edit-value=true
           value=formattedMeetingIdentifier

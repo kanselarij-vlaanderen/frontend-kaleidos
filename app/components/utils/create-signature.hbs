@@ -22,7 +22,7 @@
         uploadedFileAction=(action "getUploadedFile")
       }}
     {{else}}
-      <div class="auk-u-flex auk-u-flex--center auk-preview-container">
+      <div class="auk-o-flex auk-o-flex--center auk-preview-container">
         <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}"/>
         <a href="" {{action "removeFile" uploadedFile}}>
           {{fa-icon "remove"}}

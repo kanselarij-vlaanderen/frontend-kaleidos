@@ -1,12 +1,12 @@
 <form onsubmit={{action "createSubCase"}}>
   <div class="auk-modal__content">
-    <div class="auk-u-flex auk-u-flex--justify-between">
+    <div class="auk-o-flex auk-o-flex--justify-between">
       {{web-components/vl-radio-button-list
         title=(t "subcase-type")
         optionList=(await caseTypes)
         modelChanged=(action "typeChanged")
       }}
-      <div class="auk-u-flex auk-u-flex--vertical-center">
+      <div class="auk-o-flex auk-o-flex--vertical-center">
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
@@ -54,7 +54,7 @@
     </div>
     <div class="auk-form-group">
       <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
-      <div class="auk-u-flex auk-u-flex--vertical-center">
+      <div class="auk-o-flex auk-o-flex--vertical-center">
         {{#if (not isEditing)}}
           {{utils/model-selector
             class="vlc-u-box-model-maximize-width"

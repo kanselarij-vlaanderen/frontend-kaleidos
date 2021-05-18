@@ -18,7 +18,7 @@
     </div>
   {{else}}
     <div class="auk-modal__content">
-      <div class="auk-o-grid auk-u-flex--align-end auk-u-mb-2"
+      <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2"
       >
         <div class="auk-o-grid-col-8">
           <div class="auk-toolbar-complex auk-toolbar-complex--auto">
@@ -58,7 +58,7 @@
         </div>
         <div class="auk-o-grid-col-3">
           {{#if searchTask.isRunning}}
-            <div class="auk-u-flex auk-u-flex--center auk-u-mt-4">
+            <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
               <WebComponents::AuLoader @message={{t "loading"}}/>
             </div>
           {{else}}

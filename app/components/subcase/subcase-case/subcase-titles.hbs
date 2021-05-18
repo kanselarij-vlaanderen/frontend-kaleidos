@@ -1,5 +1,5 @@
 <div class="auk-u-mb-2">
-  <div class="auk-u-flex auk-u-flex--vertical-center">
+  <div class="auk-o-flex auk-o-flex--vertical-center">
     <h2 class="vlc-subline" data-test-subcase-type>
       {{#if (not subcase.showAsRemark)}}
         {{t "note"}}
@@ -33,7 +33,7 @@
 </div>
 
 <div class="auk-u-mb-2">
-  <pre class="auk-u-flex--inline auk-u-text-pre-line">
+  <pre class="auk-o-flex--inline auk-u-text-pre-line">
     {{await subcase.title}}
   </pre>
 </div>
@@ -49,7 +49,7 @@
 {{/if}}
 <div class="auk-u-mb-2">
   <div
-    class="pill-container auk-u-flex"
+    class="pill-container auk-o-flex"
     data-test-agenda-subcasehidden-pill
   >
     {{#if (await subcase.confidential)}}
