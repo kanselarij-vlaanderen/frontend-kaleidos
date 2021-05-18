@@ -124,9 +124,12 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.numacNumber}}
-                  <td>
+                  <td class="auk-u-text-nowrap">
                     {{#each row.numacNumbers as |numac|}}
-                      <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
+                      {{numac.idName}}
+                      {{#if (not-eq numac row.numacNumbers.lastObject)}}
+                        , &nbsp;
+                      {{/if}}
                     {{else}}
                       {{t "dash"}}
                     {{/each}}
