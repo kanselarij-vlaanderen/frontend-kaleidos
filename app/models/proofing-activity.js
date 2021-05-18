@@ -9,7 +9,7 @@ export default class ProofingActivity extends Model {
   @attr('datetime') endDate;
 
   // Relations.
-  @belongsTo('subcase') subcase;
+  @belongsTo('publication-subcase') subcase;
 
   @hasMany('piece') usedPieces;
   @hasMany('piece') generatedPieces;

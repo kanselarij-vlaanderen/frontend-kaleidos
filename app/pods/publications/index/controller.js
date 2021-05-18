@@ -147,6 +147,17 @@ export default class PublicationsIndexController extends Controller {
       modified: creationDatetime,
     });
     await publicationFlow.save();
+    const translationSubcase = this.store.createRecord('translation-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      publicationFlow,
+    });
+    const publicationSubcase = this.store.createRecord('publication-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      publicationFlow,
+    });
+    await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
     return publicationFlow;
   }
 
