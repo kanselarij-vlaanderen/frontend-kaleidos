@@ -22,7 +22,9 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: belongsTo('agenda-item-treatment'),
+  agendaItemTreatment: hasMany('agenda-item-treatment', {
+    serialize: true, // on creation of the newsletter-info, multiple decisions (for now also treatments) might already exist.
+  }),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),

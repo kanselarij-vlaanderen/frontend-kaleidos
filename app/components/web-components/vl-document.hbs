@@ -22,7 +22,7 @@
           @onChangeConfidentiality={{this.changeConfidentiality}}
         />
       {{/unless}}
-      {{#if (await this.piece.downloadFileLink)}}
+      {{#if this.file}}
         <button
           type="button"
           class="auk-button auk-button--borderless auk-button--icon"
@@ -33,7 +33,7 @@
               <i class="ki ki-book"></i>
             </div>
             <div class="auk-u-sr-only">
-              {{t "download"}}
+            {{t "view-document-details"}}
             </div>
           </span>
         </button>
