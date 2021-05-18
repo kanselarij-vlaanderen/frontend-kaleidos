@@ -1,49 +1,10 @@
 import Service, { inject } from '@ember/service';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import moment from 'moment';
 
 export default Service.extend({
   store: inject(),
   intl: inject(),
-
-  /**
-   * Create a subcase for a publicationFlow
-   *
-   * @param _case
-   * @param _publicationFlow
-   * @param subcaseTypeObject
-   * @param shortTitle
-   * @param title
-   * @returns {Promise<any>}
-   */
-  async createSubcaseForPublicationFlow(_publicationFlow, subcaseTypeObject, shortTitle, title) {
-    const creationDatetime = moment().utc()
-      .toDate();
-
-    // create Subcase.
-    const subcase = await this.store.createRecord('subcase', {
-      type: subcaseTypeObject,
-      shortTitle: trimText(shortTitle),
-      title: trimText(title),
-      // TODO: wat moeten we hier in steken?
-      // confidential: confidential || false,
-      // showAsRemark: showAsRemark || false,
-      publicationFlow: _publicationFlow,
-      created: creationDatetime,
-      modified: creationDatetime,
-      isArchived: false,
-      agendaActivities: [],
-    });
-
-    // Persist to DB.
-    await subcase.save();
-
-    // Reload publication flow relation to subcase.
-    await subcase.belongsTo('publicationFlow').reload();
-
-    return subcase;
-  },
 
   getPostPonedSubcaseIds() {
     return ajax(
@@ -127,33 +88,4 @@ export default Service.extend({
     }
     return phases;
   },
-
-  /**
-   * Finds or creates a subcase of type TYPE in your publicationFlow.
-   *
-   * @param requiredSubcaseType
-   * @param publicationFlow
-   * @param title
-   * @param shortTitle
-   * @returns SUBCASE
-   */
-  async findOrCreateSubcaseFromTypeInPublicationFlow(requiredSubcaseType, publicationFlow, title, shortTitle) {
-    // Load the subcase (should be just one).
-    const subcases = await this.store.query('subcase', {
-      filter: {
-        type: {
-          id: requiredSubcaseType.id,
-        },
-        'publication-flow': {
-          id: publicationFlow.id,
-        },
-      },
-      include: 'type',
-    });
-    if (subcases.length > 0) {
-      return subcases.firstObject;
-    }
-    return await this.createSubcaseForPublicationFlow(publicationFlow, requiredSubcaseType, shortTitle, title);
-  },
-
 });

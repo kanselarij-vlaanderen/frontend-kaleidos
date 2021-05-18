@@ -105,6 +105,7 @@ export default Service.extend({
       url: `/files/${id}`,
     });
   },
+
   async getFileExtensions() {
     return ajax({
       method: 'GET',

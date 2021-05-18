@@ -23,9 +23,9 @@ export default class PublicationsIndexController extends Controller {
   @service publicationService;
 
   page = 0;
-  size = 25;
+  size = 10;
   sort = '-created';
-  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
@@ -147,6 +147,36 @@ export default class PublicationsIndexController extends Controller {
       modified: creationDatetime,
     });
     await publicationFlow.save();
+    const translationSubcase = this.store.createRecord('translation-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      publicationFlow,
+    });
+    const publicationSubcase = this.store.createRecord('publication-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      publicationFlow,
+    });
+    await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
     return publicationFlow;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.set('page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    }
+  }
+
+  @action
+  nextPage() {
+    this.set('page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  }
+
+  @action
+  setSizeOption(size) {
+    // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    this.set('size', size);
+    this.set('page', 0);
   }
 }
