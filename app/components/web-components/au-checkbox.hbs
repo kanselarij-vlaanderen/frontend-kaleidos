@@ -1,5 +1,8 @@
 <label class="auk-checkbox">
   <input class="auk-checkbox__toggle" type="checkbox" name={{@name}} checked={{@checked}} onChange={{@toggle}}/>
   {{@label}}
+  {{#if (and  @smallLabel (not-eq @label @smallLabel)) }}
+    <span class="auk-u-text-small auk-u-muted">({{@smallLabel}})</span>
+  {{/if}}
   <span class="auk-checkbox__box"></span>
 </label>

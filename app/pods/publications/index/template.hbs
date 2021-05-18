@@ -128,7 +128,7 @@
                     {{#each row.numacNumbers as |numac|}}
                       {{numac.idName}}
                       {{#if (not-eq numac row.numacNumbers.lastObject)}}
-                        , &nbsp;
+                        ,&nbsp;
                       {{/if}}
                     {{else}}
                       {{t "dash"}}
@@ -167,7 +167,7 @@
                   <td class="auk-u-text-nowrap">
                     {{#if row.status }}
                       <span class="{{if row.status.isPublished "auk-u-text-success"}}
-                        {{if row.status.isWithdrawn "auk-u-text-danger"}} " >
+                        {{if row.status.isWithdrawn "auk-u-text-error"}} " >
                         {{row.status.label}}
                       </span>
 
