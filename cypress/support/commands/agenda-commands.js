@@ -69,7 +69,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   cy.get('@newAgendaForm').eq(1)
     .within(() => {
-      cy.get('.vl-datepicker').click();
+      cy.get(form.datepickerInput).click();
     });
   cy.setDateAndTimeInFlatpickr(date);
 
