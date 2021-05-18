@@ -115,7 +115,7 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.regulationType}}
-                  <td>
+                  <td class="auk-u-text-nowrap">
                     {{#if row.regulationType}}
                       {{row.regulationType.label}}
                     {{else}}
@@ -124,7 +124,7 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.numacNumber}}
-                  <td class="auk-u-text-nowrap">
+                  <td style="min-width: 180px">
                     {{#each row.numacNumbers as |numac|}}
                       {{numac.idName}}
                       {{#if (not-eq numac row.numacNumbers.lastObject)}}
@@ -156,7 +156,7 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.lastEdited}}
-                  <td class="auk-u-text-nowrap">
+                  <td>
                     {{moment-format row.modified "DD-MM-YYYY"}}<br/>
                     <span class="auk-u-text-small auk-u-muted">
                       {{moment-format row.modified "HH:mm"}}
@@ -166,7 +166,11 @@
                 {{#if this.tableColumnDisplayOptions.status}}
                   <td class="auk-u-text-nowrap">
                     {{#if row.status }}
-                      {{row.status.label}}
+                      <span class="{{if row.status.isPublished "auk-u-text-success"}}
+                        {{if row.status.isWithdrawn "auk-u-text-danger"}} " >
+                        {{row.status.label}}
+                      </span>
+
                       {{#if (or row.status.isWithdrawn row.status.isPaused) }}
                         <br>
                         <span class="auk-u-text-small auk-u-muted">
