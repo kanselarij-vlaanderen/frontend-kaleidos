@@ -131,7 +131,7 @@
                 {{#if this.tableColumnDisplayOptions.numacNumber}}
                   <td>
                     {{#each row.numacNumbers as |numac|}}
-                      <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
+                      <WebComponents::AuPill>{{numac.idName}}</WebComponents::AuPill>
                     {{else}}
                       {{t "dash"}}
                     {{/each}}
