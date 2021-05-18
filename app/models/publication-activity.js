@@ -9,7 +9,7 @@ export default class PublicationActivity extends Model {
   @attr('datetime') endDate;
 
   // Relations.
-  @belongsTo('subcase') subcase;
+  @belongsTo('publication-subcase') subcase;
 
   @hasMany('piece') usedPieces;
   // TODO this should be decision according to model, which is a type of piece but not implemented
