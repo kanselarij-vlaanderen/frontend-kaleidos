@@ -2,15 +2,6 @@ import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-function isSupportedBrowser() {
-  // eslint-disable-next-line no-undef
-  const isFirefox = typeof InstallTrigger !== 'undefined';
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  const isChrome = window.chrome;
-  const isCypress = !!window.Cypress && (window.Cypress.browser.family === 'chrome' || window.Cypress.browser.family === 'electron' || window.Cypress.browser.family === 'chromium');
-  return isFirefox || isChrome || isSafari || isCypress;
-}
-
 export default class ApplicationRoute extends Route {
   @service moment;
   @service intl;
@@ -19,6 +10,7 @@ export default class ApplicationRoute extends Route {
   @service fileService;
   @service router;
   @service metrics;
+  @service userAgent;
 
   init() {
     super.init(...arguments);
@@ -31,7 +23,7 @@ export default class ApplicationRoute extends Route {
     this.moment.allowEmpty = true;
     this.intl.setLocale('nl-be');
 
-    if (!isSupportedBrowser()) {
+    if (!this.isSupportedBrowser) {
       this.transitionTo('not-supported');
     }
 
@@ -44,6 +36,15 @@ export default class ApplicationRoute extends Route {
     if (this.session.isAuthenticated && !this.currentSession.hasValidGroup) {
       this.transitionTo('accountless-users');
     }
+  }
+
+  get isSupportedBrowser() {
+    const browser = this.userAgent.browser;
+    return (window.Cypress
+      || browser.isFirefox
+      || browser.isChrome
+      || browser.isSafari
+      || browser.isChromeHeadless); // Headless in order not to break automated tests.
   }
 
   setupTracking() {
