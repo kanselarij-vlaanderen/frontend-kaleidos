@@ -237,8 +237,22 @@
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-          {{on "click" this.openColumnDisplayOptionsModal}}
+          {{on "click" this.toggleColumnDisplayOptions}}
         />
+        <AttachPopover
+                @class="auk-popover"
+                @showOn="click"
+                @placement="top"
+                @hideOn="click"
+                @isShown={{this.showTableDisplayOptions}}
+                @renderInPlace={{false}}
+        >
+          <Publications::OverviewTableDisplayConfigModal
+                  @options={{this.tableColumnDisplayOptions}}
+                  @onChange={{this.changeColumnDisplayOptions}}
+                  @onClose={{this.toggleColumnDisplayOptions}}
+          />
+        </AttachPopover>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
@@ -255,13 +269,6 @@
           @filter={{this.publicationFilter}}
           @onCancel={{this.cancelPublicationsFilter}}
           @onSave={{this.savePublicationsFilter}} />
-{{/if}}
-{{#if this.showTableDisplayOptions}}
-  <Publications::OverviewTableDisplayConfigModal
-          @options={{this.tableColumnDisplayOptions}}
-          @onChange={{this.changeColumnDisplayOptions}}
-          @onClose={{this.closeColumnDisplayOptionsModal}}
-  />
 {{/if}}
 
 {{!-- LOADER --}}
