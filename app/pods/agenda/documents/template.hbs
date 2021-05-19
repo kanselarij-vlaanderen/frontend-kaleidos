@@ -55,17 +55,19 @@
           @isOverlay={{true}}
           @large={{true}}
           @title={{t "documents-add"}} >
-          <div class="auk-modal__content">
-            <FileUploader
-              @multipleFiles={{true}}
-              @uploadedFileAction={{this.uploadPiece}} />
-            <div class="upload-container">
-              {{#each this.newPieces as |piece|}}
-                <Documents::UploadedDocument
-                    @piece={{piece}}
-                    @allowDocumentContainerEdit={{true}}
-                    @onDelete={{perform this.deletePiece piece}} />
-              {{/each}}
+          <div class="auk-modal__body">
+            <div class="auk-u-p-4">
+              <FileUploader
+                @multipleFiles={{true}}
+                @uploadedFileAction={{this.uploadPiece}} />
+              <div class="upload-container">
+                {{#each this.newPieces as |piece|}}
+                  <Documents::UploadedDocument
+                      @piece={{piece}}
+                      @allowDocumentContainerEdit={{true}}
+                      @onDelete={{perform this.deletePiece piece}} />
+                {{/each}}
+              </div>
             </div>
           </div>
           <WebComponents::VlModalFooter

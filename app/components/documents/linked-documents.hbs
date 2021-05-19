@@ -36,10 +36,12 @@
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
-    <div class="auk-modal__content">
-      <Utils::AddExistingPiece
-        @add={{fn this.linkPiece}}
-        @delete={{fn this.unlinkPiece}} />
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <Utils::AddExistingPiece
+          @add={{fn this.linkPiece}}
+          @delete={{fn this.unlinkPiece}} />
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @isLoading={{this.saveLinkedPieces.isRunning}}

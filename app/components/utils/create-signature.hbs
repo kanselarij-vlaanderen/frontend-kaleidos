@@ -1,34 +1,36 @@
-<div class="auk-modal__content">
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
-    {{utils/create-person-selector
-      selectedItems=selectedPerson
-      selectModel=(action "personSelected")
-    }}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
-    {{web-components/vl-form-input value=name}}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "signature-function"}}</WebComponents::AuLabel>
-    {{web-components/vl-form-input value=function}}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "signature-file"}}</WebComponents::AuLabel>
-    {{#if (not uploadedFile)}}
-      {{file-uploader
-        multipleFiles=false
-        uploadedFileAction=(action "getUploadedFile")
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
+      {{utils/create-person-selector
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
       }}
-    {{else}}
-      <div class="auk-o-flex auk-o-flex--center auk-preview-container">
-        <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}"/>
-        <a href="" {{action "removeFile" uploadedFile}}>
-          {{fa-icon "remove"}}
-        </a>
-      </div>
-    {{/if}}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
+      {{web-components/vl-form-input value=name}}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "signature-function"}}</WebComponents::AuLabel>
+      {{web-components/vl-form-input value=function}}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "signature-file"}}</WebComponents::AuLabel>
+      {{#if (not uploadedFile)}}
+        {{file-uploader
+          multipleFiles=false
+          uploadedFileAction=(action "getUploadedFile")
+        }}
+      {{else}}
+        <div class="auk-o-flex auk-o-flex--center auk-preview-container">
+          <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}"/>
+          <a href="" {{action "removeFile" uploadedFile}}>
+            {{fa-icon "remove"}}
+          </a>
+        </div>
+      {{/if}}
+    </div>
   </div>
 </div>
 {{web-components/vl-modal-footer

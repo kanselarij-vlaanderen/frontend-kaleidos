@@ -4,19 +4,21 @@
   closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        {{utils/model-selector
-          modelName="government-field"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=item
-          selectModel=(action "selectModel")
-        }}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          {{utils/model-selector
+            modelName="government-field"
+            searchField="label"
+            propertyToShow="label"
+            sortField="label"
+            selectedItems=item
+            selectModel=(action "selectModel")
+          }}
+        </div>
       </div>
     </div>
-    <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+    <div class="auk-modal__footer auk-modal__footer--bordered">
       <div class="auk-toolbar-complex">
         <div class="auk-toolbar-complex__left">
           <div class="auk-toolbar-complex__item">
@@ -81,32 +83,34 @@
     </div>
   {{/if}}
   {{#if isAdding}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
-        {{web-components/vl-form-input value=label}}
-      </div>
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
-        {{utils/model-selector
-          modelName="government-domain"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=domain
-          selectModel=(action "chooseDomain")
-        }}
-      </div>
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
-        {{utils/model-selector
-          modelName="ise-code"
-          searchField="name"
-          propertyToShow="nameToShow"
-          sortField="name"
-          selectedItems=iseCode
-          selectModel=(action "chooseIseCode")
-        }}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
+          {{web-components/vl-form-input value=label}}
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
+          {{utils/model-selector
+            modelName="government-domain"
+            searchField="label"
+            propertyToShow="label"
+            sortField="label"
+            selectedItems=domain
+            selectModel=(action "chooseDomain")
+          }}
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
+          {{utils/model-selector
+            modelName="ise-code"
+            searchField="name"
+            propertyToShow="nameToShow"
+            sortField="name"
+            selectedItems=iseCode
+            selectModel=(action "chooseIseCode")
+          }}
+        </div>
       </div>
     </div>
     {{web-components/vl-modal-footer
@@ -118,32 +122,34 @@
     }}
   {{/if}}
   {{#if isEditing}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
-        {{web-components/vl-form-input value=label}}
-      </div>
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
-        {{utils/model-selector
-          modelName="government-domain"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=domain
-          selectModel=(action "chooseDomain")
-        }}
-      </div>
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
-        {{utils/model-selector
-          modelName="ise-code"
-          searchField="name"
-          propertyToShow="name"
-          sortField="name"
-          selectedItems=iseCode
-          selectModel=(action "chooseIseCode")
-        }}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "government-field"}}</WebComponents::AuLabel>
+          {{web-components/vl-form-input value=label}}
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "government-domain"}}</WebComponents::AuLabel>
+          {{utils/model-selector
+            modelName="government-domain"
+            searchField="label"
+            propertyToShow="label"
+            sortField="label"
+            selectedItems=domain
+            selectModel=(action "chooseDomain")
+          }}
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
+          {{utils/model-selector
+            modelName="ise-code"
+            searchField="name"
+            propertyToShow="name"
+            sortField="name"
+            selectedItems=iseCode
+            selectModel=(action "chooseIseCode")
+          }}
+        </div>
       </div>
     </div>
     {{web-components/vl-modal-footer

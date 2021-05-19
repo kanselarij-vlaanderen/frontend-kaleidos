@@ -1,85 +1,87 @@
-<div class="auk-modal__content">
-  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
-
-  {{#if this.isAnnexMeeting}}
-    <div class="auk-u-mb-2">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "related-main-meeting-field-label"}}</WebComponents::AuLabel>
-        {{utils/model-selector
-          modelName="meeting"
-          searchField="numberRepresentation"
-          propertyToShow="label"
-          sortField="-planned-start"
-          selectedItems=selectedMainMeeting
-          selectModel=(action "selectMainMeeting")
-        }}
-      </div>
-    </div>
-  {{else}}
-    <div class="auk-u-mb-2">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
-        {{web-components/vl-datepicker
-          enableTime=true
-          defaultHour=10
-          defaultMinute=0
-          dateChanged=(action "selectStartDate")
-        }}
-      </div>
-    </div>
-  {{/if}}
-  <div class="auk-u-mb-2">
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
-      <div class="auk-o-flex">
-        {{#unless this.isAnnexMeeting}}
-          {{web-components/vl-form-input
-            type="number"
-            value=meetingNumber
-            input=(action "meetingNumberChangedAction" meetingNumber)
-            class="auk-input--w-medium auk-u-mr-2"
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    {{utils/kind-selector kind=kind setAction=(action "setKind")}}
+    {{#if this.isAnnexMeeting}}
+      <div class="auk-u-mb-2">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "related-main-meeting-field-label"}}</WebComponents::AuLabel>
+          {{utils/model-selector
+            modelName="meeting"
+            searchField="numberRepresentation"
+            propertyToShow="label"
+            sortField="-planned-start"
+            selectedItems=selectedMainMeeting
+            selectModel=(action "selectMainMeeting")
           }}
-        {{/unless}}
-        <div class="auk-o-flex__item">
-          <div
-            class="auk-u-text-condensed-line-height"
-            data-test-meeting-formattedMeetingIdentifier
-          >
-            {{formattedMeetingIdentifier}}
-          </div>
-          <button type="button" class="auk-button-link"
-            data-test-meeting-edit-identifier-button
-            {{action "editFormattedMeetingIdentifier"}}
-          >
-            <span class="auk-button__content">
-              <small>{{t "edit"}}</small>
-            </span>
-          </button>
         </div>
       </div>
-    </div>
-    {{#if isEditingFormattedMeetingIdentifier}}
-      <div class="auk-o-flex">
-        {{web-components/vl-form-input
-          data-test-meeting-formattedMeetingIdentifier-edit-value=true
-          value=formattedMeetingIdentifier
-          class="auk-input--w-medium auk-u-mr-2"
-        }}
-        {{web-components/vl-save-button
-          text=(t "save")
-          saveAction=(action "saveAction")
-        }}
+    {{else}}
+      <div class="auk-u-mb-2">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+          {{web-components/vl-datepicker
+            enableTime=true
+            defaultHour=10
+            defaultMinute=0
+            dateChanged=(action "selectStartDate")
+          }}
+        </div>
       </div>
     {{/if}}
-  </div>
-  {{#unless this.isAnnexMeeting}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "meeting-location"}}</WebComponents::AuLabel>
-        {{web-components/vl-form-input value=extraInfo}}
+        <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
+        <div class="auk-o-flex">
+          {{#unless this.isAnnexMeeting}}
+            {{web-components/vl-form-input
+              type="number"
+              value=meetingNumber
+              input=(action "meetingNumberChangedAction" meetingNumber)
+              class="auk-input--w-medium auk-u-mr-2"
+            }}
+          {{/unless}}
+          <div class="auk-o-flex__item">
+            <div
+              class="auk-u-text-condensed-line-height"
+              data-test-meeting-formattedMeetingIdentifier
+            >
+              {{formattedMeetingIdentifier}}
+            </div>
+            <button type="button" class="auk-button-link"
+              data-test-meeting-edit-identifier-button
+              {{action "editFormattedMeetingIdentifier"}}
+            >
+              <span class="auk-button__content">
+                <small>{{t "edit"}}</small>
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
+      {{#if isEditingFormattedMeetingIdentifier}}
+        <div class="auk-o-flex">
+          {{web-components/vl-form-input
+            data-test-meeting-formattedMeetingIdentifier-edit-value=true
+            value=formattedMeetingIdentifier
+            class="auk-input--w-medium auk-u-mr-2"
+          }}
+          {{web-components/vl-save-button
+            text=(t "save")
+            saveAction=(action "saveAction")
+          }}
+        </div>
+      {{/if}}
     </div>
-  {{/unless}}
+    {{#unless this.isAnnexMeeting}}
+      <div class="auk-u-mb-2">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "meeting-location"}}</WebComponents::AuLabel>
+          {{web-components/vl-form-input value=extraInfo}}
+        </div>
+      </div>
+    {{/unless}}
+  </div>
+
 </div>
 {{web-components/vl-modal-footer
   isLoading=isLoading

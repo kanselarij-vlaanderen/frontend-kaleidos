@@ -204,17 +204,19 @@
     @closeModal={{perform this.cancelUploadPiece}}
     @isOverlay={{true}}
     @title={{t "new-document-piece"}}>
-    <div class="auk-modal__content">
-      {{#if this.newPiece}}
-        <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
-        <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}/>
-        <Documents::UploadedDocument
-          @piece={{this.newPiece}}
-          @onDelete={{perform this.deleteUploadedPiece}} />
-      {{else}}
-        <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadPiece}}/>
-      {{/if}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if this.newPiece}}
+          <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
+          <WebComponents::VlFormInput
+            @value={{this.newPiece.name}}/>
+          <Documents::UploadedDocument
+            @piece={{this.newPiece}}
+            @onDelete={{perform this.deleteUploadedPiece}} />
+        {{else}}
+          <FileUploader @multipleFiles={{false}} @uploadedFileAction={{perform this.uploadPiece}}/>
+        {{/if}}
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @cancelButtonText={{t "cancel"}}

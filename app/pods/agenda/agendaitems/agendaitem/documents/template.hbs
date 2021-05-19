@@ -62,22 +62,24 @@
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}} >
-    <div class="auk-modal__content">
-      {{#if this.savePieces.isRunning}}
-        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-      {{else}}
-        <FileUploader
-          @multipleFiles={{true}}
-          @uploadedFileAction={{this.uploadPiece}} />
-        <div class="upload-container">
-          {{#each this.newPieces as |piece|}}
-            <Documents::UploadedDocument
-              @piece={{piece}}
-              @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deletePiece piece}} />
-          {{/each}}
-        </div>
-      {{/if}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if this.savePieces.isRunning}}
+          <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+        {{else}}
+          <FileUploader
+            @multipleFiles={{true}}
+            @uploadedFileAction={{this.uploadPiece}} />
+          <div class="upload-container">
+            {{#each this.newPieces as |piece|}}
+              <Documents::UploadedDocument
+                @piece={{piece}}
+                @allowDocumentContainerEdit={{true}}
+                @onDelete={{perform this.deletePiece piece}} />
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @isLoading={{this.savePieces.isRunning}}

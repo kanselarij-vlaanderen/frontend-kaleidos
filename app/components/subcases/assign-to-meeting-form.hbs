@@ -1,20 +1,22 @@
-<div class="auk-modal__content">
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "propose-for"}}</WebComponents::AuLabel>
-    {{#if (is-pending dateObjectsToEnable)}}
-      {{web-components/vl-loader
-        text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))
-      }}
-    {{else}}
-      {{web-components/vl-datepicker
-        dateObjectsToEnable=(await dateObjectsToEnable)
-        datePropertyToUse="plannedStart"
-        dateChanged=(action "selectStartDate")
-      }}
-    {{/if}}
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "propose-for"}}</WebComponents::AuLabel>
+      {{#if (is-pending dateObjectsToEnable)}}
+        {{web-components/vl-loader
+          text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))
+        }}
+      {{else}}
+        {{web-components/vl-datepicker
+          dateObjectsToEnable=(await dateObjectsToEnable)
+          datePropertyToUse="plannedStart"
+          dateChanged=(action "selectStartDate")
+        }}
+      {{/if}}
+    </div>
   </div>
 </div>
-<div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+<div class="auk-modal__footer auk-modal__footer--bordered">
   <div class="auk-toolbar-complex">
     <div class="auk-toolbar-complex__left">
       <div class="auk-toolbar-complex__item">

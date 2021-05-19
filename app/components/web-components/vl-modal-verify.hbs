@@ -1,64 +1,66 @@
-<div class="auk-modal-backdrop" data-test-vl-modal data-test-vl-modal-verify-container>
+<div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal data-test-vl-modal-verify-container>
   <div class="auk-modal auk-modal--small" role="dialog">
     <div class="auk-modal__push">&nbsp;</div>
-    <div class="auk-modal__header auk-modal__header--bordered">
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
-            <h2 class="auk-toolbar__title">{{title}}</h2>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        {{#if showCloseButton}}
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                @icon="close"
-                @skin="borderless"
-                @layout="icon-only"
-                {{action "cancel"}}
-                data-test-vl-modal-verify-close
-              >
-              </WebComponents::AuButton>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        {{/if}}
-      </WebComponents::AuToolbar>
-    </div>
-    <WebComponents::AuModal::Body>
-      <p>{{message}}</p>
-    </WebComponents::AuModal::Body>
-    {{#if showActions}}
-      <div class="auk-modal__footer auk-modal__footer--bordered">
+    <div class="auk-modal__content">
+      <div class="auk-modal__header auk-modal__header--bordered">
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                @skin="borderless"
-                {{action "cancel"}}
-                data-test-vl-modal-verify-cancel
-              >
-                {{t "cancel"}}
-              </WebComponents::AuButton>
+              <h2 class="auk-toolbar__title">{{title}}</h2>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
-          {{#if showVerify}}
+          {{#if showCloseButton}}
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButton
-                  @skin={{buttonSkin}}
-                  @icon={{if showIcon "delete"}}
-                  {{action "verify"}}
-                  {{!-- isLoading=isLoading --}}
-                  data-test-vl-modal-verify-save
+                  @icon="close"
+                  @skin="borderless"
+                  @layout="icon-only"
+                  {{action "cancel"}}
+                  data-test-vl-modal-verify-close
                 >
-                  {{verifyButtonText}}
                 </WebComponents::AuButton>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           {{/if}}
         </WebComponents::AuToolbar>
       </div>
-    {{/if}}
+      <WebComponents::AuModal::Body>
+        <p>{{message}}</p>
+      </WebComponents::AuModal::Body>
+      {{#if showActions}}
+        <div class="auk-modal__footer auk-modal__footer--bordered">
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <WebComponents::AuButton
+                  @skin="borderless"
+                  {{action "cancel"}}
+                  data-test-vl-modal-verify-cancel
+                >
+                  {{t "cancel"}}
+                </WebComponents::AuButton>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+            {{#if showVerify}}
+              <WebComponents::AuToolbar::Group @position="right">
+                <WebComponents::AuToolbar::Item>
+                  <WebComponents::AuButton
+                    @skin={{buttonSkin}}
+                    @icon={{if showIcon "delete"}}
+                    {{action "verify"}}
+                    {{!-- isLoading=isLoading --}}
+                    data-test-vl-modal-verify-save
+                  >
+                    {{verifyButtonText}}
+                  </WebComponents::AuButton>
+                </WebComponents::AuToolbar::Item>
+              </WebComponents::AuToolbar::Group>
+            {{/if}}
+          </WebComponents::AuToolbar>
+        </div>
+      {{/if}}
+    </div>
     <div class="auk-modal__push">&nbsp;</div>
   </div>
 </div>

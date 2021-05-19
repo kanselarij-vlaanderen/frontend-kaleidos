@@ -236,12 +236,14 @@
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
     @closeModal={{action "clearNewsletterHTML"}} >
-    <div class="auk-modal__content">
-      {{#if testCampaignIsLoading}}
-        <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
-      {{else}}
-        {{sanitize-html raw=true value=newsletterHTML}}
-      {{/if}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if testCampaignIsLoading}}
+          <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
+        {{else}}
+          {{sanitize-html raw=true value=newsletterHTML}}
+        {{/if}}
+      </div>
     </div>
   </WebComponents::VlModal>
 {{/if}}
