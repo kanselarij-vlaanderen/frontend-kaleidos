@@ -15,7 +15,7 @@ export default Controller.extend({
     },
     {
       sort: {
-        type: 'number',
+        type: 'string',
       },
     },
     {

@@ -20,6 +20,7 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
           .toDate(),
         agendaitem: this.agendaitem,
         subcase: this.subcase,
+        newsletterInfo: await this.treatments.firstObject.newsletterInfo,
       });
       await newTreatment.save();
       this.refresh();

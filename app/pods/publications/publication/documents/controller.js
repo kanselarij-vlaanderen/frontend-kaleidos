@@ -9,12 +9,7 @@ import {
 import { inject as service } from '@ember/service';
 
 export default class PublicationDocumentsController extends Controller {
-  @service activityService;
-  @service subcasesService;
-  @service emailService;
   @service fileService;
-  @service configService;
-  @service store;
 
   @tracked showPieceUploadModal = false;
   @tracked showLoader = false;

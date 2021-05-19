@@ -37,12 +37,6 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  requestActivities: hasMany('request-activity'),
-  translationActivities: hasMany('translation-activity'),
-  proofingActivities: hasMany('proofing-activity'),
-  publicationActivities: hasMany('publication-activity'),
-  cancellationActivities: hasMany('cancellation-activity'),
-
   type: belongsTo('subcase-type'),
   case: belongsTo('case', {
     inverse: null,
@@ -54,11 +48,6 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
   accessLevel: belongsTo('access-level'),
-
-
-  publicationFlow: belongsTo('publication-flow', {
-    inverse: null,
-  }),
 
   latestActivity: computed('agendaActivities', 'agendaActivities.@each', async function() {
     const activities = await this.get('agendaActivities').then((activities) => activities.sortBy('startDate'));
