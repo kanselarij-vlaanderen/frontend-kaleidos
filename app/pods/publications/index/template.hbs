@@ -120,6 +120,11 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.numacNumber}}
                   <td style="min-width: 180px">
+                    {{#if row.numacNumbers.length }}
+                      {{join ', ' (map-by 'idName' row.numacNumbers)}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
                     {{#each row.numacNumbers as |numac|}}
                       {{numac.idName}}
                       {{#if (not-eq numac row.numacNumbers.lastObject)}}
