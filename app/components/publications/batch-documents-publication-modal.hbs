@@ -32,18 +32,20 @@
             </td>
             <td>
               <WebComponents::AuButtonToolbar>
-                <WebComponents::AuButtonLink
+                <WebComponents::AuButton
                   @layout="icon-only"
                   @icon="download"
+                  @skin="borderless"
                   @href="{{await piece.downloadFileLink}}"
                   download
                   >
-                </WebComponents::AuButtonLink>
-                <WebComponents::AuButtonLink
+                </WebComponents::AuButton>
+                <WebComponents::AuButton
                   @layout="icon-only"
                   @icon="book"
+                  @skin="borderless"
                   @href="{{piece.viewDocumentURL}}">
-                </WebComponents::AuButtonLink>
+                </WebComponents::AuButton>
               </WebComponents::AuButtonToolbar>
             </td>
           </tr>
