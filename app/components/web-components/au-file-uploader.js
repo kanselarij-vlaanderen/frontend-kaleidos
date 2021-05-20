@@ -17,14 +17,11 @@ export default class FileUploader extends Component {
 
   multipleFiles = this.args.multipleFiles;
 
-  @tracked isLoading = null;
-
   @tracked filesInQueue = alias('fileQueue.files');
   uploadedFileAction = this.args.uploadedFileAction;
 
   @action
   insertElementInDom() {
-    this.isLoading = false;
     this.uploadedFileLength = 0;
     this.filesInQueue = A([]);
   }
@@ -33,7 +30,6 @@ export default class FileUploader extends Component {
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
     try {
-      this.isLoading = true;
       file.readAsDataURL().then(() => {
       });
       const response = yield file.upload('/files');
@@ -41,10 +37,7 @@ export default class FileUploader extends Component {
       this.uploadedFileAction(fileFromStore);
       this.uploadedFileLength += 1;
     } catch (exception) {
-      this.isLoading = false;
       console.warn('An exception occurred', exception);
-    } finally {
-      this.isLoading = false;
     }
   }
 
