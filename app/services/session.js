@@ -4,6 +4,7 @@ import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ExtendedSessionService extends SessionService {
   @service currentSession;
+  @service router;
 
   async handleAuthentication() {
     try {
@@ -16,10 +17,11 @@ export default class ExtendedSessionService extends SessionService {
 
   handleInvalidation() {
     const logoutUrl = ENV.torii.providers['acmidm-oauth2'].logoutUrl;
-    if (logoutUrl.startsWith('http')) {
-      super.handleInvalidation(logoutUrl);
-    } else {
-      super.handleInvalidation('aanmelden');
+    try {
+      const url = new URL(logoutUrl);
+      window.location.replace(url.toString());
+    } catch (error) { // eslint-disable-line no-unused-vars
+      this.router.transitionTo('login');
     }
   }
 }
