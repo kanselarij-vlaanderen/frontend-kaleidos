@@ -17,7 +17,7 @@
   <WebComponents::AuToolbar::Group @position="right">
     {{#if (and this.currentSession.isOvrb this.model.pieces)}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-subcase-documents-publish class="auk-button--primary" type="button"
+        <WebComponents::AuButton data-test-subcase-documents-publish type="button"
           {{on "click" this.showPublicationModal}}>
           {{t "agendaitem-documents-documents-for-publication"}}
         </WebComponents::AuButton>
