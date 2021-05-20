@@ -1,3 +1,4 @@
-<div {{did-update (perform this.groupDocumentsByContainer) @pieces}}>
+<div {{did-update (perform this.groupDocumentsByContainer) @pieces}}
+  ...attributes>
   {{yield this.latestDocuments}}
 </div>

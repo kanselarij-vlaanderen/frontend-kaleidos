@@ -12,6 +12,16 @@
           </button>
         </div>
       {{/if}}
+
+      {{#if (and this.currentSession.isOvrb this.model.pieces)}}
+        <div class="auk-u-ml-2">
+          <button data-test-subcase-documents-publish class="auk-button--primary" type="button"
+            {{on "click" this.showPublicationModal}}>
+            {{t "agendaitem-documents-documents-for-publication"}}
+          </button>
+        </div>
+      {{/if}}
+
     </div>
   </div>
   {{#if this.governmentCanViewDocuments}}
@@ -84,4 +94,12 @@
       @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @onCancel={{this.cancelPublicationModal}}
+    />
+{{/if}}
+
 <Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}}/>

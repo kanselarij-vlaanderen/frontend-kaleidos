@@ -20,6 +20,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;
+  @tracked isOpenPublicationModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
 
@@ -178,6 +179,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         }
       }
     }
+  }
+
+  @action
+  showPublicationModal() {
+    this.isOpenPublicationModal = true;
+  }
+
+  @action
+  cancelPublicationModal() {
+    this.isOpenPublicationModal = false;
   }
 
   @action

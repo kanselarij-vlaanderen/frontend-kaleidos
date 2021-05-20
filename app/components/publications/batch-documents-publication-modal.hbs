@@ -1,0 +1,58 @@
+<WebComponents::AuModal>
+  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{this.onCancel}}>
+
+  </WebComponents::AuModal::Header>
+  <WebComponents::AuModal::Body>
+    {{!-- template-lint-disable table-groups --}}
+    <table class="auk-table auk-table--styled auk-table--bordered">
+      <thead>
+        <tr>
+          <th>{{t "name"}}</th>
+          <th>{{t "document-type"}}</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <Documents::DocumentList
+        @pieces={{this.pieces}}
+        {{!-- workaround for Documents::DocumentList rendering a div --}}
+        style="display: table-row-group;"
+        as |pieces|>
+        {{#each pieces as |piece|}}
+          <tr>
+            <td>
+              {{piece.name}}
+            </td>
+            <td>
+              {{piece.file.extension}}
+            </td>
+            <td>
+              <WebComponents::AuButtonToolbar>
+                <WebComponents::AuButtonLink
+                  @layout="icon-only"
+                  @icon="download"
+                  @href="{{await piece.downloadFileLink}}"
+                  download
+                  >
+                </WebComponents::AuButtonLink>
+                <WebComponents::AuButtonLink
+                  @layout="icon-only"
+                  @icon="book"
+                  @href="{{piece.viewDocumentURL}}">
+                </WebComponents::AuButtonLink>
+              </WebComponents::AuButtonToolbar>
+            </td>
+          </tr>
+        {{else}}
+          <tr>
+
+          </tr>
+        {{/each}}
+      </Documents::DocumentList>
+
+    </table>
+  </WebComponents::AuModal::Body>
+  <WebComponents::AuModal::Footer @cancelModal={{this.onCancel}}>
+
+  </WebComponents::AuModal::Footer>
+</WebComponents::AuModal>
