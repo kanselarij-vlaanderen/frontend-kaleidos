@@ -7,6 +7,7 @@
         <tr>
           <th>{{t "name"}}</th>
           <th>{{t "document-type"}}</th>
+          <th>{{t "publications-number"}}</th>
           <th></th>
         </tr>
       </thead>
@@ -23,6 +24,11 @@
             </td>
             <td>
               {{piece.file.extension}}
+            </td>
+            <td>
+              <WebComponents::AuButton>
+                {{t "publications-new"}}
+              </WebComponents::AuButton>
             </td>
             <td>
               <WebComponents::AuButtonToolbar>
