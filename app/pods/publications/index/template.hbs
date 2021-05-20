@@ -31,7 +31,7 @@
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
-      {{#if (gt this.model.length 0) }}
+      {{#if (gt this.model.length 0)}}
         <table class="auk-table">
           <thead>
             <tr>
@@ -221,7 +221,7 @@
             {{/each}}
           </tbody>
         </table>
-      {{else }}
+      {{else}}
         <WebComponents::AuPanel>
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
@@ -287,7 +287,3 @@
   />
 {{/if}}
 
-{{!-- LOADER --}}
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
-{{/if}}

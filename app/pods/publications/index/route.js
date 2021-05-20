@@ -109,4 +109,13 @@ export default class PublicationsIndexRoute extends Route {
   refreshModel() {
     this.refresh();
   }
+
+  @action
+  async loading(transition) {
+    const controller = this.controllerFor('publications.index');
+    controller.set('currentlyLoading', true);
+    transition.promise.finally(() => {
+      controller.set('currentlyLoading', false);
+    });
+  }
 }
