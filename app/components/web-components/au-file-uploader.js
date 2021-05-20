@@ -15,10 +15,7 @@ export default class FileUploader extends Component {
 
   @tracked uploadedFileLength = null;
 
-  multipleFiles = this.args.multipleFiles;
-
   @tracked filesInQueue = alias('fileQueue.files');
-  uploadedFileAction = this.args.uploadedFileAction;
 
   @action
   insertElementInDom() {
@@ -32,7 +29,7 @@ export default class FileUploader extends Component {
     try {
       const response = yield file.upload('/files');
       const fileFromStore = yield this.store.findRecord('file', response.body.data.id);
-      this.uploadedFileAction(fileFromStore);
+      this.args.uploadedFileAction(fileFromStore);
       this.uploadedFileLength += 1;
     } catch (exception) {
       console.warn('An exception occurred', exception);
