@@ -30,8 +30,6 @@ export default class FileUploader extends Component {
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
     try {
-      file.readAsDataURL().then(() => {
-      });
       const response = yield file.upload('/files');
       const fileFromStore = yield this.store.findRecord('file', response.body.data.id);
       this.uploadedFileAction(fileFromStore);
