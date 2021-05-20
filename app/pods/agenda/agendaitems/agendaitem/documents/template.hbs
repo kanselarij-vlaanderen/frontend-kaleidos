@@ -1,29 +1,30 @@
-<div class="auk-u-mb-10">
-  <div class="auk-u-mb-4">
-    <div class="auk-u-flex auk-u-flex--vertical-center">
-      <h4 class="auk-h3 auk-u-m-0">
+<WebComponents::AuToolbar class="auk-u-mb-4">
+  <WebComponents::AuToolbar::Group @position="left">
+    <WebComponents::AuToolbar::Item>
+      <h4 class="auk-toolbar__title">
         {{t "documents"}}
       </h4>
-      {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
-        <div class="auk-u-ml-2">
-          <button data-test-subcase-documents-edit class="auk-button-link" type="button"
-            {{on "click" this.enablePieceEdit}}>
-            {{t "edit"}}
-          </button>
-        </div>
-      {{/if}}
-
-      {{#if (and this.currentSession.isOvrb this.model.pieces)}}
-        <div class="auk-u-ml-2">
-          <button data-test-subcase-documents-publish class="auk-button--primary" type="button"
-            {{on "click" this.showPublicationModal}}>
-            {{t "agendaitem-documents-documents-for-publication"}}
-          </button>
-        </div>
-      {{/if}}
-
-    </div>
-  </div>
+    </WebComponents::AuToolbar::Item>
+    {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
+      <WebComponents::AuToolbar::Item>
+        <button data-test-subcase-documents-edit class="auk-button-link" type="button"
+          {{on "click" this.enablePieceEdit}}>
+          {{t "edit"}}
+        </button>
+      </WebComponents::AuToolbar::Item>
+    {{/if}}
+  </WebComponents::AuToolbar::Group>
+  <WebComponents::AuToolbar::Group @position="right">
+    {{#if (and this.currentSession.isOvrb this.model.pieces)}}
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton data-test-subcase-documents-publish class="auk-button--primary" type="button"
+          {{on "click" this.showPublicationModal}}>
+          {{t "agendaitem-documents-documents-for-publication"}}
+        </WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    {{/if}}
+  </WebComponents::AuToolbar::Group>
+</WebComponents::AuToolbar>
   {{#if this.governmentCanViewDocuments}}
     {{#unless this.loadData.isRunning}}
       {{#if this.isEnabledPieceEdit}}
@@ -47,20 +48,20 @@
       <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
     </div>
   {{/if}}
-  {{#if this.currentSession.isEditor}}
-    <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary"
-        {{on "click" this.openPieceUploadModal}}>
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-add"></i>
-        </div>
-        <div class="auk-button__label">
-          {{t "documents-add"}}
-        </div>
-      </button>
-    </div>
-  {{/if}}
-</div>
+
+{{#if this.currentSession.isEditor}}
+  <div class="auk-u-mb-4">
+    <button type="button" class="auk-button auk-button--tertiary"
+      {{on "click" this.openPieceUploadModal}}>
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-add"></i>
+      </div>
+      <div class="auk-button__label">
+        {{t "documents-add"}}
+      </div>
+    </button>
+  </div>
+{{/if}}
 
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
