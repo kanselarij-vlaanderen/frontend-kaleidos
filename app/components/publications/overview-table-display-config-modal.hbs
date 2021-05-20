@@ -8,7 +8,7 @@
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton
-          {{action @onClose}}
+          {{on "click" @onClose}}
                 @skin="muted"
                 @layout="icon-only"
                 @icon="ki ki-close"
@@ -29,10 +29,13 @@
                 <WebComponents::AuCheckbox
                         @name={{option.keyName}}
                         @label={{t option.translationKey}}
-                        @smallLabel={{t option.translationKeySmall}}
                         @checked={{get @options option.keyName}}
                         @toggle={{this.toggleOption}}
-                />
+                >
+                  {{#if  (not-eq (t option.translationKey) (t option.translationKeySmall)) }}
+                    <span class="auk-u-text-small auk-u-muted">({{t option.translationKeySmall}})</span>
+                  {{/if}}
+                </WebComponents::AuCheckbox>
               {{/each}}
             </WebComponents::AuCheckboxList>
           </div>
