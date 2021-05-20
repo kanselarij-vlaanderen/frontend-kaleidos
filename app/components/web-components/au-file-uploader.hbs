@@ -38,7 +38,7 @@
         {{else if queue.files.length}}
           {{uploadedFileLength}}
           {{t "files-of"}}
-          {{fileQueue.files.length}}
+          {{queue.files.length}}
           {{t "uploading"}}
         {{else if dropzone.supported}}
           {{#if this.multipleFiles}}
@@ -48,14 +48,14 @@
           {{/if}}
         {{/if}}
       </span>
-      {{#if (gt fileQueue.files.length 0)}}
+      {{#if (gt queue.files.length 0)}}
         <span>
           {{ember-progress-bar
-            progress=(div this.uploadedFileLength fileQueue.files.length)
+            progress=(div this.uploadedFileLength queue.files.length)
             options=(hash strokeWidth=2 duration=1000)
           }}
           {{format-number
-            (mult (div this.uploadedFileLength fileQueue.files.length) 100)
+            (mult (div this.uploadedFileLength queue.files.length) 100)
             style="decimal"
             maximumFractionDigits="0"
           }}
