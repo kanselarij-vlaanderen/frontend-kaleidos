@@ -11,8 +11,6 @@ export default class FileUploader extends Component {
 
   @service fileQueue;
 
-  tagName = 'span';
-
   @tracked uploadedFileLength = null;
 
   @tracked filesInQueue = alias('fileQueue.files');
