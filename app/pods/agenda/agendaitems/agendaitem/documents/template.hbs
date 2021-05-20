@@ -25,29 +25,29 @@
     {{/if}}
   </WebComponents::AuToolbar::Group>
 </WebComponents::AuToolbar>
-  {{#if this.governmentCanViewDocuments}}
-    {{#unless this.loadData.isRunning}}
-      {{#if this.isEnabledPieceEdit}}
-        <Documents::BatchDocumentEdit
-          @pieces={{this.model.pieces}}
-          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
-          @onCloseEdit={{this.disablePieceEdit}}
-        />
-      {{else}}
-        <Documents::DocumentCardList
-          @pieces={{this.model.pieces}}
-          @onOpenUploadModal={{this.ensureFreshData}}
-          @onAddPiece={{perform this.addPiece}}
-          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
-          @didDeleteContainer={{this.refresh}}
-        />
-      {{/if}}
-    {{/unless}}
-  {{else}}
-    <div class="auk-u-mt-2">
-      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-    </div>
-  {{/if}}
+{{#if this.governmentCanViewDocuments}}
+  {{#unless this.loadData.isRunning}}
+    {{#if this.isEnabledPieceEdit}}
+      <Documents::BatchDocumentEdit
+        @pieces={{this.model.pieces}}
+        @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+        @onCloseEdit={{this.disablePieceEdit}}
+      />
+    {{else}}
+      <Documents::DocumentCardList
+        @pieces={{this.model.pieces}}
+        @onOpenUploadModal={{this.ensureFreshData}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+        @didDeleteContainer={{this.refresh}}
+      />
+    {{/if}}
+  {{/unless}}
+{{else}}
+  <div class="auk-u-mt-2">
+    <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
+  </div>
+{{/if}}
 
 {{#if this.currentSession.isEditor}}
   <div class="auk-u-mb-4">
