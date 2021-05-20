@@ -1,4 +1,4 @@
-<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{this.fullHeight}}">
+<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{if @fullHeight "auk-file-upload--full-height"}}">
   <FileDropzone
     @name="files"
     @class="auk-file-upload__content"

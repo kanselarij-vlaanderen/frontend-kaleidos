@@ -44,11 +44,4 @@ export default class FileUploader extends Component {
     this.uploadedFileLength = 0;
     this.uploadFileTask.perform(file);
   }
-
-  get fullHeight() {
-    if (this.args.fullHeight) {
-      return 'auk-file-upload--full-height';
-    }
-    return null;
-  }
 }
