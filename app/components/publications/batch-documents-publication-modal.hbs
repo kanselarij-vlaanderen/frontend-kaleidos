@@ -1,7 +1,5 @@
 <WebComponents::AuModal>
-  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{this.onCancel}}>
-
-  </WebComponents::AuModal::Header>
+  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{this.onCancel}} />
   <WebComponents::AuModal::Body>
     {{!-- template-lint-disable table-groups --}}
     <table class="auk-table auk-table--styled auk-table--bordered">
@@ -15,7 +13,7 @@
 
       <Documents::DocumentList
         @pieces={{this.pieces}}
-        {{!-- workaround for Documents::DocumentList rendering a div --}}
+        {{!-- should be tbody tag; workaround for Documents::DocumentList rendering a div --}}
         style="display: table-row-group;"
         as |pieces|>
         {{#each pieces as |piece|}}
@@ -43,16 +41,9 @@
               </WebComponents::AuButtonToolbar>
             </td>
           </tr>
-        {{else}}
-          <tr>
-
-          </tr>
         {{/each}}
       </Documents::DocumentList>
 
     </table>
   </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer @cancelModal={{this.onCancel}}>
-
-  </WebComponents::AuModal::Footer>
 </WebComponents::AuModal>
