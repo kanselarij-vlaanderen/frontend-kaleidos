@@ -28,10 +28,10 @@
               {{#each column as |option|}}
                 <WebComponents::AuCheckbox
                         @name={{option.keyName}}
-                        @label={{t option.translationKey}}
                         @checked={{get @options option.keyName}}
                         @toggle={{this.toggleOption}}
                 >
+                  {{t option.translationKey}}
                   {{#if  (not-eq (t option.translationKey) (t option.translationKeySmall)) }}
                     <span class="auk-u-text-small auk-u-muted">({{t option.translationKeySmall}})</span>
                   {{/if}}
