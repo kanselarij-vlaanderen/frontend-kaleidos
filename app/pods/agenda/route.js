@@ -1,11 +1,15 @@
 import Route from '@ember/routing/route';
-import { inject } from '@ember/service';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Route.extend(AuthenticatedRouteMixin, {
-  sessionService: inject(),
-  agendaService: inject(),
-  router: inject(),
+export default class AgendaRoute extends Route {
+  @service sessionService;
+  @service('session') simpleAuthSession;
+  @service agendaService;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
 
   async model(params) {
     const meetingId = params.meeting_id;
@@ -22,7 +26,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
       meeting,
       agenda,
     };
-  },
+  }
 
   async updateSelectedAgenda(meeting, agenda) {
     this.set('agendaService.addedAgendaitems', []);
@@ -31,11 +35,10 @@ export default Route.extend(AuthenticatedRouteMixin, {
     if (previousAgenda) {
       await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
     }
-  },
+  }
 
-  actions: {
-    reloadModel() {
-      this.refresh();
-    },
-  },
-});
+  @action
+  reloadModel() {
+    this.refresh();
+  }
+}

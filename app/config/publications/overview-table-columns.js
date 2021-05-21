@@ -21,13 +21,6 @@ export default [
     showByDefault: true,
   },
   {
-    keyName: 'decisionDate',
-    translationKey: 'publications-decision-date',
-    translationKeySmall: 'publications-decision-date-small',
-    sortable: true,
-    showByDefault: true,
-  },
-  {
     keyName: 'publicationNumber',
     translationKey: 'publications-table-publication-number',
     translationKeySmall: 'publications-table-publication-number-small',
@@ -70,38 +63,9 @@ export default [
     sortable: true,
   },
   {
-    keyName: 'translateRequests',
-    translationKey: 'publications-table-translate-requests',
-    translationKeySmall: 'publications-table-translate-requests-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
-    keyName: 'publishPreviewRequests',
-    translationKey: 'publications-table-publish-preview-requests',
-    translationKeySmall: 'publications-table-publish-preview-requests-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',
-    showByDefault: true,
-    sortable: true,
-  },
-  {
-    keyName: 'lastEditedBy',
-    translationKey: 'publications-table-last-edited-by',
-    translationKeySmall: 'publications-table-last-edited-by-small',
-    showByDefault: true,
-    sortable: true,
-  },
-
-  {
-    keyName: 'previewTranslator',
-    translationKey: 'publications-table-preview-translator',
-    translationKeySmall: 'publications-table-preview-translator-small',
     showByDefault: true,
     sortable: true,
   },
@@ -118,14 +82,5 @@ export default [
     translationKeySmall: 'publications-table-source-small',
     showByDefault: true,
     sortable: true,
-  },
-  {
-    keyName: 'signStatus',
-    translationKey: 'publications-table-sign-status',
-    translationKeySmall: 'publications-table-sign-status-small',
-    showByDefault: true,
-    sortable: true,
   }
-
-
 ];

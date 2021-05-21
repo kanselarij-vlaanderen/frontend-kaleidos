@@ -1,14 +1,15 @@
 import Route from '@ember/routing/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { inject as service } from '@ember/service';
 
-export default Route.extend(AuthenticatedRouteMixin, {
-  currentSession: service(),
+export default class SettingsRoute extends Route {
+  @service('session') simpleAuthSession;
+  @service currentSession;
 
-  authenticationRoute: 'login',
-  redirect() {
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+
     if (!this.currentSession.isEditor) {
       this.transitionTo('');
     }
-  },
-});
+  }
+}

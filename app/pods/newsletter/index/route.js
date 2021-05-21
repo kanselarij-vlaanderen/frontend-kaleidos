@@ -1,15 +1,15 @@
 import Route from '@ember/routing/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
-export default class IndexNewsletterRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class IndexNewsletterRoute extends Route {
+  @service currentSession;
+
   queryParams = {
     sort: {
       refreshModel: true,
     },
   };
-  @service currentSession;
 
   /* Although counterintuïtive for a route named "newsletter", this model needs to
    * be centered around agenda-items, since we need to provide "blank rows" for the items
