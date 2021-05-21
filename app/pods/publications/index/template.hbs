@@ -125,14 +125,6 @@
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
-                    {{#each row.numacNumbers as |numac|}}
-                      {{numac.idName}}
-                      {{#if (not-eq numac row.numacNumbers.lastObject)}}
-                        ,&nbsp;
-                      {{/if}}
-                    {{else}}
-                      {{t "dash"}}
-                    {{/each}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
