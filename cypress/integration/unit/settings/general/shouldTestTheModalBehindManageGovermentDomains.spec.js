@@ -94,8 +94,7 @@ context('Settings page tests', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.manageInSettingsModal.add).click();
     cy.get(form.formInput).type('Andere zaken');
-    cy.get(form.formSave).scrollIntoView()
-      .click();
+    cy.get(form.formSave).click();
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length', govermentDomains.length + 1);
     // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
@@ -114,8 +113,7 @@ context('Settings page tests', () => {
     cy.get(modal.manageInSettingsModal.edit).click();
     cy.get(form.formInput).clear();
     cy.get(form.formInput).type('Test Input');
-    cy.get(form.formSave).scrollIntoView()
-      .click();
+    cy.get(form.formSave).click();
     // TODO await patch call
     cy.get('.ember-power-select-trigger').click();
     cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);

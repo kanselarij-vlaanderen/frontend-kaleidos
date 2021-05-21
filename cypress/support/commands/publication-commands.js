@@ -92,8 +92,7 @@ function addPublicationDocuments(files) {
           if (file.newFileName) {
             cy.get('.auk-form-group').eq(0)
               .within(() => {
-                cy.get('.auk-input').scrollIntoView()
-                  .clear()
+                cy.get('.auk-input').clear()
                   .type(file.newFileName);
               });
           }

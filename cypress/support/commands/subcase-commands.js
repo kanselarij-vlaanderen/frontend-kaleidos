@@ -277,8 +277,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
           .click();
       });
   }
-  cy.get(modal.modalFooterSaveButton).scrollIntoView()
-    .click();
+  cy.get(modal.modalFooterSaveButton).click();
   cy.get(mandatee.mandateePanelEdit.actions.save)
     .contains('Opslaan')
     .click();

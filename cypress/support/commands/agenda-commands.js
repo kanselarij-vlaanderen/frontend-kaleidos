@@ -127,8 +127,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get(modal.modalFooterSaveButton).scrollIntoView()
-      .click();
+    cy.get(modal.modalFooterSaveButton).click();
   });
 
   let meetingId;
@@ -197,8 +196,7 @@ function openAgendaForDate(agendaDate) {
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').scrollIntoView()
-    .click();
+  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
@@ -506,8 +504,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(modal.modalFooterSaveButton).scrollIntoView()
-        .click();
+      cy.get(modal.modalFooterSaveButton).click();
     });
 
   cy.wait('@createAgendaActivity', {

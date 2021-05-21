@@ -36,8 +36,7 @@ function addNewDocumentsInUploadModal(files, model) {
           if (file.newFileName) {
             cy.get('.auk-form-group').eq(0)
               .within(() => {
-                cy.get('.auk-input').scrollIntoView()
-                  .clear()
+                cy.get('.auk-input').clear()
                   .type(file.newFileName);
               });
           }
@@ -159,8 +158,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).scrollIntoView()
-      .click()
+    cy.get(form.formSave).click()
       .wait(`@createNewPiece_${randomInt}`, {
         timeout: 12000,
       });
@@ -475,8 +473,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).scrollIntoView()
-      .click();
+    cy.get(form.formSave).click();
   });
   cy.wait(`@createNewPiece_${randomInt}`, {
     timeout: 12000,
@@ -506,8 +503,7 @@ function addLinkedDocument(filenames) {
     });
     cy.get(document.searchForLinkedDocumentsInput).clear();
   });
-  cy.get(form.formSave).scrollIntoView()
-    .click();
+  cy.get(form.formSave).click();
   cy.log('/addLinkedDocument');
 }
 
