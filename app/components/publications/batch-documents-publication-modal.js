@@ -13,6 +13,26 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @inject store;
   @inject publicationService;
 
+  constructor() {
+    super(...arguments);
+
+    this.loadData.perform();
+  }
+
+  @task
+  *loadData() {
+    yield this.store.query('piece', {
+      filter: {
+        ':id:': this.pieces.map((piece) => piece.id).join(','),
+      },
+      include: 'file,publication-flow',
+    });
+  }
+
+  isLoading() {
+    return this.loadData.isRunning || this.saveNewPublication.isRunning;
+  }
+
   get pieces() {
     return this.args.pieces;
   }

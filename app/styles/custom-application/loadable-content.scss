@@ -1,0 +1,16 @@
+.loadable-content {
+  display: grid;
+
+  &> .content {
+    grid-area: 1/1/1/1;
+    visibility: hidden;
+
+    &._show {
+      visibility: visible;
+    }
+  }
+
+  &> .auk-loader-wrapper {
+    grid-area: 1/1/1/1;
+  }
+}

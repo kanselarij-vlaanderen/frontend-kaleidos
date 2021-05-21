@@ -1,0 +1,10 @@
+<div class="loadable-content" style="display: grid;">
+  <div class="content {{if @isLoading "show"}}">
+    {{yield}}
+  </div>
+  {{#if @isLoading}}
+    <div class="auk-loader-wrapper" style="grid-area: 1/1/1/1; ">
+      <WebComponents::AuLoader />
+    </div>
+  {{/if}}
+</div>
