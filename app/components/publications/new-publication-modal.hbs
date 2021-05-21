@@ -7,57 +7,57 @@
     @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
     <WebComponents::AuLoadableContent @isLoading={{this.isLoading}}>
-    {{#if hasError}}
-      <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
-        @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
-    {{else if (not @isViaMinisterraad)}}
-      <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
-        @icon="circle-info" />
-    {{/if}}
-    <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
-        <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
-          {{t "publications-number"}}
-        </WebComponents::AuLabel>
-        <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
-          @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
-          {{on "change" this.isPublicationNumberAlreadyTaken}} />
-        {{#if this.numberIsAlreadyUsed}}
-          <WebComponents::AuLabelError>
-            {{t "publication-number-already-taken"}}
-          </WebComponents::AuLabelError>
-        {{else if this.hasPublicationNumberError}}
-          <WebComponents::AuLabelError>
-            {{t "input-error-message"}}
-          </WebComponents::AuLabelError>
-        {{/if}}
+      {{#if hasError}}
+        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
+          @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
+      {{else if (not @isViaMinisterraad)}}
+        <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
+          @icon="circle-info" />
+      {{/if}}
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
+          <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
+            {{t "publications-number"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
+            @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
+            {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          {{#if this.numberIsAlreadyUsed}}
+            <WebComponents::AuLabelError>
+              {{t "publication-number-already-taken"}}
+            </WebComponents::AuLabelError>
+          {{else if this.hasPublicationNumberError}}
+            <WebComponents::AuLabelError>
+              {{t "input-error-message"}}
+            </WebComponents::AuLabelError>
+          {{/if}}
 
+        </div>
+        <div class='auk-form-group'>
+          <WebComponents::AuLabel for="publicationSuffixInput">
+            {{t "publications-suffix"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
+            @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
+        </div>
+        <div class='auk-form-group {{if this.hasShortTitleError 'auk-form-group--error' }}'>
+          <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
+            {{t "name-subcase"}}
+          </WebComponents::AuLabel>
+          <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
+            @disabled={{this.initTitles.isRunning}}
+            data-test-create-publication-modal-short-title-textarea />
+          {{#if this.hasShortTitleError}}
+            <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+          {{/if}}
+        </div>
+        <div class="auk-form-group">
+          <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+          <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
+            @disabled={{this.initTitles.isRunning}}
+            data-test-create-publication-modal-long-title-textarea />
+        </div>
       </div>
-      <div class='auk-form-group'>
-        <WebComponents::AuLabel for="publicationSuffixInput">
-          {{t "publications-suffix"}}
-        </WebComponents::AuLabel>
-        <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
-          @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
-      </div>
-      <div class='auk-form-group {{if this.hasShortTitleError 'auk-form-group--error' }}'>
-        <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
-          {{t "name-subcase"}}
-        </WebComponents::AuLabel>
-        <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-          @disabled={{this.initTitles.isRunning}}
-          data-test-create-publication-modal-short-title-textarea />
-        {{#if this.hasShortTitleError}}
-          <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
-        {{/if}}
-      </div>
-      <div class="auk-form-group">
-        <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
-        <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-          @disabled={{this.initTitles.isRunning}}
-          data-test-create-publication-modal-long-title-textarea />
-      </div>
-    </div>
     </WebComponents::AuLoadableContent>
   </WebComponents::AuModal::Body>
   {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
