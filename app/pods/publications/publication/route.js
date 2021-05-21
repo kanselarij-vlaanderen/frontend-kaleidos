@@ -1,8 +1,7 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import RSVP from 'rsvp';
 
-export default class PublicationRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class PublicationRoute extends Route {
   async model(params) {
     const publicationFlow = await this.store.findRecord('publication-flow', params.publication_id, {
       include: 'case,status,mode,regulation-type,contact-persons,numac-numbers,identification',

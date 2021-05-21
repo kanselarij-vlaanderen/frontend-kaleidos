@@ -1,171 +1,71 @@
 import Service, { inject as service } from '@ember/service';
+import { get } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-import {
-  get, computed
-} from '@ember/object';
-import {
-  task, waitForProperty
-} from 'ember-concurrency';
-import CONFIG from 'frontend-kaleidos/utils/config';
+const {
+  ADMIN,
+  KANSELARIJ,
+  OVRB,
+  MINISTER,
+  KABINET,
+  OVERHEID,
+  USER,
+} = CONSTANTS.ACCOUNT_GROUPS;
 
-export default Service.extend({
-  session: service('session'),
-  store: service('store'),
-  router: service(),
+export default class CurrentSessionService extends Service {
+  @service session;
+  @service store;
 
-  async logout() {
-    await this.get('session').invalidate();
-  },
+  @tracked account;
+  @tracked user;
+  @tracked group;
+  @tracked roles;
 
   async load() {
-    if (this.get('session.isAuthenticated')) {
-      const {
-        session,
-      } = this;
-      const account = await this.store.find(
-        'account',
-        get(session, 'data.authenticated.relationships.account.data.id')
-      );
-      const user = await account.get('user');
+    if (this.session.isAuthenticated) {
+      const accountId = get(this.session, 'data.authenticated.relationships.account.data.id');
+      this.account = await this.store.find('account', accountId);
+      this.user = await this.account.user;
 
-      let group = null;
-      const groupId = get(session, 'data.authenticated.relationships.group.data.id');
+      const groupId = get(this.session, 'data.authenticated.relationships.group.data.id');
       if (groupId) {
-        group = await this.store.find('account-group', groupId);
-      }
-      const roles = await get(session, 'data.authenticated.data.attributes.roles');
-      this.set('_account', account);
-      this.set('_user', user);
-      this.set('_roles', roles);
-      this.set('_group', group);
-      // The naming is off, but account,user,roles are taken for the
-      // promises in a currently public API.
-      this.setProperties({
-        accountContent: account,
-        userContent: user,
-        rolesContent: roles,
-        groupContent: group,
-      });
-
-      if (group && group.get('name')) {
-        this.set('userRole', group.get('name'));
-        this.set('userRoleId', group.get('id'));
-      } else {
-        this.set('userRole', 'no-access');
-        this.set('userRoleId', null);
+        this.group = await this.store.find('account-group', groupId);
       }
 
-      this.set('isPublic', this.checkPublicRights());
-      this.set('isViewer', this.checkViewRights());
-      this.set('isEditor', this.checkEditRights());
-      this.set('isAdmin', this.checkAdminRights());
-      this.set('isOverheid', this.checkGovernmentRights());
-      this.set('isOvrb', this.checkOvrbRights());
+      this.roles = get(this.session, 'data.authenticated.data.attributes.roles');
     }
-  },
+  }
 
-  checkOvrbRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      ovrbId,
-      adminId,
-    } = CONFIG;
-    const roles = [ovrbId, adminId];
-    return roles.includes(userRoleId);
-  },
+  get groupUri() {
+    return this.group && this.group.uri;
+  }
 
-  checkGovernmentRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      overheidId,
-    } = CONFIG;
-    const roles = [overheidId];
-    return roles.includes(userRoleId);
-  },
+  get hasValidGroup() {
+    return this.groupUri && this.groupUri !== USER;
+  }
 
-  checkPublicRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId, overheidId, ministerId, usersId, kabinetId];
-    return roles.includes(userRoleId);
-  },
+  get isAdmin() {
+    return [ADMIN].includes(this.groupUri);
+  }
 
-  checkViewRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId, overheidId, ministerId, kabinetId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId, overheidId, ministerId, kabinetId];
-    return roles.includes(userRoleId);
-  },
+  get isOvrb() {
+    return [ADMIN, OVRB].includes(this.groupUri);
+  }
 
-  checkEditRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId, kanselarijId,
-    } = CONFIG;
-    const roles = [adminId, kanselarijId];
-    return roles.includes(userRoleId);
-  },
+  get isOverheid() {
+    return [OVERHEID].includes(this.groupUri);
+  }
 
-  checkAdminRights() {
-    const {
-      userRoleId,
-    } = this;
-    const {
-      adminId,
-    } = CONFIG;
-    const roles = [adminId];
-    return roles.includes(userRoleId);
-  },
+  get isPublic() {
+    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID, USER].includes(this.groupUri);
+  }
 
-  checkIsDeveloper() {
-    // The keys in this whitelist are only indicative
-    // They are not used, but use them to describe who the id belongs to
-    // Get these from https://kaleidos.vlaanderen.be, and then check the user id via the ember data tab
-    const whitelist = {
-      frederik: CONFIG.frederik,
-      ben: CONFIG.ben,
-      rafael: CONFIG.rafael,
-    };
+  get isViewer() {
+    return [ADMIN, KANSELARIJ, MINISTER, KABINET, OVERHEID].includes(this.groupUri);
+  }
 
-    const user = this.get('user');
-
-    return Object.keys(whitelist).some((developer) => {
-      const whitelistedDeveloperId = whitelist[developer];
-      const currentUserId = user.get('id');
-
-      return currentUserId === whitelistedDeveloperId;
-    });
-  },
-
-  // constructs a task which resolves in the promise
-  makePropertyPromise: task(function *(property) {
-    yield waitForProperty(this, property);
-    return this.get(property);
-  }),
-  // this is a promise
-  account: computed('_account', function() {
-    return this.makePropertyPromise.perform('_account');
-  }),
-  // this contains a promise
-  user: computed('_user', function() {
-    return this.makePropertyPromise.perform('_user');
-  }),
-  // this contains a promise
-  group: computed('_group', function() {
-    return this.makePropertyPromise.perform('_group');
-  }),
-});
+  get isEditor() {
+    return [ADMIN, KANSELARIJ].includes(this.groupUri);
+  }
+}
