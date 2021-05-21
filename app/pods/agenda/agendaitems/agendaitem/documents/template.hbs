@@ -18,7 +18,7 @@
     {{#if (and this.currentSession.isOvrb this.model.pieces)}}
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton data-test-subcase-documents-publish type="button"
-          {{on "click" this.showPublicationModal}}>
+          {{on "click" this.openPublicationModal}}>
           {{t "agendaitem-documents-documents-for-publication"}}
         </WebComponents::AuButton>
       </WebComponents::AuToolbar::Item>
@@ -98,6 +98,8 @@
 
 {{#if this.isOpenPublicationModal}}
   <Publications::BatchDocumentsPublicationModal
+    @isViaCabinet={{true}}
+    @casePromise={{this.casePromise}}
     @pieces={{this.model.pieces}}
     @onCancel={{this.cancelPublicationModal}}
     />

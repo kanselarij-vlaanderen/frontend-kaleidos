@@ -20,9 +20,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;
-  @tracked isOpenPublicationModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
+
+  @tracked isOpenPublicationModal = false;
+  @tracked casePromise = undefined;
 
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;
@@ -182,7 +184,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  showPublicationModal() {
+  async openPublicationModal() {
+    this.casePromise = this.agendaitem.get('agendaActivity.subcase.case');
     this.isOpenPublicationModal = true;
   }
 

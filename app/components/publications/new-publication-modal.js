@@ -5,6 +5,17 @@ import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
+/**
+ * @argument { Promise<{ shortTitle: string, longTitle: string, }> } initialTitlesPromise
+ * @argument { boolean } isViaCabinet
+ * @argument { () => void } onCancel
+ * @argument { (publicationProperties: {
+          number: number,
+          suffix: undefined | string,
+          shortTitle: string,
+          longTitle: string,
+        })) => Promise<void> } onSave
+ */
 export default class NewPublicationModal extends Component {
   @service publicationService;
   @service store;
@@ -19,6 +30,8 @@ export default class NewPublicationModal extends Component {
 
   constructor() {
     super(...arguments);
+
+    this.initTitles.perform();
     this.initPublicationNumber.perform();
   }
 
@@ -36,6 +49,15 @@ export default class NewPublicationModal extends Component {
 
   get hasShortTitleError() {
     return this.hasError && !this.isShortTitleValid;
+  }
+
+  @task
+  *initTitles() {
+    if (this.args.initialTitlesPromise) {
+      const initialTitles = yield this.args.initialTitlesPromise;
+      this.shortTitle = initialTitles.shortTitle;
+      this.longTitle = initialTitles.longTitle;
+    }
   }
 
   @task

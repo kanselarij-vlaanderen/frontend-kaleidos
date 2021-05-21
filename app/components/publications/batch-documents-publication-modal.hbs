@@ -26,7 +26,7 @@
               {{piece.file.extension}}
             </td>
             <td>
-              <WebComponents::AuButton>
+              <WebComponents::AuButton @icon="add" {{on 'click' (fn onNewPublication piece)}}>
                 {{t "publications-new"}}
               </WebComponents::AuButton>
             </td>
@@ -51,7 +51,14 @@
           </tr>
         {{/each}}
       </Documents::DocumentList>
-
     </table>
   </WebComponents::AuModal::Body>
 </WebComponents::AuModal>
+
+{{#if this.isOpenNewPublicationModal}}
+  <Publications::NewPublicationModal
+    @isViaCabinet={{true}}
+    @initialTitlesPromise={{this.newPublicationInitialTitlesPromise}}
+    @onSave={{perform this.saveNewPublication}}
+    @onCancel={{this.cancelNewPublication}} />
+{{/if}}

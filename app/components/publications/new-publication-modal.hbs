@@ -1,11 +1,16 @@
 <WebComponents::AuModal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @title={{t "publications-new-not-minister" }} @closeModal={{@onCancel}} />
+  <WebComponents::AuModal::Header @title={{if
+    @isViaCabinet
+    (t "publications-new-title-via-cabinet")
+    (t "publications-new-title-not-via-cabinet")
+  }}
+    @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
     {{#if hasError}}
       <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
         @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
-    {{else}}
-      <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message" }}
+    {{else if (not @isViaCabinet)}}
+      <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
         @icon="circle-info" />
     {{/if}}
     <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -39,6 +44,7 @@
           {{t "name-subcase"}}
         </WebComponents::AuLabel>
         <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
+          @disabled={{this.initTitles.isRunning}}
           data-test-create-publication-modal-short-title-textarea />
         {{#if this.hasShortTitleError}}
           <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -47,6 +53,7 @@
       <div class="auk-form-group">
         <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
         <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
+          @disabled={{this.initTitles.isRunning}}
           data-test-create-publication-modal-long-title-textarea />
       </div>
     </div>
