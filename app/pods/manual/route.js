@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
 
 export default class ManualRoute extends Route {

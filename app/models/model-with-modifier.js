@@ -26,7 +26,7 @@ export default ModelWithToasts.extend({
       }
 
       case 'deleted': {
-        return parentSave.call(this, ...arguments);
+        break;
       }
       case undefined: {
         await this.preEditOrSaveCheck();
@@ -38,11 +38,12 @@ export default ModelWithToasts.extend({
         break;
       }
     }
-    this.set('modified', moment().utc()
-      .toDate());
-    await this.currentSession.get('user').then((user) => {
-      this.set('modifiedBy', user);
-    });
+
+    if (['created', 'updated'].includes(dirtyType)) {
+      this.set('modified', new Date());
+      this.set('modifiedBy', this.currentSession.user);
+    }
+
     return parentSave.call(this, ...arguments);
   },
 
