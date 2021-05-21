@@ -79,7 +79,7 @@ function loginFlow(name) {
   cy.server();
   cy.route('POST', '/mock/sessions').as('mockLogin');
   cy.visit('mock-login');
-  cy.get('.grid', {
+  cy.get('[data-test-mock-login-list]', {
     timeout: 12000,
   }).within(() => {
     cy.contains(name).click()

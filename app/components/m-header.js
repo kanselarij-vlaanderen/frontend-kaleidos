@@ -4,32 +4,27 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import Component from '@glimmer/component';
 
+const environmentNames = {
+  localhost: 'LOCAL',
+  'kaleidos-dev.vlaanderen.be': 'DEV',
+  'kaleidos-test.vlaanderen.be': 'TEST',
+};
 
 export default class MHeader extends Component {
+  @service session;
   @service currentSession;
   @service router;
 
   constructor() {
     super(...arguments);
-    if (window.location.href.indexOf('http://localhost') === 0) {
-      this.environmentName = 'LOCAL';
-      this.environmentClass = 'vlc-environment-pill--local';
-    }
 
-    if (window.location.href.indexOf('https://kaleidos-dev.vlaanderen.be') === 0) {
-      this.environmentName = 'DEV';
-      this.environmentClass = 'vlc-environment-pill--dev';
-    }
-
-    if (window.location.href.indexOf('https://kaleidos-test.vlaanderen.be') === 0) {
-      this.environmentName = 'TEST';
-      this.environmentClass = 'vlc-environment-pill--test';
-    }
-
-    if (window.location.href.indexOf('https://kaleidos.vlaanderen.be') === 0
-      && this.currentSession.checkIsDeveloper()) {
-      this.environmentName = 'PROD';
-      this.environmentClass = 'vlc-environment-pill--prod';
+    const hostname = window.location.hostname;
+    if (environmentNames[hostname]) {
+      this.environmentName = environmentNames[hostname];
+      this.environmentClass = `vlc-environment-pill--${this.environmentName.toLowerCase()}`;
+    } else {
+      this.environmentName = null;
+      this.environmentClass = null;
     }
   }
 
@@ -37,16 +32,8 @@ export default class MHeader extends Component {
     return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
   }
 
-  get getFullUserName() {
-    return `${this.currentSession.userContent.firstName} ${this.currentSession.userContent.lastName}`;
-  }
-
-  get showEnvironmentName() {
-    return ['TEST', 'LOCAL', 'DEV'].indexOf(this.environmentName) >= 0;
-  }
-
   @action
-  async logout() {
-    await this.currentSession.logout();
+  logout() {
+    this.session.invalidate();
   }
 }

@@ -60,13 +60,8 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  openColumnDisplayOptionsModal() {
-    this.showTableDisplayOptions = true;
-  }
-
-  @action
-  closeColumnDisplayOptionsModal() {
-    this.showTableDisplayOptions = false;
+  toggleColumnDisplayOptions() {
+    this.showTableDisplayOptions = !this.showTableDisplayOptions ;
   }
 
   @action
