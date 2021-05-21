@@ -21,7 +21,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @action
   async onNewPublication(piece) {
     this.pieceToPublish = piece;
-    // const casePromise = this.pieceToPublish.get('agendaitems.firstObject.agendaActivity.subcase.case');
     this.newPublicationInitialTitlesPromise = await this.args.casePromise.then((case_) => ({
       shortTitle: case_.shortTitle,
       longTitle: case_.title,
@@ -31,11 +30,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   @task
-  *saveNewPublication(publication) {
+  *saveNewPublication(publicationProperties) {
     const case_ = yield this.casePromise;
-    this.publicationService.createNewPublication(publication, {
+    const publicationFlow = yield this.publicationService.createNewPublication(publicationProperties, {
       case: case_,
     });
+    this.pieceToPublish.publicationFlow = publicationFlow;
+    yield this.pieceToPublish.save();
     this.isOpenNewPublicationModal = false;
   }
 

@@ -26,9 +26,13 @@
               {{piece.file.extension}}
             </td>
             <td>
-              <WebComponents::AuButton @icon="add" {{on 'click' (fn onNewPublication piece)}}>
-                {{t "publications-new"}}
-              </WebComponents::AuButton>
+              {{#if piece.publicationFlow}}
+                {{piece.publicationFlow.identification.idName}}
+              {{else}}
+                <WebComponents::AuButton @icon="add" {{on 'click' (fn onNewPublication piece)}}>
+                  {{t "publications-new"}}
+                </WebComponents::AuButton>
+              {{/if}}
             </td>
             <td>
               <WebComponents::AuButtonToolbar>

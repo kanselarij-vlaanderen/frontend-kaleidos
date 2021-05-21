@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import PieceDetailsEdit from '../components/utils/piece-details-edit';
 
 export default class PublicationService extends Service {
   @service store;
@@ -17,7 +18,7 @@ export default class PublicationService extends Service {
    * @param {{
    *  case: Case,
    * }} viaCabinetOptions
-   * @returns
+   * @returns {PublicationFlow}
    */
   async createNewPublication(publicationProperties, viaCabinetOptions) {
     const creationDatetime = new Date();

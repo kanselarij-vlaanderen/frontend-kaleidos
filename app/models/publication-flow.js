@@ -37,7 +37,7 @@ export default class PublicationFlow extends Model {
   }) numacNumbers;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
-  @hasMany('piece') pieces;
+  @hasMany('piece') referenceDocuments;
 
   get publicationBeforeDateHasExpired() {
     return this.publishBefore
