@@ -840,5 +840,7 @@
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
-  "my-profile": "Mijn profiel"
+  "my-profile": "Mijn profiel",
+  "publication-subcase": "publicatie dossier",
+  "translation-subcase": "vertalingsdossier"
 }

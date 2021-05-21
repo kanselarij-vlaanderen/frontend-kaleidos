@@ -33,19 +33,4 @@ export default class PublicationFlow extends Model {
   }) numacNumbers;
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
-
-  get publicationBeforeDateHasExpired() {
-    return this.publishBefore
-      && this.publishBefore < new Date();
-  }
-
-  get publicationDateHasExpired() {
-    return this.publishedAt
-      && this.publishedAt < new Date();
-  }
-
-  get translationDateHasExpired() {
-    return this.translateBefore
-      && this.translateBefore < new Date();
-  }
 }

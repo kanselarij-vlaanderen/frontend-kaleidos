@@ -132,7 +132,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-                    @defaultDate={{this.publicationFlow.publicationSubcase.targetEndDate}}
+                    @defaultDate={{this.publicationSubcase.targetEndDate}}
                     @onChange={{this.setRequestedPublicationDate}}/>
           </div>
         {{/if}}
@@ -142,10 +142,10 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-                    @defaultDate={{this.publicationFlow.publicationSubcase.dueDate}}
+                    @defaultDate={{this.publicationSubcase.dueDate}}
                     @enable={{this.allowedUltimatePublicationDates}}
                     @onChange={{this.setUltimatePublicationDate}}/>
-            {{#if this.publicationFlow.publicationBeforeDateHasExpired}}
+            {{#if this.publicationSubcase.publicationDateHasExpired}}
               <div class="auk-form-help-text auk-form-help-text--warning">
                 <WebComponents::AuIcon @name="alert-triangle"/>
                 {{t "date-expired"}}
@@ -160,14 +160,14 @@
             <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
             <div class="auk-u-muted">
               {{if
-                this.publicationFlow.translateBefore
+                this.translationSubcase.dueDate
                 (moment-format
-                  this.publicationFlow.translateBefore
+                  this.translationSubcase.dueDate
                   "DD-MM-YYYY")
                 (t "not-entered-yet")
               }}
             </div>
-            {{#if this.publicationFlow.translationDateHasExpired}}
+            {{#if this.translationSubcase.translationDateHasExpired}}
               <div class="auk-form-help-text auk-form-help-text--warning">
                 <WebComponents::AuIcon @name="alert-triangle"/>
                 {{t "date-expired"}}
@@ -181,15 +181,9 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-              @defaultDate={{this.publicationFlow.publishedAt}}
+              @defaultDate={{this.publicationFlow.closingDate}}
               @onChange={{this.setPublicationDate}}
             />
-            {{#if this.publicationFlow.publicationDateHasExpired}}
-              <div class="auk-form-help-text auk-form-help-text--warning">
-                <WebComponents::AuIcon @name="alert-triangle"/>
-                {{t "date-expired"}}
-              </div>
-            {{/if}}
           </div>
         {{/if}}
 

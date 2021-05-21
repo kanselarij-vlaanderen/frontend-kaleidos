@@ -34,6 +34,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
+  @lastValue('loadPublicationSubcase') publicationSubcase;
+  @lastValue('loadTranslationSubcase') translationSubcase;
   @tracked publicationModes;
 
   constructor() {
@@ -41,6 +43,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
+    this.loadPublicationSubcase.perform();
+    this.loadTranslationSubcase.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.initializePublicationNumber.perform();
   }
@@ -67,6 +71,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *loadPublicationStatusChange() {
     const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
     return publicationStatusChange;
+  }
+
+  @task
+  *loadPublicationSubcase() {
+    const publicationSubcase = yield  this.publicationFlow.publicationSubcase;
+    return publicationSubcase;
+  }
+
+  @task
+  *loadTranslationSubcase() {
+    const translationSubcase = yield this.publicationFlow.translationSubcase;
+    return translationSubcase;
   }
 
   @task
@@ -213,36 +229,35 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setUltimatePublicationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.publishBefore = date;
-    this.notifyChanges(this.publicationFlow, 'publishBefore');
+    this.publicationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
-    this.publicationFlow.publicationSubcase.targetEndDate = selectedDates[0];
-    this.notifyChanges(this.publicationFlow.publicationSubcase, 'targetEndDate');
+    this.publicationSubcase.targetEndDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.publicationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.publicationFlow.publicationSubcase, 'dueDate');
+    this.publicationFlow.closingDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow, 'closingDate');
   }
 
   get allowedUltimateTranslationDates() {
     return [
       {
         from: new Date(),
-        to: this.publicationFlow.publicationSubcase.targetEndDate || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
+        to: this.publicationSubcase.targetEndDate || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
       }
     ];
   }
 
   @action
   setUltimateTranslationDate(selectedDates) {
-    this.publicationFlow.translationSubcase.dueDate = selectedDates[0];
-    this.notifyChanges(this.publicationFlow.translationSubcase, 'dueDate');
+    this.translationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'dueDate');
   }
 
   @restartableTask

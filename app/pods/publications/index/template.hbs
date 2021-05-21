@@ -144,12 +144,11 @@
                       {{t "dash"}}
                     {{/if}}
                   </td>
-
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if row.publicationSubcase.dueDate}}
-                      {{moment-format row.publicationSubcase.dueDate "DD-MM-YYYY"}}
+                    {{#if (and row.closingDate row.status.isPublished)}}
+                      {{moment-format row.closingDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
