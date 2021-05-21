@@ -70,7 +70,8 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(form.formSave).click();
+    cy.get(form.formSave).scrollIntoView()
+      .click();
 
     cy.wait('@createNewPiece', {
       timeout: 12000,

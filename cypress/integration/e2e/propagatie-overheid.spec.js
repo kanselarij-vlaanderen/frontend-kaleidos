@@ -51,7 +51,8 @@ context('Propagation to other graphs', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
-    cy.get(form.formSave).click();
+    cy.get(form.formSave).scrollIntoView()
+      .click();
 
     // TODO We are clicking the pill inside the document card of treatment report
     cy.get(agenda.accessLevelPill).click();

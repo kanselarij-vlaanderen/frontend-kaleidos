@@ -27,7 +27,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(systemAlert.formFields.message).type('System alert message');
 
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.get(form.formSave).click();
+    cy.get(form.formSave).scrollIntoView()
+      .click();
     // TODO await post ?
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,

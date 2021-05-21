@@ -335,6 +335,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
       cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
       cy.get(form.formSave).should('not.be.disabled')
+        .scrollIntoView()
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,

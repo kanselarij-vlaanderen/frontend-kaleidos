@@ -197,7 +197,8 @@ function openAgendaForDate(agendaDate) {
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').click();
+  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').scrollIntoView()
+    .click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');

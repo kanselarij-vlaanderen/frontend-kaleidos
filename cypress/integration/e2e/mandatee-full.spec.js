@@ -98,6 +98,7 @@ context('Full test for creating mandatees', () => {
     cy.route('POST', '/mandatees').as('postMandateeData');
     cy.get(form.formSave).should('exist')
       .should('be.visible')
+      .scrollIntoView()
       .click();
     cy.wait('@postMandateeData');
 
@@ -140,6 +141,7 @@ context('Full test for creating mandatees', () => {
 
     cy.get(form.formSave).should('exist')
       .should('be.visible')
+      .scrollIntoView()
       .click();
     cy.wait(3000);
     // TODO Fix grammar einddatum
