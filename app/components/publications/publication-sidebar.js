@@ -220,30 +220,29 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setRequestedPublicationDate(selectedDates) {
-    this.publicationFlow.publishDateRequested = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishDateRequested');
+    this.publicationFlow.publicationSubcase.targetEndDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow.publicationSubcase, 'targetEndDate');
   }
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.publishedAt = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishedAt');
+    this.publicationFlow.publicationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow.publicationSubcase, 'dueDate');
   }
 
   get allowedUltimateTranslationDates() {
     return [
       {
         from: new Date(),
-        to: this.publicationFlow.publishBefore || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
+        to: this.publicationFlow.publicationSubcase.targetEndDate || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
       }
     ];
   }
 
   @action
   setUltimateTranslationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.translateBefore = date;
-    this.notifyChanges(this.publicationFlow, 'translateBefore');
+    this.publicationFlow.translationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow.translationSubcase, 'dueDate');
   }
 
   @restartableTask

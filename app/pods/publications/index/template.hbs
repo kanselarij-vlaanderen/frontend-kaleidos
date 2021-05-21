@@ -139,8 +139,8 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if row.publishDateRequested}}
-                      {{moment-format row.publishDateRequested "DD-MM-YYYY"}}
+                    {{#if row.publicationSubcase.targetEndDate}}
+                      {{moment-format row.publicationSubcase.targetEndDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -148,12 +148,20 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedTranslationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
+                    {{#if row.translationSubcase.targetEndDate}}
+                      {{moment-format row.translationSubcase.targetEndDate "DD-MM-YYYY"}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{if row.publishedAt (moment-format row.publishedAt "DD-MM-YYYY") (t "dash") }}
+                    {{#if row.publicationSubcase.dueDate}}
+                      {{moment-format row.publicationSubcase.dueDate "DD-MM-YYYY"}}
+                    {{else}}
+                      {{t "dash"}}
+                    {{/if}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.translateRequests}}

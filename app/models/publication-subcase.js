@@ -5,6 +5,8 @@ import Model, {
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
   @attr title;
+  @attr('datetime') dueDate;
+  @attr('datetime') targetEndDate;
   @attr('datetime') created;
   @attr('datetime') modified;
 

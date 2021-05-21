@@ -132,7 +132,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-                    @defaultDate={{this.publicationFlow.publishDateRequested}}
+                    @defaultDate={{this.publicationFlow.publicationSubcase.targetEndDate}}
                     @onChange={{this.setRequestedPublicationDate}}/>
           </div>
         {{/if}}
@@ -142,7 +142,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-                    @defaultDate={{this.publicationFlow.publishBefore}}
+                    @defaultDate={{this.publicationFlow.publicationSubcase.dueDate}}
                     @enable={{this.allowedUltimatePublicationDates}}
                     @onChange={{this.setUltimatePublicationDate}}/>
             {{#if this.publicationFlow.publicationBeforeDateHasExpired}}
