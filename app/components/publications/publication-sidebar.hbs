@@ -145,12 +145,6 @@
                     @defaultDate={{this.publicationSubcase.dueDate}}
                     @enable={{this.allowedUltimatePublicationDates}}
                     @onChange={{this.setUltimatePublicationDate}}/>
-            {{#if this.publicationSubcase.publicationDateHasExpired}}
-              <div class="auk-form-help-text auk-form-help-text--warning">
-                <WebComponents::AuIcon @name="alert-triangle"/>
-                {{t "date-expired"}}
-              </div>
-            {{/if}}
           </div>
         {{/unless}}
 
@@ -160,19 +154,13 @@
             <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
             <div class="auk-u-muted">
               {{if
-                this.translationSubcase.dueDate
+                this.translationSubcase.targetEndDate
                 (moment-format
                   this.translationSubcase.dueDate
                   "DD-MM-YYYY")
                 (t "not-entered-yet")
               }}
             </div>
-            {{#if this.translationSubcase.translationDateHasExpired}}
-              <div class="auk-form-help-text auk-form-help-text--warning">
-                <WebComponents::AuIcon @name="alert-triangle"/>
-                {{t "date-expired"}}
-              </div>
-            {{/if}}
           </div>
         {{/if}}
 

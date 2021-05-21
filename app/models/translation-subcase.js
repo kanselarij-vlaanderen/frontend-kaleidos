@@ -15,9 +15,4 @@ export default class TranslationSubcase extends Model {
   @hasMany('request-activity') requestActivities;
   @hasMany('translation-activity') translationActivities;
   @hasMany('cancellation-activity') cancellationActivities;
-
-  get translationDateHasExpired() {
-    return this.dueDate
-      && this.dueDate < new Date();
-  }
 }
