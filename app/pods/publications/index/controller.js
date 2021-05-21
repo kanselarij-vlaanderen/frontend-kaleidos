@@ -61,7 +61,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   toggleColumnDisplayOptions() {
-    this.showTableDisplayOptions = !this.showTableDisplayOptions ;
+    this.showTableDisplayOptions = !this.showTableDisplayOptions;
   }
 
   @action
@@ -76,7 +76,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.publicationService.createNewPublicationNotViaMinisterraad(publication);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }

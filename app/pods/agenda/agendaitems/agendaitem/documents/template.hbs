@@ -5,19 +5,19 @@
         {{t "documents"}}
       </h4>
     </WebComponents::AuToolbar::Item>
-    {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
-      <WebComponents::AuToolbar::Item>
-        <button data-test-subcase-documents-edit class="auk-button-link" type="button"
-          {{on "click" this.enablePieceEdit}}>
-          {{t "edit"}}
-        </button>
-      </WebComponents::AuToolbar::Item>
-    {{/if}}
   </WebComponents::AuToolbar::Group>
   <WebComponents::AuToolbar::Group @position="right">
+    {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton data-test-subcase-documents-edit type="button"
+          {{on "click" this.enablePieceEdit}}>
+          {{t "edit"}}
+        </WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    {{/if}}
     {{#if (and this.currentSession.isOvrb this.model.pieces)}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-subcase-documents-publish type="button"
+        <WebComponents::AuButton data-test-subcase-documents-publication type="button"
           {{on "click" this.openPublicationModal}}>
           {{t "agendaitem-documents-documents-for-publication"}}
         </WebComponents::AuButton>
@@ -98,7 +98,6 @@
 
 {{#if this.isOpenPublicationModal}}
   <Publications::BatchDocumentsPublicationModal
-    @isViaCabinet={{true}}
     @casePromise={{this.casePromise}}
     @pieces={{this.model.pieces}}
     @onCancel={{this.cancelPublicationModal}}

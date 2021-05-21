@@ -19,7 +19,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   // new publication actions
   @action
-  async onNewPublication(piece) {
+  async openNewPublicationModal(piece) {
     this.pieceToPublish = piece;
     this.newPublicationInitialTitlesPromise = await this.args.casePromise.then((case_) => ({
       shortTitle: case_.shortTitle,
@@ -31,8 +31,8 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *saveNewPublication(publicationProperties) {
-    const case_ = yield this.casePromise;
-    const publicationFlow = yield this.publicationService.createNewPublication(publicationProperties, {
+    const case_ = yield this.args.casePromise;
+    const publicationFlow = yield this.publicationService.createNewPublicationViaMinisterraad(publicationProperties, {
       case: case_,
     });
     this.pieceToPublish.publicationFlow = publicationFlow;

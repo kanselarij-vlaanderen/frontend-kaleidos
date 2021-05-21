@@ -1,11 +1,18 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import PieceDetailsEdit from '../components/utils/piece-details-edit';
 
 export default class PublicationService extends Service {
   @service store;
   @service toaster;
   @service intl;
+
+  async createNewPublicationViaMinisterraad(publicationProperties, options) {
+    return this._createNewPublication(publicationProperties, options);
+  }
+
+  async createNewPublicationNotViaMinisterraad(publicationProperties) {
+    return this._createNewPublication(publicationProperties);
+  }
 
   /**
    *
@@ -17,14 +24,16 @@ export default class PublicationService extends Service {
    * }} publicationProperties
    * @param {{
    *  case: Case,
-   * }} viaCabinetOptions
+   * }|undefined} viaMinisterraadOptions passed when via ministerraad
    * @returns {PublicationFlow}
    */
-  async createNewPublication(publicationProperties, viaCabinetOptions) {
+  async _createNewPublication(publicationProperties, viaMinisterraadOptions) {
     const creationDatetime = new Date();
-    const case_ = viaCabinetOptions.case;
-    if (!case_) {
-      const case_ = this.store.createRecord('case', {
+    let case_;
+    if (viaMinisterraadOptions) {
+      case_ = viaMinisterraadOptions.case;
+    } else {
+      case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
         created: creationDatetime,
