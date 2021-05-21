@@ -6,6 +6,7 @@
   }}
     @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
+    <WebComponents::AuLoadableContent @isLoading={{this.isLoading}}>
     {{#if hasError}}
       <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
         @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
@@ -57,13 +58,15 @@
           data-test-create-publication-modal-long-title-textarea />
       </div>
     </div>
+    </WebComponents::AuLoadableContent>
   </WebComponents::AuModal::Body>
   {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
   <WebComponents::AuModal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel>
+          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel
+            @disabled={{this.isLoading}}>
             {{t "cancel"}}
           </WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>
@@ -73,7 +76,8 @@
           {{#if this.save.isRunning}}
             <Utils::SimpleSpinner></Utils::SimpleSpinner>
           {{else}}
-            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}>
+            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}
+              @disabled={{this.isLoading}}>
               {{t "publications-new-button-text"}}
             </WebComponents::AuButton>
           {{/if}}

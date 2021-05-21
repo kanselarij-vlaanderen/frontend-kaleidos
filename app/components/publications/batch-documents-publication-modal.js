@@ -29,7 +29,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  isLoading() {
+  get isLoading() {
     return this.loadData.isRunning || this.saveNewPublication.isRunning;
   }
 

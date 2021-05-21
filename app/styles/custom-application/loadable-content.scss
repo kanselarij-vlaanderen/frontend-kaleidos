@@ -3,10 +3,9 @@
 
   &> .content {
     grid-area: 1/1/1/1;
-    visibility: hidden;
 
-    &._show {
-      visibility: visible;
+    &.is-loading {
+      visibility: hidden;
     }
   }
 

@@ -35,6 +35,10 @@ export default class NewPublicationModal extends Component {
     this.initPublicationNumber.perform();
   }
 
+  get isLoading() {
+    return this.initTitles.isRunning && this.save.isRunning;
+  }
+
   get isPublicationNumberValid() {
     return this.number && this.number > 0 && !this.numberIsAlreadyUsed;
   }
