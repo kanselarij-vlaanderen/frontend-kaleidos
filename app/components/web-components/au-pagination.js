@@ -1,14 +1,15 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+
 export default class AuPagination extends Component {
-  currentPage= this.args.page;
-  firstPage= 0;
+  firstPage = 0;
+
+  get currentPage() {
+    return this.args.page;
+  }
 
   get totalNbOfItems() {
-    if (!this.args.total) {
-      return 0;
-    }
-    return this.args.total;
+    return this.args.total ? this.args.total : 0;
   }
 
   get lastPage() {
@@ -43,11 +44,11 @@ export default class AuPagination extends Component {
 
   @action
   nextPage() {
-    this.args.nextAction();
+    this.args.onNextPage();
   }
 
   @action
   prevPage() {
-    this.args.previousAction();
+    this.args.onPreviousPage();
   }
 }
