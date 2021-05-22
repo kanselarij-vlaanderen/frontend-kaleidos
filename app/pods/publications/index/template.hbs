@@ -195,7 +195,7 @@
             {{/each}}
           </tbody>
         </table>
-      {{else }}
+      {{else}}
         <WebComponents::AuPanel>
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
@@ -266,9 +266,4 @@
           @filter={{this.publicationFilter}}
           @onCancel={{this.cancelPublicationsFilter}}
           @onSave={{this.savePublicationsFilter}} />
-{{/if}}
-
-{{!-- LOADER --}}
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
 {{/if}}
