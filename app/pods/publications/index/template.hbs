@@ -81,7 +81,7 @@
                   <td class="auk-u-text-align--center">
                     {{#if row.remark}}
                       <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
-                      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                      <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
                         <p>
                           {{row.remark}}
                         </p>
@@ -95,19 +95,9 @@
                   <td class="auk-u-text-align--center">
                     {{#if row.urgencyLevel.isUrgent}}
                       <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
-                      <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                        <p>
-                          {{t "priority-procedure"}}
-                        </p>
-                      </EmberTooltip>
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.decisionDate}}
-                  <td>
-                    {{t "dash"}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationNumber}}
@@ -120,7 +110,7 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.regulationType}}
-                  <td>
+                  <td class="auk-u-text-nowrap">
                     {{#if row.regulationType}}
                       {{row.regulationType.label}}
                     {{else}}
@@ -129,12 +119,12 @@
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.numacNumber}}
-                  <td>
-                    {{#each row.numacNumbers as |numac|}}
-                      <WebComponents::AuPill>{{numac.name}}</WebComponents::AuPill>
+                  <td style="min-width: 180px">
+                    {{#if row.numacNumbers.length }}
+                      {{join ', ' (map-by 'idName' row.numacNumbers)}}
                     {{else}}
                       {{t "dash"}}
-                    {{/each}}
+                    {{/if}}
                   </td>
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
@@ -150,44 +140,29 @@
                   <td class="auk-u-text-nowrap">
                     {{t "dash"}}
                   </td>
+
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
                     {{if row.publishedAt (moment-format row.publishedAt "DD-MM-YYYY") (t "dash") }}
                   </td>
                 {{/if}}
-                {{#if this.tableColumnDisplayOptions.translateRequests}}
-                  <td class="auk-u-text-align--center">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.publishPreviewRequests}}
-                  <td class="auk-u-text-align--center">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
                 {{#if this.tableColumnDisplayOptions.lastEdited}}
-                  <td class="auk-u-text-nowrap">
+                  <td>
                     {{moment-format row.modified "DD-MM-YYYY"}}<br/>
                     <span class="auk-u-text-small auk-u-muted">
                       {{moment-format row.modified "HH:mm"}}
                     </span>
                   </td>
                 {{/if}}
-                {{#if this.tableColumnDisplayOptions.lastEditedBy}}
-                  <td>
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.previewTranslator}}
-                  <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
                 {{#if this.tableColumnDisplayOptions.status}}
                   <td class="auk-u-text-nowrap">
                     {{#if row.status }}
-                      {{row.status.label}}
+                      <span class="{{if row.status.isPublished "auk-u-text-success"}}
+                        {{if row.status.isWithdrawn "auk-u-text-error"}} " >
+                        {{row.status.label}}
+                      </span>
+
                       {{#if (or row.status.isWithdrawn row.status.isPaused) }}
                         <br>
                         <span class="auk-u-text-small auk-u-muted">
@@ -201,12 +176,11 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.source}}
                   <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
-                  </td>
-                {{/if}}
-                {{#if this.tableColumnDisplayOptions.signStatus}}
-                  <td class="auk-u-text-nowrap">
-                    {{t "dash"}}
+                    {{#if row.subcases }}
+                      {{t "via-cabinet"}}
+                    {{else}}
+                      {{t "not-via-cabinet"}}
+                    {{/if}}
                   </td>
                 {{/if}}
                 <td>
@@ -260,8 +234,22 @@
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
-          {{on "click" this.openColumnDisplayOptionsModal}}
+          {{on "click" this.toggleColumnDisplayOptions}}
         />
+        <AttachPopover
+                @class="auk-popover"
+                @showOn="click"
+                @placement="top"
+                @hideOn="click"
+                @isShown={{this.showTableDisplayOptions}}
+                @renderInPlace={{false}}
+        >
+          <Publications::OverviewTableDisplayConfigModal
+                  @options={{this.tableColumnDisplayOptions}}
+                  @onChange={{this.changeColumnDisplayOptions}}
+                  @onClose={{this.toggleColumnDisplayOptions}}
+          />
+        </AttachPopover>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
@@ -278,12 +266,5 @@
           @filter={{this.publicationFilter}}
           @onCancel={{this.cancelPublicationsFilter}}
           @onSave={{this.savePublicationsFilter}} />
-{{/if}}
-{{#if this.showTableDisplayOptions}}
-  <Publications::OverviewTableDisplayConfigModal
-          @options={{this.tableColumnDisplayOptions}}
-          @onChange={{this.changeColumnDisplayOptions}}
-          @onClose={{this.closeColumnDisplayOptionsModal}}
-  />
 {{/if}}
 
