@@ -46,8 +46,8 @@
         @page={{page}}
         @nbOfItems={{results.length}}
         @size={{size}}
-        @nextAction={{action 'nextPage'}}
-        @previousAction={{action 'prevPage'}}
+        @onNextPage={{action 'nextPage'}}
+        @onPreviousPage={{action 'prevPage'}}
         @total={{results.meta.count}} />
     {{/if}}
   </div>
