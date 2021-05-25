@@ -65,7 +65,7 @@ export default class NewPublicationModal extends Component {
           suffix: isBlank(this.suffix) ? undefined : this.suffix,
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
-          publishBefore: this.publicationDate,
+          publicationDate: this.publicationDate,
         });
     }
   }
@@ -77,7 +77,6 @@ export default class NewPublicationModal extends Component {
 
   @action
   setPublicationDate(selectedDates) {
-    console.log(selectedDates);
     this.publicationDate = selectedDates[0];
   }
 }
