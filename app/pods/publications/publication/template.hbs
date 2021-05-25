@@ -1,12 +1,22 @@
-{{ page-title this.casePath }}
+{{page-title
+  (concat (t "publication-flow") " " this.model.identification.idName)
+}}
 <WebComponents::AuNavbar @border="bottom" @skin="gray-100" @auto="true">
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
-                  data-test-publication-detail-menu-publication-number>
-            {{uppercase this.casePath}}
+            data-test-publication-detail-menu-publication-number>
+            {{uppercase (t "publication-flow")}}
+            -
+            {{#if this.model.case.subcases}}
+              {{uppercase (t "via-cabinet")}}
+            {{else}}
+              {{uppercase (t "not-via-cabinet")}}
+            {{/if}}
+            -
+            {{uppercase this.model.identification.idName}}
           </span>
           <WebComponents::AuAbbreviatedText
             data-test-publication-detail-menu-short-title

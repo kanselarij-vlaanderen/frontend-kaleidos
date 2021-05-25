@@ -147,7 +147,7 @@ context('Publications tests', () => {
       });
     cy.wait('@getNewPublicationDetail');
     cy.get(publicationSelectors.publicationDetailHeaderShortTitle).should('contain', shortTitle);
-    cy.get(publicationSelectors.publicationDetailHeaderPublicationNumber).should('contain', `PUBLICATIE - NIET VIA MINISTERRAAD - ${numberToCheck}`);
+    cy.contains(publicationSelectors.publicationDetailHeaderPublicationNumber, `PUBLICATIE - NIET VIA MINISTERRAAD - ${numberToCheck}`).should('exist');
   });
 
   it('should edit inscription and this data must be visible in the overview', () => {
