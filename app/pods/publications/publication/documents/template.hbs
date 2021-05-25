@@ -172,16 +172,6 @@
       @onCancel={{this.hidePieceUploadModal}} />
   {{/if}}
 
-
-  {{!-- LOADER --}}
-
-  {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay/>
-  {{/if}}
-
-
-
-
   {{!-- EDIT PIECE DETAILS --}}
 
   {{#if this.showPieceEditor}}
@@ -202,13 +192,6 @@
             @message={{t "delete-document-message" }}
             @cancel={{action this.cancelDeleteExistingPiece}}
             @verify={{perform this.verifyDeleteExistingPiece}}
-    />
-  {{/if}}
-
-  {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay
-            @title={{t "loading-text"}}
-            @message={{t "loading-text"}}
     />
   {{/if}}
 </div>
