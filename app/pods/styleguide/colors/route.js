@@ -1,7 +1,6 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 
-export default class ColorsRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class ColorsRoute extends Route {
   model() {
     return [
       {
@@ -75,10 +74,10 @@ export default class ColorsRoute extends Route.extend(AuthenticatedRouteMixin) {
             name: '$au-yellow-300 ', hex: '#FEE539',
           },
           {
-            name: '$au-yellow-400 ', hex: '#FFC515',
+            name: '$au-yellow-500 ', hex: '#FFC515',
           },
           {
-            name: '$au-yellow-600 ', hex: '#7F6E3B',
+            name: '$au-yellow-700 ', hex: '#997300',
           },
           {
             name: '$au-yellow-900 ', hex: '#473D21',
@@ -101,10 +100,10 @@ export default class ColorsRoute extends Route.extend(AuthenticatedRouteMixin) {
             name: '$au-green-500 ',  hex: '#8BAE00',
           },
           {
-            name: '$au-green-700 ',  hex: '#5F750B',
+            name: '$au-green-700 ',  hex: '#238000',
           },
           {
-            name: '$au-green-900 ',  hex: '#323D08',
+            name: '$au-green-900 ',  hex: '#030303',
           }
         ],
       },
@@ -118,7 +117,7 @@ export default class ColorsRoute extends Route.extend(AuthenticatedRouteMixin) {
             name: '$au-red-200 ', hex: '#F7E3E3',
           },
           {
-            name: '$au-red-500 ', hex: '#FF4141',
+            name: '$au-red-500 ', hex: '#DB3434',
           },
           {
             name: '$au-red-600 ', hex: '#D92626',

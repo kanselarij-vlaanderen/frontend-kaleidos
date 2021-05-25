@@ -1,0 +1,79 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Avatar" />
+
+<StyleguideSample
+        @title="Small"
+        @snippet="avatar-small.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-small --}}
+  <WebComponents::AuAvatar @icon="user" @size="small" />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Regular"
+        @snippet="avatar-regular.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-regular --}}
+  <WebComponents::AuAvatar @icon="user" />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Image"
+        @snippet="avatar-image.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-image --}}
+  <WebComponents::AuAvatar @image="/assets/icons/avatar-hilde-crevits.jpg" @name="Hilde Crevits" />
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Avatar & text"
+        @snippet="avatar-avatar-and-text.hbs"
+>
+  {{!-- BEGIN-SNIPPET avatar-avatar-and-text --}}
+  <WebComponents::AuAvatar @icon="user" @size="small" @name="Jan Jambon">
+    <p>Jan Jambon</p>
+  </WebComponents::AuAvatar>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@size</code></td>
+      <td>string</td>
+      <td><code>small</code> (optional)</td>
+      <td>Determines the sizes of the avatar</td>
+    </tr>
+    <tr>
+      <td><code>@icon</code></td>
+      <td>string</td>
+      <td>Name of the icon</td>
+      <td>Determines the icon</td>
+    </tr>
+    <tr>
+      <td><code>@image</code></td>
+      <td>string</td>
+      <td>Path to the image file</td>
+      <td>Determines the image</td>
+    </tr>
+    <tr>
+      <td><code>@name</code></td>
+      <td>string</td>
+      <td>Name of the individual depicted (optional)</td>
+      <td>Determines the name of the individual depicted (concerning accessibility)</td>
+    </tr>
+  </tbody>
+</table>

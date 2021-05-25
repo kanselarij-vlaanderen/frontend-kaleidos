@@ -1,7 +1,7 @@
-{{agenda/printable-agenda/list-section/item-group/item-group-header
-  mandatees=items.firstObject.sortedMandatees
-}}
-<div class="vlc-printable-agenda-list__item-list">
+<div class="auk-u-mt-4">
+  {{agenda/printable-agenda/list-section/item-group/item-group-header
+    mandatees=items.firstObject.sortedMandatees
+  }}
   {{#each items as |agendaitem|}}
     <div value={{agendaitem.priority}}>
       {{agenda/printable-agenda/list-section/item-group/item

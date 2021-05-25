@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 
 /*
@@ -14,29 +13,11 @@ import { inject as service } from '@ember/service';
 export default class ActivityRequestPanel extends Component {
   @service store;
   @tracked isCollapsed = false;
-  @tracked finished;
+  @tracked finished; // TODO check if you want/need this or delete
 
   get isTranslation() {
     return this.args.mode === 'translation';
   }
-
-  constructor() {
-    super(...arguments);
-    this.fetchClosedStatus();
-  }
-
-
-  async fetchClosedStatus() {
-    const closedStatus = await this.store.findRecord('activity-status', CONFIG.ACTIVITY_STATUSSES.closed.id);
-    const activityStatus = await this.args.activity.get('status');
-
-    if (activityStatus.id === closedStatus.id) {
-      this.finished = true;
-    } else {
-      this.finished = false;
-    }
-  }
-
 
   @action
   collapsePanel() {

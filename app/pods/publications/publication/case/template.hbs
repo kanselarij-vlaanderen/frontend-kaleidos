@@ -23,11 +23,11 @@
           <WebComponents::AuPanel::Body>
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-              <WebComponents::AuTextarea @rows="2" @value={{this.model.case.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+              <WebComponents::AuTextarea @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
             </div>
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-              <WebComponents::AuTextarea @rows="4" @value={{this.model.case.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+              <WebComponents::AuTextarea @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
             </div>
           </WebComponents::AuPanel::Body>
           <WebComponents::AuPanel::Footer>
@@ -71,7 +71,7 @@
                     <WebComponents::AuButtonLink
                       @route="cases.case.subcases.subcase.overview"
                       @models={{array
-                        this.model.case.id
+                        this.model.id
                         this.latestSubcaseOnMeeting.id
                       }}
                     >
@@ -90,8 +90,8 @@
                 <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
                 <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
               {{else}}
-                <h4>{{this.model.case.shortTitle}}</h4>
-                <p class="auk-u-text-prewrap">{{this.model.case.title}}</p>
+                <h4>{{this.model.shortTitle}}</h4>
+                <p class="auk-u-text-prewrap">{{this.model.title}}</p>
               {{/if}}
             </div>
           </WebComponents::AuPanel::Body>
@@ -130,7 +130,7 @@
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         {{#if (not this.latestSubcaseOnMeeting)}}
-          {{# if (gt this.model.publicationFlow.mandatees.length 0) }}
+          {{#if this.publicationFlow.mandatees }}
             <WebComponents::AuPanel::Body @noPadding="true">
               <table class="auk-table" data-test-table-mandatees>
                 <thead>
@@ -140,12 +140,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {{#each this.model.publicationFlow.mandatees as |mandatee|}}
+                  {{#each this.publicationFlow.mandatees as |mandatee|}}
                     <tr>
                       <td>
                         <div class="auk-u-flex auk-u-flex--vertical-center">
                           <WebComponents::AuBadge @icon="user"/>
-                          <span class="auk-u-mx-2">{{await mandatee.person.nameToDisplay}}</span>
+                          <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                         </div>
                       </td>
                       <td class="auk-u-text-align--right">
@@ -198,7 +198,7 @@
                     <td>
                       <div class="auk-u-flex auk-u-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
-                        <span>{{mandatee.person.nameToDisplay}}</span>
+                        <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                       </div>
                     </td>
                     {{!-- TODO Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
@@ -249,7 +249,7 @@
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
-        {{#if (not this.model.contactPersons) }}
+        {{#if (not this.contactPersons) }}
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
           </WebComponents::AuPanel::Body>
@@ -264,16 +264,16 @@
                 </tr>
               </thead>
               <tbody>
-                {{#each this.model.contactPersons as | contactPerson |}}
+                {{#each this.contactPersons as | contactPerson |}}
                   <tr>
                     <td>
                       <div class="auk-u-flex auk-u-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
                         <div class="auk-u-mx-2">
-                          <span>{{ await contactPerson.nameToDisplay }}</span>
+                          <span>{{contactPerson.nameToDisplay}}</span>
                           {{#if contactPerson.organization}}
                             <div class="auk-u-muted auk-u-text-small">
-                              {{await contactPerson.organization.name}}
+                              {{contactPerson.organization.name}}
                             </div>
                           {{/if}}
                         </div>
@@ -354,7 +354,7 @@
             <PowerSelect
                     @searchField="name"
                     @search={{this.customPowerSelectSearchFunction}}
-                    @options={{await this.allOrganizations}}
+                    @options={{this.allOrganizations}}
                     @selected={{this.selectedOrganizations}}
                     @noMatchesMessage={{t "organizations-empty-result"}}
                     @placeholder={{t "search-organization"}}
@@ -491,10 +491,4 @@
     </WebComponents::AuModal::Footer>
   </WebComponents::AuModal>
 {{/if}}
-
-  {{!-- LOADER --}}
-
-  {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay/>
-  {{/if}}
 </div>

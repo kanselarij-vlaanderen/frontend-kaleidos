@@ -1,16 +1,20 @@
 import Route from '@ember/routing/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Route.extend(AuthenticatedRouteMixin, {
+export default class AgendasRoute extends Route {
+  @service('session') simpleAuthSession;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
 
   redirect() {
     this.transitionTo('agendas.overview');
-  },
+  }
 
-  actions: {
-    refreshRoute() {
-      this._super(...arguments);
-      this.refresh();
-    },
-  },
-});
+  @action
+  refreshRoute() {
+    this.refresh();
+  }
+}

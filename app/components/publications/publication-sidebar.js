@@ -6,6 +6,7 @@ import {
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { isBlank } from '@ember/utils';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -14,22 +15,27 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    * @argument isOpen
    * @argument onCollapse
    * @argument onOpen
-   * @argument didChange: should take arguments (modifiedObject, keyName)
+   * @argument {(model, changedKeys: string[] or string) => void} didChange
+   *  on create and delete no changedKeys are passed
    */
   @service store;
   @service intl;
   @service toaster;
   @service publicationService;
 
-  // Tracked props.
   @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;
+  @tracked publicationModes;
+  @tracked publicationNumber;
+  @tracked publicationNumberSuffix;
 
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
+  @lastValue('loadPublicationSubcase') publicationSubcase;
+  @lastValue('loadTranslationSubcase') translationSubcase;
   @tracked publicationModes;
 
   constructor() {
@@ -37,7 +43,10 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
+    this.loadPublicationSubcase.perform();
+    this.loadTranslationSubcase.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
+    this.initializePublicationNumber.perform();
   }
 
   get publicationFlow() {
@@ -64,28 +73,42 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     return publicationStatusChange;
   }
 
+  @task
+  *loadPublicationSubcase() {
+    const publicationSubcase = yield  this.publicationFlow.publicationSubcase;
+    return publicationSubcase;
+  }
+
+  @task
+  *loadTranslationSubcase() {
+    const translationSubcase = yield this.publicationFlow.translationSubcase;
+    return translationSubcase;
+  }
+
+  @task
+  *initializePublicationNumber() {
+    const identification = yield this.publicationFlow.identification;
+    const structuredIdentifier = yield identification.structuredIdentifier;
+    this.publicationNumber = structuredIdentifier.localIdentifier;
+    this.publicationNumberSuffix = structuredIdentifier.versionIdentifier;
+  }
+
   @action
   setRegulationType(regulationType) {
     this.publicationFlow.regulationType = regulationType;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'regulationType');
-    }
+    this.notifyChanges(this.publicationFlow, 'regulationType');
   }
 
   @action
   setPublicationMode(publicationMode) {
     this.publicationFlow.mode = publicationMode;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'mode');
-    }
+    this.notifyChanges(this.publicationFlow, 'mode');
   }
 
   @action
   setUrgencyLevel(urgencyLevel) {
     this.publicationFlow.urgencyLevel = urgencyLevel;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'urgencyLevel');
-    }
+    this.notifyChanges(this.publicationFlow, 'urgencyLevel');
   }
 
   @action
@@ -111,14 +134,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
       startedAt: now,
       publication: this.publicationFlow,
     });
-    if (this.args.didChange) {
-      await Promise.all([
-        this.args.didChange(this.publicationFlow, ['status', 'closingDate']),
-        this.args.didChange(statusChange)
-      ]);
-      this.loadPublicationStatusChange.perform();
-      return status;
-    }
+    this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
+    this.notifyChanges(statusChange);
   }
 
   @action
@@ -135,96 +152,69 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @restartableTask
   *setPublicationNumber(event) {
+    this.publicationNumber = event.target.value;
     yield timeout(1000);
     this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
-    if (event.target.value === '') {
+    if (isBlank(this.publicationNumber)) {
       this.numberIsRequired = true;
       this.toaster.error(this.intl.t('publication-number-required'), this.intl.t('warning-title'), {
         timeOut: 5000,
       });
-      return;
+    } else {
+      this.setStructuredIdentifier();
     }
-    const publicationSuffix = this.publicationFlow.publicationSuffix;
-    this.publicationService.publicationNumberAlreadyTaken(event.target.value, publicationSuffix, this.publicationFlow.id).then((isPublicationNumberTaken) => {
-      if (isPublicationNumberTaken) {
-        this.numberIsAlreadyUsed = true;
-        let suffixText = this.intl.t('without-suffix');
-        if (publicationSuffix && publicationSuffix !== '') {
-          suffixText = `${this.intl.t('with-suffix')} '${publicationSuffix}'`;
-        }
-        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-          number: event.target.value,
-          suffix: suffixText,
-        }), this.intl.t('warning-title'), {
-          timeOut: 20000,
-        });
-        // rollback the value in the view
-        event.target.value = this.publicationFlow.publicationNumber || '';
-      } else {
-        const number = parseInt(event.target.value, 10);
-        this.publicationFlow.publicationNumber = number;
-        this.numberIsAlreadyUsed = false;
-        if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationNumber');
-        }
-      }
-    });
   }
 
   @restartableTask
-  *setPublicationSuffix(event) {
+  *setPublicationNumberSuffix(event) {
+    this.publicationNumberSuffix = isBlank(event.target.value) ? undefined : event.target.value;
     yield timeout(1000);
+    this.numberIsRequired = false;
     this.numberIsAlreadyUsed = false;
-    const publicationNumber = this.publicationFlow.publicationNumber;
-    this.publicationService.publicationNumberAlreadyTaken(publicationNumber, event.target.value, this.publicationFlow.id).then((isPublicationNumberTaken) => {
-      if (isPublicationNumberTaken) {
-        this.numberIsAlreadyUsed = true;
-        let suffixText = this.intl.t('without-suffix');
-        if (event.target.value !== '') {
-          suffixText = `${this.intl.t('with-suffix')} '${event.target.value}'`;
-        }
-        this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
-          number: publicationNumber,
-          suffix: suffixText,
-        }), this.intl.t('warning-title'), {
-          timeOut: 20000,
-        });
-        // rollback the value in the view
-        event.target.value = this.publicationFlow.publicationSuffix || '';
-      } else {
-        // TODO trimText here to remove spaces, enters ?
-        if (event.target.value !== '') {
-          this.publicationFlow.publicationSuffix = event.target.value;
-        } else {
-          this.publicationFlow.publicationSuffix = undefined;
-        }
-        this.numberIsAlreadyUsed = false;
-        if (this.args.didChange) {
-          this.args.didChange(this.publicationFlow, 'publicationSuffix');
-        }
-      }
-    });
+    this.setStructuredIdentifier();
   }
 
-  @task
-  *addNumacNumber() {
-    const numacNumber = yield this.store.createRecord('numac-number', {
-      name: this.newNumacNumber,
-      publicationFlow: this.publicationFlow,
-    });
-    if (this.args.didChange) {
-      this.args.didChange(numacNumber);
+  async setStructuredIdentifier() {
+    const isPublicationNumberTaken = await this.publicationService.publicationNumberAlreadyTaken(this.publicationNumber, this.publicationNumberSuffix, this.publicationFlow.id);
+    if (isPublicationNumberTaken) {
+      this.numberIsAlreadyUsed = true;
+      this.toaster.error(this.intl.t('publication-number-already-taken-with-params', {
+        number: this.publicationNumber,
+        suffix: isBlank(this.publicationNumberSuffix) ? this.intl.t('without-suffix') : `${this.intl.t('with-suffix')} '${this.publicationNumberSuffix}'`,
+      }), this.intl.t('warning-title'), {
+        timeOut: 5000,
+      });
+    } else {
+      const identification = await this.publicationFlow.identification;
+      const structuredIdentifier = await identification.structuredIdentifier;
+      const number = parseInt(this.publicationNumber, 10);
+      structuredIdentifier.localIdentifier = number;
+      structuredIdentifier.versionIdentifier = this.publicationNumberSuffix;
+      identification.idName = this.publicationNumberSuffix ? `${number} ${this.publicationNumberSuffix}` : `${number}`;
+      this.numberIsAlreadyUsed = false;
+      this.notifyChanges(identification, ['idName']);
+      this.notifyChanges(structuredIdentifier, ['localIdentifier', 'versionIdentifier']);
     }
+  }
+
+  @action
+  addNumacNumber() {
+    const numacNumber = this.store.createRecord('identification', {
+      idName: this.newNumacNumber,
+      agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+      publicationFlowForNumac: this.publicationFlow,
+    });
+
+    this.notifyChanges(numacNumber);
     this.newNumacNumber = '';
   }
 
-  @task
-  *unlinkNumacNumber(numacNumber) {
+  @action
+  deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
-    if (this.args.didChange) {
-      yield this.args.didChange(numacNumber);
-    }
+
+    this.notifyChanges(numacNumber);
   }
 
   get allowedUltimatePublicationDates() {
@@ -239,45 +229,35 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setUltimatePublicationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.publishBefore = date;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishBefore');
-    }
+    this.publicationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
   setRequestedPublicationDate(selectedDates) {
-    this.publicationFlow.publishDateRequested = selectedDates[0];
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishDateRequested');
-    }
+    this.publicationSubcase.targetEndDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.publishedAt = selectedDates[0];
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'publishedAt');
-    }
+    this.publicationFlow.closingDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow, 'closingDate');
   }
 
   get allowedUltimateTranslationDates() {
     return [
       {
         from: new Date(),
-        to: this.publicationFlow.publishBefore || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
+        to: this.publicationSubcase.targetEndDate || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
       }
     ];
   }
 
   @action
   setUltimateTranslationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.translateBefore = date;
-    if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'translateBefore');
-    }
+    this.translationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'dueDate');
   }
 
   @restartableTask
@@ -285,8 +265,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const newValue = event.target.value;
     this.publicationFlow.remark = newValue;
     yield timeout(1000);
+    this.notifyChanges(this.publicationFlow, 'remark');
+  }
+
+  /**
+   *
+   * @param {Model} model
+   * @param {string[] or string} changedKeys
+   */
+  notifyChanges(model, changedKeys) {
     if (this.args.didChange) {
-      this.args.didChange(this.publicationFlow, 'remark');
+      this.args.didChange(model, changedKeys);
     }
   }
 }

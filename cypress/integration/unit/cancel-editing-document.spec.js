@@ -77,7 +77,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
@@ -86,7 +86,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -284,7 +284,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
 
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
@@ -298,7 +298,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
@@ -311,7 +311,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}TER`);
@@ -351,7 +351,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
-    cy.get('.vlc-scroll-wrapper__body').within(() => {
+    cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}QUATER`);

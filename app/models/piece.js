@@ -47,7 +47,7 @@ export default Model.extend({
     inverse: null,
   }),
   cases: hasMany('case', {
-    inverse: null,
+    inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),
   // serialize: false ensures the relation (which may contain stale data due to custom service) is not send in patch calls
   agendaitems: hasMany('agendaitem', {
@@ -60,14 +60,22 @@ export default Model.extend({
   }),
 
   downloadFilename: computed('name', 'file.extension', async function() {
-    const filename = `${await this.get('name')}.${await this.get('file.extension')}`;
-    return sanitize(filename, { // file-system-safe
-      replacement: '_',
-    });
+    const file = await this.get('file');
+    if (file) {
+      const filename = `${this.name}.${file.extension}`;
+      return sanitize(filename, { // file-system-safe
+        replacement: '_',
+      });
+    }
+    return undefined;
   }),
 
   downloadFileLink: computed('downloadFilename', 'file.downloadLink', async function() {
-    return `${await this.get('file.downloadLink')}?name=${encodeURIComponent(await this.get('downloadFilename'))}`; // url-safe
+    const file = await this.get('file');
+    if (file) {
+      return `${file.downloadLink}?name=${encodeURIComponent(await this.get('downloadFilename'))}`; // url-safe
+    }
+    return undefined;
   }),
 
   changeAccessLevelLastModified() {

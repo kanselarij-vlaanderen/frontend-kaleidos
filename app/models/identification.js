@@ -1,9 +1,16 @@
-import DS from 'ember-data';
+import Model, {
+  attr, belongsTo
+} from '@ember-data/model';
 
-const {
-  Model, attr,
-} = DS;
+export default class Identification extends Model {
+  @attr('string') idName;
+  @attr('string') agency;
 
-export default Model.extend({
-  identification: attr('string'),
-});
+  @belongsTo('publication-flow', {
+    inverse: 'identification',
+  }) publicationFlow;
+  @belongsTo('publication-flow', {
+    inverse: 'numacNumbers',
+  }) publicationFlowForNumac;
+  @belongsTo('structured-identifier') structuredIdentifier;
+}

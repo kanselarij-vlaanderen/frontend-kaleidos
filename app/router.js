@@ -63,6 +63,7 @@ Router.map(function() {
     this.route('signature', () => {});
   });
   this.route('loading', { path: '/laden', });
+  // mock-login-route as name to avoid collision with mock-login component provided by addon
   this.route('mock-login-route', { path: '/mock-login', });
   this.route('login', { path: '/aanmelden', });
 
@@ -104,6 +105,7 @@ Router.map(function() {
     this.route('alert-skins');
     this.route('alert-types');
     this.route('alert-stack');
+    this.route('avatar');
     this.route('brand');
     this.route('badge');
     this.route('button-loading');
@@ -111,6 +113,7 @@ Router.map(function() {
     this.route('button-types');
     this.route('checkboxes-radio-buttons');
     this.route('colors');
+    this.route('color-badge');
     this.route('dropdown');
     this.route('empty-state');
     this.route('form-group');

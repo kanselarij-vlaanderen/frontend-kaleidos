@@ -8,6 +8,7 @@
    ========================================================================== */
 
 @import '_colors';
+@import '_s-colors'; // sourced from "au-kaleidos-css" npm package
 $icon-font-location: '/fonts/'; // overrides the default location for flanders-icons font files
 
 // Components (loaded locally to easily read source)
@@ -44,7 +45,6 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-agenda-items-section-header';
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
-@import 'custom-components/vlc-subcase-description';
 @import 'custom-components/vlc-document-card';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
@@ -52,27 +52,11 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-components/vlc-list-section-header';
 @import 'custom-components/vlc-mock-login';
 @import 'custom-components/vlc-pagination';
-@import 'custom-components/vlc-panel-layout';
-@import 'custom-components/vlc-printable-agenda-list';
-@import 'custom-components/vlc-preview-container';
 @import 'custom-components/vlc-procedure-step';
-@import 'custom-components/_vlc-publication-overview';
-@import 'custom-components/_vlc-publication-status-selector';
-@import 'custom-components/vlc-publication-status-pill';
 @import 'custom-components/vlc-rdfa-editor';
-@import 'custom-components/vlc-scroll-wrapper';
-@import 'custom-components/vlc-search';
-@import 'custom-components/vlc-side-nav';
 @import 'custom-components/vlc-status-timeline';
 @import 'custom-components/vlc-subline';
-@import 'custom-components/vlc-themes-selector';
 @import 'custom-components/vlc-toaster-button';
-@import 'custom-components/vlc-user';
-@import 'custom-components/vlc-user-management-table';
-@import 'custom-components/vlc-link-actions';
-@import 'custom-components/vlc-login';
-@import 'custom-components/vlc-color-badge-holder';
-@import 'custom-components/vlc-color-badge';
 @import 'custom-components/vlc-decision-result-select';
 @import 'custom-components/vlc-numac-nummer-list';
 
@@ -110,8 +94,8 @@ $icon-font-location: '/fonts/'; // overrides the default location for flanders-i
 @import 'custom-application/loader';
 
 // Components
-@import "auk-standalone"; // sourced from "au-kaleidos-css" npm package
-@import "au-kaleidos-css/auk-additions"; // sourced locally
+@import 'auk-standalone'; // sourced from "au-kaleidos-css" npm package
+@import 'au-kaleidos-css/auk-additions'; // sourced locally
 
 // (not sure about naming/location)
 @import 'custom-application/m-header';

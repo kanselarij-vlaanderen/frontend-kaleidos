@@ -13,13 +13,15 @@
   showPrintButton=showPrintButton
 }}
 {{#if (not isLoading)}}
-  <div class="vlc-panel-layout">
+  <div class="auk-panel-layout">
     {{#unless shouldHideNav}}
-      {{agenda/side-nav
-        agendas=this.model.meeting.sortedAgendas
-        currentAgenda=this.model.agenda
-        selectAgenda=(action "selectAgenda")
-      }}
+      <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
+        {{agenda/side-nav
+          agendas=this.model.meeting.sortedAgendas
+          currentAgenda=this.model.agenda
+          selectAgenda=(action "selectAgenda")
+        }}
+      </div>
     {{/unless}}
     {{outlet}}
   </div>

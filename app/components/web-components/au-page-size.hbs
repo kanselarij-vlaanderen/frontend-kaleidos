@@ -1,0 +1,13 @@
+<div class="auk-form-group-layout auk-form-group-layout--standard">
+  <div class="auk-form-group">
+    <PowerSelect
+      class="auk-select auk-select--block"
+      @searchEnabled={{false}}
+      @options={{this.sizeOptions}}
+      @selected={{@selectedSize}}
+      @onchange={{@onChange}}
+    as |option|>
+      {{option}}
+    </PowerSelect>
+  </div>
+</div>
