@@ -13,17 +13,21 @@
         <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
           {{t "publications-number"}}
         </WebComponents::AuLabel>
-        <WebComponents::AuInput type="number" id="publicationNumberInput" style="max-width: 10rem"
-          @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
-          {{on "change" this.isPublicationNumberAlreadyTaken}} />
-        <WebComponents::AuInput type="text" id="publicationSuffixInput" style="max-width: 6.5rem"
-                                @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
-        <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted" class="auk-u-mx"/>
-        <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
-          <p>
-            {{t "new-publication-tooltip"}}
-          </p>
-        </EmberTooltip>
+        <div class=" auk-u-flex auk-u-flex--vertical-center">
+          <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-u-mr" style="max-width: 10rem"
+                                  @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
+            {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          <WebComponents::AuInput type="text" id="publicationSuffixInput" style="max-width: 6.5rem"
+                                  @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          <div class="auk-icon auk-icon--default auk-icon--muted auk-u-mx" >
+            <i class="ki ki-circle-info"></i>
+            <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
+              <p>
+                {{t "new-publication-tooltip"}}
+              </p>
+            </EmberTooltip>
+          </div>
+        </div>
         {{#if this.numberIsAlreadyUsed}}
           <WebComponents::AuLabelError>
             {{t "publication-number-already-taken"}}
