@@ -75,20 +75,26 @@ export default class PublicationsIndexRoute extends Route {
         descending = false;
       }
       // note that the "dasherize" here is used in order to keep the original column keyName's
+      if (qpSort === dasherize('caseName')) {
+        apiSort = 'case.short-title';
+      }
       if (qpSort === dasherize('publicationNumber')) {
         // show the most recent publication first if publication-number is the same
         apiSort = 'identification.structured-identifier.local-identifier,-created';
+      } else if (qpSort === dasherize('speedProcedure')) {
+        apiSort = 'urgency-level.position';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
       } else if (qpSort === dasherize('requestedPublicationDate')) {
-        apiSort = 'publish-before';
+        apiSort = 'publication-subcase.target-end-date';
       } else if (qpSort === dasherize('publicationDate')) {
-        apiSort = 'published-at';
+        apiSort = 'publication-subcase.due-date';
+      } else if (qpSort === dasherize('requestedTranslationDate')) {
+        apiSort = 'closing-date';
       } else if (qpSort === dasherize('lastEdited')) {
         apiSort = 'modified';
-      } else if (qpSort === dasherize('withdrawnDate') || qpSort === dasherize('pauseDate')) {
-        // TODO: might want to sort on status too, since bot withdrawal & pause use the same sort field behind the scenes
-        apiSort = 'publication-status-change.started-at';
+      } else if (qpSort === dasherize('status')) {
+        apiSort = 'publication-status.position,publication-status-change.started-at';
       }
       if (apiSort && descending) {
         apiSort = `-${apiSort}`;

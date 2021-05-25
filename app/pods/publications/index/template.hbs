@@ -39,18 +39,20 @@
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
                   {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
                   {{#if (eq column.keyName "caseName")}}
-                    <ThSortable
-                          @currentSorting={{this.sort}}
-                          @field={{column.keyName}}
-                          @label={{t column.translationKeySmall}}
-                          @class="auk-u-text-nowrap auk-case-name-header"/>
+                    <Utils::ThSortable
+                      style="min-width: 25rem:"
+                      @currentSorting={{this.sort}}
+                      @field={{column.keyName}}
+                      @onChange={{fn this.sortTable column.keyName}}
+                      @label={{t column.translationKeySmall}}/>
+
                   {{else}}
                     {{#if column.sortable}}
-                      <ThSortable
-                            @currentSorting={{this.sort}}
-                            @field={{column.keyName}}
-                            @label={{t column.translationKeySmall}}
-                            @class="auk-u-text-nowrap"/>
+                      <Utils::ThSortable
+                              @onChange={{fn this.sortTable column.keyName}}
+                              @currentSorting={{this.sort}}
+                              @field={{column.keyName}}
+                              @label={{t column.translationKeySmall}}/>
                     {{else}}
                       <th class="auk-u-text-nowrap">{{t column.translationKeySmall}}</th>
                     {{/if}}
