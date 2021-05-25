@@ -1,42 +1,42 @@
-<WebComponents::AuModal @resized={{true}}>
-  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{this.onCancel}} />
+<WebComponents::AuModal @size="full-screen-padded">
+  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
   <WebComponents::AuModal::Body>
-    <Utils::LoadableContent @isLoading={{this.isLoading}}>
-      {{!-- template-lint-disable table-groups --}}
-      <table class="auk-table auk-table--styled auk-table--bordered">
-        <thead>
-          <tr>
-            <th>{{t "name"}}</th>
-            <th>{{t "document-type"}}</th>
-            <th>
-              {{t "publications-number"}}
-              <WebComponents::AuIcon @iconSkinColor="muted" @name="info-circle">
-                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-                  <p>
-                    {{t "batch-document-publication-modal-publication-number-info"}}
-                  </p>
-                </EmberTooltip>
-              </WebComponents::AuIcon>
-            </th>
-            <th />
-          </tr>
-        </thead>
-
-        <Documents::DocumentList
-          @pieces={{this.pieces}}
-          {{!-- should be tbody tag; workaround for Documents::DocumentList rendering a div --}}
-          style="display: table-row-group;"
-          as |pieces|>
-          {{#each pieces as |piece|}}
+    <Utils::LoadableContent @isLoading={{this.loadData.isRunning}}>
+      {{#unless this.loadData.isRunning}}
+        {{!-- template-lint-disable table-groups --}}
+        <table class="auk-table auk-table--styled auk-table--bordered">
+          <thead>
             <tr>
-              <td>
-                {{piece.name}}
-              </td>
-              <td>
-                {{unless this.isLoading piece.file.extension}}
-              </td>
-              <td>
-                {{#unless this.isLoading}}
+              <th>{{t "name"}}</th>
+              <th>{{t "document-type"}}</th>
+              <th>
+                {{t "publications-number"}}
+                <WebComponents::AuIcon @iconSkinColor="muted" @name="info-circle">
+                  <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                    <p>
+                      {{t "batch-document-publication-modal-publication-number-info"}}
+                    </p>
+                  </EmberTooltip>
+                </WebComponents::AuIcon>
+              </th>
+              <th />
+            </tr>
+          </thead>
+
+          <Documents::DocumentList
+            @pieces={{this.pieces}}
+            {{!-- should be tbody tag; workaround for Documents::DocumentList rendering a div --}}
+            style="display: table-row-group;"
+            as |pieces|>
+            {{#each pieces as |piece|}}
+              <tr>
+                <td>
+                  {{piece.name}}
+                </td>
+                <td>
+                  {{piece.file.extension}}
+                </td>
+                <td>
                   {{#if piece.publicationFlow}}
                     {{piece.publicationFlow.identification.idName}}
                   {{else}}
@@ -44,30 +44,30 @@
                       {{t "publications-new"}}
                     </WebComponents::AuButton>
                   {{/if}}
-                {{/unless}}
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton
-                    @layout="icon-only"
-                    @icon="download"
-                    @skin="borderless"
-                    @href="{{unless this.isLoading (await piece.downloadFileLink)}}"
-                    download
-                    >
-                  </WebComponents::AuButton>
-                  <WebComponents::AuButton
-                    @layout="icon-only"
-                    @icon="book"
-                    @skin="borderless"
-                    @href="{{piece.viewDocumentURL}}">
-                  </WebComponents::AuButton>
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
-          {{/each}}
-        </Documents::DocumentList>
-      </table>
+                </td>
+                <td>
+                  <WebComponents::AuButtonToolbar>
+                    <WebComponents::AuButton
+                      @layout="icon-only"
+                      @icon="download"
+                      @skin="borderless"
+                      @href={{await piece.downloadFileLink}}
+                      download
+                      />
+                    <WebComponents::AuButton
+                      @layout="icon-only"
+                      @icon="book"
+                      @skin="borderless"
+                      @href={{piece.viewDocumentURL}}
+                      target="_blank"
+                      />
+                  </WebComponents::AuButtonToolbar>
+                </td>
+              </tr>
+            {{/each}}
+          </Documents::DocumentList>
+        </table>
+      {{/unless}}
     </Utils::LoadableContent>
   </WebComponents::AuModal::Body>
 </WebComponents::AuModal>

@@ -23,8 +23,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
 
-  @tracked isOpenPublicationModal = false;
-  @tracked casePromise = undefined;
+  @tracked publicationModalIsOpen = false;
+  @tracked publicationModalDataPromise = undefined;
 
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;
@@ -185,13 +185,19 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   async openPublicationModal() {
-    this.casePromise = this.agendaitem.get('agendaActivity.subcase.case');
-    this.isOpenPublicationModal = true;
+    this.publicationModalDataPromise = this.store.findRecord('agendaitem', this.agendaitem.id, {
+      include: 'pieces.file,pieces.publication-flow,pieces.publication-flow.identification,agenda-activity.subcase.case',
+    }).then((agendaitem) => ({
+      case: agendaitem.get('agendaActivity.subcase.case'),
+      pieces: agendaitem.pieces,
+    }));
+    // this.casePromise = this.agendaitem.get('agendaActivity.subcase.case');
+    this.publicationModalIsOpen = true;
   }
 
   @action
-  cancelPublicationModal() {
-    this.isOpenPublicationModal = false;
+  closePublicationModal() {
+    this.publicationModalIsOpen = false;
   }
 
   @action

@@ -9,6 +9,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @tracked isOpenNewPublicationModal = false;
   @tracked newPublicationInitialTitlesPromise;
+  @tracked pieces;
 
   @inject store;
   @inject publicationService;
@@ -21,39 +22,33 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadData() {
-    yield this.store.query('piece', {
-      filter: {
-        ':id:': this.pieces.map((piece) => piece.id).join(','),
-      },
-      include: 'file,publication-flow,publication-flow.identification',
-    });
-  }
-
-  get isLoading() {
-    return this.loadData.isRunning;
-  }
-
-  get pieces() {
-    return this.args.pieces;
+    const data = yield this.args.dataPromise;
+    const pieces = yield data.pieces;
+    // <DocumentList /> expects iterable
+    this.pieces = pieces.toArray();
   }
 
   // new publication actions
   @action
   async openNewPublicationModal(piece) {
     this.pieceToPublish = piece;
-    this.newPublicationInitialTitlesPromise = await this.args.casePromise.then((case_) => ({
-      shortTitle: case_.shortTitle,
-      longTitle: case_.title,
-    }));
+    this.newPublicationInitialTitlesPromise = await this.args.dataPromise
+      .then(async(data) => {
+        const case_ = await data.case;
+        return {
+          shortTitle: case_.shortTitle,
+          longTitle: case_.title,
+        };
+      });
 
     this.isOpenNewPublicationModal = true;
   }
 
   @task
   *saveNewPublication(publicationProperties) {
-    const case_ = yield this.args.casePromise;
+    const data = yield this.args.dataPromise;
     const publicationFlow = yield this.publicationService.createNewPublicationViaMinisterraad(publicationProperties, {
-      case: case_,
+      case: data.case,
     });
     this.pieceToPublish.publicationFlow = publicationFlow;
     yield this.pieceToPublish.save();
@@ -63,10 +58,5 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @action
   cancelNewPublication() {
     this.isOpenNewPublicationModal = false;
-  }
-
-  @action
-  onCancel() {
-    this.args.onCancel();
   }
 }
