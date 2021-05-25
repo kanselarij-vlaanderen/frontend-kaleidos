@@ -31,13 +31,13 @@
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
-      {{#if (gt this.model.length 0) }}
+      {{#if this.model.length}}
         <table class="auk-table">
           <thead>
             <tr>
               {{#each this.tableColumns as |column|}}
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
-              {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
+                  {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
                   {{#if (eq column.keyName "caseName")}}
                     <ThSortable
                           @currentSorting={{this.sort}}
@@ -64,7 +64,7 @@
             {{#each this.model as |row|}}
               <tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
                 {{#if this.tableColumnDisplayOptions.caseName}}
-              {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
+                  {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
                   <td class="auk-table__col--6">
                     {{#if row.case.shortTitle}}
                       <WebComponents::AuAbbreviatedText @text={{row.case.shortTitle}} @size="150"/>
@@ -176,7 +176,7 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.source}}
                   <td class="auk-u-text-nowrap">
-                    {{#if row.subcases }}
+                    {{#if row.case.subcases }}
                       {{t "via-cabinet"}}
                     {{else}}
                       {{t "not-via-cabinet"}}
@@ -195,7 +195,7 @@
             {{/each}}
           </tbody>
         </table>
-      {{else }}
+      {{else}}
         <WebComponents::AuPanel>
           <WebComponents::AuPanel::Body>
             <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
@@ -216,8 +216,8 @@
                 @page={{this.page}}
                 @nbOfItems={{this.model.length}}
                 @size={{this.size}}
-                @nextAction={{this.nextPage}}
-                @previousAction={{this.prevPage}}
+                @onNextPage={{this.nextPage}}
+                @onPreviousPage={{this.prevPage}}
                 @total={{this.model.meta.count}} />
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
@@ -267,9 +267,4 @@
           @filter={{this.publicationFilter}}
           @onCancel={{this.cancelPublicationsFilter}}
           @onSave={{this.savePublicationsFilter}} />
-{{/if}}
-
-{{!-- LOADER --}}
-{{#if this.showLoader}}
-  <WebComponents::AuLoadingOverlay/>
 {{/if}}

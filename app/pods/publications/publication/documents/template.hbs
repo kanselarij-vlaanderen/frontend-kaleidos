@@ -172,16 +172,6 @@
       @onCancel={{this.hidePieceUploadModal}} />
   {{/if}}
 
-
-  {{!-- LOADER --}}
-
-  {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay/>
-  {{/if}}
-
-
-
-
   {{!-- EDIT PIECE DETAILS --}}
 
   {{#if this.showPieceEditor}}
@@ -204,5 +194,4 @@
             @verify={{perform this.verifyDeleteExistingPiece}}
     />
   {{/if}}
-
 </div>
