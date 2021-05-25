@@ -1,5 +1,4 @@
 {{#if @href}}
-
   <a
     class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
     href={{@href}}
@@ -10,9 +9,7 @@
       {{yield}}
     </WebComponents::AuButton::InnerLayout>
   </a>
-
 {{else}}
-
   <button
     class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
     type="button"

@@ -9,7 +9,7 @@
   <WebComponents::AuToolbar::Group @position="right">
     {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-subcase-documents-edit type="button"
+        <WebComponents::AuButton data-test-subcase-documents-edit
           {{on "click" this.enablePieceEdit}}>
           {{t "edit"}}
         </WebComponents::AuButton>
@@ -17,7 +17,8 @@
     {{/if}}
     {{#if (and this.currentSession.isOvrb this.model.pieces)}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton type="button"
+        <WebComponents::AuButton
+          @icon="copy"
           {{on "click" this.openPublicationModal}}>
           {{t "agendaitem-documents-documents-for-publication"}}
         </WebComponents::AuButton>
