@@ -186,12 +186,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   async openPublicationModal() {
     this.publicationModalDataPromise = this.store.findRecord('agendaitem', this.agendaitem.id, {
-      include: 'pieces.file,pieces.publication-flow,pieces.publication-flow.identification,agenda-activity.subcase.case',
+      include: 'pieces.file,pieces.publication-flow,pieces.publication-flow.identification,agenda-activity,agenda-activity.subcase,agenda-activity.subcase.case',
     }).then((agendaitem) => ({
       case: agendaitem.get('agendaActivity.subcase.case'),
       pieces: agendaitem.pieces,
     }));
-    // this.casePromise = this.agendaitem.get('agendaActivity.subcase.case');
     this.publicationModalIsOpen = true;
   }
 
