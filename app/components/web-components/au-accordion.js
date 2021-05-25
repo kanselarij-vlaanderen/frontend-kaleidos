@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
 export default class AuAccordion extends Component {
-  @tracked isActive = false;
+  @tracked isActive = true;
   accordionId = `accordion-${guidFor(this)}`;
 
   @action
