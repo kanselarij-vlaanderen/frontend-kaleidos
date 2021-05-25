@@ -1,7 +1,7 @@
 <WebComponents::AuModal @resized={{true}}>
   <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{this.onCancel}} />
   <WebComponents::AuModal::Body>
-    <WebComponents::AuLoadableContent @isLoading={{this.isLoading}}>
+    <Utils::LoadableContent @isLoading={{this.isLoading}}>
       {{!-- template-lint-disable table-groups --}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
@@ -33,16 +33,18 @@
                 {{piece.name}}
               </td>
               <td>
-                {{piece.file.extension}}
+                {{unless this.isLoading piece.file.extension}}
               </td>
               <td>
-                {{#if piece.publicationFlow}}
-                  {{piece.publicationFlow.identification.idName}}
-                {{else}}
-                  <WebComponents::AuButton @icon="add" {{on 'click' (fn openNewPublicationModal piece)}}>
-                    {{t "publications-new"}}
-                  </WebComponents::AuButton>
-                {{/if}}
+                {{#unless this.isLoading}}
+                  {{#if piece.publicationFlow}}
+                    {{piece.publicationFlow.identification.idName}}
+                  {{else}}
+                    <WebComponents::AuButton @icon="add" {{on 'click' (fn openNewPublicationModal piece)}}>
+                      {{t "publications-new"}}
+                    </WebComponents::AuButton>
+                  {{/if}}
+                {{/unless}}
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
@@ -50,7 +52,7 @@
                     @layout="icon-only"
                     @icon="download"
                     @skin="borderless"
-                    @href="{{await piece.downloadFileLink}}"
+                    @href="{{unless this.isLoading (await piece.downloadFileLink)}}"
                     download
                     >
                   </WebComponents::AuButton>
@@ -66,7 +68,7 @@
           {{/each}}
         </Documents::DocumentList>
       </table>
-    </WebComponents::AuLoadableContent>
+    </Utils::LoadableContent>
   </WebComponents::AuModal::Body>
 </WebComponents::AuModal>
 

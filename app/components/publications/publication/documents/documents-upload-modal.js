@@ -55,12 +55,6 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     yield piece.destroyRecord();
   }
 
-  @action
-  cancelDeleteExistingPiece() {
-    this.pieceToDelete = null;
-    this.isVerifyingDelete = false;
-  }
-
   @task
   *savePieces() {
     if (this.args.onSave) {

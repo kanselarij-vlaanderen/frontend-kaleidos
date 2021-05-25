@@ -25,12 +25,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
       filter: {
         ':id:': this.pieces.map((piece) => piece.id).join(','),
       },
-      include: 'file,publication-flow',
+      include: 'file,publication-flow,publication-flow.identification',
     });
   }
 
   get isLoading() {
-    return this.loadData.isRunning || this.saveNewPublication.isRunning;
+    return this.loadData.isRunning;
   }
 
   get pieces() {

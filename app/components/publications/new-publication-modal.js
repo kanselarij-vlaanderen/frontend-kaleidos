@@ -22,6 +22,7 @@ export default class NewPublicationModal extends Component {
 
   @tracked number = null;
   @tracked suffix = null;
+  @tracked areTitlesEditable = true;
   @tracked shortTitle = null;
   @tracked longTitle = null;
 
@@ -58,6 +59,7 @@ export default class NewPublicationModal extends Component {
   @task
   *initTitles() {
     if (this.args.initialTitlesPromise) {
+      this.areTitlesEditable = false;
       const initialTitles = yield this.args.initialTitlesPromise;
       this.shortTitle = initialTitles.shortTitle;
       this.longTitle = initialTitles.longTitle;
