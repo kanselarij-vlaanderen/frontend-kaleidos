@@ -35,7 +35,7 @@
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
-      {{#if this.showEnvironmentName}}
+      {{#if this.environmentName}}
         <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
           <div class="vlc-environment-pill {{this.environmentClass}}">
             {{this.environmentName}}
@@ -44,18 +44,18 @@
       {{/if}}
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButtonLink
-                @skin="muted"
-                @padded="padded"
-                @icon="circle-question">
+           @skin="muted"
+           @padded="padded"
+           @icon="circle-question">
           {{t "help"}}
         </WebComponents::AuButtonLink>
         <AttachPopover
-                @renderInPlace={{true}}
-                @class="ember-attacher-popper"
-                @hideOn="clickout click"
-                @showOn="click"
-                @animation="shift"
-                @placement="bottom-end"
+          @renderInPlace={{true}}
+          @class="ember-attacher-popper"
+          @hideOn="clickout click"
+          @showOn="click"
+          @animation="shift"
+          @placement="bottom-end"
         >
           <WebComponents::AuDropdown>
             <WebComponents::AuDropdown::Item
@@ -73,27 +73,27 @@
         </AttachPopover>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
-        {{#if this.currentSession.userContent}}
+        {{#if this.currentSession.user}}
           <WebComponents::AuButtonLink
-                  data-test-m-header-user-actions
-                  @skin="muted"
-                  @icon="chevron-down"
-                  @layout="icon-right">
-            {{this.currentSession.userContent.firstName}}
+            data-test-m-header-user-actions
+            @skin="muted"
+            @icon="chevron-down"
+            @layout="icon-right">
+            {{this.currentSession.user.firstName}}
           </WebComponents::AuButtonLink>
           <AttachPopover
-                  @renderInPlace={{true}}
-                  @class="ember-attacher-popper"
-                  @hideOn="clickout click"
-                  @showOn="click"
-                  @animation="shift"
-                  @placement="bottom-end"
-          >
+                 @renderInPlace={{true}}
+                 @class="ember-attacher-popper"
+                 @hideOn="clickout click"
+                 @showOn="click"
+                 @animation="shift"
+                 @placement="bottom-end"
+               >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <WebComponents::AuAvatar @icon="user" @name="{{this.getFullUserName}}">
-                  <p>{{this.getFullUserName}}</p>
-                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.userRole}}</p>
+                <WebComponents::AuAvatar @icon="user" @name={{this.currentSession.user.fullName}}>
+                  <p>{{this.currentSession.user.fullName}}</p>
+                  <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
                 </WebComponents::AuAvatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>

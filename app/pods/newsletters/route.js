@@ -1,15 +1,13 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default Route.extend(DataTableRouteMixin, AuthenticatedRouteMixin, {
-  authenticationRoute: 'login',
-  modelName: 'meeting',
+export default class NewslettersRoute extends Route.extend(DataTableRouteMixin) {
+  @service('session') simpleAuthSession;
 
-  actions: {
-    refresh() {
-      this._super(...arguments);
-      this.refresh();
-    },
-  },
-});
+  modelName = 'meeting';
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+}

@@ -63,6 +63,7 @@ Router.map(function() {
     this.route('signature', () => {});
   });
   this.route('loading', { path: '/laden', });
+  // mock-login-route as name to avoid collision with mock-login component provided by addon
   this.route('mock-login-route', { path: '/mock-login', });
   this.route('login', { path: '/aanmelden', });
 

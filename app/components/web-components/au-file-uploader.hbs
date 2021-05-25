@@ -1,4 +1,4 @@
-<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{this.fullHeight}}">
+<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{if @fullHeight "auk-file-upload--full-height"}}">
   <FileDropzone
     @name="files"
     @class="auk-file-upload__content"
@@ -10,7 +10,7 @@
       @name="files"
       @for="upload-file"
       @class="auk-file-upload__content--label"
-      @multiple={{this.multipleFiles}}
+      @multiple={{@multipleFiles}}
       @onfileadd={{action this.uploadFile}}
     >
       {{!-- <WebComponents::AuIcon @name="paperclip"></WebComponents::AuIcon> --}}
@@ -38,7 +38,7 @@
         {{else if queue.files.length}}
           {{uploadedFileLength}}
           {{t "files-of"}}
-          {{fileQueue.files.length}}
+          {{queue.files.length}}
           {{t "uploading"}}
         {{else if dropzone.supported}}
           {{#if this.multipleFiles}}
@@ -48,18 +48,13 @@
           {{/if}}
         {{/if}}
       </span>
-      {{#if (gt fileQueue.files.length 0)}}
+      {{#if queue.files.length}}
         <span>
           {{ember-progress-bar
-            progress=(div this.uploadedFileLength fileQueue.files.length)
-            options=(hash strokeWidth=2 duration=1000)
+            progress=(div queue.progress 100)
+            options=(hash strokeWidth=2)
           }}
-          {{format-number
-            (mult (div this.uploadedFileLength fileQueue.files.length) 100)
-            style="decimal"
-            maximumFractionDigits="0"
-          }}
-            &#37;
+          {{queue.progress}}%
         </span>
       {{/if}}
 
@@ -67,10 +62,10 @@
   </FileDropzone>
 </div>
 
-{{!-- temporary fix, waiting for new css --}}
-{{#if this.isLoading}}
+{{!--
+{{#if this.uploadFileTask.isRunning}}
   <WebComponents::AuLoadingOverlay
           @title={{t "upload-file"}}
           @message={{t "upload-file"}}
   />
-{{/if}}
+{{/if}}temporary fix, waiting for new css --}}
