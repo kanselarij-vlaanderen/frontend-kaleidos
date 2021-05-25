@@ -11,7 +11,7 @@ export default [
     translationKey: 'publications-table-comment',
     translationKeySmall: 'publications-table-comment-small',
     showByDefault: true,
-    sortable: true,
+    sortable: false,
   },
   {
     keyName: 'speedProcedure',
@@ -39,7 +39,7 @@ export default [
     translationKey: 'publications-table-numacnummer-bs',
     translationKeySmall: 'publications-table-numacnummer-bs-small',
     showByDefault: true,
-    sortable: true,
+    sortable: false,
   },
   {
     keyName: 'requestedPublicationDate',
@@ -81,6 +81,6 @@ export default [
     translationKey: 'publications-table-source',
     translationKeySmall: 'publications-table-source-small',
     showByDefault: true,
-    sortable: true,
+    sortable: false,
   }
 ];
