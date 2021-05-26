@@ -47,7 +47,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @task
   *saveNewPublication(publicationProperties) {
     const data = yield this.args.dataPromise;
-    const publicationFlow = yield this.publicationService.createNewPublicationViaMinisterraad(publicationProperties, {
+    const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: data.case,
     });
     this.pieceToPublish.publicationFlow = publicationFlow;

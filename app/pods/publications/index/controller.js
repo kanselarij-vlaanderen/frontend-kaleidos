@@ -76,7 +76,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.publicationService.createNewPublicationNotViaMinisterraad(publication);
+    const newPublication = await this.publicationService.createNewPublicationWithoutMinisterialCouncil(publication);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }

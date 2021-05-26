@@ -6,12 +6,12 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  async createNewPublicationViaMinisterraad(publicationProperties, options) {
-    return this._createNewPublication(publicationProperties, options);
+  async createNewPublicationFromMinisterialCouncil(publicationProperties, decisionOptions) {
+    return this.createNewPublication(publicationProperties, decisionOptions);
   }
 
-  async createNewPublicationNotViaMinisterraad(publicationProperties) {
-    return this._createNewPublication(publicationProperties);
+  async createNewPublicationWithoutMinisterialCouncil(publicationProperties) {
+    return this.createNewPublication(publicationProperties);
   }
 
   /**
@@ -24,19 +24,20 @@ export default class PublicationService extends Service {
    * }} publicationProperties
    * @param {{
    *  case: Case,
-   * }|undefined} viaMinisterraadOptions passed when via ministerraad
+   * }|undefined} decisionOptions passed when via ministerial council
    * @returns {PublicationFlow}
+   * @private
    */
-  async _createNewPublication(publicationProperties, viaMinisterraadOptions) {
-    const creationDatetime = new Date();
+  async createNewPublication(publicationProperties, decisionOptions) {
+    const now = new Date();
     let case_;
-    if (viaMinisterraadOptions) {
-      case_ = viaMinisterraadOptions.case;
+    if (decisionOptions) {
+      case_ = decisionOptions.case;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
-        created: creationDatetime,
+        created: now,
       });
       await case_.save();
     }
@@ -62,27 +63,27 @@ export default class PublicationService extends Service {
     await identifier.save();
 
     const statusChange = this.store.createRecord('publication-status-change', {
-      startedAt: new Date(),
+      startedAt: now,
     });
     await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
       statusChange: statusChange,
-      created: creationDatetime,
-      openingDate: new Date(),
+      created: now,
+      openingDate: now,
       status: toPublishStatus,
-      modified: creationDatetime,
+      modified: now,
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
+      created: now,
+      modified: now,
       publicationFlow,
     });
     const publicationSubcase = this.store.createRecord('publication-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
+      created: now,
+      modified: now,
       publicationFlow,
     });
     await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
