@@ -67,7 +67,7 @@ export default class PublicationService extends Service {
       startedAt: now,
     });
     await statusChange.save();
-    const publicationFlowProperties = {
+    const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
       status: toPublishStatus,
@@ -77,8 +77,7 @@ export default class PublicationService extends Service {
       created: now,
       openingDate: now,
       modified: now,
-    };
-    const publicationFlow = this.store.createRecord('publication-flow', publicationFlowProperties);
+    });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
       created: now,
