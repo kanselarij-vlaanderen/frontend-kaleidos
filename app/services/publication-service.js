@@ -7,11 +7,11 @@ export default class PublicationService extends Service {
   @service intl;
 
   async createNewPublicationViaMinisterraad(publicationProperties, options) {
-    return this._createNewPublication(publicationProperties, options);
+    return this.createNewPublication(publicationProperties, options);
   }
 
   async createNewPublicationNotViaMinisterraad(publicationProperties) {
-    return this._createNewPublication(publicationProperties);
+    return this.createNewPublication(publicationProperties);
   }
 
   /**
@@ -26,8 +26,9 @@ export default class PublicationService extends Service {
    *  case: Case,
    * }|undefined} viaMinisterraadOptions passed when via ministerraad
    * @returns {PublicationFlow}
+   * @private
    */
-  async _createNewPublication(publicationProperties, viaMinisterraadOptions) {
+  async createNewPublication(publicationProperties, viaMinisterraadOptions) {
     const now = new Date();
     let case_;
     if (viaMinisterraadOptions) {
