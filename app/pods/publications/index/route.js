@@ -94,7 +94,7 @@ export default class PublicationsIndexRoute extends Route {
       } else if (qpSort === dasherize('lastEdited')) {
         apiSort = 'modified';
       } else if (qpSort === dasherize('status')) {
-        apiSort = 'publication-status.position,publication-status-change.started-at';
+        apiSort = 'status.position,publication-status-change.started-at';
       }
       if (apiSort && descending) {
         apiSort = `-${apiSort}`;

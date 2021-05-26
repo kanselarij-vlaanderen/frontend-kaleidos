@@ -178,21 +178,12 @@ export default class PublicationsIndexController extends Controller {
   @action
   sortTable(field) {
     const dasherizedField = field.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-    if (this.getOrder(dasherizedField) === 'asc') {
+    if (dasherizedField === this.sort) {
       this.set('sort', `-${dasherizedField}`);
-    } else if (this.getOrder(dasherizedField) === 'desc') {
+    } else if (`-${dasherizedField}` === this.sort) {
       this.set('sort', '');
     } else { // if currentSorting is not set to this field
       this.set('sort', dasherizedField);
     }
-  }
-
-  getOrder(field) {
-    if (this.sort === field) {
-      return 'asc';
-    } else if (this.sort === `-${field}`) {
-      return 'desc';
-    }
-    return '';
   }
 }
