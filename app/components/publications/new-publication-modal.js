@@ -7,7 +7,7 @@ import { isBlank } from '@ember/utils';
 
 /**
  * @argument { Promise<{ shortTitle: string, longTitle: string, }> } initialTitlesPromise
- * @argument { boolean } isViaMinisterraad
+ * @argument { boolean } isViaCouncilOfMinisters
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
           number: number,
@@ -37,7 +37,7 @@ export default class NewPublicationModal extends Component {
   }
 
   get isLoading() {
-    return this.initTitles.isRunning && this.save.isRunning;
+    return this.initTitles.isRunning || this.save.isRunning;
   }
 
   get isPublicationNumberValid() {
