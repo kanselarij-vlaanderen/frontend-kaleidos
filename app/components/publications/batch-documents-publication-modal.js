@@ -23,7 +23,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @task
   *loadData() {
     const data = yield this.args.dataPromise;
-    const pieces = yield data.pieces;
+    const pieces = data.pieces;
     // <DocumentList /> expects iterable
     this.pieces = pieces.toArray();
   }

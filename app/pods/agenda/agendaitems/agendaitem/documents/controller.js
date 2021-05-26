@@ -3,6 +3,7 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import RSVP from 'rsvp';
 import { task } from 'ember-concurrency-decorators';
 import {
   all,
@@ -185,12 +186,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   async openPublicationModal() {
-    this.publicationModalDataPromise = this.store.findRecord('agendaitem', this.agendaitem.id, {
-      include: 'pieces.file,pieces.publication-flow,pieces.publication-flow.identification,agenda-activity,agenda-activity.subcase,agenda-activity.subcase.case',
-    }).then((agendaitem) => ({
-      case: agendaitem.get('agendaActivity.subcase.case'),
-      pieces: agendaitem.pieces,
-    }));
+    this.publicationModalDataPromise = RSVP.hash({
+      pieces: this.store.query('piece', {
+        'filter[agendaitems][:id:]': this.agendaitem.id,
+        include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
+      }),
+
+      case: this.store.queryOne('case', {
+        'filter[subcases][agenda-activities][agendaitems][:id:]': this.agendaitem.id,
+      }),
+    });
     this.publicationModalIsOpen = true;
   }
 
