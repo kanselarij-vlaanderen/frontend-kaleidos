@@ -37,7 +37,7 @@ export default class NewPublicationModal extends Component {
   }
 
   get isLoading() {
-    return this.initTitles.isRunning && this.save.isRunning;
+    return this.initTitles.isRunning || this.save.isRunning;
   }
 
   get isPublicationNumberValid() {
