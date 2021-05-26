@@ -132,6 +132,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
+                    @checkExpired={{true}}
                     @defaultDate={{this.publicationSubcase.targetEndDate}}
                     @onChange={{this.setRequestedPublicationDate}}/>
           </div>
@@ -142,8 +143,8 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
+                    @checkExpired={{true}}
                     @defaultDate={{this.publicationSubcase.dueDate}}
-                    @enable={{this.allowedUltimatePublicationDates}}
                     @onChange={{this.setUltimatePublicationDate}}/>
           </div>
         {{/unless}}
