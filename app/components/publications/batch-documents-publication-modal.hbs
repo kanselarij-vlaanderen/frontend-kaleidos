@@ -24,9 +24,8 @@
           </thead>
 
           <Documents::DocumentList
+            @tag="tbody"
             @pieces={{this.pieces}}
-            {{!-- should be tbody tag; workaround for Documents::DocumentList rendering a div --}}
-            style="display: table-row-group;"
             as |pieces|>
             {{#each pieces as |piece|}}
               <tr>
