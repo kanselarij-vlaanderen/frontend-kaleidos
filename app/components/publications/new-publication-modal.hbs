@@ -14,11 +14,24 @@
           {{t "publications-number"}}
         </WebComponents::AuLabel>
         <div class=" auk-u-flex auk-u-flex--vertical-center">
-          <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-u-mr" style="max-width: 10rem"
-                                  @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
-            {{on "change" this.isPublicationNumberAlreadyTaken}} />
-          <WebComponents::AuInput type="text" id="publicationSuffixInput" style="max-width: 6.5rem"
-                                  @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          <WebComponents::AuInput
+            type="number"
+            id="publicationNumberInput"
+            class="auk-u-mr"
+            style="max-width: 10rem"
+            @value={{mut this.number}}
+            disabled={{this.initPublicationNumber.isRunning}}
+            data-test-create-publication-modal-number-input
+            {{on "change" this.isPublicationNumberAlreadyTaken}}
+          />
+          <WebComponents::AuInput
+            type="text"
+            id="publicationSuffixInput"
+            style="max-width: 6.5rem"
+            @value={{mut this.suffix}}
+            data-test-create-publication-modal-suffix-input
+            {{on "change" this.isPublicationNumberAlreadyTaken}}
+          />
           <div class="auk-icon auk-icon--default auk-icon--muted auk-u-mx" >
             <i class="ki ki-circle-info"></i>
             <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
