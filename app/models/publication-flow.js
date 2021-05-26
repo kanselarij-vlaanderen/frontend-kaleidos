@@ -42,11 +42,6 @@ export default class PublicationFlow extends Model {
   @hasMany('mandatee') mandatees;
   @hasMany('piece') referenceDocuments;
 
-  @computed('case.subcases')
-  get isFromCouncilOfMinisters() {
-    return !!this.case.get('subcases');
-  }
-
   get publicationBeforeDateHasExpired() {
     return this.publishBefore
       && this.publishBefore < new Date();
