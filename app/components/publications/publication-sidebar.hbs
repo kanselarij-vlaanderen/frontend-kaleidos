@@ -142,8 +142,8 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
+                    @showExpired={{true}}
                     @defaultDate={{this.publicationSubcase.dueDate}}
-                    @enable={{this.allowedUltimatePublicationDates}}
                     @onChange={{this.setUltimatePublicationDate}}/>
           </div>
         {{/unless}}
@@ -152,15 +152,10 @@
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
-            <div class="auk-u-muted">
-              {{if
-                this.translationSubcase.targetEndDate
-                (moment-format
-                  this.translationSubcase.dueDate
-                  "DD-MM-YYYY")
-                (t "not-entered-yet")
-              }}
-            </div>
+            <WebComponents::AuDatepicker
+                    @showExpired={{true}}
+                    @defaultDate={{this.translationSubcase.dueDate}}
+                    @onChange={{this.setUltimateTranslationDate}}/>
           </div>
         {{/if}}
 
@@ -169,7 +164,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-              @defaultDate={{this.publicationFlow.closingDate}}
+              @defaultDate={{this.publicationSubcase.endDate}}
               @onChange={{this.setPublicationDate}}
             />
           </div>

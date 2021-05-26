@@ -138,8 +138,8 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedTranslationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if row.translationSubcase.targetEndDate}}
-                      {{moment-format row.translationSubcase.targetEndDate "DD-MM-YYYY"}}
+                    {{#if row.translationSubcase.dueDate}}
+                      {{moment-format row.translationSubcase.dueDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
@@ -147,8 +147,8 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if (and row.closingDate row.status.isPublished)}}
-                      {{moment-format row.closingDate "DD-MM-YYYY"}}
+                    {{#if (and row.publicationSubcase.endDate row.status.isPublished)}}
+                      {{moment-format row.publicationSubcase.endDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}

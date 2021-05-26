@@ -5,8 +5,10 @@ import Model, {
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
   @attr title;
-  @attr('datetime') dueDate;
-  @attr('datetime') targetEndDate;
+  @attr('datetime') dueDate; // uiterste publicatiedatum
+  @attr('datetime') targetEndDate; // gewenste/gevraagde publicatiedatum
+  @attr('datetime') startDate; // not used yet
+  @attr('datetime') endDate; // publicatiedatum
   @attr('datetime') created;
   @attr('datetime') modified;
 

@@ -39,3 +39,7 @@
     />
   {{/if}}
 </div>
+
+{{#if this.showExpired}}
+  <WebComponents::AuFormHelpText @text={{t "date-expired"}} @skin="warning" @icon="alert-triangle"/>
+{{/if}}
