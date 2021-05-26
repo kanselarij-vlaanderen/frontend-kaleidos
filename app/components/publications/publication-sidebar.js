@@ -7,7 +7,6 @@ import {
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
@@ -217,16 +216,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(numacNumber);
   }
 
-  get allowedUltimatePublicationDates() {
-    const rangeStart = this.publicationFlow.translateBefore || new Date();
-    return [
-      {
-        from: rangeStart,
-        to: moment(rangeStart).add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
-  }
-
   @action
   setUltimatePublicationDate(selectedDates) {
     this.publicationSubcase.dueDate = selectedDates[0];
@@ -243,15 +232,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setPublicationDate(selectedDates) {
     this.publicationFlow.closingDate = selectedDates[0];
     this.notifyChanges(this.publicationFlow, 'closingDate');
-  }
-
-  get allowedUltimateTranslationDates() {
-    return [
-      {
-        from: new Date(),
-        to: this.publicationSubcase.targetEndDate || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
   }
 
   @action
