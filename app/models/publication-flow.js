@@ -47,14 +47,6 @@ export default class PublicationFlow extends Model {
     return !!this.case.get('subcases');
   }
 
-  get longTitleOrDefault() {
-    return this.isFromCouncilOfMinisters ? this.case.get('title') : this.longTitle;
-  }
-
-  get shortTitleOrDefault() {
-    return this.isFromCouncilOfMinisters ? this.case.get('shortTitle') : this.shortTitle;
-  }
-
   get publicationBeforeDateHasExpired() {
     return this.publishBefore
       && this.publishBefore < new Date();

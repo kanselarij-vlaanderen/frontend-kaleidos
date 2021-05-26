@@ -70,16 +70,14 @@ export default class PublicationService extends Service {
     const publicationFlowProperties = {
       identification: identifier,
       case: case_,
+      status: toPublishStatus,
       statusChange: statusChange,
+      shortTitle: publicationProperties.shortTitle,
+      longTitle: publicationProperties.longTitle,
       created: now,
       openingDate: now,
-      status: toPublishStatus,
       modified: now,
     };
-    if (!isViaCouncilOfMinisters) {
-      publicationFlowProperties.shortTitle = publicationProperties.shortTitle;
-      publicationFlowProperties.longTitle = publicationProperties.longTitle;
-    }
     const publicationFlow = this.store.createRecord('publication-flow', publicationFlowProperties);
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {

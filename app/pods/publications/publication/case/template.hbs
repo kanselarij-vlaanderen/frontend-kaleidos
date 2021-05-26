@@ -23,11 +23,11 @@
           <WebComponents::AuPanel::Body>
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
-              <WebComponents::AuTextarea @rows="2" @value={{this.model.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+              <WebComponents::AuTextarea @rows="2" @value={{this.publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
             </div>
             <div class="auk-form-group">
               <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-              <WebComponents::AuTextarea @rows="4" @value={{this.model.title}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+              <WebComponents::AuTextarea @rows="4" @value={{this.publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
             </div>
           </WebComponents::AuPanel::Body>
           <WebComponents::AuPanel::Footer>
@@ -86,13 +86,8 @@
           </WebComponents::AuPanel::Header>
           <WebComponents::AuPanel::Body>
             <div class="auk-content" data-test-publication-flow-title>
-              {{#if this.latestSubcaseOnMeeting}}
-                <h4>{{this.latestSubcaseOnMeeting.shortTitle}}</h4>
-                <p class="auk-u-text-prewrap vlc-publication-detail">{{this.latestSubcaseOnMeeting.title}}</p>
-              {{else}}
-                <h4>{{this.model.shortTitle}}</h4>
-                <p class="auk-u-text-prewrap">{{this.model.title}}</p>
-              {{/if}}
+              <h4>{{this.publicationFlow.shortTitle}}</h4>
+              <p class="auk-u-text-prewrap">{{this.publicationFlow.longTitle}}</p>
             </div>
           </WebComponents::AuPanel::Body>
         </WebComponents::AuPanel>
