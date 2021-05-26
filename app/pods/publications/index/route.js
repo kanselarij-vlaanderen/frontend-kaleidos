@@ -101,7 +101,7 @@ export default class PublicationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      include: 'case,status,identification,identification.structured-identifier',
+      include: 'case,status,identification,identification.structured-identifier,urgency-level,regulation-type,publication-status-change,numac-numbers,publication-subcase,translation-subcase',
     });
   }
 
