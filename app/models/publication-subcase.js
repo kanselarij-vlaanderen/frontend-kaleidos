@@ -6,7 +6,7 @@ export default class PublicationSubcase extends Model {
   @attr shortTitle;
   @attr title;
   @attr('datetime') dueDate; // uiterste publicatiedatum
-  @attr('datetime') targetEndDate; // gewenste publicatiedatum
+  @attr('datetime') targetEndDate; // gewenste/gevraagde publicatiedatum
   @attr('datetime') endDate; // publicatiedatum
   @attr('datetime') created;
   @attr('datetime') modified;

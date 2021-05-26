@@ -35,6 +35,7 @@ export default class Datepicker extends Component {
 
   get showExpired() {
     if (this.args.showExpired && this.args.defaultDate) {
+      // TODO comparing dates doesnt work too well with datetime. today is already expired
       return this.args.defaultDate < new Date();
     }
     return false;

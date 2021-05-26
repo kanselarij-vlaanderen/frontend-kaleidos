@@ -5,7 +5,7 @@ import Model, {
 export default class TranslationSubcase extends Model {
   @attr shortTitle;
   @attr title;
-  @attr('datetime') dueDate; // uiterste vertaaldatum
+  @attr('datetime') dueDate; // uiterste/gevraagde vertaaldatum
   @attr('datetime') targetEndDate; // not used ?
   @attr('datetime') created;
   @attr('datetime') modified;
