@@ -230,8 +230,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.closingDate = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'closingDate');
+    this.publicationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'endDate');
   }
 
   @action

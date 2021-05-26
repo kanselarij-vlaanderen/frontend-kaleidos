@@ -170,7 +170,7 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-              @defaultDate={{this.publicationFlow.closingDate}}
+              @defaultDate={{this.publicationSubcase.endDate}}
               @onChange={{this.setPublicationDate}}
             />
           </div>
