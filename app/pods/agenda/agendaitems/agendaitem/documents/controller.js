@@ -191,7 +191,6 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         'filter[agendaitems][:id:]': this.agendaitem.id,
         include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
       }),
-
       case: this.store.queryOne('case', {
         'filter[subcases][agenda-activities][agendaitems][:id:]': this.agendaitem.id,
       }),
