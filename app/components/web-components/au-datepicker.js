@@ -33,8 +33,8 @@ export default class Datepicker extends Component {
     return this.args.placeholder;
   }
 
-  get checkExpired() {
-    if (this.args.checkExpired && this.args.defaultDate) {
+  get showExpired() {
+    if (this.args.showExpired && this.args.defaultDate) {
       return this.args.defaultDate < new Date();
     }
     return false;
