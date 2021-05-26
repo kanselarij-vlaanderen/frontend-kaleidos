@@ -4,6 +4,8 @@ import Model, {
 
 export default class PublicationFlow extends Model {
   // Attributes.
+  @attr('string') shortTitle;
+  @attr('string') longTitle;
   @attr('datetime') translateBefore;
   @attr('datetime') publishBefore;
   @attr('datetime') publishDateRequested;
@@ -38,6 +40,18 @@ export default class PublicationFlow extends Model {
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
   @hasMany('piece') referenceDocuments;
+
+  get isFromCouncilOfMinisters() {
+    return !!this.case.subcase;
+  }
+
+  get longTitleOrDefault() {
+    return this.isFromCouncilOfMinisters ? this.case.title : this.longTitle;
+  }
+
+  get shortTitleOrDefault() {
+    return this.isFromCouncilOfMinisters ? this.case.title : this.longTitle;
+  }
 
   get publicationBeforeDateHasExpired() {
     return this.publishBefore

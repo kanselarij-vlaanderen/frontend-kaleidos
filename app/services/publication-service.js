@@ -31,7 +31,8 @@ export default class PublicationService extends Service {
   async createNewPublication(publicationProperties, decisionOptions) {
     const now = new Date();
     let case_;
-    if (decisionOptions) {
+    const isViaCouncilOfMinisters = !!decisionOptions;
+    if (isViaCouncilOfMinisters) {
       case_ = decisionOptions.case;
     } else {
       case_ = this.store.createRecord('case', {
@@ -66,7 +67,7 @@ export default class PublicationService extends Service {
       startedAt: now,
     });
     await statusChange.save();
-    const publicationFlow = this.store.createRecord('publication-flow', {
+    const publicationFlowProperties = {
       identification: identifier,
       case: case_,
       statusChange: statusChange,
@@ -74,7 +75,12 @@ export default class PublicationService extends Service {
       openingDate: now,
       status: toPublishStatus,
       modified: now,
-    });
+    };
+    if (!isViaCouncilOfMinisters) {
+      publicationFlowProperties.shortTitle = publicationProperties.shortTitle;
+      publicationFlowProperties.longTitle = publicationProperties.longTitle;
+    }
+    const publicationFlow = this.store.createRecord('publication-flow', publicationFlowProperties);
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
       created: now,
