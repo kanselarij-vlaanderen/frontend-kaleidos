@@ -39,6 +39,10 @@ export default class CaseController extends Controller {
     sort: '',
   };
 
+  get isFromCouncilOfMinisters() {
+    return !!this.latestSubcaseOnMeeting;
+  }
+
   /**
    * ZONE FOR TTHE CONTACT PERSONS
    */
@@ -116,6 +120,10 @@ export default class CaseController extends Controller {
     return this.contactPerson.organization;
   }
 
+  /**
+   * ZONE FOR THE CASE PROPERTIES
+   */
+
   @action
   putInscriptionInEditMode() {
     this.isInscriptionInEditMode = true;
@@ -135,7 +143,14 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.save();
+      if (!this.isFromCouncilOfMinisters) {
+        this.publicationFlow.shortTitle = this.model.shortTitle;
+        this.publicationFlow.longTitle = this.model.title;
+      }
+      const publicationFlowSave = this.publicationFlow.save();
+      const caseSave = this.model.save();
+      yield* [publicationFlowSave, caseSave];
+
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work

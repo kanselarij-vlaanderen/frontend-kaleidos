@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { computed } from '@ember/object';
 
 export default class PublicationFlow extends Model {
   // Attributes.
@@ -41,16 +42,17 @@ export default class PublicationFlow extends Model {
   @hasMany('mandatee') mandatees;
   @hasMany('piece') referenceDocuments;
 
+  @computed('case.subcases')
   get isFromCouncilOfMinisters() {
-    return !!this.case.subcase;
+    return !!this.case.get('subcases');
   }
 
   get longTitleOrDefault() {
-    return this.isFromCouncilOfMinisters ? this.case.title : this.longTitle;
+    return this.isFromCouncilOfMinisters ? this.case.get('title') : this.longTitle;
   }
 
   get shortTitleOrDefault() {
-    return this.isFromCouncilOfMinisters ? this.case.title : this.longTitle;
+    return this.isFromCouncilOfMinisters ? this.case.get('shortTitle') : this.shortTitle;
   }
 
   get publicationBeforeDateHasExpired() {

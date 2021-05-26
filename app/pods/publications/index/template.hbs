@@ -66,11 +66,11 @@
                 {{#if this.tableColumnDisplayOptions.caseName}}
                   {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
                   <td class="auk-table__col--6">
-                    {{#if row.case.shortTitle}}
-                      <WebComponents::AuAbbreviatedText @text={{row.case.shortTitle}} @size="150"/>
+                    {{#if row.isFromCouncilOfMinisters}}
+                      <WebComponents::AuAbbreviatedText @text={{row.shortTitleOrDefault}} @size="150"/>
                     {{else}}
-                      {{#if row.case.title}}
-                        <WebComponents::AuAbbreviatedText @text={{row.case.title}} @size="150"/>
+                      {{#if row.isFromCouncilOfMinisters}}
+                        <WebComponents::AuAbbreviatedText @text={{row.longTitleOrDefault}} @size="150"/>
                       {{else}}
                         {{t "dash"}}
                       {{/if}}
@@ -140,7 +140,6 @@
                   <td class="auk-u-text-nowrap">
                     {{t "dash"}}
                   </td>
-
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
