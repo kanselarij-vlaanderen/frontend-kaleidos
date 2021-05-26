@@ -154,7 +154,7 @@
             <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
             <div class="auk-u-muted">
               {{if
-                this.translationSubcase.targetEndDate
+                this.translationSubcase.dueDate
                 (moment-format
                   this.translationSubcase.dueDate
                   "DD-MM-YYYY")

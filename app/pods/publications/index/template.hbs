@@ -138,8 +138,8 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.requestedTranslationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if row.translationSubcase.targetEndDate}}
-                      {{moment-format row.translationSubcase.targetEndDate "DD-MM-YYYY"}}
+                    {{#if row.translationSubcase.dueDate}}
+                      {{moment-format row.translationSubcase.dueDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
                     {{/if}}
