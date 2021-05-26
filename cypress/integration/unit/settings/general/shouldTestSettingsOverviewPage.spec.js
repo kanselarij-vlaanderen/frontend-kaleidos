@@ -81,9 +81,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(form.fileUploadButton).click({
-      force: true,
-    });
+    cy.get(form.fileUploadButton).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
     cy.get(settings.userSearchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
@@ -109,6 +107,7 @@ context('Settings overview page tests', () => {
       .within(() => {
         cy.contains('overheid');
       });
+    // TODO we do not click the upload button, this works anyway?
     cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
     cy.get(settings.userSearchInput).type('Greta');
     cy.route('GET', '/users?filter=**').as('filterUsers');
