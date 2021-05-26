@@ -6,8 +6,8 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  async createNewPublicationViaMinisterraad(publicationProperties, options) {
-    return this.createNewPublication(publicationProperties, options);
+  async createNewPublicationViaMinisterraad(publicationProperties, decisionOptions) {
+    return this.createNewPublication(publicationProperties, decisionOptions);
   }
 
   async createNewPublicationNotViaMinisterraad(publicationProperties) {
@@ -24,15 +24,15 @@ export default class PublicationService extends Service {
    * }} publicationProperties
    * @param {{
    *  case: Case,
-   * }|undefined} viaMinisterraadOptions passed when via ministerraad
+   * }|undefined} decisionOptions passed when via ministerial council
    * @returns {PublicationFlow}
    * @private
    */
-  async createNewPublication(publicationProperties, viaMinisterraadOptions) {
+  async createNewPublication(publicationProperties, decisionOptions) {
     const now = new Date();
     let case_;
-    if (viaMinisterraadOptions) {
-      case_ = viaMinisterraadOptions.case;
+    if (decisionOptions) {
+      case_ = decisionOptions.case;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
