@@ -28,7 +28,7 @@ export default class PublicationService extends Service {
    * @returns {PublicationFlow}
    */
   async _createNewPublication(publicationProperties, viaMinisterraadOptions) {
-    const creationDatetime = new Date();
+    const now = new Date();
     let case_;
     if (viaMinisterraadOptions) {
       case_ = viaMinisterraadOptions.case;
@@ -36,7 +36,7 @@ export default class PublicationService extends Service {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
         title: publicationProperties.longTitle,
-        created: creationDatetime,
+        created: now,
       });
       await case_.save();
     }
@@ -62,27 +62,27 @@ export default class PublicationService extends Service {
     await identifier.save();
 
     const statusChange = this.store.createRecord('publication-status-change', {
-      startedAt: new Date(),
+      startedAt: now,
     });
     await statusChange.save();
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
       statusChange: statusChange,
-      created: creationDatetime,
-      openingDate: new Date(),
+      created: now,
+      openingDate: now,
       status: toPublishStatus,
-      modified: creationDatetime,
+      modified: now,
     });
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
+      created: now,
+      modified: now,
       publicationFlow,
     });
     const publicationSubcase = this.store.createRecord('publication-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
+      created: now,
+      modified: now,
       publicationFlow,
     });
     await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
