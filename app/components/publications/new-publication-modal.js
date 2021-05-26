@@ -7,7 +7,7 @@ import { isBlank } from '@ember/utils';
 
 /**
  * @argument { Promise<{ shortTitle: string, longTitle: string, }> } initialTitlesPromise
- * @argument { boolean } isViaMinisterraad
+ * @argument { boolean } isViaCouncilOfMinisters
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
           number: number,

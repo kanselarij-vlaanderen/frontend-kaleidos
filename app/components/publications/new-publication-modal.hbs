@@ -1,8 +1,8 @@
 <WebComponents::AuModal data-test-au-modal-publication-new>
   <WebComponents::AuModal::Header @title={{if
-    @isViaMinisterraad
-    (t "publications-new-title-via-ministerraad")
-    (t "publications-new-title-not-via-ministerraad")
+    @isViaCouncilOfMinisters
+    (t "publications-new-title-via-council-of-ministers")
+    (t "publications-new-title-not-via-council-of-ministers")
   }}
     @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
@@ -10,7 +10,7 @@
       {{#if hasError}}
         <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
           @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
-      {{else if (not @isViaMinisterraad)}}
+      {{else if (not @isViaCouncilOfMinisters)}}
         <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
           @icon="circle-info" />
       {{/if}}

@@ -73,7 +73,7 @@
 
 {{#if this.isOpenNewPublicationModal}}
   <Publications::NewPublicationModal
-    @isViaMinisterraad={{true}}
+    @isViaCouncilOfMinisters={{true}}
     @initialTitlesPromise={{this.newPublicationInitialTitlesPromise}}
     @onSave={{perform this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />
