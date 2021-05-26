@@ -132,7 +132,6 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
-                    @showExpired={{true}}
                     @defaultDate={{this.publicationSubcase.targetEndDate}}
                     @onChange={{this.setRequestedPublicationDate}}/>
           </div>
