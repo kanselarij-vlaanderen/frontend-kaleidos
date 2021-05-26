@@ -6,11 +6,11 @@ export default class PublicationService extends Service {
   @service toaster;
   @service intl;
 
-  async createNewPublicationViaMinisterraad(publicationProperties, decisionOptions) {
+  async createNewPublicationFromMinisterialCouncil(publicationProperties, decisionOptions) {
     return this.createNewPublication(publicationProperties, decisionOptions);
   }
 
-  async createNewPublicationNotViaMinisterraad(publicationProperties) {
+  async createNewPublicationWithoutMinisterialCouncil(publicationProperties) {
     return this.createNewPublication(publicationProperties);
   }
 
