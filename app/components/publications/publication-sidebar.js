@@ -74,7 +74,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *loadPublicationSubcase() {
-    const publicationSubcase = yield  this.publicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
     return publicationSubcase;
   }
 

@@ -127,7 +127,7 @@
                     {{/if}}
                   </td>
                 {{/if}}
-                {{#if this.tableColumnDisplayOptions.requestedPublicationDate}}
+                {{#if this.tableColumnDisplayOptions.publicationTargetDate}}
                   <td class="auk-u-text-nowrap">
                     {{#if row.publicationSubcase.targetEndDate}}
                       {{moment-format row.publicationSubcase.targetEndDate "DD-MM-YYYY"}}
@@ -136,7 +136,7 @@
                     {{/if}}
                   </td>
                 {{/if}}
-                {{#if this.tableColumnDisplayOptions.requestedTranslationDate}}
+                {{#if this.tableColumnDisplayOptions.translationDueDate}}
                   <td class="auk-u-text-nowrap">
                     {{#if row.translationSubcase.dueDate}}
                       {{moment-format row.translationSubcase.dueDate "DD-MM-YYYY"}}

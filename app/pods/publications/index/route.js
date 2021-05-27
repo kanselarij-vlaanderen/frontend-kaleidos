@@ -80,7 +80,7 @@ export default class PublicationsIndexRoute extends Route {
         apiSort = 'identification.structured-identifier.local-identifier,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
-      } else if (qpSort === dasherize('requestedPublicationDate')) {
+      } else if (qpSort === dasherize('publicationTargetDate')) {
         apiSort = 'publish-before';
       } else if (qpSort === dasherize('publicationDate')) {
         apiSort = 'published-at';
