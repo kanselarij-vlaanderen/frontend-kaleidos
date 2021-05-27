@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import RSVP from 'rsvp';
+
 export default class PublicationsRoute extends Route {
   @service store;
   @service('session') simpleAuthSession;
@@ -30,7 +30,7 @@ export default class PublicationsRoute extends Route {
       'page[size]': 100,
       sort: 'priority',
     });
-    return RSVP.all([
+    return Promise.all([
       publicationStatusPromise,
       regulationTypePromise,
       urgencyLevelPromise,
