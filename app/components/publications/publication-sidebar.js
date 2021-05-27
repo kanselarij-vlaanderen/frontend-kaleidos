@@ -218,13 +218,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setUltimatePublicationDate(selectedDates) {
+  setPublicationDueDate(selectedDates) {
     this.publicationSubcase.dueDate = selectedDates[0];
     this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
-  setRequestedPublicationDate(selectedDates) {
+  setPublicationTargetDate(selectedDates) {
     this.publicationSubcase.targetEndDate = selectedDates[0];
     this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
@@ -236,7 +236,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setUltimateTranslationDate(selectedDates) {
+  setTranslationDueDate(selectedDates) {
     this.translationSubcase.dueDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'dueDate');
   }

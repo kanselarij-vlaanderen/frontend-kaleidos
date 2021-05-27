@@ -133,7 +133,7 @@
             <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
                     @defaultDate={{this.publicationSubcase.targetEndDate}}
-                    @onChange={{this.setRequestedPublicationDate}}/>
+                    @onChange={{this.setPublicationTargetDate}}/>
           </div>
         {{/if}}
 
@@ -144,7 +144,7 @@
             <WebComponents::AuDatepicker
                     @showExpired={{true}}
                     @defaultDate={{this.publicationSubcase.dueDate}}
-                    @onChange={{this.setUltimatePublicationDate}}/>
+                    @onChange={{this.setPublicationDueDate}}/>
           </div>
         {{/unless}}
 
@@ -155,7 +155,7 @@
             <WebComponents::AuDatepicker
                     @showExpired={{true}}
                     @defaultDate={{this.translationSubcase.dueDate}}
-                    @onChange={{this.setUltimateTranslationDate}}/>
+                    @onChange={{this.setTranslationDueDate}}/>
           </div>
         {{/if}}
 
