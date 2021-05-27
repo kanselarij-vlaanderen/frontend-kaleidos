@@ -42,9 +42,9 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationStatusChange.perform();
     this.loadPublicationSubcase.perform();
     this.loadTranslationSubcase.perform();
+    this.loadStructuredIdentifier.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
-    this.initializePublicationNumber.perform();
   }
 
   get publicationFlow() {
@@ -74,7 +74,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-  *initializePublicationNumber() {
+  *loadStructuredIdentifier() {
     const identification = yield this.publicationFlow.identification;
     const structuredIdentifier = yield identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
