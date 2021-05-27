@@ -7,7 +7,6 @@ import {
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
@@ -34,6 +33,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
+  @lastValue('loadPublicationSubcase') publicationSubcase;
+  @lastValue('loadTranslationSubcase') translationSubcase;
   @tracked publicationModes;
 
   constructor() {
@@ -41,6 +42,8 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
+    this.loadPublicationSubcase.perform();
+    this.loadTranslationSubcase.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.initializePublicationNumber.perform();
   }
@@ -67,6 +70,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *loadPublicationStatusChange() {
     const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
     return publicationStatusChange;
+  }
+
+  @task
+  *loadPublicationSubcase() {
+    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
+    return publicationSubcase;
+  }
+
+  @task
+  *loadTranslationSubcase() {
+    const translationSubcase = yield this.publicationFlow.translationSubcase;
+    return translationSubcase;
   }
 
   @task
@@ -110,6 +125,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
+      // TODO Do we want to auto fill in publicationSubcase.endDate ?
       this.publicationFlow.closingDate = now;
     } else {
       this.publicationFlow.closingDate = null;
@@ -201,49 +217,34 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(numacNumber);
   }
 
-  get allowedUltimatePublicationDates() {
-    const rangeStart = this.publicationFlow.translateBefore || new Date();
-    return [
-      {
-        from: rangeStart,
-        to: moment(rangeStart).add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
+  @action
+  setPublicationDueDate(selectedDates) {
+    this.publicationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
-  setUltimatePublicationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.publishBefore = date;
-    this.notifyChanges(this.publicationFlow, 'publishBefore');
-  }
-
-  @action
-  setRequestedPublicationDate(selectedDates) {
-    this.publicationFlow.publishDateRequested = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishDateRequested');
+  setPublicationTargetEndDate(selectedDates) {
+    this.publicationSubcase.targetEndDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.publishedAt = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishedAt');
-  }
-
-  get allowedUltimateTranslationDates() {
-    return [
-      {
-        from: new Date(),
-        to: this.publicationFlow.publishBefore || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
+    this.publicationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'endDate');
   }
 
   @action
-  setUltimateTranslationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.translateBefore = date;
-    this.notifyChanges(this.publicationFlow, 'translateBefore');
+  setTranslationDueDate(selectedDates) {
+    this.translationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'dueDate');
+  }
+
+  @action
+  setTranslationDate(selectedDates) {
+    this.translationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'endDate');
   }
 
   @restartableTask
