@@ -17,7 +17,7 @@ export default class UrgencyLevelCheckboxComponent extends Component {
 
   @task
   *loadData() {
-    this.urgencyLevels = yield this.store.query('urgency-level', {});
+    this.urgencyLevels = yield this.store.peekAll('urgency-level').sortBy('position');
   }
 
   @action

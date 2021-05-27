@@ -18,6 +18,10 @@ export default class PublicationsRoute extends Route {
       'page[size]': 100,
       sort: 'position',
     });
+    const urgencyLevelPromise = this.store.query('urgency-level', {
+      'page[size]': 100,
+      sort: 'position',
+    });
     const regulationTypePromise = this.store.query('regulation-type', {
       'page[size]': 100,
       sort: 'position',
@@ -29,6 +33,7 @@ export default class PublicationsRoute extends Route {
     return RSVP.all([
       publicationStatusPromise,
       regulationTypePromise,
+      urgencyLevelPromise,
       documentTypePromise,
       publicationModePromise
     ]);

@@ -51,22 +51,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *loadRegulationTypes() {
-    const regulationTypes = yield this.store.query('regulation-type', {
-      sort: 'position',
-    });
-    return regulationTypes;
+    return yield this.store.peekAll('regulation-type').sortBy('position');
   }
 
   @task
   *loadPublicationStatus() {
-    const publicationStatus = yield this.publicationFlow.status;
-    return publicationStatus;
+    return yield this.publicationFlow.status;
   }
 
   @task
   *loadPublicationStatusChange() {
-    const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
-    return publicationStatusChange;
+    return yield this.publicationFlow.publicationStatusChange;
   }
 
   @task
