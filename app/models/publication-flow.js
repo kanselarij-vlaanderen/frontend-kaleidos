@@ -15,11 +15,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('identification', {
     inverse: 'publicationFlow',
   }) identification;
-
-  @belongsTo('publication-status', {
-    inverse: null,
-  }) status;
-
+  @belongsTo('publication-status') status;
   @belongsTo('publication-mode') mode;
   @belongsTo('regulation-type') regulationType;
   @belongsTo('urgency-level') urgencyLevel;
