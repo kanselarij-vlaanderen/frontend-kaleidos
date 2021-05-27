@@ -85,7 +85,8 @@ const selectors = {
   agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
   agendaitemNumber: '[data-test-agendaitem-number]',
 
-  compare: {
+  // compare-agenda-list
+  compareAgenda: {
     showChanges: '[data-test-compare-show-changes]',
     agendaLeft: '[data-test-compare-agenda-left]',
     agendaRight: '[data-test-compare-agenda-right]',
