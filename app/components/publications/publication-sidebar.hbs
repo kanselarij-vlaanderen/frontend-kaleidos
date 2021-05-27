@@ -127,20 +127,39 @@
           </WebComponents::AuButton>
         </div>
 
+        {{!-- Uiterste vertaaldatum --}}
+        {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel>{{t 'translation-due-date'}}</WebComponents::AuLabel>
+            <WebComponents::AuDatepicker
+              @showExpired={{true}}
+              @defaultDate={{this.translationSubcase.dueDate}}
+              @onChange={{this.setTranslationDueDate}}/>
+          </div>
+        {{/if}}
+
+        {{!-- Vertaaldatum --}}
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t 'translation-date'}}</WebComponents::AuLabel>
+          <WebComponents::AuDatepicker
+            @defaultDate={{this.translationSubcase.endDate}}
+            @onChange={{this.setTranslationDate}}/>
+        </div>
+
         {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'publication-date-requested'}}</WebComponents::AuLabel>
+            <WebComponents::AuLabel>{{t 'publication-target-end-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
                     @defaultDate={{this.publicationSubcase.targetEndDate}}
-                    @onChange={{this.setPublicationTargetDate}}/>
+                    @onChange={{this.setPublicationTargetEndDate}}/>
           </div>
         {{/if}}
 
         {{!-- Uiterste publicatiedatum --}}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'final-publication-date'}}</WebComponents::AuLabel>
+            <WebComponents::AuLabel>{{t 'publication-due-date'}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
                     @showExpired={{true}}
                     @defaultDate={{this.publicationSubcase.dueDate}}
@@ -148,21 +167,10 @@
           </div>
         {{/unless}}
 
-        {{!-- Uiterste vertaaldatum --}}
-        {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
-          <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'final-translation-date'}}</WebComponents::AuLabel>
-            <WebComponents::AuDatepicker
-                    @showExpired={{true}}
-                    @defaultDate={{this.translationSubcase.dueDate}}
-                    @onChange={{this.setTranslationDueDate}}/>
-          </div>
-        {{/if}}
-
         {{!-- Publicatiedatum --}}
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "publication-form-publication-date"}}</WebComponents::AuLabel>
+            <WebComponents::AuLabel for="blockInput">{{t "publication-date"}}</WebComponents::AuLabel>
             <WebComponents::AuDatepicker
               @defaultDate={{this.publicationSubcase.endDate}}
               @onChange={{this.setPublicationDate}}
