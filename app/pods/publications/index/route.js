@@ -34,7 +34,10 @@ export default class PublicationsIndexRoute extends Route {
   async model(params) {
     const statusIds = [];
     let ministerFilter = {};
-
+    let apiSort;
+    const filter = {
+      ':has:case': 'yes',
+    };
     for (const statusFilter of Object.keys(this.statusFilters)) {
       if (this.publicationFilter[statusFilter]) {
         const status = await this.store.findRecordByUri('publication-status', this.statusFilters[statusFilter]);
@@ -54,22 +57,14 @@ export default class PublicationsIndexRoute extends Route {
         };
       }
     }
-
-    const filter = {
-      ':has:case': 'yes',
-    };
-
     if (ministerFilter) {
       filter.case = ministerFilter;
     }
-
     if (statusIds.length > 0) {
       filter.status = {
         ':id:': statusIds.join(','),
       };
     }
-
-    let apiSort;
     let qpSort = params.sort;
     let descending;
     if (qpSort) {
@@ -85,7 +80,7 @@ export default class PublicationsIndexRoute extends Route {
         apiSort = 'identification.structured-identifier.local-identifier,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
-      } else if (qpSort === dasherize('requestedPublicationDate')) {
+      } else if (qpSort === dasherize('publicationTargetDate')) {
         apiSort = 'publish-before';
       } else if (qpSort === dasherize('publicationDate')) {
         apiSort = 'published-at';
@@ -99,7 +94,6 @@ export default class PublicationsIndexRoute extends Route {
         apiSort = `-${apiSort}`;
       }
     }
-
     return this.store.query('publication-flow', {
       filter: filter,
       sort: apiSort,
@@ -107,7 +101,17 @@ export default class PublicationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      include: 'case,status,identification,identification.structured-identifier',
+      include: [
+        'case',
+        'status',
+        'identification.structured-identifier',
+        'urgency-level',
+        'regulation-type',
+        'publication-status-change',
+        'numac-numbers',
+        'publication-subcase',
+        'translation-subcase'
+      ].join(','),
     });
   }
 

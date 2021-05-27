@@ -273,6 +273,14 @@
 }
 
 
+/* Color badge - default color (to be removed)
+   ========================================================================== */
+
+.auk-color-badge--default {
+  background-color: $au-gray-500;
+}
+
+
 /* Utilities
    ========================================================================== */
 
@@ -322,4 +330,11 @@
   .auk-u-m-0\@print {
     margin: 0 !important;
   }
+}
+
+/* Publications table
+   ========================================================================== */
+
+.auk-case-name-header{
+  min-width: 25rem
 }

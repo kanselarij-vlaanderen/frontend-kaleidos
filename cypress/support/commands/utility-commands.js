@@ -2,6 +2,7 @@
 
 // Commands
 import agenda from '../../selectors/agenda.selectors';
+import dependency from '../../selectors/dependency.selectors';
 // ***********************************************
 
 // Functions
@@ -58,10 +59,10 @@ function selectDate(year, month, day, index) {
  */
 function validateDropdownElements(elementIndex, textContent) {
   cy.log('validateDropdownElements');
-  cy.get('.ember-power-select-trigger').click();
-  cy.get('.ember-power-select-option').eq(elementIndex)
+  cy.get(dependency.emberPowerSelect.trigger).click();
+  cy.get(dependency.emberPowerSelect.option).eq(elementIndex)
     .should('contain.text', textContent);
-  cy.get('.ember-power-select-option').eq(elementIndex)
+  cy.get(dependency.emberPowerSelect.option).eq(elementIndex)
     .scrollIntoView()
     .click();
   cy.log('/validateDropdownElements');

@@ -23,9 +23,9 @@ export default class PublicationsIndexController extends Controller {
   @service publicationService;
 
   page = 0;
-  size = 25;
+  size = 10;
   sort = '-created';
-  sizeOptions = Object.freeze([5, 10, 25, 50, 100, 200]);
+
   urgencyLevels =  CONFIG.URGENCY_LEVELS;
 
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
@@ -60,13 +60,8 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
-  openColumnDisplayOptionsModal() {
-    this.showTableDisplayOptions = true;
-  }
-
-  @action
-  closeColumnDisplayOptionsModal() {
-    this.showTableDisplayOptions = false;
+  toggleColumnDisplayOptions() {
+    this.showTableDisplayOptions = !this.showTableDisplayOptions ;
   }
 
   @action
@@ -81,7 +76,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle, publication.publicationDueDate);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
@@ -104,7 +99,7 @@ export default class PublicationsIndexController extends Controller {
     this.send('refreshModel');
   }
 
-  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
+  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle, publicationDueDate) {
     const creationDatetime = new Date();
     const caze = this.store.createRecord('case', {
       title,
@@ -128,7 +123,7 @@ export default class PublicationsIndexController extends Controller {
 
     const identifier = this.store.createRecord('identification', {
       idName: identificationNumber,
-      agency: 'ovrb',
+      agency: CONSTANTS.SCHEMA_AGENCIES.OVRB,
       structuredIdentifier: structuredIdentifier,
     });
     await identifier.save();
@@ -147,6 +142,37 @@ export default class PublicationsIndexController extends Controller {
       modified: creationDatetime,
     });
     await publicationFlow.save();
+    const translationSubcase = this.store.createRecord('translation-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      publicationFlow,
+    });
+    const publicationSubcase = this.store.createRecord('publication-subcase', {
+      created: creationDatetime,
+      modified: creationDatetime,
+      dueDate: publicationDueDate,
+      publicationFlow,
+    });
+    await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
     return publicationFlow;
+  }
+
+  @action
+  prevPage() {
+    if (this.page > 0) {
+      this.set('page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    }
+  }
+
+  @action
+  nextPage() {
+    this.set('page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  }
+
+  @action
+  setSizeOption(size) {
+    // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    this.set('size', size);
+    this.set('page', 0);
   }
 }
