@@ -80,7 +80,7 @@ export default class PublicationsIndexRoute extends Route {
         apiSort = 'identification.structured-identifier.local-identifier,-created';
       } else if (qpSort === dasherize('regulationType')) {
         apiSort = 'regulation-type.position';
-      } else if (qpSort === dasherize('requestedPublicationDate')) {
+      } else if (qpSort === dasherize('publicationTargetDate')) {
         apiSort = 'publish-before';
       } else if (qpSort === dasherize('publicationDate')) {
         apiSort = 'published-at';
@@ -101,7 +101,17 @@ export default class PublicationsIndexRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      include: 'case,status,identification,identification.structured-identifier',
+      include: [
+        'case',
+        'status',
+        'identification.structured-identifier',
+        'urgency-level',
+        'regulation-type',
+        'publication-status-change',
+        'numac-numbers',
+        'publication-subcase',
+        'translation-subcase'
+      ].join(','),
     });
   }
 

@@ -76,7 +76,7 @@ export default class PublicationsIndexController extends Controller {
 
   @action
   async saveNewPublication(publication) {
-    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle);
+    const newPublication = await this.createNewPublication(publication.number, publication.suffix, publication.longTitle, publication.shortTitle, publication.publicationDueDate);
     this.closePublicationModal();
     this.transitionToRoute('publications.publication', newPublication.get('id'));
   }
@@ -99,7 +99,7 @@ export default class PublicationsIndexController extends Controller {
     this.send('refreshModel');
   }
 
-  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
+  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle, publicationDueDate) {
     const creationDatetime = new Date();
     const caze = this.store.createRecord('case', {
       title,
@@ -123,7 +123,7 @@ export default class PublicationsIndexController extends Controller {
 
     const identifier = this.store.createRecord('identification', {
       idName: identificationNumber,
-      agency: 'ovrb',
+      agency: CONSTANTS.SCHEMA_AGENCIES.OVRB,
       structuredIdentifier: structuredIdentifier,
     });
     await identifier.save();
@@ -150,6 +150,7 @@ export default class PublicationsIndexController extends Controller {
     const publicationSubcase = this.store.createRecord('publication-subcase', {
       created: creationDatetime,
       modified: creationDatetime,
+      dueDate: publicationDueDate,
       publicationFlow,
     });
     await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
