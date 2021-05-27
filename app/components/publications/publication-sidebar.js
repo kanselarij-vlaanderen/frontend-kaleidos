@@ -38,7 +38,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
     this.loadPublicationSubcase.perform();
