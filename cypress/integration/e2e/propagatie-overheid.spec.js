@@ -4,6 +4,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import document from '../../selectors/document.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -55,8 +56,8 @@ context('Propagation to other graphs', () => {
 
     // TODO We are clicking the pill inside the document card of treatment report
     cy.get(agenda.accessLevelPill).click();
-    cy.existsAndVisible('.ember-power-select-trigger').click();
-    cy.existsAndVisible('.ember-power-select-option').contains('Intern Overheid')
+    cy.existsAndVisible(dependency.emberPowerSelect.trigger).click();
+    cy.existsAndVisible(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
     cy.get(agenda.accessLevelSave).click();
 
@@ -67,11 +68,11 @@ context('Propagation to other graphs', () => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
         .within(() => {
-          cy.get('.ember-power-select-trigger').scrollIntoView()
+          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
             .click();
         });
     });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Goedgekeurd').scrollIntoView()
           .click();

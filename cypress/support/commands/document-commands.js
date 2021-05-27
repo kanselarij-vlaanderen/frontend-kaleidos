@@ -7,6 +7,7 @@ import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
+import dependency from '../../selectors/dependency.selectors';
 // ***********************************************
 
 // ***********************************************
@@ -58,11 +59,11 @@ function addNewDocumentsInUploadModal(files, model) {
                   cy.get('input[type="radio"][value="Andere"]').check({
                     force: true,
                   });
-                  cy.get('.ember-power-select-trigger')
+                  cy.get(dependency.emberPowerSelect.trigger)
                     .click()
                     .parents('body')
                     .within(() => {
-                      cy.get('.ember-power-select-option', {
+                      cy.get(dependency.emberPowerSelect.option, {
                         timeout: 5000,
                       }).should('exist')
                         .then(() => {
