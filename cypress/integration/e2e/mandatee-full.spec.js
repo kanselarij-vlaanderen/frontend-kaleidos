@@ -47,14 +47,15 @@ context('Full test for creating mandatees', () => {
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
-    cy.get(mandatee.addMandateeTitleContainer).should('exist')
+    // TODO use input fields directly (after au refactor)
+    cy.get(mandatee.createMandatee.titleContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(form.formInput).should('exist')
           .should('be.visible')
           .type(ministerTitle);
       });
-    cy.get(mandatee.addMandateeNicknameContainer).should('exist')
+    cy.get(mandatee.createMandatee.nicknameContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(form.formInput).should('exist')
@@ -73,7 +74,7 @@ context('Full test for creating mandatees', () => {
           .click();
       });
 
-    cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist')
+    cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get('.ember-power-select-trigger').scrollIntoView()
@@ -83,7 +84,7 @@ context('Full test for creating mandatees', () => {
     cy.get('.ember-power-select-option').should('exist')
       .then(() => {
         cy.contains('Aanvullend net').click();
-        cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist')
+        cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
           .should('be.visible')
           .within(() => {
             cy.get('.ember-power-select-trigger').scrollIntoView()

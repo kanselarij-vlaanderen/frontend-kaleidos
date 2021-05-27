@@ -29,9 +29,12 @@ const selectors = {
     },
   },
   // create-mandatee
-  addMandateeTitleContainer: '[data-test-mandatee-title-container]',
-  addMandateeNicknameContainer: '[data-test-mandatee-nick-name]',
-  addMandateeIseCodeDropdownContainer: '[data-test-ise-code-dropdown-container]',
+  createMandatee: {
+    titleContainer: '[data-test-create-mandatee-title-container]',
+    nicknameContainer: '[data-test-create-mandatee-nickname-container]',
+    iseCodeContainer: '[data-test-create-mandatee-ise-code-container]',
+  },
+
   // create-person-selector
   addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
   createPerson: '[data-test-create-person]',
