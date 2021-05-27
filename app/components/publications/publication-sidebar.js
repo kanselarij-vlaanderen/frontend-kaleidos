@@ -74,7 +74,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *loadPublicationSubcase() {
-    const publicationSubcase = yield  this.publicationFlow.publicationSubcase;
+    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
     return publicationSubcase;
   }
 
@@ -218,13 +218,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setUltimatePublicationDate(selectedDates) {
+  setPublicationDueDate(selectedDates) {
     this.publicationSubcase.dueDate = selectedDates[0];
     this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
-  setRequestedPublicationDate(selectedDates) {
+  setPublicationTargetEndDate(selectedDates) {
     this.publicationSubcase.targetEndDate = selectedDates[0];
     this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
@@ -236,9 +236,15 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setUltimateTranslationDate(selectedDates) {
+  setTranslationDueDate(selectedDates) {
     this.translationSubcase.dueDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'dueDate');
+  }
+
+  @action
+  setTranslationDate(selectedDates) {
+    this.translationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'endDate');
   }
 
   @restartableTask

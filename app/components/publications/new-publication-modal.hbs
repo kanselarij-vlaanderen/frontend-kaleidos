@@ -52,12 +52,12 @@
         {{/if}}
       </div>
       <div class='auk-form-group' style="max-width: 30rem;">
-        <WebComponents::AuLabel for="finalPublicationDate">
-          {{t "final-publication-date"}}
+        <WebComponents::AuLabel for="publicationDueDate">
+          {{t "publication-due-date"}}
         </WebComponents::AuLabel>
         <WebComponents::AuDatepicker
-                @defaultDate={{this.publicationDate}}
-                @onChange={{this.setPublicationDate}}/>
+                @defaultDate={{this.publicationDueDate}}
+                @onChange={{this.setPublicationDueDate}}/>
       </div>
 
       <div class='auk-form-group {{if this.hasShortTitleError 'auk-form-group--error' }}'>

@@ -13,7 +13,7 @@ export default class NewPublicationModal extends Component {
   @tracked suffix = null;
   @tracked shortTitle = null;
   @tracked longTitle = null;
-  @tracked publicationDate = null;
+  @tracked publicationDueDate = null;
 
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed;
@@ -65,7 +65,7 @@ export default class NewPublicationModal extends Component {
           suffix: isBlank(this.suffix) ? undefined : this.suffix,
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
-          publicationDate: this.publicationDate,
+          publicationDueDate: this.publicationDueDate,
         });
     }
   }
@@ -76,7 +76,7 @@ export default class NewPublicationModal extends Component {
   }
 
   @action
-  setPublicationDate(selectedDates) {
-    this.publicationDate = selectedDates[0];
+  setPublicationDueDate(selectedDates) {
+    this.publicationDueDate = selectedDates[0];
   }
 }
