@@ -186,7 +186,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   addNumacNumber() {
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
-      agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+      agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.publicationFlow,
     });
 

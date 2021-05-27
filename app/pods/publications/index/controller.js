@@ -123,7 +123,7 @@ export default class PublicationsIndexController extends Controller {
 
     const identifier = this.store.createRecord('identification', {
       idName: identificationNumber,
-      agency: 'ovrb',
+      agency: CONSTANTS.SCHEMA_AGENCIES.OVRB,
       structuredIdentifier: structuredIdentifier,
     });
     await identifier.save();
