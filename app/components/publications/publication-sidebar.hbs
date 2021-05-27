@@ -92,9 +92,9 @@
           </div>
         {{/if}}
 
-        {{!-- Werknummer --}}
+        {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
+          <WebComponents::AuLabel>{{t "numac-number"}}</WebComponents::AuLabel>
           <WebComponents::AuInputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
