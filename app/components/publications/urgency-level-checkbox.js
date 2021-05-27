@@ -8,17 +8,7 @@ import { tracked } from '@glimmer/tracking';
 export default class UrgencyLevelCheckboxComponent extends Component {
   @service store;
 
-  @tracked urgencyLevels = null;
-
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
-
-  @task
-  *loadData() {
-    this.urgencyLevels = yield this.store.peekAll('urgency-level').sortBy('position');
-  }
+  @tracked urgencyLevels = this.store.peekAll('urgency-level').sortBy('position')
 
   @action
   toggleUrgency(value) {

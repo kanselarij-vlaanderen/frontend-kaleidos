@@ -31,10 +31,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
-  @lastValue('loadRegulationTypes') regulationTypes;
+  @tracked regulationTypes;
+
+
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
-  @tracked publicationModes;
 
   constructor() {
     super(...arguments);
@@ -42,16 +43,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
+    this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
     this.initializePublicationNumber.perform();
   }
 
   get publicationFlow() {
     return this.args.publicationFlow;
-  }
-
-  @task
-  *loadRegulationTypes() {
-    return yield this.store.peekAll('regulation-type').sortBy('position');
   }
 
   @task
