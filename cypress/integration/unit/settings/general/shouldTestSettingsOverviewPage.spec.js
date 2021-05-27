@@ -4,9 +4,9 @@
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
-import agenda from '../../../../selectors/agenda.selectors';
 import utils from '../../../../selectors/utils.selectors';
 import form from '../../../../selectors/form.selectors';
+import dependency from '../../../../selectors/dependency.selectors';
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
@@ -186,8 +186,8 @@ context('Settings overview page tests', () => {
       cy.get(settings.goToUserDetail).click();
       cy.contains('Gebruiker: Minister Test');
       cy.contains('Algemene informatie');
-      cy.get(settings.emberPowerSelectTrigger).click();
-      cy.get(agenda.emberPowerSelectOption).contains('kabinet')
+      cy.get(dependency.emberPowerSelect.trigger).click();
+      cy.get(dependency.emberPowerSelect.option).contains('kabinet')
         .click();
       cy.wait(5000); // TODO await PATCH call instead
       cy.get(utils.generalBackButton).should('exist')

@@ -5,6 +5,7 @@ import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -208,11 +209,11 @@ context('Add files to an agenda', () => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
         .within(() => {
-          cy.get('.ember-power-select-trigger').scrollIntoView()
+          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
             .click();
         });
     });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Uitgesteld').scrollIntoView()
           .click();
