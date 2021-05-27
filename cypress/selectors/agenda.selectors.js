@@ -1,6 +1,4 @@
 const selectors = {
-  emberPowerSelectTrigger: '.ember-power-select-trigger',
-  emberPowerSelectOption: '.ember-power-select-option',
   createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',

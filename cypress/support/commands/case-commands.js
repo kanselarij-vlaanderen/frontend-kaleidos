@@ -4,6 +4,7 @@
 // ***********************************************
 // Functions
 import search from '../../selectors/search.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 /**
  * @description Goes to the case overview and creates a new case
@@ -122,9 +123,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   if (step) {
     cy.get('.auk-form-group').eq(2)
       .within(() => {
-        cy.get('.ember-power-select-trigger').click();
+        cy.get(dependency.emberPowerSelect.trigger).click();
       });
-    cy.get('.ember-power-select-option', {
+    cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).should('exist')
       .then(() => {
@@ -132,7 +133,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
           .trigger('mouseover')
           .click();
         // TODO Experiment for dropdown flakyness
-        cy.get('.ember-power-select-option', {
+        cy.get(dependency.emberPowerSelect.option, {
           timeout: 15000,
         }).should('not.be.visible');
       });
@@ -142,9 +143,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   if (stepName) {
     cy.get('.auk-form-group').eq(3)
       .within(() => {
-        cy.get('.ember-power-select-trigger').click();
+        cy.get(dependency.emberPowerSelect.trigger).click();
       });
-    cy.get('.ember-power-select-option', {
+    cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).should('exist')
       .then(() => {
@@ -152,7 +153,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
           .trigger('mouseover')
           .click();
         // TODO Experiment for dropdown flakyness
-        cy.get('.ember-power-select-option', {
+        cy.get(dependency.emberPowerSelect.option, {
           timeout: 15000,
         }).should('not.be.visible');
       });
