@@ -17,15 +17,15 @@ context('Testing the toolbar as Admin user', () => {
   // TODO test url after clicking instead of other titles not existing
 
   it('Should have meeting, Case, Newsletter and Settings in toolbar', () => {
-    cy.get(toolbar.agenda).should('exist');
-    cy.get(toolbar.cases).should('exist');
-    cy.get(toolbar.newsletters).should('exist');
-    cy.get(toolbar.settings).should('exist');
+    cy.get(toolbar.mHeader.agendas).should('exist');
+    cy.get(toolbar.mHeader.cases).should('exist');
+    cy.get(toolbar.mHeader.newsletters).should('exist');
+    cy.get(toolbar.mHeader.settings).should('exist');
     // TODO publications, search
   });
 
   it('Should switch to Agenda tab when agenda is clicked', () => {
-    cy.get(toolbar.agenda).click();
+    cy.get(toolbar.mHeader.agendas).click();
     cy.get(agenda.overviewTitle).should('exist');
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
@@ -33,7 +33,7 @@ context('Testing the toolbar as Admin user', () => {
   });
 
   it('Should switch to cases tab when cases is clicked', () => {
-    cy.get(toolbar.cases).click();
+    cy.get(toolbar.mHeader.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
     cy.get(cases.casesOverviewTitle).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
@@ -41,7 +41,7 @@ context('Testing the toolbar as Admin user', () => {
   });
 
   it('Should switch to newsletter tab when newsletter is clicked', () => {
-    cy.get(toolbar.newsletters).click();
+    cy.get(toolbar.mHeader.newsletters).click();
     cy.get(agenda.overviewTitle).should('not.exist');
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.title).should('exist');
@@ -49,7 +49,7 @@ context('Testing the toolbar as Admin user', () => {
   });
 
   it('Should switch to settings tab when settings is clicked', () => {
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.get(agenda.overviewTitle).should('not.exist');
     cy.get(cases.casesOverviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');

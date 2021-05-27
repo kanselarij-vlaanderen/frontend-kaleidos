@@ -165,9 +165,9 @@ context('Search tests', () => {
       cy.get('[data-table]').contains('korte titel for batterij');
     });
 
-    cy.get('[data-test-m-header-settings]').click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
-    cy.get('[data-test-m-header-search]').click();
+    cy.get(toolbar.mHeader.search).click();
     // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
@@ -181,9 +181,9 @@ context('Search tests', () => {
     cy.server();
     cy.get(search.searchButtonToClick).click();
     cy.wait(1000);
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(search.searchMenuLink).click();
+    cy.get(toolbar.mHeader.search).click();
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
     // cy.get(search.searchfield).should('have.value', '');
