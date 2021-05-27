@@ -147,7 +147,7 @@
                 {{/if}}
                 {{#if this.tableColumnDisplayOptions.publicationDate}}
                   <td class="auk-u-text-nowrap">
-                    {{#if (and row.publicationSubcase.endDate row.status.isPublished)}}
+                    {{#if row.publicationSubcase.endDate}}
                       {{moment-format row.publicationSubcase.endDate "DD-MM-YYYY"}}
                     {{else}}
                       {{t "dash"}}
