@@ -106,6 +106,7 @@
 
 {{#if this.isOpenPublicationModal}}
   <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
     />

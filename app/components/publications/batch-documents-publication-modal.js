@@ -6,7 +6,6 @@ import {
   task,
   lastValue
 } from 'ember-concurrency-decorators';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 /**
  * @argument {Agendaitem} agedaitem
@@ -17,7 +16,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @service publicationService;
 
   @tracked isOpenNewPublicationModal = false;
-  @lastValue('loadPieces') pieces;
   @lastValue('loadCase') case;
 
   constructor() {
@@ -29,16 +27,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadPieces() {
-    // query: ensure all related records are loaded (to prevent extra calls from template)
-    let pieces = yield this.store.query('piece', {
+    // ensure all related records are loaded to prevent extra calls from template for each piece individually
+    yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      'page[size]': this.args.pieces.length,
       include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
-    // array: <DocumentList /> expects array
-    pieces = pieces.toArray();
-    pieces = sortPieces(pieces);
-    return pieces;
   }
 
   @task
