@@ -161,7 +161,7 @@ context('Full test for creating mandatees', () => {
     cy.get('[data-test-mandatee-resign="0"]').click();
     cy.wait(3000);
     // TODO Fix grammar of popup ?
-    cy.get(mandatee.manageMandateeChangesAlert).should('exist')
+    cy.get(mandatee.manageMandatee.changesAlert).should('exist')
       .should('be.visible');
     cy.get(form.formCancelButton).click();
     cy.contains(ministerNickName).parents('tr')

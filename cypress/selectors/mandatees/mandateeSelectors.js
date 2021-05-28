@@ -44,13 +44,16 @@ const selectors = {
     lastnameContainer: '[data-test-person-selector-lastname]',
   },
 
-  // edit-mandatees
+  // edit-mandatee
   editMandatee: {
     save: '[data-test-edit-mandatee-save]',
     cancel: '[data-test-edit-mandatee-cancel]',
   },
 
   // manage-mandatees
-  manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
+  manageMandatee: {
+    changesAlert: '[data-test-manage-mandatee-changes-alert]',
+  },
+
 };
 export default selectors;
