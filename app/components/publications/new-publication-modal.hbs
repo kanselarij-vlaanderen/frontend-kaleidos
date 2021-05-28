@@ -70,7 +70,7 @@
             {{t "name-subcase"}}
           </WebComponents::AuLabel>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            @disabled={{this.isViaCouncilOfMinisters}}
+            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
             <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -79,7 +79,7 @@
         <div class="auk-form-group">
           <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            @disabled={{this.isViaCouncilOfMinisters}}
+            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>
@@ -91,7 +91,7 @@
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel
-            @disabled={{this.isLoading}}>
+            disabled={{this.isLoading}}>
             {{t "cancel"}}
           </WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>
@@ -102,7 +102,7 @@
             <Utils::SimpleSpinner></Utils::SimpleSpinner>
           {{else}}
             <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}
-              @disabled={{this.isLoading}}>
+              disabled={{this.isLoading}}>
               {{t "publications-new-button-text"}}
             </WebComponents::AuButton>
           {{/if}}
