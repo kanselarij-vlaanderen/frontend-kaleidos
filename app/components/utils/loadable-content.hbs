@@ -1,7 +1,16 @@
-<div class="loadable-content">
-  <div class="content {{if @isLoading "is-loading"}}">
-    {{yield}}
-  </div>
+{{!--
+  @argument {boolean} isLoading
+  @argument {boolean} reserveSpace:
+    render with `visibility: hidden`: prevent unstable layout due to differences in size between loader-wrapper and content
+    !attention: rendering can trigger side effects like loading relationships
+--}}
+
+<div class="utils--loadable-content">
+  {{#if (or (not @isLoading) @reserveSpace)}}
+    <div class="content {{if @isLoading "is-loading"}}">
+      {{yield}}
+    </div>
+  {{/if}}
   {{#if @isLoading}}
     <div class="auk-loader-wrapper">
       <WebComponents::AuLoader />

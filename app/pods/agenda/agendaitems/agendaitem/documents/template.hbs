@@ -97,9 +97,9 @@
   </WebComponents::VlModal>
 {{/if}}
 
-{{#if this.publicationModalIsOpen}}
+{{#if this.isOpenPublicationModal}}
   <Publications::BatchDocumentsPublicationModal
-    @dataPromise={{this.publicationModalDataPromise}}
+    @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
     />
 {{/if}}

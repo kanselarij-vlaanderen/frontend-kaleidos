@@ -6,15 +6,14 @@ import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
 /**
- * @argument { Promise<{ shortTitle: string, longTitle: string, }> } initialTitlesPromise
- * @argument { boolean } isViaCouncilOfMinisters
+ * @argument { undefined|Case } case: for a publication that passes the Council of Ministers
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
-          number: number,
-          suffix: undefined | string,
-          shortTitle: string,
-          longTitle: string,
-        })) => Promise<void> } onSave
+ *  number: number,
+ *  suffix: undefined | string,
+ *  shortTitle: string,
+ *  longTitle: string,
+ * })) => Promise<void> } onSave
  */
 export default class NewPublicationModal extends Component {
   @service publicationService;
@@ -22,7 +21,6 @@ export default class NewPublicationModal extends Component {
 
   @tracked number = null;
   @tracked suffix = null;
-  @tracked areTitlesEditable = true;
   @tracked shortTitle = null;
   @tracked longTitle = null;
 
@@ -34,6 +32,10 @@ export default class NewPublicationModal extends Component {
 
     this.initTitles.perform();
     this.initPublicationNumber.perform();
+  }
+
+  get isViaCouncilOfMinisters() {
+    return !!this.args.case;
   }
 
   get isLoading() {
@@ -58,11 +60,11 @@ export default class NewPublicationModal extends Component {
 
   @task
   *initTitles() {
-    if (this.args.initialTitlesPromise) {
-      this.areTitlesEditable = false;
-      const initialTitles = yield this.args.initialTitlesPromise;
-      this.shortTitle = initialTitles.shortTitle;
-      this.longTitle = initialTitles.longTitle;
+    if (this.args.case) {
+      // in case it's not already loaded (unlikely)
+      const case_ = yield this.args.case;
+      this.shortTitle = case_.shortTitle;
+      this.longTitle = case_.title;
     }
   }
 
