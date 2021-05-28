@@ -7,9 +7,10 @@
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
   <WebComponents::AuToolbar::Group @position="right">
-    {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
+    {{#if (and this.currentSession.isEditor this.model.pieces.length (not this.isEnabledPieceEdit))}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-subcase-documents-edit
+        <WebComponents::AuButton
+          data-test-subcase-documents-edit
           {{on "click" this.enablePieceEdit}}>
           {{t "edit"}}
         </WebComponents::AuButton>
