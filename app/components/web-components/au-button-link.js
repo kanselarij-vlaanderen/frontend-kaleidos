@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 
 export default class ButtonLink extends Component {
+  // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
+  // https://github.com/emberjs/ember.js/issues/18265
   @computed('args.{model,models}')
   get models() {
     const hasModel = 'model' in this.args;
