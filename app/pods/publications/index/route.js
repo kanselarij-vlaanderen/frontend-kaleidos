@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { dasherize } from '@ember/string';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
 export default class PublicationsIndexRoute extends Route {
