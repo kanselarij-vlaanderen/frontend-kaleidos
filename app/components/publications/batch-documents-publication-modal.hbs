@@ -38,7 +38,9 @@
                 {{#if piece.publicationFlow}}
                   {{piece.publicationFlow.identification.idName}}
                 {{else}}
-                  <WebComponents::AuButton @icon="add" {{on 'click' (fn openNewPublicationModal piece)}}>
+                  <WebComponents::AuButton
+                    @icon="add"
+                    {{on 'click' (fn this.openNewPublicationModal piece)}}>
                     {{t "publications-new"}}
                   </WebComponents::AuButton>
                 {{/if}}
