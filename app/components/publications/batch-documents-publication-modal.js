@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
   task,
@@ -13,13 +13,12 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   pieceToPublish;
+  @service store;
+  @service publicationService;
 
   @tracked isOpenNewPublicationModal = false;
   @lastValue('loadPieces') pieces;
   @lastValue('loadCase') case;
-
-  @inject store;
-  @inject publicationService;
 
   constructor() {
     super(...arguments);
