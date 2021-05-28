@@ -11,7 +11,7 @@ import {
  * @argument {Agendaitem} agedaitem
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  pieceToPublish;
+  referenceDocument;
   @service store;
   @service publicationService;
 
@@ -47,23 +47,23 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   // new publication actions
   @action
   openNewPublicationModal(piece) {
-    this.pieceToPublish = piece;
+    this.referenceDocument = piece;
     this.isOpenNewPublicationModal = true;
   }
 
   @task
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
-      // case should already be loaded here
       case: this.case,
     });
-    this.pieceToPublish.publicationFlow = publicationFlow;
-    yield this.pieceToPublish.save();
+    this.referenceDocument.publicationFlow = publicationFlow;
+    yield this.referenceDocument.save();
     this.isOpenNewPublicationModal = false;
   }
 
   @action
   cancelNewPublication() {
+    this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
   }
 }
