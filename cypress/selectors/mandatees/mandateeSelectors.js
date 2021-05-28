@@ -36,10 +36,14 @@ const selectors = {
   },
 
   // create-person-selector
-  addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
-  createPerson: '[data-test-create-person]',
-  createPersonLastnameContainer: '[data-test-create-person-firstname]',
-  createPersonfirstnameContainer: '[data-test-create-person-lastname]',
+  personSelector: {
+    personDropdown: '[data-test-person-selector-dropdown-container]',
+    // TODO make test to create new person with these selectors
+    createPerson: '[data-test-person-selector-action-create-person]',
+    firstnameContainer: '[data-test-person-selector-firstname]',
+    lastnameContainer: '[data-test-person-selector-lastname]',
+  },
+
   // edit-mandatees
   mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
   // manage-mandatees

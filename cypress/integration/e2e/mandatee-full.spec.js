@@ -62,7 +62,7 @@ context('Full test for creating mandatees', () => {
           .should('be.visible')
           .type(ministerNickName);
       });
-    cy.get(mandatee.addMandateeDropdownContainer).should('exist')
+    cy.get(mandatee.personSelector.personDropdown).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get('.ember-power-select-trigger').scrollIntoView()
