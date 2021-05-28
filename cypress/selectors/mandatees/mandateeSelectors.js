@@ -45,7 +45,11 @@ const selectors = {
   },
 
   // edit-mandatees
-  mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
+  editMandatee: {
+    save: '[data-test-edit-mandatee-save]',
+    cancel: '[data-test-edit-mandatee-cancel]',
+  },
+
   // manage-mandatees
   manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
 };

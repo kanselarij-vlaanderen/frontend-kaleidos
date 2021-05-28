@@ -139,7 +139,7 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 
-    cy.get(form.formSave).should('exist')
+    cy.get(mandatee.editMandatee.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait(3000);
@@ -150,7 +150,7 @@ context('Full test for creating mandatees', () => {
     cy.get(modal.verify.cancel).should('exist')
       .should('be.visible')
       .click();
-    cy.get(mandatee.mandateeEditCancel).should('exist')
+    cy.get(mandatee.editMandatee.cancel).should('exist')
       .should('be.visible')
       .click();
     cy.visit('/');

@@ -21,7 +21,6 @@ const selectors = {
   mandateeEdit: '[data-test-mandatee-edit]',
   mandateeResign: '[data-test-mandatee-resign]',
   mandateeDelete: '[data-test-mandatee-delete]',
-  iseCodes: '[data-test-model-selector-iseCodes]',
   deleteUser: '[data-test-delete-user]',
   userSearchInput: '[data-test-user-search-input]',
   userSearchButton: '[data-test-user-search-button]',
