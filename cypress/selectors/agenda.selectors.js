@@ -13,7 +13,6 @@ const selectors = {
   agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
   agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
   agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
-  navigateToPrintableAgenda: '[data-test-agenda-header-navigateToPrintableAgenda]',
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
   dataTable: '.auk-table',
@@ -39,13 +38,8 @@ const selectors = {
       themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]',
     },
   },
-  agendaActions: '[data-test-agenda-header-showActionOptions]',
-  approveAgenda: '[data-test-agenda-header-approveAgenda]',
-  lockAgenda: '[data-test-agenda-header-lockagenda]',
-  reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
+
   agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
-  createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
-  reopenCurrentAgenda: '[data-test-agenda-header-unlockagenda]',
   agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
   addDecision: '[data-test-add-decision]',
   decisionContainer: '[data-test-decision-container]',
@@ -68,8 +62,7 @@ const selectors = {
   agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
   agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
   decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',
-  agendaHeaderShowAgendaOptions: '[data-test-agenda-header-showAgendaOptions]',
-  agendaHeaderApproveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
+
   deleteAgendaitemButton: '[data-test-delete-agendaitem]',
   postponeAgendaitemButton: '[data-test-postpone-agendaitem]',
   revertPostponeAgendaitemButton: '[data-test-revert-postpone-agendaitem]',
@@ -79,6 +72,39 @@ const selectors = {
   agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
   agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
+
+  // agenda-header
+  agendaHeader: {
+    showAgendaOptions: '[data-test-agenda-header-show-agenda-options]',
+    agendaActions: {
+      approveAgenda: '[data-test-agenda-header-approve-agenda]',
+      approveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda]',
+      lockAgenda: '[data-test-agenda-header-lock-agenda]',
+      unlockAgenda: '[data-test-agenda-header-unlock-agenda]',
+      reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
+      deleteAgenda: '[data-test-agenda-header-delete-agenda]',
+    },
+    showActionOptions: '[data-test-agenda-header-show-action-options]',
+    actions: {
+      createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',
+      navigateToPrintableAgenda: '[data-test-agenda-header-navigate-to-printable-agenda]',
+      addAgendaitems: '[data-test-agenda-header-add-agendaitems]',
+      navigateToDecisions: '[data-test-agenda-header-navigate-to-decisions]',
+      navigateToNewsletter: '[data-test-agenda-header-navigate-to-newsletter]',
+      toggleEditingSession: '[data-test-agenda-header-toggle-editing-session]',
+      downloadDocuments: '[data-test-agenda-header-download-documents]',
+      releaseDecisions: '[data-test-agenda-header-release-decisions]',
+      releaseDocuments: '[data-test-agenda-header-release-documents]',
+      approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems]',
+      // TODO unused selectors
+      navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
+      navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
+      selectSignature: '[data-test-agenda-header-select-signature]',
+      printAgenda: ['data-test-agenda-header-print-agenda'],
+    },
+    // TODO unused selector
+    title: ['data-test-agenda-header-title'],
+  },
 
   // compare-agenda-list
   compareAgenda: {

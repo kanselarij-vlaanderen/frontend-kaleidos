@@ -1,10 +1,9 @@
+/* global context, before, it, cy,beforeEach, afterEach, Cypress */
+// / <reference types="Cypress" />
+
 // import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import document from '../../selectors/document.selectors';
-// import actionModel from '../../selectors/action-modal.selectors';
-
-/* global context, before, it, cy,beforeEach, afterEach, Cypress */
-// / <reference types="Cypress" />
 
 function currentTimestamp() {
   return Cypress.moment().unix();

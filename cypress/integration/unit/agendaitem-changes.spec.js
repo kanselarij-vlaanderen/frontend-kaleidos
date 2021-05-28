@@ -1,7 +1,6 @@
 /* global context, before, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import actionModal from '../../selectors/action-modal.selectors';
 
 
 context('Agendaitem changes tests', () => {
@@ -140,8 +139,8 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(agenda.navigateToPrintableAgenda).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printHeaderTitle, {
       timeout: 80000,

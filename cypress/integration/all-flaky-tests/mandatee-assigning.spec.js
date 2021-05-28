@@ -7,7 +7,6 @@ import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selector';
 import modal from '../../selectors/modal.selectors';
-import actionModal from '../../selectors/action-modal.selectors';
 import auComponents from '../../selectors/au-component-selectors';
 
 function currentTimestamp() {
@@ -433,8 +432,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(modal.verify.save).click();
     cy.wait(3000);
 
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     cy.get(newsletter.overviewTableRow).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
