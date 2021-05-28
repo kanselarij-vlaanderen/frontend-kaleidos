@@ -148,20 +148,20 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesView.edit).should('exist')
       .should('be.visible')
       .click();
-
+    // TODO replace with confidentiality selector
     cy.get(form.formVlToggle).should('exist')
       .click();
 
-    cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
-    cy.get(agenda.agendaitemTitlesEditShorttitle).type('dit is de korte titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).type('dit is de korte titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEditTitle).clear();
-    cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.title).clear();
+    cy.get(agenda.agendaitemTitlesEdit.title).type('dit is de lange titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEditExplanation).clear();
-    cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+    cy.get(agenda.agendaitemTitlesEdit.explanation).clear();
+    cy.get(agenda.agendaitemTitlesEdit.explanation).type('Dit is de opmerking');
 
-    cy.get(agenda.agendaitemTitlesEditSave).should('exist')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).should('exist')
       .should('be.visible')
       .click();
     cy.get(agenda.agendaitemTitlesView.edit).scrollIntoView();

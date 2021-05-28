@@ -61,13 +61,6 @@ const selectors = {
   subcaseTitlesEditConfidential: '[data-test-subcase-titles-edit-confidential ]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
 
-  agendaitemTitlesEditTitle: '[data-test-agendaitem-titles-edit-title]',
-  agendaitemTitlesEditShorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
-  agendaitemTitlesEditExplanation: '[data-test-agendaitem-titles-edit-explanation]',
-  agendaitemTitlesEditShowInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
-  agendaitemTitlesEditSave: '[data-test-agendaitem-titles-edit-save]',
-  agendaitemTitlesEditConfidential: '[data-test-agendaitem-titles-edit-confidential]',
-
   approveDesignAgenda: '[data-test-approve-design-agenda]',
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
   documentType: '[data-test-document-type]',
@@ -104,5 +97,16 @@ const selectors = {
     edit: '[data-test-agendaitem-titles-edit]',
   },
 
+  // agendaitem-titles-edit
+  agendaitemTitlesEdit: {
+    title: '[data-test-agendaitem-titles-edit-title]',
+    shorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
+    explanation: '[data-test-agendaitem-titles-edit-explanation]',
+    showInNewsletter: '[data-test-agendaitem-titles-edit-showInNewsletter]',
+    confidential: '[data-test-agendaitem-titles-edit-confidential]',
+    actions: {
+      save: '[data-test-agendaitem-titles-edit-save]',
+    },
+  },
 };
 export default selectors;
