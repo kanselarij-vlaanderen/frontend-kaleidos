@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
 /**
- * @argument { undefined|Case } case for a publication that passes the Council of Ministers
+ * @argument { undefined|Case } case: for a publication that passes the Council of Ministers
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
  *  number: number,

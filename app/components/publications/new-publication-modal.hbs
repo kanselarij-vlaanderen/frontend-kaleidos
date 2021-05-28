@@ -1,5 +1,4 @@
 <WebComponents::AuModal data-test-au-modal-publication-new>
-  {{!-- TODO maak onderscheid tussen 2 cases via @case --}}
   <WebComponents::AuModal::Header @title={{if
     this.isViaCouncilOfMinisters
     (t "publications-new-title-via-council-of-ministers")
@@ -7,7 +6,7 @@
   }}
     @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
-    <Utils::LoadableContent @isLoading={{this.isLoading}}>
+    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
       {{#if hasError}}
         <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
           @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
