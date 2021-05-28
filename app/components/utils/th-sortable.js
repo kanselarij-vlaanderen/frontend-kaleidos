@@ -9,6 +9,9 @@ export default class ThSortable extends Component {
   get isDescendingOrder() {
     return this.args.currentSorting === `-${this.args.field}`;
   }
+
+  get isSorted() {
+    return this.isDescendingOrder || this.isAscendingOrder;
   }
 
   @action
