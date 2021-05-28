@@ -46,7 +46,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   // new publication actions
   @action
-  async openNewPublicationModal(piece) {
+  openNewPublicationModal(piece) {
     this.pieceToPublish = piece;
     this.isOpenNewPublicationModal = true;
   }
