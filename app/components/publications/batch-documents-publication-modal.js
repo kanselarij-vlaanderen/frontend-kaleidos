@@ -33,6 +33,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     // query: ensure all related records are loaded (to prevent extra calls from template)
     let pieces = yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': 500, // TODO add pagination when sorting is done in the backend
       include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
     // array: <DocumentList /> expects array
