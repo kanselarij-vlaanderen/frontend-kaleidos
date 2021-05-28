@@ -42,16 +42,15 @@
                     <Utils::ThSortable
                       style="min-width: 25rem:"
                       @currentSorting={{this.sort}}
-                      @field={{column.keyName}}
+                      @field={{column.sortKey}}
                       @onChange={{this.sortTable}}
                       @label={{t column.translationKeySmall}}/>
-
                   {{else}}
-                    {{#if column.sortable}}
+                    {{#if column.sortKey}}
                       <Utils::ThSortable
                               @onChange={{this.sortTable}}
                               @currentSorting={{this.sort}}
-                              @field={{column.keyName}}
+                              @field={{column.sortKey}}
                               @label={{t column.translationKeySmall}}/>
                     {{else}}
                       <th class="auk-u-text-nowrap">{{t column.translationKeySmall}}</th>
