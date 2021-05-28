@@ -105,7 +105,7 @@ context('Search tests', () => {
     cy.openAgendaForDate(dateToCreateAgenda);
     // TODO use opendetailofagendaitem and newSubcase1TitleShort to open detail
     cy.contains('dit is de korte titel for search').click();
-    cy.get(agenda.agendaitemTitlesEdit).should('exist')
+    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
       .should('be.visible')
       .click();
 

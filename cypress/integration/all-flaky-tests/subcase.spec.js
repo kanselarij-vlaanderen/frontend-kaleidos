@@ -93,7 +93,7 @@ context('Subcase tests', () => {
 
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(SubcaseTitleShort);
-    cy.get(agenda.agendaitemTitlesToSubcase).should('exist');
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('exist');
   });
 
   it('should add a subcase and then delete it', () => {
@@ -178,7 +178,7 @@ context('Subcase tests', () => {
 
     // Status is hidden
     cy.get(auComponents.auPillSpan).contains('Zichtbaar in kort bestek');
-    cy.get(agenda.agendaitemTitlesToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
     cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
@@ -197,7 +197,7 @@ context('Subcase tests', () => {
     cy.get(auComponents.auPillSpan).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
-    cy.get(agenda.agendaitemTitlesEdit).click();
+    cy.get(agenda.agendaitemTitlesView.edit).click();
 
     // Check the checkbox (toggle this invisible motafoka).
     cy.get(agenda.agendaitemTitlesEditShowInNewsletter)
@@ -219,7 +219,7 @@ context('Subcase tests', () => {
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('exist');
 
-    cy.get(agenda.agendaitemTitlesToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
   });
@@ -331,7 +331,7 @@ context('Subcase tests', () => {
       .click();
 
     cy.wait(1000);
-    cy.get(agenda.agendaitemTitlesToSubcase).click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.get(agenda.subcase.agendaLink).click();

@@ -226,8 +226,7 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
-    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering op/);
     cy.get('.vlc-status-timeline > li').eq(1)

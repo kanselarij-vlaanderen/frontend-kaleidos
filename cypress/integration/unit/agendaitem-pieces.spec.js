@@ -88,8 +88,7 @@ context('Tests of pieces on agendaitems', () => {
           cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-2');
         });
       cy.openDetailOfAgendaitem(part1Title);
-      cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-        .click();
+      cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
       cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
       cy.get('.auk-scroll-wrapper__body').within(() => {

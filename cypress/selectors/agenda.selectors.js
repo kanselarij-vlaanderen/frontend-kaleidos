@@ -24,7 +24,6 @@ const selectors = {
   agendaitemControlsActionDelete: '[data-test-agendaitem-controls-action-delete]',
   agendaitemControlsActionAdvance: '[data-test-agendaitem-controls-action-advance]',
   agendaitemControlsActionPostpone: '[data-test-agendaitem-controls-action-postpone]',
-  agendaitemTitlesToSubcase: '[data-test-agendaitem-titles-to-subcase]',
   subcase: {
     agendaLink: '[data-test-subcase-agenda-link] a',
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
@@ -62,7 +61,6 @@ const selectors = {
   subcaseTitlesEditConfidential: '[data-test-subcase-titles-edit-confidential ]',
   subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
 
-  agendaitemTitlesEdit: '[data-test-agendaitem-titles-edit]',
   agendaitemTitlesEditTitle: '[data-test-agendaitem-titles-edit-title]',
   agendaitemTitlesEditShorttitle: '[data-test-agendaitem-titles-edit-shorttitle]',
   agendaitemTitlesEditExplanation: '[data-test-agendaitem-titles-edit-explanation]',
@@ -85,6 +83,10 @@ const selectors = {
   agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
   agendaitemNumber: '[data-test-agendaitem-number]',
 
+  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
+  agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
+  agendaSidenavElement: 'data-test-agenda-sidenav-element',
+
   // compare-agenda-list
   compareAgenda: {
     showChanges: '[data-test-compare-show-changes]',
@@ -95,8 +97,12 @@ const selectors = {
     announcementLeft: '[data-test-compare-announcement-left]',
     announcementRight: '[data-test-compare-announcement-right]',
   },
-  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
-  agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
-  agendaSidenavElement: 'data-test-agenda-sidenav-element',
+
+  // agendaitem-titles-view
+  agendaitemTitlesView: {
+    linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
+    edit: '[data-test-agendaitem-titles-edit]',
+  },
+
 };
 export default selectors;

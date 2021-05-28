@@ -145,7 +145,7 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
     cy.contains('dit is de korte titel').click();
     // detail view
-    cy.get(agenda.agendaitemTitlesEdit).should('exist')
+    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
       .should('be.visible')
       .click();
 
@@ -164,7 +164,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaitemTitlesEditSave).should('exist')
       .should('be.visible')
       .click();
-    cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
+    cy.get(agenda.agendaitemTitlesView.edit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('Dit is de opmerking');
