@@ -2,9 +2,9 @@
   <button class="auk-table-sorter " type="button" onclick={{@onChange}}>
     <div class="auk-table-sorter__label {{if this.isSorted "auk-u-text-bold"}}">{{@label}}</div>
     <div class="auk-icon auk-icon--default auk-icon--muted">
-      {{#if  (and this.isSorted (eq this.order 'desc'))}}
+      {{#if this.descendingOrder}}
         <i class="ki ki-caret-down"></i>
-      {{else if (and this.isSorted (eq this.order 'asc'))}}
+      {{else if this.ascendingOrder}}
         <i class="ki ki-caret-up"></i>
       {{else}}
         <i class="ki ki-caret-up-down"></i>

@@ -5,17 +5,15 @@ export default class ThSortable extends Component {
     return this.args.field.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
   }
 
-  get isSorted() {
+  get nextSort() {
     return this.args.currentSorting === this.field
       || this.args.currentSorting === `-${this.field}`;
   }
 
-  get order() {
-    if (this.args.currentSorting === this.field) {
-      return 'asc';
-    } else if (this.args.currentSorting === `-${this.field}`) {
-      return 'desc';
-    }
-    return '';
+  get ascendingOrder() {
+    return this.args.currentSorting === this.field;
+  }
+  get descendingOrder() {
+    return this.args.currentSorting === `-${this.field}`;
   }
 }
