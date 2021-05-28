@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -25,8 +24,6 @@ export default class PublicationsIndexController extends Controller {
   size = 10;
   sort = '-created';
 
-  urgencyLevels =  CONFIG.URGENCY_LEVELS;
-
   @tracked tableColumnDisplayOptions = JSON.parse(localStorage.getItem('tableColumnDisplayOptions'))
     || tableColumns.reduce((accumulator, currentValue) => {
       accumulator[currentValue.keyName] = currentValue.showByDefault;
@@ -36,7 +33,6 @@ export default class PublicationsIndexController extends Controller {
 
   @tracked showTableDisplayOptions = false;
   @tracked isShowPublicationModal = false;
-  @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
   @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
