@@ -35,9 +35,9 @@ export default class PublicationsIndexController extends Controller {
     }, {});
   tableColumns = tableColumns;
 
+  @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
   @tracked isShowPublicationModal = false;
-  @tracked showLoader = false;
   @tracked isShowPublicationFilterModal = false;
 
   @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
