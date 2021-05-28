@@ -28,6 +28,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     controller.set('agendaitem', agendaitem);
     controller.set('defaultAccessLevel', this.defaultAccessLevel);
+    controller.isEnabledPieceEdit = false;
+    controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
   }
 
