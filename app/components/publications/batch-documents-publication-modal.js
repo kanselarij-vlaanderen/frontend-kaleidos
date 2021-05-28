@@ -35,7 +35,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
     // array: <DocumentList /> expects array
     const pieces = pieceRecords.toArray();
-    console.log(pieces)
     return pieces;
   }
 
