@@ -1,8 +1,9 @@
 <WebComponents::AuModal @size="full-screen-padded">
   <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
   <WebComponents::AuModal::Body>
-    <Utils::LoadableContent @isLoading={{this.loadData.isRunning}}>
-      {{#unless this.loadData.isRunning}}
+    <Utils::LoadableContent @isLoading={{this.loadPieces.isRunning}}>
+      {{!-- don't render: prevent extra calls --}}
+      {{#unless this.loadPieces.isRunning}}
         {{!-- template-lint-disable table-groups --}}
         <table class="auk-table auk-table--styled auk-table--bordered">
           <thead>
@@ -72,11 +73,8 @@
 </WebComponents::AuModal>
 
 {{#if this.isOpenNewPublicationModal}}
-  {{!-- TODO cleaner interface @case={{this.case}}. Case can be used to retrieve default titles from and to distinguish between via MR or not --}}
-  {{!-- TODO isViaCouncilOfMinisters definieren als getter in NewPublicationModal --}}
   <Publications::NewPublicationModal
-    @isViaCouncilOfMinisters={{true}}
-    @initialTitlesPromise={{this.newPublicationInitialTitlesPromise}}
+    @case={{this.case}}
     @onSave={{perform this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />
 {{/if}}

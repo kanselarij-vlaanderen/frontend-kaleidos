@@ -1,7 +1,7 @@
 <WebComponents::AuModal data-test-au-modal-publication-new>
   {{!-- TODO maak onderscheid tussen 2 cases via @case --}}
   <WebComponents::AuModal::Header @title={{if
-    @isViaCouncilOfMinisters
+    this.isViaCouncilOfMinisters
     (t "publications-new-title-via-council-of-ministers")
     (t "publications-new-title-not-via-council-of-ministers")
   }}
@@ -11,7 +11,7 @@
       {{#if hasError}}
         <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
           @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
-      {{else if (not @isViaCouncilOfMinisters)}}
+      {{else if (not this.isViaCouncilOfMinisters)}}
         <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
           @icon="circle-info" />
       {{/if}}
@@ -46,7 +46,7 @@
             {{t "name-subcase"}}
           </WebComponents::AuLabel>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            @disabled={{not this.areTitlesEditable}}
+            @disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
             <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -55,7 +55,7 @@
         <div class="auk-form-group">
           <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            @disabled={{not this.areTitlesEditable}}
+            @disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>

@@ -2,14 +2,19 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
-
+import {
+  task,
+  lastValue
+} from 'ember-concurrency-decorators';
+/**
+ * @argument {Agendaitem} agedaitem
+ */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   pieceToPublish;
 
   @tracked isOpenNewPublicationModal = false;
-  @tracked newPublicationInitialTitlesPromise;
-  @tracked pieces;
+  @lastValue('loadPieces') pieces;
+  @lastValue('loadCase') case;
 
   @inject store;
   @inject publicationService;
@@ -17,41 +22,44 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   constructor() {
     super(...arguments);
 
-    this.loadData.perform();
+    this.loadPieces.perform();
+    this.loadCase.perform();
   }
 
   @task
-  *loadData() {
-    // TODO niet meer nodig als we @pieces binnen krijgen als argument
-    const data = yield this.args.dataPromise;
-    const pieces = data.pieces;
-    // <DocumentList /> expects iterable
-    this.pieces = pieces.toArray();
+  *loadPieces() {
+    // query: ensure all related records are loaded (to prevent extra calls from template)
+    const pieceRecords = yield this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
+    });
+    // array: <DocumentList /> expects array
+    const pieces = pieceRecords.toArray();
+    console.log(pieces)
+    return pieces;
+  }
 
-    // TODO laden van case horende bij agendapunt om mee te geven aan new-publication-modal
+  @task
+  // no yield but use of task for @lastValue
+  // eslint-disable-next-line require-yield
+  *loadCase() {
+    return this.store.queryOne('case', {
+      'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
+    });
   }
 
   // new publication actions
   @action
   async openNewPublicationModal(piece) {
     this.pieceToPublish = piece;
-    this.newPublicationInitialTitlesPromise = await this.args.dataPromise
-      .then(async(data) => {
-        const case_ = await data.case;
-        return {
-          shortTitle: case_.shortTitle,
-          longTitle: case_.title,
-        };
-      });
-
     this.isOpenNewPublicationModal = true;
   }
 
   @task
   *saveNewPublication(publicationProperties) {
-    const data = yield this.args.dataPromise;
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
-      case: data.case,
+      // case should already be loaded here
+      case: this.case,
     });
     this.pieceToPublish.publicationFlow = publicationFlow;
     yield this.pieceToPublish.save();
