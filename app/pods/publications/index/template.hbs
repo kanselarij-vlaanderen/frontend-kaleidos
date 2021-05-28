@@ -43,13 +43,13 @@
                       style="min-width: 25rem:"
                       @currentSorting={{this.sort}}
                       @field={{column.keyName}}
-                      @onChange={{fn this.sortTable column.keyName}}
+                      @onChange={{this.sortTable}}
                       @label={{t column.translationKeySmall}}/>
 
                   {{else}}
                     {{#if column.sortable}}
                       <Utils::ThSortable
-                              @onChange={{fn this.sortTable column.keyName}}
+                              @onChange={{this.sortTable}}
                               @currentSorting={{this.sort}}
                               @field={{column.keyName}}
                               @label={{t column.translationKeySmall}}/>

@@ -6,8 +6,12 @@ export default class ThSortable extends Component {
   }
 
   get nextSort() {
-    return this.args.currentSorting === this.field
-      || this.args.currentSorting === `-${this.field}`;
+    if (this.ascendingOrder) {
+      return `-${this.field}`;
+    } else if (this.descendingOrder) {
+      return '';
+    }  // if currentSorting is not set to this field
+    return this.field;
   }
 
   get ascendingOrder() {
