@@ -30,17 +30,15 @@ export default class NewPublicationModal extends Component {
 
   constructor() {
     super(...arguments);
-
-    this.initTitles.perform();
     this.initPublicationNumber.perform();
+    if (this.args.case) {
+      this.shortTitle = this.args.case.shortTitle;
+      this.longTitle = this.args.case.title;
+    }
   }
 
   get isViaCouncilOfMinisters() {
     return !!this.args.case;
-  }
-
-  get isLoading() {
-    return this.initTitles.isRunning || this.save.isRunning;
   }
 
   get isPublicationNumberValid() {
@@ -57,16 +55,6 @@ export default class NewPublicationModal extends Component {
 
   get hasShortTitleError() {
     return this.hasError && !this.isShortTitleValid;
-  }
-
-  @task
-  *initTitles() {
-    if (this.args.case) {
-      // in case it's not already loaded (unlikely)
-      const case_ = yield this.args.case;
-      this.shortTitle = case_.shortTitle;
-      this.longTitle = case_.title;
-    }
   }
 
   @task
