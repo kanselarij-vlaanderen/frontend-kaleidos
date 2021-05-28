@@ -37,6 +37,10 @@ open-cypress-tests:
 	-	make reset-elastic-and-cache
 	-	./node_modules/.bin/cypress open
 
+open-npx-cypress-tests:
+	-	make reset-elastic-and-cache
+	-	npx cypress open
+
 me-a-sandwich:
 	@echo making you a choco sandwich
 

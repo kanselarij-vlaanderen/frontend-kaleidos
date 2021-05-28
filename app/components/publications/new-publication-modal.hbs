@@ -19,9 +19,34 @@
           <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
             {{t "publications-number"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuInput type="number" id="publicationNumberInput" class="auk-input--max-width" @block="true"
-            @value={{mut this.number}} disabled={{this.initPublicationNumber.isRunning}} data-test-create-publication-modal-number-input
-            {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          <div class=" auk-u-flex auk-u-flex--vertical-center">
+            <WebComponents::AuInput
+              type="number"
+              id="publicationNumberInput"
+              class="auk-u-mr"
+              style="max-width: 10rem"
+              @value={{mut this.number}}
+              disabled={{this.initPublicationNumber.isRunning}}
+              data-test-create-publication-modal-number-input
+              {{on "change" this.isPublicationNumberAlreadyTaken}}
+            />
+            <WebComponents::AuInput
+              type="text"
+              id="publicationSuffixInput"
+              style="max-width: 6.5rem"
+              @value={{mut this.suffix}}
+              data-test-create-publication-modal-suffix-input
+              {{on "change" this.isPublicationNumberAlreadyTaken}}
+            />
+            <div class="auk-icon auk-icon--default auk-icon--muted auk-u-mx" >
+              <i class="ki ki-circle-info"></i>
+              <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
+                <p>
+                  {{t "new-publication-tooltip"}}
+                </p>
+              </EmberTooltip>
+            </div>
+          </div>
           {{#if this.numberIsAlreadyUsed}}
             <WebComponents::AuLabelError>
               {{t "publication-number-already-taken"}}
@@ -31,16 +56,16 @@
               {{t "input-error-message"}}
             </WebComponents::AuLabelError>
           {{/if}}
-
         </div>
-        <div class='auk-form-group'>
-          <WebComponents::AuLabel for="publicationSuffixInput">
-            {{t "publications-suffix"}}
+        <div class='auk-form-group' style="max-width: 30rem;">
+          <WebComponents::AuLabel for="publicationDueDate">
+            {{t "publication-due-date"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="publicationSuffixInput" class="auk-input--max-width" @block="true"
-            @value={{mut suffix}} data-test-create-publication-modal-suffix-input {{on "change" this.isPublicationNumberAlreadyTaken}} />
+          <WebComponents::AuDatepicker
+                  @defaultDate={{this.publicationDueDate}}
+                  @onChange={{this.setPublicationDueDate}}/>
         </div>
-        <div class='auk-form-group {{if this.hasShortTitleError 'auk-form-group--error' }}'>
+        <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
           <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}
           </WebComponents::AuLabel>

@@ -21,6 +21,7 @@ export default class PublicationService extends Service {
    *  longTitle: string,
    *  number: number,
    *  suffix: string,
+   *  publicationDueDate: Date,
    * }} publicationProperties
    * @param {{
    *  case: Case,
@@ -57,7 +58,7 @@ export default class PublicationService extends Service {
 
     const identifier = this.store.createRecord('identification', {
       idName: identificationNumber,
-      agency: 'ovrb',
+      agency: CONSTANTS.SCHEMA_AGENCIES.OVRB,
       structuredIdentifier: structuredIdentifier,
     });
     await identifier.save();
@@ -84,6 +85,7 @@ export default class PublicationService extends Service {
     const publicationSubcase = this.store.createRecord('publication-subcase', {
       created: now,
       modified: now,
+      dueDate: publicationProperties.publicationDueDate,
       publicationFlow,
     });
     await Promise.all([translationSubcase.save(), publicationSubcase.save()]);

@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
 import PublicationFilter from 'frontend-kaleidos/utils/publication-filter';
 
@@ -97,63 +96,6 @@ export default class PublicationsIndexController extends Controller {
     localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
     this.send('refreshModel');
-  }
-
-  async createNewPublication(publicationNumber, publicationSuffix, title, shortTitle) {
-    const creationDatetime = new Date();
-    const caze = this.store.createRecord('case', {
-      title,
-      shortTitle,
-      created: creationDatetime,
-    });
-    await caze.save();
-
-    const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
-
-    const structuredIdentifier = this.store.createRecord('structured-identifier', {
-      localIdentifier: publicationNumber,
-      versionIdentifier: publicationSuffix,
-    });
-    await structuredIdentifier.save();
-
-    let identificationNumber = publicationNumber;
-    if (publicationSuffix && publicationSuffix.length > 0) {
-      identificationNumber += ` ${publicationSuffix}`;
-    }
-
-    const identifier = this.store.createRecord('identification', {
-      idName: identificationNumber,
-      agency: 'ovrb',
-      structuredIdentifier: structuredIdentifier,
-    });
-    await identifier.save();
-
-    const statusChange = this.store.createRecord('publication-status-change', {
-      startedAt: new Date(),
-    });
-    await statusChange.save();
-    const publicationFlow = this.store.createRecord('publication-flow', {
-      identification: identifier,
-      case: caze,
-      statusChange: statusChange,
-      created: creationDatetime,
-      openingDate: new Date(),
-      status: toPublishStatus,
-      modified: creationDatetime,
-    });
-    await publicationFlow.save();
-    const translationSubcase = this.store.createRecord('translation-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
-      publicationFlow,
-    });
-    const publicationSubcase = this.store.createRecord('publication-subcase', {
-      created: creationDatetime,
-      modified: creationDatetime,
-      publicationFlow,
-    });
-    await Promise.all([translationSubcase.save(), publicationSubcase.save()]);
-    return publicationFlow;
   }
 
   @action
