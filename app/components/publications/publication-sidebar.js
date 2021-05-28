@@ -27,25 +27,24 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;
   @tracked publicationModes;
+  @tracked regulationTypes;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
-  @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
   @lastValue('loadPublicationSubcase') publicationSubcase;
   @lastValue('loadTranslationSubcase') translationSubcase;
-  @tracked publicationModes;
 
   constructor() {
     super(...arguments);
-    this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
     this.loadPublicationSubcase.perform();
     this.loadTranslationSubcase.perform();
+    this.loadStructuredIdentifier.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
-    this.initializePublicationNumber.perform();
+    this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
   }
 
   get publicationFlow() {
@@ -53,23 +52,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-  *loadRegulationTypes() {
-    const regulationTypes = yield this.store.query('regulation-type', {
-      sort: 'position',
-    });
-    return regulationTypes;
-  }
-
-  @task
   *loadPublicationStatus() {
-    const publicationStatus = yield this.publicationFlow.status;
-    return publicationStatus;
+    return yield this.publicationFlow.status;
   }
 
   @task
   *loadPublicationStatusChange() {
-    const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
-    return publicationStatusChange;
+    return yield this.publicationFlow.publicationStatusChange;
   }
 
   @task
@@ -85,7 +74,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-  *initializePublicationNumber() {
+  *loadStructuredIdentifier() {
     const identification = yield this.publicationFlow.identification;
     const structuredIdentifier = yield identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
