@@ -14,10 +14,11 @@ export default class ThSortable extends Component {
     return this.field;
   }
 
-  get ascendingOrder() {
+  get isAscendingOrder() {
     return this.args.currentSorting === this.field;
   }
-  get descendingOrder() {
+
+  get isDescendingOrder() {
     return this.args.currentSorting === `-${this.field}`;
   }
 }
