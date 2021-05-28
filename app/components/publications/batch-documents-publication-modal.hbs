@@ -72,6 +72,8 @@
 </WebComponents::AuModal>
 
 {{#if this.isOpenNewPublicationModal}}
+  {{!-- TODO cleaner interface @case={{this.case}}. Case can be used to retrieve default titles from and to distinguish between via MR or not --}}
+  {{!-- TODO isViaCouncilOfMinisters definieren als getter in NewPublicationModal --}}
   <Publications::NewPublicationModal
     @isViaCouncilOfMinisters={{true}}
     @initialTitlesPromise={{this.newPublicationInitialTitlesPromise}}

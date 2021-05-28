@@ -97,8 +97,10 @@
   </WebComponents::VlModal>
 {{/if}}
 
+{{!-- TODO isOpenPublicationModal to be inline with other isOpen... --}}
 {{#if this.publicationModalIsOpen}}
   <Publications::BatchDocumentsPublicationModal
+    {{!-- TODO cleaner interface @pieces={{this.model.pieces}} @agendaitem={{this.agendaitem}} --}}
     @dataPromise={{this.publicationModalDataPromise}}
     @onClose={{this.closePublicationModal}}
     />

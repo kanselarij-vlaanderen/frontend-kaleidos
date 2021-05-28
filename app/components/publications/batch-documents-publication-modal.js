@@ -22,10 +22,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadData() {
+    // TODO niet meer nodig als we @pieces binnen krijgen als argument
     const data = yield this.args.dataPromise;
     const pieces = data.pieces;
     // <DocumentList /> expects iterable
     this.pieces = pieces.toArray();
+
+    // TODO laden van case horende bij agendapunt om mee te geven aan new-publication-modal
   }
 
   // new publication actions

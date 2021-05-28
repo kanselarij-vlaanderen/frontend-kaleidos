@@ -58,6 +58,7 @@ export default class NewPublicationModal extends Component {
 
   @task
   *initTitles() {
+    // TODO get titles from @case
     if (this.args.initialTitlesPromise) {
       this.areTitlesEditable = false;
       const initialTitles = yield this.args.initialTitlesPromise;
