@@ -36,7 +36,7 @@
               </td>
               <td>
                 {{#if piece.publicationFlow}}
-                  {{piece.publicationFlow.identification.idName}}
+                  <Publications::ViaCouncilOfMinisters::PublicationFlowSelector />
                 {{else}}
                   <WebComponents::AuButton @icon="add" {{on 'click' (fn openNewPublicationModal piece)}}>
                     {{t "publications-new"}}
