@@ -63,13 +63,6 @@ export default class PublicationDocumentsRoute extends Route {
     return pieces;
   }
 
-  async afterModel() {
-    await this.store.query('document-type', {
-      'page[size]': 50,
-      sort: 'priority',
-    });
-  }
-
   setupController(controller) {
     super.setupController(...arguments);
     const params = this.paramsFor('publications.publication.documents');
