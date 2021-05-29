@@ -183,7 +183,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  async openPublicationModal() {
+  openPublicationModal() {
     this.isOpenPublicationModal = true;
   }
 

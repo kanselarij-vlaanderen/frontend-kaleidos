@@ -7,7 +7,13 @@
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
   <WebComponents::AuToolbar::Group @position="right">
-    {{#if (and this.currentSession.isEditor this.model.pieces.length (not this.isEnabledPieceEdit))}}
+    {{#if
+      (and
+        this.currentSession.isEditor
+        this.model.pieces.length
+        (not this.isEnabledPieceEdit)
+      )
+    }}
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButton
           data-test-subcase-documents-edit
@@ -100,6 +106,7 @@
 
 {{#if this.isOpenPublicationModal}}
   <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
     @agendaitem={{this.agendaitem}}
     @onClose={{this.closePublicationModal}}
     />

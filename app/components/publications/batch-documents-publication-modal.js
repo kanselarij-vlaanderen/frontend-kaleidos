@@ -1,25 +1,22 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
   task,
   lastValue
 } from 'ember-concurrency-decorators';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 /**
  * @argument {Agendaitem} agedaitem
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  pieceToPublish;
+  referenceDocument;
+  @service store;
+  @service publicationService;
 
   @tracked isOpenNewPublicationModal = false;
-  @lastValue('loadPieces') pieces;
   @lastValue('loadCase') case;
-
-  @inject store;
-  @inject publicationService;
 
   constructor() {
     super(...arguments);
@@ -30,16 +27,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadPieces() {
-    // query: ensure all related records are loaded (to prevent extra calls from template)
-    let pieces = yield this.store.query('piece', {
+    // ensure all related records are loaded to prevent extra calls from template for each piece individually
+    yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      'page[size]': this.args.pieces.length,
       include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
-    // array: <DocumentList /> expects array
-    pieces = pieces.toArray();
-    pieces = sortPieces(pieces);
-    return pieces;
   }
 
   @task
@@ -53,24 +46,24 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   // new publication actions
   @action
-  async openNewPublicationModal(piece) {
-    this.pieceToPublish = piece;
+  openNewPublicationModal(piece) {
+    this.referenceDocument = piece;
     this.isOpenNewPublicationModal = true;
   }
 
   @task
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
-      // case should already be loaded here
       case: this.case,
     });
-    this.pieceToPublish.publicationFlow = publicationFlow;
-    yield this.pieceToPublish.save();
+    this.referenceDocument.publicationFlow = publicationFlow;
+    yield this.referenceDocument.save();
     this.isOpenNewPublicationModal = false;
   }
 
   @action
   cancelNewPublication() {
+    this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
   }
 }

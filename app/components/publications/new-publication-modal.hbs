@@ -6,8 +6,8 @@
   }}
     @closeModal={{@onCancel}} />
   <WebComponents::AuModal::Body>
-    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
-      {{#if hasError}}
+    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+      {{#if this.hasError}}
         <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
           @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
       {{else if (not this.isViaCouncilOfMinisters)}}
@@ -85,13 +85,12 @@
       </div>
     </Utils::LoadableContent>
   </WebComponents::AuModal::Body>
-  {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
   <WebComponents::AuModal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel
-            disabled={{this.isLoading}}>
+            disabled={{this.save.isRunning}}>
             {{t "cancel"}}
           </WebComponents::AuButton>
         </WebComponents::AuToolbar::Item>
@@ -102,7 +101,7 @@
             <Utils::SimpleSpinner></Utils::SimpleSpinner>
           {{else}}
             <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}
-              disabled={{this.isLoading}}>
+              disabled={{this.save.isRunning}}>
               {{t "publications-new-button-text"}}
             </WebComponents::AuButton>
           {{/if}}
