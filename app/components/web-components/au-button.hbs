@@ -1,12 +1,23 @@
-<button
-  class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
-  type="button"
-  disabled={{@disabled}}
-  ...attributes
->
-  <span class="auk-button__content">
+{{#if @href}}
+  <a
+    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    href={{@href}}
+    disabled={{@disabled}}
+    ...attributes
+  >
     <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
       {{yield}}
     </WebComponents::AuButton::InnerLayout>
-  </span>
-</button>
+  </a>
+{{else}}
+  <button
+    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    type="button"
+    disabled={{@disabled}}
+    ...attributes
+  >
+    <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+      {{yield}}
+    </WebComponents::AuButton::InnerLayout>
+  </button>
+{{/if}}
