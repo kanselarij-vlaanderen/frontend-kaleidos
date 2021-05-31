@@ -6,7 +6,9 @@ const selectors = {
   },
 
   // new-case
-  metadataForm: '[data-test-metadata-form]',
+  newCase: {
+    shorttitle: '[data-test-new-case-shorttitle]',
+  },
 
   // subcase-overview-header
   createSubcaseButton: '[data-test-case-create-subcase-button]',

@@ -23,7 +23,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeader.addCase).click();
     cy.get(form.formVlToggle).eq(0)
       .click();
-    cy.get(cases.metadataForm).type('Dit is een dossier met confidentiality en een korte titel');
+    cy.get(cases.newCase.shorttitle).type('Dit is een dossier met confidentiality en een korte titel');
     cy.get('button').contains('Dossier aanmaken')
       .click();
   });
@@ -31,7 +31,7 @@ context('Create case as Admin user', () => {
   it('Create a case with short title', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(cases.metadataForm).type('Dit is een dossier met een korte titel');
+    cy.get(cases.newCase.shorttitle).type('Dit is een dossier met een korte titel');
     cy.get('button').contains('Dossier aanmaken')
       .click();
   });
