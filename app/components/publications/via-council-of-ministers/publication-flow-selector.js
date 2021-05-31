@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency-decorators';
 
@@ -9,8 +8,6 @@ import { keepLatestTask } from 'ember-concurrency-decorators';
  * @argument {(identification: Identification) => void} onChange
  */
 export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
-  @service store;
-
   @tracked options = [];
 
   constructor() {

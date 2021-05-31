@@ -12,6 +12,7 @@ import muSearch from 'frontend-kaleidos/utils/mu-search';
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   @inject store;
+  @inject intl;
   @inject publicationService;
 
   publicationFlowDefaultOptionsTask;
@@ -26,7 +27,14 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
     this.loadPieces.perform();
     this.loadCase.perform();
-    this.publicationFlowDefaultOptionsTask = this.loadPublicationFlowIdentifications.perform();
+    this.publicationFlowLinkOptions = [{
+      value: false,
+      label: this.intl.t('none'),
+    }, {
+      value: true,
+      label: this.intl.t('existing'),
+    }];
+    this.publicationFlowDefaultOptionsTask = this.searchPublicationFlow.perform();
   }
 
   @task
@@ -46,6 +54,11 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     return this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
     });
+  }
+
+  @action
+  changeLinkStatus() {
+
   }
 
   // new publication actions
@@ -73,7 +86,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   // select existing publication actions
   @action
-  loadPublicationFlowIdentificationsWithCache(identification) {
+  searchPublicationFlowWithCache(identification) {
     if (!identification) {
       return this.publicationFlowDefaultOptionsTask;
     }
@@ -81,7 +94,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   @task
-  *loadPublicationFlowIdentifications(identification) {
+  *searchPublicationFlow(searchText) {
     let filterIdName = {};
     // if (identification) {
     //   console.log(identification)
@@ -91,10 +104,10 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     //   };
     // }
 
-    if (identification) {
+    if (searchText) {
       filterIdName = {
         // 'filter[id-name]': identification,
-        ':phrase_prefix:id-name': identification,
+        ':phrase_prefix:id-name': searchText,
       };
     }
     // filterIdName[':has:publication-flow'] = true;
@@ -108,23 +121,20 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     // });
 
     // TRY 4 search publication flows
-    if (identification) {
-      console.log(identification)
+    if (searchText) {
       filterIdName = {
         // 'filter[id-name]': identification,
-        'identification[:phrase_prefix:id-name]': identification,
+        'identification[:phrase_prefix:id-name]': searchText,
       };
     }
     // filterIdName[':has:publication-flow'] = true;
 
     // index, page, size, sort, filter, dataMapping
 
-    const identifications = yield muSearch('publication-flows', 0, 10, null, filterIdName, (item) => {
-      const entry = item.attributes;
-      entry.id = item.id;
-      return entry;
-    });
-
+    const searchResults = yield muSearch('publication-flows', 0, 10, null, filterIdName, (it) => Object.assign(it.attributes, {
+      id: it.id,
+    }));
+    console.log(searchResults);
     // let identifications = yield this.store.query('identification', {
     //   filter: filterIdName,
 
@@ -138,13 +148,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     // });
     // identifications = identifications.toArray();
 
-    return identifications;
+    return searchResults;
   }
 
   @action
-  async selectPublicationFlow(piece, identification) {
-    console.log(piece, identification);
-    piece.publicationFlow = await identification.publicationFlow;
+  async selectPublicationFlow(piece, searchPublicationFlow) {
+    const publicationFlow = await this.store.findRecord('publication-flow', searchPublicationFlow.id);
+    piece.publicationFlow = publicationFlow;
     await piece.save();
   }
 }

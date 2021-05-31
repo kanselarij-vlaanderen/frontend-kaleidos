@@ -9,6 +9,9 @@
             <th>{{t "name"}}</th>
             <th>{{t "document-type"}}</th>
             <th>
+              {{t "link-publication"}}
+            </th>
+            <th>
               {{t "publications-number"}}
               <WebComponents::AuIcon @iconSkinColor="muted" @name="info-circle">
                 <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
@@ -35,11 +38,24 @@
                 {{piece.documentContainer.type.label}}
               </td>
               <td>
+                <PowerSelect
+                  @searchEnabled={{false}}
+                  @selection={{piece.publicationFlow}}
+                  @onchange={{this.changeLink}}
+                  @options={{this.options}}
+                  as |option|>
+                  {{option.label}}
+                </PowerSelect>
+              </td>
+              <td>
                 {{#if piece.publicationFlow}}
                   <Publications::ViaCouncilOfMinisters::PublicationFlowSelector
                     @selected={{piece.publicationFlow.identification}}
-                    @loadData={{this.loadPublicationFlowIdentificationsWithCache}}
-                    @onChange={{fn this.selectPublicationFlow piece}} />
+                    @loadData={{this.searchPublicationFlowWithCache}}
+                    @onChange={{fn this.selectPublicationFlow piece}}
+                    as |searchPublicationFlow|>
+                    {{searchPublicationFlow.identification}}
+                  </Publications::ViaCouncilOfMinisters::PublicationFlowSelector>
                 {{else}}
                   <WebComponents::AuButton
                     @icon="add"

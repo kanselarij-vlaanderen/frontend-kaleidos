@@ -847,5 +847,8 @@
   "my-profile": "Mijn profiel",
   "batch-document-publication-modal-publication-number-info": "Is dit document nodig voor de uiteindelijke publicatie? Deze functie wordt gebruikt om bij te houden of er een update op een document is in een bestaande publicatie.",
   "publication-subcase": "publicatie dossier",
-  "translation-subcase": "vertalingsdossier"
+  "translation-subcase": "vertalingsdossier",
+  "link-publication": "Koppeling publicatie",
+  "none": "Geen",
+  "existing": "Bestaand"
 }
