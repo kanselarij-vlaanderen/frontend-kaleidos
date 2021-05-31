@@ -10,7 +10,7 @@
 <div class="auk-u-mb-2">
   <WebComponents::AuLabel>{{t "publicity"}}</WebComponents::AuLabel>
   {{utils/model-selector
-    data-test-subcase-titles-edit-accessLevel=true
+    data-test-subcase-titles-edit-access-level=true
     modelName="access-level"
     allowClear=true
     searchField="label"
@@ -48,7 +48,7 @@
 <WebComponents::AuToolbar>
   <WebComponents::AuToolbar::Group @position="right">
     <WebComponents::AuToolbar::Item>
-      <button type="button" class="auk-button auk-button--tertiary"
+      <button type="button" class="auk-button auk-button--tertiary" data-test-subcase-titles-edit-cancel
         {{action "cancelEditing"}}
       >
         {{t "cancel"}}

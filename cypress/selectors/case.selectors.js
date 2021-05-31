@@ -19,6 +19,18 @@ const selectors = {
     edit: '[data-test-subcase-titles-edit]',
   },
 
+  subcaseTitlesEdit: {
+    title: '[data-test-subcase-titles-edit-title]',
+    shorttitle: '[data-test-subcase-titles-edit-shorttitle]',
+    accessLevel: '[data-test-subcase-titles-edit-access-level]',
+    confidential: '[data-test-subcase-titles-edit-confidential ]',
+    actions: {
+      save: '[data-test-subcase-titles-edit-save]',
+      // TODO unused selector
+      cancel: '[data-test-subcase-titles-edit-cancel]',
+    },
+  },
+
   // from agenda
   subcaseTitlesEditTitle: '[data-test-subcase-titles-edit-title]',
   subcaseTitlesEditShorttitle: '[data-test-subcase-titles-edit-shorttitle]',
