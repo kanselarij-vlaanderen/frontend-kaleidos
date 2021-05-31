@@ -19,15 +19,17 @@ const selectors = {
   newSubcase: {
     clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',
   },
-  clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
 
   // subcase-description
-  // TODO 1 in agenda.selectors
-  subcaseModified: '[data-test-subcase-modified]',
-  subcaseDecidedOn: '[data-test-subcase-decided-on]',
-  subcaseRequestedBy: '[data-test-subcase-requested-by]',
-  subcaseMeetingNumber: '[data-test-meeting-number]',
-  subcaseMeetingPlannedStart: '[data-test-meeting-plannedStart]',
+  subcaseDescription: {
+    decidedOn: '[data-test-subcase-description-decided-on]',
+    requestedBy: '[data-test-subcase-description-requested-by]',
+    meetingNumber: '[data-test-subcase-description-meeting-number]',
+    meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
+    agendaLink: '[data-test-subcase-description-agenda-link] a',
+    // TODO unused selector
+    modified: '[data-test-subcase-description-modified]',
+  },
 
   // subcase-item
   // TODO better names

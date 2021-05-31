@@ -18,8 +18,6 @@ const selectors = {
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
 
   subcase: {
-    // TODO subcase-description
-    agendaLink: '[data-test-subcase-agenda-link] a',
     // TODO this is in route cases/case/subcases/subcase/overview
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },

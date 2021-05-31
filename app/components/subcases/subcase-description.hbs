@@ -40,7 +40,7 @@
         <div class="auk-key-value-item__label">
           {{t "number-session"}}
         </div>
-        <div data-test-meeting-number class="auk-key-value-item__value">
+        <div data-test-subcase-description-meeting-number class="auk-key-value-item__value">
           {{#if (await subcase.latestMeeting.number)}}
             {{await subcase.latestMeeting.number}}
           {{else}}
@@ -70,7 +70,7 @@
         <div class="auk-key-value-item__label">
           {{t "is-on-agenda"}}
         </div>
-        <div class="auk-key-value-item__value" data-test-subcase-agenda-link>
+        <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link>
           {{#if
             (or
                (is-pending isRetracted)
@@ -114,7 +114,7 @@
         <div class="auk-key-value-item__label">
           {{t "decided-on"}}
         </div>
-        <div data-test-subcase-decided-on class="auk-key-value-item__value">
+        <div data-test-subcase-description-decided-on class="auk-key-value-item__value">
           {{#if (is-pending subcase.approved)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else if (await subcase.approved)}}
