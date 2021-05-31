@@ -24,7 +24,7 @@
 
         <Documents::DocumentList
           @tag="tbody"
-          @pieces={{this.pieces}}
+          @pieces={{@pieces}}
           as |pieces|>
           {{#each pieces as |piece|}}
             <tr>
@@ -41,7 +41,9 @@
                     @loadData={{this.loadPublicationFlowIdentificationsWithCache}}
                     @onChange={{fn this.selectPublicationFlow piece}} />
                 {{else}}
-                  <WebComponents::AuButton @icon="add" {{on 'click' (fn openNewPublicationModal piece)}}>
+                  <WebComponents::AuButton
+                    @icon="add"
+                    {{on 'click' (fn this.openNewPublicationModal piece)}}>
                     {{t "publications-new"}}
                   </WebComponents::AuButton>
                 {{/if}}

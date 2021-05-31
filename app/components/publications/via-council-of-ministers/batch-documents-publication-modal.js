@@ -6,21 +6,20 @@ import {
   task,
   lastValue
 } from 'ember-concurrency-decorators';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import muSearch from 'frontend-kaleidos/utils/mu-search';
 /**
  * @argument {Agendaitem} agedaitem
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
+  @inject store;
+  @inject publicationService;
+
   publicationFlowDefaultOptionsTask;
-  pieceToPublish;
+  referenceDocument;
 
   @tracked isOpenNewPublicationModal = false;
   @lastValue('loadPieces') pieces;
   @lastValue('loadCase') case;
-
-  @inject store;
-  @inject publicationService;
 
   constructor() {
     super(...arguments);
@@ -32,16 +31,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *loadPieces() {
-    // query: ensure all related records are loaded (to prevent extra calls from template)
-    let pieces = yield this.store.query('piece', {
+    // ensure all related records are loaded to prevent extra calls from template for each piece individually
+    yield this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': 500, // TODO add pagination when sorting is done in the backend
+      'page[size]': this.args.pieces.length,
       include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
-    // array: <DocumentList /> expects array
-    pieces = pieces.toArray();
-    pieces = sortPieces(pieces);
-    return pieces;
   }
 
   @task
@@ -56,7 +51,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   // new publication actions
   @action
   async openNewPublicationModal(piece) {
-    this.pieceToPublish = piece;
+    this.referenceDocument = piece;
     this.isOpenNewPublicationModal = true;
   }
 
@@ -66,8 +61,8 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
       // case should already be loaded here
       case: this.case,
     });
-    this.pieceToPublish.publicationFlow = publicationFlow;
-    yield this.pieceToPublish.save();
+    this.referenceDocument.publicationFlow = publicationFlow;
+    yield this.referenceDocument.save();
     this.isOpenNewPublicationModal = false;
   }
 
@@ -97,7 +92,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     // }
 
     if (identification) {
-      console.log(identification)
       filterIdName = {
         // 'filter[id-name]': identification,
         ':phrase_prefix:id-name': identification,
@@ -125,7 +119,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
     // index, page, size, sort, filter, dataMapping
 
-    const identifications = muSearch('publication-flows', 0, 10, null, filterIdName, (item) => {
+    const identifications = yield muSearch('publication-flows', 0, 10, null, filterIdName, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;

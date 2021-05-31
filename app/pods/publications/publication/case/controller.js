@@ -116,6 +116,10 @@ export default class CaseController extends Controller {
     return this.contactPerson.organization;
   }
 
+  /**
+   * ZONE FOR THE INSCRIPTION
+   */
+
   @action
   putInscriptionInEditMode() {
     this.isInscriptionInEditMode = true;
