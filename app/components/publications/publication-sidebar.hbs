@@ -3,7 +3,7 @@
   @position="right"
   data-collapsed={{if (not @isOpen) "true" "false"}}
 >
-  <WebComponents::AuNavbar @border="bottom" @skin="gray-100">
+  <WebComponents::AuNavbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
         <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
