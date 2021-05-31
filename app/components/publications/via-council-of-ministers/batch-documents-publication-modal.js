@@ -7,11 +7,12 @@ import {
   lastValue
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-
+import muSearch from 'frontend-kaleidos/utils/mu-search';
 /**
  * @argument {Agendaitem} agedaitem
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
+  publicationFlowDefaultOptionsTask;
   pieceToPublish;
 
   @tracked isOpenNewPublicationModal = false;
@@ -26,6 +27,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
     this.loadPieces.perform();
     this.loadCase.perform();
+    this.publicationFlowDefaultOptionsTask = this.loadPublicationFlowIdentifications.perform();
   }
 
   @task
@@ -74,9 +76,81 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.isOpenNewPublicationModal = false;
   }
 
-  // select publication actions
+  // select existing publication actions
+  @action
+  loadPublicationFlowIdentificationsWithCache(identification) {
+    if (!identification) {
+      return this.publicationFlowDefaultOptionsTask;
+    }
+    return this.loadPublicationFlowIdentifications.perform(identification);
+  }
+
+  @task
+  *loadPublicationFlowIdentifications(identification) {
+    let filterIdName = {};
+    // if (identification) {
+    //   console.log(identification)
+    //   filterIdName = {
+    //     // 'filter[id-name]': identification,
+    //     'filter[:lte,gte:id-name]': [identification, identification + 'z'].join(',')
+    //   };
+    // }
+
+    if (identification) {
+      console.log(identification)
+      filterIdName = {
+        // 'filter[id-name]': identification,
+        ':phrase_prefix:id-name': identification,
+      };
+    }
+    // filterIdName[':has:publication-flow'] = true;
+
+    // index, page, size, sort, filter, dataMapping
+
+    // const identifications = muSearch('identifications', 0, 10, 'id-name', filterIdName, (item) => {
+    //   const entry = item.attributes;
+    //   entry.id = item.id;
+    //   return entry;
+    // });
+
+    // TRY 4 search publication flows
+    if (identification) {
+      console.log(identification)
+      filterIdName = {
+        // 'filter[id-name]': identification,
+        'identification[:phrase_prefix:id-name]': identification,
+      };
+    }
+    // filterIdName[':has:publication-flow'] = true;
+
+    // index, page, size, sort, filter, dataMapping
+
+    const identifications = muSearch('publication-flows', 0, 10, null, filterIdName, (item) => {
+      const entry = item.attributes;
+      entry.id = item.id;
+      return entry;
+    });
+
+    // let identifications = yield this.store.query('identification', {
+    //   filter: filterIdName,
+
+    //   'page[size]': 10,
+    // });
+
+    // let identifications = yield this.store.query('identification', {
+    //   ...filterIdName,
+    //   'filter[:has:publication-flow]': true,
+    //   'page[size]': 10,
+    // });
+    // identifications = identifications.toArray();
+
+    return identifications;
+  }
+
   @action
   async selectPublicationFlow(piece, identification) {
+    console.log(piece, identification);
     piece.publicationFlow = await identification.publicationFlow;
+    await piece.save();
   }
 }

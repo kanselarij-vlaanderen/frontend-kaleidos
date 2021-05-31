@@ -1,8 +1,9 @@
 <PowerSelect
   @selected={{this.selected}}
   @options={{this.options}}
+  @onopen={{this.onOpen}}
   @oninput={{this.onInput}}
-  @onfocus={{this.onFocus}}
+  @search={{this.search}}
   @onchange={{this.onChange}}
   as |item|>
   {{item.idName}}

@@ -11,43 +11,55 @@ import { keepLatestTask } from 'ember-concurrency-decorators';
 export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
   @service store;
 
-  @tracked options;
+  @tracked options = [];
 
   constructor() {
     super(...arguments);
-    this.selected = this.args.selected;
-  }
-
-  @action
-  onFocus() {
     this.loadData.perform();
   }
 
+  // select correct element in the list
+  // EmberPowerSelect does not select the correct element in the drop down
+  get selected() {
+    // .get('id'): Ember complains about .id syntax
+    const id = this.args.selected.get('id');
+    return this.options.findBy('id', id) || this.args.selected;
+  }
+
+  // onOpen event:
+  //  searchText is cleared when the select has been closed.
+  //  this does not trigger an onInput or search event
   @action
-  onInput() {
-    this.loadData.perform();
+  onOpen(select) {
+    if (!select.searchText) {
+      this.loadData.perform();
+    }
+  }
+
+  @action
+  // onInput event: search event does not fire when input is cleared
+  // when used for a non-empty searchText, the input is cleared
+  //  so we need both events.
+  onInput(searchText) {
+    if (!searchText) {
+      this.loadData.perform();
+      // prevent default filtering
+      // return false;
+    }
+  }
+
+  @action
+  search(searchText) {
+    this.loadData.perform(searchText);
   }
 
   @keepLatestTask
-  *loadData(identification) {
-    let filterIdName = {};
-    if (identification) {
-      filterIdName = {
-        'filter[id-name]': identification.idName,
-      };
-    }
-
-    let identifications = yield this.store.query('identification', {
-      ...filterIdName,
-      'filter[:has:publication-flow]': true,
-      'page[size]': 10,
-    });
-    identifications = identifications.toArray();
-    this.options = identifications;
+  *loadData(searchText) {
+    this.options = yield this.args.loadData(searchText);
   }
 
   @action
-  onChange() {
-    this.args.onChange(this.selected);
+  onChange(selected) {
+    this.args.onChange(selected);
   }
 }
