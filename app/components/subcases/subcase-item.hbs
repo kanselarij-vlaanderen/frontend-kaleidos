@@ -3,13 +3,13 @@
     {{#if (is-pending @subcase.approved)}}
       <div class="auk-badge auk-badge--default auk-badge--medium"></div>
     {{else if (await @subcase.approved)}}
-      <div data-test-case-overview-subcase-approved class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
+      <div data-test-subcase-item-approved class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
         <div class="auk-icon auk-icon--default">
           <i class="ki ki-check"></i>
         </div>
       </div>
     {{else}}
-      <div data-test-case-overview-subcase-not-approved class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
+      <div data-test-subcase-item-not-approved class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
         <div class="auk-icon auk-icon--default">
           <i class="ki ki-sitemap"></i>
         </div>

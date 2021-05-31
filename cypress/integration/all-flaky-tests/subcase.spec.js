@@ -363,7 +363,7 @@ context('Subcase tests', () => {
     cy.approveAndCloseDesignAgenda(true);
 
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
-    cy.get(cases.overviewSubcaseInfo.approved).should('have.length', 3);
+    cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
     cy.get(cases.subcaseDescription.decidedOn).contains(dateFormatDotted);
   });

@@ -33,9 +33,9 @@ const selectors = {
 
   // subcase-item
   // TODO better names
-  overviewSubcaseInfo: {
-    approved: '[data-test-case-overview-subcase-approved]',
-    notApproved: '[data-test-case-overview-subcase-not-approved]',
+  subcaseItem: {
+    approved: '[data-test-subcase-item-approved]',
+    notApproved: '[data-test-subcase-item-not-approved]',
   },
 
   // subcase-header
@@ -60,7 +60,7 @@ const selectors = {
     title: '[data-test-subcase-titles-edit-title]',
     shorttitle: '[data-test-subcase-titles-edit-shorttitle]',
     accessLevel: '[data-test-subcase-titles-edit-access-level]',
-    confidential: '[data-test-subcase-titles-edit-confidential ]',
+    confidential: '[data-test-subcase-titles-edit-confidential]',
     actions: {
       save: '[data-test-subcase-titles-edit-save]',
       // TODO unused selector
