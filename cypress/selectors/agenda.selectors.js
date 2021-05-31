@@ -69,7 +69,7 @@ const selectors = {
   agendaitemTitlesEditConfidential: '[data-test-agendaitem-titles-edit-confidential]',
 
   approveDesignAgenda: '[data-test-approve-design-agenda]',
-  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
   documentType: '[data-test-document-type]',
   documentAccessLevel: '[data-test-document-accesslevel]',
   agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
