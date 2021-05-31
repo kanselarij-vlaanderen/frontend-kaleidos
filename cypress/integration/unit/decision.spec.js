@@ -197,10 +197,10 @@ context('Add files to an agenda', () => {
       .should('not.exist');
 
     // TODO why go to press agenda ?
-    cy.get(agenda.agendaitemPersagendaTab).click();
+    cy.get(agenda.agendaitemNav.pressAgendaTab).click();
     cy.url().should('contain', '/persagenda');
 
-    cy.get(agenda.agendaitemDecisionTab).click();
+    cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
 
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');

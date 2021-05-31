@@ -116,7 +116,7 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
     cy.openDetailOfAgendaitem(approvalTitle, false);
-    cy.get(agenda.agendaitemDocumentsTab).click();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.contains('Documenten toevoegen').click();
     cy.addNewDocumentsInUploadModal(files, 'agendaitems');
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe

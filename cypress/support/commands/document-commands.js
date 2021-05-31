@@ -243,7 +243,7 @@ function addDocumentsToSubcase(files) {
  */
 function addDocumentToTreatment(file) {
   cy.log('addDocumentsToTreatment');
-  cy.get(agenda.agendaitemDecisionTab).click();
+  cy.get(agenda.agendaitemNav.decisionTab).click();
   // 1 default item treatment exists
   cy.get(agenda.uploadDecisionFile).click();
 
@@ -280,7 +280,7 @@ function addNewPieceToMeeting(oldFileName, file) {
 function openAgendaitemDocumentTab(agendaitemTitle, alreadyHasDocs = false) {
   cy.log('openAgendaitemDocumentTab');
   cy.openDetailOfAgendaitem(agendaitemTitle);
-  cy.get(agenda.agendaitemDocumentsTab)
+  cy.get(agenda.agendaitemNav.documentsTab)
     .click()
     .wait(2000); // Access-levels GET occured earlier, general wait instead
   if (alreadyHasDocs) {
@@ -364,7 +364,7 @@ function addNewPieceToSubcase(oldFileName, file) {
 function openAgendaitemDossierTab(agendaitemTitle) {
   cy.log('openAgendaitemDossierTab');
   cy.openDetailOfAgendaitem(agendaitemTitle);
-  cy.get(agenda.agendaitemDossierTab)
+  cy.get(agenda.agendaitemNav.caseTab)
     .click();
   cy.log('/openAgendaitemDossierTab');
 }

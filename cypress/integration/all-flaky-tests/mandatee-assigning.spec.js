@@ -405,7 +405,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(agenda.agendaitemKortBestekTab)
+    cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click();
 

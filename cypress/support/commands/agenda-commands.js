@@ -212,7 +212,7 @@ function openAgendaForDate(agendaDate) {
  */
 function openAgendaitemKortBestekTab(agendaitemTitle) {
   cy.openDetailOfAgendaitem(agendaitemTitle);
-  cy.get(agenda.agendaitemKortBestekTab)
+  cy.get(agenda.agendaitemNav.newsletterTab)
     .should('be.visible')
     .click();
 }
@@ -629,11 +629,11 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
     .click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
-  cy.get('[data-test-agenda-agendaitem] .active').then((element) => {
+  cy.get(agenda.agendaitemNav.activeTab).then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
-      cy.get(agenda.agendaitemDossierTab).click();
+      cy.get(agenda.agendaitemNav.caseTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing

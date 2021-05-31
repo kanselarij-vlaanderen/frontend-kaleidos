@@ -76,7 +76,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)
@@ -283,7 +283,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaitemDocumentsTab);
+    cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).eq(0)

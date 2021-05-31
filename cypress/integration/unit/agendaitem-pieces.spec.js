@@ -100,7 +100,7 @@ context('Tests of pieces on agendaitems', () => {
         });
       cy.clickReverseTab('Overzicht');
       cy.get(agenda.subcase.agendaLink).click();
-      cy.get(agenda.agendaitemDocumentsTab).click();
+      cy.get(agenda.agendaitemNav.documentsTab).click();
 
       cy.get('.auk-scroll-wrapper__body').within(() => {
         cy.get(document.documentCard).as('docCards');

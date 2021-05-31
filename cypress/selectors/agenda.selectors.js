@@ -48,13 +48,14 @@ const selectors = {
   createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
 
   // agendaitem-nav
-  // TODO [data-test-agenda-agendaitem] bestaat ook in deze template, nog geen selector maar wel gebruikt in testen
-  // TODO rename selectors data-test-agendaitem-nav-tab....
-  agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
-  agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
-  agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
-  agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
-  agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
+  agendaitemNav: {
+    caseTab: '[data-test-agendaitem-nav-case-tab]',
+    documentsTab: '[data-test-agendaitem-nav-documents-tab]',
+    decisionTab: '[data-test-agendaitem-nav-decision-tab]',
+    newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
+    pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
+    activeTab: '[data-test-agendaitem-nav-tabs] .active',
+  },
 
   // route agenda/agendaitems/agendaitem/decisions
   addDecision: '[data-test-add-decision]',
