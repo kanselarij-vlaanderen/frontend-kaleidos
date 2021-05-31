@@ -1,10 +1,19 @@
 const selectors = {
+  // cases-header
   casesOverviewTitle: '[data-test-cases-header-title]',
   casesHeaderAddCase: '[data-test-cases-header-add-case]',
+
+  // new-case
   metadataForm: '[data-test-metadata-form]',
 
+  // subcase-overview-header
   createSubcaseButton: '[data-test-case-create-subcase-button]',
+
+  // new-subcase
   clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
+
+  // subcase-description
+  // TODO 1 in agenda.selectors
   subcaseModified: '[data-test-subcase-modified]',
   subcaseDecidedOn: '[data-test-subcase-decided-on]',
   subcaseRequestedBy: '[data-test-subcase-requested-by]',

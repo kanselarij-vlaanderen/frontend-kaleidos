@@ -10,9 +10,6 @@ const selectors = {
   flatpickrDay: '.open  .flatpickr-day',
   button: 'button',
   overviewTitle: '[data-test-agendas-title]',
-  agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
-  agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
-  agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   printContainer: '[data-test-agenda-printContainer]',
   printHeaderTitle: '[data-test-agenda-print-header-title]',
   dataTable: '.auk-table',
@@ -20,7 +17,9 @@ const selectors = {
   toProcedureStapLink: '.auk-panel-layout__main-content a',
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
   subcase: {
+    // TODO subcase-description
     agendaLink: '[data-test-subcase-agenda-link] a',
+    // TODO this is in route cases/case/subcases/subcase/overview
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },
   item: {
@@ -35,31 +34,49 @@ const selectors = {
     },
   },
 
+  // agendaitem-nav
+  // TODO [data-test-agenda-agendaitem] bestaat ook in deze template, nog geen selector maar wel gebruikt in testen
+  agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
+  agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
+  agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
   agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
   agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
+
+  // route agenda/agendaitems/agendaitem/decisions
   addDecision: '[data-test-add-decision]',
+
+  // agendaitem-decision
   decisionContainer: '[data-test-decision-container]',
   deleteDecision: '[data-test-delete-decision]',
   uploadDecisionFile: '[data-test-upload-decision-file]',
+
+  // access-level-pill
   accessLevelPill: '[data-test-access-level-pill]',
   accessLevelSave: '[data-test-access-level-save]',
 
-  approveDesignAgenda: '[data-test-approve-design-agenda]',
+  // 3x agendaitem/documents, subcase/documents, agenda/documents
+  // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+
+  // edit-document-row
+  // TODO move naar document.selectors
   documentType: '[data-test-document-type]',
   documentAccessLevel: '[data-test-document-accesslevel]',
+
+  // agenda-detail/sidebar
   agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
-  agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
+
+  // agendaitem-decision-edit
   decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',
 
-  deleteAgendaitemButton: '[data-test-delete-agendaitem]',
-  postponeAgendaitemButton: '[data-test-postpone-agendaitem]',
-  revertPostponeAgendaitemButton: '[data-test-revert-postpone-agendaitem]',
-  agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
-  agendaitemNumber: '[data-test-agendaitem-number]',
-
+  // agendaitem-group-header
   agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
+
+  // agenda-overview-item
+  agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
   agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
+
+  // TODO unused selector, do we want to use this one ?
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
 
   // agenda-header

@@ -24,6 +24,7 @@ const selectors = {
   deleteUser: '[data-test-delete-user]',
   userSearchInput: '[data-test-user-search-input]',
   userSearchButton: '[data-test-user-search-button]',
+  // TODO rename selector
   goToUserDetail: '[data-test-agenda-overview-sub-item]',
   emberPowerSelectTrigger: '.ember-power-select-trigger',
   emberPowerSelectOption: '.ember-power-select-option',
