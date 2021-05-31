@@ -1,19 +1,22 @@
 const selectors = {
-  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
+  // datepickr (met css)
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
   numInputWrapper: '.open  .numInputWrapper',
   inputNumInputCurYear: '.open  input.numInput.cur-year',
   flatpickrDay: '.open  .flatpickr-day',
-  button: 'button',
-  overviewTitle: '[data-test-agendas-title]',
-  printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]',
+
+  // data table (met css)
   dataTable: '.auk-table',
   dataTableZebra: '.auk-table--striped',
-  toProcedureStapLink: '.auk-panel-layout__main-content a',
+
+  // 2x agenda-detail/sidebar-item, agenda-overview/agenda-overview-item
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
+
+  // TODO unused selector, do we want to use this one ?
+  agendaSidenavElement: 'data-test-agenda-sidenav-element',
+
   subcase: {
     // TODO subcase-description
     agendaLink: '[data-test-subcase-agenda-link] a',
@@ -21,8 +24,10 @@ const selectors = {
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },
   item: {
+    // TODO don't use css
     checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.auk-toolbar-complex__item button',
+    // route agendaitem/news-item // component news-item/edit-item / agendaitem-news-item
     themes: '[data-test-agenda-news-item-themes]',
     news: {
       editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',
@@ -31,6 +36,16 @@ const selectors = {
       themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]',
     },
   },
+
+  // printable-agenda
+  printContainer: '[data-test-agenda-printContainer]',
+  printHeaderTitle: '[data-test-agenda-print-header-title]',
+
+  // route agendas
+  // TODO welke naam gebruiken bij route templates?
+  // TODO rename selectors
+  overviewTitle: '[data-test-agendas-title]',
+  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
 
   // agendaitem-nav
   // TODO [data-test-agenda-agendaitem] bestaat ook in deze template, nog geen selector maar wel gebruikt in testen
@@ -73,9 +88,6 @@ const selectors = {
   // agenda-overview-item
   agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
   agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
-
-  // TODO unused selector, do we want to use this one ?
-  agendaSidenavElement: 'data-test-agenda-sidenav-element',
 
   // agenda-header
   agendaHeader: {
