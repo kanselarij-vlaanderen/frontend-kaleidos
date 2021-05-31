@@ -68,7 +68,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.navigateBack();
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
-    cy.get(cases.clonePreviousSubcaseButton).click();
+    cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@addSubcase-createNewSubcase');
     cy.openSubcase(0);
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');

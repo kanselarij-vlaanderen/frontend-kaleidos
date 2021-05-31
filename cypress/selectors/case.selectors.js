@@ -16,6 +16,9 @@ const selectors = {
   },
 
   // new-subcase
+  newSubcase: {
+    clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',
+  },
   clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
 
   // subcase-description
