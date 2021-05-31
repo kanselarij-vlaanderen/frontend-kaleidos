@@ -181,14 +181,14 @@ context('Add files to an agenda', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionPostpone).click();
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.postpone).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter');
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionAdvance).click();
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.advance).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });

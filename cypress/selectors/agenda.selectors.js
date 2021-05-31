@@ -19,10 +19,6 @@ const selectors = {
   dataTableZebra: '.auk-table--striped',
   toProcedureStapLink: '.auk-panel-layout__main-content a',
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
-  agendaitemControlsActions: '[data-test-agendaitem-controls-actions]',
-  agendaitemControlsActionDelete: '[data-test-agendaitem-controls-action-delete]',
-  agendaitemControlsActionAdvance: '[data-test-agendaitem-controls-action-advance]',
-  agendaitemControlsActionPostpone: '[data-test-agendaitem-controls-action-postpone]',
   subcase: {
     agendaLink: '[data-test-subcase-agenda-link] a',
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
@@ -134,5 +130,16 @@ const selectors = {
       save: '[data-test-agendaitem-titles-edit-save]',
     },
   },
+
+  // agendaitem-controls
+  agendaitemControls: {
+    actions: '[data-test-agendaitem-controls-actions]',
+    action: {
+      delete: '[data-test-agendaitem-controls-action-delete]',
+      advance: '[data-test-agendaitem-controls-action-advance]',
+      postpone: '[data-test-agendaitem-controls-action-postpone]',
+    },
+  },
+
 };
 export default selectors;
