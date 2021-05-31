@@ -26,7 +26,7 @@ context('Testing the toolbar as Minister user', () => {
   it('Should switch to Agenda tab when agenda is clicked as minister', () => {
     cy.get(toolbar.mHeader.agendas).click();
     cy.get(agenda.overviewTitle).should('exist');
-    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(cases.casesHeader.overviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
@@ -34,7 +34,7 @@ context('Testing the toolbar as Minister user', () => {
   it('Should switch to cases tab when cases is clicked as minister', () => {
     cy.get(toolbar.mHeader.cases).click();
     cy.get(agenda.overviewTitle).should('not.exist');
-    cy.get(cases.casesOverviewTitle).should('exist');
+    cy.get(cases.casesHeader.overviewTitle).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
@@ -43,7 +43,7 @@ context('Testing the toolbar as Minister user', () => {
   it('Should switch to newsletter tab when newsletter is clicked as minister', () => {
     cy.get(toolbar.mHeader.newsletters).click();
     cy.get(agenda.overviewTitle).should('not.exist');
-    cy.get(cases.casesOverviewTitle).should('not.exist');
+    cy.get(cases.casesHeader.overviewTitle).should('not.exist');
     cy.get(newsletter.title).should('exist');
     cy.get(settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');

@@ -1,7 +1,9 @@
 const selectors = {
   // cases-header
-  casesOverviewTitle: '[data-test-cases-header-title]',
-  casesHeaderAddCase: '[data-test-cases-header-add-case]',
+  casesHeader: {
+    overviewTitle: '[data-test-cases-header-title]',
+    addCase: '[data-test-cases-header-add-case]',
+  },
 
   // new-case
   metadataForm: '[data-test-metadata-form]',

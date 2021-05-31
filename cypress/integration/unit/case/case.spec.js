@@ -20,7 +20,7 @@ context('Create case as Admin user', () => {
   it('Create a case with confidentiality and short title', () => {
     // TODO use the createCase command, use data selectors
     cy.visit('/dossiers');
-    cy.get(cases.casesHeaderAddCase).click();
+    cy.get(cases.casesHeader.addCase).click();
     cy.get(form.formVlToggle).eq(0)
       .click();
     cy.get(cases.metadataForm).type('Dit is een dossier met confidentiality en een korte titel');
@@ -30,7 +30,7 @@ context('Create case as Admin user', () => {
 
   it('Create a case with short title', () => {
     cy.visit('/dossiers');
-    cy.get(cases.casesHeaderAddCase).click();
+    cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.metadataForm).type('Dit is een dossier met een korte titel');
     cy.get('button').contains('Dossier aanmaken')
       .click();
@@ -38,7 +38,7 @@ context('Create case as Admin user', () => {
 
   it('Hitting cancel should hide the model', () => {
     cy.visit('/dossiers');
-    cy.get(cases.casesHeaderAddCase).click();
+    cy.get(cases.casesHeader.addCase).click();
     cy.get(form.formCancelButton).click();
     // TODO assert modal is gone ?
     // TODO assert there is no state when cancelling en recreating ?
@@ -49,7 +49,7 @@ context('Create case as Admin user', () => {
     cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
     cy.visit('/dossiers');
 
-    cy.get(cases.casesHeaderAddCase).click();
+    cy.get(cases.casesHeader.addCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
     // TODO testing without title is done in next it, DUPLICATE test
@@ -78,7 +78,7 @@ context('Create case as Admin user', () => {
     cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
     cy.visit('/dossiers');
 
-    cy.get(cases.casesHeaderAddCase).click();
+    cy.get(cases.casesHeader.addCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
     cy.get(modal.publication.alertError).should('be.visible');
