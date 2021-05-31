@@ -73,4 +73,10 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   cancelNewPublication() {
     this.isOpenNewPublicationModal = false;
   }
+
+  // select publication actions
+  @action
+  async selectPublicationFlow(piece, identification) {
+    piece.publicationFlow = await identification.publicationFlow;
+  }
 }

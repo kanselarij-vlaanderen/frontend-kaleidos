@@ -1,50 +1,53 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { inject } from '@ember/service';
 import { keepLatestTask } from 'ember-concurrency-decorators';
 
 /**
- * @argument {PublicationFlow} selected (expects related identification to be loaded)
- * @argument {(publicationFlow: PublicationFlow) => void} onChange
+ * @argument {Identification} selected
+ * @argument {(identification: Identification) => void} onChange
  */
 export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
-  @tracked selectedIdentification;
-  @inject store;
+  @service store;
+
+  @tracked options;
 
   constructor() {
     super(...arguments);
+    this.selected = this.args.selected;
+  }
 
+  @action
+  onFocus() {
+    this.loadData.perform();
+  }
+
+  @action
+  onInput() {
+    this.loadData.perform();
   }
 
   @keepLatestTask
-  *loadData(value) {
-    let identifications;
-    if (this.args.publicationFlow) {
-      identifications = [this.args.publicationFlow.identification];
-    } else {
-      const filterIdName = value ? {
-        'filter[id-name]': value,
-      } : {};
-      identifications = yield this.store.query('identification', {
-        ...filterIdName,
-        'filter[:has:publication-flow]': true,
-        'page[size]': 10,
-      });
-      identifications = identifications.toArray();
+  *loadData(identification) {
+    let filterIdName = {};
+    if (identification) {
+      filterIdName = {
+        'filter[id-name]': identification.idName,
+      };
     }
 
-    return identifications;
+    let identifications = yield this.store.query('identification', {
+      ...filterIdName,
+      'filter[:has:publication-flow]': true,
+      'page[size]': 10,
+    });
+    identifications = identifications.toArray();
+    this.options = identifications;
   }
 
   @action
-  search() {
-    this.loadData.perform(this.selectedIdentification);
-  }
-
-  @action
-  async onChange(identifier) {
-    const publicationFlow = await identifier.publicationFlow;
-    this.onChange(publicationFlow);
+  onChange() {
+    this.args.onChange(this.selected);
   }
 }

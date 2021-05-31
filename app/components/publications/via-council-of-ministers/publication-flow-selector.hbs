@@ -1,5 +1,9 @@
-<WebComponents::AuPowerSelect
-  @selected={{this.value}}
-  @search={{this.search}}
-  @onChange={{this.onChange}}
-/>
+<PowerSelect
+  @selected={{this.selected}}
+  @options={{this.options}}
+  @oninput={{this.onInput}}
+  @onfocus={{this.onFocus}}
+  @onchange={{this.onChange}}
+  as |item|>
+  {{item.idName}}
+</PowerSelect>
