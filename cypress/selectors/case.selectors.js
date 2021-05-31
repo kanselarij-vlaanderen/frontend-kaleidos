@@ -11,7 +11,9 @@ const selectors = {
   },
 
   // subcase-overview-header
-  createSubcaseButton: '[data-test-case-create-subcase-button]',
+  subcaseOverviewHeader: {
+    createSubcase: '[data-test-subcase-overview-header-create-subcase]',
+  },
 
   // new-subcase
   clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
