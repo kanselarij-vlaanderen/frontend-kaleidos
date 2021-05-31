@@ -36,8 +36,10 @@ const selectors = {
   },
 
   // printable-agenda
-  printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]',
+  printableAgenda: {
+    container: '[data-test-printable-agenda-container]',
+    headerTitle: '[data-test-printable-agenda-header-title]',
+  },
 
   // route agendas
   // TODO welke naam gebruiken bij route templates?
