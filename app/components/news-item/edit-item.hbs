@@ -1,25 +1,29 @@
 <div class="auk-u-mb-4" data-agenda-item-news-edit>
-  <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--align-end auk-u-mb-2 auk-u-flex--justify-end">
+  <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end auk-u-mb-2 auk-o-flex--justify-end">
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
         <button type="button" class="auk-button auk-button--secondary" disabled>
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "no-nota"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-document"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "no-nota"}}
+            </div>
+          </span>
         </button>
       {{else}}
         <button type="button" class="auk-button auk-button--secondary"
           {{action "openDocument" agendaitem bubbles=false}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "open-note"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-document"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "open-note"}}
+            </div>
+          </span>
         </button>
       {{/if}}
     {{else}}
@@ -79,7 +83,9 @@
   <WebComponents::AuToolbar::Group @position="right">
     <WebComponents::AuToolbar::Item>
       <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-        {{t "cancel"}}
+        <span class="auk-button__content">
+          {{t "cancel"}}
+        </span>
       </a>
     </WebComponents::AuToolbar::Item>
     <WebComponents::AuToolbar::Item>

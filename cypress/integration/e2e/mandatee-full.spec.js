@@ -93,7 +93,7 @@ context('Full test for creating mandatees', () => {
           });
       });
 
-    cy.get('.vl-datepicker').eq(0)
+    cy.get(form.datepickerInput).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
@@ -136,7 +136,7 @@ context('Full test for creating mandatees', () => {
       hour: 10, minute: 10,
     });
 
-    cy.get('.vl-datepicker').eq(1)
+    cy.get(form.datepickerInput).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 

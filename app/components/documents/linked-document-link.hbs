@@ -35,7 +35,9 @@
                 type="button"
                 {{on "click" this.deletePieceLink}}
               >
-                <WebComponents::AuIcon @name="link-broken" @iconSkinColor="danger" />
+                <span class="auk-button__content">
+                  <WebComponents::AuIcon @name="link-broken" @iconSkinColor="danger" />
+                </span>
               </button>
             {{/if}}
           </div>

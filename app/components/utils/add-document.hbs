@@ -5,24 +5,26 @@
     @isOverlay={{true}}
     @large={{true}}
   >
-    <div class="auk-modal__content">
-      {{#if this.pieceInCreation}}
-        <div class="upload-container">
-          <EmberKaleidosWebuniversum::VlUploadedDocument
-            @name={{this.pieceInCreation.file.filename}}
-            @extension={{this.pieceInCreation.file.extension}}
-            @size={{this.pieceInCreation.file.size}}
-            @downloadName={{this.pieceInCreation.file.filename}}
-            @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
-            @delete={{fn this.deletePieceInCreation}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if this.pieceInCreation}}
+          <div class="upload-container">
+            <EmberKaleidosWebuniversum::VlUploadedDocument
+              @name={{this.pieceInCreation.file.filename}}
+              @extension={{this.pieceInCreation.file.extension}}
+              @size={{this.pieceInCreation.file.size}}
+              @downloadName={{this.pieceInCreation.file.filename}}
+              @downloadLink={{this.pieceInCreation.file.namedDownloadLink}}
+              @delete={{fn this.deletePieceInCreation}}
+            />
+          </div>
+        {{else}}
+          <FileUploader
+            @multipleFiles={{false}}
+            @uploadedFileAction={{this.createNewPiece}}
           />
-        </div>
-      {{else}}
-        <FileUploader
-          @multipleFiles={{false}}
-          @uploadedFileAction={{this.createNewPiece}}
-        />
-      {{/if}}
+        {{/if}}
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @isLoading={{this.save.isRunning}}
