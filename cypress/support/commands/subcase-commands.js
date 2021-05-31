@@ -8,6 +8,7 @@ import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
@@ -100,9 +101,9 @@ function changeSubcaseAccessLevel(isRemark, confidentialityChange, accessLevel, 
 
   if (accessLevel) {
     cy.get('@subcaseAccessLevel').within(() => {
-      cy.get('.ember-power-select-trigger').click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
     });
-    cy.get('.ember-power-select-option', {
+    cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).should('exist')
       .then(() => {
@@ -222,11 +223,11 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
 
   cy.get(mandatee.mandateePanelEdit.actions.add).contains('Minister toevoegen')
     .click();
-  cy.get('.mandatee-selector-container').children('.ember-power-select-trigger')
+  cy.get('.mandatee-selector-container').children(dependency.emberPowerSelect.trigger)
     .click();
-  // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
+  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // TODO added this because default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get('.ember-power-select-search-input').type(mandateeSearchText);
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
     cy.wait('@getFilteredMandatees', {
       timeout: 12000,
     });
@@ -235,18 +236,18 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
       timeout: 12000,
     });
   }
-  cy.get('.ember-power-select-option--search-message', {
+  cy.get(dependency.emberPowerSelect.optionSearchMessage, {
     timeout: 10000,
   }).should('not.exist'); // TODO added this because default data does not have active ministers
-  cy.get('.ember-power-select-option', {
+  cy.get(dependency.emberPowerSelect.option, {
     timeout: 10000,
   }).should('exist')
     .then(() => {
       if (mandateeSearchText) {
-        cy.get('.ember-power-select-option').contains(mandateeSearchText)
+        cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
           .click();
       } else {
-        cy.get('.ember-power-select-option').eq(mandateeNumber)
+        cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
           .click();
       }
     });

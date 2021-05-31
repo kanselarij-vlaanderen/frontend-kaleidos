@@ -26,7 +26,5 @@ const selectors = {
   userSearchButton: '[data-test-user-search-button]',
   // TODO rename selector
   goToUserDetail: '[data-test-agenda-overview-sub-item]',
-  emberPowerSelectTrigger: '.ember-power-select-trigger',
-  emberPowerSelectOption: '.ember-power-select-option',
 };
 export default selectors;
