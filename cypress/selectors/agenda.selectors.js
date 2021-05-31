@@ -44,13 +44,6 @@ const selectors = {
   accessLevelPill: '[data-test-access-level-pill]',
   accessLevelSave: '[data-test-access-level-save]',
 
-  subcaseTitlesEdit: '[data-test-subcase-titles-edit]',
-  subcaseTitlesEditTitle: '[data-test-subcase-titles-edit-title]',
-  subcaseTitlesEditShorttitle: '[data-test-subcase-titles-edit-shorttitle]',
-  subcaseTitlesEditAccessLevel: '[data-test-subcase-titles-edit-accessLevel]',
-  subcaseTitlesEditConfidential: '[data-test-subcase-titles-edit-confidential ]',
-  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
-
   approveDesignAgenda: '[data-test-approve-design-agenda]',
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
   documentType: '[data-test-document-type]',
@@ -140,6 +133,5 @@ const selectors = {
       postpone: '[data-test-agendaitem-controls-action-postpone]',
     },
   },
-
 };
 export default selectors;

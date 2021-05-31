@@ -1,6 +1,6 @@
 <div class="auk-u-mb-2">
   <div class="auk-u-flex auk-u-flex--vertical-center">
-    <h2 class="vlc-subline" data-test-subcase-type>
+    <h2 class="vlc-subline" data-test-subcase-titles-type>
       {{#if (not subcase.showAsRemark)}}
         {{t "note"}}
       {{else}}
@@ -8,7 +8,7 @@
       {{/if}}
     </h2>
     {{#if currentSession.isEditor}}
-      <div class="auk-u-ml-2" data-test-agendaitem-edit-link>
+      <div class="auk-u-ml-2">
         <a
           data-test-subcase-titles-edit
           href=""
@@ -48,7 +48,6 @@
 <div class="auk-u-mb-2">
   <div
     class="pill-container auk-u-flex"
-    data-test-agenda-subcasehidden-pill
   >
     {{#if (await subcase.confidential)}}
       <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>

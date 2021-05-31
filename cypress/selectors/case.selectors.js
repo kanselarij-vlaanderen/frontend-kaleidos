@@ -14,9 +14,20 @@ const selectors = {
     },
   },
 
+  subcaseTitlesView: {
+    type: '[data-test-subcase-titles-type]',
+    edit: '[data-test-subcase-titles-edit]',
+  },
+
+  // from agenda
+  subcaseTitlesEditTitle: '[data-test-subcase-titles-edit-title]',
+  subcaseTitlesEditShorttitle: '[data-test-subcase-titles-edit-shorttitle]',
+  subcaseTitlesEditAccessLevel: '[data-test-subcase-titles-edit-accessLevel]',
+  subcaseTitlesEditConfidential: '[data-test-subcase-titles-edit-confidential ]',
+  subcaseTitlesEditSave: '[data-test-subcase-titles-edit-save]',
+
   createSubcaseButton: '[data-test-case-create-subcase-button]',
   clonePreviousSubcaseButton: '[data-test-clone-previous-subcase]',
-  subcaseType: '[data-test-subcase-type]',
   subcaseModified: '[data-test-subcase-modified]',
   subcaseDecidedOn: '[data-test-subcase-decided-on]',
   subcaseRequestedBy: '[data-test-subcase-requested-by]',

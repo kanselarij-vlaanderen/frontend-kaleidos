@@ -65,13 +65,13 @@ context('Create case as Admin user', () => {
       .click();
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
     cy.openSubcase(0);
-    cy.get(cases.subcaseType).contains('Mededeling');
+    cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.navigateBack();
     cy.get(cases.createSubcaseButton).click();
     cy.get(cases.clonePreviousSubcaseButton).click();
     cy.wait('@addSubcase-createNewSubcase');
     cy.openSubcase(0);
-    cy.get(cases.subcaseType).contains('Mededeling');
+    cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
   });
 
   it('Een dossier maken zonder korte titel geeft een error', () => {
