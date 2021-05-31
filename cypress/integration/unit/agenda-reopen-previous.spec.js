@@ -70,7 +70,7 @@ context('Agenda reopen previous tests', () => {
     // TODO the rest of this test is not needed and does not add any value
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.deleteAgenda();
-    cy.get(agendaSelector.agendaActions).click();
+    cy.get(agendaSelector.agendaHeader.showActionOptions).click();
     cy.get(agendaSelector.agendaHeader.actions.createNewDesignAgenda).click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaATitle).should('not.exist');
