@@ -288,22 +288,23 @@
                     </td>
 
                     <td class="auk-u-text-align--right">
-                      <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                      <div class="auk-u-inline-block">
+                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more"></WebComponents::AuButton>
                         <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="left"
-                        >
+                            @renderInPlace={{true}}
+                            @class="ember-attacher-popper"
+                            @hideOn="clickout click"
+                            @showOn="click"
+                            @animation="shift"
+                            @placement="left"
+                          >
                           <WebComponents::AuDropdown>
                             <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
                               {{t "delete"}}
                             </WebComponents::AuDropdown::Item>
                           </WebComponents::AuDropdown>
                         </AttachPopover>
-                      </WebComponents::AuButton>
+                      </div>
                     </td>
                   </tr>
                 {{/each}}
