@@ -14,7 +14,7 @@
     >
       {{#if (not queue.files.length)}}
         <span class="auk-u-block auk-u-mb-2">
-          <span class="auk-button auk-button--tertiary auk-u-inline-block" type="button" tabindex="0" {{on "keydown" this.handleButtonKeyDown}}>
+          <span class="auk-button auk-button--tertiary auk-u-inline-block" type="button" tabindex="0" {{on "keyup" this.handleButtonKeyUp}}>
             <span class="auk-button__content">
               <span class="auk-icon auk-icon--default auk-icon--paperclip">
                 <i class="ki ki-paperclip"></i>

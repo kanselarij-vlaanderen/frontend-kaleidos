@@ -36,7 +36,7 @@ export default class FileUploader extends Component {
   }
 
   @action
-  handleButtonKeyDown(event) {
+  handleButtonKeyUp(event) {
     if (event.key === 'Enter') {
       event.target.click();
     }
