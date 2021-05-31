@@ -8,7 +8,7 @@ export default class PublicationsPublicationDocumentsFilterComponent extends Com
   @inject store;
   @inject fileService;
 
-  @tracked documentTypes = [];
+  @tracked documentTypes = this.store.peekAll('document-type');
   @tracked fileTypes = [];
 
   constructor(owner, args) {
@@ -16,14 +16,7 @@ export default class PublicationsPublicationDocumentsFilterComponent extends Com
 
     // clone for internal use
     this.filter = this.args.filter.clone();
-
-    this.loadDocumentTypes.perform();
     this.loadFileTypes.perform();
-  }
-
-  @task
-  *loadDocumentTypes() {
-    this.documentTypes = yield this.store.peekAll('document-type');
   }
 
   @task

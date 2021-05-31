@@ -10,6 +10,7 @@ import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponents from '../../selectors/au-component-selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
@@ -45,9 +46,9 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the kind
   cy.get('@newAgendaForm').eq(0)
     .within(() => {
-      cy.get('.ember-power-select-trigger').click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
     });
-  cy.get('.ember-power-select-option', {
+  cy.get(dependency.emberPowerSelect.option, {
     timeout: 5000,
   }).should('exist')
     .then(() => {
@@ -59,7 +60,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
         });
       // TODO Experiment for dropdown flakyness
       // Does the ember-power-select-option fix itself if we wait long enough ?
-      cy.get('.ember-power-select-option', {
+      cy.get(dependency.emberPowerSelect.option, {
         timeout: 15000,
       }).should('not.be.visible');
     // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
@@ -284,12 +285,12 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
-  cy.get('.ember-power-select-option')
+  cy.get(dependency.emberPowerSelect.option)
     .contains(formalityStatus)
     .click();
   cy.wait(`@patchAgendaitem_${int}`)
     .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-  // .get('.ember-power-select-option').should('not.exist');
+  // .get(dependency.emberPowerSelect.option).should('not.exist');
   cy.get('.vlc-agenda-items .vl-alert button')
     .click();
   cy.log('/setFormalOkOnItemWithIndex');

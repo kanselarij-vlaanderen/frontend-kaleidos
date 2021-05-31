@@ -6,6 +6,7 @@ import settings from '../../selectors/settings.selectors';
 import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
 import modal from '../../selectors/modal.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 context('Full test for creating mandatees', () => {
   /**
@@ -65,10 +66,10 @@ context('Full test for creating mandatees', () => {
     cy.get(mandatee.personSelector.personDropdown).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get('.ember-power-select-trigger').scrollIntoView()
+        cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
           .click();
       });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Liesbeth Homans').scrollIntoView()
           .click();
@@ -77,17 +78,17 @@ context('Full test for creating mandatees', () => {
     cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get('.ember-power-select-trigger').scrollIntoView()
+        cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
           .click();
       });
 
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Aanvullend net').click();
         cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
           .should('be.visible')
           .within(() => {
-            cy.get('.ember-power-select-trigger').scrollIntoView()
+            cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
               .click();
           });
       });

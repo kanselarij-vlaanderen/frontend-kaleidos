@@ -4,6 +4,7 @@ import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import toolbar from '../../selectors/toolbar.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -34,7 +35,7 @@ context('Search tests', () => {
     elementsToCheck.forEach((option) => {
       cy.get(search.searchfield).type('test');
       cy.get(search.searchButtonToClick).click();
-      cy.get('.ember-power-select-trigger')
+      cy.get(dependency.emberPowerSelect.trigger)
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
       cy.url().should('include', `aantal=${option}`);
