@@ -245,7 +245,7 @@ function addDocumentToTreatment(file) {
   cy.log('addDocumentsToTreatment');
   cy.get(agenda.agendaitemNav.decisionTab).click();
   // 1 default item treatment exists
-  cy.get(agenda.uploadDecisionFile).click();
+  cy.get(agenda.agendaitemDecision.uploadFile).click();
 
   cy.contains('Document opladen').click();
   cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');

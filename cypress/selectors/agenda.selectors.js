@@ -61,9 +61,12 @@ const selectors = {
   addDecision: '[data-test-add-decision]',
 
   // agendaitem-decision
-  decisionContainer: '[data-test-decision-container]',
-  deleteDecision: '[data-test-delete-decision]',
-  uploadDecisionFile: '[data-test-upload-decision-file]',
+  agendaitemDecision: {
+    uploadFile: '[data-test-agendaitem-decision-upload-file]',
+    // TODO unused selectors
+    container: '[data-test-agendaitem-decision-container]',
+    delete: '[data-test-agendaitem-decision-delete]',
+  },
 
   // access-level-pill
   accessLevelPill: '[data-test-access-level-pill]',

@@ -1,5 +1,5 @@
 {{#if (not this.isEditing)}}
-  <div data-test-decision-container class="auk-u-mb-4 auk-content">
+  <div data-test-agendaitem-decision-container class="auk-u-mb-4 auk-content">
     <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--justify-end">
       {{#if this.currentSession.isEditor}}
         <a
@@ -24,7 +24,7 @@
               <ul class="vlc-dropdown-menu">
                 <li class="vlc-dropdown-menu__item">
                   <button
-                    data-test-delete-decision
+                    data-test-agendaitem-decision-delete
                     type="button"
                     class="auk-button-link auk-u-text-error"
                     {{on "click" attacher.hide}}
@@ -58,7 +58,7 @@
     {{else}}
       {{#if this.currentSession.isEditor}}
         <button type="button" class="auk-button auk-button--tertiary"
-          data-test-upload-decision-file
+          data-test-agendaitem-decision-upload-file
           {{on "click" this.toggleIsAddingReport}}
         >
           {{t "signed-decision-add"}}
