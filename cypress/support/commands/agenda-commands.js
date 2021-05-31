@@ -5,7 +5,6 @@
 // Commands
 
 import agenda from '../../selectors/agenda.selectors';
-import actionModel from '../../selectors/action-modal.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -239,8 +238,8 @@ function deleteAgenda(meetingId, lastAgenda) {
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
   cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
 
-  cy.get(actionModel.showAgendaOptions).click();
-  cy.get(actionModel.agendaHeaderDeleteAgenda).click();
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
   cy.get(modal.auModal.container).within(() => {
     cy.get(modal.auModal.save).click();
   });
@@ -307,9 +306,9 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
   cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
   // TODO set only some items to formally ok with list as parameter
-  cy.get(actionModel.showActionOptions).click();
+  cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
-  cy.get(actionModel.approveAllAgendaitems).click();
+  cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
   cy.get(modal.verify.save).click();
   cy.wait('@patchAgendaitems');
@@ -382,10 +381,11 @@ function approveDesignAgenda(shouldConfirm = true) {
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
+  // TODO remove toolbar-complex
   cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
+    cy.get(agenda.agendaHeader.showAgendaOptions).click();
   });
-  cy.get(agenda.approveAgenda).click();
+  cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   if (shouldConfirm) {
     cy.get(modal.auModal.container).within(() => {
       cy.get(modal.auModal.save).click();
@@ -425,10 +425,11 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   // TODO use test selector
+  // TODO remove toolbar-complex
   cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
+    cy.get(agenda.agendaHeader.showAgendaOptions).click();
   });
-  cy.get(agenda.agendaHeaderApproveAndCloseAgenda).click();
+  cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   if (shouldConfirm) {
     cy.get(modal.auModal.container).within(() => {
       cy.get(modal.auModal.save).click();
@@ -458,8 +459,8 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
   cy.contains('Pagina is aan het laden').should('not.exist');
-  cy.get(actionModel.showActionOptions).click();
-  cy.get(actionModel.addAgendaitems)
+  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.actions.addAgendaitems)
     .should('be.visible')
     .click();
   cy.wait('@getSubcasesFiltered', {
@@ -672,8 +673,8 @@ function changeSelectedAgenda(agendaName) {
  */
 function closeAgenda() {
   cy.log('closeAgenda');
-  cy.get(actionModel.showAgendaOptions).click();
-  cy.get(actionModel.lockAgenda).click();
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
+  cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
   cy.get(modal.auModal.container).within(() => {
     cy.get(modal.auModal.save).click();
   });
@@ -692,8 +693,8 @@ function closeAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
-  cy.get(actionModel.showActionOptions).click();
-  cy.get(actionModel.releaseDecisions).click({
+  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
   cy.get(modal.modal).within(() => {
@@ -714,8 +715,8 @@ function releaseDecisions() {
  */
 function releaseDocuments() {
   cy.log('releaseDocuments');
-  cy.get(actionModel.showActionOptions).click();
-  cy.get(actionModel.releaseDocuments).click();
+  cy.get(agenda.agendaHeader.showActionOptions).click();
+  cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
   cy.get(modal.modal).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();

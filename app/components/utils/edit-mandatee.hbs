@@ -40,7 +40,6 @@
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
     {{utils/model-selector
-      data-test-model-selector-iseCodes=true
       modelName="ise-code"
       searchField="name"
       propertyToShow="nameToShow"
@@ -68,7 +67,7 @@
         {{web-components/vl-save-button
           text=(t "save")
           isLoading=isLoading
-          data-test-vl-save=true
+          data-test-edit-mandatee-save=true
           saveAction=(action "triggerPopUp" mandateeToEdit)
         }}
       </div>

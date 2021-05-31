@@ -21,7 +21,7 @@
       {{#if currentSessionService.isEditor}}
         <div class="auk-toolbar-complex__item">
           <button type="button"
-            data-test-agenda-header-showAgendaOptions
+            data-test-agenda-header-show-agenda-options
             class="auk-button auk-button--primary"
             {{action "showAgendaActions"}}
           >
@@ -46,7 +46,7 @@
                 {{#if currentSessionService.isEditor}}
                   {{#if currentAgenda.isDesignAgenda}}
                     <li class="vlc-dropdown-menu__item">
-                      <button type="button" data-test-agenda-header-approveAgenda class="auk-button-link auk-button-link--block"
+                      <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block"
                         {{action attacher.hide}}
                         {{action "openConfirmApproveAgenda"}}
                       >
@@ -70,7 +70,7 @@
                     {{#if (await isSessionClosable)}}
                       <li class="vlc-dropdown-menu__item">
                         <a href=""
-                          data-test-agenda-header-lockAgenda
+                          data-test-agenda-header-lock-agenda
                           class="auk-button-link auk-button-link--block auk-u-text-error"
                           {{action "openConfirmCloseMeeting"}}
                           {{action attacher.hide}}
@@ -83,7 +83,7 @@
                   {{else}}
                     <li class="vlc-dropdown-menu__item">
                       <a href=""
-                        data-test-agenda-header-unlockAgenda
+                        data-test-agenda-header-unlock-agenda
                         class="auk-button-link auk-button-link--block"
                         {{action "unlockAgenda"}}
                         {{action attacher.hide}}
@@ -98,7 +98,7 @@
                 {{#if (await canDeleteSelectedAgenda)}}
                   <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
                     <a href=""
-                      data-test-agenda-header-deleteAgenda
+                      data-test-agenda-header-delete-agenda
                       class="auk-button-link auk-u-text-error"
                       {{action "openConfirmDeleteSelectedAgenda"}}
                       {{action attacher.hide}}
@@ -129,7 +129,7 @@
       {{/if}}
       <div class="auk-toolbar-complex__item">
         <button type="button"
-          data-test-agenda-header-showActionOptions
+          data-test-agenda-header-show-action-options
           class="auk-button auk-button--secondary"
           {{action "showMultipleOptions"}}
         >
@@ -166,7 +166,7 @@
               {{/if}}
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                    data-test-agenda-header-navigateToDecisions
+                    data-test-agenda-header-navigate-to-decisions
                     class="auk-button-link auk-button-link--block"
                   {{action attacher.hide}}
                   {{action "navigateToDecisions"}}
@@ -176,7 +176,7 @@
               </li>
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                    data-test-agenda-header-navigateToNewsletter
+                    data-test-agenda-header-navigate-to-newsletter
                     class="auk-button-link auk-button-link--block"
                   {{action attacher.hide}}
                   {{action "navigateToNewsletter"}}
@@ -186,7 +186,7 @@
               </li>
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                    data-test-agenda-header-navigateToPressAgenda
+                    data-test-agenda-header-navigate-to-pressagenda
                     class="auk-button-link auk-button-link--block"
                   {{action "navigateToPressAgenda"}}
                   {{action attacher.hide}}
@@ -198,6 +198,7 @@
                 <li class="vlc-dropdown-menu__item">
                   {{#link-to
                     "agenda.agendaitems"
+                    data-test-agenda-header-navigate-to-agenda-view=true
                     class="auk-button-link auk-button-link--block"
                   }}
                     {{t "agenda-view"}}
@@ -205,7 +206,7 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
-                      data-test-agenda-header-navigateToPressAgenda
+                      data-test-agenda-header-print-agenda
                       class="auk-button-link auk-button-link--block"
                     {{action attacher.hide}}
                     {{action "print"}}
@@ -216,7 +217,7 @@
               {{else}}
                 <li class="vlc-dropdown-menu__item">
                   <LinkTo
-                    data-test-agenda-header-navigateToPrintableAgenda
+                    data-test-agenda-header-navigate-to-printable-agenda
                     class="auk-button-link auk-button-link--block"
                     @route="agenda.print"
                   >
@@ -228,7 +229,7 @@
                 <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
-                      data-test-agenda-header-toggleEditingSession
+                      data-test-agenda-header-toggle-editing-session
                       class="auk-button-link auk-button-link--block"
                     {{action "toggleEditingSession"}}
                     {{action attacher.hide}}
@@ -238,7 +239,7 @@
                 </li>
                 <li class="vlc-dropdown-menu__item">
                   <a href=""
-                      data-test-agenda-header-selectSignature
+                      data-test-agenda-header-select-signature
                       class="auk-button-link auk-button-link--block"
                     {{action "selectSignature"}}
                     {{action attacher.hide}}
@@ -249,7 +250,7 @@
               {{/if}}
               <li class="vlc-dropdown-menu__item">
                 <a href=""
-                    data-test-agenda-header-downloaddDocuments
+                    data-test-agenda-header-download-documents
                     class="auk-button-link auk-button-link--block"
                   {{action attacher.hide}}
                   {{action "downloadAllDocuments"}}
@@ -274,7 +275,7 @@
                 <li class="vlc-dropdown-menu__item">
                   {{#if currentSession.canReleaseDecisions}}
                     <a href=""
-                        data-test-agenda-header-releaseDecisions
+                        data-test-agenda-header-release-decisions
                         class="auk-button-link auk-button-link--block auk-u-text-error"
                       {{action "releaseDecisions"}}
                       {{action attacher.hide}}
@@ -283,7 +284,7 @@
                     </a>
                   {{else if currentSession.canReleaseDocuments}}
                     <a href=""
-                        data-test-agenda-header-releaseDocuments
+                        data-test-agenda-header-release-documents
                         class="auk-button-link auk-button-link--block auk-u-text-error"
                       {{action "releaseDocuments"}}
                       {{action attacher.hide}}

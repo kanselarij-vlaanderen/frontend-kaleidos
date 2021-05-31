@@ -1,7 +1,6 @@
 /* global context, before, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import actionModal from '../../selectors/action-modal.selectors';
 
 
 context('Agendaitem changes tests', () => {
@@ -140,8 +139,8 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // when navigating to print view, should contain all relevant info
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(agenda.navigateToPrintableAgenda).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
     cy.wait(1000);
     cy.get(agenda.printHeaderTitle, {
       timeout: 80000,
@@ -163,62 +162,62 @@ context('Agendaitem changes tests', () => {
   it('should verify that you can compare agendas', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
     // compare Agenda B against Agenda C
-    cy.get(agenda.compare.agendaLeft).click();
+    cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.contains('Agenda B').click();
-    cy.get(agenda.compare.agendaRight).click();
+    cy.get(agenda.compareAgenda.agendaRight).click();
     cy.contains('Agenda C').click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compare.announcementRight).should('have.length', 1);
-    cy.get(agenda.compare.showChanges).click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 1);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 1);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.showChanges).click();
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 1);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.contains(subcaseTitle1);
     cy.contains(subcaseTitle3);
     cy.contains(approvalTitle).should('not.exist');
     cy.contains(agendaitemIndex2).should('not.exist');
     cy.contains(subcaseTitle2).should('not.exist');
-    cy.get(agenda.compare.showChanges).click();
+    cy.get(agenda.compareAgenda.showChanges).click();
 
     // compare Agenda C against Agenda D
-    cy.get(agenda.compare.agendaLeft).click();
+    cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.contains('Agenda C').click();
-    cy.get(agenda.compare.agendaRight).click();
+    cy.get(agenda.compareAgenda.agendaRight).click();
     cy.contains('Agenda D').click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compare.announcementRight).should('have.length', 1);
-    cy.get(agenda.compare.showChanges).click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 1);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 1);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compare.announcementRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.showChanges).click();
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 1);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
     cy.contains(approvalTitle);
     cy.contains(subcaseTitle3);
     cy.contains(subcaseTitle1).should('not.exist');
     cy.contains(agendaitemIndex2).should('not.exist');
     cy.contains(subcaseTitle2).should('not.exist');
 
-    cy.get(agenda.compare.showChanges).click();
+    cy.get(agenda.compareAgenda.showChanges).click();
 
     // compare Agenda D against Agenda E
-    cy.get(agenda.compare.agendaLeft).click();
+    cy.get(agenda.compareAgenda.agendaLeft).click();
     cy.contains('Agenda D').click();
-    cy.get(agenda.compare.agendaRight).click();
+    cy.get(agenda.compareAgenda.agendaRight).click();
     cy.contains('Ontwerpagenda E').click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 4);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 4);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 1);
-    cy.get(agenda.compare.announcementRight).should('have.length', 1);
-    cy.get(agenda.compare.showChanges).click();
-    cy.get(agenda.compare.agendaitemLeft).should('have.length', 0);
-    cy.get(agenda.compare.agendaitemRight).should('have.length', 0);
-    cy.get(agenda.compare.announcementLeft).should('have.length', 0);
-    cy.get(agenda.compare.announcementRight).should('have.length', 0);
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 1);
+    cy.get(agenda.compareAgenda.showChanges).click();
+    cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 0);
+    cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 0);
+    cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
+    cy.get(agenda.compareAgenda.announcementRight).should('have.length', 0);
   });
 
   it('should assign an agenda-item to a minister and no longer under NO ASSIGNMENT', () => {

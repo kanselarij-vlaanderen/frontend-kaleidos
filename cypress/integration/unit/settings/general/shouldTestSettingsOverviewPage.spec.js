@@ -11,7 +11,7 @@ context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 
@@ -75,7 +75,7 @@ context('Settings overview page tests', () => {
 
   it('Upload a CSV and delete a user', () => {
     cy.visit('/');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.manageUsers).contains('Gebruikersbeheer')
       .click();

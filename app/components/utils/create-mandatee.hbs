@@ -2,14 +2,14 @@
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
-      data-test-mandatee-title-container=true
+      data-test-create-mandatee-title-container=true
       value=title
     }}
   </div>
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
-      data-test-mandatee-nick-name=true
+      data-test-create-mandatee-nickname-container=true
       value=nickName
     }}
   </div>
@@ -23,7 +23,7 @@
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
     {{utils/model-selector
-      data-test-ise-code-dropdown-container=true
+      data-test-create-mandatee-ise-code-container=true
       modelName="ise-code"
       searchField="name"
       propertyToShow="name"

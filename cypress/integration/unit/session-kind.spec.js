@@ -1,11 +1,9 @@
 /* global context, before, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import actionModal from '../../selectors/action-modal.selectors';
-
 import printOverview from '../../selectors/print-overview.selectors';
-
 import newsletter from '../../selectors/newsletter.selector';
+import agenda from '../../selectors/agenda.selectors';
 
 context('Different session kinds should show different titles', () => {
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
@@ -31,24 +29,24 @@ context('Different session kinds should show different titles', () => {
   it('should show the correct translations for normal session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad van';
     cy.visit(regular);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad van';
     cy.visit(special);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in decision print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure van';
     cy.visit(electronic);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetodecisions).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
     cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
   });
 
@@ -68,8 +66,8 @@ context('Different session kinds should show different titles', () => {
   it('should show the correct translations for normal session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad';
     cy.visit(regular);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     // TODO testselector could include "header"
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
     // TODO verify klad & definitief ?
@@ -78,8 +76,8 @@ context('Different session kinds should show different titles', () => {
   it('should show the correct translations for special session in newsletter-info print overview', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Bijzondere ministerraad';
     cy.visit(special);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     cy.get(newsletter.overviewTitle).contains(textToDisplay);
     cy.clickReverseTab('Klad');
     cy.get(newsletter.meetingTitle).contains(textToDisplay);
@@ -91,8 +89,8 @@ context('Different session kinds should show different titles', () => {
     const textToDisplay = 'Beslissingen van de Vlaamse Regering - Ministerraad via elektronische procedure';
     cy.visit(electronic);
     cy.wait(1000);
-    cy.get(actionModal.showActionOptions).click();
-    cy.get(actionModal.navigatetonewsletter).click();
+    cy.get(agenda.agendaHeader.showActionOptions).click();
+    cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     cy.get(newsletter.overviewTitle).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');
     cy.clickReverseTab('Klad');
     cy.get(newsletter.meetingTitle).contains(textToDisplay);
