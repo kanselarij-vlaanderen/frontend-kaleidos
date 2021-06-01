@@ -91,7 +91,9 @@ const selectors = {
   },
 
   // agendaitem-group-header
-  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
+  agendaitemGroupHeader: {
+    header: '[data-test-agendaitem-group-header]',
+  },
 
   // agenda-overview-item
   agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
