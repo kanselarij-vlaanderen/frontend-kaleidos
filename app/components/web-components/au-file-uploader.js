@@ -25,7 +25,7 @@ export default class FileUploader extends Component {
   constructor() {
     super(...arguments);
     this.uploadedFileLength = 0;
-    const queue = this.fileQueueService.create(this.fileQueueName);
+    const queue = this.fileQueue || this.fileQueueService.create(this.fileQueueName);
     setProperties(queue, { // https://github.com/adopted-ember-addons/ember-file-upload/blob/888273b997d0336841daa1fb24287b5f5c5c9d62/addon/components/base-component.js#L13
       accept: this.args.accept,
       multiple: this.args.multiple,
