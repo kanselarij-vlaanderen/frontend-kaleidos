@@ -6,7 +6,7 @@
   </WebComponents::AuTab>
   {{!-- TODO adapt tab content classes to new CSS once available in CSS-package --}}
   <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>
-    <div class="auk-u-flex auk-u-flex--center">
+    <div class="auk-o-flex auk-o-flex--center">
       <span class="auk-u-mr-2">{{t "documents"}}</span>
       {{#unless this.loadData.isRunning}}
         <p>({{this.documentsCount}})</p>
@@ -14,12 +14,12 @@
     </div>
   </WebComponents::AuTab>
   <WebComponents::AuTab @route="publications.publication.translations.documents" data-test-publication-case-nav-translations>
-    <div class="auk-u-flex auk-u-flex--center">
+    <div class="auk-o-flex auk-o-flex--center">
       <span class="auk-u-mr-2">{{t "translations"}}</span>
     </div>
   </WebComponents::AuTab>
   <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
-    <div class="auk-u-flex auk-u-flex--center">
+    <div class="auk-o-flex auk-o-flex--center">
       <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
     </div>
   </WebComponents::AuTab>

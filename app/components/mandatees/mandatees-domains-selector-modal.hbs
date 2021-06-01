@@ -3,33 +3,35 @@
   @isOverlay={{true}}
   @title={{if this.isAddingMinister (t "add-minister") (t "edit-minister")}}
 >
-  <div class="auk-modal__content">
-    <label>{{t "select-minister"}}</label>
-    <div class="auk-u-mb-8">
-      <Utils::MandateeSelector
-        data-test-mandatee-selector={{true}}
-        @singleSelect={{true}}
-        @readOnly={{not this.isAddingMinister}}
-        @selectedMandatees={{this.mandateeBuffer}}
-        @chooseMandatee={{this.selectMandatee}}
-      />
-    </div>
-    {{#unless this.isAddingMinister}}
-      {{#if
-        (or
-        (not this.loadAvailableFieldsForMandatee.lastSuccessful)
-        this.loadAvailableFieldsForMandatee.isRunnning)
-      }}
-        {{t "loading"}}
-      {{else}}
-        <DomainFieldIse::DomainsFieldsSelectorForm
-          @availableFields={{this.availableFields}}
-          @selectedFields={{this.fieldsBuffer}}
-          @onSelectFields={{this.selectFields}}
-          @onUnSelectFields={{this.unSelectFields}}
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      <label>{{t "select-minister"}}</label>
+      <div class="auk-u-mb-8">
+        <Utils::MandateeSelector
+          data-test-mandatee-selector={{true}}
+          @singleSelect={{true}}
+          @readOnly={{not this.isAddingMinister}}
+          @selectedMandatees={{this.mandateeBuffer}}
+          @chooseMandatee={{this.selectMandatee}}
         />
-      {{/if}}
-    {{/unless}}
+      </div>
+      {{#unless this.isAddingMinister}}
+        {{#if
+          (or
+          (not this.loadAvailableFieldsForMandatee.lastSuccessful)
+          this.loadAvailableFieldsForMandatee.isRunnning)
+        }}
+          {{t "loading"}}
+        {{else}}
+          <DomainFieldIse::DomainsFieldsSelectorForm
+            @availableFields={{this.availableFields}}
+            @selectedFields={{this.fieldsBuffer}}
+            @onSelectFields={{this.selectFields}}
+            @onUnSelectFields={{this.unSelectFields}}
+          />
+        {{/if}}
+      {{/unless}}
+    </div>
   </div>
   <WebComponents::VlModalFooter
     @isLoading={{this.save.isRunning}}

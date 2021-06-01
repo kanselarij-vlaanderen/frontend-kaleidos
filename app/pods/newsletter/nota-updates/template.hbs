@@ -59,9 +59,11 @@
                 <button type="button" class="auk-button auk-button--borderless auk-button--icon"
                   {{on "click" (fn this.showPieceViewer row.documentId)}}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-book"></i>
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-book"></i>
+                    </div>
+                  </span>
                 </button>
                 <LinkTo
                   class="auk-button auk-button--borderless auk-button--icon"
@@ -72,9 +74,11 @@
                     (await row.agendaitemId)
                   }}
                 >
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-nav-right"></i>
-                  </div>
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-nav-right"></i>
+                    </div>
+                  </span>
                 </LinkTo>
               </td>
             </c.body>

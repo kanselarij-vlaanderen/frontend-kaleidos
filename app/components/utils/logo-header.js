@@ -1,5 +1,5 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  classNames: ['auk-u-flex', 'auk-u-flex--horizontal-center'],
+  classNames: ['auk-o-flex', 'auk-o-flex--horizontal-center'],
 });

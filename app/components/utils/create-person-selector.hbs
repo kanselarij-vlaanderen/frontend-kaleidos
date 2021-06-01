@@ -1,5 +1,5 @@
 {{#if (not isCreatingPerson)}}
-  <div data-test-add-mandatee-dropdown-container class="auk-u-flex auk-u-flex--vertical-center">
+  <div data-test-person-selector-dropdown-container class="auk-o-flex auk-o-flex--vertical-center">
     {{#power-select
       options=items
       selected=selectedItems
@@ -17,31 +17,33 @@
       {{await (model-property-to-show model propertyToShow)}}
     {{/power-select}}
     <div class="auk-u-mr-2"></div>
-    <button data-test-create-person-container
+    <button data-test-person-selector-action-create-person
       type="button"
       class="auk-button auk-button--secondary auk-button--icon"
       {{action "toggleIsCreatingPerson"}}
     >
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-add"></i>
-      </div>
-      <div class="auk-u-sr-only">
-        {{t "create"}}
-      </div>
+      <span class="auk-button__content">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-u-sr-only">
+          {{t "create"}}
+        </div>
+      </span>
     </button>
   </div>
 {{else}}
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "first-name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
-      data-test-create-person-firstname=true
+      data-test-person-selector-firstname=true
       value=firstName
     }}
   </div>
   <div class="auk-form-group">
     <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
     {{web-components/vl-form-input
-      data-test-create-person-lastname=true
+      data-test-person-selector-lastname=true
       value=lastName
     }}
   </div>
@@ -49,7 +51,9 @@
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
         <a href="" class="auk-button-link" {{action "resetValuesAndCancelCreation"}}>
-          {{t "cancel"}}
+          <span class="auk-button__content">
+            {{t "cancel"}}
+          </span>
         </a>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>

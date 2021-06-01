@@ -29,17 +29,31 @@ const selectors = {
     },
   },
   // create-mandatee
-  addMandateeTitleContainer: '[data-test-mandatee-title-container]',
-  addMandateeNicknameContainer: '[data-test-mandatee-nick-name]',
-  addMandateeIseCodeDropdownContainer: '[data-test-ise-code-dropdown-container]',
+  createMandatee: {
+    titleContainer: '[data-test-create-mandatee-title-container]',
+    nicknameContainer: '[data-test-create-mandatee-nickname-container]',
+    iseCodeContainer: '[data-test-create-mandatee-ise-code-container]',
+  },
+
   // create-person-selector
-  addMandateeDropdownContainer: '[data-test-add-mandatee-dropdown-container]',
-  createPerson: '[data-test-create-person]',
-  createPersonLastnameContainer: '[data-test-create-person-firstname]',
-  createPersonfirstnameContainer: '[data-test-create-person-lastname]',
-  // edit-mandatees
-  mandateeEditCancel: '[data-test-edit-mandatee-cancel]',
+  personSelector: {
+    personDropdown: '[data-test-person-selector-dropdown-container]',
+    // TODO make test to create new person with these selectors
+    createPerson: '[data-test-person-selector-action-create-person]',
+    firstnameContainer: '[data-test-person-selector-firstname]',
+    lastnameContainer: '[data-test-person-selector-lastname]',
+  },
+
+  // edit-mandatee
+  editMandatee: {
+    save: '[data-test-edit-mandatee-save]',
+    cancel: '[data-test-edit-mandatee-cancel]',
+  },
+
   // manage-mandatees
-  manageMandateeChangesAlert: '[data-test-manage-mandatee-changes-alert]',
+  manageMandatee: {
+    changesAlert: '[data-test-manage-mandatee-changes-alert]',
+  },
+
 };
 export default selectors;

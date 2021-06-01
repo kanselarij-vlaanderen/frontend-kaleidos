@@ -2,12 +2,12 @@
   {{#if @custom}}
     {{yield}}
   {{else}}
-    <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar @size="large">
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" @cancelModal}} data-test-au-modal-footer-cancel>
+          <WebComponents::AuButtonLink {{on "click" @cancelModal}} data-test-au-modal-footer-cancel>
             {{t "cancel"}}
-          </WebComponents::AuButton>
+          </WebComponents::AuButtonLink>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
