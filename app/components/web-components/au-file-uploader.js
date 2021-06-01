@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
 /**
+ * @argument fullHeight <Boolean> Stretch the upload zone over the full height
  * @argument multiple <Boolean> (optional) allow uploading multiple files
  * @argument accept <String> (optional)
  * @argument fileQueueName <String> (optional) Name of the file queue to use.
