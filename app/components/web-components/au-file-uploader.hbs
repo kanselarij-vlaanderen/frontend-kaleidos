@@ -28,9 +28,9 @@ as |dropzone|
     <div class="auk-u-mb-2">
       {{#if (and (not this.fileQueue.files.length) (not this.uploadIsCompleted))}}
         <button
-          class="auk-button auk-button--tertiary"
+          class="auk-button auk-button--tertiary auk-file-upload__action-button"
           type="button"
-          tabindex="0"
+          tabindex="-1"
           {{on "click" this.clickInput}}
           {{on "key-up" this.clickInputOnEnter}}
         >
