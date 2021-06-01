@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
   task,
@@ -28,12 +28,12 @@ class PieceRow {
  * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  @inject store;
-  @inject intl;
-  @inject publicationService;
-
   linkModeOptions;
   newPublicationRow;
+
+  @service store;
+  @service intl;
+  @service publicationService;
 
   @tracked rows;
   @tracked isOpenNewPublicationModal = false;

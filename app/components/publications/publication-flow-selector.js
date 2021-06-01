@@ -50,13 +50,16 @@ export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorCom
   }
 
   async loadData(searchText) {
-    console.log(searchText);
     let publicationFlows = await this.store.query('publication-flow', {
       'filter[identification][:gte:id-name]': searchText,
       'page[size]': 10,
       sort: 'identification.id-name',
+      include: 'identification',
     });
     publicationFlows = publicationFlows.toArray();
+    if (searchText) {
+      publicationFlows = publicationFlows.filter((pub) => pub.identification.get('idName').startsWith(searchText));
+    }
     this.options = publicationFlows;
   }
 
