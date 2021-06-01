@@ -114,7 +114,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .then(() => {
         cy.contains('Decreet').click();
       });
-    cy.get(agenda.documentType).should('exist')
+    cy.get(document.editDocumentRow.type).should('exist')
       .should('be.visible')
       .contains('Decreet');
 
@@ -130,7 +130,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
         cy.contains('Publiek').scrollIntoView()
           .click();
       });
-    cy.get(agenda.documentAccessLevel).should('exist')
+    cy.get(document.editDocumentRow.accessLevel).should('exist')
       .should('be.visible')
       .contains('Publiek');
     cy.contains('Annuleren').click();

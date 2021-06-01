@@ -80,11 +80,6 @@ const selectors = {
   // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
 
-  // edit-document-row
-  // TODO move naar document.selectors
-  documentType: '[data-test-document-type]',
-  documentAccessLevel: '[data-test-document-accesslevel]',
-
   // agenda-detail/sidebar
   agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
 
