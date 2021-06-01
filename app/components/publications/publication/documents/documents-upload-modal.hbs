@@ -12,8 +12,8 @@
     {{else}}
       <WebComponents::AuFileUploader
         @fullHeight={{eq this.newPieces.length 0}}
-        @multipleFiles={{true}}
-        @uploadedFileAction={{this.uploadPiece}}
+        @multiple={{true}}
+        @onUpload={{this.uploadPiece}}
       />
       {{! TODO vervangen met correct design (nog in flux), au css en componenten }}
       <div class="upload-container">
