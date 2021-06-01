@@ -7,34 +7,71 @@ import {
   lastValue
 } from 'ember-concurrency-decorators';
 import muSearch from 'frontend-kaleidos/utils/mu-search';
+
+class PieceRow {
+  linkModeOptions;
+
+  constructor(piece, linkMode) {
+    this.piece = piece;
+    this.linkMode = linkMode;
+  }
+
+  @tracked piece;
+  @tracked linkMode;
+
+  get isInLinkMode() {
+    return this.linkMode.value;
+  }
+}
+
 /**
  * @argument {Agendaitem} agedaitem
+ * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
   @inject store;
   @inject intl;
   @inject publicationService;
 
+  linkModeOptions;
   publicationFlowDefaultOptionsTask;
-  referenceDocument;
+  newPublicationRow;
 
+  @tracked rows;
   @tracked isOpenNewPublicationModal = false;
-  @lastValue('loadPieces') pieces;
   @lastValue('loadCase') case;
 
   constructor() {
     super(...arguments);
 
-    this.loadPieces.perform();
+    this.initLinkModeOptions();
+    this.loadPieces.perform().then(() => this.initRows(this.args.pieces));
     this.loadCase.perform();
-    this.publicationFlowLinkOptions = [{
-      value: false,
-      label: this.intl.t('none'),
-    }, {
-      value: true,
-      label: this.intl.t('existing'),
-    }];
     this.publicationFlowDefaultOptionsTask = this.searchPublicationFlow.perform();
+  }
+
+  async initRows(pieces) {
+    const latestPieces = this.extractLatestVersions(pieces);
+    this.rows = await Promise.all(latestPieces.map(async(piece) => {
+      const publicationFlow = await piece.publicationFlow;
+      const isInLinkMode = !!publicationFlow;
+      const linkMode = this.getLinkMode(isInLinkMode);
+      return new PieceRow(piece, linkMode);
+    }));
+  }
+
+  extractLatestVersions(pieces) {
+    const documentsByContainer = {};
+    for (const piece of pieces) {
+      const container = piece.documentContainer;
+      const containerId = container.get('id');
+      const firstContainer = documentsByContainer[containerId];
+      if (!firstContainer) {
+        documentsByContainer[containerId] = piece;
+      }
+    }
+
+    return Object.values(documentsByContainer);
   }
 
   @task
@@ -56,26 +93,47 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  @action
-  changeLinkStatus() {
+  initLinkModeOptions() {
+    this.linkModeOptions = [{
+      value: false,
+      label: this.intl.t('none'),
+    }, {
+      value: true,
+      label: this.intl.t('existing'),
+    }];
+  }
 
+  getLinkMode(selection) {
+    return this.linkModeOptions.find((option) => option.value === selection);
+  }
+
+  @action
+  changeLinkMode(row, selection) {
+    row.linkMode = selection;
+
+    if (!row.isInLinkMode) {
+      const piece = row.piece;
+      piece.publicationFlow = undefined;
+      piece.save();
+    }
   }
 
   // new publication actions
   @action
-  async openNewPublicationModal(piece) {
-    this.referenceDocument = piece;
+  async openNewPublicationModal(row) {
+    this.newPublicationRow = row;
     this.isOpenNewPublicationModal = true;
   }
 
   @task
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
-      // case should already be loaded here
       case: this.case,
     });
-    this.referenceDocument.publicationFlow = publicationFlow;
-    yield this.referenceDocument.save();
+    const piece = this.newPublicationRow.piece;
+    piece.publicationFlow = publicationFlow;
+    yield piece.save();
+    this.newPublicationRow.linkMode = this.getLinkMode(true);
     this.isOpenNewPublicationModal = false;
   }
 
@@ -96,64 +154,23 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @task
   *searchPublicationFlow(searchText) {
     let filterIdName = {};
-    // if (identification) {
-    //   console.log(identification)
-    //   filterIdName = {
-    //     // 'filter[id-name]': identification,
-    //     'filter[:lte,gte:id-name]': [identification, identification + 'z'].join(',')
-    //   };
-    // }
-
     if (searchText) {
       filterIdName = {
-        // 'filter[id-name]': identification,
-        ':phrase_prefix:id-name': searchText,
+        '[:phrase_prefix:identification]': searchText,
       };
     }
-    // filterIdName[':has:publication-flow'] = true;
-
-    // index, page, size, sort, filter, dataMapping
-
-    // const identifications = muSearch('identifications', 0, 10, 'id-name', filterIdName, (item) => {
-    //   const entry = item.attributes;
-    //   entry.id = item.id;
-    //   return entry;
-    // });
-
-    // TRY 4 search publication flows
-    if (searchText) {
-      filterIdName = {
-        // 'filter[id-name]': identification,
-        'identification[:phrase_prefix:id-name]': searchText,
-      };
-    }
-    // filterIdName[':has:publication-flow'] = true;
-
-    // index, page, size, sort, filter, dataMapping
 
     const searchResults = yield muSearch('publication-flows', 0, 10, null, filterIdName, (it) => Object.assign(it.attributes, {
       id: it.id,
     }));
-    console.log(searchResults);
-    // let identifications = yield this.store.query('identification', {
-    //   filter: filterIdName,
-
-    //   'page[size]': 10,
-    // });
-
-    // let identifications = yield this.store.query('identification', {
-    //   ...filterIdName,
-    //   'filter[:has:publication-flow]': true,
-    //   'page[size]': 10,
-    // });
-    // identifications = identifications.toArray();
 
     return searchResults;
   }
 
   @action
-  async selectPublicationFlow(piece, searchPublicationFlow) {
+  async selectPublicationFlow(row, searchPublicationFlow) {
     const publicationFlow = await this.store.findRecord('publication-flow', searchPublicationFlow.id);
+    const piece = row.piece;
     piece.publicationFlow = publicationFlow;
     await piece.save();
   }

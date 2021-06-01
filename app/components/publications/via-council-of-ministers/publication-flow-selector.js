@@ -4,8 +4,9 @@ import { tracked } from '@glimmer/tracking';
 import { keepLatestTask } from 'ember-concurrency-decorators';
 
 /**
- * @argument {Identification} selected
- * @argument {(identification: Identification) => void} onChange
+ * @argument {PublicationFlow} selected
+ * @argument {{ id: string, identification: string }} options
+ * @argument {(publicationFlow: { id: string, identification: string }) => void} onChange
  */
 export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
   @tracked options = [];
@@ -15,12 +16,21 @@ export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorCom
     this.loadData.perform();
   }
 
-  // select correct element in the list
-  // EmberPowerSelect does not select the correct element in the drop down
   get selected() {
+    if (!this.args.selected) {
+      return undefined;
+    }
     // .get('id'): Ember complains about .id syntax
     const id = this.args.selected.get('id');
-    return this.options.findBy('id', id) || this.args.selected;
+    const selected = this.options.findBy('id', id);
+    if (selected) {
+      return selected;
+    }
+    const identification = this.args.selected.get('identification.idName');
+    return {
+      id: id,
+      identification: identification,
+    };
   }
 
   // onOpen event:

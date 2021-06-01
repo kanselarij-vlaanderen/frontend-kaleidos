@@ -25,41 +25,38 @@
           </tr>
         </thead>
 
-        <Documents::DocumentList
-          @tag="tbody"
-          @pieces={{@pieces}}
-          as |pieces|>
-          {{#each pieces as |piece|}}
+        <tbody>
+          {{#each this.rows as |row|}}
             <tr>
               <td>
-                {{piece.name}}
+                {{row.piece.name}}
               </td>
               <td>
-                {{piece.documentContainer.type.label}}
+                {{row.piece.documentContainer.type.label}}
               </td>
               <td>
                 <PowerSelect
                   @searchEnabled={{false}}
-                  @selection={{piece.publicationFlow}}
-                  @onchange={{this.changeLink}}
-                  @options={{this.options}}
+                  @selected={{row.linkMode}}
+                  @options={{this.linkModeOptions}}
+                  @onchange={{fn this.changeLinkMode row}}
                   as |option|>
                   {{option.label}}
                 </PowerSelect>
               </td>
               <td>
-                {{#if piece.publicationFlow}}
+                {{#if row.isInLinkMode}}
                   <Publications::ViaCouncilOfMinisters::PublicationFlowSelector
-                    @selected={{piece.publicationFlow.identification}}
+                    @selected={{row.piece.publicationFlow}}
                     @loadData={{this.searchPublicationFlowWithCache}}
-                    @onChange={{fn this.selectPublicationFlow piece}}
+                    @onChange={{fn this.selectPublicationFlow row}}
                     as |searchPublicationFlow|>
                     {{searchPublicationFlow.identification}}
                   </Publications::ViaCouncilOfMinisters::PublicationFlowSelector>
                 {{else}}
                   <WebComponents::AuButton
                     @icon="add"
-                    {{on 'click' (fn this.openNewPublicationModal piece)}}>
+                    {{on 'click' (fn this.openNewPublicationModal row)}}>
                     {{t "publications-new"}}
                   </WebComponents::AuButton>
                 {{/if}}
@@ -70,21 +67,21 @@
                     @layout="icon-only"
                     @icon="download"
                     @skin="borderless"
-                    @href={{piece.file.downloadLink}}
+                    @href={{row.piece.file.downloadLink}}
                     download
                     />
                   <WebComponents::AuButton
                     @layout="icon-only"
                     @icon="book"
                     @skin="borderless"
-                    @href={{piece.viewDocumentURL}}
+                    @href={{row.piece.viewDocumentURL}}
                     target="_blank"
                     />
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
           {{/each}}
-        </Documents::DocumentList>
+        </tbody>
       </table>
     </Utils::LoadableContent>
   </WebComponents::AuModal::Body>
