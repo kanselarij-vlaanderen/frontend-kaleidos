@@ -26,7 +26,7 @@ context('Testing the toolbar as Overheid user', () => {
   it('Should switch to Agenda tab when agenda is clicked as overheid', () => {
     cy.get(toolbar.mHeader.agendas).click();
     cy.get(route.agendas.title).should('exist');
-    cy.get(cases.casesHeader.overviewTitle).should('not.exist');
+    cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
@@ -35,7 +35,7 @@ context('Testing the toolbar as Overheid user', () => {
     cy.get(toolbar.mHeader.cases).click();
     cy.get(route.agendas.title).should('not.exist');
     // TODO this test is wrong (should fail on this not.exist) but doesn't because not.exist also works whne page is not loaded
-    cy.get(cases.casesHeader.overviewTitle).should('not.exist');
+    cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
@@ -44,7 +44,7 @@ context('Testing the toolbar as Overheid user', () => {
   it('Should switch to newsletter tab when newsletter is clicked as overheid', () => {
     cy.get(toolbar.mHeader.newsletters).click();
     cy.get(route.agendas.title).should('not.exist');
-    cy.get(cases.casesHeader.overviewTitle).should('not.exist');
+    cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.title).should('exist');
     cy.get(settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
