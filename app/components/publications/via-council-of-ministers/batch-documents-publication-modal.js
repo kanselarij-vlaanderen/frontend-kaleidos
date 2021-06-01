@@ -6,7 +6,6 @@ import {
   task,
   lastValue
 } from 'ember-concurrency-decorators';
-import muSearch from 'frontend-kaleidos/utils/mu-search';
 
 class PieceRow {
   linkModeOptions;
@@ -144,32 +143,26 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   // select existing publication actions
   @action
-  searchPublicationFlowWithCache(identification) {
-    if (!identification) {
+  searchPublicationFlowWithCache(searchText) {
+    if (!searchText) {
       return this.publicationFlowDefaultOptionsTask;
     }
-    return this.loadPublicationFlowIdentifications.perform(identification);
+    return this.searchPublicationFlow.perform(searchText);
   }
 
   @task
   *searchPublicationFlow(searchText) {
-    let filterIdName = {};
-    if (searchText) {
-      filterIdName = {
-        '[:phrase_prefix:identification]': searchText,
-      };
-    }
-
-    const searchResults = yield muSearch('publication-flows', 0, 10, null, filterIdName, (it) => Object.assign(it.attributes, {
-      id: it.id,
-    }));
-
-    return searchResults;
+    let publicationFlows = yield this.store.query('publication-flow', {
+      'filter[identification][:gte:id-name]': searchText,
+      'page[size]': 10,
+      sort: 'identification.id-name',
+    });
+    publicationFlows = publicationFlows.toArray();
+    return publicationFlows;
   }
 
   @action
-  async selectPublicationFlow(row, searchPublicationFlow) {
-    const publicationFlow = await this.store.findRecord('publication-flow', searchPublicationFlow.id);
+  async selectPublicationFlow(row, publicationFlow) {
     const piece = row.piece;
     piece.publicationFlow = publicationFlow;
     await piece.save();

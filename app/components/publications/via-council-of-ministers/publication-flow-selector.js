@@ -23,14 +23,7 @@ export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorCom
     // .get('id'): Ember complains about .id syntax
     const id = this.args.selected.get('id');
     const selected = this.options.findBy('id', id);
-    if (selected) {
-      return selected;
-    }
-    const identification = this.args.selected.get('identification.idName');
-    return {
-      id: id,
-      identification: identification,
-    };
+    return selected || this.args.selected;
   }
 
   // onOpen event:

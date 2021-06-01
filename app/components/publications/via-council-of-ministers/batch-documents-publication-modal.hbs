@@ -50,9 +50,7 @@
                     @selected={{row.piece.publicationFlow}}
                     @loadData={{this.searchPublicationFlowWithCache}}
                     @onChange={{fn this.selectPublicationFlow row}}
-                    as |searchPublicationFlow|>
-                    {{searchPublicationFlow.identification}}
-                  </Publications::ViaCouncilOfMinisters::PublicationFlowSelector>
+                    />
                 {{else}}
                   <WebComponents::AuButton
                     @icon="add"

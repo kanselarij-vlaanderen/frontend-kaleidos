@@ -5,6 +5,6 @@
   @oninput={{this.onInput}}
   @search={{this.search}}
   @onchange={{this.onChange}}
-  as |item|>
-  {{yield item}}
+  as |publicationFlow|>
+  {{publicationFlow.identification.idName}}
 </PowerSelect>
