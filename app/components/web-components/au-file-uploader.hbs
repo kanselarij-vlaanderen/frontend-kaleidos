@@ -70,15 +70,7 @@ as |dropzone|
       </p>
     {{/if}}
     {{#if (or this.fileQueue.files.length this.uploadIsCompleted)}}
-      <div class="auk-progress-bar {{if this.uploadIsCompleted "auk-progress-bar--success"}}">
-        <div
-          class="auk-progress-bar__bar"
-          style={{html-safe
-            "--value: (if this.uploadIsCompleted 1 (div this.fileQueue.progress 100))"
-          }}
-        ></div>
-        <div class="auk-progress-bar__value">{{if this.uploadIsCompleted 100 this.fileQueue.progress}}%</div>
-      </div>
+      <WebComponents::AuProgressBar @progress={{if this.uploadIsCompleted 100 this.fileQueue.progress}}/>
     {{/if}}
   </div>
 </FileDropzone>
