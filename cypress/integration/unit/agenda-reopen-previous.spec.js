@@ -36,8 +36,8 @@ context('Agenda reopen previous tests', () => {
     cy.approveDesignAgenda();
     cy.contains(designAgendaBTitle).should('exist');
     cy.contains(designAgendaATitle).should('not.exist');
-    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
-    cy.get(agendaSelector.reopenPreviousVersion).click();
+    cy.get(agendaSelector.agendaHeader.showAgendaOptions).click();
+    cy.get(agendaSelector.agendaHeader.agendaActions.reopenPreviousVersion).click();
     cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
@@ -65,17 +65,17 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaCTitle).should('exist');
     cy.deleteAgenda();
     cy.contains(designAgendaCTitle).should('not.exist');
-    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
-    cy.get(agendaSelector.reopenPreviousVersion).should('not.exist');
+    cy.get(agendaSelector.agendaHeader.showAgendaOptions).click();
+    cy.get(agendaSelector.agendaHeader.agendaActions.reopenPreviousVersion).should('not.exist');
     // TODO the rest of this test is not needed and does not add any value
     cy.contains(designAgendaBTitle).should('not.exist');
     cy.deleteAgenda();
-    cy.get(agendaSelector.agendaActions).click();
-    cy.get(agendaSelector.createNewDesignAgenda).click();
+    cy.get(agendaSelector.agendaHeader.showActionOptions).click();
+    cy.get(agendaSelector.agendaHeader.actions.createNewDesignAgenda).click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaATitle).should('not.exist');
     cy.contains(designAgendaBTitle).should('exist');
-    cy.get(agendaSelector.agendaHeaderShowAgendaOptions).click();
-    cy.get(agendaSelector.reopenPreviousVersion).should('exist');
+    cy.get(agendaSelector.agendaHeader.showAgendaOptions).click();
+    cy.get(agendaSelector.agendaHeader.agendaActions.reopenPreviousVersion).should('exist');
   });
 });

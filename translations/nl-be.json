@@ -50,6 +50,7 @@
   "agendaitems-subtitle": "Nota's",
   "agendaitems-page-size": "Agendapunten per pagina",
   "agendaitems-empty-result": "Geen agendapunten gevonden",
+  "agendaitem-documents-documents-for-publication": "Documenten voor publicatie",
   "note": "Nota",
   "agendas": "Agenda’s",
   "alt-document-name": "Alternatieve document naam",
@@ -674,7 +675,8 @@
   "publication-flow": "Publicatie",
   "publication-status-change": "Publicatie status wijziging",
   "mandatee-without-priority-message": "{name} heeft geen geldige prioriteit. Gelieve dit aan te passen in ministerbeheer of contacteer de administrator.",
-  "publications-new-not-minister": "Nieuwe publicatie (niet via Ministerraad)",
+  "publications-new-title-not-via-council-of-ministers": "Nieuwe publicatie (niet via Ministerraad)",
+  "publications-new-title-via-council-of-ministers": "Nieuwe publicatie (via Ministerraad)",
   "publications-new-button-text": "Publicatie aanmaken",
   "request-publication": "Publicatie aanvragen",
   "discharge-publication": "Publicatie afvoeren",
@@ -843,6 +845,7 @@
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
   "my-profile": "Mijn profiel",
+  "batch-document-publication-modal-publication-number-info": "Is dit document nodig voor de uiteindelijke publicatie? Deze functie wordt gebruikt om bij te houden of er een update op een document is in een bestaande publicatie.",
   "publication-subcase": "publicatie dossier",
   "translation-subcase": "vertalingsdossier"
 }

@@ -1,6 +1,6 @@
 <div {{did-update (perform this.loadData) @agendaitemOrSubcase}}>
   <div class="auk-u-mb-4">
-    <div class="auk-u-flex auk-u-flex--vertical-center">
+    <div class="auk-o-flex auk-o-flex--vertical-center">
       <h4 class="auk-h3 auk-u-m-0">
         {{t "linked-documents"}}
       </h4>
@@ -17,12 +17,14 @@
         data-test-add-linked-documents
         {{on "click" this.openLinkedPieceModal}}
       >
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-add"></i>
-        </div>
-        <div class="auk-button__label">
-          {{t "document-link-old"}}
-        </div>
+        <span class="auk-button__content">
+          <div class="auk-icon auk-icon--default">
+            <i class="ki ki-add"></i>
+          </div>
+          <div class="auk-button__label">
+            {{t "document-link-old"}}
+          </div>
+        </span>
       </button>
     </div>
   {{/if}}
@@ -34,10 +36,12 @@
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-link-old"}} >
-    <div class="auk-modal__content">
-      <Utils::AddExistingPiece
-        @add={{fn this.linkPiece}}
-        @delete={{fn this.unlinkPiece}} />
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <Utils::AddExistingPiece
+          @add={{fn this.linkPiece}}
+          @delete={{fn this.unlinkPiece}} />
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @isLoading={{this.saveLinkedPieces.isRunning}}

@@ -1,56 +1,80 @@
 <div class="auk-u-mb-10">
-  <div class="auk-u-mb-4">
-    <div class="auk-u-flex auk-u-flex--vertical-center">
-      <h4 class="auk-h3 auk-u-m-0">
-        {{t "documents"}}
-      </h4>
-      {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
-        <div class="auk-u-ml-2">
-          <button data-test-subcase-documents-edit class="auk-button-link" type="button"
+  <WebComponents::AuToolbar class="auk-u-mb-4">
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <h4 class="auk-toolbar__title">
+          {{t "documents"}}
+        </h4>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      {{#if
+        (and
+          this.currentSession.isEditor
+          this.model.pieces.length
+          (not this.isEnabledPieceEdit)
+        )
+      }}
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton
+            data-test-agenda-item-edit-documents-list
             {{on "click" this.enablePieceEdit}}>
             {{t "edit"}}
-          </button>
-        </div>
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
       {{/if}}
-    </div>
+      {{#if (and this.currentSession.isOvrb this.model.pieces)}}
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton
+            @icon="copy"
+            {{on "click" this.openPublicationModal}}>
+            {{t "agendaitem-documents-documents-for-publication"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      {{/if}}
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</div>
+
+
+{{#if this.governmentCanViewDocuments}}
+  {{#unless this.loadData.isRunning}}
+    {{#if this.isEnabledPieceEdit}}
+      <Documents::BatchDocumentEdit
+        @pieces={{this.model.pieces}}
+        @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+        @onCloseEdit={{this.disablePieceEdit}}
+      />
+    {{else}}
+      <Documents::DocumentCardList
+        @pieces={{this.model.pieces}}
+        @onOpenUploadModal={{this.ensureFreshData}}
+        @onAddPiece={{perform this.addPiece}}
+        @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
+        @didDeleteContainer={{this.refresh}}
+      />
+    {{/if}}
+  {{/unless}}
+{{else}}
+  <div class="auk-u-mt-2">
+    <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
   </div>
-  {{#if this.governmentCanViewDocuments}}
-    {{#unless this.loadData.isRunning}}
-      {{#if this.isEnabledPieceEdit}}
-        <Documents::BatchDocumentEdit
-          @pieces={{this.model.pieces}}
-          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
-          @onCloseEdit={{this.disablePieceEdit}}
-        />
-      {{else}}
-        <Documents::DocumentCardList
-          @pieces={{this.model.pieces}}
-          @onOpenUploadModal={{this.ensureFreshData}}
-          @onAddPiece={{perform this.addPiece}}
-          @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
-          @didDeleteContainer={{this.refresh}}
-        />
-      {{/if}}
-    {{/unless}}
-  {{else}}
-    <div class="auk-u-mt-2">
-      <WebComponents::VlAlert @message={{t "no-documents-yet"}} />
-    </div>
-  {{/if}}
-  {{#if this.currentSession.isEditor}}
-    <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary"
-        {{on "click" this.openPieceUploadModal}}>
+{{/if}}
+{{#if this.currentSession.isEditor}}
+  <div class="auk-u-mb-4">
+    <button type="button" class="auk-button auk-button--tertiary"
+      {{on "click" this.openPieceUploadModal}}>
+      <span class="auk-button__content">
         <div class="auk-icon auk-icon--default">
           <i class="ki ki-add"></i>
         </div>
         <div class="auk-button__label">
           {{t "documents-add"}}
         </div>
-      </button>
-    </div>
-  {{/if}}
-</div>
+      </span>
+    </button>
+  </div>
+{{/if}}
 
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
@@ -58,22 +82,24 @@
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}} >
-    <div class="auk-modal__content">
-      {{#if this.savePieces.isRunning}}
-        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-      {{else}}
-        <FileUploader
-          @multipleFiles={{true}}
-          @uploadedFileAction={{this.uploadPiece}} />
-        <div class="upload-container">
-          {{#each this.newPieces as |piece|}}
-            <Documents::UploadedDocument
-              @piece={{piece}}
-              @allowDocumentContainerEdit={{true}}
-              @onDelete={{perform this.deletePiece piece}} />
-          {{/each}}
-        </div>
-      {{/if}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if this.savePieces.isRunning}}
+          <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+        {{else}}
+          <FileUploader
+            @multipleFiles={{true}}
+            @uploadedFileAction={{this.uploadPiece}} />
+          <div class="upload-container">
+            {{#each this.newPieces as |piece|}}
+              <Documents::UploadedDocument
+                @piece={{piece}}
+                @allowDocumentContainerEdit={{true}}
+                @onDelete={{perform this.deletePiece piece}} />
+            {{/each}}
+          </div>
+        {{/if}}
+      </div>
     </div>
     <WebComponents::VlModalFooter
       @isLoading={{this.savePieces.isRunning}}
@@ -84,4 +110,13 @@
       @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
 {{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @agendaitem={{this.agendaitem}}
+    @onClose={{this.closePublicationModal}}
+    />
+{{/if}}
+
 <Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}}/>

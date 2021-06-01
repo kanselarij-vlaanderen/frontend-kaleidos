@@ -20,7 +20,9 @@
   <WebComponents::AuToolbar::Group @position="right">
     <WebComponents::AuToolbar::Item>
       <a href="" class="auk-button-link" {{action "cancelEditing" agendaitem}}>
-        {{t "cancel"}}
+        <span class="auk-button__content">
+          {{t "cancel"}}
+        </span>
       </a>
     </WebComponents::AuToolbar::Item>
     <WebComponents::AuToolbar::Item>

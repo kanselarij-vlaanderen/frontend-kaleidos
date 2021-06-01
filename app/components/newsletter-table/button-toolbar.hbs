@@ -1,12 +1,14 @@
-<div class="auk-u-flex--justify-between">
+<div class="auk-o-flex--justify-between">
   <button
     type="button"
     class="auk-button auk-button--borderless auk-button--icon"
     {{on "click" @onEdit}}
   >
-    <div class="auk-icon auk-icon--default">
-      <i class="ki ki-pencil"></i>
-    </div>
+    <span class="auk-button__content">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-pencil"></i>
+      </div>
+    </span>
   </button>
   {{#if (is-pending (await @agendaitem.nota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
@@ -22,12 +24,14 @@
       style={{if (not (await @agendaitem.nota)) "opacity:0.3;"}}
       {{on "click" this.openNota}}
     >
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-document"></i>
-      </div>
-      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-        {{if (await @agendaitem.nota) (t "open-note") (t "no-nota")}}
-      </EmberTooltip>
+      <span class="auk-button__content">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-document"></i>
+        </div>
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{if (await @agendaitem.nota) (t "open-note") (t "no-nota")}}
+        </EmberTooltip>
+      </span>
     </button>
   {{/if}}
   <LinkTo
@@ -41,8 +45,10 @@
       (await latestAgendaitemId)
     }}
   >
-    <div class="auk-icon auk-icon--default">
-      <i class="ki ki-nav-right"></i>
-    </div>
+    <span class="auk-button__content">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-nav-right"></i>
+      </div>
+    </span>
   </LinkTo>
 </div>

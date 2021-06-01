@@ -7,6 +7,7 @@ export default class Button extends Component {
    * secondary (default)
    * tertiary
    * borderless
+   * borderless-muted
    * danger-primary
    * danger-hover
    */

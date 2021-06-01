@@ -1,4 +1,4 @@
-<div class="auk-u-flex auk-u-flex--justify-between auk-u-flex--align-baseline">
+<div class="auk-o-flex auk-o-flex--justify-between auk-o-flex--align-baseline">
   <h4 class="auk-h2 auk-u-text-family-serif auk-u-text-capitalize" data-test-newsletter-meeting-header-title>
     {{t "newsletter-overview-pdf-name"}} - {{this.meeting.kindToShow.altLabel}} {{t "of"}} {{moment-format this.meeting.plannedStart "dddd DD-MM-YYYY"}}
   </h4>
@@ -6,13 +6,15 @@
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
         <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
+          <span class="auk-button__content">
+            {{t "edit"}}
+          </span>
         </a>
       </div>
     {{/if}}
   {{/if}}
 </div>
-<div class="auk-u-mb-4 auk-u-flex auk-u-flex--justify-between">
+<div class="auk-u-mb-4 auk-o-flex auk-o-flex--justify-between">
   <div>
     <h3 class="auk-h4 auk-u-m-0">
       {{t "date-publication"}}

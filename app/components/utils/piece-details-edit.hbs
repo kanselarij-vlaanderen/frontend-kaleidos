@@ -2,45 +2,47 @@
         @closeModal={{@cancelAction}}
         @isOverlay={{true}}
         @title={{t "document-edit"}}>
-  <div class="auk-modal__content">
-    <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-      {{#if @piece}}
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="name" @value={{@piece.name}}/>
-        </div>
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="extension">{{t "file-extension"}}</WebComponents::AuLabel>
-          <WebComponents::AuPill>{{await @piece.file.extension}}</WebComponents::AuPill>
-        </div>
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>
-          <div class="group">
-            {{#unless this.loadData.isRunning}}
-              <Utils::RadioDropdownComboSelect
-                      @options={{this.sortedDocumentTypes}}
-                      @onSelect={{this.selectDocumentType}}
-                      @selected={{await this.selectedDocumentType}}
-              />
-            {{/unless}}
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      <div class="auk-form-group-layout auk-form-group-layout--horizontal">
+        {{#if @piece}}
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="name" @value={{@piece.name}}/>
           </div>
-        </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="extension">{{t "file-extension"}}</WebComponents::AuLabel>
+            <WebComponents::AuPill>{{await @piece.file.extension}}</WebComponents::AuPill>
+          </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>
+            <div class="group">
+              {{#unless this.loadData.isRunning}}
+                <Utils::RadioDropdownComboSelect
+                        @options={{this.sortedDocumentTypes}}
+                        @onSelect={{this.selectDocumentType}}
+                        @selected={{await this.selectedDocumentType}}
+                />
+              {{/unless}}
+            </div>
+          </div>
 
-        <div class="auk-hr">
-          <hr/>
-        </div>
+          <div class="auk-hr">
+            <hr/>
+          </div>
 
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="pages-amount">{{t "pages-amount"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="pages-amount" @value={{@piece.pages}}/>
-        </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="pages-amount">{{t "pages-amount"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="pages-amount" @value={{@piece.pages}}/>
+          </div>
 
-        <div class="auk-form-group">
-          <WebComponents::AuLabel for="words-amount">{{t "words-amount"}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="text" id="words-amount" @value={{@piece.words}}/>
-        </div>
+          <div class="auk-form-group">
+            <WebComponents::AuLabel for="words-amount">{{t "words-amount"}}</WebComponents::AuLabel>
+            <WebComponents::AuInput type="text" id="words-amount" @value={{@piece.words}}/>
+          </div>
 
-      {{/if}}
+        {{/if}}
+      </div>
     </div>
   </div>
   <WebComponents::VlModalFooter

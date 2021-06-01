@@ -1,0 +1,15 @@
+.utils--loadable-content {
+  display: grid;
+
+  &> .content {
+    grid-area: 1/1/1/1;
+
+    &.is-loading {
+      visibility: hidden;
+    }
+  }
+
+  &> .auk-loader-wrapper {
+    grid-area: 1/1/1/1;
+  }
+}

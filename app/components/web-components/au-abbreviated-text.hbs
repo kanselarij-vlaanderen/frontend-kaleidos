@@ -1,5 +1,5 @@
 {{#if this.textTooLong}}
-  <div class="auk-u-flex">
+  <div class="auk-o-flex">
     {{#if this.isCustom}}
       <div class="{{@customTextClass}}" ...attributes>{{this.textAbbreviated}}</div>
     {{else}}
@@ -9,7 +9,7 @@
             @icon="circle-more"
             @skin="mute"
             @layout="icon-only"
-            class="auk-u-flex--vertical-center"
+            class="auk-o-flex--vertical-center"
             >
       <EmberTooltip @tooltipClass="auk-tooltip">
         {{@text}}

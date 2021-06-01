@@ -8,7 +8,7 @@
       <thead>
         <tr>
           <th class="auk-table__col--3 auk-table__header-title auk-table__header-title--unsortable">
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "agenda"}}
               </span>
@@ -16,7 +16,7 @@
           </th>
           <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "agenda-version"}}
               </span>
@@ -24,7 +24,7 @@
           </th>
           <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "latest-modified"}}
               </span>
@@ -32,7 +32,7 @@
           </th>
           <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "status"}}
               </span>
@@ -40,7 +40,7 @@
           </th>
           <th class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
-            <div class="auk-u-flex auk-u-flex--vertical-center">
+            <div class="auk-o-flex auk-o-flex--vertical-center">
               <span>
                 {{t "kind"}}
               </span>
@@ -102,9 +102,11 @@
                 class="auk-button auk-button--borderless auk-button--icon"
                 bubbles=false
               }}
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-nav-right"></i>
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-nav-right"></i>
+                  </div>
+                </span>
               {{/link-to}}
             </td>
           {{/link-to}}

@@ -1,34 +1,36 @@
-<div class="auk-modal-backdrop" data-test-vl-modal-container data-test-vl-modal>
+<div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal-container data-test-vl-modal>
   {{#click-outside
     action=(action "clickOutside")
     except-selector=".flatpickr-calendar"
   }}
     <div class="auk-modal {{sizeClass}}" role="dialog" data-test-vl-modal-dialogwindow>
-      <div class="auk-modal__push">&nbsp;</div>
-      <div class="auk-modal__header auk-modal__header--bordered">
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h2 class="auk-toolbar__title">{{title}}</h2>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              {{#if showCloseButton}}
-                <WebComponents::AuButton
-                        @icon="close"
-                        @skin="borderless"
-                        @layout="icon-only"
-                        {{action "close"}}
-                        data-test-vl-modal-close>
-                </WebComponents::AuButton>
-              {{/if}}
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+      <div class="auk-modal__push"></div>
+      <div class="auk-modal__content">
+        <div class="auk-modal__header auk-modal__header--bordered">
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="left">
+              <WebComponents::AuToolbar::Item>
+                <h2 class="auk-toolbar__title">{{title}}</h2>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                {{#if showCloseButton}}
+                  <WebComponents::AuButton
+                          @icon="close"
+                          @skin="borderless"
+                          @layout="icon-only"
+                          {{action "close"}}
+                          data-test-vl-modal-close>
+                  </WebComponents::AuButton>
+                {{/if}}
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </div>
+        {{yield}}
       </div>
-      {{yield}}
-      <div class="auk-modal__push">&nbsp;</div>
+      <div class="auk-modal__push"></div>
     </div>
   {{/click-outside}}
 </div>

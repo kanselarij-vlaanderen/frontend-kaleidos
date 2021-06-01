@@ -38,7 +38,7 @@ context('Full test for creating mandatees', () => {
     const ministerTitle = 'Eerste minister van onderhoud';
     const ministerNickName = 'Eerste minister';
 
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
@@ -48,21 +48,22 @@ context('Full test for creating mandatees', () => {
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
-    cy.get(mandatee.addMandateeTitleContainer).should('exist')
+    // TODO use input fields directly (after au refactor)
+    cy.get(mandatee.createMandatee.titleContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(form.formInput).should('exist')
           .should('be.visible')
           .type(ministerTitle);
       });
-    cy.get(mandatee.addMandateeNicknameContainer).should('exist')
+    cy.get(mandatee.createMandatee.nicknameContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(form.formInput).should('exist')
           .should('be.visible')
           .type(ministerNickName);
       });
-    cy.get(mandatee.addMandateeDropdownContainer).should('exist')
+    cy.get(mandatee.personSelector.personDropdown).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -74,7 +75,7 @@ context('Full test for creating mandatees', () => {
           .click();
       });
 
-    cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist')
+    cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
       .should('be.visible')
       .within(() => {
         cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -84,7 +85,7 @@ context('Full test for creating mandatees', () => {
     cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Aanvullend net').click();
-        cy.get(mandatee.addMandateeIseCodeDropdownContainer).should('exist')
+        cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
           .should('be.visible')
           .within(() => {
             cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -92,7 +93,7 @@ context('Full test for creating mandatees', () => {
           });
       });
 
-    cy.get('.vl-datepicker').eq(0)
+    cy.get(form.datepickerInput).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
@@ -123,7 +124,7 @@ context('Full test for creating mandatees', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
@@ -135,11 +136,11 @@ context('Full test for creating mandatees', () => {
       hour: 10, minute: 10,
     });
 
-    cy.get('.vl-datepicker').eq(1)
+    cy.get(form.datepickerInput).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 
-    cy.get(form.formSave).should('exist')
+    cy.get(mandatee.editMandatee.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait(3000);
@@ -150,18 +151,18 @@ context('Full test for creating mandatees', () => {
     cy.get(modal.verify.cancel).should('exist')
       .should('be.visible')
       .click();
-    cy.get(mandatee.mandateeEditCancel).should('exist')
+    cy.get(mandatee.editMandatee.cancel).should('exist')
       .should('be.visible')
       .click();
     cy.visit('/');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.get(settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     // TODO index is risky business
     cy.get('[data-test-mandatee-resign="0"]').click();
     cy.wait(3000);
     // TODO Fix grammar of popup ?
-    cy.get(mandatee.manageMandateeChangesAlert).should('exist')
+    cy.get(mandatee.manageMandatee.changesAlert).should('exist')
       .should('be.visible');
     cy.get(form.formCancelButton).click();
     cy.contains(ministerNickName).parents('tr')
