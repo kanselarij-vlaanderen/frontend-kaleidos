@@ -1,9 +1,9 @@
 <FileDropzone
   @accept={{@accept}}
-  @disabled={{or this.fileQueue.files.length this.uploadIsCompleted}}
+  @disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
   @multiple={{@multiple}}
   @name={{this.fileQueueName}}
-  @class="auk-file-upload auk-file-upload--{{if this.this.uploadIsCompleted "success" "gray-100"}} {{if @fullHeight "auk-file-upload--full-height"}}"
+  @class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
   @tagName="div"
   @action={{perform this.uploadFileTask}}
 as |dropzone|
@@ -20,13 +20,13 @@ as |dropzone|
   <input
     type="file"
     accept={{@accept}}
-    disabled={{or this.fileQueue.files.length this.uploadIsCompleted}}
+    disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
     multiple={{@multiple}}
     onchange={{this.addFilesToQueue}}
   >
   <div class="auk-file-upload__content">
     <div class="auk-u-mb-2">
-      {{#if (and (not this.fileQueue.files.length) (not this.uploadIsCompleted))}}
+      {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
         <button
           class="auk-button auk-button--tertiary auk-file-upload__action-button"
           type="button"
@@ -43,7 +43,7 @@ as |dropzone|
             </span>
           </span>
         </button>
-      {{else if this.fileQueue.files.length}}
+      {{else if this.uploadIsRunning}}
         {{t "uploading-files" numFiles=this.fileQueue.files.length}}
       {{else if this.uploadIsCompleted}}
         <div class="auk-o-flex auk-o-flex--vertical-align">
@@ -56,7 +56,7 @@ as |dropzone|
         </div>
       {{/if}}
     </div>
-    {{#if (and (not this.fileQueue.files.length) (not this.uploadIsCompleted))}}
+    {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
       <p class="auk-u-muted">
         {{#if dropzone.active}}
           {{#if dropzone.valid}}
@@ -69,7 +69,7 @@ as |dropzone|
         {{/if}}
       </p>
     {{/if}}
-    {{#if (or this.fileQueue.files.length this.uploadIsCompleted)}}
+    {{#if (or this.uploadIsRunning this.uploadIsCompleted)}}
       <WebComponents::AuProgressBar @progress={{if this.uploadIsCompleted 100 this.fileQueue.progress}}/>
     {{/if}}
   </div>

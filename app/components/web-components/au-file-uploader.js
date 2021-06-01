@@ -47,6 +47,11 @@ export default class FileUploader extends Component {
       && (!this.fileQueue.files.length); // "queue automatically gets flushed when all the files in the queue have settled"
   }
 
+  get uploadIsRunning() {
+    return this.fileQueue.get('files.length') > 0 // getter since things internal to file-upload aren't tracked
+      || this.uploadFileTask.isRunning;
+  }
+
   @enqueueTask({
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
