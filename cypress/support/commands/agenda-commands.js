@@ -11,6 +11,7 @@ import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponents from '../../selectors/au-component-selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 
 // ***********************************************
 // Functions
@@ -35,7 +36,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('');
-  cy.get(agenda.createNewAgendaButton).click();
+  cy.get(route.agendas.action.newMeeting).click();
 
   cy.get('.auk-modal').as('dialog')
     .within(() => {

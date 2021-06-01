@@ -4,6 +4,7 @@
 // import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import document from '../../selectors/document.selectors';
+import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -99,7 +100,7 @@ context('Tests of pieces on agendaitems', () => {
           cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-1');
         });
       cy.clickReverseTab('Overzicht');
-      cy.get(agenda.subcase.agendaLink).click();
+      cy.get(cases.subcaseDescription.agendaLink).click();
       cy.get(agenda.agendaitemNav.documentsTab).click();
 
       cy.get('.auk-scroll-wrapper__body').within(() => {

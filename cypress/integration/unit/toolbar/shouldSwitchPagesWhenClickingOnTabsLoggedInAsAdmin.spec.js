@@ -4,8 +4,8 @@
 import toolbar from '../../../selectors/toolbar.selectors';
 import settings from '../../../selectors/settings.selectors';
 import cases from '../../../selectors/case.selectors';
-import agenda from '../../../selectors/agenda.selectors';
 import newsletter from '../../../selectors/newsletter.selector';
+import route from '../../../selectors/route.selectors';
 
 context('Testing the toolbar as Admin user', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ context('Testing the toolbar as Admin user', () => {
 
   it('Should switch to Agenda tab when agenda is clicked', () => {
     cy.get(toolbar.mHeader.agendas).click();
-    cy.get(agenda.overviewTitle).should('exist');
+    cy.get(route.agendas.title).should('exist');
     cy.get(cases.casesHeader.overviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
@@ -34,7 +34,7 @@ context('Testing the toolbar as Admin user', () => {
 
   it('Should switch to cases tab when cases is clicked', () => {
     cy.get(toolbar.mHeader.cases).click();
-    cy.get(agenda.overviewTitle).should('not.exist');
+    cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.overviewTitle).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     cy.get(settings.generalSettings).should('not.exist');
@@ -42,7 +42,7 @@ context('Testing the toolbar as Admin user', () => {
 
   it('Should switch to newsletter tab when newsletter is clicked', () => {
     cy.get(toolbar.mHeader.newsletters).click();
-    cy.get(agenda.overviewTitle).should('not.exist');
+    cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.overviewTitle).should('not.exist');
     cy.get(newsletter.title).should('exist');
     cy.get(settings.generalSettings).should('not.exist');
@@ -50,7 +50,7 @@ context('Testing the toolbar as Admin user', () => {
 
   it('Should switch to settings tab when settings is clicked', () => {
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(agenda.overviewTitle).should('not.exist');
+    cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.overviewTitle).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
     // TODO checking the existance here is duplicate

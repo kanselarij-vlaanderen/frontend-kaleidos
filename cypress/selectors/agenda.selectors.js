@@ -14,6 +14,11 @@ const selectors = {
   // 2x agenda-detail/sidebar-item, agenda-overview/agenda-overview-item
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
 
+  // 3x agendaitem/documents, subcase/documents, agenda/documents
+  // rename data-test-documents-route-open-batch-edit
+  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
+
   // TODO unused selector, do we want to use this one ?
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
 
@@ -35,17 +40,15 @@ const selectors = {
     },
   },
 
+  /**
+    COMPONENT BASED SELECTORS
+  */
+
   // printable-agenda
   printableAgenda: {
     container: '[data-test-printable-agenda-container]',
     headerTitle: '[data-test-printable-agenda-header-title]',
   },
-
-  // route agendas
-  // TODO welke naam gebruiken bij route templates?
-  // TODO rename selectors
-  overviewTitle: '[data-test-agendas-title]',
-  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
 
   // agendaitem-nav
   agendaitemNav: {
@@ -56,9 +59,6 @@ const selectors = {
     pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
     activeTab: '[data-test-agendaitem-nav-tabs] .active',
   },
-
-  // route agenda/agendaitems/agendaitem/decisions
-  addDecision: '[data-test-add-decision]',
 
   // agendaitem-decision
   agendaitemDecision: {
@@ -75,11 +75,6 @@ const selectors = {
     save: '[data-test-access-level-pill-save]',
     cancel: '[data-test-access-level-pill-cancel]',
   },
-
-  // 3x agendaitem/documents, subcase/documents, agenda/documents
-  // rename data-test-documents-route-open-batch-edit
-  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {
