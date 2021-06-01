@@ -224,17 +224,17 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // check if only 'Geen toekenning' is a header
-    cy.get(agenda.agendaitemGroupHeader.header)
+    cy.get(agenda.agendaitemGroupHeader.section)
       .should('have.length', 0);
     // TODO CHECK WITH USERS, should there be a mandatee header between approval and first item without mandatee
-    // cy.get(agenda.agendaitemGroupHeader.header).eq(0)
+    // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
     cy.addAgendaitemMandatee(0, -1, 0, 'Minister-president van de Vlaamse Regering');
     cy.clickReverseTab('Overzicht');
-    cy.get(agenda.agendaitemGroupHeader.header).eq(0)
+    cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');
-    cy.get(agenda.agendaitemGroupHeader.header).should('have.length', 2);
+    cy.get(agenda.agendaitemGroupHeader.section).should('have.length', 2);
     // TODO check second header for "Geen toekenning"?
   });
 });

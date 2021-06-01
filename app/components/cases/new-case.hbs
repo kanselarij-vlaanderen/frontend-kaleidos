@@ -2,7 +2,7 @@
   <div class="auk-modal__body">
     <div class="auk-u-p-4">
       {{#if hasError}}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
+        <WebComponents::AuAlert data-test-new-case-shorttitle-error @title={{t "modal-error-alert-title"}} @skin="error"
                                 @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
       {{/if}}
 
@@ -22,7 +22,7 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <button type="button" data-test-vl-modal-footer-cancel
+          <button type="button" data-test-new-case-cancel
                   class="auk-button auk-button--borderless"
             {{action "closeAction"}}>
             <span class="auk-button__content">

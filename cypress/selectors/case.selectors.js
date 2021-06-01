@@ -10,6 +10,8 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
+    cancel: '[data-test-new-case-cancel]',
+    shorttitleError: '[data-test-new-case-shorttitle-error]',
   },
 
   // subcase-overview-header
@@ -38,6 +40,7 @@ const selectors = {
   // TODO better names
   subcaseItem: {
     approved: '[data-test-subcase-item-approved]',
+    // TODO unused selector
     notApproved: '[data-test-subcase-item-not-approved]',
   },
 

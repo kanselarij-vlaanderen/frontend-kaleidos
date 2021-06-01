@@ -69,8 +69,6 @@
       <WebComponents::AuButton
         @skin="borderless"
         @icon={{if this.isShowingDocuments "chevron-down" "chevron-right"}}
-        data-vl-accordion-toggle=""
-        data-vl-accordion-dressed="true"
         {{on "click" this.toggleIsShowingDocuments}}
       >
         {{t "documents"}}

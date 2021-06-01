@@ -54,7 +54,7 @@
         <div class="auk-key-value-item__label">
           {{t "requested-for-session"}}
         </div>
-        <div data-test-meeting-plannedStart class="auk-key-value-item__value">
+        <div data-test-subcase-description-meeting-planned-start class="auk-key-value-item__value">
           {{#if (await subcase.requestedForMeeting.plannedStart)}}
             {{t "requested-for-agenda"}}
             {{moment-format
@@ -108,7 +108,7 @@
         <div class="auk-key-value-item__label">
           {{t "date-last-edited"}}
         </div>
-        <div data-test-subcase-modified class="auk-key-value-item__value">
+        <div data-test-subcase-description-modified class="auk-key-value-item__value">
           {{moment-format subcase.modified "DD MMMM YYYY"}}
         </div>
       </div>
@@ -132,7 +132,7 @@
         <div class="auk-key-value-item__label">
           {{t "requested-by"}}
         </div>
-        <div data-test-subcase-requested-by class="auk-key-value-item__value">
+        <div data-test-subcase-description-requested-by class="auk-key-value-item__value">
           {{#if
             (or
                 (is-pending subcase.requestedBy)

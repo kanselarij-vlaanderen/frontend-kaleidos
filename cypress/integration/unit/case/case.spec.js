@@ -3,7 +3,6 @@
 
 import cases from '../../../selectors/case.selectors';
 import form from '../../../selectors/form.selectors';
-import modal from '../../../selectors/modal.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -39,7 +38,7 @@ context('Create case as Admin user', () => {
   it('Hitting cancel should hide the model', () => {
     cy.visit('/dossiers');
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(form.formCancelButton).click();
+    cy.get(cases.newCase.cancel).click();
     // TODO assert modal is gone ?
     // TODO assert there is no state when cancelling en recreating ?
   });
@@ -48,13 +47,13 @@ context('Create case as Admin user', () => {
     const newShortTitle = 'Dit is de korte titel';
     cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
     cy.visit('/dossiers');
-
+    // TODO use selector to save
     cy.get(cases.casesHeader.addCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
     // TODO testing without title is done in next it, DUPLICATE test
-    cy.get(modal.publication.alertError).should('be.visible');
-    cy.get(modal.publication.alertError).contains('Kijk het formulier na');
+    cy.get(cases.newCase.shorttitleError).should('be.visible')
+      .contains('Kijk het formulier na');
     cy.get('.auk-form-group').eq(1)
       .within(() => {
         cy.get('.auk-textarea').click()
@@ -81,7 +80,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.casesHeader.addCase).click();
     cy.get('button').contains('Dossier aanmaken')
       .click();
-    cy.get(modal.publication.alertError).should('be.visible');
-    cy.get(modal.publication.alertError).contains('Kijk het formulier na');
+    cy.get(cases.newCase.shorttitleError).should('be.visible')
+      .contains('Kijk het formulier na');
   });
 });

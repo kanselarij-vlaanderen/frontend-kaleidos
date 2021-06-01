@@ -11,7 +11,7 @@ const selectors = {
   dataTable: '.auk-table',
   dataTableZebra: '.auk-table--striped',
 
-  // 2x agenda-detail/sidebar-item, agenda-overview/agenda-overview-item
+  // agenda-detail/sidebar-item
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
 
   // 3x agendaitem/documents, subcase/documents, agenda/documents
@@ -68,6 +68,11 @@ const selectors = {
     delete: '[data-test-agendaitem-decision-delete]',
   },
 
+  // agendaitem-decision-edit
+  agendaitemDecisionEdit: {
+    resultContainer: '[data-test-agendaitem-decision-edit-result-container]',
+  },
+
   // access-level-pill
   accessLevelPill: {
     // Clicking the pill in this component toggles edit mode
@@ -78,23 +83,20 @@ const selectors = {
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {
+    // TODO subItem only works for nota's, not announcement
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
-  },
-
-  // agendaitem-decision-edit
-  agendaitemDecisionEdit: {
-    resultContainer: '[data-test-agendaitem-decision-edit-result-container]',
   },
 
   // agendaitem-group-header
   agendaitemGroupHeader: {
-    header: '[data-test-agendaitem-group-header]',
+    section: '[data-test-agendaitem-group-header-section]',
   },
 
   // agenda-overview-item
   agendaOverviewItem: {
     subitem: '[data-test-agenda-overview-item-sub-item]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
+    confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
   },
 
   // agenda-header
