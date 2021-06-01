@@ -31,6 +31,7 @@ export default class PublicationsIndexController extends Controller {
     }, {});
   tableColumns = tableColumns;
 
+  @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
   @tracked isShowPublicationModal = false;
   @tracked isShowPublicationFilterModal = false;
@@ -111,5 +112,10 @@ export default class PublicationsIndexController extends Controller {
     // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
     this.set('size', size);
     this.set('page', 0);
+  }
+
+  @action
+  sortTable(sortField) {
+    this.set('sort', sortField);
   }
 }
