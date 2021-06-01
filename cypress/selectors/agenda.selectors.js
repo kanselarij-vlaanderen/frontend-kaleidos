@@ -96,8 +96,10 @@ const selectors = {
   },
 
   // agenda-overview-item
-  agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
-  agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
+  agendaOverviewItem: {
+    subitem: '[data-test-agenda-overview-item-sub-item]',
+    formallyOk: '[data-test-agenda-overview-item-formally-ok]',
+  },
 
   // agenda-header
   agendaHeader: {

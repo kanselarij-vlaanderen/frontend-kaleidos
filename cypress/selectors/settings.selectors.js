@@ -25,6 +25,6 @@ const selectors = {
   userSearchInput: '[data-test-user-search-input]',
   userSearchButton: '[data-test-user-search-button]',
   // TODO rename selector
-  goToUserDetail: '[data-test-agenda-overview-sub-item]',
+  goToUserDetail: '[data-test-next-button-user-detail]',
 };
 export default selectors;

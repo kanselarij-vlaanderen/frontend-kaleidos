@@ -281,7 +281,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
-      cy.get(agenda.agendaOverviewItemFormallyok).click();
+      cy.get(agenda.agendaOverviewItem.formallyOk).click();
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
@@ -595,7 +595,7 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
-        cy.get(agenda.agendaOverviewSubitem); // changing from detail to overview = new url, this check will only work after the url has changed
+        cy.get(agenda.agendaOverviewItem.subitem); // changing from detail to overview = new url, this check will only work after the url has changed
         // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
@@ -603,7 +603,7 @@ function agendaitemExists(agendaitemName) {
           timeout: 20000,
         }).should('not.exist');
       }
-      cy.get(agenda.agendaOverviewSubitem)
+      cy.get(agenda.agendaOverviewItem.subitem)
         .contains(agendaitemName, {
           timeout: 24000,
         })
