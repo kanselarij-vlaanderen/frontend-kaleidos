@@ -1,13 +1,17 @@
 import Route from '@ember/routing/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject as service } from '@ember/service';
 
-export default class DocumentViewerRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class DocumentViewerRoute extends Route {
+  @service('session') simpleAuthSession;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+
   async model(params) {
-    const pieces = await this.store.query('piece', {
+    return this.store.queryOne('piece', {
       'filter[:id:]': params.piece_id,
       include: 'file',
     });
-    const piece = pieces.firstObject;
-    return piece;
   }
 }

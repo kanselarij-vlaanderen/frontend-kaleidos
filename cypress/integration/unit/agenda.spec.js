@@ -1,7 +1,6 @@
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
-import actionModel from '../../selectors/action-modal.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponent from '../../selectors/au-component-selectors';
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
@@ -38,8 +37,8 @@ context('Agenda tests', () => {
       .day(5); // Friday in two weeks
     cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(actionModel.showAgendaOptions).click();
-      cy.get(actionModel.agendaHeaderDeleteAgenda).click();
+      cy.get(agenda.agendaHeader.showAgendaOptions).click();
+      cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
       cy.get(modal.auModal.body).within(() => {
         // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
         cy.get(auComponent.auAlert.container).should('exist');
@@ -100,8 +99,8 @@ context('Agenda tests', () => {
       .day(5); // Friday in four weeks
     cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
     cy.openAgendaForDate(dateToCreateAgenda);
-    cy.get(actionModel.showAgendaOptions).click();
-    cy.get(actionModel.lockAgenda).should('not.exist');
+    cy.get(agenda.agendaHeader.showAgendaOptions).click();
+    cy.get(agenda.agendaHeader.agendaActions.lockAgenda).should('not.exist');
   });
 
   it('should edit nota on agendaitem and trim whitespaces', () => {
@@ -145,26 +144,26 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
     cy.contains('dit is de korte titel').click();
     // detail view
-    cy.get(agenda.agendaitemTitlesEdit).should('exist')
+    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
       .should('be.visible')
       .click();
-
+    // TODO replace with confidentiality selector
     cy.get(form.formVlToggle).should('exist')
       .click();
 
-    cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
-    cy.get(agenda.agendaitemTitlesEditShorttitle).type('dit is de korte titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).type('dit is de korte titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEditTitle).clear();
-    cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.title).clear();
+    cy.get(agenda.agendaitemTitlesEdit.title).type('dit is de lange titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEditExplanation).clear();
-    cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+    cy.get(agenda.agendaitemTitlesEdit.explanation).clear();
+    cy.get(agenda.agendaitemTitlesEdit.explanation).type('Dit is de opmerking');
 
-    cy.get(agenda.agendaitemTitlesEditSave).should('exist')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).should('exist')
       .should('be.visible')
       .click();
-    cy.get(agenda.agendaitemTitlesEdit).scrollIntoView();
+    cy.get(agenda.agendaitemTitlesView.edit).scrollIntoView();
     cy.contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
     cy.contains('Dit is de opmerking');
@@ -179,8 +178,8 @@ context('Agenda tests', () => {
     cy.createAgenda('Ministerraad', agendaDate, 'Brussel', 1);
     cy.createAgenda('Ministerraad', agendaDate, 'Brussel', null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(actionModel.showActionOptions).click();
-      cy.get(actionModel.toggleeditingsession).click();
+      cy.get(agenda.agendaHeader.showActionOptions).click();
+      cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
       // TODO data tag
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
       cy.get(form.formInput).eq(1)
@@ -259,8 +258,8 @@ context('Agenda tests', () => {
 
       cy.setAllItemsFormallyOk(3);
       cy.approveDesignAgenda();
-      cy.get(actionModel.showAgendaOptions).click();
-      cy.get(actionModel.lockAgenda).click();
+      cy.get(agenda.agendaHeader.showAgendaOptions).click();
+      cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
       // TODO check the message?
       cy.get(modal.auModal.body).within(() => {
         cy.get(auComponent.auAlert.container).should('exist');
@@ -396,8 +395,8 @@ context('Agenda tests', () => {
       timeout: 60000,
     }).should('not.exist');
 
-    cy.get(actionModel.showAgendaOptions).click();
-    cy.get(actionModel.lockAgenda).click();
+    cy.get(agenda.agendaHeader.showAgendaOptions).click();
+    cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
 
     // TODO do we need all these awaits ? what calls happen ?
     // cy.get(modal.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');

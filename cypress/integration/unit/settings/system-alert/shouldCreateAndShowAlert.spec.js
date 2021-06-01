@@ -3,6 +3,7 @@
 import alert from '../../../../selectors/system-wide/alert.selectors';
 import systemAlert from '../../../../selectors/settings/system-alert.selectors';
 import form from '../../../../selectors/form.selectors';
+import dependency from '../../../../selectors/dependency.selectors';
 
 const ALERT_POLL_INTERVAL = 70000;
 
@@ -62,7 +63,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(systemAlert.alert).should('exist');
 
     cy.get('[data-test-vl-modal-dialogwindow] .auk-form-group').click();
-    cy.get('.ember-power-select-option').click();
+    cy.get(dependency.emberPowerSelect.option).click();
     cy.route('GET', '/alerts**').as('getAlerts');
     cy.get(systemAlert.managementModal.remove).click();
     cy.wait('@getAlerts', {

@@ -94,7 +94,7 @@ export default EmberObject.create({
       label: 'Formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
-      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-u-flex',
+      classNames: 'vlc-agenda-items__status vlc-agenda-items__status--positive auk-o-flex',
       approved: true,
       pillClassNames: 'auk-pill auk-pill--success',
       iconClassNames: 'ki-check formally-ok-icon',
@@ -107,7 +107,7 @@ export default EmberObject.create({
       label: 'Formeel niet OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
-      classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-u-flex',
+      classNames: 'vlc-agenda-items__status auk-u-text-error auk-u-text-bold auk-o-flex',
       pillClassNames: 'auk-pill auk-pill--danger',
       iconClassNames: 'ki-cross formally-ok-icon',
       svg: {
@@ -119,7 +119,7 @@ export default EmberObject.create({
       label: 'Nog niet formeel OK',
       uri:
         'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
-      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-u-flex',
+      classNames: 'vlc-agenda-items__status auk-u-text-bold auk-o-flex',
       pillClassNames: 'auk-pill',
       iconClassNames: 'ki-question-mark formally-ok-icon',
       svg: {
@@ -165,19 +165,6 @@ export default EmberObject.create({
     'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
   latinAdverbialNumberals,
   numbersBylatinAdverbialNumberals,
-  adminId: '71c068e6-d2f0-43de-93ab-cd1e7156ac4b',
-  kanselarijId: '50f4c79c-902d-4ad2-bca1-0f37a69f0c13',
-  overheidId: '3e824494-bbe7-45cf-aed8-5828970a10dc',
-  ministerId: '1cc0710c-1b28-4e23-b3ff-399c8089bc71',
-  kabinetId: '7e8c0c9c-05ec-49fd-9e96-fc54ebf3f9eb',
-  usersId: '450915b2-4c64-4b03-9caa-71180400f831',
-  ovrbId: '600d9d07-3368-4e6b-abbb-f5be5c2531a5',
-  mockLoginServiceProvider: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
-  developerWhitelistIds: {
-    frederik: 'fa59bba0-52e3-11ea-8bfc-e35431e140ef',
-    ben: '58177460-4e4a-11ea-a1d0-a99143fe0685',
-    rafael: 'cbdd9b60-3b97-11ea-a194-f970e0c7187e',
-  },
   agendaStatusDesignAgenda: {
     id: '2735d084-63d1-499f-86f4-9b69eb33727f',
     uri: 'http://kanselarij.vo.data.gift/id/agendastatus/2735d084-63d1-499f-86f4-9b69eb33727f',
@@ -205,38 +192,6 @@ export default EmberObject.create({
   LANGUAGE_DE: {
     uri: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
-  ACTIVITY_TYPES: {
-    vertalen: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/e9a532a5-65c1-484f-9288-1720dcd1296c',
-      id: 'e9a532a5-65c1-484f-9288-1720dcd1296c',
-    },
-    handtekenen: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/6a43f78e-c835-40a2-bf32-81209ac6e42a',
-      id: '6a43f78e-c835-40a2-bf32-81209ac6e42a',
-    },
-    drukproeven: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
-      id: '165a56c5-6d32-4a8e-aefe-a1755eb0c0a4',
-    },
-    publiceren: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activiteit-types/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-      id: 'fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    },
-  },
-  ACTIVITY_STATUSSES: {
-    open: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/917349a2-4361-11eb-b378-0242ac130002',
-      id: '917349a2-4361-11eb-b378-0242ac130002',
-    },
-    withdrawn: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/b26eb1a0-4361-11eb-b378-0242ac130002',
-      id: 'b26eb1a0-4361-11eb-b378-0242ac130002',
-    },
-    closed: {
-      url: 'http://kanselarij.vo.data.gift/id/concept/activity-status/a6f7b9f2-4361-11eb-b378-0242ac130002',
-      id: 'a6f7b9f2-4361-11eb-b378-0242ac130002',
-    },
-  },
   SUBCASE_TYPES: {
     vertalen: {
       id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
@@ -255,6 +210,7 @@ export default EmberObject.create({
       url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
     },
   },
+  // TODO this is now called modes and is no longer used
   PUBLICATION_TYPES: {
     extenso: {
       uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',

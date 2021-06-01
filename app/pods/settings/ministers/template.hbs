@@ -1,18 +1,20 @@
 <div class="auk-u-m-8">
   {{page-title (t "manage-ministers")}}
-  <div class="auk-u-flex auk-u-flex--justify-between">
+  <div class="auk-o-flex auk-o-flex--justify-between">
     <h4 class="auk-h3"></h4>
     <button data-test-minister-add
       type="button"
       class="auk-button auk-button--primary"
       {{action "toggleIsAdding"}}
     >
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-add"></i>
-      </div>
-      <div class="auk-button__label">
-        {{t "create-mandatee"}}
-      </div>
+      <span class="auk-button__content">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-add"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "create-mandatee"}}
+        </div>
+      </span>
     </button>
   </div>
   {{#if (await model)}}
@@ -26,7 +28,7 @@
                href="#"
             ></a>
             <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-u-flex auk-u-flex--vertical-center">
+              <div class="auk-o-flex auk-o-flex--vertical-center">
                 <span>
                   {{t "minister"}}
                 </span>
@@ -38,7 +40,7 @@
                href="#"
             ></a>
             <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-u-flex auk-u-flex--vertical-center">
+              <div class="auk-o-flex auk-o-flex--vertical-center">
                 <span>
                   {{t "nick-name"}}
                 </span>
@@ -50,7 +52,7 @@
                href="#"
             ></a>
             <a class="auk-table__header-title--sortable" href="#">
-              <div class="auk-u-flex auk-u-flex--vertical-center">
+              <div class="auk-o-flex auk-o-flex--vertical-center">
                 <span>
                   {{t "priority"}}
                 </span>
@@ -100,9 +102,11 @@
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-pencil"></i>
-                      </div>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-pencil"></i>
+                        </div>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
@@ -111,12 +115,14 @@
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isResigningMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-settings"></i>
-                      </div>
-                      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-                        {{t "resign"}}
-                      </EmberTooltip>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-settings"></i>
+                        </div>
+                        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+                          {{t "resign"}}
+                        </EmberTooltip>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                   <WebComponents::AuToolbar::Item>
@@ -125,9 +131,11 @@
                       class="auk-button auk-button--borderless auk-button--icon auk-u-text-error"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                     >
-                      <div class="auk-icon auk-icon--default">
-                        <i class="ki ki-delete"></i>
-                      </div>
+                      <span class="auk-button__content">
+                        <div class="auk-icon auk-icon--default">
+                          <i class="ki ki-delete"></i>
+                        </div>
+                      </span>
                     </button>
                   </WebComponents::AuToolbar::Item>
                 </WebComponents::AuToolbar::Group>

@@ -22,18 +22,20 @@
           @onChangeConfidentiality={{this.changeConfidentiality}}
         />
       {{/unless}}
-      {{#if (await this.piece.downloadFileLink)}}
+      {{#if this.file}}
         <button
           type="button"
           class="auk-button auk-button--borderless auk-button--icon"
           {{on "click" this.showPieceViewer}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-book"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "download"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-book"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "view-document-details"}}
+            </div>
+          </span>
         </button>
         <a
           class="auk-button auk-button--borderless auk-button--icon"
@@ -42,12 +44,14 @@
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
           the filename received in the "Content-Disposition HTTP header" }}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-download"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "download"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-download"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "download"}}
+            </div>
+          </span>
         </a>
       {{/if}}
 
@@ -58,12 +62,14 @@
           data-test-delete-piece-from-history
           {{on "click" (fn this.deletePiece piece)}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-delete"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "delete"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-delete"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "delete"}}
+            </div>
+          </span>
         </button>
       {{/if}}
     </div>

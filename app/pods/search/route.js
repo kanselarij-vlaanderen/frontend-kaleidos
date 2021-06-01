@@ -1,7 +1,9 @@
 import Route from '@ember/routing/route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject as service } from '@ember/service';
 
-export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
+export default class SearchRoute extends Route {
+  @service('session') simpleAuthSession;
+
   queryParams = {
     searchText: {
       refreshModel: true,
@@ -21,9 +23,13 @@ export default class SearchRoute extends Route.extend(AuthenticatedRouteMixin) {
     },
   };
 
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+
   /* There is no reset of query parameters here by means of "resetController".
    * It is assumed that -unless users explicitly click the main "search" button-
-   * search state (term, page number, ...) should be remembered, expecially with
+   * search state (term, page number, ...) should be remembered, especially with
    * a trial-and-error search-session in mind, where users navigate to a detail item,
    * realize it's not what they're looking for and go back in history.
    */

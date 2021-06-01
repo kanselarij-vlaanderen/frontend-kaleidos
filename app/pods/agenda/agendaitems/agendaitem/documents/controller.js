@@ -23,6 +23,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
 
+  @tracked isOpenPublicationModal = false;
+
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;
 
@@ -178,6 +180,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         }
       }
     }
+  }
+
+  @action
+  openPublicationModal() {
+    this.isOpenPublicationModal = true;
+  }
+
+  @action
+  closePublicationModal() {
+    this.isOpenPublicationModal = false;
   }
 
   @action

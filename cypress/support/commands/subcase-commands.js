@@ -8,6 +8,7 @@ import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
@@ -84,30 +85,25 @@ function openSubcase(index = 0) {
  * @memberOf Cypress.Chainable#
  * @function
  * @param {boolean} isRemark - Is this a subcase of type remark
- * @param {string} shortTitle - Current title of the subcase (same as case title unless already renamed)
  * @param {boolean} [confidentialityChange] -Will change the current confidentiality if true
  * @param {string} [accessLevel] -Access level to set, must match exactly with possible options in dropdown
  * @param {string} [newShortTitle] - new short title for the subcase
  * @param {string} [newLongTitle] - new long title for the subcase
  * @param {boolean} [inNewsletter] - Will toggle "in newsletter" if true
  */
-function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
+function changeSubcaseAccessLevel(isRemark, confidentialityChange, accessLevel, newShortTitle, newLongTitle) {
   cy.log('changeSubcaseAccessLevel');
   cy.route('PATCH', '/subcases/*').as('patchSubcase');
 
-  cy.get('.auk-h3').contains(shortTitle)
-    .parents('.auk-u-mb-8')
-    .within(() => {
-      cy.get('a').click();
-    });
+  cy.get(cases.subcaseTitlesView.edit).click();
 
   cy.get('.auk-box').as('subcaseAccessLevel');
 
   if (accessLevel) {
     cy.get('@subcaseAccessLevel').within(() => {
-      cy.get('.ember-power-select-trigger').click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
     });
-    cy.get('.ember-power-select-option', {
+    cy.get(dependency.emberPowerSelect.option, {
       timeout: 5000,
     }).should('exist')
       .then(() => {
@@ -117,14 +113,11 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
 
   cy.get('@subcaseAccessLevel').within(() => {
     if (isRemark) {
-      cy.get('.auk-form-group').as('editCaseForm');
+      // TODO why set longtitle twice for remark?
       if (newLongTitle) {
-        cy.get('@editCaseForm').eq(2)
-          .within(() => {
-            cy.get('.auk-textarea').click()
-              .clear()
-              .type(newLongTitle);
-          });
+        cy.get(cases.subcaseTitlesEdit.title).click()
+          .clear()
+          .type(newLongTitle);
       }
     } else {
       cy.get('.auk-form-group').as('editCaseForm')
@@ -132,29 +125,24 @@ function changeSubcaseAccessLevel(isRemark, shortTitle, confidentialityChange, a
     }
 
     if (confidentialityChange) {
-      cy.get('@editCaseForm').eq(0)
+      cy.get(cases.subcaseTitlesEdit.confidential)
         .within(() => {
+          // TODO change with selector
           cy.get('.vl-toggle__label').click();
         });
     }
     if (newShortTitle) {
-      cy.get('@editCaseForm').eq(1)
-        .within(() => {
-          cy.get('.auk-textarea').click()
-            .clear()
-            .type(newShortTitle);
-        });
+      cy.get(cases.subcaseTitlesEdit.shorttitle).click()
+        .clear()
+        .type(newShortTitle);
     }
     if (newLongTitle) {
-      cy.get('@editCaseForm').eq(2)
-        .within(() => {
-          cy.get('.auk-textarea').click()
-            .clear()
-            .type(newLongTitle);
-        });
+      cy.get(cases.subcaseTitlesEdit.title).click()
+        .clear()
+        .type(newLongTitle);
     }
 
-    cy.get('.auk-toolbar-complex__item > .auk-button')
+    cy.get(cases.subcaseTitlesEdit.actions.save)
       .contains('Opslaan')
       .click();
   });
@@ -235,11 +223,11 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
 
   cy.get(mandatee.mandateePanelEdit.actions.add).contains('Minister toevoegen')
     .click();
-  cy.get('.mandatee-selector-container').children('.ember-power-select-trigger')
+  cy.get('.mandatee-selector-container').children(dependency.emberPowerSelect.trigger)
     .click();
-  // cy.get('.ember-power-select-search-input').type('g').clear(); // TODO added this because default data does not have active ministers
+  // cy.get(dependency.emberPowerSelect.searchInput).type('g').clear(); // TODO added this because default data does not have active ministers
   if (mandateeSearchText) {
-    cy.get('.ember-power-select-search-input').type(mandateeSearchText);
+    cy.get(dependency.emberPowerSelect.searchInput).type(mandateeSearchText);
     cy.wait('@getFilteredMandatees', {
       timeout: 12000,
     });
@@ -248,18 +236,18 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
       timeout: 12000,
     });
   }
-  cy.get('.ember-power-select-option--search-message', {
+  cy.get(dependency.emberPowerSelect.optionSearchMessage, {
     timeout: 10000,
   }).should('not.exist'); // TODO added this because default data does not have active ministers
-  cy.get('.ember-power-select-option', {
+  cy.get(dependency.emberPowerSelect.option, {
     timeout: 10000,
   }).should('exist')
     .then(() => {
       if (mandateeSearchText) {
-        cy.get('.ember-power-select-option').contains(mandateeSearchText)
+        cy.get(dependency.emberPowerSelect.option).contains(mandateeSearchText)
           .click();
       } else {
-        cy.get('.ember-power-select-option').eq(mandateeNumber)
+        cy.get(dependency.emberPowerSelect.option).eq(mandateeNumber)
           .click();
       }
     });

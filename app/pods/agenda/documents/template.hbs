@@ -3,7 +3,7 @@
     <div class="auk-u-m-8">
       <div class="auk-u-mb-10">
         <div class="auk-u-mb-4">
-          <div class="auk-u-flex auk-u-flex--vertical-center">
+          <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-h3 auk-u-m-0">
               {{t "documents"}}
             </h4>
@@ -11,7 +11,9 @@
               <div class="auk-u-ml-2">
                 <button data-test-subcase-documents-edit class="auk-button-link" type="button"
                   {{on "click" this.enablePieceEdit}}>
-                  {{t "edit"}}
+                  <span class="auk-button__content">
+                    {{t "edit"}}
+                  </span>
                 </button>
               </div>
             {{/if}}
@@ -34,12 +36,14 @@
           <div class="auk-u-mb-4">
             <button type="button" class="auk-button auk-button--tertiary"
               {{on "click" this.openPieceUploadModal}}>
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "documents-add"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-add"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "documents-add"}}
+                </div>
+              </span>
             </button>
           </div>
         {{/if}}
@@ -51,17 +55,19 @@
           @isOverlay={{true}}
           @large={{true}}
           @title={{t "documents-add"}} >
-          <div class="auk-modal__content">
-            <FileUploader
-              @multipleFiles={{true}}
-              @uploadedFileAction={{this.uploadPiece}} />
-            <div class="upload-container">
-              {{#each this.newPieces as |piece|}}
-                <Documents::UploadedDocument
-                    @piece={{piece}}
-                    @allowDocumentContainerEdit={{true}}
-                    @onDelete={{perform this.deletePiece piece}} />
-              {{/each}}
+          <div class="auk-modal__body">
+            <div class="auk-u-p-4">
+              <FileUploader
+                @multipleFiles={{true}}
+                @uploadedFileAction={{this.uploadPiece}} />
+              <div class="upload-container">
+                {{#each this.newPieces as |piece|}}
+                  <Documents::UploadedDocument
+                      @piece={{piece}}
+                      @allowDocumentContainerEdit={{true}}
+                      @onDelete={{perform this.deletePiece piece}} />
+                {{/each}}
+              </div>
             </div>
           </div>
           <WebComponents::VlModalFooter

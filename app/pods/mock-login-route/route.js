@@ -1,39 +1,25 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default Route.extend({
-  queryParams: {
-    page: {
-      refreshModel: true,
-    },
-  },
-
-  currentSession: service(),
-  session: service(),
-  store: service(),
+export default class MockLoginRoute extends Route {
+  @service('session') simpleAuthSession;
 
   beforeModel() {
-    if (this.currentSession.userRole === '') {
-      this.transitionTo('accountless-users');
-    }
-    if (this.session.isAuthenticated) {
-      this.transitionTo('agendas');
-    }
-  },
-  model(params) {
-    const filter = {
-      provider: CONFIG.mockLoginServiceProvider,
-    };
-    if (params.role) {
-      filter.user = {
-        'last-name': params.role,
-      };
-    }
+    this.simpleAuthSession.prohibitAuthentication('agendas');
+  }
+
+  model() {
     return this.store.query('account', {
       include: 'user,user.group',
-      filter,
-      sort: 'user.last-name',
+      filter: {
+        provider: CONSTANTS.SERVICE_PROVIDERS.MOCK_LOGIN,
+      },
+      sort: 'user.last-name,user.first-name',
+      page: {
+        size: 100,
+        number: 0,
+      },
     });
-  },
-});
+  }
+}

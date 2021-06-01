@@ -21,8 +21,8 @@ context('Formally ok/nok tests', () => {
     cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
     cy.get('.vlc-agenda-items__status').should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
-    cy.get(agenda.agendaHeaderShowAgendaOptions).click();
-    cy.get(agenda.approveAgenda).click();
+    cy.get(agenda.agendaHeader.showAgendaOptions).click();
+    cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
     cy.get(auComponent.auAlert.message).should('exist');
     // TODO optional, check if there is no au-alert in the new pop?
     cy.get(modal.auModal.cancel).click();

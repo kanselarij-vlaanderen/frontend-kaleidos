@@ -22,7 +22,9 @@ export default ModelWithModifier.extend({
   publicationDocDate: attr('datetime'),
   remark: attr('string'),
 
-  agendaItemTreatment: belongsTo('agenda-item-treatment'),
+  agendaItemTreatment: hasMany('agenda-item-treatment', {
+    serialize: true, // on creation of the newsletter-info, multiple decisions (for now also treatments) might already exist.
+  }),
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
@@ -33,42 +35,45 @@ export default ModelWithModifier.extend({
     inverse: null,
   }),
 
-  newsletterProposal: computed('agendaItemTreatment', 'agendaItemTreatment.subcase.mandatees', async function() {
-    const treatment = await this.get('agendaItemTreatment');
-    const subcase = await treatment.get('subcase');
-    const mandatees = await subcase.get('mandatees');
-    const sortedMandatees = await mandatees.sortBy('priority');
-    let proposalText = this.intl.t('proposal-text');
-    const seperatorComma = ', ';
-    const seperatorAnd = ' en ';
-    if (sortedMandatees && sortedMandatees.length > 1) {
-      for (let index = 0; index < sortedMandatees.length; index++) {
-        const mandatee = sortedMandatees.objectAt(index);
-        const nickName = await mandatee.get('nickName');
-        if (index > 0) {
-          if (sortedMandatees.length - 1 === index) {
-            proposalText = `${proposalText}${seperatorAnd}`;
-          } else {
-            proposalText = `${proposalText}${seperatorComma}`;
+  newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
+    const treatments = await this.get('agendaItemTreatment');
+    const treatment = treatments.firstObject;
+    if (treatment) {
+      const subcase = await treatment.get('subcase');
+      const mandatees = await subcase.get('mandatees');
+      const sortedMandatees = await mandatees.sortBy('priority');
+      let proposalText = this.intl.t('proposal-text');
+      const seperatorComma = ', ';
+      const seperatorAnd = ' en ';
+      if (sortedMandatees && sortedMandatees.length > 1) {
+        for (let index = 0; index < sortedMandatees.length; index++) {
+          const mandatee = sortedMandatees.objectAt(index);
+          const nickName = await mandatee.get('nickName');
+          if (index > 0) {
+            if (sortedMandatees.length - 1 === index) {
+              proposalText = `${proposalText}${seperatorAnd}`;
+            } else {
+              proposalText = `${proposalText}${seperatorComma}`;
+            }
           }
-        }
+          if (nickName) {
+            proposalText = `${proposalText}${nickName}`;
+          } else {
+            proposalText = `${proposalText}${mandatee.get('title')}`;
+          }
+        }// end for loop
+        return proposalText;
+      }
+      const requestedBy = await subcase.get('requestedBy');
+      if (requestedBy) {
+        const nickName = await requestedBy.get('nickName');
         if (nickName) {
           proposalText = `${proposalText}${nickName}`;
         } else {
-          proposalText = `${proposalText}${mandatee.get('title')}`;
+          proposalText = `${proposalText}${requestedBy.get('title')}`;
         }
-      }// end for loop
-      return proposalText;
-    }
-    const requestedBy = await subcase.get('requestedBy');
-    if (requestedBy) {
-      const nickName = await requestedBy.get('nickName');
-      if (nickName) {
-        proposalText = `${proposalText}${nickName}`;
-      } else {
-        proposalText = `${proposalText}${requestedBy.get('title')}`;
+        return proposalText;
       }
-      return proposalText;
     }
     return null;
   }),

@@ -1,0 +1,79 @@
+<WebComponents::AuModal @size="full-screen-padded">
+  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
+  <WebComponents::AuModal::Body>
+    <Utils::LoadableContent @isLoading={{this.loadPieces.isRunning}}>
+      {{!-- template-lint-disable table-groups --}}
+      <table class="auk-table auk-table--styled auk-table--bordered">
+        <thead>
+          <tr>
+            <th>{{t "name"}}</th>
+            <th>{{t "document-type"}}</th>
+            <th>
+              {{t "publications-number"}}
+              <WebComponents::AuIcon @iconSkinColor="muted" @name="info-circle">
+                <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
+                  <p>
+                    {{t "batch-document-publication-modal-publication-number-info"}}
+                  </p>
+                </EmberTooltip>
+              </WebComponents::AuIcon>
+            </th>
+            <th />
+          </tr>
+        </thead>
+
+        <Documents::DocumentList
+          @tag="tbody"
+          @pieces={{@pieces}}
+          as |pieces|>
+          {{#each pieces as |piece|}}
+            <tr>
+              <td>
+                {{piece.name}}
+              </td>
+              <td>
+                {{piece.documentContainer.type.label}}
+              </td>
+              <td>
+                {{#if piece.publicationFlow}}
+                  {{piece.publicationFlow.identification.idName}}
+                {{else}}
+                  <WebComponents::AuButton
+                    @icon="add"
+                    {{on 'click' (fn this.openNewPublicationModal piece)}}>
+                    {{t "publications-new"}}
+                  </WebComponents::AuButton>
+                {{/if}}
+              </td>
+              <td>
+                <WebComponents::AuButtonToolbar>
+                  <WebComponents::AuButton
+                    @layout="icon-only"
+                    @icon="download"
+                    @skin="borderless"
+                    @href={{piece.file.downloadLink}}
+                    download
+                    />
+                  <WebComponents::AuButton
+                    @layout="icon-only"
+                    @icon="book"
+                    @skin="borderless"
+                    @href={{piece.viewDocumentURL}}
+                    target="_blank"
+                    />
+                </WebComponents::AuButtonToolbar>
+              </td>
+            </tr>
+          {{/each}}
+        </Documents::DocumentList>
+      </table>
+    </Utils::LoadableContent>
+  </WebComponents::AuModal::Body>
+</WebComponents::AuModal>
+
+{{#if this.isOpenNewPublicationModal}}
+  <Publications::NewPublicationModal
+    @case={{this.case}}
+    @onSave={{perform this.saveNewPublication}}
+    @onCancel={{this.cancelNewPublication}} />
+{{/if}}

@@ -1,3 +1,4 @@
+{{!-- TODO every use of @activity. will change --}}
 <div class="auk-u-mb-3">
   <WebComponents::AuPanel @scrollable="true">
     <WebComponents::AuPanel::Header @borderless={{this.isCollapsed}}>
@@ -87,7 +88,7 @@
           <div class="auk-o-grid-col-6 auk-u-mr-2">
             {{#if this.isTranslation}}
               <WebComponents::AuKeyValue
-                      @key={{t "final-translation-date"}}
+                      @key={{t "translation-due-date"}}
                       @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}
               />
               <WebComponents::AuKeyValue

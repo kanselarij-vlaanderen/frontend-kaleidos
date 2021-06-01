@@ -19,6 +19,10 @@ export default class DocumentsDocumentListComponent extends Component {
     this.groupDocumentsByContainer.perform();
   }
 
+  get tag() {
+    return this.args.tag || 'div';
+  }
+
   get documents() {
     return this.args.pieces;
   }

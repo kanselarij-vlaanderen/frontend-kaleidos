@@ -1,6 +1,6 @@
-<div class="auk-modal__content">
-  <div class="auk-u-m-8">
-    <div class="auk-u-flex auk-u-flex--vertical-center">
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    <div class="auk-o-flex auk-o-flex--vertical-center">
       <Input
         @value={{searchText}}
         @placeholder={{t "search-placeholder"}}
@@ -42,12 +42,12 @@
         </tbody>
       </table>
       <div class="auk-u-mb-3"></div>
-      <WebComponents::VlPagination
+      <WebComponents::AuPagination
         @page={{page}}
         @nbOfItems={{results.length}}
         @size={{size}}
-        @nextAction={{action 'nextPage'}}
-        @previousAction={{action 'prevPage'}}
+        @onNextPage={{action 'nextPage'}}
+        @onPreviousPage={{action 'prevPage'}}
         @total={{results.meta.count}} />
     {{/if}}
   </div>

@@ -1,14 +1,41 @@
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 
-export default class PublicationsRoute extends Route.extend(AuthenticatedRouteMixin) {
-  @inject store;
+export default class PublicationsRoute extends Route {
+  @service store;
+  @service('session') simpleAuthSession;
 
-  @action
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
+  }
+
   async afterModel() {
-    // caching for use in publication detail
-    await this.store.findAll('publication-mode');
+    const publicationStatusPromise = this.store.query('publication-status', {
+      'page[size]': 100,
+      sort: 'position',
+    });
+    const publicationModePromise = this.store.query('publication-mode', {
+      'page[size]': 100,
+      sort: 'position',
+    });
+    const urgencyLevelPromise = this.store.query('urgency-level', {
+      'page[size]': 100,
+      sort: 'position',
+    });
+    const regulationTypePromise = this.store.query('regulation-type', {
+      'page[size]': 100,
+      sort: 'position',
+    });
+    const documentTypePromise =  this.store.query('document-type', {
+      'page[size]': 100,
+      sort: 'priority',
+    });
+    return Promise.all([
+      publicationStatusPromise,
+      regulationTypePromise,
+      urgencyLevelPromise,
+      documentTypePromise,
+      publicationModePromise
+    ]);
   }
 }

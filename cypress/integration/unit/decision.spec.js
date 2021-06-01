@@ -5,6 +5,7 @@ import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -181,14 +182,14 @@ context('Add files to an agenda', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionPostpone).click();
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.postpone).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter');
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionAdvance).click();
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.advance).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
@@ -208,11 +209,11 @@ context('Add files to an agenda', () => {
       cy.get(agenda.decisionPowerSelectContainer).should('exist')
         .should('be.visible')
         .within(() => {
-          cy.get('.ember-power-select-trigger').scrollIntoView()
+          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
             .click();
         });
     });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Uitgesteld').scrollIntoView()
           .click();
@@ -226,8 +227,7 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
-    cy.get(agenda.agendaitemTitlesToSubcase).contains('Naar procedurestap')
-      .click();
+    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering op/);
     cy.get('.vlc-status-timeline > li').eq(1)
