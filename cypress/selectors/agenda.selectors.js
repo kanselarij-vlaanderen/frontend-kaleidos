@@ -69,8 +69,12 @@ const selectors = {
   },
 
   // access-level-pill
-  accessLevelPill: '[data-test-access-level-pill]',
-  accessLevelSave: '[data-test-access-level-save]',
+  accessLevelPill: {
+    // Clicking the pill in this component toggles edit mode
+    pill: '[data-test-access-level-pill]',
+    save: '[data-test-access-level-pill-save]',
+    cancel: '[data-test-access-level-pill-cancel]',
+  },
 
   // 3x agendaitem/documents, subcase/documents, agenda/documents
   // rename data-test-documents-route-open-batch-edit

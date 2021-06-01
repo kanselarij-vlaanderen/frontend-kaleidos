@@ -55,11 +55,11 @@ context('Propagation to other graphs', () => {
     cy.get(form.formSave).click();
 
     // TODO We are clicking the pill inside the document card of treatment report
-    cy.get(agenda.accessLevelPill).click();
+    cy.get(agenda.accessLevelPill.pill).click();
     cy.existsAndVisible(dependency.emberPowerSelect.trigger).click();
     cy.existsAndVisible(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
-    cy.get(agenda.accessLevelSave).click();
+    cy.get(agenda.accessLevelPill.save).click();
 
     // TODO verify if this is needed, default treatments for agendaitem is approved anyway
     cy.contains('Wijzigen').click();

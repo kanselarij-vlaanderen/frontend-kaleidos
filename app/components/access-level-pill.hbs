@@ -25,7 +25,7 @@
         <button
           type="button"
           class="auk-button auk-button--borderless auk-button--icon"
-          data-test-access-level-save
+          data-test-access-level-pill-save
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
           <div class="auk-icon auk-icon--default">
@@ -38,6 +38,7 @@
         <button
           type="button"
           class="auk-button auk-button--borderless auk-button--icon"
+          data-test-access-level-pill-cancel
           {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
           <div class="auk-icon auk-icon--default">
