@@ -86,7 +86,9 @@ const selectors = {
   },
 
   // agendaitem-decision-edit
-  decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',
+  agendaitemDecisionEdit: {
+    resultContainer: '[data-test-agendaitem-decision-edit-result-container]',
+  },
 
   // agendaitem-group-header
   agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',

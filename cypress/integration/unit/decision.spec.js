@@ -206,7 +206,7 @@ context('Add files to an agenda', () => {
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
     cy.contains('Wijzigen').click();
     cy.get('.auk-box').within(() => {
-      cy.get(agenda.decisionPowerSelectContainer).should('exist')
+      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
         .should('be.visible')
         .within(() => {
           cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
