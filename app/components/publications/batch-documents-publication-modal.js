@@ -47,6 +47,16 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.loadCase.perform();
   }
 
+  @task
+  *loadPieces() {
+    // ensure all related records are loaded to prevent extra calls from template for each piece individually
+    yield this.store.query('piece', {
+      'filter[agendaitems][:id:]': this.args.agendaitem.id,
+      'page[size]': this.args.pieces.length,
+      include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
+    });
+  }
+
   async initRows(pieces) {
     const latestPieces = this.extractLatestVersions(pieces);
     this.rows = await Promise.all(latestPieces.map(async(piece) => {
@@ -73,16 +83,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   @task
-  *loadPieces() {
-    // ensure all related records are loaded to prevent extra calls from template for each piece individually
-    yield this.store.query('piece', {
-      'filter[agendaitems][:id:]': this.args.agendaitem.id,
-      'page[size]': this.args.pieces.length,
-      include: 'document-container,document-container.type,file,publication-flow,publication-flow.identification',
-    });
-  }
-
-  @task
   // no yield but use of task for @lastValue
   // eslint-disable-next-line require-yield
   *loadCase() {
@@ -91,6 +91,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
+  // SECTION: LINK MODE
   initLinkModeOptions() {
     this.linkModeOptions = [{
       value: false,
@@ -116,7 +117,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     }
   }
 
-  // new publication actions
+  // SECTION: NEW PUBLICATION FLOW
   @action
   async openNewPublicationModal(row) {
     this.newPublicationRow = row;
@@ -140,7 +141,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.isOpenNewPublicationModal = false;
   }
 
-  // select existing publication actions
+  // SECTION: EXISTING PUBLICATION FLOW
   @action
   async selectPublicationFlow(row, publicationFlow) {
     const piece = row.piece;
