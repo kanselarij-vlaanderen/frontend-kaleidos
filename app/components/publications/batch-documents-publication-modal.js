@@ -28,6 +28,7 @@ class PieceRow {
  * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
+  @inject store;
   @inject intl;
   @inject publicationService;
 
