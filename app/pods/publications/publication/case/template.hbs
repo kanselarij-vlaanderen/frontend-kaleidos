@@ -138,7 +138,7 @@
                   {{#each this.publicationFlow.mandatees as |mandatee|}}
                     <tr>
                       <td>
-                        <div class="auk-u-flex auk-u-flex--vertical-center">
+                        <div class="auk-o-flex auk-o-flex--vertical-center">
                           <WebComponents::AuBadge @icon="user"/>
                           <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                         </div>
@@ -191,7 +191,7 @@
                 {{#each this.latestSubcaseOnMeeting.sortedMandatees as |mandatee|}}
                   <tr>
                     <td>
-                      <div class="auk-u-flex auk-u-flex--vertical-center">
+                      <div class="auk-o-flex auk-o-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
                         <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                       </div>
@@ -262,7 +262,7 @@
                 {{#each this.contactPersons as | contactPerson |}}
                   <tr>
                     <td>
-                      <div class="auk-u-flex auk-u-flex--vertical-center">
+                      <div class="auk-o-flex auk-o-flex--vertical-center">
                         <WebComponents::AuBadge @icon="user"/>
                         <div class="auk-u-mx-2">
                           <span>{{contactPerson.nameToDisplay}}</span>
@@ -283,22 +283,23 @@
                     </td>
 
                     <td class="auk-u-text-align--right">
-                      <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                      <div class="auk-u-inline-block">
+                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more"></WebComponents::AuButton>
                         <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="left"
-                        >
+                            @renderInPlace={{true}}
+                            @class="ember-attacher-popper"
+                            @hideOn="clickout click"
+                            @showOn="click"
+                            @animation="shift"
+                            @placement="left"
+                          >
                           <WebComponents::AuDropdown>
                             <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
                               {{t "delete"}}
                             </WebComponents::AuDropdown::Item>
                           </WebComponents::AuDropdown>
                         </AttachPopover>
-                      </WebComponents::AuButton>
+                      </div>
                     </td>
                   </tr>
                 {{/each}}

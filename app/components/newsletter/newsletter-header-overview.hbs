@@ -1,8 +1,8 @@
 <div class="auk-toolbar-complex">
   <div class="auk-toolbar-complex__left">
     <div class="auk-toolbar-complex__item">
-      <div class="auk-u-flex auk-u-flex--vertical auk-u-mt-2">
-        <div class="auk-u-flex auk-u-flex--vertical-center">
+      <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
+        <div class="auk-o-flex auk-o-flex--vertical-center">
           <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-overview-header-title>
             {{t "newsletter-overview-pdf-name"}}
             -
@@ -81,127 +81,141 @@
           class="auk-button auk-button--secondary"
           {{action "showMultipleOptions"}}
         >
-          {{#if (not isShowingOptions)}}
-            <div class="auk-icon auk-icon--default">
-              <i
-                class="ki ki-chevron-down"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
+          <span class="auk-button__content">
+            {{#if (not isShowingOptions)}}
+              <div class="auk-icon auk-icon--default">
+                <i
+                  class="ki ki-chevron-down"
+                  {{action "showMultipleOptions" bubbles=false}}
+                ></i>
+              </div>
+            {{else}}
+              <div class="auk-icon auk-icon--default">
+                <i
+                  class="ki ki-chevron-up"
+                  {{action "showMultipleOptions" bubbles=false}}
+                ></i>
+              </div>
+            {{/if}}
+            <div class="auk-button__label">
+              {{t "actions"}}
             </div>
-          {{else}}
-            <div class="auk-icon auk-icon--default">
-              <i
-                class="ki ki-chevron-up"
-                {{action "showMultipleOptions" bubbles=false}}
-              ></i>
-            </div>
-          {{/if}}
-          <div class="auk-button__label">
-            {{t "actions"}}
-          </div>
-          {{#attach-popover
-            renderInPlace=true
-            class="ember-attacher-popper vlc-hide-on-print"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom"
-          as |attacher|
-          }}
-            <ul class="vlc-dropdown-menu">
-              {{#if currentSession.isEditor}}
-                {{#if
-                  (or (is-pending agenda.createdFor.mailCampaign) isLoading)
-                }}
-                  <li class="vlc-dropdown-menu__item">
-                    <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-p-2">
-                      <div
-                        class="auk-loader"
-                        role="alert"
-                        aria-busy="true"
-                      ></div>
-                      {{t "newsletter-loading-text"}}
-                    </div>
-                  </li>
-                {{else if (await agenda.createdFor.mailCampaign)}}
-                  {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+            {{#attach-popover
+              renderInPlace=true
+              class="ember-attacher-popper vlc-hide-on-print"
+              hideOn="clickout click"
+              showOn="click"
+              animation="shift"
+              placement="bottom"
+            as |attacher|
+            }}
+              <ul class="vlc-dropdown-menu">
+                {{#if currentSession.isEditor}}
+                  {{#if
+                    (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+                  }}
                     <li class="vlc-dropdown-menu__item">
-                      <a href=""
-                          class="auk-button-link auk-button-link--block"
-                        {{action attacher.hide}}
-                        {{action "sendTestCampaign"}}
-                      >
-                        {{t "send-test-campaign"}}
-                      </a>
+                      <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-p-2">
+                        <div
+                          class="auk-loader"
+                          role="alert"
+                          aria-busy="true"
+                        ></div>
+                        {{t "newsletter-loading-text"}}
+                      </div>
                     </li>
+                  {{else if (await agenda.createdFor.mailCampaign)}}
+                    {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+                      <li class="vlc-dropdown-menu__item">
+                        <a href=""
+                            class="auk-button-link auk-button-link--block"
+                          {{action attacher.hide}}
+                          {{action "sendTestCampaign"}}
+                        >
+                          <span class="auk-button__content">
+                            {{t "send-test-campaign"}}
+                          </span>
+                        </a>
+                      </li>
+                      <li class="vlc-dropdown-menu__item">
+                        <a href=""
+                            class="auk-button-link auk-button-link--block"
+                          {{action attacher.hide}}
+                          {{action "toggleIsVerifying"}}
+                        >
+                          <span class="auk-button__content">
+                            {{t "send-campaign"}}
+                          </span>
+                        </a>
+                      </li>
+                      <li
+                        class="vlc-dropdown-menu__separator"
+                        aria-hidden="true"
+                      ></li>
+                    {{/if}}
                     <li class="vlc-dropdown-menu__item">
-                      <a href=""
-                          class="auk-button-link auk-button-link--block"
-                        {{action attacher.hide}}
-                        {{action "toggleIsVerifying"}}
+                      <a
+                        class="auk-button-link auk-button-link--block"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={{concat
+                          "/newsletter/xml-newsletter/"
+                          agenda.id
+                        }}
+                        download={{concat
+                          "/newsletter/xml-newsletter/"
+                          agenda.id
+                        }}
                       >
-                        {{t "send-campaign"}}
+                        <span class="auk-button__content">
+                          {{t "generate-xml"}}
+                        </span>
                       </a>
                     </li>
                     <li
-                            class="vlc-dropdown-menu__separator"
-                            aria-hidden="true"
+                      class="vlc-dropdown-menu__separator"
+                      aria-hidden="true"
                     ></li>
+                    <li class="vlc-dropdown-menu__item">
+                      <a href=""
+                          class="auk-button-link auk-button-link--block auk-u-text-error"
+                        {{action attacher.hide}}
+                        {{action "deleteCampaign"}}
+                      >
+                        <span class="auk-button__content">
+                          {{t "delete-campaign"}}
+                        </span>
+                      </a>
+                    </li>
+                  {{else}}
+                    <li class="vlc-dropdown-menu__item">
+                      <a href=""
+                          class="auk-button-link auk-button-link--block"
+                        {{action "createCampaign"}}
+                      >
+                        <span class="auk-button__content">
+                          {{t "create-campaign"}}
+                        </span>
+                      </a>
+                    </li>
                   {{/if}}
-                  <li class="vlc-dropdown-menu__item">
-                    <a
-                      class="auk-button-link auk-button-link--block"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={{concat
-                        "/newsletter/xml-newsletter/"
-                        agenda.id
-                      }}
-                      download={{concat
-                        "/newsletter/xml-newsletter/"
-                        agenda.id
-                      }}
-                    >
-                      {{t "generate-xml"}}
-                    </a>
-                  </li>
-                  <li
-                          class="vlc-dropdown-menu__separator"
-                          aria-hidden="true"
-                  ></li>
-                  <li class="vlc-dropdown-menu__item">
-                    <a href=""
-                        class="auk-button-link auk-button-link--block auk-u-text-error"
-                      {{action attacher.hide}}
-                      {{action "deleteCampaign"}}
-                    >
-                      {{t "delete-campaign"}}
-                    </a>
-                  </li>
-                {{else}}
+                {{/if}}
+                {{#if shouldShowPrintButton}}
                   <li class="vlc-dropdown-menu__item">
                     <a href=""
                         class="auk-button-link auk-button-link--block"
-                      {{action "createCampaign"}}
+                      {{action attacher.hide}}
+                      {{action "print"}}
                     >
-                      {{t "create-campaign"}}
+                      <span class="auk-button__content">
+                        {{t "print"}}
+                      </span>
                     </a>
                   </li>
                 {{/if}}
-              {{/if}}
-              {{#if shouldShowPrintButton}}
-                <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                      class="auk-button-link auk-button-link--block"
-                    {{action attacher.hide}}
-                    {{action "print"}}
-                  >
-                    {{t "print"}}
-                  </a>
-                </li>
-              {{/if}}
-            </ul>
-          {{/attach-popover}}
+              </ul>
+            {{/attach-popover}}
+          </span>
         </button>
       </div>
     </div>
@@ -222,12 +236,14 @@
     @isOverlay={{true}}
     @title={{t "send-test-campaign"}}
     @closeModal={{action "clearNewsletterHTML"}} >
-    <div class="auk-modal__content">
-      {{#if testCampaignIsLoading}}
-        <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
-      {{else}}
-        {{sanitize-html raw=true value=newsletterHTML}}
-      {{/if}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if testCampaignIsLoading}}
+          <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
+        {{else}}
+          {{sanitize-html raw=true value=newsletterHTML}}
+        {{/if}}
+      </div>
     </div>
   </WebComponents::VlModal>
 {{/if}}

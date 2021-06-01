@@ -14,13 +14,10 @@ export default class PublicationsPublicationCaseSearchComponent extends Componen
 
   searchFields = Object.freeze([
     'title',
-    'publicationFlowNumber',
-    'publicationFlowRemark',
     'shortTitle',
-    'subcaseTitle',
-    'subcaseSubTitle',
-    'publicationFlowNumacNumbers',
-    'publicationFlowId'
+    'remark',
+    'identification',
+    'numacNumbers'
   ]);
   searchModifier = Object.freeze(':phrase_prefix:');
 
@@ -70,11 +67,9 @@ export default class PublicationsPublicationCaseSearchComponent extends Componen
 
   @restartableTask
   *searchPublications(searchTerm) {
-    const filter = {
-      ':has:publicationFlowNumber': 'true',
-    };
+    const filter = {};
     filter[`${this.searchModifier}${this.searchFields.join(',')}`] = searchTerm;
-    const searchResults = yield search('cases', 0, 10, null, filter, (item) => {
+    const searchResults = yield search('publication-flows', 0, 10, null, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
       return entry;

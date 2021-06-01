@@ -1,7 +1,7 @@
-{{#if @custom}}
-  {{yield}}
-{{else}}
-  <div class="auk-modal__header auk-modal__header--bordered">
+<div class="auk-modal__header auk-modal__header--bordered">
+  {{#if @custom}}
+    {{yield}}
+  {{else}}
     <WebComponents::AuToolbar @size="large">
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -31,5 +31,5 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </div>
-{{/if}}
+  {{/if}}
+</div>

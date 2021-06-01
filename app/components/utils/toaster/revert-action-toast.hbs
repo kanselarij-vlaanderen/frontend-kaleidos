@@ -14,12 +14,14 @@
       class="auk-button auk-button--borderless"
       {{action @options.onUndo}}
     >
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-redo"></i>
-      </div>
-      <div class="auk-button__label">
-        {{t "undo"}}
-      </div>
+      <span class="auk-button__content">
+        <div class="auk-icon auk-icon--default">
+          <i class="ki ki-redo"></i>
+        </div>
+        <div class="auk-button__label">
+          {{t "undo"}}
+        </div>
+      </span>
     </button>
   </div>
 </WebComponents::VlAlert>

@@ -11,7 +11,7 @@ export default class Navbar extends Component {
     if (this.args.border) {
       return `auk-navbar--bordered-${this.args.border}`;
     }
-    return null;
+    return 'auk-navbar--bordered-bottom';
   }
 
   /**

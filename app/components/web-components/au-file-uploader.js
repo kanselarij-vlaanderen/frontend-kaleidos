@@ -34,4 +34,11 @@ export default class FileUploader extends Component {
     this.uploadedFileLength = 0;
     this.uploadFileTask.perform(file);
   }
+
+  @action
+  handleButtonKeyUp(event) {
+    if (event.key === 'Enter') {
+      event.target.click();
+    }
+  }
 }

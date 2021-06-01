@@ -20,6 +20,6 @@ export default class Badge extends Component {
     if (this.args.size) {
       return `auk-badge--${this.args.size}`;
     }
-    return null;
+    return 'auk-badge--regular';
   }
 }

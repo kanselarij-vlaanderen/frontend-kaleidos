@@ -57,8 +57,8 @@ context('meeting actions tests', () => {
     cy.visitAgendaWithLink('/vergadering/5EB2CB8FF5E126000900000D/agenda/cd6b8ae7-0f00-451c-b4ad-fa236d5e6a20/agendapunten');
 
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionDelete).should('not.exist');
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.delete).should('not.exist');
   });
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
@@ -79,8 +79,8 @@ context('meeting actions tests', () => {
     });
     cy.wait(1000); // controls buttons is not clickable yet
 
-    cy.get(agenda.agendaitemControlsActions).click();
-    cy.get(agenda.agendaitemControlsActionDelete).click();
+    cy.get(agenda.agendaitemControls.actions).click();
+    cy.get(agenda.agendaitemControls.action.delete).click();
 
     cy.get(modal.modal).within(() => {
       cy.get('.auk-button').contains('Verwijderen')

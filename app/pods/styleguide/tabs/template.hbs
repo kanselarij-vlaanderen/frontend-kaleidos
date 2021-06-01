@@ -7,10 +7,10 @@
 >
   {{!-- BEGIN-SNIPPET tabs --}}
   <WebComponents::AuTabs>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
     <WebComponents::AuTab @route="styleguide.tabs">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
   </WebComponents::AuTabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -21,10 +21,10 @@
 >
   {{!-- BEGIN-SNIPPET tabs-reversed --}}
   <WebComponents::AuTabs @reversed="true">
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
     <WebComponents::AuTab @route="styleguide.tabs">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
   </WebComponents::AuTabs>
   {{!-- END-SNIPPET tabs-reversed --}}
 </StyleguideSample>
@@ -35,7 +35,7 @@
 >
   {{!-- BEGIN-SNIPPET tabs-icon --}}
   <WebComponents::AuTabs>
-    <WebComponents::AuTab @route="styleguide" @icon="search">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="" @icon="search">Nav Item</WebComponents::AuTab>
     <WebComponents::AuTab @route="styleguide.tabs" @icon="search">Nav Item</WebComponents::AuTab>
   </WebComponents::AuTabs>
   {{!-- END-SNIPPET --}}
@@ -47,7 +47,7 @@
 >
   {{!-- BEGIN-SNIPPET tabs-icon-right --}}
   <WebComponents::AuTabs>
-    <WebComponents::AuTab @route="styleguide" @icon="search" @layout="icon-right">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="" @icon="search" @layout="icon-right">Nav Item</WebComponents::AuTab>
     <WebComponents::AuTab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</WebComponents::AuTab>
   </WebComponents::AuTabs>
   {{!-- END-SNIPPET --}}
@@ -59,10 +59,10 @@
 >
   {{!-- BEGIN-SNIPPET tabs-counter --}}
   <WebComponents::AuTabs>
-    <WebComponents::AuTab @route="styleguide" @counter="3">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="" @counter="3">Nav Item</WebComponents::AuTab>
     <WebComponents::AuTab @route="styleguide.tabs" @counter="12">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
-    <WebComponents::AuTab @route="styleguide">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
+    <WebComponents::AuTab @route="">Nav Item</WebComponents::AuTab>
   </WebComponents::AuTabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -88,6 +88,12 @@
     <td>string</td>
     <td><code>icon-right</code></td>
     <td>Positions the icon on the right</td>
+  </tr>
+  <tr>
+    <td>@counter</td>
+    <td>string</td>
+    <td></td>
+    <td>Displays the tab with a counter</td>
   </tr>
   </tbody>
 </table>

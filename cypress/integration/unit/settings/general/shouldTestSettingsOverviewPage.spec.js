@@ -5,13 +5,14 @@ import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
 import utils from '../../../../selectors/utils.selectors';
+import form from '../../../../selectors/form.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 
@@ -75,12 +76,12 @@ context('Settings overview page tests', () => {
 
   it('Upload a CSV and delete a user', () => {
     cy.visit('/');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.contains('Gebruikers importeren').click();
+    cy.get(form.fileUploadButton).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
     cy.get(settings.userSearchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
@@ -106,6 +107,7 @@ context('Settings overview page tests', () => {
       .within(() => {
         cy.contains('overheid');
       });
+    // TODO we do not click the upload button, this works anyway?
     cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
     cy.get(settings.userSearchInput).type('Greta');
     cy.route('GET', '/users?filter=**').as('filterUsers');
