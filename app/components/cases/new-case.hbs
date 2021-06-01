@@ -1,30 +1,33 @@
 <form onsubmit={{action "createCaseAction"}}>
-  <div class="auk-modal__content">
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      {{#if hasError}}
+        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
+                                @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
+      {{/if}}
 
-    {{#if hasError}}
-      <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
-                              @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
-    {{/if}}
-
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
-        {{web-components/vl-toggle value=confidential}}
+      <div class="auk-u-mb-4">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
+          {{web-components/vl-toggle value=confidential}}
+        </div>
+      </div>
+      <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
+        <WebComponents::AuLabel>{{t "short-title-case"}}</WebComponents::AuLabel>
+        {{textarea class="auk-textarea" rows="2" value=shortTitle}}
       </div>
     </div>
-    <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
-      <WebComponents::AuLabel>{{t "short-title-case"}}</WebComponents::AuLabel>
-      {{textarea class="auk-textarea" rows="2" value=shortTitle}}
-    </div>
   </div>
-  <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+  <div class="auk-modal__footer auk-modal__footer--bordered">
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
           <button type="button" data-test-vl-modal-footer-cancel
                   class="auk-button auk-button--borderless"
             {{action "closeAction"}}>
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </button>
         </div>
       </div>

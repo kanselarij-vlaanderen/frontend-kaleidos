@@ -1,17 +1,19 @@
 {{#if (not isAdding)}}
-  <div class="auk-modal__content">
-    {{utils/model-selector
-      modelName="signature"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      selectedItems=(await selectedSignature)
-      selectModel=(action "selectSignature")
-    }}
-    <div class="auk-u-mb-3"/>
-    <div>
-      {{t "signature-default"}}
-      {{await defaultSignature.name}}
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      {{utils/model-selector
+        modelName="signature"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
+        selectedItems=(await selectedSignature)
+        selectModel=(action "selectSignature")
+      }}
+      <div class="auk-u-mb-3"/>
+      <div>
+        {{t "signature-default"}}
+        {{await defaultSignature.name}}
+      </div>
     </div>
   </div>
   {{#if isEditing}}
@@ -20,14 +22,16 @@
       closeModal=(action "toggleIsEditing")
     }}
   {{else}}
-    <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+    <div class="auk-modal__footer auk-modal__footer--bordered">
       <div class="auk-toolbar-complex">
         <div class="auk-toolbar-complex__left">
           <div class="auk-toolbar-complex__item">
             <button type="button" class="auk-button auk-button--borderless"
               {{action "closeModal"}}
             >
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </div>
         </div>
@@ -37,33 +41,39 @@
               <button type="button" class="auk-button auk-button--tertiary"
                 {{action "setDefaultSignature"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "signature-set-default"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "signature-set-default"}}
+                  </div>
+                </span>
               </button>
               <button type="button" class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "signature-edit"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "signature-edit"}}
+                  </div>
+                </span>
               </button>
             {{/if}}
             <button type="button" class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "signature-add"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-add"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "signature-add"}}
+                </div>
+              </span>
             </button>
           </div>
         </div>

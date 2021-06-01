@@ -1,103 +1,111 @@
 <form onsubmit={{action "createSubCase"}}>
-  <div class="auk-modal__content">
-    <div class="auk-u-flex auk-u-flex--justify-between">
-      {{web-components/vl-radio-button-list
-        title=(t "subcase-type")
-        optionList=(await caseTypes)
-        modelChanged=(action "typeChanged")
-      }}
-      <div class="auk-u-flex auk-u-flex--vertical-center">
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
-              <button type="button"
-                data-test-new-subcase-clone-previous-subcase
-                class="auk-button auk-button--secondary"
-                {{action "copyFullSubcase"}}
-              >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-copy-paste"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "clone-previous-subcase"}}
-                </div>
-              </button>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      <div class="auk-o-flex auk-o-flex--justify-between">
+        {{web-components/vl-radio-button-list
+          title=(t "subcase-type")
+          optionList=(await caseTypes)
+          modelChanged=(action "typeChanged")
+        }}
+        <div class="auk-o-flex auk-o-flex--vertical-center">
+          <WebComponents::AuToolbar>
+            <WebComponents::AuToolbar::Group @position="right">
+              <WebComponents::AuToolbar::Item>
+                <button type="button"
+                  data-test-new-subcase-clone-previous-subcase
+                  class="auk-button auk-button--secondary"
+                  {{action "copyFullSubcase"}}
+                >
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default">
+                      <i class="ki ki-copy-paste"></i>
+                    </div>
+                    <div class="auk-button__label">
+                      {{t "clone-previous-subcase"}}
+                    </div>
+                  </span>
+                </button>
+              </WebComponents::AuToolbar::Item>
+            </WebComponents::AuToolbar::Group>
+          </WebComponents::AuToolbar>
+        </div>
       </div>
-    </div>
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
-      {{textarea
-        rows="2"
-        class="auk-textarea"
-        value=shortTitle
-      }}
-    </div>
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
-      {{textarea rows="4" class="auk-textarea" value=title}}
-    </div>
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
-      {{utils/model-selector
-        modelName="subcase-type"
-        searchField="label"
-        sortField="label"
-        propertyToShow="label"
-        selectedItems=type
-        selectModel=(action "selectType")
-      }}
-    </div>
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
-      <div class="auk-u-flex auk-u-flex--vertical-center">
-        {{#if (not isEditing)}}
-          {{utils/model-selector
-            class="vlc-u-box-model-maximize-width"
-            modelName="shortcut"
-            searchField="label"
-            propertyToShow="label"
-            sortField="label"
-            filter=filter
-            selectedItems=selectedSubcaseName
-            selectModel=(action "selectModel")
-          }}
-          <button type="button"
-            class="auk-button auk-button--secondary auk-button--icon"
-            {{action "toggleIsEditing"}}
-          >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-pencil"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "edit"}}
-            </div>
-          </button>
-        {{else}}
-          {{input
-            type="text"
-            id="subcaseNameId"
-            class="auk-input auk-input--block"
-            value=subcaseName
-          }}
-          <button class="auk-button auk-button--secondary auk-button--icon"
-            type="button"
-            {{action "toggleIsEditing"}}
-          >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-cross"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "cancel"}}
-            </div>
-          </button>
-        {{/if}}
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
+        {{textarea
+          rows="2"
+          class="auk-textarea"
+          value=shortTitle
+        }}
+      </div>
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
+        {{textarea rows="4" class="auk-textarea" value=title}}
+      </div>
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
+        {{utils/model-selector
+          modelName="subcase-type"
+          searchField="label"
+          sortField="label"
+          propertyToShow="label"
+          selectedItems=type
+          selectModel=(action "selectType")
+        }}
+      </div>
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
+        <div class="auk-o-flex auk-o-flex--vertical-center">
+          {{#if (not isEditing)}}
+            {{utils/model-selector
+              class="vlc-u-box-model-maximize-width"
+              modelName="shortcut"
+              searchField="label"
+              propertyToShow="label"
+              sortField="label"
+              filter=filter
+              selectedItems=selectedSubcaseName
+              selectModel=(action "selectModel")
+            }}
+            <button type="button"
+              class="auk-button auk-button--secondary auk-button--icon"
+              {{action "toggleIsEditing"}}
+            >
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-u-sr-only">
+                  {{t "edit"}}
+                </div>
+              </span>
+            </button>
+          {{else}}
+            {{input
+              type="text"
+              id="subcaseNameId"
+              class="auk-input auk-input--block"
+              value=subcaseName
+            }}
+            <button class="auk-button auk-button--secondary auk-button--icon"
+              type="button"
+              {{action "toggleIsEditing"}}
+            >
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-cross"></i>
+                </div>
+                <div class="auk-u-sr-only">
+                  {{t "cancel"}}
+                </div>
+              </span>
+            </button>
+          {{/if}}
+        </div>
       </div>
     </div>
   </div>
-  <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+  <div class="auk-modal__footer auk-modal__footer--bordered">
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
@@ -105,7 +113,9 @@
             class="auk-button auk-button--borderless"
             {{action "closeModal"}}
           >
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </button>
         </div>
       </div>

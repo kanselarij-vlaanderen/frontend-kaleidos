@@ -3,19 +3,21 @@
   @title={{t "manage-alerts"}}
   @closeModal={{action "cancel"}}
 >
-  <div class="auk-modal__content">
-    <div class="auk-form-group">
-      {{#power-select
-        options=this.model
-        selected=this.selectedAlert
-        onchange=(action "selectAlert")
-      as |alert|
-      }}
-        {{alert.title}}
-      {{/power-select}}
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      <div class="auk-form-group">
+        {{#power-select
+          options=this.model
+          selected=this.selectedAlert
+          onchange=(action "selectAlert")
+        as |alert|
+        }}
+          {{alert.title}}
+        {{/power-select}}
+      </div>
     </div>
   </div>
-  <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+  <div class="auk-modal__footer auk-modal__footer--bordered">
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
@@ -25,7 +27,9 @@
             class="auk-button auk-button--borderless"
             @route="settings.overview"
           >
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </LinkTo>
         </div>
       </div>
@@ -38,13 +42,15 @@
             class="auk-button auk-button--tertiary"
             @route="settings.system-alerts.new"
           >
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-add"></i>
-            </div>
-            <div class="auk-button__label">
-              {{t "message"}}
-              {{t "add"}}
-            </div>
+            <span class="auk-button__content">
+              <div class="auk-icon auk-icon--default">
+                <i class="ki ki-add"></i>
+              </div>
+              <div class="auk-button__label">
+                {{t "message"}}
+                {{t "add"}}
+              </div>
+            </span>
           </LinkTo>
           {{#if this.selectedAlert}}
             <LinkTo
@@ -55,13 +61,15 @@
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-pencil"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "message"}}
-                {{t "edit"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-pencil"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "message"}}
+                  {{t "edit"}}
+                </div>
+              </span>
             </LinkTo>
             <button
               data-test-remove-system-alert
@@ -69,13 +77,15 @@
               class="auk-button auk-button--tertiary"
               {{on "click" (perform remove this.selectedAlert)}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-delete"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "message"}}
-                {{t "delete"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-delete"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "message"}}
+                  {{t "delete"}}
+                </div>
+              </span>
             </button>
           {{/if}}
         </div>

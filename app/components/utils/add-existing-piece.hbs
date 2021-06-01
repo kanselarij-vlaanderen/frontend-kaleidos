@@ -17,7 +17,9 @@
                     class="vl-input-field__submit auk-button auk-button--primary"
                     onclick={{perform this.searchTask}}
             >
-              <i class="ki-search"></i>
+              <span class="auk-button__content">
+                <i class="ki-search"></i>
+              </span>
             </button>
           </div>
         </div>
@@ -26,7 +28,7 @@
   </div>
   <div>
     {{#if this.performSearch.isRunning}}
-      <div class="auk-u-flex auk-u-flex--center auk-u-mt-4">
+      <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
         <WebComponents::AuLoader @message={{t "loading"}}/>
       </div>
     {{else}}

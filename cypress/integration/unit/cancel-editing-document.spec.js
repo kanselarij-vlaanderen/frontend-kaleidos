@@ -100,8 +100,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.subcaseDocumentsEdit).contains('Wijzigen')
-      .click();
+    cy.get(agenda.agendaItemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -142,8 +141,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get('.auk-u-ml-2 > .auk-button-link').contains('Wijzigen')
-      .click();
+    cy.get(agenda.agendaItemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {

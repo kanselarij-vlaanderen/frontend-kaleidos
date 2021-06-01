@@ -1,41 +1,43 @@
-<div class="auk-modal__content">
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
-    {{web-components/vl-form-input
-      data-test-create-mandatee-title-container=true
-      value=title
-    }}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
-    {{web-components/vl-form-input
-      data-test-create-mandatee-nickname-container=true
-      value=nickName
-    }}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
-    {{utils/create-person-selector
-      selectedItems=selectedPerson
-      selectModel=(action "personSelected")
-    }}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
-    {{utils/model-selector
-      data-test-create-mandatee-ise-code-container=true
-      modelName="ise-code"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      multiSelect=true
-      selectedItems=iseCodes
-      selectModel=(action "chooseIseCodes")
-    }}
-  </div>
-  <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
-    {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+      {{web-components/vl-form-input
+        data-test-create-mandatee-title-container=true
+        value=title
+      }}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
+      {{web-components/vl-form-input
+        data-test-create-mandatee-nickname-container=true
+        value=nickName
+      }}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
+      {{utils/create-person-selector
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
+      }}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
+      {{utils/model-selector
+        data-test-create-mandatee-ise-code-container=true
+        modelName="ise-code"
+        searchField="name"
+        propertyToShow="name"
+        sortField="name"
+        multiSelect=true
+        selectedItems=iseCodes
+        selectModel=(action "chooseIseCodes")
+      }}
+    </div>
+    <div class="auk-form-group">
+      <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+      {{web-components/vl-datepicker dateChanged=(action "selectStartDate")}}
+    </div>
   </div>
 </div>
 {{web-components/vl-modal-footer

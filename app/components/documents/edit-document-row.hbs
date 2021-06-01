@@ -1,5 +1,5 @@
 <tr>
-  <td class="auk-u-flex vlc-document-list__item">
+  <td class="auk-o-flex vlc-document-list__item">
     <div class="auk-badge auk-badge--medium auk-badge--default">
       <div class="auk-icon auk-icon--default">
         <i class="ki ki-document"></i>
@@ -42,10 +42,12 @@
     <button type="button" class="auk-button auk-button--borderless"
       {{on "click" this.softDelete}}
     >
-      <i class="ki-delete" aria-hidden="true"></i>
-      <div class="auk-u-sr-only">
-        {{t "delete"}}
-      </div>
+      <span class="auk-button__content">
+        <i class="ki-delete" aria-hidden="true"></i>
+        <div class="auk-u-sr-only">
+          {{t "delete"}}
+        </div>
+      </span>
     </button>
   </td>
 </tr>

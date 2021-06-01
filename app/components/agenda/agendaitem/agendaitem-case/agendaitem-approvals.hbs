@@ -1,13 +1,15 @@
 {{#if (gt (await agendaitem.mandatees.length) 1)}}
   <div class="auk-u-mb-2">
-    <div class="auk-u-flex auk-u-flex--align-baseline">
+    <div class="auk-o-flex auk-o-flex--align-baseline">
       <h4 class="auk-h3">
         {{t "actions"}}
       </h4>
       {{#if currentSession.isEditor}}
         <div class="auk-u-ml-2">
           <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
-            {{t "edit"}}
+            <span class="auk-button__content">
+              {{t "edit"}}
+            </span>
           </a>
         </div>
       {{/if}}
@@ -79,7 +81,9 @@
           <button type="button" class="auk-button auk-button--tertiary"
             {{action "cancelEditing"}}
           >
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </button>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>

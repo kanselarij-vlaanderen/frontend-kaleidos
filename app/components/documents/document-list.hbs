@@ -1,3 +1,6 @@
-<div {{did-update (perform this.groupDocumentsByContainer) @pieces}}>
-  {{yield this.latestDocuments}}
-</div>
+{{#let (element this.tag) as |Tag|}}
+  <Tag {{did-update (perform this.groupDocumentsByContainer) @pieces}}
+    ...attributes>
+    {{yield this.latestDocuments}}
+  </Tag>
+{{/let}}

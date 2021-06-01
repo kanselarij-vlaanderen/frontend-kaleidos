@@ -1,6 +1,6 @@
 <div data-test-agenda-news-item-view>
   <div class="auk-u-mb-4">
-    <div class="auk-u-flex auk-u-flex--align-baseline">
+    <div class="auk-o-flex auk-o-flex--align-baseline">
       <h3 class="auk-h2">
         {{t "newsletter-title"}}
       </h3>
@@ -9,14 +9,18 @@
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
             <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
-             {{on "click" this.startEditing}}>
-              {{t "edit"}}
+              {{on "click" this.startEditing}}>
+              <span class="auk-button__content">
+                {{t "edit"}}
+              </span>
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
             <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
-             {{on "click" this.createAndStartEditing}}>
-              {{t "create"}}
+              {{on "click" this.createAndStartEditing}}>
+              <span class="auk-button__content">
+                {{t "create"}}
+              </span>
             </a>
           {{/if}}
         </div>

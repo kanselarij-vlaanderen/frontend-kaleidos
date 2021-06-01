@@ -36,3 +36,13 @@
     position: absolute;
   }
 }
+
+/* ==========================================================================
+  Adjust font weight in buttons
+  ========================================================================== */
+
+.auk-button-link.br-styleguide-sample-copy-code-btn,
+.auk-button-link.br-styleguide-sample-show-code-btn {
+  font-weight: 400;
+  // font-size: 1.5rem;
+}

@@ -1,4 +1,4 @@
-<div class="auk-u-flex auk-u-flex--vertical-center">
+<div class="auk-o-flex auk-o-flex--vertical-center">
   {{#if this.isLoading}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>
   {{else}}
@@ -28,12 +28,14 @@
           data-test-access-level-pill-save
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-check"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "more-options"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-check"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "more-options"}}
+            </div>
+          </span>
         </button>
         <button
           type="button"
@@ -41,12 +43,14 @@
           data-test-access-level-pill-cancel
           {{on "click" (perform this.cancelChangeAccessLevel)}}
         >
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-cross"></i>
-          </div>
-          <div class="auk-u-sr-only">
-            {{t "more-options"}}
-          </div>
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default">
+              <i class="ki ki-cross"></i>
+            </div>
+            <div class="auk-u-sr-only">
+              {{t "more-options"}}
+            </div>
+          </span>
         </button>
       {{/if}}
     {{/if}}
@@ -56,16 +60,18 @@
       disabled={{not this.session.isEditor}}
       {{on "click" (perform this.changeConfidentiality)}}
     >
-      {{#if @confidential}}
-        <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-          <p>
-            {{t "document-is-confidential"}}
-          </p>
-        </EmberTooltip>
-        <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="danger" />
-      {{else}}
-        <WebComponents::AuIcon @name="lock-open" />
-      {{/if}}
+      <span class="auk-button__content">
+        {{#if @confidential}}
+          <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+            <p>
+              {{t "document-is-confidential"}}
+            </p>
+          </EmberTooltip>
+          <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="danger" />
+        {{else}}
+          <WebComponents::AuIcon @name="lock-open" />
+        {{/if}}
+      </span>
     </button>
   {{/if}}
 </div>

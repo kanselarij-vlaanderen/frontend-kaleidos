@@ -79,6 +79,7 @@ const selectors = {
   // 3x agendaitem/documents, subcase/documents, agenda/documents
   // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {

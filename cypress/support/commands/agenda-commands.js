@@ -69,7 +69,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   cy.get('@newAgendaForm').eq(1)
     .within(() => {
-      cy.get('.vl-datepicker').click();
+      cy.get(form.datepickerInput).click();
     });
   cy.setDateAndTimeInFlatpickr(date);
 
@@ -196,7 +196,7 @@ function openAgendaForDate(agendaDate) {
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-icon').click();
+  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');

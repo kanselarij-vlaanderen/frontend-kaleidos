@@ -4,7 +4,6 @@ import { inject } from '@ember/service';
 
 export default Component.extend({
   formatter: inject(),
-  classNames: ['vl-input-group', 'vl-datepicker'],
   dateObjectsToEnable: null,
   datePropertyToUse: null,
   enableTime: null,
