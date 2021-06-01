@@ -368,7 +368,7 @@
   "unarchive-subcase": "Procedurestap herstellen",
   "undo": "Ongedaan maken",
   "undo-propose": "Niet ingediend",
-  "upload-file": "Bestanden uploaden",
+  "upload-files": "{numFiles, plural, one {Bestand} many {Bestanden} other {Bestanden}} opladen",
   "uploaded-at": "Geüpload op",
   "sent-at": "verstuurd op",
   "uploading": "opgeladen",
