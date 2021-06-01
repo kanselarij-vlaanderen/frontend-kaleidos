@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask } from 'ember-concurrency-decorators';
+
 
 /**
  * @argument {PublicationFlow} selected
@@ -9,12 +10,9 @@ import { keepLatestTask } from 'ember-concurrency-decorators';
  * @argument {(publicationFlow: { id: string, identification: string }) => void} onChange
  */
 export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
-  @tracked options = [];
+  @service store;
 
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
+  @tracked options = [];
 
   get selected() {
     if (!this.args.selected) {
@@ -32,7 +30,7 @@ export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorCom
   @action
   onOpen(select) {
     if (!select.searchText) {
-      this.loadData.perform();
+      this.loadData();
     }
   }
 
@@ -42,20 +40,24 @@ export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorCom
   //  so we need both events.
   onInput(searchText) {
     if (!searchText) {
-      this.loadData.perform();
-      // prevent default filtering
-      // return false;
+      this.loadData();
     }
   }
 
   @action
   search(searchText) {
-    this.loadData.perform(searchText);
+    this.loadData(searchText);
   }
 
-  @keepLatestTask
-  *loadData(searchText) {
-    this.options = yield this.args.loadData(searchText);
+  async loadData(searchText) {
+    console.log(searchText);
+    let publicationFlows = await this.store.query('publication-flow', {
+      'filter[identification][:gte:id-name]': searchText,
+      'page[size]': 10,
+      sort: 'identification.id-name',
+    });
+    publicationFlows = publicationFlows.toArray();
+    this.options = publicationFlows;
   }
 
   @action

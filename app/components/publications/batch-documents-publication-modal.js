@@ -28,12 +28,10 @@ class PieceRow {
  * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  @inject store;
   @inject intl;
   @inject publicationService;
 
   linkModeOptions;
-  publicationFlowDefaultOptionsTask;
   newPublicationRow;
 
   @tracked rows;
@@ -46,12 +44,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.initLinkModeOptions();
     this.loadPieces.perform().then(() => this.initRows(this.args.pieces));
     this.loadCase.perform();
-    this.publicationFlowDefaultOptionsTask = this.searchPublicationFlow.perform();
   }
 
   async initRows(pieces) {
     const latestPieces = this.extractLatestVersions(pieces);
     this.rows = await Promise.all(latestPieces.map(async(piece) => {
+      // can only resolve to null when awaited
       const publicationFlow = await piece.publicationFlow;
       const isInLinkMode = !!publicationFlow;
       const linkMode = this.getLinkMode(isInLinkMode);
@@ -142,25 +140,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   // select existing publication actions
-  @action
-  searchPublicationFlowWithCache(searchText) {
-    if (!searchText) {
-      return this.publicationFlowDefaultOptionsTask;
-    }
-    return this.searchPublicationFlow.perform(searchText);
-  }
-
-  @task
-  *searchPublicationFlow(searchText) {
-    let publicationFlows = yield this.store.query('publication-flow', {
-      'filter[identification][:gte:id-name]': searchText,
-      'page[size]': 10,
-      sort: 'identification.id-name',
-    });
-    publicationFlows = publicationFlows.toArray();
-    return publicationFlows;
-  }
-
   @action
   async selectPublicationFlow(row, publicationFlow) {
     const piece = row.piece;

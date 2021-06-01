@@ -46,7 +46,7 @@
               </td>
               <td>
                 {{#if row.isInLinkMode}}
-                  <Publications::ViaCouncilOfMinisters::PublicationFlowSelector
+                  <Publications::PublicationFlowSelector
                     @selected={{row.piece.publicationFlow}}
                     @loadData={{this.searchPublicationFlowWithCache}}
                     @onChange={{fn this.selectPublicationFlow row}}
