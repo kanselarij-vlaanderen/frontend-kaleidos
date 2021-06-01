@@ -1,74 +1,76 @@
-<div {{did-insert this.insertElementInDom}} class="auk-file-upload {{if @fullHeight "auk-file-upload--full-height"}}">
-  <FileDropzone
-    @name="files"
-    @class="auk-file-upload__content"
-    @tagName="a"
-    @action={{action this.uploadFile}}
-  as |dropzone queue|
+<FileDropzone
+  @accept={{@accept}}
+  @disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
+  @multiple={{@multiple}}
+  @name={{this.fileQueueName}}
+  @class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
+  @tagName="div"
+  @action={{perform this.uploadFileTask}}
+as |dropzone|
+>
+  {{!-- Note that we use a regular <input> here instead of of <FileUpload>.
+        This is because at the time of writing, ember-file-upload wrap the input in a <label>-tag
+        and our design doesn't allow for this.
+        https://github.com/adopted-ember-addons/ember-file-upload/blob/master/addon/components/file-upload/component.js#L80
+        https://github.com/adopted-ember-addons/ember-file-upload/issues/388#issuecomment-679868412
+        Nonetheless we hook in to the internals of ember-file-uploader in this component's js-file to be able to
+        keep on using ember-file-upload's other features (queue) and facilitate a future migration once ember-file-upload
+        becomes more flexible.
+  --}}
+  <input
+    type="file"
+    accept={{@accept}}
+    disabled={{or this.uploadIsRunning this.uploadIsCompleted}}
+    multiple={{@multiple}}
+    onchange={{this.addFilesToQueue}}
   >
-    <FileUpload
-      @name="files"
-      @for="upload-file"
-      @multiple={{@multipleFiles}}
-      @onfileadd={{action this.uploadFile}}
-    >
-      {{#if (not queue.files.length)}}
-        <span class="auk-u-block auk-u-mb-2">
-          <span class="auk-button auk-button--tertiary auk-u-inline-block" type="button" tabindex="0" {{on "keyup" this.handleButtonKeyUp}}>
-            <span class="auk-button__content">
-              <span class="auk-icon auk-icon--default auk-icon--paperclip">
-                <i class="ki ki-paperclip"></i>
-              </span>
-              <span class="auk-button__label">
-                {{#if this.multipleFiles}}
-                  {{t "add-attachments"}}
-                {{else}}
-                  {{t "add-attachment"}}
-                {{/if}}
-              </span>
+  <div class="auk-file-upload__content">
+    <div class="auk-u-mb-2">
+      {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
+        <button
+          class="auk-button auk-button--tertiary auk-file-upload__action-button"
+          type="button"
+          tabindex="-1"
+          {{on "click" this.clickInput}}
+          {{on "key-up" this.clickInputOnEnter}}
+        >
+          <span class="auk-button__content">
+            <span class="auk-icon auk-icon--default auk-icon--paperclip">
+              <i class="ki ki-paperclip"></i>
+            </span>
+            <span class="auk-button__label">
+              {{t "upload-files" numFiles=(if @multiple 2 1)}}
             </span>
           </span>
-        </span>
-        <span class="auk-u-muted">
-          {{#if dropzone.active}}
-            {{#if dropzone.valid}}
-              {{t "drop-text"}}
-            {{else}}
-              {{t "invalid-type"}}
-            {{/if}}
-          {{else if dropzone.supported}}
-            {{#if this.multipleFiles}}
-              {{t "dropzone-text-multiple"}}
-            {{else}}
-              {{t "dropzone-text"}}
-            {{/if}}
-          {{/if}}
-        </span>
-      {{else}}
-        <span class="auk-u-block auk-u-mb-2">
-          <p>
-            {{uploadedFileLength}}
-            {{t "files-of"}}
-            {{queue.files.length}}
-            {{t "uploading"}}
-          </p>
-        </span>
-        <span>
-          {{ember-progress-bar
-            progress=(div queue.progress 100)
-            options=(hash strokeWidth=2)
-          }}
-          {{queue.progress}}%
-        </span>
+        </button>
+      {{else if this.uploadIsRunning}}
+        {{t "uploading-files" numFiles=this.fileQueue.files.length}}
+      {{else if this.uploadIsCompleted}}
+        <div class="auk-o-flex auk-o-flex--vertical-align">
+          <div class="auk-u-mr">
+            <div class="auk-icon auk-icon--default auk-icon--success-dark">
+              <i class="ki ki-check"></i>
+            </div>
+          </div>
+          <p>{{t "uploaded-files" numFiles=this.uploadedFileLength}}</p>
+        </div>
       {{/if}}
-    </FileUpload>
-  </FileDropzone>
-</div>
-
-{{!--
-{{#if this.uploadFileTask.isRunning}}
-  <WebComponents::AuLoadingOverlay
-          @title={{t "upload-file"}}
-          @message={{t "upload-file"}}
-  />
-{{/if}}temporary fix, waiting for new css --}}
+    </div>
+    {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
+      <p class="auk-u-muted">
+        {{#if dropzone.active}}
+          {{#if dropzone.valid}}
+            {{t "drop-text"}}
+          {{else}}
+            {{t "invalid-type"}}
+          {{/if}}
+        {{else if dropzone.supported}}
+          {{t "drag-or-click-for-upload" numFiles=(if @multiple "many" "one")}}
+        {{/if}}
+      </p>
+    {{/if}}
+    {{#if (or this.uploadIsRunning this.uploadIsCompleted)}}
+      <WebComponents::AuProgressBar @progress={{if this.uploadIsCompleted 100 this.fileQueue.progress}}/>
+    {{/if}}
+  </div>
+</FileDropzone>
