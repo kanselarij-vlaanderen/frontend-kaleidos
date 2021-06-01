@@ -187,13 +187,13 @@ context('Add files to an agenda', () => {
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter');
+    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter');
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
     cy.get(modal.baseModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
+    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
 
     // TODO why go to press agenda ?
@@ -225,7 +225,7 @@ context('Add files to an agenda', () => {
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
     // perhaps in the future this will be a feature
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebarSubitem).get('.vlc-u-opacity-lighter')
+    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
       .should('not.exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     cy.get('.vlc-status-timeline > li').eq(0)

@@ -81,7 +81,9 @@ const selectors = {
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
 
   // agenda-detail/sidebar
-  agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
+  agendaDetailSidebar: {
+    subitem: '[data-test-agenda-detail-sidebar-sub-item]',
+  },
 
   // agendaitem-decision-edit
   decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',

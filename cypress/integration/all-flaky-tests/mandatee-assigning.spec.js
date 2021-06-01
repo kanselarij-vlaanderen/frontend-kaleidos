@@ -267,7 +267,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.clickReverseTab('Detail');
 
     cy.log('in non-edit view, check if mandatees are correct');
-    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
+    cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
     // TODO Why is 20 seconds not enough to load this page ?
@@ -384,7 +384,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(`@patchAgenda${randomInt}`);
     cy.wait(2000);
 
-    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
+    cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
@@ -402,7 +402,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   it('should create newsletter-info for the agendaitems to check the sorting', () => {
     cy.openAgendaForDate(agendaDate);
     cy.clickReverseTab('Detail');
-    cy.get(agenda.agendaDetailSidebarSubitem).as('agendaitems');
+    cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
     cy.get(agenda.agendaitemNav.newsletterTab)

@@ -587,7 +587,7 @@ function agendaitemExists(agendaitemName) {
   cy.get('.active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
-      cy.get(agenda.agendaDetailSidebarSubitem)
+      cy.get(agenda.agendaDetailSidebar.subitem)
         .contains(agendaitemName, {
           timeout: 12000,
         })
