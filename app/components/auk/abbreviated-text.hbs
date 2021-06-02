@@ -1,9 +1,9 @@
 {{#if this.textTooLong}}
   <div class="auk-o-flex">
     {{#if this.isCustom}}
-      <div class="{{@customTextClass}}" ...attributes>{{this.textAbbreviated}}</div>
+      <div class="{{@customTextClass}}" ...attributes>{{this.abbreviatedText}}</div>
     {{else}}
-      {{this.textAbbreviated}}
+      {{this.abbreviatedText}}
     {{/if}}
     <WebComponents::AuButtonLink
             @icon="circle-more"
