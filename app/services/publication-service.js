@@ -32,7 +32,8 @@ export default class PublicationService extends Service {
   async createNewPublication(publicationProperties, decisionOptions) {
     const now = new Date();
     let case_;
-    if (decisionOptions) {
+    const isViaCouncilOfMinisters = !!decisionOptions;
+    if (isViaCouncilOfMinisters) {
       case_ = decisionOptions.case;
     } else {
       case_ = this.store.createRecord('case', {
@@ -70,10 +71,12 @@ export default class PublicationService extends Service {
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
+      status: toPublishStatus,
       statusChange: statusChange,
+      shortTitle: publicationProperties.shortTitle,
+      longTitle: publicationProperties.longTitle,
       created: now,
       openingDate: now,
-      status: toPublishStatus,
       modified: now,
     });
     await publicationFlow.save();
