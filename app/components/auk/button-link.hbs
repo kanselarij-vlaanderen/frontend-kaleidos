@@ -4,6 +4,13 @@
     class="auk-button-link {{this.skin}} {{this.block}} {{this.padded}}"
     @route={{@route}}
     @models={{this.models}}
+    @disabled={{@disabled}}
+    @activeClass={{@activeClass}}
+    @current-when={{@current-when}}
+    @preventDefault={{@preventDefault}}
+    @tagName={{@tagName}}
+    @query={{@query}}
+    {{!-- TODO: should @tagName be specified to "button"? --}}
     ...attributes
   >
     <span class="auk-button__content">
