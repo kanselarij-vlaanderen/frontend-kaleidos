@@ -9,7 +9,7 @@ import { tracked } from '@glimmer/tracking';
  * @argument {{ id: string, identification: string }} options
  * @argument {(publicationFlow: { id: string, identification: string }) => void} onChange
  */
-export default class PublicationsViaCouncilOfMinistersPublicationFlowSelectorComponent extends Component {
+export default class PublicationsPublicationFlowSelectorComponent extends Component {
   @service store;
 
   @tracked options = [];
