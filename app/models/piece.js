@@ -47,7 +47,9 @@ export default Model.extend({
     inverse: null,
   }),
   publicationFlow: belongsTo('publication-flow'),
-  translationSubcase: belongsTo('translation-subcase'),
+  translationSubcase: belongsTo('translation-subcase', {
+    inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
+  }),
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),

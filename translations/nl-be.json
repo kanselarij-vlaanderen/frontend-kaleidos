@@ -732,7 +732,7 @@
   "no-numac-number-yet": "Nog geen werknummer",
   "numac-number": "Werknummer BS",
   "requests":"Aanvragen",
-  "request-translations":"Vertaling(en) aanvragen",
+  "request-translations":"Vertaling aanvragen",
   "request-translations-for-publication":"Vertalingen aanvragen voor Publicatie {publicationNumber}",
   "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",
   "request-publish-preview":"Drukproef aanvragen",
@@ -850,5 +850,6 @@
   "my-profile": "Mijn profiel",
   "batch-document-publication-modal-publication-number-info": "Is dit document nodig voor de uiteindelijke publicatie? Deze functie wordt gebruikt om bij te houden of er een update op een document is in een bestaande publicatie.",
   "publication-subcase": "publicatie dossier",
-  "translation-subcase": "vertalingsdossier"
+  "translation-subcase": "vertalingsdossier",
+  "upload-translation-file": "Vertaaldocument uploaden"
 }

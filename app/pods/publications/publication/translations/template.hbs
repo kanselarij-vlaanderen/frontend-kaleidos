@@ -1,0 +1,31 @@
+<WebComponents::AuNavbar @border="bottom" @auto="true">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuTabs>
+          <WebComponents::AuTab @route="publications.publication.translations.documents">
+            {{capitalize (t "documents")}}
+          </WebComponents::AuTab>
+          <WebComponents::AuTab @route="publications.publication.translations.requests">
+            {{capitalize (t "requests")}}
+          </WebComponents::AuTab>
+        </WebComponents::AuTabs>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuCheckbox
+                @label={{t "finished"}}
+                @checked={{false}}
+        />
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButton @skin="secondary" >
+          <WebComponents::AuIcon @name="email"/>
+          {{t "request-translations"}}
+        </WebComponents::AuButton>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
+{{outlet}}

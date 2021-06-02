@@ -1,0 +1,36 @@
+<WebComponents::AuButton @skin="secondary">
+  <WebComponents::AuIcon @name="add"/>
+  {{t "upload-translation-file"}}
+</WebComponents::AuButton>
+
+<div class="auk-u-m-4">
+  <div class="auk-u-mb-4">
+    {{#if this.model}}
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th><WebComponents::AuCheckbox @mode="table" ></WebComponents::AuCheckbox></th>
+            <th class="auk-table__col--6">{{t "name-document"}}</th>
+            <th colspan="2">{{t "file-extension"}}</th>
+            <th colspan="2">{{t "file-type"}}</th>
+            <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.model as |piece|}}
+            <tr class="auk-table__row">
+              {{piece}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Body>
+          <WebComponents::AuEmptyState @message={{t "no-documents-yet" }} />
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
+    {{/if}}
+  </div>
+</div>
