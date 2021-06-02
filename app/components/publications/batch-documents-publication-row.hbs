@@ -1,0 +1,50 @@
+<tr>
+  <td>
+    {{@piece.name}}
+  </td>
+  <td>
+    {{@piece.documentContainer.type.label}}
+  </td>
+  <td>
+    <PowerSelect
+      @searchEnabled={{false}}
+      @selected={{this.selectedLinkModeOption}}
+      @options={{this.linkModeOptions}}
+      @onchange={{this.selectLinkModeOption}}
+      as |option|>
+      {{option.label}}
+    </PowerSelect>
+  </td>
+  <td>
+    {{#if this.selectedLinkModeOption.isEnabledLink}}
+      <Publications::PublicationFlowSelector
+        @selected={{@piece.publicationFlow}}
+        @onChange={{this.selectPublicationFlow}}
+        />
+    {{else}}
+      <WebComponents::AuButton
+        @icon="add"
+        {{on 'click' this.openNewPublicationModal}}>
+        {{t "publications-new"}}
+      </WebComponents::AuButton>
+    {{/if}}
+  </td>
+  <td>
+    <WebComponents::AuButtonToolbar>
+      <WebComponents::AuButton
+        @layout="icon-only"
+        @icon="download"
+        @skin="borderless"
+        @href={{@piece.file.downloadLink}}
+        download
+      />
+      <WebComponents::AuButton
+        @layout="icon-only"
+        @icon="book"
+        @skin="borderless"
+        @href={{@piece.viewDocumentURL}}
+        target="_blank"
+      />
+    </WebComponents::AuButtonToolbar>
+  </td>
+</tr>

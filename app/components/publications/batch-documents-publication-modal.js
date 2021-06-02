@@ -7,43 +7,21 @@ import {
   lastValue
 } from 'ember-concurrency-decorators';
 
-class PieceRow {
-  linkModeOptions;
-
-  constructor(piece, linkMode) {
-    this.piece = piece;
-    this.linkMode = linkMode;
-  }
-
-  @tracked piece;
-  @tracked linkMode;
-
-  get isInLinkMode() {
-    return this.linkMode.value;
-  }
-}
-
 /**
  * @argument {Agendaitem} agedaitem
  * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  linkModeOptions;
-  newPublicationRow;
-
   @service store;
-  @service intl;
   @service publicationService;
 
-  @tracked rows;
+  @tracked referenceDocument;
   @tracked isOpenNewPublicationModal = false;
   @lastValue('loadCase') case;
 
   constructor() {
     super(...arguments);
-
-    this.initLinkModeOptions();
-    this.loadPieces.perform().then(() => this.initRows(this.args.pieces));
+    this.loadPieces.perform();
     this.loadCase.perform();
   }
 
@@ -57,31 +35,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  async initRows(pieces) {
-    const latestPieces = this.extractLatestVersions(pieces);
-    this.rows = await Promise.all(latestPieces.map(async(piece) => {
-      // can only resolve to null when awaited
-      const publicationFlow = await piece.publicationFlow;
-      const isInLinkMode = !!publicationFlow;
-      const linkMode = this.getLinkMode(isInLinkMode);
-      return new PieceRow(piece, linkMode);
-    }));
-  }
-
-  extractLatestVersions(pieces) {
-    const documentsByContainer = {};
-    for (const piece of pieces) {
-      const container = piece.documentContainer;
-      const containerId = container.get('id');
-      const firstContainer = documentsByContainer[containerId];
-      if (!firstContainer) {
-        documentsByContainer[containerId] = piece;
-      }
-    }
-
-    return Object.values(documentsByContainer);
-  }
-
   @task
   // no yield but use of task for @lastValue
   // eslint-disable-next-line require-yield
@@ -91,36 +44,9 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  // SECTION: LINK MODE
-  initLinkModeOptions() {
-    this.linkModeOptions = [{
-      value: false,
-      label: this.intl.t('none'),
-    }, {
-      value: true,
-      label: this.intl.t('existing'),
-    }];
-  }
-
-  getLinkMode(selection) {
-    return this.linkModeOptions.find((option) => option.value === selection);
-  }
-
   @action
-  changeLinkMode(row, selection) {
-    row.linkMode = selection;
-
-    if (!row.isInLinkMode) {
-      const piece = row.piece;
-      piece.publicationFlow = undefined;
-      piece.save();
-    }
-  }
-
-  // SECTION: NEW PUBLICATION FLOW
-  @action
-  async openNewPublicationModal(row) {
-    this.newPublicationRow = row;
+  openNewPublicationModal(piece) {
+    this.referenceDocument = piece;
     this.isOpenNewPublicationModal = true;
   }
 
@@ -129,23 +55,27 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
     });
-    const piece = this.newPublicationRow.piece;
-    piece.publicationFlow = publicationFlow;
-    yield piece.save();
-    this.newPublicationRow.linkMode = this.getLinkMode(true);
+    this.referenceDocument.publicationFlow = publicationFlow;
+    yield this.referenceDocument.save();
     this.isOpenNewPublicationModal = false;
+    this.referenceDocument = null;
   }
 
   @action
   cancelNewPublication() {
     this.isOpenNewPublicationModal = false;
+    this.referenceDocument = null;
   }
 
-  // SECTION: EXISTING PUBLICATION FLOW
   @action
-  async selectPublicationFlow(row, publicationFlow) {
-    const piece = row.piece;
+  async linkPublicationFlow(piece, publicationFlow) {
     piece.publicationFlow = publicationFlow;
+    await piece.save();
+  }
+
+  @action
+  async unlinkPublicationFlow(piece) {
+    piece.publicationFlow = null;
     await piece.save();
   }
 }

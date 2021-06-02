@@ -25,60 +25,19 @@
           </tr>
         </thead>
 
-        <tbody>
-          {{#each this.rows as |row|}}
-            <tr>
-              <td>
-                {{row.piece.name}}
-              </td>
-              <td>
-                {{row.piece.documentContainer.type.label}}
-              </td>
-              <td>
-                <PowerSelect
-                  @searchEnabled={{false}}
-                  @selected={{row.linkMode}}
-                  @options={{this.linkModeOptions}}
-                  @onchange={{fn this.changeLinkMode row}}
-                  as |option|>
-                  {{option.label}}
-                </PowerSelect>
-              </td>
-              <td>
-                {{#if row.isInLinkMode}}
-                  <Publications::PublicationFlowSelector
-                    @selected={{row.piece.publicationFlow}}
-                    @onChange={{fn this.selectPublicationFlow row}}
-                    />
-                {{else}}
-                  <WebComponents::AuButton
-                    @icon="add"
-                    {{on 'click' (fn this.openNewPublicationModal row)}}>
-                    {{t "publications-new"}}
-                  </WebComponents::AuButton>
-                {{/if}}
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton
-                    @layout="icon-only"
-                    @icon="download"
-                    @skin="borderless"
-                    @href={{row.piece.file.downloadLink}}
-                    download
-                    />
-                  <WebComponents::AuButton
-                    @layout="icon-only"
-                    @icon="book"
-                    @skin="borderless"
-                    @href={{row.piece.viewDocumentURL}}
-                    target="_blank"
-                    />
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
+        <Documents::DocumentList
+          @tag="tbody"
+          @pieces={{@pieces}}
+          as |pieces|>
+          {{#each pieces as |piece|}}
+            <Publications::BatchDocumentsPublicationRow
+              @piece={{piece}}
+              @onLinkPublicationFlow={{this.linkPublicationFlow}}
+              @onUnlinkPublicationFlow={{this.unlinkPublicationFlow}}
+              @onOpenNewPublicationModal={{this.openNewPublicationModal}}
+            />
           {{/each}}
-        </tbody>
+        </Documents::DocumentList>
       </table>
     </Utils::LoadableContent>
   </WebComponents::AuModal::Body>
