@@ -4,7 +4,7 @@
     {{#if this.fileFormatIsSupported}}
       <PdfView @filePath={{await this.model.downloadFileLink}}/>
     {{else}}
-      <WebComponents::AuAlert
+      <Auk::Alert
         @skin="warning"
         @title={{t "file-type-unsupported"}}
         @message={{t "file-viewer-type-unsupported" fileType=this.model.file.extension}}
