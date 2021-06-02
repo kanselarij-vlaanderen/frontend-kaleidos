@@ -36,5 +36,7 @@ export default class CaseRoute extends Route {
     controller.contactPersons = this.contactPersons;
     controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
     controller.organizations = this.organizations;
+
+    controller.isInscriptionInEditMode = false;
   }
 }

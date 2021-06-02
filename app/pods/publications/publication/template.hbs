@@ -19,10 +19,9 @@
             {{uppercase this.model.identification.idName}}
           </span>
           <Auk::AbbreviatedText
-            @text={{if
-              this.model.case.shortTitle
-              this.model.case.shortTitle
-              this.model.case.title
+            @text={{or
+              this.model.shortTitle
+              this.model.case.longTitle
             }}
             @maxLength={{150}}
           as |abbreviatedText|>
