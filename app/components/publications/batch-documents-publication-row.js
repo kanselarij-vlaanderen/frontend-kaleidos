@@ -13,17 +13,15 @@ import { action } from '@ember/object';
 export default class PublicationsBatchDocumentsPublicationRowComponent extends Component {
   @service intl;
 
-  linkEnabledOption = {
-    isEnabledLink: true,
-    label: this.intl.t('existing'),
-  };
-  linkDisabledOption = {
-    isEnabledLink: false,
-    label: this.intl.t('none'),
-  };
   linkModeOptions = [
-    this.linkDisabledOption,
-    this.linkEnabledOption
+    {
+      isEnabledLink: true,
+      label: this.intl.t('existing'),
+    },
+    {
+      isEnabledLink: false,
+      label: this.intl.t('none'),
+    }
   ];
 
   @tracked selectedLinkModeOption;
