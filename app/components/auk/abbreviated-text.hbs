@@ -1,24 +1,21 @@
 {{#if this.textTooLong}}
   <div class="auk-o-flex">
-    {{#if this.isCustom}}
-      <div class="{{@customTextClass}}" ...attributes>{{this.abbreviatedText}}</div>
+    {{#if (has-block)}}
+      {{yield this.abbreviatedText}}
     {{else}}
       {{this.abbreviatedText}}
     {{/if}}
     <WebComponents::AuButtonLink
-            @icon="circle-more"
-            @skin="mute"
-            @layout="icon-only"
-            class="auk-o-flex--vertical-center"
-            >
-      <EmberTooltip @tooltipClass="auk-tooltip">
-        {{@text}}
-      </EmberTooltip>
-    </WebComponents::AuButtonLink>
+      @icon="circle-more"
+      @skin="mute"
+      @layout="icon-only"
+      class="auk-o-flex--vertical-center"
+    />
+    <EmberTooltip @tooltipClass="auk-tooltip">{{@text}}</EmberTooltip>
   </div>
 {{else}}
   {{#if this.isCustom}}
-    <div class="{{@customTextClass}}" ...attributes>{{@text}}</div>
+    {{yield @text}}
   {{else}}
     {{@text}}
   {{/if}}

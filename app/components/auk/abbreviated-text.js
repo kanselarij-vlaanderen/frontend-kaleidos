@@ -4,17 +4,8 @@ import Component from '@glimmer/component';
  *
  * @argument text {String}
  * @argument size {Number}
- * @argument custom {Boolean}
- * @argument customTextClass {String}
  */
 export default class AbbreviatedText extends Component {
-  get isCustom() {
-    if (this.args.custom) {
-      return true;
-    }
-    return false;
-  }
-
   get maxLength() {
     // The amount of characters to show in the title.
     return this.args.size || 20;

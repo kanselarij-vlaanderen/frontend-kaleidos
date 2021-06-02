@@ -19,16 +19,20 @@
             {{uppercase this.model.identification.idName}}
           </span>
           <Auk::AbbreviatedText
-            data-test-publication-detail-menu-short-title
             @text={{if
               this.model.case.shortTitle
               this.model.case.shortTitle
               this.model.case.title
             }}
             @size="150"
-            @custom="true"
-            @customTextClass="auk-toolbar-complex__title"
-          />
+          as |abbreviatedText|>
+            <div
+              data-test-publication-detail-menu-short-title
+              class="auk-toolbar-complex__title"
+            >
+              {{abbreviatedText}}
+            </div>
+          </Auk::AbbreviatedText>
           <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
       </WebComponents::AuToolbar::Item>
