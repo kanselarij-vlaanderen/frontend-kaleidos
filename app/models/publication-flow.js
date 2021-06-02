@@ -4,6 +4,8 @@ import Model, {
 
 export default class PublicationFlow extends Model {
   // Attributes.
+  @attr('string') shortTitle;
+  @attr('string') longTitle;
   @attr('string') remark;
   @attr('date') closingDate;
   @attr('date') openingDate;
