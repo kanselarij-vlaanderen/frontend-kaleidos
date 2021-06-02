@@ -70,10 +70,10 @@
                     {{!-- There is legacy data were case does not have a shortTitle, we have to fall back to title --}}
                     <td class="auk-table__col--6">
                       {{#if row.case.shortTitle}}
-                        <Auk::AbbreviatedText @text={{row.case.shortTitle}} @size="150" />
+                        <Auk::AbbreviatedText @text={{row.case.shortTitle}} @maxLength={{150}} />
                       {{else}}
                         {{#if row.case.title}}
-                          <Auk::AbbreviatedText @text={{row.case.title}} @size="150" />
+                          <Auk::AbbreviatedText @text={{row.case.title}} @maxLength={{150}} />
                         {{else}}
                           {{t "dash"}}
                         {{/if}}

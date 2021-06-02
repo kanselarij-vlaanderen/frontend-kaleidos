@@ -3,12 +3,12 @@ import Component from '@glimmer/component';
 /**
  *
  * @argument text {String}
- * @argument size {Number}
+ * @argument maxLength {Number}
  */
 export default class AbbreviatedText extends Component {
   get maxLength() {
     // The amount of characters to show in the title.
-    return this.args.size || 20;
+    return this.args.maxLength || 20;
   }
 
   get textTooLong() {
