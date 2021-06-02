@@ -117,7 +117,7 @@
             <ul class="auk-list auk-list--bordered">
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
                 <li class="auk-list__item auk-list__item--gray-100">
-                  <WebComponents::AuBadge @skin="white" @icon="document"/>
+                  <Auk::Badge @skin="white" @icon="document" />
                   <div class="auk-u-mx-2">
                     <span class="auk-u-text-bold">
                       {{translationSourcePiece.name}}
