@@ -11,9 +11,10 @@
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else}}
       <WebComponents::AuFileUploader
+        @fileQueueName={{this.fileQueueName}}
         @fullHeight={{eq this.newPieces.length 0}}
-        @multipleFiles={{true}}
-        @uploadedFileAction={{this.uploadPiece}}
+        @multiple={{true}}
+        @onUpload={{this.uploadPiece}}
       />
       {{! TODO vervangen met correct design (nog in flux), au css en componenten }}
       <div class="upload-container">
@@ -36,7 +37,7 @@
       <WebComponents::AuButton
         data-test-au-modal-footer-save
         @skin="primary"
-        @disabled={{eq this.newPieces.length 0}}
+        @disabled={{this.saveIsDisabled}}
         {{on "click" (perform this.savePieces)}}
       >
         {{t "documents-add"}}
@@ -44,11 +45,3 @@
     {{/if}}
   </WebComponents::AuModal::Footer>
 </WebComponents::AuModal>
-
-{{!-- temporary fix, waiting for new css --}}
-{{#if this.savePieces.isRunning}}
-  <WebComponents::AuLoadingOverlay
-          @title={{t "upload-file"}}
-          @message={{t "upload-file"}}
-  />
-{{/if}}

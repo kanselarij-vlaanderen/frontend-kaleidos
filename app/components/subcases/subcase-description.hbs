@@ -1,12 +1,14 @@
 {{#if (not isEditing)}}
-  <div class="auk-u-flex auk-u-flex--align-baseline">
+  <div class="auk-o-flex auk-o-flex--align-baseline">
     <h3 class="auk-h2">
       {{t "subcase"}}
     </h3>
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
         <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
-          {{t "edit"}}
+          <span class="auk-button__content">
+            {{t "edit"}}
+          </span>
         </a>
       </div>
     {{/if}}
@@ -92,7 +94,9 @@
                 (await latestAgendaitemId)
                 class="auk-button-link"
               }}
-                {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
+                <span class="auk-button__content">
+                  {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
+                </span>
               {{/link-to}}
             {{else}}
               {{t "not-yet-on-agenda"}}
@@ -176,7 +180,9 @@
       <div class="auk-toolbar-complex__right">
         <div class="auk-toolbar-complex__item">
           <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-            {{t "cancel"}}
+            <span class="auk-button__content">
+              {{t "cancel"}}
+            </span>
           </a>
         </div>
         <div class="auk-toolbar-complex__item">

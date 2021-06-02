@@ -19,7 +19,7 @@
           <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
             {{t "publications-number"}}
           </WebComponents::AuLabel>
-          <div class=" auk-u-flex auk-u-flex--vertical-center">
+          <div class=" auk-o-flex auk-o-flex--vertical-center">
             <WebComponents::AuInput
               type="number"
               id="publicationNumberInput"
@@ -70,7 +70,6 @@
             {{t "name-subcase"}}
           </WebComponents::AuLabel>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
             <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -79,7 +78,6 @@
         <div class="auk-form-group">
           <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>

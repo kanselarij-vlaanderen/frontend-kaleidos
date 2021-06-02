@@ -6,33 +6,35 @@
   }}
 {{/if}}
 {{#if isResigning}}
-  <div class="auk-modal__content">
-    {{#if showVerificationPopup}}
-      {{changes-alert
-        data-test-manage-mandatee-changes-alert=true
-        message=(t "show-active-minister-alert")
-        buttonText=(t "close")
-        clearAction=(action "close")
-      }}
-    {{/if}}
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
-      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
-    </div>
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "new-person"}}</WebComponents::AuLabel>
-      {{utils/create-person-selector
-        selectedItems=selectedPerson
-        selectModel=(action "personSelected")
-      }}
-    </div>
-
-    {{#if selectedPerson}}
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      {{#if showVerificationPopup}}
+        {{changes-alert
+          data-test-manage-mandatee-changes-alert=true
+          message=(t "show-active-minister-alert")
+          buttonText=(t "close")
+          clearAction=(action "close")
+        }}
+      {{/if}}
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
-        {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+        <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
+        {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
       </div>
-    {{/if}}
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "new-person"}}</WebComponents::AuLabel>
+        {{utils/create-person-selector
+          selectedItems=selectedPerson
+          selectModel=(action "personSelected")
+        }}
+      </div>
+
+      {{#if selectedPerson}}
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+          {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+        </div>
+      {{/if}}
+    </div>
   </div>
   {{web-components/vl-modal-footer
     isLoading=isLoading

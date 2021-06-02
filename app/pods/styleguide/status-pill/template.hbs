@@ -2,15 +2,6 @@
 <ComponentPageIntro @title="Status Pills" />
 
 <StyleguideSample
-        @title="In Progress"
-        @snippet="status-pill-in-progress.hbs"
->
-  {{!-- BEGIN-SNIPPET status-pill-in-progress --}}
-  <WebComponents::AuStatusPill>2/4</WebComponents::AuStatusPill>
-  {{!-- END-SNIPPET --}}
-</StyleguideSample>
-
-<StyleguideSample
         @title="Not started"
         @snippet="status-pill-not-started.hbs"
 >
@@ -20,11 +11,29 @@
 </StyleguideSample>
 
 <StyleguideSample
+        @title="In Progress"
+        @snippet="status-pill-in-progress.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-in-progress --}}
+  <WebComponents::AuStatusPill>2/4</WebComponents::AuStatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
         @title="Done"
         @snippet="status-pill-done.hbs"
 >
   {{!-- BEGIN-SNIPPET status-pill-done --}}
   <WebComponents::AuStatusPill @status="done">4/4</WebComponents::AuStatusPill>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+        @title="Error"
+        @snippet="status-pill-error.hbs"
+>
+  {{!-- BEGIN-SNIPPET status-pill-done --}}
+  <WebComponents::AuStatusPill @status="error">0/1</WebComponents::AuStatusPill>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -44,7 +53,7 @@
   <tr>
     <td>@status</td>
     <td>string</td>
-    <td><code>in-progress</code>, <code>not-started</code>, <code>done</code></td>
+    <td><code>not-started</code>, <code>in-progress</code>, <code>done</code>, <code>error</code></td>
     <td>Determines the status of the pill. Unless specified, the default skin is set to in-progress.</td>
   </tr>
   </tbody>

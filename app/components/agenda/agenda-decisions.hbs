@@ -10,7 +10,7 @@
   <div class="auk-u-mb-4 auk-u-mt-8">
     {{#each (await @agendaitemGroups) as |group|}}
       {{#each group.agendaitems as |agendaitem|}}
-        <div class="auk-u-flex auk-u-flex--horizontal-center">
+        <div class="auk-o-flex auk-o-flex--horizontal-center">
           <div class="print-only auk-u-mt-8">
             <img style="margin:-75px 0px -50px 0px; width:200px"
                  src="/assets/logo_vlaamse_regering.svg"
@@ -33,7 +33,7 @@
                 .
                 {{agendaitem.shortTitle}}
               </h3>
-              <pre class="auk-u-flex--inline auk-u-text-pre-line">
+              <pre class="auk-o-flex--inline auk-u-text-pre-line">
                 {{agendaitem.title}}
               </pre>
             </div>
@@ -49,12 +49,14 @@
                         @isTableRow={{isTableRow}}
                         @agendaitem={{agendaitem}} />
                     {{else if session.isEditor}}
-                      <div class="auk-u-flex auk-u-flex--vertical-center auk-u-flex--align-end">
+                      <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end">
                         {{#if allowEditing}}
                           <a href="" class="auk-button-link"
                             {{action "toggleIsEditing" treatment}}
                           >
-                            {{t "edit"}}
+                            <span class="auk-button__content">
+                              {{t "edit"}}
+                            </span>
                           </a>
                         {{/if}}
                       </div>

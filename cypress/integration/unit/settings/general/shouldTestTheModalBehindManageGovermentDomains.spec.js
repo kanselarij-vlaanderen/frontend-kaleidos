@@ -29,7 +29,7 @@ context('Settings page tests', () => {
     govermentDomains = insertData();
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 

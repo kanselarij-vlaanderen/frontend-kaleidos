@@ -3,11 +3,13 @@
   @title={{t "manage-alerts"}}
   @closeModal={{action "cancel"}}
 >
-  <div class="auk-modal__content">
-    <Utils::SystemAlertForm
-      @alert={{this.model}}
-      @onCancel={{action "cancel"}}
-    />
+  <div class="auk-modal__body">
+    <div class="auk-u-p-4">
+      <Utils::SystemAlertForm
+        @alert={{this.model}}
+        @onCancel={{action "cancel"}}
+      />
+    </div>
   </div>
   <WebComponents::VlModalFooter
     @isLoading={{save.isRunning}}

@@ -1,43 +1,45 @@
-<div class="auk-modal__content">
-  {{utils/kind-selector kind=kind setAction=(action "setKind")}}
-  <div class="auk-u-mb-2">
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
-      {{web-components/vl-datepicker
-        enableTime=true
-        date=date
-        dateChanged=(action "selectStartDate")
-      }}
+<div class="auk-modal__body">
+  <div class="auk-u-p-4">
+    {{utils/kind-selector kind=kind setAction=(action "setKind")}}
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+        {{web-components/vl-datepicker
+          enableTime=true
+          date=date
+          dateChanged=(action "selectStartDate")
+        }}
+      </div>
     </div>
-  </div>
-  <div class="auk-u-mb-2">
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
-      {{web-components/vl-form-input
-        type="number"
-        value=meetingNumber
-        input=(action "meetingNumberChangedAction" meetingNumber)
-      }}
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
+        {{web-components/vl-form-input
+          type="number"
+          value=meetingNumber
+          input=(action "meetingNumberChangedAction" meetingNumber)
+        }}
+      </div>
     </div>
-  </div>
-  <div class="auk-u-mb-2">
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>
-        {{t "meeting-number-visual-representation"}}
-      </WebComponents::AuLabel>
-      {{web-components/vl-form-input
-        value=numberRepresentation
-      }}
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>
+          {{t "meeting-number-visual-representation"}}
+        </WebComponents::AuLabel>
+        {{web-components/vl-form-input
+          value=numberRepresentation
+        }}
+      </div>
     </div>
-  </div>
-  <div class="auk-u-mb-2">
-    <div class="auk-form-group">
-      <WebComponents::AuLabel>
-        {{t "meeting-location"}}
-      </WebComponents::AuLabel>
-      {{web-components/vl-form-input
-        value=extraInfo
-      }}
+    <div class="auk-u-mb-2">
+      <div class="auk-form-group">
+        <WebComponents::AuLabel>
+          {{t "meeting-location"}}
+        </WebComponents::AuLabel>
+        {{web-components/vl-form-input
+          value=extraInfo
+        }}
+      </div>
     </div>
   </div>
 </div>

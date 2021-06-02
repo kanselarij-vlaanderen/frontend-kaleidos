@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 export default class AvatarVisual extends Component {
   get type() {
     if (this.args.icon) {
-      return 'auk-avatar--icon';
+      return 'auk-avatar--default';
     } else if (this.args.image) {
       return 'auk-avatar--img';
     }
