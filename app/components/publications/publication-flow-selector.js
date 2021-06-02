@@ -1,8 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
-
+import {
+  restartableTask,
+  lastValue
+} from 'ember-concurrency-decorators';
+import { timeout } from 'ember-concurrency';
+import { isBlank } from '@ember/utils';
 
 /**
  * @argument {PublicationFlow} selected
@@ -12,59 +16,46 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationFlowSelectorComponent extends Component {
   @service store;
 
-  @tracked options = [];
+  @lastValue('search') options = [];
 
-  get selected() {
-    if (!this.args.selected) {
-      return undefined;
-    }
-    // .get('id'): Ember complains about .id syntax
-    const id = this.args.selected.get('id');
-    const selected = this.options.findBy('id', id);
-    return selected || this.args.selected;
+  // ember-power-select clears the search input,
+  // but not the search result list on close.
+  // Therefore we reinitialize the options on open.
+  @action
+  onOpen() {
+    this.search.perform();
   }
 
-  // onOpen event:
-  //  searchText is cleared when the select has been closed.
-  //  this does not trigger an onInput or search event
+  // ember-power-select doesn't perform the search task
+  // when the search input is empty. Handle this case using onInput.
   @action
-  onOpen(select) {
-    if (!select.searchText) {
-      this.loadData();
-    }
-  }
-
-  @action
-  // onInput event: search event does not fire when input is cleared
-  // when used for a non-empty searchText, the input is cleared
-  //  so we need both events.
   onInput(searchText) {
-    if (!searchText) {
-      this.loadData();
+    if (isBlank(searchText)) {
+      this.search.perform();
     }
+    // else: regular search task will be called
   }
 
-  @action
-  search(searchText) {
-    this.loadData(searchText);
+  @restartableTask
+  *debouncedSearch(searchText) {
+    yield timeout(300);
+    this.search.perform(searchText);
   }
 
-  async loadData(searchText) {
-    let publicationFlows = await this.store.query('publication-flow', {
-      'filter[identification][:gte:id-name]': searchText,
+  @restartableTask
+  *search(searchText) {
+    const filter = {};
+    if (!isBlank(searchText)) {
+      filter.identification = {
+        'id-name': searchText,
+      };
+    }
+    const publicationFlows = yield this.store.query('publication-flow', {
+      filter,
       'page[size]': 10,
       sort: 'identification.id-name',
       include: 'identification',
     });
-    publicationFlows = publicationFlows.toArray();
-    if (searchText) {
-      publicationFlows = publicationFlows.filter((pub) => pub.identification.get('idName').startsWith(searchText));
-    }
-    this.options = publicationFlows;
-  }
-
-  @action
-  onChange(selected) {
-    this.args.onChange(selected);
+    return publicationFlows;
   }
 }
