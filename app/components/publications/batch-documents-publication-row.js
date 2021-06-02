@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 
 /**
  * @argument {Piece} piece
+ * @argument {Case} case
  * @argument {function(Piece, PublicationFlow)} onLinkPublicationFlow
  * @argument {function(Piece)} onUnlinkPublicationFlow
  * @argument {function(Piece)} onOpenNewPublicationModal

@@ -19,6 +19,7 @@
     {{#if this.selectedLinkModeOption.isEnabledLink}}
       <Publications::PublicationFlowSelector
         @selected={{@piece.publicationFlow}}
+        @case={{@case}}
         @onChange={{this.selectPublicationFlow}}
         />
     {{else}}

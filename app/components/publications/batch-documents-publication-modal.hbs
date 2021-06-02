@@ -32,6 +32,7 @@
           {{#each pieces as |piece|}}
             <Publications::BatchDocumentsPublicationRow
               @piece={{piece}}
+              @case={{this.case}}
               @onLinkPublicationFlow={{this.linkPublicationFlow}}
               @onUnlinkPublicationFlow={{this.unlinkPublicationFlow}}
               @onOpenNewPublicationModal={{this.openNewPublicationModal}}

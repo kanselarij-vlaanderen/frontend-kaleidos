@@ -10,7 +10,7 @@ import { isBlank } from '@ember/utils';
 
 /**
  * @argument {PublicationFlow} selected
- * @argument {{ id: string, identification: string }} options
+ * @argument {Case} case
  * @argument {(publicationFlow: { id: string, identification: string }) => void} onChange
  */
 export default class PublicationsPublicationFlowSelectorComponent extends Component {
@@ -44,7 +44,12 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
 
   @restartableTask
   *search(searchText) {
-    const filter = {};
+    const filter = {
+      // multiple reference documents on 1 publication-flow must belong to the same case
+      case: {
+        ':id:': this.args.case.get('id'),
+      },
+    };
     if (!isBlank(searchText)) {
       filter.identification = {
         'id-name': searchText,
