@@ -65,7 +65,7 @@ context('Propagation to other graphs', () => {
     cy.contains('Wijzigen').click();
     cy.get('.auk-box').as('editDecision');
     cy.get('@editDecision').within(() => {
-      cy.get(agenda.agendaitemDecisionEdit.powerSelectContainer).should('exist')
+      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
         .should('be.visible')
         .within(() => {
           cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
