@@ -1,5 +1,7 @@
 import Component from '@glimmer/component';
 
-export default class Brand extends Component {
-
-}
+/**
+ *
+ * @argument logoType {String}: ? TODO
+ */
+export default class Brand extends Component {}
