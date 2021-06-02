@@ -48,7 +48,6 @@
                 {{#if row.isInLinkMode}}
                   <Publications::PublicationFlowSelector
                     @selected={{row.piece.publicationFlow}}
-                    @loadData={{this.searchPublicationFlowWithCache}}
                     @onChange={{fn this.selectPublicationFlow row}}
                     />
                 {{else}}
