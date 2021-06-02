@@ -15,12 +15,13 @@
         </WebComponents::AuToolbar::Item>
       {{/if}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButtonLink
+        <Auk::ButtonLink
           @skin="muted"
           @padded="padded"
-          @icon="circle-question">
+          @icon="circle-question"
+        >
           {{t "help"}}
-        </WebComponents::AuButtonLink>
+        </Auk::ButtonLink>
         <AttachPopover
           @renderInPlace={{true}}
           @class="ember-attacher-popper"

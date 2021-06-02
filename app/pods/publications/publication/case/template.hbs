@@ -68,7 +68,7 @@
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
                   {{#if this.latestSubcaseOnMeeting}}
-                    <WebComponents::AuButtonLink
+                    <Auk::ButtonLink
                       @route="cases.case.subcases.subcase.overview"
                       @models={{array
                         this.model.id
@@ -76,7 +76,7 @@
                       }}
                     >
                       {{t "to-case"}}
-                    </WebComponents::AuButtonLink>
+                    </Auk::ButtonLink>
                   {{else}}
                     <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
                   {{/if}}
