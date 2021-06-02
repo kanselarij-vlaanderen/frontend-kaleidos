@@ -32,23 +32,22 @@ export default class ButtonLink extends Component {
     if (this.args.skin) {
       return `auk-button--${this.args.skin}`;
     }
-    return '';
+    return null;
   }
 
   get block() {
     if (this.args.block) {
       return 'auk-button-link--block';
     }
-    return '';
+    return null;
   }
 
   get padded() {
     if (this.args.padded === 'padded') {
       return 'auk-button-link--padded';
-    }
-    if (this.args.padded === 'padded-y') {
+    } else if (this.args.padded === 'padded-y') {
       return 'auk-button-link--padded-y';
     }
-    return '';
+    return null;
   }
 }
