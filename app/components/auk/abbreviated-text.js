@@ -1,5 +1,12 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument text {String}
+ * @argument size {Number}
+ * @argument custom {Boolean}
+ * @argument customTextClass {String}
+ */
 export default class AbbreviatedText extends Component {
   get isCustom() {
     if (this.args.custom) {
