@@ -1,5 +1,12 @@
 <label class="auk-checkbox">
-  <input class="auk-checkbox__toggle" type="checkbox" name={{@name}} checked={{@checked}} onChange={{@toggle}}/>
+  <input
+    class="auk-checkbox__toggle"
+    ...arguments
+    type="checkbox"
+    name={{@name}}
+    checked={{@checked}}
+    onChange={{@toggle}}
+  />
   <span>
     {{#if (has-block)}}
       {{yield}}
