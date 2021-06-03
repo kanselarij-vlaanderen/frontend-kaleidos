@@ -26,7 +26,7 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.visit('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008');
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
 
-    cy.get(agenda.agendaitemKortBestekTab)
+    cy.get(agenda.agendaitemNav.newsletterTab)
       .should('be.visible')
       .click()
       .wait(2000); // Access-levels GET occured earlier, general wait instead
@@ -42,9 +42,9 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(5000);
-    cy.get(agenda.agendaitemDocumentsTab).should('be.visible')
+    cy.get(agenda.agendaitemNav.documentsTab).should('be.visible')
       .click();
-    cy.get(agenda.agendaitemKortBestekTab).should('be.visible')
+    cy.get(agenda.agendaitemNav.newsletterTab).should('be.visible')
       .click();
     cy.get(alert.changesAlertComponent).should('not.be.visible');
   });

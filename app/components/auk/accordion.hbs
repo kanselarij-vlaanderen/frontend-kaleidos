@@ -1,5 +1,5 @@
 <div class="auk-accordion {{if this.isActive "auk-accordion--is-active"}}">
-  <WebComponents::AuButtonLink
+  <Auk::ButtonLink
     @padded="padded-y"
     @icon="chevron-right"
     @block="true"
@@ -7,7 +7,7 @@
     aria-expanded={{if this.isActive "true" "false"}}
     aria-controls={{this.accordionId}}>
     {{@label}}
-  </WebComponents::AuButtonLink>
+  </Auk::ButtonLink>
   <div
     class="auk-accordion__content"
     id={{this.accordionId}}
