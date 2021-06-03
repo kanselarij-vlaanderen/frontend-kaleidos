@@ -13,16 +13,16 @@
         </div>
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
               <Auk::Checkbox
                 @label={{t "via-cabinet" }}
                 @checked={{this.filter.ministerFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
               />
-            </WebComponents::AuCheckboxList>
+            </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
               <Auk::Checkbox
                 @label={{t "publications-published" }}
                 @checked={{this.filter.publishedFilterOption}}
@@ -33,21 +33,21 @@
                 @checked={{this.filter.pausedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
               />
-            </WebComponents::AuCheckboxList>
+            </Auk::CheckboxList>
           </div>
         </div>
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
               <Auk::Checkbox
                 @label={{t "not-via-cabinet" }}
                 @checked={{this.filter.notMinisterFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
               />
-            </WebComponents::AuCheckboxList>
+            </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
               <Auk::Checkbox
                 @label={{t "publications-to-publish" }}
                 @checked={{this.filter.toPublishFilterOption}}
@@ -58,7 +58,7 @@
                 @checked={{this.filter.withdrawnFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
               />
-            </WebComponents::AuCheckboxList>
+            </Auk::CheckboxList>
           </div>
         </div>
       </div>

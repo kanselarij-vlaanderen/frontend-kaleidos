@@ -24,7 +24,7 @@
       {{#each this.optionColumns as |column|}}
         <div class="auk-o-grid-col-12">
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
               {{#each column as |option|}}
                 <Auk::Checkbox
                   @checked={{get @options option.keyName}}
@@ -36,7 +36,7 @@
                   {{/if}}
                 </Auk::Checkbox>
               {{/each}}
-            </WebComponents::AuCheckboxList>
+            </Auk::CheckboxList>
           </div>
         </div>
       {{/each}}
