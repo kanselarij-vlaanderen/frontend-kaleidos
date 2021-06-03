@@ -2,7 +2,7 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuBrand @logotype="Kaleidos"/>
+        <Auk::Brand @logotype="Kaleidos" />
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuTabs>
@@ -91,10 +91,10 @@
                >
             <WebComponents::AuDropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <WebComponents::AuAvatar @icon="user" @name={{this.currentSession.user.fullName}}>
+                <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
-                </WebComponents::AuAvatar>
+                </Auk::Avatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
               <WebComponents::AuDropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
