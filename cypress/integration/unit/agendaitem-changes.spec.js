@@ -116,7 +116,7 @@ context('Agendaitem changes tests', () => {
     cy.changeSelectedAgenda('Ontwerpagenda');
     // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
     cy.openDetailOfAgendaitem(approvalTitle, false);
-    cy.get(agenda.agendaitemDocumentsTab).click();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.contains('Documenten toevoegen').click();
     cy.addNewDocumentsInUploadModal(files, 'agendaitems');
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
@@ -142,21 +142,21 @@ context('Agendaitem changes tests', () => {
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToPrintableAgenda).click();
     cy.wait(1000);
-    cy.get(agenda.printHeaderTitle, {
+    cy.get(agenda.printableAgenda.headerTitle, {
       timeout: 80000,
     }).should('exist')
       .should('be.visible');
-    cy.get(agenda.printHeaderTitle).contains('Agenda van');
+    cy.get(agenda.printableAgenda.headerTitle).contains('Agenda van');
     // TODO Type is now visible in printHeaderTitle, but not tested for correctness
-    cy.get(agenda.printContainer).should('exist')
+    cy.get(agenda.printableAgenda.container).should('exist')
       .should('be.visible');
 
     // TODO check the order of the items is as expected?
-    cy.get(agenda.printContainer).contains(approvalTitle);
-    cy.get(agenda.printContainer).contains(subcaseTitle1);
-    cy.get(agenda.printContainer).contains(agendaitemIndex2);
-    cy.get(agenda.printContainer).contains(subcaseTitle2);
-    cy.get(agenda.printContainer).contains(subcaseTitle3);
+    cy.get(agenda.printableAgenda.container).contains(approvalTitle);
+    cy.get(agenda.printableAgenda.container).contains(subcaseTitle1);
+    cy.get(agenda.printableAgenda.container).contains(agendaitemIndex2);
+    cy.get(agenda.printableAgenda.container).contains(subcaseTitle2);
+    cy.get(agenda.printableAgenda.container).contains(subcaseTitle3);
   });
 
   it('should verify that you can compare agendas', () => {
@@ -224,17 +224,17 @@ context('Agendaitem changes tests', () => {
     cy.visit(agendaURL);
     cy.changeSelectedAgenda('Ontwerpagenda');
     // check if only 'Geen toekenning' is a header
-    cy.get(agenda.agendaOverviewItemHeader)
+    cy.get(agenda.agendaitemGroupHeader.section)
       .should('have.length', 0);
     // TODO CHECK WITH USERS, should there be a mandatee header between approval and first item without mandatee
-    // cy.get(agenda.agendaOverviewItemHeader).eq(0)
+    // cy.get(agenda.agendaitemGroupHeader.section).eq(0)
     //   .should('contain.text', 'Geen toekenning');
     cy.openDetailOfAgendaitem('Cypress test dossier 1 test stap 1');
     cy.addAgendaitemMandatee(0, -1, 0, 'Minister-president van de Vlaamse Regering');
     cy.clickReverseTab('Overzicht');
-    cy.get(agenda.agendaOverviewItemHeader).eq(0)
+    cy.get(agenda.agendaitemGroupHeader.section).eq(0)
       .should('contain.text', 'Minister-president van de Vlaamse Regering');
-    cy.get(agenda.agendaOverviewItemHeader).should('have.length', 2);
+    cy.get(agenda.agendaitemGroupHeader.section).should('have.length', 2);
     // TODO check second header for "Geen toekenning"?
   });
 });

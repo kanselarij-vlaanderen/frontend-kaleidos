@@ -432,7 +432,7 @@
       {{#if (await this.currentAgenda.canBeApproved)}}
         {{t "approve-agenda-confirmation"}}
       {{else}}
-        <WebComponents::AuAlert @skin="error" @message={{t "approve-agenda-not-ok-message"}}/>
+        <Auk::Alert @skin="error" @message={{t "approve-agenda-not-ok-message"}} />
         <div>{{t "approve-agenda-confirmation"}}</div>
         {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
           <br>
@@ -473,7 +473,7 @@
       {{#if (await this.currentAgenda.canBeApproved)}}
         {{t "approve-agenda-close-meeting-confirmation"}}
       {{else}}
-        <WebComponents::AuAlert @skin="error" @message={{t "approve-agenda-close-meeting-not-ok-message"}}/>
+        <Auk::Alert @skin="error" @message={{t "approve-agenda-close-meeting-not-ok-message"}} />
         <div>{{t "approve-agenda-close-meeting-confirmation"}}</div>
         {{#if (await this.currentAgenda.approvedAgendaitemsNotOk)}}
           <br>
@@ -512,7 +512,7 @@
     />
     <WebComponents::AuModal::Body>
       {{#if (await this.currentSession.latestAgenda.isDesignAgenda)}}
-        <WebComponents::AuAlert
+        <Auk::Alert
           @skin="error"
           @message={{t
             "agenda-design-delete-message"
@@ -546,10 +546,7 @@
     />
     <WebComponents::AuModal::Body>
       {{#if (eq this.agendas.length 1)}}
-        <WebComponents::AuAlert
-          @skin="error"
-          @message={{t "delete-final-agenda-and-meeting"}}
-        />
+        <Auk::Alert @skin="error" @message={{t "delete-final-agenda-and-meeting"}} />
       {{/if}}
       <div>
         {{t
@@ -577,14 +574,13 @@
       @closeModal={{action "cancelReopenPreviousAgenda"}}
     />
     <WebComponents::AuModal::Body>
-      <WebComponents::AuAlert
+      <Auk::Alert
         @skin="error"
         @message={{t
           "agenda-reopen-confirmation"
           designAgenda = this.currentAgenda.agendaName
           approvedAgenda = (await this.lastApprovedAgendaName)
-        }}
-      />
+        }} />
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
       <Auk::Button

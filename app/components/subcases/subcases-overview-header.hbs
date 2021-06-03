@@ -8,7 +8,6 @@
             @icon="chevron-left"
             @layout="icon-only"
             {{on "click" @backLink}}
-            data-test-cases-backlink
           />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
@@ -30,7 +29,7 @@
               @skin="primary"
               @icon="add"
               {{on "click" this.toggleIsAddingSubcase}}
-              data-test-case-create-subcase-button
+              data-test-subcase-overview-header-create-subcase
             >
               {{t "create-subcase"}}
             </Auk::Button>

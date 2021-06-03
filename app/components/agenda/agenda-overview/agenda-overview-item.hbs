@@ -25,7 +25,7 @@
         <div class="left_side">
           <h4 class="vlc-agenda-items__subject">
             <LinkTo
-              data-test-agenda-overview-sub-item
+              data-test-agenda-overview-item-sub-item
               @route="agenda.agendaitems.agendaitem"
               @model={{@agendaitem.id}}
               @query={{hash anchor=@agendaitem.id}}
@@ -64,7 +64,7 @@
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
             {{#if @isEditingFormallyOkStatus}}
               <Utils::FormallyOkSelector
-                data-test-agenda-overview-item-formallyok=""
+                data-test-agenda-overview-item-formally-ok="true"
                 @formallyOkStatusUri={{@agendaitem.formallyOk}}
                 @onChange={{this.setAndSaveFormallyOkStatus}}
               />
@@ -156,8 +156,8 @@
               {{/if}}
             </div>
             {{#if this.subcase.confidential}}
-              <span class="vlc-agenda-items__confidentiality-button auk-pill auk-pill--danger">
-                <div class="auk-icon auk-icon--default vlc-agenda-items__icons" data-test-icon-agenda-confidentiality-locked>
+              <span class="vlc-agenda-items__confidentiality-button auk-pill auk-pill--danger" data-test-agenda-overview-item-confidentiality-locked>
+                <div class="auk-icon auk-icon--default vlc-agenda-items__icons">
                   <i class="ki ki-lock-closed"></i>
                 </div>
                 {{t "confidential"}}
