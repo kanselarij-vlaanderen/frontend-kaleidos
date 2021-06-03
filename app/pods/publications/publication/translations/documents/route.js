@@ -9,9 +9,20 @@ export default class PublicationTranslationDocumentRoute extends Route {
     this.translationSubcase = await this.modelFor('publications.publication').translationSubcase;
     const sourceDocs = await this.translationSubcase.sourceDocuments;
     const generatedDocs = await this.translationSubcase.translationActivities.generatedPieces;
-    const pieces = sourceDocs.toArray();
-    pieces.push(generatedDocs.toArray());
+    const pieces = [];
+    if (sourceDocs) {
+      for (const piece of sourceDocs.toArray()) {
+        pieces.push(piece);
+      }
+    }
+    if (generatedDocs) {
+      for (const piece of generatedDocs.toArray()) {
+        pieces.push(piece);
+      }
+    }
 
+
+    console.log(pieces);
     return pieces;
   }
 

@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
 import { guidFor } from '@ember/object/internals';
 
-export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
+export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
   /**
    * @argument onSave: should take arguments (pieces)
    * @argument onCancel
@@ -14,7 +14,15 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
   @service store;
   @service('file-queue') fileQueueService;
 
+
+  @tracked name = null;
+  @tracked receivedAtDate = null;
+  @tracked pagesAmount = null;
+  @tracked wordsAmount = null;
+  @tracked proofprint = false;
+
   @tracked isExpanded = false;
+  @tracked translationDocument = null;
   @tracked newPieces = [];
 
   constructor() {
@@ -22,6 +30,11 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     if (this.fileQueueService.find(this.fileQueueName)) {
       this.fileQueueService.create(this.fileQueueName);
     }
+  }
+
+  @action
+  toggleSize() {
+    this.isExpanded = !this.isExpanded;
   }
 
   get fileQueueName() {
@@ -33,9 +46,10 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
   }
 
   get saveIsDisabled() {
-    return this.newPieces.length === 0 // waiting for a file to be uploaded
-    || this.fileQueue.files.length // still files in queue -> uploading
-    || this.savePieces.isRunning; // after pressing the save-button
+    return this.translationDocument === null
+      || this.name === null
+      || this.pagesAmount === null
+      || this.wordsAmount === null;
   }
 
   @action
@@ -44,7 +58,7 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
-    const piece = this.store.createRecord('piece', {
+    this.translationDocument = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
@@ -53,13 +67,14 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.pushObject(this.translatedDocument);
   }
 
   @task
-  *cancelUploadPieces() {
-    const deleteTasks = this.newPieces.map((piece) => this.deleteUploadedPiece.perform(piece));
-    yield all(deleteTasks);
+  *cancelTranslation() {
+    if (this.translationDocument){
+      yield this.deleteUploadedPiece.perform(this.translationDocument);
+    }
     this.args.onCancel();
   }
 
@@ -74,9 +89,26 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
   }
 
   @task
-  *savePieces() {
+  *saveTranslation() {
     if (this.args.onSave) {
-      yield this.args.onSave(this.newPieces);
+      yield this.args.onSave({
+        piece: this.translationDocument,
+        name: this.name,
+        receivedAtDate: this.receivedAtDate,
+        pagesAmount: this.pagesAmount,
+        wordsAmount: this.wordsAmount,
+        proofprint: this.proofprint,
+      });
     }
+  }
+
+  @action
+  setReceivedAtDate(selectedDates) {
+    this.receivedAtDate = selectedDates[0];
+  }
+
+  @action
+  toggleProofPrint() {
+    this.proofprint = !this.proofprint;
   }
 }
