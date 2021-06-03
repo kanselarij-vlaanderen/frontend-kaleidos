@@ -116,6 +116,10 @@ export default class CaseController extends Controller {
     return this.contactPerson.organization;
   }
 
+  /**
+   * ZONE FOR THE INSCRIPTION
+   */
+
   @action
   putInscriptionInEditMode() {
     this.isInscriptionInEditMode = true;
@@ -123,7 +127,7 @@ export default class CaseController extends Controller {
 
   @action
   cancelEditingInscription() {
-    this.model.rollbackAttributes();
+    this.publicationFlow.rollbackAttributes();
     this.putInscriptionInNonEditMode();
   }
 
@@ -135,7 +139,7 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.save();
+      yield this.publicationFlow.save();
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work

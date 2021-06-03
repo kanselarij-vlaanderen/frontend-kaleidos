@@ -5,16 +5,16 @@
     {{else}}
       {{this.textAbbreviated}}
     {{/if}}
-    <WebComponents::AuButtonLink
-            @icon="circle-more"
-            @skin="mute"
-            @layout="icon-only"
-            class="auk-o-flex--vertical-center"
-            >
+    <Auk::ButtonLink
+      @icon="circle-more"
+      @skin="mute"
+      @layout="icon-only"
+      class="auk-o-flex--vertical-center"
+    >
       <EmberTooltip @tooltipClass="auk-tooltip">
         {{@text}}
       </EmberTooltip>
-    </WebComponents::AuButtonLink>
+    </Auk::ButtonLink>
   </div>
 {{else}}
   {{#if this.isCustom}}

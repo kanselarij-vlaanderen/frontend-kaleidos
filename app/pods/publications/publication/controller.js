@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class PublicationController extends Controller {
-  @service intl;
   @service media;
 
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
