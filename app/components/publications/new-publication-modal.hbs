@@ -69,9 +69,10 @@
           <WebComponents::AuLabel for="publicationDueDate">
             {{t "publication-due-date"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuDatepicker
-                  @defaultDate={{this.publicationDueDate}}
-                  @onChange={{this.setPublicationDueDate}}/>
+          <Auk::Datepicker
+            @defaultDate={{this.publicationDueDate}}
+            @onChange={{this.setPublicationDueDate}}
+          />
         </div>
         <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
           <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
