@@ -29,7 +29,7 @@
                 <Auk::Checkbox
                   @name={{option.keyName}}
                   @checked={{get @options option.keyName}}
-                  @toggle={{this.toggleOption}}
+                  {{on "input" (fn this.toggleOption option.keyName)}}
                 >
                   {{t option.translationKey}}
                   {{#if  (not-eq (t option.translationKey) (t option.translationKeySmall)) }}

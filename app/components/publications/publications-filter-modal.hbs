@@ -18,7 +18,7 @@
                 @label={{t "via-cabinet" }}
                 @name="ministerFilterOption"
                 @checked={{this.filter.ministerFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
               />
             </WebComponents::AuCheckboxList>
           </div>
@@ -28,13 +28,13 @@
                 @label={{t "publications-published" }}
                 @name="publishedFilterOption"
                 @checked={{this.filter.publishedFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "publishedFilterOption")}}
               />
               <Auk::Checkbox
                 @label={{t "publications-paused" }}
                 @name="pausedFilterOption"
                 @checked={{this.filter.pausedFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
               />
             </WebComponents::AuCheckboxList>
           </div>
@@ -46,7 +46,7 @@
                 @label={{t "not-via-cabinet" }}
                 @name="notMinisterFilterOption"
                 @checked={{this.filter.notMinisterFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
               />
             </WebComponents::AuCheckboxList>
           </div>
@@ -56,13 +56,13 @@
                 @label={{t "publications-to-publish" }}
                 @name="toPublishFilterOption"
                 @checked={{this.filter.toPublishFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "toPublishFilterOption")}}
               />
               <Auk::Checkbox
                 @label={{t "discharged" }}
                 @name="withdrawnFilterOption"
                 @checked={{this.filter.withdrawnFilterOption}}
-                @toggle={{this.toggleFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
               />
             </WebComponents::AuCheckboxList>
           </div>

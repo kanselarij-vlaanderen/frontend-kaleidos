@@ -15,7 +15,7 @@
           <Auk::Checkbox
             @label={{t "show-filter"}}
             @checked={{this.showFilterPanel}}
-            @toggle={{this.toggleFilterPanel}}
+            {{on "input" this.toggleFilterPanel}}
           />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
@@ -72,8 +72,8 @@
           <tr>
             <th>
               <Auk::Checkbox
-                @toggle={{this.changeAllPiecesSelection}}
                 @checked={{this.areAllPiecesSelected}}
+                {{on "input" this.changeAllPiecesSelection}}
               />
             </th>
             <th class="auk-table__col--6">{{t "name-document"}}</th>

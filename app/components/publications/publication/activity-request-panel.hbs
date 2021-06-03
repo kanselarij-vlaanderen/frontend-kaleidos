@@ -30,9 +30,9 @@
           {{#if (not (await @activity.isWithdrawn)) }}
             <WebComponents::AuToolbar::Item>
               <Auk::Checkbox
-                @toggle={{@finishedToggle}}
                 @label={{t "received"}}
                 @checked={{this.finished}}
+                {{on "input" @finishedToggle}}
               />
             </WebComponents::AuToolbar::Item>
           {{/if}}
