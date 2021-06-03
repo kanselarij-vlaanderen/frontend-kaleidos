@@ -57,22 +57,21 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPieceRelatedData() {
+    const loadPiece = (id) => this.store.queryOne('piece', {
+      'filter[:id:]': id,
+      include: 'document-container,document-container.type,access-level,publication-flow,publication-flow.identification',
+    });
+
     const piece = this.args.piece;
     if (piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
-      this.piece = (yield this.store.query('piece', {
-        'filter[:id:]': piece.id,
-        include: 'document-container,document-container.type,access-level',
-      })).firstObject;
+      this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      this.piece = yield this.store.query('piece', {
-        'filter[:id:]': piece.id,
-        include: 'document-container,document-container.type,access-level',
-      });
+      this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
       throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
