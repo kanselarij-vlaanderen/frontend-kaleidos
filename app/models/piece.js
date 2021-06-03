@@ -46,6 +46,7 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
+  language: belongsTo('language'),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
   cases: hasMany('case', {

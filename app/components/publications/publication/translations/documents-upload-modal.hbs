@@ -7,11 +7,11 @@
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
       <WebComponents::AuFileUploader
-                @fileQueueName={{this.fileQueueName}}
-                @fullHeight={{eq this.newPieces.length 0}}
-                @multiple={{true}}
-                @onUpload={{this.uploadPiece}}
-        />
+              @fileQueueName={{this.fileQueueName}}
+              @fullHeight={{eq this.newPieces.length 0}}
+              @multiple={{true}}
+              @onUpload={{this.uploadPiece}}
+      />
       {{#if this.translationDocument}}
         <div class="auk-u-my-4">
           <div class="auk-o-grid">
@@ -21,7 +21,7 @@
                   <WebComponents::AuLabel for="nameDocumentUpload" @isRequired={{true}}>
                     {{t 'name'}}
                   </WebComponents::AuLabel>
-                  <WebComponents::AuTextarea id="nameDocumentUpload" @value={{mut this.name}}/>
+                  <WebComponents::AuInput type="text" id="nameDocumentUpload" @value={{mut this.name}}/>
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
@@ -29,12 +29,14 @@
                     {{this.translationDocument.file.extension}}
                   </WebComponents::AuPill>
                 </div>
+                {{!-- TODO Seen in designs but not sure of usage
                 <div class="auk-form-group">
                   <WebComponents::AuLabel for="dateSet">{{t "received-at"}}</WebComponents::AuLabel>
                   <WebComponents::AuDatepicker id="dateSet"
                                                @defaultDate={{this.receivedAtDate}}
                                                @onChange={{this.setReceivedAtDate}}/>
                 </div>
+                --}}
                 <div class="auk-form-group auk-o-flex--align-start">
                   <WebComponents::AuLabel>{{t 'translation-burden'}}</WebComponents::AuLabel>
                   <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
@@ -68,6 +70,7 @@
                     </div>
                   </div>
                 </div>
+                {{!-- TODO TODO in KAS2600
                 <div class="auk-form-group auk-o-flex--align-start">
                   <WebComponents::AuLabel for="proofPrint">
                     {{t 'for-publish-preview'}}
@@ -77,6 +80,7 @@
                                                @toggle={{this.toggleProofPrint}} />
                   </WebComponents::AuCheckboxList>
                 </div>
+                --}}
               </div>
             </div>
           </div>

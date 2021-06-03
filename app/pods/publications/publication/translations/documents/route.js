@@ -21,8 +21,6 @@ export default class PublicationTranslationDocumentRoute extends Route {
       }
     }
 
-
-    console.log(pieces);
     return pieces;
   }
 

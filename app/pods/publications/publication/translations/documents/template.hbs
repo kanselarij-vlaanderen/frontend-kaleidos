@@ -21,7 +21,8 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
-                <WebComponents::AuCheckbox @mode="table" /></td>
+                <WebComponents::AuCheckbox @mode="table" />
+              </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
@@ -31,13 +32,7 @@
                 </WebComponents::AuPill>
               </td>
               <td class="auk-u-text-nowrap">
-                {{#if piece.receivedAt}}
-                  {{moment-format piece.receivedAt}}
-                  <br>
-                  <span class="auk-u-muted auk-u-text-small">{{moment-format piece.receivedAt "HH:mm"}}</span>
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
+                {{t "dash"}}
               </td>
               <td class="auk-u-text-nowrap">
                 {{moment-format piece.created}}
@@ -45,11 +40,7 @@
                 <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
               </td>
               <td class="auk-u-text-align--center">
-                {{#if piece.publishreview}}
-                  <WebComponents::AuIcon @name="check" @iconSkinColor="success"/>
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
+                {{t "dash"}}
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
