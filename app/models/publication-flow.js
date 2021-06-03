@@ -4,10 +4,8 @@ import Model, {
 
 export default class PublicationFlow extends Model {
   // Attributes.
-  @attr('datetime') translateBefore;
-  @attr('datetime') publishBefore;
-  @attr('datetime') publishDateRequested;
-  @attr('datetime') publishedAt;
+  @attr('string') shortTitle;
+  @attr('string') longTitle;
   @attr('string') remark;
   @attr('date') closingDate;
   @attr('date') openingDate;
@@ -38,19 +36,4 @@ export default class PublicationFlow extends Model {
   @hasMany('contact-person') contactPersons;
   @hasMany('mandatee') mandatees;
   @hasMany('piece') referenceDocuments;
-
-  get publicationBeforeDateHasExpired() {
-    return this.publishBefore
-      && this.publishBefore < new Date();
-  }
-
-  get publicationDateHasExpired() {
-    return this.publishedAt
-      && this.publishedAt < new Date();
-  }
-
-  get translationDateHasExpired() {
-    return this.translateBefore
-      && this.translateBefore < new Date();
-  }
 }

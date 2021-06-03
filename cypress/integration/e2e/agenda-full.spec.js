@@ -50,7 +50,7 @@ context('Full test', () => {
     cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
     cy.openSubcase(0);
 
-    cy.changeSubcaseAccessLevel(false, case1TitleShort, true, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(false, true, 'Intern Overheid');
     cy.addSubcaseMandatee(0, 0, 0);
 
     cy.addDocumentsToSubcase([{
@@ -74,7 +74,7 @@ context('Full test', () => {
 
     cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
     cy.openSubcase(0);
-    cy.changeSubcaseAccessLevel(false, newSubcase2TitleShort, false, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(false, false, 'Intern Overheid');
     cy.addSubcaseMandatee(1, 0, 0);
     cy.addSubcaseMandatee(2, 0, 0);
 
@@ -96,7 +96,7 @@ context('Full test', () => {
     cy.addSubcase(type3, newSubcase3TitleShort, subcase3TitleLong, subcase3Type, subcase3Name);
 
     cy.openSubcase();
-    cy.changeSubcaseAccessLevel(true, caseTitle3Short, false, 'Intern Overheid');
+    cy.changeSubcaseAccessLevel(true, false, 'Intern Overheid');
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);

@@ -5,6 +5,7 @@
 // Commands
 import modalSelectors from '../../selectors/modal.selectors';
 import publicationSelectors from '../../selectors/publication.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
 // Functions
@@ -116,11 +117,11 @@ function addPublicationDocuments(files) {
                   cy.get('input[type="radio"][value="Andere"]').check({
                     force: true,
                   });
-                  cy.get('.ember-power-select-trigger')
+                  cy.get(dependency.emberPowerSelect.trigger)
                     .click()
                     .parents('body')
                     .within(() => {
-                      cy.get('.ember-power-select-option', {
+                      cy.get(dependency.emberPowerSelect.option, {
                         timeout: 5000,
                       }).should('exist')
                         .then(() => {

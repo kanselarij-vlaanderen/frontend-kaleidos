@@ -22,7 +22,9 @@
           class="auk-button auk-button--tertiary"
           @route="settings.emails.debug"
         >
-          {{t "send-test-mail"}}
+          <span class="auk-button__content">
+            {{t "send-test-mail"}}
+          </span>
         </LinkTo>
 
         {{!-- Footer of the mail --}}

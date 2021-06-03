@@ -1,0 +1,7 @@
+<div class="auk-progress-bar {{if this.complete "auk-progress-bar--success"}}">
+  <div
+    class="auk-progress-bar__bar"
+    style={{html-safe (concat "--value: " this.decimalProgress)}}
+  ></div>
+  <div class="auk-progress-bar__value">{{@progress}}%</div>
+</div>

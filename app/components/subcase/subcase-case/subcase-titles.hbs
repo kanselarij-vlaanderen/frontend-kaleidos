@@ -1,6 +1,6 @@
 <div class="auk-u-mb-2">
-  <div class="auk-u-flex auk-u-flex--vertical-center">
-    <h2 class="vlc-subline" data-test-subcase-type>
+  <div class="auk-o-flex auk-o-flex--vertical-center">
+    <h2 class="vlc-subline" data-test-subcase-titles-type>
       {{#if (not subcase.showAsRemark)}}
         {{t "note"}}
       {{else}}
@@ -8,14 +8,16 @@
       {{/if}}
     </h2>
     {{#if currentSession.isEditor}}
-      <div class="auk-u-ml-2" data-test-agendaitem-edit-link>
+      <div class="auk-u-ml-2">
         <a
           data-test-subcase-titles-edit
           href=""
           class="auk-button-link"
           {{action "toggleIsEditingAction"}}
         >
-          {{t "edit"}}
+          <span class="auk-button__content">
+            {{t "edit"}}
+          </span>
         </a>
       </div>
     {{/if}}
@@ -31,7 +33,7 @@
 </div>
 
 <div class="auk-u-mb-2">
-  <pre class="auk-u-flex--inline auk-u-text-pre-line">
+  <pre class="auk-o-flex--inline auk-u-text-pre-line">
     {{await subcase.title}}
   </pre>
 </div>
@@ -46,10 +48,7 @@
   </div>
 {{/if}}
 <div class="auk-u-mb-2">
-  <div
-    class="pill-container auk-u-flex"
-    data-test-agenda-subcasehidden-pill
-  >
+  <div class="pill-container auk-o-flex">
     {{#if (await subcase.confidential)}}
       <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
     {{else}}

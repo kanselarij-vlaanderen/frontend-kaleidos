@@ -7,7 +7,6 @@ import {
 import { timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
-import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationSidebarComponent extends Component {
@@ -28,21 +27,24 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;
   @tracked publicationModes;
+  @tracked regulationTypes;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
 
-  @lastValue('loadRegulationTypes') regulationTypes;
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
-  @tracked publicationModes;
+  @lastValue('loadPublicationSubcase') publicationSubcase;
+  @lastValue('loadTranslationSubcase') translationSubcase;
 
   constructor() {
     super(...arguments);
-    this.loadRegulationTypes.perform();
     this.loadPublicationStatus.perform();
     this.loadPublicationStatusChange.perform();
+    this.loadPublicationSubcase.perform();
+    this.loadTranslationSubcase.perform();
+    this.loadStructuredIdentifier.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
-    this.initializePublicationNumber.perform();
+    this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
   }
 
   get publicationFlow() {
@@ -50,27 +52,29 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @task
-  *loadRegulationTypes() {
-    const regulationTypes = yield this.store.query('regulation-type', {
-      sort: 'position',
-    });
-    return regulationTypes;
-  }
-
-  @task
   *loadPublicationStatus() {
-    const publicationStatus = yield this.publicationFlow.status;
-    return publicationStatus;
+    return yield this.publicationFlow.status;
   }
 
   @task
   *loadPublicationStatusChange() {
-    const publicationStatusChange = yield this.publicationFlow.publicationStatusChange;
-    return publicationStatusChange;
+    return yield this.publicationFlow.publicationStatusChange;
   }
 
   @task
-  *initializePublicationNumber() {
+  *loadPublicationSubcase() {
+    const publicationSubcase = yield this.publicationFlow.publicationSubcase;
+    return publicationSubcase;
+  }
+
+  @task
+  *loadTranslationSubcase() {
+    const translationSubcase = yield this.publicationFlow.translationSubcase;
+    return translationSubcase;
+  }
+
+  @task
+  *loadStructuredIdentifier() {
     const identification = yield this.publicationFlow.identification;
     const structuredIdentifier = yield identification.structuredIdentifier;
     this.publicationNumber = structuredIdentifier.localIdentifier;
@@ -110,6 +114,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
+      // TODO Do we want to auto fill in publicationSubcase.endDate ?
       this.publicationFlow.closingDate = now;
     } else {
       this.publicationFlow.closingDate = null;
@@ -186,7 +191,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   addNumacNumber() {
     const numacNumber = this.store.createRecord('identification', {
       idName: this.newNumacNumber,
-      agency: CONSTANTS.NUMAC_SCHEMA_AGENCY,
+      agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.publicationFlow,
     });
 
@@ -201,49 +206,34 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(numacNumber);
   }
 
-  get allowedUltimatePublicationDates() {
-    const rangeStart = this.publicationFlow.translateBefore || new Date();
-    return [
-      {
-        from: rangeStart,
-        to: moment(rangeStart).add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
+  @action
+  setPublicationDueDate(selectedDates) {
+    this.publicationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'dueDate');
   }
 
   @action
-  setUltimatePublicationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.publishBefore = date;
-    this.notifyChanges(this.publicationFlow, 'publishBefore');
-  }
-
-  @action
-  setRequestedPublicationDate(selectedDates) {
-    this.publicationFlow.publishDateRequested = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishDateRequested');
+  setPublicationTargetEndDate(selectedDates) {
+    this.publicationSubcase.targetEndDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'targetEndDate');
   }
 
   @action
   setPublicationDate(selectedDates) {
-    this.publicationFlow.publishedAt = selectedDates[0];
-    this.notifyChanges(this.publicationFlow, 'publishedAt');
-  }
-
-  get allowedUltimateTranslationDates() {
-    return [
-      {
-        from: new Date(),
-        to: this.publicationFlow.publishBefore || moment().add(1, 'year').toDate(), // eslint-disable-line newline-per-chained-call
-      }
-    ];
+    this.publicationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.publicationSubcase, 'endDate');
   }
 
   @action
-  setUltimateTranslationDate(selectedDates) {
-    const date = selectedDates[0];
-    this.publicationFlow.translateBefore = date;
-    this.notifyChanges(this.publicationFlow, 'translateBefore');
+  setTranslationDueDate(selectedDates) {
+    this.translationSubcase.dueDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'dueDate');
+  }
+
+  @action
+  setTranslationDate(selectedDates) {
+    this.translationSubcase.endDate = selectedDates[0];
+    this.notifyChanges(this.translationSubcase, 'endDate');
   }
 
   @restartableTask

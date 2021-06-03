@@ -44,7 +44,9 @@
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>

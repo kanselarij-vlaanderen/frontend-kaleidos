@@ -5,6 +5,7 @@ import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
 import form from '../../../../selectors/form.selectors';
+import dependency from '../../../../selectors/dependency.selectors';
 
 context('Settings page tests', () => {
   let govermentDomains = [];
@@ -28,7 +29,7 @@ context('Settings page tests', () => {
     govermentDomains = insertData();
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 
@@ -48,18 +49,18 @@ context('Settings page tests', () => {
   it('Should open the dropdown in the modal', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
 
     for (let index = 0; index < govermentDomains.length; index++) {
-      cy.get('.ember-power-select-option').eq(index)
+      cy.get(dependency.emberPowerSelect.option).eq(index)
         .scrollIntoView()
         .should('contain.text', govermentDomains[index]);
     }
@@ -68,11 +69,11 @@ context('Settings page tests', () => {
   it('Should open the dropdown in the modal and selecting the first element should show advanced modal', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length);
-    cy.get('.ember-power-select-option').eq(0)
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
+    cy.get(dependency.emberPowerSelect.option).eq(0)
       .should('contain.text', govermentDomains[0]);
-    cy.get('.ember-power-select-option').eq(0)
+    cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
     cy.get('.ember-power-select-selected-item').should('contain.text', govermentDomains[0])
       .wait(200);
@@ -95,8 +96,8 @@ context('Settings page tests', () => {
     cy.get(modal.manageInSettingsModal.add).click();
     cy.get(form.formInput).type('Andere zaken');
     cy.get(form.formSave).click();
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length', govermentDomains.length + 1);
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length + 1);
     // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
     // cy.resetCache(); //TODO this does nothing
   });
@@ -104,21 +105,21 @@ context('Settings page tests', () => {
   it('Should open the modal, select the new domain and edit it', () => {
     cy.get(settings.manageGovermentDomains).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
-    cy.get('.ember-power-select-option').eq(0)
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length.greaterThan', 0);
+    cy.get(dependency.emberPowerSelect.option).eq(0)
       .should('contain.text', 'Andere zaken');
-    cy.get('.ember-power-select-option').eq(0)
+    cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
     cy.get(modal.manageInSettingsModal.edit).click();
     cy.get(form.formInput).clear();
     cy.get(form.formInput).type('Test Input');
     cy.get(form.formSave).click();
     // TODO await patch call
-    cy.get('.ember-power-select-trigger').click();
-    cy.get('.ember-power-select-option').should('have.length.greaterThan', 0);
-    cy.get('.ember-power-select-option').should('contain.text', 'Test Input');
-    cy.get('.ember-power-select-option').should('not.contain.text', 'Andere zaken');
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).should('have.length.greaterThan', 0);
+    cy.get(dependency.emberPowerSelect.option).should('contain.text', 'Test Input');
+    cy.get(dependency.emberPowerSelect.option).should('not.contain.text', 'Andere zaken');
   });
   // TODO delete this new domain
 });

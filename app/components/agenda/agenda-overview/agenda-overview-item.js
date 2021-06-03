@@ -41,7 +41,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   }
 
   get documentsAreReleased() {
-    return this.sessionService.currentSession.releasedDocuments > new Date();
+    return this.sessionService.currentSession.releasedDocuments < new Date();
   }
 
   get documentListSize() {

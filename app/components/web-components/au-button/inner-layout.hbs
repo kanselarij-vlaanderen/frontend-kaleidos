@@ -1,25 +1,29 @@
-{{#if @icon}}
+<span class="auk-button__content">
+  {{#if @icon}}
 
-  {{#unless @layout}}
-    <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
-    <div class="auk-button__label">
+    {{#unless @layout}}
+      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+      <span class="auk-button__label">
+        {{yield}}
+      </span>
+    {{/unless}}
+
+    {{#if (eq @layout "icon-only")}}
+      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+      <span class="auk-u-sr-only">{{yield}}</span>
+    {{/if}}
+
+    {{#if (eq @layout "icon-right")}}
+      <span class="auk-button__label">
+        {{yield}}
+      </span>
+      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+    {{/if}}
+  {{else}}
+
+    <span class="auk-button__label">
       {{yield}}
-    </div>
-  {{/unless}}
+    </span>
 
-  {{#if (eq @layout "icon-only")}}
-    <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
-    {{yield}}
   {{/if}}
-
-  {{#if (eq @layout "icon-right")}}
-    <div class="auk-button__label">
-      {{yield}}
-    </div>
-    <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
-  {{/if}}
-{{else}}
-
-  {{yield}}
-
-{{/if}}
+</span>

@@ -22,10 +22,10 @@
   }
 
   &.arrowTop,
-  &.arrowTop, {
+  &.arrowTop {
     &::before,
     &::after {
-      border-bottom-color: $white;
+      border-bottom-color: $white !important;
     }
   }
 
@@ -33,7 +33,7 @@
   &.arrowBottom {
     &::before,
     &::after {
-      border-top-color: $white;
+      border-top-color: $white !important;
     }
   }
 
@@ -199,8 +199,8 @@
     background: $athens-gray;
     border-radius: 50%;
     width: 28px;
-    height: 28px;
-    top: 50%;
+    height: 28px !important;
+    top: 50% !important;
     transform: translateY(-50%);
 
     svg {
@@ -232,7 +232,7 @@
 .flatpickr-prev-month { // flatpickr theme override, avoiding !important
   &.flatpickr-prev-month {
     .flatpickr-months & {
-      left: 1rem;
+      left: 1rem !important;
     }
   }
 }
@@ -240,7 +240,7 @@
 .flatpickr-next-month { // flatpickr theme override, avoiding !important
   &.flatpickr-next-month {
     .flatpickr-months & {
-      right: 1rem;
+      right: 1rem !important;
     }
   }
 }

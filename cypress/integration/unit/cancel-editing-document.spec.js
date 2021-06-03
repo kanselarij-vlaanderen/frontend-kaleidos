@@ -5,6 +5,7 @@ import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -99,17 +100,16 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.subcaseDocumentsEdit).contains('Wijzigen')
-      .click();
+    cy.get(agenda.agendaItemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
         cy.get('td').eq(1)
           .within(() => {
-            cy.get('.ember-power-select-trigger').click();
+            cy.get(dependency.emberPowerSelect.trigger).click();
           });
       });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Decreet').click();
       });
@@ -121,10 +121,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .within(() => {
         cy.get('td').eq(2)
           .within(() => {
-            cy.get('.ember-power-select-trigger').click();
+            cy.get(dependency.emberPowerSelect.trigger).click();
           });
       });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Publiek').scrollIntoView()
           .click();
@@ -141,8 +141,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get('.auk-u-ml-2 > .auk-button-link').contains('Wijzigen')
-      .click();
+    cy.get(agenda.agendaItemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -155,10 +154,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .within(() => {
         cy.get('td').eq(2)
           .within(() => {
-            cy.get('.ember-power-select-trigger').click();
+            cy.get(dependency.emberPowerSelect.trigger).click();
           });
       });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Intern Overheid').scrollIntoView()
           .click();
@@ -221,9 +220,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid')
           .click();
-        cy.get('.ember-power-select-trigger').click();
+        cy.get(dependency.emberPowerSelect.trigger).click();
       });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Publiek').click();
       });
@@ -231,9 +230,9 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.ki-cross').click();
       cy.get('.auk-pill').contains('Intern Overheid')
         .click();
-      cy.get('.ember-power-select-trigger').click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
     });
-    cy.get('.ember-power-select-option').should('exist')
+    cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Publiek').click();
       });
