@@ -2,8 +2,13 @@
   <div class="auk-modal__body">
     <div class="auk-u-p-4">
       {{#if hasError}}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title"}} @skin="error"
-                                @message={{t "modal-error-alert-message"}} @icon="alert-triangle"/>
+        <Auk::Alert
+          data-test-auk-alert-error
+          @skin="error"
+          @icon="alert-triangle"
+          @title={{t "modal-error-alert-title"}}
+          @message={{t "modal-error-alert-message"}}
+        />
       {{/if}}
 
       <div class="auk-u-mb-4">
