@@ -139,7 +139,7 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.save();
+      yield this.model.publicationFlow.save();
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work
