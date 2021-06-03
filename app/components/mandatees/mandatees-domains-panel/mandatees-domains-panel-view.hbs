@@ -9,14 +9,14 @@
       {{#if @showEditButton}}
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
+            <Auk::Button
               @skin="tertiary"
               @icon="settings"
               data-test-mandatee-panel-view-edit={{true}}
               {{on "click" @onClickEdit}}
             >
               {{t "edit-2"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       {{/if}}

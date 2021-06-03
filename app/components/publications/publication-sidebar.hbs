@@ -7,8 +7,12 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
         <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
-          <WebComponents::AuButton @skin="borderless" @icon={{if @isOpen "chevron-right" "chevron-left"}}
-                                   @layout="icon-only" {{on "click" (if @isOpen @onCollapse @onOpen)}} />
+          <Auk::Button
+            @skin="borderless"
+            @icon={{if @isOpen "chevron-right" "chevron-left"}}
+            @layout="icon-only"
+            {{on "click" (if @isOpen @onCollapse @onOpen)}}
+          />
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
@@ -102,12 +106,14 @@
                   <span>{{ numac.idName }}</span>
                 </div>
                 <div class="vlc-numac-number-delete-button-wrapper">
-                  <WebComponents::AuButton class="auk-button--nopadding"
+                  <Auk::Button
+                    class="auk-button--nopadding"
                     @skin="borderless"
                     @icon="close"
                     @layout="icon-only"
                     {{on "click" (fn this.deleteNumacNumber numac)}}
-                    data-test-cases-backlink/>
+                    data-test-cases-backlink
+                  />
                 </div>
               </div>
             {{else}}
@@ -119,12 +125,9 @@
             @value={{this.newNumacNumber}}
           />
 
-          <WebComponents::AuButton
-            @skin="borderless"
-            {{on "click" this.addNumacNumber}}
-          >
+          <Auk::Button @skin="borderless" {{on "click" this.addNumacNumber}}>
             {{t "add"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </div>
 
         {{!-- Uiterste vertaaldatum --}}
@@ -213,16 +216,16 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left"n>
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelWithdraw}}>
+            <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
+            <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>

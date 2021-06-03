@@ -51,23 +51,34 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel>
+          <Auk::Button
+            @skin="borderless"
+            data-test-publication-button-cancel
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters {{on "click"
-                                                                                                    this.reset}}>
+          <Auk::Button
+            @skin="secondary"
+            data-test-publication-button-reset-filters
+            {{on "click" this.reset}}
+          >
             {{t "clear-filter-plural"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
-            {{on "click" (fn @onSave this.filter)}}>
+          <Auk::Button
+            @icon="filter"
+            @skin="primary"
+            data-test-publication-button-filter-content
+            {{on "click" (fn @onSave this.filter)}}
+          >
             {{t "filter-content"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>

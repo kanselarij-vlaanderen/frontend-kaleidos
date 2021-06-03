@@ -7,13 +7,13 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton
+        <Auk::Button
+          @skin="muted"
+          @layout="icon-only"
+          @icon="ki ki-close"
           {{on "click" @onClose}}
-                @skin="muted"
-                @layout="icon-only"
-                @icon="ki ki-close"
         />
-        <span class="auk-u-sr-only">{{t "close"}}</span>
+        <span class="auk-u-sr-only">{{t "close"}}</span
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
