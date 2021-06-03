@@ -15,7 +15,7 @@
     <EmberTooltip @tooltipClass="auk-tooltip">{{@text}}</EmberTooltip>
   </div>
 {{else}}
-  {{#if this.isCustom}}
+  {{#if (has-block)}}
     {{yield @text}}
   {{else}}
     {{@text}}
