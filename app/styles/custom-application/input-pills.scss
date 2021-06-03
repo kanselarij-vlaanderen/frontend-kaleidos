@@ -1,94 +1,90 @@
-@import './power-select';
-
-// overrides: https://github.com/calvinlough/ember-tag-input/blob/master/addon/styles/addon.css
-// are left in comments for reference
+// @import './power-select';
 
 .emberTagInput {
-  // margin: 0;
-  // padding: 5px 5px 2px 5px;
-  // border: 1px solid lightgray;
-  // cursor: text;
+  // // margin: 0;
+  // // padding: 5px 5px 2px 5px;
+  // // border: 1px solid lightgray;
+  // // cursor: text;
 
-  @extend .ember-power-select-trigger;
-  @extend .ember-power-select-multiple-options;
+  // @extend .ember-power-select-trigger;
+  // @extend .ember-power-select-multiple-options;
 
-  background-image: none;
-  // consistent with text input field
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
+  @extend .auk-input;
+  @extend .auk-input--block;
 
   .emberTagInput--readOnly {
-    // cursor: default;
+    // // cursor: default;
   }
 
   li, input {
-    // list-style-type: none;
-    // display: inline-block;
+    // // list-style-type: none;
+    // // display: inline-block;
 
-    font: inherit;
+    // font: inherit;
   }
 
   li.emberTagInput-tag,
   input.emberTagInput-input {
-    // font: 12px sans-serif;
-    // padding: 5px 10px;
-    // margin-bottom: 3px;
+    // // font: 12px sans-serif;
+    // // padding: 5px 10px;
+    // // margin-bottom: 3px;
 
-    margin-bottom: 0;
+    // margin-bottom: 0;
   }
 
   li.emberTagInput-tag {
-    // background: cornflowerblue;
-    // border-radius: 20px;
-    // margin-right: 5px;
-    // color: white;
+    // // background: cornflowerblue;
+    // // border-radius: 20px;
+    // // margin-right: 5px;
+    // // color: white;
 
-    @extend .ember-power-select-multiple-option;
+    // @extend .ember-power-select-multiple-option;
+    @extend .auk-filter-pill;
 
-    // ember-tag-input orders pills and remove button in correct order
-    // ember-power-select puts pills in reverse order: row-reverse)
-    flex-direction: row;
+    // // ember-tag-input orders pills and remove button in correct order
+    // // ember-power-select puts pills in reverse order: row-reverse)
+    // flex-direction: row;
   }
 
   li.emberTagInput-tag--remove {
-    opacity: 0.75;
+    // opacity: 0.75;
   }
 
   .emberTagInput-remove {
-    @extend .ember-power-select-multiple-remove-btn;
-    // remove <a />-tag decoration
-    text-decoration: none;
+    // @extend .ember-power-select-multiple-remove-btn;
+    @extend .auk-icon;
+    @extend .auk-icon--close;
+    // // remove <a />-tag decoration
+    // text-decoration: none;
   }
 
   .emberTagInput-remove:before {
-    // content: 'x';
-    // cursor: pointer;
+    // // content: 'x';
+    // // cursor: pointer;
 
-    content: '×';
+    // content: '×';
   }
 
   .emberTagInput-new {
-    display: flex;
+    // display: flex;
   }
 
   input.emberTagInput-input,
   li.emberTagInput-input {
-    display: flex;
-    background: white;
+    // display: flex;
+    // background: white;
   }
 
   input.emberTagInput-input {
-    // border: none;
-    // padding-left: 0;
-    @extend .ember-power-select-trigger-multiple-input;
+    // @extend .ember-power-select-trigger-multiple-input;
   }
 
   input.emberTagInput-input:focus {
-    // outline: none;
-    background: white;
+    // // outline: none;
+    // background: white;
   }
 
   input.emberTagInput-input.is-disabled {
-    // display: none;
+    // // display: none;
   }
 }
