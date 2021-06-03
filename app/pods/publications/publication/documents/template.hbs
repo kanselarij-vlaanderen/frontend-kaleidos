@@ -88,8 +88,8 @@
             <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
               <td>
                 <Auk::Checkbox
-                  @toggle={{fn this.changePieceSelection piece}}
                   @checked={{includes piece this.selectedPieces}}
+                  {{on "input" (fn this.changePieceSelection piece)}}
                 />
               </td>
               <td>
