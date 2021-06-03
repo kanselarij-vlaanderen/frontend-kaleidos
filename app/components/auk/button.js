@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
  * @argument skin {String}: possible values are: "primary", "secondary" (default), "tertiary", "borderless", "borderless-muted", "danger-primary", "danger-hover"
  * @argument layout {String}
  * @argument disabled {Boolean}
+ * @argument loading {Boolean}: Show the button in a loading state. Overrides most other arguments.
  * @argument size {String}
  * @argument block {Boolean}
  */

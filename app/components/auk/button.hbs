@@ -1,4 +1,13 @@
-{{#if @href}}
+{{#if @loading}}
+  <button
+    class="auk-button-loading"
+    type="button"
+    disabled
+    ...attributes
+  >
+    <WebComponents::AuLoader/>
+  </button>
+{{else if @href}}
   {{!-- TODO: document in writing what the difference is between a "Auk::Button" with @href and a "Auk::ButtonLink" with @href --}}
   <a
     class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
