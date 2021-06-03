@@ -1,90 +1,58 @@
-// @import './power-select';
+@import 'auk-filter-pill';
+@import 'auk-icon';
 
 .emberTagInput {
-  // // margin: 0;
-  // // padding: 5px 5px 2px 5px;
-  // // border: 1px solid lightgray;
-  // // cursor: text;
-
-  // @extend .ember-power-select-trigger;
-  // @extend .ember-power-select-multiple-options;
-
   @extend .auk-input;
   @extend .auk-input--block;
 
-  .emberTagInput--readOnly {
-    // // cursor: default;
-  }
+  @extend .auk-filter-pill-list;
 
-  li, input {
-    // // list-style-type: none;
-    // // display: inline-block;
-
-    // font: inherit;
-  }
-
-  li.emberTagInput-tag,
-  input.emberTagInput-input {
-    // // font: 12px sans-serif;
-    // // padding: 5px 10px;
-    // // margin-bottom: 3px;
-
-    // margin-bottom: 0;
-  }
+  .emberTagInput--readOnly {}
 
   li.emberTagInput-tag {
-    // // background: cornflowerblue;
-    // // border-radius: 20px;
-    // // margin-right: 5px;
-    // // color: white;
-
-    // @extend .ember-power-select-multiple-option;
     @extend .auk-filter-pill;
-
-    // // ember-tag-input orders pills and remove button in correct order
-    // // ember-power-select puts pills in reverse order: row-reverse)
-    // flex-direction: row;
   }
 
   li.emberTagInput-tag--remove {
-    // opacity: 0.75;
+    opacity: 0.75;
   }
 
   .emberTagInput-remove {
-    // @extend .ember-power-select-multiple-remove-btn;
     @extend .auk-icon;
     @extend .auk-icon--close;
-    // // remove <a />-tag decoration
-    // text-decoration: none;
+    // remove <a />-tag styling
+    text-decoration: none;
+    color: inherit;
   }
 
-  .emberTagInput-remove:before {
-    // // content: 'x';
-    // // cursor: pointer;
+  // substitute <i class="ki-close" />
+  .emberTagInput-remove::after {
+    // copied from:
+    // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
+    font-family: icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
-    // content: '×';
+    // ki-close icon
+    content: "\f115";
   }
 
   .emberTagInput-new {
-    // display: flex;
-  }
-
-  input.emberTagInput-input,
-  li.emberTagInput-input {
-    // display: flex;
-    // background: white;
+    display: inline-flex;
   }
 
   input.emberTagInput-input {
-    // @extend .ember-power-select-trigger-multiple-input;
+    border: none;
   }
 
   input.emberTagInput-input:focus {
-    // // outline: none;
-    // background: white;
+    outline: none;
   }
 
-  input.emberTagInput-input.is-disabled {
-    // // display: none;
-  }
+  input.emberTagInput-input.is-disabled { }
 }
