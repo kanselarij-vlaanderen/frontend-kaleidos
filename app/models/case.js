@@ -6,7 +6,7 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject } from '@ember/service';
 
 const {
-  Model, attr, hasMany, belongsTo, PromiseObject,
+  Model, attr, hasMany, PromiseObject,
 } = DS;
 
 export default Model.extend({
@@ -18,8 +18,7 @@ export default Model.extend({
   isArchived: attr('boolean'),
   confidential: attr('boolean'),
 
-  publicationFlow: belongsTo('publication-flow'),
-
+  publicationFlows: hasMany('publication-flow'),
   subcases: hasMany('subcase'),
   pieces: hasMany('piece'),
 

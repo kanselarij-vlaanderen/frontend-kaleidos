@@ -17,7 +17,7 @@ export default class PublicationNavigation extends Component {
   *loadData() {
     const pieces = yield this.store.query('piece',
       {
-        'filter[cases][publication-flow][:id:]': this.args.publicationFlow.id,
+        'filter[cases][publication-flows][:id:]': this.args.publicationFlow.id,
         'page[size]': 1,
       }
     );

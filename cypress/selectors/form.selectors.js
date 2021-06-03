@@ -8,5 +8,6 @@ const selectors = {
     formattedMeetingIdentifier: '[data-test-meeting-formattedMeetingIdentifier]',
     meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]',
   },
+  fileUploadButton: '[data-test-file-upload-button]',
 };
 export default selectors;

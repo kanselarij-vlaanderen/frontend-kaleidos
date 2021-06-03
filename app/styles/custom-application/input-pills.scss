@@ -1,32 +1,20 @@
-@import './power-select';
+@import 'auk-filter-pill';
+@import 'auk-icon';
 
-// original css selectors are left here as a reference
-// TODO: replace use of ember power select classes by auk-classes
-//    when available
 .emberTagInput {
-  @extend .ember-power-select-trigger;
-  @extend .ember-power-select-multiple-options;
+  @extend .auk-input;
+  @extend .auk-input--block;
 
-  // remove caret down
-  background-image: none;
+  @extend .auk-filter-pill-list;
+
   // consistent with text input field
   padding-left: 0.7rem;
   padding-right: 0.7rem;
 
-  // readonly state not implemented
-  .emberTagInput--readOnly { }
-  li { }
-  emberTagInput-tag,
-  emberTagInput-input {
-    display: flex;
-  }
+  .emberTagInput--readOnly {}
 
-  .emberTagInput-tag {
-    @extend .ember-power-select-multiple-option;
-
-    // ember-tag-input orders pills and remove button in correct order
-    // ember-power-select puts pills in reverse order: row-reverse)
-    flex-direction: row;
+  li.emberTagInput-tag {
+    @extend .auk-filter-pill;
   }
 
   li.emberTagInput-tag--remove {
@@ -34,24 +22,41 @@
   }
 
   .emberTagInput-remove {
-    @extend .ember-power-select-multiple-remove-btn;
-    // remove <a />-tag decoration
+    @extend .auk-icon;
+    @extend .auk-icon--close;
+    // remove <a />-tag styling
     text-decoration: none;
+    color: inherit;
   }
 
-  .emberTagInput-remove:before {
-    content: '×';
+  // substitute <i class="ki-close" />
+  .emberTagInput-remove::after {
+    // copied from:
+    // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
+    font-family: icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    // ki-close icon
+    content: "\f115";
   }
 
   .emberTagInput-new {
-    @extend .ember-power-select-trigger-multiple-input;
+    display: inline-flex;
   }
 
   input.emberTagInput-input {
-    @extend .ember-power-select-trigger-multiple-input;
+    border: none;
   }
 
-  input.emberTagInput-input:focus {}
-  // disabled state not implemented
-  input.emberTagInput-input.is-disabled {}
+  input.emberTagInput-input:focus {
+    outline: none;
+  }
+
+  input.emberTagInput-input.is-disabled { }
 }

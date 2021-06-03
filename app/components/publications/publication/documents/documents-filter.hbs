@@ -1,6 +1,6 @@
 <WebComponents::AuPanel>
   <WebComponents::AuPanel::Body class="auk-panel--editing">
-    <div class="auk-u-flex">
+    <div class="auk-o-flex">
       <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
         <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
         <WebComponents::AuInput @value={{this.filter.documentName}} type="text" id="blockInput" @block="true" />
@@ -25,7 +25,7 @@
         </PowerSelectMultiple>
       </div>
     </div>
-    <div class="auk-u-flex auk-u-flex--justify-end">
+    <div class="auk-o-flex auk-o-flex--justify-end">
       <div>
         <WebComponents::AuButton data-test-publication-filter-reset @skin="secondary" {{on "click" this.reset}}>
           {{t "reset"}}

@@ -7,4 +7,11 @@ export default class Toolbar extends Component {
     }
     return '';
   }
+
+  get size() {
+    if (this.args.size) {
+      return `auk-toolbar-complex--${this.args.size}`;
+    }
+    return '';
+  }
 }

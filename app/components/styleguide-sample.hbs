@@ -12,7 +12,7 @@
   </div>
 
   {{#if (or @code @snippet)}}
-    <WebComponents::AuButtonLink @skin="muted" {{on "click" this.toggleVisibility}}>Toggle code</WebComponents::AuButtonLink>
+    <WebComponents::AuButtonLink @skin="muted" class="br-styleguide-sample-show-code-btn" {{on "click" this.toggleVisibility}}>Toggle code</WebComponents::AuButtonLink>
   {{/if}}
 
   {{#unless this.visibility}}

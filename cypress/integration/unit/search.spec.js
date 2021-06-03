@@ -4,6 +4,7 @@ import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import toolbar from '../../selectors/toolbar.selectors';
+import dependency from '../../selectors/dependency.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -34,7 +35,7 @@ context('Search tests', () => {
     elementsToCheck.forEach((option) => {
       cy.get(search.searchfield).type('test');
       cy.get(search.searchButtonToClick).click();
-      cy.get('.ember-power-select-trigger')
+      cy.get(dependency.emberPowerSelect.trigger)
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
       cy.url().should('include', `aantal=${option}`);
@@ -105,7 +106,7 @@ context('Search tests', () => {
     cy.openAgendaForDate(dateToCreateAgenda);
     // TODO use opendetailofagendaitem and newSubcase1TitleShort to open detail
     cy.contains('dit is de korte titel for search').click();
-    cy.get(agenda.agendaitemTitlesEdit).should('exist')
+    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
       .should('be.visible')
       .click();
 
@@ -113,16 +114,16 @@ context('Search tests', () => {
     cy.get(form.formVlToggle).should('exist')
       .click();
 
-    // cy.get(agenda.agendaitemTitlesEditShorttitle).clear();
-    // cy.get(agenda.agendaitemTitlesEditShorttitle).type('you shall find me in the codezz\n\n');
+    // cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
+    // cy.get(agenda.agendaitemTitlesEdit.shorttitle).type('you shall find me in the codezz\n\n');
     //
-    // cy.get(agenda.agendaitemTitlesEditTitle).clear();
-    // cy.get(agenda.agendaitemTitlesEditTitle).type('dit is de lange titel\n\n');
+    // cy.get(agenda.agendaitemTitlesEdit.title).clear();
+    // cy.get(agenda.agendaitemTitlesEdit.title).type('dit is de lange titel\n\n');
     //
-    // cy.get(agenda.agendaitemTitlesEditExplanation).clear();
-    // cy.get(agenda.agendaitemTitlesEditExplanation).type('Dit is de opmerking');
+    // cy.get(agenda.agendaitemTitlesEdit.explanation).clear();
+    // cy.get(agenda.agendaitemTitlesEdit.explanation).type('Dit is de opmerking');
 
-    cy.get(agenda.agendaitemTitlesEditSave).should('exist')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).should('exist')
       .should('be.visible')
       .click();
     // TODO we don't await patch calls, is data saved properly ?
@@ -165,9 +166,9 @@ context('Search tests', () => {
       cy.get('[data-table]').contains('korte titel for batterij');
     });
 
-    cy.get('[data-test-m-header-settings]').click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
-    cy.get('[data-test-m-header-search]').click();
+    cy.get(toolbar.mHeader.search).click();
     // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
@@ -181,9 +182,9 @@ context('Search tests', () => {
     cy.server();
     cy.get(search.searchButtonToClick).click();
     cy.wait(1000);
-    cy.get(toolbar.settings).click();
+    cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(search.searchMenuLink).click();
+    cy.get(toolbar.mHeader.search).click();
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
     // cy.get(search.searchfield).should('have.value', '');

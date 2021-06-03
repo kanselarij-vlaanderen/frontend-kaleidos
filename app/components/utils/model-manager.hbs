@@ -4,19 +4,21 @@
   closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        {{utils/model-selector
-          modelName=modelName
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=item
-          selectModel=(action "selectModel")
-        }}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          {{utils/model-selector
+            modelName=modelName
+            searchField="label"
+            propertyToShow="label"
+            sortField="label"
+            selectedItems=item
+            selectModel=(action "selectModel")
+          }}
+        </div>
       </div>
     </div>
-    <div class="auk-navbar auk-navbar--white auk-navbar--bordered-top">
+    <div class="auk-modal__footer auk-modal__footer--bordered">
       <div class="auk-toolbar-complex">
         <div class="auk-toolbar-complex__left">
           <div class="auk-toolbar-complex__item">
@@ -24,7 +26,9 @@
                     class="auk-button auk-button--borderless"
               {{action "close"}}
             >
-              {{t "cancel"}}
+              <span class="auk-button__content">
+                {{t "cancel"}}
+              </span>
             </button>
           </div>
         </div>
@@ -34,12 +38,14 @@
               class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "add"}}
-              </div>
+              <span class="auk-button__content">
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-add"></i>
+                </div>
+                <div class="auk-button__label">
+                  {{t "add"}}
+                </div>
+              </span>
             </button>
             {{#if item}}
               <button type="button"
@@ -47,23 +53,27 @@
                 class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "edit"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-pencil"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "edit"}}
+                  </div>
+                </span>
               </button>
               <button type="button" data-test-vl-model-manager-delete
                 class="auk-button auk-button--tertiary"
                 {{action "removeModel"}}
               >
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-delete"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "delete"}}
-                </div>
+                <span class="auk-button__content">
+                  <div class="auk-icon auk-icon--default">
+                    <i class="ki ki-delete"></i>
+                  </div>
+                  <div class="auk-button__label">
+                    {{t "delete"}}
+                  </div>
+                </span>
               </button>
             {{/if}}
           </div>
@@ -72,10 +82,12 @@
     </div>
   {{/if}}
   {{#if isAdding}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
-        {{web-components/vl-form-input value=title}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+          {{web-components/vl-form-input value=title}}
+        </div>
       </div>
     </div>
     {{web-components/vl-modal-footer
@@ -87,10 +99,12 @@
     }}
   {{/if}}
   {{#if isEditing}}
-    <div class="auk-modal__content">
-      <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
-        {{web-components/vl-form-input value=title}}
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        <div class="auk-form-group">
+          <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+          {{web-components/vl-form-input value=title}}
+        </div>
       </div>
     </div>
     {{web-components/vl-modal-footer

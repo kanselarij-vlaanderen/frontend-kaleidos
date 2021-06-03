@@ -1,45 +1,83 @@
 {{!-- template-lint-disable no-bare-strings --}}
-<div class="vlc-mock-login">
-  <div id="main" itemprop="mainContentOfPage" role="main" tabindex="-1" class="main-content">
-    <div class="auk-u-mt-8">
-      <div class="col--9-12--s col--5-12--m col--6-12">
-        <div class="grid grid--align-right">
-          <div class="col--1-1 col--10-12--m col--6-12--l">
-            <h2 class="h4 u-spacer">Kies een gebruiker om mee in te loggen.</h2>
-            <input class="input-field input-field--block u-spacer--tiny js-js-input-pattern-bound"
-                  placeholder="Gebruikersnaam..."
-                  value={{role}} autofocus
-                  oninput={{perform updateSearch value='target.value'}}>
-            {{#mock-login as |login|}}
-              {{#if queryStore.isRunning}}
-                <div class="loader-wrapper">
-                  <div class="loader">
-                    <span class="u-visually-hidden">Aan het laden</span>
-                  </div>
-                </div>
-              {{else}}
-                {{#if login.errorMessage}}
-                  {{wu-alert
-                    title=login.errorMessage
-                    isWarning=true
-                  }}
-                {{/if}}
-                <ul>
-                  {{#login.each-account accounts=model as |account|}}
-                    <div class="auk-block-link">
-                      {{account.user.firstName}} {{account.user.lastName}}
-                    </div>
-                  {{/login.each-account}}
+<WebComponents::AuNavbar @skin="white" @noPadding="true" id="c-main-nav">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuBrand @logotype="Kaleidos"/>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      {{#if this.showEnvironmentName}}
+        <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
+          <div class="vlc-environment-pill {{this.environmentClass}}">
+            {{this.environmentName}}
+          </div>
+        </WebComponents::AuToolbar::Item>
+      {{/if}}
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuButtonLink
+          @skin="muted"
+          @padded="padded"
+          @icon="circle-question">
+          {{t "help"}}
+        </WebComponents::AuButtonLink>
+        <AttachPopover
+          @renderInPlace={{true}}
+          @class="ember-attacher-popper"
+          @hideOn="clickout click"
+          @showOn="click"
+          @animation="shift"
+          @placement="bottom-end"
+        >
+          <WebComponents::AuDropdown>
+            <WebComponents::AuDropdown::Item
+              @route="manual"
+              target="_blank">
+              {{t "look-at-documentation"}}
+            </WebComponents::AuDropdown::Item>
+            <WebComponents::AuDropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+              <div>
+                <span>{{t "contact-us"}}</span>
+                <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
+              </div>
+            </WebComponents::AuDropdown::Item>
+          </WebComponents::AuDropdown>
+        </AttachPopover>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
+<div class="auk-scroll-wrapper">
+  <div class="auk-scroll-wrapper__body">
+    <div class="auk-u-p-4">
+      <div class="auk-content" style="max-width: 45rem; width: 100%; margin: 0 auto;">
+        <div class="auk-u-my-4">
+          <h4 class="auk-u-mb-2">Aanmelden als bepaald profiel (generiek)</h4>
+          <p class="auk-u-mb-4">Kies een type gebruiker om mee aan te melden:</p>
+          <div class="auk-panel auk-u-mb-8">
+            <MockLogin as |login|>
+              {{#if this.model.length}}
+                <ul class="auk-list auk-list--view" data-test-mock-login-list>
+                  <login.each-account @accounts={{this.model}} as |account|>
+                    <li class="auk-list__item">
+                      <div class="auk-u-mx-2">
+                        <span>{{account.user.firstName}} {{account.user.lastName}}</span>
+                      </div>
+                      <div class="auk-button auk-button--borderless auk-button--icon">
+                        <span class="auk-button__content">
+                          <div class="auk-icon auk-icon--default auk-icon--chevron-right ">
+                            <i class="ki ki-chevron-right"></i>
+                          </div>
+                          <div class="auk-u-sr-only">Detail</div>
+                        </span>
+                      </div>
+                    </li>
+                  </login.each-account>
                 </ul>
-                {{number-pagination
-                  page=page
-                  size=size
-                  nbOfItems=model.length
-                  total=model.meta.count
-                  links=model.meta.pagination
-                }}
+              {{else}}
+                Geen accounts gevonden.
               {{/if}}
-            {{/mock-login}}
+            </MockLogin>
           </div>
         </div>
       </div>
