@@ -127,7 +127,7 @@ export default class CaseController extends Controller {
 
   @action
   cancelEditingInscription() {
-    this.model.publicationFlow.rollbackAttributes();
+    this.publicationFlow.rollbackAttributes();
     this.putInscriptionInNonEditMode();
   }
 
@@ -139,7 +139,7 @@ export default class CaseController extends Controller {
   @task
   *saveInscription() {
     try {
-      yield this.model.publicationFlow.save();
+      yield this.publicationFlow.save();
       this.putInscriptionInNonEditMode();
     } catch {
       // Don't exit if save didn't work
