@@ -7,10 +7,6 @@
 
   @extend .auk-filter-pill-list;
 
-  // consistent with text input field
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-
   .emberTagInput--readOnly {}
 
   li.emberTagInput-tag {
