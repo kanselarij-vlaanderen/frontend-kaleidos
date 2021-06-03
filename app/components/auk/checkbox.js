@@ -12,8 +12,7 @@ import Component from '@glimmer/component';
  *   console.log('New checkbox value=', event.target.checked);
  * }
  * ```
-
- * @argument name {String}
+ *
  * @argument checked {Boolean}
  * @argument label {String}
  */

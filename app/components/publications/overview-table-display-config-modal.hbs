@@ -27,7 +27,6 @@
             <WebComponents::AuCheckboxList>
               {{#each column as |option|}}
                 <Auk::Checkbox
-                  @name={{option.keyName}}
                   @checked={{get @options option.keyName}}
                   {{on "input" (fn this.toggleOption option.keyName)}}
                 >

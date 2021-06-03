@@ -16,7 +16,6 @@
             <WebComponents::AuCheckboxList>
               <Auk::Checkbox
                 @label={{t "via-cabinet" }}
-                @name="ministerFilterOption"
                 @checked={{this.filter.ministerFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
               />
@@ -26,13 +25,11 @@
             <WebComponents::AuCheckboxList>
               <Auk::Checkbox
                 @label={{t "publications-published" }}
-                @name="publishedFilterOption"
                 @checked={{this.filter.publishedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "publishedFilterOption")}}
               />
               <Auk::Checkbox
                 @label={{t "publications-paused" }}
-                @name="pausedFilterOption"
                 @checked={{this.filter.pausedFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
               />
@@ -44,7 +41,6 @@
             <WebComponents::AuCheckboxList>
               <Auk::Checkbox
                 @label={{t "not-via-cabinet" }}
-                @name="notMinisterFilterOption"
                 @checked={{this.filter.notMinisterFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
               />
@@ -54,13 +50,11 @@
             <WebComponents::AuCheckboxList>
               <Auk::Checkbox
                 @label={{t "publications-to-publish" }}
-                @name="toPublishFilterOption"
                 @checked={{this.filter.toPublishFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "toPublishFilterOption")}}
               />
               <Auk::Checkbox
                 @label={{t "discharged" }}
-                @name="withdrawnFilterOption"
                 @checked={{this.filter.withdrawnFilterOption}}
                 {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
               />
