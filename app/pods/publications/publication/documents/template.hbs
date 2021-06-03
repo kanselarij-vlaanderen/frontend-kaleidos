@@ -72,7 +72,6 @@
           <tr>
             <th>
               <Auk::Checkbox
-                @mode="table"
                 @toggle={{this.changeAllPiecesSelection}}
                 @checked={{this.areAllPiecesSelected}}
               />
@@ -89,7 +88,6 @@
             <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
               <td>
                 <Auk::Checkbox
-                  @mode="table"
                   @toggle={{fn this.changePieceSelection piece}}
                   @checked={{includes piece this.selectedPieces}}
                 />
