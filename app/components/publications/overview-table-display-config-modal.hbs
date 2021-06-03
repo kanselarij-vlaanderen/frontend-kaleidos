@@ -26,16 +26,16 @@
           <div class="auk-form-group">
             <WebComponents::AuCheckboxList>
               {{#each column as |option|}}
-                <WebComponents::AuCheckbox
-                        @name={{option.keyName}}
-                        @checked={{get @options option.keyName}}
-                        @toggle={{this.toggleOption}}
+                <Auk::Checkbox
+                  @name={{option.keyName}}
+                  @checked={{get @options option.keyName}}
+                  @toggle={{this.toggleOption}}
                 >
                   {{t option.translationKey}}
                   {{#if  (not-eq (t option.translationKey) (t option.translationKeySmall)) }}
                     <span class="auk-u-text-small auk-u-muted">({{t option.translationKeySmall}})</span>
                   {{/if}}
-                </WebComponents::AuCheckbox>
+                </Auk::Checkbox>
               {{/each}}
             </WebComponents::AuCheckboxList>
           </div>

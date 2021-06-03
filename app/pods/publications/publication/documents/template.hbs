@@ -12,8 +12,11 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuCheckbox @label={{t "show-filter"}}
-            @checked={{this.showFilterPanel}} @toggle={{this.toggleFilterPanel}} />
+          <Auk::Checkbox
+            @label={{t "show-filter"}}
+            @checked={{this.showFilterPanel}}
+            @toggle={{this.toggleFilterPanel}}
+          />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
           <WebComponents::AuButton
@@ -67,7 +70,13 @@
       <table class="auk-table">
         <thead>
           <tr>
-            <th><WebComponents::AuCheckbox @mode="table" @toggle={{this.changeAllPiecesSelection}} @checked={{this.areAllPiecesSelected}}/></th>
+            <th>
+              <Auk::Checkbox
+                @mode="table"
+                @toggle={{this.changeAllPiecesSelection}}
+                @checked={{this.areAllPiecesSelected}}
+              />
+            </th>
             <th class="auk-table__col--6">{{t "name-document"}}</th>
             <th colspan="2">{{t "file-extension"}}</th>
             <th colspan="2">{{t "file-type"}}</th>
@@ -79,7 +88,11 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
               <td>
-                <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}} @checked={{includes piece this.selectedPieces}}/>
+                <Auk::Checkbox
+                  @mode="table"
+                  @toggle={{fn this.changePieceSelection piece}}
+                  @checked={{includes piece this.selectedPieces}}
+                />
               </td>
               <td>
                 {{#if piece.agendaitems}}
