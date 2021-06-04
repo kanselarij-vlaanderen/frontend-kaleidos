@@ -56,13 +56,13 @@
             </div>
           </div>
           {{#if this.numberIsAlreadyUsed}}
-            <WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "publication-number-already-taken"}}
-            </WebComponents::AuLabelError>
+            </Auk::Label>
           {{else if this.hasPublicationNumberError}}
-            <WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "input-error-message"}}
-            </WebComponents::AuLabelError>
+            </Auk::Label>
           {{/if}}
         </div>
         <div class='auk-form-group' style="max-width: 30rem;">
@@ -80,7 +80,9 @@
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
-            <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
+              {{t "input-error-message"}}
+            </Auk::Label>
           {{/if}}
         </div>
         <div class="auk-form-group">
