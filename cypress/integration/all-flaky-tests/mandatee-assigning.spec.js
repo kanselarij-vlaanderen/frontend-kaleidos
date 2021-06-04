@@ -2,12 +2,12 @@
 // / <reference types="Cypress" />
 
 import mandatee from '../../selectors/mandatees/mandateeSelectors';
-import isecodes from '../../selectors/isecodes/isecodesSelectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selector';
 import modal from '../../selectors/modal.selectors';
 import auComponents from '../../selectors/au-component-selectors';
+import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -62,8 +62,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -124,8 +124,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
@@ -258,8 +258,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
   });
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
