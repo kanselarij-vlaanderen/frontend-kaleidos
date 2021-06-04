@@ -12,15 +12,15 @@
         <Publications::PublicationCaseSearch/>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
+        <Auk::Button @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
           {{t "filter-content"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
 
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
+        <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
           {{t "publications-new"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
@@ -68,7 +68,7 @@
                 <tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
                   {{#if this.tableColumnDisplayOptions.caseName}}
                     <td class="auk-table__col--6">
-                      <WebComponents::AuAbbreviatedText @text={{row.shortTitle}} @size="150"/>
+                      <Auk::AbbreviatedText @text={{row.shortTitle}} @maxLength={{150}}/>
                     </td>
                   {{/if}}
                   {{#if this.tableColumnDisplayOptions.comment}}
@@ -213,7 +213,7 @@
   <hr>
 </div>
 <div class="auk-u-mx-4">
-  <WebComponents::AuToolbar >
+  <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuPagination
@@ -237,7 +237,10 @@
         </WebComponents::AuPageSize>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+        <Auk::Button
+          @icon="settings"
+          @skin="borderless"
+          data-test-publication-button-filter-tables
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover
