@@ -12,7 +12,7 @@
     @disabled={{this.onChange.isRunning}}
   as |option|>
     {{#if option.svg }}
-      <Auk::Icon @name={{option.svg.icon}} @iconSkinColor={{option.svg.color}} />
+      <Auk::Icon @name={{option.svg.icon}} @skin={{option.svg.color}} />
     {{/if}}
     {{option.label}}
   </PowerSelect>

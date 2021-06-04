@@ -74,7 +74,7 @@
                   {{#if this.tableColumnDisplayOptions.comment}}
                     <td class="auk-u-text-align--center">
                       {{#if row.remark}}
-                        <Auk::Icon @iconSkinColor="muted" @name="comment" />
+                        <Auk::Icon @skin="muted" @name="comment" />
                         <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
                           <p>
                             {{row.remark}}
@@ -88,7 +88,7 @@
                   {{#if this.tableColumnDisplayOptions.speedProcedure}}
                     <td class="auk-u-text-align--center">
                       {{#if row.urgencyLevel.isUrgent}}
-                        <Auk::Icon @iconSkinColor="warning" @name="alert-triangle" />
+                        <Auk::Icon @skin="warning" @name="alert-triangle" />
                       {{else}}
                         {{t "dash"}}
                       {{/if}}

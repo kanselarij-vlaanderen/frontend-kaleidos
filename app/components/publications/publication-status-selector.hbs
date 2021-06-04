@@ -6,13 +6,13 @@
           @selected={{@publicationStatus}}
           @onchange={{@onChange}} as |status|>
     {{#if status.isPending }}
-      <Auk::Icon @name="clock" @iconSkinColor="warning" />
+      <Auk::Icon @name="clock" @skin="warning" />
     {{else if status.isPublished }}
-      <Auk::Icon @name="circle-check" @iconSkinColor="success" />
+      <Auk::Icon @name="circle-check" @skin="success" />
     {{else if status.isPaused}}
-      <Auk::Icon @name="circle-pause" @iconSkinColor="muted" />
+      <Auk::Icon @name="circle-pause" @skin="muted" />
     {{else if status.isWithdrawn }}
-      <Auk::Icon @name="circle-error" @iconSkinColor="danger" />
+      <Auk::Icon @name="circle-error" @skin="danger" />
     {{/if}}
     {{status.label}}
   </PowerSelect>
