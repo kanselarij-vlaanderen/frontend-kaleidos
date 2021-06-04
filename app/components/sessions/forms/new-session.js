@@ -74,9 +74,10 @@ export default Component.extend({
     });
 
     // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+    const agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
       created: now,
       modified: now,
+      startDate: now,
       decisionResultCode,
     });
     await agendaItemTreatment.save();

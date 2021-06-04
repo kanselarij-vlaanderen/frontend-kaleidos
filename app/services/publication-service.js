@@ -25,6 +25,7 @@ export default class PublicationService extends Service {
    * }} publicationProperties
    * @param {{
    *  case: Case,
+   *  agendaItemTreatment: AgendaItemTreatment,
    * }|undefined} viaCouncilOfMinisterOptions passed when via ministerial council
    * @param {{
    *  decisionDate: Date,
@@ -39,6 +40,7 @@ export default class PublicationService extends Service {
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
       case_ = viaCouncilOfMinisterOptions.case;
+      agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,

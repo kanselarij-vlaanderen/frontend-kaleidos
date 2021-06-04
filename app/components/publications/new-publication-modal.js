@@ -7,6 +7,7 @@ import { isBlank } from '@ember/utils';
 
 /**
  * @argument { undefined|Case } case: for a publication that passes the Council of Ministers
+ * @argument { undefined|AgendaItemTreatment } agendaItemTreatment: for a publication that passes the Council of Ministers
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
  *  number: number,
@@ -37,6 +38,8 @@ export default class NewPublicationModal extends Component {
     if (this.args.case) {
       this.shortTitle = this.args.case.shortTitle;
       this.longTitle = this.args.case.title;
+
+      this.decisionDate = this.args.agendaItemTreatment.startDate;
     }
   }
 
