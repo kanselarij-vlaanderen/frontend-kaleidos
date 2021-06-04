@@ -3,10 +3,8 @@
     (t "documents")
   }}
   <div class="auk-u-mb-8">
-    <Auk::Accordion @title={{t "reference-documents-council-of-ministers"}}>
-      <Documents::DocumentCardList @pieces={{@model}}>
-
-      </Documents::DocumentCardList>
+    <Auk::Accordion @label={{t "reference-documents-council-of-ministers"}}>
+      <Documents::DocumentCardList @pieces={{@model}} />
     </Auk::Accordion>
   </div>
 </div>

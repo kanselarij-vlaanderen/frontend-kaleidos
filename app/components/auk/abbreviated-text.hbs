@@ -1,0 +1,23 @@
+{{#if this.textTooLong}}
+  <div class="auk-o-flex">
+    {{#if (has-block)}}
+      {{yield this.abbreviatedText}}
+    {{else}}
+      {{this.abbreviatedText}}
+    {{/if}}
+    <Auk::ButtonLink
+      @icon="circle-more"
+      @skin="mute"
+      @layout="icon-only"
+      class="auk-o-flex--vertical-center"
+    />
+    {{!-- TODO: This tooltip should be within the button-link, but doesn't yield when inside --}}
+    <EmberTooltip @tooltipClass="auk-tooltip">{{@text}}</EmberTooltip>
+  </div>
+{{else}}
+  {{#if (has-block)}}
+    {{yield @text}}
+  {{else}}
+    {{@text}}
+  {{/if}}
+{{/if}}

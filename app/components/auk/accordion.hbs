@@ -1,25 +1,16 @@
 <div class="auk-accordion {{if this.isActive "auk-accordion--is-active"}}">
-  <div class="auk-accordion__item {{unless this.isActive "auk-accordion__item--closed"}}">
-    <div class="auk-accordion__header auk-accordion__header--controls-left">
-      <button type="button" aria-expanded="{{this.isActive}}" aria-controls={{this.accordionId}}
-        {{on "click" toggleAccordion}}>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Item>
-            <WebComponents::AuIcon @name="chevron-right" class="auk-icon--primary">
-            </WebComponents::AuIcon>
-            <span class="auk-accordion__title">
-              {{@title}}
-            </span>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar>
-      </button>
-    </div>
-  </div>
-
+  <Auk::ButtonLink
+    @padded="padded-y"
+    @icon="chevron-right"
+    @block="true"
+    {{on "click" this.toggleAccordion}}
+    aria-expanded={{if this.isActive "true" "false"}}
+    aria-controls={{this.accordionId}}>
+    {{@label}}
+  </Auk::ButtonLink>
   <div
     class="auk-accordion__content" id={{this.accordionId}}
     aria-hidden="{{not this.isActive}}">
     {{yield}}
   </div>
-
 </div>

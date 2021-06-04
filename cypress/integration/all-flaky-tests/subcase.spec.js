@@ -80,16 +80,16 @@ context('Subcase tests', () => {
     cy.get('.vlc-status-timeline > li').eq(0)
       .contains(/Ingediend voor agendering/);
 
-    cy.get(cases.subcaseMeetingNumber);
-    cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
-    cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
-    cy.get(agenda.subcase.agendaLink).contains(dateFormat);
+    cy.get(cases.subcaseDescription.meetingNumber);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(/Ingediend voor de agenda van/);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(dateRegex);
+    cy.get(cases.subcaseDescription.agendaLink).contains(dateFormat);
     // The "decided on" field was already filled in right after proposing for agenda for a long time
     // this field has been changed to take in account if the relevant meeting is final to show this info
-    cy.get(cases.subcaseDecidedOn).contains('Nog niet beslist');
+    cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
+    cy.get(cases.subcaseDescription.requestedBy).contains(/Hilde Crevits/);
 
     cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemDossierTab(SubcaseTitleShort);
@@ -141,17 +141,17 @@ context('Subcase tests', () => {
     const dateFormat = `${agendaDate.date()} ${monthDutch} ${agendaDate.year()}`;
     const dateRegex = new RegExp(`.?${Cypress.moment(agendaDate).date()}.\\w+.${Cypress.moment(agendaDate).year()}`);
 
-    cy.get(cases.subcaseMeetingNumber);
-    cy.get(cases.subcaseMeetingPlannedStart).contains(/Ingediend voor de agenda van/);
-    cy.get(cases.subcaseMeetingPlannedStart).contains(dateRegex);
-    cy.get(agenda.subcase.agendaLink).contains(dateFormat);
+    cy.get(cases.subcaseDescription.meetingNumber);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(/Ingediend voor de agenda van/);
+    cy.get(cases.subcaseDescription.meetingPlannedStart).contains(dateRegex);
+    cy.get(cases.subcaseDescription.agendaLink).contains(dateFormat);
     // The "decided on" field was already filled in right after proposing for agenda for a long time
     // this field has been changed to take in account if the relevant meeting is final to show this info
-    cy.get(cases.subcaseDecidedOn).contains('Nog niet beslist');
+    cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
     // Deze test volgt het al dan niet default "beslist" zijn van een beslissing.
     // Default = beslist, assert dotted date; default = niet beslist: assert "nog niet beslist".
-    cy.get(cases.subcaseRequestedBy).contains(/Hilde Crevits/);
-    cy.get(agenda.subcase.agendaLink).click();
+    cy.get(cases.subcaseDescription.requestedBy).contains(/Hilde Crevits/);
+    cy.get(cases.subcaseDescription.agendaLink).click();
     cy.url().should('contain', '/agenda/');
     cy.url().should('contain', '/agendapunten/');
     cy.url().should('not.contain', '/dossier/');
@@ -190,7 +190,7 @@ context('Subcase tests', () => {
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
-    cy.get(agenda.subcase.agendaLink).click();
+    cy.get(cases.subcaseDescription.agendaLink).click();
     cy.wait('@getMeetingsRequest');
     cy.get(agenda.confidentialityIcon).should('exist');
     // Index view
@@ -334,7 +334,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
-    cy.get(agenda.subcase.agendaLink).click();
+    cy.get(cases.subcaseDescription.agendaLink).click();
     cy.wait('@getMeetingsRequest');
 
     cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
@@ -363,8 +363,8 @@ context('Subcase tests', () => {
     cy.approveAndCloseDesignAgenda(true);
 
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
-    cy.get(cases.overviewSubcaseInfo.approved).should('have.length', 3);
+    cy.get(cases.subcaseItem.approved).should('have.length', 3);
     cy.openSubcase(2);
-    cy.get(cases.subcaseDecidedOn).contains(dateFormatDotted);
+    cy.get(cases.subcaseDescription.decidedOn).contains(dateFormatDotted);
   });
 });
