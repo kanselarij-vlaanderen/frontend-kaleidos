@@ -1,14 +1,29 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    <WebComponents::AuButton @skin="secondary" {{on "click" this.openPieceUploadModal}} >
-      <WebComponents::AuIcon @name="add"/>
-      {{t "upload-translation-file"}}
-    </WebComponents::AuButton>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="secondary" {{on "click" this.openPieceUploadModal}} >
+            <WebComponents::AuIcon @name="add"/>
+            {{t "upload-translation-file"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+        <WebComponents::AuToolbar::Item>
+          <WebComponents::AuButton @skin="secondary" @disabled={{eq this.selectedPieces.length 0}}>
+            <WebComponents::AuIcon @name="mail"/>
+            {{t "request-translations"}}
+          </WebComponents::AuButton>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
     {{#if this.model}}
       <table class="auk-table">
         <thead>
           <tr>
-            <th class="auk-table-checkbox-col"><WebComponents::AuCheckbox @mode="table" /></th>
+            <th class="auk-table-checkbox-col">
+              <WebComponents::AuCheckbox @mode="table" @toggle={{this.changeAllPiecesSelection}}
+                                       @checked={{this.areAllPiecesSelected}} />
+            </th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
@@ -21,12 +36,13 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
-                <WebComponents::AuCheckbox @mode="table" />
+                <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}}
+                                         @checked={{includes piece this.selectedPieces}} />
               </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
-              <td >
+              <td>
                 <WebComponents::AuPill class="auk-pill--white">
                   {{piece.file.extension}}
                 </WebComponents::AuPill>

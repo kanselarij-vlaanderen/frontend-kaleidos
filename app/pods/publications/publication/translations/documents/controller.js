@@ -5,6 +5,39 @@ import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationTranslationDocumentController extends Controller {
+  @tracked selectedPieces = [];
+
+  // Editing of pieces.
+  @tracked pieceBeingEdited = null;
+  @tracked showPieceEditor = false;
+
+  // Hacky way to refresh the checkboxes in the view without reloading the route.
+  @tracked renderPieces = true;
+
+  get areAllPiecesSelected() {
+    return this.model.length === this.selectedPieces.length;
+  }
+
+  @action
+  changePieceSelection(selectedPiece) {
+    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+    if (isPieceSelected) {
+      this.selectedPieces.removeObject(selectedPiece);
+    } else {
+      this.selectedPieces.pushObject(selectedPiece);
+    }
+  }
+
+  @action
+  changeAllPiecesSelection() {
+    if (this.areAllPiecesSelected) {
+      this.selectedPieces = [];
+    } else {
+      this.selectedPieces = [...this.model];
+    }
+  }
+
+
   @tracked showPieceUploadModal = false;
 
   @action
