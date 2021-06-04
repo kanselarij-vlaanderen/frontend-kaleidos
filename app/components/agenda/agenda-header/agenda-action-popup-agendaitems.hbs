@@ -1,4 +1,4 @@
-<ul class="auk-list auk-list--bordered">
+<Auk::List @bordered={{true}}>
   {{#each (await @agendaitems) as |agendaitem|}}
     <li class="auk-list__item auk-list__item--gray-100">
       <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-input--block">
@@ -38,4 +38,4 @@
       </div>
     </li>
   {{/each}}
-</ul>
+</Auk::List>
