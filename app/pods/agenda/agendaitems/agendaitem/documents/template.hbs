@@ -16,20 +16,22 @@
         )
       }}
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
+          <Auk::Button
             data-test-agenda-item-edit-documents-list
-            {{on "click" this.enablePieceEdit}}>
+            {{on "click" this.enablePieceEdit}}
+          >
             {{t "edit"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       {{/if}}
       {{#if (and this.currentSession.isOvrb this.model.pieces)}}
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
+          <Auk::Button
             @icon="copy"
-            {{on "click" this.openPublicationModal}}>
+            {{on "click" this.openPublicationModal}}
+          >
             {{t "agendaitem-documents-documents-for-publication"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       {{/if}}
     </WebComponents::AuToolbar::Group>

@@ -19,13 +19,14 @@
           />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
-                  @skin="secondary"
-                  @icon="chevron-down"
-                  @layout="icon-right"
-                  @disabled={{not this.model}}>
+          <Auk::Button
+            @skin="secondary"
+            @icon="chevron-down"
+            @layout="icon-right"
+            @disabled={{not this.model}}
+          >
             {{t "requests"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
           <AttachPopover
                   @renderInPlace={{true}}
                   @class="ember-attacher-popper"
@@ -45,14 +46,14 @@
           </AttachPopover>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
-                  data-test-publication-case-add-documents
-                  @skin="primary"
-                  @icon="add"
-                  {{on "click" this.openPieceUploadModal}}
+          <Auk::Button
+            data-test-publication-case-add-documents
+            @skin="primary"
+            @icon="add"
+            {{on "click" this.openPieceUploadModal}}
           >
             {{t "documents-add"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
@@ -111,7 +112,7 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only"></WebComponents::AuButton>
+                  <Auk::Button data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only"></Auk::Button>
                   <AttachPopover
                       @renderInPlace={{true}}
                       @class="ember-attacher-popper"
