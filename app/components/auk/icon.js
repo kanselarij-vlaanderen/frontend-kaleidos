@@ -4,11 +4,11 @@ import Component from '@glimmer/component';
  * Important, @name should be the icon name without prefix
  */
 export default class Icon extends Component {
+  baseClass = 'auk-icon';
+
   get size() {
-    if (this.args.size) {
-      return `auk-icon--${this.args.size}`;
-    }
-    return 'auk-icon--default';
+    const modifier = this.args.size || 'default';
+    return `${this.baseClass}--${modifier}`;
   }
 
   get grab() {
@@ -26,9 +26,9 @@ export default class Icon extends Component {
     - success
     - danger
    */
-  get iconSkinColor() {
+  get skin() {
     if (this.args.iconSkinColor) {
-      return `auk-icon--${this.args.iconSkinColor}`;
+      return `${this.baseClass}--${this.args.iconSkinColor}`;
     }
     return null;
   }
