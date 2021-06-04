@@ -3,31 +3,31 @@
 
 <StyleguideSample @title="Default" @snippet="list-default.hbs">
   {{!-- BEGIN-SNIPPET list-default --}}
-  <WebComponents::AuList>
+  <Auk::List>
     <WebComponents::AuList::AuListItem>WebComponents::AuList item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-  </WebComponents::AuList>
+  </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample @title="Default bordered" @snippet="list-bordered.hbs">
   {{!-- BEGIN-SNIPPET list-bordered --}}
-  <WebComponents::AuList @isBordered="true">
+  <Auk::List @isBordered="true">
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-  </WebComponents::AuList>
+  </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample @title="Document bordered" @snippet="document-bordered.hbs">
   {{!-- BEGIN-SNIPPET document-bordered --}}
-  <WebComponents::AuList @isBordered="true">
+  <Auk::List @isBordered="true">
     <WebComponents::AuList::AuListItem>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
@@ -49,13 +49,13 @@
         <div class="auk-u-muted auk-u-text-small">Decreet - PDF</div>
       </div>
     </WebComponents::AuList::AuListItem>
-  </WebComponents::AuList>
+  </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample @title="Document actions" @snippet="document-actions.hbs">
   {{!-- BEGIN-SNIPPET document-actions --}}
-  <WebComponents::AuList @isBordered="true">
+  <Auk::List @isBordered="true">
     <WebComponents::AuList::AuListItem>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
@@ -86,6 +86,6 @@
         <WebComponents::AuButton @skin="borderless" @icon="book" @layout="icon-only">Document bekijken</WebComponents::AuButton>
       </WebComponents::AuButtonToolbar>
     </WebComponents::AuList::AuListItem>
-  </WebComponents::AuList>
+  </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
