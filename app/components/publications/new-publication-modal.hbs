@@ -28,7 +28,7 @@
             {{t "publications-number"}}
           </WebComponents::AuLabel>
           <div class=" auk-o-flex auk-o-flex--vertical-center">
-            <WebComponents::AuInput
+            <Auk::Input
               type="number"
               id="publicationNumberInput"
               class="auk-u-mr"
@@ -38,7 +38,7 @@
               data-test-create-publication-modal-number-input
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
-            <WebComponents::AuInput
+            <Auk::Input
               type="text"
               id="publicationSuffixInput"
               style="max-width: 6.5rem"

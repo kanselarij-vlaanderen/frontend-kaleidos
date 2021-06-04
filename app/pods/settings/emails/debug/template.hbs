@@ -15,15 +15,15 @@
       <WebComponents::AuPanel::Body>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">{{t "email-to" }}</WebComponents::AuLabel>
-          <WebComponents::AuInput @value={{this.to}} type="text" id="blockInput" @block="true" {{on "change" this.onchangeTargetMailAddress}}/>
+          <Auk::Input @value={{this.to}} type="text" id="blockInput" @block="true" {{on "change" this.onchangeTargetMailAddress}} />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">{{t "subject" }}</WebComponents::AuLabel>
-          <WebComponents::AuInput @value={{this.subject}} type="text" id="blockInput" @block="true" {{on "change" this.onChangeSubject}}/>
+          <Auk::Input @value={{this.subject}} type="text" id="blockInput" @block="true" {{on "change" this.onChangeSubject}} />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">{{t "test-attachement-piece-id" }}</WebComponents::AuLabel>
-          <WebComponents::AuInput @value={{this.pieceId}} type="text" id="blockInput" @block="true" {{on "change" this.onChangePieceId}}/>
+          <Auk::Input @value={{this.pieceId}} type="text" id="blockInput" @block="true" {{on "change" this.onChangePieceId}} />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">{{t "content" }}</WebComponents::AuLabel>
