@@ -55,17 +55,17 @@ context('Propagation to other graphs', () => {
     cy.get(form.formSave).click();
 
     // TODO We are clicking the pill inside the document card of treatment report
-    cy.get(agenda.accessLevelPill).click();
+    cy.get(agenda.accessLevelPill.pill).click();
     cy.existsAndVisible(dependency.emberPowerSelect.trigger).click();
     cy.existsAndVisible(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
-    cy.get(agenda.accessLevelSave).click();
+    cy.get(agenda.accessLevelPill.save).click();
 
     // TODO verify if this is needed, default treatments for agendaitem is approved anyway
     cy.contains('Wijzigen').click();
     cy.get('.auk-box').as('editDecision');
     cy.get('@editDecision').within(() => {
-      cy.get(agenda.decisionPowerSelectContainer).should('exist')
+      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
         .should('be.visible')
         .within(() => {
           cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -104,12 +104,12 @@ context('Propagation to other graphs', () => {
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
-    cy.get(agenda.agendaitemDecisionTab).click();
+    cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.get(document.documentCard).eq(0)
       .within(() => {
         cy.get('.auk-h4 > span').contains(file.fileName);
       });
-    cy.get(agenda.agendaitemDocumentsTab).click();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', 0);
@@ -132,7 +132,7 @@ context('Propagation to other graphs', () => {
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
-    cy.get(agenda.agendaitemDocumentsTab).click();
+    cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard).as('docCards')
         .should('have.length', 2);

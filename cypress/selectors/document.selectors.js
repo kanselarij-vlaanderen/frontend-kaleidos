@@ -12,5 +12,10 @@ const selectors = {
   searchForLinkedDocumentsButton: '[data-test-search-existing-document-button]',
   searchForLinkedDocumentsLoader: '[data-test-search-loader]',
   linkeddocumentTypeLabel: '[data-test-linkeddocument-type-label]',
+
+  editDocumentRow: {
+    type: '[data-test-edit-document-row-type]',
+    accessLevel: '[data-test-edit-document-row-access-level]',
+  },
 };
 export default selectors;

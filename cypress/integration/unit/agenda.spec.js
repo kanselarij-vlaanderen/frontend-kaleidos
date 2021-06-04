@@ -1,11 +1,12 @@
+/* global context, before, it, cy,beforeEach, afterEach, Cypress */
+// / <reference types="Cypress" />
+
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponent from '../../selectors/au-component-selectors';
-/* global context, before, it, cy,beforeEach, afterEach, Cypress */
-
-// / <reference types="Cypress" />
+import route from  '../../selectors/route.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -185,7 +186,7 @@ context('Agenda tests', () => {
       cy.get(form.formInput).eq(1)
         .should('have.value', `${result.meetingNumberVisualRepresentation}`);
       cy.visit('/');
-      cy.get(agenda.createNewAgendaButton).click();
+      cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500);
       cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });

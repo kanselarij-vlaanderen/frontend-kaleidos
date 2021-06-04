@@ -5,9 +5,12 @@
     <WebComponents::AuToolbar @size="large">
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButtonLink {{on "click" @cancelModal}} data-test-au-modal-footer-cancel>
+          <Auk::ButtonLink
+            data-test-au-modal-footer-cancel
+            {{on "click" @cancelModal}}
+          >
             {{t "cancel"}}
-          </WebComponents::AuButtonLink>
+          </Auk::ButtonLink>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">

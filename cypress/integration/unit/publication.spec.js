@@ -166,9 +166,9 @@ context('Publications tests', () => {
       .clear()
       .type(shortTitle2);
 
-    cy.route('PATCH', '/cases/*').as('patchCaseForPublicationFlow');
+    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publicationSelectors.inscriptionSaveButton).click();
-    cy.wait('@patchCaseForPublicationFlow');
+    cy.wait('@patchPublicationFlow');
     cy.contains(shortTitle2).should('exist');
 
     // go back in overview
