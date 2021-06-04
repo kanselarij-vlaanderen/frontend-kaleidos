@@ -27,10 +27,7 @@ export default class Datepicker extends Component {
   }
 
   get placeholder() {
-    if (!this.args.placeholder) {
-      return 'Kies een datum';
-    }
-    return this.args.placeholder;
+    return this.args.placeholder || 'Kies een datum';
   }
 
   get showExpired() {
