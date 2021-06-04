@@ -4,11 +4,11 @@
 <StyleguideSample @title="Default" @snippet="list-default.hbs">
   {{!-- BEGIN-SNIPPET list-default --}}
   <Auk::List>
-    <WebComponents::AuList::AuListItem>WebComponents::AuList item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
+    <Auk::List::Item>WebComponents::AuList item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
   </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -16,11 +16,11 @@
 <StyleguideSample @title="Default bordered" @snippet="list-bordered.hbs">
   {{!-- BEGIN-SNIPPET list-bordered --}}
   <Auk::List @bordered={{true}}>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
+    <Auk::List::Item>List item</Auk::List::Item>
   </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -28,27 +28,27 @@
 <StyleguideSample @title="Document bordered" @snippet="document-bordered.hbs">
   {{!-- BEGIN-SNIPPET document-bordered --}}
   <Auk::List @bordered={{true}}>
-    <WebComponents::AuList::AuListItem>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
         <div class="auk-u-muted auk-u-text-small">Nota - PDF</div>
       </div>
-    </WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
         <div class="auk-u-muted auk-u-text-small">Decreet - PDF</div>
       </div>
-    </WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
         <div class="auk-u-muted auk-u-text-small">Decreet - PDF</div>
       </div>
-    </WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
   </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -56,7 +56,7 @@
 <StyleguideSample @title="Document actions" @snippet="document-actions.hbs">
   {{!-- BEGIN-SNIPPET document-actions --}}
   <Auk::List @bordered={{true}}>
-    <WebComponents::AuList::AuListItem>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
@@ -65,8 +65,8 @@
       <WebComponents::AuButtonToolbar>
         <WebComponents::AuButton @skin="borderless" @icon="book" @layout="icon-only">Document bekijken</WebComponents::AuButton>
       </WebComponents::AuButtonToolbar>
-    </WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
@@ -75,8 +75,8 @@
       <WebComponents::AuButtonToolbar>
         <WebComponents::AuButton @skin="borderless" @icon="book" @layout="icon-only">Document bekijken</WebComponents::AuButton>
       </WebComponents::AuButtonToolbar>
-    </WebComponents::AuList::AuListItem>
-    <WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
+    <Auk::List::Item>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
         <span class="auk-u-text-bold">VR 2019 2012 DOC.1256-2 Overeenkomst luchtvervoer Senegal</span>
@@ -85,7 +85,7 @@
       <WebComponents::AuButtonToolbar>
         <WebComponents::AuButton @skin="borderless" @icon="book" @layout="icon-only">Document bekijken</WebComponents::AuButton>
       </WebComponents::AuButtonToolbar>
-    </WebComponents::AuList::AuListItem>
+    </Auk::List::Item>
   </Auk::List>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
