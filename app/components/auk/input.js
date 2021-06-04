@@ -7,7 +7,7 @@ import Component from '@glimmer/component';
  * @argument {Boolean} block
  * @argument {Boolean} error
  */
-export default class AuInput extends Component {
+export default class Input extends Component {
   get block() {
     if (this.args.block) {
       return 'auk-input--block';
