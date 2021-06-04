@@ -87,20 +87,15 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6 auk-u-mr-2">
             {{#if this.isTranslation}}
-              <WebComponents::AuKeyValue
-                      @key={{t "translation-due-date"}}
-                      @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}
-              />
-              <WebComponents::AuKeyValue
-                      @key={{t "subject"}}
-                      @value={{@activity.mailSubject}}
-              />
-            {{else}}
-              <WebComponents::AuKeyValue
-                      @key={{t "subject"}}
-                      @value={{@activity.mailSubject}}
+              <Auk::KeyValue
+                @key={{t "translation-due-date"}}
+                @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}
               />
             {{/if}}
+            <Auk::KeyValue
+              @key={{t "subject"}}
+              @value={{@activity.mailSubject}}
+            />
             <WebComponents::AuLabel>
               {{t "translation-mail-header"}}
             </WebComponents::AuLabel>
