@@ -69,7 +69,6 @@
           <WebComponents::AuLabel for="decisionDate">
             {{t "decision-date"}}
           </WebComponents::AuLabel>
-          {{log this.isViaCouncilOfMinisters}}
           <WebComponents::AuDatepicker
                   @defaultDate={{this.decisionDate}}
                   @disabled={{this.isViaCouncilOfMinisters}}
