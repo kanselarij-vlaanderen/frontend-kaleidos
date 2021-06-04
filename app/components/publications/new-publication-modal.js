@@ -13,6 +13,8 @@ import { isBlank } from '@ember/utils';
  *  suffix: undefined | string,
  *  shortTitle: string,
  *  longTitle: string,
+ *  decisionDate: Date,
+ *  publicationDueDate: Date,
  * })) => Promise<void> } onSave
  */
 export default class NewPublicationModal extends Component {
@@ -21,9 +23,10 @@ export default class NewPublicationModal extends Component {
 
   @tracked number = null;
   @tracked suffix = null;
+  @tracked decisionDate = null;
+  @tracked publicationDueDate = null;
   @tracked shortTitle = null;
   @tracked longTitle = null;
-  @tracked publicationDueDate = null;
 
   @tracked hasError = false;
   @tracked numberIsAlreadyUsed;
@@ -84,6 +87,7 @@ export default class NewPublicationModal extends Component {
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
           publicationDueDate: this.publicationDueDate,
+          decisionDate: this.decisionDate,
         });
     }
   }
@@ -91,6 +95,11 @@ export default class NewPublicationModal extends Component {
   @action
   async isPublicationNumberAlreadyTaken() {
     this.numberIsAlreadyUsed = await this.publicationService.publicationNumberAlreadyTaken(this.number, this.suffix);
+  }
+
+  @action
+  setDecisionDate(selectedDates) {
+    this.decisionDate = selectedDates[0];
   }
 
   @action

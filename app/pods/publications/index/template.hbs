@@ -35,9 +35,9 @@
               {{#each this.tableColumns as |column|}}
                 {{#if (get this.tableColumnDisplayOptions column.keyName)}}
                   {{!-- first cases that need a special treament. The "else" clause treats the default case --}}
-                  {{#if (eq column.keyName "caseName")}}
+                  {{#if (eq column.keyName "shortTitle")}}
                     <Utils::ThSortable
-                      style="min-width: 25rem:"
+                      style="min-width: 25rem;"
                       @currentSorting={{this.sort}}
                       @field={{column.sortKey}}
                       @onChange={{this.sortTable}}
@@ -66,7 +66,7 @@
             {{else}}
               {{#each this.model as |row|}}
                 <tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
-                  {{#if this.tableColumnDisplayOptions.caseName}}
+                  {{#if this.tableColumnDisplayOptions.shortTitle}}
                     <td class="auk-table__col--6">
                       <WebComponents::AuAbbreviatedText @text={{row.shortTitle}} @size="150"/>
                     </td>
@@ -80,6 +80,15 @@
                             {{row.remark}}
                           </p>
                         </EmberTooltip>
+                      {{else}}
+                        {{t "dash"}}
+                      {{/if}}
+                    </td>
+                  {{/if}}
+                  {{#if this.tableColumnDisplayOptions.decisionDate}}
+                    <td class="auk-u-text-nowrap">
+                      {{#if row.decisionDate}}
+                        {{moment-format row.decisionDate "DD-MM-YYYY"}}
                       {{else}}
                         {{t "dash"}}
                       {{/if}}

@@ -10,31 +10,35 @@ export default class PublicationService extends Service {
     return this.createNewPublication(publicationProperties, decisionOptions);
   }
 
-  async createNewPublicationWithoutMinisterialCouncil(publicationProperties) {
-    return this.createNewPublication(publicationProperties);
+  async createNewPublicationWithoutMinisterialCouncil(publicationProperties, decisionOptions) {
+    return this.createNewPublication(publicationProperties, decisionOptions);
   }
 
   /**
    *
    * @param {{
-   *  shortTitle: string,
-   *  longTitle: string,
    *  number: number,
    *  suffix: string,
+   *  shortTitle: string,
+   *  longTitle: string,
    *  publicationDueDate: Date,
    * }} publicationProperties
    * @param {{
    *  case: Case,
-   * }|undefined} decisionOptions passed when via ministerial council
+   * }|undefined} viaCouncilOfMinisterOptions passed when via ministerial council
+   * @param {{
+   *  decisionDate: Date,
+   * }} notViaCouncilOfMinistersOptions passed when not via council of ministers
    * @returns {PublicationFlow}
    * @private
    */
-  async createNewPublication(publicationProperties, decisionOptions) {
+  async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
     const now = new Date();
     let case_;
-    const isViaCouncilOfMinisters = !!decisionOptions;
+    let agendaItemTreatment;
+    const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
-      case_ = decisionOptions.case;
+      case_ = viaCouncilOfMinisterOptions.case;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -42,6 +46,11 @@ export default class PublicationService extends Service {
         created: now,
       });
       await case_.save();
+
+      agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
+        startDate: notViaCouncilOfMinistersOptions.decisionDate,
+      });
+      await agendaItemTreatment.save();
     }
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
@@ -71,6 +80,7 @@ export default class PublicationService extends Service {
     const publicationFlow = this.store.createRecord('publication-flow', {
       identification: identifier,
       case: case_,
+      agendaItemTreatment: agendaItemTreatment,
       status: toPublishStatus,
       statusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,

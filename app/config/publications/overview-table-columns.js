@@ -1,9 +1,9 @@
 export default [
   {
-    keyName: 'caseName',
-    translationKey: 'publications-table-case-name',
-    translationKeySmall: 'publications-table-case-name-small',
-    sortKey: 'case.short-title',
+    keyName: 'shortTitle',
+    translationKey: 'publications-table-short-title',
+    translationKeySmall: 'publications-table-short-title-small',
+    sortKey: 'short-title',
     showByDefault: true,
   },
   {
@@ -11,6 +11,13 @@ export default [
     translationKey: 'publications-table-comment',
     translationKeySmall: 'publications-table-comment-small',
     showByDefault: true,
+  },
+  {
+    keyName: 'decisionDate',
+    translationKey: 'decision-date',
+    translationKeySmall: 'decision-date',
+    showByDefault: true,
+    sortKey: 'agendaItemTreatment.decisionDate',
   },
   {
     keyName: 'speedProcedure',

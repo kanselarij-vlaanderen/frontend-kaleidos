@@ -57,6 +57,16 @@
             </WebComponents::AuLabelError>
           {{/if}}
         </div>
+        {{#unless this.isViaCouncilOfMinisters}}
+          <div class='auk-form-group' style="max-width: 30rem;">
+            <WebComponents::AuLabel for="decisionDate">
+              {{t "decision-date"}}
+            </WebComponents::AuLabel>
+            <WebComponents::AuDatepicker
+                    @defaultDate={{this.decisionDate}}
+                    @onChange={{this.setDecisionDate}}/>
+          </div>
+        {{/unless}}
         <div class='auk-form-group' style="max-width: 30rem;">
           <WebComponents::AuLabel for="publicationDueDate">
             {{t "publication-due-date"}}
