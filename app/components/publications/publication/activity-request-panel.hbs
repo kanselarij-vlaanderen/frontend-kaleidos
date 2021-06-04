@@ -5,11 +5,11 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-                    {{on "click" this.collapsePanel}}
-                    @skin="tertiary"
-                    @layout="icon-only"
-                    @icon={{if this.isCollapsed "chevron-down"  "chevron-up"}}
+            <Auk::Button
+              @skin="tertiary"
+              @layout="icon-only"
+              @icon={{if this.isCollapsed "chevron-down"  "chevron-up"}}
+              {{on "click" this.collapsePanel}}
             />
           </WebComponents::AuToolbar::Item>
           <WebComponents::AuToolbar::Item>
@@ -37,8 +37,7 @@
             </WebComponents::AuToolbar::Item>
           {{/if}}
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" @icon="more" @layout="icon-only">
-            </WebComponents::AuButton>
+            <Auk::Button @skin="borderless" @icon="more" @layout="icon-only"/>
             <AttachPopover
                     @renderInPlace={{true}}
                     @class="ember-attacher-popper"
@@ -127,10 +126,11 @@
                     </div>
                   </div>
                   <WebComponents::AuButtonToolbar>
-                    <WebComponents::AuButton {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
-                            @layout="icon-only"
-                            @skin="borderless"
-                            @icon="book"
+                    <Auk::Button
+                      @layout="icon-only"
+                      @skin="borderless"
+                      @icon="book"
+                      {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
                     />
                   </WebComponents::AuButtonToolbar>
                 </li>

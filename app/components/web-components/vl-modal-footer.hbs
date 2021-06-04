@@ -1,27 +1,29 @@
 <WebComponents::AuToolbar>
   <WebComponents::AuToolbar::Group @position="left">
     <WebComponents::AuToolbar::Item>
-      <WebComponents::AuButton @skin="borderless" {{action "cancelAction"}} data-test-vl-modal-footer-cancel>
+      <Auk::Button
+      @skin="borderless"
+      {{action "cancelAction"}}
+      data-test-vl-modal-footer-cancel>
         {{cancelButtonText}}
-      </WebComponents::AuButton>
+      </Auk::Button>
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
   <WebComponents::AuToolbar::Group @position="right">
     <WebComponents::AuToolbar::Item>
-      <WebComponents::AuButton
+      <Auk::Button
         @skin="primary"
         {{!-- also disable button when 'isLoading', since no loading state on button is available.
           Disabling the button while in loading state is important in order to avoid multiple
           action calls when clicking multiple times on the same confirm-button --}}
         disabled={{or this.disableSave this.isLoading}}
-        {{!-- loadingText=(t "please-be-patient")
-        isLoading=isLoading --}}
+        {{!-- loadingText=(t "please-be-patient") isLoading=isLoading --}}
         data-test-vl-save={{true}}
         data-test-vl-modal-footer-save={{true}}
         {{action "saveAction"}}
       >
         {{saveButtonText}}
-      </WebComponents::AuButton>
+      </Auk::Button>
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
 </WebComponents::AuToolbar>
