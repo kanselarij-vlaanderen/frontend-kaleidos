@@ -35,7 +35,7 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
   });
 
   it('Should switch to newsletter tab when newsletter is clicked as Kanselarij', () => {
@@ -43,7 +43,7 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.title).should('exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
   });
 
   it('Should switch to settings tab when settings is clicked as Kanselarij', () => {
@@ -51,8 +51,8 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
-    cy.get(settings.generalSettings).should('exist');
-    cy.get(settings.manageMinisters).should('exist');
-    cy.get(settings.manageUsers).should('exist');
+    cy.get(settings.settings.generalSettings).should('exist');
+    cy.get(settings.settings.manageMinisters).should('exist');
+    cy.get(settings.settings.manageUsers).should('exist');
   });
 });

@@ -19,9 +19,9 @@ context('Settings overview page tests', () => {
   // TODO test 2-9 testing opening modals is not enough, how can we be sure that the right one has been opened ?
 
   it('Should open settings page and see all fields from the general settings tab', () => {
-    cy.get(settings.generalSettings).should('be.visible');
-    cy.get(settings.manageMinisters).should('be.visible');
-    cy.get(settings.manageUsers).should('be.visible');
+    cy.get(settings.settings.generalSettings).should('be.visible');
+    cy.get(settings.settings.manageMinisters).should('be.visible');
+    cy.get(settings.settings.manageUsers).should('be.visible');
     // settings in this view
     cy.get(settings.manageEmails).should('be.visible');
     cy.get(settings.manageGovermentDomains).should('be.visible');
@@ -78,16 +78,16 @@ context('Settings overview page tests', () => {
     cy.visit('/');
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(form.fileUploadButton).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
-    cy.get(settings.userSearchInput).type('Wendy');
+    cy.get(settings.usersIndex.searchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
-    cy.get(settings.userSearchButton).click()
+    cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
-    cy.get(settings.settingsUserTable).contains('Wendy')
+    cy.get(settings.usersIndex.settingsUserTable).contains('Wendy')
       .parents('tr')
       .within(() => {
         cy.get(settings.deleteUser).should('exist')
@@ -99,22 +99,22 @@ context('Settings overview page tests', () => {
       .should('be.visible')
       .click();
     cy.wait('@getUsers').then(() => {
-      cy.get(settings.settingsUserTable).should('not.have.value', 'Wendy');
+      cy.get(settings.usersIndex.settingsUserTable).should('not.have.value', 'Wendy');
     });
-    cy.get(settings.userSearchInput).clear();
-    cy.get(settings.settingsUserTable).contains('Greta')
+    cy.get(settings.usersIndex.searchInput).clear();
+    cy.get(settings.usersIndex.settingsUserTable).contains('Greta')
       .parents('tr')
       .within(() => {
         cy.contains('overheid');
       });
     // TODO we do not click the upload button, this works anyway?
     cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
-    cy.get(settings.userSearchInput).type('Greta');
+    cy.get(settings.usersIndex.searchInput).type('Greta');
     cy.route('GET', '/users?filter=**').as('filterUsers');
-    cy.get(settings.userSearchButton).click()
+    cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
     cy.get('tbody > tr').should('have.length', '1');
-    cy.get(settings.settingsUserTable).contains('Greta')
+    cy.get(settings.usersIndex.settingsUserTable).contains('Greta')
       .parents('tr')
       .within(() => {
         cy.contains('kanselarij');
@@ -122,44 +122,44 @@ context('Settings overview page tests', () => {
   });
 
   it('Should test the search of a user when typing', () => {
-    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist')
+    cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
     // TODO, this next should can work regardless of search working on the unfiltered tabel
     // wait for search api call, count the number of rows
-    cy.get(settings.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
   });
 
   it('Should trigger search when clicking on search icon', () => {
     cy.route('GET', '/users?filter=**').as('filterUsers');
 
-    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist')
+    cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
-    cy.get(settings.settingsUserTable).should('contain', 'Minister');
-    cy.get(settings.userSearchButton).click()
+    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.searchButton).click()
       .then(() => {
         cy.wait('@filterUsers');
-        cy.get(settings.settingsUserTable).should('contain', 'Minister');
+        cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
       });
   });
 
   it('Should navigate to detailview from user', () => {
     cy.route('GET', '/users?filter=**').as('filterUsers');
-    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.userSearchInput).should('exist')
+    cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
-    cy.get(settings.settingsUserTable).should('contain', 'Minister');
-    cy.get(settings.userSearchButton).click()
+    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.searchButton).click()
       .then(() => {
         cy.wait('@filterUsers');
         cy.get(settings.goToUserDetail).should('exist')
@@ -174,14 +174,14 @@ context('Settings overview page tests', () => {
     cy.route('GET', '/users?**').as('getUsers');
     cy.route('GET', '/users?filter=**').as('filterUsers');
 
-    cy.get(settings.manageUsers).contains('Gebruikersbeheer')
+    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.wait('@getUsers').then(() => {
-      cy.get(settings.userSearchInput).should('exist')
+      cy.get(settings.usersIndex.searchInput).should('exist')
         .should('be.visible')
         .type('Minister');
-      cy.get(settings.settingsUserTable).should('contain', 'Minister');
+      cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
       cy.wait(3000); // TODO this wait is not needed ?
       cy.get(settings.goToUserDetail).click();
       cy.contains('Gebruiker: Minister Test');

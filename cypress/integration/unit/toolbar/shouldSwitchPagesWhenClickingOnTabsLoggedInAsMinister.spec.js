@@ -36,7 +36,7 @@ context('Testing the toolbar as Minister user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
 
@@ -45,7 +45,7 @@ context('Testing the toolbar as Minister user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.title).should('exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
 });

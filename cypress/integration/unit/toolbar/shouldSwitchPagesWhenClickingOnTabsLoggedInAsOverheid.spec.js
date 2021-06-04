@@ -37,7 +37,7 @@ context('Testing the toolbar as Overheid user', () => {
     // TODO this test is wrong (should fail on this not.exist) but doesn't because not.exist also works whne page is not loaded
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.overviewTitle).should('not.exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
 
@@ -46,7 +46,7 @@ context('Testing the toolbar as Overheid user', () => {
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.title).should('exist');
-    cy.get(settings.generalSettings).should('not.exist');
+    cy.get(settings.settings.generalSettings).should('not.exist');
     cy.get(toolbar.mHeader.settings).should('not.exist');
   });
 });

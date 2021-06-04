@@ -1,13 +1,17 @@
 const selectors = {
   // route settings
-  generalSettings: '[data-test-settings-generalSettings]',
-  manageMinisters: '[data-test-settings-manageMinisters]',
-  manageUsers: '[data-test-settings-manageUsers]',
+  settings: {
+    generalSettings: '[data-test-route-settings-general-settings]',
+    manageMinisters: '[data-test-route-settings-manage-ministers]',
+    manageUsers: '[data-test-route-settings-manage-users]',
+  },
 
   // route settings/users/index
-  userSearchInput: '[data-test-user-search-input]',
-  userSearchButton: '[data-test-user-search-button]',
-  settingsUserTable: '[data-test-settings-user-table]',
+  usersIndex: {
+    searchInput: '[data-test-route-settings-user-search-input]',
+    searchButton: '[data-test-route-settings-user-search-button]',
+    settingsUserTable: '[data-test-route-settings-settings-user-table]',
+  },
 
   // route settings/overview
   manageEmails: '[data-test-manage-emails]',

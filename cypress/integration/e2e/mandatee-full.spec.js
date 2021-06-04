@@ -39,7 +39,7 @@ context('Full test for creating mandatees', () => {
     const ministerNickName = 'Eerste minister';
 
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
     cy.get(settings.addMinister).should('exist')
@@ -125,7 +125,7 @@ context('Full test for creating mandatees', () => {
     cy.approveDesignAgenda();
 
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
@@ -156,7 +156,7 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.visit('/');
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     // TODO index is risky business
     cy.get('[data-test-mandatee-resign="0"]').click();
