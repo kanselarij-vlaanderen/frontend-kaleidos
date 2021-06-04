@@ -68,7 +68,7 @@
                 <tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
                   {{#if this.tableColumnDisplayOptions.caseName}}
                     <td class="auk-table__col--6">
-                      <WebComponents::AuAbbreviatedText @text={{row.shortTitle}} @size="150"/>
+                      <Auk::AbbreviatedText @text={{row.shortTitle}} @maxLength={{150}}/>
                     </td>
                   {{/if}}
                   {{#if this.tableColumnDisplayOptions.comment}}
