@@ -15,7 +15,7 @@
 
 <StyleguideSample @title="Default bordered" @snippet="list-bordered.hbs">
   {{!-- BEGIN-SNIPPET list-bordered --}}
-  <Auk::List @isBordered="true">
+  <Auk::List @bordered={{true}}>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
     <WebComponents::AuList::AuListItem>List item</WebComponents::AuList::AuListItem>
@@ -27,7 +27,7 @@
 
 <StyleguideSample @title="Document bordered" @snippet="document-bordered.hbs">
   {{!-- BEGIN-SNIPPET document-bordered --}}
-  <Auk::List @isBordered="true">
+  <Auk::List @bordered={{true}}>
     <WebComponents::AuList::AuListItem>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
@@ -55,7 +55,7 @@
 
 <StyleguideSample @title="Document actions" @snippet="document-actions.hbs">
   {{!-- BEGIN-SNIPPET document-actions --}}
-  <Auk::List @isBordered="true">
+  <Auk::List @bordered={{true}}>
     <WebComponents::AuList::AuListItem>
       <Auk::Badge @icon="file" />
       <div class="auk-u-mx-2">
