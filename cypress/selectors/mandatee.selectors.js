@@ -1,5 +1,4 @@
 const selectors = {
-  // TODO KAS-2622 move to selectors folder, remove mandatees folder, change imports
   // mandatees-domains-panel-view
   mandateePanelView: {
     rows: '[data-test-mandatee-panel-view-mandatee-row]',

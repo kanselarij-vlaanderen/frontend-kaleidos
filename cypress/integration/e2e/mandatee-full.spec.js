@@ -4,7 +4,7 @@
 import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import form from '../../selectors/form.selectors';
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
 

@@ -1,7 +1,7 @@
 /* global context, before, it, cy,beforeEach, Cypress */
 // / <reference types="Cypress" />
 
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selector';
