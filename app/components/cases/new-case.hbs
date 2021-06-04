@@ -3,7 +3,7 @@
     <div class="auk-u-p-4">
       {{#if hasError}}
         <Auk::Alert
-          data-test-auk-alert-error
+          data-test-new-case-shorttitle-error
           @skin="error"
           @icon="alert-triangle"
           @title={{t "modal-error-alert-title"}}
@@ -17,7 +17,7 @@
           {{web-components/vl-toggle value=confidential}}
         </div>
       </div>
-      <div class="auk-form-group {{getClassForShortTitle}}" data-test-metadata-form>
+      <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
         <WebComponents::AuLabel>{{t "short-title-case"}}</WebComponents::AuLabel>
         {{textarea class="auk-textarea" rows="2" value=shortTitle}}
       </div>
@@ -27,7 +27,7 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <button type="button" data-test-vl-modal-footer-cancel
+          <button type="button" data-test-new-case-cancel
                   class="auk-button auk-button--borderless"
             {{action "closeAction"}}>
             <span class="auk-button__content">
