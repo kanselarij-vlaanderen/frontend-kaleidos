@@ -69,7 +69,7 @@
           <Auk::Input
             type="text"
             @value={{ await email.to }}
-            @block="true"
+            @block={{true}}
             {{on "change" (fn this.setMailTo email)}}
           />
           <pre>{{ await email.defaultTo }}</pre>
@@ -81,7 +81,7 @@
           <Auk::Input
             type="text"
             @value={{ await email.subject }}
-            @block="true"
+            @block={{true}}
             {{on "change" (fn this.setMailSubject email)}}
           />
           <pre>{{ await email.defaultSubject }}</pre>

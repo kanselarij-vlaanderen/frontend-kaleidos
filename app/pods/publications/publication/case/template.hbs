@@ -330,18 +330,18 @@
               <WebComponents::AuLabel for="firstNameInput">
                 {{t "first-name"}}
               </WebComponents::AuLabel>
-              <Auk::Input {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
+              <Auk::Input {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block={{true}} />
             </div>
             <div>
               <WebComponents::AuLabel for="lastNameInput">
                 {{t "name"}}
               </WebComponents::AuLabel>
-              <Auk::Input {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
+              <Auk::Input {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block={{true}} />
             </div>
           </div>
           <div class='auk-form-group'>
             <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
-            <Auk::Input {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
+            <Auk::Input {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block={{true}} />
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel for="organisationInput">

@@ -9,15 +9,15 @@
   <div class="auk-form-group-layout auk-form-group-layout--standard">
     <div class="auk-form-group">
       <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-      <Auk::Input type="text" id="defaultInput" @block="true" />
+      <Auk::Input type="text" id="defaultInput" @block={{true}} />
     </div>
     <div class="auk-form-group">
       <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-      <Auk::Input type="text" id="defaultInput" @block="true" />
+      <Auk::Input type="text" id="defaultInput" @block={{true}} />
     </div>
     <div class="auk-form-group">
       <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-      <Auk::Input type="text" id="defaultInput" @block="true" />
+      <Auk::Input type="text" id="defaultInput" @block={{true}} />
     </div>
   </div>
   {{!-- END-SNIPPET default-form-grouping --}}
@@ -55,21 +55,21 @@
       <div class="auk-o-grid-col-6">
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-          <Auk::Input type="text" id="defaultInput" @block="true" />
+          <Auk::Input type="text" id="defaultInput" @block={{true}} />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-          <Auk::Input type="text" id="defaultInput" @block="true" />
+          <Auk::Input type="text" id="defaultInput" @block={{true}} />
         </div>
       </div>
       <div class="auk-o-grid-col-6">
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-          <Auk::Input type="text" id="defaultInput" @block="true" />
+          <Auk::Input type="text" id="defaultInput" @block={{true}} />
         </div>
         <div class="auk-form-group">
           <WebComponents::AuLabel for="defaultInput">Label</WebComponents::AuLabel>
-          <Auk::Input type="text" id="defaultInput" @block="true" />
+          <Auk::Input type="text" id="defaultInput" @block={{true}} />
         </div>
       </div>
     </div>
@@ -85,17 +85,17 @@
   <div class="auk-form-group-layout auk-form-group-layout--standard">
     <div class="auk-form-group">
       <WebComponents::AuLabel @error="true">Label</WebComponents::AuLabel>
-      <Auk::Input type="text" @block="true" @error="true" />
+      <Auk::Input type="text" @block={{true}} @error="true" />
       <WebComponents::AuFormHelpText @text="This is an error message." @skin="danger" @icon="alert-triangle" />
     </div>
     <div class="auk-form-group">
       <WebComponents::AuLabel>Label</WebComponents::AuLabel>
-      <Auk::Input type="text" @block="true" />
+      <Auk::Input type="text" @block={{true}} />
       <WebComponents::AuFormHelpText @text="This is a success message."@skin="success" @icon="check" />
     </div>
     <div class="auk-form-group">
       <WebComponents::AuLabel>Label</WebComponents::AuLabel>
-      <Auk::Input type="text" @block="true" />
+      <Auk::Input type="text" @block={{true}} />
       <WebComponents::AuFormHelpText @text="This is a warning message." @icon="alert-triangle" @skin="warning" />
     </div>
   </div>
