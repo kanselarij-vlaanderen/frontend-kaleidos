@@ -13,7 +13,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  @tracked isExpanded = false;
   @tracked translationDocument = null;
   @tracked newPieces = [];
   @tracked name = null;
@@ -29,11 +28,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     if (this.fileQueueService.find(this.fileQueueName)) {
       this.fileQueueService.create(this.fileQueueName);
     }
-  }
-
-  @action
-  toggleSize() {
-    this.isExpanded = !this.isExpanded;
   }
 
   get fileQueueName() {
