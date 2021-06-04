@@ -4,7 +4,6 @@
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
-import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponent from '../../selectors/au-component-selectors';
 import route from  '../../selectors/route.selectors';
 
@@ -274,7 +273,7 @@ context('Agenda tests', () => {
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
       // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
-      cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     });
   });
 
@@ -336,7 +335,7 @@ context('Agenda tests', () => {
     cy.wait('@agendaActivities');
 
     // TODO is deze not exists wel goed ?
-    cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
     // cy.get('.auk-loader', {
     //   timeout: 60000,
@@ -422,7 +421,7 @@ context('Agenda tests', () => {
     // cy.contains('Doorgaan')
     //   .click();
 
-    // cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    // cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     cy.get(modal.auModal.container, {
       timeout: 60000,
     }).should('not.exist');

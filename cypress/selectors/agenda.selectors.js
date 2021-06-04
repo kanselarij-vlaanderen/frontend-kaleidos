@@ -99,6 +99,11 @@ const selectors = {
     confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
   },
 
+  // agenda-overview
+  agendaOverview: {
+    formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
+  },
+
   // agenda-header
   agendaHeader: {
     showAgendaOptions: '[data-test-agenda-header-show-agenda-options]',

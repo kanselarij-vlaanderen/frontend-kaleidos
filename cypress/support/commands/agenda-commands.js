@@ -8,7 +8,6 @@ import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
-import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponents from '../../selectors/au-component-selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
@@ -187,12 +186,12 @@ function openAgendaForDate(agendaDate) {
 
   cy.visit('');
   // cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get(agendaOverview.agendaFilter, {
+  cy.get(route.agendasOverview.filter.container, {
     timeout: 10000,
   }).should('exist')
     .within(() => {
-      cy.get(agendaOverview.agendaFilterInput).type(searchDate);
-      cy.get(agendaOverview.agendaFilterButton).click();
+      cy.get(route.agendasOverview.filter.input).type(searchDate);
+      cy.get(route.agendasOverview.filter.button).click();
     });
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
@@ -275,7 +274,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
-  cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  cy.get(agenda.agendaOverview.formallyOkEdit).click();
   cy.wait(2000); // TODO await data loading after clicking this button?
 
   cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
