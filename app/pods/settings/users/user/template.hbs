@@ -14,26 +14,29 @@
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
           <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-full-name'}}</dt>
-              <dd class="auk-key-value-item__value">{{model.firstName}} {{model.lastName}}</dd>
-            </div>
+            <Auk::KeyValue
+              @key={{t 'manage-users-full-name'}}
+              @value={{model.fullName}}
+              @layout="horizontal"
+            />
+          </dl>
+          <dl>
+            <Auk::KeyValue
+              @key={{t 'manage-users-email'}}
+              @value={{if model.email model.email "-"}}
+              @layout="horizontal"
+            />
+          </dl>
+          <dl>
+            <Auk::KeyValue
+              @key={{t 'manage-users-telephone'}}
+              @value={{if model.phone model.phone "-"}}
+              @layout="horizontal"
+            />
           </dl>
           <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-email'}}</dt>
-              <dd class="auk-key-value-item__value">{{if model.email model.email "-"}}</dd>
-            </div>
-          </dl>
-          <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-telephone'}}</dt>
-              <dd class="auk-key-value-item__value">{{if model.phone model.phone "-"}}</dd>
-            </div>
-          </dl>
-          <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-group'}}</dt>
+              <dt class="auk-key-value-item__label"></dt>
               <dd class="auk-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</dd>
             </div>
           </dl>
@@ -47,16 +50,18 @@
         </WebComponents::AuPanel::Header>
         <WebComponents::AuPanel::Body>
           <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-void'}}</dt>
-              <dd class="auk-key-value-item__value">{{model.account.voId}}</dd>
-            </div>
+            <Auk::KeyValue
+              @key={{t 'manage-users-void'}}
+              @value={{model.account.voId}}
+              @layout="horizontal"
+            />
           </dl>
           <dl>
-            <div class="auk-key-value-item auk-key-value-item--horizontal">
-              <dt class="auk-key-value-item__label">{{t 'manage-users-ovo'}}</dt>
-              <dd class="auk-key-value-item__value">{{if model.organization.identifier model.organization.identifier "-"}}</dd>
-            </div>
+            <Auk::KeyValue
+              @key={{t 'manage-users-ovo'}}
+              @value={{if model.organization.identifier model.organization.identifier "-"}}
+              @layout="horizontal"
+            />
           </dl>
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
