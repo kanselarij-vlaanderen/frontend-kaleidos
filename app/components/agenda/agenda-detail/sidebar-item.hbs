@@ -36,7 +36,7 @@
             <div class="auk-o-flex auk-o-flex--align-end vlc-agenda-detail-sidebar-item__icon">
               {{#if @isNew}}
                 <span class="vlc-agenda-meta__recently-added">
-                  <WebComponents::AuIcon @name="calendar-new" @size="small" />
+                  <Auk::Icon @name="calendar-new" @size="small" />
                   <EmberTooltip @side="top-start" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
@@ -48,7 +48,7 @@
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
                   <span class="vlc-agenda-meta__recently-added">
-                    <WebComponents::AuIcon @name="not-visible" @size="small" />
+                    <Auk::Icon @name="not-visible" @size="small" />
                     <EmberTooltip @side="top-start" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -77,7 +77,7 @@
 
               {{#if this.subcase.confidential}}
                 <span>
-                  <WebComponents::AuIcon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true"/>
+                  <Auk::Icon @name="lock-closed" @size="small" data-test-icon-agenda-confidentiality-locked="true" />
                 </span>
               {{/if}}
             </div>

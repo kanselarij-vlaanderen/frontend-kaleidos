@@ -26,13 +26,13 @@
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">
-              <WebComponents::AuIcon @name="alert-triangle"/>
+              <Auk::Icon @name="alert-triangle" />
               {{t "publication-number-already-taken"}}
             </div>
           {{/if}}
           {{#if this.numberIsRequired}}
             <div class="auk-form-help-text auk-form-help-text--danger">
-              <WebComponents::AuIcon @name="alert-triangle"/>
+              <Auk::Icon @name="alert-triangle" />
               {{t "publication-number-required"}}
             </div>
           {{/if}}
