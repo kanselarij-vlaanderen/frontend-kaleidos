@@ -16,12 +16,12 @@
     </div>
     <div class="auk-toolbar-complex__right">
       <div class="auk-toolbar-complex__item">
-        <WebComponents::AuButtonLink
+        <Auk::ButtonLink
           class="vlc-agenda-items-section-header__link"
           {{on "click" @toggleShowModifiedOnly}}
         >
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
-        </WebComponents::AuButtonLink>
+        </Auk::ButtonLink>
       </div>
       <div class="auk-toolbar-complex__item">
         {{#if
@@ -32,13 +32,13 @@
         }}
           {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
-              <WebComponents::AuButtonLink
+              <Auk::ButtonLink
                 data-test-agenda-edit-formally-ok-button={{true}}
                 class="vlc-agenda-items-section-header__link"
                 {{on "click" this.toggleIsEditingOverview}}
               >
                 {{t "edit"}}
-              </WebComponents::AuButtonLink>
+              </Auk::ButtonLink>
             </div>
           {{/unless}}
         {{/if}}

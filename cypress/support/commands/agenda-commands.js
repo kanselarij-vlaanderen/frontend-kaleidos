@@ -11,6 +11,7 @@ import utils from '../../selectors/utils.selectors';
 import agendaOverview from '../../selectors/agenda-overview.selectors';
 import auComponents from '../../selectors/au-component-selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 
 // ***********************************************
 // Functions
@@ -35,7 +36,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.route('PATCH', '/meetings/**').as('patchMeetings');
 
   cy.visit('');
-  cy.get(agenda.createNewAgendaButton).click();
+  cy.get(route.agendas.action.newMeeting).click();
 
   cy.get('.auk-modal').as('dialog')
     .within(() => {
@@ -212,7 +213,7 @@ function openAgendaForDate(agendaDate) {
  */
 function openAgendaitemKortBestekTab(agendaitemTitle) {
   cy.openDetailOfAgendaitem(agendaitemTitle);
-  cy.get(agenda.agendaitemKortBestekTab)
+  cy.get(agenda.agendaitemNav.newsletterTab)
     .should('be.visible')
     .click();
 }
@@ -281,7 +282,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get('@agendaitems').eq(indexOfItem)
     .scrollIntoView()
     .within(() => {
-      cy.get(agenda.agendaOverviewItemFormallyok).click();
+      cy.get(agenda.agendaOverviewItem.formallyOk).click();
     });
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
@@ -587,7 +588,7 @@ function agendaitemExists(agendaitemName) {
   cy.get('.active').then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
-      cy.get(agenda.agendaDetailSidebarSubitem)
+      cy.get(agenda.agendaDetailSidebar.subitem)
         .contains(agendaitemName, {
           timeout: 12000,
         })
@@ -595,7 +596,7 @@ function agendaitemExists(agendaitemName) {
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
-        cy.get(agenda.agendaOverviewSubitem); // changing from detail to overview = new url, this check will only work after the url has changed
+        cy.get(agenda.agendaOverviewItem.subitem); // changing from detail to overview = new url, this check will only work after the url has changed
         // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
@@ -603,7 +604,7 @@ function agendaitemExists(agendaitemName) {
           timeout: 20000,
         }).should('not.exist');
       }
-      cy.get(agenda.agendaOverviewSubitem)
+      cy.get(agenda.agendaOverviewItem.subitem)
         .contains(agendaitemName, {
           timeout: 24000,
         })
@@ -629,11 +630,11 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
     .click();
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
-  cy.get('[data-test-agenda-agendaitem] .active').then((element) => {
+  cy.get(agenda.agendaitemNav.activeTab).then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
       cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
-      cy.get(agenda.agendaitemDossierTab).click();
+      cy.get(agenda.agendaitemNav.caseTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing

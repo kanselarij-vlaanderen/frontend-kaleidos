@@ -29,10 +29,10 @@
         <WebComponents::AuToolbar::Group @position="right">
           {{#if (not (await @activity.isWithdrawn)) }}
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuCheckbox
-                      @toggle={{@finishedToggle}}
-                      @label={{t "received"}}
-                      @checked={{this.finished}}
+              <Auk::Checkbox
+                @label={{t "received"}}
+                @checked={{this.finished}}
+                {{on "input" @finishedToggle}}
               />
             </WebComponents::AuToolbar::Item>
           {{/if}}
@@ -117,7 +117,7 @@
             <ul class="auk-list auk-list--bordered">
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
                 <li class="auk-list__item auk-list__item--gray-100">
-                  <WebComponents::AuBadge @skin="white" @icon="document"/>
+                  <Auk::Badge @skin="white" @icon="document" />
                   <div class="auk-u-mx-2">
                     <span class="auk-u-text-bold">
                       {{translationSourcePiece.name}}
