@@ -8,11 +8,19 @@
   <WebComponents::AuModal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}
-        <WebComponents::AuAlert data-test-auk-alert-error @title={{t "modal-error-alert-title" }} @skin="error"
-          @message={{t "modal-error-alert-message" }} @icon="alert-triangle" />
+        <Auk::Alert
+          data-test-auk-alert-error
+          @skin="error"
+          @icon="alert-triangle"
+          @title={{t "modal-error-alert-title" }}
+          @message={{t "modal-error-alert-message" }}
+        />
       {{else if (not this.isViaCouncilOfMinisters)}}
-        <WebComponents::AuAlert data-test-auk-alert-info @message={{t "publications-new-warning-message"}}
-          @icon="circle-info" />
+        <Auk::Alert
+          data-test-auk-alert-info
+          @icon="circle-info"
+          @message={{t "publications-new-warning-message"}}
+        />
       {{/if}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
@@ -70,7 +78,6 @@
             {{t "name-subcase"}}
           </WebComponents::AuLabel>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
             <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
@@ -79,7 +86,6 @@
         <div class="auk-form-group">
           <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            disabled={{this.isViaCouncilOfMinisters}}
             data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>

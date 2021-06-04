@@ -10,9 +10,7 @@
         @snippet="default-alert.hbs"
 >
   {{!-- BEGIN-SNIPPET default-alert --}}
-  <WebComponents::AuAlert
-          @message="Lorem Ipsum dolor sit amet, consectetur adipiscing elit"
-  />
+  <Auk::Alert @message="Lorem Ipsum dolor sit amet, consectetur adipiscing elit" />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -21,9 +19,9 @@
         @snippet="success-alert.hbs"
 >
   {{!-- BEGIN-SNIPPET success-alert --}}
-  <WebComponents::AuAlert
-          @skin="success"
-          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  <Auk::Alert
+    @skin="success"
+    @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
   />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -33,10 +31,7 @@
         @snippet="error-alert.hbs"
 >
   {{!-- BEGIN-SNIPPET error-alert --}}
-  <WebComponents::AuAlert
-          @skin="error"
-          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-  />
+  <Auk::Alert @skin="error" @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -45,9 +40,9 @@
         @snippet="warning-alert.hbs"
 >
   {{!-- BEGIN-SNIPPET warning-alert --}}
-  <WebComponents::AuAlert
-          @skin="warning"
-          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  <Auk::Alert
+    @skin="warning"
+    @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
   />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -57,9 +52,9 @@
         @snippet="alert-custom-icon.hbs"
 >
   {{!-- BEGIN-SNIPPET alert-custom-icon --}}
-  <WebComponents::AuAlert
-          @icon="circle-question"
-          @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+  <Auk::Alert
+    @icon="circle-question"
+    @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
   />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>

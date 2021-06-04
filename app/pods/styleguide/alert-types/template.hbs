@@ -12,9 +12,7 @@
   @snippet="alert-default.hbs"
 >
   {{!-- BEGIN-SNIPPET alert-default --}}
-  <WebComponents::AuAlert
-    @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-  />
+  <Auk::Alert @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -23,7 +21,7 @@
   @snippet="alert-with-title.hbs"
 >
   {{!-- BEGIN-SNIPPET alert-with-title --}}
-  <WebComponents::AuAlert
+  <Auk::Alert
     @title="Alert title"
     @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
   />
@@ -36,7 +34,7 @@
   @snippet="alert-closable.hbs"
 >
   {{!-- BEGIN-SNIPPET alert-closable --}}
-  <WebComponents::AuAlert
+  <Auk::Alert
     @isClosable="true"
     @message="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
   />

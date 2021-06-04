@@ -1,23 +1,46 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { all } from 'ember-concurrency';
+import { guidFor } from '@ember/object/internals';
 
 export default class PublicationsPublicationDocumentsDocumentsUploadModalComponent extends Component {
   /**
    * @argument onSave: should take arguments (pieces)
    * @argument onCancel
    */
-  @inject store;
+  @service store;
+  @service('file-queue') fileQueueService;
 
   @tracked isExpanded = false;
   @tracked newPieces = [];
 
+  constructor() {
+    super(...arguments);
+    if (this.fileQueueService.find(this.fileQueueName)) {
+      this.fileQueueService.create(this.fileQueueName);
+    }
+  }
+
   @action
   toggleSize() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  get fileQueueName() {
+    return `${guidFor(this)}-file-queue`;
+  }
+
+  get fileQueue() {
+    return this.fileQueueService.find(this.fileQueueName);
+  }
+
+  get saveIsDisabled() {
+    return this.newPieces.length === 0 // waiting for a file to be uploaded
+    || this.fileQueue.files.length // still files in queue -> uploading
+    || this.savePieces.isRunning; // after pressing the save-button
   }
 
   @action
