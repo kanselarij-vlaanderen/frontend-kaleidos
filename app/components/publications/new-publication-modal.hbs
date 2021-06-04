@@ -24,9 +24,9 @@
       {{/if}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
-          <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
+          <Auk::Label for="publicationNumberInput" @isRequired={{true}}>
             {{t "publications-number"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <div class=" auk-o-flex auk-o-flex--vertical-center">
             <WebComponents::AuInput
               type="number"
@@ -66,17 +66,17 @@
           {{/if}}
         </div>
         <div class='auk-form-group' style="max-width: 30rem;">
-          <WebComponents::AuLabel for="publicationDueDate">
+          <Auk::Label for="publicationDueDate">
             {{t "publication-due-date"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuDatepicker
                   @defaultDate={{this.publicationDueDate}}
                   @onChange={{this.setPublicationDueDate}}/>
         </div>
         <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
-          <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
+          <Auk::Label for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
@@ -84,7 +84,7 @@
           {{/if}}
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+          <Auk::Label for="longTitleInput">{{t "title-subcase"}}</Auk::Label>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
             data-test-create-publication-modal-long-title-textarea />
         </div>

@@ -4,7 +4,7 @@
     {{#if this.isAnnexMeeting}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "related-main-meeting-field-label"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "related-main-meeting-field-label"}}</Auk::Label>
           {{utils/model-selector
             modelName="meeting"
             searchField="numberRepresentation"
@@ -18,7 +18,7 @@
     {{else}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "start-date"}}</Auk::Label>
           {{web-components/vl-datepicker
             enableTime=true
             defaultHour=10
@@ -30,7 +30,7 @@
     {{/if}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "meeting-number"}}</Auk::Label>
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
             {{web-components/vl-form-input
@@ -75,7 +75,7 @@
     {{#unless this.isAnnexMeeting}}
       <div class="auk-u-mb-2">
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "meeting-location"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "meeting-location"}}</Auk::Label>
           {{web-components/vl-form-input value=extraInfo}}
         </div>
       </div>

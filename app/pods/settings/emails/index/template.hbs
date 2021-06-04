@@ -28,9 +28,9 @@
         </LinkTo>
 
         {{!-- Footer of the mail --}}
-        <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-footer"}}
-        </WebComponents::AuLabel>
+        </Auk::Label>
         <WebComponents::AuTextarea
                 id="emailFooter"
                 @rows="15"
@@ -63,9 +63,9 @@
 
 
           {{!-- Mails of this tyype go to --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "email-to"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuInput
             {{on "change" (fn this.setMailTo email)}}
                   @value={{ await email.to }}
@@ -75,9 +75,9 @@
           <pre>{{ await email.defaultTo }}</pre>
 
           {{!-- subject of the mail --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "subject"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuInput
             {{on "change" (fn this.setMailSubject email)}}
             @value={{ await email.subject }}
@@ -88,9 +88,9 @@
 
 
           {{!-- content of the mail --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "accompanying-text"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuTextarea
             id="emailMessage"
             @rows="15"

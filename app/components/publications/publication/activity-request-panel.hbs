@@ -73,9 +73,9 @@
         {{!-- IF WITHDRAWN SHOW REASON--}}
         {{#if @activity.withdrawReason}}
           <div class="auk-u-mb-4">
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{t "reason-withdraw"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <p class="auk-u-text-pre vlc-mail-content">
               <pre>
                 {{@activity.withdrawReason}}
@@ -101,9 +101,9 @@
                       @value={{@activity.mailSubject}}
               />
             {{/if}}
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{t "translation-mail-header"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <div class="auk-u-text-pre vlc-mail-content">
               <pre>
                 {{@activity.mailContent}}
@@ -111,9 +111,9 @@
             </div>
           </div>
           <div class="auk-o-grid-col-4">
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{t "files"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <ul class="auk-list auk-list--bordered">
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
                 <li class="auk-list__item auk-list__item--gray-100">
