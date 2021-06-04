@@ -47,7 +47,7 @@
                     @animation="shift"
                     @placement="bottom"
             >
-              <WebComponents::AuDropdown>
+              <Auk::Dropdown>
                 {{#if (and (not this.finished) ( not (await @activity.isWithdrawn)))}}
                   <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
                     {{t "cancel-request"}}
@@ -61,7 +61,7 @@
                     {{t "request-publication"}}
                   </WebComponents::AuDropdown::Item>
                 {{/if}}
-              </WebComponents::AuDropdown>
+              </Auk::Dropdown>
             </AttachPopover>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>

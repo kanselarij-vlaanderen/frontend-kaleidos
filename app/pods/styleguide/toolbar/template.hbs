@@ -126,11 +126,11 @@
         <WebComponents::AuToolbar::Item>
           <WebComponents::AuButton @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</WebComponents::AuButton>
           <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <WebComponents::AuDropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
+            <Auk::Dropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </EmberPopover>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
