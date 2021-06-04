@@ -17,7 +17,7 @@ export default [
     translationKey: 'decision-date',
     translationKeySmall: 'decision-date',
     showByDefault: true,
-    sortKey: 'agendaItemTreatment.decisionDate',
+    sortKey: 'agenda-item-treatment.start-date',
   },
   {
     keyName: 'speedProcedure',

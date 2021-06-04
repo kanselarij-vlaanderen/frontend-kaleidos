@@ -87,8 +87,8 @@
                   {{/if}}
                   {{#if this.tableColumnDisplayOptions.decisionDate}}
                     <td class="auk-u-text-nowrap">
-                      {{#if row.decisionDate}}
-                        {{moment-format row.decisionDate "DD-MM-YYYY"}}
+                      {{#if row.agendaItemTreatment.startDate}}
+                        {{moment-format row.agendaItemTreatment.startDate "DD-MM-YYYY"}}
                       {{else}}
                         {{t "dash"}}
                       {{/if}}

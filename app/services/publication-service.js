@@ -7,11 +7,11 @@ export default class PublicationService extends Service {
   @service intl;
 
   async createNewPublicationFromMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, decisionOptions);
+    return this.createNewPublication(publicationProperties, decisionOptions, undefined);
   }
 
   async createNewPublicationWithoutMinisterialCouncil(publicationProperties, decisionOptions) {
-    return this.createNewPublication(publicationProperties, decisionOptions);
+    return this.createNewPublication(publicationProperties, undefined, decisionOptions);
   }
 
   /**
