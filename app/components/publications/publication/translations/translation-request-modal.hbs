@@ -1,0 +1,20 @@
+<WebComponents::AuModal>
+  <WebComponents::AuModal::Header
+          @resizeable={{false}}
+          @title={{t "request-translation"}}
+          @closeModal={{perform this.cancelRequest}}
+  />
+  <WebComponents::AuModal::Body>
+  </WebComponents::AuModal::Body>
+  <WebComponents::AuModal::Footer
+          @cancelModal={{perform this.cancelRequest}}
+  >
+    <WebComponents::AuButton
+            @skin="primary"
+            @disabled={{this.saveIsDisabled}}
+      {{on "click" (perform this.saveTranslation)}}
+    >
+      {{t "save"}}
+    </WebComponents::AuButton>
+  </WebComponents::AuModal::Footer>
+</WebComponents::AuModal>
