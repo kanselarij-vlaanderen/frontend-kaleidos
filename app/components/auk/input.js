@@ -5,7 +5,7 @@ import Component from '@glimmer/component';
  *
  * @argument {String} icon
  * @argument {Boolean} block
- * @argument {String} error
+ * @argument {Boolean} error
  */
 export default class AuInput extends Component {
   get block() {
@@ -17,7 +17,7 @@ export default class AuInput extends Component {
   }
 
   get error() {
-    if (this.args.error === 'true') {
+    if (this.args.error) {
       return 'auk-input--error';
     }
 
