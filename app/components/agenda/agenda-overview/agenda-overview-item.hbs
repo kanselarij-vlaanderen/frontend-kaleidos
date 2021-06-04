@@ -8,9 +8,12 @@
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
-          <WebComponents::AuButton class="auk-u-p-0" @skin="borderless">
-            <Auk::Icon @name="drag-handle-2" @grab={{true}} />
-          </WebComponents::AuButton>
+          <Auk::Button
+            class="auk-u-p-0"
+            @skin="borderless"
+          >
+            <Auk::Icon @name="drag-handle-2" @grab={{true}}/>
+          </Auk::Button>
         </div>
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">

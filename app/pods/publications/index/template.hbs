@@ -12,15 +12,15 @@
         <Publications::PublicationCaseSearch/>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
+        <Auk::Button @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
           {{t "filter-content"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
 
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
+        <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
           {{t "publications-new"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
@@ -202,7 +202,7 @@
       {{else}}
         <WebComponents::AuPanel>
           <WebComponents::AuPanel::Body>
-            <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
+            <Auk::EmptyState @message={{t "no-results-found"}} />
           </WebComponents::AuPanel::Body>
         </WebComponents::AuPanel>
       {{/if}}
@@ -213,7 +213,7 @@
   <hr>
 </div>
 <div class="auk-u-mx-4">
-  <WebComponents::AuToolbar >
+  <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuPagination
@@ -237,7 +237,10 @@
         </WebComponents::AuPageSize>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+        <Auk::Button
+          @icon="settings"
+          @skin="borderless"
+          data-test-publication-button-filter-tables
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover

@@ -69,9 +69,10 @@
           <WebComponents::AuLabel for="publicationDueDate">
             {{t "publication-due-date"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuDatepicker
-                  @defaultDate={{this.publicationDueDate}}
-                  @onChange={{this.setPublicationDueDate}}/>
+          <Auk::Datepicker
+            @date={{this.publicationDueDate}}
+            @onChange={{this.setPublicationDueDate}}
+          />
         </div>
         <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
           <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
@@ -95,10 +96,14 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel
-            disabled={{this.save.isRunning}}>
+          <Auk::Button
+            @skin="borderless"
+            disabled={{this.save.isRunning}}
+            data-test-publication-button-cancel
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
@@ -106,10 +111,14 @@
           {{#if this.save.isRunning}}
             <Utils::SimpleSpinner></Utils::SimpleSpinner>
           {{else}}
-            <WebComponents::AuButton @skin="primary" data-test-publication-button-create-new {{on "click" (perform this.save)}}
-              disabled={{this.save.isRunning}}>
+            <Auk::Button
+              @skin="primary"
+              disabled={{this.save.isRunning}}
+              data-test-publication-button-create-new
+              {{on "click" (perform this.save)}}
+            >
               {{t "publications-new-button-text"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           {{/if}}
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>

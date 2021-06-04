@@ -7,8 +7,12 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
         <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
-          <WebComponents::AuButton @skin="borderless" @icon={{if @isOpen "chevron-right" "chevron-left"}}
-                                   @layout="icon-only" {{on "click" (if @isOpen @onCollapse @onOpen)}} />
+          <Auk::Button
+            @skin="borderless"
+            @icon={{if @isOpen "chevron-right" "chevron-left"}}
+            @layout="icon-only"
+            {{on "click" (if @isOpen @onCollapse @onOpen)}}
+          />
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
@@ -102,7 +106,8 @@
                   <span>{{ numac.idName }}</span>
                 </div>
                 <div class="vlc-numac-number-delete-button-wrapper">
-                  <WebComponents::AuButton class="auk-button--nopadding"
+                  <Auk::Button
+                    class="auk-button--nopadding"
                     @skin="borderless"
                     @icon="close"
                     @layout="icon-only"
@@ -119,40 +124,46 @@
             @value={{this.newNumacNumber}}
           />
 
-          <WebComponents::AuButton
-            @skin="borderless"
-            {{on "click" this.addNumacNumber}}
-          >
+          <Auk::Button @skin="borderless" {{on "click" this.addNumacNumber}}>
             {{t "add"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </div>
 
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'translation-due-date'}}</WebComponents::AuLabel>
-            <WebComponents::AuDatepicker
-              @showExpired={{true}}
-              @defaultDate={{this.translationSubcase.dueDate}}
-              @onChange={{this.setTranslationDueDate}}/>
+            <Auk::Datepicker
+              @date={{this.translationSubcase.dueDate}}
+              @onChange={{this.setTranslationDueDate}}
+            />
+            {{#if (is-after this.translationSubcase.dueDate precision="days")}}
+              <WebComponents::AuFormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         {{/if}}
 
         {{!-- Vertaaldatum --}}
         <div class="auk-form-group">
           <WebComponents::AuLabel>{{t 'translation-date'}}</WebComponents::AuLabel>
-          <WebComponents::AuDatepicker
-            @defaultDate={{this.translationSubcase.endDate}}
-            @onChange={{this.setTranslationDate}}/>
+          <Auk::Datepicker
+            @date={{this.translationSubcase.endDate}}
+            @onChange={{this.setTranslationDate}}
+          />
         </div>
 
         {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-target-end-date'}}</WebComponents::AuLabel>
-            <WebComponents::AuDatepicker
-                    @defaultDate={{this.publicationSubcase.targetEndDate}}
-                    @onChange={{this.setPublicationTargetEndDate}}/>
+            <Auk::Datepicker
+              @date={{this.publicationSubcase.targetEndDate}}
+              @onChange={{this.setPublicationTargetEndDate}}
+            />
           </div>
         {{/if}}
 
@@ -160,10 +171,17 @@
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-due-date'}}</WebComponents::AuLabel>
-            <WebComponents::AuDatepicker
-                    @showExpired={{true}}
-                    @defaultDate={{this.publicationSubcase.dueDate}}
-                    @onChange={{this.setPublicationDueDate}}/>
+            <Auk::Datepicker
+              @date={{this.publicationSubcase.dueDate}}
+              @onChange={{this.setPublicationDueDate}}
+            />
+            {{#if (is-after this.publicationSubcase.dueDate precision="days")}}
+              <WebComponents::AuFormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         {{/unless}}
 
@@ -171,10 +189,10 @@
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
             <WebComponents::AuLabel for="blockInput">{{t "publication-date"}}</WebComponents::AuLabel>
-            <WebComponents::AuDatepicker
-              @defaultDate={{this.publicationSubcase.endDate}}
+            <Auk::Datepicker
+              @date={{this.publicationSubcase.endDate}}
               @onChange={{this.setPublicationDate}}
-            />
+               />
           </div>
         {{/if}}
 
@@ -213,16 +231,16 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left"n>
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelWithdraw}}>
+            <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
+            <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
