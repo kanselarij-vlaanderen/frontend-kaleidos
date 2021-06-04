@@ -8,17 +8,14 @@
             @icon="chevron-left"
             @layout="icon-only"
             {{on "click" @backLink}}
-            data-test-cases-backlink/>
+          />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
           <div class="auk-u-my">
             <span class="auk-overline auk-u-block">
               {{t "case"}}
             </span>
-            <WebComponents::AuAbbreviatedText
-              @text={{this.caseTitleFromCase}}
-              @size="250"
-            />
+            <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
           </div>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
@@ -29,7 +26,8 @@
               @skin="primary"
               @icon="add"
               {{on "click" this.toggleIsAddingSubcase}}
-              data-test-case-create-subcase-button>
+              data-test-subcase-overview-header-create-subcase
+            >
               {{t "create-subcase"}}
             </WebComponents::AuButton>
           </WebComponents::AuToolbar::Item>

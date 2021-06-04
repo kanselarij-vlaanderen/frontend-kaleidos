@@ -1,29 +1,36 @@
 const selectors = {
-  createNewAgendaButton: '[data-test-vlc-agenda-createnewagendabutton]',
+  // datepickr (met css)
   datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
   numInputWrapper: '.open  .numInputWrapper',
   inputNumInputCurYear: '.open  input.numInput.cur-year',
   flatpickrDay: '.open  .flatpickr-day',
-  button: 'button',
-  overviewTitle: '[data-test-agendas-title]',
-  agendaitemKortBestekTab: '[data-test-agenda-agendaitem-tab="agendaitem-bestek"]',
-  agendaitemDocumentsTab: '[data-test-agenda-agendaitem-tab="documents"]',
-  agendaitemDossierTab: '[data-test-agenda-agendaitem-tab="agendaitem-case"]',
-  printContainer: '[data-test-agenda-printContainer]',
-  printHeaderTitle: '[data-test-agenda-print-header-title]',
+
+  // data table (met css)
   dataTable: '.auk-table',
   dataTableZebra: '.auk-table--striped',
-  toProcedureStapLink: '.auk-panel-layout__main-content a',
+
+  // agenda-detail/sidebar-item
   confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
+
+  // 3x agendaitem/documents, subcase/documents, agenda/documents
+  // rename data-test-documents-route-open-batch-edit
+  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
+  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
+
+  // TODO unused selector, do we want to use this one ?
+  agendaSidenavElement: 'data-test-agenda-sidenav-element',
+
   subcase: {
-    agendaLink: '[data-test-subcase-agenda-link] a',
+    // TODO this is in route cases/case/subcases/subcase/overview
     confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
   },
   item: {
+    // TODO don't use css
     checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.auk-toolbar-complex__item button',
+    // route agendaitem/news-item // component news-item/edit-item / agendaitem-news-item
     themes: '[data-test-agenda-news-item-themes]',
     news: {
       editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',
@@ -33,32 +40,64 @@ const selectors = {
     },
   },
 
-  agendaitemDecisionTab: '[data-test-agenda-agendaitem-tab="agendaitem-decision"]',
-  agendaitemPersagendaTab: '[data-test-agenda-agendaitem-tab="agendaitem-press-agenda"]',
-  addDecision: '[data-test-add-decision]',
-  decisionContainer: '[data-test-decision-container]',
-  deleteDecision: '[data-test-delete-decision]',
-  uploadDecisionFile: '[data-test-upload-decision-file]',
-  accessLevelPill: '[data-test-access-level-pill]',
-  accessLevelSave: '[data-test-access-level-save]',
+  /**
+    COMPONENT BASED SELECTORS
+  */
 
-  approveDesignAgenda: '[data-test-approve-design-agenda]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
-  documentType: '[data-test-document-type]',
-  documentAccessLevel: '[data-test-document-accesslevel]',
-  agendaDetailSidebarSubitem: '[data-test-agenda-detail-sidebar-sub-item]',
-  agendaOverviewSubitem: '[data-test-agenda-overview-sub-item]',
-  decisionPowerSelectContainer: '[data-test-decision-edit-power-select-container]',
+  // printable-agenda
+  printableAgenda: {
+    container: '[data-test-printable-agenda-container]',
+    headerTitle: '[data-test-printable-agenda-header-title]',
+  },
 
-  deleteAgendaitemButton: '[data-test-delete-agendaitem]',
-  postponeAgendaitemButton: '[data-test-postpone-agendaitem]',
-  revertPostponeAgendaitemButton: '[data-test-revert-postpone-agendaitem]',
-  agendaDetailSubItemContainer: '[data-test-agenda-detail-sidebar-sub-item-container]',
-  agendaitemNumber: '[data-test-agendaitem-number]',
+  // agendaitem-nav
+  agendaitemNav: {
+    caseTab: '[data-test-agendaitem-nav-case-tab]',
+    documentsTab: '[data-test-agendaitem-nav-documents-tab]',
+    decisionTab: '[data-test-agendaitem-nav-decision-tab]',
+    newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
+    pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
+    activeTab: '[data-test-agendaitem-nav-tabs] .active',
+  },
 
-  agendaOverviewItemHeader: '[data-test-agenda-overview-agenda-item-header]',
-  agendaOverviewItemFormallyok: '[data-test-agenda-overview-item-formallyok]',
-  agendaSidenavElement: 'data-test-agenda-sidenav-element',
+  // agendaitem-decision
+  agendaitemDecision: {
+    uploadFile: '[data-test-agendaitem-decision-upload-file]',
+    // TODO unused selectors
+    container: '[data-test-agendaitem-decision-container]',
+    delete: '[data-test-agendaitem-decision-delete]',
+  },
+
+  // agendaitem-decision-edit
+  agendaitemDecisionEdit: {
+    resultContainer: '[data-test-agendaitem-decision-edit-result-container]',
+  },
+
+  // access-level-pill
+  accessLevelPill: {
+    // Clicking the pill in this component toggles edit mode
+    pill: '[data-test-access-level-pill]',
+    save: '[data-test-access-level-pill-save]',
+    cancel: '[data-test-access-level-pill-cancel]',
+  },
+
+  // agenda-detail/sidebar
+  agendaDetailSidebar: {
+    // TODO subItem only works for nota's, not announcement
+    subitem: '[data-test-agenda-detail-sidebar-sub-item]',
+  },
+
+  // agendaitem-group-header
+  agendaitemGroupHeader: {
+    section: '[data-test-agendaitem-group-header-section]',
+  },
+
+  // agenda-overview-item
+  agendaOverviewItem: {
+    subitem: '[data-test-agenda-overview-item-sub-item]',
+    formallyOk: '[data-test-agenda-overview-item-formally-ok]',
+    confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
+  },
 
   // agenda-header
   agendaHeader: {

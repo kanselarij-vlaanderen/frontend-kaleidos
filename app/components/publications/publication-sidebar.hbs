@@ -107,7 +107,7 @@
                     @icon="close"
                     @layout="icon-only"
                     {{on "click" (fn this.deleteNumacNumber numac)}}
-                    data-test-cases-backlink/>
+                  />
                 </div>
               </div>
             {{else}}
@@ -184,7 +184,7 @@
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span class="auk-u-mr">{{t "remark-title"}}</span>
               <div>
-                <WebComponents::AuButtonLink @icon="circle-info" @layout="icon-right" @skin="muted"/>
+                <Auk::ButtonLink @icon="circle-info" @layout="icon-right" @skin="muted" />
                 <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
                   <p>
                     {{t "publication-sidebar-tooltip"}}

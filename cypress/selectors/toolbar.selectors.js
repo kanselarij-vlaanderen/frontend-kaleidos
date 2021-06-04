@@ -1,4 +1,5 @@
 const selectors = {
+  // m-header
   mHeader: {
     agendas: '[data-test-m-header-agendas]',
     cases: '[data-test-m-header-cases]',
