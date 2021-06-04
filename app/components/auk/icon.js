@@ -1,7 +1,10 @@
 import Component from '@glimmer/component';
 
 /**
- * Important, @name should be the icon name without prefix
+ * @argument {String} name: au-kaleidos-icons name (without prefix)
+ * @argument {String} size: Possible values are 'small', 'large'
+ * @argument {String} iconSkinColor: Possible values are 'muted', 'warning', 'primary', 'success', 'danger'
+ * @argument {Boolean} grab: Make the grab-hand appear on hover
  */
 export default class Icon extends Component {
   baseClass = 'auk-icon';
@@ -18,14 +21,6 @@ export default class Icon extends Component {
     return null;
   }
 
-  /*
-    Skins can be:
-    - muted
-    - warning
-    - primary
-    - success
-    - danger
-   */
   get skin() {
     if (this.args.iconSkinColor) {
       return `${this.baseClass}--${this.args.iconSkinColor}`;
