@@ -2,12 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 /**
- * @argument enable choose selectability of specific dates in the calendar popup
- * @argument {boolean} disabled disable the component entirely
- * @argument defaultDate
- * @argument placeholder
- * @argument class css classes
- * @argument onChange
+ * Kaleidos-styled wrapper for EmberFlatpickr. Takes the same arguments as EmberFlatpickr takes.
  */
 export default class Datepicker extends Component {
   get enable() {
