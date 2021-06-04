@@ -132,10 +132,16 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'translation-due-date'}}</WebComponents::AuLabel>
             <Auk::Datepicker
-              @showExpired={{true}}
               @date={{this.translationSubcase.dueDate}}
               @onChange={{this.setTranslationDueDate}}
             />
+            {{#if (is-after this.translationSubcase.dueDate precision="days")}}
+              <WebComponents::AuFormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         {{/if}}
 
@@ -164,10 +170,16 @@
           <div class="auk-form-group">
             <WebComponents::AuLabel>{{t 'publication-due-date'}}</WebComponents::AuLabel>
             <Auk::Datepicker
-              @showExpired={{true}}
               @date={{this.publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
             />
+            {{#if (is-after this.publicationSubcase.dueDate precision="days")}}
+              <WebComponents::AuFormHelpText
+                @text={{t "date-expired"}}
+                @skin="warning"
+                @icon="alert-triangle"
+              />
+            {{/if}}
           </div>
         {{/unless}}
 

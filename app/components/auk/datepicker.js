@@ -28,14 +28,6 @@ export default class Datepicker extends Component {
     return this.args.placeholder || 'Kies een datum';
   }
 
-  get showExpired() {
-    if (this.args.showExpired && this.args.defaultDate) {
-      // TODO comparing dates doesnt work too well with datetime. today is already expired
-      return this.args.defaultDate < new Date();
-    }
-    return false;
-  }
-
   @action
   // eslint-disable-next-line no-unused-vars
   onReady(_selectedDates, _dateStr, instance) {
