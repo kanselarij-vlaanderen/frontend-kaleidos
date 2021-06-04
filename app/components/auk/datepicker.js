@@ -11,12 +11,12 @@ import { action } from '@ember/object';
  */
 export default class Datepicker extends Component {
   get enable() {
-    if (this.args.enabledDatesFunction) { // reverse compatibility
-      return [this.args.enabledDatesFunction];
-    } else if (this.args.enable) { // same interface a flatpickr
+    if (this.args.enable) {
       return this.args.enable;
     }
-    return null;
+    // Return a function that enables all dates as a default, since passing undefined
+    // to <EmberFlatpickr>'s @enable doesn't work
+    return [() => true];
   }
 
   get defaultDate() {
