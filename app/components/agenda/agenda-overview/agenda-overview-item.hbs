@@ -8,6 +8,7 @@
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
+          {{!-- TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon --}}
           <Auk::Button
             class="auk-u-p-0 auk-u-cursor-grab"
             @skin="borderless"
