@@ -1,7 +1,5 @@
 <div class="auk-u-m-4">
-  {{ page-title
-    (t "case")
-  }}
+  {{page-title (capitalize (t "case")) }}
   {{!--  DOSSIER PANEL  --}}
     <div class="auk-u-mb-3">
       {{#if this.isInscriptionInEditMode}}
@@ -15,7 +13,7 @@
               </WebComponents::AuToolbar::Group>
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button/>
+                  <Auk::Button @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button />
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
@@ -34,17 +32,17 @@
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</WebComponents::AuButton>
+                  <Auk::Button @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</Auk::Button>
                 </WebComponents::AuToolbar::Item>
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton
-                    data-test-publication-save-inscription
+                  <Auk::Button
                     @skin="primary"
                     @disabled={{this.saveInscription.isRunning}}
+                    data-test-publication-save-inscription
                     {{on "click" (perform this.saveInscription)}}
                   >
                     {{t "save"}}
-                  </WebComponents::AuButton>
+                  </Auk::Button>
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
@@ -78,7 +76,7 @@
                       {{t "to-case"}}
                     </Auk::ButtonLink>
                   {{else}}
-                    <WebComponents::AuButton  @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button/>
+                    <Auk::Button @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button />
                   {{/if}}
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
@@ -111,14 +109,14 @@
             {{#if (not this.latestSubcaseOnMeeting)}}
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton
+                  <Auk::Button
+                    @skin="tertiary"
+                    @icon="add"
+                    data-test-add-mandatee
                     {{on "click" this.showMandateeModal}}
-                          @skin="tertiary"
-                          @icon="add"
-                          data-test-add-mandatee
                   >
                     {{t "create-mandatee"}}
-                  </WebComponents::AuButton>
+                  </Auk::Button>
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
             {{/if}}
@@ -144,7 +142,7 @@
                         </div>
                       </td>
                       <td class="auk-u-text-align--right">
-                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                        <Auk::Button @layout="icon-only" @skin="borderless" @icon="more">
                           <AttachPopover
                                   @renderInPlace={{true}}
                                   @class="ember-attacher-popper"
@@ -163,7 +161,7 @@
                               </WebComponents::AuDropdown::Item>
                             </WebComponents::AuDropdown>
                           </AttachPopover>
-                        </WebComponents::AuButton>
+                        </Auk::Button>
                       </td>
                     </tr>
                   {{/each}}
@@ -172,7 +170,7 @@
             </WebComponents::AuPanel::Body>
           {{else}}
             <WebComponents::AuPanel::Body>
-              <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+              <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
             </WebComponents::AuPanel::Body>
           {{/if}}
         {{else}}
@@ -232,21 +230,21 @@
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                  {{on "click" this.showContactPersonModal}}
+                <Auk::Button
                   @skin="tertiary"
                   @icon="add"
                   data-test-add-contactperson
+                  {{on "click" this.showContactPersonModal}}
                 >
                   {{t "add-contact"}}
-                </WebComponents::AuButton>
+                </Auk::Button>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </WebComponents::AuPanel::Header>
         {{#if (not this.contactPersons) }}
           <WebComponents::AuPanel::Body>
-            <WebComponents::AuEmptyState @message={{t "no-added-contact-persons"}}/>
+            <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
           </WebComponents::AuPanel::Body>
         {{else}}
           <WebComponents::AuPanel::Body @noPadding="true">
@@ -284,7 +282,7 @@
 
                     <td class="auk-u-text-align--right">
                       <div class="auk-u-inline-block">
-                        <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more"></WebComponents::AuButton>
+                        <Auk::Button @layout="icon-only" @skin="borderless" @icon="more"></Auk::Button>
                         <AttachPopover
                             @renderInPlace={{true}}
                             @class="ember-attacher-popper"
@@ -330,18 +328,18 @@
               <WebComponents::AuLabel for="firstNameInput">
                 {{t "first-name"}}
               </WebComponents::AuLabel>
-              <WebComponents::AuInput {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block="true" />
+              <Auk::Input {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block={{true}} />
             </div>
             <div>
               <WebComponents::AuLabel for="lastNameInput">
                 {{t "name"}}
               </WebComponents::AuLabel>
-              <WebComponents::AuInput {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block="true" />
+              <Auk::Input {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block={{true}} />
             </div>
           </div>
           <div class='auk-form-group'>
             <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
-            <WebComponents::AuInput {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block="true" />
+            <Auk::Input {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block={{true}} />
           </div>
           <div class="auk-form-group">
             <WebComponents::AuLabel for="organisationInput">
@@ -358,9 +356,9 @@
                     as |organization|>
               {{ organization.name }}
             </PowerSelect>
-            <WebComponents::AuButton @skin="borderless" {{on "click" this.openAddOrganisationModal}}>
+            <Auk::Button @skin="borderless" {{on "click" this.openAddOrganisationModal}}>
               {{t "add-organization"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </div>
         </div>
       </WebComponents::AuModal::Body>
@@ -369,16 +367,16 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="borderless" {{on "click" this.closeContactPersonModal}}>
+              <Auk::Button @skin="borderless" {{on "click" this.closeContactPersonModal}}>
                 {{t "cancel"}}
-              </WebComponents::AuButton>
+              </Auk::Button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton @skin="primary" @icon="add" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
+              <Auk::Button @skin="primary" @icon="add" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
                 {{t "add"}}
-              </WebComponents::AuButton>
+              </Auk::Button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -411,17 +409,14 @@
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
-                @skin="borderless"
-                {{on "click" this.closeMandateeModal}}
-              >
+              <Auk::Button @skin="borderless" {{on "click" this.closeMandateeModal}}>
                 {{t "cancel"}}
-              </WebComponents::AuButton>
+              </Auk::Button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
+              <Auk::Button
                 @skin="primary"
                 @icon="add"
                 @size="small"
@@ -429,7 +424,7 @@
                 data-test-add-contactperson-submit-button
               >
                 {{t "add"}}
-              </WebComponents::AuButton>
+              </Auk::Button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
@@ -450,37 +445,38 @@
             @closeModal={{this.closeAddOrganisationModal}}
     />
     <WebComponents::AuModal::Body>
-      <WebComponents::AuInput @icon=""
-                              class="auk-input--block"
-                              type="text"
-                              data-test-trigger-search-input
-                              id="defaultInput"
-                              @value={{this.inputOrganization}}
+      <Auk::Input
+        @icon=""
+        class="auk-input--block"
+        type="text"
+        data-test-trigger-search-input
+        id="defaultInput"
+        @value={{this.inputOrganization}}
       />
     </WebComponents::AuModal::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-                    @skin="borderless"
+            <Auk::Button
+              @skin="borderless"
               {{on "click" this.closeAddOrganisationModal}}
             >
               {{t "cancel"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
-                    @skin="primary"
-                    @icon="add"
-                    @size="small"
+            <Auk::Button
+              @skin="primary"
+              @icon="add"
+              @size="small"
+              data-test-add-organization-submit-button
               {{on "click" this.addOrganisation}}
-                    data-test-add-organization-submit-button
             >
               {{t "add"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
