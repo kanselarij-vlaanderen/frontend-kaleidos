@@ -97,12 +97,12 @@
         {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
           <WebComponents::AuLabel>{{t "numac-number"}}</WebComponents::AuLabel>
-          <WebComponents::AuInputPills
+          <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
             @onRemove={{this.deleteNumacNumber}} as |numac|>
             {{numac.idName}}
-          </WebComponents::AuInputPills>
+          </Auk::InputPills>
         </div>
 
         {{!-- Uiterste vertaaldatum --}}

@@ -7,7 +7,7 @@ import { action } from '@ember/object';
  * @argument {textValue: string) => void} onCreate
  * @argument {(item: TItem) => void} onRemove
  */
-export default class WebComponentsAuInputPillsComponent extends Component {
+export default class AukInputPillsComponent extends Component {
   @action
   onAdd(textValue) {
     this.args.onCreate(textValue);
