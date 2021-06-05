@@ -21,7 +21,11 @@
                   <WebComponents::AuLabel for="nameDocumentUpload" @isRequired={{true}}>
                     {{t 'name'}}
                   </WebComponents::AuLabel>
-                  <WebComponents::AuInput type="text" id="nameDocumentUpload" @value={{mut this.name}}/>
+                  <Auk::Input
+                    type="text"
+                    id="nameDocumentUpload"
+                    @value={{mut this.name}}
+                  />
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
@@ -47,10 +51,10 @@
                                                   class="auk-label--light">
                             {{t 'pages-amount'}}
                           </WebComponents::AuLabel>
-                          <WebComponents::AuInput
-                                  type="number"
-                                  id="translationLoadPages"
-                                  @value={{mut this.pagesAmount}}
+                          <Auk::Input
+                            type="number"
+                            id="translationLoadPages"
+                            @value={{mut this.pagesAmount}}
                           />
                         </div>
                       </div>
@@ -60,10 +64,10 @@
                                                   class="auk-label--light">
                             {{t 'words-amount'}}
                           </WebComponents::AuLabel>
-                          <WebComponents::AuInput
-                                  type="number"
-                                  id="translationLoadWords"
-                                  @value={{mut this.wordsAmount}}
+                          <Auk::Input
+                            type="number"
+                            id="translationLoadWords"
+                            @value={{mut this.wordsAmount}}
                           />
                         </div>
                       </div>
