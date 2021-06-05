@@ -1,8 +1,22 @@
+<WebComponents::AuNavbar @border="none">
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <Auk::Button @skin="secondary" @icon="mail" @disabled={{true}}>
+          {{t "request-translations"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+
+        <Auk::Button @skin="secondary" @icon="add" {{on "click" this.openPieceUploadModal}}>
+          {{t "upload-translation-file"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    <Auk::Button @skin="secondary" @icon="add" {{on "click" this.openPieceUploadModal}} >
-      {{t "upload-translation-file"}}
-    </Auk::Button>
     {{#if this.model}}
       <table class="auk-table">
         <thead>
