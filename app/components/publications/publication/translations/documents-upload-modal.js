@@ -18,8 +18,9 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @tracked name = null;
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
-  // TODO KAS2600
+  // TODO KAS-2600
   // @tracked proofprint = false;
+  // TODO KAS-2481
   // @tracked receivedAtDate = null;
 
 
@@ -90,13 +91,13 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     }
   }
 
-  // TODO Seen in Designs but not sure of usage
+  // TODO KAS-2481
   // @action
   // setReceivedAtDate(selectedDates) {
   //   this.receivedAtDate = selectedDates[0];
   // }
 
-  // TODO In KAS 2600
+  // TODO In KAS-2600
   // @action
   // toggleProofPrint() {
   //   this.proofprint = !this.proofprint;
