@@ -89,14 +89,14 @@
     </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer
-          @cancelModal={{perform this.cancelTranslation}}
+    @cancelModal={{perform this.cancelTranslation}}
   >
-    <WebComponents::AuButton
-            @skin="primary"
-            @disabled={{this.saveIsDisabled}}
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.saveIsDisabled}}
       {{on "click" (perform this.saveTranslation)}}
     >
       {{t "save"}}
-    </WebComponents::AuButton>
+    </Auk::Button>
   </WebComponents::AuModal::Footer>
 </WebComponents::AuModal>
