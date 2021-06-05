@@ -13,34 +13,52 @@
         </div>
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox @label={{t "via-cabinet" }} @name="ministerFilterOption"
-                @checked={{this.filter.ministerFilterOption}} @toggle={{this.toggleFilterOption}} />
-            </WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
+              <Auk::Checkbox
+                @label={{t "via-cabinet" }}
+                @checked={{this.filter.ministerFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "ministerFilterOption")}}
+              />
+            </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox @label={{t "publications-published" }} @name="publishedFilterOption"
-                @checked={{this.filter.publishedFilterOption}} @toggle={{this.toggleFilterOption}} />
-              <WebComponents::AuCheckbox @label={{t "publications-paused" }} @name="pausedFilterOption"
-                @checked={{this.filter.pausedFilterOption}} @toggle={{this.toggleFilterOption}} />
-            </WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
+              <Auk::Checkbox
+                @label={{t "publications-published" }}
+                @checked={{this.filter.publishedFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "publishedFilterOption")}}
+              />
+              <Auk::Checkbox
+                @label={{t "publications-paused" }}
+                @checked={{this.filter.pausedFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "pausedFilterOption")}}
+              />
+            </Auk::CheckboxList>
           </div>
         </div>
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox @label={{t "not-via-cabinet" }} @name="notMinisterFilterOption"
-                @checked={{this.filter.notMinisterFilterOption}} @toggle={{this.toggleFilterOption}} />
-            </WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
+              <Auk::Checkbox
+                @label={{t "not-via-cabinet" }}
+                @checked={{this.filter.notMinisterFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "notMinisterFilterOption")}}
+              />
+            </Auk::CheckboxList>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuCheckboxList>
-              <WebComponents::AuCheckbox @label={{t "publications-to-publish" }} @name="toPublishFilterOption"
-                @checked={{this.filter.toPublishFilterOption}} @toggle={{this.toggleFilterOption}} />
-              <WebComponents::AuCheckbox @label={{t "discharged" }} @name="withdrawnFilterOption"
-                @checked={{this.filter.withdrawnFilterOption}} @toggle={{this.toggleFilterOption}} />
-            </WebComponents::AuCheckboxList>
+            <Auk::CheckboxList>
+              <Auk::Checkbox
+                @label={{t "publications-to-publish" }}
+                @checked={{this.filter.toPublishFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "toPublishFilterOption")}}
+              />
+              <Auk::Checkbox
+                @label={{t "discharged" }}
+                @checked={{this.filter.withdrawnFilterOption}}
+                {{on "input" (fn this.toggleFilterOption "withdrawnFilterOption")}}
+              />
+            </Auk::CheckboxList>
           </div>
         </div>
       </div>
@@ -51,23 +69,34 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="borderless" {{on "click" @onCancel}} data-test-publication-button-cancel>
+          <Auk::Button
+            @skin="borderless"
+            data-test-publication-button-cancel
+            {{on "click" @onCancel}}
+          >
             {{t "cancel"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="secondary" data-test-publication-button-reset-filters {{on "click"
-                                                                                                    this.reset}}>
+          <Auk::Button
+            @skin="secondary"
+            data-test-publication-button-reset-filters
+            {{on "click" this.reset}}
+          >
             {{t "clear-filter-plural"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="filter" @skin="primary" data-test-publication-button-filter-content
-            {{on "click" (fn @onSave this.filter)}}>
+          <Auk::Button
+            @icon="filter"
+            @skin="primary"
+            data-test-publication-button-filter-content
+            {{on "click" (fn @onSave this.filter)}}
+          >
             {{t "filter-content"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>

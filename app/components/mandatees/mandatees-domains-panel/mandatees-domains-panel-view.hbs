@@ -9,14 +9,14 @@
       {{#if @showEditButton}}
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
+            <Auk::Button
               @skin="tertiary"
               @icon="settings"
               data-test-mandatee-panel-view-edit={{true}}
               {{on "click" @onClickEdit}}
             >
               {{t "edit-2"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       {{/if}}
@@ -38,7 +38,7 @@
             <tr data-test-mandatee-panel-view-mandatee-row>
               <td class="auk-table__col--4" data-test-mandatee-panel-view-row-name>
                 <div class="auk-o-flex auk-o-flex--vertical-center">
-                  <WebComponents::AuBadge @icon="user"/>
+                  <Auk::Badge @icon="user" />
                   <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
                 </div>
               </td>
@@ -70,7 +70,7 @@
               </td>
               {{!-- TODO implement actions --}}
               {{!-- <td class="auk-u-text-align--right">
-                <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="more">
+                <Auk::Button @layout="icon-only" @skin="borderless" @icon="more">
                   <AttachPopover
                           @renderInPlace={{true}}
                           @class="ember-attacher-popper"
@@ -88,7 +88,7 @@
                       </WebComponents::AuDropdown::Item>
                     </WebComponents::AuDropdown>
                   </AttachPopover>
-                </WebComponents::AuButton>
+                </Auk::Button>
               </td> --}}
             </tr>
           {{/each}}
@@ -97,7 +97,7 @@
     </WebComponents::AuPanel::Body>
   {{else}}
     <WebComponents::AuPanel::Body>
-      <WebComponents::AuEmptyState @message={{t "no-mandatees-and-fields-added"}}/>
+      <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
     </WebComponents::AuPanel::Body>
   {{/if}}
 </WebComponents::AuPanel>

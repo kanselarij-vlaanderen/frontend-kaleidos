@@ -24,6 +24,7 @@ const selectors = {
   deleteUser: '[data-test-delete-user]',
   userSearchInput: '[data-test-user-search-input]',
   userSearchButton: '[data-test-user-search-button]',
-  goToUserDetail: '[data-test-agenda-overview-sub-item]',
+  // TODO rename selector
+  goToUserDetail: '[data-test-next-button-user-detail]',
 };
 export default selectors;

@@ -52,7 +52,7 @@
         <td>Data punt</td>
         <td>
           <WebComponents::AuButtonToolbar>
-            <WebComponents::AuButton @skin="borderless" @layout="icon-only" id={{@index}} @icon="more">Acties</WebComponents::AuButton>
+            <Auk::Button @skin="borderless" @layout="icon-only" id={{@index}} @icon="more">Acties</Auk::Button>
 
             <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId={{@index}} as |popover|>
               <WebComponents::AuDropdown>
@@ -92,8 +92,8 @@
         <td>Data punt</td>
         <td>
           <WebComponents::AuButtonToolbar>
-            <WebComponents::AuButton @skin="borderless" @icon="edit" @layout="icon-only" @route="styleguide">Edit item</WebComponents::AuButton>
-            <WebComponents::AuButton @skin="borderless" @icon="delete" @layout="icon-only" @route="styleguide">Delete item</WebComponents::AuButton>
+            <Auk::Button @skin="borderless" @icon="edit" @layout="icon-only" @route="styleguide">Edit item</Auk::Button>
+            <Auk::Button @skin="borderless" @icon="delete" @layout="icon-only" @route="styleguide">Delete item</Auk::Button>
           </WebComponents::AuButtonToolbar>
         </td>
       </tr>
@@ -126,7 +126,7 @@
         <td>Data punt</td>
         <td>
           <div class="auk-form-group">
-            <WebComponents::AuCheckbox />
+            <Auk::Checkbox />
           </div>
         </td>
       </tr>

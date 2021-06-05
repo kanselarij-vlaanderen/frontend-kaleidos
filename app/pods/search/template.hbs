@@ -6,8 +6,7 @@
     <div class="auk-toolbar-complex auk-toolbar-complex--auto">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <h2 class="auk-toolbar__title"
-              data-test-agendas-title>
+          <h2 class="auk-toolbar__title">
             {{capitalize (t "search")}}
           </h2>
         </div>
@@ -114,7 +113,7 @@
           </div>
         </div>
         <div class="auk-o-grid-col-1">
-          <WebComponents::AuButton
+          <Auk::Button
             @skin="primary"
             @icon="search"
             data-test-trigger-search
@@ -122,7 +121,7 @@
             {{on "click" this.search}}
           >
             {{t "search"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </div>
       </div>
 

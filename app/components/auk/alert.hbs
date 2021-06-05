@@ -1,6 +1,6 @@
 <div data-test-au-alert-container class="auk-alert {{this.skin}}" ...attributes>
   <div class="auk-alert__body">
-    <WebComponents::AuBadge @icon="{{this.icon}}" @skin={{@skin}} @size={{@size}}/>
+    <Auk::Badge @icon="{{this.icon}}" @skin={{@skin}} @size={{@size}} />
     <div class="auk-alert__text">
       {{#if @title}}
         <p data-test-au-alert-title class="auk-alert__title">{{@title}}</p>
@@ -9,6 +9,6 @@
     </div>
   </div>
   {{#if @isClosable}}
-    <WebComponents::AuButton data-test-au-alert-close @skin="muted-borderless" @icon="close" @layout="icon-only" @size={{@size}}>{{t "cancel"}}</WebComponents::AuButton>
+    <Auk::Button data-test-au-alert-close @skin="muted-borderless" @icon="close" @layout="icon-only" @size={{@size}}>{{t "cancel"}}</Auk::Button>
   {{/if}}
 </div>
