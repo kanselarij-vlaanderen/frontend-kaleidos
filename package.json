@@ -110,6 +110,7 @@
     "ember-responsive": "^3.0.6",
     "ember-sortable": "^2.2.2",
     "ember-source": "~3.17.0",
+    "ember-tag-input": "git+https://github.com/kanselarij-vlaanderen/ember-tag-input.git#6f7d67f23274e2ebe23f8e9619353d35de94b516",
     "ember-template-lint": "^2.4.0",
     "ember-test-selectors": "^3.0.0",
     "ember-tooltips": "^3.4.5",
