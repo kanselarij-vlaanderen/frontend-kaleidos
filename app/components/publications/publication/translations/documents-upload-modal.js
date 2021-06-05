@@ -39,10 +39,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   get saveIsDisabled() {
-    return this.translationDocument === null
-      || this.name === null
-      || this.pagesAmount === null
-      || this.wordsAmount === null;
+    return this.translationDocument === null || this.name === null;
   }
 
   @action
