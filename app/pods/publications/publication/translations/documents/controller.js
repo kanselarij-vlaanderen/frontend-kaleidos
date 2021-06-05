@@ -7,11 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @tracked showPieceUploadModal = false;
 
-  @action
-  openPieceUploadModal() {
-    this.showPieceUploadModal = true;
-  }
-
   @task
   *saveAndLinkPieces(translationDocument) {
     const piece = translationDocument.piece;
@@ -30,7 +25,12 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  hidePieceUploadModal() {
+  openPieceUploadModal() {
+    this.showPieceUploadModal = true;
+  }
+
+  @action
+  closePieceUploadModal() {
     this.showPieceUploadModal = false;
   }
 }

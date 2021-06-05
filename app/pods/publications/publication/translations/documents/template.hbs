@@ -21,7 +21,7 @@
       <table class="auk-table">
         <thead>
           <tr>
-            <th class="auk-table-checkbox-col"><WebComponents::AuCheckbox @mode="table" /></th>
+            <th class="auk-table-checkbox-col"><Auk::Checkbox @mode="table" /></th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
@@ -89,6 +89,6 @@
 
 {{#if this.showPieceUploadModal}}
   <Publications::Publication::Translations::DocumentsUploadModal
-          @onSave={{perform this.saveAndLinkPieces}}
-          @onCancel={{this.hidePieceUploadModal}} />
+    @onSave={{perform this.saveAndLinkPieces}}
+    @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
