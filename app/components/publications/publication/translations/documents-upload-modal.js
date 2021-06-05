@@ -57,6 +57,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
+    this.name = file.filenameWithoutExtension;
     this.newPieces.pushObject(this.translatedDocument);
   }
 
