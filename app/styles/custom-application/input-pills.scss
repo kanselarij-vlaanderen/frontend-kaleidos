@@ -1,0 +1,58 @@
+@import 'auk-filter-pill';
+@import 'auk-icon';
+
+.emberTagInput {
+  @extend .auk-input;
+  @extend .auk-input--block;
+
+  @extend .auk-filter-pill-list;
+
+  .emberTagInput--readOnly {}
+
+  li.emberTagInput-tag {
+    @extend .auk-filter-pill;
+  }
+
+  li.emberTagInput-tag--remove {
+    opacity: 0.75;
+  }
+
+  .emberTagInput-remove {
+    @extend .auk-icon;
+    @extend .auk-icon--close;
+    // remove <a />-tag styling
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // substitute <i class="ki-close" />
+  .emberTagInput-remove::after {
+    // copied from:
+    // @kanselarij-vlaanderen/au-kaleidos-icons/iconfont/icons
+    font-family: icons !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    // ki-close icon
+    content: "\f115";
+  }
+
+  .emberTagInput-new {
+    display: inline-flex;
+  }
+
+  input.emberTagInput-input {
+    border: none;
+  }
+
+  input.emberTagInput-input:focus {
+    outline: none;
+  }
+
+  input.emberTagInput-input.is-disabled { }
+}
