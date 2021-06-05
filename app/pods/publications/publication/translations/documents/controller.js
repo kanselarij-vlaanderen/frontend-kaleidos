@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class PublicationTranslationDocumentController extends Controller {
+export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @tracked showPieceUploadModal = false;
 
   @action

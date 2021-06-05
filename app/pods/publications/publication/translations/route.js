@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default class PublicationTranslationRoute extends Route {
+export default class PublicationsPublicationTranslationsRoute extends Route {
   model() {
     return this.modelFor('publications.publication').translationSubcase;
   }

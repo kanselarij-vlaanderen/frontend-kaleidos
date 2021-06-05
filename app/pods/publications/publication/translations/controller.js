@@ -1,4 +1,4 @@
 import Controller from '@ember/controller';
 
-export default class PublicationTranslationController extends Controller {
+export default class PublicationsPublicationTranslationsController extends Controller {
 }
