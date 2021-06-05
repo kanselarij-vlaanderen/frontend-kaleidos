@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  @tracked translationSubcase;
   @tracked showPieceUploadModal = false;
 
   @task
