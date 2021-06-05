@@ -89,6 +89,7 @@
 
 {{#if this.showPieceUploadModal}}
   <Publications::Publication::Translations::DocumentsUploadModal
+    @translationSubcase={{this.translationSubcase}}
     @onSave={{perform this.saveAndLinkPieces}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}

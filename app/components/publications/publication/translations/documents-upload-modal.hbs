@@ -1,8 +1,8 @@
 <WebComponents::AuModal >
   <WebComponents::AuModal::Header
-          @resizeable={{false}}
-          @title={{t "upload-translation-document"}}
-          @closeModal={{perform this.cancelTranslation}}
+    @resizeable={{false}}
+    @title={{t "upload-translation-document" identifier=@translationSubcase.publicationFlow.identification.idName}}
+    @closeModal={{perform this.cancelTranslation}}
   />
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
