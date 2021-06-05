@@ -53,7 +53,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       created: now,
       modified: now,
       file: file,
-      accessLevel: this.defaultAccessLevel,
       confidential: false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
