@@ -9,6 +9,9 @@
             <th>{{t "name"}}</th>
             <th>{{t "document-type"}}</th>
             <th>
+              {{t "link-publication"}}
+            </th>
+            <th>
               {{t "publications-number"}}
               <WebComponents::AuIcon @iconSkinColor="muted" @name="info-circle">
                 <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
@@ -27,44 +30,13 @@
           @pieces={{@pieces}}
           as |pieces|>
           {{#each pieces as |piece|}}
-            <tr>
-              <td>
-                {{piece.name}}
-              </td>
-              <td>
-                {{piece.documentContainer.type.label}}
-              </td>
-              <td>
-                {{#if piece.publicationFlow}}
-                  {{piece.publicationFlow.identification.idName}}
-                {{else}}
-                  <Auk::Button
-                    @icon="add"
-                    {{on 'click' (fn this.openNewPublicationModal piece)}}
-                  >
-                    {{t "publications-new"}}
-                  </Auk::Button>
-                {{/if}}
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <Auk::Button
-                    @layout="icon-only"
-                    @icon="download"
-                    @skin="borderless"
-                    @href={{piece.file.downloadLink}}
-                    download
-                  />
-                  <Auk::Button
-                    @layout="icon-only"
-                    @icon="book"
-                    @skin="borderless"
-                    @href={{piece.viewDocumentURL}}
-                    target="_blank"
-                  />
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
+            <Publications::BatchDocumentsPublicationRow
+              @piece={{piece}}
+              @case={{this.case}}
+              @onLinkPublicationFlow={{this.linkPublicationFlow}}
+              @onUnlinkPublicationFlow={{this.unlinkPublicationFlow}}
+              @onOpenNewPublicationModal={{this.openNewPublicationModal}}
+            />
           {{/each}}
         </Documents::DocumentList>
       </table>
