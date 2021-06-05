@@ -14,16 +14,15 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuCheckbox
-                @label={{t "finished"}}
-                @checked={{false}}
+        <Auk::Checkbox
+          @label={{t "finished"}}
+          @checked={{false}}
         />
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" >
-          <WebComponents::AuIcon @name="mail"/>
+        <Auk::Button @skin="secondary" @icon="mail" @disabled={{true}}>
           {{t "request-translations"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
