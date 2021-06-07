@@ -108,7 +108,7 @@
             <Auk::Label>
               {{t "files"}}
             </Auk::Label>
-            <ul class="auk-list auk-list--bordered">
+            <Auk::List @bordered={{true}}>
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
                 <li class="auk-list__item auk-list__item--gray-100">
                   <Auk::Badge @skin="white" @icon="document" />
@@ -130,7 +130,7 @@
                   </WebComponents::AuButtonToolbar>
                 </li>
               {{/each}}
-            </ul>
+            </Auk::List>
           </div>
         </div>
       </WebComponents::AuPanel::Body>
