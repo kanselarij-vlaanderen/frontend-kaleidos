@@ -14,19 +14,19 @@
       </WebComponents::AuPanel::Header>
       <WebComponents::AuPanel::Body>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="defaultInput">{{t "email-to" }}</WebComponents::AuLabel>
+          <Auk::Label for="defaultInput">{{t "email-to" }}</Auk::Label>
           <Auk::Input @value={{this.to}} type="text" id="blockInput" @block={{true}} {{on "change" this.onchangeTargetMailAddress}} />
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="defaultInput">{{t "subject" }}</WebComponents::AuLabel>
+          <Auk::Label for="defaultInput">{{t "subject" }}</Auk::Label>
           <Auk::Input @value={{this.subject}} type="text" id="blockInput" @block={{true}} {{on "change" this.onChangeSubject}} />
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="defaultInput">{{t "test-attachement-piece-id" }}</WebComponents::AuLabel>
+          <Auk::Label for="defaultInput">{{t "test-attachement-piece-id" }}</Auk::Label>
           <Auk::Input @value={{this.pieceId}} type="text" id="blockInput" @block={{true}} {{on "change" this.onChangePieceId}} />
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="defaultInput">{{t "content" }}</WebComponents::AuLabel>
+          <Auk::Label for="defaultInput">{{t "content" }}</Auk::Label>
           <WebComponents::AuTextarea @rows="2" @value={{this.content}} {{on "change" this.onChangeContent}}></WebComponents::AuTextarea>
         </div>
         <WebComponents::VlSaveButton

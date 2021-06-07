@@ -1,5 +1,5 @@
 <WebComponents::AuSidebar
-  class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--large auk-sidebar--responsive auk-sidebar--collapsible auk-scroll-wrapper"
+  class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--right auk-sidebar--large auk-sidebar--collapsible"
   @position="right"
   data-collapsed={{if (not @isOpen) "true" "false"}}
 >
@@ -22,9 +22,18 @@
       {{!--Publicatienummer --}}
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
-          <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-          <Auk::Input type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}} {{on "input" (perform this.setPublicationNumber)}} />
-          <Auk::Input size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}} {{on "input" (perform this.setPublicationNumberSuffix)}} />
+          <Auk::Label>{{t 'publications-number'}}</Auk::Label>
+          <Auk::Input
+            type="number"
+            value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
+            {{on "input" (perform this.setPublicationNumber)}}
+          />
+          <Auk::Input
+            size="5"
+            type="text"
+            value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
+            {{on "input" (perform this.setPublicationNumberSuffix)}}
+          />
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">
@@ -48,13 +57,13 @@
 
         {{#if (or this.publicationStatus.isWithdrawn this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{#if this.publicationStatus.isWithdrawn}}
                 {{t "withdrawn-on"}}
               {{else if this.publicationStatus.isPaused}}
                 {{t "paused-on"}}
               {{/if}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <div class="auk-u-muted">
               {{moment-format this.publicationStatusChange.startedAt "DD-MM-YYYY \o\m HH:mm"}}
             </div>
@@ -64,7 +73,7 @@
         {{!-- Type regelgeving --}}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "regulation-type"}}</WebComponents::AuLabel>
+            <Auk::Label for="blockInput">{{t "regulation-type"}}</Auk::Label>
             <WebComponents::AuPowerSelect @options={{this.regulationTypes}}
                                           @isSearchable={{false}}
                                           @onchange={{this.setRegulationType}}
@@ -76,7 +85,7 @@
         {{!-- Publicatiewijze --}}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "kind-of-publication"}}</WebComponents::AuLabel>
+            <Auk::Label for="blockInput">{{t "kind-of-publication"}}</Auk::Label>
             <WebComponents::AuPowerSelect @options={{this.publicationModes}}
                                           @isSearchable={{false}}
                                           @onchange={{this.setPublicationMode}}
@@ -96,7 +105,7 @@
 
         {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "numac-number"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "numac-number"}}</Auk::Label>
           <Auk::InputPills
             @items={{this.publicationFlow.numacNumbers}}
             @onCreate={{this.addNumacNumber}}
@@ -108,13 +117,13 @@
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'translation-due-date'}}</WebComponents::AuLabel>
+            <Auk::Label>{{t 'translation-due-date'}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.translationSubcase.dueDate}}
               @onChange={{this.setTranslationDueDate}}
             />
             {{#if (is-after this.translationSubcase.dueDate precision="days")}}
-              <WebComponents::AuFormHelpText
+              <Auk::FormHelpText
                 @text={{t "date-expired"}}
                 @skin="warning"
                 @icon="alert-triangle"
@@ -125,7 +134,7 @@
 
         {{!-- Vertaaldatum --}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t 'translation-date'}}</WebComponents::AuLabel>
+          <Auk::Label>{{t 'translation-date'}}</Auk::Label>
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
             @onChange={{this.setTranslationDate}}
@@ -135,7 +144,7 @@
         {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'publication-target-end-date'}}</WebComponents::AuLabel>
+            <Auk::Label>{{t 'publication-target-end-date'}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.targetEndDate}}
               @onChange={{this.setPublicationTargetEndDate}}
@@ -146,13 +155,13 @@
         {{!-- Uiterste publicatiedatum --}}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel>{{t 'publication-due-date'}}</WebComponents::AuLabel>
+            <Auk::Label>{{t 'publication-due-date'}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
             />
             {{#if (is-after this.publicationSubcase.dueDate precision="days")}}
-              <WebComponents::AuFormHelpText
+              <Auk::FormHelpText
                 @text={{t "date-expired"}}
                 @skin="warning"
                 @icon="alert-triangle"
@@ -164,7 +173,7 @@
         {{!-- Publicatiedatum --}}
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="blockInput">{{t "publication-date"}}</WebComponents::AuLabel>
+            <Auk::Label for="blockInput">{{t "publication-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.endDate}}
               @onChange={{this.setPublicationDate}}
@@ -174,7 +183,7 @@
 
         {{!-- Opmerking --}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>
+          <Auk::Label>
             <div class="auk-o-flex auk-o-flex--vertical-center">
               <span class="auk-u-mr">{{t "remark-title"}}</span>
               <div>
@@ -186,7 +195,7 @@
                 </EmberTooltip>
               </div>
             </div>
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuTextarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
         </div>
       </div>

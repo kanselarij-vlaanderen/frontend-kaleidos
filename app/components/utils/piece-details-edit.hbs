@@ -7,15 +7,15 @@
       <div class="auk-form-group-layout auk-form-group-layout--horizontal">
         {{#if @piece}}
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="name">{{t "name"}}</WebComponents::AuLabel>
+            <Auk::Label for="name">{{t "name"}}</Auk::Label>
             <Auk::Input type="text" id="name" @value={{@piece.name}} />
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="extension">{{t "file-extension"}}</WebComponents::AuLabel>
+            <Auk::Label for="extension">{{t "file-extension"}}</Auk::Label>
             <WebComponents::AuPill>{{await @piece.file.extension}}</WebComponents::AuPill>
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="document-type">{{t "document-type"}}</WebComponents::AuLabel>
+            <Auk::Label for="document-type">{{t "document-type"}}</Auk::Label>
             <div class="group">
               {{#unless this.loadData.isRunning}}
                 <Utils::RadioDropdownComboSelect
@@ -32,12 +32,12 @@
           </div>
 
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="pages-amount">{{t "pages-amount"}}</WebComponents::AuLabel>
+            <Auk::Label for="pages-amount">{{t "pages-amount"}}</Auk::Label>
             <Auk::Input type="text" id="pages-amount" @value={{@piece.pages}} />
           </div>
 
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="words-amount">{{t "words-amount"}}</WebComponents::AuLabel>
+            <Auk::Label for="words-amount">{{t "words-amount"}}</Auk::Label>
             <Auk::Input type="text" id="words-amount" @value={{@piece.words}} />
           </div>
 
