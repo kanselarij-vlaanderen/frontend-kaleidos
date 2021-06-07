@@ -27,15 +27,21 @@ const selectors = {
   },
 
   // route settings/ministers
-  addMinister: '[data-test-minister-add]',
-  sortableGroup: '[data-test-ministers-sortable-group]',
-  sortableGroupRow: '[data-test-ministers-sortable-group-row]',
-  mandateeFullDisplayName: '[data-test-mandatee-fulldisplayname]',
-  mandateeNickname: '[data-test-mandatee-nickname]',
-  mandateePriority: '[data-test-mandatee-priority]',
-  mandateeEdit: '[data-test-mandatee-edit]',
-  mandateeResign: '[data-test-mandatee-resign]',
-  mandateeDelete: '[data-test-mandatee-delete]',
+  ministers: {
+    add: '[data-test-route-settings-ministers-add]',
+    // TODO unused selectors
+    sortableGroup: '[data-test-route-settings-ministers-sortable-group]',
+    sortableGroupRow: '[data-test-route-settings-ministers-sortable-group-row]',
+    mandatee: {
+      edit: '[data-test-route-settings-ministers-mandatee-edit]',
+      delete: '[data-test-route-settings-ministers-mandatee-delete]',
+      // TODO unused selectors
+      fullDisplayName: '[data-test-route-settings-ministers-mandatee-full-display-name]',
+      nickname: '[data-test-route-settings-ministers-mandatee-nickname]',
+      priority: '[data-test-route-settings-ministers-mandatee-priority]',
+      resign: '[data-test-mandatee-route-settings-ministers-mandatee-resign]',
+    },
+  },
 
   // component vl-delete-user
   deleteUser: '[data-test-delete-user]',
