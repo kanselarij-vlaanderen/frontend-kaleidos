@@ -3,7 +3,7 @@
     <div class="auk-o-flex">
       <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
         <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
-        <WebComponents::AuInput @value={{this.filter.documentName}} type="text" id="blockInput" @block="true" />
+        <Auk::Input @value={{this.filter.documentName}} type="text" id="blockInput" @block={{true}} />
       </div>
       <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
         <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
@@ -27,13 +27,21 @@
     </div>
     <div class="auk-o-flex auk-o-flex--justify-end">
       <div>
-        <WebComponents::AuButton data-test-publication-filter-reset @skin="secondary" {{on "click" this.reset}}>
+        <Auk::Button
+          data-test-publication-filter-reset
+          @skin="secondary"
+          {{on "click" this.reset}}
+        >
           {{t "reset"}}
-        </WebComponents::AuButton>
-        <WebComponents::AuButton @icon="filter" data-test-publication-filter @skin="primary"
-          {{on "click" this.apply}}>
+        </Auk::Button>
+        <Auk::Button
+          @icon="filter"
+          data-test-publication-filter
+          @skin="primary"
+          {{on "click" this.apply}}
+        >
           {{t "filter-plural"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </div>
     </div>
   </WebComponents::AuPanel::Body>

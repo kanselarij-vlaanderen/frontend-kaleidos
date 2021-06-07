@@ -1,0 +1,6 @@
+<TagInput @tags={{@items}}
+  @addTag={{this.onAdd}}
+  @removeTagAtIndex={{this.onRemoveTagAtIndex}}
+  as |item|>
+  {{yield item}}
+</TagInput>

@@ -16,13 +16,13 @@
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
                 {{#if showCloseButton}}
-                  <WebComponents::AuButton
-                          @icon="close"
-                          @skin="borderless"
-                          @layout="icon-only"
-                          {{action "close"}}
-                          data-test-vl-modal-close>
-                  </WebComponents::AuButton>
+                  <Auk::Button
+                    @icon="close"
+                    @skin="borderless"
+                    @layout="icon-only"
+                    {{action "close"}}
+                    data-test-vl-modal-close
+                  />
                 {{/if}}
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>

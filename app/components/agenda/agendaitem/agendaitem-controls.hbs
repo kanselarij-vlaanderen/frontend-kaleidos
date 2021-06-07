@@ -3,13 +3,13 @@
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
     <WebComponents::AuButtonToolbar>
-      <WebComponents::AuButton
-              data-test-agendaitem-controls-actions
-              @layout="icon-right"
-              @icon="chevron-down"
+      <Auk::Button
+        data-test-agendaitem-controls-actions
+        @layout="icon-right"
+        @icon="chevron-down"
       >
         {{t "actions"}}
-      </WebComponents::AuButton>
+      </Auk::Button>
       <AttachPopover
               @renderInPlace={{true}}
               @class="ember-attacher-popper"
@@ -18,7 +18,7 @@
               @animation="shift"
               @placement="bottom"
       >
-        <WebComponents::AuDropdown>
+        <Auk::Dropdown>
           {{#if this.isPostPonable}}
             {{#if @agendaitem.retracted}}
               <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
@@ -38,7 +38,7 @@
               {{t "delete"}}
             </WebComponents::AuDropdown::Item>
           {{/if}}
-        </WebComponents::AuDropdown>
+        </Auk::Dropdown>
       </AttachPopover>
     </WebComponents::AuButtonToolbar>
   {{else}}

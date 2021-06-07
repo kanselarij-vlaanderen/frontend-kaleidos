@@ -9,18 +9,18 @@ import {
 
 /**
  * @argument {Agendaitem} agedaitem
+ * @argument {Piece[]} pieces
  */
 export default class PublicationsBatchDocumentsPublicationModalComponent extends Component {
-  referenceDocument;
   @service store;
   @service publicationService;
 
+  @tracked referenceDocument;
   @tracked isOpenNewPublicationModal = false;
   @lastValue('loadCase') case;
 
   constructor() {
     super(...arguments);
-
     this.loadPieces.perform();
     this.loadCase.perform();
   }
@@ -44,7 +44,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  // new publication actions
   @action
   openNewPublicationModal(piece) {
     this.referenceDocument = piece;
@@ -59,11 +58,24 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
     this.isOpenNewPublicationModal = false;
+    this.referenceDocument = null;
   }
 
   @action
   cancelNewPublication() {
-    this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
+    this.referenceDocument = null;
+  }
+
+  @action
+  async linkPublicationFlow(piece, publicationFlow) {
+    piece.publicationFlow = publicationFlow;
+    await piece.save();
+  }
+
+  @action
+  async unlinkPublicationFlow(piece) {
+    piece.publicationFlow = null;
+    await piece.save();
   }
 }

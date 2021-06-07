@@ -1,0 +1,33 @@
+{{#if @loading}}
+  <button
+    class="auk-button-loading"
+    type="button"
+    disabled
+    ...attributes
+  >
+    <WebComponents::AuLoader/>
+  </button>
+{{else if @href}}
+  {{!-- TODO: document in writing what the difference is between a "Auk::Button" with @href and a "Auk::ButtonLink" with @href --}}
+  <a
+    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    href={{@href}}
+    disabled={{@disabled}}
+    ...attributes
+  >
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+      {{yield}}
+    </Auk::Button::InnerLayout>
+  </a>
+{{else}}
+  <button
+    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    type="button"
+    disabled={{@disabled}}
+    ...attributes
+  >
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+      {{yield}}
+    </Auk::Button::InnerLayout>
+  </button>
+{{/if}}
