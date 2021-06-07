@@ -27,7 +27,7 @@ export default class PublicationService extends Service {
    *  case: Case,
    *  agendaItemTreatment: AgendaItemTreatment,
    * }|undefined} viaCouncilOfMinisterOptions passed when via ministerial council
-   * @param {{
+   * @param {undefined|{
    *  decisionDate: Date,
    * }} notViaCouncilOfMinistersOptions passed when not via council of ministers
    * @returns {PublicationFlow}

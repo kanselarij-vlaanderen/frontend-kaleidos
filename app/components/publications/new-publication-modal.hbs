@@ -69,7 +69,7 @@
           <WebComponents::AuLabel for="decisionDate">
             {{t "decision-date"}}
           </WebComponents::AuLabel>
-          <WebComponents::AuDatepicker
+          <Auk::Datepicker
                   @defaultDate={{this.decisionDate}}
                   @disabled={{this.isViaCouncilOfMinisters}}
                   @onChange={{this.setDecisionDate}}/>
