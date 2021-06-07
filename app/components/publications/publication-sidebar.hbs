@@ -23,10 +23,8 @@
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
           <WebComponents::AuLabel>{{t 'publications-number'}}</WebComponents::AuLabel>
-          <WebComponents::AuInput type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
-            {{on "input" (perform this.setPublicationNumber)}} />
-          <WebComponents::AuInput size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}}
-            {{on "input" (perform this.setPublicationNumberSuffix)}} />
+          <Auk::Input type="number" value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}} {{on "input" (perform this.setPublicationNumber)}} />
+          <Auk::Input size="5" type="text" value={{@publicationFlow.identification.structuredIdentifier.versionIdentifier}} {{on "input" (perform this.setPublicationNumberSuffix)}} />
 
           {{#if this.numberIsAlreadyUsed}}
             <div class="auk-form-help-text auk-form-help-text--danger">
@@ -96,37 +94,15 @@
           </div>
         {{/if}}
 
-        {{!-- Werknummer --}}
+        {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "publication-form-numac-nummer"}}</WebComponents::AuLabel>
-          <div style="background: #FFFFFF;border: 1px solid #CCD1D9; box-sizing: border-box;  line-height: 0.8em;  padding: 7px;">
-            {{#each @publicationFlow.numacNumbers as |numac|}}
-              <div class="vlc-numac-number-wrapper">
-                <div class="vlc-numac-number">
-                  <span>{{ numac.idName }}</span>
-                </div>
-                <div class="vlc-numac-number-delete-button-wrapper">
-                  <Auk::Button
-                    class="auk-button--nopadding"
-                    @skin="borderless"
-                    @icon="close"
-                    @layout="icon-only"
-                    {{on "click" (fn this.deleteNumacNumber numac)}}
-                  />
-                </div>
-              </div>
-            {{else}}
-              <span class="auk-icon--light">{{t "no-numac-number-yet"}}</span>
-            {{/each}}
-          </div>
-          <WebComponents::AuInput
-            type="text"
-            @value={{this.newNumacNumber}}
-          />
-
-          <Auk::Button @skin="borderless" {{on "click" this.addNumacNumber}}>
-            {{t "add"}}
-          </Auk::Button>
+          <WebComponents::AuLabel>{{t "numac-number"}}</WebComponents::AuLabel>
+          <Auk::InputPills
+            @items={{this.publicationFlow.numacNumbers}}
+            @onCreate={{this.addNumacNumber}}
+            @onRemove={{this.deleteNumacNumber}} as |numac|>
+            {{numac.idName}}
+          </Auk::InputPills>
         </div>
 
         {{!-- Uiterste vertaaldatum --}}

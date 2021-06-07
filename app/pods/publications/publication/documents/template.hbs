@@ -35,14 +35,14 @@
                   @animation="shift"
                   @placement="bottom" {{!-- as |attacher| --}}
           >
-            <WebComponents::AuDropdown>
+            <Auk::Dropdown>
               <WebComponents::AuDropdown::Item {{on "click" this.openTranslationRequestModal}}>
                 {{t "request-translations"}}
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item {{on "click" this.openPublishPreviewRequestModal}}>
                 {{t "request-publish-preview"}}
               </WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </AttachPopover>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
@@ -122,7 +122,7 @@
                       @placement="bottom"
                       {{!-- as |attacher| --}}
                     >
-                    <WebComponents::AuDropdown>
+                    <Auk::Dropdown>
                       {{!-- TODO opening viewer will only work for pdf files --}}
                       <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn this.showPieceViewer piece.id)}}>
                         {{t "view-document-details"}}
@@ -158,7 +158,7 @@
                           {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
-                    </WebComponents::AuDropdown>
+                    </Auk::Dropdown>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
