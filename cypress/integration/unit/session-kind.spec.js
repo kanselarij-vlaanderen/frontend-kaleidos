@@ -69,7 +69,7 @@ context('Different session kinds should show different titles', () => {
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     // TODO testselector could include "header"
-    cy.get(newsletter.overviewTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterHeaderOverview.title).contains(textToDisplay);
     // TODO verify klad & definitief ?
   });
 
@@ -78,11 +78,11 @@ context('Different session kinds should show different titles', () => {
     cy.visit(special);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.overviewTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterHeaderOverview.title).contains(textToDisplay);
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterMeeting.title).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterMeeting.title).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in newsletter-info print overview', () => {
@@ -91,10 +91,10 @@ context('Different session kinds should show different titles', () => {
     cy.wait(1000);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.overviewTitle).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');
+    cy.get(newsletter.newsletterHeaderOverview.title).contains('Beslissingen van de Vlaamse Regering - Elektronische procedure');
     cy.clickReverseTab('Klad');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterMeeting.title).contains(textToDisplay);
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.meetingTitle).contains(textToDisplay);
+    cy.get(newsletter.newsletterMeeting.title).contains(textToDisplay);
   });
 });

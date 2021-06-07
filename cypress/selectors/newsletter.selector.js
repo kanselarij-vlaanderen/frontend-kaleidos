@@ -1,25 +1,47 @@
 const selectors = {
   // component newsletter-header
-  title: '[data-test-newsletter-header-title]',
+  newsletterHeader: {
+    title: '[data-test-newsletter-header-title]',
+  },
 
   // route agenda/agendaitems/agendaitem/news-item
-  edit: '[data-test-newsletter-edit]',
+  newsItem: {
+    edit: '[data-test-route-agenda---news-item-edit]',
+    create: '[data-test-route-agenda---news-item-create]',
+  },
+
+  // component agendaitem-news-item
+  agendaitemNewsItem: {
+    themes: '[data-test-agendaitem-news-item-themes]',
+  },
 
   // component edit-item
-  rdfaEditor: '[data-test-rdfa-editor]',
-  editSave: '[data-test-newsletter-edit-save]',
+  editItem: {
+    rdfaEditor: '[data-test-newsletter-edit-item-rdfa-editor]',
+    save: '[data-test-newsletter-edit-item-save]',
+    checkedThemes: '[data-test-newsletter-edit-item-themes-selector] input:checked',
+    themesSelector: '[data-test-newsletter-edit-item-themes-selector]',
+  },
 
   // component newsletter-meeting
-  meetingTitle: '[data-test-newsletter-meeting-header-title]',
+  newsletterMeeting: {
+    title: '[data-test-newsletter-meeting-title]',
+  },
 
   // component newsletter-header-overview
-  overviewTitle: '[data-test-newsletter-overview-header-title]',
-  notaUpdates: '[data-test-nota-updates]',
+  newsletterHeaderOverview: {
+    title: '[data-test-newsletter-header-overview-title]',
+    notaUpdates: '[data-test-newsletter-header-overview-nota-updates]',
+  },
 
   // component table-row
-  overviewTableRow: '[data-test-newsletter-overview-table-row]',
+  tableRow: {
+    overview: '[data-test-newsletter-table-row-overview]',
+  },
 
   // component item-content
-  printItemProposal: '[data-test-newsletter-print-item-proposal]',
+  itemContent: {
+    printItemProposal: '[data-test-newsletter-item-content-print-item-proposal]',
+  },
 };
 export default selectors;

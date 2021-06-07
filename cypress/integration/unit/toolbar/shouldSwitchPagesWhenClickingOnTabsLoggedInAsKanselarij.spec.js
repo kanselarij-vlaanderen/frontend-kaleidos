@@ -27,14 +27,14 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(toolbar.mHeader.agendas).click();
     cy.get(route.agendas.title).should('exist');
     cy.get(cases.casesHeader.title).should('not.exist');
-    cy.get(newsletter.overviewTitle).should('not.exist');
+    cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');
   });
 
   it('Should switch to cases tab when cases is clicked as Kanselarij', () => {
     cy.get(toolbar.mHeader.cases).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('exist');
-    cy.get(newsletter.overviewTitle).should('not.exist');
+    cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');
     cy.get(settings.settings.generalSettings).should('not.exist');
   });
 
@@ -42,7 +42,7 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(toolbar.mHeader.newsletters).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
-    cy.get(newsletter.title).should('exist');
+    cy.get(newsletter.newsletterHeader.title).should('exist');
     cy.get(settings.settings.generalSettings).should('not.exist');
   });
 
@@ -50,7 +50,7 @@ context('Testing the toolbar as Kanselarij user', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
-    cy.get(newsletter.overviewTitle).should('not.exist');
+    cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');
     cy.get(settings.settings.generalSettings).should('exist');
     cy.get(settings.settings.manageMinisters).should('exist');
     cy.get(settings.settings.manageUsers).should('exist');

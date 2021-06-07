@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import newsletter from '../../../selectors/newsletter.selector';
-import agenda from '../../../selectors/agenda.selectors';
 
 context('KB: Edit content of news-item', () => {
   before(() => {
@@ -26,10 +25,10 @@ context('KB: Edit content of news-item', () => {
     // cy.get('.editor__paper').clear(); //TODO triggers error:  "Cannot read property 'nodeType" of null from RDFA editor
     cy.get('.say-editor__inner').type(decisionText);
 
-    cy.get(agenda.item.news.themesSelector).contains('Sport')
+    cy.get(newsletter.editItem.themesSelector).contains('Sport')
       .click();
     cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
-    cy.get(newsletter.editSave).click()
+    cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPost');
 
     cy.contains(decisionText);

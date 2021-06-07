@@ -409,32 +409,32 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('be.visible')
       .click();
 
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.overviewTableRow).as('newsletterRows');
+    cy.get(newsletter.tableRow.overview).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
         cy.get(utils.checkboxLabel).click();
@@ -452,7 +452,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       });
 
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.printItemProposal).as('proposals');
+    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van Minister-president Geert Bourgeois en Vlaams minister Hilde Crevits');
     cy.get('@proposals').eq(1)

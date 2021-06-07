@@ -31,14 +31,14 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
       .click()
       .wait(2000); // Access-levels GET occured earlier, general wait instead
 
-    cy.get(alert.changesAlertComponent).should('be.visible');
-    cy.get(alert.changesAlertComponentCloseButton).click();
-    cy.get(alert.changesAlertComponent).should('not.be.visible');
+    cy.get(alert.changesAlert).should('be.visible');
+    cy.get(alert.changesAlertClose).click();
+    cy.get(alert.changesAlert).should('not.be.visible');
     // Edit KB
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.rdfaEditor).type('Aanpassing');
-    cy.get(newsletter.editSave).type('Aanpassing');
+    cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
+    cy.get(newsletter.editItem.Save).type('Aanpassing');
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(5000);
@@ -46,6 +46,6 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
       .click();
     cy.get(agenda.agendaitemNav.newsletterTab).should('be.visible')
       .click();
-    cy.get(alert.changesAlertComponent).should('not.be.visible');
+    cy.get(alert.changesAlert).should('not.be.visible');
   });
 });

@@ -3,7 +3,7 @@
     <div class="auk-toolbar-complex__item">
       <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
         <div class="auk-o-flex auk-o-flex--vertical-center">
-          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-overview-header-title>
+          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
             {{t "newsletter-overview-pdf-name"}}
             -
             {{await agenda.createdFor.kindToShow.label}}
@@ -58,7 +58,7 @@
             </li>
             <li class="auk-tabs__tab">
               <LinkTo
-                data-test-nota-updates
+                data-test-newsletter-header-overview-nota-updates
                 @route="newsletter.nota-updates"
                 @activeClass="active"
               >

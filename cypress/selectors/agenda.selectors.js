@@ -30,14 +30,6 @@ const selectors = {
     // TODO don't use css
     checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.auk-toolbar-complex__item button',
-    // route agendaitem/news-item // component news-item/edit-item / agendaitem-news-item
-    themes: '[data-test-agenda-news-item-themes]',
-    news: {
-      editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',
-      saveButton: '[data-test-newsletter-edit-save]',
-      checkedThemes: '[data-test-themes-selector] input:checked',
-      themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]',
-    },
   },
 
   /**

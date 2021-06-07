@@ -96,7 +96,7 @@ context('Test the KB functionality', () => {
       // cy.route('/document-containers?**').as('getDocumentContainerOfPieces');
       // TODO use visit or action in agenda? visit is faster but then why not visit ".../nota-updates"
       cy.visit(`/vergadering/${result.meetingId}/kort-bestek`);
-      cy.get(newsletter.notaUpdates).click();
+      cy.get(newsletter.newsletterHeaderOverview.notaUpdates).click();
       cy.wait(2000);
       // cy.wait('@getDocumentContainerOfPieces');
       cy.contains(case1TitleShort).should('exist');

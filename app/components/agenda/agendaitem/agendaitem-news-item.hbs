@@ -24,7 +24,7 @@
   {{/if}}
   <div
     class="auk-u-mb-2 auk-u-mt-2"
-    data-test-agenda-news-item-themes>
+    data-test-agendaitem-news-item-themes>
     {{#if (is-pending @newsletterInfo.themes)}}
       <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
     {{else if (gt (await @newsletterInfo.themes.length) 0)}}
@@ -33,7 +33,7 @@
           (await @newsletterInfo.themes)
         as |theme|
         }}
-          <WebComponents::AuPill data-test-agenda-news-item-theme>{{theme.label}}</WebComponents::AuPill>
+          <WebComponents::AuPill>{{theme.label}}</WebComponents::AuPill>
         {{/each}}
       </WebComponents::AuPillList>
     {{else}}
