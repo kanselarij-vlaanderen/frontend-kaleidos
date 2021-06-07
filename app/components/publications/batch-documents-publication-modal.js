@@ -41,6 +41,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   async loadAgendaItemTreatment() {
+    // latest
     this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
       'filter[agendaitem][:id:]': this.args.agendaitem.id,
       sort: '-start-date',

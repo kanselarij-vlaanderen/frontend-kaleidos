@@ -10,16 +10,15 @@ export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
     });
   }
 
-  async setupController(controller, model) {
+  afterModel() {
+    this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    this.meeting = this.modelFor('agenda').meeting;
+  }
+
+  setupController(controller) {
     super.setupController(...arguments);
-    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
-    controller.set('agendaitem', agendaitem);
-    const agendaActivity = await agendaitem.get('agendaActivity');
-    if (agendaActivity) { // Some items don't have a subcase nor a "put on agenda"-activity
-      const subcase = await agendaActivity.subcase;
-      controller.set('subcase', subcase);
-    }
-    controller.set('model', model);
+    controller.agendaitem = this.agendaitem;
+    controller.meeting = this.meeting;
   }
 
   @action

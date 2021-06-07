@@ -11,19 +11,20 @@ export default class DecisionAgendaitemAgendaitemsAgendaController extends Contr
 
   @action
   async addTreatment() {
-    if (this.agendaitem) {
-      const now = new Date();
-      const newTreatment = this.store.createRecord('agenda-item-treatment', {
-        created: now,
-        modified: now,
-        startDate: now,
-        agendaitem: this.agendaitem,
-        subcase: this.subcase,
-        newsletterInfo: await this.treatments.firstObject.newsletterInfo,
-      });
-      await newTreatment.save();
-      this.refresh();
-    }
+    const startDate = this.meeting.plannedStart;
+    const now = new Date();
+    const subcase = this.agendaitem.agendaActivity.get('subcase');
+    const newsletterInfo = this.treatments.firstObject.newsletterInfo;
+    const newTreatment = this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      startDate: startDate,
+      agendaitem: this.agendaitem,
+      subcase: subcase,
+      newsletterInfo: newsletterInfo,
+    });
+    await newTreatment.save();
+    this.refresh();
   }
 
   @action

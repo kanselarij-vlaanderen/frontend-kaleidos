@@ -60,14 +60,16 @@ export default Controller.extend({
     async addTreatment(agendaitemRow) {
       const now = new Date();
       const agendaitem = await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
-        include: 'agenda-activity,agenda-activity.subcase',
+        include: 'agenda,agenda.created-for',
       });
+      const startDate = agendaitem.get('agenda.createdFor').get('plannedStart');
+      const subcase =  agendaitem.get('agendaActivity.subcase');
       const treatment = this.store.createRecord('agenda-item-treatment', {
         created: now,
         modified: now,
-        startDate: now,
+        startDate: startDate,
         agendaitem: agendaitem,
-        subcase: agendaitem.agendaActivity.subcase,
+        subcase: subcase,
       });
       await treatment.save();
     },

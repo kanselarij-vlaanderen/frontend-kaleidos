@@ -74,10 +74,11 @@ export default Component.extend({
     });
 
     // Treatment of agenda-item / decision activity
+    const startDate = agenda.createdFor.plannedStart;
     const agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
       created: now,
       modified: now,
-      startDate: now,
+      startDate: startDate,
       decisionResultCode,
     });
     await agendaItemTreatment.save();
@@ -87,7 +88,7 @@ export default Component.extend({
       agenda,
       priority: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
-        closestMeeting.plannedstart
+        closestMeeting.plannedStart
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
@@ -121,32 +122,29 @@ export default Component.extend({
 
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
-      newMeeting
-        .save()
-        .then(async(meeting) => {
-          const agenda = await this.createAgenda(meeting, date);
-          if (!meeting.isAnnex && closestMeeting) {
-            await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
-          }
-          await this.newsletterService.createNewsItemForMeeting(meeting);
+      try {
+        await newMeeting.save();
+        const agenda = await this.createAgenda(newMeeting, date);
+        if (!newMeeting.isAnnex && closestMeeting) {
+          await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
+        }
+        await this.newsletterService.createNewsItemForMeeting(newMeeting);
 
-          // TODO: Should fix sessionNrBug
-          // await this.agendaService.assignNewSessionNumbers();
-        })
-        .catch(() => {
-          this.toaster.error();
-        })
-        .finally(() => {
-          this.set('isLoading', false);
-          this.successfullyAdded();
-        });
+        // TODO: Should fix sessionNrBug
+        // await this.agendaService.assignNewSessionNumbers();
+      } catch {
+        this.toaster.error();
+      } finally {
+        this.set('isLoading', false);
+        this.successfullyAdded();
+      }
     },
 
     selectMainMeeting(mainMeeting) {
       const kind = CONFIG.kinds.find((kind) => kind.uri === this.selectedKindUri);
       const postfix = (kind && kind.postfix) || '';
       this.set('selectedMainMeeting', mainMeeting);
-      this.set('startDate', mainMeeting.plannedStart);
+      this.set('startDate', mainMeeting.plannedstart);
       this.set('meetingNumber', mainMeeting.number);
       this.set('formattedMeetingIdentifier', `${mainMeeting.numberRepresentation}-${postfix}`);
       this.set('extraInfo', mainMeeting.extraInfo);
