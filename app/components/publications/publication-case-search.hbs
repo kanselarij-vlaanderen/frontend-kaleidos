@@ -12,25 +12,19 @@
   @autocomplete="off"
 />
 {{#if this.isShowingResults}}
-  <div id={{this.resultListId}} class="autocomplete-results auk-search-results-list">
+  <ul id={{this.resultListId}} class="autocomplete-results auk-search-results-list">
     {{#each this.searchResults as |result|}}
-      <WebComponents::AuDropdown::Item @class="auk-search-results-list__item">
-        <LinkTo
-          data-test-publication-search-result
-          @route="publications.publication.documents"
-          @model={{result.id}}
-        >
-          {{#if result.shortTile}}
-            {{result.shortTile}}
-          {{else if result.title}}
-            {{result.title}}
-          {{/if}}
-          <br>
-          <span class="auk-u-muted auk-u-text-small">{{result.identification}}</span>
-        </LinkTo>
+      <WebComponents::AuDropdown::Item @class="auk-search-results-list__item" @route="publications.publication.documents" @model={{result.id}}>
+        {{#if result.shortTile}}
+          {{result.shortTile}}
+        {{else if result.title}}
+          {{result.title}}
+        {{/if}}
+        <br>
+        <span class="auk-u-muted auk-u-text-small">{{result.identification}}</span>
       </WebComponents::AuDropdown::Item>
     {{else}}
       {{ t "no-results-found" }}
     {{/each}}
-  </div>
+  </ul>
 {{/if}}
