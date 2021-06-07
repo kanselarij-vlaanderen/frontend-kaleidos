@@ -14,7 +14,7 @@
     ...attributes
   >
     <span class="auk-button__content">
-      <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</WebComponents::AuButton::InnerLayout>
+      <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</Auk::Button::InnerLayout>
     </span>
   </LinkTo>
 {{else if @href}}
@@ -24,7 +24,7 @@
     ...attributes
   >
     <span class="auk-button__content">
-      <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</WebComponents::AuButton::InnerLayout>
+      <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>{{yield}}</Auk::Button::InnerLayout>
     </span>
   </a>
 {{else}}
@@ -35,7 +35,7 @@
     ...attributes
   >
     <span class="auk-button__content">
-      <WebComponents::AuButton::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</WebComponents::AuButton::InnerLayout>
+      <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}}>{{yield}}</Auk::Button::InnerLayout>
     </span>
   </button>
 {{/if}}
