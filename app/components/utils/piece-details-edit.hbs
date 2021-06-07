@@ -8,7 +8,7 @@
         {{#if @piece}}
           <div class="auk-form-group">
             <Auk::Label for="name">{{t "name"}}</Auk::Label>
-            <WebComponents::AuInput type="text" id="name" @value={{@piece.name}}/>
+            <Auk::Input type="text" id="name" @value={{@piece.name}} />
           </div>
           <div class="auk-form-group">
             <Auk::Label for="extension">{{t "file-extension"}}</Auk::Label>
@@ -33,12 +33,12 @@
 
           <div class="auk-form-group">
             <Auk::Label for="pages-amount">{{t "pages-amount"}}</Auk::Label>
-            <WebComponents::AuInput type="text" id="pages-amount" @value={{@piece.pages}}/>
+            <Auk::Input type="text" id="pages-amount" @value={{@piece.pages}} />
           </div>
 
           <div class="auk-form-group">
             <Auk::Label for="words-amount">{{t "words-amount"}}</Auk::Label>
-            <WebComponents::AuInput type="text" id="words-amount" @value={{@piece.words}}/>
+            <Auk::Input type="text" id="words-amount" @value={{@piece.words}} />
           </div>
 
         {{/if}}
