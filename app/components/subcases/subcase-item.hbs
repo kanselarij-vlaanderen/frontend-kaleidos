@@ -66,13 +66,13 @@
   {{yield @subcase}}
   {{#if this.hasDocumentsToShow}}
     <div class="js-vl-accordion">
-      <WebComponents::AuButton
+      <Auk::Button
         @skin="borderless"
         @icon={{if this.isShowingDocuments "chevron-down" "chevron-right"}}
         {{on "click" this.toggleIsShowingDocuments}}
       >
         {{t "documents"}}
-      </WebComponents::AuButton>
+      </Auk::Button>
     </div>
     {{#if this.isShowingDocuments}}
       <div class="vl-accordion__panel">

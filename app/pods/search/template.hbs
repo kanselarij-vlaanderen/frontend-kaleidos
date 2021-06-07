@@ -20,9 +20,9 @@
         <div class="auk-o-grid-col-4">
           <div class="auk-form-group">
             <div class="auk-o-flex auk-o-flex--align-baseline">
-              <WebComponents::AuLabel for="dossierId" class="auk-u-mr">
+              <Auk::Label for="dossierId" class="auk-u-mr">
                 {{capitalize (t "keyword")}}
-              </WebComponents::AuLabel>
+              </Auk::Label>
               <span>
                 <i
                   class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
@@ -55,7 +55,7 @@
         </div>
         <div class="auk-o-grid-col-2">
           <div class="auk-form-group auk-u-position-relative">
-            <WebComponents::AuLabel>{{t "from"}}</WebComponents::AuLabel>
+            <Auk::Label>{{t "from"}}</Auk::Label>
             <WebComponents::VlDatepicker
               @selectedDate={{array this.dateFromBuffer}}
               @dateChanged={{fn (mut this.dateFromBuffer)}}
@@ -78,7 +78,7 @@
         </div>
         <div class="auk-o-grid-col-2">
           <div class="auk-form-group auk-u-position-relative">
-            <WebComponents::AuLabel>{{t "until-inclusive"}}</WebComponents::AuLabel>
+            <Auk::Label>{{t "until-inclusive"}}</Auk::Label>
             <WebComponents::VlDatepicker
               @selectedDate={{array this.dateToBuffer}}
               @dateChanged={{fn (mut this.dateToBuffer)}}
@@ -100,9 +100,9 @@
         </div>
         <div class="auk-o-grid-col-2">
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="ministerName">
+            <Auk::Label for="ministerName">
               {{t "minister"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <Input
               type="text"
               class="auk-input auk-input--block"
@@ -113,7 +113,7 @@
           </div>
         </div>
         <div class="auk-o-grid-col-1">
-          <WebComponents::AuButton
+          <Auk::Button
             @skin="primary"
             @icon="search"
             data-test-trigger-search
@@ -121,7 +121,7 @@
             {{on "click" this.search}}
           >
             {{t "search"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </div>
       </div>
 

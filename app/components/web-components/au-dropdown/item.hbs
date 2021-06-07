@@ -8,7 +8,7 @@
       {{yield}}
     </div>
   {{else}}
-    <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} ...attributes>
+    <LinkTo class="auk-menu__item active {{this.skin}}" @route={{@route}} @model={{@model}} ...attributes>
       {{yield}}
     </LinkTo>
   {{/if}}
