@@ -32,7 +32,8 @@ export default class AgendaItemsAgendaRoute extends Route {
       'fields[pieces]': [
         'name', // Display and sorting pieces per agendaitem
         'document-container', // Deduplicating multiple pieces per container
-        'created' // Fallback sorting pieces per agendaitem
+        'created', // Fallback sorting pieces per agendaitem
+        'confidential' // Display lock icon on document-badge
       ].join(','),
       'fields[document-containers]': '',
       'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,

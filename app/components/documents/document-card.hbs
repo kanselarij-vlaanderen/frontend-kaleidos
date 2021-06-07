@@ -189,18 +189,18 @@
     </div>
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-        <WebComponents::AuButton
+        <Auk::Button
+          data-test-show-pieces-history
           @skin="borderless"
           @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           disabled={{this.loadPieceRelatedData.isRunning}}
-          data-test-show-pieces-history
           {{on "click" (if this.isExpandedVersionHistory this.collapseVersionHistory (perform this.expandVersionHistory))}}
         >
           {{t "show-pieces"}}
           {{#if this.expandVersionHistory.isRunning}}
             <WebComponents::AuLoader/>
           {{/if}}
-        </WebComponents::AuButton>
+        </Auk::Button>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">

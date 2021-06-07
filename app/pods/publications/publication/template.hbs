@@ -18,16 +18,20 @@
             -
             {{uppercase this.model.identification.idName}}
           </span>
-          <WebComponents::AuAbbreviatedText
-            data-test-publication-detail-menu-short-title
+          <Auk::AbbreviatedText
             @text={{or
               this.model.shortTitle
               this.model.longTitle
             }}
-            @size="150"
-            @custom="true"
-            @customTextClass="auk-toolbar-complex__title"
-          />
+            @maxLength={{150}}
+          as |abbreviatedText|>
+            <div
+              data-test-publication-detail-menu-short-title
+              class="auk-toolbar-complex__title"
+            >
+              {{abbreviatedText}}
+            </div>
+          </Auk::AbbreviatedText>
           <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
       </WebComponents::AuToolbar::Item>

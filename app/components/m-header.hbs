@@ -2,7 +2,7 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuBrand @logotype="Kaleidos"/>
+        <Auk::Brand @logotype="Kaleidos" />
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuTabs>
@@ -43,12 +43,13 @@
         </WebComponents::AuToolbar::Item>
       {{/if}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButtonLink
-           @skin="muted"
-           @padded="padded"
-           @icon="circle-question">
+        <Auk::ButtonLink
+          @skin="muted"
+          @padded="padded"
+          @icon="circle-question"
+        >
           {{t "help"}}
-        </WebComponents::AuButtonLink>
+        </Auk::ButtonLink>
         <AttachPopover
           @renderInPlace={{true}}
           @class="ember-attacher-popper"
@@ -57,7 +58,7 @@
           @animation="shift"
           @placement="bottom-end"
         >
-          <WebComponents::AuDropdown>
+          <Auk::Dropdown>
             <WebComponents::AuDropdown::Item
               @route="manual"
               target="_blank">
@@ -69,18 +70,19 @@
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
             </WebComponents::AuDropdown::Item>
-          </WebComponents::AuDropdown>
+          </Auk::Dropdown>
         </AttachPopover>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
         {{#if this.currentSession.user}}
-          <WebComponents::AuButtonLink
+          <Auk::ButtonLink
             data-test-m-header-user-actions
             @skin="muted"
             @icon="chevron-down"
-            @layout="icon-right">
+            @layout="icon-right"
+          >
             {{this.currentSession.user.firstName}}
-          </WebComponents::AuButtonLink>
+          </Auk::ButtonLink>
           <AttachPopover
                  @renderInPlace={{true}}
                  @class="ember-attacher-popper"
@@ -89,27 +91,27 @@
                  @animation="shift"
                  @placement="bottom-end"
                >
-            <WebComponents::AuDropdown>
+            <Auk::Dropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
-                <WebComponents::AuAvatar @icon="user" @name={{this.currentSession.user.fullName}}>
+                <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
-                </WebComponents::AuAvatar>
+                </Auk::Avatar>
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Divider/>
               <WebComponents::AuDropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
               </WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </AttachPopover>
         {{else}}
-          <WebComponents::AuButtonLink
+          <Auk::ButtonLink
             @route="login"
             @skin="muted"
             @data-menu-samewidth="true"
           >
             {{t "login"}}
-          </WebComponents::AuButtonLink>
+          </Auk::ButtonLink>
         {{/if}}
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
