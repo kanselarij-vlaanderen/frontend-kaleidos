@@ -40,5 +40,10 @@ export default Component.extend({
     dateChanged(val) {
       this.dateChanged(this.formatter.formatDate(val.get('firstObject')));
     },
+
+    // eslint-disable-next-line no-unused-vars
+    onReady(_selectedDates, _dateStr, instance) {
+      this.flatpickrRef = instance;
+    },
   },
 });

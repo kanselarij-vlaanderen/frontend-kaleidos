@@ -25,7 +25,7 @@
           <WebComponents::AuTab   @route="search.index"
                                   @currentWhen="search"
                                   data-test-m-header-search>
-            <WebComponents::AuIcon @name="search" class="auk-icon--search" />
+            <Auk::Icon @name="search" class="auk-icon--search" />
             {{capitalize (t "search")}}
           </WebComponents::AuTab>
           {{#if this.currentSession.isEditor}}
@@ -58,7 +58,7 @@
           @animation="shift"
           @placement="bottom-end"
         >
-          <WebComponents::AuDropdown>
+          <Auk::Dropdown>
             <WebComponents::AuDropdown::Item
               @route="manual"
               target="_blank">
@@ -70,7 +70,7 @@
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
             </WebComponents::AuDropdown::Item>
-          </WebComponents::AuDropdown>
+          </Auk::Dropdown>
         </AttachPopover>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
@@ -91,7 +91,7 @@
                  @animation="shift"
                  @placement="bottom-end"
                >
-            <WebComponents::AuDropdown>
+            <Auk::Dropdown>
               <WebComponents::AuDropdown::Item @textOnly={{true}}>
                 <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
@@ -102,7 +102,7 @@
               <WebComponents::AuDropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
               </WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </AttachPopover>
         {{else}}
           <Auk::ButtonLink

@@ -11,18 +11,18 @@
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
               {{#if (await agendaitem.checkAdded)}}
-                <WebComponents::AuIcon @name="calendar-new" @iconSkinColor="muted"/>
+                <Auk::Icon @name="calendar-new" @skin="muted" />
               {{/if}}
               {{!-- This does not seem to work properly without the #let, newsletterInfo.inNewsletter is undefined --}}
               {{#if (await agendaitem.newsletterInfo)}}
                 {{#let (await agendaitem.newsletterInfo) as |newsletterInfo|}}
                   {{#if (eq (await newsletterInfo.inNewsletter) false)}}
-                    <WebComponents::AuIcon @name="not-visible" @iconSkinColor="muted"/>
+                    <Auk::Icon @name="not-visible" @skin="muted" />
                   {{/if}}
                 {{/let}}
               {{/if}}
               {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
-                <WebComponents::AuIcon @name="lock-closed" @iconSkinColor="muted"/>
+                <Auk::Icon @name="lock-closed" @skin="muted" />
               {{/if}}
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>

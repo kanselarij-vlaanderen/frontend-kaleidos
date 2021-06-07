@@ -1,17 +1,17 @@
 <span class="auk-pill {{this.skin}} {{this.layout}}" ...attributes data-test-au-pill-span>
   {{#if @icon}}
     {{#if (or (not @layout) (eq @layout "icon-left"))}}
-      <WebComponents::AuIcon @name={{@icon}}/>
+      <Auk::Icon @name={{@icon}} />
       {{yield}}
     {{/if}}
 
     {{#if (eq @layout "icon-only")}}
-      <WebComponents::AuIcon @name={{@icon}}/>
+      <Auk::Icon @name={{@icon}} />
     {{/if}}
 
     {{#if (eq @layout "icon-right")}}
       {{yield}}
-      <WebComponents::AuIcon @name={{@icon}}/>
+      <Auk::Icon @name={{@icon}} />
     {{/if}}
   {{else}}
     {{yield}}

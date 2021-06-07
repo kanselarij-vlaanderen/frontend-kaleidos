@@ -13,12 +13,12 @@
 
       <div class="auk-u-mb-4">
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "confidential"}}</Auk::Label>
           {{web-components/vl-toggle value=confidential}}
         </div>
       </div>
       <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
-        <WebComponents::AuLabel>{{t "short-title-case"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "short-title-case"}}</Auk::Label>
         {{textarea class="auk-textarea" rows="2" value=shortTitle}}
       </div>
     </div>

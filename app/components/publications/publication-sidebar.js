@@ -22,7 +22,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @service toaster;
   @service publicationService;
 
-  @tracked newNumacNumber = '';
   @tracked numberIsAlreadyUsed = false;
   @tracked numberIsRequired = false;
   @tracked showConfirmWithdraw = false;
@@ -188,21 +187,18 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  addNumacNumber() {
+  addNumacNumber(newNumacNumber) {
     const numacNumber = this.store.createRecord('identification', {
-      idName: this.newNumacNumber,
+      idName: newNumacNumber,
       agency: CONSTANTS.SCHEMA_AGENCIES.NUMAC,
       publicationFlowForNumac: this.publicationFlow,
     });
-
     this.notifyChanges(numacNumber);
-    this.newNumacNumber = '';
   }
 
   @action
   deleteNumacNumber(numacNumber) {
     numacNumber.deleteRecord();
-
     this.notifyChanges(numacNumber);
   }
 
