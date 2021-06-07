@@ -27,10 +27,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @tracked isOpenPublicationModal = false;
 
-  constructor() {
-    super(...arguments);
-
-    this.areEnabledPublications = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  get hasPublicationsEnabled() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
   }
 
   get governmentCanViewDocuments() {
