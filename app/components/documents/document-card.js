@@ -8,6 +8,8 @@ import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -50,6 +52,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadPieceRelatedData.perform();
   }
 
+  get shouldShowPublications() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb;
+  }
+
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
@@ -58,7 +64,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @task
   *loadPieceRelatedData() {
     const includeBuilder = ['document-container,document-container.type,access-level'];
-    if (this.currentSession.isOvrb) {
+    if (this.shouldShowPublications) {
       includeBuilder.push('publication-flow,publication-flow.identification');
     }
     const includeStr = includeBuilder.join(',');

@@ -18,8 +18,8 @@
           <div class="vlc-document-card-toolbar__right">
             {{#if
               (and
-                (not this.loadPieceRelatedData.isRunning)
-                this.currentSession.isOvrb)
+                this.shouldShowPublications
+                (not this.loadPieceRelatedData.isRunning))
             }}
               {{!-- trigger fetch --}}
               {{#if this.piece.publicationFlow}}

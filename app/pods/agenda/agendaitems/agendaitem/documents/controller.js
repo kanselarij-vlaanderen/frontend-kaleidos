@@ -13,6 +13,8 @@ import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { isEmpty } from '@ember/utils';
+import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
@@ -24,6 +26,12 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked newPieces = A([]);
 
   @tracked isOpenPublicationModal = false;
+
+  constructor() {
+    super(...arguments);
+
+    this.areEnabledPublications = !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+  }
 
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;

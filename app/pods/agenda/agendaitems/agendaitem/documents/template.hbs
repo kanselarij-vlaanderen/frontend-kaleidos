@@ -24,7 +24,12 @@
           </Auk::Button>
         </WebComponents::AuToolbar::Item>
       {{/if}}
-      {{#if (and this.currentSession.isOvrb this.model.pieces)}}
+      {{#if
+        (and
+          this.areEnabledPublications
+          this.currentSession.isOvrb
+          this.model.pieces)
+      }}
         <WebComponents::AuToolbar::Item>
           <Auk::Button
             @icon="copy"
