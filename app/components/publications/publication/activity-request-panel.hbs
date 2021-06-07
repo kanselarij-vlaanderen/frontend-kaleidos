@@ -110,7 +110,7 @@
             </Auk::Label>
             <Auk::List @bordered={{true}}>
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
-                <li class="auk-list__item auk-list__item--gray-100">
+                <Auk::List::Item @skin="gray-100">
                   <Auk::Badge @skin="white" @icon="document" />
                   <div class="auk-u-mx-2">
                     <span class="auk-u-text-bold">
@@ -128,7 +128,7 @@
                       {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
                     />
                   </WebComponents::AuButtonToolbar>
-                </li>
+                </Auk::List::Item>
               {{/each}}
             </Auk::List>
           </div>

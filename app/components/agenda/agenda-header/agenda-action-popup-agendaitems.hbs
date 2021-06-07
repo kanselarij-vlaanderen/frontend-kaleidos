@@ -1,6 +1,6 @@
 <Auk::List @bordered={{true}}>
   {{#each (await @agendaitems) as |agendaitem|}}
-    <li class="auk-list__item auk-list__item--gray-100">
+    <Auk::List::Item @skin="gray-100">
       <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-input--block">
         {{t
           "number-point-title"
@@ -36,6 +36,6 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </div>
-    </li>
+    </Auk::List::Item>
   {{/each}}
 </Auk::List>
