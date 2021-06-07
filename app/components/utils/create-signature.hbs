@@ -1,22 +1,22 @@
 <div class="auk-modal__body">
   <div class="auk-u-p-4">
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "add-people"}}</Auk::Label>
       {{utils/create-person-selector
         selectedItems=selectedPerson
         selectModel=(action "personSelected")
       }}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "name"}}</Auk::Label>
       {{web-components/vl-form-input value=name}}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "signature-function"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "signature-function"}}</Auk::Label>
       {{web-components/vl-form-input value=function}}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "signature-file"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "signature-file"}}</Auk::Label>
       {{#if (not uploadedFile)}}
         {{file-uploader
           multipleFiles=false

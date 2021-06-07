@@ -2,7 +2,7 @@
   <div class="auk-u-mb-4">
     {{#if @subcase}}
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "confidential"}}</Auk::Label>
         {{web-components/vl-toggle
           data-test-agendaitem-titles-edit-confidential=true
           value=@subcase.confidential
@@ -10,7 +10,7 @@
       </div>
     {{/if}}
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "name-subcase"}}</Auk::Label>
       {{textarea
         data-test-agendaitem-titles-edit-shorttitle=true
         rows="2"
@@ -21,7 +21,7 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "title-subcase"}}</Auk::Label>
       {{textarea
         data-test-agendaitem-titles-edit-title=true
         rows="4"
@@ -32,7 +32,7 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "remark-title"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "remark-title"}}</Auk::Label>
       {{textarea
         data-test-agendaitem-titles-edit-explanation=true
         rows="2"
@@ -45,13 +45,13 @@
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
         {{#if this.newsletterInfo}}
-          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
           {{web-components/vl-toggle
             data-test-agendaitem-titles-edit-showInNewsletter=true
             value=this.newsletterInfo.inNewsletter
           }}
         {{else}}
-          <WebComponents::AuLabel>{{t "show-in-newsletter"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "show-in-newsletter"}}</Auk::Label>
           {{t "no-newsletter-info"}}
         {{/if}}
       </div>

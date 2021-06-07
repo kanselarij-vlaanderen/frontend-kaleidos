@@ -20,11 +20,11 @@
           </WebComponents::AuPanel::Header>
           <WebComponents::AuPanel::Body>
             <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
+              <Auk::Label>{{t "short-title"}}</Auk::Label>
               <WebComponents::AuTextarea @rows="2" @value={{this.publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
             </div>
             <div class="auk-form-group">
-              <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel> {{!-- TODO: misleading translation tag. There are no subcases here --}}
+              <Auk::Label>{{t "title-subcase"}}</Auk::Label> {{!-- TODO: misleading translation tag. There are no subcases here --}}
               <WebComponents::AuTextarea @rows="4" @value={{this.publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
             </div>
           </WebComponents::AuPanel::Body>
@@ -151,7 +151,7 @@
                                   @animation="shift"
                                   @placement="left"
                           >
-                            <WebComponents::AuDropdown>
+                            <Auk::Dropdown>
                               <WebComponents::AuDropdown::Item
                                 data-test-unlink-mandatee
                                 {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
@@ -159,7 +159,7 @@
                               >
                                 {{t "delete"}}
                               </WebComponents::AuDropdown::Item>
-                            </WebComponents::AuDropdown>
+                            </Auk::Dropdown>
                           </AttachPopover>
                         </Auk::Button>
                       </td>
@@ -291,11 +291,11 @@
                             @animation="shift"
                             @placement="left"
                           >
-                          <WebComponents::AuDropdown>
+                          <Auk::Dropdown>
                             <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
                               {{t "delete"}}
                             </WebComponents::AuDropdown::Item>
-                          </WebComponents::AuDropdown>
+                          </Auk::Dropdown>
                         </AttachPopover>
                       </div>
                     </td>
@@ -325,26 +325,26 @@
         <div class="auk-form-group-layout auk-form-group-layout--standard">
           <div class='auk-form-group auk-form-group--grid'>
             <div>
-              <WebComponents::AuLabel for="firstNameInput">
+              <Auk::Label for="firstNameInput">
                 {{t "first-name"}}
-              </WebComponents::AuLabel>
+              </Auk::Label>
               <Auk::Input {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block={{true}} />
             </div>
             <div>
-              <WebComponents::AuLabel for="lastNameInput">
+              <Auk::Label for="lastNameInput">
                 {{t "name"}}
-              </WebComponents::AuLabel>
+              </Auk::Label>
               <Auk::Input {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block={{true}} />
             </div>
           </div>
           <div class='auk-form-group'>
-            <WebComponents::AuLabel for="emailInput">{{t "email"}}</WebComponents::AuLabel>
+            <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
             <Auk::Input {{on "blur" this.onEmailChanged}} type="text" id="emailInput" @block={{true}} />
           </div>
           <div class="auk-form-group">
-            <WebComponents::AuLabel for="organisationInput">
+            <Auk::Label for="organisationInput">
               {{t "organisation"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <PowerSelect
                     @searchField="name"
                     @search={{this.customPowerSelectSearchFunction}}

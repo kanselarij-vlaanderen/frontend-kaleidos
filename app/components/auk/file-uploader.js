@@ -9,12 +9,12 @@ import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 
 /**
- * @argument fullHeight <Boolean> Stretch the upload zone over the full height
- * @argument multiple <Boolean> (optional) allow uploading multiple files
- * @argument accept <String> (optional)
- * @argument fileQueueName <String> (optional) Name of the file queue to use.
+ * @argument {Boolean} fullHeight Stretch the upload zone over the full height
+ * @argument {Boolean} multiple (optional) allow uploading multiple files
+ * @argument {String} accept (optional)
+ * @argument {String} fileQueueName (optional) Name of the file queue to use.
  *   Setting this name will allow you to access this queue from the file-queue service outside of this component.
- * @argument onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
+ * @argument {Function} onUpload: action fired for each file that gets uploaded. Passes a semantic.works File as an argument,
  */
 export default class FileUploader extends Component {
   @service store;
