@@ -1,0 +1,16 @@
+<label class="auk-checkbox">
+  <input
+    class="auk-checkbox__toggle"
+    ...attributes
+    type="checkbox"
+    checked={{@checked}}
+  />
+  <span>
+    {{#if (has-block)}}
+      {{yield}}
+    {{else}}
+      {{@label}}
+    {{/if}}
+  </span>
+  <span class="auk-checkbox__box"></span>
+</label>

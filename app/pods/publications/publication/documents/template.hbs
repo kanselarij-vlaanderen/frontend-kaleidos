@@ -12,17 +12,21 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuCheckbox @label={{t "show-filter"}}
-            @checked={{this.showFilterPanel}} @toggle={{this.toggleFilterPanel}} />
+          <Auk::Checkbox
+            @label={{t "show-filter"}}
+            @checked={{this.showFilterPanel}}
+            {{on "input" this.toggleFilterPanel}}
+          />
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
-                  @skin="secondary"
-                  @icon="chevron-down"
-                  @layout="icon-right"
-                  @disabled={{not this.model}}>
+          <Auk::Button
+            @skin="secondary"
+            @icon="chevron-down"
+            @layout="icon-right"
+            @disabled={{not this.model}}
+          >
             {{t "requests"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
           <AttachPopover
                   @renderInPlace={{true}}
                   @class="ember-attacher-popper"
@@ -31,25 +35,25 @@
                   @animation="shift"
                   @placement="bottom" {{!-- as |attacher| --}}
           >
-            <WebComponents::AuDropdown>
+            <Auk::Dropdown>
               <WebComponents::AuDropdown::Item {{on "click" this.openTranslationRequestModal}}>
                 {{t "request-translations"}}
               </WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item {{on "click" this.openPublishPreviewRequestModal}}>
                 {{t "request-publish-preview"}}
               </WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </AttachPopover>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
-                  data-test-publication-case-add-documents
-                  @skin="primary"
-                  @icon="add"
-                  {{on "click" this.openPieceUploadModal}}
+          <Auk::Button
+            data-test-publication-case-add-documents
+            @skin="primary"
+            @icon="add"
+            {{on "click" this.openPieceUploadModal}}
           >
             {{t "documents-add"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
@@ -67,7 +71,12 @@
       <table class="auk-table">
         <thead>
           <tr>
-            <th><WebComponents::AuCheckbox @mode="table" @toggle={{this.changeAllPiecesSelection}} @checked={{this.areAllPiecesSelected}}/></th>
+            <th>
+              <Auk::Checkbox
+                @checked={{this.areAllPiecesSelected}}
+                {{on "input" this.changeAllPiecesSelection}}
+              />
+            </th>
             <th class="auk-table__col--6">{{t "name-document"}}</th>
             <th colspan="2">{{t "file-extension"}}</th>
             <th colspan="2">{{t "file-type"}}</th>
@@ -79,7 +88,10 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row" data-test-publication-case-documents-piece-row>
               <td>
-                <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}} @checked={{includes piece this.selectedPieces}}/>
+                <Auk::Checkbox
+                  @checked={{includes piece this.selectedPieces}}
+                  {{on "input" (fn this.changePieceSelection piece)}}
+                />
               </td>
               <td>
                 {{#if piece.agendaitems}}
@@ -100,7 +112,7 @@
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
-                  <WebComponents::AuButton data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only"></WebComponents::AuButton>
+                  <Auk::Button data-test-pub-case-doc-row-actions @skin="borderless" @icon="more" @layout="icon-only"></Auk::Button>
                   <AttachPopover
                       @renderInPlace={{true}}
                       @class="ember-attacher-popper"
@@ -110,7 +122,7 @@
                       @placement="bottom"
                       {{!-- as |attacher| --}}
                     >
-                    <WebComponents::AuDropdown>
+                    <Auk::Dropdown>
                       {{!-- TODO opening viewer will only work for pdf files --}}
                       <WebComponents::AuDropdown::Item data-test-pub-case-doc-row-action-view {{on "click" (fn this.showPieceViewer piece.id)}}>
                         {{t "view-document-details"}}
@@ -146,7 +158,7 @@
                           {{t "delete"}}
                         </WebComponents::AuDropdown::Item>
                       {{/if}}
-                    </WebComponents::AuDropdown>
+                    </Auk::Dropdown>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
@@ -157,7 +169,7 @@
     {{else}}
       <WebComponents::AuPanel>
         <WebComponents::AuPanel::Body>
-          <WebComponents::AuEmptyState @message={{t "no-documents-yet" }} />
+          <Auk::EmptyState @message={{t "no-documents-yet" }} />
         </WebComponents::AuPanel::Body>
       </WebComponents::AuPanel>
     {{/if}}
