@@ -16,7 +16,11 @@
             </div>
           </div>
           <div class="vlc-document-card-toolbar__right">
-            {{#unless this.loadPieceRelatedData.isRunning}}
+            {{#if
+              (and
+                (not this.loadPieceRelatedData.isRunning)
+                this.currentSession.isOvrb)
+            }}
               {{#if this.piece.publicationFlow}}
                 {{!-- TODO: remove style attributes and replace classes with auk-status-pill --}}
                 <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
@@ -32,7 +36,7 @@
                   </span>
                 </LinkTo>
               {{/if}}
-            {{/unless}}
+            {{/if}}
             <div class="auk-toolbar-complex__item auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill

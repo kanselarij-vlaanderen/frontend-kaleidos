@@ -57,9 +57,15 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPieceRelatedData() {
+    const includeBuilder = ['document-container,document-container.type,access-level'];
+    if (this.currentSession.isOvrb) {
+      includeBuilder.push('publication-flow,publication-flow.identification');
+    }
+    const includeStr = includeBuilder.join(',');
+
     const loadPiece = (id) => this.store.queryOne('piece', {
       'filter[:id:]': id,
-      include: 'document-container,document-container.type,access-level,publication-flow,publication-flow.identification',
+      include: includeStr,
     });
 
     const piece = this.args.piece;
