@@ -14,15 +14,17 @@ const selectors = {
   },
 
   // route settings/overview
-  manageEmails: '[data-test-manage-emails]',
-  manageGovermentDomains: '[data-test-manage-government-domains]',
-  manageGovermentFields: '[data-test-manage-government-fields]',
-  manageIseCodes: '[data-test-manage-ise-codes]',
-  manageAlerts: '[data-test-manage-alerts]',
-  manageDocumentTypes: '[data-test-manage-document-types]',
-  manageCaseTypes: '[data-test-manage-case-types]',
-  manageSubcaseTypes: '[data-test-manage-subcase-types]',
-  manageSignatures: '[data-test-manage-signatures]',
+  overview: {
+    manageEmails: '[data-test-route-settings-overview-manage-emails]',
+    manageGovermentDomains: '[data-test-route-settings-overview-manage-government-domains]',
+    manageGovermentFields: '[data-test-route-settings-overview-manage-government-fields]',
+    manageIseCodes: '[data-test-route-settings-overview-manage-ise-codes]',
+    manageAlerts: '[data-test-route-settings-overview-manage-alerts]',
+    manageDocumentTypes: '[data-test-route-settings-overview-manage-document-types]',
+    manageCaseTypes: '[data-test-route-settings-overview-manage-case-types]',
+    manageSubcaseTypes: '[data-test-route-settings-overview-manage-subcase-types]',
+    manageSignatures: '[data-test-route-settings-overview-manage-signatures]',
+  },
 
   // route settings/ministers
   addMinister: '[data-test-minister-add]',

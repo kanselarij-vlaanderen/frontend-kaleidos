@@ -23,54 +23,54 @@ context('Settings overview page tests', () => {
     cy.get(settings.settings.manageMinisters).should('be.visible');
     cy.get(settings.settings.manageUsers).should('be.visible');
     // settings in this view
-    cy.get(settings.manageEmails).should('be.visible');
-    cy.get(settings.manageGovermentDomains).should('be.visible');
-    cy.get(settings.manageGovermentFields).should('be.visible');
-    cy.get(settings.manageIseCodes).should('be.visible');
-    cy.get(settings.manageAlerts).should('be.visible');
-    cy.get(settings.manageDocumentTypes).should('be.visible');
-    cy.get(settings.manageCaseTypes).should('be.visible');
-    cy.get(settings.manageSubcaseTypes).should('be.visible');
-    cy.get(settings.manageSignatures).should('be.visible');
+    cy.get(settings.overview.manageEmails).should('be.visible');
+    cy.get(settings.overview.manageGovermentDomains).should('be.visible');
+    cy.get(settings.overview.manageGovermentFields).should('be.visible');
+    cy.get(settings.overview.manageIseCodes).should('be.visible');
+    cy.get(settings.overview.manageAlerts).should('be.visible');
+    cy.get(settings.overview.manageDocumentTypes).should('be.visible');
+    cy.get(settings.overview.manageCaseTypes).should('be.visible');
+    cy.get(settings.overview.manageSubcaseTypes).should('be.visible');
+    cy.get(settings.overview.manageSignatures).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
-    cy.openSettingsModal(settings.manageGovermentDomains);
+    cy.openSettingsModal(settings.overview.manageGovermentDomains);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage goverment fields and close it', () => {
-    cy.openSettingsModal(settings.manageGovermentFields);
+    cy.openSettingsModal(settings.overview.manageGovermentFields);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
-    cy.openSettingsModal(settings.manageIseCodes);
+    cy.openSettingsModal(settings.overview.manageIseCodes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage alerts and close it', () => {
-    cy.openSettingsModal(settings.manageAlerts);
+    cy.openSettingsModal(settings.overview.manageAlerts);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage document types and close it', () => {
-    cy.openSettingsModal(settings.manageDocumentTypes);
+    cy.openSettingsModal(settings.overview.manageDocumentTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage case types and close it', () => {
-    cy.openSettingsModal(settings.manageCaseTypes);
+    cy.openSettingsModal(settings.overview.manageCaseTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage subcase types and close it', () => {
-    cy.openSettingsModal(settings.manageSubcaseTypes);
+    cy.openSettingsModal(settings.overview.manageSubcaseTypes);
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage signatures and close it', () => {
-    cy.openSettingsModal(settings.manageSignatures);
+    cy.openSettingsModal(settings.overview.manageSignatures);
     cy.closeSettingsModal();
   });
 
