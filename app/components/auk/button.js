@@ -1,16 +1,15 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument skin {String}: possible values are: "primary", "secondary" (default), "tertiary", "borderless", "borderless-muted", "danger-primary", "danger-hover"
+ * @argument layout {String}
+ * @argument disabled {Boolean}
+ * @argument loading {Boolean}: Show the button in a loading state. Overrides most other arguments.
+ * @argument size {String}
+ * @argument block {Boolean}
+ */
 export default class Button extends Component {
-  /**
-   * skin can be:
-   * primary
-   * secondary (default)
-   * tertiary
-   * borderless
-   * borderless-muted
-   * danger-primary
-   * danger-hover
-   */
   get skin() {
     if (this.args.skin) {
       return `auk-button--${this.args.skin}`;
@@ -20,6 +19,7 @@ export default class Button extends Component {
 
   get layout() {
     if (this.args.layout === 'icon-only') {
+      // TODO: Is this argument unnecessary? Could this be determined from existence of @icon && !has-block?
       return 'auk-button--icon';
     }
     return null;

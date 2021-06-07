@@ -3,13 +3,13 @@
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
     <WebComponents::AuButtonToolbar>
-      <WebComponents::AuButton
-              data-test-agendaitem-controls-actions
-              @layout="icon-right"
-              @icon="chevron-down"
+      <Auk::Button
+        data-test-agendaitem-controls-actions
+        @layout="icon-right"
+        @icon="chevron-down"
       >
         {{t "actions"}}
-      </WebComponents::AuButton>
+      </Auk::Button>
       <AttachPopover
               @renderInPlace={{true}}
               @class="ember-attacher-popper"

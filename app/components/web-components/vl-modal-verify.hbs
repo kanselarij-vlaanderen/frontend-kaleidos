@@ -12,14 +12,14 @@
           {{#if showCloseButton}}
             <WebComponents::AuToolbar::Group @position="right">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
+                <Auk::Button
                   @icon="close"
                   @skin="borderless"
                   @layout="icon-only"
                   {{action "cancel"}}
                   data-test-vl-modal-verify-close
                 >
-                </WebComponents::AuButton>
+                </Auk::Button>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           {{/if}}
@@ -33,19 +33,15 @@
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
-                <WebComponents::AuButton
-                  @skin="borderless"
-                  {{action "cancel"}}
-                  data-test-vl-modal-verify-cancel
-                >
+                <Auk::Button @skin="borderless" {{action "cancel"}} data-test-vl-modal-verify-cancel>
                   {{t "cancel"}}
-                </WebComponents::AuButton>
+                </Auk::Button>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
             {{#if showVerify}}
               <WebComponents::AuToolbar::Group @position="right">
                 <WebComponents::AuToolbar::Item>
-                  <WebComponents::AuButton
+                  <Auk::Button
                     @skin={{buttonSkin}}
                     @icon={{if showIcon "delete"}}
                     {{action "verify"}}
@@ -53,7 +49,7 @@
                     data-test-vl-modal-verify-save
                   >
                     {{verifyButtonText}}
-                  </WebComponents::AuButton>
+                  </Auk::Button>
                 </WebComponents::AuToolbar::Item>
               </WebComponents::AuToolbar::Group>
             {{/if}}
