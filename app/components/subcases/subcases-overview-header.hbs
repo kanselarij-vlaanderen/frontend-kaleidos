@@ -3,7 +3,7 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton
+          <Auk::Button
             @skin="borderless"
             @icon="chevron-left"
             @layout="icon-only"
@@ -15,24 +15,21 @@
             <span class="auk-overline auk-u-block">
               {{t "case"}}
             </span>
-            <WebComponents::AuAbbreviatedText
-              @text={{this.caseTitleFromCase}}
-              @size="250"
-            />
+            <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
           </div>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
       {{#if currentSession.isEditor}}
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton
+            <Auk::Button
               @skin="primary"
               @icon="add"
               {{on "click" this.toggleIsAddingSubcase}}
               data-test-subcase-overview-header-create-subcase
             >
               {{t "create-subcase"}}
-            </WebComponents::AuButton>
+            </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       {{/if}}

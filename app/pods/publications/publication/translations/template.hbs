@@ -1,5 +1,5 @@
-<WebComponents::AuNavbar @border="bottom" @auto="true">
-  <WebComponents::AuToolbar>
+<WebComponents::AuNavbar @border="bottom">
+  <WebComponents::AuToolbar @size="large">
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuTabs>
@@ -14,9 +14,9 @@
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuCheckbox
-                @label={{t "finished"}}
-                @checked={{false}}
+        <Auk::Checkbox
+          @label={{t "finished"}}
+          @checked={{false}}
         />
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>

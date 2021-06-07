@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
 
-export default class PublicationTranslationDocumentRoute extends Route {
+export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   @inject store;
 
   async model() {

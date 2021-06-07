@@ -4,7 +4,9 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-export default class PublicationTranslationDocumentController extends Controller {
+export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  @tracked translationSubcase;
+  @tracked showPieceUploadModal = false;
   @tracked selectedPieces = [];
 
   // Editing of pieces.
@@ -13,7 +15,6 @@ export default class PublicationTranslationDocumentController extends Controller
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
-
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
   }
@@ -36,10 +37,6 @@ export default class PublicationTranslationDocumentController extends Controller
       this.selectedPieces = [...this.model];
     }
   }
-
-
-  @tracked showPieceUploadModal = false;
-
   @action
   openPieceUploadModal() {
     this.showPieceUploadModal = true;

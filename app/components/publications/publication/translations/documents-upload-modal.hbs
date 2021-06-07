@@ -1,8 +1,11 @@
-<WebComponents::AuModal @resized={{this.isExpanded}}>
+<WebComponents::AuModal >
   <WebComponents::AuModal::Header
-          @resizeable={{false}}
-          @title={{t "upload-translation-document"}}
-          @closeModal={{perform this.cancelTranslation}}
+    @resizeable={{false}}
+    @title={{t
+      "upload-translation-document"
+      identifier=@translationSubcase.publicationFlow.identification.idName
+    }}
+    @closeModal={{perform this.cancelTranslation}}
   />
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
@@ -21,7 +24,11 @@
                   <WebComponents::AuLabel for="nameDocumentUpload" @isRequired={{true}}>
                     {{t 'name'}}
                   </WebComponents::AuLabel>
-                  <WebComponents::AuInput type="text" id="nameDocumentUpload" @value={{mut this.name}}/>
+                  <Auk::Input
+                    type="text"
+                    id="nameDocumentUpload"
+                    @value={{mut this.name}}
+                  />
                 </div>
                 <div class="auk-form-group">
                   <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
@@ -29,7 +36,7 @@
                     {{this.translationDocument.file.extension}}
                   </WebComponents::AuPill>
                 </div>
-                {{!-- TODO Seen in designs but not sure of usage
+                {{!-- TODO KAS-2481
                 <div class="auk-form-group">
                   <WebComponents::AuLabel for="dateSet">{{t "received-at"}}</WebComponents::AuLabel>
                   <WebComponents::AuDatepicker id="dateSet"
@@ -43,34 +50,32 @@
                     <div class="auk-o-grid">
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
-                          <WebComponents::AuLabel for="translationLoadPages" @isRequired={{true}}
-                                                  class="auk-label--light">
+                          <WebComponents::AuLabel for="translationLoadPages" class="auk-label--light">
                             {{t 'pages-amount'}}
                           </WebComponents::AuLabel>
-                          <WebComponents::AuInput
-                                  type="number"
-                                  id="translationLoadPages"
-                                  @value={{mut this.pagesAmount}}
+                          <Auk::Input
+                            type="number"
+                            id="translationLoadPages"
+                            @value={{mut this.pagesAmount}}
                           />
                         </div>
                       </div>
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
-                          <WebComponents::AuLabel for="translationLoadWords" @isRequired={{true}}
-                                                  class="auk-label--light">
+                          <WebComponents::AuLabel for="translationLoadWords" class="auk-label--light">
                             {{t 'words-amount'}}
                           </WebComponents::AuLabel>
-                          <WebComponents::AuInput
-                                  type="number"
-                                  id="translationLoadWords"
-                                  @value={{mut this.wordsAmount}}
+                          <Auk::Input
+                            type="number"
+                            id="translationLoadWords"
+                            @value={{mut this.wordsAmount}}
                           />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                {{!-- TODO TODO in KAS2600
+                {{!-- TODO in KAS-2600
                 <div class="auk-form-group auk-o-flex--align-start">
                   <WebComponents::AuLabel for="proofPrint">
                     {{t 'for-publish-preview'}}
@@ -89,14 +94,14 @@
     </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer
-          @cancelModal={{perform this.cancelTranslation}}
+    @cancelModal={{perform this.cancelTranslation}}
   >
-    <WebComponents::AuButton
-            @skin="primary"
-            @disabled={{this.saveIsDisabled}}
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.saveIsDisabled}}
       {{on "click" (perform this.saveTranslation)}}
     >
       {{t "save"}}
-    </WebComponents::AuButton>
+    </Auk::Button>
   </WebComponents::AuModal::Footer>
 </WebComponents::AuModal>

@@ -13,14 +13,14 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  @tracked isExpanded = false;
   @tracked translationDocument = null;
   @tracked newPieces = [];
   @tracked name = null;
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
-  // TODO KAS2600
+  // TODO KAS-2600
   // @tracked proofprint = false;
+  // TODO KAS-2481
   // @tracked receivedAtDate = null;
 
 
@@ -29,11 +29,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     if (this.fileQueueService.find(this.fileQueueName)) {
       this.fileQueueService.create(this.fileQueueName);
     }
-  }
-
-  @action
-  toggleSize() {
-    this.isExpanded = !this.isExpanded;
   }
 
   get fileQueueName() {
@@ -45,10 +40,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   get saveIsDisabled() {
-    return this.translationDocument === null
-      || this.name === null
-      || this.pagesAmount === null
-      || this.wordsAmount === null;
+    return this.translationDocument === null || this.name === null;
   }
 
   @action
@@ -61,11 +53,11 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       created: now,
       modified: now,
       file: file,
-      accessLevel: this.defaultAccessLevel,
       confidential: false,
       name: file.filenameWithoutExtension,
       documentContainer: documentContainer,
     });
+    this.name = file.filenameWithoutExtension;
     this.newPieces.pushObject(this.translatedDocument);
   }
 
@@ -99,13 +91,13 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     }
   }
 
-  // TODO Seen in Designs but not sure of usage
+  // TODO KAS-2481
   // @action
   // setReceivedAtDate(selectedDates) {
   //   this.receivedAtDate = selectedDates[0];
   // }
 
-  // TODO In KAS 2600
+  // TODO In KAS-2600
   // @action
   // toggleProofPrint() {
   //   this.proofprint = !this.proofprint;

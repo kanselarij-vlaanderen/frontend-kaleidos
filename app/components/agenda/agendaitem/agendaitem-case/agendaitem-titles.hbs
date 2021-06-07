@@ -35,12 +35,12 @@
           {{/if}}
           {{#if this.currentSession.isEditor}}
             <WebComponents::AuToolbar::Item>
-              <WebComponents::AuButton
+              <Auk::Button
                 data-test-agendaitem-titles-edit
+                @skin="tertiary"
+                @icon="edit"
+                @layout="icon-only"
                 {{on "click" this.startEditing}}
-                      @skin="tertiary"
-                      @icon="edit"
-                      @layout="icon-only"
               />
             </WebComponents::AuToolbar::Item>
           {{/if}}
