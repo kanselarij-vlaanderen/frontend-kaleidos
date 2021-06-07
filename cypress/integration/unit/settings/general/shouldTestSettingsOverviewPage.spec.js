@@ -90,7 +90,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.settingsUserTable).contains('Wendy')
       .parents('tr')
       .within(() => {
-        cy.get(settings.deleteUser).should('exist')
+        cy.get(settings.vlDeleteUser).should('exist')
           .should('be.visible')
           .click();
       });
