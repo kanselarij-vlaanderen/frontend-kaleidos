@@ -34,14 +34,14 @@
   </div>
 {{else}}
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "first-name"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "first-name"}}</Auk::Label>
     {{web-components/vl-form-input
       data-test-person-selector-firstname=true
       value=firstName
     }}
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "name"}}</Auk::Label>
     {{web-components/vl-form-input
       data-test-person-selector-lastname=true
       value=lastName

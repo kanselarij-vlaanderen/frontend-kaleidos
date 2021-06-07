@@ -10,36 +10,36 @@
 <div class="auk-modal__body">
   <div class="auk-u-p-4">
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "title"}}</Auk::Label>
       {{web-components/vl-form-input value=title}}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "nick-name"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "nick-name"}}</Auk::Label>
       {{web-components/vl-form-input value=nickName}}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "add-people"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "add-people"}}</Auk::Label>
       {{utils/create-person-selector
         selectedItems=mandateeToEdit.person
         selectModel=(action "personSelected")
       }}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "start-date"}}</Auk::Label>
       {{web-components/vl-datepicker
         selectedDate=startDate
         dateChanged=(action "selectStartDate")
       }}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "end-date"}}</Auk::Label>
       {{web-components/vl-datepicker
         selectedDate=endDate
         dateChanged=(action "selectEndDate")
       }}
     </div>
     <div class="auk-form-group">
-      <WebComponents::AuLabel>{{t "ise-code"}}</WebComponents::AuLabel>
+      <Auk::Label>{{t "ise-code"}}</Auk::Label>
       {{utils/model-selector
         modelName="ise-code"
         searchField="name"
