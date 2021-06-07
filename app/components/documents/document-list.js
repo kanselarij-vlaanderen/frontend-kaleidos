@@ -38,14 +38,16 @@ export default class DocumentsDocumentListComponent extends Component {
   @task
   *groupDocumentsByContainer() {
     this.documentsByContainer = new Map();
-    for (const doc of this.documents) {
-      const container = yield doc.documentContainer;
+    // support ember-data record array
+    yield Promise.all(this.documents.map(async(doc) => {
+      const container = await doc.documentContainer;
       if (this.documentsByContainer.has(container)) {
         this.documentsByContainer.get(container).push(doc);
       } else {
         this.documentsByContainer.set(container, [doc]);
       }
-    }
+    }));
+
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
 
     for (const key of this.documentsByContainer.keys()) {

@@ -9,11 +9,8 @@
     {{@label}}
   </Auk::ButtonLink>
   <div
-    class="auk-accordion__content"
-    id={{this.accordionId}}
-    aria-hidden={{if this.isActive "false" "true"}}
-  >
+    class="auk-accordion__content" id={{this.accordionId}}
+    aria-hidden="{{not this.isActive}}">
     {{yield}}
   </div>
-
 </div>

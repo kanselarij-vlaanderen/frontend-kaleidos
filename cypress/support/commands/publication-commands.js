@@ -75,7 +75,8 @@ function addPublicationDocuments(files) {
   cy.route('POST', 'pieces').as('createNewPiece');
   cy.route('POST', 'document-containers').as('createNewDocumentContainer');
 
-  cy.get(publicationSelectors.publicationCase.addDocumentsButton).click();
+  // TODO This part can be reused in future tests
+
   cy.get(modalSelectors.auModal.container).as('fileUploadDialog');
 
   files.forEach((file, index) => {
@@ -100,6 +101,7 @@ function addPublicationDocuments(files) {
         });
     });
 
+    // TODO will need refactoring if the current uploader changes to a new design for publication
     if (file.fileType) {
       cy.get('@fileUploadDialog').within(() => {
         cy.get('.vl-uploaded-document').eq(index)

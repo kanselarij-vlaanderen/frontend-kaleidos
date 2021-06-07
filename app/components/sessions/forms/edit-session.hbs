@@ -3,7 +3,7 @@
     {{utils/kind-selector kind=kind setAction=(action "setKind")}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "start-date"}}</Auk::Label>
         {{web-components/vl-datepicker
           enableTime=true
           date=date
@@ -13,7 +13,7 @@
     </div>
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "meeting-number"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "meeting-number"}}</Auk::Label>
         {{web-components/vl-form-input
           type="number"
           value=meetingNumber
@@ -23,9 +23,9 @@
     </div>
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>
+        <Auk::Label>
           {{t "meeting-number-visual-representation"}}
-        </WebComponents::AuLabel>
+        </Auk::Label>
         {{web-components/vl-form-input
           value=numberRepresentation
         }}
@@ -33,9 +33,9 @@
     </div>
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <WebComponents::AuLabel>
+        <Auk::Label>
           {{t "meeting-location"}}
-        </WebComponents::AuLabel>
+        </Auk::Label>
         {{web-components/vl-form-input
           value=extraInfo
         }}
