@@ -8,11 +8,12 @@
     <h4 class="vlc-agenda-items__subject">
       {{#if @showDragHandle}}
         <div class="vlc-agenda-items__cursor">
+          {{!-- TODO: grab-hand shows over the whole parent height instead of only over the grab-handle icon --}}
           <Auk::Button
-            class="auk-u-p-0"
+            class="auk-u-p-0 auk-u-cursor-grab"
             @skin="borderless"
           >
-            <WebComponents::AuIcon @name="drag-handle-2" @grab={{true}}/>
+            <Auk::Icon @name="drag-handle-2"/>
           </Auk::Button>
         </div>
       {{/if}}
@@ -88,7 +89,7 @@
         </div>
         {{#if this.enableShowMore}}
           <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
-            <WebComponents::AuIcon @name={{if this.isShowingAll "remove" "add"}} />
+            <Auk::Icon @name={{if this.isShowingAll "remove" "add"}} />
             <p class="vlc-document-show-more-button__text auk-u-ml">
               {{#if this.isShowingAllDocuments }}
                 {{t "show-less"}}

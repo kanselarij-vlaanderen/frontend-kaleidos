@@ -49,12 +49,12 @@
             <td>
               {{#if (not isEditing)}}
                 {{#if (await mandateeApproval.approval)}}
-                  <WebComponents::AuIcon @name="check" @iconSkinColor="success" />
+                  <Auk::Icon @name="check" @skin="success" />
                   <span class="auk-u-text-success">
                     {{t "approval-mandatee"}}
                   </span>
                 {{else}}
-                  <WebComponents::AuIcon @name="remove" @iconSkinColor="muted" />
+                  <Auk::Icon @name="remove" @skin="muted" />
                   <span class="auk-u-muted">
                     {{t "not-yet-approval-mandatee"}}
                   </span>

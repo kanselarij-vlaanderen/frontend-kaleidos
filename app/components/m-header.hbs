@@ -25,7 +25,7 @@
           <WebComponents::AuTab   @route="search.index"
                                   @currentWhen="search"
                                   data-test-m-header-search>
-            <WebComponents::AuIcon @name="search" class="auk-icon--search" />
+            <Auk::Icon @name="search" class="auk-icon--search" />
             {{capitalize (t "search")}}
           </WebComponents::AuTab>
           {{#if this.currentSession.isEditor}}

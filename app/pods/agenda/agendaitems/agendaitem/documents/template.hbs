@@ -24,15 +24,17 @@
           </Auk::Button>
         </WebComponents::AuToolbar::Item>
       {{/if}}
-      {{#if (and this.currentSession.isOvrb this.model.pieces)}}
-        <WebComponents::AuToolbar::Item>
-          <Auk::Button
-            @icon="copy"
-            {{on "click" this.openPublicationModal}}
-          >
-            {{t "agendaitem-documents-documents-for-publication"}}
-          </Auk::Button>
-        </WebComponents::AuToolbar::Item>
+      {{#if this.hasPublicationsEnabled}}
+        {{#if (and this.currentSession.isOvrb this.model.pieces)}}
+          <WebComponents::AuToolbar::Item>
+            <Auk::Button
+              @icon="copy"
+              {{on "click" this.openPublicationModal}}
+            >
+              {{t "agendaitem-documents-documents-for-publication"}}
+            </Auk::Button>
+          </WebComponents::AuToolbar::Item>
+        {{/if}}
       {{/if}}
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
