@@ -1,10 +1,12 @@
 <Auk::Modal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @title={{if
-    this.isViaCouncilOfMinisters
-    (t "publications-new-title-via-council-of-ministers")
-    (t "publications-new-title-not-via-council-of-ministers")
-  }}
-    @closeModal={{@onCancel}} />
+  <Auk::Modal::Header
+    @title={{if
+      this.isViaCouncilOfMinisters
+      (t "publications-new-title-via-council-of-ministers")
+      (t "publications-new-title-not-via-council-of-ministers")
+    }}
+    @closeModal={{@onCancel}}
+  />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}

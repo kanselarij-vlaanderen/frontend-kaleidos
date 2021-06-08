@@ -320,8 +320,10 @@
       @size="medium"
       data-test-add-contactpersonmodal
     >
-      <WebComponents::AuModal::Header @title={{t "add-contact"}}
-        @closeModal={{this.closeContactPersonModal}} />
+      <Auk::Modal::Header
+        @title={{t "add-contact"}}
+        @closeModal={{this.closeContactPersonModal}}
+      />
       <Auk::Modal::Body>
         <div class="auk-form-group-layout auk-form-group-layout--standard">
           <div class='auk-form-group auk-form-group--grid'>
@@ -394,7 +396,7 @@
       @size="medium"
       data-test-add-mandateemodal
     >
-      <WebComponents::AuModal::Header
+      <Auk::Modal::Header
         @title={{t "create-mandatee"}}
         @closeModal={{this.closeMandateeModal}}
       />
@@ -441,9 +443,9 @@
     @size="medium"
     data-test-add-organisationModal
   >
-    <WebComponents::AuModal::Header
-            @title={{t "add-organization"}}
-            @closeModal={{this.closeAddOrganisationModal}}
+    <Auk::Modal::Header
+      @title={{t "add-organization"}}
+      @closeModal={{this.closeAddOrganisationModal}}
     />
     <Auk::Modal::Body>
       <Auk::Input

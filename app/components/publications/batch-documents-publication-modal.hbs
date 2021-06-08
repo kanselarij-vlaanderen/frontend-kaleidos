@@ -1,5 +1,5 @@
 <Auk::Modal @size="full-screen-padded">
-  <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
+  <Auk::Modal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.loadPieces.isRunning}}>
       {{!-- template-lint-disable table-groups --}}
