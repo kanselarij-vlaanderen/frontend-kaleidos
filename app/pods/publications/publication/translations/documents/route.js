@@ -1,10 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
-  @inject store;
-
   async model() {
     this.publicationFlow = await this.modelFor('publications.publication');
     this.translationSubcase = await this.publicationFlow.translationSubcase;
