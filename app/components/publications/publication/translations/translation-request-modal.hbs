@@ -4,9 +4,9 @@
           @title=
             {{t
               "request-translations-for-publication"
-              publicationNumber=@publicationFlow.identification.structuredIdentifier.localIdentifier
+              publicationNumber=@identification.idName
             }}
-          @closeModal={{perform this.cancelRequest}}
+          @closeModal={{this.cancelRequest}}
   />
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
@@ -21,13 +21,13 @@
           <Auk::Label for="subjectTransl" @isRequired={{true}}>
             {{t 'subject'}}
           </Auk::Label>
-          <Auk::Input type="text" id="subjectTransld" rows="6" @value={{mut this.subject}}/>
+          <Auk::Input type="text" id="subjectTransld" size="39" @value={{mut this.subject}}/>
         </div>
         <div class="auk-form-group">
           <Auk::Label for="messageTransl" @isRequired={{true}}>
-            {{t 'message'}}
+            {{t 'translation-mail-header'}}
           </Auk::Label>
-          <WebComponents::AuTextarea id="messageTransld" rows="6" @value={{mut this.message}} @disabeled={{true}} />
+          <WebComponents::AuTextarea id="messageTransld" @rows="6" @value={{mut this.message}} disabled />
         </div>
         <div class="auk-form-group">
           <Auk::Label>
@@ -40,7 +40,7 @@
                 <Auk::Badge @icon="file"/>
                 <div class="auk-u-mx-2">
                   <span class="auk-u-text-bold">{{piece.name}}</span>
-                  <div class="auk-u-muted auk-u-text-small">{{piece.file.extension}}, {{piece.file.size}}</div>
+                  <div class="auk-u-muted auk-u-text-small">{{piece.file.extension}}, {{format-bytesize piece.file.size}}</div>
                 </div>
                 <Auk::Button
                         @layout="icon-only"
@@ -58,7 +58,7 @@
     </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer
-          @cancelModal={{perform this.cancelRequest}}
+          @cancelModal={{this.cancelRequest}}
   >
     <Auk::Button
             @skin="primary"

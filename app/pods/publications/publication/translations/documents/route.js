@@ -7,6 +7,9 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
 
   async model() {
     this.translationSubcase = await this.modelFor('publications.publication').translationSubcase;
+    this.publicationFlow = await this.modelFor('publications.publication');
+    this.identification = await this.modelFor('publications.publication').identification;
+
     const sourceDocs = await this.translationSubcase.sourceDocuments;
     const generatedDocs = await this.translationSubcase.translationActivities.generatedPieces;
     const pieces = [];
@@ -27,6 +30,8 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+    controller.publicationFlow = this.publicationFlow;
+    controller.identification = this.identification;
   }
 
   @action

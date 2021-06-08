@@ -857,6 +857,9 @@
   "batch-document-publication-modal-publication-number-info": "Is dit document nodig voor de uiteindelijke publicatie? Deze functie wordt gebruikt om bij te houden of er een update op een document is in een bestaande publicatie.",
   "publication-subcase": "publicatie dossier",
   "translation-subcase": "vertalingsdossier",
+  "translation-activitie": "vertalingsactiviteit",
+  "request-activitie": "aanvraag activiteit",
+
   "for-publish-preview": "Dient voor drukproef",
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
