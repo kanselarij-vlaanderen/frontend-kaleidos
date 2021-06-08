@@ -124,7 +124,7 @@
         </Auk::Panel::Header>
         {{#if (not this.latestSubcaseOnMeeting)}}
           {{#if this.publicationFlow.mandatees }}
-            <Auk::Panel::Body @noPadding="true">
+            <Auk::Panel::Body @noPadding={{true}}>
               <table class="auk-table" data-test-table-mandatees>
                 <thead>
                   <tr>
@@ -174,7 +174,7 @@
             </Auk::Panel::Body>
           {{/if}}
         {{else}}
-          <Auk::Panel::Body @noPadding="true">
+          <Auk::Panel::Body @noPadding={{true}}>
             <table class="auk-table">
               <thead>
                 <tr>
@@ -247,7 +247,7 @@
             <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
           </Auk::Panel::Body>
         {{else}}
-          <Auk::Panel::Body @noPadding="true">
+          <Auk::Panel::Body @noPadding={{true}}>
             <table class="auk-table"  data-test-contact-persons>
               <thead>
                 <tr>
