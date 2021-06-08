@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 
 /**
  *
@@ -49,15 +48,5 @@ export default class Pagination extends Component {
       return 0;
     }
     return (this.startItem + this.args.nbOfItems) - 1;
-  }
-
-  @action
-  nextPage() {
-    this.args.onNextPage();
-  }
-
-  @action
-  prevPage() {
-    this.args.onPreviousPage();
   }
 }
