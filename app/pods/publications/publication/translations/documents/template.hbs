@@ -3,16 +3,22 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @disabled={{eq this.selectedPieces.length 0}}>
-          <WebComponents::AuIcon @name="mail"/>
-          {{t "request-translations"}}
-        </WebComponents::AuButton>
-      </WebComponents::AuToolbar::Item>
+          <Auk::Button
+                  @icon="mail"
+                  @skin="secondary"
+                  @disabled={{eq this.selectedPieces.length 0}}
+                  {{on "click" this.openTranslationRequestModal}}
+          >
+            {{t "request-translations"}}
+          </Auk::Button>
+        </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="secondary" {{on "click" this.openPieceUploadModal}} >
-            <WebComponents::AuIcon @name="add"/>
+          <Auk::Button
+                  @icon="add"
+                  @skin="secondary"
+                  {{on "click" this.openPieceUploadModal}}>
             {{t "upload-translation-file"}}
-          </WebComponents::AuButton>
+          </Auk::Button>
         </WebComponents::AuToolbar::Item>
 
       </WebComponents::AuToolbar::Group>
@@ -22,8 +28,8 @@
         <thead>
           <tr>
             <th class="auk-table-checkbox-col">
-              <WebComponents::AuCheckbox @mode="table" @toggle={{this.changeAllPiecesSelection}}
-                                       @checked={{this.areAllPiecesSelected}} />
+              <Auk::Checkbox @mode="table" {{on "click" this.changeAllPiecesSelection}}
+                             @checked={{this.areAllPiecesSelected}}  />
             </th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
@@ -37,13 +43,14 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
-                <WebComponents::AuCheckbox @mode="table" @toggle={{fn this.changePieceSelection piece}}
-                                         @checked={{includes piece this.selectedPieces}} />
+                <Auk::Checkbox @mode="table"
+                                {{on "click" (fn this.changePieceSelection piece)}}
+                               @checked={{includes piece this.selectedPieces}}  />
               </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
-              <td >
+              <td>
                 <WebComponents::AuPill class="auk-pill--white">
                   {{piece.file.extension}}
                 </WebComponents::AuPill>
@@ -62,18 +69,18 @@
               <td>
                 <WebComponents::AuButtonToolbar>
                   <Auk::Button
-                    @layout="icon-only"
-                    @icon="download"
-                    @skin="borderless"
-                    @href={{piece.file.namedDownloadLink}}
-                    download
+                        @layout="icon-only"
+                        @icon="download"
+                        @skin="borderless"
+                        @href={{piece.file.namedDownloadLink}}
+                        download
                   />
                   <Auk::Button
-                    @layout="icon-only"
-                    @icon="book"
-                    @skin="borderless"
-                    @href={{piece.viewDocumentURL}}
-                    target="_blank"
+                        @layout="icon-only"
+                        @icon="book"
+                        @skin="borderless"
+                        @href={{piece.viewDocumentURL}}
+                        target="_blank"
                   />
                 </WebComponents::AuButtonToolbar>
               </td>
@@ -93,7 +100,16 @@
 
 {{#if this.showPieceUploadModal}}
   <Publications::Publication::Translations::DocumentsUploadModal
-    @translationSubcase={{this.translationSubcase}}
-    @onSave={{perform this.saveAndLinkPieces}}
-    @onCancel={{this.closePieceUploadModal}} />
+          @translationSubcase={{this.translationSubcase}}
+          @onSave={{perform this.saveAndLinkPieces}}
+          @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
+
+{{#if this.showTranslationRequestModal}}
+  <Publications::Publication::Translations::TranslationRequestModal
+          @translationSubcase={{this.translationSubcase}}
+          @publicationFlow={{this.publicationFlow}}
+          @selectedPieces={{this.selectedPieces}}
+          @onSave={{perform this.saveTranslationRequest}}
+          @onCancel={{this.hideTranslationRequestModal}} />
 {{/if}}

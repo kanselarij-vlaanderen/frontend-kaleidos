@@ -6,7 +6,9 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   @tracked translationSubcase;
+  @tracked publicationFlow;
   @tracked showPieceUploadModal = false;
+  @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
 
   // Editing of pieces.
@@ -15,6 +17,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   // Hacky way to refresh the checkboxes in the view without reloading the route.
   @tracked renderPieces = true;
+
+
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
   }
@@ -62,5 +66,32 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @action
   hidePieceUploadModal() {
     this.showPieceUploadModal = false;
+  }
+
+  @action
+  openTranslationRequestModal() {
+    this.showTranslationRequestModal = true;
+  }
+
+  @task
+  *saveTranslationRequest(translationRequest) {
+    const piece = translationRequest.piece;
+    // piece.translationSubcase = this.translationSubcase;
+    // const documentContainer = yield piece.documentContainer;
+    // yield documentContainer.save();
+    // piece.pages = translationDocument.pagesAmount;
+    // piece.words = translationDocument.wordsAmount;
+    // piece.name = translationDocument.name;
+    // piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+    //
+    yield piece.save();
+
+    this.showTranslationRequestModal = false;
+    this.send('refresh');
+  }
+
+  @action
+  hideTranslationRequestModal() {
+    this.showTranslationRequestModal = false;
   }
 }

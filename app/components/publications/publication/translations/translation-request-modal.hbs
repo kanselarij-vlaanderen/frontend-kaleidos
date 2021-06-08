@@ -1,20 +1,71 @@
 <WebComponents::AuModal>
   <WebComponents::AuModal::Header
           @resizeable={{false}}
-          @title={{t "request-translation"}}
+          @title=
+            {{t
+              "request-translations-for-publication"
+              publicationNumber=@publicationFlow.identification.structuredIdentifier.localIdentifier
+            }}
           @closeModal={{perform this.cancelRequest}}
   />
   <WebComponents::AuModal::Body>
+    <div class="auk-u-p-4">
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group" style="max-width: 30rem;">
+          <Auk::Label for="dateSet">{{t "translation-due-date"}}</Auk::Label>
+          <Auk::Datepicker id="dateSet"
+                                       @date={{this.translationDueDate}}
+                                       @onChange={{this.setTranslationDueDate}}/>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="subjectTransl" @isRequired={{true}}>
+            {{t 'subject'}}
+          </Auk::Label>
+          <Auk::Input type="text" id="subjectTransld" rows="6" @value={{mut this.subject}}/>
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="messageTransl" @isRequired={{true}}>
+            {{t 'message'}}
+          </Auk::Label>
+          <WebComponents::AuTextarea id="messageTransld" rows="6" @value={{mut this.message}} @disabeled={{true}} />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t 'files'}}
+          </Auk::Label>
+
+          <WebComponents::AuList @isBordered="true">
+            {{#each @selectedPieces as |piece|}}
+              <WebComponents::AuList::AuListItem>
+                <Auk::Badge @icon="file"/>
+                <div class="auk-u-mx-2">
+                  <span class="auk-u-text-bold">{{piece.name}}</span>
+                  <div class="auk-u-muted auk-u-text-small">{{piece.file.extension}}, {{piece.file.size}}</div>
+                </div>
+                <Auk::Button
+                        @layout="icon-only"
+                        @icon="book"
+                        @skin="borderless"
+                        @href={{piece.viewDocumentURL}}
+                        target="_blank"
+                />
+              </WebComponents::AuList::AuListItem>
+
+            {{/each}}
+          </WebComponents::AuList>
+        </div>
+      </div>
+    </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer
           @cancelModal={{perform this.cancelRequest}}
   >
-    <WebComponents::AuButton
+    <Auk::Button
             @skin="primary"
             @disabled={{this.saveIsDisabled}}
-      {{on "click" (perform this.saveTranslation)}}
+      {{on "click" (perform this.saveRequest)}}
     >
       {{t "save"}}
-    </WebComponents::AuButton>
+    </Auk::Button>
   </WebComponents::AuModal::Footer>
 </WebComponents::AuModal>
