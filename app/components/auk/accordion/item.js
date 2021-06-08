@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
+import { isPresent } from '@ember/utils';
 
 /**
  *
@@ -14,7 +15,7 @@ export default class AuAccordionItem extends Component {
   accordionId = `accordion-${guidFor(this)}`;
 
   get layout() {
-    if (this.args.layout) {
+    if (isPresent(this.args.layout)) {
       return this.args.layout;
     }
     return 'controls-left';
