@@ -451,7 +451,7 @@
         {{/if}}
       {{/if}}
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{action "cancelApproveAgenda"}}>
+    <Auk::Modal::Footer @cancelModal={{action "cancelApproveAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
@@ -459,7 +459,7 @@
       >
         {{t "approve"}}
       </Auk::Button>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 
@@ -492,7 +492,7 @@
         {{/if}}
       {{/if}}
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{action "cancelApproveAgendaAndCloseMeeting"}}>
+    <Auk::Modal::Footer @cancelModal={{action "cancelApproveAgendaAndCloseMeeting"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
@@ -500,7 +500,7 @@
       >
         {{t "approve-and-close"}}
       </Auk::Button>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 
@@ -522,7 +522,7 @@
       {{/if}}
       <div>{{t "close-meeting-confirmation"}}</div>
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{action "cancelCloseMeeting"}}>
+    <Auk::Modal::Footer @cancelModal={{action "cancelCloseMeeting"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if
@@ -534,7 +534,7 @@
       >
         {{t "agenda-close"}}
       </Auk::Button>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 
@@ -555,7 +555,7 @@
         }}
       </div>
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{action "cancelDeleteSelectedAgenda"}}>
+    <Auk::Modal::Footer @cancelModal={{action "cancelDeleteSelectedAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin="danger-primary"
@@ -563,7 +563,7 @@
       >
         {{t "agenda-delete"}}
       </Auk::Button>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 
@@ -582,7 +582,7 @@
           approvedAgenda = (await this.lastApprovedAgendaName)
         }} />
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
+    <Auk::Modal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin="danger-primary"
@@ -590,6 +590,6 @@
       >
         {{t "agenda-reopen-previous-version"}}
       </Auk::Button>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

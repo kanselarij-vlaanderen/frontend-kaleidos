@@ -28,7 +28,7 @@
       </div>
     {{/if}}
   </Auk::Modal::Body>
-  <WebComponents::AuModal::Footer
+  <Auk::Modal::Footer
     @cancelModal={{perform this.cancelUploadPieces}}
   >
     {{#if this.savePieces.isRunning}}
@@ -43,5 +43,5 @@
         {{t "documents-add"}}
       </Auk::Button>
     {{/if}}
-  </WebComponents::AuModal::Footer>
+  </Auk::Modal::Footer>
 </Auk::Modal>

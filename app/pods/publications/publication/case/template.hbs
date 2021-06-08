@@ -364,7 +364,7 @@
         </div>
       </Auk::Modal::Body>
       {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
-      <WebComponents::AuModal::Footer @custom={{true}}>
+      <Auk::Modal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -381,7 +381,7 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuModal::Footer>
+      </Auk::Modal::Footer>
     </Auk::Modal>
   {{/if}}
 
@@ -406,7 +406,7 @@
           chooseMandatee=(action "mandateeSelectedForPublication")
         }}
       </Auk::Modal::Body>
-      <WebComponents::AuModal::Footer @custom={{true}}>
+      <Auk::Modal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -429,7 +429,7 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuModal::Footer>
+      </Auk::Modal::Footer>
     </Auk::Modal>
   {{/if}}
 
@@ -455,7 +455,7 @@
         @value={{this.inputOrganization}}
       />
     </Auk::Modal::Body>
-    <WebComponents::AuModal::Footer @custom={{true}}>
+    <Auk::Modal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -481,7 +481,7 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
+    </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}
 </div>
