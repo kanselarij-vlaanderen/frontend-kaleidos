@@ -1,6 +1,6 @@
 /* global context, before, cy, beforeEach, afterEach, it, Cypress */
 // / <reference types="Cypress" />
-import newsletter from '../../selectors/newsletter.selector';
+import newsletter from '../../selectors/newsletter.selectors';
 
 /**
  * @description returns the current time in unix timestamp

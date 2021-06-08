@@ -5,7 +5,7 @@ import toolbar from '../../../selectors/toolbar.selectors';
 import settings from '../../../selectors/settings.selectors';
 import cases from '../../../selectors/case.selectors';
 import route from '../../../selectors/route.selectors';
-import newsletter from '../../../selectors/newsletter.selector';
+import newsletter from '../../../selectors/newsletter.selectors';
 
 context('Testing the toolbar as Minister user', () => {
   beforeEach(() => {

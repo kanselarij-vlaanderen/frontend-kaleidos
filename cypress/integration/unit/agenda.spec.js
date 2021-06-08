@@ -4,7 +4,7 @@
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
-import auComponent from '../../selectors/au-component-selectors';
+import auComponent from '../../selectors/au-component.selectors';
 import route from  '../../selectors/route.selectors';
 
 function currentTimestamp() {

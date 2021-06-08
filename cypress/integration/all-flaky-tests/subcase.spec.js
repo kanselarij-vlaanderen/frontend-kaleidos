@@ -2,8 +2,8 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
-import auComponents from '../../selectors/au-component-selectors';
-import newsletter from '../../selectors/newsletter.selector';
+import auComponents from '../../selectors/au-component.selectors';
+import newsletter from '../../selectors/newsletter.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();

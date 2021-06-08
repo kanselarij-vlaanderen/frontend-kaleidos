@@ -3,7 +3,7 @@
 
 import agendaSelector from '../../selectors/agenda.selectors';
 import modalSelector from '../../selectors/modal.selectors';
-import auComponentSelector from '../../selectors/au-component-selectors';
+import auComponentSelector from '../../selectors/au-component.selectors';
 
 context('Agenda reopen previous tests', () => {
   const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')

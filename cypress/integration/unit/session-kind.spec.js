@@ -2,7 +2,7 @@
 // / <reference types="Cypress" />
 
 import printOverview from '../../selectors/print-overview.selectors';
-import newsletter from '../../selectors/newsletter.selector';
+import newsletter from '../../selectors/newsletter.selectors';
 import agenda from '../../selectors/agenda.selectors';
 
 context('Different session kinds should show different titles', () => {

@@ -3,7 +3,7 @@
 
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
-import newsletter from '../../../selectors/newsletter.selector';
+import newsletter from '../../../selectors/newsletter.selectors';
 import modal from '../../../selectors/modal.selectors';
 
 context('Should upload nota, see the warning, close warning, edit KB and see no warning when revisiting', () => {

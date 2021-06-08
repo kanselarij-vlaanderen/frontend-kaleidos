@@ -1,7 +1,7 @@
 /* global context, before, it, cy */
 // / <reference types="Cypress" />
 
-import newsletter from '../../../selectors/newsletter.selector';
+import newsletter from '../../../selectors/newsletter.selectors';
 
 context('KB: Edit content of news-item', () => {
   before(() => {

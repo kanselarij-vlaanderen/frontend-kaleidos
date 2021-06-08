@@ -4,9 +4,9 @@
 import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
-import newsletter from '../../selectors/newsletter.selector';
+import newsletter from '../../selectors/newsletter.selectors';
 import modal from '../../selectors/modal.selectors';
-import auComponents from '../../selectors/au-component-selectors';
+import auComponents from '../../selectors/au-component.selectors';
 import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {

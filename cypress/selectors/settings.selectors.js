@@ -44,7 +44,9 @@ const selectors = {
   },
 
   // component vl-delete-user
-  vlDeleteUser: '[data-test-vl-delete-user]',
+  vlDeleteUser: {
+    delete: '[data-test-vl-delete-user]',
+  },
 
   // component next-button
   // TODO this component is just a linkTo, refactor to au component

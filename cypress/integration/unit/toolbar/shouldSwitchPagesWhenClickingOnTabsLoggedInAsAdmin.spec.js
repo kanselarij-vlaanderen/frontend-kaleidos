@@ -4,7 +4,7 @@
 import toolbar from '../../../selectors/toolbar.selectors';
 import settings from '../../../selectors/settings.selectors';
 import cases from '../../../selectors/case.selectors';
-import newsletter from '../../../selectors/newsletter.selector';
+import newsletter from '../../../selectors/newsletter.selectors';
 import route from '../../../selectors/route.selectors';
 
 context('Testing the toolbar as Admin user', () => {

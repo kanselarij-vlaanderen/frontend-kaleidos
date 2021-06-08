@@ -2,7 +2,7 @@
 
 // / <reference types="Cypress" />
 import publicationSelectors from '../../selectors/publication.selectors';
-import auComponentSelectors from '../../selectors/au-component-selectors';
+import auComponentSelectors from '../../selectors/au-component.selectors';
 import modalSelectors from '../../selectors/modal.selectors';
 
 context('Publications documents tests', () => {
