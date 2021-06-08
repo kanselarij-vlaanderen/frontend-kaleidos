@@ -3,7 +3,7 @@
   @position="right"
   data-collapsed={{if (not @isOpen) "true" "false"}}
 >
-  <WebComponents::AuNavbar @skin="gray-100">
+  <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
         <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
@@ -16,7 +16,7 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       {{!--Publicatienummer --}}
