@@ -28,8 +28,9 @@
         <thead>
           <tr>
             <th class="auk-table-checkbox-col">
-              <Auk::Checkbox @mode="table" {{on "click" this.changeAllPiecesSelection}}
-                             @checked={{this.areAllPiecesSelected}}  />
+              <Auk::Checkbox @mode="table"
+                {{on "click" this.toggleAllPiecesSelection}}
+                @checked={{this.areAllPiecesSelected}}  />
             </th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
@@ -44,8 +45,8 @@
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
                 <Auk::Checkbox @mode="table"
-                                {{on "click" (fn this.changePieceSelection piece)}}
-                               @checked={{includes piece this.selectedPieces}}  />
+                  {{on "click" (fn this.togglePieceSelection piece)}}
+                  @checked={{includes piece this.selectedPieces}}  />
               </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
@@ -100,9 +101,9 @@
 
 {{#if this.showPieceUploadModal}}
   <Publications::Publication::Translations::DocumentsUploadModal
-          @translationSubcase={{this.translationSubcase}}
-          @onSave={{perform this.saveAndLinkPieces}}
-          @onCancel={{this.closePieceUploadModal}} />
+    @translationSubcase={{this.translationSubcase}}
+    @onSave={{perform this.saveSourceDocument}}
+    @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
 {{#if this.showTranslationRequestModal}}
@@ -112,5 +113,5 @@
           @identification={{this.identification}}
           @selectedPieces={{this.selectedPieces}}
           @onSave={{perform this.saveTranslationRequest}}
-          @onCancel={{this.hideTranslationRequestModal}} />
+          @onCancel={{this.closeTranslationRequestModal}} />
 {{/if}}

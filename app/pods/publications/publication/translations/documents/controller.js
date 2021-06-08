@@ -7,6 +7,8 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  @service store;
+
   @tracked translationSubcase;
   @tracked publicationFlow;
   @tracked identification;
@@ -14,20 +16,12 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
 
-  // Editing of pieces.
-  @tracked pieceBeingEdited = null;
-  @tracked showPieceEditor = false;
-
-  // Hacky way to refresh the checkboxes in the view without reloading the route.
-  @tracked renderPieces = true;
-  @service store;
-
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
   }
 
   @action
-  changePieceSelection(selectedPiece) {
+  togglePieceSelection(selectedPiece) {
     const isPieceSelected = this.selectedPieces.includes(selectedPiece);
     if (isPieceSelected) {
       this.selectedPieces.removeObject(selectedPiece);
@@ -37,7 +31,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  changeAllPiecesSelection() {
+  toggleAllPiecesSelection() {
     if (this.areAllPiecesSelected) {
       this.selectedPieces = [];
     } else {
@@ -45,13 +39,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     }
   }
 
-  @action
-  openPieceUploadModal() {
-    this.showPieceUploadModal = true;
-  }
-
   @task
-  *saveAndLinkPieces(translationDocument) {
+  *saveSourceDocument(translationDocument) {
     const piece = translationDocument.piece;
     piece.translationSubcase = this.translationSubcase;
     const documentContainer = yield piece.documentContainer;
@@ -65,16 +54,6 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
     this.showPieceUploadModal = false;
     this.send('refresh');
-  }
-
-  @action
-  hidePieceUploadModal() {
-    this.showPieceUploadModal = false;
-  }
-
-  @action
-  openTranslationRequestModal() {
-    this.showTranslationRequestModal = true;
   }
 
   @task
@@ -125,8 +104,24 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
+
   @action
-  hideTranslationRequestModal() {
+  openPieceUploadModal() {
+    this.showPieceUploadModal = true;
+  }
+
+  @action
+  closePieceUploadModal() {
+    this.showPieceUploadModal = false;
+  }
+
+  @action
+  openTranslationRequestModal() {
+    this.showTranslationRequestModal = true;
+  }
+
+  @action
+  closeTranslationRequestModal() {
     this.showTranslationRequestModal = false;
   }
 }
