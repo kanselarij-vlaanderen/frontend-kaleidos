@@ -59,7 +59,7 @@
             </span>
           </div>
         {{/if}}
-        <WebComponents::AuPillList>
+        <Auk::PillList>
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
               <Auk::Pill>
@@ -99,7 +99,7 @@
               {{@agendaitem.formallyOkToShow.label}}
             </Auk::Pill>
           {{/if}}
-        </WebComponents::AuPillList>
+        </Auk::PillList>
       </div>
     </WebComponents::AuPanel::Body>
     {{#if @agendaitem.explanation }}

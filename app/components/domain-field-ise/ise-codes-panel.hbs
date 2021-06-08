@@ -13,13 +13,13 @@
     </WebComponents::AuPanel::Header>
     {{#if @iseCodes.length }}
       <WebComponents::AuPanel::Body>
-        <WebComponents::AuPillList data-test-subcase-ise-codes-list>
+        <Auk::PillList data-test-subcase-ise-codes-list>
           {{#each @iseCodes as |iseCode|}}
             <Auk::Pill data-test-subcase-ise-codes-list-item>
               {{iseCode.name}}
             </Auk::Pill>
           {{/each}}
-        </WebComponents::AuPillList>
+        </Auk::PillList>
       </WebComponents::AuPanel::Body>
     {{else}}
       <WebComponents::AuPanel::Body>
