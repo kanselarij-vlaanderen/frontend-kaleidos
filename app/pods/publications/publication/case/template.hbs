@@ -322,7 +322,7 @@
     >
       <Auk::Modal::Header
         @title={{t "add-contact"}}
-        @closeModal={{this.closeContactPersonModal}}
+        @onClose={{this.closeContactPersonModal}}
       />
       <Auk::Modal::Body>
         <div class="auk-form-group-layout auk-form-group-layout--standard">
@@ -398,7 +398,7 @@
     >
       <Auk::Modal::Header
         @title={{t "create-mandatee"}}
-        @closeModal={{this.closeMandateeModal}}
+        @onClose={{this.closeMandateeModal}}
       />
       <Auk::Modal::Body>
         {{utils/mandatee-selector
@@ -445,7 +445,7 @@
   >
     <Auk::Modal::Header
       @title={{t "add-organization"}}
-      @closeModal={{this.closeAddOrganisationModal}}
+      @onClose={{this.closeAddOrganisationModal}}
     />
     <Auk::Modal::Body>
       <Auk::Input

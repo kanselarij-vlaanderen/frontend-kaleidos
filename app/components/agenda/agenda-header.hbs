@@ -426,7 +426,7 @@
   <Auk::Modal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
-      @closeModal={{action "cancelApproveAgenda"}}
+      @onClose={{action "cancelApproveAgenda"}}
     />
     <Auk::Modal::Body>
       {{#if (await this.currentAgenda.canBeApproved)}}
@@ -467,7 +467,7 @@
   <Auk::Modal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <Auk::Modal::Header
       @title={{t "approve-agenda-and-close" serialnumber = this.currentAgenda.serialnumber}}
-      @closeModal={{action "cancelApproveAgendaAndCloseMeeting"}}
+      @onClose={{action "cancelApproveAgendaAndCloseMeeting"}}
     />
     <Auk::Modal::Body>
       {{#if (await this.currentAgenda.canBeApproved)}}
@@ -508,7 +508,7 @@
   <Auk::Modal @size={{if (await this.currentSession.latestAgenda.isDesignAgenda) "large" "small"}}>
     <Auk::Modal::Header
       @title={{t "agenda-close"}}
-      @closeModal={{action "cancelCloseMeeting"}}
+      @onClose={{action "cancelCloseMeeting"}}
     />
     <Auk::Modal::Body>
       {{#if (await this.currentSession.latestAgenda.isDesignAgenda)}}
@@ -542,7 +542,7 @@
   <Auk::Modal @size={{if (eq this.agendas.length 1) "large" "small"}}>
     <Auk::Modal::Header
       @title={{t "agenda-delete"}}
-      @closeModal={{action "cancelDeleteSelectedAgenda"}}
+      @onClose={{action "cancelDeleteSelectedAgenda"}}
     />
     <Auk::Modal::Body>
       {{#if (eq this.agendas.length 1)}}
@@ -571,7 +571,7 @@
   <Auk::Modal>
     <Auk::Modal::Header
       @title={{t "agenda-reopen-previous-version"}}
-      @closeModal={{action "cancelReopenPreviousAgenda"}}
+      @onClose={{action "cancelReopenPreviousAgenda"}}
     />
     <Auk::Modal::Body>
       <Auk::Alert

@@ -4,7 +4,7 @@
     @title={{t "documents-add"}}
     @changeIcon={{this.isExpanded}}
     @onResize={{this.toggleSize}}
-    @closeModal={{perform this.cancelUploadPieces}}
+    @onClose={{perform this.cancelUploadPieces}}
   />
   <Auk::Modal::Body>
     {{#if this.savePieces.isRunning}}
