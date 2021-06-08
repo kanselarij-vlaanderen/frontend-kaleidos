@@ -12,7 +12,7 @@
             @icon={{if @changeIcon 'minimize' 'expand'}}
             @skin="borderless"
             @layout="icon-only"
-            {{on "click" @toggleSize}}
+            {{on "click" @onResize}}
             data-test-au-modal-header-resize
           />
         {{/if}}
