@@ -3,8 +3,8 @@ import { action } from '@ember/object';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
-    this.publicationFlow = await this.modelFor('publications.publication');
-    this.translationSubcase = await this.modelFor('publications.publication.translations');
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.translationSubcase = this.modelFor('publications.publication.translations');
     this.identification = await this.publicationFlow.identification;
 
     const sourceDocs = await this.translationSubcase.sourceDocuments;
