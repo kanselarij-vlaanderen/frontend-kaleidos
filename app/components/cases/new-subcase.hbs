@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "name-subcase"}}</Auk::Label>
         {{textarea
           rows="2"
           class="auk-textarea"
@@ -39,11 +39,11 @@
         }}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "title-subcase"}}</Auk::Label>
         {{textarea rows="4" class="auk-textarea" value=title}}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         {{utils/model-selector
           modelName="subcase-type"
           searchField="label"
@@ -54,7 +54,7 @@
         }}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         <div class="auk-o-flex auk-o-flex--vertical-center">
           {{#if (not isEditing)}}
             {{utils/model-selector

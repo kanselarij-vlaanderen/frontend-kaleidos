@@ -8,7 +8,7 @@ import { guidFor } from '@ember/object/internals';
  * @argument label {String}
  */
 export default class AuAccordion extends Component {
-  @tracked isActive = false;
+  @tracked isActive = true;
   accordionId = `accordion-${guidFor(this)}`;
 
   @action

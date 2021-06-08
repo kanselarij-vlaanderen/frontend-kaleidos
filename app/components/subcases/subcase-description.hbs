@@ -38,6 +38,7 @@
 
   <div class="auk-o-grid">
     <div class="auk-o-grid-col-4 auk-u-mt">
+      {{!-- TODO: modify test-selector strategy to be able to use <Auk::KeyValue> --}}
       <div class="auk-key-value-item">
         <div class="auk-key-value-item__label">
           {{t "number-session"}}
@@ -161,7 +162,7 @@
         }}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "subcase-type-dropdown"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         {{utils/model-selector
           modelName="subcase-type"
           searchField="label"
@@ -172,7 +173,7 @@
         }}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "subcase-name"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "subcase-name"}}</Auk::Label>
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>
