@@ -9,7 +9,7 @@
       <WebComponents::AuToolbar::Item>
         {{#if @resizeable}}
           <Auk::Button
-            @icon={{if @changeIcon 'minimize' 'expand'}}
+            @icon={{if @isExpanded 'minimize' 'expand'}}
             @skin="borderless"
             @layout="icon-only"
             {{on "click" @onResize}}
