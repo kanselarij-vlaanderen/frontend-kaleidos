@@ -451,7 +451,7 @@
         {{/if}}
       {{/if}}
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @cancelModal={{action "cancelApproveAgenda"}}>
+    <Auk::Modal::Footer @onCancel={{action "cancelApproveAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
@@ -492,7 +492,7 @@
         {{/if}}
       {{/if}}
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @cancelModal={{action "cancelApproveAgendaAndCloseMeeting"}}>
+    <Auk::Modal::Footer @onCancel={{action "cancelApproveAgendaAndCloseMeeting"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
@@ -522,7 +522,7 @@
       {{/if}}
       <div>{{t "close-meeting-confirmation"}}</div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @cancelModal={{action "cancelCloseMeeting"}}>
+    <Auk::Modal::Footer @onCancel={{action "cancelCloseMeeting"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin={{if
@@ -555,7 +555,7 @@
         }}
       </div>
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @cancelModal={{action "cancelDeleteSelectedAgenda"}}>
+    <Auk::Modal::Footer @onCancel={{action "cancelDeleteSelectedAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin="danger-primary"
@@ -582,7 +582,7 @@
           approvedAgenda = (await this.lastApprovedAgendaName)
         }} />
     </Auk::Modal::Body>
-    <Auk::Modal::Footer @cancelModal={{action "cancelReopenPreviousAgenda"}}>
+    <Auk::Modal::Footer @onCancel={{action "cancelReopenPreviousAgenda"}}>
       <Auk::Button
         data-test-au-modal-footer-save
         @skin="danger-primary"

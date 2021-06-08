@@ -29,7 +29,7 @@
     {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelModal={{perform this.cancelUploadPieces}}
+    @onCancel={{perform this.cancelUploadPieces}}
   >
     {{#if this.savePieces.isRunning}}
       <Utils::SimpleSpinner />
