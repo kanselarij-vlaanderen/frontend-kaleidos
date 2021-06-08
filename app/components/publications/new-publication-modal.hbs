@@ -5,7 +5,7 @@
     (t "publications-new-title-not-via-council-of-ministers")
   }}
     @closeModal={{@onCancel}} />
-  <WebComponents::AuModal::Body>
+  <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}
         <Auk::Alert
@@ -93,7 +93,7 @@
         </div>
       </div>
     </Utils::LoadableContent>
-  </WebComponents::AuModal::Body>
+  </Auk::Modal::Body>
   <WebComponents::AuModal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">

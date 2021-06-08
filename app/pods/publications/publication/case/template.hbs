@@ -322,7 +322,7 @@
     >
       <WebComponents::AuModal::Header @title={{t "add-contact"}}
         @closeModal={{this.closeContactPersonModal}} />
-      <WebComponents::AuModal::Body>
+      <Auk::Modal::Body>
         <div class="auk-form-group-layout auk-form-group-layout--standard">
           <div class='auk-form-group auk-form-group--grid'>
             <div>
@@ -362,7 +362,7 @@
             </Auk::Button>
           </div>
         </div>
-      </WebComponents::AuModal::Body>
+      </Auk::Modal::Body>
       {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
       <WebComponents::AuModal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
@@ -398,14 +398,14 @@
         @title={{t "create-mandatee"}}
         @closeModal={{this.closeMandateeModal}}
       />
-      <WebComponents::AuModal::Body>
+      <Auk::Modal::Body>
         {{utils/mandatee-selector
           data-test-mandatee-selector=true
           singleSelect=true
           selectedMandatees=selectedMandatee
           chooseMandatee=(action "mandateeSelectedForPublication")
         }}
-      </WebComponents::AuModal::Body>
+      </Auk::Modal::Body>
       <WebComponents::AuModal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
@@ -445,7 +445,7 @@
             @title={{t "add-organization"}}
             @closeModal={{this.closeAddOrganisationModal}}
     />
-    <WebComponents::AuModal::Body>
+    <Auk::Modal::Body>
       <Auk::Input
         @icon=""
         class="auk-input--block"
@@ -454,7 +454,7 @@
         id="defaultInput"
         @value={{this.inputOrganization}}
       />
-    </WebComponents::AuModal::Body>
+    </Auk::Modal::Body>
     <WebComponents::AuModal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">

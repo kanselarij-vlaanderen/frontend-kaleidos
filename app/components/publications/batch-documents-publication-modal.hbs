@@ -1,6 +1,6 @@
 <Auk::Modal @size="full-screen-padded">
   <WebComponents::AuModal::Header @title={{ t "documents" }} @closeModal={{@onClose}} />
-  <WebComponents::AuModal::Body>
+  <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.loadPieces.isRunning}}>
       {{!-- template-lint-disable table-groups --}}
       <table class="auk-table auk-table--styled auk-table--bordered">
@@ -41,7 +41,7 @@
         </Documents::DocumentList>
       </table>
     </Utils::LoadableContent>
-  </WebComponents::AuModal::Body>
+  </Auk::Modal::Body>
 </Auk::Modal>
 
 {{#if this.isOpenNewPublicationModal}}
