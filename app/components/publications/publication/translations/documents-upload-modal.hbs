@@ -9,7 +9,7 @@
   />
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
-      <WebComponents::AuFileUploader
+      <Auk::FileUploader
               @fileQueueName={{this.fileQueueName}}
               @fullHeight={{eq this.newPieces.length 0}}
               @multiple={{true}}
@@ -21,9 +21,9 @@
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <WebComponents::AuLabel for="nameDocumentUpload" @isRequired={{true}}>
+                  <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
                     {{t 'name'}}
-                  </WebComponents::AuLabel>
+                  </Auk::Label>
                   <Auk::Input
                     type="text"
                     id="nameDocumentUpload"
@@ -31,28 +31,28 @@
                   />
                 </div>
                 <div class="auk-form-group">
-                  <WebComponents::AuLabel>{{t "document-type"}}</WebComponents::AuLabel>
+                  <Auk::Label>{{t "document-type"}}</Auk::Label>
                   <WebComponents::AuPill class="auk-pill--white">
                     {{this.translationDocument.file.extension}}
                   </WebComponents::AuPill>
                 </div>
                 {{!-- TODO KAS-2481
                 <div class="auk-form-group">
-                  <WebComponents::AuLabel for="dateSet">{{t "received-at"}}</WebComponents::AuLabel>
+                  <Auk::Label for="dateSet">{{t "received-at"}}</Auk::Label>
                   <WebComponents::AuDatepicker id="dateSet"
                                                @defaultDate={{this.receivedAtDate}}
                                                @onChange={{this.setReceivedAtDate}}/>
                 </div>
                 --}}
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <WebComponents::AuLabel>{{t 'translation-burden'}}</WebComponents::AuLabel>
+                  <Auk::Label>{{t 'translation-burden'}}</Auk::Label>
                   <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
                     <div class="auk-o-grid">
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
-                          <WebComponents::AuLabel for="translationLoadPages" class="auk-label--light">
+                          <Auk::Label for="translationLoadPages" class="auk-label--light">
                             {{t 'pages-amount'}}
-                          </WebComponents::AuLabel>
+                          </Auk::Label>
                           <Auk::Input
                             type="number"
                             id="translationLoadPages"
@@ -62,9 +62,9 @@
                       </div>
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
-                          <WebComponents::AuLabel for="translationLoadWords" class="auk-label--light">
+                          <Auk::Label for="translationLoadWords" class="auk-label--light">
                             {{t 'words-amount'}}
-                          </WebComponents::AuLabel>
+                          </Auk::Label>
                           <Auk::Input
                             type="number"
                             id="translationLoadWords"
@@ -77,9 +77,9 @@
                 </div>
                 {{!-- TODO in KAS-2600
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <WebComponents::AuLabel for="proofPrint">
+                  <Auk::Label for="proofPrint">
                     {{t 'for-publish-preview'}}
-                  </WebComponents::AuLabel>
+                  </Auk::Label>
                   <WebComponents::AuCheckboxList>
                     <WebComponents::AuCheckbox @name="proofPrint" @checked={{this.proofprint}}
                                                @toggle={{this.toggleProofPrint}} />
