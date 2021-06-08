@@ -1,0 +1,60 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Accordion panel" />
+
+<StyleguideSample @title="Default" @snippet="accordion-panel-default.hbs">
+  {{!-- BEGIN-SNIPPET accordion-panel-default --}}
+  <Auk::AccordionPanel as |accordionPanel|>
+    <accordionPanel.Header @title="Panel header"/>
+    <accordionPanel.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a.</p>
+    </accordionPanel.Body>
+  </Auk::AccordionPanel>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample @title="Header with actions" @snippet="accordion-panel-actions.hbs">
+  {{!-- BEGIN-SNIPPET accordion-panel-actions --}}
+  <Auk::AccordionPanel @isActive={{true}} as |accordionPanel|>
+    <accordionPanel.Header @title="Panel header" as |header|>
+      <header.Actions as |actions|>
+        <actions.Item>
+          <Auk::Button @skin="tertiary" @icon="edit">Button label</Auk::Button>
+        </actions.Item>
+        <actions.Item>
+          <Auk::Button @skin="tertiary" @icon="more" @layout="icon-only">More</Auk::Button>
+        </actions.Item>
+      </header.Actions>
+    </accordionPanel.Header>
+    <accordionPanel.Body>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a.</p>
+    </accordionPanel.Body>
+  </Auk::AccordionPanel>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@title</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"></td>
+    <td>Determines the title of the accordion panel.</td>
+  </tr>
+  <tr>
+    <td><code>@isActive</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td> Determines the active state (on display) of the accordion item.</td>
+  </tr>
+  </tbody>
+</table>
