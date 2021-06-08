@@ -1,8 +1,17 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-export default class AuPagination extends Component {
-  firstPage = 0;
+/**
+ *
+ * @argument {Number} page: Current page number
+ * @argument {Number} size: Page size
+ * @argument {Number} nbOfItems: Number of items in the current result-set
+ * @argument {Number} total: Total amount of items (over all pages)
+ * @argument {Funtion} onNextPage: action fired when clicking 'next page'
+ * @argument {Funtion} onPreviousPage: action fired when clicking 'previous page'
+ */
+export default class Pagination extends Component {
+  firstPage = 0; // currently not configurable
 
   get currentPage() {
     return this.args.page;
