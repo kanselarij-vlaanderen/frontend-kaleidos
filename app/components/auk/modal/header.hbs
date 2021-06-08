@@ -1,35 +1,31 @@
 <div class="auk-modal__header auk-modal__header--bordered">
-  {{#if @custom}}
-    {{yield}}
-  {{else}}
-    <WebComponents::AuToolbar @size="large">
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
-          <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
-          {{#if @resizeable}}
-            <Auk::Button
-              @icon={{if @changeIcon 'minimize' 'expand'}}
-              @skin="borderless"
-              @layout="icon-only"
-              {{on "click" @toggleSize}}
-              data-test-au-modal-header-resize
-            />
-          {{/if}}
-          {{#if (not @hideCloseButton)}}
-            <Auk::Button
-              @icon="close"
-              @skin="borderless"
-              @layout="icon-only"
-              {{on "click" @closeModal}}
-              data-test-au-modal-header-close
-            />
-          {{/if}}
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
-  {{/if}}
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        {{#if @resizeable}}
+          <Auk::Button
+            @icon={{if @changeIcon 'minimize' 'expand'}}
+            @skin="borderless"
+            @layout="icon-only"
+            {{on "click" @toggleSize}}
+            data-test-au-modal-header-resize
+          />
+        {{/if}}
+        {{#if (not @hideCloseButton)}}
+          <Auk::Button
+            @icon="close"
+            @skin="borderless"
+            @layout="icon-only"
+            {{on "click" @closeModal}}
+            data-test-au-modal-header-close
+          />
+        {{/if}}
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
 </div>
