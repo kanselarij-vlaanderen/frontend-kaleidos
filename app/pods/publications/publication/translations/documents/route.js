@@ -7,21 +7,29 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     this.translationSubcase = this.modelFor('publications.publication.translations');
     this.identification = await this.publicationFlow.identification;
 
-    const sourceDocs = await this.translationSubcase.sourceDocuments;
-    const generatedDocs = await this.translationSubcase.translationActivities.generatedPieces;
-    const pieces = [];
-    if (sourceDocs) {
-      for (const piece of sourceDocs.toArray()) {
-        pieces.push(piece);
-      }
-    }
-    if (generatedDocs) {
-      for (const piece of generatedDocs.toArray()) {
-        pieces.push(piece);
-      }
-    }
+    // Workaround pagination by using include for the documents of a translation subcase
+    // As such, we're sure all documents are loaded client-side by Ember Data
+    this.store.findRecord('translation-subcase', this.translationSubcase.id, {
+      include: [
+        'source-documents',
+        'translation-activities.generated-pieces'
+      ].join(','),
+    });
 
-    return pieces;
+    const allDocuments = [];
+
+    const sourceDocuments = await this.translationSubcase.sourceDocuments;
+    allDocuments.push(...sourceDocuments.toArray());
+
+    const translationActivities = await this.translationSubcase.translationActivities;
+    await Promise.all(
+      translationActivities.map(async(activity) => {
+        const translatedDocuments = await activity.generatedPieces;
+        allDocuments.push(...translatedDocuments.toArray());
+      })
+    );
+
+    return allDocuments;
   }
 
   setupController(controller) {
