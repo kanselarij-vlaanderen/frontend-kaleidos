@@ -158,8 +158,10 @@ context('Full test for creating mandatees', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    // TODO index is risky business
-    cy.get('[data-test-mandatee-route-settings-ministers-mandatee-resign="0"]').click();
+    cy.contains(ministerNickName).parents('tr')
+      .within(() => {
+        cy.get(settings.ministers.mandatee.resign).click();
+      });
     cy.wait(3000);
     // TODO Fix grammar of popup ?
     cy.get(mandatee.manageMandatee.changesAlert).should('exist')

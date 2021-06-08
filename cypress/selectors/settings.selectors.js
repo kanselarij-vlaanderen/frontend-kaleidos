@@ -8,9 +8,9 @@ const selectors = {
 
   // route settings/users/index
   usersIndex: {
-    searchInput: '[data-test-route-settings-user-search-input]',
-    searchButton: '[data-test-route-settings-user-search-button]',
-    settingsUserTable: '[data-test-route-settings-settings-user-table]',
+    searchInput: '[data-test-route-settings-users-search-input]',
+    searchButton: '[data-test-route-settings-users-search-button]',
+    table: '[data-test-route-settings-users-table]',
   },
 
   // route settings/overview

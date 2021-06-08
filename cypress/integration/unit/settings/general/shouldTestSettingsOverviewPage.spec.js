@@ -87,7 +87,7 @@ context('Settings overview page tests', () => {
     cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
-    cy.get(settings.usersIndex.settingsUserTable).contains('Wendy')
+    cy.get(settings.usersIndex.table).contains('Wendy')
       .parents('tr')
       .within(() => {
         cy.get(settings.vlDeleteUser.delete).should('exist')
@@ -99,10 +99,10 @@ context('Settings overview page tests', () => {
       .should('be.visible')
       .click();
     cy.wait('@getUsers').then(() => {
-      cy.get(settings.usersIndex.settingsUserTable).should('not.have.value', 'Wendy');
+      cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
     });
     cy.get(settings.usersIndex.searchInput).clear();
-    cy.get(settings.usersIndex.settingsUserTable).contains('Greta')
+    cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
       .within(() => {
         cy.contains('overheid');
@@ -114,7 +114,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
     cy.get('tbody > tr').should('have.length', '1');
-    cy.get(settings.usersIndex.settingsUserTable).contains('Greta')
+    cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
       .within(() => {
         cy.contains('kanselarij');
@@ -130,7 +130,7 @@ context('Settings overview page tests', () => {
       .type('Minister');
     // TODO, this next should can work regardless of search working on the unfiltered tabel
     // wait for search api call, count the number of rows
-    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.table).should('contain', 'Minister');
   });
 
   it('Should trigger search when clicking on search icon', () => {
@@ -142,11 +142,11 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
-    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.table).should('contain', 'Minister');
     cy.get(settings.usersIndex.searchButton).click()
       .then(() => {
         cy.wait('@filterUsers');
-        cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+        cy.get(settings.usersIndex.table).should('contain', 'Minister');
       });
   });
 
@@ -158,7 +158,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
-    cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+    cy.get(settings.usersIndex.table).should('contain', 'Minister');
     cy.get(settings.usersIndex.searchButton).click()
       .then(() => {
         cy.wait('@filterUsers');
@@ -181,7 +181,7 @@ context('Settings overview page tests', () => {
       cy.get(settings.usersIndex.searchInput).should('exist')
         .should('be.visible')
         .type('Minister');
-      cy.get(settings.usersIndex.settingsUserTable).should('contain', 'Minister');
+      cy.get(settings.usersIndex.table).should('contain', 'Minister');
       cy.wait(3000); // TODO this wait is not needed ?
       cy.get(settings.goToUserDetail).click();
       cy.contains('Gebruiker: Minister Test');
