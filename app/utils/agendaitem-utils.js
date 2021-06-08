@@ -103,9 +103,11 @@ export const saveChanges = async(agendaitemOrSubcase, propertiesToSetOnAgendaite
 
   await item.preEditOrSaveCheck();
   if (isAgendaitem) {
-    const agendaActivity = await item.get('agendaActivity');
-    if (agendaActivity) {
-      const agendaitemSubcase = await agendaActivity.get('subcase');
+    const agenda = await item.agenda;
+    const agendaStatus = await agenda.status;
+    const agendaActivity = await item.agendaActivity;
+    if (agendaActivity && (agendaStatus.isDesignAgenda || agendaStatus.isFinal)) {
+      const agendaitemSubcase = await agendaActivity.subcase;
       await agendaitemSubcase.preEditOrSaveCheck();
       await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);
     }
