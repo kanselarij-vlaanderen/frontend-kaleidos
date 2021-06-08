@@ -16,7 +16,7 @@
             data-test-au-modal-header-resize
           />
         {{/if}}
-        {{#if (not @hideCloseButton)}}
+        {{#if this.closeable}}
           <Auk::Button
             @icon="close"
             @skin="borderless"
