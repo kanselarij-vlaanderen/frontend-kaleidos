@@ -14,7 +14,7 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </Auk::Panel::Header>
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         <pre>{{t "manage-emails-tokens"}}</pre>
         <LinkTo
           @tagName="button"
@@ -38,7 +38,7 @@
           {{on "change" (fn this.setFooterContent)}}
                 data-test-email-content-textarea
         />
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     </Auk::Panel>
   </div>
 </div>
@@ -59,7 +59,7 @@
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
         </Auk::Panel::Header>
-        <WebComponents::AuPanel::Body>
+        <Auk::Panel::Body>
 
 
           {{!-- Mails of this tyype go to --}}
@@ -99,7 +99,7 @@
             data-test-email-content-textarea
           />
           <pre>{{ await email.defaultContent }}</pre>
-        </WebComponents::AuPanel::Body>
+        </Auk::Panel::Body>
       </Auk::Panel>
     </div>
   {{/each}}

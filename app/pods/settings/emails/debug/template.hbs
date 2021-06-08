@@ -12,7 +12,7 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </Auk::Panel::Header>
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         <div class="auk-form-group">
           <Auk::Label for="defaultInput">{{t "email-to" }}</Auk::Label>
           <Auk::Input @value={{this.to}} type="text" id="blockInput" @block={{true}} {{on "change" this.onchangeTargetMailAddress}} />
@@ -33,7 +33,7 @@
                 @text={{t "send-test-mail"}}
                 @isLoading={{this.showLoader}}
                 @saveAction={{this.sendTestMail}} />
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     </Auk::Panel>
   </div>
 

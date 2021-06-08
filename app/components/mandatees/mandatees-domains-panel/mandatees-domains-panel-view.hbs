@@ -23,7 +23,7 @@
     </WebComponents::AuToolbar>
   </Auk::Panel::Header>
   {{#if @mandatees.length }}
-    <WebComponents::AuPanel::Body @noPadding="true">
+    <Auk::Panel::Body @noPadding="true">
       <table class="auk-table">
         <thead>
           <tr>
@@ -94,10 +94,10 @@
           {{/each}}
         </tbody>
       </table>
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
   {{else}}
-    <WebComponents::AuPanel::Body>
+    <Auk::Panel::Body>
       <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
   {{/if}}
 </Auk::Panel>

@@ -18,7 +18,7 @@
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
           </Auk::Panel::Header>
-          <WebComponents::AuPanel::Body>
+          <Auk::Panel::Body>
             <div class="auk-form-group">
               <Auk::Label>{{t "short-title"}}</Auk::Label>
               <WebComponents::AuTextarea @rows="2" @value={{this.publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
@@ -27,7 +27,7 @@
               <Auk::Label>{{t "title-subcase"}}</Auk::Label> {{!-- TODO: misleading translation tag. There are no subcases here --}}
               <WebComponents::AuTextarea @rows="4" @value={{this.publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
             </div>
-          </WebComponents::AuPanel::Body>
+          </Auk::Panel::Body>
           <WebComponents::AuPanel::Footer>
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="right">
@@ -82,12 +82,12 @@
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
           </Auk::Panel::Header>
-          <WebComponents::AuPanel::Body>
+          <Auk::Panel::Body>
             <div class="auk-content" data-test-publication-flow-title>
               <h4>{{this.publicationFlow.shortTitle}}</h4>
               <p class="auk-u-text-prewrap">{{this.publicationFlow.longTitle}}</p>
             </div>
-          </WebComponents::AuPanel::Body>
+          </Auk::Panel::Body>
         </Auk::Panel>
       {{/if}}
     </div>
@@ -124,7 +124,7 @@
         </Auk::Panel::Header>
         {{#if (not this.latestSubcaseOnMeeting)}}
           {{#if this.publicationFlow.mandatees }}
-            <WebComponents::AuPanel::Body @noPadding="true">
+            <Auk::Panel::Body @noPadding="true">
               <table class="auk-table" data-test-table-mandatees>
                 <thead>
                   <tr>
@@ -167,14 +167,14 @@
                   {{/each}}
                 </tbody>
               </table>
-            </WebComponents::AuPanel::Body>
+            </Auk::Panel::Body>
           {{else}}
-            <WebComponents::AuPanel::Body>
+            <Auk::Panel::Body>
               <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
-            </WebComponents::AuPanel::Body>
+            </Auk::Panel::Body>
           {{/if}}
         {{else}}
-          <WebComponents::AuPanel::Body @noPadding="true">
+          <Auk::Panel::Body @noPadding="true">
             <table class="auk-table">
               <thead>
                 <tr>
@@ -209,7 +209,7 @@
                 {{/each}}
               </tbody>
             </table>
-          </WebComponents::AuPanel::Body>
+          </Auk::Panel::Body>
         {{/if}}
       </Auk::Panel>
     </div>
@@ -243,11 +243,11 @@
           </WebComponents::AuToolbar>
         </Auk::Panel::Header>
         {{#if (not this.contactPersons) }}
-          <WebComponents::AuPanel::Body>
+          <Auk::Panel::Body>
             <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
-          </WebComponents::AuPanel::Body>
+          </Auk::Panel::Body>
         {{else}}
-          <WebComponents::AuPanel::Body @noPadding="true">
+          <Auk::Panel::Body @noPadding="true">
             <table class="auk-table"  data-test-contact-persons>
               <thead>
                 <tr>
@@ -303,7 +303,7 @@
                 {{/each}}
               </tbody>
             </table>
-          </WebComponents::AuPanel::Body>
+          </Auk::Panel::Body>
         {{/if}}
       </Auk::Panel>
     </div>

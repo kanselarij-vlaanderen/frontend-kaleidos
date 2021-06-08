@@ -12,7 +12,7 @@
       </WebComponents::AuToolbar>
     </Auk::Panel::Header>
     {{#if @iseCodes.length }}
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         <WebComponents::AuPillList data-test-subcase-ise-codes-list>
           {{#each @iseCodes as |iseCode|}}
             <WebComponents::AuPill data-test-subcase-ise-codes-list-item>
@@ -20,11 +20,11 @@
             </WebComponents::AuPill>
           {{/each}}
         </WebComponents::AuPillList>
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     {{else}}
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         <Auk::EmptyState @message={{t "no-ise-codes-yet"}} />
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     {{/if}}
   </Auk::Panel>
 </div>
