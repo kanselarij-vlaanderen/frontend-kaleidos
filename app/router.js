@@ -151,7 +151,10 @@ Router.map(function() {
         this.route('case', { path: '/dossiers', });
         this.route('documents', { path: '/documenten', });
         this.route('translations', { path: '/vertalingen', });
-        this.route('publishpreview', { path: '/drukproeven', });
+        this.route('proofs', { path: '/drukproeven', }, function() {
+          this.route('documents', '/drukproeven');
+          this.route('requests', '/aanvragen');
+        });
         this.route('signatures', { path: '/handtekeningen', });
       });
     });
