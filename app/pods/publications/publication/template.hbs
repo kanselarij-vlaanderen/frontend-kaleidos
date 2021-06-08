@@ -40,10 +40,16 @@
 </WebComponents::AuNavbar>
 
 {{!-- Auk css gebruiken, component ? --}}
-<div class="auk-panel-layout auk-panel-layout--responsive">
-  <div class="auk-panel-layout__main-content auk-u-maximize-height auk-scroll-wrapper">
-    <div class="auk-scroll-wrapper__body">
-      {{outlet}}
+<div class="auk-panel-layout">
+  <div class="auk-panel-layout__main-content">
+    <div class="auk-scroll-wrapper">
+      <div class="auk-scroll-wrapper__body">
+        <div class="auk-u-m-4">
+          <div class="auk-u-mb-8">
+            {{outlet}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="auk-panel-layout__sidebar">

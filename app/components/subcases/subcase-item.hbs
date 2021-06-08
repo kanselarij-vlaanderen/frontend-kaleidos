@@ -82,7 +82,7 @@
       </div>
       {{#if this.enableShowMore}}
         <button class="vlc-document-show-more-button" type="button" {{on "click" this.toggleShowingAllDocuments}}>
-          <WebComponents::AuIcon @name={{if this.isShowingAllDocuments "remove" "add"}} />
+          <Auk::Icon @name={{if this.isShowingAllDocuments "remove" "add"}} />
           <p class="vlc-document-show-more-button__text auk-u-ml">
             {{#if this.isShowingAllDocuments }}
               {{t "show-less"}}
