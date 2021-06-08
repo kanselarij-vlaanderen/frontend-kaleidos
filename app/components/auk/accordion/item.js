@@ -6,7 +6,7 @@ import { guidFor } from '@ember/object/internals';
 /**
  *
  * @argument title {String}
- * @argument layout {String}: Determines the position of the control. Possible values are: "left" (default) & "right".
+ * @argument layout {String}: Determines the position of the control. Possible values are: "controls-left" (default) & "controls-right".
  * @argument isActive {Boolean}: Determines the active (open) state on display. "false" is the default value.
  */
 export default class AuAccordionItem extends Component {
@@ -17,7 +17,7 @@ export default class AuAccordionItem extends Component {
     if (this.args.layout) {
       return this.args.layout;
     }
-    return 'left';
+    return 'controls-left';
   }
 
   @action

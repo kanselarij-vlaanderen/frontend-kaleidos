@@ -1,5 +1,5 @@
 <div class="auk-accordion__item {{if (not this.isActive) "auk-accordion__item--closed"}}" ...attributes>
-  <div class="auk-accordion__header auk-accordion__header--controls-{{this.layout}}">
+  <div class="auk-accordion__header auk-accordion__header--{{this.layout}}">
     <button
       type="button"
       aria-expanded={{if this.isActive "true" "false"}}
@@ -7,7 +7,7 @@
       {{on "click" this.toggleAccordion}}
     >
       <WebComponents::AuToolbar>
-        {{#if (eq this.layout "right")}}
+        {{#if (eq this.layout "controls-right")}}
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
               <span class="auk-accordion__title">{{@title}}</span>
