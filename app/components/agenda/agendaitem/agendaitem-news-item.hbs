@@ -33,7 +33,7 @@
           (await @newsletterInfo.themes)
         as |theme|
         }}
-          <WebComponents::AuPill data-test-agenda-news-item-theme>{{theme.label}}</WebComponents::AuPill>
+          <Auk::Pill data-test-agenda-news-item-theme>{{theme.label}}</Auk::Pill>
         {{/each}}
       </WebComponents::AuPillList>
     {{else}}
