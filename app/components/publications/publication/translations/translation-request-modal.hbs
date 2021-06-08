@@ -34,9 +34,9 @@
             {{t 'files'}}
           </Auk::Label>
 
-          <WebComponents::AuList @isBordered="true">
+          <Auk::List @isBordered="true">
             {{#each @selectedPieces as |piece|}}
-              <WebComponents::AuList::AuListItem>
+              <Auk::List::Item>
                 <Auk::Badge @icon="file"/>
                 <div class="auk-u-mx-2">
                   <span class="auk-u-text-bold">{{piece.name}}</span>
@@ -49,10 +49,10 @@
                         @href={{piece.viewDocumentURL}}
                         target="_blank"
                 />
-              </WebComponents::AuList::AuListItem>
+              </Auk::List::Item>
 
             {{/each}}
-          </WebComponents::AuList>
+          </Auk::List>
         </div>
       </div>
     </div>
