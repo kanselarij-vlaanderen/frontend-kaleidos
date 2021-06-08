@@ -36,7 +36,7 @@ const selectors = {
 
   // component table-row
   tableRow: {
-    overview: '[data-test-newsletter-table-row-overview]',
+    newsletterRow: '[data-test-table-row-newsletter-row]',
   },
 
   // component item-content

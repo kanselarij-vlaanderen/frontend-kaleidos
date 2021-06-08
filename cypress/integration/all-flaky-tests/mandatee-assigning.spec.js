@@ -434,7 +434,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.tableRow.overview).as('newsletterRows');
+    // TODO .as not needed, user row.eq(index)
+    cy.get(newsletter.tableRow.newsletterRow).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
         cy.get(utils.checkboxLabel).click();
