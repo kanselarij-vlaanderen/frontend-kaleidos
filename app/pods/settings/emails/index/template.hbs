@@ -4,7 +4,7 @@
 
 <div class="auk-u-m-8">
   <div class="auk-u-mb-3">
-    <WebComponents::AuPanel>
+    <Auk::Panel>
       <WebComponents::AuPanel::Header>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
@@ -39,7 +39,7 @@
                 data-test-email-content-textarea
         />
       </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
+    </Auk::Panel>
   </div>
 </div>
 
@@ -49,7 +49,7 @@
 <div class="auk-u-m-8">
   {{#each this.emails as |email|}}
     <div class="auk-u-mb-3">
-      <WebComponents::AuPanel>
+      <Auk::Panel>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -100,7 +100,7 @@
           />
           <pre>{{ await email.defaultContent }}</pre>
         </WebComponents::AuPanel::Body>
-      </WebComponents::AuPanel>
+      </Auk::Panel>
     </div>
   {{/each}}
 

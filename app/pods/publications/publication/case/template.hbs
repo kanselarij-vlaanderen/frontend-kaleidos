@@ -3,7 +3,7 @@
   {{!--  DOSSIER PANEL  --}}
     <div class="auk-u-mb-3">
       {{#if this.isInscriptionInEditMode}}
-        <WebComponents::AuPanel data-test-publication-case-panel-case-editing class="auk-panel--editing">
+        <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
           <WebComponents::AuPanel::Header>
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="left">
@@ -47,9 +47,9 @@
               </WebComponents::AuToolbar::Group>
             </WebComponents::AuToolbar>
           </WebComponents::AuPanel::Footer>
-        </WebComponents::AuPanel>
+        </Auk::Panel>
       {{else}}
-        <WebComponents::AuPanel data-test-publication-case-panel-case>
+        <Auk::Panel data-test-publication-case-panel-case>
           <WebComponents::AuPanel::Header>
             <WebComponents::AuToolbar>
               <WebComponents::AuToolbar::Group @position="left">
@@ -88,7 +88,7 @@
               <p class="auk-u-text-prewrap">{{this.publicationFlow.longTitle}}</p>
             </div>
           </WebComponents::AuPanel::Body>
-        </WebComponents::AuPanel>
+        </Auk::Panel>
       {{/if}}
     </div>
 
@@ -98,7 +98,7 @@
 
 
     <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
-      <WebComponents::AuPanel>
+      <Auk::Panel>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -211,14 +211,14 @@
             </table>
           </WebComponents::AuPanel::Body>
         {{/if}}
-      </WebComponents::AuPanel>
+      </Auk::Panel>
     </div>
 
 
     {{!--  CONTACTPERSON PANEL  --}}
 
     <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
-      <WebComponents::AuPanel>
+      <Auk::Panel>
         <WebComponents::AuPanel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
@@ -305,7 +305,7 @@
             </table>
           </WebComponents::AuPanel::Body>
         {{/if}}
-      </WebComponents::AuPanel>
+      </Auk::Panel>
     </div>
 
 
