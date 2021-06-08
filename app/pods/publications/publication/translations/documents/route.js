@@ -6,9 +6,9 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
   @inject store;
 
   async model() {
-    this.translationSubcase = await this.modelFor('publications.publication').translationSubcase;
     this.publicationFlow = await this.modelFor('publications.publication');
-    this.identification = await this.modelFor('publications.publication').identification;
+    this.translationSubcase = await this.publicationFlow.translationSubcase;
+    this.identification = await this.publicationFlow.identification;
 
     const sourceDocs = await this.translationSubcase.sourceDocuments;
     const generatedDocs = await this.translationSubcase.translationActivities.generatedPieces;
