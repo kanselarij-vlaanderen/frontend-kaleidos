@@ -423,7 +423,7 @@
 {{!-- new agenda actions with single pop-up for confirmation --}}
 
 {{#if this.showConfirmForApprovingAgenda}}
-  <WebComponents::AuModal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
+  <Auk::Modal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <WebComponents::AuModal::Header
       @title={{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
       @closeModal={{action "cancelApproveAgenda"}}
@@ -460,11 +460,11 @@
         {{t "approve"}}
       </Auk::Button>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}
 
 {{#if this.showConfirmForApprovingAgendaAndClosingMeeting}}
-  <WebComponents::AuModal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
+  <Auk::Modal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
     <WebComponents::AuModal::Header
       @title={{t "approve-agenda-and-close" serialnumber = this.currentAgenda.serialnumber}}
       @closeModal={{action "cancelApproveAgendaAndCloseMeeting"}}
@@ -501,11 +501,11 @@
         {{t "approve-and-close"}}
       </Auk::Button>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}
 
 {{#if this.showConfirmForClosingMeeting}}
-  <WebComponents::AuModal @size={{if (await this.currentSession.latestAgenda.isDesignAgenda) "large" "small"}}>
+  <Auk::Modal @size={{if (await this.currentSession.latestAgenda.isDesignAgenda) "large" "small"}}>
     <WebComponents::AuModal::Header
             @title={{t "agenda-close"}}
             @closeModal={{action "cancelCloseMeeting"}}
@@ -535,11 +535,11 @@
         {{t "agenda-close"}}
       </Auk::Button>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}
 
 {{#if this.showConfirmForDeletingSelectedAgenda}}
-  <WebComponents::AuModal @size={{if (eq this.agendas.length 1) "large" "small"}}>
+  <Auk::Modal @size={{if (eq this.agendas.length 1) "large" "small"}}>
     <WebComponents::AuModal::Header
       @title={{t "agenda-delete"}}
       @closeModal={{action "cancelDeleteSelectedAgenda"}}
@@ -564,11 +564,11 @@
         {{t "agenda-delete"}}
       </Auk::Button>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}
 
 {{#if this.showConfirmForReopeningPreviousAgenda}}
-  <WebComponents::AuModal>
+  <Auk::Modal>
     <WebComponents::AuModal::Header
       @title={{t "agenda-reopen-previous-version"}}
       @closeModal={{action "cancelReopenPreviousAgenda"}}
@@ -591,5 +591,5 @@
         {{t "agenda-reopen-previous-version"}}
       </Auk::Button>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}

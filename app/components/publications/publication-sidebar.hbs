@@ -204,7 +204,7 @@
 </WebComponents::AuSidebar>
 
 {{#if this.showConfirmWithdraw}}
-  <WebComponents::AuModal @size="small">
+  <Auk::Modal @size="small">
     <WebComponents::AuModal::Header
             @title={{t "discharge-publication"}}
             @hideCloseButton={{true}}
@@ -230,5 +230,5 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}

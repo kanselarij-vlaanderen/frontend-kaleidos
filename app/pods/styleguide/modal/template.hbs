@@ -7,7 +7,7 @@
         @snippet="confirmation-modal.hbs"
 >
   {{!-- BEGIN-SNIPPET confirmation-modal --}}
-  <WebComponents::AuModal>
+  <Auk::Modal>
     <WebComponents::AuModal::Header @title="Dossier goedkeuren voor co-agendering?" @toggleSize={{this.onClick}} @closeModal={{this.onClick}} />
     <WebComponents::AuModal::Body>
       <p>Weet je zeker dat je dit dossier wilt goedkeuren voor co-agendering?</p>
@@ -21,7 +21,7 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -32,7 +32,7 @@
         @snippet="delete-modal.hbs"
 >
   {{!-- BEGIN-SNIPPET delete-modal --}}
-  <WebComponents::AuModal>
+  <Auk::Modal>
     <WebComponents::AuModal::Header @title="Document verwijderen?" @toggleSize={{this.onClick}} @closeModal={{this.onClick}}/>
     <WebComponents::AuModal::Body>
       <p>Deze actie zal het document definitief verwijderen en kan niet ongedaan gemaakt worden. Weet u zeker dat u het document wilt verwijderen?</p>
@@ -46,7 +46,7 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 

@@ -316,9 +316,10 @@
 
 
   {{#if personModalOpen}}
-    <WebComponents::AuModal
+    <Auk::Modal
       @size="medium"
-      data-test-add-contactpersonmodal>
+      data-test-add-contactpersonmodal
+    >
       <WebComponents::AuModal::Header @title={{t "add-contact"}}
         @closeModal={{this.closeContactPersonModal}} />
       <WebComponents::AuModal::Body>
@@ -381,7 +382,7 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuModal::Footer>
-    </WebComponents::AuModal>
+    </Auk::Modal>
   {{/if}}
 
 
@@ -389,7 +390,7 @@
 
 
   {{#if mandateeModalOpen}}
-    <WebComponents::AuModal
+    <Auk::Modal
       @size="medium"
       data-test-add-mandateemodal
     >
@@ -429,16 +430,16 @@
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
       </WebComponents::AuModal::Footer>
-    </WebComponents::AuModal>
+    </Auk::Modal>
   {{/if}}
 
 {{!-- ADD organization MODAL --}}
 
 
 {{#if showAddOrganisationModal}}
-  <WebComponents::AuModal
-          @size="medium"
-          data-test-add-organisationModal
+  <Auk::Modal
+    @size="medium"
+    data-test-add-organisationModal
   >
     <WebComponents::AuModal::Header
             @title={{t "add-organization"}}
@@ -481,6 +482,6 @@
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
     </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+  </Auk::Modal>
 {{/if}}
 </div>
