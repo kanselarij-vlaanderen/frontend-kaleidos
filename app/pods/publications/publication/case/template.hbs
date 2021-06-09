@@ -333,24 +333,11 @@
             </Auk::Label>
             <Auk::Input {{on "blur" this.onFirstNameChanged}} type="text" id="firstNameInput" @block={{true}} />
           </div>
-          <div class="auk-form-group">
-            <Auk::Label for="organisationInput">
-              {{t "organisation"}}
+          <div>
+            <Auk::Label for="lastNameInput">
+              {{t "name"}}
             </Auk::Label>
-            <PowerSelect
-              @searchField="name"
-              @search={{this.customPowerSelectSearchFunction}}
-              @options={{this.allOrganizations}}
-              @selected={{this.selectedOrganizations}}
-              @noMatchesMessage={{t "organizations-empty-result"}}
-              @placeholder={{t "search-organization"}}
-              @onchange={{this.selectOrganization}}
-              as |organization|>
-              {{ organization.name }}
-            </PowerSelect>
-            <Auk::Button @skin="borderless" {{on "click" this.openAddOrganisationModal}}>
-              {{t "add-organization"}}
-            </Auk::Button>
+            <Auk::Input {{on "blur" this.onLastNameChanged}} type="text" id="lastNameInput" @block={{true}} />
           </div>
         </div>
         <div class='auk-form-group'>
