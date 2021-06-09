@@ -33,6 +33,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+    controller.selectedPieces = [];
   }
 
   @action
