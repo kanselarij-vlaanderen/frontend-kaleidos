@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 function translationRequestEmail(params) {
-  return ' Collega,\n'
+  return 'Collega,\n'
     + '\n'
     + 'In bijlage document(en) die wij indienen voor vertaling.\n'
     + '\n'

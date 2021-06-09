@@ -9,51 +9,54 @@
           @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
-    <div class="auk-u-p-4">
-      <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class="auk-form-group" style="max-width: 30rem;">
-          <Auk::Label for="dateSet">{{t "translation-due-date"}}</Auk::Label>
-          <Auk::Datepicker id="dateSet"
-                                       @date={{this.translationDueDate}}
-                                       @onChange={{this.setTranslationDueDate}}/>
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label for="subjectTransl" @isRequired={{true}}>
-            {{t 'subject'}}
-          </Auk::Label>
-          <Auk::Input type="text" id="subjectTransld" size="39" @value={{mut this.subject}}/>
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label for="messageTransl" @isRequired={{true}}>
-            {{t 'translation-mail-header'}}
-          </Auk::Label>
-          <WebComponents::AuTextarea id="messageTransld" @rows="6" @value={{mut this.message}} disabled />
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>
-            {{t 'files'}}
-          </Auk::Label>
+    <div class="auk-form-group-layout auk-form-group-layout--standard">
+      <div class="auk-form-group" style="max-width: 30rem;">
+        <Auk::Label for="dateSet">{{t "translation-due-date"}}</Auk::Label>
+        <Auk::Datepicker id="dateSet"
+          @date={{this.translationDueDate}}
+          @onChange={{this.setTranslationDueDate}}/>
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="subjectTransl">
+          {{t 'subject'}}
+        </Auk::Label>
+        <Auk::Input type="text" id="subjectTransld"
+          @value={{mut this.subject}}
+          class="auk-input auk-input--block" />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label for="messageTransl" @isRequired={{true}}>
+          {{t 'translation-mail-header'}}
+        </Auk::Label>
+        <WebComponents::AuTextarea id="messageTransld" @rows="6" @value={{mut this.message}} />
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label>
+          {{t 'files'}}
+        </Auk::Label>
 
-          <Auk::List @isBordered="true">
-            {{#each @selectedPieces as |piece|}}
-              <Auk::List::Item>
-                <Auk::Badge @icon="file"/>
-                <div class="auk-u-mx-2">
-                  <span class="auk-u-text-bold">{{piece.name}}</span>
-                  <div class="auk-u-muted auk-u-text-small">{{piece.file.extension}}, {{format-bytesize piece.file.size}}</div>
+        <Auk::List @isBordered="true" class="auk-list--view">
+          {{#each @selectedPieces as |piece|}}
+            <Auk::List::Item @skin="gray-100">
+              <div class="auk-u-ml-2">
+                <Auk::Icon @name="document" @skin="muted-dark" />
+              </div>
+              <div class="auk-u-mx-2">
+                <span>{{piece.name}}</span>
+                <div class="auk-u-muted auk-u-text-small">
+                  {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
                 </div>
-                <Auk::Button
-                        @layout="icon-only"
-                        @icon="book"
-                        @skin="borderless"
-                        @href={{piece.viewDocumentURL}}
-                        target="_blank"
-                />
-              </Auk::List::Item>
-
-            {{/each}}
-          </Auk::List>
-        </div>
+              </div>
+              <Auk::Button
+                @layout="icon-only"
+                @icon="book"
+                @skin="borderless"
+                @href={{piece.viewDocumentURL}}
+                target="_blank"
+              />
+            </Auk::List::Item>
+          {{/each}}
+        </Auk::List>
       </div>
     </div>
   </Auk::Modal::Body>
