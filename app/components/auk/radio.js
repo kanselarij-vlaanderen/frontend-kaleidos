@@ -2,6 +2,13 @@ import Component from '@glimmer/component';
 import { isEmpty } from '@ember/utils';
 import { warn } from '@ember/debug';
 
+/**
+ *
+ * @argument {String} name
+ * @argument {Boolean} checked
+ * @argument {String} label
+ * @argument {String} sublabel
+ */
 export default class Radio extends Component {
   constructor() {
     super(...arguments);
