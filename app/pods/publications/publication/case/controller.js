@@ -5,7 +5,6 @@ import {
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
 
 export default class CaseController extends Controller {
   @service publicationService;
@@ -114,36 +113,6 @@ export default class CaseController extends Controller {
 
   get selectedOrganizations() {
     return this.contactPerson.organization;
-  }
-
-  /**
-   * ZONE FOR THE INSCRIPTION
-   */
-
-  @action
-  putInscriptionInEditMode() {
-    this.isInscriptionInEditMode = true;
-  }
-
-  @action
-  cancelEditingInscription() {
-    this.publicationFlow.rollbackAttributes();
-    this.putInscriptionInNonEditMode();
-  }
-
-  @action
-  putInscriptionInNonEditMode() {
-    this.isInscriptionInEditMode = false;
-  }
-
-  @task
-  *saveInscription() {
-    try {
-      yield this.publicationFlow.save();
-      this.putInscriptionInNonEditMode();
-    } catch {
-      // Don't exit if save didn't work
-    }
   }
 
   @action
