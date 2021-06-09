@@ -8,7 +8,7 @@ import { guidFor } from '@ember/object/internals';
  * @argument title {String}
  * @argument isActive {Boolean}: Determines the active (open) state on display. "false" is the default value.
  */
-export default class AuAccordionPanelItem extends Component {
+export default class AccordionPanel extends Component {
   @tracked isActive = this.args.isActive || false;
   accordionPanelId = `accordion-panel-${guidFor(this)}`;
 

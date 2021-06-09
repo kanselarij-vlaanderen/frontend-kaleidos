@@ -10,7 +10,7 @@ import { isPresent } from '@ember/utils';
  * @argument layout {String}: Determines the position of the control. Possible values are: "controls-left" (default) & "controls-right".
  * @argument isActive {Boolean}: Determines the active (open) state on display. "false" is the default value.
  */
-export default class AuAccordionItem extends Component {
+export default class AccordionItem extends Component {
   @tracked isActive = this.args.isActive || false;
   accordionId = `accordion-${guidFor(this)}`;
 
