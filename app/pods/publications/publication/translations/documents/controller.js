@@ -100,6 +100,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     });
     yield mail.save();
 
+    this.selectedPieces = [];
     this.showTranslationRequestModal = false;
     this.send('refresh');
   }
