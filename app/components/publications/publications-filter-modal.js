@@ -16,7 +16,7 @@ export default class PublicationsFilterModal extends Component {
   }
 
   @action
-  toggleFilterOption(event) {
-    this.filter[event.target.name] = event.target.checked;
+  toggleFilterOption(filterKey, event) {
+    this.filter[filterKey] = event.target.checked;
   }
 }
