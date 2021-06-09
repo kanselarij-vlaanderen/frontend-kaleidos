@@ -145,7 +145,7 @@ export default Component.extend({
       const kind = CONFIG.kinds.find((kind) => kind.uri === this.selectedKindUri);
       const postfix = (kind && kind.postfix) || '';
       this.set('selectedMainMeeting', mainMeeting);
-      this.set('startDate', mainMeeting.plannedstart);
+      this.set('startDate', mainMeeting.plannedStart);
       this.set('meetingNumber', mainMeeting.number);
       this.set('formattedMeetingIdentifier', `${mainMeeting.numberRepresentation}-${postfix}`);
       this.set('extraInfo', mainMeeting.extraInfo);
