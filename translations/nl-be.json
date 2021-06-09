@@ -861,5 +861,7 @@
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
-  "existing": "Bestaand"
+  "existing": "Bestaand",
+  "publication.proofs.new-request": "Nieuwe aanvraag",
+  "publication.proofs.upload-documents": "Documenten uploaden"
 }

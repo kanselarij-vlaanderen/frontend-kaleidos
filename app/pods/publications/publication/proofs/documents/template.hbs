@@ -1,1 +1,16 @@
-DOCUMENTEN
+<Auk::Navbar @border="none">
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <Auk::Button @skin="secondary" @disabled={{true}}>
+          {{t "publication.proofs.new-request"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <Auk::Button @skin="secondary" @icon="add" {{on "click" this.openPieceUploadModal}}>
+          {{t "publication.proofs.upload-documents"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</Auk::Navbar>
