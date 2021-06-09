@@ -1,6 +1,6 @@
 <fieldset>
   <legend class="auk-label">{{title}}</legend>
-  <WebComponents::AuRadioList @layout="inline">
+  <Auk::RadioList @layout="inline">
     {{#each optionList as |option index|}}
       {{#if selectedModel}}
         <Auk::Radio
@@ -20,5 +20,5 @@
         />
       {{/if}}
     {{/each}}
-  </WebComponents::AuRadioList>
+  </Auk::RadioList>
 </fieldset>
