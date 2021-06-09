@@ -1,14 +1,14 @@
-<WebComponents::AuModal>
-  <WebComponents::AuModal::Header
+<Auk::Modal>
+  <Auk::Modal::Header
           @resizeable={{false}}
           @title=
             {{t
               "request-translations-for-publication"
               publicationNumber=@identification.idName
             }}
-          @closeModal={{@onCancel}}
+          @onClose={{@onCancel}}
   />
-  <WebComponents::AuModal::Body>
+  <Auk::Modal::Body>
     <div class="auk-u-p-4">
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group" style="max-width: 30rem;">
@@ -56,16 +56,14 @@
         </div>
       </div>
     </div>
-  </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer
-          @cancelModal={{@onCancel}}
-  >
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
-            @skin="primary"
-            @disabled={{this.saveIsDisabled}}
+      @skin="primary"
+      @disabled={{this.saveIsDisabled}}
       {{on "click" (perform this.saveRequest)}}
     >
       {{t "save"}}
     </Auk::Button>
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>
