@@ -1,7 +1,7 @@
 {{!-- TODO every use of @activity. will change --}}
 <div class="auk-u-mb-3">
-  <WebComponents::AuPanel @scrollable="true">
-    <WebComponents::AuPanel::Header @borderless={{this.isCollapsed}}>
+  <Auk::Panel>
+    <Auk::Panel::Header @borderless={{this.isCollapsed}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -66,9 +66,9 @@
         </WebComponents::AuToolbar::Group>
 
       </WebComponents::AuToolbar>
-    </WebComponents::AuPanel::Header>
+    </Auk::Panel::Header>
     {{#if (not this.isCollapsed)}}
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         {{!-- IF WITHDRAWN SHOW REASON--}}
         {{#if @activity.withdrawReason}}
           <div class="auk-u-mb-4">
@@ -133,7 +133,7 @@
             </Auk::List>
           </div>
         </div>
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     {{/if}}
-  </WebComponents::AuPanel>
+  </Auk::Panel>
 </div>

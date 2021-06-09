@@ -53,10 +53,10 @@
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
-              <td>
-                <WebComponents::AuPill class="auk-pill--white">
+              <td >
+                <Auk::Pill @skin="white">
                   {{piece.file.extension}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               </td>
               <td class="auk-u-text-nowrap">
                 {{t "dash"}}
@@ -92,11 +92,11 @@
         </tbody>
       </table>
     {{else}}
-      <WebComponents::AuPanel>
-        <WebComponents::AuPanel::Body>
+      <Auk::Panel>
+        <Auk::Panel::Body>
           <Auk::EmptyState @message={{t "no-documents-yet" }} />
-        </WebComponents::AuPanel::Body>
-      </WebComponents::AuPanel>
+        </Auk::Panel::Body>
+      </Auk::Panel>
     {{/if}}
   </div>
 </div>
