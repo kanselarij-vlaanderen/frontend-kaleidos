@@ -6,7 +6,7 @@
               "request-translations-for-publication"
               publicationNumber=@identification.idName
             }}
-          @closeModal={{this.cancelRequest}}
+          @closeModal={{@onCancel}}
   />
   <WebComponents::AuModal::Body>
     <div class="auk-u-p-4">
@@ -58,7 +58,7 @@
     </div>
   </WebComponents::AuModal::Body>
   <WebComponents::AuModal::Footer
-          @cancelModal={{this.cancelRequest}}
+          @cancelModal={{@onCancel}}
   >
     <Auk::Button
             @skin="primary"

@@ -66,11 +66,6 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     this.setEmailFields.perform();
   }
 
-  @action
-  cancelRequest() {
-    this.args.onCancel();
-  }
-
   @task
   *saveRequest() {
     if (this.args.onSave) {
