@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 /**
  *
- * @argument {String} skin: possible values are (empty, default), "success", "danger", "warning"
+ * @argument {String} skin: possible values are (empty, default), "white", "success", "danger", "warning"
  * @argumemt {String} layout: possible values are (empty, default is "icon-left"), "icon-only", "icon-right"
  * @argument {String} icon: name of the icon to render
  */
