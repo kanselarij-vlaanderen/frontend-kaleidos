@@ -28,14 +28,14 @@
     {{#if (is-pending @newsletterInfo.themes)}}
       <WebComponents::VlLoader @text={{t "themes-loading-text"}} />
     {{else if (gt (await @newsletterInfo.themes.length) 0)}}
-      <WebComponents::AuPillList>
+      <Auk::PillList>
         {{#each
           (await @newsletterInfo.themes)
         as |theme|
         }}
-          <WebComponents::AuPill data-test-agenda-news-item-theme>{{theme.label}}</WebComponents::AuPill>
+          <Auk::Pill data-test-agenda-news-item-theme>{{theme.label}}</Auk::Pill>
         {{/each}}
-      </WebComponents::AuPillList>
+      </Auk::PillList>
     {{else}}
       <div class="auk-u-mt-2">
         <WebComponents::VlAlert @message={{t "no-themes-yet"}} />
