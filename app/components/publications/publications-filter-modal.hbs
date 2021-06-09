@@ -1,6 +1,6 @@
-<WebComponents::AuModal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @size="medium" @title={{t "publications-filter" }} @closeModal={{@onCancel}} />
-  <WebComponents::AuModal::Body>
+<Auk::Modal data-test-au-modal-publication-new>
+  <Auk::Modal::Header @size="medium" @title={{t "publications-filter" }} @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--grid">
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-4">
@@ -63,9 +63,9 @@
         </div>
       </div>
     </div>
-  </WebComponents::AuModal::Body>
+  </Auk::Modal::Body>
   {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
-  <WebComponents::AuModal::Footer @custom={{true}}>
+  <Auk::Modal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -100,5 +100,5 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>

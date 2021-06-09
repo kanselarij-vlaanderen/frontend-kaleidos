@@ -204,15 +204,15 @@
 </WebComponents::AuSidebar>
 
 {{#if this.showConfirmWithdraw}}
-  <WebComponents::AuModal @size="small">
-    <WebComponents::AuModal::Header
-            @title={{t "discharge-publication"}}
-            @hideCloseButton={{true}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "discharge-publication"}}
+      @closeable={{false}}
     />
-    <WebComponents::AuModal::Body>
+    <Auk::Modal::Body>
       {{t "discharge-publication-flow-confirm"}}
-    </WebComponents::AuModal::Body>
-    <WebComponents::AuModal::Footer @custom={{true}}>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @custom={{true}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left"n>
           <WebComponents::AuToolbar::Item>
@@ -229,6 +229,6 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
 {{/if}}
