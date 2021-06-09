@@ -417,7 +417,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(3000);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(newsletter.newsItem.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
@@ -425,7 +425,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.wait(3000);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(newsletter.newsItem.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
