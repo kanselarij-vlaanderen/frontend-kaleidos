@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
-export default class CasesIndexRoute extends Route.extend(DataTableRouteMixin) {
+export default class CasesIndexRoute extends Route.extend() {
+  @service store;
+
   queryParams = {
     page: {
       refreshModel: true,
@@ -22,15 +24,22 @@ export default class CasesIndexRoute extends Route.extend(DataTableRouteMixin) {
     },
   };
 
-  modelName = 'case';
-
-  // eslint-disable-next-line class-methods-use-this
-  mergeQueryOptions(params) {
-    if (!params.showArchived) {
-      return {
-        'filter[is-archived]': false,
-      };
+  async model(params) {
+    const options = {
+      sort: params.sort,
+      page: {
+        number: params.page,
+        size: params.size,
+      },
+    };
+    if (params.filter) {
+      options.filter = params.filter;
     }
+    if (!params.showArchived) {
+      options['filter[is-archived]'] = false;
+    }
+    const model = await this.store.query('case', options);
+    return model;
   }
 
   @action
