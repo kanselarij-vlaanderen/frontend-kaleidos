@@ -4,8 +4,8 @@ import Component from '@glimmer/component';
  *
  * @argument {String} border Can be "top", "bottom" (default) or "none"
  * @argument {String} skin Can be "gray-100", "gray-200" or "white (default)"
- * @argument {String} size
- * @argument {Boolean} auto TODO: document what this does
+ * @argument {String} size Can be "large"
+ * @argument {Boolean} auto Makes height automatic
  * @argument {Boolean} noPadding
  */
 export default class Navbar extends Component {
