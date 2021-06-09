@@ -65,7 +65,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.translationSubcase.dueDate = translationRequest.translationDueDate;
     yield this.translationSubcase.save();
 
-    const requestActivity = yield  this.store.createRecord('request-activity', {
+    const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
       usedPieces: translationRequest.selectedPieces,
@@ -74,7 +74,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
     const pieces = translationRequest.selectedPieces;
-    const translationActivity = yield  this.store.createRecord('translation-activity', {
+    const translationActivity = yield this.store.createRecord('translation-activity', {
       startDate: now,
       dueDate: translationRequest.translationDueDate,
       title: translationRequest.subject,
