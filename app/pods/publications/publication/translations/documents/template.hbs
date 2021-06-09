@@ -1,0 +1,95 @@
+<WebComponents::AuNavbar @border="none">
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <Auk::Button @skin="secondary" @icon="mail" @disabled={{true}}>
+          {{t "request-translations"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+
+        <Auk::Button @skin="secondary" @icon="add" {{on "click" this.openPieceUploadModal}}>
+          {{t "upload-translation-file"}}
+        </Auk::Button>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
+<div class="auk-u-m-4">
+  <div class="auk-u-mb-4">
+    {{#if this.model}}
+      <table class="auk-table">
+        <thead>
+          <tr>
+            <th class="auk-table-checkbox-col"><Auk::Checkbox @mode="table" /></th>
+            <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
+            <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
+            <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
+            <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
+            <th class="auk-u-text-nowrap">{{t "for-publishpreview"}}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.model as |piece|}}
+            <tr class="auk-table__row">
+              <td class="auk-table-checkbox-col">
+                <Auk::Checkbox @mode="table" />
+              </td>
+              <td class="auk-u-text-nowrap">
+                {{piece.name}}
+              </td>
+              <td >
+                <WebComponents::AuPill class="auk-pill--white">
+                  {{piece.file.extension}}
+                </WebComponents::AuPill>
+              </td>
+              <td class="auk-u-text-nowrap">
+                {{t "dash"}}
+              </td>
+              <td class="auk-u-text-nowrap">
+                {{moment-format piece.created}}
+                <br>
+                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+              </td>
+              <td class="auk-u-text-align--center">
+                {{t "dash"}}
+              </td>
+              <td>
+                <WebComponents::AuButtonToolbar>
+                  <Auk::Button
+                    @layout="icon-only"
+                    @icon="download"
+                    @skin="borderless"
+                    @href={{piece.file.namedDownloadLink}}
+                    download
+                  />
+                  <Auk::Button
+                    @layout="icon-only"
+                    @icon="book"
+                    @skin="borderless"
+                    @href={{piece.viewDocumentURL}}
+                    target="_blank"
+                  />
+                </WebComponents::AuButtonToolbar>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <WebComponents::AuPanel>
+        <WebComponents::AuPanel::Body>
+          <Auk::EmptyState @message={{t "no-documents-yet" }} />
+        </WebComponents::AuPanel::Body>
+      </WebComponents::AuPanel>
+    {{/if}}
+  </div>
+</div>
+
+{{#if this.showPieceUploadModal}}
+  <Publications::Publication::Translations::DocumentsUploadModal
+    @translationSubcase={{this.translationSubcase}}
+    @onSave={{perform this.saveAndLinkPieces}}
+    @onCancel={{this.closePieceUploadModal}} />
+{{/if}}

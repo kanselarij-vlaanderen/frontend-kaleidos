@@ -183,15 +183,6 @@ export default EmberObject.create({
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
-  LANGUAGE_NL: {
-    uri: 'http://publications.europa.eu/resource/authority/language/NLD',
-  },
-  LANGUAGE_FR: {
-    uri: 'http://publications.europa.eu/resource/authority/language/FRA',
-  },
-  LANGUAGE_DE: {
-    uri: 'http://publications.europa.eu/resource/authority/language/DEU',
-  },
   SUBCASE_TYPES: {
     vertalen: {
       id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',

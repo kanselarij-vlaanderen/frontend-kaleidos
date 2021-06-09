@@ -8,6 +8,8 @@ import moment from 'moment';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import ENV from 'frontend-kaleidos/config/environment';
+import { isEmpty } from '@ember/utils';
 
 export default class DocumentsDocumentCardComponent extends Component {
   /**
@@ -50,6 +52,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadPieceRelatedData.perform();
   }
 
+  get shouldShowPublications() {
+    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB) && this.currentSession.isOvrb;
+  }
+
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
@@ -57,22 +63,27 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadPieceRelatedData() {
+    const includeBuilder = ['document-container,document-container.type,access-level'];
+    if (this.shouldShowPublications) {
+      includeBuilder.push('publication-flow,publication-flow.identification');
+    }
+    const includeStr = includeBuilder.join(',');
+
+    const loadPiece = (id) => this.store.queryOne('piece', {
+      'filter[:id:]': id,
+      include: includeStr,
+    });
+
     const piece = this.args.piece;
     if (piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
-      this.piece = (yield this.store.query('piece', {
-        'filter[:id:]': piece.id,
-        include: 'document-container,document-container.type,access-level',
-      })).firstObject;
+      this.piece = yield loadPiece(this.piece.id);
       this.documentContainer = yield this.piece.documentContainer;
       this.accessLevel = yield this.piece.accessLevel;
     } else if (this.args.documentContainer) {
       this.documentContainer = this.args.documentContainer;
       yield this.loadVersionHistory.perform();
-      this.piece = yield this.store.query('piece', {
-        'filter[:id:]': piece.id,
-        include: 'document-container,document-container.type,access-level',
-      });
+      this.piece = yield loadPiece(this.piece.id);
       this.accessLevel = yield this.piece.accessLevel;
     } else {
       throw new Error(`You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`);
