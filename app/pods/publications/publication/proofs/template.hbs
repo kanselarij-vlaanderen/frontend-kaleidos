@@ -1,1 +1,16 @@
+<WebComponents::AuNavbar>
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuTabs>
+        <WebComponents::AuTab @route="publications.publication.proofs.documents">
+          {{t "documents"}}
+        </WebComponents::AuTab>
+        <WebComponents::AuTab @route="publications.publication.proofs.requests">
+          {{t "requests"}}
+        </WebComponents::AuTab>
+      </WebComponents::AuTabs>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</WebComponents::AuNavbar>
+
 {{outlet}}
