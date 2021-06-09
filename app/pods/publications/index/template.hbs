@@ -1,4 +1,4 @@
-<WebComponents::AuNavbar class="auk-publication-overview-navbar" @skin="gray-100" @auto="true">
+<Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -12,19 +12,19 @@
         <Publications::PublicationCaseSearch/>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
+        <Auk::Button @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
           {{t "filter-content"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
 
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
+        <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
           {{t "publications-new"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
-</WebComponents::AuNavbar>
+</Auk::Navbar>
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -74,7 +74,7 @@
                   {{#if this.tableColumnDisplayOptions.comment}}
                     <td class="auk-u-text-align--center">
                       {{#if row.remark}}
-                        <WebComponents::AuIcon @iconSkinColor="muted" @name="comment"/>
+                        <Auk::Icon @skin="muted" @name="comment" />
                         <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
                           <p>
                             {{row.remark}}
@@ -88,7 +88,7 @@
                   {{#if this.tableColumnDisplayOptions.speedProcedure}}
                     <td class="auk-u-text-align--center">
                       {{#if row.urgencyLevel.isUrgent}}
-                        <WebComponents::AuIcon @iconSkinColor="warning" @name="alert-triangle"/>
+                        <Auk::Icon @skin="warning" @name="alert-triangle" />
                       {{else}}
                         {{t "dash"}}
                       {{/if}}
@@ -202,7 +202,7 @@
       {{else}}
         <WebComponents::AuPanel>
           <WebComponents::AuPanel::Body>
-            <WebComponents::AuEmptyState @message={{t "no-results-found"}}/>
+            <Auk::EmptyState @message={{t "no-results-found"}} />
           </WebComponents::AuPanel::Body>
         </WebComponents::AuPanel>
       {{/if}}
@@ -213,16 +213,17 @@
   <hr>
 </div>
 <div class="auk-u-mx-4">
-  <WebComponents::AuToolbar >
+  <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuPagination
-                @page={{this.page}}
-                @nbOfItems={{this.model.length}}
-                @size={{this.size}}
-                @onNextPage={{this.nextPage}}
-                @onPreviousPage={{this.prevPage}}
-                @total={{this.model.meta.count}} />
+        <Auk::Pagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{this.model.length}}
+          @total={{this.model.meta.count}}
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.prevPage}}
+        />
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
@@ -237,7 +238,10 @@
         </WebComponents::AuPageSize>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton @icon="settings" @skin="borderless" data-test-publication-button-filter-tables
+        <Auk::Button
+          @icon="settings"
+          @skin="borderless"
+          data-test-publication-button-filter-tables
           {{on "click" this.toggleColumnDisplayOptions}}
         />
         <AttachPopover

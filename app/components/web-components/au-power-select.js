@@ -1,6 +1,16 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 
+/**
+ * @typedef {{
+ *  label: string,
+ *  icon: {
+ *    svg: string, // auk icon name
+ *    color: string,
+ *  }
+ * }}
+ * @argument {AuPowerOption[]} options
+ */
 export default class PowerSelect extends Component {
   // Services.
   @service intl;

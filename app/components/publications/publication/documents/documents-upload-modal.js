@@ -24,11 +24,6 @@ export default class PublicationsPublicationDocumentsDocumentsUploadModalCompone
     }
   }
 
-  @action
-  toggleSize() {
-    this.isExpanded = !this.isExpanded;
-  }
-
   get fileQueueName() {
     return `${guidFor(this)}-file-queue`;
   }

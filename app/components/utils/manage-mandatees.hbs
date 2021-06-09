@@ -17,11 +17,11 @@
         }}
       {{/if}}
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "end-date"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "end-date"}}</Auk::Label>
         {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
       </div>
       <div class="auk-form-group">
-        <WebComponents::AuLabel>{{t "new-person"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "new-person"}}</Auk::Label>
         {{utils/create-person-selector
           selectedItems=selectedPerson
           selectModel=(action "personSelected")
@@ -30,7 +30,7 @@
 
       {{#if selectedPerson}}
         <div class="auk-form-group">
-          <WebComponents::AuLabel>{{t "start-date"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "start-date"}}</Auk::Label>
           {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
         </div>
       {{/if}}

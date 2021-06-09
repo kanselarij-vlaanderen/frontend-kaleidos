@@ -4,7 +4,6 @@
   <WebComponents::AuTab @route="publications.publication.case" data-test-publication-case-nav-case>
     {{t "agendaitem-case"}}
   </WebComponents::AuTab>
-  {{!-- TODO adapt tab content classes to new CSS once available in CSS-package --}}
   <WebComponents::AuTab @route="publications.publication.documents" data-test-publication-case-nav-documents>
     <div class="auk-o-flex auk-o-flex--center">
       <span class="auk-u-mr-2">{{t "documents"}}</span>
@@ -15,12 +14,12 @@
   </WebComponents::AuTab>
   <WebComponents::AuTab @route="publications.publication.translations" data-test-publication-case-nav-translations>
     <div class="auk-o-flex auk-o-flex--center">
-      <span class="auk-u-mr-2">{{t "translations"}}</span>
+      <span>{{t "translations"}}</span>
     </div>
   </WebComponents::AuTab>
   <WebComponents::AuTab @route="publications.publication.publishpreview" data-test-publication-case-nav-publishpreview>
     <div class="auk-o-flex auk-o-flex--center">
-      <span class="auk-u-mr-2">{{t "publishpreview-requests"}}</span>
+      <span>{{t "publishpreview-requests"}}</span>
     </div>
   </WebComponents::AuTab>
 </WebComponents::AuTabs>

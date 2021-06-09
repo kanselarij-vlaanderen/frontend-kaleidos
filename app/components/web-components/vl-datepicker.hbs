@@ -1,38 +1,48 @@
 {{#if (not await dateObjectsToEnable)}}
   <div class="auk-input-with-icon">
-    {{ember-flatpickr
-      data-test-vl-datepicker-input=true
-      classNames="auk-input auk-input--block"
-      locale="nl"
-      enableTime=enableTime
-      time_24hr=true
-      date=(readonly selectedDate)
-      dateFormat=(if enableTime "d-m-Y H:i" "d-m-Y")
-      onChange=(action "dateChanged")
-      defaultHour=defaultHour
-      defaultMinute=defaultMinute
-      getFlatpickrRef=(action (mut flatpickrRef))
-    }}
+    <EmberFlatpickr
+      data-test-vl-datepicker-input
+      class="auk-input auk-input--block"
+      @locale="nl"
+      @date={{readonly this.selectedDate}} {{!-- Required Option --}}
+      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+      @enableTime={{@enableTime}}
+      @time_24hr={{true}}
+      @defaultHour={{@defaultHour}}
+      @defaultMinute={{@defaultMinute}}
+      @nextArrow=">"
+      @prevArrow="<"
+      @noCalendar={{false}}
+      @onChange={{action "dateChanged"}} {{!-- Required Option --}}
+      @onReady={{this.onReady}}
+      @shorthandCurrentMonth={{true}}
+      @disabled={{@disabled}}
+    />
     <div class="auk-icon auk-icon--default">
       <i class="ki ki-calendar"></i>
     </div>
   </div>
 {{else}}
   <div class="auk-input-with-icon">
-    {{ember-flatpickr
-      data-test-vl-datepicker-input=true
-      classNames="auk-input auk-input--block"
-      locale="nl"
-      enable=datesToEnable
-      enableTime=enableTime
-      time_24hr=true
-      date=(readonly selectedDate)
-      dateFormat=(if enableTime "d-m-Y H:i" "d-m-Y")
-      onChange=(action "dateChanged")
-      defaultHour=defaultHour
-      defaultMinute=defaultMinute
-      getFlatpickrRef=(action (mut flatpickrRef))
-    }}
+    <EmberFlatpickr
+      data-test-vl-datepicker-input
+      class="auk-input auk-input--block"
+      @locale="nl"
+      @date={{readonly this.selectedDate}} {{!-- Required Option --}}
+      @dateFormat={{if @enableTime "d-m-Y H:i" "d-m-Y"}}
+      @enable={{this.datesToEnable}}
+      @enableTime={{@enableTime}}
+      @time_24hr={{true}}
+      @defaultHour={{@defaultHour}}
+      @defaultMinute={{@defaultMinute}}
+      @nextArrow=">"
+      @prevArrow="<"
+      @noCalendar={{false}}
+      @onChange={{action "dateChanged"}} {{!-- Required Option --}}
+      @onReady={{this.onReady}}
+      @shorthandCurrentMonth={{true}}
+      @disabled={{@disabled}}
+    />
     <div class="auk-icon auk-icon--default">
       <i class="ki ki-calendar"></i>
     </div>

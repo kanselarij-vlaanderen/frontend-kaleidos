@@ -151,13 +151,13 @@ context('Settings overview page tests', () => {
   });
 
   it('Should navigate to detailview from user', () => {
-    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(settings.usersIndex.searchInput).should('exist')
       .should('be.visible')
       .type('Minister');
+    cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.usersIndex.table).should('contain', 'Minister');
     cy.get(settings.usersIndex.searchButton).click()
       .then(() => {

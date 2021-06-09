@@ -58,7 +58,7 @@
 
 <StyleguideSample @title="Toolbar - Add" @snippet="toolbar-3.hbs">
   {{!-- BEGIN-SNIPPET toolbar-3 --}}
-  <WebComponents::AuNavbar @skin="gray-100">
+  <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -67,22 +67,22 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="add" @skin="primary">Toevoegen</WebComponents::AuButton>
+          <Auk::Button @icon="add" @skin="primary">Toevoegen</Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 
 <StyleguideSample @title="Toolbar - Detail" @snippet="toolbar-4.hbs">
   {{!-- BEGIN-SNIPPET toolbar-4 --}}
-  <WebComponents::AuNavbar @skin="gray-100">
+  <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @layout="icon-only" @skin="borderless" @icon="chevron-left">Ga terug</WebComponents::AuButton>
+          <Auk::Button @layout="icon-only" @skin="borderless" @icon="chevron-left">Ga terug</Auk::Button>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
           <h2 class="auk-toolbar__title">Titel</h2>
@@ -90,17 +90,17 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="primary">Opslaan</WebComponents::AuButton>
+          <Auk::Button @skin="primary">Opslaan</Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample @title="Toolbar - Complex" @snippet="toolbar-5.hbs">
   {{!-- BEGIN-SNIPPET toolbar-5 --}}
-  <WebComponents::AuNavbar @skin="gray-100" @auto="true">
+  <Auk::Navbar @skin="gray-100" @auto={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -121,21 +121,21 @@
       </WebComponents::AuToolbar::Group>
       <WebComponents::AuToolbar::Group @position="right">
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @skin="primary">Ontwerpagenda goedkeuren</WebComponents::AuButton>
+          <Auk::Button @skin="primary">Ontwerpagenda goedkeuren</Auk::Button>
         </WebComponents::AuToolbar::Item>
         <WebComponents::AuToolbar::Item>
-          <WebComponents::AuButton @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</WebComponents::AuButton>
+          <Auk::Button @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</Auk::Button>
           <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <WebComponents::AuDropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
+            <Auk::Dropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </EmberPopover>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -156,7 +156,7 @@
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="tertiary" @icon="edit">Button label</WebComponents::AuButton>
+            <Auk::Button @skin="tertiary" @icon="edit">Button label</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
@@ -179,23 +179,23 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton>Left button 1</WebComponents::AuButton>
+        <Auk::Button>Left button 1</Auk::Button>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButtonToolbar>
-          <WebComponents::AuButton @icon="chevron-left" @layout="icon-only">Toevoegen</WebComponents::AuButton>
-          <WebComponents::AuButton @icon="chevron-right" @layout="icon-only">Toevoegen</WebComponents::AuButton>
+          <Auk::Button @icon="chevron-left" @layout="icon-only">Toevoegen</Auk::Button>
+          <Auk::Button @icon="chevron-right" @layout="icon-only">Toevoegen</Auk::Button>
         </WebComponents::AuButtonToolbar>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuButton>Right button 1</WebComponents::AuButton>
+        <Auk::Button>Right button 1</Auk::Button>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         <WebComponents::AuButtonToolbar>
-          <WebComponents::AuButton @icon="edit" @layout="icon-only">Bewerken</WebComponents::AuButton>
-          <WebComponents::AuButton @icon="delete" @skin="danger-hover" @layout="icon-only">Verwijderen</WebComponents::AuButton>
+          <Auk::Button @icon="edit" @layout="icon-only">Bewerken</Auk::Button>
+          <Auk::Button @icon="delete" @skin="danger-hover" @layout="icon-only">Verwijderen</Auk::Button>
         </WebComponents::AuButtonToolbar>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>

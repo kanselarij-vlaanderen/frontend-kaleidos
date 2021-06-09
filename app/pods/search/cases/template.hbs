@@ -5,7 +5,7 @@
   <div class="auk-o-grid-col-2">
     <div class="auk-box">
       <div class="auk-u-mb-2">
-        <WebComponents::AuLabel>{{t "type"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "type"}}</Auk::Label>
         <WebComponents::VlCheckbox
           data-test-decisions-only-check
           @value={{this.decisionsOnly}}
@@ -14,7 +14,7 @@
         />
       </div>
       <div>
-        <WebComponents::AuLabel>{{t "archive"}}</WebComponents::AuLabel>
+        <Auk::Label>{{t "archive"}}</Auk::Label>
         <WebComponents::VlCheckbox
           @value={{this.includeArchived}}
           @label={{t "search-include-archived"}}
