@@ -7,7 +7,7 @@
     </WebComponents::AuToolbar::Item>
     {{#if (await this.subcase.confidential)}}
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuPill @skin="danger" @icon="lock-closed">{{t "confidential"}}</WebComponents::AuPill>
+        <Auk::Pill @skin="danger" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
       </WebComponents::AuToolbar::Item>
     {{/if}}
   </WebComponents::AuToolbar::Group>

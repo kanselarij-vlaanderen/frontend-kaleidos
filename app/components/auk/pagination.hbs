@@ -8,7 +8,7 @@
         <Auk::ButtonLink
           @icon="chevron-left"
           disabled={{this.isFirstPage}}
-          {{on "click" this.prevPage}}
+          {{on "click" @onPreviousPage}}
         >
           {{t "previous"}}
         </Auk::ButtonLink>
@@ -18,7 +18,7 @@
           @icon="chevron-right"
           @layout="icon-right"
           disabled={{this.isLastPage}}
-          {{on "click" this.nextPage}}
+          {{on "click" @onNextPage}}
         >
           {{t "next"}}
         </Auk::ButtonLink>
