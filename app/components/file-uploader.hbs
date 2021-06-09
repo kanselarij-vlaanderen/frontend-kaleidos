@@ -52,8 +52,8 @@
 
 
 {{#if this.blockInterface}}
-  <WebComponents::AuLoadingOverlay
-          @title={{t "upload-files" numFiles=(if @multipleFiles "multiple" "one")}}
-          @message={{t "upload-files" numFiles=(if @multipleFiles "multiple" "one")}}
+  <WebComponents::LoadingOverlay
+    @title={{t "upload-files" numFiles=(if @multipleFiles "multiple" "one")}}
+    @message={{t "upload-files" numFiles=(if @multipleFiles "multiple" "one")}}
   />
 {{/if}}

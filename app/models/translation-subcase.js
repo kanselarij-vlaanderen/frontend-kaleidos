@@ -15,6 +15,7 @@ export default class TranslationSubcase extends Model {
   @belongsTo('publication-flow') publicationFlow;
 
   @hasMany('request-activity') requestActivities;
+  @hasMany('piece') sourceDocuments;
   @hasMany('translation-activity') translationActivities;
   @hasMany('cancellation-activity') cancellationActivities;
 }

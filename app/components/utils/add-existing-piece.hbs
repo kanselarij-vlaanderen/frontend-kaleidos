@@ -29,7 +29,7 @@
   <div>
     {{#if this.performSearch.isRunning}}
       <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-        <WebComponents::AuLoader @message={{t "loading"}}/>
+        <Auk::Loader @message={{t "loading"}} />
       </div>
     {{else}}
       {{#data-table
