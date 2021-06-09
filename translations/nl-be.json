@@ -736,7 +736,7 @@
   "numac-number": "Werknummer BS",
   "requests":"Aanvragen",
   "request-translations":"Vertaling aanvragen",
-  "request-translations-for-publication":"Vertalingen aanvragen voor Publicatie {publicationNumber}",
+  "request-translations-for-publication":"Vertaling(en) aanvragen voor publicatie {publicationNumber}",
   "request-translation-confirmation": "Bent u zeker dat u de vertaling voor volgende documenten met uiterste vertaaldatum wilt aanvragen?",
   "request-publish-preview":"Drukproef aanvragen",
   "publish-preview":"Drukproef",
