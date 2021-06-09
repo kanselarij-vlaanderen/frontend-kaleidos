@@ -89,7 +89,7 @@ export default Component.extend({
       agenda,
       priority: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
-        closestMeeting.plannedStart
+        closestMeeting.plannedstart
       ).format('dddd DD-MM-YYYY')}.`,
       formallyOk: CONFIG.notYetFormallyOk,
       mandatees: [],
