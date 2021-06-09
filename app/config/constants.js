@@ -17,6 +17,11 @@ export default {
   SERVICE_PROVIDERS: {
     MOCK_LOGIN: 'https://github.com/kanselarij-vlaanderen/mock-login-service',
   },
+  LANGUAGES: {
+    NL: 'http://publications.europa.eu/resource/authority/language/NLD',
+    FR: 'http://publications.europa.eu/resource/authority/language/FRA',
+    DE: 'http://publications.europa.eu/resource/authority/language/DEU',
+  },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
     PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
