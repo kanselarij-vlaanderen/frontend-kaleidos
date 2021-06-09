@@ -109,8 +109,6 @@
 {{#if this.showTranslationRequestModal}}
   <Publications::Publication::Translations::TranslationRequestModal
           @translationSubcase={{this.translationSubcase}}
-          @publicationFlow={{this.publicationFlow}}
-          @identification={{this.identification}}
           @selectedPieces={{this.selectedPieces}}
           @onSave={{perform this.saveTranslationRequest}}
           @onCancel={{this.closeTranslationRequestModal}} />
