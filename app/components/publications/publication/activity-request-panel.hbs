@@ -1,7 +1,7 @@
 {{!-- TODO every use of @activity. will change --}}
 <div class="auk-u-mb-3">
-  <WebComponents::AuPanel @scrollable="true">
-    <WebComponents::AuPanel::Header @borderless={{this.isCollapsed}}>
+  <Auk::Panel>
+    <Auk::Panel::Header @borderless={{this.isCollapsed}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -46,7 +46,7 @@
                     @animation="shift"
                     @placement="bottom"
             >
-              <WebComponents::AuDropdown>
+              <Auk::Dropdown>
                 {{#if (and (not this.finished) ( not (await @activity.isWithdrawn)))}}
                   <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
                     {{t "cancel-request"}}
@@ -60,21 +60,21 @@
                     {{t "request-publication"}}
                   </WebComponents::AuDropdown::Item>
                 {{/if}}
-              </WebComponents::AuDropdown>
+              </Auk::Dropdown>
             </AttachPopover>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
 
       </WebComponents::AuToolbar>
-    </WebComponents::AuPanel::Header>
+    </Auk::Panel::Header>
     {{#if (not this.isCollapsed)}}
-      <WebComponents::AuPanel::Body>
+      <Auk::Panel::Body>
         {{!-- IF WITHDRAWN SHOW REASON--}}
         {{#if @activity.withdrawReason}}
           <div class="auk-u-mb-4">
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{t "reason-withdraw"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <p class="auk-u-text-pre vlc-mail-content">
               <pre>
                 {{@activity.withdrawReason}}
@@ -86,23 +86,18 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6 auk-u-mr-2">
             {{#if this.isTranslation}}
-              <WebComponents::AuKeyValue
-                      @key={{t "translation-due-date"}}
-                      @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}
-              />
-              <WebComponents::AuKeyValue
-                      @key={{t "subject"}}
-                      @value={{@activity.mailSubject}}
-              />
-            {{else}}
-              <WebComponents::AuKeyValue
-                      @key={{t "subject"}}
-                      @value={{@activity.mailSubject}}
+              <Auk::KeyValue
+                @key={{t "translation-due-date"}}
+                @value={{moment-format @activity.finalTranslationDate "DD-MM-YYYY"}}
               />
             {{/if}}
-            <WebComponents::AuLabel>
+            <Auk::KeyValue
+              @key={{t "subject"}}
+              @value={{@activity.mailSubject}}
+            />
+            <Auk::Label>
               {{t "translation-mail-header"}}
-            </WebComponents::AuLabel>
+            </Auk::Label>
             <div class="auk-u-text-pre vlc-mail-content">
               <pre>
                 {{@activity.mailContent}}
@@ -110,12 +105,12 @@
             </div>
           </div>
           <div class="auk-o-grid-col-4">
-            <WebComponents::AuLabel>
+            <Auk::Label>
               {{t "files"}}
-            </WebComponents::AuLabel>
-            <ul class="auk-list auk-list--bordered">
+            </Auk::Label>
+            <Auk::List @bordered={{true}}>
               {{#each (await @activity.usedPieces) as |translationSourcePiece|}}
-                <li class="auk-list__item auk-list__item--gray-100">
+                <Auk::List::Item @skin="gray-100">
                   <Auk::Badge @skin="white" @icon="document" />
                   <div class="auk-u-mx-2">
                     <span class="auk-u-text-bold">
@@ -133,12 +128,12 @@
                       {{on "click" (fn this.showPieceViewer translationSourcePiece) }}
                     />
                   </WebComponents::AuButtonToolbar>
-                </li>
+                </Auk::List::Item>
               {{/each}}
-            </ul>
+            </Auk::List>
           </div>
         </div>
-      </WebComponents::AuPanel::Body>
+      </Auk::Panel::Body>
     {{/if}}
-  </WebComponents::AuPanel>
+  </Auk::Panel>
 </div>

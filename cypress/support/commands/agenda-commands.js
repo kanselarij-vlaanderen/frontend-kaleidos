@@ -258,6 +258,10 @@ function deleteAgenda(meetingId, lastAgenda) {
   if (!lastAgenda) {
     cy.wait('@loadAgendaitems');
   }
+  // loading page is no longer visible
+  cy.get(auComponents.auLoading, {
+    timeout: 20000,
+  }).should('not.exist');
 
   cy.log('/deleteAgenda');
   // TODO should patches happen when deleting a design agenda ?

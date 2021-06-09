@@ -1,5 +1,5 @@
-<WebComponents::AuPanel>
-  <WebComponents::AuPanel::Header>
+<Auk::Panel>
+  <Auk::Panel::Header>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -21,9 +21,9 @@
         </WebComponents::AuToolbar::Group>
       {{/if}}
     </WebComponents::AuToolbar>
-  </WebComponents::AuPanel::Header>
+  </Auk::Panel::Header>
   {{#if @mandatees.length }}
-    <WebComponents::AuPanel::Body @noPadding="true">
+    <Auk::Panel::Body @noPadding={{true}}>
       <table class="auk-table">
         <thead>
           <tr>
@@ -63,7 +63,7 @@
               </Mandatees::DomainsFieldsForMandatee>
               <td data-test-mandatee-panel-view-row-submitter>
                 {{#if (eq mandatee @submitter)}}
-                  <WebComponents::AuIcon @name="circle-check" @iconSkinColor="success"/>
+                  <Auk::Icon @name="circle-check" @skin="success" />
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -79,14 +79,14 @@
                           @animation="shift"
                           @placement="left"
                   >
-                    <WebComponents::AuDropdown>
+                    <Auk::Dropdown>
                       <WebComponents::AuDropdown::Item>
                         {{t "edit-2"}}
                       </WebComponents::AuDropdown::Item>
                       <WebComponents::AuDropdown::Item @skin="danger">
                         {{t "delete"}}
                       </WebComponents::AuDropdown::Item>
-                    </WebComponents::AuDropdown>
+                    </Auk::Dropdown>
                   </AttachPopover>
                 </Auk::Button>
               </td> --}}
@@ -94,10 +94,10 @@
           {{/each}}
         </tbody>
       </table>
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
   {{else}}
-    <WebComponents::AuPanel::Body>
+    <Auk::Panel::Body>
       <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
   {{/if}}
-</WebComponents::AuPanel>
+</Auk::Panel>

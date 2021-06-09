@@ -1,9 +1,9 @@
 {{#if @icon}}
   {{#if (eq @layout "icon-right")}}
     <div class="auk-tabs__label">{{yield}}</div>
-    <WebComponents::AuIcon @name={{@icon}}/>
+    <Auk::Icon @name={{@icon}} />
   {{else}}
-    <WebComponents::AuIcon @name={{@icon}}/>
+    <Auk::Icon @name={{@icon}} />
     <div class="auk-tabs__label">{{yield}}</div>
   {{/if}}
 {{else}}

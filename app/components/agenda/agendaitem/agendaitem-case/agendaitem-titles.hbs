@@ -1,6 +1,6 @@
 <div class="auk-u-mb-8">
-  <WebComponents::AuPanel>
-    <WebComponents::AuPanel::Header>
+  <Auk::Panel>
+    <Auk::Panel::Header>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -46,8 +46,8 @@
           {{/if}}
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuPanel::Header>
-    <WebComponents::AuPanel::Body>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
       <div class="auk-content">
         <h4>
           {{@agendaitem.shortTitle}}
@@ -101,9 +101,9 @@
           {{/if}}
         </WebComponents::AuPillList>
       </div>
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}
-      <WebComponents::AuModal::Footer @custom={{true}}>
+      <Auk::Modal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -113,7 +113,7 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuModal::Footer>
+      </Auk::Modal::Footer>
     {{/if}}
-  </WebComponents::AuPanel>
+  </Auk::Panel>
 </div>

@@ -2,14 +2,14 @@
   {{#if @icon}}
 
     {{#unless @layout}}
-      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+      <Auk::Icon @name={{@icon}} @size={{@size}} />
       <span class="auk-button__label">
         {{yield}}
       </span>
     {{/unless}}
 
     {{#if (eq @layout "icon-only")}}
-      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+      <Auk::Icon @name={{@icon}} @size={{@size}} />
       <span class="auk-u-sr-only">{{yield}}</span>
     {{/if}}
 
@@ -17,7 +17,7 @@
       <span class="auk-button__label">
         {{yield}}
       </span>
-      <WebComponents::AuIcon @name={{@icon}} @size={{@size}}/>
+      <Auk::Icon @name={{@icon}} @size={{@size}} />
     {{/if}}
   {{else}}
 

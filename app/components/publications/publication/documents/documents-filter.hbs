@@ -1,12 +1,12 @@
-<WebComponents::AuPanel>
-  <WebComponents::AuPanel::Body class="auk-panel--editing">
+<Auk::Panel>
+  <Auk::Panel::Body class="auk-panel--editing">
     <div class="auk-o-flex">
       <div class="auk-form-group auk-u-maximize-width auk-u-mr-2">
-        <WebComponents::AuLabel for="blockInput">{{t "name-document" }}</WebComponents::AuLabel>
+        <Auk::Label for="blockInput">{{t "name-document" }}</Auk::Label>
         <Auk::Input @value={{this.filter.documentName}} type="text" id="blockInput" @block={{true}} />
       </div>
       <div class="auk-form-group auk-u-maximize-width auk-u-mr-2 auk-u-ml-2">
-        <WebComponents::AuLabel for="blockInput">{{t "file-extension" }}</WebComponents::AuLabel>
+        <Auk::Label for="blockInput">{{t "file-extension" }}</Auk::Label>
         <PowerSelectMultiple @options={{this.fileTypes}} @searchEnabled={{true}}
           @selected={{this.filter.fileTypes}}
           @onchange={{fn (mut this.filter.fileTypes)}}
@@ -16,7 +16,7 @@
         </PowerSelectMultiple>
       </div>
       <div class="auk-form-group auk-u-maximize-width auk-u-ml-2">
-        <WebComponents::AuLabel for="blockInput">{{t "file-type" }}</WebComponents::AuLabel>
+        <Auk::Label for="blockInput">{{t "file-type" }}</Auk::Label>
         <PowerSelectMultiple @options={{this.documentTypes}} @isSearchable={{false}}
           @selected={{this.filter.documentTypes}}
           @onchange={{fn (mut this.filter.documentTypes)}}
@@ -44,5 +44,5 @@
         </Auk::Button>
       </div>
     </div>
-  </WebComponents::AuPanel::Body>
-</WebComponents::AuPanel>
+  </Auk::Panel::Body>
+</Auk::Panel>

@@ -58,7 +58,7 @@
 
 <StyleguideSample @title="Toolbar - Add" @snippet="toolbar-3.hbs">
   {{!-- BEGIN-SNIPPET toolbar-3 --}}
-  <WebComponents::AuNavbar @skin="gray-100">
+  <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -71,14 +71,14 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 
 <StyleguideSample @title="Toolbar - Detail" @snippet="toolbar-4.hbs">
   {{!-- BEGIN-SNIPPET toolbar-4 --}}
-  <WebComponents::AuNavbar @skin="gray-100">
+  <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -94,13 +94,13 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
 <StyleguideSample @title="Toolbar - Complex" @snippet="toolbar-5.hbs">
   {{!-- BEGIN-SNIPPET toolbar-5 --}}
-  <WebComponents::AuNavbar @skin="gray-100" @auto="true">
+  <Auk::Navbar @skin="gray-100" @auto={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -126,16 +126,16 @@
         <WebComponents::AuToolbar::Item>
           <Auk::Button @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</Auk::Button>
           <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <WebComponents::AuDropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
+            <Auk::Dropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
               <WebComponents::AuDropdown::Item>Action item</WebComponents::AuDropdown::Item>
-            </WebComponents::AuDropdown>
+            </Auk::Dropdown>
           </EmberPopover>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuNavbar>
+  </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -146,8 +146,8 @@
 
 <StyleguideSample @snippet="toolbar-6.hbs">
   {{!-- BEGIN-SNIPPET toolbar-6 --}}
-  <WebComponents::AuPanel>
-    <WebComponents::AuPanel::Header>
+  <Auk::Panel>
+    <Auk::Panel::Header>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -160,11 +160,11 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuPanel::Header>
-    <WebComponents::AuPanel::Body>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
       Panel body text
-    </WebComponents::AuPanel::Body>
-  </WebComponents::AuPanel>
+    </Auk::Panel::Body>
+  </Auk::Panel>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 

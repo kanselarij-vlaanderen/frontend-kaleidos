@@ -16,6 +16,28 @@
             </div>
           </div>
           <div class="vlc-document-card-toolbar__right">
+            {{#if
+              (and
+                this.shouldShowPublications
+                (not this.loadPieceRelatedData.isRunning))
+            }}
+              {{!-- trigger fetch --}}
+              {{#if this.piece.publicationFlow}}
+                {{!-- TODO: remove style attributes and replace classes with auk-status-pill --}}
+                <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
+                  @route="publications.publication"
+                  @model={{this.piece.publicationFlow.id}}>
+                  <div class="auk-icon auk-icon--default auk-icon--link"
+                    style="display: none;">
+                    <i class="ki ki-link"></i>
+                  </div>
+                  <span class="auk-status-pill__label"
+                    style="padding: 0;">
+                    {{this.piece.publicationFlow.identification.idName}}
+                  </span>
+                </LinkTo>
+              {{/if}}
+            {{/if}}
             <div class="auk-toolbar-complex__item auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill
@@ -176,7 +198,7 @@
         >
           {{t "show-pieces"}}
           {{#if this.expandVersionHistory.isRunning}}
-            <WebComponents::AuLoader/>
+            <Auk::Loader />
           {{/if}}
         </Auk::Button>
         {{#if this.isExpandedVersionHistory}}
@@ -207,7 +229,7 @@
     <div class="auk-modal__body">
       <div class="auk-u-p-4">
         {{#if this.newPiece}}
-          <WebComponents::AuLabel>{{t "name"}}</WebComponents::AuLabel>
+          <Auk::Label>{{t "name"}}</Auk::Label>
           <WebComponents::VlFormInput
             @value={{this.newPiece.name}}/>
           <Documents::UploadedDocument

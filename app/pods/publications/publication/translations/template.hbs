@@ -1,0 +1,25 @@
+<Auk::Navbar @border="bottom">
+  <WebComponents::AuToolbar @size="large">
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <WebComponents::AuTabs>
+          <WebComponents::AuTab @route="publications.publication.translations.documents">
+            {{capitalize (t "documents")}}
+          </WebComponents::AuTab>
+          <WebComponents::AuTab @route="publications.publication.translations.requests">
+            {{capitalize (t "requests")}}
+          </WebComponents::AuTab>
+        </WebComponents::AuTabs>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    <WebComponents::AuToolbar::Group @position="right">
+      <WebComponents::AuToolbar::Item>
+        <Auk::Checkbox
+          @label={{t "finished"}}
+          @checked={{false}}
+        />
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+  </WebComponents::AuToolbar>
+</Auk::Navbar>
+{{outlet}}

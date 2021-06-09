@@ -1,6 +1,6 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "confidential"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "confidential"}}</Auk::Label>
     {{web-components/vl-toggle
       data-test-subcase-titles-edit-confidential=true
       value=subcase.confidential
@@ -8,7 +8,7 @@
   </div>
 </div>
 <div class="auk-u-mb-2">
-  <WebComponents::AuLabel>{{t "publicity"}}</WebComponents::AuLabel>
+  <Auk::Label>{{t "publicity"}}</Auk::Label>
   {{utils/model-selector
     data-test-subcase-titles-edit-access-level=true
     modelName="access-level"
@@ -24,7 +24,7 @@
 
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "name-subcase"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "name-subcase"}}</Auk::Label>
     {{textarea
       data-test-subcase-titles-edit-shorttitle=true
       rows="2"
@@ -35,7 +35,7 @@
 </div>
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "title-subcase"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "title-subcase"}}</Auk::Label>
     {{textarea
       data-test-subcase-titles-edit-title=true
       rows="4"

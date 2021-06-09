@@ -1,11 +1,13 @@
-<WebComponents::AuModal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @title={{if
-    this.isViaCouncilOfMinisters
-    (t "publications-new-title-via-council-of-ministers")
-    (t "publications-new-title-not-via-council-of-ministers")
-  }}
-    @closeModal={{@onCancel}} />
-  <WebComponents::AuModal::Body>
+<Auk::Modal data-test-au-modal-publication-new>
+  <Auk::Modal::Header
+    @title={{if
+      this.isViaCouncilOfMinisters
+      (t "publications-new-title-via-council-of-ministers")
+      (t "publications-new-title-not-via-council-of-ministers")
+    }}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}
         <Auk::Alert
@@ -24,9 +26,9 @@
       {{/if}}
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class='auk-form-group {{if this.hasPublicationNumberError 'auk-form-group--error' }}'>
-          <WebComponents::AuLabel for="publicationNumberInput" @isRequired={{true}}>
+          <Auk::Label for="publicationNumberInput" @isRequired={{true}}>
             {{t "publications-number"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <div class=" auk-o-flex auk-o-flex--vertical-center">
             <Auk::Input
               type="number"
@@ -56,52 +58,54 @@
             </div>
           </div>
           {{#if this.numberIsAlreadyUsed}}
-            <WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "publication-number-already-taken"}}
-            </WebComponents::AuLabelError>
+            </Auk::Label>
           {{else if this.hasPublicationNumberError}}
-            <WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "input-error-message"}}
-            </WebComponents::AuLabelError>
+            </Auk::Label>
           {{/if}}
         </div>
         <div class='auk-form-group' style="max-width: 30rem;">
-          <WebComponents::AuLabel for="decisionDate">
+          <Auk::Label for="decisionDate">
             {{t "decision-date"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <Auk::Datepicker
                   @date={{this.decisionDate}}
                   @disabled={{this.isViaCouncilOfMinisters}}
                   @onChange={{this.setDecisionDate}}/>
         </div>
         <div class='auk-form-group' style="max-width: 30rem;">
-          <WebComponents::AuLabel for="publicationDueDate">
+          <Auk::Label for="publicationDueDate">
             {{t "publication-due-date"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <Auk::Datepicker
             @date={{this.publicationDueDate}}
             @onChange={{this.setPublicationDueDate}}
           />
         </div>
         <div class="auk-form-group {{if this.hasShortTitleError "auk-form-group--error" }}">
-          <WebComponents::AuLabel for="shortTitleInput" @isRequired={{true}}>
+          <Auk::Label for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
             data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
-            <WebComponents::AuLabelError>{{t "input-error-message"}}</WebComponents::AuLabelError>
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
+              {{t "input-error-message"}}
+            </Auk::Label>
           {{/if}}
         </div>
         <div class="auk-form-group">
-          <WebComponents::AuLabel for="longTitleInput">{{t "title-subcase"}}</WebComponents::AuLabel>
+          <Auk::Label for="longTitleInput">{{t "title-subcase"}}</Auk::Label>
           <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
             data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>
     </Utils::LoadableContent>
-  </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer @custom={{true}}>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -132,5 +136,5 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>

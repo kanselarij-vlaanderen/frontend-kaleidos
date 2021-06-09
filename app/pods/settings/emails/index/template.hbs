@@ -4,8 +4,8 @@
 
 <div class="auk-u-m-8">
   <div class="auk-u-mb-3">
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Header>
+    <Auk::Panel>
+      <Auk::Panel::Header>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -13,8 +13,8 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuPanel::Header>
-      <WebComponents::AuPanel::Body>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
         <pre>{{t "manage-emails-tokens"}}</pre>
         <LinkTo
           @tagName="button"
@@ -28,9 +28,9 @@
         </LinkTo>
 
         {{!-- Footer of the mail --}}
-        <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-footer"}}
-        </WebComponents::AuLabel>
+        </Auk::Label>
         <WebComponents::AuTextarea
                 id="emailFooter"
                 @rows="15"
@@ -38,8 +38,8 @@
           {{on "change" (fn this.setFooterContent)}}
                 data-test-email-content-textarea
         />
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
+      </Auk::Panel::Body>
+    </Auk::Panel>
   </div>
 </div>
 
@@ -49,8 +49,8 @@
 <div class="auk-u-m-8">
   {{#each this.emails as |email|}}
     <div class="auk-u-mb-3">
-      <WebComponents::AuPanel>
-        <WebComponents::AuPanel::Header>
+      <Auk::Panel>
+        <Auk::Panel::Header>
           <WebComponents::AuToolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
@@ -58,14 +58,14 @@
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
           </WebComponents::AuToolbar>
-        </WebComponents::AuPanel::Header>
-        <WebComponents::AuPanel::Body>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
 
 
           {{!-- Mails of this tyype go to --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "email-to"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <Auk::Input
             type="text"
             @value={{ await email.to }}
@@ -75,9 +75,9 @@
           <pre>{{ await email.defaultTo }}</pre>
 
           {{!-- subject of the mail --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "subject"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <Auk::Input
             type="text"
             @value={{ await email.subject }}
@@ -88,9 +88,9 @@
 
 
           {{!-- content of the mail --}}
-          <WebComponents::AuLabel class="auk-u-mt-2 auk-u-mb-1">
+          <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "accompanying-text"}}
-          </WebComponents::AuLabel>
+          </Auk::Label>
           <WebComponents::AuTextarea
             id="emailMessage"
             @rows="15"
@@ -99,8 +99,8 @@
             data-test-email-content-textarea
           />
           <pre>{{ await email.defaultContent }}</pre>
-        </WebComponents::AuPanel::Body>
-      </WebComponents::AuPanel>
+        </Auk::Panel::Body>
+      </Auk::Panel>
     </div>
   {{/each}}
 
@@ -112,6 +112,6 @@
     @saveAction={{this.saveSettings}} />
 
   {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay/>
+    <WebComponents::LoadingOverlay />
   {{/if}}
 </div>
