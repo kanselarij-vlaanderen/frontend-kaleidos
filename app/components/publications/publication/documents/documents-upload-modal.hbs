@@ -1,12 +1,12 @@
-<WebComponents::AuModal @resized={{this.isExpanded}}>
-  <WebComponents::AuModal::Header
+<Auk::Modal @size={{if this.isExpanded "full-screen"}}>
+  <Auk::Modal::Header
     @resizeable={{true}}
     @title={{t "documents-add"}}
-    @changeIcon={{this.isExpanded}}
-    @toggleSize={{this.toggleSize}}
-    @closeModal={{perform this.cancelUploadPieces}}
+    @isExpanded={{this.isExpanded}}
+    @onResize={{this.toggleSize}}
+    @onClose={{perform this.cancelUploadPieces}}
   />
-  <WebComponents::AuModal::Body>
+  <Auk::Modal::Body>
     {{#if this.savePieces.isRunning}}
       <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
     {{else}}
@@ -27,9 +27,9 @@
         {{/each}}
       </div>
     {{/if}}
-  </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer
-    @cancelModal={{perform this.cancelUploadPieces}}
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{perform this.cancelUploadPieces}}
   >
     {{#if this.savePieces.isRunning}}
       <Utils::SimpleSpinner />
@@ -43,5 +43,5 @@
         {{t "documents-add"}}
       </Auk::Button>
     {{/if}}
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>

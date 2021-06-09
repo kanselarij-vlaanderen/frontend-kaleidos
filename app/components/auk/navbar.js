@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument {String} border Can be "top", "bottom" (default) or "none"
+ * @argument {String} skin Can be "gray-100", "gray-200" or "white (default)"
+ * @argument {String} size Can be "large"
+ * @argument {Boolean} auto Makes height automatic
+ * @argument {Boolean} noPadding
+ */
 export default class Navbar extends Component {
-  /**
-   * border can be:
-   * top
-   * bottom (default)
-   * none
-   */
   get border() {
     if (this.args.border) {
       return `auk-navbar--bordered-${this.args.border}`;
@@ -14,12 +16,6 @@ export default class Navbar extends Component {
     return 'auk-navbar--bordered-bottom';
   }
 
-  /**
-   * skin can be:
-   * gray-100
-   * gray-200
-   * white (default)
-   */
   get skin() {
     if (this.args.skin) {
       return `auk-navbar--${this.args.skin}`;

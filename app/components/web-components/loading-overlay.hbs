@@ -1,11 +1,11 @@
 <div class="auk-o-flex auk-o-flex--justify-around">
-  <WebComponents::AuModal @size={{this.getSize}}>
-    <WebComponents::AuModal::Header
+  <Auk::Modal @size={{this.getSize}}>
+    <Auk::Modal::Header
       @title={{this.getTitle}}
-      @hideCloseButton={{true}}
+      @closeable={{false}}
     />
-    <WebComponents::AuModal::Body>
+    <Auk::Modal::Body>
       <Auk::Loader @message={{this.getMessage}} />
-    </WebComponents::AuModal::Body>
-  </WebComponents::AuModal>
+    </Auk::Modal::Body>
+  </Auk::Modal>
 </div>

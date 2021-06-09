@@ -1,13 +1,13 @@
-<WebComponents::AuModal >
-  <WebComponents::AuModal::Header
+<Auk::Modal>
+  <Auk::Modal::Header
     @resizeable={{false}}
     @title={{t
       "upload-translation-document"
       identifier=@translationSubcase.publicationFlow.identification.idName
     }}
-    @closeModal={{perform this.cancelTranslation}}
+    @onClose={{perform this.cancelTranslation}}
   />
-  <WebComponents::AuModal::Body>
+  <Auk::Modal::Body>
     <div class="auk-u-p-4">
       <Auk::FileUploader
               @fileQueueName={{this.fileQueueName}}
@@ -92,9 +92,9 @@
         </div>
       {{/if}}
     </div>
-  </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer
-    @cancelModal={{perform this.cancelTranslation}}
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{perform this.cancelTranslation}}
   >
     <Auk::Button
       @skin="primary"
@@ -103,5 +103,5 @@
     >
       {{t "save"}}
     </Auk::Button>
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>

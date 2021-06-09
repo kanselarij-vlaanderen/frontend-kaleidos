@@ -1,4 +1,4 @@
-<WebComponents::AuNavbar class="auk-publication-overview-navbar" @skin="gray-100" @auto="true">
+<Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -24,7 +24,7 @@
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
-</WebComponents::AuNavbar>
+</Auk::Navbar>
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -216,13 +216,14 @@
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuPagination
-                @page={{this.page}}
-                @nbOfItems={{this.model.length}}
-                @size={{this.size}}
-                @onNextPage={{this.nextPage}}
-                @onPreviousPage={{this.prevPage}}
-                @total={{this.model.meta.count}} />
+        <Auk::Pagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{this.model.length}}
+          @total={{this.model.meta.count}}
+          @onNextPage={{this.nextPage}}
+          @onPreviousPage={{this.prevPage}}
+        />
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
