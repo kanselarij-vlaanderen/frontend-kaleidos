@@ -3,7 +3,7 @@
   <WebComponents::AuRadioList @layout="inline">
     {{#each optionList as |option index|}}
       {{#if selectedModel}}
-        <WebComponents::AuRadio
+        <Auk::Radio
           value={{option.id}}
           name={{title}}
           checked={{eq option.id selectedModel.id}}
@@ -11,7 +11,7 @@
           @label={{option.label}}
         />
       {{else}}
-        <WebComponents::AuRadio
+        <Auk::Radio
           value={{option.id}}
           name={{title}}
           checked={{eq index 0}}
