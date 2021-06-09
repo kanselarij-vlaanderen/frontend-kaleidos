@@ -11,7 +11,7 @@ import { isPresent } from '@ember/utils';
  * @argument isActive {Boolean}: Determines the active (open) state on display. "false" is the default value.
  */
 export default class AccordionItem extends Component {
-  @tracked isActive = this.args.isActive || false;
+  @tracked isActive = this.args.isDefaultActive || false;
   accordionId = `accordion-${guidFor(this)}`;
 
   get layout() {

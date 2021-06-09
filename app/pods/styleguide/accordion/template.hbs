@@ -4,7 +4,7 @@
 <StyleguideSample @title="Controls left" @snippet="accordion-controls-left.hbs">
   {{!-- BEGIN-SNIPPET accordion-controls-left --}}
   <Auk::Accordion>
-    <Auk::Accordion::Item @title="Accordion" @isActive={{true}}>
+    <Auk::Accordion::Item @title="Accordion" @isDefaultActive={{true}}>
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ipsam labore sequi. Eaque alias consequatur totam iste error, ipsam quis reprehenderit. Itaque consectetur ex est placeat tenetur, modi consequatur quibusdam.</p>
     </Auk::Accordion::Item>
   </Auk::Accordion>
@@ -46,7 +46,7 @@
     <td>Determines the position of the control within the accordion item.</td>
   </tr>
   <tr>
-    <td><code>@isActive</code></td>
+    <td><code>@isDefaultActive</code></td>
     <td>boolean</td>
     <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
     <td> Determines the active state (on display) of the accordion item.</td>
