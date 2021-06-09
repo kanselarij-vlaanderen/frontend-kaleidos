@@ -43,8 +43,8 @@ export default Model.extend({
   downloadLink: computed('id', function() {
     return `/files/${this.get('id')}/download`;
   }),
-  namedDownloadLink: computed('filename', 'downloadLink', function() {
-    return `${this.get('downloadLink')}?name=${encodeURIComponent(this.get('downloadFilename'))}`; // url-safe
+  namedDownloadLink: computed('downloadFilename', 'downloadLink', function() {
+    return `${this.downloadLink}?name=${encodeURIComponent(this.downloadFilename)}`; // url-safe
   }),
   name: alias('filename'), // Compatibility. Use of 'name' should be refactored out.
 });

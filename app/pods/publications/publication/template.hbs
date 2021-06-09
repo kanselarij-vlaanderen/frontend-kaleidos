@@ -1,7 +1,7 @@
 {{page-title
   (concat (t "publication-flow") " " this.model.identification.idName)
 }}
-<WebComponents::AuNavbar @skin="gray-100" @auto="true">
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
   <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
@@ -37,7 +37,7 @@
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
-</WebComponents::AuNavbar>
+</Auk::Navbar>
 
 {{!-- Auk css gebruiken, component ? --}}
 <div class="auk-panel-layout">
