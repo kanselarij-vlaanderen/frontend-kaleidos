@@ -1,11 +1,13 @@
-<WebComponents::AuModal data-test-au-modal-publication-new>
-  <WebComponents::AuModal::Header @title={{if
-    this.isViaCouncilOfMinisters
-    (t "publications-new-title-via-council-of-ministers")
-    (t "publications-new-title-not-via-council-of-ministers")
-  }}
-    @closeModal={{@onCancel}} />
-  <WebComponents::AuModal::Body>
+<Auk::Modal data-test-au-modal-publication-new>
+  <Auk::Modal::Header
+    @title={{if
+      this.isViaCouncilOfMinisters
+      (t "publications-new-title-via-council-of-ministers")
+      (t "publications-new-title-not-via-council-of-ministers")
+    }}
+    @onClose={{@onCancel}}
+  />
+  <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       {{#if this.hasError}}
         <Auk::Alert
@@ -93,8 +95,8 @@
         </div>
       </div>
     </Utils::LoadableContent>
-  </WebComponents::AuModal::Body>
-  <WebComponents::AuModal::Footer @custom={{true}}>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
@@ -125,5 +127,5 @@
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
     </WebComponents::AuToolbar>
-  </WebComponents::AuModal::Footer>
-</WebComponents::AuModal>
+  </Auk::Modal::Footer>
+</Auk::Modal>
