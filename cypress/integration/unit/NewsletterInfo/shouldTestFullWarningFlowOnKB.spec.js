@@ -35,7 +35,7 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.get(alert.changesAlertClose).click();
     cy.get(alert.changesAlert).should('not.be.visible');
     // Edit KB
-    cy.get(newsletter.newsItem.create).should('be.visible')
+    cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
     cy.get(newsletter.editItem.Save).type('Aanpassing');

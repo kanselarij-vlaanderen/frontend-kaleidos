@@ -73,7 +73,7 @@
     <Auk::Label>{{t "finished"}}</Auk::Label>
     {{web-components/vl-toggle value=newsletterInfo.finished}}
   </div>
-  <div class="auk-form-group" data-test-themes-selector>
+  <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
     <Auk::Label>{{t "themes"}}</Auk::Label>
     {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
   </div>
@@ -90,7 +90,7 @@
     </WebComponents::AuToolbar::Item>
     <WebComponents::AuToolbar::Item>
       {{web-components/vl-save-button
-        data-test-newsletter-edit-save=true
+        data-test-newsletter-edit-item-save=true
         text=(t "save")
         isLoading=isLoading
         saveAction=(action "trySaveChanges")
