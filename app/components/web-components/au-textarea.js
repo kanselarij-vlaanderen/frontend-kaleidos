@@ -1,13 +1,13 @@
 import Component from '@glimmer/component';
 
-const DEFAULT_ROWS = 2;
-
 export default class Textarea extends Component {
-  get getRows() {
+  static DEFAULT_ROWS = 2;
+
+  get amountOfRows() {
     if (this.args.rows) {
       return `${this.args.rows}`;
     }
-    return DEFAULT_ROWS;
+    return Textarea.DEFAULT_ROWS;
   }
 
   get getResizeClass() {
