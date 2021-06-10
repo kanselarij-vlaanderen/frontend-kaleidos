@@ -11,8 +11,8 @@
   >
     <span class="auk-tabs__tab-inner">
       <WebComponents::AuTab::Innerlayout
-        @layout={{this.layout}}
-        @icon={{if @isHierarchicalBack "hierarchical-back" this.icon}}
+        @layout={{@layout}}
+        @icon={{if @isHierarchicalBack "hierarchical-back" @icon}}
         @counter={{this.counter}}
       >
         {{yield}}

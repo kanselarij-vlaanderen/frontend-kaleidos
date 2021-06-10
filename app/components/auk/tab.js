@@ -24,20 +24,6 @@ export default class Tab extends Component {
     return [];
   }
 
-  get icon() {
-    if (this.args.icon) {
-      return this.args.icon;
-    }
-    return null;
-  }
-
-  get layout() {
-    if (this.args.layout) {
-      return this.args.layout;
-    }
-    return null;
-  }
-
   get counter() {
     if (this.args.counter) {
       return this.args.counter;
