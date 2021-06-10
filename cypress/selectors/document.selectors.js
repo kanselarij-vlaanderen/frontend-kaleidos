@@ -1,4 +1,12 @@
 const selectors = {
+  // component document-card
+  documentCard: {
+    card: '[data-test-document-card]',
+    titleHeader: '[data-test-document-card-title-header]',
+    actions: '[data-test-document-card-actions]',
+    delete: '[data-test-document-card-delete]',
+  },
+
   modalPieceDelete: '[data-test-vl-uploaded-document-deletepiece]',
   modalPieceUploadedFilename: '[data-test-vl-uploaded-document-filename]',
   documentUploadNewPiece: '[data-test-document-upload-new-piece]',
@@ -6,7 +14,6 @@ const selectors = {
   singlePieceHistory: '[data-test-single-piece-history]',
   deletePieceFromhistory: '[data-test-delete-piece-from-history]',
   documentUploadShowMore: '[data-test-documents-show-more]',
-  documentCard: '[data-test-document-card]',
   addLinkedDocuments: '[data-test-add-linked-documents]',
   searchForLinkedDocumentsInput: '[data-test-search-existing-document]',
   searchForLinkedDocumentsButton: '[data-test-search-existing-document-button]',

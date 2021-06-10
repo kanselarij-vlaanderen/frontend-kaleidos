@@ -18,7 +18,7 @@ function uploadFileToCancel(file) {
     .contains(file.fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -79,7 +79,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
         });
@@ -88,7 +88,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
@@ -180,7 +180,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     // Cancel/save name in document card
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
-    cy.get(document.documentCard).within(() => {
+    cy.get(document.documentCard.card).within(() => {
       cy.get('.auk-h4').as('documentName');
       cy.get('@documentName').contains(fileName)
         .click();
@@ -195,7 +195,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.ki-check').click();
       // TODO patch happens
     });
-    cy.get(document.documentCard).within(() => {
+    cy.get(document.documentCard.card).within(() => {
       // assert new value is set
       cy.get('@documentName').contains(savedName);
     });
@@ -284,7 +284,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
         });
@@ -298,7 +298,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
@@ -311,7 +311,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}TER`);
         });
@@ -351,7 +351,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}QUATER`);
         });

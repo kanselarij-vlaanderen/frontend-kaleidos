@@ -84,7 +84,7 @@ context('Add files to an agenda', () => {
     });
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).as('docCards');
+      cy.get(document.documentCard.card).as('docCards');
     });
 
     cy.get('@docCards').should('have.length', 1);

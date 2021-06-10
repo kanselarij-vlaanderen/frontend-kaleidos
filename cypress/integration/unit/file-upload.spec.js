@@ -33,36 +33,28 @@ context('Add files to an agenda', () => { // At the meeting-level
     }], 'meeting');
 
     // Check the name of the document we just uploaded
-    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
-      cy.get(document.documentCard).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains('test pdf');
-        });
-    });
+    cy.get(document.documentCard.titleHeader).eq(0)
+      .contains('test pdf');
 
     // Add a new version and check its name
     cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
-      cy.get(document.documentCard).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/BIS/);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/BIS/);
+      });
 
     // Add a new version and check its name
     cy.addNewPieceToMeeting('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
     // cy.wait('@loadPieces');
-    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
-      cy.get(document.documentCard).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/TER/);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/TER/);
+      });
   });
 
   it('should add several documents that should be sorted', () => {
@@ -100,37 +92,35 @@ context('Add files to an agenda', () => { // At the meeting-level
     );
 
     // Test if documents are listed in the correct sorting order
-    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
-      cy.get(document.documentCard).as('docCards');
-      cy.get('@docCards').eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/1e/);
-        });
-      cy.get('@docCards').eq(1)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/2e/);
-        });
-      cy.get('@docCards').eq(2)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/3e/);
-        });
-      cy.get('@docCards').eq(3)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/4e/);
-        });
-      cy.get('@docCards').eq(4)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/5e/);
-        });
-      cy.get('@docCards').eq(5)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/6e/);
-        });
-      cy.get('@docCards').eq(6)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(/7e/);
-        });
-    });
+    cy.get(document.documentCard.card).as('docCards');
+    cy.get('@docCards').eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/1e/);
+      });
+    cy.get('@docCards').eq(1)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/2e/);
+      });
+    cy.get('@docCards').eq(2)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/3e/);
+      });
+    cy.get('@docCards').eq(3)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/4e/);
+      });
+    cy.get('@docCards').eq(4)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/5e/);
+      });
+    cy.get('@docCards').eq(5)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/6e/);
+      });
+    cy.get('@docCards').eq(6)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(/7e/);
+      });
   });
 
   it('should delete documents, pieces and files', () => {
@@ -140,21 +130,16 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Test if the documents we're looking for are present
-    cy.get('.auk-scroll-wrapper__body > .auk-u-m-8').within(() => { // TODO: selectors need improvement
-      cy.get(document.documentCard).as('docCards');
-    });
+    cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 2);
 
     // Remove a document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/1e/);
-        cy.get('.ki-more').click();
+        cy.get(document.documentCard.titleHeader).contains(/1e/);
+        cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.delete).click();
       });
-    cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.auk-u-text-error').contains('Document verwijderen')
-        .click();
-    });
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
@@ -181,7 +166,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Delete another document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/2e/);
+        cy.get(document.documentCard.titleHeader).contains(/2e/);
         cy.get(document.showPiecesHistory).click();
         cy.get(document.singlePieceHistory).as('pieces');
         cy.get('@pieces').eq(0)
