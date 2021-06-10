@@ -6,17 +6,23 @@
     @activeClass={{@activeClass}}
     @current-when={{@current-when}}
     @preventDefault={{@preventDefault}}
-    @tagName={{@tagName}}
     @query={{@query}}
   >
     <span class="auk-tabs__tab-inner">
-      <WebComponents::AuTab::Innerlayout
-        @layout={{@layout}}
-        @icon={{if @isHierarchicalBack "hierarchical-back" @icon}}
-        @counter={{this.counter}}
-      >
-        {{yield}}
-      </WebComponents::AuTab::Innerlayout>
+      {{#if @icon}}
+        {{#if (eq @layout "icon-right")}}
+          <div class="auk-tabs__label">{{yield}}</div>
+          <Auk::Icon @name={{@icon}} />
+        {{else}}
+          <Auk::Icon @name={{@icon}} />
+          <div class="auk-tabs__label">{{yield}}</div>
+        {{/if}}
+      {{else}}
+        <div class="auk-tabs__label">{{yield}}</div>
+        {{#if this.hasCounter}}
+          <div class="auk-tabs__tab-counter">({{@counter}})</div>
+        {{/if}}
+      {{/if}}
     </span>
   </LinkTo>
 </li>
