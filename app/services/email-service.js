@@ -17,7 +17,7 @@ export default class emailService extends Service {
       from: from,
       to: to,
       subject: subject,
-      content: content,
+      message: content,
     });
     if (attachedPieces) {
       const files = await Promise.all(attachedPieces.map((piece) => piece.file));
