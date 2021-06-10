@@ -102,7 +102,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
     this.selectedPieces = [];
     this.showTranslationRequestModal = false;
-    this.send('refresh');
+    this.transitionToRoute('publications.publication.translations.requests');
   }
 
 
