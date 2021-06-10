@@ -2,7 +2,7 @@
   class="auk-sidebar--large auk-sidebar--collapsible"
   @position="right"
   @skin="gray-100"
-  data-collapsed={{if (not @isOpen) "true" "false"}}
+  @isCollapsed={{not @isOpen}}
 >
   <Auk::Navbar @skin="gray-100">
     <WebComponents::AuToolbar>

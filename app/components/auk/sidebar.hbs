@@ -1,3 +1,5 @@
-<div class="{{this.baseClass}} {{this.skin}} {{this.position}}" ...attributes>
+<div
+  data-collapsed={{if @isCollapsed "true" "false"}}
+  class="{{this.baseClass}} {{this.skin}} {{this.position}}" ...attributes>
   {{yield}}
 </div>

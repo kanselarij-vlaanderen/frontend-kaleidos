@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 
 /**
  *
+ * @argument {Boolean} isCollapsed
  * @argument {String} skin
  * @argument {String} position: Position can be "left" or "right"
  */
