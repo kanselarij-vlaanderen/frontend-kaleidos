@@ -1,6 +1,6 @@
 <WebComponents::AuTabs {{did-update this.checkExistance this.agendaitem}} data-test-agendaitem-nav-tabs>
-  <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.index" data-test-agendaitem-nav-case-tab>{{capitalize (t "case")}}</WebComponents::AuTab>
-  <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.documents" data-test-agendaitem-nav-documents-tab>{{capitalize (t "documents")}}</WebComponents::AuTab>
+  <Auk::Tab @route="agenda.agendaitems.agendaitem.index" data-test-agendaitem-nav-case-tab>{{capitalize (t "case")}}</Auk::Tab>
+  <Auk::Tab @route="agenda.agendaitems.agendaitem.documents" data-test-agendaitem-nav-documents-tab>{{capitalize (t "documents")}}</Auk::Tab>
   {{#if (not this.agendaitem.isApproval) }}
     {{#if
       (or
@@ -8,21 +8,21 @@
         (and @meetingIsConcluded this.decisionsExist)
       )
     }}
-      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.decisions" data-test-agendaitem-nav-decision-tab>{{capitalize (t "decision")}}</WebComponents::AuTab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.decisions" data-test-agendaitem-nav-decision-tab>{{capitalize (t "decision")}}</Auk::Tab>
     {{/if}}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.newsItemExists))
     }}
-      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.news-item" data-test-agendaitem-nav-newsletter-tab>{{capitalize (t "newsletter")}}</WebComponents::AuTab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.news-item" data-test-agendaitem-nav-newsletter-tab>{{capitalize (t "newsletter")}}</Auk::Tab>
     {{/if}}
     {{#if
       (or
       this.currentSession.isEditor
       (and @meetingIsConcluded this.pressAgendaitemExists))
     }}
-      <WebComponents::AuTab @route="agenda.agendaitems.agendaitem.press-agenda" data-test-agendaitem-nav-press-agenda-tab>{{capitalize (t "agendaitem-press-agenda")}}</WebComponents::AuTab>
+      <Auk::Tab @route="agenda.agendaitems.agendaitem.press-agenda" data-test-agendaitem-nav-press-agenda-tab>{{capitalize (t "agendaitem-press-agenda")}}</Auk::Tab>
     {{/if}}
   {{/if}}
 </WebComponents::AuTabs>
