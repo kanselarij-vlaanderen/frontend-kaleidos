@@ -1,5 +1,10 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument {String} skin
+ * @argument {String} position: Position can be "left" or "right"
+ */
 export default class Sidebar extends Component {
   baseClass = 'auk-sidebar';
   get skin() {
