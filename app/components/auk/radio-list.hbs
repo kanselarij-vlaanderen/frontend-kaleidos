@@ -1,3 +1,9 @@
 <div class="auk-radio-list {{this.layout}}" ...attributes>
-  {{yield}}
+  {{yield
+    (hash
+      Radio=(
+        component "auk/radio"
+        name=this.groupName)
+    )
+  }}
 </div>

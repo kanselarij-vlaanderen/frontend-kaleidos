@@ -37,10 +37,10 @@
   {{!-- BEGIN-SNIPPET radio-default --}}
   <fieldset>
     <legend class="auk-label">Label</legend>
-    <Auk::RadioList>
-      <Auk::Radio @label="Label 1" name="styleguide-radio-1" checked />
-      <Auk::Radio @label="Label 2" name="styleguide-radio-1" />
-      <Auk::Radio @label="Label 3" name="styleguide-radio-1" />
+    <Auk::RadioList as |List|>
+      <List.Radio @label="Label 1" checked />
+      <List.Radio @label="Label 2" />
+      <List.Radio @label="Label 3" />
     </Auk::RadioList>
   </fieldset>
   {{!-- END-SNIPPET --}}
@@ -52,10 +52,10 @@
   {{!-- BEGIN-SNIPPET radio-inline --}}
   <fieldset>
     <legend class="auk-label">Label</legend>
-    <Auk::RadioList @layout="inline">
-      <Auk::Radio @label="Label 1" name="styleguide-radio-2" checked />
-      <Auk::Radio @label="Label 2" name="styleguide-radio-2" />
-      <Auk::Radio @label="Label 3" name="styleguide-radio-2" />
+    <Auk::RadioList @layout="inline" as |List|>
+      <List.Radio @label="Label 1" checked />
+      <List.Radio @label="Label 2" />
+      <List.Radio @label="Label 3" />
     </Auk::RadioList>
   </fieldset>
   {{!-- END-SNIPPET --}}

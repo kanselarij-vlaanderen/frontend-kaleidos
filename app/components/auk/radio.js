@@ -6,6 +6,7 @@ import {
 import { warn } from '@ember/debug';
 
 /**
+ * A radio-button. Most often not to be used directly, but through the contextual component provided by Auk::RadioList.
  *
  * @argument {String} name
  * @argument {Boolean} checked
