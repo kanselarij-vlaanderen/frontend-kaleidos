@@ -1,6 +1,6 @@
 <Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav">
   <Auk::Toolbar>
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <Auk::Brand @logotype="Kaleidos" />
       </Auk::Toolbar::Item>
@@ -33,8 +33,8 @@
           {{/if}}
         </WebComponents::AuTabs>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{#if this.environmentName}}
         <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
@@ -114,6 +114,6 @@
           </Auk::ButtonLink>
         {{/if}}
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

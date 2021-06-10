@@ -76,7 +76,7 @@
   </div>
   {{#if isEditing}}
     <Auk::Toolbar>
-      <WebComponents::AuToolbar::Group @position="right">
+      <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <button type="button" class="auk-button auk-button--tertiary"
             {{action "cancelEditing"}}
@@ -93,7 +93,7 @@
             saveAction=(action "saveChanges" agendaitem.approvals)
           }}
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
+      </Auk::Toolbar::Group>
     </Auk::Toolbar>
   {{/if}}
 {{/if}}

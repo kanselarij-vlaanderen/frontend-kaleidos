@@ -2,7 +2,7 @@
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
-        <WebComponents::AuToolbar::Group @position="left">
+        <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
               {{#if (not @agendaitem.showAsRemark)}}
@@ -12,8 +12,8 @@
               {{/if}}
             </h4>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
           {{!-- TODO: for now the link-button is hidden while loading.
           A disabled state would be better to avoid flashing a new button in view once loaded. --}}
           {{#if (and @subcase this.loadCase.isIdle)}}
@@ -44,7 +44,7 @@
               />
             </Auk::Toolbar::Item>
           {{/if}}
-        </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
@@ -105,13 +105,13 @@
     {{#if @agendaitem.explanation }}
       <Auk::Modal::Footer @custom={{true}}>
         <Auk::Toolbar>
-          <WebComponents::AuToolbar::Group @position="left">
+          <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               <pre class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
                {{t "remark-title"}}: {{@agendaitem.explanation}}
               </pre>
             </Auk::Toolbar::Item>
-          </WebComponents::AuToolbar::Group>
+          </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </Auk::Modal::Footer>
     {{/if}}

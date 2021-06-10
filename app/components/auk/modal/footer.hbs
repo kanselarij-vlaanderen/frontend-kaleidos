@@ -3,7 +3,7 @@
     {{yield}}
   {{else}}
     <Auk::Toolbar @size="large">
-      <WebComponents::AuToolbar::Group @position="left">
+      <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
             data-test-au-modal-footer-cancel
@@ -12,12 +12,12 @@
             {{t "cancel"}}
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           {{yield}}
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
+      </Auk::Toolbar::Group>
     </Auk::Toolbar>
   {{/if}}
 </div>

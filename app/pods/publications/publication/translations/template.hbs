@@ -1,6 +1,6 @@
 <Auk::Navbar @border="bottom">
   <Auk::Toolbar @size="large">
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <WebComponents::AuTabs>
           <WebComponents::AuTab @route="publications.publication.translations.documents">
@@ -11,15 +11,15 @@
           </WebComponents::AuTab>
         </WebComponents::AuTabs>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Auk::Checkbox
           @label={{t "finished"}}
           @checked={{false}}
         />
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 {{outlet}}

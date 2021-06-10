@@ -1,5 +1,5 @@
 <Auk::Toolbar class="auk-u-mb-4">
-  <WebComponents::AuToolbar::Group @position="left">
+  <Auk::Toolbar::Group @position="left">
     <Auk::Toolbar::Item>
       <h3 class="auk-toolbar__title">
         {{t "agendaitem-case"}}
@@ -10,8 +10,8 @@
         <Auk::Pill @skin="danger" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
       </Auk::Toolbar::Item>
     {{/if}}
-  </WebComponents::AuToolbar::Group>
-  <WebComponents::AuToolbar::Group @position="right">
+  </Auk::Toolbar::Group>
+  <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
       {{#if this.currentSession.isEditor}}
         {{#if (not this.agenda.isFinal)}}
@@ -23,7 +23,7 @@
         {{/if}}
       {{/if}}
     </Auk::Toolbar::Item>
-  </WebComponents::AuToolbar::Group>
+  </Auk::Toolbar::Group>
 </Auk::Toolbar>
 {{!-- TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing --}}
 {{#if this.isEditingAgendaItemTitles}}

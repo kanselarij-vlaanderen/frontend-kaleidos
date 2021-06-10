@@ -1,13 +1,13 @@
 <Auk::Panel>
   <Auk::Panel::Header>
     <Auk::Toolbar>
-      <WebComponents::AuToolbar::Group @position="left">
+      <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
+      </Auk::Toolbar::Group>
       {{#if @showEditButton}}
-        <WebComponents::AuToolbar::Group @position="right">
+        <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary"
@@ -18,7 +18,7 @@
               {{t "edit-2"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Group>
       {{/if}}
     </Auk::Toolbar>
   </Auk::Panel::Header>

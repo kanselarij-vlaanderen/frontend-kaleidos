@@ -16,7 +16,7 @@
       <div class="auk-u-m-8">
         <div class="auk-u-mb-4">
           <Auk::Toolbar>
-            <WebComponents::AuToolbar::Group @position="center">
+            <Auk::Toolbar::Group @position="center">
               <Auk::Toolbar::Item>
                 <button type="button" class="auk-button auk-button--secondary"
                   {{action "addTreatment" agendaitemRow}}
@@ -31,7 +31,7 @@
                   </span>
                 </button>
               </Auk::Toolbar::Item>
-            </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}

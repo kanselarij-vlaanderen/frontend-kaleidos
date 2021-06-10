@@ -48,7 +48,7 @@
     }}
   </div>
   <Auk::Toolbar>
-    <WebComponents::AuToolbar::Group @position="right">
+    <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <a href="" class="auk-button-link" {{action "resetValuesAndCancelCreation"}}>
           <span class="auk-button__content">
@@ -63,6 +63,6 @@
           saveAction=(action "createPerson")
         }}
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 {{/if}}

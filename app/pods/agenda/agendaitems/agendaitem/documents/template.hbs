@@ -1,13 +1,13 @@
 <div class="auk-u-mb-10">
   <Auk::Toolbar class="auk-u-mb-4">
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <h4 class="auk-toolbar__title">
           {{t "documents"}}
         </h4>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{#if
         (and
           this.currentSession.isEditor
@@ -36,7 +36,7 @@
           </Auk::Toolbar::Item>
         {{/if}}
       {{/if}}
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
 

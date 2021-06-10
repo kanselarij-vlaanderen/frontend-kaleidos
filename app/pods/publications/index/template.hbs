@@ -1,13 +1,13 @@
 <Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4 class="auk-toolbar-complex__title">{{t "publications"}}</h4>
         </div>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         <Publications::PublicationCaseSearch/>
       </Auk::Toolbar::Item>
@@ -22,7 +22,7 @@
           {{t "publications-new"}}
         </Auk::Button>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 <div class="auk-scroll-wrapper">
@@ -214,7 +214,7 @@
 </div>
 <div class="auk-u-mx-4">
   <Auk::Toolbar>
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <Auk::Pagination
           @page={{this.page}}
@@ -225,8 +225,8 @@
           @onPreviousPage={{this.prevPage}}
         />
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
         {{t "amount-showed"}}
       </Auk::Toolbar::Item>
@@ -259,7 +259,7 @@
           />
         </AttachPopover>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </div>
 

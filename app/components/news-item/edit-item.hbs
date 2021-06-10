@@ -80,7 +80,7 @@
 
 </div>
 <Auk::Toolbar>
-  <WebComponents::AuToolbar::Group @position="right">
+  <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
       <a href="" class="auk-button-link" {{action "cancelEditing"}}>
         <span class="auk-button__content">
@@ -96,7 +96,7 @@
         saveAction=(action "trySaveChanges")
       }}
     </Auk::Toolbar::Item>
-  </WebComponents::AuToolbar::Group>
+  </Auk::Toolbar::Group>
 </Auk::Toolbar>
 {{#if isTryingToSave}}
   {{web-components/vl-modal-verify

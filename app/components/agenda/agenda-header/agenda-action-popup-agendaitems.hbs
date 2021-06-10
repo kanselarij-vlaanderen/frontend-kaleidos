@@ -8,7 +8,7 @@
           title=(if agendaitem.shortTitle agendaitem.shortTitle agendaitem.title)
         }}
         <Auk::Toolbar>
-          <WebComponents::AuToolbar::Group @position="left">
+          <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
               {{#if (await agendaitem.checkAdded)}}
                 <Auk::Icon @name="calendar-new" @skin="muted" />
@@ -25,15 +25,15 @@
                 <Auk::Icon @name="lock-closed" @skin="muted" />
               {{/if}}
             </Auk::Toolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <p class="{{agendaitem.formallyOkToShow.classNames}}">
                 <i class="{{agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
                 {{agendaitem.formallyOkToShow.label}}
               </p>
             </Auk::Toolbar::Item>
-          </WebComponents::AuToolbar::Group>
+          </Auk::Toolbar::Group>
         </Auk::Toolbar>
       </div>
     </Auk::List::Item>

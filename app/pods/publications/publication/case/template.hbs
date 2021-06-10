@@ -7,16 +7,16 @@
         <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
           <Auk::Panel::Header>
             <Auk::Toolbar>
-              <WebComponents::AuToolbar::Group @position="left">
+              <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
-              <WebComponents::AuToolbar::Group @position="right">
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <Auk::Button @skin="tertiary" @icon="close" @layout="icon-only" {{on "click" this.cancelEditingInscription}} data-test-publication-not-edit-inscription-button />
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
@@ -31,7 +31,7 @@
           </Auk::Panel::Body>
           <Auk::Panel::Footer>
             <Auk::Toolbar>
-              <WebComponents::AuToolbar::Group @position="right">
+              <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <Auk::Button @skin="borderless" {{on "click" this.cancelEditingInscription}} data-test-publication-cancel-inscription>{{t "cancel"}}</Auk::Button>
                 </Auk::Toolbar::Item>
@@ -45,7 +45,7 @@
                     {{t "save"}}
                   </Auk::Button>
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Footer>
         </Auk::Panel>
@@ -53,7 +53,7 @@
         <Auk::Panel data-test-publication-case-panel-case>
           <Auk::Panel::Header>
             <Auk::Toolbar>
-              <WebComponents::AuToolbar::Group @position="left">
+              <Auk::Toolbar::Group @position="left">
                 <Auk::Toolbar::Item>
                   <h4 class="auk-panel__title">
                     {{t
@@ -63,8 +63,8 @@
                     }}
                   </h4>
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
-              <WebComponents::AuToolbar::Group @position="right">
+              </Auk::Toolbar::Group>
+              <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   {{#if this.latestSubcaseOnMeeting}}
                     <Auk::ButtonLink
@@ -80,7 +80,7 @@
                     <Auk::Button @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInscriptionInEditMode}} data-test-publication-edit-inscription-button />
                   {{/if}}
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Group>
             </Auk::Toolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
@@ -101,13 +101,13 @@
       <Auk::Panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
-            <WebComponents::AuToolbar::Group @position="left">
+            <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
               </Auk::Toolbar::Item>
-            </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Group>
             {{#if (not this.latestSubcaseOnMeeting)}}
-              <WebComponents::AuToolbar::Group @position="right">
+              <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <Auk::Button
                     @skin="tertiary"
@@ -118,7 +118,7 @@
                     {{t "create-mandatee"}}
                   </Auk::Button>
                 </Auk::Toolbar::Item>
-              </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Group>
             {{/if}}
           </Auk::Toolbar>
         </Auk::Panel::Header>
@@ -221,14 +221,14 @@
       <Auk::Panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
-            <WebComponents::AuToolbar::Group @position="left">
+            <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
                 <h4 class="auk-panel__title">
                   {{t "contacts"}}
                 </h4>
               </Auk::Toolbar::Item>
-            </WebComponents::AuToolbar::Group>
-            <WebComponents::AuToolbar::Group @position="right">
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 <Auk::Button
                   @skin="tertiary"
@@ -239,7 +239,7 @@
                   {{t "add-contact"}}
                 </Auk::Button>
               </Auk::Toolbar::Item>
-            </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
         {{#if (not this.contactPersons) }}
@@ -368,20 +368,20 @@
     {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
     <Auk::Modal::Footer @custom={{true}}>
       <Auk::Toolbar>
-        <WebComponents::AuToolbar::Group @position="left">
+        <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.closeContactPersonModal}}>
               {{t "cancel"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button @skin="primary" @icon="add" @size="small" {{on "click" this.addNewContactPerson}} data-test-add-contactperson-submit-button>
               {{t "add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
@@ -410,14 +410,14 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
       <Auk::Toolbar>
-        <WebComponents::AuToolbar::Group @position="left">
+        <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.closeMandateeModal}}>
               {{t "cancel"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="primary"
@@ -429,7 +429,7 @@
               {{t "add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
@@ -459,7 +459,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
       <Auk::Toolbar>
-        <WebComponents::AuToolbar::Group @position="left">
+        <Auk::Toolbar::Group @position="left">
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="borderless"
@@ -468,8 +468,8 @@
               {{t "cancel"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="primary"
@@ -481,7 +481,7 @@
               {{t "add"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
-        </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>

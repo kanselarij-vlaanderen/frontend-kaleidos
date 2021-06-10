@@ -67,7 +67,7 @@
   {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
   <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar>
-      <WebComponents::AuToolbar::Group @position="left">
+      <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
@@ -77,8 +77,8 @@
             {{t "cancel"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary"
@@ -98,7 +98,7 @@
             {{t "filter-content"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
-      </WebComponents::AuToolbar::Group>
+      </Auk::Toolbar::Group>
     </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>

@@ -5,7 +5,7 @@
 </div>
 {{#if this.currentSession.isEditor}}
   <Auk::Toolbar>
-    <WebComponents::AuToolbar::Group @position="left">
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
         <button
           type="button"
@@ -23,7 +23,7 @@
           </span>
         </button>
       </Auk::Toolbar::Item>
-    </WebComponents::AuToolbar::Group>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 {{/if}}
 {{#each this.treatments as |treatment|}}
