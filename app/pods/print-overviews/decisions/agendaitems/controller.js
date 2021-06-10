@@ -62,8 +62,11 @@ export default Controller.extend({
       const agendaitem = await this.store.findRecord('agendaitem', agendaitemRow.content.id, {
         include: 'agenda,agenda.created-for',
       });
-      const startDate = agendaitem.get('agenda.createdFor').get('plannedStart');
-      const subcase =  agendaitem.get('agendaActivity.subcase');
+      const agenda = await agendaitem.agenda;
+      const meeting = await agenda.createdFor;
+      const startDate = meeting.plannedStart;
+      const agendaActivity = await agendaitem.agendaActivity;
+      const subcase =  await agendaActivity.subcase;
       const treatment = this.store.createRecord('agenda-item-treatment', {
         created: now,
         modified: now,

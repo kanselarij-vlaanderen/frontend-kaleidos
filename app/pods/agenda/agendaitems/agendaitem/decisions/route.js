@@ -3,16 +3,15 @@ import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
-    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
+    this.agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     return await this.store.query('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': agendaitem.id,
+      'filter[agendaitem][:id:]': this.agendaitem.id,
       include: 'report',
     });
   }
 
-  afterModel() {
-    this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    this.meeting = this.modelFor('agenda').meeting;
+  async afterModel() {
+    this.meeting = await this.modelFor('agenda').meeting;
   }
 
   setupController(controller) {
