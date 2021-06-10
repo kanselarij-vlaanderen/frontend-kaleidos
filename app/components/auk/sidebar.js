@@ -4,6 +4,7 @@ import Component from '@glimmer/component';
  *
  * @argument {Boolean} isCollapsed
  * @argument {String} skin
+ * @argument {String} size: Size can be (default, none), "small", "large", "xlarge"
  * @argument {String} position: Position can be "left" or "right"
  */
 export default class Sidebar extends Component {
@@ -14,6 +15,13 @@ export default class Sidebar extends Component {
       return `${this.baseClass}--${this.args.skin}`;
     }
     return `${this.baseClass}--${defaultSkin}`;
+  }
+
+  get size() {
+    if (this.args.size) {
+      return `${this.baseClass}--${this.args.size}`;
+    }
+    return null;
   }
 
   get position() {
