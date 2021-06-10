@@ -16,7 +16,7 @@
           {{/if}}
           <Auk::Tab
             @route="agendas.overview"
-            @currentWhen="agendas agenda print-overviews.decisions print-overviews.press-agenda"
+            @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
             data-test-m-header-agendas
           >
             {{t "agendas"}}
@@ -25,7 +25,7 @@
           {{#if this.currentSession.isViewer}}
             <Auk::Tab
               @route="newsletters"
-              @currentWhen="newsletters newsletter print-overviews.newsletter"
+              @current-when="newsletters newsletter print-overviews.newsletter"
               data-test-m-header-newsletters
             >
               {{t "newsletter"}}
@@ -33,7 +33,7 @@
           {{/if}}
           <Auk::Tab
             @route="search.index"
-            @currentWhen="search"
+            @current-when="search"
             data-test-m-header-search
           >
             <Auk::Icon @name="search" class="auk-icon--search" />
