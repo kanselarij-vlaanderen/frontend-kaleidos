@@ -88,7 +88,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const filePromises = translationRequest.selectedPieces.mapBy('file');
     const files = yield Promise.all(filePromises);
 
-    const folder = yield this.store.findRecord('mail-folder', CONFIG.EMAIL.OUTBOX.ID);
+    const folder = yield this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
     const mail = yield this.store.createRecord('email', {
       to: CONFIG.EMAIL.TO.translationsEmail,
       from: CONFIG.EMAIL.DEFAULT_FROM,
