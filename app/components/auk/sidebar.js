@@ -1,18 +1,21 @@
 import Component from '@glimmer/component';
 
 export default class Sidebar extends Component {
+  baseClass = 'auk-sidebar';
   get skin() {
+    const defaultSkin = 'gray-100';
     if (this.args.skin) {
-      return `auk-sidebar--${this.args.skin}`;
+      return `${this.baseClass}--${this.args.skin}`;
     }
-    return 'auk-sidebar--gray-100';
+    return `${this.baseClass}--${defaultSkin}`;
   }
 
   get position() {
+    const defaultPosition = 'left';
     if (this.args.position) {
-      return `auk-sidebar--${this.args.position}`;
+      return `${this.baseClass}--${this.args.position}`;
     }
-    return 'auk-sidebar--left';
+    return `${this.baseClass}--${defaultPosition}`;
   }
   // TODO css was missing, check later
 }
