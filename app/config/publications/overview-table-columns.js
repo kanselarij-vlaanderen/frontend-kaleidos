@@ -14,8 +14,8 @@ export default [
   },
   {
     keyName: 'decisionDate',
-    translationKey: 'decision-date',
-    translationKeySmall: 'decision-date',
+    translationKey: 'publications-table-decision-date',
+    translationKeySmall: 'publications-table-decision-date-small',
     showByDefault: true,
     sortKey: 'agenda-item-treatment.start-date',
   },
