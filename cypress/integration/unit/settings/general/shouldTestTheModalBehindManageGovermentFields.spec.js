@@ -14,14 +14,14 @@ context('Manage goverment field tests', () => {
   it('Should open the model behind manage goverment fields', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageGovermentFields).click();
+    cy.get(settings.overview.manageGovermentFields).click();
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
   });
 
   it('Should open the model behind manage goverment fields and close it', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageGovermentFields).click();
+    cy.get(settings.overview.manageGovermentFields).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get(modal.baseModal.close).click();
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');

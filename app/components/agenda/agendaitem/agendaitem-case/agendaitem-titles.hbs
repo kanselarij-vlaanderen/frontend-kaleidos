@@ -59,47 +59,47 @@
             </span>
           </div>
         {{/if}}
-        <WebComponents::AuPillList>
+        <Auk::PillList>
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{@subcase.subcaseName}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
             {{#if @agendaitem.retracted}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{t "postponed-item"}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
           {{else}}
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
-                <WebComponents::AuPill @skin="success" @icon="visible">
+                <Auk::Pill @skin="success" @icon="visible">
                   {{t "visible-in-newsletter"}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               {{else}}
-                <WebComponents::AuPill @skin="danger" @icon="not-visible">
+                <Auk::Pill @skin="danger" @icon="not-visible">
                   {{t "hidden-in-newsletter"}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               {{/if}}
             {{else}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{t "no-newsletter-info"}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
           {{/if}}
           {{#if
             (and @agendaitem.isDesignAgenda
                     (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
           }}
-            <WebComponents::AuPill
+            <Auk::Pill
               @skin={{@agendaitem.formallyOkToShow.svg.color}}
               @icon={{@agendaitem.formallyOkToShow.svg.icon}}
             >
               {{@agendaitem.formallyOkToShow.label}}
-            </WebComponents::AuPill>
+            </Auk::Pill>
           {{/if}}
-        </WebComponents::AuPillList>
+        </Auk::PillList>
       </div>
     </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}

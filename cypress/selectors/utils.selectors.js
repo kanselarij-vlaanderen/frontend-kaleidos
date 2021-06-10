@@ -1,4 +1,6 @@
 const selectors = {
+  // This file is for reusable components that don't fit in with other categories (like agenda or documents)
+
   datePickerIcon: '[data-test-vlc-vl-datepickerbutton]',
   checkbox: '[data-test-vl-checkbox]',
   checkboxLabel: '[data-test-vl-checkbox-label]',

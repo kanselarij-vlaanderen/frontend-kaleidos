@@ -52,7 +52,7 @@
   </div>
 {{/if}}
 <div class="auk-u-mb-2">
-  <p data-test-newsletter-print-item-proposal>
+  <p data-test-newsletter-item-content-print-item-proposal>
     {{await newsletterInfo.newsletterProposal}}
   </p>
 </div>
@@ -82,14 +82,14 @@
 }}
   <div class="auk-u-mb-2">
     <div class="auk-u-mt-2">
-      <WebComponents::AuPillList>
+      <Auk::PillList>
         {{#each
           (await newsletterInfo.themes)
         as |theme|
         }}
-          <WebComponents::AuPill>{{theme.label}}</WebComponents::AuPill>
+          <Auk::Pill>{{theme.label}}</Auk::Pill>
         {{/each}}
-      </WebComponents::AuPillList>
+      </Auk::PillList>
     </div>
   </div>
 {{else if (and allowEditing newsletterInfo.richtext)}}

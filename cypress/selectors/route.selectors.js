@@ -21,6 +21,15 @@ const selectors = {
     },
   },
 
+  // agendas/overview/template.hbs
+  agendasOverview: {
+    filter: {
+      container: '[data-test-route-agendas-overview-filter-container]',
+      input: '[data-test-route-agendas-overview-filter-input]',
+      button: '[data-test-route-agendas-overview-filter-button]',
+    },
+  },
+
   /**
     ROUTE AGENDA
   */
