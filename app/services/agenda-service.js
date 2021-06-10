@@ -151,7 +151,10 @@ export default Service.extend({
     for (const piece of payload.data) {
       let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
       if (!pieceFromStore) {
-        pieceFromStore = this.store.queryRecord(singularize(piece.type), piece.id);
+        pieceFromStore = await this.store.queryOne(singularize(piece.type),
+          {
+            'filter[:id:]': piece.id,
+          });
       }
       piecesFromStore.push(pieceFromStore);
     }
