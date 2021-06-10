@@ -35,10 +35,9 @@ export default class NewPublicationModal extends Component {
   constructor() {
     super(...arguments);
     this.initPublicationNumber.perform();
-    if (this.args.case) {
+    if (this.isViaCouncilOfMinisters) {
       this.shortTitle = this.args.case.shortTitle;
       this.longTitle = this.args.case.title;
-
       this.decisionDate = this.args.agendaItemTreatment.startDate;
     }
   }
