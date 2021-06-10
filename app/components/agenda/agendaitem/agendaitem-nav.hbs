@@ -1,4 +1,4 @@
-<WebComponents::AuTabs {{did-update this.checkExistance this.agendaitem}} data-test-agendaitem-nav-tabs>
+<Auk::Tabs {{did-update this.checkExistance this.agendaitem}} data-test-agendaitem-nav-tabs>
   <Auk::Tab @route="agenda.agendaitems.agendaitem.index" data-test-agendaitem-nav-case-tab>{{capitalize (t "case")}}</Auk::Tab>
   <Auk::Tab @route="agenda.agendaitems.agendaitem.documents" data-test-agendaitem-nav-documents-tab>{{capitalize (t "documents")}}</Auk::Tab>
   {{#if (not this.agendaitem.isApproval) }}
@@ -25,4 +25,4 @@
       <Auk::Tab @route="agenda.agendaitems.agendaitem.press-agenda" data-test-agendaitem-nav-press-agenda-tab>{{capitalize (t "agendaitem-press-agenda")}}</Auk::Tab>
     {{/if}}
   {{/if}}
-</WebComponents::AuTabs>
+</Auk::Tabs>

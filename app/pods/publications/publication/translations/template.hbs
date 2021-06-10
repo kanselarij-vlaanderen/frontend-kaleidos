@@ -2,14 +2,14 @@
   <WebComponents::AuToolbar @size="large">
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
-        <WebComponents::AuTabs>
+        <Auk::Tabs>
           <Auk::Tab @route="publications.publication.translations.documents">
             {{capitalize (t "documents")}}
           </Auk::Tab>
           <Auk::Tab @route="publications.publication.translations.requests">
             {{capitalize (t "requests")}}
           </Auk::Tab>
-        </WebComponents::AuTabs>
+        </Auk::Tabs>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
