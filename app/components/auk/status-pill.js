@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument {String} status: Status can be "in-progress" (default), "not-started", "done", "error"
+ */
 export default class StatusPill extends Component {
   baseClass = 'auk-status-pill';
 
