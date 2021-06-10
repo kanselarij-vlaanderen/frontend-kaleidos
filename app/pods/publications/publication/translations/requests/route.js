@@ -20,9 +20,4 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
     controller.translationSubcase = this.translationSubcase;
     controller.publicationFlow = this.publicationFlow;
   }
-
-  @action
-  refresh() {
-    super.refresh();
-  }
 }
