@@ -1,7 +1,13 @@
 <li class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}}" ...attributes>
   <LinkTo
-    @route={{this.route}}
+    @route={{@route}}
+    @models={{this.models}}
+    @disabled={{@disabled}}
+    @activeClass={{@activeClass}}
     @current-when={{@currentWhen}}
+    @preventDefault={{@preventDefault}}
+    @tagName={{@tagName}}
+    @query={{@query}}
   >
     <span class="auk-tabs__tab-inner">
       <WebComponents::AuTab::Innerlayout
