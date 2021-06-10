@@ -35,18 +35,18 @@
             </div>
           </div>
           <div class="auk-toolbar-complex__right">
-            <div class="auk-toolbar-complex__item" data-test-agendas-filter data-children-count="1">
+            <div class="auk-toolbar-complex__item" data-test-route-agendas-overview-filter-container data-children-count="1">
               {{input
                 type="text"
                 id=id
-                data-test-agendas-filter-input=true
+                data-test-route-agendas-overview-filter-input=true
                 class="auk-input"
                 value=dateFilter
                 placeholder="bv. 01/2020"
               }}
               <button class="auk-button auk-button--secondary auk-button--icon"
                 type="submit"
-                data-test-agendas-filter-button
+                data-test-route-agendas-overview-filter-button
                 onclick={{action "setDateFilter" dateFilter}}
               >
                 <span class="auk-button__content">

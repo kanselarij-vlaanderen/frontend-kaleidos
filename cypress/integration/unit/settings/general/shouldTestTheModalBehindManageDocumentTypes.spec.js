@@ -14,14 +14,14 @@ context('Manage document tests', () => {
   it('Should open the model behind manage document types', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageDocumentTypes).click();
+    cy.get(settings.overview.manageDocumentTypes).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage document types and close it', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageDocumentTypes).click();
+    cy.get(settings.overview.manageDocumentTypes).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get(modal.baseModal.close).click();
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
