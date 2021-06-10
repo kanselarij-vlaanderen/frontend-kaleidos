@@ -8,32 +8,6 @@
           time=(moment-format activity.startDate "H:mm")
         }}
       >
-        {{!-- Button currently placed here as accordion doesn't allow actions yet --}}
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <Auk::Button @layout="icon-only" @skin="secondary" @icon="more"/>
-            <AttachPopover
-                    @renderInPlace={{false}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="bottom">
-              <Auk::Dropdown>
-                <WebComponents::AuDropdown::Item>
-                  {{t "download-documents"}}
-                </WebComponents::AuDropdown::Item>
-                <WebComponents::AuDropdown::Item
-                        @skin="danger">
-                  {{t "cancel-request"}}
-                </WebComponents::AuDropdown::Item>
-              </Auk::Dropdown>
-            </AttachPopover>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-
       <div class="auk-o-grid">
         <div class="auk-o-grid-col-6">
           <div class="auk-u-mb-2">
