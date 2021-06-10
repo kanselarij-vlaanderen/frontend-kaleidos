@@ -1,5 +1,8 @@
 import Component from '@glimmer/component';
-import { isEmpty } from '@ember/utils';
+import {
+  isEmpty,
+  isPresent
+} from '@ember/utils';
 import { warn } from '@ember/debug';
 
 /**
@@ -12,7 +15,7 @@ import { warn } from '@ember/debug';
 export default class Radio extends Component {
   constructor() {
     super(...arguments);
-    warn(`Using ${this.constructor.name} without providing @name is most likely to be an oversight`, isEmpty(this.args.name), {
+    warn(`Using ${this.constructor.name} without providing @name is most likely to be an oversight`, isPresent(this.args.name), {
       id: 'auk.name-argument',
     });
   }
