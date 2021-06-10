@@ -1,20 +1,6 @@
-<span class='auk-status-pill {{this.status}}' ...attributes>
-  {{#if @status}}
-    {{#if (eq @status 'in-progress')}}
-      <Auk::Icon @name="clock" />
-    {{/if}}
-    {{#if (eq @status 'not-started')}}
-      <Auk::Icon @name="not-started" />
-    {{/if}}
-
-    {{#if (eq @status 'done')}}
-      <Auk::Icon @name="circle-check" />
-    {{/if}}
-    {{#if (eq @status 'error')}}
-      <Auk::Icon @name="circle-error" />
-    {{/if}}
-  {{else}}
-    <Auk::Icon @name="clock" />
+<span class="{{this.baseClass}} {{this.statusClass}}" ...attributes>
+  <Auk::Icon @name={{this.iconName}} />
+  {{#if (has-block)}}
+    <span class="auk-status-pill__label">{{yield}}</span>
   {{/if}}
-  <span class="auk-status-pill__label">{{yield}}</span>
 </span>
