@@ -8,51 +8,51 @@
           time=(moment-format activity.startDate "H:mm")
         }}
       >
-      <div class="auk-o-grid">
-        <div class="auk-o-grid-col-6">
-          <div class="auk-u-mb-2">
-            <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
-            <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
-          </div>
-          <div class="auk-u-mb-2">
-            <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
-            <p>{{activity.email.subject}}</p>
-          </div>
-          <div class="auk-u-mb-2">
-            <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-mail-header"}}</p>
-            <div class="auk-box">
-              <p style="white-space:pre-line;">
-                {{activity.email.message}}
-              </p>
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <div class="auk-u-mb-2">
+              <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
+              <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
+            </div>
+            <div class="auk-u-mb-2">
+              <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
+              <p>{{activity.email.subject}}</p>
+            </div>
+            <div class="auk-u-mb-2">
+              <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-mail-header"}}</p>
+              <div class="auk-box">
+                <p style="white-space:pre-line;">
+                  {{activity.email.message}}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="auk-o-grid-col-6">
-          <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
-          <Auk::List @isBordered="true" class="auk-list--view">
-            {{#each activity.usedPieces as |piece|}}
-              <Auk::List::Item @skin="gray-100">
-                <div class="auk-u-ml-2">
-                  <Auk::Icon @name="document" @skin="muted-dark" />
-                </div>
-                <div class="auk-u-mx-2">
-                  <span class="auk-u-text-bold">{{piece.name}}</span>
-                  <div class="auk-u-muted auk-u-text-small">
-                    {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+          <div class="auk-o-grid-col-6">
+            <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
+            <Auk::List @isBordered="true" class="auk-list--view">
+              {{#each activity.usedPieces as |piece|}}
+                <Auk::List::Item @skin="gray-100">
+                  <div class="auk-u-ml-2">
+                    <Auk::Icon @name="document" @skin="muted-dark" />
                   </div>
-                </div>
-                <Auk::Button
-                  @layout="icon-only"
-                  @icon="book"
-                  @skin="borderless"
-                  @href={{piece.viewDocumentURL}}
-                  target="_blank"
-                />
-              </Auk::List::Item>
-            {{/each}}
-          </Auk::List>
+                  <div class="auk-u-mx-2">
+                    <span class="auk-u-text-bold">{{piece.name}}</span>
+                    <div class="auk-u-muted auk-u-text-small">
+                      {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                    </div>
+                  </div>
+                  <Auk::Button
+                    @layout="icon-only"
+                    @icon="book"
+                    @skin="borderless"
+                    @href={{piece.viewDocumentURL}}
+                    target="_blank"
+                  />
+                </Auk::List::Item>
+              {{/each}}
+            </Auk::List>
+          </div>
         </div>
-      </div>
       </Auk::Accordion>
     </div>
   {{else}}
