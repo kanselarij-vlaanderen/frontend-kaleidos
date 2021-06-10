@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
-
+import { isPresent } from '@ember/utils';
 
 export default class Tab extends Component {
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
@@ -25,7 +25,7 @@ export default class Tab extends Component {
   }
 
   get counter() {
-    if (this.args.counter) {
+    if (isPresent(this.args.counter)) {
       return this.args.counter;
     }
     return 0;
