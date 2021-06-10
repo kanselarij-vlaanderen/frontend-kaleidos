@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 /**
  *
  * @argument {Boolean} isCollapsed
- * @argument {String} skin
+ * @argument {String} skin: Skin can be "gray-100", "gray-200" or "white"
  * @argument {String} size: Size can be (default, none), "small", "large", "xlarge"
  * @argument {String} position: Position can be "left" or "right"
  */
