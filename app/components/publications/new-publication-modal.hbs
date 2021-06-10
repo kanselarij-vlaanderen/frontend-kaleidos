@@ -71,10 +71,16 @@
           <Auk::Label for="decisionDate">
             {{t "decision-date"}}
           </Auk::Label>
-          <Auk::Datepicker
-                  @date={{this.decisionDate}}
-                  @disabled={{this.isViaCouncilOfMinisters}}
-                  @onChange={{this.setDecisionDate}}/>
+          {{#if this.isViaCouncilOfMinisters}}
+            <span class="auk-u-muted">
+              {{moment-format this.decisionDate "DD-MM-YYYY"}}
+            </span>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.decisionDate}}
+              @disabled={{this.isViaCouncilOfMinisters}}
+              @onChange={{this.setDecisionDate}}/>
+          {{/if}}
         </div>
         <div class='auk-form-group' style="max-width: 30rem;">
           <Auk::Label for="publicationDueDate">
