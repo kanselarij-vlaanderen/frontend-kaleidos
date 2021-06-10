@@ -132,9 +132,8 @@ export default Component.extend({
         await this.newsletterService.createNewsItemForMeeting(newMeeting);
         // TODO: Should fix sessionNrBug
         // await this.agendaService.assignNewSessionNumbers();
-      } catch (err) {
+      } catch (err) { // eslint-disable-line no-unused-vars
         this.toaster.error();
-        throw err;
       } finally {
         this.set('isLoading', false);
         this.successfullyAdded();
