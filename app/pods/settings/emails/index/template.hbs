@@ -94,7 +94,7 @@
           <WebComponents::AuTextarea
             id="emailMessage"
             @rows="15"
-            @value={{await email.content}}
+            @value={{await email.message}}
             {{on "change" (fn this.setMailContent email)}}
             data-test-email-content-textarea
           />

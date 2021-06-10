@@ -96,7 +96,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
       attachments: files,
       requestActivity: requestActivity,
       subject: translationRequest.subject,
-      content: translationRequest.message,
+      message: translationRequest.message,
     });
     yield mail.save();
 

@@ -245,6 +245,7 @@
   "no-case-type": "Geen dossiertype",
   "no-decision": "Nog geen beslissing voor dit agendapunt.",
   "no-documents-yet": "Er zijn nog geen documenten toegevoegd.",
+  "no-translation-activities-yet": "Er zijn nog geen vertalingsactiviteiten aangevraagd.",
   "no-linked-documents-yet": "Er zijn geen reeds bezorgde documenten gekoppeld.",
   "no-domains-yet": "Er zijn nog geen beleidsvelden toegevoegd.",
   "no-ise-codes-yet": "Er zijn nog geen geselecteerde inhoudelijke structuurelementen.",
@@ -859,7 +860,7 @@
   "translation-subcase": "vertalingsdossier",
   "translation-activitie": "vertalingsactiviteit",
   "request-activitie": "aanvraag activiteit",
-
+  "translation-request-for": "Vertaalaanvraag op {date} om {time}",
   "for-publish-preview": "Dient voor drukproef",
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
