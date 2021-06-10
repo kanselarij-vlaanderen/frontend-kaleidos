@@ -14,14 +14,14 @@ context('Manage ISE codes tests', () => {
   it('Should open the model behind manage case types', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageCaseTypes).click();
+    cy.get(settings.overview.manageCaseTypes).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage case types and close it', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageCaseTypes).click();
+    cy.get(settings.overview.manageCaseTypes).click();
     cy.get(modal.baseModal.dialogWindow).should('be.visible');
     cy.get(modal.baseModal.close).click();
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');

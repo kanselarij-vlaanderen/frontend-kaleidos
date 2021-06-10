@@ -70,7 +70,7 @@ as |dropzone|
       </p>
     {{/if}}
     {{#if (or this.uploadIsRunning this.uploadIsCompleted)}}
-      <WebComponents::AuProgressBar @progress={{if this.uploadIsCompleted 100 this.fileQueue.progress}}/>
+      <Auk::ProgressBar @progress={{if this.uploadIsCompleted 100 this.fileQueue.progress}} />
     {{/if}}
   </div>
 </FileDropzone>
