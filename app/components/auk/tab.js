@@ -24,10 +24,7 @@ export default class Tab extends Component {
     return [];
   }
 
-  get counter() {
-    if (isPresent(this.args.counter)) {
-      return this.args.counter;
-    }
-    return 0;
+  get hasCounter() {
+    return isPresent(this.args.counter); // In order to be able to supply 0
   }
 }
