@@ -2,7 +2,8 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
-import auComponents from '../../selectors/au-component-selectors';
+import auComponents from '../../selectors/au-component.selectors';
+import newsletter from '../../selectors/newsletter.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -233,38 +234,38 @@ context('Subcase tests', () => {
     // Are there Themes in this agenda? Should be none
     cy.openAgendaitemKortBestekTab(SubcaseTitleShort); // TODO: doesn't find this item it's looking for in the agenda it just openend
     cy.route('GET', '**/themes').as('getAgendaitemThemes');
-    cy.get(agenda.item.news.editLink).click();
+    cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
     cy.contains('Annuleren').click();
 
     // open themes ediging pane.
     cy.route('GET', '**/themes').as('getAgendaitemThemes');
-    cy.get(agenda.item.news.editLink).click();
+    cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
 
     // Toggle some themes.
-    cy.get(agenda.item.news.themesSelector).contains('Wonen')
+    cy.get(newsletter.editItem.themesSelector).contains('Wonen')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Sport ')
+    cy.get(newsletter.editItem.themesSelector).contains('Sport ')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Toerisme ')
+    cy.get(newsletter.editItem.themesSelector).contains('Toerisme ')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Overheid ')
+    cy.get(newsletter.editItem.themesSelector).contains('Overheid ')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Innovatie ')
+    cy.get(newsletter.editItem.themesSelector).contains('Innovatie ')
       .click();
 
     // Save this stuff.
     cy.route('POST', '/newsletter-infos').as('newsletterInfosPost');
-    cy.get(agenda.item.news.saveButton).click()
+    cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPost');
 
     // Assert the save is done.
-    cy.get(agenda.item.themes).contains('Wonen');
-    cy.get(agenda.item.themes).contains('Sport');
-    cy.get(agenda.item.themes).contains('Toerisme');
-    cy.get(agenda.item.themes).contains('Overheid');
-    cy.get(agenda.item.themes).contains('Innovatie');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Wonen');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Sport');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Toerisme');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Overheid');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Innovatie');
 
     // Go via kort-bestek view
     cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
@@ -291,35 +292,35 @@ context('Subcase tests', () => {
     cy.wait('@getKortBestekThemes');
 
     // Validate already inputted data.
-    cy.get(agenda.item.news.checkedThemes).parent('label')
+    cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains('Wonen');
-    cy.get(agenda.item.news.checkedThemes).parent('label')
+    cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains('Sport');
-    cy.get(agenda.item.news.checkedThemes).parent('label')
+    cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains('Toerisme');
-    cy.get(agenda.item.news.checkedThemes).parent('label')
+    cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains('Overheid');
-    cy.get(agenda.item.news.checkedThemes).parent('label')
+    cy.get(newsletter.editItem.checkedThemes).parent('label')
       .contains('Innovatie');
 
     // uncheck 2
-    cy.get(agenda.item.news.themesSelector).contains('Wonen')
+    cy.get(newsletter.editItem.themesSelector).contains('Wonen')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Toerisme')
+    cy.get(newsletter.editItem.themesSelector).contains('Toerisme')
       .click();
 
     // check 3   others
-    cy.get(agenda.item.news.themesSelector).contains('Jeugd')
+    cy.get(newsletter.editItem.themesSelector).contains('Jeugd')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Cultuur')
+    cy.get(newsletter.editItem.themesSelector).contains('Cultuur')
       .click();
-    cy.get(agenda.item.news.themesSelector).contains('Media')
+    cy.get(newsletter.editItem.themesSelector).contains('Media')
       .click();
 
     // Save this stuff.
     // cy.route('GET', '**/pieces?page*size*=9999').as('pieces');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
-    cy.get(agenda.item.news.saveButton).click()
+    cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPatch');
     // cy.wait('@pieces');
 
@@ -339,17 +340,17 @@ context('Subcase tests', () => {
 
     cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
 
-    cy.get(agenda.item.themes).contains('Sport');
-    cy.get(agenda.item.themes).contains('Overheid');
-    cy.get(agenda.item.themes).contains('Innovatie');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Sport');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Overheid');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Innovatie');
 
-    cy.get(agenda.item.themes).contains('Jeugd');
-    cy.get(agenda.item.themes).contains('Cultuur');
-    cy.get(agenda.item.themes).contains('Media');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Jeugd');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Cultuur');
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Media');
 
-    cy.get(agenda.item.themes).contains('Toerisme')
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Toerisme')
       .should('not.exist');
-    cy.get(agenda.item.themes).contains('Wonen')
+    cy.get(newsletter.agendaitemNewsItem.themes).contains('Wonen')
       .should('not.exist');
   });
 

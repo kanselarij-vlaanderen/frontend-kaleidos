@@ -7,7 +7,7 @@
 import cases from '../../selectors/case.selectors';
 import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
 
 // ***********************************************
