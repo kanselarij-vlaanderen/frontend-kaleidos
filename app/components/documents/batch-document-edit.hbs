@@ -40,7 +40,7 @@
           </tbody>
         </table>
       </div>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
@@ -56,7 +56,7 @@
               @saveAction={{perform this.saveEditPieces}} />
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </div>
   {{/if}}
 </div>

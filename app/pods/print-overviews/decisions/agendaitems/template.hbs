@@ -15,7 +15,7 @@
     {{else}}
       <div class="auk-u-m-8">
         <div class="auk-u-mb-4">
-          <WebComponents::AuToolbar>
+          <Auk::Toolbar>
             <WebComponents::AuToolbar::Group @position="center">
               <WebComponents::AuToolbar::Item>
                 <button type="button" class="auk-button auk-button--secondary"
@@ -32,7 +32,7 @@
                 </button>
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
-          </WebComponents::AuToolbar>
+          </Auk::Toolbar>
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}
           {{agenda/agendaitem/agendaitem-decision

@@ -4,7 +4,7 @@
   data-collapsed={{if (not @isOpen) "true" "false"}}
 >
   <Auk::Navbar @skin="gray-100">
-    <WebComponents::AuToolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
         <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <Auk::Button
@@ -15,7 +15,7 @@
           />
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
@@ -213,7 +213,7 @@
       {{t "discharge-publication-flow-confirm"}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left"n>
           <WebComponents::AuToolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
@@ -228,7 +228,7 @@
             </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

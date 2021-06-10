@@ -1,6 +1,6 @@
 <Auk::Panel>
   <Auk::Panel::Header>
-    <WebComponents::AuToolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
@@ -20,7 +20,7 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       {{/if}}
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Panel::Header>
   {{#if @mandatees.length }}
     <Auk::Panel::Body @noPadding={{true}}>

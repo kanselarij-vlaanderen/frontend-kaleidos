@@ -13,13 +13,13 @@
       <p>Weet je zeker dat je dit dossier wilt goedkeuren voor co-agendering?</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.onClick}}>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <Auk::Button @skin="primary">Goedkeuren</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
   {{!-- END-SNIPPET --}}
@@ -38,13 +38,13 @@
       <p>Deze actie zal het document definitief verwijderen en kan niet ongedaan gemaakt worden. Weet u zeker dat u het document wilt verwijderen?</p>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.onClick}}>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
             <Auk::Button @skin="danger-primary" @icon="delete">Verwijderen</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
   {{!-- END-SNIPPET --}}

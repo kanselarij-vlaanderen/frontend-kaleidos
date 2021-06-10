@@ -7,7 +7,7 @@
       <div class="auk-modal__push"></div>
       <div class="auk-modal__content">
         <div class="auk-modal__header auk-modal__header--bordered">
-          <WebComponents::AuToolbar>
+          <Auk::Toolbar>
             <WebComponents::AuToolbar::Group @position="left">
               <WebComponents::AuToolbar::Item>
                 <h2 class="auk-toolbar__title">{{title}}</h2>
@@ -26,7 +26,7 @@
                 {{/if}}
               </WebComponents::AuToolbar::Item>
             </WebComponents::AuToolbar::Group>
-          </WebComponents::AuToolbar>
+          </Auk::Toolbar>
         </div>
         {{yield}}
       </div>

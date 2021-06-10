@@ -4,7 +4,7 @@
   </h3>
 </div>
 {{#if this.currentSession.isEditor}}
-  <WebComponents::AuToolbar>
+  <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <button
@@ -24,7 +24,7 @@
         </button>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+  </Auk::Toolbar>
 {{/if}}
 {{#each this.treatments as |treatment|}}
   <div class="auk-u-mb-4">

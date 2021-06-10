@@ -2,7 +2,7 @@
   {{#if @custom}}
     {{yield}}
   {{else}}
-    <WebComponents::AuToolbar @size="large">
+    <Auk::Toolbar @size="large">
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <Auk::ButtonLink
@@ -18,6 +18,6 @@
           {{yield}}
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   {{/if}}
 </div>

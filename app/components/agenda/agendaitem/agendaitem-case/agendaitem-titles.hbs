@@ -1,7 +1,7 @@
 <div class="auk-u-mb-8">
   <Auk::Panel>
     <Auk::Panel::Header>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
             <h4 class="auk-panel__title">
@@ -45,7 +45,7 @@
             </WebComponents::AuToolbar::Item>
           {{/if}}
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
@@ -104,7 +104,7 @@
     </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}
       <Auk::Modal::Footer @custom={{true}}>
-        <WebComponents::AuToolbar>
+        <Auk::Toolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
               <pre class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
@@ -112,7 +112,7 @@
               </pre>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+        </Auk::Toolbar>
       </Auk::Modal::Footer>
     {{/if}}
   </Auk::Panel>

@@ -6,7 +6,7 @@
 
 <StyleguideSample @snippet="toolbar-1.hbs">
   {{!-- BEGIN-SNIPPET toolbar-1 --}}
-  <WebComponents::AuToolbar>
+  <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <p>I am an item on the left</p>
@@ -22,7 +22,7 @@
         <p>I am an item on the right</p>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+  </Auk::Toolbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -30,7 +30,7 @@
 
 <StyleguideSample @snippet="toolbar-2.hbs">
   {{!-- BEGIN-SNIPPET toolbar-2 --}}
-  <WebComponents::AuToolbar>
+  <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <p>Item left 1</p>
@@ -47,7 +47,7 @@
         <p>Item right 2</p>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+  </Auk::Toolbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -59,7 +59,7 @@
 <StyleguideSample @title="Toolbar - Add" @snippet="toolbar-3.hbs">
   {{!-- BEGIN-SNIPPET toolbar-3 --}}
   <Auk::Navbar @skin="gray-100">
-    <WebComponents::AuToolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <h2 class="auk-toolbar__title">Titel</h2>
@@ -70,7 +70,7 @@
           <Auk::Button @icon="add" @skin="primary">Toevoegen</Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -79,7 +79,7 @@
 <StyleguideSample @title="Toolbar - Detail" @snippet="toolbar-4.hbs">
   {{!-- BEGIN-SNIPPET toolbar-4 --}}
   <Auk::Navbar @skin="gray-100">
-    <WebComponents::AuToolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <Auk::Button @layout="icon-only" @skin="borderless" @icon="chevron-left">Ga terug</Auk::Button>
@@ -93,7 +93,7 @@
           <Auk::Button @skin="primary">Opslaan</Auk::Button>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -101,7 +101,7 @@
 <StyleguideSample @title="Toolbar - Complex" @snippet="toolbar-5.hbs">
   {{!-- BEGIN-SNIPPET toolbar-5 --}}
   <Auk::Navbar @skin="gray-100" @auto={{true}}>
-    <WebComponents::AuToolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
           <div class="o-flex o-flex--vertical auk-u-mt-2">
@@ -134,7 +134,7 @@
           </EmberPopover>
         </WebComponents::AuToolbar::Item>
       </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -148,7 +148,7 @@
   {{!-- BEGIN-SNIPPET toolbar-6 --}}
   <Auk::Panel>
     <Auk::Panel::Header>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
             <h4 class="auk-panel__title">Panel header</h4>
@@ -159,7 +159,7 @@
             <Auk::Button @skin="tertiary" @icon="edit">Button label</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       Panel body text
@@ -176,7 +176,7 @@
 
 <StyleguideSample @title="Button toolbar in toolbar example" @description="A button toolbar is used to group related buttons. Combine toolbar groups with specific button toolbars." @snippet="button-toolbar-in-toolbar.hbs">
   {{!-- BEGIN-SNIPPET button-toolbar-in-toolbar --}}
-  <WebComponents::AuToolbar>
+  <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
       <WebComponents::AuToolbar::Item>
         <Auk::Button>Left button 1</Auk::Button>
@@ -199,6 +199,6 @@
         </WebComponents::AuButtonToolbar>
       </WebComponents::AuToolbar::Item>
     </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+  </Auk::Toolbar>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>

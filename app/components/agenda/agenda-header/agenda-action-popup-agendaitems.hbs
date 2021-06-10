@@ -7,7 +7,7 @@
           number=agendaitem.number
           title=(if agendaitem.shortTitle agendaitem.shortTitle agendaitem.title)
         }}
-        <WebComponents::AuToolbar>
+        <Auk::Toolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
               {{#if (await agendaitem.checkAdded)}}
@@ -34,7 +34,7 @@
               </p>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+        </Auk::Toolbar>
       </div>
     </Auk::List::Item>
   {{/each}}

@@ -1,6 +1,7 @@
 <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar>
+  {{!-- TODO: is this double wrapped toolbar here on purpose? --}}
+  <Auk::Toolbar>
+    <Auk::Toolbar>
       <WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Item>
           <Auk::Button
@@ -33,8 +34,8 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       {{/if}}
-    </WebComponents::AuToolbar>
-  </WebComponents::AuToolbar>
+    </Auk::Toolbar>
+  </Auk::Toolbar>
 </div>
 
 

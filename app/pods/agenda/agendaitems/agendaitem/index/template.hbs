@@ -1,4 +1,4 @@
-<WebComponents::AuToolbar class="auk-u-mb-4">
+<Auk::Toolbar class="auk-u-mb-4">
   <WebComponents::AuToolbar::Group @position="left">
     <WebComponents::AuToolbar::Item>
       <h3 class="auk-toolbar__title">
@@ -24,7 +24,7 @@
       {{/if}}
     </WebComponents::AuToolbar::Item>
   </WebComponents::AuToolbar::Group>
-</WebComponents::AuToolbar>
+</Auk::Toolbar>
 {{!-- TODO: refactor titles-component into 1 with 2 sub-components: 1 for displaying, 1 for editing --}}
 {{#if this.isEditingAgendaItemTitles}}
   <Agenda::Agendaitem::AgendaitemCase::AgendaitemTitlesEdit

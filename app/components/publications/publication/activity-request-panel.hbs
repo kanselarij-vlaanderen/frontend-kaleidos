@@ -2,7 +2,7 @@
 <div class="auk-u-mb-3">
   <Auk::Panel>
     <Auk::Panel::Header @borderless={{this.isCollapsed}}>
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
             <Auk::Button
@@ -65,7 +65,7 @@
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
 
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     {{#if (not this.isCollapsed)}}
       <Auk::Panel::Body>
