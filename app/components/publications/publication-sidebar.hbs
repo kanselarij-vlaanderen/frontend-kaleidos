@@ -6,14 +6,14 @@
   <Auk::Navbar @skin="gray-100">
     <Auk::Toolbar>
       <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
-        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
+        <Auk::Toolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <Auk::Button
             @skin="borderless"
             @icon={{if @isOpen "chevron-right" "chevron-left"}}
             @layout="icon-only"
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           />
-        </WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
       </WebComponents::AuToolbar::Group>
     </Auk::Toolbar>
   </Auk::Navbar>
@@ -215,18 +215,18 @@
     <Auk::Modal::Footer @custom={{true}}>
       <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left"n>
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
       </Auk::Toolbar>
     </Auk::Modal::Footer>

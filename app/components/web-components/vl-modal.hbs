@@ -9,12 +9,12 @@
         <div class="auk-modal__header auk-modal__header--bordered">
           <Auk::Toolbar>
             <WebComponents::AuToolbar::Group @position="left">
-              <WebComponents::AuToolbar::Item>
+              <Auk::Toolbar::Item>
                 <h2 class="auk-toolbar__title">{{title}}</h2>
-              </WebComponents::AuToolbar::Item>
+              </Auk::Toolbar::Item>
             </WebComponents::AuToolbar::Group>
             <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
+              <Auk::Toolbar::Item>
                 {{#if showCloseButton}}
                   <Auk::Button
                     @icon="close"
@@ -24,7 +24,7 @@
                     data-test-vl-modal-close
                   />
                 {{/if}}
-              </WebComponents::AuToolbar::Item>
+              </Auk::Toolbar::Item>
             </WebComponents::AuToolbar::Group>
           </Auk::Toolbar>
         </div>

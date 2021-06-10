@@ -4,15 +4,15 @@
     <Auk::Panel::Header @borderless={{this.isCollapsed}}>
       <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary"
               @layout="icon-only"
               @icon={{if this.isCollapsed "chevron-down"  "chevron-up"}}
               {{on "click" this.collapsePanel}}
             />
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             <h4 class="auk-toolbar-complex__title">
               {{#if (await @activity.isWithdrawn) }}
                 {{t "cancelled-request"}} {{moment-format @activity.endDate "DD MMMM YYYY [om] H:mm"}}
@@ -24,19 +24,19 @@
                 {{t "requested-on"}} {{moment-format @activity.startDate "DD MMMM YYYY [om] H:mm"}}
               {{/if}}
             </h4>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
           {{#if (not (await @activity.isWithdrawn)) }}
-            <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Item>
               <Auk::Checkbox
                 @label={{t "received"}}
                 @checked={{this.finished}}
                 {{on "input" @finishedToggle}}
               />
-            </WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
           {{/if}}
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" @icon="more" @layout="icon-only"/>
             <AttachPopover
                     @renderInPlace={{true}}
@@ -62,7 +62,7 @@
                 {{/if}}
               </Auk::Dropdown>
             </AttachPopover>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
 
       </Auk::Toolbar>

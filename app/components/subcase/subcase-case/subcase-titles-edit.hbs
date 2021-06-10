@@ -47,7 +47,7 @@
 
 <Auk::Toolbar>
   <WebComponents::AuToolbar::Group @position="right">
-    <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar::Item>
       <button type="button" class="auk-button auk-button--tertiary" data-test-subcase-titles-edit-cancel
         {{action "cancelEditing"}}
       >
@@ -55,14 +55,14 @@
           {{t "cancel"}}
         </span>
       </button>
-    </WebComponents::AuToolbar::Item>
-    <WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
+    <Auk::Toolbar::Item>
       {{web-components/vl-save-button
         data-test-subcase-titles-edit-save=true
         text=(t "save")
         isLoading=isLoading
         saveAction=(action "saveChanges")
       }}
-    </WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
   </WebComponents::AuToolbar::Group>
 </Auk::Toolbar>

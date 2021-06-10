@@ -1,10 +1,10 @@
 <Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav">
   <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::Brand @logotype="Kaleidos" />
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         <WebComponents::AuTabs>
           {{#if this.hasPublicationsEnabled}}
             <WebComponents::AuTab @route="publications" data-test-m-header-publications>{{t "publications"}}</WebComponents::AuTab>
@@ -32,17 +32,17 @@
             <WebComponents::AuTab @route="settings.overview" data-test-m-header-settings>{{t "settings"}}</WebComponents::AuTab>
           {{/if}}
         </WebComponents::AuTabs>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
       {{#if this.environmentName}}
-        <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
+        <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
             {{this.environmentName}}
           </div>
-        </WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
       {{/if}}
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::ButtonLink
           @skin="muted"
           @padded="padded"
@@ -72,8 +72,8 @@
             </WebComponents::AuDropdown::Item>
           </Auk::Dropdown>
         </AttachPopover>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="auk-u-mr-3">
         {{#if this.currentSession.user}}
           <Auk::ButtonLink
             data-test-m-header-user-actions
@@ -113,7 +113,7 @@
             {{t "login"}}
           </Auk::ButtonLink>
         {{/if}}
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>

@@ -1,27 +1,27 @@
 <Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
   <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical">
           <h4 class="auk-toolbar-complex__title">{{t "publications"}}</h4>
         </div>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Publications::PublicationCaseSearch/>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::Button @skin="secondary" @icon="filter" {{on "click" this.showFilterModal}}>
           {{t "filter-content"}}
         </Auk::Button>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
 
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.showPublicationModal}}>
           {{t "publications-new"}}
         </Auk::Button>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
@@ -215,7 +215,7 @@
 <div class="auk-u-mx-4">
   <Auk::Toolbar>
     <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::Pagination
           @page={{this.page}}
           @size={{this.size}}
@@ -224,20 +224,20 @@
           @onNextPage={{this.nextPage}}
           @onPreviousPage={{this.prevPage}}
         />
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         {{t "amount-showed"}}
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         <WebComponents::AuPageSize
           @selectedSize={{this.size}}
           @onChange={{this.setSizeOption}}
         >
         </WebComponents::AuPageSize>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::Button
           @icon="settings"
           @skin="borderless"
@@ -258,7 +258,7 @@
                   @onClose={{this.toggleColumnDisplayOptions}}
           />
         </AttachPopover>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
   </Auk::Toolbar>
 </div>

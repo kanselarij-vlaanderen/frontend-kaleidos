@@ -9,7 +9,7 @@
         }}
         <Auk::Toolbar>
           <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Item>
               {{#if (await agendaitem.checkAdded)}}
                 <Auk::Icon @name="calendar-new" @skin="muted" />
               {{/if}}
@@ -24,15 +24,15 @@
               {{#if (await agendaitem.agendaActivity.subcase.confidential)}}
                 <Auk::Icon @name="lock-closed" @skin="muted" />
               {{/if}}
-            </WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Item>
               <p class="{{agendaitem.formallyOkToShow.classNames}}">
                 <i class="{{agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
                 {{agendaitem.formallyOkToShow.label}}
               </p>
-            </WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
           </WebComponents::AuToolbar::Group>
         </Auk::Toolbar>
       </div>

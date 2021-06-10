@@ -1,12 +1,12 @@
 <div class="auk-modal__header auk-modal__header--bordered">
   <Auk::Toolbar @size="large">
     <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
     <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         {{#if @resizeable}}
           <Auk::Button
             @icon={{if @isExpanded 'minimize' 'expand'}}
@@ -25,7 +25,7 @@
             data-test-au-modal-header-close
           />
         {{/if}}
-      </WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
     </WebComponents::AuToolbar::Group>
   </Auk::Toolbar>
 </div>

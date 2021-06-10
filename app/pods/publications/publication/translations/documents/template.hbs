@@ -3,7 +3,7 @@
     <Auk::Navbar @border="none">
       <Auk::Toolbar @size="large">
         <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button
               @icon="mail"
               @skin="secondary"
@@ -12,15 +12,15 @@
             >
               {{t "request-translations"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button
               @icon="add"
               @skin="secondary"
               {{on "click" this.openPieceUploadModal}}>
               {{t "upload-translation-file"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
       </Auk::Toolbar>
     </Auk::Navbar>

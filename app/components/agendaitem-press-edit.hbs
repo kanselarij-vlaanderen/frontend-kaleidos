@@ -18,19 +18,19 @@
 </div>
 <Auk::Toolbar>
   <WebComponents::AuToolbar::Group @position="right">
-    <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar::Item>
       <a href="" class="auk-button-link" {{action "cancelEditing" agendaitem}}>
         <span class="auk-button__content">
           {{t "cancel"}}
         </span>
       </a>
-    </WebComponents::AuToolbar::Item>
-    <WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
+    <Auk::Toolbar::Item>
       {{web-components/vl-save-button
         text=(t "save")
         isLoading=isLoading
         saveAction=(action "saveChanges" agendaitem)
       }}
-    </WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
   </WebComponents::AuToolbar::Group>
 </Auk::Toolbar>

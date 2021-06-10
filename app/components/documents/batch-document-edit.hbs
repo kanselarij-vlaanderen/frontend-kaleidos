@@ -42,19 +42,19 @@
       </div>
       <Auk::Toolbar>
         <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
               <span class="auk-button__content">
                 {{t "cancel"}}
               </span>
             </button>
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             <WebComponents::VlSaveButton
               @text={{t "save"}}
               @isLoading={{this.saveEditPieces.isRunning}}
               @saveAction={{perform this.saveEditPieces}} />
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         </WebComponents::AuToolbar::Group>
       </Auk::Toolbar>
     </div>
