@@ -107,8 +107,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.auk-h4 > span').contains(/TER/);
-        cy.get(document.showPiecesHistory).click();
-        cy.get(document.singlePieceHistory).as('pieces');
+        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.vlDocument.piece).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();

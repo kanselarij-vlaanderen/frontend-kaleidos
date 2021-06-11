@@ -1,8 +1,8 @@
 /* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
 import modal from '../../selectors/modal.selectors';
-
 import document from '../../selectors/document.selectors';
+import route from '../../selectors/route.selectors';
 
 function formatmeetingDocumentsUrl(meetingId, agendaId) {
   return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
@@ -27,7 +27,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Open the modal, add files
-    cy.contains('Documenten toevoegen').click();
+    cy.get(route.agendaDocuments.addDocuments).click();
     cy.addNewDocumentsInUploadModal([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }], 'meeting');
@@ -64,7 +64,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Open the modal, add files
-    cy.contains('Documenten toevoegen').click();
+    cy.get(route.agendaDocuments.addDocuments).click();
     cy.addNewDocumentsInUploadModal(
       [
         {
@@ -144,8 +144,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.modal).within(() => {
-      cy.get('button').contains('Verwijderen')
+    cy.get(modal.verify.container).within(() => {
+      cy.get(modal.verify.save).contains('Verwijderen')
         .click();
     });
 
@@ -167,19 +167,20 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.titleHeader).contains(/2e/);
-        cy.get(document.showPiecesHistory).click();
-        cy.get(document.singlePieceHistory).as('pieces');
+        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.vlDocument.piece).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
-            cy.get('.ki-delete').click();
+            cy.get(document.vlDocument.delete).click();
           });
       });
+
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.modal).within(() => {
-      cy.get('button').contains('Verwijderen')
+    cy.get(modal.verify.container).within(() => {
+      cy.get(modal.verify.save).contains('Verwijderen')
         .click();
     });
 

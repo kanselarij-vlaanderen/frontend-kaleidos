@@ -93,14 +93,14 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.agendaItemEditDocumentsList).click();
+    cy.get(agenda.agendaitemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -135,13 +135,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Annuleren').click();
 
     // Verify nothing changed after cancel
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get(agenda.agendaItemEditDocumentsList).click();
+    cy.get(agenda.agendaitemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -165,8 +165,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Opslaan').click();
 
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid');
@@ -202,8 +202,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     // TODO duplicate asserts, we want to check name here
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid');
@@ -244,8 +244,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Publiek');
@@ -358,8 +358,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // TODO pressing ESC key on the modal should be tested once implemented
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);
@@ -381,8 +381,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openCase(caseTitle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);

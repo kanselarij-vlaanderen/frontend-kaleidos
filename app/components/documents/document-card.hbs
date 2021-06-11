@@ -54,12 +54,12 @@
               {{#if this.currentSession.isEditor}}
                 <button
                   class="auk-button auk-button--borderless auk-button--icon"
-                  data-test-documents-show-more
+                  data-test-document-card-actions
                   type="button"
                 >
                   <span class="auk-button__content">
                     <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-more" data-test-document-card-actions></i>
+                      <i class="ki ki-more"></i>
                     </div>
                     <AttachPopover
                       @renderInPlace={{true}}
@@ -190,7 +190,7 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
         <Auk::Button
-          data-test-show-pieces-history
+          data-test-document-card-version-history
           @skin="borderless"
           @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           disabled={{this.loadPieceRelatedData.isRunning}}
