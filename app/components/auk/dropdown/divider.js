@@ -1,5 +1,3 @@
 import Component from '@glimmer/component';
 
-export default class DropdownDivider extends Component {
-
-}
+export default class DropdownDivider extends Component {}
