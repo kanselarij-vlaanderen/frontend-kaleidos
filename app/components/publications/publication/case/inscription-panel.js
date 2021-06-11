@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-import { timeout } from 'ember-concurrency';
 
 export default class PublicationsPublicationCaseInscriptionPanelComponent extends Component {
   @tracked isInEditMode;
