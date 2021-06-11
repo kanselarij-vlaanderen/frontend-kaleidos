@@ -27,6 +27,12 @@
         <h4 class="br-styleguide-bordered-list-header">{{t "style-guide-components"}}</h4>
         <ul class="br-styleguide-bordered-list br-styleguide-bordered-list--on-gray-100">
           <li>
+            <LinkTo @route="styleguide.accordion">{{t "style-guide-accordion"}}</LinkTo>
+          </li>
+          <li>
+            <LinkTo @route="styleguide.accordion-panel">Accordion panel</LinkTo>
+          </li>
+          <li>
             <LinkTo @route="styleguide.alert-skins">Alert (skins)</LinkTo>
           </li>
           <li>
@@ -120,13 +126,6 @@
           </li>
           <li>
             <LinkTo @route="styleguide.table">{{t "style-guide-table"}}</LinkTo>
-          </li>
-        </ul>
-
-        <h4 class="br-styleguide-bordered-list-header">{{t "style-guide-javascript-components"}}</h4>
-        <ul class="br-styleguide-bordered-list  br-styleguide-bordered-list--on-gray-100">
-          <li>
-            <LinkTo @route="styleguide.accordion">{{t "style-guide-accordion"}}</LinkTo>
           </li>
         </ul>
       </nav>

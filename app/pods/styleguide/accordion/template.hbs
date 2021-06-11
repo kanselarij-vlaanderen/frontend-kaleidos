@@ -1,10 +1,55 @@
 {{!-- template-lint-disable  --}}
 <ComponentPageIntro @title="Accordion" />
 
-<StyleguideSample @title="Default" @snippet="accordion-default.hbs">
-  {{!-- BEGIN-SNIPPET accordion-default --}}
-  <Auk::Accordion @label="Accordion">
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ipsam labore sequi. Eaque alias consequatur totam iste error, ipsam quis reprehenderit. Itaque consectetur ex est placeat tenetur, modi consequatur quibusdam.</p>
+<StyleguideSample @title="Controls left" @snippet="accordion-controls-left.hbs">
+  {{!-- BEGIN-SNIPPET accordion-controls-left --}}
+  <Auk::Accordion>
+    <Auk::Accordion::Item @title="Accordion" @isDefaultActive={{true}}>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ipsam labore sequi. Eaque alias consequatur totam iste error, ipsam quis reprehenderit. Itaque consectetur ex est placeat tenetur, modi consequatur quibusdam.</p>
+    </Auk::Accordion::Item>
   </Auk::Accordion>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
+
+<StyleguideSample @title="Controls right" @snippet="accordion-controls-right.hbs">
+  {{!-- BEGIN-SNIPPET accordion-controls-right --}}
+  <Auk::Accordion>
+    <Auk::Accordion::Item @title="Accordion" @layout="controls-right">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam ipsam labore sequi. Eaque alias consequatur totam iste error, ipsam quis reprehenderit. Itaque consectetur ex est placeat tenetur, modi consequatur quibusdam.</p>
+    </Auk::Accordion::Item>
+  </Auk::Accordion>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@title</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"></td>
+    <td>Determines the title of the accordion item.</td>
+  </tr>
+  <tr>
+    <td><code>@layout</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>controls-left</code> (default) or <code>controls-right</code></td>
+    <td>Determines the position of the control within the accordion item.</td>
+  </tr>
+  <tr>
+    <td><code>@isDefaultActive</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td> Determines the active state (on display) of the accordion item.</td>
+  </tr>
+  </tbody>
+</table>
