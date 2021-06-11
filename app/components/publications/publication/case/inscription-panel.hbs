@@ -18,15 +18,14 @@
                     @route="cases.case.subcases.subcase.overview"
                     @models={{array
                       @publicationFlow.case.id
-                      @latestSubcaseOnMeeting.id
-                    }}
-                  >
-                  <span class="auk-button__content">
-                    <span class="auk-button__label">{{t "to-case"}}</span>
-                    <div class="auk-icon auk-icon--default auk-icon--chevron-right">
-                      <i class="ki ki-chevron-right"></i>
-                    </div>
-                  </span>
+                      @subcase.id
+                    }}>
+                    <span class="auk-button__content">
+                      <span class="auk-button__label">{{t "to-case"}}</span>
+                      <div class="auk-icon auk-icon--default auk-icon--chevron-right">
+                        <i class="ki ki-chevron-right"></i>
+                      </div>
+                    </span>
                   </LinkTo>
                 </WebComponents::AuButtonToolbar>
               </WebComponents::AuToolbar::Item>
@@ -46,30 +45,36 @@
     </Auk::Panel>
   {{else}}
     <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
-      <Auk::Panel::Header>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <h4 class="auk-panel__title">{{t "publication-inscription"}}</h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
-      </Auk::Panel::Header>
+      <Auk::Panel::Header @title={{t "publication-inscription"}} />
       <Auk::Panel::Body>
-        <div class="auk-form-group">
+        <div class="auk-form-group {{if showShortTitleError "auk-form-group--error"}}">
           <Auk::Label>{{t "short-title"}}</Auk::Label>
-          <WebComponents::AuTextarea @rows="2" @value={{@publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+          <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
+            disabled={{this.save.isRunning}}
+            data-test-publication-inscription-short-title-textarea />
         </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "title-subcase"}}</Auk::Label> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-          <WebComponents::AuTextarea @rows="4" @value={{@publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+        <div class="auk-form-group }}">
+          <Auk::Label>{{t "long-title"}}</Auk::Label>
+          <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
+            disabled={{this.save.isRunning}}
+            data-test-publication-inscription-long-title-textarea />
+          {{#if this.showShortTitleError}}
+            <Auk::Label @error={{true}} data-test-au-label-error="true">
+              {{t "input-error-message"}}
+            </Auk::Label>
+          {{/if}}
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
-              <Auk::Button @skin="borderless" {{on "click" this.cancelEdit}} data-test-publication-cancel-inscription>{{t "cancel"}}</Auk::Button>
+              <Auk::Button @skin="borderless"
+                @disabled={{this.save.isRunning}}
+                {{on "click" this.cancelEdit}}
+                data-test-publication-cancel-inscription>
+                {{t "cancel"}}
+              </Auk::Button>
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
@@ -78,8 +83,7 @@
                 @skin="primary"
                 @disabled={{this.save.isRunning}}
                 data-test-publication-save-inscription
-                {{on "click" (perform this.save)}}
-              >
+                {{on "click" (perform this.save)}}>
                 {{t "save"}}
               </Auk::Button>
             </WebComponents::AuToolbar::Item>

@@ -11,7 +11,7 @@ export default class CaseController extends Controller {
 
   @tracked publicationFlow;
   @tracked contactPersons;
-  @tracked latestSubcaseOnMeeting;
+  @tracked subcase;
   @tracked organizations;
 
   @tracked showLoader = false;
@@ -120,7 +120,7 @@ export default class CaseController extends Controller {
     this.showLoader = true;
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
+    await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
     this.contactPerson.organization = null;
     this.personModalOpen = false;
     this.showLoader = false;
@@ -130,54 +130,6 @@ export default class CaseController extends Controller {
   async deleteContactPerson(contactPerson) {
     this.showLoader = true;
     await contactPerson.destroyRecord();
-    this.showLoader = false;
-  }
-
-  // Mandatee Stuff.
-
-  @action
-  showMandateeModal() {
-    this.selectedMandatee = null;
-    this.mandateeModalOpen = true;
-  }
-
-  @action
-  closeMandateeModal() {
-    this.selectedMandatee = null;
-    this.mandateeModalOpen = false;
-  }
-
-  @action
-  async mandateeSelectedForPublication(mandatee) {
-    this.selectedMandatee = mandatee;
-  }
-
-  @action
-  async addSelectedMandateeToPublicationFlow() {
-    const mandatee = this.selectedMandatee;
-    this.mandateeModalOpen = false;
-    this.showLoader = true;
-    const mandatees = this.publicationFlow.get('mandatees').toArray();
-    mandatees.push(mandatee);
-    this.publicationFlow.set('mandatees', mandatees);
-    await this.publicationFlow.save();
-    this.selectedMandatee = null;
-    this.showLoader = false;
-  }
-
-  @action
-  async unlinkMandateeFromPublicationFlow(mandateeToUnlink) {
-    this.showLoader = true;
-    const mandatees = this.publicationFlow.get('mandatees').toArray();
-    for (let index = 0; index < mandatees.length; index++) {
-      const mandatee = mandatees[index];
-      if (mandateeToUnlink.id === mandatee.id) {
-        mandatees.splice(index, 1);
-      }
-    }
-    this.publicationFlow.set('mandatees', mandatees);
-    await this.publicationFlow.save();
-    this.mandateeModalOpen = false;
     this.showLoader = false;
   }
 }

@@ -1,0 +1,12 @@
+<PowerSelect
+  @selected={{@selected}}
+  @options={{@options}}
+  @placeholder={{@placeholder}}
+  @noMatchesMessage={{@noMatchesMessage}}
+  @onopen={{this.onOpen}}
+  @oninput={{this.onInput}}
+  @search={{this.search}}
+  @onchange={{@onChange}}
+  as |option|>
+  {{yield option}}
+</PowerSelect>

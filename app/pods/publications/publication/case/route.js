@@ -2,14 +2,11 @@ import Route from '@ember/routing/route';
 
 export default class CaseRoute extends Route {
   async model() {
-    return this.modelFor('publications.publication').case;
+    return this.modelFor('publications.publication');
   }
 
   async afterModel(model) {
-    this.publicationFlow = this.modelFor('publications.publication');
-    this.contactPersons = this.publicationFlow.contactPersons;
-
-    this.latestSubcaseOnMeeting = await this.store.queryOne('subcase', {
+    this.subcase = await this.store.queryOne('subcase', {
       filter: {
         case: {
           [':id:']: model.id,
@@ -32,11 +29,7 @@ export default class CaseRoute extends Route {
 
   async setupController(controller) {
     super.setupController(...arguments);
-    controller.publicationFlow = this.publicationFlow;
-    controller.contactPersons = this.contactPersons;
-    controller.latestSubcaseOnMeeting = this.latestSubcaseOnMeeting;
+    controller.subcase = this.subcase;
     controller.organizations = this.organizations;
-
-    controller.isInscriptionInEditMode = false;
   }
 }

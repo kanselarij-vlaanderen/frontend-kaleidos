@@ -1,0 +1,50 @@
+<Auk::Modal
+  @size="medium"
+  data-test-add-mandateemodal>
+  <Auk::Modal::Header
+    @title={{t "add-minister"}}
+    @onClose={{@onClose}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.isLoading}} @reserveSpace={{true}}>
+      <Auk::Label>{{t "minister"}}</Auk::Label>
+      <Utils::PowerSelectDdau
+        @options={{this.options}}
+        @selected={{this.selection}}
+        @noMatchesMessage={{t "no-ministers-found"}}
+        @placeholder={{t "select-minister"}}
+        @search={{this.search}}
+        @onChange={{this.select}}
+        data-test-mandatee-selector
+        as |mandatee|>
+        <Auk::Avatar @size="small" @icon="user">
+          {{mandatee.person.fullName}}
+        </Auk::Avatar>
+      </Utils::PowerSelectDdau>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <WebComponents::AuToolbar>
+      <WebComponents::AuToolbar::Group @position="left">
+        <WebComponents::AuToolbar::Item>
+          <Auk::Button @skin="borderless" {{on "click" @onClose}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+      <WebComponents::AuToolbar::Group @position="right">
+        <WebComponents::AuToolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @icon="add"
+            @size="small"
+            @disabled={{not this.canLink}}
+            {{on "click" (perform this.onLink)}}
+            data-test-add-contactperson-submit-button>
+            {{t "add"}}
+          </Auk::Button>
+        </WebComponents::AuToolbar::Item>
+      </WebComponents::AuToolbar::Group>
+    </WebComponents::AuToolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>
