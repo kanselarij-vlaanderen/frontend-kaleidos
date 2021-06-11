@@ -213,7 +213,7 @@ function searchCase(caseTitle) {
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':', '%3A');
   cy.route('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
-  cy.get(search.searchButtonToClick)
+  cy.get(search.searchTrigger)
     .click()
     .wait('@getCaseSearchResult');
   cy.contains('Aan het laden...').should('not.exist');

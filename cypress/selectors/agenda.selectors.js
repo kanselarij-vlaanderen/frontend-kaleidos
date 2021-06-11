@@ -1,6 +1,5 @@
 const selectors = {
   // datepickr (met css)
-  datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
   numInputWrapper: '.open  .numInputWrapper',
@@ -166,6 +165,11 @@ const selectors = {
       advance: '[data-test-agendaitem-controls-action-advance]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
     },
+  },
+
+  // agendaitem-search
+  agendaitemSearch: {
+    input: '[data-test-agendaitem-search-input]',
   },
 };
 export default selectors;

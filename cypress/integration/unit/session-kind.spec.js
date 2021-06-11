@@ -31,7 +31,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(regular);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.overviewsHeaderDecision).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in decision print overview', () => {
@@ -39,7 +39,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(special);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.overviewsHeaderDecision).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in decision print overview', () => {
@@ -47,7 +47,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(electronic);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(printOverview.overviewsHeaderDecision).contains(textToDisplay);
   });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {

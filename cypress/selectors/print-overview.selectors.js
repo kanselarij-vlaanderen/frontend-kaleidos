@@ -1,5 +1,6 @@
 const selectors = {
-  printoverviewTemplateHeaderTitle: '[data-test-print-overview-template-header-title]',
-  printoverviewDecisionsHeaderTitle: '[data-test-print-overview-decisions-title]',
+  // TODO KAS-2647 move to utils
+  // overviews-header-decision
+  overviewsHeaderDecision: '[data-test-overviews-header-decision-title]',
 };
 export default selectors;

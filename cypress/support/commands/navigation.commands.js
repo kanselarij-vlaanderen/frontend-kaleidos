@@ -30,7 +30,7 @@ function clickReverseTab(tabName) {
  */
 function navigateBack() {
   cy.log('navigateBack');
-  cy.get(utils.navigationWalkUp).click();
+  cy.get(utils.aukTabNavBack).click();
   cy.log('/navigateBack');
 }
 

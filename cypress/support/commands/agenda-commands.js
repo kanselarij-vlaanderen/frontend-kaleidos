@@ -7,7 +7,6 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import utils from '../../selectors/utils.selectors';
 import auComponents from '../../selectors/au-component.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
@@ -101,7 +100,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       .click()
       .clear()
       .type(meetingNumberVisualRepresentation);
-    cy.get(utils.saveButton).contains('Opslaan')
+    cy.get(form.meeting.save).contains('Opslaan')
       .click();
   } else {
     cy.get(form.meeting.meetingEditIdentifierButton).click({

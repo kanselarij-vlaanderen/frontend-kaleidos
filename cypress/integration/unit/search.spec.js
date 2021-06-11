@@ -34,7 +34,7 @@ context('Search tests', () => {
   const searchFunction = (elementsToCheck) => {
     elementsToCheck.forEach((option) => {
       cy.get(search.searchfield).type('test');
-      cy.get(search.searchButtonToClick).click();
+      cy.get(search.searchTrigger).click();
       cy.get(dependency.emberPowerSelect.trigger)
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
@@ -136,7 +136,7 @@ context('Search tests', () => {
 
     cy.server(); // TODO server here not needed ?
     cy.route('GET', '/agendaitems/search?**').as('searchCall');
-    cy.get('button[data-test-trigger-search]').click();
+    cy.get(search.searchTrigger).click();
     cy.wait('@searchCall');
 
     cy.get('[data-table]').should('not.exist');
@@ -159,7 +159,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/agendaitems/search?**').as('searchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(search.searchTrigger).click();
       cy.wait('@searchCall');
 
       // TODO use newSubcase2TitleShort instead of fixed data
@@ -180,7 +180,7 @@ context('Search tests', () => {
     cy.get(search.searchfield).clear();
     cy.get(search.searchfield).type('TestSearchSet');
     cy.server();
-    cy.get(search.searchButtonToClick).click();
+    cy.get(search.searchTrigger).click();
     cy.wait(1000);
     cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
@@ -211,7 +211,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/cases/search?**').as('casesSearchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(search.searchTrigger).click();
       cy.wait('@casesSearchCall');
 
       // TODO case1TitleShort instead of hardcoded text
@@ -234,7 +234,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/casesByDecisionText/search?**').as('decisionsSearchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(search.searchTrigger).click();
       cy.wait('@decisionsSearchCall');
 
       cy.get('[data-table]').contains('korte titel for batterij');
@@ -251,8 +251,8 @@ context('Search tests', () => {
     cy.server();
     cy.route('GET', '/agendaitems/search?**IKBESTANIET**').as('searchCallOverview-IKBESTANIET');
 
-    cy.get('[data-test-trigger-search-input]').clear();
-    cy.get('[data-test-trigger-search-input]').type('IKBESTANIET');
+    cy.get(agenda.agendaitemSearch.input).clear();
+    cy.get(agenda.agendaitemSearch.input).type('IKBESTANIET');
     cy.wait(200);
     cy.wait('@searchCallOverview-IKBESTANIET');
 
@@ -287,16 +287,16 @@ context('Search tests', () => {
     ];
     wordsToCheck1.forEach((searchTerm) => {
       cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
-      cy.get('[data-test-trigger-search-input]').clear();
-      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.get(agenda.agendaitemSearch.input).clear();
+      cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
       cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for batterij');
     });
     wordsToCheck2.forEach((searchTerm) => {
       cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
-      cy.get('[data-test-trigger-search-input]').clear();
-      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.get(agenda.agendaitemSearch.input).clear();
+      cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
       cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for search');
