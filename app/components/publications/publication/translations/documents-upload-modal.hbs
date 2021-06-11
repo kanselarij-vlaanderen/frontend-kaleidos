@@ -99,6 +99,7 @@
     <Auk::Button
       @skin="primary"
       @disabled={{this.saveIsDisabled}}
+      @loading={{this.saveTranslation.isRunning}}
       {{on "click" (perform this.saveTranslation)}}
     >
       {{t "save"}}
