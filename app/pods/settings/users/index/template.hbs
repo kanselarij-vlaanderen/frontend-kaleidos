@@ -1,5 +1,5 @@
 {{#utils/settings-header title=(t 'manage-users')}}
-  <WebComponents::AuToolbar data-test-settings-user-file-upload>
+  <WebComponents::AuToolbar>
     <WebComponents::AuToolbar::Group @position="right">
       <WebComponents::AuToolbar::Item>
         {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
@@ -12,13 +12,13 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <Input
-          data-test-user-search-input=""
+          data-test-route-settings-users-search-input=""
           class="auk-input"
           type="search"
           @value={{this.filter}}
         />
         <button
-          data-test-user-search-button
+          data-test-route-settings-users-search-button
           class="auk-button auk-button--secondary auk-button--icon"
           type="submit"
           {{on "click" (action "refreshRoute")}}
@@ -35,7 +35,7 @@
 
   {{#if (await model)}}
     {{#data-table
-      data-test-settings-user-table=true
+      data-test-route-settings-users-table=true
       content=(await model)
       class="auk-table auk-table--striped"
       isLoading=isLoadingModel

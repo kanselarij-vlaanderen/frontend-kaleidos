@@ -32,9 +32,9 @@
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label>{{t "document-type"}}</Auk::Label>
-                  <WebComponents::AuPill class="auk-pill--white">
+                  <Auk::Pill class="auk-pill--white">
                     {{this.translationDocument.file.extension}}
-                  </WebComponents::AuPill>
+                  </Auk::Pill>
                 </div>
                 {{!-- TODO KAS-2481
                 <div class="auk-form-group">
@@ -99,6 +99,7 @@
     <Auk::Button
       @skin="primary"
       @disabled={{this.saveIsDisabled}}
+      @loading={{this.saveTranslation.isRunning}}
       {{on "click" (perform this.saveTranslation)}}
     >
       {{t "save"}}

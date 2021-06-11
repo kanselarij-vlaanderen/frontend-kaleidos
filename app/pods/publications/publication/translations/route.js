@@ -5,11 +5,6 @@ export default class PublicationsPublicationTranslationsRoute extends Route {
     return this.modelFor('publications.publication').translationSubcase;
   }
 
-
-  beforeModel() {
-    this.transitionTo('publications.publication.translations.documents');
-  }
-
   afterModel() {
     this.publicationFlow = this.modelFor('publications.publication');
   }

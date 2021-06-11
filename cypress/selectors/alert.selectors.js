@@ -1,5 +1,6 @@
 const selectors = {
-  changesAlertComponent: '[data-test-changes-alert]',
-  changesAlertComponentCloseButton: '[data-test-changes-alert-close-button]',
+  // TODO only two selectors in this file, move to util?
+  changesAlert: '[data-test-changes-alert]',
+  changesAlertClose: '[data-test-changes-alert-close]',
 };
 export default selectors;
