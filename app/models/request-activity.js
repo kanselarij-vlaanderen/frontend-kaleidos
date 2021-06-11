@@ -11,6 +11,7 @@ export default class RequestActivity extends Model {
   // Relations.
   @belongsTo('translation-subcase') translationSubcase;
   @belongsTo('publication-subcase') publicationSubcase;
+  @belongsTo('translation-activity') translationActivity;
 
   @belongsTo('email') email;
 

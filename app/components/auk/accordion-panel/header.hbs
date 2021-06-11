@@ -1,0 +1,21 @@
+<div class="auk-accordion-panel__header">
+  <WebComponents::AuToolbar>
+    <WebComponents::AuToolbar::Group @position="left">
+      <WebComponents::AuToolbar::Item>
+        <Auk::Button
+          @skin="tertiary"
+          @icon="chevron-right"
+          @layout="icon-only"
+          aria-controls={{@accordionPanelId}}
+          {{on "click" @onToggleClick}}
+        />
+      </WebComponents::AuToolbar::Item>
+      <WebComponents::AuToolbar::Item>
+        <h4 class="auk-accordion__title">{{@title}}</h4>
+      </WebComponents::AuToolbar::Item>
+    </WebComponents::AuToolbar::Group>
+    {{yield
+      (hash Actions=(component 'auk/accordion-panel/header/actions'))
+    }}
+  </WebComponents::AuToolbar>
+</div>

@@ -1,6 +1,6 @@
 <div class="auk-u-mb-8">
-  <WebComponents::AuPanel>
-    <WebComponents::AuPanel::Header>
+  <Auk::Panel>
+    <Auk::Panel::Header>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
@@ -46,8 +46,8 @@
           {{/if}}
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuPanel::Header>
-    <WebComponents::AuPanel::Body>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
       <div class="auk-content">
         <h4>
           {{@agendaitem.shortTitle}}
@@ -59,51 +59,51 @@
             </span>
           </div>
         {{/if}}
-        <WebComponents::AuPillList>
+        <Auk::PillList>
           {{#if (not @agendaitem.showAsRemark) }}
             {{#if @subcase.subcaseName}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{@subcase.subcaseName}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
             {{#if @agendaitem.retracted}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{t "postponed-item"}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
           {{else}}
             {{#if @newsletterInfo}}
               {{#if @newsletterInfo.inNewsletter}}
-                <WebComponents::AuPill @skin="success" @icon="visible">
+                <Auk::Pill @skin="success" @icon="visible">
                   {{t "visible-in-newsletter"}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               {{else}}
-                <WebComponents::AuPill @skin="danger" @icon="not-visible">
+                <Auk::Pill @skin="danger" @icon="not-visible">
                   {{t "hidden-in-newsletter"}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               {{/if}}
             {{else}}
-              <WebComponents::AuPill>
+              <Auk::Pill>
                 {{t "no-newsletter-info"}}
-              </WebComponents::AuPill>
+              </Auk::Pill>
             {{/if}}
           {{/if}}
           {{#if
             (and @agendaitem.isDesignAgenda
                     (and this.currentSession.isEditor @agendaitem.formallyOkToShow))
           }}
-            <WebComponents::AuPill
+            <Auk::Pill
               @skin={{@agendaitem.formallyOkToShow.svg.color}}
               @icon={{@agendaitem.formallyOkToShow.svg.icon}}
             >
               {{@agendaitem.formallyOkToShow.label}}
-            </WebComponents::AuPill>
+            </Auk::Pill>
           {{/if}}
-        </WebComponents::AuPillList>
+        </Auk::PillList>
       </div>
-    </WebComponents::AuPanel::Body>
+    </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}
-      <WebComponents::AuModal::Footer @custom={{true}}>
+      <Auk::Modal::Footer @custom={{true}}>
         <WebComponents::AuToolbar>
           <WebComponents::AuToolbar::Group @position="left">
             <WebComponents::AuToolbar::Item>
@@ -113,7 +113,7 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
         </WebComponents::AuToolbar>
-      </WebComponents::AuModal::Footer>
+      </Auk::Modal::Footer>
     {{/if}}
-  </WebComponents::AuPanel>
+  </Auk::Panel>
 </div>

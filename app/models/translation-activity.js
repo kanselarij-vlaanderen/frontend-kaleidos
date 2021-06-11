@@ -12,6 +12,7 @@ export default class TranslationActivity extends Model {
 
   // Relations.
   @belongsTo('translation-subcase') subcase;
+  @belongsTo('request-activity') requestActivity;
   @belongsTo('language') language;
 
   @hasMany('piece') usedPieces;

@@ -42,13 +42,14 @@
         </tbody>
       </table>
       <div class="auk-u-mb-3"></div>
-      <WebComponents::AuPagination
+      <Auk::Pagination
         @page={{page}}
-        @nbOfItems={{results.length}}
         @size={{size}}
+        @nbOfItems={{results.length}}
+        @total={{results.meta.count}}
         @onNextPage={{action 'nextPage'}}
         @onPreviousPage={{action 'prevPage'}}
-        @total={{results.meta.count}} />
+      />
     {{/if}}
   </div>
 </div>
