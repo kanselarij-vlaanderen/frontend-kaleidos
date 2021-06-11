@@ -48,17 +48,17 @@
             >
               <Auk::Dropdown>
                 {{#if (and (not this.finished) ( not (await @activity.isWithdrawn)))}}
-                  <WebComponents::AuDropdown::Item {{on "click" @cancelExisting}}>
+                  <Auk::Dropdown::Item {{on "click" @cancelExisting}}>
                     {{t "cancel-request"}}
-                  </WebComponents::AuDropdown::Item>
+                  </Auk::Dropdown::Item>
                 {{/if}}
-                <WebComponents::AuDropdown::Item>
+                <Auk::Dropdown::Item>
                   {{t "download-documents"}}
-                </WebComponents::AuDropdown::Item>
+                </Auk::Dropdown::Item>
                 {{#if @publishPreview}}
-                  <WebComponents::AuDropdown::Item {{on "click" @publishPreview}}>
+                  <Auk::Dropdown::Item {{on "click" @publishPreview}}>
                     {{t "request-publication"}}
-                  </WebComponents::AuDropdown::Item>
+                  </Auk::Dropdown::Item>
                 {{/if}}
               </Auk::Dropdown>
             </AttachPopover>
