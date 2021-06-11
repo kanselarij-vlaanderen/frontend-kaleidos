@@ -8,11 +8,6 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
   @tracked isOpenLinkModal = false;
   @tracked mandatees;
 
-  constructor() {
-    super(...arguments);
-    this.loadData();
-  }
-
   @action
   openLinkModal() {
     this.isOpenLinkModal = true;
@@ -30,7 +25,7 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
 
   @action
   async unlink(mandatee) {
-    mandatee.publicationFlows.removeObject(this.args.publicationFlow);
-    await mandatee.save();
+    this.args.publicationFlow.mandatees.removeObject(mandatee);
+    await this.args.publicationFlow.save();
   }
 }

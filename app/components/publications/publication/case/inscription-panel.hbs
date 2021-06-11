@@ -45,23 +45,33 @@
     </Auk::Panel>
   {{else}}
     <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
-      <Auk::Panel::Header @title={{t "publication-inscription"}} />
+      <Auk::Panel::Header >
+        <WebComponents::AuToolbar::Group @position="left">
+          <WebComponents::AuToolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "publication-inscription"}}
+            </h4>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </Auk::Panel::Header>
       <Auk::Panel::Body>
-        <div class="auk-form-group {{if showShortTitleError "auk-form-group--error"}}">
-          <Auk::Label>{{t "short-title"}}</Auk::Label>
-          <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
-            data-test-publication-inscription-short-title-textarea />
-          {{#if this.showShortTitleError}}
-            <Auk::Label @error={{true}} data-test-au-label-error="true">
-              {{t "input-error-message"}}
-            </Auk::Label>
-          {{/if}}
-        </div>
-        <div class="auk-form-group }}">
-          <Auk::Label>{{t "long-title"}}</Auk::Label>
-          <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
-            data-test-publication-inscription-long-title-textarea />
-        </div>
+        <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+          <div class="auk-form-group {{if showShortTitleError "auk-form-group--error"}}">
+            <Auk::Label>{{t "short-title"}}</Auk::Label>
+            <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
+              data-test-publication-inscription-short-title-textarea />
+            {{#if this.showShortTitleError}}
+              <Auk::Label @error={{true}} data-test-au-label-error="true">
+                {{t "input-error-message"}}
+              </Auk::Label>
+            {{/if}}
+          </div>
+          <div class="auk-form-group }}">
+            <Auk::Label>{{t "long-title"}}</Auk::Label>
+            <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
+              data-test-publication-inscription-long-title-textarea />
+          </div>
+        </Utils::LoadableContent>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
         <WebComponents::AuToolbar>
@@ -79,7 +89,7 @@
             <WebComponents::AuToolbar::Item>
               <Auk::Button
                 @skin="primary"
-                @disabled={{this.save.isRunning}}
+                @loading={{this.save.isRunning}}
                 data-test-publication-save-inscription
                 {{on "click" (perform this.save)}}>
                 {{t "save"}}

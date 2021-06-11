@@ -1,5 +1,5 @@
 <Auk::Modal
-  @size="medium"
+  @size="small"
   data-test-add-mandateemodal>
   <Auk::Modal::Header
     @title={{t "add-minister"}}
@@ -27,7 +27,8 @@
     <WebComponents::AuToolbar>
       <WebComponents::AuToolbar::Group @position="left">
         <WebComponents::AuToolbar::Item>
-          <Auk::Button @skin="borderless" {{on "click" @onClose}}>
+          <Auk::Button @skin="borderless" {{on "click" @onClose}}
+            @disabled={{this.onLink.isRunning}}>
             {{t "cancel"}}
           </Auk::Button>
         </WebComponents::AuToolbar::Item>
@@ -38,7 +39,8 @@
             @skin="primary"
             @icon="add"
             @size="small"
-            @disabled={{not this.canLink}}
+            @disabled={{or this.init.isRunning (not this.canLink)}}
+            @loading={{this.onLink.isRunning}}
             {{on "click" (perform this.onLink)}}
             data-test-add-contactperson-submit-button>
             {{t "add"}}

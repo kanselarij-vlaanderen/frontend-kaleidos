@@ -36,7 +36,7 @@ export default class PublicationsPublicationCaseLinkMandateeModalComponent exten
   @action
   search(searchText) {
     const searchTextLC = searchText.toLowerCase();
-    this.options = this.args.mandatees.filter((mandatee) => this.match(searchTextLC, mandatee));
+    this.options = this.mandatees.filter((mandatee) => this.match(searchTextLC, mandatee));
   }
 
   match(searchTextLC, mandatee) {
@@ -61,9 +61,8 @@ export default class PublicationsPublicationCaseLinkMandateeModalComponent exten
 
   @task
   *onLink() {
-    if (this.canLink) {
-      this.selection.publicationFlows.push(this.args.publicationFlow);
-      yield this.selection.save();
-    }
+    this.args.publicationFlow.mandatees.addObject(this.selection);
+    yield this.args.publicationFlow.save();
+    this.args.onLink(this.selection);
   }
 }

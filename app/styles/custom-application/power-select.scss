@@ -1,7 +1,3 @@
-.ember-power-select-selected-item {
-  display: block;
-}
-
 .ember-basic-dropdown-content--left.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioned-in {
   display: block;
   top: 100%;
@@ -15,6 +11,10 @@
 .ember-power-select-trigger,
 .ember-basic-dropdown-trigger {
   height: unset !important;
+}
+
+.ember-power-select-selected-item {
+  display: inline-block;
 }
 
 .ember-power-select-option {
@@ -173,4 +173,9 @@
 
 .ember-power-select-trigger {
   width: 100%;
+}
+
+// Kaleidos specific css class name
+.ember-power-select--block-item .ember-power-select-selected-item {
+  display: block;
 }
