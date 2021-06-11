@@ -438,17 +438,17 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(newsletter.tableRow.newsletterRow).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
     cy.get('@newsletterRows').eq(1)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
     cy.get('@newsletterRows').eq(2)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
 

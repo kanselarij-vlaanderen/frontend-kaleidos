@@ -4,8 +4,11 @@ const selectors = {
   /** Section VL-components **/
 
   // vl-checkbox
-  checkbox: '[data-test-vl-checkbox]',
-  checkboxLabel: '[data-test-vl-checkbox-label]',
+  vlCheckbox: {
+    label: '[data-test-vl-checkbox-label]',
+    // unused selector
+    checkbox: '[data-test-vl-checkbox]',
+  },
 
   // subcase-detail-nav
   // TODO KAS-2647 deze moet naar au-component selectors, na refactoring naar auk::Tab herbekijken

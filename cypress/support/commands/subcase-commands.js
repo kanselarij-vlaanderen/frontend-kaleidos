@@ -261,7 +261,7 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }).should('exist')
       .eq(fieldNumber)
       .within(() => {
-        cy.get(utils.checkboxLabel).eq(domainNumber)
+        cy.get(utils.vlCheckbox.label).eq(domainNumber)
           .click();
       });
   }
