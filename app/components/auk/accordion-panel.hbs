@@ -1,0 +1,21 @@
+<div class="auk-accordion-panel">
+  <div
+    class="auk-accordion-panel__item {{if (not this.isActive) "auk-accordion-panel__item--closed"}}"
+    aria-expanded={{if this.isActive "true" "false"}}
+  >
+    {{yield
+      (hash
+        Header=(
+          component 'auk/accordion-panel/header'
+          accordionPanelId=this.accordionPanelId
+          onToggleClick=this.toggleAccordionPanel
+        )
+        Body=(
+          component 'auk/accordion-panel/body'
+          accordionPanelId=this.accordionPanelId
+          isActive=this.isActive
+        )
+      )
+    }}
+  </div>
+</div>
