@@ -14,14 +14,14 @@ context('Manage ISE codes tests', () => {
   it('Should open the model behind manage ISE codes', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageIseCodes).click();
+    cy.get(settings.overview.manageIseCodes).click();
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
-    cy.get(settings.manageIseCodes).click();
+    cy.get(settings.overview.manageIseCodes).click();
     cy.wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
     cy.get(modal.baseModal.close).click();

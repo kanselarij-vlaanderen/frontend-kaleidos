@@ -1,13 +1,13 @@
 /* global context, before, it, cy,beforeEach, Cypress */
 // / <reference types="Cypress" />
 
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
-import isecodes from '../../selectors/isecodes/isecodesSelectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
-import newsletter from '../../selectors/newsletter.selector';
+import newsletter from '../../selectors/newsletter.selectors';
 import modal from '../../selectors/modal.selectors';
-import auComponents from '../../selectors/au-component-selectors';
+import auComponents from '../../selectors/au-component.selectors';
+import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -62,8 +62,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
@@ -124,8 +124,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
 
     // Check if agendaitem has the same amount of mandatees
     cy.openAgendaForDate(agendaDate);
@@ -258,8 +258,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
         cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
 
-    cy.get(isecodes.isecodesList).should('exist');
-    cy.get(isecodes.isecodesListItem).should('have.length.greaterThan', 0);
+    cy.get(cases.isecodes.list).should('exist');
+    cy.get(cases.isecodes.listItem).should('have.length.greaterThan', 0);
   });
 
   it('should edit mandatees and show correct mandatees when switching agendaitems before, during and after edits', () => {
@@ -409,32 +409,33 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('be.visible')
       .click();
 
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(newsletter.edit).should('be.visible')
+    cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
-    cy.get(newsletter.editSave).click();
+    cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
     cy.get(modal.verify.save).click();
     cy.wait(3000);
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    cy.get(newsletter.overviewTableRow).as('newsletterRows');
+    // TODO .as not needed, user row.eq(index)
+    cy.get(newsletter.tableRow.newsletterRow).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
         cy.get(utils.checkboxLabel).click();
@@ -452,7 +453,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       });
 
     cy.clickReverseTab('Definitief');
-    cy.get(newsletter.printItemProposal).as('proposals');
+    cy.get(newsletter.itemContent.printItemProposal).as('proposals');
     cy.get('@proposals').eq(0)
       .contains('Op voorstel van Minister-president Geert Bourgeois en Vlaams minister Hilde Crevits');
     cy.get('@proposals').eq(1)
