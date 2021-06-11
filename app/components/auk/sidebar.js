@@ -31,5 +31,4 @@ export default class Sidebar extends Component {
     }
     return `${this.baseClass}--${defaultPosition}`;
   }
-  // TODO css was missing, check later
 }
