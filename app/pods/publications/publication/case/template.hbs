@@ -1,18 +1,17 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-  {{page-title (capitalize (t "case")) }}
+    {{page-title (capitalize (t "case")) }}
 
     <Publications::Publication::Case::InscriptionPanel
       @publicationFlow={{@model}}
       @subcase={{this.subcase}} />
 
-    {{!--  MINISTER PANEL  --}}
     <Publications::Publication::Case::MandateesPanel
       @publicationFlow={{@model}} />
 
-  {{!--  CONTACTPERSON PANEL  --}}
+    {{!--  CONTACTPERSON PANEL  --}}
 
- <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
+    <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
       <Auk::Panel>
         <Auk::Panel::Header>
           <WebComponents::AuToolbar>

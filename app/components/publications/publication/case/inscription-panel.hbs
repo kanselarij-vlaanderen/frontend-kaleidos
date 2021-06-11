@@ -50,19 +50,17 @@
         <div class="auk-form-group {{if showShortTitleError "auk-form-group--error"}}">
           <Auk::Label>{{t "short-title"}}</Auk::Label>
           <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
-            disabled={{this.save.isRunning}}
             data-test-publication-inscription-short-title-textarea />
-        </div>
-        <div class="auk-form-group }}">
-          <Auk::Label>{{t "long-title"}}</Auk::Label>
-          <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
-            disabled={{this.save.isRunning}}
-            data-test-publication-inscription-long-title-textarea />
           {{#if this.showShortTitleError}}
             <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "input-error-message"}}
             </Auk::Label>
           {{/if}}
+        </div>
+        <div class="auk-form-group }}">
+          <Auk::Label>{{t "long-title"}}</Auk::Label>
+          <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
+            data-test-publication-inscription-long-title-textarea />
         </div>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
