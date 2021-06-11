@@ -1,6 +1,6 @@
 <li class={{@class}}>
   {{#if @href}}
-    <a class="auk-menu__item active {{this.skin}}" href={{@href}} ...attributes>
+    <a class="auk-menu__item {{this.skin}}" href={{@href}} ...attributes>
       {{yield}}
     </a>
   {{else if @textOnly}}
@@ -9,7 +9,7 @@
     </div>
   {{else}}
     <LinkTo
-      class="auk-menu__item active {{this.skin}}"
+      class="auk-menu__item {{this.skin}}"
       @route={{@route}}
       @models={{this.models}}
       @disabled={{@disabled}}
