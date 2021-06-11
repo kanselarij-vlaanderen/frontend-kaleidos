@@ -154,7 +154,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
@@ -469,7 +469,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
@@ -493,16 +493,16 @@ function addLinkedDocument(filenames) {
   // TODO, this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
-  cy.get(document.addLinkedDocuments).click();
-  cy.get(document.searchForLinkedDocumentsInput).click();
+  cy.get(document.linkedDocuments.add).click();
+  cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
-    cy.get(document.searchForLinkedDocumentsInput).type(name);
+    cy.get(document.addExistingPiece.searchInput).type(name);
     cy.wait(1000);
     cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
-    cy.get(document.searchForLinkedDocumentsInput).clear();
+    cy.get(document.addExistingPiece.searchInput).clear();
   });
   cy.get(form.formSave).click();
   cy.log('/addLinkedDocument');

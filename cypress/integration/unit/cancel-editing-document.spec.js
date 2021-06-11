@@ -33,7 +33,7 @@ function uploadFileToCancel(file) {
 
   cy.get(modal.baseModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
     cy.wait(1000);
   });
 }
@@ -319,7 +319,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 3');
     uploadFileToCancel(file);
-    cy.get(document.modalPieceDelete).should('exist')
+    cy.get(document.vlUploadedDocument.deletePiece).should('exist')
       .click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
 

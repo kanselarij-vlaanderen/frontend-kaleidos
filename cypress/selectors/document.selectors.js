@@ -22,18 +22,28 @@ const selectors = {
   },
 
   // vl-uploaded-document
-  modalPieceDelete: '[data-test-vl-uploaded-document-deletepiece]',
-  modalPieceUploadedFilename: '[data-test-vl-uploaded-document-filename]',
+  vlUploadedDocument: {
+    deletePiece: '[data-test-vl-uploaded-document-delete-piece]',
+    filename: '[data-test-vl-uploaded-document-filename]',
+  },
 
   // add-existing-piece
-  searchForLinkedDocumentsInput: '[data-test-search-existing-document]',
-  searchForLinkedDocumentsButton: '[data-test-search-existing-document-button]',
+  addExistingPiece: {
+    searchInput: '[data-test-add-existing-piece-search-input]',
+    // unused selector:
+    searchButton: '[data-test-add-existing-piece-search-button]',
+  },
 
   // linked-documents
-  addLinkedDocuments: '[data-test-add-linked-documents]',
+  linkedDocuments: {
+    add: '[data-test-linked-documents-add]',
+  },
 
   // linked-document-link
-  linkeddocumentTypeLabel: '[data-test-linkeddocument-type-label]',
+  linkedDocumentLink: {
+    typeLabel: '[data-test-linked-document-link-type-label]',
+  },
+
   // unused selector
   showLinkedPiecesHistory: '[data-test-linked-document-version-history]',
 

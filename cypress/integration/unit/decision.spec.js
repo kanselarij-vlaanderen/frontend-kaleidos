@@ -54,7 +54,7 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.get(document.modalPieceDelete).click();
+    cy.get(document.vlUploadedDocument.deletePiece).click();
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
