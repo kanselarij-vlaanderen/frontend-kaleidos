@@ -7,12 +7,12 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent
       @isLoading={{this.isLoading}} @reserveSpace={{true}}>
-      <Auk::Label>{{t "minister"}}</Auk::Label>
+      <Auk::Label>{{t "mandatee"}}</Auk::Label>
       <Utils::PowerSelectDdau
         @options={{this.options}}
         @selected={{this.selection}}
-        @noMatchesMessage={{t "no-ministers-found"}}
-        @placeholder={{t "select-minister"}}
+        @noMatchesMessage={{t "no-mandatees-found"}}
+        @placeholder={{t "select-mandatee"}}
         @search={{this.search}}
         @onChange={{this.select}}
         data-test-mandatee-selector

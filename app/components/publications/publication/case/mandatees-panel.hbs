@@ -4,7 +4,7 @@
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="left">
           <WebComponents::AuToolbar::Item>
-            <h4 class="auk-panel__title">{{t "ministers"}}</h4>
+            <h4 class="auk-panel__title">{{t "mandatees"}}</h4>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
         <WebComponents::AuToolbar::Group @position="right">
@@ -14,7 +14,7 @@
               @icon="add"
               data-test-add-mandatee
               {{on "click" this.openLinkModal}}>
-              {{t "add-minister"}}
+              {{t "add-mandatee"}}
             </Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
@@ -25,7 +25,7 @@
         <table class="auk-table" data-test-table-mandatees>
           <thead>
             <tr>
-              <th>{{t "minister"}}</th>
+              <th>{{t "mandatee"}}</th>
               <th></th>
             </tr>
           </thead>
@@ -53,7 +53,7 @@
       </Auk::Panel::Body>
     {{else}}
       <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-mandatees-and-fields-added"}} />
+        <Auk::EmptyState @message={{t "no-mandatees-added"}} />
       </Auk::Panel::Body>
     {{/if}}
   </Auk::Panel>

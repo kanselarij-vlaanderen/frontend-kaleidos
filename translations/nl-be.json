@@ -208,7 +208,8 @@
   "manage-subcase-types": "Procedurestap types beheer",
   "manage-user-roles": "Gebruikersbeheer",
   "manage-users": "Gebruikersbeheer",
-  "mandatee": "Hoedanigheid",
+  "mandatee": "Mandataris",
+  "mandatees": "Mandatarissen",
   "mandatee-approval": "Goedkeuring co-agendering",
   "meeting-new": "nieuwe vergadering",
   "meetings": "vergaderingen",
@@ -866,5 +867,8 @@
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
   "existing": "Bestaand",
-  "no-ministers-found": "Geen ministers gevonden."
+  "add-mandatee": "Mandataris toevoegen",
+  "no-mandatees-added": "Geen mandataris toegevoegd",
+  "no-mandatees-found": "Geen mandatarissen gevonden.",
+  "select-mandatee": "Selecteer mandataris..."
 }
