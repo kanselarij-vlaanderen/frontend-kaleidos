@@ -7,34 +7,43 @@
         <table class="auk-table auk-table--styled js-data-table">
           <thead>
             <tr>
-              <th class="auk-u-text-nowrap" >
-                {{t "case-name-2"}}
-              </th>
-              <Utils::ThSortable
-                @onChange={{this.sortTable}}
-                @currentSorting={{this.sort}}
-                @field={{"on-agenda"}}
-                @label={{t "latest-on-agenda"}}/>
-              <Utils::ThSortable
-                @onChange={{this.sortTable}}
-                @currentSorting={{this.sort}}
-                @field={{"created"}}
-                @label={{t "created-on"}}/>
+              {{#each this.tableColumns as |column|}}
+                {{#if (get this.tableColumnDisplayOptions column.keyName)}}
+                  {{#if column.sortKey}}
+                    <Utils::ThSortable
+                      @onChange={{this.sortTable}}
+                      @currentSorting={{this.sort}}
+                      @field={{column.sortKey}}
+                      @label={{t column.translationKey}}
+                    />
+                  {{else}}
+                    <th class="auk-u-text-nowrap" >
+                      {{t column.translationKey}}
+                    </th>
+                  {{/if}}
+                {{/if}}
+              {{/each}}
               <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
             {{#each this.model as |case|}}
               <tr>
-                <td>
-                  {{case.shortTitle}}
-                </td>
-                <td>
-                  {{moment-format case.created "DD-MM-YYYY HH:mm"}}
-                </td>
-                <td>
-                  {{moment-format case.created "DD-MM-YYYY HH:mm"}}
-                </td>
+                {{#if this.tableColumnDisplayOptions.caseName}}
+                  <td>
+                    {{case.shortTitle}}
+                  </td>
+                {{/if}}
+                {{#if this.tableColumnDisplayOptions.latestOnAgenda}}
+                  <td>
+                    {{moment-format case.created "DD-MM-YYYY HH:mm"}}
+                  </td>
+                {{/if}}
+                {{#if this.tableColumnDisplayOptions.createdOn}}
+                  <td>
+                    {{moment-format case.created "DD-MM-YYYY HH:mm"}}
+                  </td>
+                {{/if}}
                 <td>
                   <div class="auk-button-toolbar">
                     {{#if this.currentSession.isEditor}}
@@ -126,20 +135,21 @@
           data-test-publication-button-filter-tables
           {{on "click" this.toggleColumnDisplayOptions}}
         />
-        {{!-- <AttachPopover
-                @class="auk-popover"
-                @showOn="click"
-                @placement="top"
-                @hideOn="click"
-                @isShown={{this.showTableDisplayOptions}}
-                @renderInPlace={{false}}
+        <AttachPopover
+          @class="auk-popover"
+          @showOn="click"
+          @placement="top"
+          @hideOn="click"
+          @isShown={{this.showTableDisplayOptions}}
+          @renderInPlace={{false}}
         >
-          <Publications::OverviewTableDisplayConfigModal
-                  @options={{this.tableColumnDisplayOptions}}
-                  @onChange={{this.changeColumnDisplayOptions}}
-                  @onClose={{this.toggleColumnDisplayOptions}}
+          <TableDisplayConfigModal
+            @configElements={{this.tableColumns}}
+            @options={{this.tableColumnDisplayOptions}}
+            @onChange={{this.changeColumnDisplayOption}}
+            @onClose={{this.toggleColumnDisplayOptions}}
           />
-        </AttachPopover> --}}
+        </AttachPopover>
       </WebComponents::AuToolbar::Item>
       <WebComponents::AuToolbar::Item>
         {{t "amount-showed"}}

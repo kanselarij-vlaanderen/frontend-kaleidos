@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import tableColumns from 'frontend-kaleidos/config/cases/overview-table-columns';
 
 export default class CasesIndexController extends Controller {
   @service currentSession;
@@ -39,6 +40,15 @@ export default class CasesIndexController extends Controller {
   @tracked isEditingRow = false;
   @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
+  @tracked tableColumnDisplayOptions = {};
+  tableColumns = tableColumns;
+
+  constructor() {
+    super(...arguments);
+    tableColumns.forEach((column) => {
+      this.tableColumnDisplayOptions[column.keyName] = column.showByDefault;
+    });
+  }
 
   @action
   editCase(_case) {
@@ -106,6 +116,11 @@ export default class CasesIndexController extends Controller {
   }
 
   @action
+  changeColumnDisplayOption(optionName, value) {
+    this.set(`tableColumnDisplayOptions.${optionName}`, value);
+  }
+
+  @action
   toggleColumnDisplayOptions() {
     this.showTableDisplayOptions = !this.showTableDisplayOptions;
   }
@@ -135,5 +150,10 @@ export default class CasesIndexController extends Controller {
     // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
     this.set('size', size);
     this.set('page', 0);
+  }
+
+  @action
+  sortTable(sortField) {
+    this.set('sort', sortField);
   }
 }
