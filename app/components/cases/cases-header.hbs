@@ -9,6 +9,13 @@
     </div>
     <div class="auk-toolbar-complex__right">
       <div class="auk-toolbar-complex__item">
+        <label class="auk-checkbox">
+          <input class="auk-checkbox__toggle" type="checkbox">
+          <span>{{t "show-archived" }}</span>
+          <span class="auk-checkbox__box"></span>
+        </label>
+      </div>
+      <div class="auk-toolbar-complex__item">
         {{#if currentSession.isEditor}}
           <button type="button"
             data-test-cases-header-add-case
