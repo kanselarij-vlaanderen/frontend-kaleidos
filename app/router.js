@@ -39,7 +39,6 @@ Router.map(function() {
         this.route('loading', { path: '/laden', });
       });
     });
-    this.route('overview', { path: '/overzicht', });
   });
   this.route('settings', { path: '/instellingen', }, function() {
     this.route('ministers');
