@@ -1,5 +1,5 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} />
+<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} @showArchived={{this.showArchived}} @toggleShowArchived={{this.toggleShowArchived}} />
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -72,7 +72,7 @@
                                   {{t "delete"}}
                                 </a>
                               {{else}}
-                                <a href="" class="auk-menu-item auk-menu__item--danger"
+                                <a href="" class="auk-menu__item auk-menu__item--danger"
                                   {{action attacher.hide}}
                                   {{action "unarchiveCase" case}}
                                 >
@@ -155,3 +155,23 @@
     </WebComponents::AuToolbar::Group>
   </WebComponents::AuToolbar>
 </div>
+{{#if isEditingRow}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "edit-case"}}
+    @closeModal={{this.cancelEditing}}
+  >
+    <Cases::EditCase 
+      @caseToEdit={{this.selectedCase}}
+      @cancelEditing={{this.cancelEditing}}
+    />
+  </WebComponents::VlModal>
+{{/if}}
+{{#if isArchivingCase}}
+  <WebComponents::VlModalVerify
+    @title={{t "archive-case"}}
+    @message={{t "archive-case-message"}}
+    @cancel={{this.cancelArchiveCase}}
+    @verify={{this.archiveCase}}
+  />
+{{/if}}

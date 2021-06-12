@@ -1,41 +1,40 @@
-{{#if (not isAddingCase)}}
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        <h1 class="auk-toolbar__title" data-test-cases-header-title>
-          {{t "cases"}}
-        </h1>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
-        <label class="auk-checkbox">
-          <input class="auk-checkbox__toggle" type="checkbox">
-          <span>{{t "show-archived" }}</span>
-          <span class="auk-checkbox__box"></span>
-        </label>
-      </div>
-      <div class="auk-toolbar-complex__item">
-        {{#if currentSession.isEditor}}
-          <button type="button"
-            data-test-cases-header-add-case
-            class="auk-button auk-button--primary"
-            {{action "toggleAddingCase"}}
-          >
-            <span class="auk-button__content">
-              <div class="auk-icon auk-icon--default ">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "add-case"}}
-              </div>
-            </span>
-          </button>
-        {{/if}}
-      </div>
+<div class="auk-toolbar-complex auk-toolbar-complex--auto">
+  <div class="auk-toolbar-complex__left">
+    <div class="auk-toolbar-complex__item">
+      <h1 class="auk-toolbar__title" data-test-cases-header-title>
+        {{t "cases"}}
+      </h1>
     </div>
   </div>
-{{else}}
+  {{#if currentSession.isEditor}}
+    <div class="auk-toolbar-complex__right">
+      <div class="auk-toolbar-complex__item">
+        <WebComponents::VlCheckbox 
+          @value={{@showArchived}}
+          @toggle={{@toggleShowArchived}}
+          @label={{t "show-archived" }}
+        />      
+      </div>
+      <div class="auk-toolbar-complex__item">
+        <button type="button"
+          data-test-cases-header-add-case
+          class="auk-button auk-button--primary"
+          {{action "toggleAddingCase"}}
+        >
+          <span class="auk-button__content">
+            <div class="auk-icon auk-icon--default ">
+              <i class="ki ki-add"></i>
+            </div>
+            <div class="auk-button__label">
+              {{t "add-case"}}
+            </div>
+          </span>
+        </button>
+      </div>
+    </div>
+  {{/if}}
+</div>
+{{#if isAddingCase}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @closeModal={{action "toggleAddingCase"}}
