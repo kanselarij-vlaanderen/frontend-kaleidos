@@ -49,3 +49,10 @@
     </WebComponents::AuButtonToolbar>
   </td>
 </tr>
+
+{{#if this.isOpenNewPublicationModal}}
+  <Publications::NewPublicationModal
+    @case={{this.case}}
+    @onSave={{this.saveNewPublication}}
+    @onCancel={{this.cancelNewPublication}} />
+{{/if}}

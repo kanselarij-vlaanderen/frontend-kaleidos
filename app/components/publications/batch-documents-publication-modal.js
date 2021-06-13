@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import {
   task,
   lastValue
@@ -15,8 +14,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @service store;
   @service publicationService;
 
-  @tracked referenceDocument;
-  @tracked isOpenNewPublicationModal = false;
   @lastValue('loadCase') case;
 
   constructor() {
@@ -44,27 +41,13 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  @action
-  openNewPublicationModal(piece) {
-    this.referenceDocument = piece;
-    this.isOpenNewPublicationModal = true;
-  }
-
   @task
-  *saveNewPublication(publicationProperties) {
+  *saveNewPublicationFlow(piece, publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
     });
-    this.referenceDocument.publicationFlow = publicationFlow;
-    yield this.referenceDocument.save();
-    this.isOpenNewPublicationModal = false;
-    this.referenceDocument = null;
-  }
-
-  @action
-  cancelNewPublication() {
-    this.isOpenNewPublicationModal = false;
-    this.referenceDocument = null;
+    piece.publicationFlow = publicationFlow;
+    yield piece.save();
   }
 
   @action

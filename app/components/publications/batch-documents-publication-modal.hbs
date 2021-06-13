@@ -33,6 +33,7 @@
             <Publications::BatchDocumentsPublicationRow
               @piece={{piece}}
               @case={{this.case}}
+              @onSaveNewPublicationFlow={{perform this.saveNewPublicationFlow}}
               @onLinkPublicationFlow={{this.linkPublicationFlow}}
               @onUnlinkPublicationFlow={{this.unlinkPublicationFlow}}
               @onOpenNewPublicationModal={{this.openNewPublicationModal}}
@@ -43,10 +44,3 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
 </Auk::Modal>
-
-{{#if this.isOpenNewPublicationModal}}
-  <Publications::NewPublicationModal
-    @case={{this.case}}
-    @onSave={{perform this.saveNewPublication}}
-    @onCancel={{this.cancelNewPublication}} />
-{{/if}}
