@@ -9,5 +9,6 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     const publicationActivity = this.store.findRecord('publication-activity', pubSubcase.id, {
       include: 'proofing-activities,proofing-activities.used-pieces,proofing-activities.generated-pieces',
     });
+    return publicationActivity;
   }
 }

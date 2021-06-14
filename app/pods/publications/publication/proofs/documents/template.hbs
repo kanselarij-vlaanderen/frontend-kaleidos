@@ -33,8 +33,10 @@
           <th>
             Bestandstype
           </th>
-          <ThSortable @label={{"Ontvangen op"}}
-            @currentSorting={{this}} />
+          <Utils::ThSortable @label={{"Ontvangen op"}}
+            onChange={{this.sortTable}}
+            @currentSorting={{this.sort}}
+            @field="created" />
 
           <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
 
