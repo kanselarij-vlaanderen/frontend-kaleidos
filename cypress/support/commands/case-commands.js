@@ -3,8 +3,8 @@
 
 // ***********************************************
 // Functions
-import search from '../../selectors/search.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 
 /**
  * @description Goes to the case overview and creates a new case
@@ -213,7 +213,7 @@ function searchCase(caseTitle) {
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':', '%3A');
   cy.route('GET', `/cases/search?**${splitCaseTitle}**`).as('getCaseSearchResult');
-  cy.get(search.searchTrigger)
+  cy.get(route.search.trigger)
     .click()
     .wait('@getCaseSearchResult');
   cy.contains('Aan het laden...').should('not.exist');

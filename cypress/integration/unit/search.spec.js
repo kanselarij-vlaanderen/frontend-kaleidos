@@ -1,10 +1,10 @@
 /* global context, before, it, cy,beforeEach, afterEach, Cypress, xit */
 // / <reference types="Cypress" />
-import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import toolbar from '../../selectors/toolbar.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -33,13 +33,13 @@ context('Search tests', () => {
 
   const searchFunction = (elementsToCheck) => {
     elementsToCheck.forEach((option) => {
-      cy.get(search.searchfield).type('test');
-      cy.get(search.searchTrigger).click();
+      cy.get(route.search.input).type('test');
+      cy.get(route.search.trigger).click();
       cy.get(dependency.emberPowerSelect.trigger)
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
       cy.url().should('include', `aantal=${option}`);
-      cy.get(search.searchfield).clear();
+      cy.get(route.search.input).clear();
     });
   };
 
@@ -136,7 +136,7 @@ context('Search tests', () => {
 
     cy.server(); // TODO server here not needed ?
     cy.route('GET', '/agendaitems/search?**').as('searchCall');
-    cy.get(search.searchTrigger).click();
+    cy.get(route.search.trigger).click();
     cy.wait('@searchCall');
 
     cy.get('[data-table]').should('not.exist');
@@ -159,7 +159,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/agendaitems/search?**').as('searchCall');
-      cy.get(search.searchTrigger).click();
+      cy.get(route.search.trigger).click();
       cy.wait('@searchCall');
 
       // TODO use newSubcase2TitleShort instead of fixed data
@@ -177,17 +177,17 @@ context('Search tests', () => {
 
   it('Searchfield should be empty after revisting search page', () => {
     cy.visit('/zoeken/agendapunten');
-    cy.get(search.searchfield).clear();
-    cy.get(search.searchfield).type('TestSearchSet');
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type('TestSearchSet');
     cy.server();
-    cy.get(search.searchTrigger).click();
+    cy.get(route.search.trigger).click();
     cy.wait(1000);
     cy.get(toolbar.mHeader.settings).click();
     cy.wait(1000);
     cy.get(toolbar.mHeader.search).click();
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
-    // cy.get(search.searchfield).should('have.value', '');
+    // cy.get(route.search.input).should('have.value', '');
   });
 
   it('Search for funky searchterms in dossiers', () => {
@@ -211,7 +211,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/cases/search?**').as('casesSearchCall');
-      cy.get(search.searchTrigger).click();
+      cy.get(route.search.trigger).click();
       cy.wait('@casesSearchCall');
 
       // TODO case1TitleShort instead of hardcoded text
@@ -234,7 +234,7 @@ context('Search tests', () => {
 
       cy.server();
       cy.route('GET', '/casesByDecisionText/search?**').as('decisionsSearchCall');
-      cy.get(search.searchTrigger).click();
+      cy.get(route.search.trigger).click();
       cy.wait('@decisionsSearchCall');
 
       cy.get('[data-table]').contains('korte titel for batterij');
