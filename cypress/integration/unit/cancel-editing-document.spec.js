@@ -1,11 +1,11 @@
 /* global context, before, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -292,7 +292,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 1');
     uploadFileToCancel(file);
-    cy.get(form.formCancelButton).click()
+    cy.get(utils.vlModalFooter.cancel).click()
       .wait('@deleteFile');
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
@@ -325,7 +325,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 4');
     cy.get(modal.baseModal.dialogWindow).within(() => {
-      cy.get(form.formSave).should('be.disabled');
+      cy.get(utils.vlModalFooter.save).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
       cy.route('POST', '/pieces').as('createNewPiece');
@@ -333,7 +333,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.route('PATCH', '/submission-activities').as('patchAgendaitem');
       cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
       cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
-      cy.get(form.formSave).should('not.be.disabled')
+      cy.get(utils.vlModalFooter.save).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,

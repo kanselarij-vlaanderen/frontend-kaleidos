@@ -5,7 +5,6 @@ import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
 import utils from '../../../../selectors/utils.selectors';
-import form from '../../../../selectors/form.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 
 context('Settings overview page tests', () => {
@@ -81,7 +80,7 @@ context('Settings overview page tests', () => {
     cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(form.fileUploadButton).click();
+    cy.get(utils.simpleFileUploader).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
     cy.get(settings.usersIndex.searchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');

@@ -18,7 +18,6 @@
           action calls when clicking multiple times on the same confirm-button --}}
         disabled={{or this.disableSave this.isLoading}}
         {{!-- loadingText=(t "please-be-patient") isLoading=isLoading --}}
-        data-test-vl-save={{true}}
         data-test-vl-modal-footer-save={{true}}
         {{action "saveAction"}}
       >

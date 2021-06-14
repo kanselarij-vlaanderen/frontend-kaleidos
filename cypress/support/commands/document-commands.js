@@ -5,9 +5,9 @@ import 'cypress-file-upload';
 import document from '../../selectors/document.selectors';
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 // ***********************************************
 
 // ***********************************************
@@ -159,7 +159,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click()
+    cy.get(utils.vlModalFooter.save).click()
       .wait(`@createNewPiece_${randomInt}`, {
         timeout: 12000,
       });
@@ -474,7 +474,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
   cy.wait(`@createNewPiece_${randomInt}`, {
     timeout: 12000,
@@ -504,7 +504,7 @@ function addLinkedDocument(filenames) {
     });
     cy.get(document.addExistingPiece.searchInput).clear();
   });
-  cy.get(form.formSave).click();
+  cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');
 }
 

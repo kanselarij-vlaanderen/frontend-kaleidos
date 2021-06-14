@@ -3,9 +3,9 @@
 
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import auk from '../../selectors/auk.selectors';
 import route from  '../../selectors/route.selectors';
+import utils from  '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -148,7 +148,7 @@ context('Agenda tests', () => {
       .should('be.visible')
       .click();
     // TODO replace with confidentiality selector
-    cy.get(form.formVlToggle).should('exist')
+    cy.get(utils.vlToggle).should('exist')
       .click();
 
     cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
@@ -182,7 +182,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
       // TODO data tag
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
-      cy.get(form.formInput).eq(1)
+      cy.get(utils.vlFormInput).eq(1)
         .should('have.value', `${result.meetingNumberVisualRepresentation}`);
       cy.visit('/');
       cy.get(route.agendas.action.newMeeting).click();

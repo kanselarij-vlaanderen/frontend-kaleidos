@@ -10,6 +10,7 @@ import modal from '../../selectors/modal.selectors';
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 // ***********************************************
 // Functions
@@ -68,7 +69,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   cy.get('@newAgendaForm').eq(1)
     .within(() => {
-      cy.get(form.datepickerInput).click();
+      cy.get(utils.vlDatepicker).click();
     });
   cy.setDateAndTimeInFlatpickr(date);
 
@@ -96,7 +97,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     cy.get(form.meeting.meetingEditIdentifierButton).click({
       force: true,
     });
-    cy.get(form.formInput).eq(1)
+    cy.get(utils.vlFormInput).eq(1)
       .click()
       .clear()
       .type(meetingNumberVisualRepresentation);
@@ -107,7 +108,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       force: true,
     });
 
-    cy.get(form.formInput).eq(1)
+    cy.get(utils.vlFormInput).eq(1)
       .click({
         force: true,
       })
@@ -126,7 +127,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get(modal.modalFooterSaveButton).click();
+    cy.get(utils.vlModalFooter.saveS).click();
   });
 
   let meetingId;
@@ -509,7 +510,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(modal.modalFooterSaveButton).click();
+      cy.get(utils.vlModalFooter.save).click();
     });
 
   cy.wait('@createAgendaActivity', {

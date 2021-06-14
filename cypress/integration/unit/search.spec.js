@@ -1,10 +1,10 @@
 /* global context, before, it, cy,beforeEach, afterEach, Cypress, xit */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import toolbar from '../../selectors/toolbar.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -111,7 +111,7 @@ context('Search tests', () => {
       .click();
 
     // TODO confidential toggle, use better selector ?
-    cy.get(form.formVlToggle).should('exist')
+    cy.get(utils.vlToggle).should('exist')
       .click();
 
     // cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();

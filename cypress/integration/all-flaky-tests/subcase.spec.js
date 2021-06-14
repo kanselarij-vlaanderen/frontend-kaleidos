@@ -4,7 +4,7 @@ import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
 import auk from '../../selectors/auk.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
-import form from '../../selectors/form.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -203,7 +203,7 @@ context('Subcase tests', () => {
 
     // Check the checkbox
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .find(form.formVlToggle)
+      .find(utils.vlToggle)
       .click();
 
     // Save the changes setting
