@@ -51,6 +51,7 @@ export default EmberObject.create({
   ],
   // TODO translate
   notaID: '9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
+  visieNotaID: '52d8ce45-1954-48e7-9402-ac5ee3edbbc4',
   notaCaseTypeID: '1b6a6975-28e7-46b5-83fe-da37bb967db2',
   documentType: {
     decreet: {

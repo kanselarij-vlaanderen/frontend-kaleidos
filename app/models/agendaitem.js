@@ -110,26 +110,43 @@ export default ModelWithModifier.extend({
     return names;
   }),
 
-  nota: computed('pieces', function() {
+  nota: computed('id', function() {
     return PromiseObject.create({
-      promise: this.get('pieces').then((pieces) => {
-        if (pieces && pieces.get('length') > 0) {
-          return this.store
-            .query('document-container', {
-              filter: {
-                pieces: {
-                  agendaitems: {
-                    id: this.get('id'),
-                  },
-                },
-                type: {
-                  id: CONFIG.notaID,
-                },
-              },
-              include: 'pieces,type,pieces.access-level',
-            })
-            .then((notas) => notas.get('firstObject'));
+      promise: this.store.queryOne('document-container', {
+        filter: {
+          pieces: {
+            agendaitems: {
+              id: this.id,
+            },
+          },
+          type: {
+            id: CONFIG.notaID,
+          },
+        },
+        include: 'pieces,type,pieces.access-level',
+      }),
+    });
+  }),
+
+  notaOrVisienota: computed('id', 'nota', function() {
+    return PromiseObject.create({
+      promise: this.nota.then((nota) => {
+        if (nota) {
+          return nota;
         }
+        return this.store.queryOne('document-container', {
+          filter: {
+            pieces: {
+              agendaitems: {
+                id: this.id,
+              },
+            },
+            type: {
+              id: CONFIG.visieNotaID,
+            },
+          },
+          include: 'pieces,type,pieces.access-level',
+        });
       }),
     });
   }),
