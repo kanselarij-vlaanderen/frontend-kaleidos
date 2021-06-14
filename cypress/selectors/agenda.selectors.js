@@ -17,7 +17,7 @@ const selectors = {
   // 3x agendaitem/documents, subcase/documents, agenda/documents
   // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
+  agendaitemEditDocumentsList: '[data-test-agendaitem-edit-documents-list]',
 
   // TODO unused selector, do we want to use this one ?
   agendaSidenavElement: 'data-test-agenda-sidenav-element',

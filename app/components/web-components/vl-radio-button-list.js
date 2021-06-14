@@ -6,8 +6,8 @@ export default Component.extend({
   classNames: ['auk-u-mb-4'],
 
   actions: {
-    modelChanged(event) {
-      this.modelChanged(event.target.value);
+    modelChanged(value) {
+      this.modelChanged(value);
     },
   },
 });
