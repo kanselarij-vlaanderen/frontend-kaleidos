@@ -34,12 +34,10 @@
             Bestandstype
           </th>
           <Utils::ThSortable @label={{"Ontvangen op"}}
-            onChange={{this.sortTable}}
-            @currentSorting={{this.sort}}
-            @field="created" />
-
+            @onChange={{this.changeSortOrder}}
+            @currentSorting={{this.sorting}}
+            @field="ontvangen" />
           <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
-
             <button class="auk-table-sorter">
               <div class="auk-table-sorter__label">
                 Ontvangen op
@@ -68,104 +66,106 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="auk-table-checkbox-col">
-            <label class="auk-checkbox">
-              <input class="auk-checkbox__toggle" type="checkbox" />
-              <span class="auk-checkbox__box"></span>
-            </label>
-          </td>
-          <td>
-            566232 drukproef
-          </td>
-          <td>
-            <span class="auk-pill auk-pill--white">
-              <div class="auk-icon auk-icon--default auk-icon--pdf">
-                <i class="ki ki-pdf"></i>
+        {{#each @model as |piece|}}
+          <tr>
+            <td class="auk-table-checkbox-col">
+              <label class="auk-checkbox">
+                <input class="auk-checkbox__toggle" type="checkbox" />
+                <span class="auk-checkbox__box"></span>
+              </label>
+            </td>
+            <td>
+              {{piece.name}}
+            </td>
+            <td>
+              <span class="auk-pill auk-pill--white">
+                <div class="auk-icon auk-icon--default auk-icon--pdf">
+                  <i class="ki ki-pdf"></i>
+                </div>
+                PDF
+              </span>
+            </td>
+            <td>
+              <p>
+                19-04-2021
+              </p>
+              <p class="auk-u-muted auk-u-text-small">
+                11:08
+              </p>
+            </td>
+            <td>
+              <p>
+                19-04-2021
+              </p>
+              <p class="auk-u-muted auk-u-text-small">
+                11:08
+              </p>
+            </td>
+            <td class="auk-u-text-align--center">
+              <div class="auk-icon auk-icon--default auk-icon--success-dark">
+                <i class="ki ki-check"></i>
               </div>
-              PDF
-            </span>
-          </td>
-          <td>
-            <p>
-              19-04-2021
-            </p>
-            <p class="auk-u-muted auk-u-text-small">
-              11:08
-            </p>
-          </td>
-          <td>
-            <p>
-              19-04-2021
-            </p>
-            <p class="auk-u-muted auk-u-text-small">
-              11:08
-            </p>
-          </td>
-          <td class="auk-u-text-align--center">
-            <div class="auk-icon auk-icon--default auk-icon--success-dark">
-              <i class="ki ki-check"></i>
-            </div>
-          </td>
-          <td>
-            <div class="auk-button-toolbar">
-              <button
-                class="auk-button auk-button--borderless auk-button--icon"
-                type="button"
-              >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default auk-icon--download">
-                    <i class="ki ki-download"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    Download
-                  </div>
-                </span>
-              </button>
-              <a
-                class="auk-button auk-button--borderless auk-button--icon"
-                href="/ovrb/documents/proof/proof-document.html"
-              >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default auk-icon--book">
-                    <i class="ki ki-book"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    Read
-                  </div>
-                </span>
-              </a>
-              <button
-                class="auk-button auk-button--borderless auk-button--icon"
-                type="button"
-                data-menu-placement="bottom-end"
-                data-menu="moreMenu0"
-                data-menu-samewidth="true"
-              >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default auk-icon--more">
-                    <i class="ki ki-more"></i>
-                  </div>
-                  <div class="auk-u-sr-only">
-                    View more
-                  </div>
-                </span>
-              </button>
-              <ul class="auk-menu" id="moreMenu0">
-                <li>
-                  <a class="auk-menu__item" href="#">
-                    Bewerk drukproef details
-                  </a>
-                </li>
-                <li>
-                  <a class="auk-menu__item auk-menu__item--danger" href="#">
-                    Verwijderen
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </td>
-        </tr>
+            </td>
+            <td>
+              <div class="auk-button-toolbar">
+                <button
+                  class="auk-button auk-button--borderless auk-button--icon"
+                  type="button"
+                >
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default auk-icon--download">
+                      <i class="ki ki-download"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      Download
+                    </div>
+                  </span>
+                </button>
+                <a
+                  class="auk-button auk-button--borderless auk-button--icon"
+                  href="/ovrb/documents/proof/proof-document.html"
+                >
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default auk-icon--book">
+                      <i class="ki ki-book"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      Read
+                    </div>
+                  </span>
+                </a>
+                <button
+                  class="auk-button auk-button--borderless auk-button--icon"
+                  type="button"
+                  data-menu-placement="bottom-end"
+                  data-menu="moreMenu0"
+                  data-menu-samewidth="true"
+                >
+                  <span class="auk-button__content">
+                    <div class="auk-icon auk-icon--default auk-icon--more">
+                      <i class="ki ki-more"></i>
+                    </div>
+                    <div class="auk-u-sr-only">
+                      View more
+                    </div>
+                  </span>
+                </button>
+                <ul class="auk-menu" id="moreMenu0">
+                  <li>
+                    <a class="auk-menu__item" href="#">
+                      Bewerk drukproef details
+                    </a>
+                  </li>
+                  <li>
+                    <a class="auk-menu__item auk-menu__item--danger" href="#">
+                      Verwijderen
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
