@@ -867,8 +867,5 @@
   "none": "Geen",
   "existing": "Bestaand",
   "publication.proofs.new-request": "Nieuwe aanvraag",
-  "publication.proofs.upload-documents": "Documenten uploaden",
-  "sort": "sorteer",
-  "query-param.uploaded": "geupload",
-  "query-param.received": "ontvangen"
+  "publication.proofs.upload-documents": "Documenten uploaden"
 }

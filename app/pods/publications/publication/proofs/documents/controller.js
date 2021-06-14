@@ -19,13 +19,13 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   columnMap = {
     receiptDate: {
-      translationKey: 'received',
+      translationKey: 'received-at',
       // ['translation'] added dynamically
       // TODO: correct properties!
       propertyPath: 'created',
     },
     uploadDate: {
-      translationKey: 'uploaded',
+      translationKey: 'uploaded-at',
       // TODO: correct properties!
       propertyPath: 'modified',
     },
@@ -36,7 +36,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
     for (const key in this.columnMap) {
       const column = this.columnMap[key];
-      column.translation = this.intl.t(column.translationKey);
+      const translation = this.intl.t(column.translationKey);
+      column.translation = translation.toLowerCase();
     }
   }
 
