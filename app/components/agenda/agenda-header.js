@@ -524,6 +524,7 @@ export default Component.extend(FileSaverMixin, {
    * loadPiecesToDelete
    *
    * This task will get all pieces that are new on the current designAgenda
+   * Excluding the pieces from new agendaitems, they don't have to be deleted
    * Used in reopenPreviousAgenda action
    */
   loadPiecesToDelete: task(function *() {
@@ -531,9 +532,12 @@ export default Component.extend(FileSaverMixin, {
     const previousAgenda = yield this.get('lastApprovedAgenda');
     const pieces = [];
     const agendaitemNewPieces = agendaitems.map(async(agendaitem) => {
-      const newPieces = await this.agendaService.changedPieces(this.currentAgenda.id, previousAgenda.id, agendaitem.id);
-      if (newPieces.length > 0) {
-        pieces.push(...newPieces);
+      const previousVersion = await agendaitem.get('previousVersion');
+      if (previousVersion) {
+        const newPieces = await this.agendaService.changedPieces(this.currentAgenda.id, previousAgenda.id, agendaitem.id);
+        if (newPieces.length > 0) {
+          pieces.push(...newPieces);
+        }
       }
     });
     yield all(agendaitemNewPieces);
