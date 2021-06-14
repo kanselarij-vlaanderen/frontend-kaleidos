@@ -1,0 +1,6 @@
+<span class="{{this.baseClass}} {{this.statusClass}}" ...attributes>
+  <Auk::Icon @name={{this.iconName}} />
+  {{#if (has-block)}}
+    <span class="auk-status-pill__label">{{yield}}</span>
+  {{/if}}
+</span>
