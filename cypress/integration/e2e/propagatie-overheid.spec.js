@@ -105,13 +105,13 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.get(document.documentCard).eq(0)
+    cy.get(document.documentCard.card).eq(0)
       .within(() => {
         cy.get('.auk-h4 > span').contains(file.fileName);
       });
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).as('docCards')
+      cy.get(document.documentCard.card).as('docCards')
         .should('have.length', 0);
     });
     cy.logoutFlow();
@@ -134,7 +134,7 @@ context('Propagation to other graphs', () => {
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).as('docCards')
+      cy.get(document.documentCard.card).as('docCards')
         .should('have.length', 2);
     });
 
