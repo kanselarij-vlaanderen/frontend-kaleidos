@@ -9,5 +9,10 @@ const selectors = {
     // unused selector
     checkbox: '[data-test-vl-checkbox]',
   },
+
+  // overviews-header-decision
+  overviewsHeaderDecision: {
+    title: '[data-test-overviews-header-decision-title]',
+  },
 };
 export default selectors;
