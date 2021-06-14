@@ -26,24 +26,22 @@ export default class PublicationsPublicationCaseLinkMandateeModalComponent exten
     this.search('');
   }
 
-  loadData() {
-    // fetcha all: mu-cl-resources does not support filtering on firstName + lastName
-    this.mandatees = this.store.findAll('mandatee', {
-      include: 'person',
-    });
+  async loadData() {
+    const mandatees = this.store.peekAll('mandatee');
+    this.options = mandatees.filter((mandatee) => !this.isLinked(mandatee));
   }
 
   @action
   search(searchText) {
     const searchTextLC = searchText.toLowerCase();
-    this.options = this.mandatees.filter((mandatee) => this.match(searchTextLC, mandatee));
+    return this.options.filter((mandatee) => this.match(searchTextLC, mandatee));
+  }
+
+  isLinked(mandatee) {
+    return this.args.publicationFlow.mandatees.includes(mandatee);
   }
 
   match(searchTextLC, mandatee) {
-    const isLinked = this.args.publicationFlow.mandatees.includes(mandatee);
-    if (isLinked) {
-      return false;
-    }
     const fullName = mandatee.person.get('fullName');
     const fullNameMatches = fullName.toLowerCase()
       .includes(searchTextLC);

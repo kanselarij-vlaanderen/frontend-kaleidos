@@ -30,12 +30,18 @@ export default class PublicationsRoute extends Route {
       'page[size]': 100,
       sort: 'priority',
     });
+    const mandateePromise = await this.store.query('mandatee', {
+      include: 'person',
+      'page[size]': 100,
+      sort: 'person.last-name',
+    });
     return Promise.all([
       publicationStatusPromise,
       regulationTypePromise,
       urgencyLevelPromise,
       documentTypePromise,
-      publicationModePromise
+      publicationModePromise,
+      mandateePromise
     ]);
   }
 }
