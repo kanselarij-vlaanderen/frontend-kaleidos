@@ -34,4 +34,13 @@ export default class Tab extends Component {
   get hasCounter() {
     return isPresent(this.args.counter); // In order to be able to supply 0
   }
+
+  get icon() {
+    if (isPresent(this.args.icon)) {
+      return this.args.icon;
+    } else if (this.args.isHierarchicalBack) {
+      return 'hierarchical-back';
+    }
+    return null;
+  }
 }

@@ -12,12 +12,12 @@ as |l|>
       {{on "click" l.transitionTo}}
     >
       <span class="auk-tabs__tab-inner">
-        {{#if @icon}}
+        {{#if this.icon}}
           {{#if (eq @layout "icon-right")}}
             <div class="auk-tabs__label">{{yield}}</div>
-            <Auk::Icon @name={{@icon}} />
+            <Auk::Icon @name={{this.icon}} />
           {{else}}
-            <Auk::Icon @name={{@icon}} />
+            <Auk::Icon @name={{this.icon}} />
             <div class="auk-tabs__label">{{yield}}</div>
           {{/if}}
         {{else}}
