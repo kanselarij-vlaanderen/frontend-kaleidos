@@ -22,11 +22,11 @@
           <Auk::Panel::Body>
             <div class="auk-form-group">
               <Auk::Label>{{t "short-title"}}</Auk::Label>
-              <WebComponents::AuTextarea @rows="2" @value={{this.publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></WebComponents::AuTextarea>
+              <Auk::Textarea @rows="2" @value={{this.publicationFlow.shortTitle}} data-test-publication-inscription-short-title-textarea></Auk::Textarea>
             </div>
             <div class="auk-form-group">
               <Auk::Label>{{t "title-subcase"}}</Auk::Label> {{!-- TODO: misleading translation tag. There are no subcases here --}}
-              <WebComponents::AuTextarea @rows="4" @value={{this.publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></WebComponents::AuTextarea>
+              <Auk::Textarea @rows="4" @value={{this.publicationFlow.longTitle}} data-test-publication-inscription-long-title-textarea></Auk::Textarea>
             </div>
           </Auk::Panel::Body>
           <Auk::Panel::Footer>

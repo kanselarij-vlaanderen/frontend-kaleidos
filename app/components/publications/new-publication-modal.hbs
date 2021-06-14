@@ -80,8 +80,7 @@
           <Auk::Label for="shortTitleInput" @isRequired={{true}}>
             {{t "name-subcase"}}
           </Auk::Label>
-          <WebComponents::AuTextarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}}
-            data-test-create-publication-modal-short-title-textarea />
+          <Auk::Textarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}} data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
             <Auk::Label @error={{true}} data-test-au-label-error="true">
               {{t "input-error-message"}}
@@ -90,8 +89,7 @@
         </div>
         <div class="auk-form-group">
           <Auk::Label for="longTitleInput">{{t "title-subcase"}}</Auk::Label>
-          <WebComponents::AuTextarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}}
-            data-test-create-publication-modal-long-title-textarea />
+          <Auk::Textarea id="longTitleInput" @rows="4" @value={{mut this.longTitle}} data-test-create-publication-modal-long-title-textarea />
         </div>
       </div>
     </Utils::LoadableContent>

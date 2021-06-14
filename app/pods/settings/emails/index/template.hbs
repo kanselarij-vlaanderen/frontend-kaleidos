@@ -31,12 +31,12 @@
         <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-footer"}}
         </Auk::Label>
-        <WebComponents::AuTextarea
-                id="emailFooter"
-                @rows="15"
-                @value={{await this.footer}}
+        <Auk::Textarea
+          id="emailFooter"
+          @rows="15"
+          @value={{await this.footer}}
           {{on "change" (fn this.setFooterContent)}}
-                data-test-email-content-textarea
+          data-test-email-content-textarea
         />
       </Auk::Panel::Body>
     </Auk::Panel>
@@ -91,7 +91,7 @@
           <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
             {{t "accompanying-text"}}
           </Auk::Label>
-          <WebComponents::AuTextarea
+          <Auk::Textarea
             id="emailMessage"
             @rows="15"
             @value={{await email.content}}

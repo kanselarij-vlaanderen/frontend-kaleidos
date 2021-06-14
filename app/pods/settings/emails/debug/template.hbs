@@ -27,7 +27,7 @@
         </div>
         <div class="auk-form-group">
           <Auk::Label for="defaultInput">{{t "content" }}</Auk::Label>
-          <WebComponents::AuTextarea @rows="2" @value={{this.content}} {{on "change" this.onChangeContent}}></WebComponents::AuTextarea>
+          <Auk::Textarea @rows="2" @value={{this.content}} {{on "change" this.onChangeContent}}></Auk::Textarea>
         </div>
         <WebComponents::VlSaveButton
                 @text={{t "send-test-mail"}}
