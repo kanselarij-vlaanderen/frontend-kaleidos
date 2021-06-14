@@ -50,9 +50,9 @@
 <div class="auk-u-mb-2">
   <div class="pill-container auk-o-flex">
     {{#if (await subcase.confidential)}}
-      <WebComponents::AuPill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
+      <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed" />
     {{else}}
-      <WebComponents::AuPill @skin="success" @layout="icon-only" @icon="lock-open"/>
+      <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open" />
     {{/if}}
   </div>
 </div>

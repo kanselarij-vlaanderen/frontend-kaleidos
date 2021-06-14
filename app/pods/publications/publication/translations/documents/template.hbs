@@ -1,27 +1,39 @@
-<Auk::Navbar @border="none">
-  <WebComponents::AuToolbar @size="large">
-    <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
-        <Auk::Button @skin="secondary" @icon="mail" @disabled={{true}}>
-          {{t "request-translations"}}
-        </Auk::Button>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
-
-        <Auk::Button @skin="secondary" @icon="add" {{on "click" this.openPieceUploadModal}}>
-          {{t "upload-translation-file"}}
-        </Auk::Button>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
-</Auk::Navbar>
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
+    <Auk::Navbar @border="none">
+      <WebComponents::AuToolbar @size="large">
+        <WebComponents::AuToolbar::Group @position="right">
+          <WebComponents::AuToolbar::Item>
+            <Auk::Button
+              @icon="mail"
+              @skin="secondary"
+              @disabled={{eq this.selectedPieces.length 0}}
+              {{on "click" this.openTranslationRequestModal}}
+            >
+              {{t "request-translations"}}
+            </Auk::Button>
+          </WebComponents::AuToolbar::Item>
+          <WebComponents::AuToolbar::Item>
+            <Auk::Button
+              @icon="add"
+              @skin="secondary"
+              {{on "click" this.openPieceUploadModal}}>
+              {{t "upload-translation-file"}}
+            </Auk::Button>
+          </WebComponents::AuToolbar::Item>
+        </WebComponents::AuToolbar::Group>
+      </WebComponents::AuToolbar>
+    </Auk::Navbar>
+
     {{#if this.model}}
       <table class="auk-table">
         <thead>
           <tr>
-            <th class="auk-table-checkbox-col"><Auk::Checkbox @mode="table" /></th>
+            <th class="auk-table-checkbox-col">
+              <Auk::Checkbox @mode="table"
+                {{on "click" this.toggleAllPiecesSelection}}
+                @checked={{this.areAllPiecesSelected}}  />
+            </th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
@@ -34,15 +46,17 @@
           {{#each this.model as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
-                <Auk::Checkbox @mode="table" />
+                <Auk::Checkbox @mode="table"
+                  {{on "click" (fn this.togglePieceSelection piece)}}
+                  @checked={{includes piece this.selectedPieces}}  />
               </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
               <td >
-                <WebComponents::AuPill class="auk-pill--white">
+                <Auk::Pill @skin="white">
                   {{piece.file.extension}}
-                </WebComponents::AuPill>
+                </Auk::Pill>
               </td>
               <td class="auk-u-text-nowrap">
                 {{t "dash"}}
@@ -58,18 +72,18 @@
               <td>
                 <WebComponents::AuButtonToolbar>
                   <Auk::Button
-                    @layout="icon-only"
-                    @icon="download"
-                    @skin="borderless"
-                    @href={{piece.file.namedDownloadLink}}
-                    download
+                        @layout="icon-only"
+                        @icon="download"
+                        @skin="borderless"
+                        @href={{piece.file.namedDownloadLink}}
+                        download
                   />
                   <Auk::Button
-                    @layout="icon-only"
-                    @icon="book"
-                    @skin="borderless"
-                    @href={{piece.viewDocumentURL}}
-                    target="_blank"
+                        @layout="icon-only"
+                        @icon="book"
+                        @skin="borderless"
+                        @href={{piece.viewDocumentURL}}
+                        target="_blank"
                   />
                 </WebComponents::AuButtonToolbar>
               </td>
@@ -78,11 +92,11 @@
         </tbody>
       </table>
     {{else}}
-      <WebComponents::AuPanel>
-        <WebComponents::AuPanel::Body>
+      <Auk::Panel>
+        <Auk::Panel::Body>
           <Auk::EmptyState @message={{t "no-documents-yet" }} />
-        </WebComponents::AuPanel::Body>
-      </WebComponents::AuPanel>
+        </Auk::Panel::Body>
+      </Auk::Panel>
     {{/if}}
   </div>
 </div>
@@ -90,6 +104,14 @@
 {{#if this.showPieceUploadModal}}
   <Publications::Publication::Translations::DocumentsUploadModal
     @translationSubcase={{this.translationSubcase}}
-    @onSave={{perform this.saveAndLinkPieces}}
+    @onSave={{perform this.saveSourceDocument}}
     @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
+
+{{#if this.showTranslationRequestModal}}
+  <Publications::Publication::Translations::TranslationRequestModal
+          @translationSubcase={{this.translationSubcase}}
+          @selectedPieces={{this.selectedPieces}}
+          @onSave={{perform this.saveTranslationRequest}}
+          @onCancel={{this.closeTranslationRequestModal}} />
 {{/if}}

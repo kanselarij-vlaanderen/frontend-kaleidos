@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 /**
- * @argument progress <Number> in percent (0-100)
+ * @argument {Number} progress: progress in percent (0-100)
  */
 export default class ProgressBar extends Component {
   get decimalProgress() {

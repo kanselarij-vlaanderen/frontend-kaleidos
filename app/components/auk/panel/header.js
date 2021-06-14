@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
 
+/**
+ *
+ * @argument {Boolean} borderless
+ */
 export default class PanelHeader extends Component {
   get borderless() {
     if (this.args.borderless) {
