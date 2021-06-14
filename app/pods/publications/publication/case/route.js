@@ -13,7 +13,6 @@ export default class CaseRoute extends Route {
         },
         ':has:agenda-activities': 'yes',
       },
-      sort: '-created',
     }).then((subcase) => !!subcase);
 
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
