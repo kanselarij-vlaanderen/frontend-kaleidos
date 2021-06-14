@@ -1,10 +1,10 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "title"}}</Auk::Label>
     {{web-components/vl-form-input value=agendaitem.titlePress}}
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "content"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "content"}}</Auk::Label>
     {{textarea
       class="auk-textarea"
       rows="10"
@@ -12,7 +12,7 @@
     }}
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "for-press"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "for-press"}}</Auk::Label>
     {{web-components/vl-toggle value=agendaitem.forPress}}
   </div>
 </div>

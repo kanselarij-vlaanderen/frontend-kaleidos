@@ -2,7 +2,7 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import modal from '../../selectors/modal.selectors';
-import auComponent from '../../selectors/au-component-selectors';
+import auComponent from '../../selectors/au-component.selectors';
 
 context('Formally ok/nok tests', () => {
   beforeEach(() => {

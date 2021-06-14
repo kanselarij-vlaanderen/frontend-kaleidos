@@ -35,6 +35,6 @@ context('Show no warning in Newsletterinfo', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(alert.changesAlertComponent).should('not.be.visible');
+    cy.get(alert.changesAlert).should('not.be.visible');
   });
 });

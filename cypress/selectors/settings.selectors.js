@@ -1,30 +1,55 @@
 const selectors = {
-  generalSettings: '[data-test-settings-generalSettings]',
-  settingsUserTable: '[data-test-settings-user-table]',
-  manageMinisters: '[data-test-settings-manageMinisters]',
-  manageUsers: '[data-test-settings-manageUsers]',
-  manageEmails: '[data-test-manage-emails]',
-  manageGovermentDomains: '[data-test-manage-government-domains]',
-  manageGovermentFields: '[data-test-manage-government-fields]',
-  manageIseCodes: '[data-test-manage-ise-codes]',
-  manageAlerts: '[data-test-manage-alerts]',
-  manageDocumentTypes: '[data-test-manage-document-types]',
-  manageCaseTypes: '[data-test-manage-case-types]',
-  manageSubcaseTypes: '[data-test-manage-subcase-types]',
-  manageSignatures: '[data-test-manage-signatures]',
-  addMinister: '[data-test-minister-add]',
-  sortableGroup: '[data-test-ministers-sortable-group]',
-  sortableGroupRow: '[data-test-ministers-sortable-group-row]',
-  mandateeFullDisplayName: '[data-test-mandatee-fulldisplayname]',
-  mandateeNickname: '[data-test-mandatee-nickname]',
-  mandateePriority: '[data-test-mandatee-priority]',
-  mandateeEdit: '[data-test-mandatee-edit]',
-  mandateeResign: '[data-test-mandatee-resign]',
-  mandateeDelete: '[data-test-mandatee-delete]',
-  deleteUser: '[data-test-delete-user]',
-  userSearchInput: '[data-test-user-search-input]',
-  userSearchButton: '[data-test-user-search-button]',
-  // TODO rename selector
+  // route settings
+  settings: {
+    generalSettings: '[data-test-route-settings-general-settings]',
+    manageMinisters: '[data-test-route-settings-manage-ministers]',
+    manageUsers: '[data-test-route-settings-manage-users]',
+  },
+
+  // route settings/users/index
+  usersIndex: {
+    searchInput: '[data-test-route-settings-users-search-input]',
+    searchButton: '[data-test-route-settings-users-search-button]',
+    table: '[data-test-route-settings-users-table]',
+  },
+
+  // route settings/overview
+  overview: {
+    manageEmails: '[data-test-route-settings-overview-manage-emails]',
+    manageGovermentDomains: '[data-test-route-settings-overview-manage-government-domains]',
+    manageGovermentFields: '[data-test-route-settings-overview-manage-government-fields]',
+    manageIseCodes: '[data-test-route-settings-overview-manage-ise-codes]',
+    manageAlerts: '[data-test-route-settings-overview-manage-alerts]',
+    manageDocumentTypes: '[data-test-route-settings-overview-manage-document-types]',
+    manageCaseTypes: '[data-test-route-settings-overview-manage-case-types]',
+    manageSubcaseTypes: '[data-test-route-settings-overview-manage-subcase-types]',
+    manageSignatures: '[data-test-route-settings-overview-manage-signatures]',
+  },
+
+  // route settings/ministers
+  ministers: {
+    add: '[data-test-route-settings-ministers-add]',
+    // TODO unused selectors
+    sortableGroup: '[data-test-route-settings-ministers-sortable-group]',
+    sortableGroupRow: '[data-test-route-settings-ministers-sortable-group-row]',
+    mandatee: {
+      edit: '[data-test-route-settings-ministers-mandatee-edit]',
+      delete: '[data-test-route-settings-ministers-mandatee-delete]',
+      // TODO unused selectors
+      fullDisplayName: '[data-test-route-settings-ministers-mandatee-full-display-name]',
+      nickname: '[data-test-route-settings-ministers-mandatee-nickname]',
+      priority: '[data-test-route-settings-ministers-mandatee-priority]',
+      resign: '[data-test-mandatee-route-settings-ministers-mandatee-resign]',
+    },
+  },
+
+  // component vl-delete-user
+  vlDeleteUser: {
+    delete: '[data-test-vl-delete-user]',
+  },
+
+  // component next-button
+  // TODO this component is just a linkTo, refactor to au component
   goToUserDetail: '[data-test-next-button-user-detail]',
 };
 export default selectors;

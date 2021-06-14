@@ -36,7 +36,7 @@
                 {{on "click" this.deletePieceLink}}
               >
                 <span class="auk-button__content">
-                  <WebComponents::AuIcon @name="link-broken" @iconSkinColor="danger" />
+                  <Auk::Icon @name="link-broken" @skin="danger" />
                 </span>
               </button>
             {{/if}}
@@ -57,14 +57,14 @@
   {{#if this.reverseSortedPieces.length}}
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
-        <WebComponents::AuButton
+        <Auk::Button
           @skin="borderless"
           @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           data-test-show-pieces-history
           {{on "click" this.toggleVersionHistory}}
         >
           {{t "show-pieces"}}
-        </WebComponents::AuButton>
+        </Auk::Button>
         {{#if this.isExpandedVersionHistory}}
           <div class="vl-accordion__content js-vl-accordion__content">
             <div class="vl-accordion__panel">

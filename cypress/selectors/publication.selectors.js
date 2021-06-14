@@ -3,7 +3,6 @@ const selectors = {
   publicationDetailHeaderShortTitle: '[data-test-publication-detail-menu-short-title]',
   publicationDetailHeaderPublicationNumber: '[data-test-publication-detail-menu-publication-number]',
   goToPublication: '[data-test-publications-button-go-to-publication]',
-  notViaMinisterTab: '[data-test-publication-in-progress-not-via-minister-tab]',
   editInscriptionButton: '[data-test-publication-edit-inscription-button]',
   inscriptionShortTitleTextarea: '[data-test-publication-inscription-short-title-textarea]',
   inscriptionLongTitleTextarea: '[data-test-publication-inscription-long-title-textarea]',
@@ -24,12 +23,6 @@ const selectors = {
     casePanelEditing: '[data-test-publication-case-panel-case-editing]',
     mandateePanel: '[data-test-publication-case-panel-mandatees]',
     contantPersonPanel: '[data-test-publication-case-panel-contactperson]',
-    // buttons
-    addDocumentsButton: '[data-test-publication-case-add-documents]',
-    documentsPieceRow: '[data-test-publication-case-documents-piece-row]',
-    documentsRowActions: '[data-test-pub-case-doc-row-actions]',
-    documentsRowActionView: '[data-test-pub-case-doc-row-action-view]',
-    documentsRowActionDelete: '[data-test-pub-case-doc-row-action-delete]',
   },
   nav: {
     goBack: '[data-test-publication-case-nav-go-back]',
@@ -40,7 +33,6 @@ const selectors = {
   },
   // TODO replace deze bij het maken van publication translation testen
   tableCell: '.auk-table__cell--accent',
-  startPublication: '[data-test-start-publication]',
   flowTitle: '[data-test-publication-flow-title]',
 };
 export default selectors;

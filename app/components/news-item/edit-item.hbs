@@ -1,4 +1,4 @@
-<div class="auk-u-mb-4" data-agenda-item-news-edit>
+<div class="auk-u-mb-4">
   <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end auk-u-mb-2 auk-o-flex--justify-end">
     {{#if (not (is-pending agendaitem.nota))}}
       {{#if (not (await agendaitem.nota))}}
@@ -35,17 +35,17 @@
     {{/if}}
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "title"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "title"}}</Auk::Label>
     <p>
       {{agendaitem.title}}
     </p>
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "short-title"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "short-title"}}</Auk::Label>
     {{web-components/vl-form-input value=newsletterInfo.title}}
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "mandatee-proposal"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
     <p>
       {{#if (await newsletterInfo.newsletterProposal)}}
         {{await newsletterInfo.newsletterProposal}}
@@ -55,9 +55,9 @@
     </p>
   </div>
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "decision-in-newsletter"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
     {{web-components/vl-rdfa-editor
-      data-test-rdfa-editor=true
+      data-test-newsletter-edit-item-rdfa-editor=true
       isLarge=isExpanded
       richtext=(await newsletterInfo.richtext)
       handleRdfaEditorInit=(action "handleRdfaEditorInit")
@@ -65,16 +65,16 @@
   </div>
 
   <div class="auk-form-group auk-u-text-capitalize">
-    <WebComponents::AuLabel>{{t "remark"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "remark"}}</Auk::Label>
     {{web-components/vl-form-input value=newsletterInfo.remark}}
   </div>
 
   <div class="auk-form-group">
-    <WebComponents::AuLabel>{{t "finished"}}</WebComponents::AuLabel>
+    <Auk::Label>{{t "finished"}}</Auk::Label>
     {{web-components/vl-toggle value=newsletterInfo.finished}}
   </div>
-  <div class="auk-form-group" data-test-themes-selector>
-    <WebComponents::AuLabel>{{t "themes"}}</WebComponents::AuLabel>
+  <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
+    <Auk::Label>{{t "themes"}}</Auk::Label>
     {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
   </div>
 
@@ -90,7 +90,7 @@
     </WebComponents::AuToolbar::Item>
     <WebComponents::AuToolbar::Item>
       {{web-components/vl-save-button
-        data-test-newsletter-edit-save=true
+        data-test-newsletter-edit-item-save=true
         text=(t "save")
         isLoading=isLoading
         saveAction=(action "trySaveChanges")

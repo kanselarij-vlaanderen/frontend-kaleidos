@@ -23,23 +23,23 @@
         @onChange={{this.selectPublicationFlow}}
         />
     {{else}}
-      <WebComponents::AuButton
+      <Auk::Button
         @icon="add"
         {{on 'click' this.openNewPublicationModal}}>
         {{t "publications-new"}}
-      </WebComponents::AuButton>
+      </Auk::Button>
     {{/if}}
   </td>
   <td>
     <WebComponents::AuButtonToolbar>
-      <WebComponents::AuButton
+      <Auk::Button
         @layout="icon-only"
         @icon="download"
         @skin="borderless"
-        @href={{@piece.file.downloadLink}}
+        @href={{@piece.file.namedDownloadLink}}
         download
       />
-      <WebComponents::AuButton
+      <Auk::Button
         @layout="icon-only"
         @icon="book"
         @skin="borderless"
@@ -49,3 +49,10 @@
     </WebComponents::AuButtonToolbar>
   </td>
 </tr>
+
+{{#if this.isOpenNewPublicationModal}}
+  <Publications::NewPublicationModal
+    @case={{this.case}}
+    @onSave={{this.saveNewPublication}}
+    @onCancel={{this.cancelNewPublication}} />
+{{/if}}

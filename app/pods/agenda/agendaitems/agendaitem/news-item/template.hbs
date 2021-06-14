@@ -1,4 +1,4 @@
-<div data-test-agenda-news-item-view>
+<div>
   <div class="auk-u-mb-4">
     <div class="auk-o-flex auk-o-flex--align-baseline">
       <h3 class="auk-h2">
@@ -8,7 +8,7 @@
         <div class="auk-u-ml-2">
           {{#if this.model}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
+            <a href="javascript://" data-test-route-agenda---news-item-edit class="auk-button-link"
               {{on "click" this.startEditing}}>
               <span class="auk-button__content">
                 {{t "edit"}}
@@ -16,7 +16,7 @@
             </a>
           {{else}}
             {{!-- TODO: replace by link-styled button --}}
-            <a href="javascript://" data-test-newsletter-edit class="auk-button-link"
+            <a href="javascript://" data-test-route-agenda---news-item-create class="auk-button-link"
               {{on "click" this.createAndStartEditing}}>
               <span class="auk-button__content">
                 {{t "create"}}
@@ -31,7 +31,6 @@
     {{#if (and this.notaHasChanged this.currentSession.isEditor)}}
       {{#unless this.notaModifiedWarningConfirmed}}
         <ChangesAlert
-          data-test-changes-alert
           @message={{t
             "nota-changed-message"
             date=(moment-format this.notaModifiedTime "D MMMM YYYY")

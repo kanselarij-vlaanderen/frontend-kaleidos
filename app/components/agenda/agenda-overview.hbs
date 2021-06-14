@@ -33,7 +33,7 @@
           {{#unless this.isEditingOverview}}
             <div class="auk-u-ml-2">
               <Auk::ButtonLink
-                data-test-agenda-edit-formally-ok-button={{true}}
+                data-test-agenda-overview-formally-ok-edit={{true}}
                 class="vlc-agenda-items-section-header__link"
                 {{on "click" this.toggleIsEditingOverview}}
               >
@@ -85,7 +85,7 @@
       </div>
     {{/if}}
   {{else}}
-    <WebComponents::AuLoadingPage/>
+    <WebComponents::LoadingPage />
   {{/if}}
   <div class="vlc-agenda-items-section-header">
     <h3 class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title">
@@ -121,6 +121,6 @@
     {{/if}}
   </div>
   {{#if this.showLoader}}
-    <WebComponents::AuLoadingOverlay/>
+    <WebComponents::LoadingOverlay />
   {{/if}}
 </div>

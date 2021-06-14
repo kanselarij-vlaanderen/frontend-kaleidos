@@ -1,0 +1,39 @@
+{{#if @icon}}
+  <div class="auk-input-with-icon">
+    <Input
+      class="auk-input {{this.error}} {{this.block}}"
+      data-test-auk-input=""
+      @type={{@type}}
+      @enter={{@enter}}
+      @value={{@value}}
+      @insert-newline={{@insert-newline}}
+      @escape-press={{@escape-press}}
+      @focus-in={{@focus-in}}
+      @focus-out={{@focus-out}}
+      @key-down={{@key-down}}
+      @key-press={{@key-press}}
+      @key-up={{@key-up}}
+      @placeholder={{@placeholder}}
+      @autocomplete={{@autocomplete}}
+      ...attributes
+    />
+    <Auk::Icon @name={{@icon}} />
+  </div>
+{{else}}
+  <Input
+    class="auk-input {{this.error}} {{this.block}}"
+    data-test-auk-input=""
+    @type={{@type}}
+    @value={{@value}}
+    @insert-newline={{@insert-newline}}
+    @escape-press={{@escape-press}}
+    @focus-in={{@focus-in}}
+    @focus-out={{@focus-out}}
+    @key-down={{@key-down}}
+    @key-press={{@key-press}}
+    @key-up={{@key-up}}
+    @placeholder={{@placeholder}}
+    @autocomplete={{@autocomplete}}
+    ...attributes
+  />
+{{/if}}

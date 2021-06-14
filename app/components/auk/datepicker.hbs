@@ -1,0 +1,22 @@
+<div class="auk-input-with-icon {{@class}}" {{did-update this.updateEnable this.enable}}>
+  <div {{on "click" this.openDatepicker}}>
+    <Auk::Icon @name="calendar"/>
+  </div>
+  <EmberFlatpickr
+    class="auk-input auk-input--block"
+    placeholder={{this.placeholder}}
+    @allowInput={{true}}
+    @clickOpens={{true}}
+    @date={{this.date}} {{!-- Required Option --}}
+    @dateFormat="d-m-Y"
+    @mode="single"
+    @enable={{this.enable}}
+    @nextArrow=">"
+    @prevArrow="<"
+    @noCalendar={{false}}
+    @onChange={{@onChange}} {{!-- Required Option --}}
+    @onReady={{this.onReady}}
+    @shorthandCurrentMonth={{true}}
+    @disabled={{@disabled}}
+  />
+</div>

@@ -7,21 +7,21 @@
         @snippet="confirmation-modal.hbs"
 >
   {{!-- BEGIN-SNIPPET confirmation-modal --}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header @title="Dossier goedkeuren voor co-agendering?" @toggleSize={{this.onClick}} @closeModal={{this.onClick}} />
-    <WebComponents::AuModal::Body>
+  <Auk::Modal>
+    <Auk::Modal::Header @title="Dossier goedkeuren voor co-agendering?" @onResize={{this.onClick}} @onClose={{this.onClick}} />
+    <Auk::Modal::Body>
       <p>Weet je zeker dat je dit dossier wilt goedkeuren voor co-agendering?</p>
-    </WebComponents::AuModal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{this.onClick}}>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.onClick}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="primary">Goedkeuren</WebComponents::AuButton>
+            <Auk::Button @skin="primary">Goedkeuren</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -32,21 +32,20 @@
         @snippet="delete-modal.hbs"
 >
   {{!-- BEGIN-SNIPPET delete-modal --}}
-  <WebComponents::AuModal>
-    <WebComponents::AuModal::Header @title="Document verwijderen?" @toggleSize={{this.onClick}} @closeModal={{this.onClick}}/>
-    <WebComponents::AuModal::Body>
+  <Auk::Modal>
+    <Auk::Modal::Header @title="Document verwijderen?" @onResize={{this.onClick}} @onClose={{this.onClick}} />
+    <Auk::Modal::Body>
       <p>Deze actie zal het document definitief verwijderen en kan niet ongedaan gemaakt worden. Weet u zeker dat u het document wilt verwijderen?</p>
-    </WebComponents::AuModal::Body>
-    <WebComponents::AuModal::Footer @cancelModal={{this.onClick}}>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.onClick}}>
       <WebComponents::AuToolbar>
         <WebComponents::AuToolbar::Group @position="right">
           <WebComponents::AuToolbar::Item>
-            <WebComponents::AuButton @skin="danger-primary" @icon="delete">Verwijderen</WebComponents::AuButton>
+            <Auk::Button @skin="danger-primary" @icon="delete">Verwijderen</Auk::Button>
           </WebComponents::AuToolbar::Item>
         </WebComponents::AuToolbar::Group>
       </WebComponents::AuToolbar>
-    </WebComponents::AuModal::Footer>
-  </WebComponents::AuModal>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
-
