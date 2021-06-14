@@ -11,7 +11,7 @@ export default class CaseController extends Controller {
 
   @tracked publicationFlow;
   @tracked contactPersons;
-  @tracked subcase;
+  @tracked isViaCouncilOfMinisters;
   @tracked organizations;
 
   @tracked showLoader = false;

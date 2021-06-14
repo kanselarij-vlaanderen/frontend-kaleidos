@@ -11,15 +11,12 @@
             </WebComponents::AuToolbar::Item>
           </WebComponents::AuToolbar::Group>
           <WebComponents::AuToolbar::Group @position="right">
-            {{#if this.isViaCouncilOfMinisters}}
+            {{#if @isViaCouncilOfMinisters}}
               <WebComponents::AuToolbar::Item>
                 <WebComponents::AuButtonToolbar>
                   <LinkTo class="auk-button auk-button--tertiary"
-                    @route="cases.case.subcases.subcase.overview"
-                    @models={{array
-                      @publicationFlow.case.id
-                      @subcase.id
-                    }}>
+                    @route="cases.case.subcases"
+                    @model={{@publicationFlow.case.id}}>
                     <span class="auk-button__content">
                       <span class="auk-button__label">{{t "to-case"}}</span>
                       <div class="auk-icon auk-icon--default auk-icon--chevron-right">

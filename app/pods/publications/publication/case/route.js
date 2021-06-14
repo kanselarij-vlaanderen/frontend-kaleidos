@@ -6,15 +6,15 @@ export default class CaseRoute extends Route {
   }
 
   async afterModel(model) {
-    this.subcase = await this.store.queryOne('subcase', {
+    const isViaCouncilOfMinisters = this.store.queryOne('subcase', {
       filter: {
         case: {
-          [':id:']: model.id,
+          [':id:']: model.case.get('id'),
         },
         ':has:agenda-activities': 'yes',
       },
       sort: '-created',
-    });
+    }).then((subcase) => !!subcase);
 
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
     // TODO need a better filter, add a boolean to model maybe ?
@@ -24,12 +24,13 @@ export default class CaseRoute extends Route {
       },
     }).then((organizations) => organizations.filter((org) => org.name));
 
+    this.isViaCouncilOfMinisters = await isViaCouncilOfMinisters;
     this.organizations = await organizationsPromise;
   }
 
   async setupController(controller) {
     super.setupController(...arguments);
-    controller.subcase = this.subcase;
+    controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
     controller.organizations = this.organizations;
   }
 }

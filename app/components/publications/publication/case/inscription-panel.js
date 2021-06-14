@@ -6,7 +6,7 @@ import { task } from 'ember-concurrency-decorators';
 
 /**
  * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.case)
- * @argument {Subcase} subcase
+ * @argument {boolean} isViaCouncilOfMinisters
  */
 export default class PublicationsPublicationCaseInscriptionPanelComponent extends Component {
   @tracked isInEditMode;
@@ -15,10 +15,6 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
   @tracked longTitle;
 
   @tracked showError;
-
-  get isViaCouncilOfMinisters() {
-    return !!this.args.subcase;
-  }
 
   get isShortTitleValid() {
     return !isBlank(this.shortTitle);
