@@ -4,6 +4,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
+/**
+ * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees)
+ * @callback {() => Promise} onClose
+ * @callback {(mandatee: Mandatee) => Promise} onLink
+ * @dependsOn {Mandatee[]} mandatees ('mandatee,mandatee.person')
+ */
 export default class PublicationsPublicationCaseLinkMandateeModalComponent extends Component {
   @service store;
 
@@ -61,6 +67,6 @@ export default class PublicationsPublicationCaseLinkMandateeModalComponent exten
   *onLink() {
     this.args.publicationFlow.mandatees.addObject(this.selection);
     yield this.args.publicationFlow.save();
-    this.args.onLink(this.selection);
+    yield this.args.onLink(this.selection);
   }
 }

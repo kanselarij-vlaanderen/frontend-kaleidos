@@ -16,10 +16,6 @@ export default class CaseController extends Controller {
 
   @tracked showLoader = false;
   @tracked personModalOpen = false;
-  @tracked mandateeModalOpen = false;
-  @tracked isInscriptionInEditMode = false;
-  @tracked isUpdatingInscription = false;
-  @tracked selectedMandatee = null;
   @tracked showAddOrganisationModal = false;
   @tracked inputOrganization = '';
 

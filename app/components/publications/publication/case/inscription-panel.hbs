@@ -56,7 +56,7 @@
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
-          <div class="auk-form-group {{if showShortTitleError "auk-form-group--error"}}">
+          <div class="auk-form-group {{if this.showShortTitleError "auk-form-group--error"}}">
             <Auk::Label>{{t "short-title"}}</Auk::Label>
             <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
               data-test-publication-inscription-short-title-textarea />
