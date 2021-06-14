@@ -52,7 +52,7 @@
 
 {{#if this.isOpenNewPublicationModal}}
   <Publications::NewPublicationModal
-    @case={{this.case}}
+    @case={{@case}}
     @onSave={{this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />
 {{/if}}
