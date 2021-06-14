@@ -27,7 +27,6 @@ const selectors = {
   },
   item: {
     // TODO don't use css
-    checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.auk-toolbar-complex__item button',
   },
 

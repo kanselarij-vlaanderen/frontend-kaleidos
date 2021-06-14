@@ -1,6 +1,6 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
-import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 /**
  * @description Clicks on the specified reverse tab for navigating
@@ -30,7 +30,7 @@ function clickReverseTab(tabName) {
  */
 function navigateBack() {
   cy.log('navigateBack');
-  cy.get(utils.aukTabNavBack).click();
+  cy.get(auk.subcaseDetailNav.tabNavBack).click();
   cy.log('/navigateBack');
 }
 

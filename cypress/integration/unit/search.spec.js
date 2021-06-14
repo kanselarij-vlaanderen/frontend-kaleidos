@@ -141,7 +141,7 @@ context('Search tests', () => {
 
     cy.get('[data-table]').should('not.exist');
     // TODO not existing of data table could have multiple reasons (still loading, error)
-    // TODO check auEmptyState and text instead "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan."
+    // TODO check auk.emptyState and text instead "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan."
   });
 
   it('Search for funky searchterms in agendaitems', () => {

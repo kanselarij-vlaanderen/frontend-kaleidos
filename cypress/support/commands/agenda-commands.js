@@ -7,7 +7,7 @@
 import agenda from '../../selectors/agenda.selectors';
 import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import auComponents from '../../selectors/au-component.selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
@@ -257,7 +257,7 @@ function deleteAgenda(meetingId, lastAgenda) {
     cy.wait('@loadAgendaitems');
   }
   // loading page is no longer visible
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
 
@@ -584,7 +584,7 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
   cy.get('.active').then((element) => {
@@ -602,7 +602,7 @@ function agendaitemExists(agendaitemName) {
         // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
-        cy.get(auComponents.auLoading, {
+        cy.get(auk.loader, {
           timeout: 20000,
         }).should('not.exist');
       }
