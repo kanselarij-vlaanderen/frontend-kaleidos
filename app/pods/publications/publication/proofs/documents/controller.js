@@ -20,48 +20,24 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   columnMap = {
     receiptDate: {
+      key: 'receiptDate',
       translationKey: 'received-at',
-      // ['qpSortingKey'] added dynamically
       // TODO: correct properties!
       property: (piece) => piece.created,
     },
     uploadDate: {
+      key: 'uploadDate',
       translationKey: 'uploaded-at',
       // TODO: correct properties!
       property: (piece) => piece.modified,
     },
   }
 
-  translateQPSortingKey(translationKey) {
-    let value = this.intl.t(translationKey);
-    console.log(value);
+  translateQPSortingKey(column) {
+    let value = this.intl.t(column.translationKey);
     value = value.toLowerCase();
     value = dasherize(value);
     return value;
-  }
-
-  sortingToQP(sorting) {
-    const sortingString = this.sortingToString(sorting);
-    this.set('qpSorting', sortingString);
-  }
-
-  sortingFromQP() {
-    const value = this.qpSorting;
-
-    if (value) {
-      const isDescending = value.startsWith('-');
-      const translatedSortKey = value.substr(isDescending);
-
-      const column = Object.values(this.columnMap).find((column) => {
-        const sortingKey = this.translateQPSortingKey(column.translationKey);
-        return translatedSortKey === sortingKey;
-      });
-
-      return {
-        column: column,
-        isDescending: isDescending,
-      };
-    }
   }
 
   initSort() {
@@ -71,34 +47,77 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     //   column.qpSortingKey = this.translateQPSortingKey(column.translationKey);
     // }
 
-    const sorting = this.sortingFromQP();
+    const sorting = this.getQPSorting();
     this.sort(sorting);
   }
 
   @action
   changeSorting(sortingString) {
-    this.sortingToQP(sortingString);
+    const sorting = this.sortingFromString(sortingString);
+    this.setQPSorting(sorting);
+    this.sort(sorting);
   }
 
-  sortingToString(sorting) {
-    return (sorting.isDescending ? '-' : '') + sorting.column.property;
+  getQPSorting() {
+    const value = this.qpSorting;
+
+    if (!value) {
+      return;
+    }
+
+    const {
+      key: translatedSortKey, isDescending,
+    } = this.sortingFromString(value);
+
+    let foundSortKey;
+    for (const sortKey in this.columnMap) {
+      const column = this.columnMap[sortKey];
+      const translatedSortKey2 = this.translateQPSortingKey(column);
+      if (translatedSortKey === translatedSortKey2) {
+        foundSortKey = sortKey;
+        break;
+      }
+    }
+
+    // unknown column
+    if (!foundSortKey) {
+      return;
+    }
+
+    return {
+      key: foundSortKey,
+      isDescending: isDescending,
+    };
+  }
+
+  setQPSorting(sorting) {
+    const column = this.columnMap[sorting.key];
+    const translatedKey = this.translateQPSortingKey(column);
+    const sortingString = this.sortingToString({
+      key: translatedKey, isDescending: sorting.isDescending,
+    });
+    this.set('qpSorting', sortingString);
   }
 
   sortingFromString(sortingString) {
     const isDescending = sortingString.startsWith('-');
     const sortKey = sortingString.substr(isDescending);
-    const column = this.columnMap[sortKey];
     return {
-      column: column,
+      key: sortKey,
       isDescending: isDescending,
     };
+  }
+
+  sortingToString(sorting) {
+    return (sorting.isDescending ? '-' : '') + sorting.key;
   }
 
   sort(sorting) {
     if (sorting) {
       // const sortingString = this.toSortingString(sorting);
       this.model.sort((piece1, piece2) => {
-        let comparison = sorting.column.property(piece1) - sorting.column.property(piece2);
+        const property = this.columnMap[sorting.key].property;
+        let comparison = property(piece1) - property(piece2);
         comparison = sorting.isDescending ? -comparison : comparison;
         return comparison;
       });
