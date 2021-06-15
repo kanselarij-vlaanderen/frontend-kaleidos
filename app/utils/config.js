@@ -50,7 +50,6 @@ export default EmberObject.create({
     'Z'
   ],
   // TODO translate
-  notaCaseTypeID: '1b6a6975-28e7-46b5-83fe-da37bb967db2',
   documentType: {
     decreet: {
       id: 'e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
