@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default class CaseRoute extends Route {
-  async model() {
+  model() {
     return this.modelFor('publications.publication');
   }
 
@@ -27,7 +27,7 @@ export default class CaseRoute extends Route {
     this.organizations = await organizationsPromise;
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
     controller.organizations = this.organizations;
