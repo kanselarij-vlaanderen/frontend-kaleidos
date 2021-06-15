@@ -2,7 +2,6 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { inject } from '@ember/service';
 
@@ -29,7 +28,7 @@ export default Model.extend({
 
   // Computed.
   hasBvr: computed('pieces.@each', async function() {
-    const documentTypeBesluit = await this.store.findRecord('document-type', CONFIG.documentType.besluitVlaamseRegering.id);
+    const documentTypeBesluit = await this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION_VR);
     return await this.caseService.hasPieceOfType(this, documentTypeBesluit);
   }),
 
