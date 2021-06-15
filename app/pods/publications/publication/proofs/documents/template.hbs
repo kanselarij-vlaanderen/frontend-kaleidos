@@ -34,13 +34,13 @@
             Bestandstype
           </th>
           <Utils::ThSortable @label={{"Ontvangen op"}}
-            @onChange={{this.changeSortOrder}}
-            @currentSorting={{this.sorting}}
+            @onChange={{this.changeSorting}}
+            @currentSorting={{this.sortingString}}
             @field="receiptDate" />
           <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
             <button class="auk-table-sorter">
               <div class="auk-table-sorter__label">
-                Ontvangen op
+                {{t 'received-at'}}
               </div>
               <div class="auk-icon auk-icon--default auk-icon--muted">
                 <i class="ki ki-caret-up-down"></i>
@@ -50,7 +50,7 @@
           <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
             <button class="auk-table-sorter">
               <div class="auk-table-sorter__label">
-                Geüpload op
+                {{t 'uploaded-at'}}
               </div>
               <div class="auk-icon auk-icon--default auk-icon--muted">
                 <i class="ki ki-caret-up-down"></i>
@@ -58,7 +58,7 @@
             </button>
           </th>
           <th class="auk-u-text-align--center">
-            Verbeterd
+            {{t 'corrected'}}
           </th>
           <th>
             <!-- Actions-->
