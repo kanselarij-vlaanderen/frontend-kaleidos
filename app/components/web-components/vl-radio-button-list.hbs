@@ -1,24 +1,16 @@
 <fieldset>
   <legend class="auk-label">{{title}}</legend>
-  <WebComponents::AuRadioList @layout="inline">
+  <Auk::RadioList @layout="inline" as |RadioList|>
     {{#each optionList as |option index|}}
-      {{#if selectedModel}}
-        <WebComponents::AuRadio
-          value={{option.id}}
-          name={{title}}
-          checked={{eq option.id selectedModel.id}}
-          onchange={{action "modelChanged"}}
-          @label={{option.label}}
-        />
-      {{else}}
-        <WebComponents::AuRadio
-          value={{option.id}}
-          name={{title}}
-          checked={{eq index 0}}
-          onchange={{action "modelChanged"}}
-          @label={{option.label}}
-        />
-      {{/if}}
+      <RadioList.Radio
+        @label={{option.label}}
+        @checked={{if
+          selectedModel
+          (eq option.id selectedModel.id)
+          (eq index 0)
+        }}
+        onchange={{fn (action "modelChanged") option.id}}
+      />
     {{/each}}
-  </WebComponents::AuRadioList>
+  </Auk::RadioList>
 </fieldset>

@@ -1,0 +1,21 @@
+<div class="auk-accordion-panel__header">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="tertiary"
+          @icon="chevron-right"
+          @layout="icon-only"
+          aria-controls={{@accordionPanelId}}
+          {{on "click" @onToggleClick}}
+        />
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <h4 class="auk-accordion__title">{{@title}}</h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    {{yield
+      (hash Actions=(component 'auk/accordion-panel/header/actions'))
+    }}
+  </Auk::Toolbar>
+</div>

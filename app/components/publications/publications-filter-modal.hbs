@@ -66,9 +66,9 @@
   </Auk::Modal::Body>
   {{!-- TODO, use the template, yield the buttons in the right toolbar--}}
   <Auk::Modal::Footer @custom={{true}}>
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
             data-test-publication-button-cancel
@@ -76,10 +76,10 @@
           >
             {{t "cancel"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary"
             data-test-publication-button-reset-filters
@@ -87,8 +87,8 @@
           >
             {{t "clear-filter-plural"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
           <Auk::Button
             @icon="filter"
             @skin="primary"
@@ -97,8 +97,8 @@
           >
             {{t "filter-content"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>
