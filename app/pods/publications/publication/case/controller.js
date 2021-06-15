@@ -9,7 +9,6 @@ import { inject as service } from '@ember/service';
 export default class CaseController extends Controller {
   @service publicationService;
 
-  @tracked publicationFlow;
   @tracked contactPersons;
   @tracked isViaCouncilOfMinisters;
   @tracked organizations;
