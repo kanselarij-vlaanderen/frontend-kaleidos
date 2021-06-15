@@ -4,7 +4,7 @@ const selectors = {
   // simple-file-uploader
   simpleFileUploader: '[data-test-simple-file-uploader]',
 
-  // overviews-header-decision
+  // utils/overviews-header-decision
   overviewsHeaderDecision: {
     title: '[data-test-overviews-header-decision-title]',
   },

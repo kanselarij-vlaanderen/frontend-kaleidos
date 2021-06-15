@@ -57,7 +57,7 @@ context('Publications tests', () => {
       }).should('not.exist');
       // both number and shortTitle should show error when empty
       // TODO this does not indicate where the errors should be, make selectors for both errors and get those
-      cy.get(aukSelectors.labelError).should('have.length', 2);
+      cy.get(aukSelectors.label.error).should('have.length', 2);
       // Create publication with number and title
       // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
       cy.get(modalSelectors.publication.publicationNumberInput).click()
