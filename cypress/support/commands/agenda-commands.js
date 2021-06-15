@@ -5,7 +5,6 @@
 // Commands
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -94,17 +93,17 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the meetingNumber
   if (meetingNumberVisualRepresentation) {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
+    cy.get(agenda.newSession.meetingEditIdentifierButton).click({
       force: true,
     });
     cy.get(utils.vlFormInput).eq(1)
       .click()
       .clear()
       .type(meetingNumberVisualRepresentation);
-    cy.get(form.meeting.save).contains('Opslaan')
+    cy.get(agenda.newSession.save).contains('Opslaan')
       .click();
   } else {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
+    cy.get(agenda.newSession.meetingEditIdentifierButton).click({
       force: true,
     });
 

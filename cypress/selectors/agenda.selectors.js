@@ -170,5 +170,19 @@ const selectors = {
   agendaitemSearch: {
     input: '[data-test-agendaitem-search-input]',
   },
+
+  // new-session
+  newSession: {
+    meetingEditIdentifierButton: '[data-test-new-session-edit-identifier-button]',
+    save: '[data-test-new-session-save]',
+    // TODO unused selector
+    formattedMeetingIdentifier: '[data-test-new-session-formattedMeetingIdentifier]',
+    input: '[data-test-new-session-formattedMeetingIdentifier-edit-value]',
+  },
+  meeting: {
+    formattedMeetingIdentifier: '[data-test-meeting-formattedMeetingIdentifier]',
+    meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]',
+    save: '[data-test-new-session-save]',
+  },
 };
 export default selectors;
