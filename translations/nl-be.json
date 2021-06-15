@@ -868,7 +868,7 @@
   "none": "Geen",
   "existing": "Bestaand",
   "add-mandatee": "Mandataris toevoegen",
-  "no-mandatees-added": "Geen mandataris toegevoegd",
+  "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
   "select-mandatee": "Selecteer mandataris..."
 }
