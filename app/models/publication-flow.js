@@ -30,6 +30,8 @@ export default class PublicationFlow extends Model {
     inverse: 'publicationFlowForNumac',
   }) numacNumbers;
   @hasMany('contact-person') contactPersons;
-  @hasMany('mandatee') mandatees;
+  @hasMany('mandatee', {
+    serialize: true,
+  }) mandatees;
   @hasMany('piece') referenceDocuments;
 }
