@@ -152,13 +152,13 @@
                             @placement="left"
                           >
                             <Auk::Dropdown>
-                              <WebComponents::AuDropdown::Item
+                              <Auk::Dropdown::Item
+                                @skin="danger"
                                 data-test-unlink-mandatee
                                 {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
-                                @skin="danger"
                               >
                                 {{t "delete"}}
-                              </WebComponents::AuDropdown::Item>
+                              </Auk::Dropdown::Item>
                             </Auk::Dropdown>
                           </AttachPopover>
                         </Auk::Button>
@@ -292,9 +292,9 @@
                           @placement="left"
                         >
                           <Auk::Dropdown>
-                            <WebComponents::AuDropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
+                            <Auk::Dropdown::Item data-test-delete-contactperson {{on "click" (fn this.deleteContactPerson contactPerson) }} @skin="danger">
                               {{t "delete"}}
-                            </WebComponents::AuDropdown::Item>
+                            </Auk::Dropdown::Item>
                           </Auk::Dropdown>
                         </AttachPopover>
                       </div>

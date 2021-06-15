@@ -115,6 +115,21 @@
           </Auk::InputPills>
         </div>
 
+        {{!-- Beslissingsdatum --}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t 'decision-date'}}</Auk::Label>
+          {{#if this.publicationFlow.case.subcases}}
+            <span class="auk-u-muted">
+              {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
+            </span>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.treatment.startDate}}
+              @onChange={{this.setDecisionDate}}
+            />
+          {{/if}}
+        </div>
+
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
