@@ -83,7 +83,7 @@ export default class SettingsEmailController extends Controller {
       const configSubject = this.getConfig(item.subjectKey, item.defaultSubject).then((result) => result);
       set(item, 'subject', configSubject);
       const configContent = this.getConfig(item.contentKey, item.defaultContent).then((result) => result);
-      set(item, 'content', configContent);
+      set(item, 'message', configContent);
       const toMailAddress = this.getConfig(item.mailKey, item.defaultTo).then((result) => result);
       set(item, 'to', toMailAddress);
     }
@@ -104,7 +104,7 @@ export default class SettingsEmailController extends Controller {
     for (let index = 0; index < this.emails.length; index ++) {
       const email = this.emails[index];
       await this.configService.set(email.subjectKey, await email.subject);
-      await this.configService.set(email.contentKey, await email.content);
+      await this.configService.set(email.contentKey, await email.message);
       await this.configService.set(email.mailKey, await email.to);
     }
     await this.configService.set(this.footerKey, await this.footer);
