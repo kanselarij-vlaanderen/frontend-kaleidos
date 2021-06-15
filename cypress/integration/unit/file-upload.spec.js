@@ -126,8 +126,10 @@ context('Add files to an agenda', () => { // At the meeting-level
   it('should delete documents, pieces and files', () => {
     const meetingId = '5EBA8CE1DAB6BB0009000009';
     const agendaId = '5EBA8CE3DAB6BB000900000A';
+    cy.route('GET', '/pieces?filter\\[:id:\\]=*').as('loadPieceData');
     cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
-    cy.wait('@loadPieces');
+    cy.wait('@loadPieces'); // general load
+    cy.wait('@loadPieceData'); // specific load to ensure document-container is loaded
 
     // Test if the documents we're looking for are present
     cy.get(document.documentCard.card).as('docCards');

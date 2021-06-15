@@ -131,8 +131,8 @@ context('Search tests', () => {
 
   it('Search for non existing searchterm in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
-    cy.get('[data-test-searchfield]').clear();
-    cy.get('[data-test-searchfield]').type('nietstezienhier');
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type('nietstezienhier');
 
     cy.server(); // TODO server here not needed ?
     cy.route('GET', '/agendaitems/search?**').as('searchCall');
@@ -154,8 +154,8 @@ context('Search tests', () => {
       'batterij'
     ];
     wordsToCheck1.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
 
       cy.server();
       cy.route('GET', '/agendaitems/search?**').as('searchCall');
@@ -172,7 +172,7 @@ context('Search tests', () => {
     // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
-    // cy.get('[data-test-searchfield]').should('have.value', '');
+    // cy.get(route.search.input).should('have.value', '');
   });
 
   it('Searchfield should be empty after revisting search page', () => {
@@ -206,8 +206,8 @@ context('Search tests', () => {
       'accénten'
     ];
     wordsToCheck2.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
 
       cy.server();
       cy.route('GET', '/cases/search?**').as('casesSearchCall');
@@ -228,8 +228,8 @@ context('Search tests', () => {
       // 'krokket'
     ];
     wordsFromPdf.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
       cy.get('[data-test-decisions-only-check] .auk-checkbox').click();
 
       cy.server();
