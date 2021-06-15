@@ -40,7 +40,7 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6">
             <div class="auk-u-mb-2">
-              <p class="auk-u-text-bold auk-u-muted auk-u-mb"> {{t "translation-due-date"}}</p>
+              <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
               <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
             </div>
             <div class="auk-u-mb-2">
@@ -58,42 +58,24 @@
           </div>
           <div class="auk-o-grid-col-6">
             <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
-            <Auk::List @isBordered="true">
+            <Auk::List @isBordered="true" class="auk-list--view">
               {{#each activity.usedPieces as |piece|}}
-                <Auk::List::Item>
-                  <Auk::Badge @icon="file"/>
+                <Auk::List::Item @skin="gray-100">
+                  <div class="auk-u-ml-2">
+                    <Auk::Icon @name="document" @skin="muted-dark" />
+                  </div>
                   <div class="auk-u-mx-2">
                     <span class="auk-u-text-bold">{{piece.name}}</span>
                     <div class="auk-u-muted auk-u-text-small">
-                      {{piece.file.extension}},
-                      {{format-bytesize piece.file.size}}
+                      {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
                     </div>
                   </div>
                   <Auk::Button
-                          @layout="icon-only"
-                          @icon="book"
-                          @skin="borderless"
-                          @href={{piece.viewDocumentURL}}
-                          target="_blank"
-                  />
-                </Auk::List::Item>
-              {{/each}}
-              {{#each activity.generatedPieces as |piece|}}
-                <Auk::List::Item>
-                  <Auk::Badge @icon="file"/>
-                  <div class="auk-u-mx-2">
-                    <span class="auk-u-text-bold">{{piece.name}}</span>
-                    <div class="auk-u-muted auk-u-text-small">
-                      {{piece.file.extension}},
-                      {{format-bytesize piece.file.size}}
-                    </div>
-                  </div>
-                  <Auk::Button
-                          @layout="icon-only"
-                          @icon="book"
-                          @skin="borderless"
-                          @href={{piece.viewDocumentURL}}
-                          target="_blank"
+                    @layout="icon-only"
+                    @icon="book"
+                    @skin="borderless"
+                    @href={{piece.viewDocumentURL}}
+                    target="_blank"
                   />
                 </Auk::List::Item>
               {{/each}}
@@ -110,11 +92,10 @@
               @onCancel={{this.closeTranslationUploadModal}} />
     {{/if}}
   {{else}}
-    <WebComponents::AuPanel>
-      <WebComponents::AuPanel::Body>
-        <Auk::EmptyState @message={{t "no-translation-activities-yet" }} />
-      </WebComponents::AuPanel::Body>
-    </WebComponents::AuPanel>
+    <Auk::Panel>
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-translation-activities-yet"}} />
+      </Auk::Panel::Body>
+    </Auk::Panel>
   {{/each}}
 </div>
-
