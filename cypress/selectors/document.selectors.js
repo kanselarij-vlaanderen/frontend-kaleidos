@@ -30,7 +30,7 @@ const selectors = {
   // add-existing-piece
   addExistingPiece: {
     searchInput: '[data-test-add-existing-piece-search-input]',
-    // unused selector:
+    // TODO unused selector
     searchButton: '[data-test-add-existing-piece-search-button]',
   },
 
@@ -42,10 +42,9 @@ const selectors = {
   // linked-document-link
   linkedDocumentLink: {
     typeLabel: '[data-test-linked-document-link-type-label]',
+    // TODO unused selector
+    card: '[data-test-linked-document-link-card]',
+    versionHistory: '[data-test-linked-document-link-version-history]',
   },
-
-  // unused selector
-  showLinkedPiecesHistory: '[data-test-linked-document-version-history]',
-
 };
 export default selectors;
