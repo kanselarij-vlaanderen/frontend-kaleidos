@@ -65,7 +65,8 @@ export default Component.extend({
     return savedAgenda;
   },
 
-  async createAgendaitemToApproveMinutes(agenda, closestMeeting) {
+  // new meeting parameter prevents extra request of agenda.createdFor
+  async createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting) {
     const now = new Date();
 
     // load code-list item
@@ -74,9 +75,11 @@ export default Component.extend({
     });
 
     // Treatment of agenda-item / decision activity
-    const agendaItemTreatment = await this.store.createRecord('agenda-item-treatment', {
+    const startDate = newMeeting.plannedStart;
+    const agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
       created: now,
       modified: now,
+      startDate: startDate,
       decisionResultCode,
     });
     await agendaItemTreatment.save();
@@ -120,25 +123,21 @@ export default Component.extend({
 
       const closestMeeting = await this.agendaService.getClosestMeetingAndAgendaId(startDate);
 
-      newMeeting
-        .save()
-        .then(async(meeting) => {
-          const agenda = await this.createAgenda(meeting, date);
-          if (!meeting.isAnnex && closestMeeting) {
-            await this.createAgendaitemToApproveMinutes(agenda, closestMeeting);
-          }
-          await this.newsletterService.createNewsItemForMeeting(meeting);
-
-          // TODO: Should fix sessionNrBug
-          // await this.agendaService.assignNewSessionNumbers();
-        })
-        .catch(() => {
-          this.toaster.error();
-        })
-        .finally(() => {
-          this.set('isLoading', false);
-          this.successfullyAdded();
-        });
+      try {
+        await newMeeting.save();
+        const agenda = await this.createAgenda(newMeeting, date);
+        if (!newMeeting.isAnnex && closestMeeting) {
+          await this.createAgendaitemToApproveMinutes(agenda, newMeeting, closestMeeting);
+        }
+        await this.newsletterService.createNewsItemForMeeting(newMeeting);
+        // TODO: Should fix sessionNrBug
+        // await this.agendaService.assignNewSessionNumbers();
+      } catch (err) { // eslint-disable-line no-unused-vars
+        this.toaster.error();
+      } finally {
+        this.set('isLoading', false);
+        this.successfullyAdded();
+      }
     },
 
     selectMainMeeting(mainMeeting) {

@@ -3,11 +3,12 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 const {
-  Model, attr, belongsTo,
+  Model, attr, belongsTo, hasMany,
 } = DS;
 
 export default Model.extend({
   intl: inject(),
+  startDate: attr('date'),
   agendaitem: belongsTo('agendaitem'),
   subcase: belongsTo('subcase'),
   report: belongsTo('piece'),
@@ -22,4 +23,5 @@ export default Model.extend({
       name: this.get('report.lastPiece.name'),
     });
   }),
+  publicationFlows: hasMany('publication-flows'),
 });
