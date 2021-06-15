@@ -173,16 +173,11 @@ const selectors = {
 
   // new-session
   newSession: {
-    meetingEditIdentifierButton: '[data-test-new-session-edit-identifier-button]',
-    save: '[data-test-new-session-save]',
-    // TODO unused selector
-    formattedMeetingIdentifier: '[data-test-new-session-formattedMeetingIdentifier]',
-    input: '[data-test-new-session-formattedMeetingIdentifier-edit-value]',
-  },
-  meeting: {
-    formattedMeetingIdentifier: '[data-test-meeting-formattedMeetingIdentifier]',
-    meetingEditIdentifierButton: '[data-test-meeting-edit-identifier-button]',
-    save: '[data-test-new-session-save]',
+    numberRep: {
+      edit: '[data-test-new-session-number-representation-edit]',
+      input: '[data-test-new-session-number-representation-input]',
+      save: '[data-test-new-session-number-representation-save]',
+    },
   },
 };
 export default selectors;

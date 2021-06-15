@@ -82,6 +82,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
           .clear()
           .type(meetingNumber);
       } else {
+        // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
         cy.get('.auk-input').click({
           force: true,
         })
@@ -91,30 +92,29 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       }
     });
 
-  // Set the meetingNumber
-  if (meetingNumberVisualRepresentation) {
-    cy.get(agenda.newSession.meetingEditIdentifierButton).click({
-      force: true,
-    });
-    cy.get(utils.vlFormInput).eq(1)
-      .click()
-      .clear()
-      .type(meetingNumberVisualRepresentation);
-    cy.get(agenda.newSession.save).contains('Opslaan')
-      .click();
-  } else {
-    cy.get(agenda.newSession.meetingEditIdentifierButton).click({
-      force: true,
-    });
+  // Set the meetingNumber representation
+  let meetingNumberRep;
 
-    cy.get(utils.vlFormInput).eq(1)
-      .click({
-        force: true,
-      })
-      .invoke('val')
-      // eslint-disable-next-line
-      .then((sometext) => meetingNumberVisualRepresentation = sometext);
+  if (meetingNumberVisualRepresentation) {
+    cy.get(agenda.newSession.numberRep.edit).click();
+    cy.get(agenda.newSession.numberRep.input).within(() => {
+      cy.get(utils.vlFormInput)
+        .click()
+        .clear()
+        .type(meetingNumberVisualRepresentation);
+    });
+    cy.get(agenda.newSession.numberRep.save).click();
   }
+  // Get the value from the meetingNumber representation
+  cy.get(agenda.newSession.numberRep.edit).click();
+  cy.get(agenda.newSession.numberRep.input).within(() => {
+    cy.get(utils.vlFormInput)
+      .click()
+      .invoke('val')
+      .then((sometext) => {
+        meetingNumberRep = sometext;
+      });
+  });
 
   // Set the location
   cy.get('@newAgendaForm').eq(3)
@@ -126,7 +126,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get(utils.vlModalFooter.saveS).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
 
   let meetingId;
@@ -150,7 +150,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
-        meetingId, meetingNumber, agendaId, meetingNumberVisualRepresentation,
+        meetingId, meetingNumber, agendaId, meetingNumberRep,
       });
     }));
 }

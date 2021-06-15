@@ -183,7 +183,7 @@ context('Agenda tests', () => {
       // TODO data tag
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
       cy.get(utils.vlFormInput).eq(1)
-        .should('have.value', `${result.meetingNumberVisualRepresentation}`);
+        .should('have.value', `${result.meetingNumberRep}`);
       cy.visit('/');
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500);

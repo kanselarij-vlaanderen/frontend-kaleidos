@@ -43,12 +43,11 @@
           <div class="auk-o-flex__item">
             <div
               class="auk-u-text-condensed-line-height"
-              data-test-meeting-formattedMeetingIdentifier
             >
               {{formattedMeetingIdentifier}}
             </div>
             <button type="button" class="auk-button-link"
-              data-test-meeting-edit-identifier-button
+              data-test-new-session-number-representation-edit
               {{action "editFormattedMeetingIdentifier"}}
             >
               <span class="auk-button__content">
@@ -61,12 +60,12 @@
       {{#if isEditingFormattedMeetingIdentifier}}
         <div class="auk-o-flex">
           {{web-components/vl-form-input
-            data-test-meeting-formattedMeetingIdentifier-edit-value=true
+            data-test-new-session-number-representation-input=true
             value=formattedMeetingIdentifier
             class="auk-input--w-medium auk-u-mr-2"
           }}
           {{web-components/vl-save-button
-            data-test-new-session-save=true
+            data-test-new-session-number-representation-save=true
             text=(t "save")
             saveAction=(action "saveAction")
           }}
