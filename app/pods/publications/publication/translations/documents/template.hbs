@@ -1,9 +1,9 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
     <Auk::Navbar @border="none">
-      <WebComponents::AuToolbar @size="large">
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar @size="large">
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button
               @icon="mail"
               @skin="secondary"
@@ -12,17 +12,17 @@
             >
               {{t "request-translations"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button
               @icon="add"
               @skin="secondary"
               {{on "click" this.openPieceUploadModal}}>
               {{t "upload-translation-file"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Navbar>
 
     {{#if this.model}}
@@ -94,7 +94,7 @@
     {{else}}
       <Auk::Panel>
         <Auk::Panel::Body>
-          <Auk::EmptyState @message={{t "no-documents-yet" }} />
+          <Auk::EmptyState @message={{t "no-translations-yet" }} />
         </Auk::Panel::Body>
       </Auk::Panel>
     {{/if}}

@@ -17,7 +17,7 @@ const selectors = {
   // 3x agendaitem/documents, subcase/documents, agenda/documents
   // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
+  agendaitemEditDocumentsList: '[data-test-agendaitem-edit-documents-list]',
 
   // TODO unused selector, do we want to use this one ?
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
@@ -49,7 +49,7 @@ const selectors = {
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
-    activeTab: '[data-test-agendaitem-nav-tabs] .active',
+    activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
   // agendaitem-decision

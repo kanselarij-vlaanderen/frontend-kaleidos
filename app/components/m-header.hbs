@@ -1,48 +1,64 @@
 <Auk::Navbar @skin="white" @noPadding={{true}} id="c-main-nav">
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <Auk::Brand @logotype="Kaleidos" />
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
-        <WebComponents::AuTabs>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <Auk::Tabs>
           {{#if this.hasPublicationsEnabled}}
-            <WebComponents::AuTab @route="publications" data-test-m-header-publications>{{t "publications"}}</WebComponents::AuTab>
+            <Auk::Tab
+              @route="publications"
+              data-test-m-header-publications
+            >
+              {{t "publications"}}
+            </Auk::Tab>
           {{/if}}
-          <WebComponents::AuTab @route="agendas.overview"
-                                @currentWhen="agendas agenda print-overviews.decisions print-overviews.press-agenda"
-                                data-test-m-header-agendas>
+          <Auk::Tab
+            @route="agendas.overview"
+            @current-when="agendas agenda print-overviews.decisions print-overviews.press-agenda"
+            data-test-m-header-agendas
+          >
             {{t "agendas"}}
-          </WebComponents::AuTab>
-          <WebComponents::AuTab @route="cases" data-test-m-header-cases>{{t "cases"}}</WebComponents::AuTab>
+          </Auk::Tab>
+          <Auk::Tab @route="cases" data-test-m-header-cases>{{t "cases"}}</Auk::Tab>
           {{#if this.currentSession.isViewer}}
-            <WebComponents::AuTab @route="newsletters"
-                                  @currentWhen="newsletters newsletter print-overviews.newsletter"
-                                  data-test-m-header-newsletters>
+            <Auk::Tab
+              @route="newsletters"
+              @current-when="newsletters newsletter print-overviews.newsletter"
+              data-test-m-header-newsletters
+            >
               {{t "newsletter"}}
-            </WebComponents::AuTab>
+            </Auk::Tab>
           {{/if}}
-          <WebComponents::AuTab   @route="search.index"
-                                  @currentWhen="search"
-                                  data-test-m-header-search>
+          <Auk::Tab
+            @route="search.index"
+            @current-when="search"
+            data-test-m-header-search
+          >
             <Auk::Icon @name="search" class="auk-icon--search" />
             {{capitalize (t "search")}}
-          </WebComponents::AuTab>
+          </Auk::Tab>
           {{#if this.currentSession.isEditor}}
-            <WebComponents::AuTab @route="settings.overview" data-test-m-header-settings>{{t "settings"}}</WebComponents::AuTab>
+            <Auk::Tab
+              @route="settings.overview"
+              data-test-m-header-settings
+            >
+              {{t "settings"}}
+            </Auk::Tab>
           {{/if}}
-        </WebComponents::AuTabs>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+        </Auk::Tabs>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{#if this.environmentName}}
-        <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
+        <Auk::Toolbar::Item class="auk-u-mr-3">
           <div class="vlc-environment-pill {{this.environmentClass}}">
             {{this.environmentName}}
           </div>
-        </WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
       {{/if}}
-      <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar::Item>
         <Auk::ButtonLink
           @skin="muted"
           @padded="padded"
@@ -59,21 +75,22 @@
           @placement="bottom-end"
         >
           <Auk::Dropdown>
-            <WebComponents::AuDropdown::Item
+            <Auk::Dropdown::Item
               @route="manual"
-              target="_blank">
+              target="_blank"
+            >
               {{t "look-at-documentation"}}
-            </WebComponents::AuDropdown::Item>
-            <WebComponents::AuDropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+            </Auk::Dropdown::Item>
+            <Auk::Dropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
-            </WebComponents::AuDropdown::Item>
+            </Auk::Dropdown::Item>
           </Auk::Dropdown>
         </AttachPopover>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item class="auk-u-mr-3" >
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="auk-u-mr-3">
         {{#if this.currentSession.user}}
           <Auk::ButtonLink
             data-test-m-header-user-actions
@@ -92,16 +109,16 @@
                  @placement="bottom-end"
                >
             <Auk::Dropdown>
-              <WebComponents::AuDropdown::Item @textOnly={{true}}>
+              <Auk::Dropdown::Item @textOnly={{true}}>
                 <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
                 </Auk::Avatar>
-              </WebComponents::AuDropdown::Item>
-              <WebComponents::AuDropdown::Divider/>
-              <WebComponents::AuDropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
+              </Auk::Dropdown::Item>
+              <Auk::Dropdown::Divider />
+              <Auk::Dropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
-              </WebComponents::AuDropdown::Item>
+              </Auk::Dropdown::Item>
             </Auk::Dropdown>
           </AttachPopover>
         {{else}}
@@ -113,7 +130,7 @@
             {{t "login"}}
           </Auk::ButtonLink>
         {{/if}}
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>

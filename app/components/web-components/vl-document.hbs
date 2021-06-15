@@ -2,7 +2,7 @@
   class={{if this.piece.aboutToDelete "vlc-document--deleted-state"}}
   {{did-update (perform this.loadPieceRelatedData) @piece}}
 >
-  <div class="vlc-document-card-item" data-test-single-piece-history>
+  <div class="vlc-document-card-item" data-test-vl-document-piece>
     <div class="vlc-document-card-item__title">
       <h6 class="auk-h4">
         {{#if (not this.file)}}
@@ -59,7 +59,7 @@
         <button
           type="button"
           class="auk-button auk-button--warning-borderless auk-button--icon"
-          data-test-delete-piece-from-history
+          data-test-vl-document-delete-piece
           {{on "click" (fn this.deletePiece piece)}}
         >
           <span class="auk-button__content">

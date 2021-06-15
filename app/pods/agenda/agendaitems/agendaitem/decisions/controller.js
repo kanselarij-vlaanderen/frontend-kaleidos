@@ -1,30 +1,36 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import moment from 'moment';
+import { tracked } from '@glimmer/tracking';
 
 export default class DecisionAgendaitemAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service store;
 
-  @alias('model') treatments;
+  @tracked agendaitem;
+  @tracked meeting;
+
+  get treatments() {
+    return this.model;
+  }
 
   @action
   async addTreatment() {
-    if (this.agendaitem) {
-      const newTreatment = this.store.createRecord('agenda-item-treatment', {
-        created: moment().utc()
-          .toDate(),
-        modified: moment().utc()
-          .toDate(),
-        agendaitem: this.agendaitem,
-        subcase: this.subcase,
-        newsletterInfo: await this.treatments.firstObject.newsletterInfo,
-      });
-      await newTreatment.save();
-      this.refresh();
-    }
+    const startDate = this.meeting.plannedStart;
+    const now = new Date();
+    const agendaActivity = await this.agendaitem.agendaActivity;
+    const subcase = await agendaActivity.subcase;
+    const newsletterInfo = await this.treatments.firstObject.newsletterInfo;
+    const newTreatment = this.store.createRecord('agenda-item-treatment', {
+      created: now,
+      modified: now,
+      startDate: startDate,
+      agendaitem: this.agendaitem,
+      subcase: subcase,
+      newsletterInfo: newsletterInfo,
+    });
+    await newTreatment.save();
+    this.refresh();
   }
 
   @action

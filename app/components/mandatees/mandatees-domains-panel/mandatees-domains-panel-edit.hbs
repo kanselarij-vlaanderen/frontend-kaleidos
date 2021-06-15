@@ -125,9 +125,9 @@
       </button>
     </div>
     <div class="auk-toolbar-complex__right">
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <button
               type="button"
               data-test-mandatee-panel-edit-cancel
@@ -138,17 +138,17 @@
                 {{t "cancel"}}
               </span>
             </button>
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             <WebComponents::VlSaveButton
               data-test-mandatee-panel-edit-save={{true}}
               @text={{t "save"}}
               @isLoading={{this.save.isRunning}}
               @saveAction={{perform this.save}}
             />
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </div>
   </div>
 </div>

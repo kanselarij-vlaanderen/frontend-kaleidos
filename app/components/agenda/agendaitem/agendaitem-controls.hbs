@@ -21,22 +21,23 @@
         <Auk::Dropdown>
           {{#if this.isPostPonable}}
             {{#if @agendaitem.retracted}}
-              <WebComponents::AuDropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+              <Auk::Dropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
                 {{t "not-postpone"}}
-              </WebComponents::AuDropdown::Item>
+              </Auk::Dropdown::Item>
             {{else}}
-              <WebComponents::AuDropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+              <Auk::Dropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
                 {{t "postpone"}}
-              </WebComponents::AuDropdown::Item>
+              </Auk::Dropdown::Item>
             {{/if}}
           {{/if}}
           {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-            <WebComponents::AuDropdown::Item {{on "click" this.toggleIsVerifying}}
-                    data-test-agendaitem-controls-action-delete
-                    @skin="danger"
+            <Auk::Dropdown::Item
+              @skin="danger"
+              data-test-agendaitem-controls-action-delete
+              {{on "click" this.toggleIsVerifying}}
             >
               {{t "delete"}}
-            </WebComponents::AuDropdown::Item>
+            </Auk::Dropdown::Item>
           {{/if}}
         </Auk::Dropdown>
       </AttachPopover>

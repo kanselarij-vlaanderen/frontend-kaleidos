@@ -6,27 +6,27 @@
       aria-controls={{this.accordionId}}
       {{on "click" this.toggleAccordion}}
     >
-      <WebComponents::AuToolbar>
+      <Auk::Toolbar>
         {{#if (eq this.layout "controls-right")}}
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <span class="auk-accordion__title">{{@title}}</span>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
               <Auk::Icon @name="chevron-right" @skin="primary" />
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
         {{else}}
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <Auk::Icon @name="chevron-right" @skin="primary" />
               <span class="auk-accordion__title">{{@title}}</span>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
         {{/if}}
-      </WebComponents::AuToolbar>
+      </Auk::Toolbar>
     </button>
   </div>
   <div
