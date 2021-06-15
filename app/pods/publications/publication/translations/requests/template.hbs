@@ -9,9 +9,9 @@
         }}
       >
         {{!-- Button currently placed here as accordion doesn't allow actions yet --}}
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button @layout="icon-only" @skin="secondary" @icon="more"/>
             <AttachPopover
                     @renderInPlace={{false}}
@@ -24,18 +24,11 @@
                 <WebComponents::AuDropdown::Item {{on "click" openTranslationUploadModal}}>
                   {{t "upload-translation"}}
                 </WebComponents::AuDropdown::Item>
-                <WebComponents::AuDropdown::Item>
-                  {{t "download-documents"}}
-                </WebComponents::AuDropdown::Item>
-                <WebComponents::AuDropdown::Item
-                        @skin="danger">
-                  {{t "cancel-request"}}
-                </WebComponents::AuDropdown::Item>
               </Auk::Dropdown>
             </AttachPopover>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
 
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-6">
@@ -79,6 +72,27 @@
                   />
                 </Auk::List::Item>
               {{/each}}
+              {{#each activity.translationActivity.generatedPieces as |piece|}}
+                <Auk::List::Item @skin="gray-100">
+                  <div class="auk-u-ml-2">
+                    <Auk::Icon @name="document" @skin="muted-dark" />
+                  </div>
+                  <div class="auk-u-mx-2">
+                    <span class="auk-u-text-bold">{{piece.name}}</span>
+                    <div class="auk-u-muted auk-u-text-small">
+                      {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                    </div>
+                  </div>
+                  <Auk::Button
+                          @layout="icon-only"
+                          @icon="book"
+                          @skin="borderless"
+                          @href={{piece.viewDocumentURL}}
+                          target="_blank"
+                  />
+                </Auk::List::Item>
+              {{/each}}
+
             </Auk::List>
           </div>
         </div>
@@ -87,7 +101,7 @@
     {{#if this.showTranslationUploadModal}}
       <Publications::Publication::Translations::TranslationUploadModal
               @translationSubcase={{this.translationSubcase}}
-              @activity={{activity}}
+              @requestActivity={{activity}}
               @onSave={{perform this.saveTranslationUpload}}
               @onCancel={{this.closeTranslationUploadModal}} />
     {{/if}}

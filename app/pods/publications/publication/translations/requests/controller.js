@@ -15,7 +15,8 @@ export default class PublicationsPublicationTranslationsRequestController extend
   @task
   *saveTranslationUpload(translationUpload) {
     const piece = translationUpload.piece;
-    const activity = translationUpload.activity;
+    const requestActivity = translationUpload.requestActivity;
+    const translationActivity = yield requestActivity.translationActivity;
 
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
@@ -24,12 +25,17 @@ export default class PublicationsPublicationTranslationsRequestController extend
     piece.pages = translationUpload.pagesAmount;
     piece.words = translationUpload.wordsAmount;
     piece.name = translationUpload.name;
-    piece.language = activity.language;
+    piece.language = requestActivity.language;
     yield piece.save();
 
-    activity.endDate = translationUpload.receivedAtDate;
-    activity.generatedPieces !== undefined ? activity.generatedPieces.push(piece) : activity.generatedPieces = [piece];
-    yield activity.save();
+    translationActivity.endDate = translationUpload.receivedAtDate;
+    yield  translationActivity.generatedPieces;
+    if (translationActivity.generatedPieces) {
+      translationActivity.generatedPieces.pushObject(piece);
+    } else {
+      translationActivity.generatedPieces = [piece];
+    }
+    yield translationActivity.save();
 
     this.showTranslationUploadModal = false;
     this.send('refresh');

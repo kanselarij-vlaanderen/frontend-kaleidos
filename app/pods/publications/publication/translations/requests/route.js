@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
 export default class PublicationsPublicationTranslationsRequestRoute extends Route {
   model() {
@@ -16,5 +17,10 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }

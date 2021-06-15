@@ -85,7 +85,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         receivedAtDate: this.receivedAtDate,
         pagesAmount: this.pagesAmount,
         wordsAmount: this.wordsAmount,
-        activity: this.args.activity,
+        requestActivity: this.args.requestActivity,
       });
     }
   }
