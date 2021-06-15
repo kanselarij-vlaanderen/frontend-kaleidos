@@ -6,10 +6,11 @@ export default class CaseRoute extends Route {
   }
 
   async afterModel(model) {
+    const case_ = await model.case;
     const subcase = await this.store.queryOne('subcase', {
       filter: {
         case: {
-          [':id:']: model.case.get('id'),
+          [':id:']: case_.id,
         },
         ':has:agenda-activities': 'yes',
       },
