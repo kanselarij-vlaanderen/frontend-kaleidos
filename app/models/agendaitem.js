@@ -1,6 +1,7 @@
 import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import {
   alias, deprecatingAlias
@@ -120,7 +121,7 @@ export default ModelWithModifier.extend({
             },
           },
           type: {
-            id: CONFIG.notaID,
+            ':uri:': CONSTANTS.DOCUMENT_TYPES.NOTA,
           },
         },
         include: 'pieces,type,pieces.access-level',
@@ -142,7 +143,7 @@ export default ModelWithModifier.extend({
               },
             },
             type: {
-              id: CONFIG.visieNotaID,
+              ':uri:': CONSTANTS.DOCUMENT_TYPES.VISIENOTA,
             },
           },
           include: 'pieces,type,pieces.access-level',
