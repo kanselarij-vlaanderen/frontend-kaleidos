@@ -79,7 +79,8 @@ export default class PublicationsIndexRoute extends Route {
         'publication-status-change',
         'numac-numbers',
         'publication-subcase',
-        'translation-subcase'
+        'translation-subcase',
+        'agenda-item-treatment'
       ].join(','),
     });
   }
