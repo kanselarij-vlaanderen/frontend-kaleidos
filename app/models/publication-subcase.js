@@ -17,4 +17,5 @@ export default class PublicationSubcase extends Model {
   @hasMany('request-activity') requestActivities;
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
+  @hasMany('piece') publicationSourceDocuments;
 }
