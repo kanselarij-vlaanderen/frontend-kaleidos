@@ -140,12 +140,12 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.documentUploadShowMore).click();
-    cy.get(document.documentUploadNewPiece)
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.uploadPiece)
       .should('be.visible')
       .click();
   });
@@ -455,12 +455,12 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.documentUploadShowMore).click();
-    cy.get(document.documentUploadNewPiece)
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.uploadPiece)
       .should('be.visible')
       .click();
   });
@@ -527,14 +527,14 @@ function deleteSinglePiece(fileName, indexToDelete) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).eq(indexToDelete)
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).eq(indexToDelete)
       .within(() => {
-        cy.get(document.deletePieceFromhistory)
+        cy.get(document.vlDocument.delete)
           .should('be.visible')
           .click();
       });
@@ -571,17 +571,17 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).eq(indexToCheck)
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).eq(indexToCheck)
       .within(() => {
         if (shouldBeDeletable) {
-          cy.get(document.deletePieceFromhistory).should('be.visible');
+          cy.get(document.vlDocument.delete).should('be.visible');
         } else {
-          cy.get(document.deletePieceFromhistory).should('not.exist');
+          cy.get(document.vlDocument.delete).should('not.exist');
         }
       });
   });

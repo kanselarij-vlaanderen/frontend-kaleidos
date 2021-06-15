@@ -28,7 +28,7 @@
         <Auk::Label for="messageTransl" @isRequired={{true}}>
           {{t 'translation-mail-header'}}
         </Auk::Label>
-        <WebComponents::AuTextarea id="messageTransld" @rows="6" @value={{mut this.message}} />
+        <Auk::Textarea id="messageTransld" @rows="6" @value={{mut this.message}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>
@@ -64,6 +64,7 @@
     <Auk::Button
       @skin="primary"
       @disabled={{this.saveIsDisabled}}
+      @loading={{this.saveRequest.isRunning}}
       {{on "click" (perform this.saveRequest)}}
     >
       {{t "save"}}

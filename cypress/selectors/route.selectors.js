@@ -34,6 +34,11 @@ const selectors = {
     ROUTE AGENDA
   */
 
+  // agenda/documents/template
+  agendaDocuments: {
+    addDocuments: '[data-test-agenda-documents-add-documents]',
+  },
+
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
     // TODO unused selector
