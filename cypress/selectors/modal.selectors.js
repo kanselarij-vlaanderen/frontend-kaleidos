@@ -1,11 +1,4 @@
 const selectors = {
-  // vl-modal, move to utils
-  baseModal: {
-    container: '[data-test-vl-modal-container]',
-    dialogWindow: '[data-test-vl-modal-dialogwindow]',
-    close: '[data-test-vl-modal-close]',
-  },
-
   // 3x duplication, manage-government-fields, manage-ise-codes, model-manager
   manageInSettingsModal: {
     add: '[data-test-vl-model-manager-add]',
@@ -13,13 +6,6 @@ const selectors = {
     delete: '[data-test-vl-model-manager-delete]',
   },
 
-  // vl-modal-verify, move to utils, check/remove presence of data-test-vl-modal
-  verify: {
-    container: '[data-test-vl-modal-verify-container]',
-    close: '[data-test-vl-modal-verify-close]',
-    cancel: '[data-test-vl-modal-verify-cancel]',
-    save: '[data-test-vl-modal-verify-save]',
-  },
   // new-publication-modal, move to publication
   publication: {
     modal: '[data-test-au-modal-publication-new]', // 3x duplication
@@ -43,8 +29,6 @@ const selectors = {
     title: '[data-test-au-modal-header-title]',
     body: '[data-test-au-modal-body-content]',
   },
-  // this selector is both in vl-modal and vl-modal-verify component
-  modal: '[data-test-vl-modal]',
 
   ministerModalSelector: '[data-test-mandatee-selector]',
 };

@@ -3,7 +3,7 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
-import modal from '../../../../selectors/modal.selectors';
+import utils from '../../../../selectors/utils.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
@@ -15,13 +15,13 @@ context('Manage alerts tests', () => {
 
   it('Should open the model behind manage alerts', () => {
     cy.get(settings.overview.manageAlerts).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.get(settings.overview.manageAlerts).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get(modal.baseModal.close).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.close).click();
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
   });
 });

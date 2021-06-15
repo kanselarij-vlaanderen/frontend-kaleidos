@@ -313,7 +313,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
-  cy.get(modal.verify.save).click();
+  cy.get(utils.vlModalVerify.save).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.log('/setAllItemsFormallyOk');
@@ -700,11 +700,11 @@ function releaseDecisions() {
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModal.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModal.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDecisions');
@@ -720,11 +720,11 @@ function releaseDocuments() {
   cy.log('releaseDocuments');
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModal.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModal.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDocuments');

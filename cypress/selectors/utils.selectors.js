@@ -32,5 +32,21 @@ const selectors = {
 
   // vl-datepicker
   vlDatepicker: '[data-test-vl-datepicker]',
+
+  // vl-modal
+  vlModal: {
+    container: '[data-test-vl-modal-container]',
+    dialogWindow: '[data-test-vl-modal-dialogwindow]',
+    close: '[data-test-vl-modal-close]',
+  },
+
+  // vl-modal-verify
+  vlModalVerify: {
+    container: '[data-test-vl-modal-verify-container]',
+    close: '[data-test-vl-modal-verify-close]',
+    cancel: '[data-test-vl-modal-verify-cancel]',
+    save: '[data-test-vl-modal-verify-save]',
+  },
+
 };
 export default selectors;

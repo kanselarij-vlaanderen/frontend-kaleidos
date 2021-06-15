@@ -4,7 +4,6 @@
 import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
-import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -145,10 +144,10 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.wait(3000);
     // TODO Fix grammar einddatum
-    cy.get(modal.verify.save).should('exist')
+    cy.get(utils.vlModalVerify.save).should('exist')
       .should('be.visible')
       .contains('Eindatum aanpassen');
-    cy.get(modal.verify.cancel).should('exist')
+    cy.get(utils.vlModalVerify.cancel).should('exist')
       .should('be.visible')
       .click();
     cy.get(mandatee.editMandatee.cancel).should('exist')
@@ -171,6 +170,6 @@ context('Full test for creating mandatees', () => {
       .within(() => {
         cy.get(settings.ministers.mandatee.delete).click();
       });
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
   });
 });

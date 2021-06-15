@@ -4,6 +4,7 @@
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
+import utils from '../../../../selectors/utils.selectors';
 
 context('Manage ISE codes tests', () => {
   beforeEach(() => {
@@ -24,7 +25,7 @@ context('Manage ISE codes tests', () => {
     cy.get(settings.overview.manageIseCodes).click();
     cy.wait(200);
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
-    cy.get(modal.baseModal.close).click();
+    cy.get(utils.vlModal.close).click();
     cy.get(modal.manageInSettingsModal.add).should('not.be.visible');
   });
 });

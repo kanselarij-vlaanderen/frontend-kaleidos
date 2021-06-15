@@ -3,7 +3,6 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
-import modal from '../../../../selectors/modal.selectors';
 import utils from '../../../../selectors/utils.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 
@@ -94,7 +93,7 @@ context('Settings overview page tests', () => {
           .click();
       });
     cy.route('GET', '/users/*').as('getUsers');
-    cy.get(modal.verify.save).should('exist')
+    cy.get(utils.vlModalVerify.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait('@getUsers').then(() => {

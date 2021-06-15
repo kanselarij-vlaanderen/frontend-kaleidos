@@ -4,6 +4,7 @@
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
+import utils from '../../../../selectors/utils.selectors';
 
 context('Manage goverment field tests', () => {
   beforeEach(() => {
@@ -22,8 +23,8 @@ context('Manage goverment field tests', () => {
     cy.get(toolbar.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.overview.manageGovermentFields).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get(modal.baseModal.close).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.close).click();
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
   });
 });

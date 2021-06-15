@@ -1,7 +1,7 @@
 /* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
-import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('meeting actions tests', () => {
   beforeEach(() => {
@@ -82,7 +82,7 @@ context('meeting actions tests', () => {
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.delete).click();
 
-    cy.get(modal.modal).within(() => {
+    cy.get(utils.vlModal.container).within(() => {
       cy.get('.auk-button').contains('Verwijderen')
         .click();
     });
@@ -99,7 +99,7 @@ context('meeting actions tests', () => {
       timeout: 12000,
     });
     // TODO this is no longer a vl modal? cypress test does not wait while loading modal is still present
-    cy.get(modal.modal).should('not.be.visible');
+    cy.get(utils.vlModal.container).should('not.be.visible');
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
     cy.changeSelectedAgenda('Ontwerpagenda');

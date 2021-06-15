@@ -5,7 +5,6 @@ import 'cypress-file-upload';
 import document from '../../selectors/document.selectors';
 
 import agenda from '../../selectors/agenda.selectors';
-import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
 // ***********************************************
@@ -150,7 +149,7 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -248,7 +247,7 @@ function addDocumentToTreatment(file) {
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
   cy.contains('Document opladen').click();
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -465,7 +464,7 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -540,7 +539,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
       });
   });
 
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModal.container).within(() => {
     cy.get('button').contains('Verwijderen')
       .click();
   });

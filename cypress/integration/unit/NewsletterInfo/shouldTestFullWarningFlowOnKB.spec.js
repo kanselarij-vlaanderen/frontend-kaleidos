@@ -4,7 +4,7 @@
 import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
 import newsletter from '../../../selectors/newsletter.selectors';
-import modal from '../../../selectors/modal.selectors';
+import utils from '../../../selectors/utils.selectors';
 
 context('Should upload nota, see the warning, close warning, edit KB and see no warning when revisiting', () => {
   before(() => {
@@ -40,7 +40,7 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.get(newsletter.editItem.rdfaEditor).type('Aanpassing');
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(5000);
     cy.get(agenda.agendaitemNav.documentsTab).should('be.visible')
       .click();

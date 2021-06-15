@@ -35,27 +35,27 @@ context('Settings page tests', () => {
 
   it('Should open the model behind manage goverment domains', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
-    cy.get(modal.baseModal.close).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.close).click();
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
   });
 
   // TODO this test is duplicated by the next two
   it('Should open the dropdown in the modal', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
 
@@ -68,7 +68,7 @@ context('Settings page tests', () => {
 
   it('Should open the dropdown in the modal and selecting the first element should show advanced modal', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
     cy.get(dependency.emberPowerSelect.option).eq(0)
@@ -80,12 +80,12 @@ context('Settings page tests', () => {
     cy.get(modal.manageInSettingsModal.add).should('be.visible');
     cy.get(modal.manageInSettingsModal.edit).should('be.visible');
     cy.get(modal.manageInSettingsModal.delete).should('be.visible');
-    cy.get(modal.baseModal.close).should('be.visible');
+    cy.get(utils.vlModal.close).should('be.visible');
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced modal with that element in the dropdown span', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
     for (let index = 0; index < govermentDomains.length; index++) {
       cy.validateDropdownElements(index, govermentDomains[index]);
     }
@@ -104,7 +104,7 @@ context('Settings page tests', () => {
 
   it('Should open the modal, select the new domain and edit it', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.baseModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length.greaterThan', 0);
     cy.get(dependency.emberPowerSelect.option).eq(0)
