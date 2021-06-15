@@ -1,9 +1,14 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
-import { dasherize } from '@ember/string';
 import { tracked } from '@glimmer/tracking';
 
+/**
+ * @typedef {{
+ *  key: string,
+ *  isDescending: boolean
+ * }} Sorting
+ */
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   @inject intl;
 
@@ -11,33 +16,27 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   queryParams = [{
     qpSorting: {
-      // no intl: language not set yet.
       as: 'sorteer',
     },
   }]
 
   qpSorting = '';
+  // undefined|'sortKey'|'-sortKey'
+  @tracked sortingString = undefined;
 
   columnMap = {
     receiptDate: {
       key: 'receiptDate',
-      translationKey: 'received-at',
+      qpKey: 'ontvangen-op',
       // TODO: correct properties!
       property: (piece) => piece.created,
     },
     uploadDate: {
       key: 'uploadDate',
-      translationKey: 'uploaded-at',
+      qpKey: 'geupload-op',
       // TODO: correct properties!
       property: (piece) => piece.modified,
     },
-  }
-
-  translateQPSortingKey(column) {
-    let value = this.intl.t(column.translationKey);
-    value = value.toLowerCase();
-    value = dasherize(value);
-    return value;
   }
 
   initSort() {
@@ -48,6 +47,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     // }
 
     const sorting = this.getQPSorting();
+    this.sortingString = this.sortingToString(sorting);
     this.sort(sorting);
   }
 
@@ -62,7 +62,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const value = this.qpSorting;
 
     if (!value) {
-      return;
+      return undefined;
     }
 
     const {
@@ -72,7 +72,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     let foundSortKey;
     for (const sortKey in this.columnMap) {
       const column = this.columnMap[sortKey];
-      const translatedSortKey2 = this.translateQPSortingKey(column);
+      const translatedSortKey2 = column.qpKey;
       if (translatedSortKey === translatedSortKey2) {
         foundSortKey = sortKey;
         break;
@@ -81,7 +81,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
     // unknown column
     if (!foundSortKey) {
-      return;
+      return undefined;
     }
 
     return {
@@ -92,9 +92,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   setQPSorting(sorting) {
     const column = this.columnMap[sorting.key];
-    const translatedKey = this.translateQPSortingKey(column);
+    const translatedKey = column.qpKey;
     const sortingString = this.sortingToString({
-      key: translatedKey, isDescending: sorting.isDescending,
+      key: translatedKey,
+      isDescending: sorting.isDescending,
     });
     this.set('qpSorting', sortingString);
   }

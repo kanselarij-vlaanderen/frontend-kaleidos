@@ -31,32 +31,16 @@
             Naam document
           </th>
           <th>
-            Bestandstype
+            {{t 'filetype'}}
           </th>
-          <Utils::ThSortable @label={{"Ontvangen op"}}
+          <Utils::ThSortable @label={{t 'received-at'}}
             @onChange={{this.changeSorting}}
             @currentSorting={{this.sortingString}}
             @field="receiptDate" />
-          <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
-            <button class="auk-table-sorter">
-              <div class="auk-table-sorter__label">
-                {{t 'received-at'}}
-              </div>
-              <div class="auk-icon auk-icon--default auk-icon--muted">
-                <i class="ki ki-caret-up-down"></i>
-              </div>
-            </button>
-          </th>
-          <th class="auk-u-text-nowrap" role="columnheader" aria-sort="none">
-            <button class="auk-table-sorter">
-              <div class="auk-table-sorter__label">
-                {{t 'uploaded-at'}}
-              </div>
-              <div class="auk-icon auk-icon--default auk-icon--muted">
-                <i class="ki ki-caret-up-down"></i>
-              </div>
-            </button>
-          </th>
+          <Utils::ThSortable @label={{t 'uploaded-at'}}
+            @onChange={{this.changeSorting}}
+            @currentSorting={{this.sortingString}}
+            @field="uploadDate" />
           <th class="auk-u-text-align--center">
             {{t 'corrected'}}
           </th>
@@ -102,38 +86,22 @@
               </p>
             </td>
             <td class="auk-u-text-align--center">
-              <div class="auk-icon auk-icon--default auk-icon--success-dark">
-                <i class="ki ki-check"></i>
-              </div>
+              <Auk::Icon @name="check" @skin="success-dark" />
             </td>
             <td>
-              <div class="auk-button-toolbar">
-                <button
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  type="button"
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default auk-icon--download">
-                      <i class="ki ki-download"></i>
-                    </div>
-                    <div class="auk-u-sr-only">
-                      Download
-                    </div>
-                  </span>
-                </button>
-                <a
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  href="/ovrb/documents/proof/proof-document.html"
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default auk-icon--book">
-                      <i class="ki ki-book"></i>
-                    </div>
-                    <div class="auk-u-sr-only">
-                      Read
-                    </div>
-                  </span>
-                </a>
+              <Auk::ButtonToolbar>
+                <Auk::Button
+                  @skin="border" @layout="icon-only" @icon="download"
+                  @href={{piece.file.namedDownloadLink}}
+                  download>
+                  Download
+                </Auk::Button>
+                <Auk::Button
+                  @skin="border" @layout="icon-only" @icon="download"
+                  @href={{piece.viewDocumentURL}}
+                  target="_blank">
+                  Read
+                </Auk::Button>
                 <button
                   class="auk-button auk-button--borderless auk-button--icon"
                   type="button"
@@ -162,11 +130,14 @@
                     </a>
                   </li>
                 </ul>
-              </div>
+              </Auk::ButtonToolbar>
             </td>
           </tr>
         {{/each}}
       </tbody>
     </table>
+    {{else}}
+      <Auk::EmptyState @message={{t "no-documents-yet" }} />
+    {{/if}}
   </div>
 </div>
