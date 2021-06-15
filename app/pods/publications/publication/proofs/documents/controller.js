@@ -10,13 +10,13 @@ import { tracked } from '@glimmer/tracking';
  * }} Sorting
  */
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
-  @inject intl;
+  @inject router;
 
   @tracked pieces;
 
   queryParams = [{
     qpSorting: {
-      as: 'sorteer',
+      as: 'volgorde',
     },
   }]
 
@@ -37,6 +37,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       // TODO: correct properties!
       property: (piece) => piece.modified,
     },
+  }
+
+  get routeName() {
+    return this.router.currentRouteName;
   }
 
   initSort() {
@@ -110,7 +114,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   sortingToString(sorting) {
-    return (sorting.isDescending ? '-' : '') + sorting.key;
+    if (sorting) {
+      return (sorting.isDescending ? '-' : '') + sorting.key;
+    }
   }
 
   sort(sorting) {
@@ -126,6 +132,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       // TODO: default sort
     }
   }
+
 
   @action
   openPieceUploadModal() {

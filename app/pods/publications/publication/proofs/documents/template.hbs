@@ -29,10 +29,10 @@
             <Auk::Checkbox />
           </th>
           <th>
-            Naam document
+            {{t 'document-name'}}
           </th>
           <th>
-            {{t 'filetype'}}
+            {{t 'file-type'}}
           </th>
           <Utils::ThSortable @label={{t 'received-at'}}
             @onChange={{this.changeSorting}}
@@ -90,36 +90,39 @@
               <Auk::Icon @name="check" @skin="success-dark" />
             </td>
             <td>
-              <Auk::ButtonToolbar>
+              <WebComponents::AuButtonToolbar>
                 <Auk::Button
-                  @skin="border" @layout="icon-only" @icon="download"
+                  @skin="borderless" @layout="icon-only" @icon="download"
                   @href={{piece.file.namedDownloadLink}}
                   download>
                   Download
                 </Auk::Button>
                 <Auk::Button
-                  @skin="border" @layout="icon-only" @icon="download"
+                  @skin="borderless" @layout="icon-only" @icon="download"
                   @href={{piece.viewDocumentURL}}
                   target="_blank">
-                  Read
+                  {{t "read"}}
                 </Auk::Button>
-                <button
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  type="button"
-                  data-menu-placement="bottom-end"
-                  data-menu="moreMenu0"
-                  data-menu-samewidth="true"
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default auk-icon--more">
-                      <i class="ki ki-more"></i>
-                    </div>
-                    <div class="auk-u-sr-only">
-                      View more
-                    </div>
-                  </span>
-                </button>
-                <ul class="auk-menu" id="moreMenu0">
+                <Auk::Button
+                  @layout="icon-only" @skin="borderless" @icon="more"
+                  id="{{this.routeName}}.{{piece.id}}">
+                  {{t "view-more"}}
+                </Auk::Button>
+                <EmberPopover
+                  @side="bottom-start"
+                  @targetId="{{this.routeName}}.{{piece.id}}">
+                  <Auk::Dropdown>
+                    <WebComponents::AuDropdown::Item
+                      data-test-unlink-mandatee
+                      {{on "click" (fn this.unlinkMandateeFromPublicationFlow mandatee) }}
+                      @skin="danger"
+                    >
+                      {{t "delete"}}
+                    </WebComponents::AuDropdown::Item>
+                  </Auk::Dropdown>
+                </EmberPopover>
+
+                <ul class="auk-menu">
                   <li>
                     <a class="auk-menu__item" href="#">
                       Bewerk drukproef details
@@ -131,7 +134,7 @@
                     </a>
                   </li>
                 </ul>
-              </Auk::ButtonToolbar>
+              </WebComponents::AuButtonToolbar>
             </td>
           </tr>
         {{/each}}
