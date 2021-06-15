@@ -51,10 +51,6 @@ export default EmberObject.create({
   ],
   // TODO translate
   documentType: {
-    decreet: {
-      id: 'e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
-      url: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
-    },
     besluitVlaamseRegering: {
       id: '4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
       url: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',

@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { inject } from '@ember/service';
 
 const {
@@ -33,7 +34,7 @@ export default Model.extend({
   }),
 
   hasDecreet: computed('pieces.@each', async function() {
-    const documentTypeDecreet = await this.store.findRecord('document-type', CONFIG.documentType.decreet.id);
+    const documentTypeDecreet = await this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECREET);
     return await this.caseService.hasPieceOfType(this, documentTypeDecreet);
   }),
 

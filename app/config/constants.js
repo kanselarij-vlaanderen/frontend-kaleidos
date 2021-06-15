@@ -37,6 +37,7 @@ export default {
     NOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
     VISIENOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/52d8ce45-1954-48e7-9402-ac5ee3edbbc4',
     DECISION: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
+    DECREET: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
   },
   DOSSIER_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/1b6a6975-28e7-46b5-83fe-da37bb967db2',
