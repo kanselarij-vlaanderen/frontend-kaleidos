@@ -73,6 +73,15 @@
                     </div>
                   </div>
                 </div>
+                <div class="auk-form-group auk-o-flex--align-start">
+                  <Auk::Label for="proofPrint">
+                    {{t 'for-publish-preview'}}
+                  </Auk::Label>
+                  <Auk::CheckboxList>
+                    <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
+                                   @toggle={{this.toggleProofPrint}} />
+                  </Auk::CheckboxList>
+                </div>
               </div>
             </div>
           </div>

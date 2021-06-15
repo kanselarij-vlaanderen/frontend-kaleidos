@@ -19,7 +19,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
   @tracked receivedAtDate = null;
-
+  @tracked proofprint = false;
 
   constructor() {
     super(...arguments);
@@ -86,8 +86,14 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         pagesAmount: this.pagesAmount,
         wordsAmount: this.wordsAmount,
         requestActivity: this.args.requestActivity,
+        proofprint: this.proofprint,
       });
     }
+  }
+
+  @action
+  toggleProofPrint() {
+    this.proofprint = !this.proofprint;
   }
 
   @action
