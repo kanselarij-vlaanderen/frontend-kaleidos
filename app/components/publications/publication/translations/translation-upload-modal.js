@@ -16,8 +16,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @tracked translationDocument = null;
   @tracked newPieces = [];
   @tracked name = null;
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
   @tracked receivedAtDate = null;
 
 
@@ -83,8 +81,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         piece: this.translationDocument,
         name: this.name,
         receivedAtDate: this.receivedAtDate,
-        pagesAmount: this.pagesAmount,
-        wordsAmount: this.wordsAmount,
         requestActivity: this.args.requestActivity,
       });
     }

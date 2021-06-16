@@ -42,37 +42,6 @@
                                                @defaultDate={{this.receivedAtDate}}
                                                @onChange={{this.setReceivedAtDate}}/>
                 </div>
-                <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label>{{t 'translation-burden'}}</Auk::Label>
-                  <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
-                    <div class="auk-o-grid">
-                      <div class="auk-o-grid-col-6">
-                        <div class="auk-form-group">
-                          <Auk::Label for="translationLoadPages" class="auk-label--light">
-                            {{t 'pages-amount'}}
-                          </Auk::Label>
-                          <Auk::Input
-                            type="number"
-                            id="translationLoadPages"
-                            @value={{mut this.pagesAmount}}
-                          />
-                        </div>
-                      </div>
-                      <div class="auk-o-grid-col-6">
-                        <div class="auk-form-group">
-                          <Auk::Label for="translationLoadWords" class="auk-label--light">
-                            {{t 'words-amount'}}
-                          </Auk::Label>
-                          <Auk::Input
-                            type="number"
-                            id="translationLoadWords"
-                            @value={{mut this.wordsAmount}}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

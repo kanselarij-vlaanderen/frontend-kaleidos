@@ -22,8 +22,6 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield documentContainer.save();
 
     piece.translationSubcase = this.translationSubcase;
-    piece.pages = translationUpload.pagesAmount;
-    piece.words = translationUpload.wordsAmount;
     piece.name = translationUpload.name;
     piece.language = requestActivity.language;
     yield piece.save();
