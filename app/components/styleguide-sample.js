@@ -7,7 +7,7 @@ export default class StyleguideSample extends Component {
   @tracked visibility = true;
   // code open or closed on the sample level
 
-  get getModifierClass() {
+  get modifierClass() {
     if (isPresent(this.args.modifier)) {
       return `br-styleguide-sample__sample--${this.args.modifier}`;
     }
