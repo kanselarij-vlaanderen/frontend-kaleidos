@@ -1,0 +1,21 @@
+<li class={{@class}}>
+  {{#if @href}}
+    <a class="auk-search-results-list-b__item {{this.skin}}" href={{@href}} ...attributes>
+      {{yield}}
+    </a>
+  {{else}}
+    <LinkTo
+      class="auk-search-results-list-b__item {{this.skin}}"
+      @route={{@route}}
+      @models={{this.models}}
+      @disabled={{@disabled}}
+      @activeClass={{@activeClass}}
+      @current-when={{@current-when}}
+      @preventDefault={{@preventDefault}}
+      @query={{@query}}
+      ...attributes
+    >
+      {{yield}}
+    </LinkTo>
+  {{/if}}
+</li>

@@ -1,0 +1,7 @@
+<ul class="auk-search-results-list-b {{if this.isActive "auk-search-results-list-b--visible"}}" ...attributes>
+  {{yield
+    (hash
+      Item=(component "auk/search-results-list/item")
+    )
+  }}
+</ul>
