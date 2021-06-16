@@ -27,12 +27,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
-    yield  translationActivity.generatedPieces;
-    if (translationActivity.generatedPieces) {
-      translationActivity.generatedPieces.pushObject(piece);
-    } else {
-      translationActivity.generatedPieces = [piece];
-    }
+    translationActivity.generatedPieces.pushObject(piece);
     yield translationActivity.save();
 
     this.showTranslationUploadModal = false;

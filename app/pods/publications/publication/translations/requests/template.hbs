@@ -67,36 +67,38 @@
                 {{/each}}
               </Auk::List>
             </div>
-            <div class="auk-u-mb-2">
-              <p class="auk-u-text-bold auk-u-muted auk-u-mb">
-                {{t
-                  "received-documents-on"
-                  date=(moment-format activity.translationActivity.endDate "DD-MM-YYYY")
-                }}
-              </p>
-              <Auk::List @isBordered="true" class="auk-list--view">
-                {{#each activity.translationActivity.generatedPieces as |piece|}}
-                  <Auk::List::Item @skin="gray-100">
-                    <div class="auk-u-ml-2">
-                      <Auk::Icon @name="document" @skin="muted-dark"/>
-                    </div>
-                    <div class="auk-u-mx-2">
-                      <span class="auk-u-text-bold">{{piece.name}}</span>
-                      <div class="auk-u-muted auk-u-text-small">
-                        {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+            {{#if activity.translationActivity.generatedPieces}}
+              <div class="auk-u-mb-2">
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                  {{t
+                    "received-documents-on"
+                    date=(moment-format activity.translationActivity.endDate "DD-MM-YYYY")
+                  }}
+                </p>
+                <Auk::List @isBordered="true" class="auk-list--view">
+                  {{#each activity.translationActivity.generatedPieces as |piece|}}
+                    <Auk::List::Item @skin="gray-100">
+                      <div class="auk-u-ml-2">
+                        <Auk::Icon @name="document" @skin="muted-dark"/>
                       </div>
-                    </div>
-                    <Auk::Button
+                      <div class="auk-u-mx-2">
+                        <span class="auk-u-text-bold">{{piece.name}}</span>
+                        <div class="auk-u-muted auk-u-text-small">
+                          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                        </div>
+                      </div>
+                      <Auk::Button
                             @layout="icon-only"
                             @icon="book"
                             @skin="borderless"
                             @href={{piece.viewDocumentURL}}
                             target="_blank"
-                    />
-                  </Auk::List::Item>
-                {{/each}}
-              </Auk::List>
-            </div>
+                      />
+                    </Auk::List::Item>
+                  {{/each}}
+                </Auk::List>
+              </div>
+            {{/if}}
           </div>
         </div>
       </Auk::Accordion>
