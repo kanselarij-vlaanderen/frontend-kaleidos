@@ -1,15 +1,19 @@
 <div class="auk-u-m-4">
   {{#each this.model as |activity|}}
     <div class="auk-u-mb-4">
-      <Auk::Accordion @label=
-                        {{t
-                          "translation-request-for"
-                          date=(moment-format activity.startDate "D MMMM")
-                          time=(moment-format activity.startDate "H:mm")
-                        }}
-      >
-        {{!-- Button currently placed here as accordion doesn't allow actions yet --}}
+      <Auk::Accordion>
         <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-accordion__title">
+                {{t
+                  "translation-request-for"
+                  date=(moment-format activity.startDate "D MMMM")
+                  time=(moment-format activity.startDate "H:mm")
+                }}
+              </h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
