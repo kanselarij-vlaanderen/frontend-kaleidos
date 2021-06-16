@@ -4,11 +4,18 @@
 >
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
+      <div class="auk-u-mr-3">
+        {{#if @isHighlighted}}
+          <Auk::Badge @skin="success" @icon="document-added" @size="large"/>
+        {{else}}
+          <Auk::Badge @icon="document" @size="large"/>
+        {{/if}}
+      </div>
       <div class="vlc-document-card__content">
         <div class="auk-toolbar-complex auk-toolbar-complex--auto">
           <div class="auk-toolbar-complex__left">
             <div class="auk-toolbar-complex__item">
-              <p class="vlc-subline vlc-document-card__subline">
+              <p class="vlc-subline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
@@ -112,13 +119,6 @@
           </div>
         </div>
         <div class="auk-o-flex">
-          <div class="auk-u-mr-3">
-            {{#if @isHighlighted}}
-              <Auk::Badge @skin="success" @icon="document-added" @size="large"/>
-            {{else}}
-              <Auk::Badge @icon="document" @size="large"/>
-            {{/if}}
-          </div>
           <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
