@@ -2,10 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {
-  task,
-  lastValue
-} from 'ember-concurrency-decorators';
+import { task } from 'ember-concurrency-decorators';
 
 /**
  * @argument {Agendaitem} agedaitem
@@ -16,14 +13,16 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @service publicationService;
 
   @tracked isOpenNewPublicationModal = false;
-  @tracked referenceDocument;
 
-  @lastValue('loadCase') case;
+  @tracked referenceDocument;
+  @tracked case;
+  @tracked agendaItemTreatment;
 
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
-    this.loadCase.perform();
+    this.loadCase();
+    this.loadAgendaItemTreatment();
   }
 
   @task
@@ -36,12 +35,16 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  @task
-  // no yield but use of task for @lastValue
-  // eslint-disable-next-line require-yield
-  *loadCase() {
-    return this.store.queryOne('case', {
+  async loadCase() {
+    this.case = await this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
+    });
+  }
+
+  async loadAgendaItemTreatment() {
+    this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
+      'filter[agendaitem][:id:]': this.args.agendaitem.id,
+      sort: '-start-date',
     });
   }
 
@@ -61,6 +64,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
+      agendaItemTreatment: this.agendaItemTreatment,
     });
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
