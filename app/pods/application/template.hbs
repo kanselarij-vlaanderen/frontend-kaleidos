@@ -17,7 +17,7 @@
     <Auk::AlertStack as |Alert|>
       {{#each this.toaster.toasts as |toast|}}
         <Alert
-          @skin={{toast.type}}
+          @skin={{toast.options.type}}
           @title={{toast.title}}
           @message={{toast.message}}
           @isClosable={{not (eq alert.type "success")}}
