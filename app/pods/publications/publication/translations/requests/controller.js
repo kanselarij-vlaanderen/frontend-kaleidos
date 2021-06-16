@@ -21,7 +21,6 @@ export default class PublicationsPublicationTranslationsRequestController extend
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
 
-    piece.translationSubcase = this.translationSubcase;
     piece.name = translationUpload.name;
     piece.language = requestActivity.language;
     yield piece.save();
