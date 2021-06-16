@@ -1,4 +1,4 @@
-<tr>
+<tr {{did-update this.initLinkModeOption @piece.publicationFlow}}>
   <td>
     {{@piece.name}}
   </td>
@@ -25,7 +25,7 @@
     {{else}}
       <Auk::Button
         @icon="add"
-        {{on 'click' this.openNewPublicationModal}}>
+        {{on 'click' (fn @onOpenNewPublicationModal @piece)}}>
         {{t "publications-new"}}
       </Auk::Button>
     {{/if}}
@@ -49,10 +49,3 @@
     </WebComponents::AuButtonToolbar>
   </td>
 </tr>
-
-{{#if this.isOpenNewPublicationModal}}
-  <Publications::NewPublicationModal
-    @case={{this.case}}
-    @onSave={{this.saveNewPublication}}
-    @onCancel={{this.cancelNewPublication}} />
-{{/if}}

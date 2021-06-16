@@ -25,10 +25,14 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
   ];
 
   @tracked selectedLinkModeOption;
-  @tracked isOpenNewPublicationModal = false;
 
   constructor() {
     super(...arguments);
+    this.initLinkModeOption();
+  }
+
+  @action
+  initLinkModeOption() {
     const isEnabledLink = !!this.args.piece.publicationFlow.get('id');
     this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink === isEnabledLink);
   }
@@ -49,23 +53,5 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     } else {
       this.args.onUnlinkPublicationFlow(this.args.piece);
     }
-  }
-
-  @action
-  openNewPublicationModal() {
-    this.isOpenNewPublicationModal = true;
-    this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink);
-  }
-
-  @action
-  async saveNewPublication(publicationProperties) {
-    await this.args.onSaveNewPublicationFlow(this.args.piece, publicationProperties);
-    this.isOpenNewPublicationModal = false;
-  }
-
-  @action
-  cancelNewPublication() {
-    this.selectedLinkModeOption = this.linkModeOptions.find((opt) => !opt.isEnabledLink);
-    this.isOpenNewPublicationModal = false;
   }
 }
