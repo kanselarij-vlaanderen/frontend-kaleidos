@@ -71,7 +71,7 @@
                 {{/each}}
               </Auk::List>
             </div>
-            {{#if activity.translationActivity.generatedPieces}}
+            {{#if (not-eq activity.translationActivity.generatedPieces.length 0)}}
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                   {{t
