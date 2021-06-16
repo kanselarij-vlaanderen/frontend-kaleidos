@@ -6,18 +6,11 @@ import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
-  /**
-   * @argument onSave: should take arguments (pieces)
-   * @argument onCancel
-   */
   @service store;
   @service('file-queue') fileQueueService;
 
   @tracked translationDocument = null;
-  @tracked newPieces = [];
   @tracked name = null;
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
   @tracked receivedAtDate = null;
   @tracked proofprint = false;
 
@@ -55,7 +48,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
       documentContainer: documentContainer,
     });
     this.name = file.filenameWithoutExtension;
-    this.newPieces.pushObject(this.translatedDocument);
   }
 
   @task
@@ -70,7 +62,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    this.translationDocument = null;
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -83,8 +75,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         piece: this.translationDocument,
         name: this.name,
         receivedAtDate: this.receivedAtDate,
-        pagesAmount: this.pagesAmount,
-        wordsAmount: this.wordsAmount,
         requestActivity: this.args.requestActivity,
         proofprint: this.proofprint,
       });

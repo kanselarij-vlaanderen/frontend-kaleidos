@@ -22,19 +22,12 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield documentContainer.save();
 
     piece.translationSubcase = this.translationSubcase;
-    piece.pages = translationUpload.pagesAmount;
-    piece.words = translationUpload.wordsAmount;
     piece.name = translationUpload.name;
     piece.language = requestActivity.language;
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
-    yield  translationActivity.generatedPieces;
-    if (translationActivity.generatedPieces) {
-      translationActivity.generatedPieces.pushObject(piece);
-    } else {
-      translationActivity.generatedPieces = [piece];
-    }
+    translationActivity.generatedPieces.pushObject(piece);
     yield translationActivity.save();
 
     this.showTranslationUploadModal = false;
