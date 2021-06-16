@@ -19,11 +19,13 @@ import ENV from 'frontend-kaleidos/config/environment';
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
   @service intl;
+  @service agendaService;
 
   @tracked isEnabledPieceEdit = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
+  @tracked newAgendaitemPieces;
 
   @tracked isOpenPublicationModal = false;
 
@@ -36,6 +38,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
     const documentsAreReleased = this.agendaitem.get('agenda.createdFor.releasedDocuments'); // TODO async ...?
     return !(isOverheid && !documentsAreReleased);
+  }
+
+  @task
+  *loadNewPieces() {
+    if (this.previousAgenda) {
+      this.newAgendaitemPieces = yield this.agendaService.changedPieces(this.currentAgenda.id,
+        this.previousAgenda.id, this.agendaitem.id);
+    }
   }
 
   @action

@@ -112,18 +112,12 @@
           </div>
         </div>
         <div class="auk-o-flex">
-          {{!-- TODO: make checkAdded a DDAU @isHighlighted --}}
-          <div class="vlc-document-card__badge
-            {{if
-              @documentContainer.checkAdded
-              "vlc-document-list__item vlc-document-list__item--active"
-            }}"
-          >
-            <div class="auk-badge auk-badge--default auk-badge--medium">
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-document"></i>
-              </div>
-            </div>
+          <div class="auk-u-mr-3">
+            {{#if @isHighlighted}}
+              <Auk::Badge @skin="success" @icon="document-added" @size="large"/>
+            {{else}}
+              <Auk::Badge @icon="document" @size="large"/>
+            {{/if}}
           </div>
           <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
