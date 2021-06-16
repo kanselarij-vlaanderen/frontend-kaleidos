@@ -1,0 +1,73 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Search results list" />
+
+<StyleguideSample
+  @title="Default"
+  @snippet="search-results-list-default.hbs"
+  @modifier="dropdown"
+>
+  {{!-- BEGIN-SNIPPET search-results-list-default --}}
+  <div class="auk-u-position-relative auk-u-inline-block">
+    <Auk::Input @icon="search" type="text" />
+    <Auk::SearchResultsList>
+      <Auk::SearchResultsList::Item @route="styleguide.accordion">
+        Accordion
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.accordion-panel">
+        Accordion panel
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.avatar">
+        Avatar
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.badge">
+        Badge
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.brand">
+        Brand
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.checkboxes-radio-buttons">
+        Checkboxes/radio buttons
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.color-badge">
+        Color badge
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.empty-state">
+        Empty state
+      </Auk::SearchResultsList::Item>
+    </Auk::SearchResultsList>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+{{!-- <h3 class="auk-h3">Arguments</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@title</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"></td>
+    <td>Determines the title of the accordion item.</td>
+  </tr>
+  <tr>
+    <td><code>@layout</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>controls-left</code> (default) or <code>controls-right</code></td>
+    <td>Determines the position of the control within the accordion item.</td>
+  </tr>
+  <tr>
+    <td><code>@isDefaultActive</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td> Determines the active state (on display) of the accordion item.</td>
+  </tr>
+  </tbody>
+</table> --}}
