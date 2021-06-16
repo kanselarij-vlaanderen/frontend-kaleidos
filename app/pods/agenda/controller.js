@@ -9,6 +9,8 @@ export default class AgendaController extends Controller {
   @service agendaService;
   @service router;
   @service currentSession;
+  @service toaster;
+  @service intl;
 
   @tracked isLoading = false;
 
@@ -61,6 +63,14 @@ export default class AgendaController extends Controller {
   @action
   loadingAgendaitems() {
     this.isLoading = !this.isLoading;
+  }
+
+  @action
+  handleAgendaItemCreation(agendaItems) {
+    this.toaster.success(this.intl.t('successfully-added-agenda-items', {
+      numItems: agendaItems.length,
+    }));
+    this.send('reloadModel');
   }
 
   @action

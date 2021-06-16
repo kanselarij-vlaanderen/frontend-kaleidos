@@ -869,5 +869,6 @@
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
   "existing": "Bestaand",
-  "successfully-created-meeting": "Nieuwe agenda aangemaakt voor de {meetingType} van {meetingDate}"
+  "successfully-created-meeting": "Nieuwe agenda aangemaakt voor de {meetingType} van {meetingDate}",
+  "successfully-added-agenda-items": "{numItems} {numItems, plural, =1 {agendapunt} other {agendapunten}} aan de agenda toegevoegd"
 }
