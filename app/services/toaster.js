@@ -48,7 +48,7 @@ export default class ToasterService extends Service {
     options = options || {};
     options.type = 'success';
     if (typeof options.timeOut === 'undefined') {
-      options.timeOut = 2000;
+      options.timeOut = 3200;
     }
     return this.notify(message, title, options);
   }
