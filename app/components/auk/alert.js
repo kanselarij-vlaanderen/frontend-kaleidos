@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 /**
  *
- * @argument skin {String}: value can be (empty, default), "succes", "warning", "error", "loading" (not yet implemented in our code below)
+ * @argument skin {String}: value can be (empty, default), "success", "warning", "error", "loading" (not yet implemented in our code below)
  * @argument icon {String}
  * @argument size {String}
  * @argument title {String}
