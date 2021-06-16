@@ -25,15 +25,17 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
   ];
 
   @tracked selectedLinkModeOption;
+  @tracked selectedPublicationFlow;
 
   constructor() {
     super(...arguments);
-    this.initLinkModeOption();
+    this.initSelectedOptions();
   }
 
   @action
-  initLinkModeOption() {
-    const isEnabledLink = !!this.args.piece.publicationFlow.get('id');
+  async initSelectedOptions() {
+    this.selectedPublicationFlow = await this.args.piece.publicationFlow;
+    const isEnabledLink = !!this.selectedPublicationFlow;
     this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink === isEnabledLink);
   }
 
