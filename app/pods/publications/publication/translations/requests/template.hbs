@@ -12,20 +12,12 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @layout="icon-only" @skin="secondary" @icon="more"/>
-            <AttachPopover
-                    @renderInPlace={{false}}
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="bottom">
-              <Auk::Dropdown>
-                <WebComponents::AuDropdown::Item {{on "click" openTranslationUploadModal}}>
-                  {{t "upload-translation"}}
-                </WebComponents::AuDropdown::Item>
-              </Auk::Dropdown>
-            </AttachPopover>
+            <Auk::Button
+                    @skin="primary"
+              {{on "click" openTranslationUploadModal}}
+            >
+              {{t "upload-translation"}}
+            </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
