@@ -5,18 +5,18 @@
   @isCollapsed={{not @isOpen}}
 >
   <Auk::Navbar @skin="gray-100">
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
-        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position={{if @isOpen "right" "center"}}>
+        <Auk::Toolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <Auk::Button
             @skin="borderless"
             @icon={{if @isOpen "chevron-right" "chevron-left"}}
             @layout="icon-only"
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           />
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
@@ -197,7 +197,7 @@
               </div>
             </div>
           </Auk::Label>
-          <WebComponents::AuTextarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
+          <Auk::Textarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></Auk::Textarea>
         </div>
       </div>
     </div>
@@ -214,22 +214,22 @@
       {{t "discharge-publication-flow-confirm"}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left"n>
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left" n>
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

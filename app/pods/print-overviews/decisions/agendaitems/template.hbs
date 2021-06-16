@@ -15,9 +15,9 @@
     {{else}}
       <div class="auk-u-m-8">
         <div class="auk-u-mb-4">
-          <WebComponents::AuToolbar>
-            <WebComponents::AuToolbar::Group @position="center">
-              <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="center">
+              <Auk::Toolbar::Item>
                 <button type="button" class="auk-button auk-button--secondary"
                   {{action "addTreatment" agendaitemRow}}
                 >
@@ -30,9 +30,9 @@
                     </div>
                   </span>
                 </button>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
-          </WebComponents::AuToolbar>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}
           {{agenda/agendaitem/agendaitem-decision

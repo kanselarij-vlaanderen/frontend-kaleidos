@@ -33,4 +33,7 @@ export default {
     NUMAC: 'Belgisch Staatsblad',
     OVRB: 'ovrb',
   },
+  MAIL_FOLDERS: {
+    OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
+  },
 };

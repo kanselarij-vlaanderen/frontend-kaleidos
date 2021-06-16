@@ -3,10 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SettingsEmailsDebugController extends Controller {
   @service configService;
-  @service emailService;
   @service toaster;
   @service intl;
   @tracked showLoader = false;
@@ -22,9 +22,9 @@ export default class SettingsEmailsDebugController extends Controller {
 
     if (this.pieceId) {
       const piece = await this.store.findRecord('piece', this.pieceId);
-      await this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content, [piece, piece]);
+      await this.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content, [piece, piece]);
     } else {
-      await this.emailService.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content);
+      await this.sendEmail(CONFIG.EMAIL.DEFAULT_FROM, this.toMailAddress, this.subject, this.content);
     }
     this.subject = '';
     this.content = '';
@@ -33,6 +33,20 @@ export default class SettingsEmailsDebugController extends Controller {
     this.toaster.success(this.intl.t('sent-test-mail'), this.intl.t('sent-test-mail'));
     this.showLoader = false;
   }
+
+  async sendEmail(from, to, subject, plainTextMessage, attachments) {
+    const folder = await this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+    const email = this.store.createRecord('email', {
+      folder: folder,
+      from: from,
+      to: to,
+      subject: subject,
+      message: plainTextMessage,
+      attachments,
+    });
+    return await email.save();
+  }
+
   @action
   async onChangeSubject(event) {
     this.subject = event.target.value;
