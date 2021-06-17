@@ -87,13 +87,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       });
     }
   }
-
-  // TODO KAS-2481
-  // @action
-  // setReceivedAtDate(selectedDates) {
-  //   this.receivedAtDate = selectedDates[0];
-  // }
-
   // TODO In KAS-2600
   // @action
   // toggleProofPrint() {
