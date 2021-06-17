@@ -10,9 +10,9 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
+              data-test-add-mandatee
               @skin="tertiary"
               @icon="add"
-              data-test-add-mandatee
               {{on "click" this.openLinkModal}}>
               {{t "add-mandatee"}}
             </Auk::Button>
@@ -40,10 +40,11 @@
                   </div>
                 </td>
                 <td class="auk-u-text-align--right">
-                  <Auk::Button @skin="borderless"
-                    @icon="delete"
+                  <Auk::Button 
                     data-test-unlink-mandatee
-                    {{on "click" (fn this.unlink mandatee) }}>
+                    @skin="borderless"
+                    @icon="delete"
+                    {{on "click" (fn this.unlink mandatee)}}>
                   </Auk::Button>
                 </td>
               </tr>

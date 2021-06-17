@@ -76,8 +76,7 @@
                 data-test-publication-cancel-inscription
                 @skin="borderless"
                 @disabled={{this.save.isRunning}}
-                {{on "click" this.cancelEdit}}
-              >
+                {{on "click" this.cancelEdit}}>
                 {{t "cancel"}}
               </Auk::Button>
             </Auk::Toolbar::Item>
@@ -88,8 +87,7 @@
                 data-test-publication-save-inscription
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                {{on "click" (perform this.save)}}
-              >
+                {{on "click" (perform this.save)}}>
                 {{t "save"}}
               </Auk::Button>
             </Auk::Toolbar::Item>

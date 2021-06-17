@@ -1,6 +1,6 @@
 <Auk::Modal
-  @size="small"
-  data-test-add-mandateemodal>
+  data-test-add-mandateemodal
+  @size="small">
   <Auk::Modal::Header
     @title={{t "add-mandatee"}}
     @onClose={{@onClose}} />
@@ -9,13 +9,13 @@
       @isLoading={{this.isLoading}} @reserveSpace={{true}}>
       <Auk::Label>{{t "mandatee"}}</Auk::Label>
       <PowerSelect
-        @options={{this.options}}
-        @selected={{this.selection}}
+        data-test-mandatee-selector
         @noMatchesMessage={{t "no-mandatees-found"}}
         @placeholder={{t "select-mandatee"}}
+        @options={{this.options}}
+        @selected={{this.selection}}
         @search={{this.search}}
         @onchange={{this.select}}
-        data-test-mandatee-selector
         as |mandatee|>
         <Auk::Avatar @size="small" @icon="user">
           {{mandatee.person.fullName}}
@@ -36,13 +36,13 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
+            data-test-add-contactperson-submit-button
             @skin="primary"
             @icon="add"
             @size="small"
             @disabled={{or this.init.isRunning (not this.canLink)}}
             @loading={{this.onLink.isRunning}}
-            {{on "click" (perform this.onLink)}}
-            data-test-add-contactperson-submit-button>
+            {{on "click" (perform this.onLink)}}>
             {{t "add"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
