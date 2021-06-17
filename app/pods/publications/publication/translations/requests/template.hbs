@@ -18,7 +18,7 @@
             <Auk::Toolbar::Item>
               <Auk::Button
                       @skin="primary"
-                {{on "click" openTranslationUploadModal}}
+                {{on "click" (fn openTranslationUploadModal activity)}}
               >
                 {{t "upload-translation"}}
               </Auk::Button>
@@ -107,13 +107,6 @@
         </div>
       </Auk::Accordion>
     </div>
-    {{#if this.showTranslationUploadModal}}
-      <Publications::Publication::Translations::TranslationUploadModal
-              @translationSubcase={{this.translationSubcase}}
-              @requestActivity={{activity}}
-              @onSave={{perform this.saveTranslationUpload}}
-              @onCancel={{this.closeTranslationUploadModal}} />
-    {{/if}}
   {{else}}
     <Auk::Panel>
       <Auk::Panel::Body>
@@ -122,3 +115,10 @@
     </Auk::Panel>
   {{/each}}
 </div>
+
+{{#if this.showTranslationUploadModal}}
+  <Publications::Publication::Translations::TranslationUploadModal
+    @translationSubcase={{this.translationSubcase}}
+    @onSave={{perform this.saveTranslationUpload}}
+    @onCancel={{this.closeTranslationUploadModal}} />
+{{/if}}

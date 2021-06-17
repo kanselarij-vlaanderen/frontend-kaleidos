@@ -8,15 +8,13 @@ export default class PublicationsPublicationTranslationsRequestController extend
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
-
+  @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
 
   @task
   *saveTranslationUpload(translationUpload) {
     const piece = translationUpload.piece;
-    const requestActivity = translationUpload.requestActivity;
-    const translationActivity = yield requestActivity.translationActivity;
+    const translationActivity = yield this.selectedRequestActivity.translationActivity;
 
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
@@ -34,12 +32,14 @@ export default class PublicationsPublicationTranslationsRequestController extend
   }
 
   @action
-  openTranslationUploadModal() {
+  openTranslationUploadModal(requestActivity) {
+    this.selectedRequestActivity = requestActivity;
     this.showTranslationUploadModal = true;
   }
 
   @action
   closeTranslationUploadModal() {
+    this.selectedRequestActivity = null;
     this.showTranslationUploadModal = false;
   }
 }
