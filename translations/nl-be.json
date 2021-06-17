@@ -865,7 +865,7 @@
   "translation-activitie": "vertalingsactiviteit",
   "request-activitie": "aanvraag activiteit",
   "translation-request-for": "Vertaalaanvraag op {date} om {time}",
-  "received-documents-on": "Ontvagen documenten op {date}",
+  "received-documents-on": "Ontvangen documenten op {date}",
   "for-publish-preview": "Dient voor drukproef",
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",

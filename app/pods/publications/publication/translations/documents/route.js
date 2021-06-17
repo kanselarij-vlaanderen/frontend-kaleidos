@@ -14,20 +14,20 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
       ].join(','),
     });
 
-    const allDocuments = [];
+    const allDocuments = new Set(); // using set to ensure a collection of unique documents
 
     const sourceDocuments = await this.translationSubcase.sourceDocuments;
-    allDocuments.push(...sourceDocuments.toArray());
+    sourceDocuments.forEach((doc) => allDocuments.add(doc));
 
     const translationActivities = await this.translationSubcase.translationActivities;
     await Promise.all(
       translationActivities.map(async(activity) => {
         const translatedDocuments = await activity.generatedPieces;
-        allDocuments.push(...translatedDocuments.toArray());
+        translatedDocuments.forEach((doc) => allDocuments.add(doc));
       })
     );
 
-    return allDocuments;
+    return [...allDocuments];
   }
 
   setupController(controller) {

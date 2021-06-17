@@ -8,39 +8,38 @@ export default class PublicationsPublicationTranslationsRequestController extend
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
-
+  @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
 
   @task
   *saveTranslationUpload(translationUpload) {
     const piece = translationUpload.piece;
-    const requestActivity = translationUpload.requestActivity;
-    const translationActivity = yield requestActivity.translationActivity;
+    const translationActivity = yield this.selectedRequestActivity.translationActivity;
 
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
 
-    piece.translationSubcase = this.translationSubcase;
     piece.name = translationUpload.name;
-    piece.language = requestActivity.language;
+    piece.language = yield translationActivity.language;
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
-    translationActivity.generatedPieces.pushObject(piece);
+    const generatedPieces = yield translationActivity.generatedPieces;
+    generatedPieces.pushObject(piece);
     yield translationActivity.save();
 
     this.showTranslationUploadModal = false;
-    this.send('refresh');
   }
 
   @action
-  openTranslationUploadModal() {
+  openTranslationUploadModal(requestActivity) {
+    this.selectedRequestActivity = requestActivity;
     this.showTranslationUploadModal = true;
   }
 
   @action
   closeTranslationUploadModal() {
+    this.selectedRequestActivity = null;
     this.showTranslationUploadModal = false;
   }
 }
