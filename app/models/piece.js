@@ -52,9 +52,9 @@ export default Model.extend({
   }),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
-  publicationSubcase: belongsTo('publication-subcase'),
-  proofingActivity: belongsTo('proofing-activity'),
-  publicationActivity: belongsTo('publication-activity'),
+  publicationSubcaseAsSource: belongsTo('publication-subcase'),
+  proofingActivityAsGenerated: belongsTo('proofing-activity'),
+  publicationActivityAsGenerated: belongsTo('publication-activity'),
 
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.

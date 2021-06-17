@@ -8,8 +8,18 @@ import { tracked } from '@glimmer/tracking';
  *  key: string,
  *  isDescending: boolean
  * }} Sorting
- * @typedef {undefined|'sortKey'|'-sortKey'} SortingString
  */
+
+class Row {
+  @tracked isSelected = false;
+  @tracked piece;
+  @tracked type;
+
+  constructor(piece, type) {
+    this.piece = piece;
+    this.type = type;
+  }
+}
 
 const COLUMN_MAP = {
   receiptDate: {
@@ -28,6 +38,7 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   @inject router;
+  @tracked rows;
 
   queryParams = [{
     qpSorting: {
@@ -36,21 +47,46 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }]
 
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} key name prepended with minus if descending */
   qpSorting = '';
-
-  /**
-   * @type {SortingString}
-   */
+  /** @type {string} key name prepended with minus if descending */
   @tracked sortingString = undefined;
 
   get routeName() {
     return this.router.currentRouteName;
   }
 
-  initSort() {
+  initRows(pubSubcase) {
+    const sourceDocRows = pubSubcase.sourceDocuments.map((piece) => new Row(piece, 'source'));
+    const proofDocRows = pubSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'proofing')));
+    const pubDocRows = pubSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'publication')));
+
+    this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
+
     const sorting = this.getQPSorting();
     this.sortingString = this.sortingToString(sorting);
     this.sort(sorting);
+  }
+
+  get canCreateNewRequest() {
+    return this.rows.any((row) => row.isSelected);
+  }
+
+  get areAllSelected() {
+    return this.rows.every((row) => row.isSelected);
+  }
+
+  @action
+  toggleSelectionAll() {
+    const newValue = !this.areAllSelected;
+    for (const row of this.rows) {
+      row.isSelected = newValue;
+    }
+  }
+
+  @action
+  toggleSelection(row) {
+    row.isSelected = !row.isSelected;
   }
 
   @action
@@ -59,24 +95,25 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const sorting = this.sortingFromString(sortingString);
     this.setQPSorting(sorting);
     this.sort(sorting);
+    this.rows.arrayContentDidChange();
   }
 
   getQPSorting() {
-    const value = this.qpSorting;
+    const currentSortingQP = this.qpSorting;
 
-    if (!value) {
+    if (!currentSortingQP) {
       return undefined;
     }
 
     const {
-      key: translatedSortKey, isDescending,
-    } = this.sortingFromString(value);
+      key: currentQPValue, isDescending,
+    } = this.sortingFromString(currentSortingQP);
 
     let foundSortKey;
     for (const sortKey in COLUMN_MAP) {
       const column = COLUMN_MAP[sortKey];
-      const translatedSortKey2 = column.qpKey;
-      if (translatedSortKey === translatedSortKey2) {
+      const qpValue = column.qpKey;
+      if (currentQPValue === qpValue) {
         foundSortKey = sortKey;
         break;
       }
@@ -130,9 +167,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   sort(sorting) {
     if (sorting) {
       // const sortingString = this.toSortingString(sorting);
-      this.model.sort((piece1, piece2) => {
+      this.rows.sort((row1, row2) => {
         const property = COLUMN_MAP[sorting.key].property;
-        let comparison = property(piece1) - property(piece2);
+        let comparison = property(row1.piece) - property(row2.piece);
         comparison = sorting.isDescending ? -comparison : comparison;
         return comparison;
       });
@@ -140,7 +177,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } else {
       // TODO: default sort
     }
-    this.model.arrayContentDidChange();
   }
 
 
@@ -148,4 +184,15 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   openPieceUploadModal() {
 
   }
+}
+
+function flatten(arrayOfArrays, flatArray = []) {
+  for (const arrayOrValue of arrayOfArrays) {
+    if (Array.isArray(arrayOrValue)) {
+      flatten(arrayOrValue, flatArray);
+    } else {
+      flatArray.push(arrayOrValue);
+    }
+  }
+  return flatArray;
 }

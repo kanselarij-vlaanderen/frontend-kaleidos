@@ -12,5 +12,7 @@ export default class ProofingActivity extends Model {
   @belongsTo('publication-subcase') subcase;
 
   @hasMany('piece') usedPieces;
-  @hasMany('piece') generatedPieces;
+  @hasMany('piece', {
+    inverse: 'proofingActivityAsGenerated',
+  }) generatedPieces;
 }

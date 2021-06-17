@@ -872,6 +872,7 @@
   "existing": "Bestaand",
   "new-request": "Nieuwe aanvraag",
   "upload-documents": "Documenten uploaden",
-  "publication.proofs.edit-details": "Bewerk drukproef details",
-  "view-more": "Bekijk meer"
+  "edit-proof-details": "Bewerk drukproef details",
+  "view-more": "Bekijk meer",
+  "read": "lees"
 }

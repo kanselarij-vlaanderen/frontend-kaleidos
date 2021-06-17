@@ -1,13 +1,13 @@
 {{!-- template-lint-disable --}}
 <Auk::Navbar @border="none">
-  <Auk::Toolbar @size="large">
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <Auk::Button @skin="secondary" @disabled={{true}}>
+  <Auk::Toolbar @size="large" as |group|>
+    <group @position="right" as |item|>
+      <item>
+        <Auk::Button @skin="secondary" @disabled={{this.canCreateNewRequest}}>
           {{t "new-request"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
+      </item>
+      <item>
         <Auk::Button
           @skin="secondary"
           @icon="add"
@@ -15,18 +15,19 @@
         >
           {{t "upload-documents"}}
         </Auk::Button>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
+      </item>
+    </group>
   </Auk::Toolbar>
 </Auk::Navbar>
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    {{#if @model}}
+    {{#if this.rows}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
             <th class="auk-table-checkbox-col">
-              <Auk::Checkbox />
+              <Auk::Checkbox @checked={{this.areAllSelected}}
+                {{on 'input' this.toggleSelectionAll}} />
             </th>
             <th>
               {{t 'document-name'}}
@@ -51,25 +52,26 @@
           </tr>
         </thead>
         <tbody>
-          {{#each @model as |piece|}}
+          {{#each this.rows as |row|}}
             <tr>
               <td class="auk-table-checkbox-col">
-                <Auk::Checkbox />
+                <Auk::Checkbox @checked={{row.isSelected}}
+                  {{on 'input' (fn this.toggleSelection row)}}/>
               </td>
               <td>
-                {{piece.name}}
+                {{row.piece.name}}
               </td>
               <td>
-                <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
+                <Utils::Documents::FileTypePill @extension={{row.piece.file.extension}} />
               </td>
               <td>
-                <Utils::Table::Timestamp @timestamp={{piece.created}} />
+                <Utils::Table::Timestamp @timestamp={{row.piece.created}} />
               </td>
               <td>
-                <Utils::Table::Timestamp @timestamp={{piece.modified}} />
+                <Utils::Table::Timestamp @timestamp={{row.piece.modified}} />
               </td>
               <td class="auk-u-text-align--center">
-                {{#if piece}}
+                {{#if row.piece}}
                   <Auk::Icon @name="check" @skin="success-dark" />
                 {{else}}
                   {{t "dash"}}
@@ -79,19 +81,19 @@
                 <WebComponents::AuButtonToolbar>
                   <Auk::Button
                     @skin="borderless" @layout="icon-only" @icon="download"
-                    @href={{piece.file.namedDownloadLink}}
+                    @href={{row.piece.file.namedDownloadLink}}
                     download>
                     {{t "download"}}
                   </Auk::Button>
                   <Auk::Button
                     @skin="borderless" @layout="icon-only" @icon="book"
-                    @href={{piece.viewDocumentURL}}
+                    @href={{row.piece.viewDocumentURL}}
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
                   <Auk::Button
                     @layout="icon-only" @skin="borderless" @icon="more"
-                    id="{{this.routeName}}.{{piece.id}}">
+                    id="{{this.routeName}}.{{row.piece.id}}">
                     {{t "view-more"}}
                   </Auk::Button>
                   {{!-- TODO: figure out how to use EmberPopover/AttachPopover --}}
@@ -99,7 +101,7 @@
                     style="display:none;"
                     as |dropdown|>
                     <dropdown.Item>
-                      {{t "publication.proofs.edit-details"}}
+                      {{t "edit-proof-details"}}
                     </dropdown.Item>
                     <dropdown.Item @skin="danger">
                       {{t "delete"}}

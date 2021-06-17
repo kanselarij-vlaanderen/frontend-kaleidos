@@ -15,6 +15,9 @@ export default class PublicationSubcase extends Model {
   @belongsTo('publication-flow') publicationFlow;
 
   @hasMany('request-activity') requestActivities;
+  @hasMany('piece', {
+    inverse: 'publicationSubcaseAsSource',
+  }) sourceDocuments;
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
 }
