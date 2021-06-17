@@ -8,11 +8,26 @@ import { tracked } from '@glimmer/tracking';
  *  key: string,
  *  isDescending: boolean
  * }} Sorting
+ * @typedef {undefined|'sortKey'|'-sortKey'} SortingString
  */
+
+const COLUMN_MAP = {
+  receiptDate: {
+    key: 'receiptDate',
+    qpKey: 'ontvangen-op',
+    // TODO: correct properties!
+    property: (piece) => piece.created,
+  },
+  uploadDate: {
+    key: 'uploadDate',
+    qpKey: 'geupload-op',
+    // TODO: correct properties!
+    property: (piece) => piece.modified,
+  },
+};
+
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   @inject router;
-
-  @tracked pieces;
 
   queryParams = [{
     qpSorting: {
@@ -20,36 +35,19 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     },
   }]
 
+  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   qpSorting = '';
-  // undefined|'sortKey'|'-sortKey'
-  @tracked sortingString = undefined;
 
-  columnMap = {
-    receiptDate: {
-      key: 'receiptDate',
-      qpKey: 'ontvangen-op',
-      // TODO: correct properties!
-      property: (piece) => piece.created,
-    },
-    uploadDate: {
-      key: 'uploadDate',
-      qpKey: 'geupload-op',
-      // TODO: correct properties!
-      property: (piece) => piece.modified,
-    },
-  }
+  /**
+   * @type {SortingString}
+   */
+  @tracked sortingString = undefined;
 
   get routeName() {
     return this.router.currentRouteName;
   }
 
   initSort() {
-    // for (const key in this.columnMap) {
-    //   const column = this.columnMap[key];
-    //   column.key = key;
-    //   column.qpSortingKey = this.translateQPSortingKey(column.translationKey);
-    // }
-
     const sorting = this.getQPSorting();
     this.sortingString = this.sortingToString(sorting);
     this.sort(sorting);
@@ -57,6 +55,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   changeSorting(sortingString) {
+    this.sortingString = sortingString;
     const sorting = this.sortingFromString(sortingString);
     this.setQPSorting(sorting);
     this.sort(sorting);
@@ -74,8 +73,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } = this.sortingFromString(value);
 
     let foundSortKey;
-    for (const sortKey in this.columnMap) {
-      const column = this.columnMap[sortKey];
+    for (const sortKey in COLUMN_MAP) {
+      const column = COLUMN_MAP[sortKey];
       const translatedSortKey2 = column.qpKey;
       if (translatedSortKey === translatedSortKey2) {
         foundSortKey = sortKey;
@@ -95,42 +94,53 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   setQPSorting(sorting) {
-    const column = this.columnMap[sorting.key];
-    const translatedKey = column.qpKey;
-    const sortingString = this.sortingToString({
-      key: translatedKey,
-      isDescending: sorting.isDescending,
-    });
+    let translatedSorting = undefined;
+    if (sorting) {
+      console.log(sorting);
+      const column = COLUMN_MAP[sorting.key];
+      const translatedKey = column.qpKey;
+      translatedSorting = {
+        key: translatedKey,
+        isDescending: sorting.isDescending,
+      };
+    }
+    const sortingString = this.sortingToString(translatedSorting);
     this.set('qpSorting', sortingString);
   }
 
   sortingFromString(sortingString) {
-    const isDescending = sortingString.startsWith('-');
-    const sortKey = sortingString.substr(isDescending);
-    return {
-      key: sortKey,
-      isDescending: isDescending,
-    };
+    if (sortingString) {
+      const isDescending = sortingString.startsWith('-');
+      const sortKey = sortingString.substr(isDescending);
+      return {
+        key: sortKey,
+        isDescending: isDescending,
+      };
+    }
+    return undefined;
   }
 
   sortingToString(sorting) {
     if (sorting) {
       return (sorting.isDescending ? '-' : '') + sorting.key;
     }
+    return '';
   }
 
   sort(sorting) {
     if (sorting) {
       // const sortingString = this.toSortingString(sorting);
       this.model.sort((piece1, piece2) => {
-        const property = this.columnMap[sorting.key].property;
+        const property = COLUMN_MAP[sorting.key].property;
         let comparison = property(piece1) - property(piece2);
         comparison = sorting.isDescending ? -comparison : comparison;
         return comparison;
       });
+      // array sort changes are not observed by Ember
     } else {
       // TODO: default sort
     }
+    this.model.arrayContentDidChange();
   }
 
 

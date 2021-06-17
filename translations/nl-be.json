@@ -870,6 +870,8 @@
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
   "existing": "Bestaand",
-  "publication.proofs.new-request": "Nieuwe aanvraag",
-  "publication.proofs.upload-documents": "Documenten uploaden"
+  "new-request": "Nieuwe aanvraag",
+  "upload-documents": "Documenten uploaden",
+  "publication.proofs.edit-details": "Bewerk drukproef details",
+  "view-more": "Bekijk meer"
 }

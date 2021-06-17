@@ -1,16 +1,16 @@
 <Auk::Navbar>
-  <WebComponents::AuToolbar @size="large">
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuTabs>
-        <WebComponents::AuTab @route="publications.publication.proofs.documents">
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Tabs>
+        <Auk::Tab @route="publications.publication.proofs.documents">
           {{t "documents"}}
-        </WebComponents::AuTab>
-        <WebComponents::AuTab @route="publications.publication.proofs.requests">
+        </Auk::Tab>
+        <Auk::Tab @route="publications.publication.proofs.requests">
           {{t "requests"}}
-        </WebComponents::AuTab>
-      </WebComponents::AuTabs>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+        </Auk::Tab>
+      </Auk::Tabs>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 
 {{outlet}}
