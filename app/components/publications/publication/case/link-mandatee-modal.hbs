@@ -24,17 +24,17 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <Auk::Button @skin="borderless" {{on "click" @onClose}}
             @disabled={{this.onLink.isRunning}}>
             {{t "cancel"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary"
             @icon="add"
@@ -45,8 +45,8 @@
             data-test-add-contactperson-submit-button>
             {{t "add"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>

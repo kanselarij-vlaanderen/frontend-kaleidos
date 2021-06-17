@@ -1,14 +1,14 @@
 <div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
   <Auk::Panel>
     <Auk::Panel::Header>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">{{t "mandatees"}}</h4>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary"
               @icon="add"
@@ -16,9 +16,9 @@
               {{on "click" this.openLinkModal}}>
               {{t "add-mandatee"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     {{#if @publicationFlow.mandatees}}
       <Auk::Panel::Body @noPadding={{true}}>

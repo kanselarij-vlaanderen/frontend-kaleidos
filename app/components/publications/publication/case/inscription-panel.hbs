@@ -2,17 +2,17 @@
   {{#unless this.isInEditMode}}
     <Auk::Panel data-test-publication-case-panel-case>
       <Auk::Panel::Header>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <h4 class="auk-panel__title">
                 {{t "publication-inscription"}}
               </h4>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
             {{#if @isViaCouncilOfMinisters}}
-              <WebComponents::AuToolbar::Item>
+              <Auk::Toolbar::Item>
                 <WebComponents::AuButtonToolbar>
                   <LinkTo class="auk-button auk-button--tertiary"
                     @route="cases.case.subcases"
@@ -25,13 +25,13 @@
                     </span>
                   </LinkTo>
                 </WebComponents::AuButtonToolbar>
-              </WebComponents::AuToolbar::Item>
+              </Auk::Toolbar::Item>
             {{/if}}
-            <WebComponents::AuToolbar::Item>
-              <Auk::Button @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}} data-test-publication-edit-inscription-button />
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+            <Auk::Toolbar::Item>
+              <Auk::Button data-test-publication-edit-inscription-button @skin="tertiary" @icon="edit" @layout="icon-only" {{on "click" this.putInEditMode}}/>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <div class="auk-content" data-test-publication-flow-title>
@@ -43,57 +43,58 @@
   {{else}}
     <Auk::Panel data-test-publication-case-panel-case-editing class="auk-panel--editing">
       <Auk::Panel::Header>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
               {{t "publication-inscription"}}
             </h4>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
           <div class="auk-form-group {{if this.showShortTitleError "auk-form-group--error"}}">
             <Auk::Label>{{t "short-title"}}</Auk::Label>
-            <WebComponents::AuTextarea @rows="2" @value={{this.shortTitle}}
-              data-test-publication-inscription-short-title-textarea />
+            <Auk::Textarea data-test-publication-inscription-short-title-textarea @rows="2" @value={{this.shortTitle}}/>
             {{#if this.showShortTitleError}}
-              <Auk::Label @error={{true}} data-test-au-label-error="true">
+              <Auk::Label data-test-au-label-error="true" @error={{true}}>
                 {{t "input-error-message"}}
               </Auk::Label>
             {{/if}}
           </div>
-          <div class="auk-form-group }}">
+          <div class="auk-form-group">
             <Auk::Label>{{t "long-title"}}</Auk::Label>
-            <WebComponents::AuTextarea @rows="4" @value={{this.longTitle}}
-              data-test-publication-inscription-long-title-textarea />
+            <Auk::Textarea data-test-publication-inscription-long-title-textarea @rows="4" @value={{this.longTitle}}/>
           </div>
         </Utils::LoadableContent>
       </Auk::Panel::Body>
       <Auk::Panel::Footer>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
-              <Auk::Button @skin="borderless"
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                data-test-publication-cancel-inscription
+                @skin="borderless"
                 @disabled={{this.save.isRunning}}
                 {{on "click" this.cancelEdit}}
-                data-test-publication-cancel-inscription>
+              >
                 {{t "cancel"}}
               </Auk::Button>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-          <WebComponents::AuToolbar::Group @position="right">
-            <WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
               <Auk::Button
+                data-test-publication-save-inscription
                 @skin="primary"
                 @loading={{this.save.isRunning}}
-                data-test-publication-save-inscription
-                {{on "click" (perform this.save)}}>
+                {{on "click" (perform this.save)}}
+              >
                 {{t "save"}}
               </Auk::Button>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
       </Auk::Panel::Footer>
     </Auk::Panel>
   {{/unless}}
