@@ -38,7 +38,7 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaATitle).should('not.exist');
     cy.get(agendaSelector.agendaHeader.showAgendaOptions).click();
     cy.get(agendaSelector.agendaHeader.agendaActions.reopenPreviousVersion).click();
-    cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
+    cy.get(aukSelector.auModal.header.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
     cy.get(aukSelector.alert.message).contains(designAgendaBTitle, {

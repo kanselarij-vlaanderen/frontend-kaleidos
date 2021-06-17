@@ -29,10 +29,10 @@ function createPublication(shortTitle, longTitle) {
 
   cy.get(modalSelectors.auModal.container).as('publicationModal')
     .within(() => {
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
-      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
     });
@@ -40,7 +40,7 @@ function createPublication(shortTitle, longTitle) {
   let publicationFlowId;
 
   cy.get('@publicationModal').within(() => {
-    cy.get(modalSelectors.publication.createButton).click()
+    cy.get(publicationSelectors.newPublicationModal.createButton).click()
       .wait('@createNewCase', {
         timeout: 20000,
       })

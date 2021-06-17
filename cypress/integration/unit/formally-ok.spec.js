@@ -1,7 +1,6 @@
 /* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import modal from '../../selectors/modal.selectors';
 import auk from '../../selectors/auk.selectors';
 
 context('Formally ok/nok tests', () => {
@@ -25,7 +24,7 @@ context('Formally ok/nok tests', () => {
     cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
     cy.get(auk.alert.message).should('exist');
     // TODO optional, check if there is no au-alert in the new pop?
-    cy.get(modal.auModal.cancel).click();
+    cy.get(auk.auModal.footer.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
     cy.get('.auk-sidebar__item').as('agendas');
     // Testing on approved agenda the formally ok status should not show

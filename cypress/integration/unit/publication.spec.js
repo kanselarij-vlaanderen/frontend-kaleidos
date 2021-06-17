@@ -38,21 +38,21 @@ context('Publications tests', () => {
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
     cy.get('@publicationModal').within(() => {
       // No errors on initial view, just info
-      cy.get(modalSelectors.publication.alertInfo, {
+      cy.get(publicationSelectors.newPublicationModal.alertInfo, {
         timeout: 5000,
       }).should('exist');
-      cy.get(modalSelectors.publication.alertError, {
+      cy.get(publicationSelectors.newPublicationModal.alertError, {
         timeout: 5000,
       }).should('not.exist');
       // Clear the next number to validate that empty number is not allowed
-      cy.get(modalSelectors.publication.publicationNumberInput).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationNumberInput).click()
         .clear();
-      cy.get(modalSelectors.publication.createButton).click();
+      cy.get(publicationSelectors.newPublicationModal.createButton).click();
       // The info alert is replaces by error alert
-      cy.get(modalSelectors.publication.alertError, {
+      cy.get(publicationSelectors.newPublicationModal.alertError, {
         timeout: 5000,
       }).should('exist');
-      cy.get(modalSelectors.publication.alertInfo, {
+      cy.get(publicationSelectors.newPublicationModal.alertInfo, {
         timeout: 5000,
       }).should('not.exist');
       // both number and shortTitle should show error when empty
@@ -60,18 +60,18 @@ context('Publications tests', () => {
       cy.get(aukSelectors.label.error).should('have.length', 2);
       // Create publication with number and title
       // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
-      cy.get(modalSelectors.publication.publicationNumberInput).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationNumberInput).click()
         .clear()
         .type('100');
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea)
+      cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea)
         .click()
         .clear()
         .type(someText);
-      cy.get(modalSelectors.publication.createButton).click();
-      cy.get(modalSelectors.publication.alertError, {
+      cy.get(publicationSelectors.newPublicationModal.createButton).click();
+      cy.get(publicationSelectors.newPublicationModal.alertError, {
         timeout: 5000,
       }).should('not.exist');
-      cy.get(modalSelectors.publication.alertInfo, {
+      cy.get(publicationSelectors.newPublicationModal.alertInfo, {
         timeout: 5000,
       }).should('exist');
     });
@@ -93,20 +93,20 @@ context('Publications tests', () => {
     cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       // TODO check if suffix and long title are cleared
-      cy.get(modalSelectors.publication.publicationNumberInput)
+      cy.get(publicationSelectors.newPublicationModal.publicationNumberInput)
         .click()
         .clear()
         .type(number);
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea)
+      cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea)
         .click()
         .type(someText);
     });
     // TODO also test close button
-    cy.get(modalSelectors.publication.cancelButton).click();
+    cy.get(publicationSelectors.newPublicationModal.cancelButton).click();
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get('@publicationModal').within(() => {
       // TODO check the other fields
-      cy.get(modalSelectors.publication.publicationNumberInput).should('not.contain', number);
+      cy.get(publicationSelectors.newPublicationModal.publicationNumberInput).should('not.contain', number);
       cy.contains(someText).should('not.exist');
     });
   });
@@ -116,19 +116,19 @@ context('Publications tests', () => {
     cy.get(publicationSelectors.newPublicationButton).click();
     cy.get(modalSelectors.auModal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
-      cy.get(modalSelectors.publication.publicationNumberInput).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationNumberInput).click()
         .clear()
         .type(numberToCheck);
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
-      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click()
+      cy.get(publicationSelectors.newPublicationModal.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
 
       cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
       cy.route('/publication-flows/*?include**').as('loadPublicationDetailView');
-      cy.get(modalSelectors.publication.createButton).click();
+      cy.get(publicationSelectors.newPublicationModal.createButton).click();
       cy.wait('@createNewPublicationFlow');
       cy.wait('@loadPublicationDetailView');
     });

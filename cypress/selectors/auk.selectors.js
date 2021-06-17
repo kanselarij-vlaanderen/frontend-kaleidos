@@ -32,6 +32,22 @@ const selectors = {
     error: '.auk-label-error',
   },
 
+  auModal: {
+    container: '[data-test-au-modal]',
+    body: '[data-test-au-modal-body]',
+    header: {
+      title: '[data-test-au-modal-header-title]',
+      // TODO unused selectors
+      close: '[data-test-au-modal-header-close]',
+      resize: '[data-test-au-modal-header-resize]',
+    },
+    footer: {
+      cancel: '[data-test-au-modal-footer-cancel]',
+      // TODO 6x duplication, make custom test selectors
+      save: '[data-test-au-modal-footer-save]',
+    },
+  },
+
   // TODO unused selectors
   emptyState: {
     container: '.auk-empty-state',
