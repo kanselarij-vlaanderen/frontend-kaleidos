@@ -3,10 +3,10 @@
 
 import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
-import form from '../../selectors/form.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Full test for creating mandatees', () => {
   /**
@@ -52,14 +52,14 @@ context('Full test for creating mandatees', () => {
     cy.get(mandatee.createMandatee.titleContainer).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get(form.formInput).should('exist')
+        cy.get(utils.vlFormInput).should('exist')
           .should('be.visible')
           .type(ministerTitle);
       });
     cy.get(mandatee.createMandatee.nicknameContainer).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get(form.formInput).should('exist')
+        cy.get(utils.vlFormInput).should('exist')
           .should('be.visible')
           .type(ministerNickName);
       });
@@ -93,12 +93,12 @@ context('Full test for creating mandatees', () => {
           });
       });
 
-    cy.get(form.datepickerInput).eq(0)
+    cy.get(utils.vlDatepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
     cy.route('POST', '/mandatees').as('postMandateeData');
-    cy.get(form.formSave).should('exist')
+    cy.get(utils.vlModalFooter.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait('@postMandateeData');
@@ -136,7 +136,7 @@ context('Full test for creating mandatees', () => {
       hour: 10, minute: 10,
     });
 
-    cy.get(form.datepickerInput).eq(1)
+    cy.get(utils.vlDatepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 
@@ -166,7 +166,7 @@ context('Full test for creating mandatees', () => {
     // TODO Fix grammar of popup ?
     cy.get(mandatee.manageMandatee.changesAlert).should('exist')
       .should('be.visible');
-    cy.get(form.formCancelButton).click();
+    cy.get(utils.vlModalFooter.cancel).click();
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
         cy.get(settings.ministers.mandatee.delete).click();

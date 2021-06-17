@@ -43,6 +43,5 @@ const selectors = {
   modal: '[data-test-vl-modal]',
 
   ministerModalSelector: '[data-test-mandatee-selector]',
-  modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
 };
 export default selectors;
