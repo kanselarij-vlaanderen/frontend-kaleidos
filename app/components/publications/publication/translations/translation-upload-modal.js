@@ -11,8 +11,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @tracked translationDocument = null;
   @tracked name = null;
-  @tracked receivedAtDate = null;
-
+  @tracked receivedAtDate = new Date();
 
   constructor() {
     super(...arguments);
@@ -75,7 +74,6 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         piece: this.translationDocument,
         name: this.name,
         receivedAtDate: this.receivedAtDate,
-        requestActivity: this.args.requestActivity,
       });
     }
   }
