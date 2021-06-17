@@ -45,10 +45,8 @@
                   <Auk::Label for="proofPrint">
                     {{t 'for-publish-preview'}}
                   </Auk::Label>
-                  <Auk::CheckboxList>
-                    <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
-                                   @toggle={{this.toggleProofPrint}} />
-                  </Auk::CheckboxList>
+                  <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
+                      {{on "input" this.toggleProofprint}} />
                 </div>
               </div>
             </div>

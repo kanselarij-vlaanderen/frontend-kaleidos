@@ -73,7 +73,7 @@
                   </Auk::Label>
                   <Auk::CheckboxList>
                     <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
-                                               @toggle={{this.toggleProofPrint}} />
+                      {{on "input" this.toggleProofprint}} />
                   </Auk::CheckboxList>
                 </div>
               </div>

@@ -89,7 +89,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   @action
-  toggleProofPrint() {
+  toggleProofprint() {
     this.proofprint = !this.proofprint;
   }
 }

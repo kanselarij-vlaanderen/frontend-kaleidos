@@ -67,7 +67,13 @@
                 <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
               </td>
               <td class="auk-u-text-align--center">
-                {{t "dash"}}
+                {{#if piece.publicationSubcase}}
+                  <div class="auk-icon auk-icon--default auk-icon--success-dark">
+                    <i class="ki ki-check"></i>
+                  </div>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>

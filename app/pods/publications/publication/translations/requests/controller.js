@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 export default class PublicationsPublicationTranslationsRequestController extends Controller {
   @service store;
 
+  @tracked publicationSubcase;
   @tracked translationSubcase;
   @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
@@ -21,6 +22,9 @@ export default class PublicationsPublicationTranslationsRequestController extend
 
     piece.name = translationUpload.name;
     piece.language = yield translationActivity.language;
+    if (translationUpload.proofprint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    }
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;

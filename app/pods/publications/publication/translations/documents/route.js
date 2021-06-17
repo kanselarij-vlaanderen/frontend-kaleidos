@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
     this.translationSubcase = this.modelFor('publications.publication.translations');
+    this.publicationSubcase = this.modelFor('publications.publication').publicationSubcase;
 
     // Workaround pagination by using include for the documents of a translation subcase
     // As such, we're sure all documents are loaded client-side by Ember Data
@@ -34,6 +35,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
     controller.selectedPieces = [];
+    controller.publicationSubcase = this.publicationSubcase;
   }
 
   @action

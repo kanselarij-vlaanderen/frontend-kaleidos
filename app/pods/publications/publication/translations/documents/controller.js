@@ -11,6 +11,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   @tracked translationSubcase;
   @tracked publicationFlow;
+  @tracked publicationSubcase;
   @tracked identification;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationRequestModal = false;
@@ -50,8 +51,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.name = translationDocument.name;
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-    yield piece.save();
+    if (translationDocument.proofprint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    }
 
+    yield piece.save();
     this.showPieceUploadModal = false;
     this.send('refresh');
   }
