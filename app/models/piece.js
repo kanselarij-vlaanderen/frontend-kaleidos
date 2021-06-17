@@ -16,6 +16,7 @@ export default Model.extend({
   confidential: attr('boolean'),
   accessLevelLastModified: attr('datetime'),
   accessLevel: belongsTo('access-level'),
+  language: belongsTo('language'),
 
   file: belongsTo('file'),
   convertedFile: belongsTo('file', {
@@ -31,6 +32,9 @@ export default Model.extend({
   previousPiece: belongsTo('piece', {
     inverse: 'nextPiece',
   }),
+
+  // resources with pieces linked:
+
   // Below relationship is only defined in frontend.
   // This definition is merely here to help ember-data with relationship bookkeeping,
   // so that when a piece gets deleted, the submissionActivity-piece relationships get updated.
@@ -46,9 +50,12 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
-  language: belongsTo('language'),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
+  publicationSubcase: belongsTo('publication-subcase'),
+  proofingActivity: belongsTo('proofing-activity'),
+  publicationActivity: belongsTo('publication-activity'),
+
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),
