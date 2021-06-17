@@ -31,7 +31,6 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield translationActivity.save();
 
     this.showTranslationUploadModal = false;
-    this.send('refresh');
   }
 
   @action
