@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="auk-o-grid-col-6">
-            <div class="auk-u-mb-2">
+            <div class="auk-u-mb-6">
               <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
               <Auk::List @isBordered="true" class="auk-list--view">
                 {{#each activity.usedPieces as |piece|}}
@@ -71,7 +71,7 @@
                 {{/each}}
               </Auk::List>
             </div>
-            {{#if (not-eq activity.translationActivity.generatedPieces.length 0)}}
+            {{#if activity.translationActivity.generatedPieces.length}}
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                   {{t
