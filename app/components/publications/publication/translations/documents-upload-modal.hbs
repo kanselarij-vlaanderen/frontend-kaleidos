@@ -12,7 +12,7 @@
       <Auk::FileUploader
               @fileQueueName={{this.fileQueueName}}
               @fullHeight={{eq this.newPieces.length 0}}
-              @multiple={{true}}
+              @multiple={{false}}
               @onUpload={{this.uploadPiece}}
       />
       {{#if this.translationDocument}}
