@@ -1,11 +1,11 @@
 /* global context, before, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -18,7 +18,7 @@ function uploadFileToCancel(file) {
     .contains(file.fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
@@ -33,7 +33,7 @@ function uploadFileToCancel(file) {
 
   cy.get(modal.baseModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
     cy.wait(1000);
   });
 }
@@ -79,7 +79,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
         });
@@ -88,19 +88,19 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
     });
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.agendaItemEditDocumentsList).click();
+    cy.get(agenda.agendaitemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -135,13 +135,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Annuleren').click();
 
     // Verify nothing changed after cancel
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').each(() => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get(agenda.agendaItemEditDocumentsList).click();
+    cy.get(agenda.agendaitemEditDocumentsList).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -165,8 +165,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.contains('Opslaan').click();
 
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid');
@@ -180,7 +180,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     // Cancel/save name in document card
     const extraName = (' - Nota');
     const savedName = `${fileName}BIS${extraName}`;
-    cy.get(document.documentCard).within(() => {
+    cy.get(document.documentCard.card).within(() => {
       cy.get('.auk-h4').as('documentName');
       cy.get('@documentName').contains(fileName)
         .click();
@@ -195,15 +195,15 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.ki-check').click();
       // TODO patch happens
     });
-    cy.get(document.documentCard).within(() => {
+    cy.get(document.documentCard.card).within(() => {
       // assert new value is set
       cy.get('@documentName').contains(savedName);
     });
 
     // TODO duplicate asserts, we want to check name here
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Intern Overheid');
@@ -244,8 +244,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Verify only 1 piece is affected by change
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-pill').contains('Publiek');
@@ -284,7 +284,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(file.newFileName);
         });
@@ -292,13 +292,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 1');
     uploadFileToCancel(file);
-    cy.get(form.formCancelButton).click()
+    cy.get(utils.vlModalFooter.cancel).click()
       .wait('@deleteFile');
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
         });
@@ -311,7 +311,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}TER`);
         });
@@ -319,13 +319,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 3');
     uploadFileToCancel(file);
-    cy.get(document.modalPieceDelete).should('exist')
+    cy.get(document.vlUploadedDocument.deletePiece).should('exist')
       .click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
 
     cy.log('uploadFileToCancel 4');
     cy.get(modal.baseModal.dialogWindow).within(() => {
-      cy.get(form.formSave).should('be.disabled');
+      cy.get(utils.vlModalFooter.save).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
       cy.route('POST', '/pieces').as('createNewPiece');
@@ -333,7 +333,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.route('PATCH', '/submission-activities').as('patchAgendaitem');
       cy.route('PUT', '/agendaitems/**/pieces').as('putAgendaitemDocuments');
       cy.route('GET', '/pieces?filter\\[agendaitems\\]\\[:id:\\]=*').as('loadPiecesAgendaitemQuater');
-      cy.get(form.formSave).should('not.be.disabled')
+      cy.get(utils.vlModalFooter.save).should('not.be.disabled')
         .click();
       cy.wait('@createNewPiece', {
         timeout: 12000,
@@ -351,15 +351,15 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).eq(0)
+      cy.get(document.documentCard.card).eq(0)
         .within(() => {
           cy.get('.auk-h4 > span').contains(`${file.newFileName}QUATER`);
         });
     });
 
     // TODO pressing ESC key on the modal should be tested once implemented
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);
@@ -381,8 +381,8 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openCase(caseTitle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).as('pieces');
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).as('pieces');
     cy.get('@pieces').eq(0)
       .within(() => {
         cy.get('.auk-h4').contains(`${file.newFileName}QUATER`);

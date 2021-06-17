@@ -1,21 +1,22 @@
-<WebComponents::AuSidebar
-  class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--right auk-sidebar--large auk-sidebar--collapsible"
+<Auk::Sidebar
+  @size="large"
   @position="right"
-  data-collapsed={{if (not @isOpen) "true" "false"}}
+  @skin="gray-100"
+  @isCollapsed={{not @isOpen}}
 >
   <Auk::Navbar @skin="gray-100">
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position={{if @isOpen "right" "center"}}>
-        <WebComponents::AuToolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position={{if @isOpen "right" "center"}}>
+        <Auk::Toolbar::Item class="{{if (not @isOpen) "auk-o-flex auk-o-flex--horizontal-center"}}">
           <Auk::Button
             @skin="borderless"
             @icon={{if @isOpen "chevron-right" "chevron-left"}}
             @layout="icon-only"
             {{on "click" (if @isOpen @onCollapse @onOpen)}}
           />
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Navbar>
   {{#if @isOpen}}
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
@@ -114,6 +115,21 @@
           </Auk::InputPills>
         </div>
 
+        {{!-- Beslissingsdatum --}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t 'decision-date'}}</Auk::Label>
+          {{#if this.publicationFlow.case.subcases}}
+            <span class="auk-u-muted">
+              {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
+            </span>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.treatment.startDate}}
+              @onChange={{this.setDecisionDate}}
+            />
+          {{/if}}
+        </div>
+
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
@@ -196,12 +212,12 @@
               </div>
             </div>
           </Auk::Label>
-          <WebComponents::AuTextarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></WebComponents::AuTextarea>
+          <Auk::Textarea rows="4" type="text" value={{@publicationFlow.remark}} {{on "input" (perform this.setRemark)}}></Auk::Textarea>
         </div>
       </div>
     </div>
   {{/if}}
-</WebComponents::AuSidebar>
+</Auk::Sidebar>
 
 {{#if this.showConfirmWithdraw}}
   <Auk::Modal @size="small">
@@ -213,22 +229,22 @@
       {{t "discharge-publication-flow-confirm"}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left"n>
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left" n>
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button @skin="danger-primary" {{on "click" this.withdrawPublicationFlow}}>
               {{t "discharge"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
 {{/if}}

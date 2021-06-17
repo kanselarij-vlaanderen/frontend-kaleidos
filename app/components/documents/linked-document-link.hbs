@@ -1,4 +1,4 @@
-<div class="vlc-document-card auk-u-mb-2" data-test-document-card>
+<div class="vlc-document-card auk-u-mb-2" data-test-linked-document-link-card>
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__badge">
       <div class="auk-badge auk-badge--default auk-badge--medium">
@@ -11,7 +11,7 @@
       <div class="auk-toolbar-complex auk-toolbar-complex--auto">
         <div class="auk-toolbar-complex__left">
           <div class="auk-toolbar-complex__item">
-            <p class="vlc-subline" data-test-linkeddocument-type-label>
+            <p class="vlc-subline" data-test-linked-document-link-type-label>
               {{@documentContainer.type.label}}
             </p>
           </div>
@@ -60,7 +60,7 @@
         <Auk::Button
           @skin="borderless"
           @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
-          data-test-show-pieces-history
+          data-test-linked-document-link-version-history
           {{on "click" this.toggleVersionHistory}}
         >
           {{t "show-pieces"}}

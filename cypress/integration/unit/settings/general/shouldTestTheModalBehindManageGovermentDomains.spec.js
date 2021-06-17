@@ -4,8 +4,8 @@
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import modal from '../../../../selectors/modal.selectors';
-import form from '../../../../selectors/form.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
+import utils from '../../../../selectors/utils.selectors';
 
 context('Settings page tests', () => {
   let govermentDomains = [];
@@ -94,8 +94,8 @@ context('Settings page tests', () => {
   it('Should open the modal and add a new item in the list', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
     cy.get(modal.manageInSettingsModal.add).click();
-    cy.get(form.formInput).type('Andere zaken');
-    cy.get(form.formSave).click();
+    cy.get(utils.vlFormInput).type('Andere zaken');
+    cy.get(utils.vlModalFooter.save).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length + 1);
     // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
@@ -112,9 +112,9 @@ context('Settings page tests', () => {
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
     cy.get(modal.manageInSettingsModal.edit).click();
-    cy.get(form.formInput).clear();
-    cy.get(form.formInput).type('Test Input');
-    cy.get(form.formSave).click();
+    cy.get(utils.vlFormInput).clear();
+    cy.get(utils.vlFormInput).type('Test Input');
+    cy.get(utils.vlModalFooter.save).click();
     // TODO await patch call
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length.greaterThan', 0);

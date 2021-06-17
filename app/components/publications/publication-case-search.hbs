@@ -2,7 +2,6 @@
   class="auk-input--block"
   @icon="search"
   @type="text"
-  data-test-trigger-search-input
   @placeholder={{t "search-placeholder"}}
   value={{this.searchText}}
   {{on "input" (perform this.debouncedSearch)}}
@@ -14,7 +13,7 @@
 {{#if this.isShowingResults}}
   <ul id={{this.resultListId}} class="autocomplete-results auk-search-results-list">
     {{#each this.searchResults as |result|}}
-      <WebComponents::AuDropdown::Item @class="auk-search-results-list__item" @route="publications.publication.documents" @model={{result.id}}>
+      <Auk::Dropdown::Item @class="auk-search-results-list__item" @route="publications.publication.documents" @model={{result.id}}>
         {{#if result.shortTile}}
           {{result.shortTile}}
         {{else if result.title}}
@@ -22,7 +21,7 @@
         {{/if}}
         <br>
         <span class="auk-u-muted auk-u-text-small">{{result.identification}}</span>
-      </WebComponents::AuDropdown::Item>
+      </Auk::Dropdown::Item>
     {{else}}
       {{ t "no-results-found" }}
     {{/each}}

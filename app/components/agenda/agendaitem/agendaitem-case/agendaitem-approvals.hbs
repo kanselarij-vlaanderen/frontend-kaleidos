@@ -75,9 +75,9 @@
     </table>
   </div>
   {{#if isEditing}}
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           <button type="button" class="auk-button auk-button--tertiary"
             {{action "cancelEditing"}}
           >
@@ -85,15 +85,15 @@
               {{t "cancel"}}
             </span>
           </button>
-        </WebComponents::AuToolbar::Item>
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
           {{web-components/vl-save-button
             text=(t "save")
             isLoading=isLoading
             saveAction=(action "saveChanges" agendaitem.approvals)
           }}
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   {{/if}}
 {{/if}}
