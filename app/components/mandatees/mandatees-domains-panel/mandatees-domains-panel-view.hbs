@@ -1,14 +1,14 @@
 <Auk::Panel>
   <Auk::Panel::Header>
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <h4 class="auk-panel__title">{{t "ministers-policy-fields"}}</h4>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
       {{#if @showEditButton}}
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary"
               @icon="settings"
@@ -17,10 +17,10 @@
             >
               {{t "edit-2"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
       {{/if}}
-    </WebComponents::AuToolbar>
+    </Auk::Toolbar>
   </Auk::Panel::Header>
   {{#if @mandatees.length }}
     <Auk::Panel::Body @noPadding={{true}}>

@@ -1,13 +1,13 @@
 <div class="auk-u-mb-10">
-  <WebComponents::AuToolbar class="auk-u-mb-4">
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar class="auk-u-mb-4">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <h4 class="auk-toolbar__title">
           {{t "documents"}}
         </h4>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{#if
         (and
           this.currentSession.isEditor
@@ -15,29 +15,29 @@
           (not this.isEnabledPieceEdit)
         )
       }}
-        <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar::Item>
           <Auk::Button
             data-test-agendaitem-edit-documents-list
             {{on "click" this.enablePieceEdit}}
           >
             {{t "edit"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
       {{/if}}
       {{#if this.hasPublicationsEnabled}}
         {{#if (and this.currentSession.isOvrb this.model.pieces)}}
-          <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar::Item>
             <Auk::Button
               @icon="copy"
               {{on "click" this.openPublicationModal}}
             >
               {{t "agendaitem-documents-documents-for-publication"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
+          </Auk::Toolbar::Item>
         {{/if}}
       {{/if}}
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>
 
 

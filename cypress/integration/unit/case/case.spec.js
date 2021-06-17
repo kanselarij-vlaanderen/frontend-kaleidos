@@ -2,7 +2,7 @@
 // / <reference types="Cypress" />
 
 import cases from '../../../selectors/case.selectors';
-import form from '../../../selectors/form.selectors';
+import utils from '../../../selectors/utils.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ context('Create case as Admin user', () => {
     // TODO use the createCase command, use data selectors
     cy.visit('/dossiers');
     cy.get(cases.casesHeader.addCase).click();
-    cy.get(form.formVlToggle).eq(0)
+    cy.get(utils.vlToggle).eq(0)
       .click();
     cy.get(cases.newCase.shorttitle).type('Dit is een dossier met confidentiality en een korte titel');
     cy.get('button').contains('Dossier aanmaken')

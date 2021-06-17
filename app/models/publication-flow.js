@@ -24,6 +24,7 @@ export default class PublicationFlow extends Model {
   @belongsTo('publication-status-change') publicationStatusChange;
   @belongsTo('publication-subcase') publicationSubcase;
   @belongsTo('translation-subcase') translationSubcase;
+  @belongsTo('agenda-item-treatment') agendaItemTreatment;
 
   // Has many .
   @hasMany('identification', {

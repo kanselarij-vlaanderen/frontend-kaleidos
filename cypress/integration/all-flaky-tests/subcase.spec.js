@@ -2,8 +2,9 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
-import auComponents from '../../selectors/au-component.selectors';
+import auk from '../../selectors/auk.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -178,7 +179,7 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(auComponents.auPillSpan).contains('Zichtbaar in kort bestek');
+    cy.get(auk.pill).contains('Zichtbaar in kort bestek');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
@@ -195,14 +196,14 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsRequest');
     cy.get(agenda.confidentialityIcon).should('exist');
     // Index view
-    cy.get(auComponents.auPillSpan).contains('Vertrouwelijk');
+    cy.get(auk.pill).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();
 
-    // Check the checkbox (toggle this invisible motafoka).
+    // Check the checkbox
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .find(agenda.item.checkBoxLabel) // Because who uses checkboxes anyway?
+      .find(utils.vlToggle)
       .click();
 
     // Save the changes setting
@@ -215,7 +216,7 @@ context('Subcase tests', () => {
     cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(auComponents.auPillSpan).contains('Verborgen in kort bestek');
+    cy.get(auk.pill).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(agenda.confidentialityIcon).should('exist');

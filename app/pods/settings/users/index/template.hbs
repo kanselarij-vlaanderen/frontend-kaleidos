@@ -1,11 +1,11 @@
 {{#utils/settings-header title=(t 'manage-users')}}
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 {{/utils/settings-header}}
 <div class="auk-u-m-8">
   <div class="vlc-input-field-group vlc-input-field-group--gmeeting">

@@ -4,9 +4,9 @@
   </h3>
 </div>
 {{#if this.currentSession.isEditor}}
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <button
           type="button"
           class="auk-button auk-button--secondary"
@@ -22,9 +22,9 @@
             </div>
           </span>
         </button>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 {{/if}}
 {{#each this.treatments as |treatment|}}
   <div class="auk-u-mb-4">
