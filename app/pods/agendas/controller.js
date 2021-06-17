@@ -27,7 +27,7 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   @action
   async successfullyAdded(meeting) {
     this.set('isCreatingNewSession', false);
-    const meetingType = CONFIG.kinds.filter((type) => type.uri === meeting.kind)[0];
+    const meetingType = CONFIG.kinds.find((type) => type.uri === meeting.kind);
     this.toaster.success(this.intl.t('successfully-created-meeting', {
       meetingType: decamelize(meetingType.label),
       meetingDate: moment(meeting.plannedStart).format('DD-MM-YYYY'),
