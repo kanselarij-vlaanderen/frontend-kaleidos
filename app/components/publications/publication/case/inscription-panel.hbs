@@ -17,12 +17,7 @@
                   <LinkTo class="auk-button auk-button--tertiary"
                     @route="cases.case.subcases"
                     @model={{@publicationFlow.case.id}}>
-                    <span class="auk-button__content">
-                      <span class="auk-button__label">{{t "to-case"}}</span>
-                      <div class="auk-icon auk-icon--default auk-icon--chevron-right">
-                        <i class="ki ki-chevron-right"></i>
-                      </div>
-                    </span>
+                    <Auk::Button::InnerLayout @layout="icon-right" @icon="chevron-right">{{t "to-case"}}</Auk::Button::InnerLayout>
                   </LinkTo>
                 </WebComponents::AuButtonToolbar>
               </Auk::Toolbar::Item>
