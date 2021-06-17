@@ -26,7 +26,8 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
-    translationActivity.generatedPieces.pushObject(piece);
+    const generatedPieces = yield translationActivity.generatedPieces;
+    generatedPieces.pushObject(piece);
     yield translationActivity.save();
 
     this.showTranslationUploadModal = false;
