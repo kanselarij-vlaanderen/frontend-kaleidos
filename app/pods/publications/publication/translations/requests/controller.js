@@ -22,7 +22,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
     yield documentContainer.save();
 
     piece.name = translationUpload.name;
-    piece.language = requestActivity.language;
+    piece.language = yield translationActivity.language;
     yield piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
