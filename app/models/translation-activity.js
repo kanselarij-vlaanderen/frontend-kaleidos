@@ -15,6 +15,6 @@ export default class TranslationActivity extends Model {
   @belongsTo('request-activity') requestActivity;
   @belongsTo('language') language;
 
-  @hasMany('piece') usedPieces;
-  @hasMany('piece') generatedPieces;
+  @hasMany('piece', { serialize: true }) usedPieces;
+  @hasMany('piece', { serialize: true }) generatedPieces;
 }

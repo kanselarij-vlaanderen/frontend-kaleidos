@@ -15,5 +15,5 @@ export default class RequestActivity extends Model {
 
   @belongsTo('email') email;
 
-  @hasMany('piece') usedPieces;
+  @hasMany('piece', { serialize: true }) usedPieces;
 }
