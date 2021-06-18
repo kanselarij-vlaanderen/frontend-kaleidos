@@ -33,7 +33,7 @@ export default class Item extends Component {
 
   get skin() {
     if (isPresent(this.args.skin)) {
-      return `auk-search-results-list-b__item--${this.args.skin}`;
+      return `auk-search-results-list__item--${this.args.skin}`;
     }
     return null;
   }

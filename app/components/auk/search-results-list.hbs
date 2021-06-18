@@ -1,7 +1,19 @@
-<ul class="auk-search-results-list-b {{if this.isActive "auk-search-results-list-b--visible"}}" ...attributes>
-  {{yield
-    (hash
-      Item=(component "auk/search-results-list/item")
-    )
-  }}
-</ul>
+<div class="auk-search-results-list
+  {{positionClass}}
+  {{if this.isVisible "auk-search-results-list--visible"}}
+  {{if @isLoading "auk-search-results-list--loading"}}
+  {{if @hasNoResults "auk-search-results-list--no-results"}}"
+  ...attributes
+>
+  {{#if @isLoading}}
+    <Auk::Loader />
+  {{else if @hasNoResults}}
+    <p class="auk-u-muted">
+      {{yield}}
+    </p>
+  {{else}}
+    <ul>
+      {{yield}}
+    </ul>
+  {{/if}}
+</div>

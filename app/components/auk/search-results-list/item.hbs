@@ -1,21 +1,24 @@
 <li class={{@class}}>
   {{#if @href}}
-    <a class="auk-search-results-list-b__item {{this.skin}}" href={{@href}} ...attributes>
+    <a class="auk-search-results-list__item {{this.skin}}" href={{@href}} ...attributes>
       {{yield}}
+      {{#if (has-block "subline")}}
+        <span class="auk-search-results-list__subline">{{yield to="subline"}}</span>
+      {{/if}}
     </a>
   {{else}}
     <LinkTo
-      class="auk-search-results-list-b__item {{this.skin}}"
+      class="auk-search-results-list__item {{this.skin}}"
       @route={{@route}}
       @models={{this.models}}
-      @disabled={{@disabled}}
-      @activeClass={{@activeClass}}
-      @current-when={{@current-when}}
       @preventDefault={{@preventDefault}}
       @query={{@query}}
       ...attributes
     >
       {{yield}}
+      {{#if (has-block "subline")}}
+        <span class="auk-search-results-list__subline">{{yield to="subline"}}</span>
+      {{/if}}
     </LinkTo>
   {{/if}}
 </li>
