@@ -2,8 +2,9 @@
 
 // Commands
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
+
 // ***********************************************
 
 // Functions
@@ -22,7 +23,7 @@ function selectDate(year, month, day, index) {
   let element;
 
   if (index !== undefined) {
-    element = cy.get(form.datepickerInput).eq(index)
+    element = cy.get(utils.vlDatepicker).eq(index)
       .click();
     element.get(agenda.flatpickrMonthDropdownMonths).eq(index)
       .select(month);
@@ -36,7 +37,7 @@ function selectDate(year, month, day, index) {
       .contains(day)
       .click();
   } else {
-    element = cy.get(form.datepickerInput).click();
+    element = cy.get(utils.vlDatepicker).click();
     element.get(agenda.flatpickrMonthDropdownMonths).select(month);
     element.get(agenda.numInputWrapper)
       .get(agenda.inputNumInputCurYear)

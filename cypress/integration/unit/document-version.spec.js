@@ -114,11 +114,11 @@ context('Tests for KAS-1076', () => {
     const linkedDocumentTypes = files.slice(0, 3).map((file) => file.fileType);
 
     cy.addLinkedDocument(linkedDocumentsNames);
-    cy.get(document.linkeddocumentTypeLabel).eq(0)
+    cy.get(document.linkedDocumentLink.typeLabel).eq(0)
       .contains(linkedDocumentTypes[0]);
-    cy.get(document.linkeddocumentTypeLabel).eq(1)
+    cy.get(document.linkedDocumentLink.typeLabel).eq(1)
       .contains(linkedDocumentTypes[1]);
-    cy.get(document.linkeddocumentTypeLabel).eq(2)
+    cy.get(document.linkedDocumentLink.typeLabel).eq(2)
       .contains(linkedDocumentTypes[2]);
     // TODO are these documentes visible on agendaitem ?
   });
@@ -209,9 +209,8 @@ context('Tests for KAS-1076', () => {
 
     cy.clickReverseTab('Documenten');
     cy.get('[data-test-vl-loader]');
-    // TODO make sure these are under "reeds bezorgde documenten"
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards')
+      cy.get(document.linkedDocumentLink.card).as('docCards')
         .should('have.length', files.length);
     });
   });

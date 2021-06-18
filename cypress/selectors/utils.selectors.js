@@ -1,13 +1,36 @@
 const selectors = {
   // This file is for reusable components that don't fit in with other categories (like agenda or documents)
 
-  datePickerIcon: '[data-test-vlc-vl-datepickerbutton]',
-  checkbox: '[data-test-vl-checkbox]',
-  checkboxLabel: '[data-test-vl-checkbox-label]',
-  generalBackButton: '[data-test-general-back-button]',
-  saveButton: '[data-test-save-button]',
-  navigationWalkUp: '[data-test-navigation-walk-up]',
-  aukInput: '[data-test-auk-input]',
-  aukTextarea: '[data-test-auk-textarea]',
+  // simple-file-uploader
+  simpleFileUploader: '[data-test-simple-file-uploader]',
+
+  // utils/overviews-header-decision
+  overviewsHeaderDecision: {
+    title: '[data-test-overviews-header-decision-title]',
+  },
+
+  /** Section VL-components **/
+
+  // vl-checkbox
+  vlCheckbox: {
+    label: '[data-test-vl-checkbox-label]',
+    // unused selector
+    checkbox: '[data-test-vl-checkbox]',
+  },
+
+  // vl-form-input
+  vlFormInput: '[data-test-vl-form-input]',
+
+  // vl-modal-footer
+  vlModalFooter: {
+    save: '[data-test-vl-modal-footer-save]',
+    cancel: '[data-test-vl-modal-footer-cancel]',
+  },
+
+  // vl-toggle
+  vlToggle: '[data-test-vl-toggle]',
+
+  // vl-datepicker
+  vlDatepicker: '[data-test-vl-datepicker]',
 };
 export default selectors;
