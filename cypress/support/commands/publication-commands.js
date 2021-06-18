@@ -1,7 +1,7 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-import publicationSelectors from '../../selectors/publication.selectors';
+import publication from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import auk from '../../selectors/auk.selectors';
 
@@ -23,14 +23,14 @@ function createPublication(shortTitle, longTitle) {
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
   cy.visit('publicaties');
-  cy.get(publicationSelectors.newPublicationButton).click();
+  cy.get(publication.newPublicationButton).click();
 
   cy.get(auk.modal.container).as('publicationModal')
     .within(() => {
-      cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea).click()
+      cy.get(publication.newPublicationModal.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
-      cy.get(publicationSelectors.newPublicationModal.publicationLongTitleTextarea).click()
+      cy.get(publication.newPublicationModal.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
     });
@@ -38,7 +38,7 @@ function createPublication(shortTitle, longTitle) {
   let publicationFlowId;
 
   cy.get('@publicationModal').within(() => {
-    cy.get(publicationSelectors.newPublicationModal.createButton).click()
+    cy.get(publication.newPublicationModal.createButton).click()
       .wait('@createNewCase', {
         timeout: 20000,
       })
@@ -57,7 +57,7 @@ function createPublication(shortTitle, longTitle) {
       }));
   });
   // Check if we transitioned to dossier page of the publication-flow
-  cy.get(publicationSelectors.publicationCase.casePanel);
+  cy.get(publication.publicationCase.casePanel);
   cy.log('/createPublication');
 }
 
