@@ -5,6 +5,7 @@ import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
 import utils from '../../../../selectors/utils.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
+import auk from '../../../../selectors/auk.selectors';
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
@@ -188,7 +189,7 @@ context('Settings overview page tests', () => {
       cy.get(dependency.emberPowerSelect.option).contains('kabinet')
         .click();
       cy.wait(5000); // TODO await PATCH call instead
-      cy.get(utils.generalBackButton).should('exist')
+      cy.get(auk.backButton).should('exist')
         .should('be.visible')
         .click();
       cy.wait(3000); // TODO why wait ?

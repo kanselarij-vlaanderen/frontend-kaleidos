@@ -209,9 +209,8 @@ context('Tests for KAS-1076', () => {
 
     cy.clickReverseTab('Documenten');
     cy.get('[data-test-vl-loader]');
-    // TODO make sure these are under "reeds bezorgde documenten"
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards')
+      cy.get(document.linkedDocumentLink.card).as('docCards')
         .should('have.length', files.length);
     });
   });

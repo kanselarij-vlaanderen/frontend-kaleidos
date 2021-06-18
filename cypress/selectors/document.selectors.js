@@ -42,8 +42,8 @@ const selectors = {
   // linked-document-link
   linkedDocumentLink: {
     typeLabel: '[data-test-linked-document-link-type-label]',
-    // TODO unused selector
     card: '[data-test-linked-document-link-card]',
+    // TODO unused selector
     versionHistory: '[data-test-linked-document-link-version-history]',
   },
 };
