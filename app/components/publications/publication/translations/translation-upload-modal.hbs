@@ -21,7 +21,7 @@
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
-                    {{t 'name'}}
+                    {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
                     type="text"
@@ -42,8 +42,8 @@
                                                @onChange={{this.setReceivedAtDate}}/>
                 </div>
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label for="proofPrint">
-                    {{t 'for-publish-preview'}}
+                  <Auk::Label for="proof-print">
+                    {{t "for-proof-print"}}
                   </Auk::Label>
                   <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
                       {{on "input" this.toggleProofprint}} />
