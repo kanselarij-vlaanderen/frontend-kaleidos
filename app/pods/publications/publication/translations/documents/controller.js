@@ -129,4 +129,13 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   closeTranslationRequestModal() {
     this.showTranslationRequestModal = false;
   }
+
+  get  isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.isUploadDisabled; // translation is already finished
+  }
+
+  get  isUploadDisabled() {
+    return this.translationSubcase.endDate !== undefined &&  this.translationSubcase.endDate !== null; // translation is already finished
+  }
 }

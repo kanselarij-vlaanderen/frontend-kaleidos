@@ -46,4 +46,8 @@ export default class PublicationsPublicationTranslationsRequestController extend
     this.selectedRequestActivity = null;
     this.showTranslationUploadModal = false;
   }
+
+  get  isUploadDisabled() {
+    return this.translationSubcase.endDate !== undefined &&  this.translationSubcase.endDate !== null; // translation is already finished
+  }
 }

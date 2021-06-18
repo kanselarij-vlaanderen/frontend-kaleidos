@@ -7,7 +7,7 @@
             <Auk::Button
               @icon="mail"
               @skin="secondary"
-              @disabled={{eq this.selectedPieces.length 0}}
+              @disabled={{this.isRequestingDisabled}}
               {{on "click" this.openTranslationRequestModal}}
             >
               {{t "request-translations"}}
@@ -17,6 +17,7 @@
             <Auk::Button
               @icon="add"
               @skin="secondary"
+              @disabled={{this.isUploadDisabled}}
               {{on "click" this.openPieceUploadModal}}>
               {{t "upload-translation-file"}}
             </Auk::Button>

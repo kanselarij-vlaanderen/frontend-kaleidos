@@ -16,7 +16,8 @@
       <Auk::Toolbar::Item>
         <Auk::Checkbox
           @label={{t "finished"}}
-          @checked={{false}}
+          @checked={{translationFinished}}
+                {{on "input" toggleFinishTranslation}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

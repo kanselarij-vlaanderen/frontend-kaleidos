@@ -17,6 +17,7 @@
           <Auk::Toolbar::Group @position="right">
             <Auk::Toolbar::Item>
               <Auk::Button
+                      @disabled={{this.isUploadDisabled}}
                       @skin="primary"
                 {{on "click" (fn openTranslationUploadModal activity)}}
               >
