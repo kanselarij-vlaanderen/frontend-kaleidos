@@ -7,7 +7,7 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
     return this.store.query('request-activity',
       {
         'filter[translation-subcase][:id:]': this.translationSubcase.id,
-        include: 'translation-activity,email,used-pieces',
+        include: 'translation-activity,translation-activity.generated-pieces,translation-activity.generated-pieces.file,email,used-pieces,used-pieces.file',
         sort: '-start-date',
       }
     );
