@@ -54,7 +54,7 @@
                       <div class="auk-u-mx-2">
                         <span class="auk-u-text-bold">{{piece.name}}</span>
                         <div class="auk-u-muted auk-u-text-small">
-                          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}, {{t "received-at-date" date=(moment-format piece.receivedDate "DD-MM-YYYY")}}
                         </div>
                       </div>
                       <Auk::Button
@@ -71,10 +71,7 @@
               {{#if activity.translationActivity.generatedPieces.length}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
-                    {{t
-                      "received-documents-on"
-                      date=(moment-format activity.translationActivity.endDate "DD-MM-YYYY")
-                    }}
+                    {{t "received-documents"}}
                   </p>
                   <Auk::List @isBordered="true" class="auk-list--view">
                     {{#each activity.translationActivity.generatedPieces as |piece|}}
