@@ -8,17 +8,19 @@
     data-test-publication-case-nav-case>
     {{t "agendaitem-case"}}
   </Auk::Tab>
-  <Auk::Tab
-    @route="publications.publication.documents"
-    data-test-publication-case-nav-documents
-  >
-    <div class="auk-o-flex auk-o-flex--center">
-      <span class="auk-u-mr-2">{{t "documents"}}</span>
-      {{#unless this.loadData.isRunning}}
-        <p>({{this.documentsCount}})</p>
-      {{/unless}}
-    </div>
-  </Auk::Tab>
+  {{#if @publicationFlow.case.subcases}}
+    <Auk::Tab
+      @route="publications.publication.documents"
+      data-test-publication-case-nav-documents
+    >
+      <div class="auk-o-flex auk-o-flex--center">
+        <span class="auk-u-mr-2">{{t "documents"}}</span>
+        {{#unless this.loadData.isRunning}}
+          <p>({{this.documentsCount}})</p>
+        {{/unless}}
+      </div>
+    </Auk::Tab>
+  {{/if}}
   <Auk::Tab
     @route="publications.publication.translations"
     data-test-publication-case-nav-translations
