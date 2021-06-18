@@ -288,7 +288,7 @@ context('Subcase tests', () => {
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(route.newsletters.dataTable).find('.ki-pencil')
+    cy.get(route.newsletter.dataTable).find('.ki-pencil')
       .first()
       .click();
     cy.wait('@getKortBestekThemes');
