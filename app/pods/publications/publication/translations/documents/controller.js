@@ -51,7 +51,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.name = translationDocument.name;
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-    if (translationDocument.proofprint) {
+    if (translationDocument.isSourceForProofPrint) {
       piece.publicationSubcase = this.publicationSubcase;
     }
 

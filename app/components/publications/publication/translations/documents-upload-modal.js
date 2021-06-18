@@ -17,7 +17,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @tracked name = null;
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
-  @tracked proofprint = false;
+  @tracked isSourceForProofPrint = false;
 
   constructor() {
     super(...arguments);
@@ -80,13 +80,13 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
         name: this.name,
         pagesAmount: this.pagesAmount,
         wordsAmount: this.wordsAmount,
-        proofprint: this.proofprint,
+        isSourceForProofPrint: this.isSourceForProofPrint,
       });
     }
   }
 
   @action
   toggleProofprint() {
-    this.proofprint = !this.proofprint;
+    this.isSourceForProofPrint = !this.isSourceForProofPrint;
   }
 }

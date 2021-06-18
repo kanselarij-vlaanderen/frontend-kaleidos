@@ -23,7 +23,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
     piece.name = translationUpload.name;
     piece.receivedDate = translationUpload.receivedAtDate;
     piece.language = yield translationActivity.language;
-    if (translationUpload.proofprint) {
+    if (translationUpload.isSourceForProofPrint) {
       piece.publicationSubcase = this.publicationSubcase;
     }
     yield piece.save();
