@@ -4,6 +4,7 @@
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -99,7 +100,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.agendaitemEditDocumentsList).click();
+    cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -140,7 +141,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get(agenda.agendaitemEditDocumentsList).click();
+    cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
