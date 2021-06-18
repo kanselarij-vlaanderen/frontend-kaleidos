@@ -18,9 +18,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
   @tracked proofprint = false;
-  // TODO KAS-2481
-  // @tracked receivedAtDate = null;
-
 
   constructor() {
     super(...arguments);

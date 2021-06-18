@@ -2,8 +2,8 @@
 // / <reference types="Cypress" />
 import alert from '../../../../selectors/system-wide/alert.selectors';
 import systemAlert from '../../../../selectors/settings/system-alert.selectors';
-import form from '../../../../selectors/form.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
+import utils from '../../../../selectors/utils.selectors';
 
 const ALERT_POLL_INTERVAL = 70000;
 
@@ -28,7 +28,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(systemAlert.formFields.message).type('System alert message');
 
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
     // TODO await post ?
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,

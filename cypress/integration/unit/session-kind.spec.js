@@ -1,9 +1,9 @@
 /* global context, before, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import printOverview from '../../selectors/print-overview.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
 import agenda from '../../selectors/agenda.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Different session kinds should show different titles', () => {
   const regular = '/vergadering/5EC5258C5B08050008000001/agenda/5EC5258D5B08050008000002/agendapunten';
@@ -31,7 +31,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(regular);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(utils.overviewsHeaderDecision.title).contains(textToDisplay);
   });
 
   it('should show the correct translations for special session in decision print overview', () => {
@@ -39,7 +39,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(special);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(utils.overviewsHeaderDecision.title).contains(textToDisplay);
   });
 
   it('should show the correct translations for electronic session in decision print overview', () => {
@@ -47,7 +47,7 @@ context('Different session kinds should show different titles', () => {
     cy.visit(electronic);
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToDecisions).click();
-    cy.get(printOverview.printoverviewTemplateHeaderTitle).contains(textToDisplay);
+    cy.get(utils.overviewsHeaderDecision.title).contains(textToDisplay);
   });
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {

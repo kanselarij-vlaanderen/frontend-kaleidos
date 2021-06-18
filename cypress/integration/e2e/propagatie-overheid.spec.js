@@ -2,9 +2,9 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -52,7 +52,7 @@ context('Propagation to other graphs', () => {
 
     cy.openDetailOfAgendaitem(subcaseTitle1);
     cy.addDocumentToTreatment(file);
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
 
     // TODO We are clicking the pill inside the document card of treatment report
     cy.get(agenda.accessLevelPill.pill).click();
