@@ -699,11 +699,11 @@ function releaseDecisions() {
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(utils.vlModal.container).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(utils.vlModal.container, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDecisions');
@@ -719,11 +719,11 @@ function releaseDocuments() {
   cy.log('releaseDocuments');
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(utils.vlModal.container).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(utils.vlModal.container, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDocuments');

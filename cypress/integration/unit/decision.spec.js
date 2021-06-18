@@ -115,7 +115,7 @@ context('Add files to an agenda', () => {
       });
 
     // verify modal
-    cy.get(utils.vlModal.container).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -140,7 +140,7 @@ context('Add files to an agenda', () => {
       cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
-    cy.get(utils.vlModal.container).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
