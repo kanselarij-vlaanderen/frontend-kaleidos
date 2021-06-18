@@ -2,14 +2,13 @@
 // / <reference types="Cypress" />
 
 import settings from '../../../../selectors/settings.selectors';
-import toolbar from '../../../../selectors/toolbar.selectors';
 import utils from '../../../../selectors/utils.selectors';
 
 context('Manage alerts tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 

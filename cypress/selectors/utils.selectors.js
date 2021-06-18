@@ -1,6 +1,20 @@
 const selectors = {
   // This file is for reusable components that don't fit in with other categories (like agenda or documents)
 
+  // m-header (application level)
+  mHeader: {
+    agendas: '[data-test-m-header-agendas]',
+    cases: '[data-test-m-header-cases]',
+    newsletters: '[data-test-m-header-newsletters]',
+    search: '[data-test-m-header-search]',
+    publications: '[data-test-m-header-publications]',
+    settings: '[data-test-m-header-settings]',
+    userActions: '[data-test-m-header-user-actions]',
+    userAction: {
+      logout: '[data-test-m-header-user-action-logout]',
+    },
+  },
+
   // simple-file-uploader
   simpleFileUploader: '[data-test-simple-file-uploader]',
 

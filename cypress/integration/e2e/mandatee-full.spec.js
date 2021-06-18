@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 // / <reference types="Cypress" />
 
-import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -37,7 +36,7 @@ context('Full test for creating mandatees', () => {
     const ministerTitle = 'Eerste minister van onderhoud';
     const ministerNickName = 'Eerste minister';
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
@@ -123,7 +122,7 @@ context('Full test for creating mandatees', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
@@ -154,7 +153,7 @@ context('Full test for creating mandatees', () => {
       .should('be.visible')
       .click();
     cy.visit('/');
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
