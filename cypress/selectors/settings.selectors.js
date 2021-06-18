@@ -71,5 +71,28 @@ const selectors = {
   // component next-button
   // TODO this component is just a linkTo, refactor to au component
   goToUserDetail: '[data-test-next-button-user-detail]',
+
+  // component model-manager
+  modelManager: {
+    add: '[data-test-vl-model-manager-add]',
+    edit: '[data-test-vl-model-manager-edit]',
+    delete: '[data-test-vl-model-manager-delete]',
+  },
+
+  // component manage-government-fields
+  manageGovernmentFields: {
+    add: '[data-test-manage-government-fields-add]',
+    // TODO unused selector
+    edit: '[data-test-manage-government-fields-edit]',
+    delete: '[data-test-manage-government-fields-delete]',
+  },
+
+  // component manage-ise-codes
+  manageIseCodes: {
+    add: '[data-test-manage-ise-code-add]',
+    // TODO unused selector
+    edit: '[data-test-manage-ise-code-edit]',
+    delete: '[data-test-manage-ise-code-delete]',
+  },
 };
 export default selectors;

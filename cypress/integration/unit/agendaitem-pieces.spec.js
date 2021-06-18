@@ -1,7 +1,6 @@
 /* global context, before, it, cy,beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
-// import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import document from '../../selectors/document.selectors';
 import cases from '../../selectors/case.selectors';

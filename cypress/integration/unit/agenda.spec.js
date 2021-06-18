@@ -38,13 +38,13 @@ context('Agenda tests', () => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-      cy.get(auk.auModal.body).within(() => {
+      cy.get(auk.modal.body).within(() => {
         // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
         cy.get(auk.alert.container).should('exist');
         cy.get(auk.alert.message).should('exist');
       });
-      cy.get(auk.auModal.save).contains('Agenda verwijderen');
-      cy.get(auk.auModal.footer.cancel).click();
+      cy.get(agenda.agendaHeader.confirm.del).contains('Agenda verwijderen');
+      cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(result.meetingId, true);
       // TODO assert we go back to agendas overview
@@ -54,13 +54,13 @@ context('Agenda tests', () => {
   it('should get different message when trying to approve with formal not ok items', () => {
     cy.openAgendaForDate(agendaDate); // 1 item with "not yet formally ok"
     cy.approveDesignAgenda(false);
-    cy.get(auk.auModal.body).within(() => {
+    cy.get(auk.modal.body).within(() => {
       // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
       cy.get(auk.alert.container).should('exist');
       cy.get(auk.alert.message).should('exist');
     });
-    cy.get(auk.auModal.save).contains('Goedkeuren');
-    cy.get(auk.auModal.footer.cancel).click();
+    cy.get(agenda.agendaHeader.confirm.approveAgenda).contains('Goedkeuren');
+    cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
@@ -260,14 +260,14 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
       // TODO check the message?
-      cy.get(auk.auModal.body).within(() => {
+      cy.get(auk.modal.body).within(() => {
         cy.get(auk.alert.container).should('exist');
       });
 
       // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
 
-      cy.get(auk.auModal.save).contains('Agenda afsluiten')
+      cy.get(agenda.agendaHeader.confirm.lockAgenda).contains('Agenda afsluiten')
         .click();
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
@@ -313,7 +313,7 @@ context('Agenda tests', () => {
     });
     cy.approveAndCloseDesignAgenda(false);
     // TODO tekst beter afcheken
-    // cy.get(auk.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
+    // cy.get(auk.modal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
 
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
@@ -323,7 +323,7 @@ context('Agenda tests', () => {
     cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
 
 
-    cy.get(auk.auModal.save).click();
+    cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
 
     // TODO gebeuren al deze patches nog ?
     cy.wait('@agendaActivitiesAgendaItems');
@@ -384,13 +384,13 @@ context('Agenda tests', () => {
     cy.route('GET', '/agendaitems/**/treatments').as('treatments');
 
     // TODO tekst checken ?
-    cy.get(auk.auModal.container).within(() => {
+    cy.get(auk.modal.container).within(() => {
       cy.get(auk.alert.message).should('exist');
-      cy.get(auk.auModal.save)
+      cy.get(agenda.agendaHeader.confirm.approveAgenda)
         .click();
     });
 
-    cy.get(auk.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
 
@@ -398,7 +398,7 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
 
     // TODO do we need all these awaits ? what calls happen ?
-    // cy.get(auk.auModal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
+    // cy.get(auk.modal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
     // cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
     // cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
     // cy.route('GET', '/agendaitems/*/agenda').as('agenda');
@@ -407,7 +407,7 @@ context('Agenda tests', () => {
     // cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
 
 
-    cy.get(auk.auModal.save)
+    cy.get(agenda.agendaHeader.confirm.lockAgenda)
       .click();
 
     // cy.wait('@agendaActivitiesAgendaItems');
@@ -421,7 +421,7 @@ context('Agenda tests', () => {
     //   .click();
 
     // cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
-    cy.get(auk.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
     cy.contains(newSubcase2TitleShort).should('not.exist');

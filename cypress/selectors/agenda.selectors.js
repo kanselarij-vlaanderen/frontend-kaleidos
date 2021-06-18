@@ -105,6 +105,13 @@ const selectors = {
       reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
       deleteAgenda: '[data-test-agenda-header-delete-agenda]',
     },
+    confirm: {
+      approveAgenda: '[data-test-agenda-header-approve-agenda-confirm]',
+      approveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda-confirm]',
+      lockAgenda: '[data-test-agenda-header-lock-agenda-confirm]',
+      reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version-confirm]',
+      deleteAgenda: '[data-test-agenda-header-delete-agenda-confirm]',
+    },
     showActionOptions: '[data-test-agenda-header-show-action-options]',
     actions: {
       createNewDesignAgenda: '[data-test-agenda-header-create-new-design]',

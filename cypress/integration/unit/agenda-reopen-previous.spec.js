@@ -2,7 +2,6 @@
 // / <reference types='Cypress' />
 
 import agendaSelector from '../../selectors/agenda.selectors';
-import modalSelector from '../../selectors/modal.selectors';
 import aukSelector from '../../selectors/auk.selectors';
 
 context('Agenda reopen previous tests', () => {
@@ -38,7 +37,7 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaATitle).should('not.exist');
     cy.get(agendaSelector.agendaHeader.showAgendaOptions).click();
     cy.get(agendaSelector.agendaHeader.agendaActions.reopenPreviousVersion).click();
-    cy.get(aukSelector.auModal.header.title).contains(designAgendaDeleteModalTitleAndVerify, {
+    cy.get(aukSelector.modal.header.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
     cy.get(aukSelector.alert.message).contains(designAgendaBTitle, {
@@ -47,7 +46,7 @@ context('Agenda reopen previous tests', () => {
     cy.get(aukSelector.alert.message).contains('Agenda A', {
       timeout: 5000,
     });
-    cy.get(modalSelector.auModal.save).contains(designAgendaDeleteModalTitleAndVerify)
+    cy.get(agendaSelector.agendaHeader.confirm.reopenPreviousVersion).contains(designAgendaDeleteModalTitleAndVerify)
       .click();
     cy.wait('@getAgendas');
     cy.contains(designAgendaBTitle).should('not.exist');

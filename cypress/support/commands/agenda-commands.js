@@ -238,8 +238,8 @@ function deleteAgenda(meetingId, lastAgenda) {
 
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-  cy.get(auk.auModal.container).within(() => {
-    cy.get(auk.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.deleteAgenda).click();
   });
   if (lastAgenda) {
     cy.wait('@deleteNewsletter', {
@@ -249,7 +249,7 @@ function deleteAgenda(meetingId, lastAgenda) {
         timeout: 20000,
       });
   }
-  cy.get(auk.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 20000,
   }).should('not.exist');
   if (!lastAgenda) {
@@ -389,11 +389,11 @@ function approveDesignAgenda(shouldConfirm = true) {
   });
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   if (shouldConfirm) {
-    cy.get(auk.auModal.container).within(() => {
-      cy.get(auk.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(auk.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -405,7 +405,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   //   timeout: 12000,
   // });
 
-  // cy.get(auk.auModal.container, {
+  // cy.get(auk.modal.container, {
   //   timeout: 60000,
   // }).should('not.exist');
   cy.log('/approveDesignAgenda');
@@ -433,11 +433,11 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   });
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   if (shouldConfirm) {
-    cy.get(auk.auModal.container).within(() => {
-      cy.get(auk.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(auk.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -677,11 +677,11 @@ function closeAgenda() {
   cy.log('closeAgenda');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-  cy.get(auk.auModal.container).within(() => {
-    cy.get(auk.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
   });
   // as long as the modal exists, the action is not completed
-  cy.get(auk.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
   cy.log('/closeAgenda');

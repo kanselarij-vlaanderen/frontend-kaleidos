@@ -1,11 +1,9 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-// ***********************************************
-// Commands
-import modalSelectors from '../../selectors/modal.selectors';
 import publicationSelectors from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import auk from '../../selectors/auk.selectors';
 
 // ***********************************************
 // Functions
@@ -27,7 +25,7 @@ function createPublication(shortTitle, longTitle) {
   cy.visit('publicaties');
   cy.get(publicationSelectors.newPublicationButton).click();
 
-  cy.get(modalSelectors.auModal.container).as('publicationModal')
+  cy.get(auk.modal.container).as('publicationModal')
     .within(() => {
       cy.get(publicationSelectors.newPublicationModal.publicationShortTitleTextarea).click()
         .clear()
@@ -77,7 +75,7 @@ function addPublicationDocuments(files) {
 
   // TODO This part can be reused in future tests
 
-  cy.get(modalSelectors.auModal.container).as('fileUploadDialog');
+  cy.get(auk.modal.container).as('fileUploadDialog');
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
@@ -135,8 +133,9 @@ function addPublicationDocuments(files) {
     }
   });
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(modalSelectors.auModal.save).contains('Documenten toevoegen')
-      .click();
+    cy.get(auk.modal.footer).within(() => {
+      // TODO Click the save button in your modal footer
+    });
   });
 
   cy.wait('@createNewPiece', {
@@ -150,5 +149,7 @@ function addPublicationDocuments(files) {
   cy.log('/addPublicationDocuments');
 }
 
+// ***********************************************
+// Commands
 Cypress.Commands.add('createPublication', createPublication);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);

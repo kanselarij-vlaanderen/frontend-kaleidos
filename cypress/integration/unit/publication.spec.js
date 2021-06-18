@@ -2,7 +2,6 @@
 
 // / <reference types="Cypress" />
 import publicationSelectors from '../../selectors/publication.selectors';
-import modalSelectors from '../../selectors/modal.selectors';
 import aukSelectors from '../../selectors/auk.selectors';
 
 context('Publications tests', () => {
@@ -34,7 +33,7 @@ context('Publications tests', () => {
   it('should render error when required fields are not filled in to create new publication', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.auModal.container).as('publicationModal');
+    cy.get(aukSelectors.modal.container).as('publicationModal');
     cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
     cy.get('@publicationModal').within(() => {
       // No errors on initial view, just info
@@ -90,7 +89,7 @@ context('Publications tests', () => {
     cy.visit(publicationOverviewUrl);
     const number = 999;
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.auModal.container).as('publicationModal');
+    cy.get(aukSelectors.modal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       // TODO check if suffix and long title are cleared
       cy.get(publicationSelectors.newPublicationModal.publicationNumberInput)
@@ -114,7 +113,7 @@ context('Publications tests', () => {
   it('should create a publication and redirect to its detail page', () => {
     cy.visit(publicationOverviewUrl);
     cy.get(publicationSelectors.newPublicationButton).click();
-    cy.get(modalSelectors.auModal.container).as('publicationModal');
+    cy.get(aukSelectors.modal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
       cy.get(publicationSelectors.newPublicationModal.publicationNumberInput).click()
         .clear()
@@ -202,7 +201,7 @@ context('Publications tests', () => {
 
     // Add contactperson.
     cy.get(publicationSelectors.contactperson.addButton).click();
-    cy.get(modalSelectors.auModal.container).should('exist');
+    cy.get(aukSelectors.modal.container).should('exist');
     cy.get(publicationSelectors.contactperson.firstNameInput).clear()
       .type(contactperson.fin);
     cy.get(publicationSelectors.contactperson.lastNameInput).clear()

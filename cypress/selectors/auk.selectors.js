@@ -32,7 +32,7 @@ const selectors = {
     error: '.auk-label-error',
   },
 
-  auModal: {
+  modal: {
     container: '[data-test-au-modal]',
     body: '[data-test-au-modal-body]',
     header: {
@@ -43,8 +43,8 @@ const selectors = {
     },
     footer: {
       cancel: '[data-test-au-modal-footer-cancel]',
-      // TODO 6x duplication, make custom test selectors
-      save: '[data-test-au-modal-footer-save]',
+      // there is no default footer-save available (yet), use a custom selector for your use case
+      // save: '[data-test-au-modal-footer-save]',
     },
   },
 

@@ -3,7 +3,6 @@
 
 import settings from '../../../../selectors/settings.selectors';
 import toolbar from '../../../../selectors/toolbar.selectors';
-import modal from '../../../../selectors/modal.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 import utils from '../../../../selectors/utils.selectors';
 
@@ -77,9 +76,9 @@ context('Settings page tests', () => {
       .click();
     cy.get('.ember-power-select-selected-item').should('contain.text', govermentDomains[0])
       .wait(200);
-    cy.get(modal.manageInSettingsModal.add).should('be.visible');
-    cy.get(modal.manageInSettingsModal.edit).should('be.visible');
-    cy.get(modal.manageInSettingsModal.delete).should('be.visible');
+    cy.get(settings.modelManager.add).should('be.visible');
+    cy.get(settings.modelManager.edit).should('be.visible');
+    cy.get(settings.modelManager.delete).should('be.visible');
     cy.get(utils.vlModal.close).should('be.visible');
   });
 
@@ -93,7 +92,7 @@ context('Settings page tests', () => {
 
   it('Should open the modal and add a new item in the list', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(modal.manageInSettingsModal.add).click();
+    cy.get(settings.modelManager.add).click();
     cy.get(utils.vlFormInput).type('Andere zaken');
     cy.get(utils.vlModalFooter.save).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
@@ -111,7 +110,7 @@ context('Settings page tests', () => {
       .should('contain.text', 'Andere zaken');
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
-    cy.get(modal.manageInSettingsModal.edit).click();
+    cy.get(settings.modelManager.edit).click();
     cy.get(utils.vlFormInput).clear();
     cy.get(utils.vlFormInput).type('Test Input');
     cy.get(utils.vlModalFooter.save).click();
