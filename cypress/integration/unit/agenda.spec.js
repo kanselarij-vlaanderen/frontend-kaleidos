@@ -43,8 +43,9 @@ context('Agenda tests', () => {
         cy.get(auk.alert.container).should('exist');
         cy.get(auk.alert.message).should('exist');
       });
-      cy.get(agenda.agendaHeader.confirm.del).contains('Agenda verwijderen');
-      cy.get(auk.modal.footer.cancel).click();
+      cy.get(agenda.agendaHeader.confirm.deleteAgenda).contains('Agenda verwijderen');
+      cy.get(auk.modal.footer.cancel).contains('Annuleren')
+        .click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(result.meetingId, true);
       // TODO assert we go back to agendas overview
@@ -60,7 +61,8 @@ context('Agenda tests', () => {
       cy.get(auk.alert.message).should('exist');
     });
     cy.get(agenda.agendaHeader.confirm.approveAgenda).contains('Goedkeuren');
-    cy.get(auk.modal.footer.cancel).click();
+    cy.get(auk.modal.footer.cancel).contains('Annuleren')
+      .click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();

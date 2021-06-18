@@ -33,18 +33,18 @@ const selectors = {
   },
 
   modal: {
-    container: '[data-test-au-modal]',
-    body: '[data-test-au-modal-body]',
+    container: '.auk-modal',
+    body: '.auk-modal__body',
     header: {
-      title: '[data-test-au-modal-header-title]',
+      title: '.auk-modal__header .auk-toolbar__title',
       // TODO unused selectors
-      close: '[data-test-au-modal-header-close]',
-      resize: '[data-test-au-modal-header-resize]',
+      close: '.auk-modal__header .auk-button .auk-icon .ki-close',
+      minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
+      expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
     },
     footer: {
-      cancel: '[data-test-au-modal-footer-cancel]',
+      cancel: '.auk-modal__footer .auk-toolbar-complex__left .auk-button-link',
       // there is no default footer-save available (yet), use a custom selector for your use case
-      // save: '[data-test-au-modal-footer-save]',
     },
   },
 

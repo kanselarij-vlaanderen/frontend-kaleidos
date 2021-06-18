@@ -56,7 +56,11 @@ const selectors = {
 
   // vl-alert
   vlAlert: {
-    closeButton: '[data-test-vl-alert-close-button]',
+    close: '[data-test-vl-alert-close]',
+    // TODO unused selectors
+    container: '[data-test-vl-alert]',
+    title: '[data-test-vl-alert-title]',
+    message: '[data-test-vl-alert-message]',
   },
 
 };
