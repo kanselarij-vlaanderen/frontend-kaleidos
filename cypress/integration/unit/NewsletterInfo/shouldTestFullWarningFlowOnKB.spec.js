@@ -1,7 +1,6 @@
 /* global context, before, it, cy,beforeEach */
 // / <reference types="Cypress" />
 
-import alert from '../../../selectors/alert.selectors';
 import agenda from '../../../selectors/agenda.selectors';
 import newsletter from '../../../selectors/newsletter.selectors';
 import utils from '../../../selectors/utils.selectors';
@@ -31,9 +30,9 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
       .click()
       .wait(2000); // Access-levels GET occured earlier, general wait instead
 
-    cy.get(alert.changesAlert).should('be.visible');
-    cy.get(alert.changesAlertClose).click();
-    cy.get(alert.changesAlert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('be.visible');
+    cy.get(utils.changesAlert.close).click();
+    cy.get(utils.changesAlert.alert).should('not.be.visible');
     // Edit KB
     cy.get(newsletter.newsItem.edit).should('be.visible')
       .click();
@@ -46,6 +45,6 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
       .click();
     cy.get(agenda.agendaitemNav.newsletterTab).should('be.visible')
       .click();
-    cy.get(alert.changesAlert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('not.be.visible');
   });
 });

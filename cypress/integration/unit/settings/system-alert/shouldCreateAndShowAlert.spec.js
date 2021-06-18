@@ -1,6 +1,6 @@
 /* global context, it, cy,before,beforeEach */
 // / <reference types="Cypress" />
-import alert from '../../../../selectors/system-wide/alert.selectors';
+
 import systemAlert from '../../../../selectors/settings/system-alert.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
 import utils from '../../../../selectors/utils.selectors';
@@ -44,7 +44,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
 
-    cy.get(alert.closeButton).each((button) => {
+    cy.get(utils.vlAlert.closeButton).each((button) => {
       button.click();
     });
     cy.get(systemAlert.alert).should('not.exist');

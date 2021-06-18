@@ -9,6 +9,12 @@ const selectors = {
     title: '[data-test-overviews-header-decision-title]',
   },
 
+  // changes-alert
+  changesAlert: {
+    alert: '[data-test-changes-alert]',
+    close: '[data-test-changes-alert-close]',
+  },
+
   /** Section VL-components **/
 
   // vl-checkbox
@@ -46,6 +52,11 @@ const selectors = {
     close: '[data-test-vl-modal-verify-close]',
     cancel: '[data-test-vl-modal-verify-cancel]',
     save: '[data-test-vl-modal-verify-save]',
+  },
+
+  // vl-alert
+  vlAlert: {
+    closeButton: '[data-test-vl-alert-close-button]',
   },
 
 };
