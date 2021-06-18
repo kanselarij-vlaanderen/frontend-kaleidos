@@ -19,8 +19,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @tracked wordsAmount = null;
   // TODO KAS-2600
   // @tracked proofprint = false;
-  // TODO KAS-2481
-  // @tracked receivedAtDate = null;
+  @tracked receivedAtDate = new Date();
 
 
   constructor() {
@@ -84,9 +83,16 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
         name: this.name,
         pagesAmount: this.pagesAmount,
         wordsAmount: this.wordsAmount,
+        receivedAtDate: this.receivedAtDate,
       });
     }
   }
+
+  @action
+  setReceivedAtDate(selectedDates) {
+    this.receivedAtDate = selectedDates[0];
+  }
+
   // TODO In KAS-2600
   // @action
   // toggleProofPrint() {

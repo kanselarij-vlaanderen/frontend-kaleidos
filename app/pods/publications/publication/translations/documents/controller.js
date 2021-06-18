@@ -48,6 +48,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.pages = translationDocument.pagesAmount;
     piece.words = translationDocument.wordsAmount;
     piece.name = translationDocument.name;
+    piece.receivedDate = translationDocument.receivedAtDate;
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
     yield piece.save();
