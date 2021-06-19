@@ -3,8 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class CasesIndexRoute extends Route.extend() {
-  @service store;
-
   queryParams = {
     page: {
       refreshModel: true,
@@ -38,8 +36,7 @@ export default class CasesIndexRoute extends Route.extend() {
     if (!params.showArchived) {
       options['filter[is-archived]'] = false;
     }
-    const model = await this.store.query('case', options);
-    return model;
+    return this.store.query('case', options);
   }
 
   @action
