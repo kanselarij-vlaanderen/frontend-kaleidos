@@ -11,6 +11,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @tracked translationDocument = null;
   @tracked name = null;
+  @tracked isSourceForProofPrint = false;
   @tracked receivedAtDate = new Date();
 
   constructor() {
@@ -74,8 +75,14 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
         piece: this.translationDocument,
         name: this.name,
         receivedAtDate: this.receivedAtDate,
+        isSourceForProofPrint: this.isSourceForProofPrint,
       });
     }
+  }
+
+  @action
+  toggleProofprint() {
+    this.isSourceForProofPrint = !this.isSourceForProofPrint;
   }
 
   @action

@@ -17,8 +17,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @tracked name = null;
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
-  // TODO KAS-2600
-  // @tracked proofprint = false;
+  @tracked isSourceForProofPrint = false;
 
   constructor() {
     super(...arguments);
@@ -81,13 +80,13 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
         name: this.name,
         pagesAmount: this.pagesAmount,
         wordsAmount: this.wordsAmount,
+        isSourceForProofPrint: this.isSourceForProofPrint,
       });
     }
   }
 
-  // TODO In KAS-2600
-  // @action
-  // toggleProofPrint() {
-  //   this.proofprint = !this.proofprint;
-  // }
+  @action
+  toggleProofprint() {
+    this.isSourceForProofPrint = !this.isSourceForProofPrint;
+  }
 }

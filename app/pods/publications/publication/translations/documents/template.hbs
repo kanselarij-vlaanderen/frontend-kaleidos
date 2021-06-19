@@ -38,7 +38,7 @@
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
             <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
-            <th class="auk-u-text-nowrap">{{t "for-publishpreview"}}</th>
+            <th class="auk-u-text-align--center">{{t "for-publishpreview"}}</th>
             <th></th>
           </tr>
         </thead>
@@ -60,8 +60,6 @@
               </td>
               <td class="auk-u-text-nowrap">
                 {{moment-format piece.receivedDate}}
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.receivedDate "HH:mm"}}</span>
               </td>
               <td class="auk-u-text-nowrap">
                 {{moment-format piece.created}}
@@ -69,7 +67,13 @@
                 <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
               </td>
               <td class="auk-u-text-align--center">
-                {{t "dash"}}
+                {{#if piece.publicationSubcase}}
+                  <div class="auk-icon auk-icon--default auk-icon--success-dark">
+                    <i class="ki ki-check"></i>
+                  </div>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>

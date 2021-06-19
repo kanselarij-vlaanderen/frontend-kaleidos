@@ -13,8 +13,14 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
     );
   }
 
+  async afterModel() {
+    const publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await publicationFlow.publicationSubcase;
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+    controller.publicationSubcase = this.publicationSubcase;
   }
 }

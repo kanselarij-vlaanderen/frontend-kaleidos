@@ -50,6 +50,7 @@ export default Model.extend({
   language: belongsTo('language'),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
+  publicationSubcase: belongsTo('publication-subcase'),
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),

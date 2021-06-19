@@ -867,7 +867,7 @@
   "translation-request-for": "Vertaalaanvraag op {date} om {time}",
   "received-documents": "Ontvangen documenten",
   "received-at-date": "ontvangen op {date}",
-  "for-publish-preview": "Dient voor drukproef",
+  "for-proof-print": "Dient voor drukproef",
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
   "none": "Geen",

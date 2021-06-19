@@ -21,7 +21,7 @@
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
-                    {{t 'name'}}
+                    {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
                     type="text"
@@ -40,6 +40,13 @@
                   <Auk::Datepicker id="dateSet"
                                                @date={{this.receivedAtDate}}
                                                @onChange={{this.setReceivedAtDate}}/>
+                </div>
+                <div class="auk-form-group auk-o-flex--align-start">
+                  <Auk::Label for="proof-print">
+                    {{t "for-proof-print"}}
+                  </Auk::Label>
+                  <Auk::Checkbox @name="proof-print" @checked={{this.isSourceForProofPrint}}
+                      {{on "input" this.toggleProofprint}} />
                 </div>
               </div>
             </div>
