@@ -12,6 +12,10 @@ export default class PublicationsPublicationTranslationsRequestController extend
   @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
 
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
+  }
+
   @task
   *saveTranslationUpload(translationUpload) {
     const piece = translationUpload.piece;
