@@ -114,9 +114,9 @@
   <hr>
 </div>
 <div class="auk-u-mx-4">
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <Auk::Pagination
           @page={{this.page}}
           @size={{this.size}}
@@ -125,10 +125,10 @@
           @onNextPage={{this.nextPage}}
           @onPreviousPage={{this.prevPage}}
         />
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         <Auk::Button
           @icon="settings"
           @skin="borderless"
@@ -150,20 +150,20 @@
             @onClose={{this.toggleColumnDisplayOptions}}
           />
         </AttachPopover>
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         {{t "amount-showed"}}
-      </WebComponents::AuToolbar::Item>
-      <WebComponents::AuToolbar::Item>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         <WebComponents::AuPageSize
-          @selectedSize={{this.size}}
           @sizeOptions={{this.sizeOptions}}
+          @selectedSize={{this.size}}
           @onChange={{this.setSizeOption}}
         >
         </WebComponents::AuPageSize>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>
 {{#if isEditingRow}}
   <WebComponents::VlModal
