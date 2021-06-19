@@ -2,9 +2,7 @@ import Route from '@ember/routing/route';
 
 export default class PublicationsPublicationTranslationsRoute extends Route {
   model() {
-    const translationSubcase = this.modelFor('publications.publication').translationSubcase;
-    translationSubcase.get('endDate') ? this.translationFinished = true : this.translationFinished = false;
-    return translationSubcase;
+    return this.modelFor('publications.publication').translationSubcase;
   }
 
   afterModel() {
@@ -14,6 +12,5 @@ export default class PublicationsPublicationTranslationsRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.publicationFlow = this.publicationFlow;
-    controller.translationFinished = this.translationFinished;
   }
 }

@@ -16,8 +16,8 @@
       <Auk::Toolbar::Item>
         <Auk::Checkbox
           @label={{t "finished"}}
-          @checked={{translationFinished}}
-                {{on "input" toggleFinishTranslation}}
+          @checked={{this.model.endDate}}
+          {{on "input" this.toggleFinishTranslation}}
         />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
