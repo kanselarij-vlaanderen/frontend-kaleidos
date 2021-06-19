@@ -2,7 +2,7 @@
   {{page-title (t "manage-ministers")}}
   <div class="auk-o-flex auk-o-flex--justify-between">
     <h4 class="auk-h3"></h4>
-    <button data-test-minister-add
+    <button data-test-route-settings-ministers-add
       type="button"
       class="auk-button auk-button--primary"
       {{action "toggleIsAdding"}}
@@ -63,7 +63,7 @@
         </tr>
       </thead>
       <SortableGroup
-        data-test-ministers-sortable-group
+        data-test-route-settings-ministers-sortable-group
         @tagName="tbody"
         @model={{model}}
         @onChange={{action "reorderItems" model}}
@@ -73,31 +73,31 @@
           <sortableGroup.item
             @tagName="tr"
             @model={{mandatee}}
-            data-test-ministers-sortable-group-row="index"
+            data-test-route-settings-ministers-sortable-group-row="index"
             @handle=".mandatee-draggable-row"
           >
-            <td data-test-mandatee-fullDisplayName={{index}} class="mandatee-draggable-row">
+            <td data-test-route-settings-ministers-mandatee-full-display-name={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.fullDisplayName)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
               {{else}}
                 {{await mandatee.fullDisplayName}}
               {{/if}}
             </td>
-            <td data-test-mandatee-nickName={{index}} class="mandatee-draggable-row">
+            <td data-test-route-settings-ministers-mandatee-nickname={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.nickName)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
               {{else}}
                 {{await mandatee.nickName}}
               {{/if}}
             </td>
-            <td data-test-mandatee-priority={{index}} class="mandatee-draggable-row">
+            <td data-test-route-settings-ministers-mandatee-priority={{index}} class="mandatee-draggable-row">
               {{await mandatee.priority}}
             </td>
             <td class="auk-u-text-align--center">
-              <WebComponents::AuToolbar>
-                <WebComponents::AuToolbar::Group @position="center">
-                  <WebComponents::AuToolbar::Item>
-                    <button data-test-mandatee-edit={{index}}
+              <Auk::Toolbar>
+                <Auk::Toolbar::Group @position="center">
+                  <Auk::Toolbar::Item>
+                    <button data-test-route-settings-ministers-mandatee-edit={{index}}
                       type="button"
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
@@ -108,10 +108,10 @@
                         </div>
                       </span>
                     </button>
-                  </WebComponents::AuToolbar::Item>
-                  <WebComponents::AuToolbar::Item>
+                  </Auk::Toolbar::Item>
+                  <Auk::Toolbar::Item>
                     <button type="button"
-                      data-test-mandatee-resign={{index}}
+                      data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
                       class="auk-button auk-button--borderless auk-button--icon"
                       {{action "toggleProperty" "isResigningMandatee" mandatee}}
                     >
@@ -124,10 +124,10 @@
                         </EmberTooltip>
                       </span>
                     </button>
-                  </WebComponents::AuToolbar::Item>
-                  <WebComponents::AuToolbar::Item>
+                  </Auk::Toolbar::Item>
+                  <Auk::Toolbar::Item>
                     <button type="button"
-                      data-test-mandatee-delete={{index}}
+                      data-test-route-settings-ministers-mandatee-delete={{index}}
                       class="auk-button auk-button--borderless auk-button--icon auk-u-text-error"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                     >
@@ -137,9 +137,9 @@
                         </div>
                       </span>
                     </button>
-                  </WebComponents::AuToolbar::Item>
-                </WebComponents::AuToolbar::Group>
-              </WebComponents::AuToolbar>
+                  </Auk::Toolbar::Item>
+                </Auk::Toolbar::Group>
+              </Auk::Toolbar>
             </td>
           </sortableGroup.item>
         {{/each}}

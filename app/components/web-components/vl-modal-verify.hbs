@@ -3,15 +3,15 @@
     <div class="auk-modal__push"></div>
     <div class="auk-modal__content">
       <div class="auk-modal__header auk-modal__header--bordered">
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <h2 class="auk-toolbar__title">{{title}}</h2>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
           {{#if showCloseButton}}
-            <WebComponents::AuToolbar::Group @position="right">
-              <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Group @position="right">
+              <Auk::Toolbar::Item>
                 <Auk::Button
                   @icon="close"
                   @skin="borderless"
@@ -20,27 +20,27 @@
                   data-test-vl-modal-verify-close
                 >
                 </Auk::Button>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
           {{/if}}
-        </WebComponents::AuToolbar>
+        </Auk::Toolbar>
       </div>
       <Auk::Modal::Body>
         <p>{{message}}</p>
       </Auk::Modal::Body>
       {{#if showActions}}
         <div class="auk-modal__footer auk-modal__footer--bordered">
-          <WebComponents::AuToolbar>
-            <WebComponents::AuToolbar::Group @position="left">
-              <WebComponents::AuToolbar::Item>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
                 <Auk::Button @skin="borderless" {{action "cancel"}} data-test-vl-modal-verify-cancel>
                   {{t "cancel"}}
                 </Auk::Button>
-              </WebComponents::AuToolbar::Item>
-            </WebComponents::AuToolbar::Group>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
             {{#if showVerify}}
-              <WebComponents::AuToolbar::Group @position="right">
-                <WebComponents::AuToolbar::Item>
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
                   <Auk::Button
                     @skin={{buttonSkin}}
                     @icon={{if showIcon "delete"}}
@@ -50,10 +50,10 @@
                   >
                     {{verifyButtonText}}
                   </Auk::Button>
-                </WebComponents::AuToolbar::Item>
-              </WebComponents::AuToolbar::Group>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
             {{/if}}
-          </WebComponents::AuToolbar>
+          </Auk::Toolbar>
         </div>
       {{/if}}
     </div>

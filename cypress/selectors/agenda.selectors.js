@@ -1,6 +1,5 @@
 const selectors = {
   // datepickr (met css)
-  datepickerButton: '[data-test-vlc-vl-datepickerButton]',
   flatpickrCalendar: '.flatpickr-calendar',
   flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
   numInputWrapper: '.open  .numInputWrapper',
@@ -17,7 +16,7 @@ const selectors = {
   // 3x agendaitem/documents, subcase/documents, agenda/documents
   // rename data-test-documents-route-open-batch-edit
   subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
+  agendaitemEditDocumentsList: '[data-test-agendaitem-edit-documents-list]',
 
   // TODO unused selector, do we want to use this one ?
   agendaSidenavElement: 'data-test-agenda-sidenav-element',
@@ -28,16 +27,7 @@ const selectors = {
   },
   item: {
     // TODO don't use css
-    checkBoxLabel: 'label.vl-toggle__label',
     actionButton: '.auk-toolbar-complex__item button',
-    // route agendaitem/news-item // component news-item/edit-item / agendaitem-news-item
-    themes: '[data-test-agenda-news-item-themes]',
-    news: {
-      editLink: '[data-test-agenda-news-item-view] [data-test-newsletter-edit]',
-      saveButton: '[data-test-newsletter-edit-save]',
-      checkedThemes: '[data-test-themes-selector] input:checked',
-      themesSelector: '[data-agenda-item-news-edit] [data-test-themes-selector]',
-    },
   },
 
   /**
@@ -57,7 +47,7 @@ const selectors = {
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
-    activeTab: '[data-test-agendaitem-nav-tabs] .active',
+    activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
   // agendaitem-decision
@@ -97,6 +87,11 @@ const selectors = {
     subitem: '[data-test-agenda-overview-item-sub-item]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
+  },
+
+  // agenda-overview
+  agendaOverview: {
+    formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 
   // agenda-header
@@ -168,6 +163,20 @@ const selectors = {
       delete: '[data-test-agendaitem-controls-action-delete]',
       advance: '[data-test-agendaitem-controls-action-advance]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
+    },
+  },
+
+  // agendaitem-search
+  agendaitemSearch: {
+    input: '[data-test-agendaitem-search-input]',
+  },
+
+  // new-session
+  newSession: {
+    numberRep: {
+      edit: '[data-test-new-session-number-representation-edit]',
+      input: '[data-test-new-session-number-representation-input]',
+      save: '[data-test-new-session-number-representation-save]',
     },
   },
 };

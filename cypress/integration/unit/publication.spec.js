@@ -3,7 +3,7 @@
 // / <reference types="Cypress" />
 import publicationSelectors from '../../selectors/publication.selectors';
 import modalSelectors from '../../selectors/modal.selectors';
-import auComponentSelectors from '../../selectors/au-component-selectors';
+import aukSelectors from '../../selectors/auk.selectors';
 
 context('Publications tests', () => {
   before(() => {
@@ -57,7 +57,7 @@ context('Publications tests', () => {
       }).should('not.exist');
       // both number and shortTitle should show error when empty
       // TODO this does not indicate where the errors should be, make selectors for both errors and get those
-      cy.get(auComponentSelectors.auLabelError).should('have.length', 2);
+      cy.get(aukSelectors.label.error).should('have.length', 2);
       // Create publication with number and title
       // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
       cy.get(modalSelectors.publication.publicationNumberInput).click()
@@ -197,7 +197,7 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
-    // TODO get auComponents.auEmptyState met selector
+    // TODO get aukSelectors.emptyState met selector
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
 
     // Add contactperson.

@@ -5,13 +5,11 @@
 // Commands
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import modal from '../../selectors/modal.selectors';
-import utils from '../../selectors/utils.selectors';
-import agendaOverview from '../../selectors/agenda-overview.selectors';
-import auComponents from '../../selectors/au-component-selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 // ***********************************************
 // Functions
@@ -70,7 +68,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   cy.get('@newAgendaForm').eq(1)
     .within(() => {
-      cy.get(form.datepickerInput).click();
+      cy.get(utils.vlDatepicker).click();
     });
   cy.setDateAndTimeInFlatpickr(date);
 
@@ -84,6 +82,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
           .clear()
           .type(meetingNumber);
       } else {
+        // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
         cy.get('.auk-input').click({
           force: true,
         })
@@ -93,30 +92,29 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       }
     });
 
-  // Set the meetingNumber
-  if (meetingNumberVisualRepresentation) {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
-      force: true,
-    });
-    cy.get(form.formInput).eq(1)
-      .click()
-      .clear()
-      .type(meetingNumberVisualRepresentation);
-    cy.get(utils.saveButton).contains('Opslaan')
-      .click();
-  } else {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
-      force: true,
-    });
+  // Set the meetingNumber representation
+  let meetingNumberRep;
 
-    cy.get(form.formInput).eq(1)
-      .click({
-        force: true,
-      })
-      .invoke('val')
-      // eslint-disable-next-line
-      .then((sometext) => meetingNumberVisualRepresentation = sometext);
+  if (meetingNumberVisualRepresentation) {
+    cy.get(agenda.newSession.numberRep.edit).click();
+    cy.get(agenda.newSession.numberRep.input).within(() => {
+      cy.get(utils.vlFormInput)
+        .click()
+        .clear()
+        .type(meetingNumberVisualRepresentation);
+    });
+    cy.get(agenda.newSession.numberRep.save).click();
   }
+  // Get the value from the meetingNumber representation
+  cy.get(agenda.newSession.numberRep.edit).click();
+  cy.get(agenda.newSession.numberRep.input).within(() => {
+    cy.get(utils.vlFormInput)
+      .click()
+      .invoke('val')
+      .then((sometext) => {
+        meetingNumberRep = sometext;
+      });
+  });
 
   // Set the location
   cy.get('@newAgendaForm').eq(3)
@@ -128,7 +126,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get(modal.modalFooterSaveButton).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
 
   let meetingId;
@@ -152,7 +150,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
-        meetingId, meetingNumber, agendaId, meetingNumberVisualRepresentation,
+        meetingId, meetingNumber, agendaId, meetingNumberRep,
       });
     }));
 }
@@ -187,12 +185,12 @@ function openAgendaForDate(agendaDate) {
 
   cy.visit('');
   // cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get(agendaOverview.agendaFilter, {
+  cy.get(route.agendasOverview.filter.container, {
     timeout: 10000,
   }).should('exist')
     .within(() => {
-      cy.get(agendaOverview.agendaFilterInput).type(searchDate);
-      cy.get(agendaOverview.agendaFilterButton).click();
+      cy.get(route.agendasOverview.filter.input).type(searchDate);
+      cy.get(route.agendasOverview.filter.button).click();
     });
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
@@ -259,7 +257,7 @@ function deleteAgenda(meetingId, lastAgenda) {
     cy.wait('@loadAgendaitems');
   }
   // loading page is no longer visible
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
 
@@ -279,7 +277,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
-  cy.get(agendaOverview.agendaEditFormallyOkButton).click();
+  cy.get(agenda.agendaOverview.formallyOkEdit).click();
   cy.wait(2000); // TODO await data loading after clicking this button?
 
   cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
@@ -511,7 +509,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(modal.modalFooterSaveButton).click();
+      cy.get(utils.vlModalFooter.save).click();
     });
 
   cy.wait('@createAgendaActivity', {
@@ -586,7 +584,7 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
   cy.get('.active').then((element) => {
@@ -604,7 +602,7 @@ function agendaitemExists(agendaitemName) {
         // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
-        cy.get(auComponents.auLoading, {
+        cy.get(auk.loader, {
           timeout: 20000,
         }).should('not.exist');
       }

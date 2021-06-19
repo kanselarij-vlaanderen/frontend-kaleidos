@@ -1,0 +1,32 @@
+<Link
+  @route={{@route}}
+  @models={{this.models}}
+  @disabled={{@disabled}}
+  @current-when={{@current-when}}
+  @preventDefault={{@preventDefault}}
+  @query={{@query}}
+as |l|>
+  <li class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}} {{if l.isActive "auk-tabs__tab--active"}}" ...attributes>
+    <a
+      href={{l.url}}
+      {{on "click" l.transitionTo}}
+    >
+      <span class="auk-tabs__tab-inner">
+        {{#if this.icon}}
+          {{#if (eq @layout "icon-right")}}
+            <div class="auk-tabs__label">{{yield}}</div>
+            <Auk::Icon @name={{this.icon}} />
+          {{else}}
+            <Auk::Icon @name={{this.icon}} />
+            <div class="auk-tabs__label">{{yield}}</div>
+          {{/if}}
+        {{else}}
+          <div class="auk-tabs__label">{{yield}}</div>
+          {{#if this.hasCounter}}
+            <div class="auk-tabs__tab-counter">({{@counter}})</div>
+          {{/if}}
+        {{/if}}
+      </span>
+    </a>
+  </li>
+</Link>

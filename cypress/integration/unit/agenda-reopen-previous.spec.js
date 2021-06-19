@@ -3,7 +3,7 @@
 
 import agendaSelector from '../../selectors/agenda.selectors';
 import modalSelector from '../../selectors/modal.selectors';
-import auComponentSelector from '../../selectors/au-component-selectors';
+import aukSelector from '../../selectors/auk.selectors';
 
 context('Agenda reopen previous tests', () => {
   const dateToCreateAgenda = Cypress.moment().add(10, 'weeks')
@@ -41,10 +41,10 @@ context('Agenda reopen previous tests', () => {
     cy.get(modalSelector.auModal.title).contains(designAgendaDeleteModalTitleAndVerify, {
       timeout: 5000,
     });
-    cy.get(auComponentSelector.auAlert.message).contains(designAgendaBTitle, {
+    cy.get(aukSelector.alert.message).contains(designAgendaBTitle, {
       timeout: 5000,
     });
-    cy.get(auComponentSelector.auAlert.message).contains('Agenda A', {
+    cy.get(aukSelector.alert.message).contains('Agenda A', {
       timeout: 5000,
     });
     cy.get(modalSelector.auModal.save).contains(designAgendaDeleteModalTitleAndVerify)

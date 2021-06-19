@@ -3,10 +3,9 @@
 
 import modal from '../../selectors/modal.selectors';
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import agendaOverview from '../../selectors/agenda-overview.selectors';
-import auComponent from '../../selectors/au-component-selectors';
+import auk from '../../selectors/auk.selectors';
 import route from  '../../selectors/route.selectors';
+import utils from  '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -42,8 +41,8 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
       cy.get(modal.auModal.body).within(() => {
         // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-        cy.get(auComponent.auAlert.container).should('exist');
-        cy.get(auComponent.auAlert.message).should('exist');
+        cy.get(auk.alert.container).should('exist');
+        cy.get(auk.alert.message).should('exist');
       });
       cy.get(modal.auModal.save).contains('Agenda verwijderen');
       cy.get(modal.auModal.cancel).click();
@@ -58,8 +57,8 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(modal.auModal.body).within(() => {
       // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-      cy.get(auComponent.auAlert.container).should('exist');
-      cy.get(auComponent.auAlert.message).should('exist');
+      cy.get(auk.alert.container).should('exist');
+      cy.get(auk.alert.message).should('exist');
     });
     cy.get(modal.auModal.save).contains('Goedkeuren');
     cy.get(modal.auModal.cancel).click();
@@ -149,7 +148,7 @@ context('Agenda tests', () => {
       .should('be.visible')
       .click();
     // TODO replace with confidentiality selector
-    cy.get(form.formVlToggle).should('exist')
+    cy.get(utils.vlToggle).should('exist')
       .click();
 
     cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
@@ -169,7 +168,7 @@ context('Agenda tests', () => {
     cy.contains('dit is de lange titel');
     cy.contains('Dit is de opmerking');
     // TODO KAS-2142 setting confidentiality and cancelling does not roll back
-    cy.get(auComponent.auPillSpan).contains('Vertrouwelijk');
+    cy.get(auk.pill).contains('Vertrouwelijk');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
@@ -183,8 +182,8 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
       // TODO data tag
       cy.get('input[type="number"]').should('have.value', result.meetingNumber);
-      cy.get(form.formInput).eq(1)
-        .should('have.value', `${result.meetingNumberVisualRepresentation}`);
+      cy.get(utils.vlFormInput).eq(1)
+        .should('have.value', `${result.meetingNumberRep}`);
       cy.visit('/');
       cy.get(route.agendas.action.newMeeting).click();
       cy.wait(500);
@@ -263,7 +262,7 @@ context('Agenda tests', () => {
       cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
       // TODO check the message?
       cy.get(modal.auModal.body).within(() => {
-        cy.get(auComponent.auAlert.container).should('exist');
+        cy.get(auk.alert.container).should('exist');
       });
 
       // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
@@ -274,7 +273,7 @@ context('Agenda tests', () => {
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
       // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
-      cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+      cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     });
   });
 
@@ -336,7 +335,7 @@ context('Agenda tests', () => {
     cy.wait('@agendaActivities');
 
     // TODO is deze not exists wel goed ?
-    cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
     // cy.get('.auk-loader', {
     //   timeout: 60000,
@@ -387,7 +386,7 @@ context('Agenda tests', () => {
 
     // TODO tekst checken ?
     cy.get(modal.auModal.container).within(() => {
-      cy.get(auComponent.auAlert.message).should('exist');
+      cy.get(auk.alert.message).should('exist');
       cy.get(modal.auModal.save)
         .click();
     });
@@ -422,7 +421,7 @@ context('Agenda tests', () => {
     // cy.contains('Doorgaan')
     //   .click();
 
-    // cy.get(agendaOverview.agendaEditFormallyOkButton).should('not.exist');
+    // cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     cy.get(modal.auModal.container, {
       timeout: 60000,
     }).should('not.exist');

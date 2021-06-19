@@ -2,9 +2,9 @@
   (concat (t "publication-flow") " " this.model.identification.idName)
 }}
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <span class="auk-overline auk-u-muted"
             data-test-publication-detail-menu-publication-number>
@@ -34,9 +34,9 @@
           </Auk::AbbreviatedText>
           <Publications::Publication::PublicationNavigation @publicationFlow={{this.model}} />
         </div>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 
 {{!-- Auk css gebruiken, component ? --}}
@@ -44,11 +44,7 @@
   <div class="auk-panel-layout__main-content">
     <div class="auk-scroll-wrapper">
       <div class="auk-scroll-wrapper__body">
-        <div class="auk-u-m-4">
-          <div class="auk-u-mb-8">
-            {{outlet}}
-          </div>
-        </div>
+        {{outlet}}
       </div>
     </div>
   </div>

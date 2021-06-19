@@ -14,15 +14,11 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service('file-queue') fileQueueService;
 
   @tracked translationDocument = null;
-  @tracked newPieces = [];
   @tracked name = null;
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
   // TODO KAS-2600
   // @tracked proofprint = false;
-  // TODO KAS-2481
-  // @tracked receivedAtDate = null;
-
 
   constructor() {
     super(...arguments);
@@ -58,7 +54,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       documentContainer: documentContainer,
     });
     this.name = file.filenameWithoutExtension;
-    this.newPieces.pushObject(this.translatedDocument);
   }
 
   @task
@@ -73,7 +68,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -90,12 +84,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       });
     }
   }
-
-  // TODO KAS-2481
-  // @action
-  // setReceivedAtDate(selectedDates) {
-  //   this.receivedAtDate = selectedDates[0];
-  // }
 
   // TODO In KAS-2600
   // @action

@@ -1,0 +1,9 @@
+<label class="auk-radio">
+  <input class="auk-radio__toggle" type="radio" checked={{@checked}} name={{this.name}} ...attributes>
+  <span>{{@label}}</span>
+  {{#if @sublabel}}
+    <br/>
+    <span class="auk-u-muted auk-u-text-small">{{@sublabel}}</span>
+  {{/if}}
+  <span class="auk-radio__box"></span>
+</label>

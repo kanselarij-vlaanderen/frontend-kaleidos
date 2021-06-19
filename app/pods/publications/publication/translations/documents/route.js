@@ -1,32 +1,39 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
-  @inject store;
-
   async model() {
-    this.translationSubcase = await this.modelFor('publications.publication').translationSubcase;
-    const sourceDocs = await this.translationSubcase.sourceDocuments;
-    const generatedDocs = await this.translationSubcase.translationActivities.generatedPieces;
-    const pieces = [];
-    if (sourceDocs) {
-      for (const piece of sourceDocs.toArray()) {
-        pieces.push(piece);
-      }
-    }
-    if (generatedDocs) {
-      for (const piece of generatedDocs.toArray()) {
-        pieces.push(piece);
-      }
-    }
+    this.translationSubcase = this.modelFor('publications.publication.translations');
 
-    return pieces;
+    // Workaround pagination by using include for the documents of a translation subcase
+    // As such, we're sure all documents are loaded client-side by Ember Data
+    this.store.findRecord('translation-subcase', this.translationSubcase.id, {
+      include: [
+        'source-documents',
+        'translation-activities.generated-pieces'
+      ].join(','),
+    });
+
+    const allDocuments = new Set(); // using set to ensure a collection of unique documents
+
+    const sourceDocuments = await this.translationSubcase.sourceDocuments;
+    sourceDocuments.forEach((doc) => allDocuments.add(doc));
+
+    const translationActivities = await this.translationSubcase.translationActivities;
+    await Promise.all(
+      translationActivities.map(async(activity) => {
+        const translatedDocuments = await activity.generatedPieces;
+        translatedDocuments.forEach((doc) => allDocuments.add(doc));
+      })
+    );
+
+    return [...allDocuments];
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+    controller.selectedPieces = [];
   }
 
   @action

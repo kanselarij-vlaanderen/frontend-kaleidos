@@ -1,16 +1,16 @@
-<WebComponents::AuToolbar>
-  <WebComponents::AuToolbar::Group @position="left">
-    <WebComponents::AuToolbar::Item>
+<Auk::Toolbar>
+  <Auk::Toolbar::Group @position="left">
+    <Auk::Toolbar::Item>
       <Auk::Button
       @skin="borderless"
       {{action "cancelAction"}}
       data-test-vl-modal-footer-cancel>
         {{cancelButtonText}}
       </Auk::Button>
-    </WebComponents::AuToolbar::Item>
-  </WebComponents::AuToolbar::Group>
-  <WebComponents::AuToolbar::Group @position="right">
-    <WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+  <Auk::Toolbar::Group @position="right">
+    <Auk::Toolbar::Item>
       <Auk::Button
         @skin="primary"
         {{!-- also disable button when 'isLoading', since no loading state on button is available.
@@ -18,12 +18,11 @@
           action calls when clicking multiple times on the same confirm-button --}}
         disabled={{or this.disableSave this.isLoading}}
         {{!-- loadingText=(t "please-be-patient") isLoading=isLoading --}}
-        data-test-vl-save={{true}}
         data-test-vl-modal-footer-save={{true}}
         {{action "saveAction"}}
       >
         {{saveButtonText}}
       </Auk::Button>
-    </WebComponents::AuToolbar::Item>
-  </WebComponents::AuToolbar::Group>
-</WebComponents::AuToolbar>
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+</Auk::Toolbar>

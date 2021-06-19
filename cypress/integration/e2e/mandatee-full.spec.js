@@ -3,10 +3,10 @@
 
 import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
-import form from '../../selectors/form.selectors';
-import mandatee from '../../selectors/mandatees/mandateeSelectors';
+import mandatee from '../../selectors/mandatee.selectors';
 import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Full test for creating mandatees', () => {
   /**
@@ -39,10 +39,10 @@ context('Full test for creating mandatees', () => {
     const ministerNickName = 'Eerste minister';
 
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
-    cy.get(settings.addMinister).should('exist')
+    cy.get(settings.ministers.add).should('exist')
       .should('be.visible')
       .click();
     cy.wait('@getIseCodes', {
@@ -52,14 +52,14 @@ context('Full test for creating mandatees', () => {
     cy.get(mandatee.createMandatee.titleContainer).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get(form.formInput).should('exist')
+        cy.get(utils.vlFormInput).should('exist')
           .should('be.visible')
           .type(ministerTitle);
       });
     cy.get(mandatee.createMandatee.nicknameContainer).should('exist')
       .should('be.visible')
       .within(() => {
-        cy.get(form.formInput).should('exist')
+        cy.get(utils.vlFormInput).should('exist')
           .should('be.visible')
           .type(ministerNickName);
       });
@@ -93,12 +93,12 @@ context('Full test for creating mandatees', () => {
           });
       });
 
-    cy.get(form.datepickerInput).eq(0)
+    cy.get(utils.vlDatepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
     cy.route('POST', '/mandatees').as('postMandateeData');
-    cy.get(form.formSave).should('exist')
+    cy.get(utils.vlModalFooter.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait('@postMandateeData');
@@ -125,18 +125,18 @@ context('Full test for creating mandatees', () => {
     cy.approveDesignAgenda();
 
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
-        cy.get(settings.mandateeEdit).click();
+        cy.get(settings.ministers.mandatee.edit).click();
       });
     // TODO make this agendaDate minus x days or weeks, no set date
     const enddateForMandatee = Cypress.moment('2020-03-02').set({
       hour: 10, minute: 10,
     });
 
-    cy.get(form.datepickerInput).eq(1)
+    cy.get(utils.vlDatepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 
@@ -156,18 +156,20 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.visit('/');
     cy.get(toolbar.mHeader.settings).click();
-    cy.get(settings.manageMinisters).click();
+    cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    // TODO index is risky business
-    cy.get('[data-test-mandatee-resign="0"]').click();
+    cy.contains(ministerNickName).parents('tr')
+      .within(() => {
+        cy.get(settings.ministers.mandatee.resign).click();
+      });
     cy.wait(3000);
     // TODO Fix grammar of popup ?
     cy.get(mandatee.manageMandatee.changesAlert).should('exist')
       .should('be.visible');
-    cy.get(form.formCancelButton).click();
+    cy.get(utils.vlModalFooter.cancel).click();
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
-        cy.get(settings.mandateeDelete).click();
+        cy.get(settings.ministers.mandatee.delete).click();
       });
     cy.get(modal.verify.save).click();
   });
