@@ -12,6 +12,10 @@ export default class PublicationsPublicationTranslationsRequestController extend
   @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
 
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
+  }
+
   @task
   *saveTranslationUpload(translationUpload) {
     const piece = translationUpload.piece;
@@ -46,9 +50,5 @@ export default class PublicationsPublicationTranslationsRequestController extend
   closeTranslationUploadModal() {
     this.selectedRequestActivity = null;
     this.showTranslationUploadModal = false;
-  }
-
-  get  isUploadDisabled() {
-    return this.translationSubcase.endDate !== undefined &&  this.translationSubcase.endDate !== null; // translation is already finished
   }
 }

@@ -21,6 +21,15 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     return this.model.length === this.selectedPieces.length;
   }
 
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
+  }
+
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
+  }
+
   @action
   togglePieceSelection(selectedPiece) {
     const isPieceSelected = this.selectedPieces.includes(selectedPiece);
@@ -128,14 +137,5 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @action
   closeTranslationRequestModal() {
     this.showTranslationRequestModal = false;
-  }
-
-  get  isRequestingDisabled() {
-    return this.selectedPieces.length === 0 // no files are selected
-      || this.isUploadDisabled; // translation is already finished
-  }
-
-  get  isUploadDisabled() {
-    return this.translationSubcase.endDate !== undefined &&  this.translationSubcase.endDate !== null; // translation is already finished
   }
 }
