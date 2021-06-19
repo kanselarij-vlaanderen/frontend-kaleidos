@@ -10,9 +10,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
   @tracked publicationSubcase;
-  @tracked identification;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
