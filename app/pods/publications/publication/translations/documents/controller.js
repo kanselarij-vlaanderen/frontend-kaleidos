@@ -10,15 +10,22 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
   @tracked publicationSubcase;
-  @tracked identification;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
+  }
+
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
+  }
+
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
   }
 
   @action
@@ -128,14 +135,5 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @action
   closeTranslationRequestModal() {
     this.showTranslationRequestModal = false;
-  }
-
-  get  isRequestingDisabled() {
-    return this.selectedPieces.length === 0 // no files are selected
-      || this.isUploadDisabled; // translation is already finished
-  }
-
-  get  isUploadDisabled() {
-    return this.translationSubcase.endDate !== undefined &&  this.translationSubcase.endDate !== null; // translation is already finished
   }
 }

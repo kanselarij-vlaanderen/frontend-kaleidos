@@ -1,30 +1,28 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    <Auk::Navbar @border="none">
-      <Auk::Toolbar @size="large">
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @icon="mail"
-              @skin="secondary"
-              @disabled={{this.isRequestingDisabled}}
-              {{on "click" this.openTranslationRequestModal}}
-            >
-              {{t "request-translations"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @icon="add"
-              @skin="secondary"
-              @disabled={{this.isUploadDisabled}}
-              {{on "click" this.openPieceUploadModal}}>
-              {{t "upload-translation-file"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Navbar>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @icon="mail"
+            @skin="secondary"
+            @disabled={{this.isRequestingDisabled}}
+            {{on "click" this.openTranslationRequestModal}}
+          >
+            {{t "request-translations"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @icon="add"
+            @skin="secondary"
+            @disabled={{this.isUploadDisabled}}
+            {{on "click" this.openPieceUploadModal}}>
+            {{t "upload-translation-file"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
 
     {{#if this.model}}
       <table class="auk-table">
