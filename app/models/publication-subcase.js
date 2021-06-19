@@ -1,6 +1,7 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { isPresent } from '@ember/utils';
 
 export default class PublicationSubcase extends Model {
   @attr shortTitle;
@@ -18,4 +19,8 @@ export default class PublicationSubcase extends Model {
   @hasMany('proofing-activity') proofingActivities;
   @hasMany('publication-activity') publicationActivities;
   @hasMany('piece') sourceDocuments;
+
+  get isFinished() {
+    return isPresent(this.endDate);
+  }
 }
