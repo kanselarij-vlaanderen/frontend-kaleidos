@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 
 export default class PublicationRoute extends Route {
-  async model(params) {
+  model(params) {
     return this.store.findRecord('publication-flow', params.publication_id, {
       include: [
         'case',

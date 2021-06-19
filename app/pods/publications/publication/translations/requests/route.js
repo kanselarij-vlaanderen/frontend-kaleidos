@@ -3,7 +3,6 @@ import Route from '@ember/routing/route';
 export default class PublicationsPublicationTranslationsRequestRoute extends Route {
   model() {
     this.translationSubcase = this.modelFor('publications.publication.translations');
-    this.publicationSubcase = this.modelFor('publications.publication').publicationSubcase;
 
     return this.store.query('request-activity',
       {
@@ -12,6 +11,11 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
         sort: '-start-date',
       }
     );
+  }
+
+  async afterModel() {
+    const publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {

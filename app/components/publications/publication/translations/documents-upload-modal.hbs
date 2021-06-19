@@ -22,7 +22,7 @@
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
-                    {{t 'name'}}
+                    {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
                     type="text"
@@ -37,13 +37,13 @@
                   </Auk::Pill>
                 </div>
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label>{{t 'translation-burden'}}</Auk::Label>
+                  <Auk::Label>{{t "translation-burden"}}</Auk::Label>
                   <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
                     <div class="auk-o-grid">
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
                           <Auk::Label for="translationLoadPages" class="auk-label--light">
-                            {{t 'pages-amount'}}
+                            {{t "pages-amount"}}
                           </Auk::Label>
                           <Auk::Input
                             type="number"
@@ -55,7 +55,7 @@
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
                           <Auk::Label for="translationLoadWords" class="auk-label--light">
-                            {{t 'words-amount'}}
+                            {{t "words-amount"}}
                           </Auk::Label>
                           <Auk::Input
                             type="number"
@@ -69,10 +69,10 @@
                 </div>
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="proofPrint">
-                    {{t 'for-publish-preview'}}
+                    {{t "for-proof-print"}}
                   </Auk::Label>
                   <Auk::CheckboxList>
-                    <Auk::Checkbox @name="proofPrint" @checked={{this.proofprint}}
+                    <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
                       {{on "input" this.toggleProofprint}} />
                   </Auk::CheckboxList>
                 </div>

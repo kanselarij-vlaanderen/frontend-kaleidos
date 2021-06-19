@@ -1,10 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
     this.translationSubcase = this.modelFor('publications.publication.translations');
-    this.publicationSubcase = this.modelFor('publications.publication').publicationSubcase;
 
     // Workaround pagination by using include for the documents of a translation subcase
     // As such, we're sure all documents are loaded client-side by Ember Data
@@ -28,14 +28,21 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
       })
     );
 
-    return [...allDocuments];
+    const sortedDocuments = A([...allDocuments]).sortBy('created');
+    sortedDocuments.reverse();
+    return sortedDocuments;
+  }
+
+  async afterModel() {
+    const publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
-    controller.selectedPieces = [];
     controller.publicationSubcase = this.publicationSubcase;
+    controller.selectedPieces = [];
   }
 
   @action
