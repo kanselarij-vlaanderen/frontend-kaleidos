@@ -54,7 +54,7 @@
                       <div class="auk-u-mx-2">
                         <span class="auk-u-text-bold">{{piece.name}}</span>
                         <div class="auk-u-muted auk-u-text-small">
-                          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}, {{t "received-at-date" date=(moment-format piece.receivedDate "DD-MM-YYYY")}}
+                          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
                         </div>
                       </div>
                       <Auk::Button
@@ -82,7 +82,7 @@
                         <div class="auk-u-mx-2">
                           <span class="auk-u-text-bold">{{piece.name}}</span>
                           <div class="auk-u-muted auk-u-text-small">
-                            {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                            {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}, {{t "received-at-date" date=(moment-format piece.receivedDate "DD-MM-YYYY")}}
                           </div>
                         </div>
                         <Auk::Button
