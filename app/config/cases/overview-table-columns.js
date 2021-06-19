@@ -4,6 +4,7 @@ export default [
     translationKey: 'case-name-concat',
     showByDefault: true,
   },
+  // Add later
   // {
   //   keyName: 'latestOnAgenda',
   //   translationKey: 'latest-on-agenda',

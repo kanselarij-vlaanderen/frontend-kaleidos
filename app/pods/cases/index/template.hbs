@@ -34,11 +34,12 @@
                     {{case.shortTitle}}
                   </td>
                 {{/if}}
-                {{#if this.tableColumnDisplayOptions.latestOnAgenda}}
+                {{!-- Add later --}}
+                {{!-- {{#if this.tableColumnDisplayOptions.latestOnAgenda}}
                   <td>
                     {{moment-format case.created "DD-MM-YYYY HH:mm"}}
                   </td>
-                {{/if}}
+                {{/if}} --}}
                 {{#if this.tableColumnDisplayOptions.createdOn}}
                   <td>
                     {{moment-format case.created "DD-MM-YYYY HH:mm"}}
@@ -61,32 +62,30 @@
                           @showOn="click"
                           @animation="shift"
                           @placement="bottom-end"
-                          as |attacher|
                         >
-                          <ul class="auk-menu auk-menu--visible">
+                          <ul 
+                            class="auk-menu auk-menu--visible"
+                          >
                             <li>
-                              <a href="" class="auk-menu__item"
-                                {{action attacher.hide}}
-                                {{action "editCase" case}}
+                              <div class="auk-menu__item"
+                                {{on "click" (fn this.editCase case)}}
                               >
                                 {{t "edit-2"}}
-                              </a>
+                              </div>
                             </li>
                             <li>
                               {{#if (not case.isArchived)}}
-                                <a href="" class="auk-menu__item auk-menu__item--danger"
-                                  {{action attacher.hide}}
-                                  {{action "requestArchiveCase" case}}
+                                <div class="auk-menu__item auk-menu__item--danger"
+                                  {{on "click" (fn this.requestArchiveCase case)}}
                                 >
                                   {{t "delete"}}
-                                </a>
+                                </div>
                               {{else}}
-                                <a href="" class="auk-menu__item auk-menu__item--danger"
-                                  {{action attacher.hide}}
-                                  {{action "unarchiveCase" case}}
+                                <div class="auk-menu__item auk-menu__item"
+                                  {{on "click" (fn this.unarchiveCase case)}}
                                 >
                                   {{t "unarchive"}}
-                                </a>
+                                </div>
                               {{/if}}
                             </li>
                           </ul>
@@ -106,6 +105,12 @@
             {{/each}}
           </tbody>
         </table>
+      {{else}}
+        <Auk::Panel>
+          <Auk::Panel::Body>
+            <Auk::EmptyState @message={{t "no-results-found"}} />
+          </Auk::Panel::Body>
+        </Auk::Panel>
       {{/if}}
     </div>
   </div>
