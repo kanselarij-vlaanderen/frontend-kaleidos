@@ -1,7 +1,7 @@
 export default [
   {
     keyName: 'caseName',
-    translationKey: 'case-name-2',
+    translationKey: 'case-name-concat',
     showByDefault: true,
   },
   // {
