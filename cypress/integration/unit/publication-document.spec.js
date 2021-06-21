@@ -1,7 +1,7 @@
 /* global context, xit, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-// import publicationSelectors from '../../selectors/publication.selectors';
+// import publication from '../../selectors/publication.selectors';
 
 context('Publications documents tests', () => {
   beforeEach(() => {

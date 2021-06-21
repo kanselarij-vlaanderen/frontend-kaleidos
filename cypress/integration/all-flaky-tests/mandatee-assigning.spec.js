@@ -5,7 +5,6 @@ import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
-import modal from '../../selectors/modal.selectors';
 import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 
@@ -413,7 +412,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(2)
       .click();
@@ -421,7 +420,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(3)
       .click();
@@ -429,7 +428,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
 
     cy.get(agenda.agendaHeader.showActionOptions).click();

@@ -1,14 +1,15 @@
 import Model, {
   attr, belongsTo, hasMany
 } from '@ember-data/model';
+import { isPresent } from '@ember/utils';
 
 export default class TranslationSubcase extends Model {
   @attr shortTitle;
   @attr title;
   @attr('datetime') dueDate; // uiterste/gevraagde vertaaldatum
   @attr('datetime') targetEndDate; // not used ?
-  @attr('datetime') startDate; // not used yet
-  @attr('datetime') endDate; // not used yet
+  @attr('datetime') startDate;
+  @attr('datetime') endDate;
   @attr('datetime') created;
   @attr('datetime') modified;
 
@@ -18,4 +19,8 @@ export default class TranslationSubcase extends Model {
   @hasMany('piece') sourceDocuments;
   @hasMany('translation-activity') translationActivities;
   @hasMany('cancellation-activity') cancellationActivities;
+
+  get isFinished() {
+    return isPresent(this.endDate);
+  }
 }

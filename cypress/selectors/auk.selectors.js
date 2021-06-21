@@ -32,6 +32,22 @@ const selectors = {
     error: '.auk-label-error',
   },
 
+  modal: {
+    container: '.auk-modal',
+    body: '.auk-modal__body',
+    header: {
+      title: '.auk-modal__header .auk-toolbar__title',
+      // TODO unused selectors
+      close: '.auk-modal__header .auk-button .auk-icon .ki-close',
+      minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
+      expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
+    },
+    footer: {
+      cancel: '.auk-modal__footer .auk-toolbar-complex__left .auk-button-link',
+      // there is no default footer-save available (yet), use a custom selector for your use case
+    },
+  },
+
   // TODO unused selectors
   emptyState: {
     container: '.auk-empty-state',

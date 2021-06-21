@@ -1,7 +1,6 @@
 /* global context, before, it, cy,beforeEach, afterEach, Cypress, xit */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
-import toolbar from '../../selectors/toolbar.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -166,9 +165,9 @@ context('Search tests', () => {
       cy.get('[data-table]').contains('korte titel for batterij');
     });
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.search).click();
+    cy.get(utils.mHeader.search).click();
     // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
@@ -182,9 +181,9 @@ context('Search tests', () => {
     cy.server();
     cy.get(route.search.trigger).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.search).click();
+    cy.get(utils.mHeader.search).click();
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
     // cy.get(route.search.input).should('have.value', '');
