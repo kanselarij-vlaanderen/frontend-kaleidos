@@ -15,7 +15,8 @@
         <Auk::Toolbar::Item>
           <Auk::Button 
             @skin="primary"
-            {{on "click" this.saveChanges}}
+            @loading={{this.editCaseTask.isRunning}}
+            {{on "click" (perform this.editCaseTask)}}
           >
             {{t "save"}}
           </Auk::Button>
