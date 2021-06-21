@@ -43,7 +43,7 @@
               </span>
             </div>
             <Input
-              data-test-searchfield=""
+              data-test-route-search-input=""
               class="auk-input auk-input--block"
               type="text"
               id="dossierId"
@@ -62,7 +62,7 @@
             />
             {{#if this.dateFromBuffer}}
               <button
-                data-test-searchbutton
+                data-test-route-search-datepicker-button
                 type="button"
                 class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
                 {{on "click" (fn (mut this.dateFromBuffer) null)}}
@@ -116,7 +116,7 @@
           <Auk::Button
             @skin="primary"
             @icon="search"
-            data-test-trigger-search
+            data-test-route-search-trigger
             type="button"
             {{on "click" this.search}}
           >

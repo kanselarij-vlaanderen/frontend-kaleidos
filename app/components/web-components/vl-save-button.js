@@ -6,9 +6,8 @@ export default Component.extend({
   intl: inject(),
   tagName: 'button',
   type: 'button',
-  attributeBindings: ['isLoading:disabled', 'testTag:data-test-save-button'],
+  attributeBindings: ['isLoading:disabled'],
   classNameBindings: ['isLoading::auk-button', 'isLoading::auk-button--primary', 'isLoading:auk-button-loading'],
-  testTag: true, // Hack to show a value-less attribute for testing
 
   focus: computed('isLoading', function() {
     return !this.isLoading;

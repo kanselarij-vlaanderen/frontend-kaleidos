@@ -1,7 +1,7 @@
 {{#if (not await dateObjectsToEnable)}}
   <div class="auk-input-with-icon">
     <EmberFlatpickr
-      data-test-vl-datepicker-input
+      data-test-vl-datepicker
       class="auk-input auk-input--block"
       @locale="nl"
       @date={{readonly this.selectedDate}} {{!-- Required Option --}}
@@ -25,7 +25,7 @@
 {{else}}
   <div class="auk-input-with-icon">
     <EmberFlatpickr
-      data-test-vl-datepicker-input
+      data-test-vl-datepicker
       class="auk-input auk-input--block"
       @locale="nl"
       @date={{readonly this.selectedDate}} {{!-- Required Option --}}
