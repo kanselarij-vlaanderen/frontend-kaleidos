@@ -38,7 +38,6 @@ export default class CasesIndexController extends Controller {
   @tracked showTableDisplayOptions = false;
   @tracked selectedCase = null;
   @tracked isEditingRow = false;
-  @tracked isNotArchived = false;
   @tracked isArchivingCase = false;
   @tracked tableColumnDisplayOptions = {};
   tableColumns = tableColumns;
@@ -67,11 +66,10 @@ export default class CasesIndexController extends Controller {
     const _case = await this.store.findRecord('case', this.get('selectedCase.id'));
     _case.isArchived = true;
     const subcases = await _case.subcases;
-    await Promise.all(subcases.map(async(subcase) => {
+    subcases.forEach((subcase) => {
       subcase.isArchived = true;
-      const savedSubcase = await subcase.save();
-      return savedSubcase;
-    }));
+      subcase.save();
+    });
     await _case.save();
     this.selectedCase = null;
     this.isArchivingCase = false;
@@ -82,11 +80,10 @@ export default class CasesIndexController extends Controller {
   async unarchiveCase(_case) {
     _case.isArchived = false;
     const subcases = await _case.subcases;
-    await Promise.all(subcases.map(async(subcase) => {
+    subcases.forEach((subcase) => {
       subcase.isArchived = false;
-      const savedSubcase = await subcase.save();
-      return savedSubcase;
-    }));
+      subcase.save();
+    });
     await _case.save();
   }
 

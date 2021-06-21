@@ -31,7 +31,8 @@
               <tr>
                 {{#if this.tableColumnDisplayOptions.caseName}}
                   <td>
-                    {{case.shortTitle}}
+                    {{!-- Fallback to case.title is required for legay data in production --}}
+                    {{if case.shortTitle case.shortTitle case.title}}
                   </td>
                 {{/if}}
                 {{!-- Add later --}}
@@ -74,17 +75,17 @@
                               </div>
                             </li>
                             <li>
-                              {{#if (not case.isArchived)}}
-                                <div class="auk-menu__item auk-menu__item--danger"
-                                  {{on "click" (fn this.requestArchiveCase case)}}
-                                >
-                                  {{t "delete"}}
-                                </div>
-                              {{else}}
+                              {{#if case.isArchived}}
                                 <div class="auk-menu__item auk-menu__item"
                                   {{on "click" (fn this.unarchiveCase case)}}
                                 >
                                   {{t "unarchive"}}
+                                </div>
+                              {{else}}
+                                <div class="auk-menu__item auk-menu__item--danger"
+                                  {{on "click" (fn this.requestArchiveCase case)}}
+                                >
+                                  {{t "delete"}}
                                 </div>
                               {{/if}}
                             </li>
