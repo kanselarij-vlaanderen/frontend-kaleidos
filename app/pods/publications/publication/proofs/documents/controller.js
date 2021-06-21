@@ -9,7 +9,12 @@ import { tracked } from '@glimmer/tracking';
  * }} Sorting
  */
 
-// prevent calls to proofingActivityAsGenerated and publicationActivityAsGenerated
+const PIECE_TYPES = {
+  'source-documents': 0,
+  'proofing-activities.generated-pieces': 1,
+  'publication-activities.generated-pieces': 2,
+};
+
 class Row {
   @tracked isSelected = false;
   @tracked piece;
@@ -45,14 +50,14 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }];
 
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  /** @type {string} key name prepended with minus if descending */
+  /** @type {string} key name, prepended with minus if descending */
   qpSortingString = '';
-  /** @type {string} key name prepended with minus if descending */
+  /** @type {string} key name. prepended with minus if descending */
   @tracked sortingString = undefined;
   @tracked isRequestModalOpen = false;
 
   initRows(publicationSubcase) {
-    const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, 'source'));
+    const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, 'source-documents'));
     const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'proofing-activities.generated-pieces')));
     const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'publication-activities.generated-pieces')));
 
@@ -63,17 +68,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.sort(sorting);
   }
 
-  get areAllSelected() {
-    return this.rows.every((row) => row.isSelected);
-  }
-
-
   get canOpenRequestModal() {
     return this.rows.any((row) => row.isSelected);
-  }
-
-  get selection() {
-    return this.rows.filter((row) => row.isSelected).map((row) => row.piece);
   }
 
   @action
@@ -81,6 +77,14 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     if (mode === 'new') {
       this.isRequestModalOpen = true;
     }
+  }
+
+  get areAllSelected() {
+    return this.rows.every((row) => row.isSelected);
+  }
+
+  get selection() {
+    return this.rows.filter((row) => row.isSelected).map((row) => row.piece);
   }
 
   @action
@@ -110,13 +114,19 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       const compareFn = Sorting.createCompareFn(sorting, COLUMN_MAP);
       this.rows.sort(compareFn);
     } else {
-      // TODO: default sorting
+      this.rows.sort((row1, row2) => {
+        let comparison = PIECE_TYPES[row1.type] - PIECE_TYPES[row2.type];
+        if (!comparison) {
+          comparison = row1.piece.created - row2.piece.created;
+        }
+        return comparison;
+      });
     }
   }
 
   @action
   openPieceUploadModal() {
-
+    // TODO
   }
 }
 
@@ -150,9 +160,9 @@ const Sorting = {
     return '';
   },
   createCompareFn(sorting, propertyMap) {
-    const property = propertyMap[sorting.key].property;
+    const getProperty = propertyMap[sorting.key].property;
     return (element1, element2) => {
-      let comparison = property(element1) - property(element2);
+      let comparison = getProperty(element1) - getProperty(element2);
       comparison = sorting.isDescending ? -comparison : comparison;
       return comparison;
     };

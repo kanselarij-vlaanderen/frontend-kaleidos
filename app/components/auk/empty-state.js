@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 /**
  *
  * @argument {String} message
- * @argument {String}
+ * @argument {boolean} bordered
  */
 export default class EmptyState extends Component {
   get bordered() {
