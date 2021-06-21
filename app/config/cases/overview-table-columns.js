@@ -2,6 +2,7 @@ export default [
   {
     keyName: 'caseName',
     translationKey: 'case-name-concat',
+    sortKey: 'short-title',
     showByDefault: true,
   },
   // Add later
