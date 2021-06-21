@@ -57,6 +57,7 @@ const selectors = {
     subitem: '[data-test-agenda-overview-item-sub-item]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
+    status: '[data-test-agenda-overview-item-status]',
   },
 
   // agenda-overview

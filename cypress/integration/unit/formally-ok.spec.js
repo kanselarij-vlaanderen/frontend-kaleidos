@@ -17,8 +17,8 @@ context('Formally ok/nok tests', () => {
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {
     cy.visit('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     // TODO this first part of the test could belong in meeting-actions.spec
-    cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
-    cy.get('.vlc-agenda-items__status').should('contain', 'Formeel OK');
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
+    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
@@ -27,13 +27,11 @@ context('Formally ok/nok tests', () => {
     cy.get(auk.modal.footer.cancel).contains('Annuleren')
       .click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
-    cy.get('.auk-sidebar__item').as('agendas');
+    cy.changeSelectedAgenda('Agenda A');
     // Testing on approved agenda the formally ok status should not show
-    cy.get('@agendas').eq(1)
-      .click();
     cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)
-    cy.get('.vlc-agenda-items__sub-item').should('have.length', 1);
-    cy.get('.vlc-agenda-items__status').should('not.contain', 'Formeel OK');
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
+    cy.get(agenda.agendaOverviewItem.status).should('not.contain', 'Formeel OK');
     // TODO this test does more than needed to assert what it should. open any agenda and check for the absence of "formeel ok"
     // "formeel niet ok" and "formeel nog niet ok" status are not allowed on approved agendas
   });
