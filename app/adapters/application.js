@@ -1,32 +1,32 @@
-import DS from 'ember-data';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
 
-export default DS.JSONAPIAdapter.extend({
-  defaultSerializer: 'JSONAPISerializer',
-
-  ajax() {
-    const args = [].slice.call(arguments);
-    if (args[1] === 'DELETE') {
-      // eslint-disable-next-line prefer-spread
-      return this._super.apply(this, args);
+export default class ApplicationAdapter extends JSONAPIAdapter {
+  // eslint-disable-next-line no-unused-vars
+  ajax(url, method) {
+    if (['POST', 'DELETE'].includes(method)) { // methods that cause unwanted effects when executing a request multiple times
+      return super.ajax(...arguments);
     }
-    const originalData = args[2] && args[2].data;
 
-    const original = this._super;
-    let retries = 0;
-    const retry = (error) => {
-      if (retries < 3) {
-        retries += 1;
-        const originalResult = original.apply(this, args);
-        return originalResult.catch((catchError) => {
-          if (originalData) {
-            args[2].data = typeof originalData === 'string' ? JSON.parse(originalData) : originalData;
-          }
-          return retry(catchError);
-        });
-      }
-      return Promise.reject(error);
-    };
-    return retry();
+    return retryOnError(super.ajax.bind(this), arguments);
   }
-  ,
-});
+}
+
+// from https://github.com/lblod/frontend-gelinkt-notuleren/blob/5d3c17e9c084e13ea8354c81bf378a27043d7e59/app/adapters/application.js
+async function retryOnError(ajax, ajaxArgs, retryCount = 0) {
+  const MAX_RETRIES = 5;
+
+  try {
+    return await ajax(...ajaxArgs);
+  } catch (error) {
+    if (retryCount < MAX_RETRIES) {
+      await sleep(250 * (retryCount + 1));
+      return retryOnError(ajax, ajaxArgs, retryCount + 1);
+    }
+    throw new Error(error);
+  }
+}
+
+function sleep(time) {
+  return new Promise((resolve) => setTimeout(() => resolve(true), time));
+}
+
