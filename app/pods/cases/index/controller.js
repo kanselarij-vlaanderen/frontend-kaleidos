@@ -83,6 +83,14 @@ export default class CasesIndexController extends Controller {
   }
 
   @action
+  onClickTableRow(_case, event) {
+    // Prevent transition if elements in table row were clicked
+    if (event.target.tagName.toLowerCase() === 'td') {
+      this.navigateToCase(_case);
+    }
+  }
+
+  @action
   navigateToCase(_case) {
     this.transitionToRoute('cases.case.subcases', _case.id);
   }

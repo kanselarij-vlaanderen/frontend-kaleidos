@@ -32,7 +32,7 @@
           </thead>
           <tbody>
             {{#each this.model as |case|}}
-              <tr>
+              <tr class="auk-table--interaction-cursor" {{on "click" (fn this.onClickTableRow case)}}>
                 {{#if this.tableColumnDisplayOptions.caseName}}
                   <td>
                     {{!-- Fallback to case.title is required for legay data in production --}}
