@@ -12,7 +12,10 @@ export default class NewCase extends Component {
 
   @task
   *createNewCaseTask() {
-    const { shortTitle, confidential } = this;
+    const {
+      shortTitle,
+      confidential,
+    } = this;
     if (shortTitle === null || shortTitle.trim().length === 0) {
       this.hasError = true;
     } else {
