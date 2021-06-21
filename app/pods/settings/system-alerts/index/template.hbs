@@ -36,7 +36,7 @@
       <div class="auk-toolbar-complex__right">
         <div class="auk-toolbar-complex__item">
           <LinkTo
-            data-test-add-system-alert
+            data-test-route-settings-system-alerts-index-add
             @tagName="button"
             @type="button"
             class="auk-button auk-button--tertiary"
@@ -54,7 +54,7 @@
           </LinkTo>
           {{#if this.selectedAlert}}
             <LinkTo
-              data-test-edit-system-alert
+              data-test-route-settings-system-alerts-index-edit
               @tagName="button"
               @type="button"
               class="auk-button auk-button--tertiary"
@@ -72,7 +72,7 @@
               </span>
             </LinkTo>
             <button
-              data-test-remove-system-alert
+              data-test-route-settings-system-alerts-index-remove
               type="button"
               class="auk-button auk-button--tertiary"
               {{on "click" (perform remove this.selectedAlert)}}

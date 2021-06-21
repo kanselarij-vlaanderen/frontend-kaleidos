@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
 // / <reference types="Cypress" />
 
-import toolbar from '../../selectors/toolbar.selectors';
 import settings from '../../selectors/settings.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
-import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -38,7 +36,7 @@ context('Full test for creating mandatees', () => {
     const ministerTitle = 'Eerste minister van onderhoud';
     const ministerNickName = 'Eerste minister';
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
@@ -124,7 +122,7 @@ context('Full test for creating mandatees', () => {
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
@@ -145,17 +143,17 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.wait(3000);
     // TODO Fix grammar einddatum
-    cy.get(modal.verify.save).should('exist')
+    cy.get(utils.vlModalVerify.save).should('exist')
       .should('be.visible')
       .contains('Eindatum aanpassen');
-    cy.get(modal.verify.cancel).should('exist')
+    cy.get(utils.vlModalVerify.cancel).should('exist')
       .should('be.visible')
       .click();
     cy.get(mandatee.editMandatee.cancel).should('exist')
       .should('be.visible')
       .click();
     cy.visit('/');
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.contains(ministerNickName).parents('tr')
@@ -171,6 +169,6 @@ context('Full test for creating mandatees', () => {
       .within(() => {
         cy.get(settings.ministers.mandatee.delete).click();
       });
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
   });
 });

@@ -2,7 +2,6 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -58,7 +57,7 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
-    cy.get(modal.baseModal.dialogWindow).contains('test')
+    cy.get(utils.vlModal.dialogWindow).contains('test')
       .should('not.exist');
 
     cy.get('@fileUploadDialog').within(() => {
@@ -116,7 +115,7 @@ context('Add files to an agenda', () => {
       });
 
     // verify modal
-    cy.get(modal.modal).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -141,7 +140,7 @@ context('Add files to an agenda', () => {
       cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
-    cy.get(modal.modal).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -184,13 +183,13 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.postpone).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter');
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')

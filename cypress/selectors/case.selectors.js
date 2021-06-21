@@ -1,6 +1,4 @@
 const selectors = {
-  // TODO rename imports of this file from 'cases' to 'case'
-
   // cases-header
   casesHeader: {
     title: '[data-test-cases-header-title]',
