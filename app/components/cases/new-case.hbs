@@ -23,9 +23,10 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <Auk::Button 
+        <Auk::Button
           @skin="primary"
-          {{on "click" this.createCaseAction}}
+          @loading={{this.createNewCaseTask.isRunning}}
+          {{on "click" (perform this.createNewCaseTask)}}
         >
           {{t "create-case"}}
         </Auk::Button>
