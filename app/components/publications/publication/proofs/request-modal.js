@@ -1,3 +1,4 @@
+// !! NOT READY FOR REVIEW (KAS-2475)
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject } from '@ember/service';
