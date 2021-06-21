@@ -53,7 +53,7 @@ export default Model.extend({
   }),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
-  publicationSubcaseAsSource: belongsTo('publication-subcase'),
+  publicationSubcase: belongsTo('publication-subcase'),
   proofingActivityAsGenerated: belongsTo('proofing-activity'),
   publicationActivityAsGenerated: belongsTo('publication-activity'),
 

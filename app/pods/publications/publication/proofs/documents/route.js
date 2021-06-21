@@ -7,7 +7,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     // six pieces must be already uploaded
     await Promise.all([
       ...pubSubcase.sourceDocuments.map(async(piece) => {
-        piece.publicationSubcaseAsSource = undefined;
+        piece.publicationSubcase = undefined;
         await piece.save();
       }),
       ...pubSubcase.proofingActivities.map((activity) => activity.destroy()),
