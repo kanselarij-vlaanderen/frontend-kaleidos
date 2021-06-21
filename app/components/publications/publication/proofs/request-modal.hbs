@@ -5,14 +5,42 @@
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
 
-    <Auk::CheckboxList>
-      {{#each @attachmentRows as |attachmentRow|}}
-        <Auk::Checkbox
-          @checked={{includes this.attachmentsSelection attachmentRow}}
-          {{on 'input' (fn this.toggleSelection attachmentRow)}} />
-      {{/each}}
-    </Auk::CheckboxList>
+    <div class="auk-form-group">
+      <Auk::Label for="proofRequestSubject">
+        {{t 'subject'}}
+      </Auk::Label>
+      <Auk::Input type="text" id="proofRequestSubject"
+        @value={{mut this.subject}}
+        class="auk-input auk-input--block" />
+    </div>
+
+    <div class="auk-form-group">
+      <Auk::Label for="proofRequestMessage" @isRequired={{true}}>
+        {{t 'translation-mail-header'}}
+      </Auk::Label>
+      <Auk::Textarea id="proofRequestMessage" @rows="6" @value={{mut this.message}} />
+    </div>
+
+    <div class="auk-form-group">
+      <Auk::Label>{{t 'attachments'}}</Auk::Label>
+      <Auk::CheckboxList>
+        {{#each @attachments as |piece|}}
+          <Auk::Checkbox
+            @label={{piece.name}}
+            @checked={{includes this.attachmentSelection piece}}
+            {{on 'input' (fn this.toggleSelection piece)}} />
+        {{/each}}
+      </Auk::CheckboxList>
+    </div>
 
   </Auk::Modal::Body>
-  <Auk::Modal::Footer></Auk::Modal::Footer>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @disabled={{not this.canSave}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
 </Auk::Modal>
