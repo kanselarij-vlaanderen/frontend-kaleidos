@@ -10,12 +10,12 @@ export default class CaseController extends Controller {
   @service publicationService;
 
   @tracked publicationFlow;
-  @tracked contactPersons;
   @tracked isViaCouncilOfMinisters;
-  @tracked organizations;
 
   @tracked showLoader = false;
+  @tracked contactPersons;
   @tracked personModalOpen = false;
+  @tracked organizations;
   @tracked showAddOrganisationModal = false;
   @tracked inputOrganization = '';
 
