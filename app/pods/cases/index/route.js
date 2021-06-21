@@ -39,6 +39,15 @@ export default class CasesIndexRoute extends Route {
   }
 
   @action
+  loading(transition) {
+    const controller = this.controllerFor('cases.index');
+    controller.isLoadingModel = true;
+    transition.promise.finally(() => {
+      controller.isLoadingModel = false;
+    });
+  }
+
+  @action
   refreshModel() {
     this.refresh();
   }

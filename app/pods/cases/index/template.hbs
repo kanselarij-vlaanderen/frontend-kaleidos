@@ -31,83 +31,89 @@
             </tr>
           </thead>
           <tbody>
-            {{#each this.model as |case|}}
-              <tr class="auk-table--interaction-cursor" {{on "click" (fn this.onClickTableRow case)}}>
-                {{#if this.tableColumnDisplayOptions.caseName}}
-                  <td>
-                    {{!-- Fallback to case.title is required for legay data in production --}}
-                    {{if case.shortTitle case.shortTitle case.title}}
-                  </td>
-                {{/if}}
-                {{!-- Add later --}}
-                {{!-- {{#if this.tableColumnDisplayOptions.latestOnAgenda}}
-                  <td>
-                    {{moment-format case.created "DD-MM-YYYY HH:mm"}}
-                  </td>
-                {{/if}} --}}
-                {{#if this.tableColumnDisplayOptions.createdOn}}
-                  <td>
-                    {{moment-format case.created "DD-MM-YYYY HH:mm"}}
-                  </td>
-                {{/if}}
-                <td>
-                  <div class="auk-button-toolbar">
-                    {{#if this.currentSession.isEditor}}
-                      <button type="button"
-                        class="auk-button auk-button--borderless auk-button--icon">
-                        <span class="auk-button__content">
-                          <div class="auk-icon auk-icon--default auk-icon--more">
-                            <i class="ki ki-more"></i>
-                          </div>  
-                        </span>
-                        <AttachPopover
-                          @renderInPlace={{true}}
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="bottom-end"
-                        >
-                          <ul 
-                            class="auk-menu auk-menu--visible"
-                          >
-                            <li>
-                              <div class="auk-menu__item"
-                                {{on "click" (fn this.editCase case)}}
-                              >
-                                {{t "edit-2"}}
-                              </div>
-                            </li>
-                            <li>
-                              {{#if case.isArchived}}
-                                <div class="auk-menu__item auk-menu__item"
-                                  {{on "click" (perform this.unarchiveCaseTask case)}}
-                                >
-                                  {{t "unarchive"}}
-                                </div>
-                              {{else}}
-                                <div class="auk-menu__item auk-menu__item--danger"
-                                  {{on "click" (fn this.requestArchiveCase case)}}
-                                >
-                                  {{t "delete"}}
-                                </div>
-                              {{/if}}
-                            </li>
-                          </ul>
-                        </AttachPopover>
-                      </button>
-                    {{/if}}
-                    <LinkTo @route="cases.case.subcases" @model={{case.id}} class="auk-button auk-button--borderless auk-button--icon">
-                      <span class="auk-button__content">
-                        <div class="auk-icon auk-icon--default">
-                          <i class="ki ki-nav-right"></i>
-                        </div>
-                      </span>
-                    </LinkTo>
-                  </div>
-                </td>
+            {{#if this.isLoadingModel}}
+              <tr>
+                <td colspan={{add this.tableColumns.length 1}}>{{t "loading"}}</td>
               </tr>
-            {{/each}}
+            {{else}}
+              {{#each this.model as |case|}}
+                <tr class="auk-table--interaction-cursor" {{on "click" (fn this.onClickTableRow case)}}>
+                  {{#if this.tableColumnDisplayOptions.caseName}}
+                    <td>
+                      {{!-- Fallback to case.title is required for legay data in production --}}
+                      {{if case.shortTitle case.shortTitle case.title}}
+                    </td>
+                  {{/if}}
+                  {{!-- Add later --}}
+                  {{!-- {{#if this.tableColumnDisplayOptions.latestOnAgenda}}
+                    <td>
+                      {{moment-format case.created "DD-MM-YYYY HH:mm"}}
+                    </td>
+                  {{/if}} --}}
+                  {{#if this.tableColumnDisplayOptions.createdOn}}
+                    <td>
+                      {{moment-format case.created "DD-MM-YYYY HH:mm"}}
+                    </td>
+                  {{/if}}
+                  <td>
+                    <div class="auk-button-toolbar">
+                      {{#if this.currentSession.isEditor}}
+                        <button type="button"
+                          class="auk-button auk-button--borderless auk-button--icon">
+                          <span class="auk-button__content">
+                            <div class="auk-icon auk-icon--default auk-icon--more">
+                              <i class="ki ki-more"></i>
+                            </div>  
+                          </span>
+                          <AttachPopover
+                            @renderInPlace={{true}}
+                            @class="ember-attacher-popper"
+                            @hideOn="clickout click"
+                            @showOn="click"
+                            @animation="shift"
+                            @placement="bottom-end"
+                          >
+                            <ul 
+                              class="auk-menu auk-menu--visible"
+                            >
+                              <li>
+                                <div class="auk-menu__item"
+                                  {{on "click" (fn this.editCase case)}}
+                                >
+                                  {{t "edit-2"}}
+                                </div>
+                              </li>
+                              <li>
+                                {{#if case.isArchived}}
+                                  <div class="auk-menu__item auk-menu__item"
+                                    {{on "click" (perform this.unarchiveCaseTask case)}}
+                                  >
+                                    {{t "unarchive"}}
+                                  </div>
+                                {{else}}
+                                  <div class="auk-menu__item auk-menu__item--danger"
+                                    {{on "click" (fn this.requestArchiveCase case)}}
+                                  >
+                                    {{t "delete"}}
+                                  </div>
+                                {{/if}}
+                              </li>
+                            </ul>
+                          </AttachPopover>
+                        </button>
+                      {{/if}}
+                      <LinkTo @route="cases.case.subcases" @model={{case.id}} class="auk-button auk-button--borderless auk-button--icon">
+                        <span class="auk-button__content">
+                          <div class="auk-icon auk-icon--default">
+                            <i class="ki ki-nav-right"></i>
+                          </div>
+                        </span>
+                      </LinkTo>
+                    </div>
+                  </td>
+                </tr>
+              {{/each}}
+            {{/if}}
           </tbody>
         </table>
       {{else}}
