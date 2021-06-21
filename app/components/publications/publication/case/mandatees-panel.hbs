@@ -40,11 +40,13 @@
                   </div>
                 </td>
                 <td class="auk-u-text-align--right">
-                  <Auk::Button 
+                  <Auk::Button
                     data-test-unlink-mandatee
-                    @skin="borderless"
+                    @layout="icon-only"
+                    @skin="danger-borderless"
                     @icon="delete"
-                    {{on "click" (fn this.unlink mandatee)}}>
+                    {{on "click" (fn this.unlink mandatee)}}
+                  >
                   </Auk::Button>
                 </td>
               </tr>
