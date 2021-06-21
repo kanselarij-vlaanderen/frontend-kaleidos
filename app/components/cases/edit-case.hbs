@@ -1,10 +1,12 @@
 {{#if @caseToEdit}}
   <Auk::Modal::Body>
-    <div class="auk-u-mb-4">
+    <div class="auk-u-mb-4"
+      {{did-insert this.onChange}}
+    >
       <div class="auk-form-group">
         <Auk::Label>{{t "name-subcase"}}</Auk::Label>
         <Auk::Textarea 
-          @value={{@caseToEdit.shortTitle}}
+          @value={{this.shortTitle}}
         />
       </div>
     </div>
