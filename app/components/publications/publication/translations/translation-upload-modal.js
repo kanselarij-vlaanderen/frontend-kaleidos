@@ -5,19 +5,14 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
 
-export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
-  /**
-   * @argument onSave: should take arguments (pieces)
-   * @argument onCancel
-   */
+export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
   @service store;
   @service('file-queue') fileQueueService;
 
   @tracked translationDocument = null;
   @tracked name = null;
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
   @tracked isSourceForProofPrint = false;
+  @tracked receivedAtDate = new Date();
 
   constructor() {
     super(...arguments);
@@ -35,7 +30,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   get saveIsDisabled() {
-    return this.translationDocument === null || this.name === null;
+    return this.translationDocument === null || this.receivedAtDate === null;
   }
 
   @action
@@ -67,6 +62,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   *deleteUploadedPiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
+    this.translationDocument = null;
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -78,8 +74,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
       yield this.args.onSave({
         piece: this.translationDocument,
         name: this.name,
-        pagesAmount: this.pagesAmount,
-        wordsAmount: this.wordsAmount,
+        receivedAtDate: this.receivedAtDate,
         isSourceForProofPrint: this.isSourceForProofPrint,
       });
     }
@@ -88,5 +83,10 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @action
   toggleProofprint() {
     this.isSourceForProofPrint = !this.isSourceForProofPrint;
+  }
+
+  @action
+  setReceivedAtDate(selectedDates) {
+    this.receivedAtDate = selectedDates[0];
   }
 }
