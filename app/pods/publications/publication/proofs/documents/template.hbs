@@ -86,10 +86,20 @@
                 <Utils::Documents::FileTypePill @extension={{row.piece.file.extension}} />
               </td>
               <td>
-                <Utils::Table::Timestamp @timestamp={{row.piece.created}} />
+                <p>
+                  {{moment-format row.piece.created}}
+                </p>
+                <p class="auk-u-muted auk-u-text-small">
+                  {{moment-format row.piece.created "HH:mm"}}
+                </p>
               </td>
               <td>
-                <Utils::Table::Timestamp @timestamp={{row.piece.modified}} />
+                <p>
+                  {{moment-format row.piece.modified}}
+                </p>
+                <p class="auk-u-muted auk-u-text-small">
+                  {{moment-format row.piece.modified "HH:mm"}}
+                </p>
               </td>
               <td class="auk-u-text-align--center">
                 {{#if row.piece.publicationActivityAsGenerated}}
@@ -103,7 +113,7 @@
                   <Auk::Button
                     @skin="borderless" @layout="icon-only" @icon="download"
                     @href={{row.piece.file.namedDownloadLink}}
-                    download>
+                    download={{row.piece.file.namedDownloadLink}}>
                     {{t "download"}}
                   </Auk::Button>
                   <Auk::Button
