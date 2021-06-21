@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 import tableColumns from 'frontend-kaleidos/config/cases/overview-table-columns';
 
 export default class CasesIndexController extends Controller {
@@ -59,32 +60,6 @@ export default class CasesIndexController extends Controller {
   cancelEditing() {
     this.selectedCase = null;
     this.isEditingRow = false;
-  }
-
-  @action
-  async archiveCase() {
-    const _case = await this.store.findRecord('case', this.selectedCase.id);
-    _case.isArchived = true;
-    const subcases = await _case.subcases;
-    subcases.forEach((subcase) => {
-      subcase.isArchived = true;
-      subcase.save();
-    });
-    await _case.save();
-    this.selectedCase = null;
-    this.isArchivingCase = false;
-    this.send('refreshModel');
-  }
-
-  @action
-  async unarchiveCase(_case) {
-    _case.isArchived = false;
-    const subcases = await _case.subcases;
-    subcases.forEach((subcase) => {
-      subcase.isArchived = false;
-      subcase.save();
-    });
-    await _case.save();
   }
 
   @action
@@ -152,5 +127,31 @@ export default class CasesIndexController extends Controller {
   @action
   sortTable(sortField) {
     this.set('sort', sortField);
+  }
+
+  @task
+  *unarchiveCaseTask(_case) {
+    _case.isArchived = false;
+    const subcases = yield _case.subcases;
+    subcases.forEach((subcase) => {
+      subcase.isArchived = false;
+      subcase.save();
+    });
+    yield _case.save();
+  }
+
+  @task
+  *archiveCaseTask() {
+    const _case = yield this.store.findRecord('case', this.selectedCase.id);
+    _case.isArchived = true;
+    const subcases = yield _case.subcases;
+    subcases.forEach((subcase) => {
+      subcase.isArchived = true;
+      subcase.save();
+    });
+    yield _case.save();
+    this.selectedCase = null;
+    this.isArchivingCase = false;
+    this.send('refreshModel');
   }
 }

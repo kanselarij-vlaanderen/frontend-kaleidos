@@ -81,7 +81,7 @@
                             <li>
                               {{#if case.isArchived}}
                                 <div class="auk-menu__item auk-menu__item"
-                                  {{on "click" (fn this.unarchiveCase case)}}
+                                  {{on "click" (perform this.unarchiveCaseTask case)}}
                                 >
                                   {{t "unarchive"}}
                                 </div>
@@ -203,7 +203,8 @@
             <Auk::Button 
               @skin="danger-primary" 
               @icon="delete"
-              {{on "click" this.archiveCase}}
+              @loading={{this.archiveCaseTask.isRunning}}
+              {{on "click" (perform this.archiveCaseTask)}}
             >
               {{t "delete"}}
             </Auk::Button>
