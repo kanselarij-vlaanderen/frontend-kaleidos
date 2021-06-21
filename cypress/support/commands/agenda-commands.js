@@ -5,7 +5,6 @@
 // Commands
 
 import agenda from '../../selectors/agenda.selectors';
-import modal from '../../selectors/modal.selectors';
 import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
@@ -239,8 +238,8 @@ function deleteAgenda(meetingId, lastAgenda) {
 
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-  cy.get(modal.auModal.container).within(() => {
-    cy.get(modal.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.deleteAgenda).click();
   });
   if (lastAgenda) {
     cy.wait('@deleteNewsletter', {
@@ -250,7 +249,7 @@ function deleteAgenda(meetingId, lastAgenda) {
         timeout: 20000,
       });
   }
-  cy.get(modal.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 20000,
   }).should('not.exist');
   if (!lastAgenda) {
@@ -313,7 +312,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
-  cy.get(modal.verify.save).click();
+  cy.get(utils.vlModalVerify.save).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.log('/setAllItemsFormallyOk');
@@ -390,11 +389,11 @@ function approveDesignAgenda(shouldConfirm = true) {
   });
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   if (shouldConfirm) {
-    cy.get(modal.auModal.container).within(() => {
-      cy.get(modal.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(modal.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -406,7 +405,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   //   timeout: 12000,
   // });
 
-  // cy.get(modal.auModal.container, {
+  // cy.get(auk.modal.container, {
   //   timeout: 60000,
   // }).should('not.exist');
   cy.log('/approveDesignAgenda');
@@ -434,11 +433,11 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   });
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   if (shouldConfirm) {
-    cy.get(modal.auModal.container).within(() => {
-      cy.get(modal.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(modal.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -678,11 +677,11 @@ function closeAgenda() {
   cy.log('closeAgenda');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-  cy.get(modal.auModal.container).within(() => {
-    cy.get(modal.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
   });
   // as long as the modal exists, the action is not completed
-  cy.get(modal.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
   cy.log('/closeAgenda');
@@ -700,11 +699,11 @@ function releaseDecisions() {
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDecisions');
@@ -720,11 +719,11 @@ function releaseDocuments() {
   cy.log('releaseDocuments');
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDocuments');

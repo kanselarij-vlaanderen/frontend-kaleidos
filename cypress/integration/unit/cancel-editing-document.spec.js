@@ -1,10 +1,10 @@
 /* global context, before, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -31,7 +31,7 @@ function uploadFileToCancel(file) {
     .should('be.visible')
     .click();
 
-  cy.get(modal.baseModal.dialogWindow).within(() => {
+  cy.get(utils.vlModal.dialogWindow).within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
     cy.wait(1000);
@@ -100,7 +100,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     });
 
     // Cancel/save of document-type and access-level in editing view
-    cy.get(agenda.agendaitemEditDocumentsList).click();
+    cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -141,7 +141,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.get('.auk-pill').contains('Intern Regering');
     });
 
-    cy.get(agenda.agendaitemEditDocumentsList).click();
+    cy.get(route.agendaitemDocuments.batchEdit).click();
     cy.get('tbody > tr').as('documentRows');
     cy.get('@documentRows').eq(0)
       .within(() => {
@@ -296,7 +296,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile');
 
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard.card).eq(0)
         .within(() => {
@@ -306,10 +306,10 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     cy.log('uploadFileToCancel 2');
     uploadFileToCancel(file);
-    cy.get(modal.baseModal.close).click()
+    cy.get(utils.vlModal.close).click()
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard.card).eq(0)
         .within(() => {
@@ -324,7 +324,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .wait('@deleteFile'); // TODO this causes fails sometimes because the piece is not deleted fully
 
     cy.log('uploadFileToCancel 4');
-    cy.get(modal.baseModal.dialogWindow).within(() => {
+    cy.get(utils.vlModal.dialogWindow).within(() => {
       cy.get(utils.vlModalFooter.save).should('be.disabled');
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
       cy.wait(1000);
@@ -349,7 +349,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       cy.wait('@loadPiecesAgendaitemQuater');
     });
 
-    cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
     cy.get('.auk-scroll-wrapper__body').within(() => {
       cy.get(document.documentCard.card).eq(0)
         .within(() => {

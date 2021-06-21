@@ -24,11 +24,8 @@
   </div>
 </div>
 <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
-  {{#each (await agendas) as |agenda index|}}
-    <li
-      data-test-agenda-sidenav-element={{index}}
-      class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}"
-    >
+  {{#each (await agendas) as |agenda|}}
+    <li class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">
       <a
         href="#"
         {{action "setCurrentAgenda" agenda}}
