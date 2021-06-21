@@ -8,6 +8,7 @@ import {
   task
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -22,6 +23,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
    */
 
   @service store;
+  @service intl;
   @service toaster;
   @service sessionService;
   @service agendaService;
@@ -99,8 +101,12 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @action
   async setAndSaveFormallyOkStatus(newFormallyOkUri) {
     this.args.agendaitem.formallyOk = newFormallyOkUri;
+    const status = CONFIG.formallyOkOptions.find((type) => type.uri === newFormallyOkUri);
     try {
       await this.args.agendaitem.save();
+      this.toaster.success(this.intl.t('successfully-modified-formally-ok-status', {
+        status: status.label,
+      }));
     } catch {
       this.args.agendaitem.rollbackAttributes();
       this.toaster.error();

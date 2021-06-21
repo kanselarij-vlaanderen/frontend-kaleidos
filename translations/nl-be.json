@@ -868,5 +868,6 @@
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
-  "existing": "Bestaand"
+  "existing": "Bestaand",
+  "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\""
 }
