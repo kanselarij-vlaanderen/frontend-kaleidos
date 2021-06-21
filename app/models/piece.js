@@ -12,6 +12,7 @@ export default Model.extend({
   pages: attr('number'),
   words: attr('number'),
   created: attr('datetime'),
+  receivedDate: attr('datetime'),
   modified: attr('datetime'),
   confidential: attr('boolean'),
   accessLevelLastModified: attr('datetime'),
