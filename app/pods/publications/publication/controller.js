@@ -5,6 +5,8 @@ import { inject as service } from '@ember/service';
 
 export default class PublicationController extends Controller {
   @service media;
+  @service intl;
+  @service toaster;
 
   @tracked sidebarIsOpen = this.get('media.isBigScreen');
 
@@ -14,7 +16,8 @@ export default class PublicationController extends Controller {
   }
 
   @action
-  saveSidebarProperty(modifiedObject) {
-    modifiedObject.save();
+  async saveSidebarProperty(modifiedObject) {
+    await modifiedObject.save();
+    this.toaster.success(this.intl.t('successfully-saved'));
   }
 }
