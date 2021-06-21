@@ -8,7 +8,6 @@ export default class EditCaseComponent extends Component {
 
   @action
   onChange() {
-    console.log('Update');
     this.shortTitle = this.args.caseToEdit.shortTitle;
   }
 
