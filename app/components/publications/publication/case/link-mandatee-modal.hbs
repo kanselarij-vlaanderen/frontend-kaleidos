@@ -1,8 +1,8 @@
 <Auk::Modal
-  @size="small"
-  data-test-add-mandateemodal>
+  data-test-add-mandateemodal
+  @size="small">
   <Auk::Modal::Header
-    @title={{t "add-minister"}}
+    @title={{t "add-mandatee"}}
     @onClose={{@onClose}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent
@@ -15,29 +15,29 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group @position="left">
-        <WebComponents::AuToolbar::Item>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <Auk::Button @skin="borderless" {{on "click" @onClose}}
             @disabled={{this.onLink.isRunning}}>
             {{t "cancel"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-      <WebComponents::AuToolbar::Group @position="right">
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           <Auk::Button
+            data-test-add-contactperson-submit-button
             @skin="primary"
             @icon="add"
             @size="small"
             @disabled={{or this.init.isRunning (not this.canLink)}}
             @loading={{this.onLink.isRunning}}
-            {{on "click" (perform this.onLink)}}
-            data-test-add-contactperson-submit-button>
+            {{on "click" (perform this.onLink)}}>
             {{t "add"}}
           </Auk::Button>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
-    </WebComponents::AuToolbar>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>

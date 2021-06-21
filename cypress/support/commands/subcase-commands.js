@@ -5,7 +5,6 @@
 // Commands
 
 import cases from '../../selectors/case.selectors';
-import modal from '../../selectors/modal.selectors';
 import utils from '../../selectors/utils.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
@@ -261,11 +260,11 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     }).should('exist')
       .eq(fieldNumber)
       .within(() => {
-        cy.get(utils.checkboxLabel).eq(domainNumber)
+        cy.get(utils.vlCheckbox.label).eq(domainNumber)
           .click();
       });
   }
-  cy.get(modal.modalFooterSaveButton).click();
+  cy.get(utils.vlModalFooter.save).click();
   cy.get(mandatee.mandateePanelEdit.actions.save)
     .contains('Opslaan')
     .click();

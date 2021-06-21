@@ -1,3 +1,8 @@
 <ul class="auk-menu auk-menu--visible" role="menu" ...attributes>
-  {{yield}}
+  {{yield
+    (hash
+      Item=(component "auk/dropdown/item")
+      Divider=(component "auk/dropdown/divider")
+    )
+  }}
 </ul>

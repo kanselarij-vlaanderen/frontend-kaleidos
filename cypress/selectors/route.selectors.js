@@ -34,11 +34,27 @@ const selectors = {
     ROUTE AGENDA
   */
 
+  // agenda/documents/template
+  agendaDocuments: {
+    addDocuments: '[data-test-agenda-documents-add-documents]',
+  },
+
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
     // TODO unused selector
     addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
   },
 
+  /**
+    ROUTE SEARCH
+  */
+
+  // search/template
+  search: {
+    input: '[data-test-route-search-input]',
+    trigger: '[data-test-route-search-trigger]',
+    // TODO unused selector:
+    datepickerButton: '[data-test-route-search-datepicker-button]',
+  },
 };
 export default selectors;

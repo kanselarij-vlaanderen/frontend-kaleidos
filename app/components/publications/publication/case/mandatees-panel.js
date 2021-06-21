@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 /**
- * @argument {PublicatinFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
+ * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees,publication-flow.mandatees.person)
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked isOpenLinkModal = false;

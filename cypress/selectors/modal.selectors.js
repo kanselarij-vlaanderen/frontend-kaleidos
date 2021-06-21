@@ -39,8 +39,9 @@ const selectors = {
     body: '[data-test-au-modal-body-content]',
   },
   modalDialog: '[data-test-vl-modal-dialog]',
+  // this selector is both in vl-modal and vl-modal-verify component
   modal: '[data-test-vl-modal]',
+
   ministerModalSelector: '[data-test-mandatee-selector]',
-  modalFooterSaveButton: '[data-test-vl-modal-footer-save]',
 };
 export default selectors;

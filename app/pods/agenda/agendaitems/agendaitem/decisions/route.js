@@ -3,23 +3,21 @@ import { action } from '@ember/object';
 
 export default class DecisionsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
-    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
+    this.agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
     return await this.store.query('agenda-item-treatment', {
-      'filter[agendaitem][:id:]': agendaitem.id,
+      'filter[agendaitem][:id:]': this.agendaitem.id,
       include: 'report',
     });
   }
 
-  async setupController(controller, model) {
+  async afterModel() {
+    this.meeting = await this.modelFor('agenda').meeting;
+  }
+
+  setupController(controller) {
     super.setupController(...arguments);
-    const agendaitem = await this.modelFor('agenda.agendaitems.agendaitem');
-    controller.set('agendaitem', agendaitem);
-    const agendaActivity = await agendaitem.get('agendaActivity');
-    if (agendaActivity) { // Some items don't have a subcase nor a "put on agenda"-activity
-      const subcase = await agendaActivity.subcase;
-      controller.set('subcase', subcase);
-    }
-    controller.set('model', model);
+    controller.agendaitem = this.agendaitem;
+    controller.meeting = this.meeting;
   }
 
   @action

@@ -149,7 +149,7 @@ Router.map(function() {
   if (!isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB)) {
     this.route('publications', { path: '/publicaties', }, function() {
       this.route('publication', { path: ':publication_id', }, function() {
-        this.route('case', { path: '/dossiers', });
+        this.route('case', { path: '/dossier', });
         this.route('documents', { path: '/documenten', });
         this.route('translations', { path: '/vertalingen', }, function() {
           this.route('documents', { path: '/documenten', });

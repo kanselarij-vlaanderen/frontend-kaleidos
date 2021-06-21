@@ -29,7 +29,9 @@ export default Model.extend({
   subcases: hasMany('subcase', {
     inverse: null,
   }),
-  publicationFlows: hasMany('publication-flow'),
+  publicationFlows: hasMany('publication-flow', {
+    serialize: false,
+  }),
   requestedSubcases: hasMany('subcase', {
     inverse: null,
   }),
