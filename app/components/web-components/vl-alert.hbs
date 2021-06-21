@@ -1,5 +1,5 @@
 <div
-  data-test-alert
+  data-test-vl-alert
   class="vl-alert {{this.typeClass}} {{if @small "vl-alert--small"}}"
   ...attributes
   role="alert"
@@ -16,7 +16,7 @@
     </div>
   {{/if}}
   {{#if @closeable}}
-    <button data-test-alert-close-button class="vl-alert__close" type="button" {{action "close"}}>
+    <button data-test-vl-alert-close class="vl-alert__close" type="button" {{action "close"}}>
       <div class='auk-icon'>
         <i class="ki-cross" aria-hidden="true"></i>
       </div>
@@ -28,7 +28,7 @@
   <div class="vl-alert__content">
     {{#if @title}}
       <p
-        data-test-alert-title
+        data-test-vl-alert-title
         class="vl-alert__title"
       >
         {{@title}}
@@ -38,7 +38,7 @@
       {{yield}}
     {{else}}
       <div
-        data-test-alert-message
+        data-test-vl-alert-message
         class="vl-alert__message"
       >
         {{@message}}

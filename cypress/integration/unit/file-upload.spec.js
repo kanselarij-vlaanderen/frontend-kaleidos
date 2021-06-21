@@ -1,8 +1,8 @@
 /* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function formatmeetingDocumentsUrl(meetingId, agendaId) {
   return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
@@ -146,8 +146,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
+    cy.get(utils.vlModalVerify.container).within(() => {
+      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
         .click();
     });
 
@@ -181,8 +181,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
+    cy.get(utils.vlModalVerify.container).within(() => {
+      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
         .click();
     });
 
