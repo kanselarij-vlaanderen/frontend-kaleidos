@@ -1,23 +1,26 @@
-{{#if caseToEdit}}
-  <div class="auk-modal__body">
-    <div class="auk-u-p-4">
-      <div class="auk-u-mb-4">
-        <div class="auk-form-group">
-          <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-          {{textarea
-            rows="2"
-            class="auk-textarea"
-            value=(mut caseToEdit.shortTitle)
-          }}
-        </div>
+{{#if @caseToEdit}}
+  <Auk::Modal::Body>
+    <div class="auk-u-mb-4">
+      <div class="auk-form-group">
+        <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+        <Auk::Textarea 
+          @value={{@caseToEdit.shortTitle}}
+        />
       </div>
     </div>
-  </div>
-  {{web-components/vl-modal-footer
-    isLoading=isLoading
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "save")
-    cancelAction=(action "toggleIsEditing")
-    saveAction=(action "saveChanges")
-  }}
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onClose}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button 
+            @skin="primary"
+            {{on "click" this.saveChanges}}
+          >
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
 {{/if}}

@@ -176,22 +176,40 @@
   </Auk::Toolbar>
 </div>
 {{#if isEditingRow}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @title={{t "edit-case"}}
-    @closeModal={{this.cancelEditing}}
-  >
+  <Auk::Modal>
+    <Auk::Modal::Header 
+      @title={{t "edit-case"}}
+      @onClose={{this.cancelEditing}}
+    />
     <Cases::EditCase 
       @caseToEdit={{this.selectedCase}}
-      @cancelEditing={{this.cancelEditing}}
+      @onClose={{this.cancelEditing}}
     />
-  </WebComponents::VlModal>
+  </Auk::Modal>
 {{/if}}
 {{#if isArchivingCase}}
-  <WebComponents::VlModalVerify
-    @title={{t "archive-case"}}
-    @message={{t "archive-case-message"}}
-    @cancel={{this.cancelArchiveCase}}
-    @verify={{this.archiveCase}}
-  />
+  <Auk::Modal>
+    <Auk::Modal::Header 
+      @title={{t "archive-case"}}
+      @onClose={{this.cancelArchiveCase}}
+    />
+    <Auk::Modal::Body>
+      <p>{{t "archive-case-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelArchiveCase}}>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button 
+              @skin="danger-primary" 
+              @icon="delete"
+              {{on "click" this.archiveCase}}
+            >
+              {{t "delete"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
 {{/if}}

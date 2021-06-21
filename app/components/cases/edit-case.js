@@ -1,18 +1,15 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
-export default Component.extend({
+export default class EditCaseComponent extends Component {
+  @tracked isLoading = false;
 
-  actions: {
-    toggleIsEditing() {
-      this.cancelEditing();
-    },
-
-    saveChanges() {
-      this.set('isLoading', true);
-      this.caseToEdit.save().then(() => {
-        this.cancelEditing();
-        this.set('isLoading', false);
-      });
-    },
-  },
-});
+  @action
+  async saveChanges() {
+    this.isLoading = true;
+    await this.args.caseToEdit.save();
+    this.args.onClose();
+    this.isLoading = false;
+  }
+}
