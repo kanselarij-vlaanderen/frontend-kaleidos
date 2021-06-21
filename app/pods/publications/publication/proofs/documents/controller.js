@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
  * }} Sorting
  */
 
+// prevent calls to proofingActivityAsGenerated and publicationActivityAsGenerated
 class Row {
   @tracked isSelected = false;
   @tracked piece;
@@ -17,6 +18,11 @@ class Row {
   constructor(piece, type) {
     this.piece = piece;
     this.type = type;
+  }
+
+  get isCorrected() {
+    return this.type === 'proofing-activities.generated-pieces'
+      || this.type === 'publication-activities.generated-pieces';
   }
 }
 
@@ -47,8 +53,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   initRows(publicationSubcase) {
     const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, 'source'));
-    const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'proofing')));
-    const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'publication')));
+    const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'proofing-activities.generated-pieces')));
+    const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'publication-activities.generated-pieces')));
 
     this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
 
