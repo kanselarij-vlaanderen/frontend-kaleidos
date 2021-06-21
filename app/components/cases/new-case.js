@@ -1,40 +1,31 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import moment from 'moment';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class NewCase extends Component {
-  title = null;
-  shortTitle = null;
-  confidential = false;
   @service store;
+
+  @tracked shortTitle = null;
+  @tracked confidential = false;
   @tracked hasError = false;
   @tracked isLoading = false;
 
   async createCase() {
-    const newDate = moment().utc()
-      .toDate();
+    const newDate = new Date();
     const {
       shortTitle, confidential,
     } = this;
-    const caze = this.store.createRecord('case',
+    const _case = this.store.createRecord('case',
       {
         shortTitle,
         confidential,
         isArchived: false,
         created: newDate,
       });
-    await caze.save();
+    await _case.save();
     this.isLoading = false;
-    return this.args.close(caze);
-  }
-
-  get getClassForShortTitle() {
-    if (this.hasError) {
-      return 'auk-form-group--error';
-    }
-    return null;
+    return this.args.onSave(_case);
   }
 
   @action
@@ -49,10 +40,5 @@ export default class NewCase extends Component {
       this.isLoading = true;
       await this.createCase();
     }
-  }
-
-  @action
-  closeAction() {
-    this.args.close();
   }
 }

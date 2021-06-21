@@ -1,37 +1,35 @@
-<form>
-  <Auk::Modal::Body>
-    {{#if this.hasError}}
-      <Auk::Alert
-        data-test-new-case-shorttitle-error
-        @skin="error"
-        @icon="alert-triangle"
-        @title={{t "modal-error-alert-title"}}
-        @message={{t "modal-error-alert-message"}}
-      />
-    {{/if}}
-    <div class="auk-u-mb-4">
-      <div class="auk-form-group">
-        <Auk::Label>{{t "confidential"}}</Auk::Label>
-        {{web-components/vl-toggle value=confidential}}
-      </div>
+<Auk::Modal::Body>
+  {{#if this.hasError}}
+    <Auk::Alert
+      data-test-new-case-shorttitle-error
+      @skin="error"
+      @icon="alert-triangle"
+      @title={{t "modal-error-alert-title"}}
+      @message={{t "modal-error-alert-message"}}
+    />
+  {{/if}}
+  <div class="auk-u-mb-4">
+    <div class="auk-form-group">
+      <Auk::Label>{{t "confidential"}}</Auk::Label>
+      <WebComponents::VlToggle @value={{this.confidential}} />
     </div>
-    <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
-      <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      {{textarea class="auk-textarea" rows="2" value=shortTitle}}
-    </div>
-  </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{this.closeAction}}>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <Auk::Button 
-            @skin="primary"
-            {{on "click" this.createCaseAction}}
-          >
-            {{t "create-case"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-  </Auk::Modal::Footer>
-</form>
+  </div>
+  <div class="auk-form-group {{if this.hasError "auk-form-group--error" ""}}" data-test-new-case-shorttitle>
+    <Auk::Label>{{t "short-title-case"}}</Auk::Label>
+    <Auk::Textarea @value={{this.shortTitle}} />
+  </div>
+</Auk::Modal::Body>
+<Auk::Modal::Footer @onCancel={{@onClose}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::Button 
+          @skin="primary"
+          {{on "click" this.createCaseAction}}
+        >
+          {{t "create-case"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Modal::Footer>

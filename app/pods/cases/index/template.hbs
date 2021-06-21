@@ -1,5 +1,9 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} @showArchived={{this.showArchived}} @toggleShowArchived={{this.toggleShowArchived}} />
+<Cases::CasesHeader 
+  @onSave={{this.close}} 
+  @showArchived={{this.showArchived}} 
+  @onToggleShowArchived={{this.toggleShowArchived}} 
+/>
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">

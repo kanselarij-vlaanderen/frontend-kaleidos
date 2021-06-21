@@ -1,22 +1,25 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class CasesHeader extends Component {
   @service currentSession;
-
-  classNames = ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100'];
-
-  isAddingCase = false;
+  @tracked showNewCaseModal = false;
 
   @action
-  toggleAddingCase() {
-    this.toggleProperty('isAddingCase');
+  openNewCaseModal() {
+    this.showNewCaseModal = true;
   }
 
   @action
-  closeAction(caze) {
-    this.toggleProperty('isAddingCase');
-    this.close(caze);
+  closeNewCaseModal() {
+    this.showNewCaseModal = false;
+  }
+
+  @action
+  saveNewCase(_case) {
+    this.closeNewCaseModal();
+    this.args.onSave(_case);
   }
 }

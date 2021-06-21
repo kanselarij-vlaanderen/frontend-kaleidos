@@ -1,31 +1,33 @@
-<Auk::Toolbar>
-  <Auk::Toolbar::Group @position="left">
-    <Auk::Toolbar::Item>
-      <div class="auk-o-flex auk-o-flex--vertical">
-        <h4 class="auk-toolbar-complex__title">{{t "cases"}}</h4>
-      </div>
-    </Auk::Toolbar::Item>
-  </Auk::Toolbar::Group>
-  {{#if this.currentSession.isEditor}}
-    <Auk::Toolbar::Group @position="right">
+<div class='auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100'>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::Checkbox 
-          @checked={{@showArchived}}
-          @label={{t "show-archived" }}
-          {{on "input" @toggleShowArchived}}
-        />
-      </Auk::Toolbar::Item>
-      <Auk::Toolbar::Item>
-        <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.toggleAddingCase}}>
-          {{t "add-case"}}
-        </Auk::Button>
+        <div class="auk-o-flex auk-o-flex--vertical">
+          <h4 class="auk-toolbar-complex__title">{{t "cases"}}</h4>
+        </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
+    {{#if this.currentSession.isEditor}}
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Checkbox 
+            @checked={{@showArchived}}
+            @label={{t "show-archived" }}
+            {{on "input" @onToggleShowArchived}}
+          />
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <Auk::Button data-test-publication-header-button-new @icon="add" @skin="primary" {{on "click" this.openNewCaseModal}}>
+            {{t "add-case"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    {{/if}}
+  </Auk::Toolbar>
+  {{#if this.showNewCaseModal}}
+    <Auk::Modal>
+      <Auk::Modal::Header @title={{t "new-case"}} @onClose={{this.closeNewCaseModal}} />
+      <Cases::NewCase @onClose={{this.closeNewCaseModal}} @onSave={{this.saveNewCase}} />
+    </Auk::Modal>
   {{/if}}
-</Auk::Toolbar>
-{{#if isAddingCase}}
-  <Auk::Modal>
-    <Auk::Modal::Header @title={{t "new-case"}} @onResize={{this.toggleAddingCase}} @onClose={{this.toggleAddingCase}} />
-    <Cases::NewCase @close={{this.closeAction}} />
-  </Auk::Modal>
-{{/if}}
+</div>

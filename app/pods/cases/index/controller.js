@@ -63,7 +63,7 @@ export default class CasesIndexController extends Controller {
 
   @action
   async archiveCase() {
-    const _case = await this.store.findRecord('case', this.get('selectedCase.id'));
+    const _case = await this.store.findRecord('case', this.selectedCase.id);
     _case.isArchived = true;
     const subcases = await _case.subcases;
     subcases.forEach((subcase) => {
