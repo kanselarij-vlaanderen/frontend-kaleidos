@@ -13,26 +13,28 @@ context('Formally ok/nok tests', () => {
     cy.logout();
   });
 
-  // TODO This test could be replaced by checking that approved agenda is not showing formal ok's in existing testdata
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {
-    cy.visit('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
-    // TODO this first part of the test could belong in meeting-actions.spec
+    cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
     cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
+    cy.changeSelectedAgenda('Agenda A');
+    // approved agendas never show the formally ok status of the agendaitem
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
+    cy.get(agenda.agendaOverviewItem.status).should('not.exist');
+  });
+
+  // TODO-agendaheader this test belongs with other agenda-header tests
+  it('should show warning when trying to approve agenda with "not yet formally ok" items', () => {
+    cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
+    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
+    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Nog niet formeel OK');
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
+    // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(auk.alert.message).should('exist');
-    // TODO optional, check if there is no au-alert in the new pop?
-    cy.get(auk.modal.footer.cancel).contains('Annuleren')
-      .click();
+    cy.get(auk.modal.footer.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
-    cy.changeSelectedAgenda('Agenda A');
-    // Testing on approved agenda the formally ok status should not show
-    cy.wait(2000); // Make sure the formally ok can load (false positive if testing immediately)
-    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
-    cy.get(agenda.agendaOverviewItem.status).should('not.contain', 'Formeel OK');
-    // TODO this test does more than needed to assert what it should. open any agenda and check for the absence of "formeel ok"
-    // "formeel niet ok" and "formeel nog niet ok" status are not allowed on approved agendas
+    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
   });
 });

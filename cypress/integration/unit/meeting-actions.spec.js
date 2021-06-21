@@ -15,8 +15,6 @@ context('meeting actions tests', () => {
     cy.logout();
   });
 
-  // TODO-agendaHeader
-
   it('should perform action delete agenda with agendaitems on designagenda', () => {
     cy.login('Admin');
     cy.visitAgendaWithLink('/vergadering/5EB287CDF359DD0009000008/agenda/c7b045ce-3976-459c-aeaa-d0e8597b96d8/agendapunten');
@@ -65,58 +63,42 @@ context('meeting actions tests', () => {
 
   it('should be able to delete approved agendaitem from designagenda with profile: admin', () => {
     cy.login('Admin');
-    const SubcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
+    const subcaseTitleShort = 'Cypress test: delete approve agenda Admin - 1588776224';
     cy.visitAgendaWithLink('/vergadering/5EB2CD4EF5E1260009000015/agenda/9da67561-a827-47a2-8f58-8b3fd5739df4/agendapunten');
-    cy.agendaitemExists(SubcaseTitleShort);
-    // Verify agendaitem exists and has subcase on design agenda and agenda A
+    cy.agendaitemExists(subcaseTitleShort);
+    // Verify agendaitem exists on design agenda B and agenda A
     cy.changeSelectedAgenda('Agenda A');
-    cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.contains('Naar procedurestap', {
-      timeout: 12000,
-    });
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
     cy.changeSelectedAgenda('Ontwerpagenda');
-    cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.contains('Naar procedurestap', {
-      timeout: 12000,
-    });
-    cy.wait(1000); // controls buttons is not clickable yet
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
 
+    cy.wait(1000); // controls buttons is not clickable yet (no calls are running)
+    // delete the agendaitem from approved agenda
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.delete).click();
-
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
 
     cy.route('DELETE', 'agendaitems/**').as('deleteAgendaitem');
     cy.route('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
     cy.route('PATCH', 'subcases/**').as('patchSubcase');
-    cy.wait('@deleteAgendaitem', {
-      timeout: 12000,
-    }); // 2 of these happen
-    cy.wait('@deleteAgendaActivity', {
-      timeout: 12000,
-    });
-    cy.wait('@patchSubcase', {
-      timeout: 12000,
-    });
-    // TODO this is no longer a vl modal? cypress test does not wait while loading modal is still present
+    cy.wait('@deleteAgendaitem'); // 2 of these happen
+    cy.wait('@deleteAgendaActivity');
+    cy.wait('@patchSubcase');
     cy.get(auk.modal.container).should('not.exist');
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
-    cy.changeSelectedAgenda('Ontwerpagenda');
     cy.clickReverseTab('Overzicht');
-    cy.wait(1000);
     cy.get(agenda.agendaOverviewItem.subitem)
-      .contains(SubcaseTitleShort, {
+      .contains(subcaseTitleShort, {
         timeout: 2500,
       })
       .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
     cy.changeSelectedAgenda('Agenda A');
     cy.clickReverseTab('Overzicht');
-    cy.wait(1000);
     cy.get(agenda.agendaOverviewItem.subitem)
-      .contains(SubcaseTitleShort, {
+      .contains(subcaseTitleShort, {
         timeout: 2500,
       })
       .should('not.exist');
