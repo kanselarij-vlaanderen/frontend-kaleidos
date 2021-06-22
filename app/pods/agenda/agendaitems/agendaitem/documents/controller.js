@@ -26,6 +26,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked defaultAccessLevel;
   @tracked newPieces = A([]);
   @tracked newAgendaitemPieces;
+  @tracked agendaitem;
+  @tracked currentAgenda;
+  @tracked previousAgenda;
 
   @tracked isOpenPublicationModal = false;
 
