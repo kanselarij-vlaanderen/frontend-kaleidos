@@ -120,8 +120,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
-      // TODO Do we want to auto fill in publicationSubcase.endDate ?
       this.publicationFlow.closingDate = now;
+      this.publicationSubcase.endDate = now;
+      this.notifyChanges(this.publicationSubcase);
+      this.translationSubcase.endDate = now;
+      this.notifyChanges(this.translationSubcase);
     } else {
       this.publicationFlow.closingDate = null;
     }
