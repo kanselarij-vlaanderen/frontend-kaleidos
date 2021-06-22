@@ -29,10 +29,6 @@
   }
 }
 
-.vlc-document-card__badge {
-  margin-right: 1.6rem;
-}
-
 .vlc-document-card__summary {
   display: flex;
   align-items: center;
@@ -59,10 +55,6 @@
   color: $primary-blue;
 }
 
-.vlc-document-card__subline {
-  padding-left: 4.6rem;
-}
-
 /* ==========================================================================
    Documents timeline
    ========================================================================== */
@@ -87,7 +79,7 @@
     }
   }
 
-  margin-left: 4.6rem;
+  margin-left: 5rem;
   margin-bottom: 2rem;
   &:last-child {
     margin-bottom: 0;
