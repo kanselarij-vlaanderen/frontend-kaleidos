@@ -17,7 +17,7 @@
       }}
         <Auk::Toolbar::Item>
           <Auk::Button
-            data-test-agenda---agendaitem-documents-batch-edit
+            data-test-route-agenda---agendaitem-documents-batch-edit
             {{on "click" this.enablePieceEdit}}
           >
             {{t "edit"}}
@@ -66,7 +66,7 @@
 {{/if}}
 {{#if this.currentSession.isEditor}}
   <div class="auk-u-mb-4">
-    <button type="button" class="auk-button auk-button--tertiary"
+    <button data-test-route-agenda---agendaitem-documents-add type="button" class="auk-button auk-button--tertiary"
       {{on "click" this.openPieceUploadModal}}>
       <span class="auk-button__content">
         <div class="auk-icon auk-icon--default">

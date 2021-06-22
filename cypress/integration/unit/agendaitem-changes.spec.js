@@ -1,6 +1,8 @@
 /* global context, before, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
+import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
 
 
 context('Agendaitem changes tests', () => {
@@ -58,13 +60,10 @@ context('Agendaitem changes tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle2, false);
     cy.setFormalOkOnItemWithIndex(2); // punt 3
     cy.toggleShowChanges(true);
-    // TODO don't use then here, cypress awaits each command anyway
-    cy.get('.vlc-agenda-items__sub-item').should('have.length', 3)
-      .then(() => {
-        cy.agendaitemExists(subcaseTitle2);
-        cy.setFormalOkOnItemWithIndex(2); // punt 4
-        cy.approveDesignAgenda();
-      });
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 3);
+    cy.agendaitemExists(subcaseTitle2);
+    cy.setFormalOkOnItemWithIndex(2); // punt 4
+    cy.approveDesignAgenda();
   });
 
   it('should add a piece to an item and highlight it as changed', () => {
@@ -75,8 +74,6 @@ context('Agendaitem changes tests', () => {
     cy.addNewPieceToAgendaitem(subcaseTitle1, file.newFileName, file);
     cy.setFormalOkOnItemWithIndex(1);
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
-    // TODO change not needed, already on ontwerpagenda
-    cy.changeSelectedAgenda('Ontwerpagenda');
     cy.toggleShowChanges(true);
     cy.agendaitemExists(subcaseTitle1);
   });
@@ -92,11 +89,9 @@ context('Agendaitem changes tests', () => {
     cy.addAgendaitemToAgenda(subcaseTitle3, false);
     cy.setFormalOkOnItemWithIndex(4);
     cy.toggleShowChanges(true);
-    cy.get('.vlc-agenda-items__sub-item').should('have.length', 2)
-      .then(() => {
-        cy.agendaitemExists(subcaseTitle3);
-        cy.approveDesignAgenda();
-      });
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 2);
+    cy.agendaitemExists(subcaseTitle3);
+    cy.approveDesignAgenda();
   });
 
   it('should add a document version to a remark and highlight it as changed', () => {
@@ -117,7 +112,7 @@ context('Agendaitem changes tests', () => {
     // workaround for adding documents to approval, cy.addDocumentsToAgendaitem fails because of no subcase
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.contains('Documenten toevoegen').click();
+    cy.get(route.agendaitemDocuments.add).click();
     cy.addNewDocumentsInUploadModal(files, 'agendaitems');
     cy.wait(waitTime); // Computeds are not reloaded yet , maybe
     cy.changeSelectedAgenda('Ontwerpagenda');
@@ -132,7 +127,7 @@ context('Agendaitem changes tests', () => {
     cy.wait(2000);
     cy.approveDesignAgenda();
     cy.toggleShowChanges(true);
-    cy.get('.vlc-agenda-items__sub-item').should('have.length', 0);
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 0);
   });
 
   it('should check the printable version of the agenda', () => {
@@ -163,9 +158,11 @@ context('Agendaitem changes tests', () => {
     cy.visit('/vergadering/5EBA48CF95A2760008000006/agenda/f66c6d79-6ad2-49e2-af55-702df3a936d8/vergelijken');
     // compare Agenda B against Agenda C
     cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.contains('Agenda B').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Agenda B')
+      .click();
     cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.contains('Agenda C').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Agenda C')
+      .click();
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 0);
@@ -184,9 +181,11 @@ context('Agendaitem changes tests', () => {
 
     // compare Agenda C against Agenda D
     cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.contains('Agenda C').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Agenda C')
+      .click();
     cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.contains('Agenda D').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
+      .click();
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);
@@ -206,9 +205,11 @@ context('Agendaitem changes tests', () => {
 
     // compare Agenda D against Agenda E
     cy.get(agenda.compareAgenda.agendaLeft).click();
-    cy.contains('Agenda D').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Agenda D')
+      .click();
     cy.get(agenda.compareAgenda.agendaRight).click();
-    cy.contains('Ontwerpagenda E').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Ontwerpagenda E')
+      .click();
     cy.get(agenda.compareAgenda.agendaitemLeft).should('have.length', 4);
     cy.get(agenda.compareAgenda.agendaitemRight).should('have.length', 4);
     cy.get(agenda.compareAgenda.announcementLeft).should('have.length', 1);

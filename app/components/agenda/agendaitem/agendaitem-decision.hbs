@@ -3,6 +3,7 @@
     <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--justify-end">
       {{#if this.currentSession.isEditor}}
         <a
+          data-test-agendaitem-decision-edit
           href="javascript://"
           class="auk-button-link"
           {{on "click" this.openEditingWindow}}

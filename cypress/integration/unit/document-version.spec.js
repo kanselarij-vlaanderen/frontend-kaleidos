@@ -1,6 +1,8 @@
 /* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
+import agenda from '../../selectors/agenda.selectors';
+import auk from '../../selectors/auk.selectors';
 import document from '../../selectors/document.selectors';
 
 context('Tests for KAS-1076', () => {
@@ -92,23 +94,19 @@ context('Tests for KAS-1076', () => {
     ];
 
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, files, false);
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card, {
-        timeout: 60000,
-      }).as('docCards')
-        .should('have.length', files.length);
-    });
+    cy.get(document.documentCard.card, {
+      timeout: 60000,
+    }).as('docCards')
+      .should('have.length', files.length);
 
     // TODO click agendatosubcase link
     cy.openCase(caseTitleSingle);
     cy.openSubcase(0);
     cy.clickReverseTab('Documenten');
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card, {
-        timeout: 80000,
-      }).as('docCards')
-        .should('have.length', files.length);
-    });
+    cy.get(document.documentCard.card, {
+      timeout: 80000,
+    }).as('docCards')
+      .should('have.length', files.length);
 
     const linkedDocumentsNames = files.slice(0, 3).map((file) => file.newFileName);
     const linkedDocumentTypes = files.slice(0, 3).map((file) => file.fileType);
@@ -195,11 +193,9 @@ context('Tests for KAS-1076', () => {
       // }
     ];
     cy.addDocumentsToSubcase(files);
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards')
-        .should('have.length', files.length);
-    });
-    cy.get('.auk-tabs__hierarchical-back > a').click();
+    cy.get(document.documentCard.card).should('have.length', files.length);
+
+    cy.get(auk.subcaseDetailNav.tabNavBack).click();
     const subcaseTitleLong = 'Cypress test voor het tonen van meer dan 20 documenten in procedurestap';
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
@@ -208,11 +204,7 @@ context('Tests for KAS-1076', () => {
     cy.openSubcase(0);
 
     cy.clickReverseTab('Documenten');
-    cy.get('[data-test-vl-loader]');
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.linkedDocumentLink.card).as('docCards')
-        .should('have.length', files.length);
-    });
+    cy.get(document.linkedDocumentLink.card).should('have.length', files.length);
   });
 
   // TODO this test and the next verify that adding a new doc or new version resets formally ok, but done in reverse? first new version, then new doc
@@ -227,53 +219,45 @@ context('Tests for KAS-1076', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}BIS`);
+      });
 
     // Verify formally ok is reset
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
 
     // Verify subcase is updated
     // TODO check subcase no longer needed (legacy subcase also had formal ok status)
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}BIS`);
+      });
 
     // PART 2, adding new document, separate test ?
     cy.visit('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016');
     cy.setFormalOkOnItemWithIndex(1);
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(agenda.agendaOverviewItem.status).contains('Nog niet formeel OK')
       .should('have.length', 0);
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
-    // TODO are we sure we are checking the newly added document or the pre-existing BIS ?
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
-        });
-    });
+    // TODO are wesure we are checking the newly added document or the pre-existing BIS ?
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}`);
+      });
     // Verify formally ok is reset
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
     // Verify subcase is updated
     // TODO check subcase no longer needed (legacy subcase also had formal ok status)
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}`);
+      });
   });
 
   it('Adding new document or piece to subcase should reset formally ok and update the agendaitem on designagendas', () => {
@@ -288,49 +272,41 @@ context('Tests for KAS-1076', () => {
     cy.addNewPieceToSubcase('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}BIS`);
+      });
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}BIS`);
-        });
-    });
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}BIS`);
+      });
+    cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
 
 
     // PART 2, adding new document
     cy.setFormalOkOnItemWithIndex(1);
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(agenda.agendaOverviewItem.status).contains('Nog niet formeel OK')
       .should('have.length', 0);
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
     cy.addDocumentsToSubcase([file]);
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
-        });
-    });
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}`);
+      });
 
     cy.visit('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).eq(0)
-        .within(() => {
-          cy.get('.auk-h4 > span').contains(`${file.newFileName}`);
-        });
-    });
-    cy.get('.vlc-agenda-items__status').contains('Nog niet formeel OK')
+    cy.get(document.documentCard.card).eq(0)
+      .within(() => {
+        cy.get(document.documentCard.titleHeader).contains(`${file.newFileName}`);
+      });
+    cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
   });
 });

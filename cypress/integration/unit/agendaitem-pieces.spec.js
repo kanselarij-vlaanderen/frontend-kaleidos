@@ -67,45 +67,35 @@ context('Tests of pieces on agendaitems', () => {
       cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1', file); // add BIS to doc 1
       cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-1BIS', file); // add TER to doc 1 BIS
       cy.addNewPieceToAgendaitem(part1Title, 'VR 2020 1212 DOC.0001-2', file); // add BIS to doc 2
-      cy.get('.auk-scroll-wrapper__body').within(() => {
-        cy.get(document.documentCard.card).as('docCards');
-      });
-      cy.get('@docCards').should('have.length', 2);
+      cy.get(document.documentCard.card).should('have.length', 2);
 
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1TER', 0);
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-2BIS', 0);
-      cy.get('.auk-scroll-wrapper__body').within(() => {
-        cy.get(document.documentCard.card).as('docCards');
-      });
+      cy.get(document.documentCard.card).as('docCards');
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
         .within(() => {
-          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-1BIS');
+          cy.get(document.documentCard.titleHeader).contains('VR 2020 1212 DOC.0001-1BIS');
         });
       cy.get('@docCards').eq(1)
         .within(() => {
-          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-2');
+          cy.get(document.documentCard.titleHeader).contains('VR 2020 1212 DOC.0001-2');
         });
       cy.openDetailOfAgendaitem(part1Title);
       cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
       cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
-      cy.get('.auk-scroll-wrapper__body').within(() => {
-        cy.get(document.documentCard.card).as('docCards');
-      });
+      cy.get(document.documentCard.card).as('docCards');
       cy.get('@docCards').should('have.length', 2);
       cy.get('@docCards').eq(0)
         .within(() => {
-          cy.get('.auk-h4 > span').contains('VR 2020 1212 DOC.0001-1');
+          cy.get(document.documentCard.titleHeader).contains('VR 2020 1212 DOC.0001-1');
         });
       cy.clickReverseTab('Overzicht');
       cy.get(cases.subcaseDescription.agendaLink).click();
       cy.get(agenda.agendaitemNav.documentsTab).click();
 
-      cy.get('.auk-scroll-wrapper__body').within(() => {
-        cy.get(document.documentCard.card).as('docCards');
-      });
-      cy.get('@docCards').should('have.length', 2);
+      cy.get(document.documentCard.card).should('have.length', 2);
       // TODO: Policy regarding "safe document removal" should be revised. (https://kanselarij.atlassian.net/browse/VAL-287)
       // cy.isPieceDeletable('VR 2020 1212 DOC.0001-1', 0, false);
       // cy.isPieceDeletable('VR 2020 1212 DOC.0001-2', 0, false);

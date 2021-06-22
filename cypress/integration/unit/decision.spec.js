@@ -2,6 +2,7 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -82,9 +83,7 @@ context('Add files to an agenda', () => {
       timeout: 12000,
     });
 
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards');
-    });
+    cy.get(document.documentCard.card).as('docCards');
 
     cy.get('@docCards').should('have.length', 1);
 
@@ -92,10 +91,8 @@ context('Add files to an agenda', () => {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
 
-    cy.get('@docCards').eq(0)
-      .within(() => {
-        cy.get('.auk-h4 > span').contains(/BIS/);
-      });
+    cy.get(document.documentCard.titleHeader).eq(0)
+      .contains(/BIS/);
 
     // Delete the TER piece, the BIS should then become the report
     cy.addNewPieceToSignedDocumentContainer('test', {
@@ -105,20 +102,18 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/TER/);
+        cy.get(document.documentCard.titleHeader).contains(/TER/);
         cy.get(document.documentCard.versionHistory).click();
         cy.get(document.vlDocument.piece).as('pieces');
-        cy.get('@pieces').eq(0)
+        cy.get('@pieces').eq(0) // this is the TER piece
           .within(() => {
-            cy.get('.ki-delete').click();
+            cy.get(document.vlDocument.delete).click();
           });
       });
 
     // verify modal
-    cy.get(utils.vlModalVerify.container).within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
@@ -131,19 +126,14 @@ context('Add files to an agenda', () => {
 
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/BIS/);
-        cy.get('.ki-more').click();
+        cy.get(document.documentCard.titleHeader).contains(/BIS/);
+        cy.get(document.documentCard.actions).click();
       });
 
     // Delete the document-container + all pieces
-    cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.auk-u-text-error').contains('Document verwijderen')
-        .click();
-    });
-    cy.get(utils.vlModalVerify.container).within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
+    cy.get(document.documentCard.delete).click();
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
 
     cy.wait('@deleteFile', {
       timeout: 20000,
@@ -186,13 +176,14 @@ context('Add files to an agenda', () => {
     cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter');
+    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted);
+    cy.get(agenda.agendaDetailSidebarItem.retracted);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
     cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
+    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted)
       .should('not.exist');
 
     // TODO why go to press agenda ?
@@ -203,37 +194,31 @@ context('Add files to an agenda', () => {
     cy.url().should('contain', '/beslissingen');
 
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
-    cy.contains('Wijzigen').click();
-    cy.get('.auk-box').within(() => {
-      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
-        .should('be.visible')
-        .within(() => {
-          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-            .click();
-        });
+    cy.get(agenda.agendaitemDecision.edit).click();
+    cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
+        .click();
     });
-    cy.get(dependency.emberPowerSelect.option).should('exist')
-      .then(() => {
-        cy.contains('Uitgesteld').scrollIntoView()
-          .click();
-      });
-    cy.contains('Opslaan').click()
+    cy.get(dependency.emberPowerSelect.option).contains('Uitgesteld')
+      .scrollIntoView()
+      .click();
+    cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@patchTreatment');
 
     // TODO right now, changing the status of the treatment does not change the retracted attribute of agendaitem
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
     // perhaps in the future this will be a feature
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
+    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted)
       .should('not.exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get('.vlc-status-timeline > li').eq(0)
+    cy.get(cases.subcaseDescription.timelineItem).eq(0)
       .contains(/Ingediend voor agendering op/);
-    cy.get('.vlc-status-timeline > li').eq(1)
+    cy.get(cases.subcaseDescription.timelineItem).eq(1)
       .contains(/Geagendeerd op de agenda van/);
-    cy.get('.vlc-status-timeline > li').eq(2)
+    cy.get(cases.subcaseDescription.timelineItem).eq(2)
       .contains(/Uitgesteld op de agenda van/);
-    cy.get('.vlc-status-timeline > li').eq(3)
+    cy.get(cases.subcaseDescription.timelineItem).eq(3)
       .contains(/Er is beslist om dit agendapunt uit te stellen/);
   });
 });
