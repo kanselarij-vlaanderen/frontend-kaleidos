@@ -12,6 +12,7 @@ export default Model.extend({
   pages: attr('number'),
   words: attr('number'),
   created: attr('datetime'),
+  receivedDate: attr('datetime'),
   modified: attr('datetime'),
   confidential: attr('boolean'),
   accessLevelLastModified: attr('datetime'),
@@ -49,6 +50,7 @@ export default Model.extend({
   language: belongsTo('language'),
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
+  publicationSubcase: belongsTo('publication-subcase'),
   cases: hasMany('case', {
     inverse: null, // TODO: figure out if and why this is required. Delete otherwise.
   }),

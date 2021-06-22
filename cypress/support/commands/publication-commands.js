@@ -1,11 +1,9 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-// ***********************************************
-// Commands
-import modalSelectors from '../../selectors/modal.selectors';
-import publicationSelectors from '../../selectors/publication.selectors';
+import publication from '../../selectors/publication.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import auk from '../../selectors/auk.selectors';
 
 // ***********************************************
 // Functions
@@ -25,14 +23,14 @@ function createPublication(shortTitle, longTitle) {
   cy.route('POST', '/publication-flows').as('createNewPublicationFlow');
 
   cy.visit('publicaties');
-  cy.get(publicationSelectors.newPublicationButton).click();
+  cy.get(publication.newPublicationButton).click();
 
-  cy.get(modalSelectors.auModal.container).as('publicationModal')
+  cy.get(auk.modal.container).as('publicationModal')
     .within(() => {
-      cy.get(modalSelectors.publication.publicationShortTitleTextarea).click()
+      cy.get(publication.newPublicationModal.publicationShortTitleTextarea).click()
         .clear()
         .type(shortTitle);
-      cy.get(modalSelectors.publication.publicationLongTitleTextarea).click()
+      cy.get(publication.newPublicationModal.publicationLongTitleTextarea).click()
         .clear()
         .type(longTitle);
     });
@@ -40,7 +38,7 @@ function createPublication(shortTitle, longTitle) {
   let publicationFlowId;
 
   cy.get('@publicationModal').within(() => {
-    cy.get(modalSelectors.publication.createButton).click()
+    cy.get(publication.newPublicationModal.createButton).click()
       .wait('@createNewCase', {
         timeout: 20000,
       })
@@ -59,7 +57,7 @@ function createPublication(shortTitle, longTitle) {
       }));
   });
   // Check if we transitioned to dossier page of the publication-flow
-  cy.get(publicationSelectors.publicationCase.casePanel);
+  cy.get(publication.publicationCase.casePanel);
   cy.log('/createPublication');
 }
 
@@ -77,7 +75,7 @@ function addPublicationDocuments(files) {
 
   // TODO This part can be reused in future tests
 
-  cy.get(modalSelectors.auModal.container).as('fileUploadDialog');
+  cy.get(auk.modal.container).as('fileUploadDialog');
 
   files.forEach((file, index) => {
     cy.get('@fileUploadDialog').within(() => {
@@ -135,8 +133,9 @@ function addPublicationDocuments(files) {
     }
   });
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(modalSelectors.auModal.save).contains('Documenten toevoegen')
-      .click();
+    cy.get(auk.modal.footer).within(() => {
+      // TODO Click the save button in your modal footer
+    });
   });
 
   cy.wait('@createNewPiece', {
@@ -150,5 +149,7 @@ function addPublicationDocuments(files) {
   cy.log('/addPublicationDocuments');
 }
 
+// ***********************************************
+// Commands
 Cypress.Commands.add('createPublication', createPublication);
 Cypress.Commands.add('addPublicationDocuments', addPublicationDocuments);

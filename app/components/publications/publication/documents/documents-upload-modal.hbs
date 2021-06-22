@@ -35,7 +35,6 @@
       <Utils::SimpleSpinner />
     {{else}}
       <Auk::Button
-        data-test-au-modal-footer-save
         @skin="primary"
         @disabled={{this.saveIsDisabled}}
         {{on "click" (perform this.savePieces)}}
