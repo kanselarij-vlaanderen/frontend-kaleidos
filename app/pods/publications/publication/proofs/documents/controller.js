@@ -10,11 +10,10 @@ import { tracked } from '@glimmer/tracking';
  */
 
 const PIECE_RELATED_ENTITIES = {
-  'source-documents': 0,
-  'proofing-activities.generated-pieces': 1,
-  'publication-activities.generated-pieces': 2,
+  SOURCE_DOCUMENTS: 'source-documents',
+  PROOFING_ACTIVITIES_GENERATED_PIECES: 'proofing-activities.generated-pieces',
+  PUBLICATION_ACTIVITIES_GENERATED_PIECES: 'publication-activities.generated-pieces',
 };
-
 
 const COLUMN_MAP = {
   ['ontvangen-op']: {
@@ -58,13 +57,32 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isRequestModalOpen = false;
 
   initRows(publicationSubcase) {
-    const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, 'source-documents'));
-    const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'proofing-activities.generated-pieces')));
-    const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, 'publication-activities.generated-pieces')));
-    this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
+    this.#createRows(publicationSubcase);
+    this.initSort();
+  }
 
+  #createRows(publicationSubcase) {
+    const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.SOURCE_DOCUMENTS));
+    const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PROOFING_ACTIVITIES_GENERATED_PIECES)));
+    const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PUBLICATION_ACTIVITIES_GENERATED_PIECES)));
+    this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
+  }
+
+  initSort() {
     this.sortingString = this.qpSortingString;
-    const sorting = SortingStringUtils.fromStringRestricted(this.sortingString, Object.keys(COLUMN_MAP));
+    let sorting = this.sortingFromString(this.sortingString);
+    console.log(sorting);
+    if (sorting) {
+      const restrictedKeys = Object.keys(COLUMN_MAP);
+      const isValidSortKey = restrictedKeys.includes(sorting.key);
+      if (!isValidSortKey) {
+        this.set('qpSortingString', '');
+        this.sortingString = '';
+        sorting = undefined;
+      }
+    }
+
+    console.log(sorting);
     this.sort(sorting);
   }
 
@@ -103,49 +121,13 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   changeSorting(sortingString) {
     this.sortingString = sortingString;
-    this.set('qpSorting', sortingString);
-    const sorting = SortingStringUtils.fromString(sortingString);
+    this.set('qpSortingString', sortingString);
+    const sorting = this.sortingFromString(sortingString);
     this.sort(sorting);
     this.rows.arrayContentDidChange();
   }
 
-  sort(sorting) {
-    if (sorting) {
-      const getProperty = COLUMN_MAP[sorting.key].property;
-      this.rows.sort((element1, element2) => {
-        let comparison = getProperty(element1) - getProperty(element2);
-        comparison = sorting.isDescending ? -comparison : comparison;
-        return comparison;
-      });
-    } else {
-      this.rows.sort((row1, row2) => {
-        let comparison = PIECE_RELATED_ENTITIES[row1.type] - PIECE_RELATED_ENTITIES[row2.type];
-        if (!comparison) {
-          comparison = row1.piece.created - row2.piece.created;
-        }
-        return comparison;
-      });
-    }
-  }
-
-  @action
-  openPieceUploadModal() {
-    // TODO
-  }
-}
-
-const SortingStringUtils = {
-  fromStringRestricted(sortingString, restrictedKeys) {
-    const sorting = this.fromString(sortingString);
-    if (!sorting) {
-      return undefined;
-    }
-    if (!restrictedKeys.includes(sorting.key)) {
-      return undefined;
-    }
-    return sorting;
-  },
-  fromString(sortingString) {
+  sortingFromString(sortingString) {
     if (!sortingString) {
       return undefined;
     }
@@ -156,14 +138,27 @@ const SortingStringUtils = {
       key: sortKey,
       isDescending: isDescending,
     };
-  },
-  toString(sorting) {
+  }
+
+  sort(sorting) {
+    let comparison = (row1, row2) => row1.piece.created - row2.piece.created;
     if (sorting) {
-      return (sorting.isDescending ? '-' : '') + sorting.key;
+      const getProperty = COLUMN_MAP[sorting.key].property;
+      comparison = (element1, element2) => {
+        let comparison = getProperty(element1) - getProperty(element2);
+        comparison = sorting.isDescending ? -comparison : comparison;
+        return comparison;
+      };
     }
-    return '';
-  },
-};
+    this.rows.sort(comparison);
+  }
+
+  @action
+  openPieceUploadModal() {
+    // TODO
+  }
+}
+
 
 function flatten(arrayOfArrays, flatArray = []) {
   for (const arrayOrValue of arrayOfArrays) {
