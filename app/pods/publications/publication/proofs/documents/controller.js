@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -58,7 +59,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   initRows(publicationSubcase) {
     this.#createRows(publicationSubcase);
-    this.initSort();
+    this.#initSort();
   }
 
   #createRows(publicationSubcase) {
@@ -68,9 +69,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
   }
 
-  initSort() {
+  #initSort() {
     this.sortingString = this.qpSortingString;
-    let sorting = this.sortingFromString(this.sortingString);
+    let sorting = this.#sortingFromString(this.sortingString);
     console.log(sorting);
     if (sorting) {
       const restrictedKeys = Object.keys(COLUMN_MAP);
@@ -83,7 +84,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
 
     console.log(sorting);
-    this.sort(sorting);
+    this.#sort(sorting);
   }
 
   get canOpenRequestModal() {
@@ -122,12 +123,12 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   changeSorting(sortingString) {
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
-    const sorting = this.sortingFromString(sortingString);
-    this.sort(sorting);
+    const sorting = this.#sortingFromString(sortingString);
+    this.#sort(sorting);
     this.rows.arrayContentDidChange();
   }
 
-  sortingFromString(sortingString) {
+  #sortingFromString(sortingString) {
     if (!sortingString) {
       return undefined;
     }
@@ -140,7 +141,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     };
   }
 
-  sort(sorting) {
+  #sort(sorting) {
     let comparison = (row1, row2) => row1.piece.created - row2.piece.created;
     if (sorting) {
       const getProperty = COLUMN_MAP[sorting.key].property;
@@ -158,7 +159,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     // TODO
   }
 }
-
 
 function flatten(arrayOfArrays, flatArray = []) {
   for (const arrayOrValue of arrayOfArrays) {
