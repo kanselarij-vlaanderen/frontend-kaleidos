@@ -131,6 +131,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     });
     this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
     this.notifyChanges(statusChange);
+    await this.loadPublicationStatusChange.perform();
   }
 
   @action

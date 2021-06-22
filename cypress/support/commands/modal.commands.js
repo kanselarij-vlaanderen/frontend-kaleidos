@@ -1,7 +1,7 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
 
-import modal from '../../selectors/modal.selectors';
+import utils from '../../selectors/utils.selectors';
 
 /**
  * Validate the content of the dropdown
@@ -13,7 +13,7 @@ import modal from '../../selectors/modal.selectors';
 function openSettingsModal(selector) {
   cy.log('openSettingsModal');
   cy.get(selector).click();
-  cy.get(modal.baseModal.dialogWindow).should('be.visible');
+  cy.get(utils.vlModal.dialogWindow).should('be.visible');
   cy.log('/openSettingsModal');
 }
 
@@ -25,8 +25,8 @@ function openSettingsModal(selector) {
  */
 function closeSettingsModal() {
   cy.log('closeSettingsModal');
-  cy.get(modal.baseModal.close).click();
-  cy.get(modal.baseModal.dialogWindow).should('not.be.visible');
+  cy.get(utils.vlModal.close).click();
+  cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
   cy.log('/closeSettingsModal');
 }
 

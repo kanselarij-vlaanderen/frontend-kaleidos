@@ -452,7 +452,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelApproveAgenda"}}>
       <Auk::Button
-        data-test-au-modal-footer-save
+        data-test-agenda-header-approve-agenda-confirm
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
         {{on "click" (action "confirmApproveAgenda")}}
       >
@@ -493,7 +493,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelApproveAgendaAndCloseMeeting"}}>
       <Auk::Button
-        data-test-au-modal-footer-save
+        data-test-agenda-header-approve-and-close-agenda-confirm
         @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
         {{on "click" (action "confirmApproveAgendaAndCloseMeeting")}}
       >
@@ -523,7 +523,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelCloseMeeting"}}>
       <Auk::Button
-        data-test-au-modal-footer-save
+        data-test-agenda-header-lock-agenda-confirm
         @skin={{if
           (await this.currentSession.latestAgenda.isDesignAgenda)
           "danger-primary"
@@ -556,7 +556,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelDeleteSelectedAgenda"}}>
       <Auk::Button
-        data-test-au-modal-footer-save
+        data-test-agenda-header-delete-agenda-confirm
         @skin="danger-primary"
         {{on "click" (action "confirmDeleteSelectedAgenda")}}
       >
@@ -583,7 +583,7 @@
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelReopenPreviousAgenda"}}>
       <Auk::Button
-        data-test-au-modal-footer-save
+        data-test-agenda-header-reopen-previous-version-confirm
         @skin="danger-primary"
         {{on "click" (action "confirmReopenPreviousAgenda")}}
       >

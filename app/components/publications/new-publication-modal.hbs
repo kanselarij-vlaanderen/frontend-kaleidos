@@ -1,4 +1,4 @@
-<Auk::Modal data-test-au-modal-publication-new>
+<Auk::Modal>
   <Auk::Modal::Header
     @title={{if
       this.isViaCouncilOfMinisters
@@ -58,11 +58,11 @@
             </div>
           </div>
           {{#if this.numberIsAlreadyUsed}}
-            <Auk::Label @error={{true}} data-test-au-label-error="true">
+            <Auk::Label @error={{true}}>
               {{t "publication-number-already-taken"}}
             </Auk::Label>
           {{else if this.hasPublicationNumberError}}
-            <Auk::Label @error={{true}} data-test-au-label-error="true">
+            <Auk::Label @error={{true}}>
               {{t "input-error-message"}}
             </Auk::Label>
           {{/if}}
@@ -96,7 +96,7 @@
           </Auk::Label>
           <Auk::Textarea id="shortTitleInput" @rows="2" @value={{mut this.shortTitle}} data-test-create-publication-modal-short-title-textarea />
           {{#if this.hasShortTitleError}}
-            <Auk::Label @error={{true}} data-test-au-label-error="true">
+            <Auk::Label @error={{true}}>
               {{t "input-error-message"}}
             </Auk::Label>
           {{/if}}

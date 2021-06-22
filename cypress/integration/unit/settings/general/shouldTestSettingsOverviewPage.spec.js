@@ -2,17 +2,15 @@
 // / <reference types="Cypress" />
 
 import settings from '../../../../selectors/settings.selectors';
-import toolbar from '../../../../selectors/toolbar.selectors';
-import modal from '../../../../selectors/modal.selectors';
 import utils from '../../../../selectors/utils.selectors';
-import form from '../../../../selectors/form.selectors';
 import dependency from '../../../../selectors/dependency.selectors';
+import auk from '../../../../selectors/auk.selectors';
 
 context('Settings overview page tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
   });
 
@@ -76,12 +74,12 @@ context('Settings overview page tests', () => {
 
   it('Upload a CSV and delete a user', () => {
     cy.visit('/');
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(form.fileUploadButton).click();
+    cy.get(utils.simpleFileUploader).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
     cy.get(settings.usersIndex.searchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
@@ -95,7 +93,7 @@ context('Settings overview page tests', () => {
           .click();
       });
     cy.route('GET', '/users/*').as('getUsers');
-    cy.get(modal.verify.save).should('exist')
+    cy.get(utils.vlModalVerify.save).should('exist')
       .should('be.visible')
       .click();
     cy.wait('@getUsers').then(() => {
@@ -190,7 +188,7 @@ context('Settings overview page tests', () => {
       cy.get(dependency.emberPowerSelect.option).contains('kabinet')
         .click();
       cy.wait(5000); // TODO await PATCH call instead
-      cy.get(utils.generalBackButton).should('exist')
+      cy.get(auk.backButton).should('exist')
         .should('be.visible')
         .click();
       cy.wait(3000); // TODO why wait ?

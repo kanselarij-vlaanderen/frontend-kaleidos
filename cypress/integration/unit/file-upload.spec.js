@@ -1,8 +1,8 @@
 /* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function formatmeetingDocumentsUrl(meetingId, agendaId) {
   return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
@@ -126,8 +126,10 @@ context('Add files to an agenda', () => { // At the meeting-level
   it('should delete documents, pieces and files', () => {
     const meetingId = '5EBA8CE1DAB6BB0009000009';
     const agendaId = '5EBA8CE3DAB6BB000900000A';
+    cy.route('GET', '/pieces?filter\\[:id:\\]=*').as('loadPieceData');
     cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
-    cy.wait('@loadPieces');
+    cy.wait('@loadPieces'); // general load
+    cy.wait('@loadPieceData'); // specific load to ensure document-container is loaded
 
     // Test if the documents we're looking for are present
     cy.get(document.documentCard.card).as('docCards');
@@ -144,8 +146,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
+    cy.get(utils.vlModalVerify.container).within(() => {
+      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
         .click();
     });
 
@@ -179,8 +181,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
+    cy.get(utils.vlModalVerify.container).within(() => {
+      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
         .click();
     });
 

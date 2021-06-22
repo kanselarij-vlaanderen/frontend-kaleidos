@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 
 // Commands
-import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
+
 // ***********************************************
 
 // Functions
@@ -22,29 +22,29 @@ function selectDate(year, month, day, index) {
   let element;
 
   if (index !== undefined) {
-    element = cy.get(form.datepickerInput).eq(index)
+    element = cy.get(utils.vlDatepicker).eq(index)
       .click();
-    element.get(agenda.flatpickrMonthDropdownMonths).eq(index)
+    element.get(dependency.flatpickrMonthDropdownMonths).eq(index)
       .select(month);
-    element.get(agenda.numInputWrapper).get(agenda.inputNumInputCurYear)
+    element.get(dependency.numInputWrapper).get(dependency.inputNumInputCurYear)
       .eq(index)
       .clear()
       .type(year, {
         delay: 300,
       });
-    element.get(agenda.flatpickrDay).should('be.visible')
+    element.get(dependency.flatpickrDay).should('be.visible')
       .contains(day)
       .click();
   } else {
-    element = cy.get(form.datepickerInput).click();
-    element.get(agenda.flatpickrMonthDropdownMonths).select(month);
-    element.get(agenda.numInputWrapper)
-      .get(agenda.inputNumInputCurYear)
+    element = cy.get(utils.vlDatepicker).click();
+    element.get(dependency.flatpickrMonthDropdownMonths).select(month);
+    element.get(dependency.numInputWrapper)
+      .get(dependency.inputNumInputCurYear)
       .clear()
       .type(year, {
         delay: 300,
       });
-    element.get(agenda.flatpickrDay).contains(day)
+    element.get(dependency.flatpickrDay).contains(day)
       .click();
   }
   cy.log('/selectDate');

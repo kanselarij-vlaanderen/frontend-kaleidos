@@ -24,12 +24,12 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   get totalPages() {
     const pages = this.args.selectedPieces.mapBy('pages').filter((page) => page >= 0);
-    return add(pages);
+    return pages.length ? add(pages) : 0;
   }
 
   get totalWords() {
     const words = this.args.selectedPieces.mapBy('words').filter((word) => word >= 0);
-    return add(words);
+    return words.length ? add(words) : 0;
   }
 
   get totalDocuments() {

@@ -2,7 +2,6 @@
   class="auk-input--block"
   @icon="search"
   @type="text"
-  data-test-trigger-search-input
   @placeholder={{t "search-placeholder"}}
   value={{this.searchText}}
   {{on "input" (perform this.debouncedSearch)}}

@@ -45,5 +45,49 @@ const selectors = {
     addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
   },
 
+  // agenda/agendaitems/agendaitem/documents/template
+  agendaitemDocuments: {
+    batchEdit: '[data-test-agenda---agendaitem-documents-batch-edit]',
+  },
+
+  /**
+    ROUTE CASES
+  */
+
+  // cases/case/subcase/subcase/overview/template
+  subcaseOverview: {
+    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
+  },
+
+  /**
+    ROUTE SEARCH
+  */
+
+  // search/template
+  search: {
+    input: '[data-test-route-search-input]',
+    trigger: '[data-test-route-search-trigger]',
+    // TODO unused selector:
+    datepickerButton: '[data-test-route-search-datepicker-button]',
+  },
+
+  /**
+    ROUTE NEWSLETTER
+  */
+
+  // newsletter/template
+  newsletter: {
+    dataTable: '[data-test-route-newsletter-data-table]',
+  },
+
+  /**
+    ROUTE NEWSLETTERS
+  */
+
+  // newsletters/template
+  newsletters: {
+    dataTable: '[data-test-route-newsletters-data-table]',
+  },
+
 };
 export default selectors;
