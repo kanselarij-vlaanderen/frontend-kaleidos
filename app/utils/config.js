@@ -182,39 +182,6 @@ export default EmberObject.create({
     KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
     INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
   },
-  SUBCASE_TYPES: {
-    vertalen: {
-      id: 'd25ac65a-34a9-11eb-adc1-0242ac120002',
-      url: 'http://example.com/step/d25ac65a-34a9-11eb-adc1-0242ac120002',
-    },
-    handtekenen: {
-      id: 'e711f906-34a9-11eb-adc1-0242ac120002',
-      url: 'http://example.com/step/e711f906-34a9-11eb-adc1-0242ac120002',
-    },
-    drukproef: {
-      id: 'ef78bb52-34a9-11eb-adc1-0242ac120002',
-      url: 'http://example.com/step/ef78bb52-34a9-11eb-adc1-0242ac120002',
-    },
-    publicatieBS: {
-      id: 'ec5877b7-737b-4051-9b8b-abd177b61236',
-      url: 'http://example.com/step/ec5877b7-737b-4051-9b8b-abd177b61236',
-    },
-  },
-  // TODO this is now called modes and is no longer used
-  PUBLICATION_TYPES: {
-    extenso: {
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5fcca4a7-3e1f-44ec-b854-e21ad092c524',
-      id: '5fcca4a7-3e1f-44ec-b854-e21ad092c524',
-    },
-    bijUitreksel: {
-      uri: 'http://kanselarij.vo.data.gift/id/concept/publicatie-types/5423c83d-ae5c-4973-8cb7-baefdc3e4949',
-      id: '5423c83d-ae5c-4973-8cb7-baefdc3e4949',
-    },
-  },
-  URGENCY_LEVELS: {
-    spoedprocedure: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
-    standaard: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
-  },
   EMAIL: {
     DEFAULT_FROM: 'noreply@kaleidos.vlaanderen.be',
     TO: {
