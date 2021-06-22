@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
@@ -12,7 +14,13 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
       include: 'document-container',
     });
     pieces = pieces.toArray();
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    if (agendaitem.isApproval) {
+      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('agenda.agendaitems.agendaitem').get('linkedPieces')
