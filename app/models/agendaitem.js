@@ -123,7 +123,7 @@ export default ModelWithModifier.extend({
                   },
                 },
                 type: {
-                  id: CONFIG.noteId,
+                  id: CONFIG.notaID,
                 },
               },
               include: 'pieces,type,pieces.access-level',

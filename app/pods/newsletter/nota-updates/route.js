@@ -34,7 +34,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const notas = await this.store.query('piece', {
       'filter[agendaitems][agenda][:id:]': agendaId,
       'filter[agendaitems][show-as-remark]': false,
-      'filter[document-container][type][:id:]': CONFIG.noteId,
+      'filter[document-container][type][:id:]': CONFIG.notaID,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       include: 'agendaitems',
       'fields[agendaitems]': 'id,priority,short-title',
