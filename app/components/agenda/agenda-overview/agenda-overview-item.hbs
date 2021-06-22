@@ -65,7 +65,7 @@
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
             {{#if @isEditingFormallyOkStatus}}
               <Utils::FormallyOkSelector
-                data-test-agenda-overview-item-formally-ok="true"
+                data-test-agenda-overview-item-formally-ok={{true}}
                 @formallyOkStatusUri={{@agendaitem.formallyOk}}
                 @onChange={{this.setAndSaveFormallyOkStatus}}
               />

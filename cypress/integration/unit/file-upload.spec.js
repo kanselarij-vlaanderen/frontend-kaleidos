@@ -146,10 +146,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(utils.vlModalVerify.container).within(() => {
-      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
 
     cy.wait('@deleteFile', {
       timeout: 20000,
@@ -170,21 +168,16 @@ context('Add files to an agenda', () => { // At the meeting-level
       .within(() => {
         cy.get(document.documentCard.titleHeader).contains(/2e/);
         cy.get(document.documentCard.versionHistory).click();
-        cy.get(document.vlDocument.piece).as('pieces');
-        cy.get('@pieces').eq(0)
-          .within(() => {
-            cy.get(document.vlDocument.delete).click();
-          });
+        cy.get(document.vlDocument.piece).should('have.length', 1);
+        cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
       });
 
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(utils.vlModalVerify.container).within(() => {
-      cy.get(utils.vlModalVerify.save).contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
 
     cy.wait('@deleteFile', {
       timeout: 20000,
@@ -196,7 +189,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@loadPieces');
 
     // Nothing should be left
-    cy.get('@docCards').should('have.length', 0);
+    cy.get(document.documentCard.card).should('have.length', 0);
 
     cy.deleteAgenda(meetingId, true);
   });

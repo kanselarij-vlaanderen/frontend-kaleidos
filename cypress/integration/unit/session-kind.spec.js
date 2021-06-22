@@ -41,6 +41,7 @@ context('Different session kinds should show different titles', () => {
   });
 
   // TODO-PVV agenda
+  // TODO-printableAgenda shows session-kind
 
   it('should show the correct translations for normal session in decision print overview', () => {
     const headerText = 'Beslissingen van de Vlaamse Regering - Ministerraad van';

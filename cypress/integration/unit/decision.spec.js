@@ -3,8 +3,8 @@
 
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
-import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -18,9 +18,6 @@ context('Add files to an agenda', () => {
   before(() => {
     cy.server();
     cy.resetCache();
-    // cy.login('Admin');
-    // cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    // cy.logout();
   });
 
   beforeEach(() => {
@@ -49,7 +46,6 @@ context('Add files to an agenda', () => {
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
     });
-    // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.addDocumentToTreatment(file);
@@ -58,10 +54,10 @@ context('Add files to an agenda', () => {
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
-    cy.get(utils.vlModal.dialogWindow).contains('test')
-      .should('not.exist');
 
-    cy.get('@fileUploadDialog').within(() => {
+    cy.get(document.vlUploadedDocument.filename).should('not.exist');
+
+    cy.get(utils.vlModal.dialogWindow).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
@@ -84,13 +80,12 @@ context('Add files to an agenda', () => {
     });
 
     cy.get(document.documentCard.card).as('docCards');
-
     cy.get('@docCards').should('have.length', 1);
 
+    // TODO-command addNewPieceToTreatment
     cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-
     cy.get(document.documentCard.titleHeader).eq(0)
       .contains(/BIS/);
 
@@ -98,19 +93,15 @@ context('Add files to an agenda', () => {
     cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.titleHeader).contains(/TER/);
         cy.get(document.documentCard.versionHistory).click();
-        cy.get(document.vlDocument.piece).as('pieces');
-        cy.get('@pieces').eq(0) // this is the TER piece
-          .within(() => {
-            cy.get(document.vlDocument.delete).click();
-          });
+        cy.get(document.vlDocument.piece).should('have.length', 3);
+        cy.get(document.vlDocument.delete).eq(0) // this is the TER piece
+          .click();
       });
-
     // verify modal
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
@@ -124,17 +115,15 @@ context('Add files to an agenda', () => {
       timeout: 12000,
     });
 
+    // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get(document.documentCard.titleHeader).contains(/BIS/);
         cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.delete).click();
       });
-
-    // Delete the document-container + all pieces
-    cy.get(document.documentCard.delete).click();
     cy.get(utils.vlModalVerify.save).contains('Verwijderen')
       .click();
-
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
@@ -145,11 +134,11 @@ context('Add files to an agenda', () => {
       timeout: 20000,
     });
 
-    cy.get('@docCards').should('have.length', 0);
+    cy.get(document.documentCard.card).should('have.length', 0);
   });
 
   it('should postpone an agendaitem and change the status of the treatment', () => {
-    // TODO replace setup by existing data and make new zip
+    // TODO-setup replace setup by existing data and make new zip
     const caseTitle = `Cypress test: Decision postponing - ${currentTimestamp()}`;
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: perform postpone action of agendaitem - ${currentTimestamp()}`;
@@ -176,19 +165,15 @@ context('Add files to an agenda', () => {
     cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted);
-    cy.get(agenda.agendaDetailSidebarItem.retracted);
+    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
+    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 1);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
     cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted)
-      .should('not.exist');
-
-    // TODO why go to press agenda ?
-    cy.get(agenda.agendaitemNav.pressAgendaTab).click();
-    cy.url().should('contain', '/persagenda');
+    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
+    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 0);
 
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
