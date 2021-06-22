@@ -29,16 +29,21 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async afterModel() {
     this.defaultAccessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    this.currentAgenda = await this.agendaitem.agenda;
+    this.previousAgenda = await this.currentAgenda.previousVersion;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    controller.set('agendaitem', agendaitem);
-    controller.set('defaultAccessLevel', this.defaultAccessLevel);
+    controller.agendaitem = this.agendaitem;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.isEnabledPieceEdit = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
+    controller.currentAgenda = this.currentAgenda;
+    controller.previousAgenda = this.previousAgenda;
+    controller.loadNewPieces.perform();
   }
 
   @action

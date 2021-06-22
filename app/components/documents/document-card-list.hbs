@@ -4,6 +4,7 @@ as |documents|>
   {{#each documents as |doc|}}
     <Documents::DocumentCard
       @piece={{doc}}
+      @isHighlighted={{includes doc @highlightedPieces}}
       @hideNewerVersions={{false}}
       @didDeletePiece={{@didDeletePiece}}
       @didDeleteContainer={{@didDeleteContainer}}
