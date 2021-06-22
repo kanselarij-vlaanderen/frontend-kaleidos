@@ -61,18 +61,15 @@
               @dateChanged={{fn (mut this.dateFromBuffer)}}
             />
             {{#if this.dateFromBuffer}}
-              <button
-                data-test-route-search-datepicker-button
-                type="button"
-                class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
+              <Auk::Button
+                @skin="muted-borderless"
+                @layout="icon-only"
+                @icon="close"
+                class="auk-button-in-input"
                 {{on "click" (fn (mut this.dateFromBuffer) null)}}
+                data-test-route-search-datepicker-button
               >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-close" aria-hidden="true"></i>
-                  </div>
-                </span>
-              </button>
+              </Auk::Button>
             {{/if}}
           </div>
         </div>
@@ -84,17 +81,14 @@
               @dateChanged={{fn (mut this.dateToBuffer)}}
             />
             {{#if this.dateToBuffer}}
-              <button
-                type="button"
-                class="auk-button auk-button--muted-borderless auk-button--icon auk-button-in-input"
+              <Auk::Button
+                @skin="muted-borderless"
+                @layout="icon-only"
+                @icon="close"
+                class="auk-button-in-input"
                 {{on "click" (fn (mut this.dateToBuffer) null)}}
               >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-close" aria-hidden="true"></i>
-                  </div>
-                </span>
-              </button>
+              </Auk::Button>
             {{/if}}
           </div>
         </div>

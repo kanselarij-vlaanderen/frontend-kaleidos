@@ -194,14 +194,15 @@
                     </td>
                   {{/if}}
                   <td>
-                    <LinkTo
-                      data-test-publications-button-go-to-publication
+                    <Auk::Button
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="chevron-right"
                       @route="publications.publication"
-                      @model={{row.id}} class="auk-button auk-button--borderless auk-button--icon">
-                      <span class="auk-button__content">
-                        <i class="ki ki-chevron-right"></i>
-                      </span>
-                    </LinkTo>
+                      @model={{row.id}}
+                      data-test-publications-button-go-to-publication
+                    >
+                    </Auk::Button>
                   </td>
                 </tr>
               {{/each}}

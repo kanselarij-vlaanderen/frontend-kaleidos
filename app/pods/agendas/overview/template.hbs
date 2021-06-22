@@ -44,17 +44,14 @@
                 value=dateFilter
                 placeholder="bv. 01/2020"
               }}
-              <button class="auk-button auk-button--secondary auk-button--icon"
-                type="submit"
+              <Auk::Button
+                @skin="secondary"
+                @layout="icon-only"
+                @icon="search"
                 data-test-route-agendas-overview-filter-button
-                onclick={{action "setDateFilter" dateFilter}}
+                {{on "click" (fn (action "setDateFilter") dateFilter)}}
               >
-                <span class="auk-button__content">
-                  <div class="auk-icon auk-icon--default">
-                    <i class="ki ki-search"></i>
-                  </div>
-                </span>
-              </button>
+              </Auk::Button>
             </div>
           </div>
         </div>
@@ -136,18 +133,27 @@
                       {{meeting.kindToShow.label}}
                     </td>
                     <td class="auk-u-text-align--center">
-                      {{#link-to
-                        "agenda.agendaitems"
-                        meeting.id
-                        (await meeting.latestAgenda.id)
-                        class="auk-button auk-button--borderless auk-button--icon"
-                      }}
-                        <span class="auk-button__content">
-                          <div class="auk-icon auk-icon--default">
-                            <i class="ki ki-nav-right"></i>
-                          </div>
-                        </span>
-                      {{/link-to}}
+                      <Auk::Button
+                        @skin="borderless"
+                        @layout="icon-only"
+                        @icon="nav-right"
+                        @route="agenda.agendaitems"
+                        @models={{array meeting.id (await meeting.latestAgenda.id)}}
+                      >
+                      </Auk::Button>
+
+                      {{!--  --}}
+
+                      {{#if (await meeting.latestAgenda.id)}}
+                        <Auk::Button
+                          @skin="borderless"
+                          @layout="icon-only"
+                          @icon="nav-right"
+                          @route="agenda.agendaitems"
+                          @models={{array meeting.id meeting.latestAgenda.id}}
+                        >
+                        </Auk::Button>
+                      {{/if}}
                     </td>
                   {{/if}}
                 {{/c.body}}
