@@ -1,6 +1,6 @@
 /* eslint-disable ember/no-arrow-function-computed-properties */
 import Component from '@ember/component';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject, { computed } from '@ember/object';
 
 export default Component.extend({
@@ -8,7 +8,7 @@ export default Component.extend({
   isLoading: null,
   hideLabel: null,
 
-  options: computed(() => CONFIG.kinds.map((meetingType) => EmberObject.create(meetingType))),
+  options: computed(() => CONSTANTS.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
 
   selectedkind: computed('options', 'kind', function() {
     return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');

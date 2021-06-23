@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import {
@@ -44,7 +44,7 @@ export default Model.extend({
 
   label: computed('plannedStart', 'kind', 'numberRepresentation', function() {
     const date = moment(this.plannedStart).format('DD-MM-YYYY');
-    const kind = CONFIG.kinds.find((kind) => kind.uri === this.kind);
+    const kind = CONSTANTS.MINISTERRAAD_TYPES.TYPES.find((type) => type.uri === this.kind);
     const kindLabel = kind ? kind.altLabel : '';
     return `${kindLabel} ${this.intl.t('of')} ${date} (${this.numberRepresentation})`;
   }),
@@ -124,11 +124,12 @@ export default Model.extend({
   }),
 
   kindToShow: computed('kind', function() {
-    const options = CONFIG.kinds;
+    const options = CONSTANTS.MINISTERRAAD_TYPES.TYPES;
     const {
       kind,
     } = this;
     const foundOption = options.find((kindOption) => kindOption.uri === kind);
+
 
     return EmberObject.create(foundOption);
   }),
