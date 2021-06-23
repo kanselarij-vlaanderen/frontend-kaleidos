@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   async model() {
@@ -12,7 +14,13 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
       include: 'document-container',
     });
     pieces = pieces.toArray();
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    if (agendaitem.isApproval) {
+      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
+
     return {
       pieces: sortedPieces,
       // linkedPieces: this.modelFor('agenda.agendaitems.agendaitem').get('linkedPieces')
@@ -21,16 +29,21 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   async afterModel() {
     this.defaultAccessLevel = await this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+    this.agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
+    this.currentAgenda = await this.agendaitem.agenda;
+    this.previousAgenda = await this.currentAgenda.previousVersion;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
-    const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
-    controller.set('agendaitem', agendaitem);
-    controller.set('defaultAccessLevel', this.defaultAccessLevel);
+    controller.agendaitem = this.agendaitem;
+    controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.isEnabledPieceEdit = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
+    controller.currentAgenda = this.currentAgenda;
+    controller.previousAgenda = this.previousAgenda;
+    controller.loadNewPieces.perform();
   }
 
   @action
