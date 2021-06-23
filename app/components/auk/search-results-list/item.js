@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { computed } from '@ember/object';
 import { assert } from '@ember/debug';
 import { isPresent } from '@ember/utils';
 
@@ -13,7 +12,6 @@ import { isPresent } from '@ember/utils';
 export default class Item extends Component {
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
   // https://github.com/emberjs/ember.js/issues/18265
-  @computed('args.{model,models}')
   get models() {
     const hasModel = 'model' in this.args;
     const hasModels = 'models' in this.args;
