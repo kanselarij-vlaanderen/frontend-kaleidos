@@ -1,5 +1,6 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import { inject as service } from '@ember/service';
+import { later } from '@ember/runloop';
 
 export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
@@ -35,6 +36,6 @@ async function retryOnError(ajax, ajaxArgs, retryCount = 0) {
 }
 
 function sleep(time) {
-  return new Promise((resolve) => setTimeout(() => resolve(true), time));
+  return new Promise((resolve) => later(this, () => resolve(true), time));
 }
 
