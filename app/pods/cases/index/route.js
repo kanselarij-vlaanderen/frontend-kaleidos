@@ -45,6 +45,7 @@ export default class CasesIndexRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
+    return true;
   }
 
   @action
