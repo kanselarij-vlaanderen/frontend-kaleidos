@@ -27,12 +27,14 @@ export default Model.extend({
 
   latestSubcase: computed('subcases.@each', function() {
     return PromiseObject.create({
-      promise:
-        this.get('subcases').then((subcases) => {
-          const sortedSubcases = subcases.sortBy('created');
-          return sortedSubcases.get('lastObject');
-        }),
+      promise: this.store.queryOne('subcase', {
+        filter: {
+          case: {
+            ':id:': this.id,
+          },
+        },
+        sort: '-created',
+      }),
     });
   }),
-
 });
