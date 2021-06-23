@@ -21,8 +21,6 @@ export default class PublicationsPublicationCaseLinkMandateeModalComponent exten
 
   @task
   *onLink() {
-    this.args.publicationFlow.mandatees.addObject(this.selection);
-    yield this.args.publicationFlow.save();
     yield this.args.onLink(this.selection);
   }
 }

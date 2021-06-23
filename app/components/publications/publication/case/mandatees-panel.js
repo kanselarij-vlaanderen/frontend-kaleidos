@@ -20,7 +20,9 @@ export default class PublicationsPublicationCaseMandateesPanelComponent extends 
   }
 
   @action
-  async onLink() {
+  async link(selection) {
+    this.args.publicationFlow.mandatees.addObject(selection);
+    await this.args.publicationFlow.save();
     this.isOpenLinkModal = false;
   }
 
