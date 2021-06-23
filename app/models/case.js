@@ -2,14 +2,12 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-import { inject } from '@ember/service';
 
 const {
   Model, attr, hasMany, PromiseObject,
 } = DS;
 
 export default Model.extend({
-  caseService: inject(),
   created: attr('datetime'),
   title: attr('string'),
   shortTitle: attr('string'),
