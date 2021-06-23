@@ -52,6 +52,7 @@
     {{else}}
       <Documents::DocumentCardList
         @pieces={{this.model.pieces}}
+        @highlightedPieces={{this.newAgendaitemPieces}}
         @onOpenUploadModal={{this.ensureFreshData}}
         @onAddPiece={{perform this.addPiece}}
         @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
