@@ -11,9 +11,11 @@ export default class PublicationActivity extends Model {
   // Relations.
   @belongsTo('publication-subcase') subcase;
 
-  @hasMany('piece') usedPieces;
+  @hasMany('piece', {
+    serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)
+  }) usedPieces;
   // TODO this should be decision according to model, which is a type of piece but not implemented
   @hasMany('piece', {
-    inverse: 'publicationActivityAsGenerated',
+    serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)
   }) generatedPieces;
 }

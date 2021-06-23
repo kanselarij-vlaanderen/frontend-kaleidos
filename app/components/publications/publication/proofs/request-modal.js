@@ -1,44 +1,62 @@
+/* eslint-disable no-dupe-class-members */
 // !! NOT READY FOR REVIEW (KAS-2475)
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
-// class AttachmentRow {
-//   @tracked isSelected = false;
-//   @tracked attachment;
+class Validation {
+  constructor(
+    getShowError,
+    check) {
+    this.getShowError = getShowError;
+    this.check = check;
+  }
 
-//   constructor(attachment) {
-//     this.attachment = attachment;
-//   }
-// }
+  get isValid() {
+    return this.check();
+  }
+
+  get showError() {
+    return this.getShowError() && !this.check();
+  }
+}
 
 export default class PublicationsPublicationProofsRequestModalComponent extends Component {
-  @inject store;
-  @inject intl;
+  @service intl;
 
   @tracked subject = undefined;
   @tracked shortTitle = undefined;
   @tracked longTitle = undefined;
   @tracked message = undefined;
+  @tracked selectedAttachments = [];
 
-  @tracked attachmentSelection = [];
+  @tracked showErrors = true;
 
   constructor() {
     super(...arguments);
-    this.attachmentSelection = this.args.attachments;
-    // this.attachmentRows = this.args.attachments.map((it) => new AttachmentRow(it));
+    this.#init();
   }
 
-  @task
-  init() {
-    this.subject = `Publicatieaanvraag VO-dossier: ${this.publicationSubcase.publicationFlow.identifier}`,
+  async #init() {
+    this.#initValidation('subject', () => !isBlank(this.subject));
+    this.#initValidation('message', () => !isBlank(this.message));
+    this.selectedAttachments = [...this.args.attachments];
+    const identification = this.args.publicationFlow.identification;
+    const idName = identification.get('idName');
+    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
     this.message = proofRequestEmail({
-      identifier: this.publicationSubcase.identifier.idName,
+      identifier: idName,
     });
+  }
+
+  @tracked
+  validations = {};
+  #initValidation(key, check) {
+    this.validations[key] = new Validation(() => this.showErrors, check);
   }
 
   get modalTitle() {
@@ -47,42 +65,33 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     return `${title} (${initial})`;
   }
 
-  #validations = ['isSubjectValid', 'isMessageValid'];
-
-  get isSubjectValid() {
-    return !isBlank(this.subject);
-  }
-
-  get isMessageValid() {
-    return !isBlank(this.message);
-  }
-
   get canSave() {
-    return this.#validations.every((validation) => this[validation]);
+    return Object.entries(this.validations).every(([, validation]) => validation.isValid);
   }
 
   @task
-  save() {
-    const now = new Date();
-    this.store.createRecord('request-activity', {
-      title: this.subject,
-      startDate: now,
+  *onSave() {
+    if (!this.canSave) {
+      return;
+    }
+
+    const properties = {
+      stage: this.args.stage,
+      subject: this.subject,
+      message: this.message,
+      attachments: [...this.selectedAttachments],
       publicationSubcase: this.args.publicationSubcase,
-      usedPieces: this.attachmentSelection,
-    });
-    // this.store.createRecord('email', {
-    //   // from:
-    // });
+    };
+
+    yield this.args.onSave(properties);
   }
 
   @action
   toggleAttachmentSelection(attachment) {
-    // row.isSelected = !row.isSelected;
-
-    if (this.attachmentSelection.includes(attachment)) {
-      this.attachmentSelection.removeObject(attachment);
+    if (this.selectedAttachments.includes(attachment)) {
+      this.selectedAttachments.removeObject(attachment);
     } else {
-      this.attachmentSelection.pushObject(attachment);
+      this.selectedAttachments.pushObject(attachment);
     }
   }
 }

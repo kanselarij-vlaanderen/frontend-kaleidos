@@ -159,5 +159,10 @@
 
 {{#if this.isRequestModalOpen}}
   <Publications::Publication::Proofs::RequestModal
-    @attachments={{this.selection}} />
+    @stage={{this.requestStage}}
+    @publicationFlow={{this.publicationFlow}}
+    @publicationSubcase={{this.publicationSubcase}}
+    @attachments={{this.selection}}
+    @onSave={{this.onSaveRequest}}
+    @onCancel={{this.onCancelRequest}} />
 {{/if}}

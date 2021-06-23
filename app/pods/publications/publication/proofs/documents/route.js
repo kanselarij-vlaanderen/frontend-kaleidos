@@ -21,7 +21,6 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       sort: 'created,name',
     });
     pieces = pieces.toArray();
-    console.log(pieces);
     if (pieces.length < 6) {
       alert('Upload 6 pieces then I will generate test data.');
       return;
@@ -79,7 +78,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseFromParentRoute = this.modelFor('publications.publication.proofs');
 
-    // await this.generateTestData(publicationSubcaseFromParentRoute);
+    await this.generateTestData(publicationSubcaseFromParentRoute);
 
     const pieceInclude = {
       file: true,
@@ -103,11 +102,19 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     return publicationSubcase;
   }
 
-  setupController(controller, model) {
+  async afterModel(model) {
+    // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = model;
+  }
+
+  async setupController(controller, model) {
     super.setupController(...arguments);
 
-    controller.isOpenRequestModal = false;
+    controller.publicationSubcase = this.publicationSubcase;
+    controller.publicationFlow = this.publicationFlow;
     controller.initRows(model);
+    controller.isOpenRequestModal = false;
   }
 }
 

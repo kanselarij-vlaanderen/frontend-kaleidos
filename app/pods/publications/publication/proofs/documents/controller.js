@@ -2,6 +2,10 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { all as allTasks } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CONFIG from 'frontend-kaleidos/utils/config';
 
 /**
  * @typedef {{
@@ -42,20 +46,24 @@ class Row {
 }
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
-  @tracked rows;
-
   queryParams = [{
     qpSortingString: {
       as: 'volgorde',
     },
   }];
-
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString = '';
+
+  @tracked rows;
+  @tracked publicationFlow;
+  @tracked publicationSubcase;
+
+  @tracked isRequestModalOpen = false;
+  @tracked requestStage;
   /** @type {string} key name. prepended with minus if descending */
   @tracked sortingString = undefined;
-  @tracked isRequestModalOpen = false;
+
 
   initRows(publicationSubcase) {
     this.#createRows(publicationSubcase);
@@ -72,7 +80,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   #initSort() {
     this.sortingString = this.qpSortingString;
     let sorting = this.#sortingFromString(this.sortingString);
-    console.log(sorting);
     if (sorting) {
       const restrictedKeys = Object.keys(COLUMN_MAP);
       const isValidSortKey = restrictedKeys.includes(sorting.key);
@@ -83,7 +90,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       }
     }
 
-    console.log(sorting);
     this.#sort(sorting);
   }
 
@@ -92,9 +98,74 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  openRequestModal(mode) {
-    if (mode === 'new') {
+  openRequestModal(stage) {
+    if (stage === 'new') {
+      this.requestStage = stage;
       this.isRequestModalOpen = true;
+    }
+  }
+
+  @action
+  onCancelRequest() {
+    this.isRequestModalOpen = false;
+  }
+
+  @action
+  async onSaveRequest(requestProperties) {
+    await this.saveRequest.perform(requestProperties);
+    this.isRequestModalOpen = false;
+  }
+
+  @task
+  *saveRequest(requestProperties) {
+    console.log(requestProperties);
+    if (requestProperties.stage === 'new') {
+      const now = new Date();
+      const {
+        publicationSubcase,
+        attachments,
+      } = requestProperties;
+
+      const requestActivity = this.store.createRecord('request-activity', {
+        startDate: now,
+        title: requestProperties.subject,
+        publicationSubcase: publicationSubcase,
+        usedPieces: attachments,
+      });
+      yield requestActivity.save();
+
+      const proofingActivity = this.store.createRecord('proofing-activity', {
+        startDate: now,
+        title: requestProperties.subject,
+        subcase: publicationSubcase,
+        requestActivity: requestActivity,
+        usedPieces: attachments,
+      });
+      const proofingActivitySave = proofingActivity.save();
+      const saves = [proofingActivitySave];
+
+      if (!requestProperties.publicationSubcase.startDate) {
+        requestProperties.publicationSubcase.startDate = now;
+        const publicationSubcaseSave = publicationSubcase.save();
+        saves.push(publicationSubcaseSave);
+      }
+
+      const filePromises = attachments.mapBy('file');
+      const attachmentFiles = yield Promise.all(filePromises);
+      const mailFolder = yield this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+      const email = this.store.createRecord('email', {
+        from: CONFIG.EMAIL.DEFAULT_FROM,
+        to: CONFIG.EMAIL.TO.publishpreviewEmail,
+        folder: mailFolder,
+        subject: requestProperties.subject,
+        message: requestProperties.message,
+        attachments: attachmentFiles,
+        requestActivity: requestActivity,
+      });
+      const emailSave = email.save();
+      saves.push(emailSave);
+
+      yield allTasks(saves);
     }
   }
 
