@@ -1,13 +1,21 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
+import { inject as service } from '@ember/service';
 
 export default class ApplicationAdapter extends JSONAPIAdapter {
-  // eslint-disable-next-line no-unused-vars
-  ajax(url, method) {
-    if (['POST', 'DELETE'].includes(method)) { // methods that cause unwanted effects when executing a request multiple times
-      return super.ajax(...arguments);
-    }
+  @service intl;
+  @service toaster;
 
-    return retryOnError(super.ajax.bind(this), arguments);
+  // eslint-disable-next-line no-unused-vars
+  async ajax(url, method) {
+    try {
+      if (['POST', 'DELETE'].includes(method)) { // methods that cause unwanted effects when executing a request multiple times
+        return await super.ajax(...arguments);
+      }
+      return await retryOnError(super.ajax.bind(this), arguments); // return-await of importance to be able to catch errors
+    } catch (error) {
+      this.toaster.error(this.intl.t('couldnt-answer-net-req'));
+      throw error;
+    }
   }
 }
 

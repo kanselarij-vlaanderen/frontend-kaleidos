@@ -869,5 +869,6 @@
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
   "existing": "Bestaand",
-  "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\""
+  "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
+  "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag."
 }
