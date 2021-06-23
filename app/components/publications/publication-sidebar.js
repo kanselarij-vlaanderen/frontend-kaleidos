@@ -121,8 +121,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
       this.publicationFlow.closingDate = now;
-      console.log(this.publicationSubcase.endDate)
-      console.log(this.translationSubcase.endDate)
 
       if (!this.publicationSubcase.endDate) {
         this.publicationSubcase.endDate = now;
