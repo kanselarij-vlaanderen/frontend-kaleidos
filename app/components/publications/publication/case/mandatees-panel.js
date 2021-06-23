@@ -7,7 +7,6 @@ import { tracked } from '@glimmer/tracking';
  */
 export default class PublicationsPublicationCaseMandateesPanelComponent extends Component {
   @tracked isOpenLinkModal = false;
-  @tracked mandatees;
 
   @action
   openLinkModal() {
