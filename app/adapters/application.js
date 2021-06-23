@@ -30,7 +30,7 @@ async function retryOnError(ajax, ajaxArgs, retryCount = 0) {
       await sleep(250 * (retryCount + 1));
       return retryOnError(ajax, ajaxArgs, retryCount + 1);
     }
-    throw new Error(error);
+    throw error;
   }
 }
 
