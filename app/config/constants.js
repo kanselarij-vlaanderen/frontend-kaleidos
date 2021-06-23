@@ -22,6 +22,17 @@ export default {
     FR: 'http://publications.europa.eu/resource/authority/language/FRA',
     DE: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
+  MAX_PAGE_SIZES: {
+    ONE_ITEM: 1,
+    PUBLICATION_FLOWS: 10,
+    NOTAS: 50,
+    PUBLICATION_FLOW_PIECES: 200,
+    CODE_LISTS: 100,
+    AGENDAITEMS: 300,
+    PIECES: 500,
+    ACTIVITIES: 500,
+    CASES: 500,
+  },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
     PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
@@ -40,6 +51,7 @@ export default {
   MAIL_FOLDERS: {
     OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
   },
+
   // TODO refactor to right style
   MINISTERRAAD_TYPES: {
     DEFAULT: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',

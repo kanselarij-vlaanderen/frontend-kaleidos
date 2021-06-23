@@ -182,7 +182,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     const agendaActivities = yield this.store.query('agenda-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[agendaitems][agenda][created-for][is-final]': false,
-      'page[size]': 1,
+      'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
     });
 
     return agendaActivities.firstObject;
@@ -206,7 +206,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     const submissionActivities = yield this.store.query('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[:has-no:agenda-activity]': true,
-      'page[size]': 1,
+      'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
     });
 
     if (submissionActivities.length) { // Adding pieces to existing submission activity

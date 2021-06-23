@@ -10,7 +10,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500,
+      'page[size]': CONSTANTS.MAX_PAGE_SIZES.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
 

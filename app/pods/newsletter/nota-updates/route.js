@@ -4,6 +4,7 @@ import CONFIG from 'frontend-kaleidos/utils/config';
 import {
   task, timeout
 } from 'ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterNotaUpdatesRoute extends Route {
   queryParams = {
@@ -39,7 +40,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       include: 'agendaitems',
       'fields[agendaitems]': 'id,priority,short-title',
       'fields[piece]': 'id,name,modified',
-      'page[size]': 50,
+      'page[size]': CONSTANTS.MAX_PAGE_SIZES.NOTAS,
       sort: params.sort,
     });
     for (const nota of notas.toArray()) { // proxyarray to native JS array

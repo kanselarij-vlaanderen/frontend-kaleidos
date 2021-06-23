@@ -33,7 +33,7 @@ export default class AgendaitemDecisionComponent extends Component {
     this.decisionDocType = this.store.peekRecord('document-type', CONFIG.decisionDocumentTypeId);
     if (!this.decisionDocType) {
       const docTypes = yield this.store.query('document-type', {
-        'page[size]': 1,
+        'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
         'filter[:id:]': CONFIG.decisionDocumentTypeId,
       });
       this.decisionDocType = docTypes.firstObject;

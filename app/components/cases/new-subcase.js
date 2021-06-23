@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import moment from 'moment';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default Component.extend({
   store: inject(),
@@ -33,7 +34,7 @@ export default Component.extend({
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500,
+      'page[size]': CONSTANTS.MAX_PAGE_SIZES.CASES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     const pieces = [];

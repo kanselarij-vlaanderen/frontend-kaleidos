@@ -1,4 +1,5 @@
 import Store from 'ember-data/store';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 
 export default class ExtendedStoreService extends Store {
@@ -7,7 +8,7 @@ export default class ExtendedStoreService extends Store {
    */
   async queryOne(modelName, query, options) {
     if (!(query['page[size]'] || (query.page && query.page.size))) {
-      query['page[size]'] = 1;
+      query['page[size]'] = CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM;
     }
     const results = await this.query(modelName, query, options);
     if (results.length) {
