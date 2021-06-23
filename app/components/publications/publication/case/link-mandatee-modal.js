@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 /**
- * @argument {PublicationFlow} publicationFlow (publication-flow,publication-flow.mandatees)
  * @callback {() => Promise} onClose
  * @callback {(mandatee: Mandatee) => Promise} onLink
  * @dependsOn {Mandatee[]} mandatees ('mandatee,mandatee.person')
