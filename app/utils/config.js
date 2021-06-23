@@ -50,20 +50,6 @@ export default EmberObject.create({
     'Z'
   ],
   // TODO translate
-  notaID: '9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
-  notaCaseTypeID: '1b6a6975-28e7-46b5-83fe-da37bb967db2',
-  documentType: {
-    decreet: {
-      id: 'e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
-      url: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
-    },
-    besluitVlaamseRegering: {
-      id: '4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
-      url: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
-    },
-  },
-  decisionDocumentTypeId: '2b73f8e2-b1f8-4cbd-927f-30c91759f08b',
-  minuteDocumentTypeId: 'e149294e-a8b8-4c11-83ac-6d4c417b079b',
   remarkId: '305E9678-8106-4C14-9BD6-60AE2032D794',
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
