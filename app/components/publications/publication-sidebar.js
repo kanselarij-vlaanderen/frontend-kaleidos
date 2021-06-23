@@ -121,10 +121,17 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
       this.publicationFlow.closingDate = now;
-      this.publicationSubcase.endDate = now;
-      this.notifyChanges(this.publicationSubcase);
-      this.translationSubcase.endDate = now;
-      this.notifyChanges(this.translationSubcase);
+      console.log(this.publicationSubcase.endDate)
+      console.log(this.translationSubcase.endDate)
+
+      if (!this.publicationSubcase.endDate) {
+        this.publicationSubcase.endDate = now;
+        this.notifyChanges(this.publicationSubcase);
+      }
+      if (!this.translationSubcase.endDate) {
+        this.translationSubcase.endDate = now;
+        this.notifyChanges(this.translationSubcase);
+      }
     } else {
       this.publicationFlow.closingDate = null;
     }
