@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each @publicationFlow.mandatees as |mandatee|}}
+            {{#each (sort-by "priority" @publicationFlow.mandatees) as |mandatee|}}
               <tr>
                 <td>
                   <div class="auk-o-flex auk-o-flex--vertical-center">
