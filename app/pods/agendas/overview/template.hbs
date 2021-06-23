@@ -141,19 +141,6 @@
                         @models={{array meeting.id (await meeting.latestAgenda.id)}}
                       >
                       </Auk::Button>
-
-                      {{!--  --}}
-
-                      {{#if (await meeting.latestAgenda.id)}}
-                        <Auk::Button
-                          @skin="borderless"
-                          @layout="icon-only"
-                          @icon="nav-right"
-                          @route="agenda.agendaitems"
-                          @models={{array meeting.id meeting.latestAgenda.id}}
-                        >
-                        </Auk::Button>
-                      {{/if}}
                     </td>
                   {{/if}}
                 {{/c.body}}
