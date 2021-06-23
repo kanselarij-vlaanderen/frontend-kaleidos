@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   attr, hasMany, belongsTo, PromiseArray,
@@ -143,11 +144,11 @@ export default ModelWithModifier.extend({
         const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
         const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
           'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
         });
         const acknowledgedTreatment = await this.store.queryOne('agenda-item-treatment', {
           'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME,
+          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME,
         });
         return !!approvedTreatment || !!acknowledgedTreatment;
       }

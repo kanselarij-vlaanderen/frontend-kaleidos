@@ -72,7 +72,7 @@ export default Component.extend({
 
     // load code-list item
     const decisionResultCode = await this.store.queryOne('decision-result-code', {
-      'filter[:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+      'filter[:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
     });
 
     // Treatment of agenda-item / decision activity

@@ -206,7 +206,7 @@ export default Service.extend({
     }
 
     // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     const decisionResultCode = await this.store.queryOne('decision-result-code', {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     });
