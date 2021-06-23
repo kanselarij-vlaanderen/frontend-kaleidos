@@ -32,7 +32,7 @@
             @skin="primary"
             @icon="add"
             @size="small"
-            @disabled={{or this.init.isRunning (not this.canLink)}}
+            @disabled={{not this.canLink}}
             @loading={{this.onLink.isRunning}}
             {{on "click" (perform this.onLink)}}>
             {{t "add"}}
