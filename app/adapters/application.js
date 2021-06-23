@@ -46,4 +46,3 @@ async function retryOnError(ajax, ajaxArgs, retryCount = 0) {
 function sleep(time) {
   return new Promise((resolve) => later(this, () => resolve(true), time));
 }
-
