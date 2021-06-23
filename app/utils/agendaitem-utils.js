@@ -1,4 +1,4 @@
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import EmberObject from '@ember/object';
 import moment from 'moment';
 import { A } from '@ember/array';
@@ -29,8 +29,8 @@ export const cancelEdit = (agendaitemOrSubcase, propertiesToSet) => {
  * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
  */
 export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
-  if (subcaseOrAgendaitem.get('formallyOk') !== CONFIG.notYetFormallyOk) {
-    subcaseOrAgendaitem.set('formallyOk', CONFIG.notYetFormallyOk);
+  if (subcaseOrAgendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK) {
+    subcaseOrAgendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
   }
 };
 
@@ -40,8 +40,8 @@ export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
  * @param agendaitem
  */
 export const setAgendaitemFormallyOk = async(agendaitem) => {
-  if (agendaitem.get('formallyOk') !== CONFIG.formallyOk) {
-    agendaitem.set('formallyOk', CONFIG.formallyOk);
+  if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.OK) {
+    agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.OK);
     await agendaitem.save();
   }
 };

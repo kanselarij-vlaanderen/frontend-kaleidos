@@ -4,6 +4,7 @@ import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
@@ -237,7 +238,7 @@ export default Service.extend({
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,
-      formallyOk: CONFIG.notYetFormallyOk,
+      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       showAsRemark: isAnnouncement,
       mandatees,
       pieces: submittedPieces,
