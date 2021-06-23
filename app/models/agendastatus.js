@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   Model, attr,
@@ -10,12 +10,12 @@ export default Model.extend({
   uri: attr('string'),
   label: attr('string'),
   isDesignAgenda: computed('uri', function() {
-    return this.uri === CONFIG.agendaStatusDesignAgenda.uri;
+    return this.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN;
   }),
   isFinal: computed('uri', function() {
-    return this.uri === CONFIG.agendaStatusClosed.uri;
+    return this.uri === CONSTANTS.AGENDA_STATUSSES.CLOSED;
   }),
   isApproved: computed('uri', function() {
-    return this.uri === CONFIG.agendaStatusApproved.uri;
+    return this.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED;
   }),
 });

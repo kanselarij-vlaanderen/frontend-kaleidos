@@ -104,7 +104,7 @@ export default ModelWithModifier.extend({
         },
         agenda: {
           status: {
-            id: CONFIG.agendaStatusDesignAgenda.id,
+            uri: CONSTANTS.AGENDA_STATUSSES.DESIGN,
           },
         },
       },

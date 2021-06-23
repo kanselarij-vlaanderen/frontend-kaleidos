@@ -3,7 +3,6 @@ import { singularize } from 'ember-inflector';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
@@ -180,7 +179,7 @@ export default Service.extend({
     const subcase = await submissionActivities[0].get('subcase');
     const lastAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
-      'filter[status][:uri:]': CONFIG.agendaStatusDesignAgenda.uri,
+      'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       sort: '-created', // serialnumber
     });
     const isAnnouncement = subcase.get('showAsRemark');

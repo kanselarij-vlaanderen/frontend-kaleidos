@@ -12,7 +12,7 @@ import {
   timeout
 } from 'ember-concurrency';
 import moment from 'moment';
-import config from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
@@ -228,7 +228,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // and related to an agenda in the design status
     const agendaitems = yield this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.subcase.get('id'),
-      'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
 
     // agendaitems can only have more than 1 item
