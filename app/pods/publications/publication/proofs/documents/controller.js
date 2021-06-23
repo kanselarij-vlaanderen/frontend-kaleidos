@@ -118,7 +118,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @task
   *saveRequest(requestProperties) {
-    console.log(requestProperties);
     if (requestProperties.stage === 'new') {
       const now = new Date();
       const {

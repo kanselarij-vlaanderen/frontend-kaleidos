@@ -78,7 +78,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseFromParentRoute = this.modelFor('publications.publication.proofs');
 
-    await this.generateTestData(publicationSubcaseFromParentRoute);
+    // await this.generateTestData(publicationSubcaseFromParentRoute);
 
     const pieceInclude = {
       file: true,
