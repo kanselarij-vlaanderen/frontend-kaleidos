@@ -18,6 +18,14 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       throw error;
     }
   }
+
+  // eslint-disable-next-line no-unused-vars
+  handleResponse(status, headers, payload, requestData) {
+    if (!this.isSuccess(status, headers, payload)) {
+      this.toaster.error(this.intl.t('invalid-net-req-answer'));
+    }
+    return super.handleResponse(...arguments);
+  }
 }
 
 // from https://github.com/lblod/frontend-gelinkt-notuleren/blob/5d3c17e9c084e13ea8354c81bf378a27043d7e59/app/adapters/application.js

@@ -870,5 +870,6 @@
   "none": "Geen",
   "existing": "Bestaand",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
+  "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
   "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag."
 }
