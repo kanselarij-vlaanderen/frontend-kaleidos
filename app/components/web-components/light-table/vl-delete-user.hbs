@@ -1,13 +1,12 @@
-<button type="button" data-test-vl-delete-user class="auk-button auk-button--borderless auk-button--icon" {{action "toggleIsVerifying" bubbles=false}}>
-  <span class="auk-button__content">
-    <div class="auk-icon auk-icon--default">
-      <i class="ki ki-delete"></i>
-    </div>
-    <div class="auk-u-sr-only">
-      {{t "delete"}}
-    </div>
-  </span>
-</button>
+<Auk::Button
+  @skin="warning-borderless"
+  @layout="icon-only"
+  @icon="delete"
+  {{action "toggleIsVerifying" bubbles=false}}
+  data-test-vl-delete-user
+>
+  {{t "delete"}}
+</Auk::Button>
 {{#if isVerifying}}
   {{web-components/vl-modal-verify
     title=(t "delete-account")

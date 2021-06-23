@@ -17,18 +17,14 @@
           type="search"
           @value={{this.filter}}
         />
-        <button
-          data-test-route-settings-users-search-button
-          class="auk-button auk-button--secondary auk-button--icon"
-          type="submit"
+        <Auk::Button
+          @skin="secondary"
+          @layout="icon-only"
+          @icon="search"
           {{on "click" (action "refreshRoute")}}
+          data-test-route-settings-users-search-button
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-search"></i>
-            </div>
-          </span>
-        </button>
+        </Auk::Button>
       </div>
     </div>
   </div>
