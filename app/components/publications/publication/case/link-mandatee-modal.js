@@ -11,10 +11,6 @@ import { task } from 'ember-concurrency-decorators';
 export default class PublicationsPublicationCaseLinkMandateeModalComponent extends Component {
   @tracked selection;
 
-  get isLoading() {
-    return this.onLink.isRunning;
-  }
-
   get canLink() {
     return !!this.selection;
   }
