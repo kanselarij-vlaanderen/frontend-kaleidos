@@ -33,8 +33,10 @@
         </div>
         <div class="auk-toolbar-complex__right">
           <div class="auk-toolbar-complex__item">
-            <button type="button" class="auk-button auk-button--tertiary"
-              data-test-vl-model-manager-add
+            <button
+              data-test-manage-ise-code-add
+              type="button"
+              class="auk-button auk-button--tertiary"
               {{action "toggleIsAdding"}}
             >
               <span class="auk-button__content">
@@ -47,7 +49,9 @@
               </span>
             </button>
             {{#if item}}
-              <button type="button"
+              <button
+                data-test-manage-ise-code-edit
+                type="button"
                 class="auk-button auk-button--tertiary"
                 {{action "toggleIsEditing"}}
               >
@@ -60,7 +64,9 @@
                   </div>
                 </span>
               </button>
-              <button type="button"
+              <button
+                data-test-manage-ise-code-delete
+                type="button"
                 class="auk-button auk-button--tertiary"
                 {{action "removeModel"}}
               >

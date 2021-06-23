@@ -5,9 +5,8 @@ import 'cypress-file-upload';
 import document from '../../selectors/document.selectors';
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 // ***********************************************
 
 // ***********************************************
@@ -140,26 +139,26 @@ function addNewPiece(oldFileName, file, modelToPatch) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.documentUploadShowMore).click();
-    cy.get(document.documentUploadNewPiece)
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.uploadPiece)
       .should('be.visible')
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click()
+    cy.get(utils.vlModalFooter.save).click()
       .wait(`@createNewPiece_${randomInt}`, {
         timeout: 12000,
       });
@@ -248,7 +247,7 @@ function addDocumentToTreatment(file) {
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
   cy.contains('Document opladen').click();
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -455,26 +454,26 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
     .contains(oldFileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.documentUploadShowMore).click();
-    cy.get(document.documentUploadNewPiece)
+    cy.get(document.documentCard.actions).click();
+    cy.get(document.documentCard.uploadPiece)
       .should('be.visible')
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
   cy.wait(`@createNewPiece_${randomInt}`, {
     timeout: 12000,
@@ -493,18 +492,18 @@ function addLinkedDocument(filenames) {
   // TODO, this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
-  cy.get(document.addLinkedDocuments).click();
-  cy.get(document.searchForLinkedDocumentsInput).click();
+  cy.get(document.linkedDocuments.add).click();
+  cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
-    cy.get(document.searchForLinkedDocumentsInput).type(name);
+    cy.get(document.addExistingPiece.searchInput).type(name);
     cy.wait(1000);
     cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
-    cy.get(document.searchForLinkedDocumentsInput).clear();
+    cy.get(document.addExistingPiece.searchInput).clear();
   });
-  cy.get(form.formSave).click();
+  cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');
 }
 
@@ -527,20 +526,20 @@ function deleteSinglePiece(fileName, indexToDelete) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).eq(indexToDelete)
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).eq(indexToDelete)
       .within(() => {
-        cy.get(document.deletePieceFromhistory)
+        cy.get(document.vlDocument.delete)
           .should('be.visible')
           .click();
       });
   });
 
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('button').contains('Verwijderen')
       .click();
   });
@@ -571,17 +570,17 @@ function isPieceDeletable(fileName, indexToCheck, shouldBeDeletable) {
     .contains(fileName, {
       timeout: 12000,
     })
-    .parents(document.documentCard)
+    .parents(document.documentCard.card)
     .as('documentCard');
 
   cy.get('@documentCard').within(() => {
-    cy.get(document.showPiecesHistory).click();
-    cy.get(document.singlePieceHistory).eq(indexToCheck)
+    cy.get(document.documentCard.versionHistory).click();
+    cy.get(document.vlDocument.piece).eq(indexToCheck)
       .within(() => {
         if (shouldBeDeletable) {
-          cy.get(document.deletePieceFromhistory).should('be.visible');
+          cy.get(document.vlDocument.delete).should('be.visible');
         } else {
-          cy.get(document.deletePieceFromhistory).should('not.exist');
+          cy.get(document.vlDocument.delete).should('not.exist');
         }
       });
   });

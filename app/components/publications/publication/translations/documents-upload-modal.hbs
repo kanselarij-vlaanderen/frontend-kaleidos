@@ -12,7 +12,7 @@
       <Auk::FileUploader
               @fileQueueName={{this.fileQueueName}}
               @fullHeight={{eq this.newPieces.length 0}}
-              @multiple={{true}}
+              @multiple={{false}}
               @onUpload={{this.uploadPiece}}
       />
       {{#if this.translationDocument}}
@@ -22,7 +22,7 @@
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
-                    {{t 'name'}}
+                    {{t "name"}}
                   </Auk::Label>
                   <Auk::Input
                     type="text"
@@ -36,22 +36,14 @@
                     {{this.translationDocument.file.extension}}
                   </Auk::Pill>
                 </div>
-                {{!-- TODO KAS-2481
-                <div class="auk-form-group">
-                  <Auk::Label for="dateSet">{{t "received-at"}}</Auk::Label>
-                  <WebComponents::AuDatepicker id="dateSet"
-                                               @defaultDate={{this.receivedAtDate}}
-                                               @onChange={{this.setReceivedAtDate}}/>
-                </div>
-                --}}
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label>{{t 'translation-burden'}}</Auk::Label>
+                  <Auk::Label>{{t "translation-burden"}}</Auk::Label>
                   <div class="auk-form-group-layout auk-form-group-layout--standard auk-form-group-layout--grid">
                     <div class="auk-o-grid">
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
                           <Auk::Label for="translationLoadPages" class="auk-label--light">
-                            {{t 'pages-amount'}}
+                            {{t "pages-amount"}}
                           </Auk::Label>
                           <Auk::Input
                             type="number"
@@ -63,7 +55,7 @@
                       <div class="auk-o-grid-col-6">
                         <div class="auk-form-group">
                           <Auk::Label for="translationLoadWords" class="auk-label--light">
-                            {{t 'words-amount'}}
+                            {{t "words-amount"}}
                           </Auk::Label>
                           <Auk::Input
                             type="number"
@@ -75,17 +67,15 @@
                     </div>
                   </div>
                 </div>
-                {{!-- TODO in KAS-2600
                 <div class="auk-form-group auk-o-flex--align-start">
                   <Auk::Label for="proofPrint">
-                    {{t 'for-publish-preview'}}
+                    {{t "for-proof-print"}}
                   </Auk::Label>
-                  <WebComponents::AuCheckboxList>
-                    <WebComponents::AuCheckbox @name="proofPrint" @checked={{this.proofprint}}
-                                               @toggle={{this.toggleProofPrint}} />
-                  </WebComponents::AuCheckboxList>
+                  <Auk::CheckboxList>
+                    <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
+                      {{on "input" this.toggleProofprint}} />
+                  </Auk::CheckboxList>
                 </div>
-                --}}
               </div>
             </div>
           </div>

@@ -33,6 +33,9 @@ export default {
     NUMAC: 'Belgisch Staatsblad',
     OVRB: 'ovrb',
   },
+  MAIL_FOLDERS: {
+    OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
+  },
   DOCUMENT_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
     VISIENOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/52d8ce45-1954-48e7-9402-ac5ee3edbbc4',

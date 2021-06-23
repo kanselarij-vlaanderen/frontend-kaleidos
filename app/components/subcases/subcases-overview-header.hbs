@@ -1,27 +1,28 @@
 <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
-  <WebComponents::AuToolbar>
-    <WebComponents::AuToolbar>
-      <WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Item>
+  {{!-- TODO: is this double wrapped toolbar here on purpose? --}}
+  <Auk::Toolbar>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group>
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
             @icon="chevron-left"
             @layout="icon-only"
             {{on "click" @backLink}}
           />
-        </WebComponents::AuToolbar::Item>
-        <WebComponents::AuToolbar::Item>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
           <div class="auk-u-my">
             <span class="auk-overline auk-u-block">
               {{t "case"}}
             </span>
             <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
           </div>
-        </WebComponents::AuToolbar::Item>
-      </WebComponents::AuToolbar::Group>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
       {{#if currentSession.isEditor}}
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
             <Auk::Button
               @skin="primary"
               @icon="add"
@@ -30,11 +31,11 @@
             >
               {{t "create-subcase"}}
             </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
       {{/if}}
-    </WebComponents::AuToolbar>
-  </WebComponents::AuToolbar>
+    </Auk::Toolbar>
+  </Auk::Toolbar>
 </div>
 
 

@@ -2,8 +2,10 @@
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import cases from '../../selectors/case.selectors';
-import auComponents from '../../selectors/au-component.selectors';
+import auk from '../../selectors/auk.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -178,51 +180,51 @@ context('Subcase tests', () => {
     cy.openAgendaitemDossierTab(shortSubcaseTitle);
 
     // Status is hidden
-    cy.get(auComponents.auPillSpan).contains('Zichtbaar in kort bestek');
+    cy.get(auk.pill).contains('Zichtbaar in kort bestek');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
     // Assert status also hidden
-    cy.get(agenda.subcase.confidentialyCheck).should('not.be.checked');
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
     cy.route('PATCH', '/agendaitems/*').as('patchAgendaitem');
     cy.changeSubcaseAccessLevel(true, true, 'Intern Overheid') // CHECK na save in agendaitem
       .wait('@patchAgendaitem');
 
-    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
     // "Go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
     cy.route('GET', '/agendas/**').as('getAgendas');
     cy.get(cases.subcaseDescription.agendaLink).click();
     cy.wait('@getMeetingsRequest');
-    cy.get(agenda.confidentialityIcon).should('exist');
+    cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
     // Index view
-    cy.get(auComponents.auPillSpan).contains('Vertrouwelijk');
+    cy.get(auk.pill).contains('Vertrouwelijk');
 
     // Click the "wijzigen link.
     cy.get(agenda.agendaitemTitlesView.edit).click();
 
-    // Check the checkbox (toggle this invisible motafoka).
+    // Check the checkbox
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .find(agenda.item.checkBoxLabel) // Because who uses checkboxes anyway?
+      .find(utils.vlToggle)
       .click();
 
     // Save the changes setting
     cy.route('PATCH', '/agendas/**').as('patchAgenda');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
-    cy.get(agenda.item.actionButton).contains('Opslaan')
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).contains('Opslaan')
       .click();
     cy.wait('@patchAgenda');
     // We toggled hide in newsletter, await the patch
     cy.wait('@newsletterInfosPatch');
 
     // Assert status shown & confidentiality icon is visible
-    cy.get(auComponents.auPillSpan).contains('Verborgen in kort bestek');
+    cy.get(auk.pill).contains('Verborgen in kort bestek');
 
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
-    cy.get(agenda.confidentialityIcon).should('exist');
+    cy.get(agenda.agendaDetailSidebarItem.confidential).should('exist');
 
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
-    cy.get(agenda.subcase.confidentialyCheck).should('be.checked');
+    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
   it('Changes to agenda item Themas propagate properly', () => {
@@ -270,7 +272,7 @@ context('Subcase tests', () => {
     // Go via kort-bestek view
     cy.route('GET', '/meetings/**/mail-campaign').as('getMeetingsMail');
     cy.route('GET', '/meetings?**').as('getMeetingsfilter');
-    cy.get('.auk-toolbar-complex').contains('Kort bestek')
+    cy.get(utils.mHeader.newsletters).contains('Kort bestek')
       .click();
     cy.wait('@getMeetingsMail');
     cy.wait('@getMeetingsfilter');
@@ -278,7 +280,7 @@ context('Subcase tests', () => {
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     // cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaitems');
-    cy.get(agenda.dataTableZebra).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
+    cy.get(route.newsletters.dataTable).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     // cy.wait('@getAgendas');
@@ -286,7 +288,7 @@ context('Subcase tests', () => {
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(agenda.dataTable).find('.ki-pencil')
+    cy.get(route.newsletter.dataTable).find('.ki-pencil')
       .first()
       .click();
     cy.wait('@getKortBestekThemes');
@@ -327,7 +329,7 @@ context('Subcase tests', () => {
     // dont open links in new windows.
 
     cy.get('a').invoke('removeAttr', 'target');
-    cy.get(agenda.dataTable).find('[data-test-link-to-subcase-overview]')
+    cy.get(route.newsletter.dataTable).find('[data-test-link-to-subcase-overview]')
       .first()
       .click();
 

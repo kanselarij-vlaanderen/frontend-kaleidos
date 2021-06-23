@@ -1,10 +1,9 @@
 /* global context, before, it, cy,beforeEach, afterEach, Cypress, xit */
 // / <reference types="Cypress" />
-import search from '../../selectors/search.selectors';
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import toolbar from '../../selectors/toolbar.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -33,13 +32,13 @@ context('Search tests', () => {
 
   const searchFunction = (elementsToCheck) => {
     elementsToCheck.forEach((option) => {
-      cy.get(search.searchfield).type('test');
-      cy.get(search.searchButtonToClick).click();
+      cy.get(route.search.input).type('test');
+      cy.get(route.search.trigger).click();
       cy.get(dependency.emberPowerSelect.trigger)
         .click()
         .then(() => cy.selectOptionInSelectByText(option));
       cy.url().should('include', `aantal=${option}`);
-      cy.get(search.searchfield).clear();
+      cy.get(route.search.input).clear();
     });
   };
 
@@ -111,7 +110,7 @@ context('Search tests', () => {
       .click();
 
     // TODO confidential toggle, use better selector ?
-    cy.get(form.formVlToggle).should('exist')
+    cy.get(utils.vlToggle).should('exist')
       .click();
 
     // cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
@@ -131,17 +130,17 @@ context('Search tests', () => {
 
   it('Search for non existing searchterm in agendaitems', () => {
     cy.visit('/zoeken/agendapunten');
-    cy.get('[data-test-searchfield]').clear();
-    cy.get('[data-test-searchfield]').type('nietstezienhier');
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type('nietstezienhier');
 
     cy.server(); // TODO server here not needed ?
     cy.route('GET', '/agendaitems/search?**').as('searchCall');
-    cy.get('button[data-test-trigger-search]').click();
+    cy.get(route.search.trigger).click();
     cy.wait('@searchCall');
 
     cy.get('[data-table]').should('not.exist');
     // TODO not existing of data table could have multiple reasons (still loading, error)
-    // TODO check auEmptyState and text instead "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan."
+    // TODO check auk.emptyState and text instead "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan."
   });
 
   it('Search for funky searchterms in agendaitems', () => {
@@ -154,40 +153,40 @@ context('Search tests', () => {
       'batterij'
     ];
     wordsToCheck1.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
 
       cy.server();
       cy.route('GET', '/agendaitems/search?**').as('searchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(route.search.trigger).click();
       cy.wait('@searchCall');
 
       // TODO use newSubcase2TitleShort instead of fixed data
       cy.get('[data-table]').contains('korte titel for batterij');
     });
 
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.search).click();
+    cy.get(utils.mHeader.search).click();
     // TODO reenable reset test ?
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
-    // cy.get('[data-test-searchfield]').should('have.value', '');
+    // cy.get(route.search.input).should('have.value', '');
   });
 
   it('Searchfield should be empty after revisting search page', () => {
     cy.visit('/zoeken/agendapunten');
-    cy.get(search.searchfield).clear();
-    cy.get(search.searchfield).type('TestSearchSet');
+    cy.get(route.search.input).clear();
+    cy.get(route.search.input).type('TestSearchSet');
     cy.server();
-    cy.get(search.searchButtonToClick).click();
+    cy.get(route.search.trigger).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.wait(1000);
-    cy.get(toolbar.mHeader.search).click();
+    cy.get(utils.mHeader.search).click();
     // https://github.com/kanselarij-vlaanderen/kaleidos-frontend/blob/a30ff5fa756691b824031c5c069d906b70d67b09/app/pods/search/index/route.js#L10
     // cy.wait(1000);
-    // cy.get(search.searchfield).should('have.value', '');
+    // cy.get(route.search.input).should('have.value', '');
   });
 
   it('Search for funky searchterms in dossiers', () => {
@@ -206,12 +205,12 @@ context('Search tests', () => {
       'accénten'
     ];
     wordsToCheck2.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
 
       cy.server();
       cy.route('GET', '/cases/search?**').as('casesSearchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(route.search.trigger).click();
       cy.wait('@casesSearchCall');
 
       // TODO case1TitleShort instead of hardcoded text
@@ -228,13 +227,13 @@ context('Search tests', () => {
       // 'krokket'
     ];
     wordsFromPdf.forEach((searchTerm) => {
-      cy.get('[data-test-searchfield]').clear();
-      cy.get('[data-test-searchfield]').type(searchTerm);
+      cy.get(route.search.input).clear();
+      cy.get(route.search.input).type(searchTerm);
       cy.get('[data-test-decisions-only-check] .auk-checkbox').click();
 
       cy.server();
       cy.route('GET', '/casesByDecisionText/search?**').as('decisionsSearchCall');
-      cy.get('button[data-test-trigger-search]').click();
+      cy.get(route.search.trigger).click();
       cy.wait('@decisionsSearchCall');
 
       cy.get('[data-table]').contains('korte titel for batterij');
@@ -251,8 +250,8 @@ context('Search tests', () => {
     cy.server();
     cy.route('GET', '/agendaitems/search?**IKBESTANIET**').as('searchCallOverview-IKBESTANIET');
 
-    cy.get('[data-test-trigger-search-input]').clear();
-    cy.get('[data-test-trigger-search-input]').type('IKBESTANIET');
+    cy.get(agenda.agendaitemSearch.input).clear();
+    cy.get(agenda.agendaitemSearch.input).type('IKBESTANIET');
     cy.wait(200);
     cy.wait('@searchCallOverview-IKBESTANIET');
 
@@ -287,16 +286,16 @@ context('Search tests', () => {
     ];
     wordsToCheck1.forEach((searchTerm) => {
       cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
-      cy.get('[data-test-trigger-search-input]').clear();
-      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.get(agenda.agendaitemSearch.input).clear();
+      cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
       cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for batterij');
     });
     wordsToCheck2.forEach((searchTerm) => {
       cy.route('GET', `/agendaitems/search?**${searchTerm}**`).as(`searchCallOverview-${searchTerm}`);
-      cy.get('[data-test-trigger-search-input]').clear();
-      cy.get('[data-test-trigger-search-input]').type(searchTerm);
+      cy.get(agenda.agendaitemSearch.input).clear();
+      cy.get(agenda.agendaitemSearch.input).type(searchTerm);
       cy.wait(200);
       cy.wait(`@searchCallOverview-${searchTerm}`);
       cy.get('.vlc-agenda-items').contains('korte titel for search');

@@ -1,29 +1,28 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    <Auk::Navbar @border="none">
-      <WebComponents::AuToolbar @size="large">
-        <WebComponents::AuToolbar::Group @position="right">
-          <WebComponents::AuToolbar::Item>
-            <Auk::Button
-              @icon="mail"
-              @skin="secondary"
-              @disabled={{eq this.selectedPieces.length 0}}
-              {{on "click" this.openTranslationRequestModal}}
-            >
-              {{t "request-translations"}}
-            </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-          <WebComponents::AuToolbar::Item>
-            <Auk::Button
-              @icon="add"
-              @skin="secondary"
-              {{on "click" this.openPieceUploadModal}}>
-              {{t "upload-translation-file"}}
-            </Auk::Button>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
-    </Auk::Navbar>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @icon="mail"
+            @skin="secondary"
+            @disabled={{this.isRequestingDisabled}}
+            {{on "click" this.openTranslationRequestModal}}
+          >
+            {{t "request-translations"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @icon="add"
+            @skin="secondary"
+            @disabled={{this.isUploadDisabled}}
+            {{on "click" this.openPieceUploadModal}}>
+            {{t "upload-translation-file"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
 
     {{#if this.model}}
       <table class="auk-table">
@@ -38,7 +37,7 @@
             <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
             <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
-            <th class="auk-u-text-nowrap">{{t "for-publishpreview"}}</th>
+            <th class="auk-u-text-align--center">{{t "for-publishpreview"}}</th>
             <th></th>
           </tr>
         </thead>
@@ -59,7 +58,7 @@
                 </Auk::Pill>
               </td>
               <td class="auk-u-text-nowrap">
-                {{t "dash"}}
+                {{moment-format piece.receivedDate}}
               </td>
               <td class="auk-u-text-nowrap">
                 {{moment-format piece.created}}
@@ -67,7 +66,13 @@
                 <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
               </td>
               <td class="auk-u-text-align--center">
-                {{t "dash"}}
+                {{#if piece.publicationSubcase}}
+                  <div class="auk-icon auk-icon--default auk-icon--success-dark">
+                    <i class="ki ki-check"></i>
+                  </div>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>
@@ -94,7 +99,7 @@
     {{else}}
       <Auk::Panel>
         <Auk::Panel::Body>
-          <Auk::EmptyState @message={{t "no-documents-yet" }} />
+          <Auk::EmptyState @message={{t "no-translations-yet" }} />
         </Auk::Panel::Body>
       </Auk::Panel>
     {{/if}}

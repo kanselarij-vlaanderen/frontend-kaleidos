@@ -1,41 +1,4 @@
 const selectors = {
-  // datepickr (met css)
-  datepickerButton: '[data-test-vlc-vl-datepickerButton]',
-  flatpickrCalendar: '.flatpickr-calendar',
-  flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
-  numInputWrapper: '.open  .numInputWrapper',
-  inputNumInputCurYear: '.open  input.numInput.cur-year',
-  flatpickrDay: '.open  .flatpickr-day',
-
-  // data table (met css)
-  dataTable: '.auk-table',
-  dataTableZebra: '.auk-table--striped',
-
-  // agenda-detail/sidebar-item
-  confidentialityIcon: '[data-test-icon-agenda-confidentiality-locked]',
-
-  // 3x agendaitem/documents, subcase/documents, agenda/documents
-  // rename data-test-documents-route-open-batch-edit
-  subcaseDocumentsEdit: '[data-test-subcase-documents-edit]',
-  agendaItemEditDocumentsList: '[data-test-agenda-item-edit-documents-list]',
-
-  // TODO unused selector, do we want to use this one ?
-  agendaSidenavElement: 'data-test-agenda-sidenav-element',
-
-  subcase: {
-    // TODO this is in route cases/case/subcases/subcase/overview
-    confidentialyCheck: '[data-test-vl-subcase-titles-edit-confidentiality] input',
-  },
-  item: {
-    // TODO don't use css
-    checkBoxLabel: 'label.vl-toggle__label',
-    actionButton: '.auk-toolbar-complex__item button',
-  },
-
-  /**
-    COMPONENT BASED SELECTORS
-  */
-
   // printable-agenda
   printableAgenda: {
     container: '[data-test-printable-agenda-container]',
@@ -49,7 +12,7 @@ const selectors = {
     decisionTab: '[data-test-agendaitem-nav-decision-tab]',
     newsletterTab: '[data-test-agendaitem-nav-newsletter-tab]',
     pressAgendaTab: '[data-test-agendaitem-nav-press-agenda-tab]',
-    activeTab: '[data-test-agendaitem-nav-tabs] .active',
+    activeTab: '[data-test-agendaitem-nav-tabs] .auk-tabs__tab--active > *',
   },
 
   // agendaitem-decision
@@ -79,6 +42,11 @@ const selectors = {
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
   },
 
+  // agenda-detail/sidebar-item
+  agendaDetailSidebarItem: {
+    confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
+  },
+
   // agendaitem-group-header
   agendaitemGroupHeader: {
     section: '[data-test-agendaitem-group-header-section]',
@@ -106,6 +74,13 @@ const selectors = {
       unlockAgenda: '[data-test-agenda-header-unlock-agenda]',
       reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version]',
       deleteAgenda: '[data-test-agenda-header-delete-agenda]',
+    },
+    confirm: {
+      approveAgenda: '[data-test-agenda-header-approve-agenda-confirm]',
+      approveAndCloseAgenda: '[data-test-agenda-header-approve-and-close-agenda-confirm]',
+      lockAgenda: '[data-test-agenda-header-lock-agenda-confirm]',
+      reopenPreviousVersion: '[data-test-agenda-header-reopen-previous-version-confirm]',
+      deleteAgenda: '[data-test-agenda-header-delete-agenda-confirm]',
     },
     showActionOptions: '[data-test-agenda-header-show-action-options]',
     actions: {
@@ -165,6 +140,20 @@ const selectors = {
       delete: '[data-test-agendaitem-controls-action-delete]',
       advance: '[data-test-agendaitem-controls-action-advance]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
+    },
+  },
+
+  // agendaitem-search
+  agendaitemSearch: {
+    input: '[data-test-agendaitem-search-input]',
+  },
+
+  // new-session
+  newSession: {
+    numberRep: {
+      edit: '[data-test-new-session-number-representation-edit]',
+      input: '[data-test-new-session-number-representation-input]',
+      save: '[data-test-new-session-number-representation-save]',
     },
   },
 };

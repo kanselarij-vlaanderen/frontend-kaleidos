@@ -203,9 +203,6 @@ export default EmberObject.create({
     standaard: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
   },
   EMAIL: {
-    OUTBOX: {
-      ID: '4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
-    },
     DEFAULT_FROM: 'noreply@kaleidos.vlaanderen.be',
     TO: {
       translationsEmail: 'johan.delaure@redpencil.io',

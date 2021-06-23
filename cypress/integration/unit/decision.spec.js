@@ -2,10 +2,9 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -54,11 +53,11 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.get(document.modalPieceDelete).click();
+    cy.get(document.vlUploadedDocument.deletePiece).click();
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
-    cy.get(modal.baseModal.dialogWindow).contains('test')
+    cy.get(utils.vlModal.dialogWindow).contains('test')
       .should('not.exist');
 
     cy.get('@fileUploadDialog').within(() => {
@@ -71,7 +70,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
 
     cy.wait('@createNewPiece', {
       timeout: 12000,
@@ -84,7 +83,7 @@ context('Add files to an agenda', () => {
     });
 
     cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).as('docCards');
+      cy.get(document.documentCard.card).as('docCards');
     });
 
     cy.get('@docCards').should('have.length', 1);
@@ -107,8 +106,8 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').eq(0)
       .within(() => {
         cy.get('.auk-h4 > span').contains(/TER/);
-        cy.get(document.showPiecesHistory).click();
-        cy.get(document.singlePieceHistory).as('pieces');
+        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.vlDocument.piece).as('pieces');
         cy.get('@pieces').eq(0)
           .within(() => {
             cy.get('.ki-delete').click();
@@ -116,7 +115,7 @@ context('Add files to an agenda', () => {
       });
 
     // verify modal
-    cy.get(modal.modal).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -141,7 +140,7 @@ context('Add files to an agenda', () => {
       cy.get('.auk-u-text-error').contains('Document verwijderen')
         .click();
     });
-    cy.get(modal.modal).within(() => {
+    cy.get(utils.vlModalVerify.container).within(() => {
       cy.get('button').contains('Verwijderen')
         .click();
     });
@@ -184,13 +183,13 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.postpone).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter');
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
     cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')

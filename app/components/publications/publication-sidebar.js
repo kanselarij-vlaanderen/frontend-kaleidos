@@ -34,6 +34,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
   @lastValue('loadPublicationSubcase') publicationSubcase;
   @lastValue('loadTranslationSubcase') translationSubcase;
+  @lastValue('loadAgendaitemTreatment') treatment;
 
   constructor() {
     super(...arguments);
@@ -41,6 +42,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadPublicationStatusChange.perform();
     this.loadPublicationSubcase.perform();
     this.loadTranslationSubcase.perform();
+    this.loadAgendaitemTreatment.perform();
     this.loadStructuredIdentifier.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
@@ -70,6 +72,11 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   *loadTranslationSubcase() {
     const translationSubcase = yield this.publicationFlow.translationSubcase;
     return translationSubcase;
+  }
+
+  @task
+  *loadAgendaitemTreatment() {
+    return yield this.publicationFlow.agendaItemTreatment;
   }
 
   @task
@@ -124,6 +131,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     });
     this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
     this.notifyChanges(statusChange);
+    await this.loadPublicationStatusChange.perform();
   }
 
   @action
@@ -230,6 +238,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   setTranslationDate(selectedDates) {
     this.translationSubcase.endDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'endDate');
+  }
+
+  @action
+  setDecisionDate(selectedDates) {
+    this.treatment.startDate = selectedDates[0];
+    this.notifyChanges(this.treatment, 'startDate');
   }
 
   @restartableTask
