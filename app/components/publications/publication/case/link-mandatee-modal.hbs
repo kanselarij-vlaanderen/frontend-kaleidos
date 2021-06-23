@@ -8,10 +8,9 @@
     <Utils::LoadableContent
       @isLoading={{this.onLink.isRunning}} @reserveSpace={{true}}>
       <Auk::Label>{{t "mandatee"}}</Auk::Label>
-      {{!-- MandateeSelector expects chooseMandatee,to be a function --}}
       <Utils::MandateeSelector
-        data-test-mandatee-selector={{true}}
-        @chooseMandatee={{noop}}
+        data-test-mandatee-selector
+        @chooseMandatee={{fn (mut this.selection)}}
         @singleSelect={{true}}
         @selectedMandatees={{this.selection}} />
     </Utils::LoadableContent>
