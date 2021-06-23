@@ -2,7 +2,6 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { inject } from '@ember/service';
 
 const {
@@ -24,17 +23,6 @@ export default Model.extend({
 
   sortedPieces: computed('pieces.@each.name', function() {
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
-  }),
-
-  // Computed.
-  hasBvr: computed('pieces.@each', async function() {
-    const documentTypeBesluit = await this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION_VR);
-    return await this.caseService.hasPieceOfType(this, documentTypeBesluit);
-  }),
-
-  hasDecreet: computed('pieces.@each', async function() {
-    const documentTypeDecreet = await this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECREET);
-    return await this.caseService.hasPieceOfType(this, documentTypeDecreet);
   }),
 
   latestSubcase: computed('subcases.@each', function() {
