@@ -85,7 +85,7 @@
             <div class="vlc-agenda-detail-sidebar__formally-ok-label auk-o-flex--align-end">
               {{#if @showFormallyOkStatus}}
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}} {{@agendaitem.formallyOkToShow.classNames}}" />
-                <p class="{{@agendaitem.formallyOkToShow.classNames}}">
+                <p class="{{@agendaitem.formallyOkToShow.classNames}}" data-test-agenda-detail-sidebar-item-status>
                   {{@agendaitem.formallyOkToShow.label}}
                 </p>
               {{/if}}

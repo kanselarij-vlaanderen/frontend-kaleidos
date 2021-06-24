@@ -13,6 +13,11 @@
   height: unset !important;
 }
 
+// allow block content in span.ember-power-select-selected-item
+.ember-power-select-selected-item {
+  display: inline-block;
+}
+
 .ember-power-select-option {
   border-top: 1px solid $ghost;
   display: block;
@@ -169,4 +174,9 @@
 
 .ember-power-select-trigger {
   width: 100%;
+}
+
+// Kaleidos specific css class name
+.ember-power-select--block-item .ember-power-select-selected-item {
+  display: block;
 }

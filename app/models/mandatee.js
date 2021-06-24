@@ -30,7 +30,7 @@ export default Model.extend({
     inverse: null,
   }),
   publicationFlows: hasMany('publication-flow', {
-    inverse: null,
+    serialize: false,
   }),
   requestedSubcases: hasMany('subcase', {
     inverse: null,

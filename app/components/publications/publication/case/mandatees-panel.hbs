@@ -1,0 +1,65 @@
+<div class="auk-u-mb-3" data-test-publication-case-panel-mandatees>
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">{{t "mandatees"}}</h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              data-test-add-mandatee
+              @skin="tertiary"
+              @icon="add"
+              {{on "click" this.openLinkModal}}>
+              {{t "add-mandatee"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    {{#if @publicationFlow.mandatees}}
+      <Auk::Panel::Body @noPadding={{true}}>
+        <table class="auk-table" data-test-table-mandatees>
+          <thead>
+            <tr>
+              <th>{{t "mandatee"}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each (sort-by "priority" @publicationFlow.mandatees) as |mandatee|}}
+              <tr>
+                <td>
+                  <div class="auk-o-flex auk-o-flex--vertical-center">
+                    <Auk::Badge @icon="user" />
+                    <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                    {{!-- Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
+                  </div>
+                </td>
+                <td class="auk-u-text-align--right">
+                  <Auk::Button
+                    data-test-unlink-mandatee
+                    @layout="icon-only" @icon="delete" @skin="danger-borderless"
+                    {{on "click" (fn this.unlink mandatee)}} />
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </Auk::Panel::Body>
+    {{else}}
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-mandatees-added"}} />
+      </Auk::Panel::Body>
+    {{/if}}
+  </Auk::Panel>
+</div>
+
+{{#if this.isOpenLinkModal}}
+  <Publications::Publication::Case::LinkMandateeModal
+    @onClose={{this.closeLinkModal}}
+    @onLink={{this.link}} />
+{{/if}}

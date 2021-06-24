@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -34,7 +34,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const notas = await this.store.query('piece', {
       'filter[agendaitems][agenda][:id:]': agendaId,
       'filter[agendaitems][show-as-remark]': false,
-      'filter[document-container][type][:id:]': CONFIG.notaID,
+      'filter[document-container][type][:uri:]': CONSTANTS.DOCUMENT_TYPES.NOTA,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       include: 'agendaitems',
       'fields[agendaitems]': 'id,priority,short-title',
