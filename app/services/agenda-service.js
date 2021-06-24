@@ -136,7 +136,7 @@ export default Service.extend({
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
       if (!itemFromStore) {
-        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -151,10 +151,7 @@ export default Service.extend({
     for (const piece of payload.data) {
       let pieceFromStore = this.store.peekRecord(singularize(piece.type), piece.id);
       if (!pieceFromStore) {
-        pieceFromStore = await this.store.queryOne(singularize(piece.type),
-          {
-            'filter[:id:]': piece.id,
-          });
+        pieceFromStore = await this.store.queryRecord(singularize(piece.type), piece.id);
       }
       piecesFromStore.push(pieceFromStore);
     }
