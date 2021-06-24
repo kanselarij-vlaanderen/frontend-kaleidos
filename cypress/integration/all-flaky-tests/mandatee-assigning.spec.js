@@ -273,22 +273,19 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
 
     cy.log('in non-edit view, check if mandatees of last selected agendaitem are correctly ordered');
     cy.get(mandatee.mandateePanelView.row.name).as('mandateeNames');
@@ -305,50 +302,40 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.log('when edit is open, check if mandatees are correct (in reverse order)');
     cy.get(mandatee.mandateePanelView.actions.edit).click();
-    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
-    cy.get('@editItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelEdit.rows).should('have.length', 5);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(mandatee.mandateePanelView.actions.edit).click();
-    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
-    cy.get('@editItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelEdit.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(1)
       .click();
     cy.get(mandatee.mandateePanelView.actions.edit).click();
-    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
-    cy.get('@editItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelEdit.rows).should('have.length', 2);
 
     cy.log('when edit is cancelled, check the non-edit view again');
     cy.get(mandatee.mandateePanelEdit.actions.cancel).click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
 
     cy.log('changing the submitter and saving, check the non-edit view again (in reverse order)');
     cy.get(mandatee.mandateePanelView.actions.edit).click();
-    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
-    cy.get('@editItems').eq(2)
+    cy.get(mandatee.mandateePanelEdit.rows).eq(2)
       .within(() => {
         cy.get(mandatee.mandateePanelEdit.row.submitter).click();
       });
     cy.get(mandatee.mandateePanelEdit.actions.save).click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
 
     cy.log('adding a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(2)
@@ -356,23 +343,19 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.addAgendaitemMandatee(6, -1, -1);
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 4);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 4);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
 
     cy.log('deleting a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(mandatee.mandateePanelView.actions.edit).click();
-    cy.get(mandatee.mandateePanelEdit.rows).as('editItems');
-    cy.get('@editItems').eq(2)
+    cy.get(mandatee.mandateePanelEdit.rows).eq(2)
       .within(() => {
         cy.get(mandatee.mandateePanelEdit.row.delete).click();
       });
@@ -386,16 +369,13 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 2);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(mandatee.mandateePanelView.rows).as('listItems');
-    cy.get('@listItems').should('have.length', 5);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 5);
   });
 
   it('should create newsletter-info for the agendaitems to check the sorting', () => {
@@ -433,19 +413,17 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
-    // TODO .as not needed, user row.eq(index)
-    cy.get(newsletter.tableRow.newsletterRow).as('newsletterRows');
-    cy.get('@newsletterRows').eq(0)
+    cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
-    cy.get('@newsletterRows').eq(1)
+    cy.get(newsletter.tableRow.newsletterRow).eq(1)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
-    cy.get('@newsletterRows').eq(2)
+    cy.get(newsletter.tableRow.newsletterRow).eq(2)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);

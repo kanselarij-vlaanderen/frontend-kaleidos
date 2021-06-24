@@ -25,7 +25,6 @@ context('Full test for creating mandatees', () => {
 
   it('should add new minister', () => {
     cy.visit('/');
-    cy.route('GET', '/mandatee-service/**').as('getMandateeIsCompetentOnFutureAgendaitem'); // not used ..
     const KIND = 'Ministerraad';
 
     const agendaDate = Cypress.moment().add(1, 'weeks')
@@ -40,65 +39,47 @@ context('Full test for creating mandatees', () => {
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     cy.route('GET', '/ise-codes?sort=name').as('getIseCodes');
-    cy.get(settings.ministers.add).should('exist')
-      .should('be.visible')
+    cy.get(settings.ministers.add)
       .click();
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
     // TODO use input fields directly (after au refactor)
-    cy.get(mandatee.createMandatee.titleContainer).should('exist')
-      .should('be.visible')
-      .within(() => {
-        cy.get(utils.vlFormInput).should('exist')
-          .should('be.visible')
-          .type(ministerTitle);
-      });
-    cy.get(mandatee.createMandatee.nicknameContainer).should('exist')
-      .should('be.visible')
-      .within(() => {
-        cy.get(utils.vlFormInput).should('exist')
-          .should('be.visible')
-          .type(ministerNickName);
-      });
-    cy.get(mandatee.personSelector.personDropdown).should('exist')
-      .should('be.visible')
-      .within(() => {
-        cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-          .click();
-      });
-    cy.get(dependency.emberPowerSelect.option).should('exist')
-      .then(() => {
-        cy.contains('Liesbeth Homans').scrollIntoView()
-          .click();
-      });
+    cy.get(mandatee.createMandatee.titleContainer).within(() => {
+      cy.get(utils.vlFormInput).type(ministerTitle);
+    });
+    cy.get(mandatee.createMandatee.nicknameContainer).within(() => {
+      cy.get(utils.vlFormInput).type(ministerNickName);
+    });
+    cy.get(mandatee.personSelector.personDropdown).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger)
+        .scrollIntoView()
+        .click();
+    });
+    cy.get(dependency.emberPowerSelect.option).contains('Liesbeth Homans')
+      .scrollIntoView()
+      .click();
 
-    cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
-      .should('be.visible')
-      .within(() => {
-        cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-          .click();
-      });
+    cy.get(mandatee.createMandatee.iseCodeContainer).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger)
+        .scrollIntoView()
+        .click();
+    });
 
-    cy.get(dependency.emberPowerSelect.option).should('exist')
-      .then(() => {
-        cy.contains('Aanvullend net').click();
-        cy.get(mandatee.createMandatee.iseCodeContainer).should('exist')
-          .should('be.visible')
-          .within(() => {
-            cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-              .click();
-          });
-      });
+    cy.get(dependency.emberPowerSelect.option).contains('Aanvullend net')
+      .click();
+    cy.get(mandatee.createMandatee.iseCodeContainer).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger)
+        .scrollIntoView()
+        .click();
+    });
 
     cy.get(utils.vlDatepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(agendaDate);
 
     cy.route('POST', '/mandatees').as('postMandateeData');
-    cy.get(utils.vlModalFooter.save).should('exist')
-      .should('be.visible')
-      .click();
+    cy.get(utils.vlModalFooter.save).click();
     cy.wait('@postMandateeData');
 
     cy.createCase(false, caseTitle);
@@ -125,6 +106,7 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
+    // TODO is there a better way to get this by name?
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
         cy.get(settings.ministers.mandatee.edit).click();
@@ -138,33 +120,26 @@ context('Full test for creating mandatees', () => {
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
 
-    cy.get(mandatee.editMandatee.save).should('exist')
-      .should('be.visible')
-      .click();
+    cy.get(mandatee.editMandatee.save).click();
     cy.wait(3000);
     // TODO Fix grammar einddatum
-    cy.get(utils.vlModalVerify.save).should('exist')
-      .should('be.visible')
-      .contains('Eindatum aanpassen');
-    cy.get(utils.vlModalVerify.cancel).should('exist')
-      .should('be.visible')
-      .click();
-    cy.get(mandatee.editMandatee.cancel).should('exist')
-      .should('be.visible')
-      .click();
+    cy.get(utils.vlModalVerify.save).contains('Eindatum aanpassen');
+    cy.get(utils.vlModalVerify.cancel).click();
+    cy.get(mandatee.editMandatee.cancel).click();
     cy.visit('/');
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
+    // TODO is there a better way to get this by name?
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
         cy.get(settings.ministers.mandatee.resign).click();
       });
     cy.wait(3000);
     // TODO Fix grammar of popup ?
-    cy.get(mandatee.manageMandatee.changesAlert).should('exist')
-      .should('be.visible');
+    cy.get(mandatee.manageMandatee.changesAlert).should('be.visible');
     cy.get(utils.vlModalFooter.cancel).click();
+    // TODO is there a better way to get this by name?
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
         cy.get(settings.ministers.mandatee.delete).click();

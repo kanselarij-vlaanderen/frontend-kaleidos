@@ -39,6 +39,12 @@ const selectors = {
     newsletterRow: '[data-test-table-row-newsletter-row]',
   },
 
+  // component button-toolbar
+  buttonToolbar: {
+    edit: '[data-test-newsletter-table-button-toolbar-edit]',
+    linkToAgendaitem: '[data-test-newsletter-table-button-toolbar-link-to-agendaitem]',
+  },
+
   // component item-content
   itemContent: {
     printItemProposal: '[data-test-newsletter-item-content-print-item-proposal]',

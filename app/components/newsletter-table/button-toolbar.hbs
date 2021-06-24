@@ -1,5 +1,6 @@
 <div class="auk-o-flex--justify-between">
   <button
+    data-test-newsletter-table-button-toolbar-edit
     type="button"
     class="auk-button auk-button--borderless auk-button--icon"
     {{on "click" @onEdit}}
@@ -35,7 +36,7 @@
     </button>
   {{/if}}
   <LinkTo
-    data-test-link-to-subcase-overview
+    data-test-newsletter-table-button-toolbar-link-to-agendaitem
     class="auk-button auk-button--borderless auk-button--icon"
     target="_blank"
     @route="agenda.agendaitems.agendaitem"

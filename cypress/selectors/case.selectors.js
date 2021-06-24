@@ -33,6 +33,7 @@ const selectors = {
     agendaLink: '[data-test-subcase-description-agenda-link] a',
     // TODO unused selector
     modified: '[data-test-subcase-description-modified]',
+    edit: '[data-test-subcase-description-edit]',
   },
 
   // subcase-item
