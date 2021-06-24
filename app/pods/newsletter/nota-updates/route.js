@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -39,7 +40,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       include: 'agendaitems',
       'fields[agendaitems]': 'id,priority,short-title',
       'fields[piece]': 'id,name,modified',
-      'page[size]': CONSTANTS.MAX_PAGE_SIZES.NOTAS,
+      'page[size]': MAX_PAGE_SIZES.NOTAS,
       sort: params.sort,
     });
     for (const nota of notas.toArray()) { // proxyarray to native JS array

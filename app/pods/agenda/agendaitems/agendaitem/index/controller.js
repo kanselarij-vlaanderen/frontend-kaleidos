@@ -6,7 +6,7 @@ import {
   saveChanges,
   reorderAgendaitemsOnAgenda
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -32,7 +32,7 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       'filter[agenda][:id:]': this.agenda.id,
       'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:gte:priority]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
-      'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
+      'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
     });
     if (result.length) {
       const neighbouringItem = result.firstObject;

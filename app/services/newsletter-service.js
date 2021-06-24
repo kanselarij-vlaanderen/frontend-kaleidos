@@ -1,5 +1,5 @@
 import Service, { inject as service } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
@@ -123,7 +123,7 @@ export default Service.extend({
             'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
             'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
             sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
-            'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
+            'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
           })).firstObject;
           if (previousNewsItem) {
             news.set('richtext', previousNewsItem.richtext);

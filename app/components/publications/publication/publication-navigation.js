@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class PublicationNavigation extends Component {
   @service store;
@@ -18,7 +18,7 @@ export default class PublicationNavigation extends Component {
   *loadData() {
     const pieces = yield this.store.query('piece', {
       'filter[publication-flow][:id:]': this.args.publicationFlow.id,
-      'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
+      'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
     });
     this.documentsCount = pieces.meta.count;
   }

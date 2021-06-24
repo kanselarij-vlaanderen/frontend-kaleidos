@@ -7,7 +7,7 @@ import {
 } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument {PublicationFlow} selected
@@ -58,7 +58,7 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
     }
     const publicationFlows = yield this.store.query('publication-flow', {
       filter,
-      'page[size]': CONSTANTS.MAX_PAGE_SIZES.PUBLICATION_FLOWS,
+      'page[size]': MAX_PAGE_SIZES.PUBLICATION_FLOWS,
       sort: 'identification.id-name',
       include: 'identification',
     });

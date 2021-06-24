@@ -22,17 +22,6 @@ export default {
     FR: 'http://publications.europa.eu/resource/authority/language/FRA',
     DE: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
-  MAX_PAGE_SIZES: {
-    ONE_ITEM: 1,
-    PUBLICATION_FLOWS: 10,
-    NOTAS: 50,
-    PUBLICATION_FLOW_PIECES: 200,
-    CODE_LISTS: 100,
-    AGENDAITEMS: 300,
-    PIECES: 500,
-    ACTIVITIES: 500,
-    CASES: 500,
-  },
   // PUBLICATIONS
   PUBLICATION_STATUSES: {
     PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
