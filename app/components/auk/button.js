@@ -4,7 +4,9 @@ import { assert } from '@ember/debug';
 
 /**
  *
- * @argument skin {String}: possible values are: "primary", "secondary" (default), "tertiary", "borderless", "borderless-muted", "danger-primary", "danger-hover"
+ * @argument skin {String}: possible values are:
+ *  "primary", "secondary" (default), "tertiary", "borderless", "muted-borderless",
+ *  "danger-primary", "danger-secondary", "danger-tertiary", "danger-borderless", "danger-hover"
  * @argument layout {String}
  * @argument disabled {Boolean}
  * @argument loading {Boolean}: Show the button in a loading state. Overrides most other arguments.

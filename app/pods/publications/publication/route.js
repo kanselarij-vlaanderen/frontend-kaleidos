@@ -15,7 +15,9 @@ export default class PublicationRoute extends Route {
         'numac-numbers',
         'publication-subcase',
         'translation-subcase',
-        'contact-persons'
+        'contact-persons',
+        'mandatees',
+        'mandatees.person'
       ].join(','),
     });
   }

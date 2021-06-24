@@ -24,6 +24,7 @@ const selectors = {
 
   // subcase-description
   subcaseDescription: {
+    timelineItem: '[data-test-subcase-description-timeline-item]',
     decidedOn: '[data-test-subcase-description-decided-on]',
     requestedBy: '[data-test-subcase-description-requested-by]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
