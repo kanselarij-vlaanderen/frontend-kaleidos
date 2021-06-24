@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -166,12 +167,12 @@ export default ModelWithModifier.extend({
   }),
 
   remarkType: computed('showAsRemark', function() {
-    let id = '';
+    let uri = '';
     if (this.showAsRemark) {
-      id = CONFIG.remarkId;
+      uri = CONSTANTS.DOSSIER_TYPE.REMARK;
     } else {
-      id = CONFIG.notaCaseTypeID;
+      uri = CONSTANTS.DOSSIER_TYPE.NOTA;
     }
-    return this.store.findRecord('case-type', id);
+    return this.store.findRecordByUri('case-type', uri);
   }),
 });

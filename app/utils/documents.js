@@ -38,18 +38,18 @@ export const sortDocumentContainers = (pieces, containers) => {
   });
 };
 
-export const sortPieces = (pieces) => {
+export const sortPieces = (pieces, NameClass = VRDocumentName, sortingFunc = compareFunction) => {
   const validNamedPieces = [];
   let invalidNamedPieces = A();
   for (const piece of pieces) {
     try {
-      (new VRDocumentName(piece.name)).parseMeta();
+      (new NameClass(piece.name)).parseMeta();
       validNamedPieces.push(piece);
     } catch {
       invalidNamedPieces.push(piece);
     }
   }
-  validNamedPieces.sort((docA, docB) => compareFunction(new VRDocumentName(docA.name), new VRDocumentName(docB.name)));
+  validNamedPieces.sort((docA, docB) => sortingFunc(new NameClass(docA.name), new NameClass(docB.name)));
   invalidNamedPieces = invalidNamedPieces.sortBy('created').toArray();
   invalidNamedPieces.reverse();
 

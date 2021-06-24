@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
 
 export default class AgendaitemDecisionComponent extends Component {
   @service currentSession;
@@ -30,14 +29,7 @@ export default class AgendaitemDecisionComponent extends Component {
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri('access-level', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
-    this.decisionDocType = this.store.peekRecord('document-type', CONFIG.decisionDocumentTypeId);
-    if (!this.decisionDocType) {
-      const docTypes = yield this.store.query('document-type', {
-        'page[size]': CONSTANTS.MAX_PAGE_SIZES.ONE_ITEM,
-        'filter[:id:]': CONFIG.decisionDocumentTypeId,
-      });
-      this.decisionDocType = docTypes.firstObject;
-    }
+    this.decisionDocType = yield this.store.findRecordByUri('document-type', CONSTANTS.DOCUMENT_TYPES.DECISION);
   }
 
   @action

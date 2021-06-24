@@ -31,6 +31,7 @@ export default class PublicationsRoute extends Route {
       'page[size]': CONSTANTS.MAX_PAGE_SIZES.CODE_LISTS,
       sort: 'priority',
     });
+
     return Promise.all([
       publicationStatusPromise,
       regulationTypePromise,

@@ -18,6 +18,7 @@ const selectors = {
   // agendaitem-decision
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
+    edit: '[data-test-agendaitem-decision-edit]',
     // TODO unused selectors
     container: '[data-test-agendaitem-decision-container]',
     delete: '[data-test-agendaitem-decision-delete]',
@@ -26,6 +27,7 @@ const selectors = {
   // agendaitem-decision-edit
   agendaitemDecisionEdit: {
     resultContainer: '[data-test-agendaitem-decision-edit-result-container]',
+    save: '[data-test-agendaitem-decision-edit-save]',
   },
 
   // access-level-pill
@@ -45,6 +47,9 @@ const selectors = {
   // agenda-detail/sidebar-item
   agendaDetailSidebarItem: {
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
+    status: '[data-test-agenda-detail-sidebar-item-status]',
+    // Test tag is not possible, CSS is added conditionally
+    retracted: '.vlc-u-opacity-lighter',
   },
 
   // agendaitem-group-header
@@ -57,10 +62,12 @@ const selectors = {
     subitem: '[data-test-agenda-overview-item-sub-item]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
+    status: '[data-test-agenda-overview-item-status]',
   },
 
   // agenda-overview
   agendaOverview: {
+    showChanges: '[data-test-agenda-overview-show-changes]',
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
   },
 

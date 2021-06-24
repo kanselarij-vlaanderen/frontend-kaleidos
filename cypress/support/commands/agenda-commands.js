@@ -382,11 +382,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   // cy.route('GET', '/agendas/**').as('getAgendas');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
-  // TODO use test selector
-  // TODO remove toolbar-complex
-  cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  });
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).within(() => {
@@ -394,6 +390,10 @@ function approveDesignAgenda(shouldConfirm = true) {
     });
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+    // agendaitems are loading after action is completed
+    cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -426,11 +426,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
-  // TODO use test selector
-  // TODO remove toolbar-complex
-  cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  });
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   if (shouldConfirm) {
     cy.get(auk.modal.container).within(() => {
@@ -533,40 +529,12 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  * @name toggleShowChanges
  * @memberOf Cypress.Chainable#
  * @function
- * @param {boolean} refresh - boolean to check if a refresh needs to happen.
  */
-function toggleShowChanges(refresh) {
+function toggleShowChanges() {
   cy.log('toggleShowChanges');
-  cy.route('GET', '/agendaitems?fields**').as('getAgendaitems');
-
-  // TODO, refresh is no longer needed
-  if (refresh) {
-  //   cy.get('.auk-sidebar__item', {
-  //     timeout: 12000,
-  //   })
-  //     .last({
-  //       timeout: 12000,
-  //     })
-  //     .click();
-  //   cy.wait('@getAgendaitems', {
-  //     timeout: 20000,
-  //   });
-  //   cy.get('.auk-sidebar__item', {
-  //     timeout: 12000,
-  //   })
-  //     .first({
-  //       timeout: 12000,
-  //     })
-  //     .click();
-  //   cy.wait(2000); // a lot of data is being reloaded
-  // } else {
-    cy.clickReverseTab('Overzicht');
-    cy.wait(2500); // data loading after switching to overzicht
-  }
-
-  cy.get('.vlc-agenda-items .auk-toolbar-complex__right > .auk-toolbar-complex__item')
-    .first()
-    .click();
+  cy.clickReverseTab('Overzicht');
+  cy.get(auk.loader).should('not.exist'); // data is not loading
+  cy.get(agenda.agendaOverview.showChanges).click();
   cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
   cy.log('/toggleShowChanges');
 }
@@ -663,7 +631,7 @@ function changeSelectedAgenda(agendaName) {
     })
     .should('exist')
     .click();
-  cy.wait(2000); // TODO await calls after switch
+  cy.get(auk.loader).should('not.exist'); // await calls after switch covered by checking for loader
 }
 
 /**

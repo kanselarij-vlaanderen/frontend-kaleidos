@@ -1,4 +1,4 @@
-<tr>
+<tr {{did-update this.initSelectedOptions @piece.publicationFlow}}>
   <td>
     {{@piece.name}}
   </td>
@@ -18,14 +18,14 @@
   <td>
     {{#if this.selectedLinkModeOption.isEnabledLink}}
       <Publications::PublicationFlowSelector
-        @selected={{@piece.publicationFlow}}
+        @selected={{this.selectedPublicationFlow}}
         @case={{@case}}
         @onChange={{this.selectPublicationFlow}}
         />
     {{else}}
       <Auk::Button
         @icon="add"
-        {{on 'click' this.openNewPublicationModal}}>
+        {{on 'click' (fn @onOpenNewPublicationModal @piece)}}>
         {{t "publications-new"}}
       </Auk::Button>
     {{/if}}

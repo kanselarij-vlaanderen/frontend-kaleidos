@@ -25,10 +25,17 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
   ];
 
   @tracked selectedLinkModeOption;
+  @tracked selectedPublicationFlow;
 
   constructor() {
     super(...arguments);
-    const isEnabledLink = !!this.args.piece.publicationFlow.get('id');
+    this.initSelectedOptions();
+  }
+
+  @action
+  async initSelectedOptions() {
+    this.selectedPublicationFlow = await this.args.piece.publicationFlow;
+    const isEnabledLink = !!this.selectedPublicationFlow;
     this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink === isEnabledLink);
   }
 
@@ -48,11 +55,5 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     } else {
       this.args.onUnlinkPublicationFlow(this.args.piece);
     }
-  }
-
-  @action
-  openNewPublicationModal() {
-    this.args.onOpenNewPublicationModal(this.args.piece);
-    this.selectedLinkModeOption = this.linkModeOptions.find((opt) => opt.isEnabledLink);
   }
 }
