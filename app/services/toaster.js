@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -8,7 +9,17 @@ import { A } from '@ember/array';
 export default class ToasterService extends Service {
   @service intl;
 
-  toasts = A([]);
+  @tracked toasts = A([]);
+
+  // TODO: Below "newToasts" & "oldToasts" getters are a temporary to be able to render "old toasts" that
+  // don't have new design yet according to their old design, while already implementing new design for those types that support it.
+  get newToasts() {
+    return this.toasts.filter((toast) => ['success', 'warning', 'error'].includes(toast.type));
+  }
+
+  get oldToasts() {
+    return this.toasts.filter((toast) => !this.newToasts.includes(toast));
+  }
 
   @(task(function *(toast) {
     toast.options.onClose = toast.options.onClose || (() => this.toasts.removeObject(toast));
