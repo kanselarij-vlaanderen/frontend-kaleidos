@@ -1,19 +1,18 @@
 <div class="auk-modal__header auk-modal__header--bordered">
-  <WebComponents::AuToolbar @size="large">
-    <WebComponents::AuToolbar::Group @position="left">
-      <WebComponents::AuToolbar::Item>
-        <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-    <WebComponents::AuToolbar::Group @position="right">
-      <WebComponents::AuToolbar::Item>
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <h2 class="auk-toolbar__title">{{@title}}</h2>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         {{#if @resizeable}}
           <Auk::Button
             @icon={{if @isExpanded 'minimize' 'expand'}}
             @skin="borderless"
             @layout="icon-only"
             {{on "click" @onResize}}
-            data-test-au-modal-header-resize
           />
         {{/if}}
         {{#if this.closeable}}
@@ -22,10 +21,9 @@
             @skin="borderless"
             @layout="icon-only"
             {{on "click" @onClose}}
-            data-test-au-modal-header-close
           />
         {{/if}}
-      </WebComponents::AuToolbar::Item>
-    </WebComponents::AuToolbar::Group>
-  </WebComponents::AuToolbar>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>

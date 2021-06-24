@@ -1,7 +1,7 @@
 <div class="auk-u-mb-4">
   <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end auk-u-mb-2 auk-o-flex--justify-end">
-    {{#if (not (is-pending agendaitem.nota))}}
-      {{#if (not (await agendaitem.nota))}}
+    {{#if (not (is-pending agendaitem.notaOrVisienota))}}
+      {{#if (not (await agendaitem.notaOrVisienota))}}
         <button type="button" class="auk-button auk-button--secondary" disabled>
           <span class="auk-button__content">
             <div class="auk-icon auk-icon--default">
@@ -79,25 +79,25 @@
   </div>
 
 </div>
-<WebComponents::AuToolbar>
-  <WebComponents::AuToolbar::Group @position="right">
-    <WebComponents::AuToolbar::Item>
+<Auk::Toolbar>
+  <Auk::Toolbar::Group @position="right">
+    <Auk::Toolbar::Item>
       <a href="" class="auk-button-link" {{action "cancelEditing"}}>
         <span class="auk-button__content">
           {{t "cancel"}}
         </span>
       </a>
-    </WebComponents::AuToolbar::Item>
-    <WebComponents::AuToolbar::Item>
+    </Auk::Toolbar::Item>
+    <Auk::Toolbar::Item>
       {{web-components/vl-save-button
         data-test-newsletter-edit-item-save=true
         text=(t "save")
         isLoading=isLoading
         saveAction=(action "trySaveChanges")
       }}
-    </WebComponents::AuToolbar::Item>
-  </WebComponents::AuToolbar::Group>
-</WebComponents::AuToolbar>
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+</Auk::Toolbar>
 {{#if isTryingToSave}}
   {{web-components/vl-modal-verify
     title=(t "no-themes-selected")

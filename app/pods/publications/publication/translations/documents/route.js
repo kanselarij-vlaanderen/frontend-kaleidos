@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
@@ -14,25 +15,33 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
       ].join(','),
     });
 
-    const allDocuments = [];
+    const allDocuments = new Set(); // using set to ensure a collection of unique documents
 
     const sourceDocuments = await this.translationSubcase.sourceDocuments;
-    allDocuments.push(...sourceDocuments.toArray());
+    sourceDocuments.forEach((doc) => allDocuments.add(doc));
 
     const translationActivities = await this.translationSubcase.translationActivities;
     await Promise.all(
       translationActivities.map(async(activity) => {
         const translatedDocuments = await activity.generatedPieces;
-        allDocuments.push(...translatedDocuments.toArray());
+        translatedDocuments.forEach((doc) => allDocuments.add(doc));
       })
     );
 
-    return allDocuments;
+    const sortedDocuments = A([...allDocuments]).sortBy('created');
+    sortedDocuments.reverse();
+    return sortedDocuments;
+  }
+
+  async afterModel() {
+    const publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
     controller.translationSubcase = this.translationSubcase;
+    controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
   }
 

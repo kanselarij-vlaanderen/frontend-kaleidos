@@ -1,9 +1,9 @@
 <div class="auk-u-mb-8">
   <Auk::Panel>
     <Auk::Panel::Header>
-      <WebComponents::AuToolbar>
-        <WebComponents::AuToolbar::Group @position="left">
-          <WebComponents::AuToolbar::Item>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
             <h4 class="auk-panel__title">
               {{#if (not @agendaitem.showAsRemark)}}
                 {{t "note"}}
@@ -11,13 +11,13 @@
                 {{t "text"}}
               {{/if}}
             </h4>
-          </WebComponents::AuToolbar::Item>
-        </WebComponents::AuToolbar::Group>
-        <WebComponents::AuToolbar::Group @position="right">
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
           {{!-- TODO: for now the link-button is hidden while loading.
           A disabled state would be better to avoid flashing a new button in view once loaded. --}}
           {{#if (and @subcase this.loadCase.isIdle)}}
-            <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Item>
               <LinkTo
                 class="auk-button auk-button--tertiary"
                 data-test-agendaitem-titles-link-to-subcase={{true}}
@@ -31,10 +31,10 @@
                   </div>
                 </span>
               </LinkTo>
-            </WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
           {{/if}}
           {{#if this.currentSession.isEditor}}
-            <WebComponents::AuToolbar::Item>
+            <Auk::Toolbar::Item>
               <Auk::Button
                 data-test-agendaitem-titles-edit
                 @skin="tertiary"
@@ -42,10 +42,10 @@
                 @layout="icon-only"
                 {{on "click" this.startEditing}}
               />
-            </WebComponents::AuToolbar::Item>
+            </Auk::Toolbar::Item>
           {{/if}}
-        </WebComponents::AuToolbar::Group>
-      </WebComponents::AuToolbar>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
@@ -104,15 +104,15 @@
     </Auk::Panel::Body>
     {{#if @agendaitem.explanation }}
       <Auk::Modal::Footer @custom={{true}}>
-        <WebComponents::AuToolbar>
-          <WebComponents::AuToolbar::Group @position="left">
-            <WebComponents::AuToolbar::Item>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <pre class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
                {{t "remark-title"}}: {{@agendaitem.explanation}}
               </pre>
-            </WebComponents::AuToolbar::Item>
-          </WebComponents::AuToolbar::Group>
-        </WebComponents::AuToolbar>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
       </Auk::Modal::Footer>
     {{/if}}
   </Auk::Panel>

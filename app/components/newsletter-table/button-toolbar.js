@@ -22,7 +22,7 @@ export default class ButtonToolbarNewsletterTable extends Component {
 
   @action
   async openNota() {
-    const nota = await this.args.agendaitem.get('nota');
+    const nota = await this.args.agendaitem.get('notaOrVisienota');
     if (nota) {
       const piece = await nota.get('lastPiece');
       window.open(`/document/${piece.get('id')}`);

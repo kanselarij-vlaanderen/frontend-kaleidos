@@ -1,7 +1,7 @@
 <Auk::Modal @size="full-screen-padded">
   <Auk::Modal::Header @title={{ t "documents" }} @onClose={{@onClose}} />
-  <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.loadPieces.isRunning}}>
+  <Auk::Modal::Body @noPadding={{true}}>
+    <Utils::LoadableContent @isLoading={{or this.loadPieces.isRunning this.loadCase.isRunning}}>
       {{!-- template-lint-disable table-groups --}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
@@ -47,6 +47,7 @@
 {{#if this.isOpenNewPublicationModal}}
   <Publications::NewPublicationModal
     @case={{this.case}}
+    @agendaItemTreatment={{this.agendaItemTreatment}}
     @onSave={{perform this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />
 {{/if}}

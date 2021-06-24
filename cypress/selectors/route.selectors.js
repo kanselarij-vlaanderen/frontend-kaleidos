@@ -34,10 +34,60 @@ const selectors = {
     ROUTE AGENDA
   */
 
+  // agenda/documents/template
+  agendaDocuments: {
+    addDocuments: '[data-test-route-agenda-documents-add-documents]',
+  },
+
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
     // TODO unused selector
     addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
+  },
+
+  // agenda/agendaitems/agendaitem/documents/template
+  agendaitemDocuments: {
+    batchEdit: '[data-test-route-agenda---agendaitem-documents-batch-edit]',
+    add: '[data-test-route-agenda---agendaitem-documents-add]',
+  },
+
+  /**
+    ROUTE CASES
+  */
+
+  // cases/case/subcase/subcase/overview/template
+  subcaseOverview: {
+    confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
+  },
+
+  /**
+    ROUTE SEARCH
+  */
+
+  // search/template
+  search: {
+    input: '[data-test-route-search-input]',
+    trigger: '[data-test-route-search-trigger]',
+    // TODO unused selector:
+    datepickerButton: '[data-test-route-search-datepicker-button]',
+  },
+
+  /**
+    ROUTE NEWSLETTER
+  */
+
+  // newsletter/template
+  newsletter: {
+    dataTable: '[data-test-route-newsletter-data-table]',
+  },
+
+  /**
+    ROUTE NEWSLETTERS
+  */
+
+  // newsletters/template
+  newsletters: {
+    dataTable: '[data-test-route-newsletters-data-table]',
   },
 
 };

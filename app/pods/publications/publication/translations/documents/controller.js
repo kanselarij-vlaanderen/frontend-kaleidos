@@ -10,14 +10,22 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
-  @tracked identification;
+  @tracked publicationSubcase;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
+  }
+
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
+  }
+
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
   }
 
   @action
@@ -50,8 +58,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.name = translationDocument.name;
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-    yield piece.save();
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    }
 
+    yield piece.save();
     this.showPieceUploadModal = false;
     this.send('refresh');
   }
@@ -88,7 +99,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const filePromises = translationRequest.selectedPieces.mapBy('file');
     const files = yield Promise.all(filePromises);
 
-    const folder = yield this.store.findRecord('mail-folder', CONFIG.EMAIL.OUTBOX.ID);
+    const folder = yield this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
     const mail = yield this.store.createRecord('email', {
       to: CONFIG.EMAIL.TO.translationsEmail,
       from: CONFIG.EMAIL.DEFAULT_FROM,
@@ -96,13 +107,13 @@ export default class PublicationsPublicationTranslationsDocumentController exten
       attachments: files,
       requestActivity: requestActivity,
       subject: translationRequest.subject,
-      content: translationRequest.message,
+      message: translationRequest.message,
     });
     yield mail.save();
 
     this.selectedPieces = [];
     this.showTranslationRequestModal = false;
-    this.send('refresh');
+    this.transitionToRoute('publications.publication.translations.requests');
   }
 
 

@@ -218,6 +218,7 @@ export default Service.extend({
       created: now,
       modified: now,
       subcase,
+      startDate: meeting.plannedStart,
       decisionResultCode,
     });
     await agendaItemTreatment.save();

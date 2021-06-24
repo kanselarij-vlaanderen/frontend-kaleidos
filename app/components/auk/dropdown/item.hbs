@@ -1,0 +1,27 @@
+<li class={{@class}}>
+  {{#if @href}}
+    <a class="auk-menu__item {{this.skin}}" href={{@href}} ...attributes>
+      {{yield}}
+    </a>
+  {{else if @textOnly}}
+    <div class="auk-menu__item--text-only" ...attributes>
+      {{yield}}
+    </div>
+  {{else}}
+    {{!-- TODO: when wanting to define an action in a dropdown that looks (and is) clickable, but doesn't link anywhere, one ends up here.
+      From a html semantics point of view it doesn't seem right to render an `<a href="#">` for something that serves as a button. --}}
+    <LinkTo
+      class="auk-menu__item {{this.skin}}"
+      @route={{@route}}
+      @models={{this.models}}
+      @disabled={{@disabled}}
+      @activeClass={{@activeClass}}
+      @current-when={{@current-when}}
+      @preventDefault={{@preventDefault}}
+      @query={{@query}}
+      ...attributes
+    >
+      {{yield}}
+    </LinkTo>
+  {{/if}}
+</li>

@@ -4,11 +4,18 @@
 >
   <div class="vlc-document-card" data-test-document-card>
     <div class="vlc-document-card__summary">
+      <div class="auk-u-mr-3">
+        {{#if @isHighlighted}}
+          <Auk::Badge @skin="success" @icon="document-added" @size="large"/>
+        {{else}}
+          <Auk::Badge @icon="document" @size="large"/>
+        {{/if}}
+      </div>
       <div class="vlc-document-card__content">
         <div class="auk-toolbar-complex auk-toolbar-complex--auto">
           <div class="auk-toolbar-complex__left">
             <div class="auk-toolbar-complex__item">
-              <p class="vlc-subline vlc-document-card__subline">
+              <p class="vlc-subline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
@@ -54,7 +61,7 @@
               {{#if this.currentSession.isEditor}}
                 <button
                   class="auk-button auk-button--borderless auk-button--icon"
-                  data-test-documents-show-more
+                  data-test-document-card-actions
                   type="button"
                 >
                   <span class="auk-button__content">
@@ -94,7 +101,7 @@
                         </li>
                         <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                         <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                          <button class="auk-button-link auk-button-link--block auk-u-text-error" type="button"
+                          <button class="auk-button-link auk-button-link--block auk-u-text-error" data-test-document-card-delete type="button"
                             {{on "click" attacher.hide}}
                             {{on "click" this.deleteDocumentContainer}}
                           >
@@ -112,19 +119,6 @@
           </div>
         </div>
         <div class="auk-o-flex">
-          {{!-- TODO: make checkAdded a DDAU @isHighlighted --}}
-          <div class="vlc-document-card__badge
-            {{if
-              @documentContainer.checkAdded
-              "vlc-document-list__item vlc-document-list__item--active"
-            }}"
-          >
-            <div class="auk-badge auk-badge--default auk-badge--medium">
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-document"></i>
-              </div>
-            </div>
-          </div>
           <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
@@ -163,7 +157,7 @@
                 </button>
               </div>
             {{else}}
-              <h6 class="auk-h4">
+              <h6 class="auk-h4" data-test-document-card-title-header>
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
@@ -190,7 +184,7 @@
     <div class="vlc-document-card__more">
       <div class="js-vl-accordion {{if this.isExpandedVersionHistory "js-vl-accordion--open"}}">
         <Auk::Button
-          data-test-show-pieces-history
+          data-test-document-card-version-history
           @skin="borderless"
           @icon={{if this.isExpandedVersionHistory "chevron-down" "chevron-right"}}
           disabled={{this.loadPieceRelatedData.isRunning}}

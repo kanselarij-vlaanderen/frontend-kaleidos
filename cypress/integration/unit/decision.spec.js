@@ -2,10 +2,10 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import modal from '../../selectors/modal.selectors';
-import document from '../../selectors/document.selectors';
+import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
   return Cypress.moment().unix();
@@ -18,9 +18,6 @@ context('Add files to an agenda', () => {
   before(() => {
     cy.server();
     cy.resetCache();
-    // cy.login('Admin');
-    // cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
-    // cy.logout();
   });
 
   beforeEach(() => {
@@ -49,19 +46,18 @@ context('Add files to an agenda', () => {
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
     });
-    // cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(SubcaseTitleShort, false);
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.addDocumentToTreatment(file);
     cy.route('DELETE', 'files/*').as('deleteFile');
-    cy.get(document.modalPieceDelete).click();
+    cy.get(document.vlUploadedDocument.deletePiece).click();
     cy.wait('@deleteFile', {
       timeout: 12000,
     });
-    cy.get(modal.baseModal.dialogWindow).contains('test')
-      .should('not.exist');
 
-    cy.get('@fileUploadDialog').within(() => {
+    cy.get(document.vlUploadedDocument.filename).should('not.exist');
+
+    cy.get(utils.vlModal.dialogWindow).within(() => {
       cy.uploadFile(file.folder, file.fileName, file.fileExtension);
     });
 
@@ -71,7 +67,7 @@ context('Add files to an agenda', () => {
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
 
     cy.wait('@createNewPiece', {
       timeout: 12000,
@@ -83,43 +79,32 @@ context('Add files to an agenda', () => {
       timeout: 12000,
     });
 
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard).as('docCards');
-    });
-
+    cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').should('have.length', 1);
 
+    // TODO-command addNewPieceToTreatment
     cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-
-    cy.get('@docCards').eq(0)
-      .within(() => {
-        cy.get('.auk-h4 > span').contains(/BIS/);
-      });
+    cy.get(document.documentCard.titleHeader).eq(0)
+      .contains(/BIS/);
 
     // Delete the TER piece, the BIS should then become the report
     cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/TER/);
-        cy.get(document.showPiecesHistory).click();
-        cy.get(document.singlePieceHistory).as('pieces');
-        cy.get('@pieces').eq(0)
-          .within(() => {
-            cy.get('.ki-delete').click();
-          });
+        cy.get(document.documentCard.titleHeader).contains(/TER/);
+        cy.get(document.documentCard.versionHistory).click();
+        cy.get(document.vlDocument.piece).should('have.length', 3);
+        cy.get(document.vlDocument.delete).eq(0) // this is the TER piece
+          .click();
       });
-
     // verify modal
-    cy.get(modal.modal).within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
@@ -130,22 +115,15 @@ context('Add files to an agenda', () => {
       timeout: 12000,
     });
 
+    // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get('.auk-h4 > span').contains(/BIS/);
-        cy.get('.ki-more').click();
+        cy.get(document.documentCard.titleHeader).contains(/BIS/);
+        cy.get(document.documentCard.actions).click();
+        cy.get(document.documentCard.delete).click();
       });
-
-    // Delete the document-container + all pieces
-    cy.get('.vlc-dropdown-menu').within(() => {
-      cy.get('.auk-u-text-error').contains('Document verwijderen')
-        .click();
-    });
-    cy.get(modal.modal).within(() => {
-      cy.get('button').contains('Verwijderen')
-        .click();
-    });
-
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
     cy.wait('@deleteFile', {
       timeout: 20000,
     });
@@ -156,11 +134,11 @@ context('Add files to an agenda', () => {
       timeout: 20000,
     });
 
-    cy.get('@docCards').should('have.length', 0);
+    cy.get(document.documentCard.card).should('have.length', 0);
   });
 
   it('should postpone an agendaitem and change the status of the treatment', () => {
-    // TODO replace setup by existing data and make new zip
+    // TODO-setup replace setup by existing data and make new zip
     const caseTitle = `Cypress test: Decision postponing - ${currentTimestamp()}`;
     const type = 'Nota';
     const SubcaseTitleShort = `Cypress test: perform postpone action of agendaitem - ${currentTimestamp()}`;
@@ -184,57 +162,48 @@ context('Add files to an agenda', () => {
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.postpone).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter');
+    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
+    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 1);
     cy.get(agenda.agendaitemControls.actions).click();
     cy.get(agenda.agendaitemControls.action.advance).click();
-    cy.get(modal.baseModal.dialogWindow).should('not.exist', {
+    cy.get(utils.vlModal.dialogWindow).should('not.exist', {
       timeout: 5000,
     });
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
-      .should('not.exist');
-
-    // TODO why go to press agenda ?
-    cy.get(agenda.agendaitemNav.pressAgendaTab).click();
-    cy.url().should('contain', '/persagenda');
+    cy.get(agenda.agendaDetailSidebar.subitem).should('have.length', 2);
+    cy.get(agenda.agendaDetailSidebarItem.retracted).should('have.length', 0);
 
     cy.get(agenda.agendaitemNav.decisionTab).click();
     cy.url().should('contain', '/beslissingen');
 
     cy.route('PATCH', 'agenda-item-treatments/**').as('patchTreatment');
-    cy.contains('Wijzigen').click();
-    cy.get('.auk-box').within(() => {
-      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
-        .should('be.visible')
-        .within(() => {
-          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-            .click();
-        });
+    cy.get(agenda.agendaitemDecision.edit).click();
+    cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
+      cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
+        .click();
     });
-    cy.get(dependency.emberPowerSelect.option).should('exist')
-      .then(() => {
-        cy.contains('Uitgesteld').scrollIntoView()
-          .click();
-      });
-    cy.contains('Opslaan').click()
+    cy.get(dependency.emberPowerSelect.option).contains('Uitgesteld')
+      .scrollIntoView()
+      .click();
+    cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@patchTreatment');
 
     // TODO right now, changing the status of the treatment does not change the retracted attribute of agendaitem
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
     // perhaps in the future this will be a feature
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
-    cy.get(agenda.agendaDetailSidebar.subitem).get('.vlc-u-opacity-lighter')
+    cy.get(agenda.agendaDetailSidebar.subitem).get(agenda.agendaDetailSidebarItem.retracted)
       .should('not.exist');
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    cy.get('.vlc-status-timeline > li').eq(0)
+    cy.get(cases.subcaseDescription.timelineItem).eq(0)
       .contains(/Ingediend voor agendering op/);
-    cy.get('.vlc-status-timeline > li').eq(1)
+    cy.get(cases.subcaseDescription.timelineItem).eq(1)
       .contains(/Geagendeerd op de agenda van/);
-    cy.get('.vlc-status-timeline > li').eq(2)
+    cy.get(cases.subcaseDescription.timelineItem).eq(2)
       .contains(/Uitgesteld op de agenda van/);
-    cy.get('.vlc-status-timeline > li').eq(3)
+    cy.get(cases.subcaseDescription.timelineItem).eq(3)
       .contains(/Er is beslist om dit agendapunt uit te stellen/);
   });
 });
