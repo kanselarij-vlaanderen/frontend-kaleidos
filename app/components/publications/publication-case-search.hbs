@@ -1,29 +1,30 @@
-<Auk::Input
-  class="auk-input--block"
-  @icon="search"
-  @type="text"
-  @placeholder={{t "search-placeholder"}}
-  value={{this.searchText}}
-  {{on "input" (perform this.debouncedSearch)}}
-  {{on "focusout" this.hideResults}}
-  {{on "focusin" (if this.search.lastSuccessful this.showResults this.hideResults)}}
-  @enter={{perform this.search}}
-  @autocomplete="off"
-/>
-{{#if this.isShowingResults}}
-  <ul id={{this.resultListId}} class="autocomplete-results auk-search-results-list">
+<div class="auk-u-position-relative">
+  <Auk::Input
+    class="auk-input--block"
+    @icon="search"
+    @type="text"
+    @placeholder={{t "search-placeholder"}}
+    value={{this.searchText}}
+    {{on "input" (perform this.debouncedSearch)}}
+    {{on "focusout" this.hideResults}}
+    {{on "focusin" (if this.search.lastSuccessful this.showResults this.hideResults)}}
+    @enter={{perform this.search}}
+    @autocomplete="off"
+  />
+  <Auk::SearchResultsList @isVisible={{this.isShowingResults}} @hasNoResults={{eq this.searchResults.length 0}} id={{this.resultListId}}>
     {{#each this.searchResults as |result|}}
-      <Auk::Dropdown::Item @class="auk-search-results-list__item" @route="publications.publication.documents" @model={{result.id}}>
-        {{#if result.shortTile}}
-          {{result.shortTile}}
-        {{else if result.title}}
-          {{result.title}}
-        {{/if}}
-        <br>
-        <span class="auk-u-muted auk-u-text-small">{{result.identification}}</span>
-      </Auk::Dropdown::Item>
+      <Auk::SearchResultsList::Item @route="publications.publication.documents" @model={{result.id}} @skin="multiline">
+        <:default>
+          {{#if result.shortTile}}
+            {{result.shortTile}}
+          {{else if result.title}}
+            {{result.title}}
+          {{/if}}
+        </:default>
+        <:subline>{{result.identification}}</:subline>
+      </Auk::SearchResultsList::Item>
     {{else}}
-      {{ t "no-results-found" }}
+      {{t "no-results-found"}}
     {{/each}}
-  </ul>
-{{/if}}
+  </Auk::SearchResultsList>
+</div>
