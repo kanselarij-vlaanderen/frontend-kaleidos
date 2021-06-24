@@ -10,14 +10,22 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @service store;
 
   @tracked translationSubcase;
-  @tracked publicationFlow;
-  @tracked identification;
+  @tracked publicationSubcase;
   @tracked showPieceUploadModal = false;
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
+  }
+
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
+  }
+
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
   }
 
   @action
@@ -50,8 +58,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.name = translationDocument.name;
     piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-    yield piece.save();
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    }
 
+    yield piece.save();
     this.showPieceUploadModal = false;
     this.send('refresh');
   }

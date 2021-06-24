@@ -34,5 +34,17 @@ const selectors = {
   // TODO replace deze bij het maken van publication translation testen
   tableCell: '.auk-table__cell--accent',
   flowTitle: '[data-test-publication-flow-title]',
+
+  // new-publication-modal
+  newPublicationModal: {
+    createButton: '[data-test-publication-button-create-new]',
+    cancelButton: '[data-test-publication-button-cancel]', // 2x duplication
+    publicationNumberInput: '[data-test-create-publication-modal-number-input]',
+    publicationNumberSuffixInput: '[data-test-create-publication-modal-suffix-input]',
+    publicationShortTitleTextarea: '[data-test-create-publication-modal-short-title-textarea]',
+    publicationLongTitleTextarea: '[data-test-create-publication-modal-long-title-textarea]',
+    alertInfo: '[data-test-auk-alert-info]', // refactor either to publication specific or auk reuse
+    alertError: '[data-test-auk-alert-error]', // refactor either to publication specific or auk reuse
+  },
 };
 export default selectors;

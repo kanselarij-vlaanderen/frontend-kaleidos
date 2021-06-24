@@ -2,7 +2,7 @@
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <h2 data-test-au-modal-header-title class="auk-toolbar__title">{{@title}}</h2>
+        <h2 class="auk-toolbar__title">{{@title}}</h2>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
@@ -13,7 +13,6 @@
             @skin="borderless"
             @layout="icon-only"
             {{on "click" @onResize}}
-            data-test-au-modal-header-resize
           />
         {{/if}}
         {{#if this.closeable}}
@@ -22,7 +21,6 @@
             @skin="borderless"
             @layout="icon-only"
             {{on "click" @onClose}}
-            data-test-au-modal-header-close
           />
         {{/if}}
       </Auk::Toolbar::Item>

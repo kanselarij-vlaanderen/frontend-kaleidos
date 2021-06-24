@@ -5,8 +5,7 @@ import mandatee from '../../selectors/mandatee.selectors';
 import agenda from '../../selectors/agenda.selectors';
 import utils from '../../selectors/utils.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
-import modal from '../../selectors/modal.selectors';
-import auComponents from '../../selectors/au-component.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 
 function currentTimestamp() {
@@ -271,21 +270,21 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@agendaitems').eq(1)
       .click();
     // TODO Why is 20 seconds not enough to load this page ?
-    cy.get(auComponents.auLoading, {
+    cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 2);
     cy.get('@agendaitems').eq(2)
       .click();
-    cy.get(auComponents.auLoading, {
+    cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 3);
     cy.get('@agendaitems').eq(3)
       .click();
-    cy.get(auComponents.auLoading, {
+    cy.get(auk.loader, {
       timeout: 40000,
     }).should('not.exist');
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
@@ -413,7 +412,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(2)
       .click();
@@ -421,7 +420,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
     cy.get('@agendaitems').eq(3)
       .click();
@@ -429,7 +428,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .click();
     cy.get(newsletter.editItem.save).click();
     cy.wait(2000);
-    cy.get(modal.verify.save).click();
+    cy.get(utils.vlModalVerify.save).click();
     cy.wait(3000);
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
@@ -438,17 +437,17 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(newsletter.tableRow.newsletterRow).as('newsletterRows');
     cy.get('@newsletterRows').eq(0)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
     cy.get('@newsletterRows').eq(1)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
     cy.get('@newsletterRows').eq(2)
       .within(() => {
-        cy.get(utils.checkboxLabel).click();
+        cy.get(utils.vlCheckbox.label).click();
         cy.wait(1000);
       });
 

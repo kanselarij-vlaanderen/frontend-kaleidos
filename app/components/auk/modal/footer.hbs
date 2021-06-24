@@ -5,10 +5,7 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::ButtonLink
-            data-test-au-modal-footer-cancel
-            {{on "click" @onCancel}}
-          >
+          <Auk::ButtonLink {{on "click" @onCancel}}>
             {{t "cancel"}}
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>

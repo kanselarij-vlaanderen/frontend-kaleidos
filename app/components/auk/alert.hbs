@@ -1,11 +1,11 @@
-<div data-test-au-alert-container class="auk-alert {{this.skin}}" ...attributes>
+<div class="auk-alert {{this.skin}}" ...attributes>
   <div class="auk-alert__body">
     <Auk::Badge @icon="{{this.icon}}" @skin={{@skin}} @size={{@size}} />
     <div class="auk-alert__text">
       {{#if @title}}
-        <p data-test-au-alert-title class="auk-alert__title">{{@title}}</p>
+        <p class="auk-alert__title">{{@title}}</p>
       {{/if}}
-      <p data-test-au-alert-message class="auk-alert__message">{{@message}}</p>
+      <p class="auk-alert__message">{{@message}}</p>
     </div>
   </div>
   {{#if @isClosable}}

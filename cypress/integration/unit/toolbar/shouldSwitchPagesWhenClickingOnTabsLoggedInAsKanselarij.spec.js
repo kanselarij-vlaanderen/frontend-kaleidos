@@ -1,7 +1,7 @@
 /* global context, it, cy,beforeEach */
 // / <reference types="Cypress" />
 
-import toolbar from '../../../selectors/toolbar.selectors';
+import utils from '../../../selectors/utils.selectors';
 import settings from '../../../selectors/settings.selectors';
 import cases from '../../../selectors/case.selectors';
 import route from '../../../selectors/route.selectors';
@@ -17,21 +17,21 @@ context('Testing the toolbar as Kanselarij user', () => {
   // TODO test url after clicking instead of other titles not existing
 
   it('Should have meeting, Case, Newsletter, Settings in toolbar', () => {
-    cy.get(toolbar.mHeader.agendas).should('exist');
-    cy.get(toolbar.mHeader.cases).should('exist');
-    cy.get(toolbar.mHeader.newsletters).should('exist');
-    cy.get(toolbar.mHeader.settings).should('exist');
+    cy.get(utils.mHeader.agendas).should('exist');
+    cy.get(utils.mHeader.cases).should('exist');
+    cy.get(utils.mHeader.newsletters).should('exist');
+    cy.get(utils.mHeader.settings).should('exist');
   });
 
   it('Should switch to Agenda tab when agenda is clicked as Kanselarij', () => {
-    cy.get(toolbar.mHeader.agendas).click();
+    cy.get(utils.mHeader.agendas).click();
     cy.get(route.agendas.title).should('exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');
   });
 
   it('Should switch to cases tab when cases is clicked as Kanselarij', () => {
-    cy.get(toolbar.mHeader.cases).click();
+    cy.get(utils.mHeader.cases).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('exist');
     cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');
@@ -39,7 +39,7 @@ context('Testing the toolbar as Kanselarij user', () => {
   });
 
   it('Should switch to newsletter tab when newsletter is clicked as Kanselarij', () => {
-    cy.get(toolbar.mHeader.newsletters).click();
+    cy.get(utils.mHeader.newsletters).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.newsletterHeader.title).should('exist');
@@ -47,7 +47,7 @@ context('Testing the toolbar as Kanselarij user', () => {
   });
 
   it('Should switch to settings tab when settings is clicked as Kanselarij', () => {
-    cy.get(toolbar.mHeader.settings).click();
+    cy.get(utils.mHeader.settings).click();
     cy.get(route.agendas.title).should('not.exist');
     cy.get(cases.casesHeader.title).should('not.exist');
     cy.get(newsletter.newsletterHeaderOverview.title).should('not.exist');

@@ -2,7 +2,7 @@
 // / <reference types="Cypress" />
 
 
-import toolbar from '../../selectors/toolbar.selectors';
+import utils from '../../selectors/utils.selectors';
 
 
 /**
@@ -99,8 +99,8 @@ function logoutFlow() {
   cy.server();
   cy.route('DELETE', '/mock/sessions/current').as('mockLogout');
   cy.visit('');
-  cy.get(toolbar.mHeader.userActions).click();
-  cy.get(toolbar.mHeader.userAction.logout)
+  cy.get(utils.mHeader.userActions).click();
+  cy.get(utils.mHeader.userAction.logout)
     .contains('Afmelden')
     .click();
   cy.wait('@mockLogout');

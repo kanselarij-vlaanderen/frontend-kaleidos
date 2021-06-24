@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 /**
@@ -12,8 +12,9 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @service store;
   @service publicationService;
 
-  @tracked referenceDocument;
   @tracked isOpenNewPublicationModal = false;
+
+  @tracked referenceDocument;
   @tracked case;
   @tracked agendaItemTreatment;
 
@@ -41,7 +42,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   }
 
   async loadAgendaItemTreatment() {
-    // latest
     this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
       'filter[agendaitem][:id:]': this.args.agendaitem.id,
       sort: '-start-date',
@@ -54,6 +54,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.isOpenNewPublicationModal = true;
   }
 
+  @action
+  cancelNewPublication() {
+    this.referenceDocument = null;
+    this.isOpenNewPublicationModal = false;
+  }
+
   @task
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
@@ -62,14 +68,8 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
-    this.isOpenNewPublicationModal = false;
     this.referenceDocument = null;
-  }
-
-  @action
-  cancelNewPublication() {
     this.isOpenNewPublicationModal = false;
-    this.referenceDocument = null;
   }
 
   @action

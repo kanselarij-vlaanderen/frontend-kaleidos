@@ -120,8 +120,16 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.publicationFlow.status = status;
     this.loadPublicationStatus.perform();
     if (status.isPublished || status.isWithdrawn) {
-      // TODO Do we want to auto fill in publicationSubcase.endDate ?
       this.publicationFlow.closingDate = now;
+
+      if (!this.publicationSubcase.endDate) {
+        this.publicationSubcase.endDate = now;
+        this.notifyChanges(this.publicationSubcase);
+      }
+      if (!this.translationSubcase.endDate) {
+        this.translationSubcase.endDate = now;
+        this.notifyChanges(this.translationSubcase);
+      }
     } else {
       this.publicationFlow.closingDate = null;
     }
@@ -131,6 +139,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     });
     this.notifyChanges(this.publicationFlow, ['status', 'closingDate']),
     this.notifyChanges(statusChange);
+    await this.loadPublicationStatusChange.perform();
   }
 
   @action

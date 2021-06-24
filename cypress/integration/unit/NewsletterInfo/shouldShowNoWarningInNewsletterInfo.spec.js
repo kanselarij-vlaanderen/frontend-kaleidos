@@ -1,7 +1,7 @@
 /* global Cypress, context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
 
-import alert from '../../../selectors/alert.selectors';
+import utils from '../../../selectors/utils.selectors';
 
 context('Show no warning in Newsletterinfo', () => {
   function currentTimestamp() {
@@ -35,6 +35,6 @@ context('Show no warning in Newsletterinfo', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitle1, false);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
-    cy.get(alert.changesAlert).should('not.be.visible');
+    cy.get(utils.changesAlert.alert).should('not.be.visible');
   });
 });

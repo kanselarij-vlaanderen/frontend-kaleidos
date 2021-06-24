@@ -1,8 +1,8 @@
 /* global context, before, it, cy, beforeEach */
 // / <reference types="Cypress" />
-import modal from '../../selectors/modal.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 function formatmeetingDocumentsUrl(meetingId, agendaId) {
   return `/vergadering/${meetingId}/agenda/${agendaId}/documenten`;
@@ -126,8 +126,10 @@ context('Add files to an agenda', () => { // At the meeting-level
   it('should delete documents, pieces and files', () => {
     const meetingId = '5EBA8CE1DAB6BB0009000009';
     const agendaId = '5EBA8CE3DAB6BB000900000A';
+    cy.route('GET', '/pieces?filter\\[:id:\\]=*').as('loadPieceData');
     cy.visit(formatmeetingDocumentsUrl(meetingId, agendaId));
-    cy.wait('@loadPieces');
+    cy.wait('@loadPieces'); // general load
+    cy.wait('@loadPieceData'); // specific load to ensure document-container is loaded
 
     // Test if the documents we're looking for are present
     cy.get(document.documentCard.card).as('docCards');
@@ -144,10 +146,8 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
 
     cy.wait('@deleteFile', {
       timeout: 20000,
@@ -168,21 +168,16 @@ context('Add files to an agenda', () => { // At the meeting-level
       .within(() => {
         cy.get(document.documentCard.titleHeader).contains(/2e/);
         cy.get(document.documentCard.versionHistory).click();
-        cy.get(document.vlDocument.piece).as('pieces');
-        cy.get('@pieces').eq(0)
-          .within(() => {
-            cy.get(document.vlDocument.delete).click();
-          });
+        cy.get(document.vlDocument.piece).should('have.length', 1);
+        cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document
       });
 
     cy.route('DELETE', 'files/*').as('deleteFile');
     cy.route('DELETE', 'pieces/*').as('deletePiece');
     cy.route('DELETE', 'document-containers/*').as('deleteDocumentContainer');
 
-    cy.get(modal.verify.container).within(() => {
-      cy.get(modal.verify.save).contains('Verwijderen')
-        .click();
-    });
+    cy.get(utils.vlModalVerify.save).contains('Verwijderen')
+      .click();
 
     cy.wait('@deleteFile', {
       timeout: 20000,
@@ -190,11 +185,11 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@deletePiece', {
       timeout: 20000,
     });
-    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO fix the deletion of document in vl-document component
+    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO code-fix: the deletion of document in vl-document component
     cy.wait('@loadPieces');
 
     // Nothing should be left
-    cy.get('@docCards').should('have.length', 0);
+    cy.get(document.documentCard.card).should('have.length', 0);
 
     cy.deleteAgenda(meetingId, true);
   });

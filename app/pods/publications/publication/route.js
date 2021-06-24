@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 
 export default class PublicationRoute extends Route {
-  async model(params) {
+  model(params) {
     return this.store.findRecord('publication-flow', params.publication_id, {
       include: [
         'case',
@@ -15,7 +15,9 @@ export default class PublicationRoute extends Route {
         'numac-numbers',
         'publication-subcase',
         'translation-subcase',
-        'contact-persons'
+        'contact-persons',
+        'mandatees',
+        'mandatees.person'
       ].join(','),
     });
   }

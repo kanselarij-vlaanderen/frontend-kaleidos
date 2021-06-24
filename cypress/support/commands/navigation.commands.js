@@ -1,6 +1,6 @@
 /* global cy, Cypress */
 // / <reference types="Cypress" />
-import utils from '../../selectors/utils.selectors';
+import auk from '../../selectors/auk.selectors';
 
 /**
  * @description Clicks on the specified reverse tab for navigating
@@ -16,9 +16,9 @@ function clickReverseTab(tabName) {
     timeout: 12000,
   }).should('exist')
     .within(() => {
-    // cy.wait(1000);
       cy.contains(tabName).click();
     });
+  cy.get(auk.loader).should('not.exist');
   cy.log('/clickReverseTab');
 }
 
@@ -30,7 +30,7 @@ function clickReverseTab(tabName) {
  */
 function navigateBack() {
   cy.log('navigateBack');
-  cy.get(utils.navigationWalkUp).click();
+  cy.get(auk.subcaseDetailNav.tabNavBack).click();
   cy.log('/navigateBack');
 }
 

@@ -5,12 +5,10 @@
 // Commands
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import modal from '../../selectors/modal.selectors';
-import utils from '../../selectors/utils.selectors';
-import auComponents from '../../selectors/au-component.selectors';
+import auk from '../../selectors/auk.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 // ***********************************************
 // Functions
@@ -69,7 +67,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   cy.get('@newAgendaForm').eq(1)
     .within(() => {
-      cy.get(form.datepickerInput).click();
+      cy.get(utils.vlDatepicker).click();
     });
   cy.setDateAndTimeInFlatpickr(date);
 
@@ -83,6 +81,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
           .clear()
           .type(meetingNumber);
       } else {
+        // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
         cy.get('.auk-input').click({
           force: true,
         })
@@ -92,30 +91,29 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
       }
     });
 
-  // Set the meetingNumber
-  if (meetingNumberVisualRepresentation) {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
-      force: true,
-    });
-    cy.get(form.formInput).eq(1)
-      .click()
-      .clear()
-      .type(meetingNumberVisualRepresentation);
-    cy.get(utils.saveButton).contains('Opslaan')
-      .click();
-  } else {
-    cy.get(form.meeting.meetingEditIdentifierButton).click({
-      force: true,
-    });
+  // Set the meetingNumber representation
+  let meetingNumberRep;
 
-    cy.get(form.formInput).eq(1)
-      .click({
-        force: true,
-      })
-      .invoke('val')
-      // eslint-disable-next-line
-      .then((sometext) => meetingNumberVisualRepresentation = sometext);
+  if (meetingNumberVisualRepresentation) {
+    cy.get(agenda.newSession.numberRep.edit).click();
+    cy.get(agenda.newSession.numberRep.input).within(() => {
+      cy.get(utils.vlFormInput)
+        .click()
+        .clear()
+        .type(meetingNumberVisualRepresentation);
+    });
+    cy.get(agenda.newSession.numberRep.save).click();
   }
+  // Get the value from the meetingNumber representation
+  cy.get(agenda.newSession.numberRep.edit).click();
+  cy.get(agenda.newSession.numberRep.input).within(() => {
+    cy.get(utils.vlFormInput)
+      .click()
+      .invoke('val')
+      .then((sometext) => {
+        meetingNumberRep = sometext;
+      });
+  });
 
   // Set the location
   cy.get('@newAgendaForm').eq(3)
@@ -127,7 +125,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     });
 
   cy.get('@dialog').within(() => {
-    cy.get(modal.modalFooterSaveButton).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
 
   let meetingId;
@@ -151,7 +149,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
-        meetingId, meetingNumber, agendaId, meetingNumberVisualRepresentation,
+        meetingId, meetingNumber, agendaId, meetingNumberRep,
       });
     }));
 }
@@ -240,8 +238,8 @@ function deleteAgenda(meetingId, lastAgenda) {
 
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-  cy.get(modal.auModal.container).within(() => {
-    cy.get(modal.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.deleteAgenda).click();
   });
   if (lastAgenda) {
     cy.wait('@deleteNewsletter', {
@@ -251,14 +249,14 @@ function deleteAgenda(meetingId, lastAgenda) {
         timeout: 20000,
       });
   }
-  cy.get(modal.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 20000,
   }).should('not.exist');
   if (!lastAgenda) {
     cy.wait('@loadAgendaitems');
   }
   // loading page is no longer visible
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
 
@@ -314,7 +312,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
-  cy.get(modal.verify.save).click();
+  cy.get(utils.vlModalVerify.save).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
   cy.log('/setAllItemsFormallyOk');
@@ -384,18 +382,18 @@ function approveDesignAgenda(shouldConfirm = true) {
   // cy.route('GET', '/agendas/**').as('getAgendas');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
-  // TODO use test selector
-  // TODO remove toolbar-complex
-  cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  });
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   if (shouldConfirm) {
-    cy.get(modal.auModal.container).within(() => {
-      cy.get(modal.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(modal.auModal.container, {
+    cy.get(auk.modal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+    // agendaitems are loading after action is completed
+    cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -407,7 +405,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   //   timeout: 12000,
   // });
 
-  // cy.get(modal.auModal.container, {
+  // cy.get(auk.modal.container, {
   //   timeout: 60000,
   // }).should('not.exist');
   cy.log('/approveDesignAgenda');
@@ -428,18 +426,14 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
-  // TODO use test selector
-  // TODO remove toolbar-complex
-  cy.get('.auk-toolbar-complex').within(() => {
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-  });
+  cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   if (shouldConfirm) {
-    cy.get(modal.auModal.container).within(() => {
-      cy.get(modal.auModal.save).click();
+    cy.get(auk.modal.container).within(() => {
+      cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
     });
     // as long as the modal exists, the action is not completed
-    cy.get(modal.auModal.container, {
+    cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
@@ -510,7 +504,7 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
         .click()
         .get('[type="checkbox"]')
         .should('be.checked');
-      cy.get(modal.modalFooterSaveButton).click();
+      cy.get(utils.vlModalFooter.save).click();
     });
 
   cy.wait('@createAgendaActivity', {
@@ -535,40 +529,12 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
  * @name toggleShowChanges
  * @memberOf Cypress.Chainable#
  * @function
- * @param {boolean} refresh - boolean to check if a refresh needs to happen.
  */
-function toggleShowChanges(refresh) {
+function toggleShowChanges() {
   cy.log('toggleShowChanges');
-  cy.route('GET', '/agendaitems?fields**').as('getAgendaitems');
-
-  // TODO, refresh is no longer needed
-  if (refresh) {
-  //   cy.get('.auk-sidebar__item', {
-  //     timeout: 12000,
-  //   })
-  //     .last({
-  //       timeout: 12000,
-  //     })
-  //     .click();
-  //   cy.wait('@getAgendaitems', {
-  //     timeout: 20000,
-  //   });
-  //   cy.get('.auk-sidebar__item', {
-  //     timeout: 12000,
-  //   })
-  //     .first({
-  //       timeout: 12000,
-  //     })
-  //     .click();
-  //   cy.wait(2000); // a lot of data is being reloaded
-  // } else {
-    cy.clickReverseTab('Overzicht');
-    cy.wait(2500); // data loading after switching to overzicht
-  }
-
-  cy.get('.vlc-agenda-items .auk-toolbar-complex__right > .auk-toolbar-complex__item')
-    .first()
-    .click();
+  cy.clickReverseTab('Overzicht');
+  cy.get(auk.loader).should('not.exist'); // data is not loading
+  cy.get(agenda.agendaOverview.showChanges).click();
   cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
   cy.log('/toggleShowChanges');
 }
@@ -585,7 +551,7 @@ function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
   cy.wait(200);
   // Check which reverse tab is active
-  cy.get(auComponents.auLoading, {
+  cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
   cy.get('.active').then((element) => {
@@ -603,7 +569,7 @@ function agendaitemExists(agendaitemName) {
         // The following is to check for data loading but could succeed before the correct url was loaded
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
-        cy.get(auComponents.auLoading, {
+        cy.get(auk.loader, {
           timeout: 20000,
         }).should('not.exist');
       }
@@ -665,7 +631,7 @@ function changeSelectedAgenda(agendaName) {
     })
     .should('exist')
     .click();
-  cy.wait(2000); // TODO await calls after switch
+  cy.get(auk.loader).should('not.exist'); // await calls after switch covered by checking for loader
 }
 
 /**
@@ -679,11 +645,11 @@ function closeAgenda() {
   cy.log('closeAgenda');
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-  cy.get(modal.auModal.container).within(() => {
-    cy.get(modal.auModal.save).click();
+  cy.get(auk.modal.container).within(() => {
+    cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
   });
   // as long as the modal exists, the action is not completed
-  cy.get(modal.auModal.container, {
+  cy.get(auk.modal.container, {
     timeout: 60000,
   }).should('not.exist');
   cy.log('/closeAgenda');
@@ -701,11 +667,11 @@ function releaseDecisions() {
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDecisions');
@@ -721,11 +687,11 @@ function releaseDocuments() {
   cy.log('releaseDocuments');
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('.auk-button').contains('Vrijgeven')
       .click();
   });
-  cy.get(modal.modal, {
+  cy.get(utils.vlModalVerify.container, {
     timeout: 20000,
   }).should('not.exist');
   cy.log('/releaseDocuments');

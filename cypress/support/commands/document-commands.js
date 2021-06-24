@@ -2,12 +2,12 @@
 // / <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import document from '../../selectors/document.selectors';
 
 import agenda from '../../selectors/agenda.selectors';
-import form from '../../selectors/form.selectors';
-import modal from '../../selectors/modal.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 // ***********************************************
 
 // ***********************************************
@@ -150,16 +150,16 @@ function addNewPiece(oldFileName, file, modelToPatch) {
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click()
+    cy.get(utils.vlModalFooter.save).click()
       .wait(`@createNewPiece_${randomInt}`, {
         timeout: 12000,
       });
@@ -248,7 +248,7 @@ function addDocumentToTreatment(file) {
   cy.get(agenda.agendaitemDecision.uploadFile).click();
 
   cy.contains('Document opladen').click();
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
@@ -302,7 +302,7 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
   openAgendaitemDocumentTab(agendaitemTitle, false);
 
   // Open the modal, add files
-  cy.contains('Documenten toevoegen').click();
+  cy.get(route.agendaitemDocuments.add).click();
   addNewDocumentsInUploadModal(files, 'agendaitems');
 
   // Click save
@@ -465,16 +465,16 @@ function addNewPieceToSignedDocumentContainer(oldFileName, file) {
       .click();
   });
 
-  cy.get(modal.baseModal.dialogWindow).as('fileUploadDialog');
+  cy.get(utils.vlModal.dialogWindow).as('fileUploadDialog');
 
   cy.get('@fileUploadDialog').within(() => {
     cy.uploadFile(file.folder, file.fileName, file.fileExtension);
-    cy.get(document.modalPieceUploadedFilename).should('contain', file.fileName);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
   });
   cy.wait(1000); // Cypress is too fast
 
   cy.get('@fileUploadDialog').within(() => {
-    cy.get(form.formSave).click();
+    cy.get(utils.vlModalFooter.save).click();
   });
   cy.wait(`@createNewPiece_${randomInt}`, {
     timeout: 12000,
@@ -493,18 +493,18 @@ function addLinkedDocument(filenames) {
   // TODO, this works in subcase view, untested in agendaitem view
   cy.route('GET', 'pieces').as('createNewPiece');
   cy.log('addLinkedDocument');
-  cy.get(document.addLinkedDocuments).click();
-  cy.get(document.searchForLinkedDocumentsInput).click();
+  cy.get(document.linkedDocuments.add).click();
+  cy.get(document.addExistingPiece.searchInput).click();
 
   filenames.forEach((name) => {
-    cy.get(document.searchForLinkedDocumentsInput).type(name);
+    cy.get(document.addExistingPiece.searchInput).type(name);
     cy.wait(1000);
     cy.get('.auk-modal .data-table [data-test-vl-checkbox-label]').click({
       force: true,
     });
-    cy.get(document.searchForLinkedDocumentsInput).clear();
+    cy.get(document.addExistingPiece.searchInput).clear();
   });
-  cy.get(form.formSave).click();
+  cy.get(utils.vlModalFooter.save).click();
   cy.log('/addLinkedDocument');
 }
 
@@ -540,7 +540,7 @@ function deleteSinglePiece(fileName, indexToDelete) {
       });
   });
 
-  cy.get(modal.modal).within(() => {
+  cy.get(utils.vlModalVerify.container).within(() => {
     cy.get('button').contains('Verwijderen')
       .click();
   });
