@@ -59,7 +59,7 @@ export default class ToasterService extends Service {
     options = options || {};
     options.type = 'warning';
     if (typeof options.timeOut === 'undefined') {
-      options.timeOut = 3000;
+      options.timeOut = 5000;
     }
     return this.notify(message, title, options);
   }
@@ -69,7 +69,7 @@ export default class ToasterService extends Service {
     options = options || {};
     options.type = 'error';
     if (typeof options.timeOut === 'undefined') {
-      options.timeOut = 3000;
+      options.timeOut = 60000;
     }
     if (!(message || title)) { // TODO: revise naming/defaults, taken over from legacy global-error
       // eslint-disable-next-line no-param-reassign
