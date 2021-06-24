@@ -1,11 +1,9 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   attr, hasMany, belongsTo, PromiseArray,

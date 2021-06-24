@@ -4,7 +4,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   task, timeout
 } from 'ember-concurrency';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class NewsletterNotaUpdatesRoute extends Route {
   queryParams = {
