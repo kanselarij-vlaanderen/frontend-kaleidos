@@ -1,6 +1,6 @@
 
 
-export const MAX_PAGE_SIZES = {
+export const PAGE_SIZE = {
   PUBLICATION_FLOWS: 10,
   NOTAS: 50,
   PUBLICATION_FLOW_PIECES: 200,

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { action } from '@ember/object';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
@@ -11,7 +11,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': MAX_PAGE_SIZES.ACTIVITIES,
+      'page[size]': PAGE_SIZE.ACTIVITIES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
 

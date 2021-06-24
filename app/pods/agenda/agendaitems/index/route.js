@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
-import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { animationFrame } from 'ember-concurrency';
 
 export default class AgendaItemsAgendaRoute extends Route {
@@ -36,7 +36,7 @@ export default class AgendaItemsAgendaRoute extends Route {
         'confidential' // Display lock icon on document-badge
       ].join(','),
       'fields[document-containers]': '',
-      'page[size]': MAX_PAGE_SIZES.AGENDAITEMS,
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'show-as-remark,priority',
     });
 

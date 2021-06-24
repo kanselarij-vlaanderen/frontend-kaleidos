@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
@@ -11,7 +11,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     const agendaitem = this.modelFor('agenda.agendaitems.agendaitem');
     let pieces = await this.store.query('piece', {
       'filter[agendaitems][:id:]': agendaitem.id,
-      'page[size]': MAX_PAGE_SIZES.PIECES, // TODO add pagination when sorting is done in the backend
+      'page[size]': PAGE_SIZE.PIECES, // TODO add pagination when sorting is done in the backend
       include: 'document-container',
     });
     pieces = pieces.toArray();
