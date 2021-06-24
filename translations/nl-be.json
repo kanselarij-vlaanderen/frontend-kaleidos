@@ -208,7 +208,8 @@
   "manage-subcase-types": "Procedurestap types beheer",
   "manage-user-roles": "Gebruikersbeheer",
   "manage-users": "Gebruikersbeheer",
-  "mandatee": "Hoedanigheid",
+  "mandatee": "Mandataris",
+  "mandatees": "Mandatarissen",
   "mandatee-approval": "Goedkeuring co-agendering",
   "meeting-new": "nieuwe vergadering",
   "meetings": "vergaderingen",
@@ -330,6 +331,7 @@
   "severity": "Strengheid",
   "short-title": "Korte titel",
   "short-title-case": "Korte titel dossier",
+  "long-title": "Lange titel",
   "show-archived": "Toon verwijderde dossiers",
   "show-as-remark": "Dit is een mededeling",
   "show-piece": "Viewer",
@@ -708,7 +710,6 @@
   "proof": "Drukproef",
   "publishpreview-requests": "Drukproefaanvragen",
   "publication-inscription": "Opschrift",
-  "publication-inscription-subcase": "Tekst agendering",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
   "delete-minister": "Verwijderen van minister",
@@ -871,5 +872,9 @@
   "upload-translation-file": "Vertaaldocument uploaden",
   "link-publication": "Koppeling publicatie",
   "none": "Geen",
-  "existing": "Bestaand"
+  "existing": "Bestaand",
+  "add-mandatee": "Mandataris toevoegen",
+  "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
+  "no-mandatees-found": "Geen mandatarissen gevonden.",
+  "select-mandatee": "Selecteer mandataris..."
 }

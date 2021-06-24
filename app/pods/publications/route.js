@@ -30,6 +30,7 @@ export default class PublicationsRoute extends Route {
       'page[size]': 100,
       sort: 'priority',
     });
+
     return Promise.all([
       publicationStatusPromise,
       regulationTypePromise,

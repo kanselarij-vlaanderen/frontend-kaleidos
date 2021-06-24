@@ -1,0 +1,44 @@
+<Auk::Modal
+  data-test-add-mandateemodal
+  @size="small">
+  <Auk::Modal::Header
+    @title={{t "add-mandatee"}}
+    @onClose={{@onClose}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent
+      @isLoading={{this.onLink.isRunning}} @reserveSpace={{true}}>
+      <Auk::Label>{{t "mandatee"}}</Auk::Label>
+      <Utils::MandateeSelector
+        data-test-mandatee-selector
+        @chooseMandatee={{fn (mut this.selection)}}
+        @singleSelect={{true}}
+        @selectedMandatees={{this.selection}} />
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="borderless" {{on "click" @onClose}}
+            @disabled={{this.onLink.isRunning}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            data-test-add-mandatee-submit-button
+            @skin="primary"
+            @icon="add"
+            @size="small"
+            @disabled={{not this.canLink}}
+            @loading={{this.onLink.isRunning}}
+            {{on "click" (perform this.onLink)}}>
+            {{t "add"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>
