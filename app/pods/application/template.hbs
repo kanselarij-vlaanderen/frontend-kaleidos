@@ -20,7 +20,7 @@
           @skin={{toast.options.type}}
           @title={{toast.title}}
           @message={{toast.message}}
-          @isClosable={{not (eq alert.type "success")}}
+          @isClosable={{not (eq toast.options.type "success")}}
           @onClose={{fn this.toaster.clear toast}}
         />
       {{/each}}
