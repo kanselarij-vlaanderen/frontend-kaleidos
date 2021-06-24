@@ -14,6 +14,7 @@ const selectors = {
 
   // subcase-overview-header
   subcaseOverviewHeader: {
+    titleContainer: '[data-test-subcase-overview-header-title-container]',
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
   },
 

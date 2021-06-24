@@ -53,7 +53,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -78,7 +78,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -110,8 +110,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
-        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
+        // NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -138,8 +138,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
-        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -176,8 +175,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
-        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -205,8 +203,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
-        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -236,8 +233,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get('@listItems').eq(0)
       .within(() => {
         // Checking if name of first mandatee is present ensures data is loaded
-        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck); // TODO data dependency
-        // TODO NOTE: even though we did not select fields for this mandatee, he shares ise-codes with another mandatee and now show fields
+        cy.get(mandatee.mandateePanelView.row.name).should('contain', nameToCheck);
         cy.get(mandatee.mandateePanelView.row.domains).should('not.contain', '-');
       });
     cy.get('@listItems').eq(1)
@@ -269,7 +265,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
     cy.get('@agendaitems').eq(1)
       .click();
-    // TODO Why is 20 seconds not enough to load this page ?
     cy.get(auk.loader, {
       timeout: 60000,
     }).should('not.exist');

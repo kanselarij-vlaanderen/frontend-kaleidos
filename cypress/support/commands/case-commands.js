@@ -57,7 +57,7 @@ function createCase(confidential, shortTitle) {
   })
     .then((res) => {
       caseId = res.responseBody.data.id;
-      cy.visit(`/dossiers/${caseId}/deeldossiers`);
+      // cy.visit(`/dossiers/${caseId}/deeldossiers`);
     }) // TODO after a successfull post, the get sometimes fails
     .then(() => new Cypress.Promise((resolve) => {
       resolve(caseId);
