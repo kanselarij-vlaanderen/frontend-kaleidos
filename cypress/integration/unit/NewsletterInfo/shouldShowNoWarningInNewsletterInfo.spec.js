@@ -18,7 +18,7 @@ context('Show no warning in Newsletterinfo', () => {
     cy.login('Admin');
   });
 
-  // TODO so much setup for 1 assert
+  // TODO-setup so much setup for 1 assert
 
   it('Should show no warning in kortbestek view', () => {
     const caseTitle = `testId=${currentTimestamp()}: Cypress test dossier 1`;

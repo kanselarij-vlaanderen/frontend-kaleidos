@@ -79,7 +79,6 @@ context('Propagation to other graphs', () => {
     cy.logoutFlow();
   });
 
-  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
   it('Test as Minister', () => {
     cy.server();
     cy.login('Minister');
@@ -96,6 +95,7 @@ context('Propagation to other graphs', () => {
     cy.get(route.subcaseDocuments.add).should('not.exist');
     cy.get(document.linkedDocuments.add).should('not.exist');
   });
+
   it('Test as Overheid', () => {
     cy.server();
     cy.login('Overheid');
