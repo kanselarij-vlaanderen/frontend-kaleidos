@@ -25,6 +25,7 @@
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <WebComponents::VlSaveButton
+          data-test-agendaitem-decision-edit-save={{true}}
           @text={{t "save"}}
           @isLoading={{this.saveTreatment.isRunning}}
           @saveAction={{perform this.saveTreatment}}

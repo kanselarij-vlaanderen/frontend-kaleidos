@@ -36,7 +36,7 @@ const selectors = {
 
   // agenda/documents/template
   agendaDocuments: {
-    addDocuments: '[data-test-agenda-documents-add-documents]',
+    addDocuments: '[data-test-route-agenda-documents-add-documents]',
   },
 
   // agenda/agendaitems/agendaitem/decisions/template.hbs
@@ -47,7 +47,8 @@ const selectors = {
 
   // agenda/agendaitems/agendaitem/documents/template
   agendaitemDocuments: {
-    batchEdit: '[data-test-agenda---agendaitem-documents-batch-edit]',
+    batchEdit: '[data-test-route-agenda---agendaitem-documents-batch-edit]',
+    add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
   /**
