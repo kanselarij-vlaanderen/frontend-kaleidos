@@ -6,7 +6,6 @@ import {
   saveChanges,
   reorderAgendaitemsOnAgenda
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -28,14 +27,12 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
     const previousNumber = agendaitem.priority - 1;
-    const result = await this.store.query('agendaitem', {
+    const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[show-as-remark]': agendaitem.showAsRemark,
       'filter[:gte:priority]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
-      'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
     });
-    if (result.length) {
-      const neighbouringItem = result.firstObject;
+    if (neighbouringItem) {
       this.transitionToRoute('agenda.agendaitems.agendaitem', neighbouringItem.id);
     } else {
       this.transitionToRoute('agenda.agendaitems');

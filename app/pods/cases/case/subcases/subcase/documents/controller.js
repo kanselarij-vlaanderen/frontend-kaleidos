@@ -13,7 +13,6 @@ import {
 } from 'ember-concurrency';
 import moment from 'moment';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { MAX_PAGE_SIZES } from 'frontend-kaleidos/config/config';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
@@ -180,13 +179,12 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @task
   *getAgendaActivity() {
-    const agendaActivities = yield this.store.query('agenda-activity', {
+    const agendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[agendaitems][agenda][created-for][is-final]': false,
-      'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
     });
 
-    return agendaActivities.firstObject;
+    return agendaActivity;
   }
 
   @task
@@ -204,18 +202,16 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @task
   *updateSubmissionActivity(pieces) {
-    const submissionActivities = yield this.store.query('submission-activity', {
+    const submissionActivity = yield this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[:has-no:agenda-activity]': true,
-      'page[size]': MAX_PAGE_SIZES.ONE_ITEM,
     });
 
-    if (submissionActivities.length) { // Adding pieces to existing submission activity
-      let submissionActivity = submissionActivities.firstObject;
+    if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
       submissionPieces.pushObjects(pieces);
 
-      submissionActivity = yield submissionActivity.save();
+      yield submissionActivity.save();
       return submissionActivity;
     }
 
