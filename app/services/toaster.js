@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -89,7 +90,13 @@ export default class ToasterService extends Service {
     return this.notify(message, title, options);
   }
 
-  clear() {
+  @action
+  clear(toast) {
+    if (toast) {
+      if (this.toasts.includes(toast)) {
+        this.toasts.removeObject(toast);
+      }
+    }
     this.toasts.clear();
   }
 }
