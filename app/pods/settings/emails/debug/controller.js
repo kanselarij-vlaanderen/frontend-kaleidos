@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONFIG from 'frontend-kaleidos/utils/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 export default class SettingsEmailsDebugController extends Controller {
   @service configService;
@@ -35,7 +35,7 @@ export default class SettingsEmailsDebugController extends Controller {
   }
 
   async sendEmail(from, to, subject, plainTextMessage, attachments) {
-    const folder = await this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+    const folder = await this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
     const email = this.store.createRecord('email', {
       folder: folder,
       from: from,
