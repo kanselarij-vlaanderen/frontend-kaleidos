@@ -21,6 +21,7 @@
           @title={{toast.title}}
           @message={{toast.message}}
           @isClosable={{not (eq alert.type "success")}}
+          @onClose={{fn this.toaster.clear toast}}
         />
       {{/each}}
     </Auk::AlertStack>
