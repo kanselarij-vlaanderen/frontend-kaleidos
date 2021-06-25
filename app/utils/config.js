@@ -21,34 +21,6 @@ const numbersBylatinAdverbialNumberals = {
 const latinAdverbialNumberals = invert(numbersBylatinAdverbialNumberals);
 
 export default EmberObject.create({
-  alphabet: [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z'
-  ],
   // TODO translate
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
