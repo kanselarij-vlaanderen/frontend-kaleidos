@@ -20,9 +20,9 @@ function translationRequestEmail(params) {
 function proofRequestEmail(params) {
   return `Wij voorzien een publicatie voor VO-dossier ${params.identifier}.
 
-Graag registreren we het Numac nummer dat u hiervoor voorziet en de geplande datum voor publicatie.
+Graag registreren we het Numac-nummer dat u hiervoor voorziet en de geplande datum voor publicatie.
 
-Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaande email adres.`;
+Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand e-mailadres.`;
 }
 
 export {
