@@ -8,8 +8,10 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
-    cancel: '[data-test-new-case-cancel]',
     shorttitleError: '[data-test-new-case-shorttitle-error]',
+    toggleConfidential: '[data-test-new-case-toggle-confidential]',
+    cancel: '[data-test-new-case-cancel]',
+    save: '[data-test-new-case-save]',
   },
 
   // subcase-overview-header

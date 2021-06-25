@@ -202,7 +202,7 @@ context('Subcase tests', () => {
 
     // Check the checkbox
     cy.get(agenda.agendaitemTitlesEdit.showInNewsletter)
-      .find(utils.vlToggle)
+      .find(utils.vlToggle.label)
       .click();
 
     // Save the changes setting
