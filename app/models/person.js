@@ -18,6 +18,10 @@ export default Model.extend({
   }),
   signature: belongsTo('signature'),
 
+  fullName: computed('firstName', 'lastName', function() {
+    return [this.firstName, this.lastName].filter((str) => !!str).join(' ');
+  }),
+
   nameToDisplay: computed('mandatee', 'alternativeName', 'firstName', 'lastName', function() {
     const {
       alternativeName, firstName, lastName,
