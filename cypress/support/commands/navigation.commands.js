@@ -16,9 +16,9 @@ function clickReverseTab(tabName) {
     timeout: 12000,
   }).should('exist')
     .within(() => {
-    // cy.wait(1000);
       cy.contains(tabName).click();
     });
+  cy.get(auk.loader).should('not.exist');
   cy.log('/clickReverseTab');
 }
 

@@ -5,22 +5,16 @@ import {
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
 
 export default class CaseController extends Controller {
   @service publicationService;
 
-  @tracked publicationFlow;
-  @tracked contactPersons;
-  @tracked latestSubcaseOnMeeting;
-  @tracked organizations;
+  @tracked isViaCouncilOfMinisters;
 
   @tracked showLoader = false;
+  @tracked contactPersons;
   @tracked personModalOpen = false;
-  @tracked mandateeModalOpen = false;
-  @tracked isInscriptionInEditMode = false;
-  @tracked isUpdatingInscription = false;
-  @tracked selectedMandatee = null;
+  @tracked organizations;
   @tracked showAddOrganisationModal = false;
   @tracked inputOrganization = '';
 
@@ -116,42 +110,12 @@ export default class CaseController extends Controller {
     return this.contactPerson.organization;
   }
 
-  /**
-   * ZONE FOR THE INSCRIPTION
-   */
-
-  @action
-  putInscriptionInEditMode() {
-    this.isInscriptionInEditMode = true;
-  }
-
-  @action
-  cancelEditingInscription() {
-    this.publicationFlow.rollbackAttributes();
-    this.putInscriptionInNonEditMode();
-  }
-
-  @action
-  putInscriptionInNonEditMode() {
-    this.isInscriptionInEditMode = false;
-  }
-
-  @task
-  *saveInscription() {
-    try {
-      yield this.publicationFlow.save();
-      this.putInscriptionInNonEditMode();
-    } catch {
-      // Don't exit if save didn't work
-    }
-  }
-
   @action
   async addNewContactPerson() {
     this.showLoader = true;
     const contactPerson =  await this.store.createRecord('contact-person', this.contactPerson);
     await contactPerson.save();
-    await this.publicationService.linkContactPersonToPublication(this.publicationFlow.id, contactPerson);
+    await this.publicationService.linkContactPersonToPublication(this.model.id, contactPerson);
     this.contactPerson.organization = null;
     this.personModalOpen = false;
     this.showLoader = false;
@@ -161,54 +125,6 @@ export default class CaseController extends Controller {
   async deleteContactPerson(contactPerson) {
     this.showLoader = true;
     await contactPerson.destroyRecord();
-    this.showLoader = false;
-  }
-
-  // Mandatee Stuff.
-
-  @action
-  showMandateeModal() {
-    this.selectedMandatee = null;
-    this.mandateeModalOpen = true;
-  }
-
-  @action
-  closeMandateeModal() {
-    this.selectedMandatee = null;
-    this.mandateeModalOpen = false;
-  }
-
-  @action
-  async mandateeSelectedForPublication(mandatee) {
-    this.selectedMandatee = mandatee;
-  }
-
-  @action
-  async addSelectedMandateeToPublicationFlow() {
-    const mandatee = this.selectedMandatee;
-    this.mandateeModalOpen = false;
-    this.showLoader = true;
-    const mandatees = this.publicationFlow.get('mandatees').toArray();
-    mandatees.push(mandatee);
-    this.publicationFlow.set('mandatees', mandatees);
-    await this.publicationFlow.save();
-    this.selectedMandatee = null;
-    this.showLoader = false;
-  }
-
-  @action
-  async unlinkMandateeFromPublicationFlow(mandateeToUnlink) {
-    this.showLoader = true;
-    const mandatees = this.publicationFlow.get('mandatees').toArray();
-    for (let index = 0; index < mandatees.length; index++) {
-      const mandatee = mandatees[index];
-      if (mandateeToUnlink.id === mandatee.id) {
-        mandatees.splice(index, 1);
-      }
-    }
-    this.publicationFlow.set('mandatees', mandatees);
-    await this.publicationFlow.save();
-    this.mandateeModalOpen = false;
     this.showLoader = false;
   }
 }

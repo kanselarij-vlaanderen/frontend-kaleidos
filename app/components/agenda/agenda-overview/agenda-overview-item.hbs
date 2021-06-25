@@ -65,12 +65,12 @@
           {{#if (and this.currentSessionService.isEditor @showFormallyOkStatus)}}
             {{#if @isEditingFormallyOkStatus}}
               <Utils::FormallyOkSelector
-                data-test-agenda-overview-item-formally-ok="true"
+                data-test-agenda-overview-item-formally-ok={{true}}
                 @formallyOkStatusUri={{@agendaitem.formallyOk}}
                 @onChange={{this.setAndSaveFormallyOkStatus}}
               />
             {{else}}
-              <p class="{{@agendaitem.formallyOkToShow.classNames}}">
+              <p class="{{@agendaitem.formallyOkToShow.classNames}}" data-test-agenda-overview-item-status>
                 <i class="{{@agendaitem.formallyOkToShow.iconClassNames}}" aria-hidden="true"></i>
                 {{@agendaitem.formallyOkToShow.label}}
               </p>

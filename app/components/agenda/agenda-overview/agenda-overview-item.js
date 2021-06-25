@@ -8,6 +8,8 @@ import {
   task
 } from 'ember-concurrency-decorators';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import VrNotulenName,
+{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -68,7 +70,12 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *loadDocuments() {
     let pieces = yield this.args.agendaitem.pieces;
     pieces = pieces.toArray();
-    const sortedPieces = sortPieces(pieces);
+    let sortedPieces;
+    if (this.args.agendaitem.isApproval) {
+      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
+    } else {
+      sortedPieces = sortPieces(pieces);
+    }
     this.agendaitemDocuments = sortedPieces;
   }
 
