@@ -29,7 +29,8 @@ export default {
     DECREET: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
     DECISION_VR: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
   },
-  DOSSIER_TYPES: {
+  // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling) that get converted to booleans like `showAsRemark` and get assigned to subcases as well.
+  CASE_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/1b6a6975-28e7-46b5-83fe-da37bb967db2',
     REMARK: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/305E9678-8106-4C14-9BD6-60AE2032D794',
   },

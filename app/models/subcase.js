@@ -157,9 +157,9 @@ export default ModelWithModifier.extend({
   remarkType: computed('showAsRemark', function() {
     let uri = '';
     if (this.showAsRemark) {
-      uri = CONSTANTS.DOSSIER_TYPE.REMARK;
+      uri = CONSTANTS.CASE_TYPES.REMARK;
     } else {
-      uri = CONSTANTS.DOSSIER_TYPE.NOTA;
+      uri = CONSTANTS.CASE_TYPES.NOTA;
     }
     return this.store.findRecordByUri('case-type', uri);
   }),

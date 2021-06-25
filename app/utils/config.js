@@ -50,7 +50,6 @@ export default EmberObject.create({
     'Z'
   ],
   // TODO translate
-  remarkId: '305E9678-8106-4C14-9BD6-60AE2032D794',
   mail: {
     defaultFromAddress: 'noreply@vlaanderen.be',
     translationRequest: {
