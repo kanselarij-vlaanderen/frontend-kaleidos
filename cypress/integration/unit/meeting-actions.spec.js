@@ -86,17 +86,18 @@ context('meeting actions tests', () => {
     cy.wait('@deleteAgendaActivity');
     cy.wait('@patchSubcase');
     cy.get(auk.modal.container).should('not.exist');
+    cy.get(auk.loader, {
+      timeout: 20000,
+    }).should('not.exist'); // route is loading data after this action
 
     // Verify subcase is no longer on designagenda after deleting the agendaitem
-    cy.clickReverseTab('Overzicht');
-    cy.get(agenda.agendaOverviewItem.subitem)
+    cy.get(agenda.agendaDetailSidebar.subitem)
       .contains(subcaseTitleShort, {
         timeout: 2500,
       })
       .should('not.exist');
     // Verify subcase is no longer on agenda A after deleting the agendaitem
-    cy.changeSelectedAgenda('Agenda A');
-    cy.clickReverseTab('Overzicht');
+    cy.changeSelectedAgenda('Agenda A'); // changing agenda takes you to "Overzicht" view
     cy.get(agenda.agendaOverviewItem.subitem)
       .contains(subcaseTitleShort, {
         timeout: 2500,

@@ -43,6 +43,7 @@ context('Should upload nota, see the warning, close warning, edit KB and see no 
     cy.wait(5000);
     cy.get(agenda.agendaitemNav.documentsTab).should('be.visible')
       .click();
+    cy.wait(2000); // documents are loading, we have to wait for that (will be changed in active ticket KAS-2693)
     cy.get(agenda.agendaitemNav.newsletterTab).should('be.visible')
       .click();
     cy.get(utils.changesAlert.alert).should('not.be.visible');
