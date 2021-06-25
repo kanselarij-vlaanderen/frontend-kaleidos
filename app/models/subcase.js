@@ -95,18 +95,8 @@ export default ModelWithModifier.extend({
 
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
     return await this.store.query('agendaitem', {
-      filter: {
-        'agenda-activity': {
-          subcase: {
-            id: this.get('id'),
-          },
-        },
-        agenda: {
-          status: {
-            uri: CONSTANTS.AGENDA_STATUSSES.DESIGN,
-          },
-        },
-      },
+      'filter[agenda-activity][subcase][:id:]': this.get('id'),
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
   }),
 
