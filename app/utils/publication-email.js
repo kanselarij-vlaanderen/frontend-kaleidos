@@ -14,13 +14,13 @@ function translationRequestEmail(params) {
     + `Aantal woorden: ${params.totalWords}\n`
     + `Aantal documenten: ${params.totalDocuments}\n`
     + '\n'
-    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaande emailadres.';
+    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.';
 }
 
 function proofRequestEmail(params) {
   return `Wij voorzien een publicatie voor VO-dossier ${params.identifier}.
 
-Graag registreren we het Numac-nummer dat u hiervoor voorziet en de geplande datum voor publicatie.
+Graag registreren we het Numac-nummer dat u hiervoor voorziet, en de geplande datum voor publicatie.
 
 Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand e-mailadres.`;
 }
