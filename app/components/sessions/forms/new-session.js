@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CONFIG from 'frontend-kaleidos/utils/config';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
 import { A } from '@ember/array';
@@ -107,7 +108,7 @@ export default Component.extend({
         isDigital, extraInfo, selectedKindUri, meetingNumber, formattedMeetingIdentifier,
       } = this;
       this.set('isLoading', true);
-      const kindUriToAdd = selectedKindUri || CONSTANTS.MINISTERRAAD_TYPES.DEFAULT;
+      const kindUriToAdd = selectedKindUri || CONFIG.MINISTERRAAD_TYPES.DEFAULT;
       const date = this.formatter.formatDate(null);
       const startDate = this.get('startDate') || date;
       const newMeeting = this.store.createRecord('meeting', {
@@ -141,7 +142,7 @@ export default Component.extend({
     },
 
     selectMainMeeting(mainMeeting) {
-      const kind = CONSTANTS.MINISTERRAAD_TYPES.TYPES.find((minsterraad) => minsterraad.uri === this.selectedKindUri);
+      const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find((minsterraad) => minsterraad.uri === this.selectedKindUri);
       const postfix = (kind && kind.postfix) || '';
       this.set('selectedMainMeeting', mainMeeting);
       this.set('startDate', mainMeeting.plannedStart);

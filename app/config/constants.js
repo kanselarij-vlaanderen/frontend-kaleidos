@@ -65,35 +65,4 @@ export default {
     NUMAC: 'Belgisch Staatsblad',
     OVRB: 'ovrb',
   },
-  // TODO refactor to right style
-  MINISTERRAAD_TYPES: {
-    DEFAULT: 'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
-    TYPES: [
-      {
-        label: 'Ministerraad',
-        altLabel: 'Ministerraad',
-        uri:
-        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/A5D6B7A8-2F9C-44B6-B3BE-98D80B426254',
-      },
-      {
-        label: 'Elektronische procedure',
-        altLabel: 'Ministerraad via elektronische procedure',
-        uri:
-        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/406F2ECA-524D-47DC-B889-651893135456',
-      },
-      {
-        label: 'Bijzondere ministerraad',
-        altLabel: 'Bijzondere ministerraad',
-        uri:
-        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/7D8E35BE-E5D1-494F-B5F9-51B07875B96F',
-      },
-      {
-        label: 'Ministerraad - Plan Vlaamse Veerkracht',
-        altLabel: 'Ministerraad - Plan Vlaamse Veerkracht',
-        postfix: 'VV',
-        uri:
-        'http://kanselarij.vo.data.gift/id/concept/ministerraad-type-codes/1d16cb70-0ae9-489e-bf97-c74897222e3c',
-      }
-    ],
-  },
 };
