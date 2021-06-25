@@ -14,7 +14,7 @@ function translationRequestEmail(params) {
     + `Aantal woorden: ${params.totalWords}\n`
     + `Aantal documenten: ${params.totalDocuments}\n`
     + '\n'
-    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand emailadres.';
+    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand e-mailadres.';
 }
 
 function proofRequestEmail(params) {
