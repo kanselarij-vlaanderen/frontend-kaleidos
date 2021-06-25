@@ -1,5 +1,4 @@
 /* eslint-disable no-dupe-class-members */
-// !! NOT READY FOR REVIEW (KAS-2475)
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -11,8 +10,7 @@ import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 class Validation {
   @tracked isErrorEnabled;
 
-  constructor(
-    check) {
+  constructor(check) {
     this.check = check;
   }
 
@@ -64,7 +62,7 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   }
 
   get canSave() {
-    return Object.entries(this.validations).every(([, validation]) => validation.isValid);
+    return Object.values(this.validations).every((validation) => validation.isValid);
   }
 
   @task
