@@ -581,25 +581,24 @@
           approvedAgenda = (await this.lastApprovedAgendaName)
         }}
       />
+      {{#if this.loadPiecesToDelete.isRunning}}
+        <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+          <Auk::Loader @message={{t "loading"}} />
+        </div>
+      {{/if}}
       {{#if this.piecesToDeleteReopenPreviousAgenda}}
         <Auk::Alert
           @skin="warning"
           @message={{t "agenda-reopen-pieces-delete"}}
         />
         <Auk::List class="auk-list auk-list--bordered">
-          {{#if this.loadPiecesToDelete.isRunning}}
-            <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-              <Auk::Loader @message={{t "loading"}} />
-            </div>
-          {{else}}
-            {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
-              <Auk::List::Item>
-                <WebComponents::VlDocument
-                  @piece={{piece}}
-                />
-              </Auk::List::Item>
-            {{/each}}
-          {{/if}}
+          {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
+            <Auk::List::Item>
+              <WebComponents::VlDocument
+                @piece={{piece}}
+              />
+            </Auk::List::Item>
+          {{/each}}
         </Auk::List>
       {{/if}}
     </Auk::Modal::Body>
@@ -607,7 +606,7 @@
       <Auk::Button
         data-test-agenda-header-reopen-previous-version-confirm
         @skin="danger-primary"
-        @disable={{this.loadPiecesToDelete.isRunning}}
+        @disabled={{this.loadPiecesToDelete.isRunning}}
         {{on "click" (action "confirmReopenPreviousAgenda")}}
       >
         {{#if this.piecesToDeleteReopenPreviousAgenda}}

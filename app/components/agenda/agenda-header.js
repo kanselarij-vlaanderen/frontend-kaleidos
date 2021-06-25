@@ -758,6 +758,7 @@ export default Component.extend(FileSaverMixin, {
     },
 
     cancelReopenPreviousAgenda() {
+      this.set('piecesToDeleteReopenPreviousAgenda', null);
       this.set('showConfirmForReopeningPreviousAgenda', false);
     },
 
