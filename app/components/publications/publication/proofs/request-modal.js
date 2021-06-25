@@ -9,10 +9,10 @@ import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
 class Validation {
+  @tracked isErrorEnabled;
+
   constructor(
-    getShowError,
     check) {
-    this.getShowError = getShowError;
     this.check = check;
   }
 
@@ -20,8 +20,13 @@ class Validation {
     return this.check();
   }
 
+  @action
+  enableError() {
+    this.isErrorEnabled = true;
+  }
+
   get showError() {
-    return this.getShowError() && !this.check();
+    return this.isErrorEnabled && !this.check();
   }
 }
 
@@ -33,8 +38,7 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   @tracked longTitle = undefined;
   @tracked message = undefined;
   @tracked selectedAttachments = [];
-
-  @tracked showErrors = true;
+  validations = {};
 
   constructor() {
     super(...arguments);
@@ -42,8 +46,8 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   }
 
   async #init() {
-    this.#initValidation('subject', () => !isBlank(this.subject));
-    this.#initValidation('message', () => !isBlank(this.message));
+    this.validations.subject = new Validation(() => !isBlank(this.subject));
+    this.validations.message = new Validation(() => !isBlank(this.message));
     this.selectedAttachments = [...this.args.attachments];
     const identification = this.args.publicationFlow.identification;
     const idName = identification.get('idName');
@@ -51,12 +55,6 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     this.message = proofRequestEmail({
       identifier: idName,
     });
-  }
-
-  @tracked
-  validations = {};
-  #initValidation(key, check) {
-    this.validations[key] = new Validation(() => this.showErrors, check);
   }
 
   get modalTitle() {

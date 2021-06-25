@@ -75,6 +75,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     }
   }
 
+  // model returns publicationSubcase instead of pieces: single request
   async model() {
     const publicationSubcaseFromParentRoute = this.modelFor('publications.publication.proofs');
 
@@ -93,7 +94,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       },
     };
     const includeString = buildIncludeString(includes);
-    // findRecord 'include' does not work
+    // findRecord with 'include' triggers extra requests
     const publicationSubcase = await this.store.queryOne('publication-subcase', {
       'filter[:id:]': publicationSubcaseFromParentRoute.id,
       include: includeString,
