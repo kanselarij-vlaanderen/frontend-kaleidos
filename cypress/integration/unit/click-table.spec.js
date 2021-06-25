@@ -74,9 +74,9 @@ context('Table Row Click tests', () => {
     cy.get('.vl-alert__content').should('exist')
       .contains('Deze data is gefilterd.');
     // TODO should('exist') is overkill, if it doesn't exist, we can't cy.get it anyway
-    cy.get('.auk-button.auk-button--warning-primary').should('exist')
+    cy.get('.auk-button.auk-button--danger-primary').should('exist')
       .contains('Reset filter');
-    cy.get('.auk-button.auk-button--warning-primary').contains('Reset filter')
+    cy.get('.auk-button.auk-button--danger-primary').contains('Reset filter')
       .click();
     // TODO this assert proves nothing, this table row never exists. Check the number of agenda's before filter, and after resetting filter
     cy.get('td').contains('No data')
