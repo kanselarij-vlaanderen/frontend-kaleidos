@@ -120,7 +120,7 @@ export default Service.extend({
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(singularize(item.type), item.id);
       if (!itemFromStore) {
-        itemFromStore = this.store.queryRecord(singularize(item.type), item.id);
+        itemFromStore = await this.store.queryRecord(singularize(item.type), item.id);
       }
       itemsFromStore.push(itemFromStore);
     }
