@@ -576,7 +576,8 @@ export default Component.extend(FileSaverMixin, {
       this.set('isApprovingAllAgendaitems', false);
     },
 
-    showApproveAllAgendaitemsWarning() {
+    async showApproveAllAgendaitemsWarning() {
+      await this.ensureAgendaDataIsRecent();
       this.set('isApprovingAllAgendaitems', true);
     },
 
