@@ -35,14 +35,14 @@
                       disabled=showPostponed
                       class="vl-input-field vl-input-field__input"
                     }}
-                    <button type="button"
-                            class="vl-input-field__submit auk-button auk-button--primary"
-                            onclick={{perform searchTask}}
+                    <Auk::Button
+                      @skin="primary"
+                      @layout="icon-only"
+                      @icon="search"
+                      class="vl-input-field__submit"
+                      onclick={{perform searchTask}}
                     >
-                      <span class="auk-button__content">
-                        <i class="ki-search"></i>
-                      </span>
-                    </button>
+                    </Auk::Button>
                   </div>
                 </div>
               </div>

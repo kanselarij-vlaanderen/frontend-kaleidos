@@ -1,15 +1,11 @@
 <div class="auk-o-flex--justify-between">
-  <button
-    type="button"
-    class="auk-button auk-button--borderless auk-button--icon"
+  <Auk::Button
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="pencil"
     {{on "click" @onEdit}}
   >
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-pencil"></i>
-      </div>
-    </span>
-  </button>
+  </Auk::Button>
   {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
@@ -17,38 +13,31 @@
       </EmberTooltip>
     </div>
   {{else}}
-    <button
-      type="button"
-      class="auk-button auk-button--borderless auk-button--icon"
-      disabled={{not (await @agendaitem.notaOrVisienota)}}
-      style={{if (not (await @agendaitem.notaOrVisienota)) "opacity:0.3;"}}
-      {{on "click" this.openNota}}
-    >
-      <span class="auk-button__content">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-document"></i>
-        </div>
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
-        </EmberTooltip>
-      </span>
-    </button>
+    <div class="auk-u-position-relative auk-u-inline-block">
+      <Auk::Button
+        @skin="borderless"
+        @layout="icon-only"
+        @icon="document"
+        @disabled={{not (await @agendaitem.notaOrVisienota)}}
+        {{on "click" this.openNota}}
+      >
+      </Auk::Button>
+      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+        {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
+      </EmberTooltip>
+    </div>
   {{/if}}
-  <LinkTo
-    data-test-link-to-subcase-overview
-    class="auk-button auk-button--borderless auk-button--icon"
-    target="_blank"
+  <Auk::Button
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="nav-right"
     @route="agenda.agendaitems.agendaitem"
     @models={{array
       (await latestMeetingId)
       (await latestAgendaId)
       (await latestAgendaitemId)
     }}
+    data-test-link-to-subcase-overview
   >
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-nav-right"></i>
-      </div>
-    </span>
-  </LinkTo>
+  </Auk::Button>
 </div>

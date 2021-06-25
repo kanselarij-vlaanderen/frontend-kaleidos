@@ -12,15 +12,15 @@
               @input={{perform this.searchTask}}
               @class="vl-input-field vl-input-field__input"
             />
-            <button type="button"
-                    data-test-add-existing-piece-search-button
-                    class="vl-input-field__submit auk-button auk-button--primary"
-                    onclick={{perform this.searchTask}}
+            <Auk::Button
+              @skin="primary"
+              @layout="icon-only"
+              @icon="search"
+              class="vl-input-field__submit"
+              onclick={{perform this.searchTask}}
+              data-test-add-existing-piece-search-button
             >
-              <span class="auk-button__content">
-                <i class="ki-search"></i>
-              </span>
-            </button>
+            </Auk::Button>
           </div>
         </div>
       </div>

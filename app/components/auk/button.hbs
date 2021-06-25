@@ -26,6 +26,7 @@
 {{else if @href}}
   {{!-- TODO: document in writing what the difference is between a "Auk::Button" with @href and a "Auk::ButtonLink" with @href --}}
   <a
+    type="button"
     class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
     href={{@href}}
     disabled={{@disabled}}
