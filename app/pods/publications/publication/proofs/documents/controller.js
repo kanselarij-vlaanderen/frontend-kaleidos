@@ -98,16 +98,18 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   #sort(sortingString) {
-    if (!sortingString) {
-      return undefined;
+    let property = 'piece.created';
+    let isDescending = false;
+    if (sortingString) {
+      isDescending = sortingString.startsWith('-');
+      const sortKey = sortingString.substr(isDescending);
+      property = COLUMN_MAP[sortKey]?.property || property;
     }
 
-    const isDescending = sortingString.startsWith('-');
-    const sortKey = sortingString.substr(isDescending);
-
-    const property = COLUMN_MAP[sortKey]?.property || 'piece.created';
     this.rows.sortBy(property);
-    isDescending && this.rows.reverse();
+    if (isDescending) {
+      this.rows.reverse();
+    }
   }
 
   get canOpenRequestModal() {
