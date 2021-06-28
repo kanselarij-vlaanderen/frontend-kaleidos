@@ -19,6 +19,8 @@ import {
 import CONFIG from 'frontend-kaleidos/utils/config';
 import moment from 'moment';
 import { A } from '@ember/array';
+import { task } from 'ember-concurrency';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default Component.extend(FileSaverMixin, {
   classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100', 'auk-navbar--auto'],
@@ -47,6 +49,7 @@ export default Component.extend(FileSaverMixin, {
   showConfirmForClosingMeeting: false,
   showConfirmForDeletingSelectedAgenda: false,
   showConfirmForReopeningPreviousAgenda: false,
+  piecesToDeleteReopenPreviousAgenda: null,
 
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
@@ -481,6 +484,14 @@ export default Component.extend(FileSaverMixin, {
       previousAgenda.set('status', designAgendaStatus);
       await previousAgenda.save();
 
+      // delete all the new documents from the designagenda
+      if (this.piecesToDeleteReopenPreviousAgenda) {
+        await all(this.piecesToDeleteReopenPreviousAgenda.map(async(piece) => {
+          await this.fileService.deletePiece(piece);
+        }));
+        this.set('piecesToDeleteReopenPreviousAgenda', null);
+      }
+
       await this.agendaService.deleteAgenda(designAgenda);
       // After the agenda has been deleted, we want to update the agendaitems of activity
       const agendaitems = await previousAgenda.get('agendaitems');
@@ -508,6 +519,30 @@ export default Component.extend(FileSaverMixin, {
     await this.currentAgenda.hasMany('agendaitems').reload();
     // this.toggleLoadingOverlayWithMessage(null);
   },
+
+  /**
+   * loadPiecesToDelete
+   *
+   * This task will get all pieces that are new on the current designAgenda
+   * Excluding the pieces from new agendaitems, they don't have to be deleted
+   * Used in reopenPreviousAgenda action
+   */
+  loadPiecesToDelete: task(function *() {
+    const agendaitems = yield this.currentAgenda.get('agendaitems');
+    const previousAgenda = yield this.get('lastApprovedAgenda');
+    const pieces = [];
+    const agendaitemNewPieces = agendaitems.map(async(agendaitem) => {
+      const previousVersion = await agendaitem.get('previousVersion');
+      if (previousVersion) {
+        const newPieces = await this.agendaService.changedPieces(this.currentAgenda.id, previousAgenda.id, agendaitem.id);
+        if (newPieces.length > 0) {
+          pieces.push(...newPieces);
+        }
+      }
+    });
+    yield all(agendaitemNewPieces);
+    this.set('piecesToDeleteReopenPreviousAgenda', sortPieces(pieces));
+  }),
 
   actions: {
     print() {
@@ -541,7 +576,8 @@ export default Component.extend(FileSaverMixin, {
       this.set('isApprovingAllAgendaitems', false);
     },
 
-    showApproveAllAgendaitemsWarning() {
+    async showApproveAllAgendaitemsWarning() {
+      await this.ensureAgendaDataIsRecent();
       this.set('isApprovingAllAgendaitems', true);
     },
 
@@ -713,6 +749,7 @@ export default Component.extend(FileSaverMixin, {
 
     async openConfirmReopenPreviousAgenda() {
       await this.get('lastApprovedAgenda').then((agenda) => agenda); // The computed is not loaded before the message with params is sent to the modal, so wait here
+      this.loadPiecesToDelete.perform();
       this.set('showConfirmForReopeningPreviousAgenda', true);
     },
 
@@ -722,6 +759,7 @@ export default Component.extend(FileSaverMixin, {
     },
 
     cancelReopenPreviousAgenda() {
+      this.set('piecesToDeleteReopenPreviousAgenda', null);
       this.set('showConfirmForReopeningPreviousAgenda', false);
     },
 
