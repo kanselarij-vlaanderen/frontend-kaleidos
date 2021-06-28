@@ -132,6 +132,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   async onSaveRequest(requestProperties) {
     await this.saveRequest(requestProperties);
+    this.rows.forEach((row) => row.isSelected = false);
     this.isRequestModalOpen = false;
   }
 
