@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 import { A } from '@ember/array';
 
@@ -92,14 +92,14 @@ export default Model.extend(LoadableModel, {
 
   canBeApproved: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONFIG.formallyOk].includes(agendaitem.get('formallyOk')));
+      const approvedAgendaitems = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.OK].includes(agendaitem.get('formallyOk')));
       return approvedAgendaitems.get('length') === agendaitems.get('length');
     });
   }),
 
   allAgendaitemsNotOk: computed('agendaitems.@each.formallyOk', function() {
     return this.get('agendaitems').then((agendaitems) => {
-      const allAgendaitemsNotOk = agendaitems.filter((agendaitem) => [CONFIG.formallyNok, CONFIG.notYetFormallyOk].includes(agendaitem.get('formallyOk')));
+      const allAgendaitemsNotOk = agendaitems.filter((agendaitem) => [CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK, CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK].includes(agendaitem.get('formallyOk')));
       return allAgendaitemsNotOk.sortBy('number');
     });
   }),

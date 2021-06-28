@@ -36,6 +36,7 @@
     "edition": "octane"
   },
   "devDependencies": {
+    "alphabet": "^1.0.0",
     "@ember/optional-features": "^1.3.0",
     "@ember/render-modifiers": "^1.0.2",
     "@glimmer/component": "^1.0.0",
