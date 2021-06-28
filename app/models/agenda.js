@@ -27,11 +27,14 @@ export default Model.extend(LoadableModel, {
   created: attr('datetime'),
   modified: attr('datetime'),
 
+  // the next and previous version of agenda is set in agenda-approve-service, read-only in frontend
   previousVersion: belongsTo('agenda', {
     inverse: 'nextVersion',
+    serialize: false,
   }),
   nextVersion: belongsTo('agenda', {
     inverse: 'previousVersion',
+    serialize: false,
   }),
   isDesignAgenda: computed('status.isDesignAgenda', function() {
     return this.get('status.isDesignAgenda');
