@@ -213,7 +213,7 @@
   "mandatee-approval": "Goedkeuring co-agendering",
   "meeting-new": "nieuwe vergadering",
   "meetings": "vergaderingen",
-  "message": "Systeembericht",
+  "system-message": "Systeembericht",
   "minister": "Minister",
   "ministers": "Ministers",
   "more-options": "Meer opties",
@@ -771,7 +771,6 @@
   "requested-on": "Aanvraag op",
   "request": "Aanvraag",
   "request-action": "Aanvragen",
-  "translation-mail-header": "Bericht",
   "files": "Bijlages",
   "no-translation-requests": "Er zijn nog geen vertalingsaanvragen.",
   "translation-requests": "Vertalingsaanvragen",
@@ -893,5 +892,6 @@
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris..."
+  "select-mandatee": "Selecteer mandataris...",
+  "message": "Bericht"
 }

@@ -25,14 +25,12 @@
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
                 <div class="auk-box">
-                  <p style="white-space:pre-line;">
-                    {{row.requestActivity.email.message}}
-                  </p>
+                  <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
                 </div>
               </div>
             </div>
             <div class="auk-o-grid-col-6">
-              <div class="auk-u-mb-6">
+              <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
                 <Utils::Documents::List
                   @pieces={{row.pieces}} />
