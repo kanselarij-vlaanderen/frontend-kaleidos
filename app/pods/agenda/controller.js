@@ -64,11 +64,6 @@ export default class AgendaController extends Controller {
   }
 
   @action
-  handleAgendaItemCreation() {
-    this.send('reloadModel');
-  }
-
-  @action
   refresh() {
     this.send('reloadModel');
   }
