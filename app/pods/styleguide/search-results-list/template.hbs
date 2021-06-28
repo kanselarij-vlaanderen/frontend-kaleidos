@@ -1,0 +1,153 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Search results list" />
+
+<StyleguideSample
+  @title="Default"
+  @snippet="search-results-list-default.hbs"
+  @modifier="dropdown"
+>
+  {{!-- BEGIN-SNIPPET search-results-list-default --}}
+  <div class="auk-u-position-relative auk-u-inline-block">
+    <Auk::Input @icon="search" type="text" />
+    <Auk::SearchResultsList>
+      <Auk::SearchResultsList::Item @route="styleguide.accordion" @skin="multiline">
+        Accordion
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.accordion-panel">
+        Accordion panel
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.avatar">
+        Avatar
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.badge">
+        Badge
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.brand">
+        Brand
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.checkboxes-radio-buttons">
+        Checkboxes/radio buttons
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.color-badge">
+        Color badge
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.empty-state">
+        Empty state
+      </Auk::SearchResultsList::Item>
+    </Auk::SearchResultsList>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Multi-line & position (right)"
+  @snippet="search-results-list-multiline-and-position.hbs"
+  @modifier="dropdown"
+  @align="end"
+>
+  {{!-- BEGIN-SNIPPET search-results-list-multiline-and-position --}}
+  <div class="auk-u-position-relative auk-u-inline-block">
+    <Auk::Input @icon="search" type="text" />
+    <Auk::SearchResultsList @position="right">
+      <Auk::SearchResultsList::Item @route="styleguide.accordion" @skin="multiline">
+        <:default>Accordion</:default>
+        <:subline>2de datapunt</:subline>
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.accordion-panel" @skin="multiline">
+        <:default>Accordion panel</:default>
+        <:subline>1ste datapunt</:subline>
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.avatar" @skin="multiline">
+        <:default>Avatar</:default>
+        <:subline>3de datapunt</:subline>
+      </Auk::SearchResultsList::Item>
+      <Auk::SearchResultsList::Item @route="styleguide.badge" @skin="multiline">
+        <:default>Badge</:default>
+        <:subline>2de datapunt</:subline>
+      </Auk::SearchResultsList::Item>
+    </Auk::SearchResultsList>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Loading state"
+  @snippet="search-results-list-loading.hbs"
+  @modifier="dropdown"
+>
+  {{!-- BEGIN-SNIPPET search-results-list-loading --}}
+  <div class="auk-u-position-relative auk-u-inline-block">
+    <Auk::Input @icon="search" type="text" />
+    <Auk::SearchResultsList @isLoading={{true}}></Auk::SearchResultsList>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="No results state"
+  @snippet="search-results-list-no-results.hbs"
+  @modifier="dropdown"
+>
+  {{!-- BEGIN-SNIPPET search-results-list-no-results --}}
+  <div class="auk-u-position-relative auk-u-inline-block">
+    <Auk::Input @icon="search" type="text" />
+    <Auk::SearchResultsList @hasNoResults={{true}}>{{t "agendaitems-empty-result"}}</Auk::SearchResultsList>
+  </div>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments (list)</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@position</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>left</code> (default) or <code>right</code></td>
+    <td>Determines the position of the search results list (against input field).</td>
+  </tr>
+  <tr>
+    <td><code>@isLoading</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td>Determines the loading state of the search results list.</td>
+  </tr>
+  <tr>
+    <td><code>@hasNoResults</code></td>
+    <td>boolean</td>
+    <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+    <td> Determines the active state (on display) of the accordion item.</td>
+  </tr>
+  </tbody>
+</table>
+
+<h3 class="auk-h3">Arguments (item)</h3>
+
+<table class="auk-table">
+  <thead>
+  <tr>
+    <th>Argument</th>
+    <th>Type</th>
+    <th>Possible values</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>@skin</code></td>
+    <td>string</td>
+    <td class="auk-table__col--3"><code>multiline</code></td>
+    <td>Determines the skin of the list item.</td>
+  </tr>
+  </tbody>
+</table>
+
+<p>The item component also takes the same arguments as a native link-element (<code>@href</code>) or a LinkTo component (<code>@route</code>, <code>@model</code>, <code>@models</code>, etc.).</p>

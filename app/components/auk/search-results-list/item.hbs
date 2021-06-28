@@ -1,0 +1,24 @@
+<li class={{@class}}>
+  {{#if @href}}
+    <a class="auk-search-results-list__item {{this.skin}}" href={{@href}} ...attributes>
+      {{yield}}
+      {{#if (has-block "subline")}}
+        <span class="auk-search-results-list__subline">{{yield to="subline"}}</span>
+      {{/if}}
+    </a>
+  {{else}}
+    <LinkTo
+      class="auk-search-results-list__item {{this.skin}}"
+      @route={{@route}}
+      @models={{this.models}}
+      @preventDefault={{@preventDefault}}
+      @query={{@query}}
+      ...attributes
+    >
+      {{yield}}
+      {{#if (has-block "subline")}}
+        <span class="auk-search-results-list__subline">{{yield to="subline"}}</span>
+      {{/if}}
+    </LinkTo>
+  {{/if}}
+</li>

@@ -7,8 +7,14 @@
     {{/if}}
   </div>
 
-  <div class="br-styleguide-sample__sample {{this.getModalCssClass}}">
-    {{yield}}
+  <div class="br-styleguide-sample__sample {{this.modifierClass}}">
+    {{#if @align}}
+      <div class="auk-o-flex auk-o-flex--justify-{{@align}}">
+        {{yield}}
+      </div>
+    {{else}}
+      {{yield}}
+    {{/if}}
   </div>
 
   {{#if (or @code @snippet)}}
@@ -19,9 +25,9 @@
 
     {{#if @code}}
       <CodeBlock
-              class="br-styleguide-code-block"
-              @code={{@code}}
-              @language="markup"
+        class="br-styleguide-code-block"
+        @code={{@code}}
+        @language="markup"
       />
     {{/if}}
 
@@ -29,16 +35,13 @@
 
       {{#let (get-code-snippet @snippet) as |snippet|}}
         <CodeBlock
-                class="br-styleguide-code-block"
-                @code={{snippet.source}}
-                @language="markup"
+          class="br-styleguide-code-block"
+          @code={{snippet.source}}
+          @language="markup"
         />
       {{/let}}
 
     {{/if}}
 
-
   {{/unless}}
 </div>
-
-
