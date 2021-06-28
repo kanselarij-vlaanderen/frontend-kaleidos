@@ -889,6 +889,7 @@
   "initial": "initieel",
   "x-request-x-timestamp": "{request} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
+  "upload-proof-for-publication": "Drukproef uploaden voor publicatie {identifier}",
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
