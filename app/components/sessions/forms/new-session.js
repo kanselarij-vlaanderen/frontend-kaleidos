@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { isAnnexMeetingKind } from 'frontend-kaleidos/utils/meeting-utils';
 import moment from 'moment';
@@ -51,7 +52,7 @@ export default Component.extend({
   }),
 
   async createAgenda(meeting, date) {
-    const status = await this.store.findRecord('agendastatus', CONFIG.agendaStatusDesignAgenda.id);
+    const status = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.DESIGN);
     const fallBackDate = this.formatter.formatDate(null);
     const agenda = this.store.createRecord('agenda', {
       serialnumber: 'A',
@@ -71,7 +72,7 @@ export default Component.extend({
 
     // load code-list item
     const decisionResultCode = await this.store.queryOne('decision-result-code', {
-      'filter[:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+      'filter[:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
     });
 
     // Treatment of agenda-item / decision activity
@@ -91,7 +92,7 @@ export default Component.extend({
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
       ).format('dddd DD-MM-YYYY')}.`,
-      formallyOk: CONFIG.notYetFormallyOk,
+      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       mandatees: [],
       pieces: [],
       approvals: [],
@@ -107,7 +108,7 @@ export default Component.extend({
         isDigital, extraInfo, selectedKindUri, meetingNumber, formattedMeetingIdentifier,
       } = this;
       this.set('isLoading', true);
-      const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
+      const kindUriToAdd = selectedKindUri || CONFIG.MINISTERRAAD_TYPES.DEFAULT;
       const date = this.formatter.formatDate(null);
       const startDate = this.get('startDate') || date;
       const newMeeting = this.store.createRecord('meeting', {
@@ -136,12 +137,12 @@ export default Component.extend({
         this.toaster.error();
       } finally {
         this.set('isLoading', false);
-        this.successfullyAdded();
+        this.successfullyAdded(newMeeting);
       }
     },
 
     selectMainMeeting(mainMeeting) {
-      const kind = CONFIG.kinds.find((kind) => kind.uri === this.selectedKindUri);
+      const kind = CONFIG.MINISTERRAAD_TYPES.TYPES.find((minsterraad) => minsterraad.uri === this.selectedKindUri);
       const postfix = (kind && kind.postfix) || '';
       this.set('selectedMainMeeting', mainMeeting);
       this.set('startDate', mainMeeting.plannedStart);

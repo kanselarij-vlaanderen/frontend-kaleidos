@@ -5,7 +5,7 @@ import { all } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-import config from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class DocumentsLinkedDocumentsComponent extends Component {
   @service currentSession;
@@ -79,7 +79,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
         // and related to an agenda in the design status
         const agendaitems = yield this.store.query('agendaitem', {
           'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
-          'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
+          'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
         });
         const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
           const currentAgendaitemLinkedPieces = await agendaitem.hasMany('linkedPieces').reload();
@@ -121,7 +121,7 @@ export default class DocumentsLinkedDocumentsComponent extends Component {
       // and related to an agenda in the design status
       const agendaitems = yield this.store.query('agendaitem', {
         'filter[agenda-activity][subcase][:id:]': this.args.agendaitemOrSubcase.get('id'),
-        'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
+        'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       });
       const agendaitemUpdates = agendaitems.map(async(agendaitem) => {
         const currentAgendaitemLinkedPieces = await agendaitem.hasMany('linkedPieces').reload();

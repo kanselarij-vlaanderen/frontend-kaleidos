@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
@@ -99,7 +100,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const filePromises = translationRequest.selectedPieces.mapBy('file');
     const files = yield Promise.all(filePromises);
 
-    const folder = yield this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+    const folder = yield this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
     const mail = yield this.store.createRecord('email', {
       to: CONFIG.EMAIL.TO.translationsEmail,
       from: CONFIG.EMAIL.DEFAULT_FROM,

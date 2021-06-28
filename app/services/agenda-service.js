@@ -3,7 +3,7 @@ import { singularize } from 'ember-inflector';
 import { notifyPropertyChange } from '@ember/object';
 import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 import { A } from '@ember/array';
 
@@ -179,7 +179,7 @@ export default Service.extend({
     const subcase = await submissionActivities[0].get('subcase');
     const lastAgenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': meeting.id,
-      'filter[status][:uri:]': CONFIG.agendaStatusDesignAgenda.uri,
+      'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
       sort: '-created', // serialnumber
     });
     const isAnnouncement = subcase.get('showAsRemark');
@@ -205,7 +205,7 @@ export default Service.extend({
     }
 
     // load code-list item
-    const defaultDecisionResultCodeUri = isAnnouncement ? CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME : CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
+    const defaultDecisionResultCodeUri = isAnnouncement ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
     const decisionResultCode = await this.store.queryOne('decision-result-code', {
       'filter[:uri:]': defaultDecisionResultCodeUri,
     });
@@ -237,7 +237,7 @@ export default Service.extend({
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,
-      formallyOk: CONFIG.notYetFormallyOk,
+      formallyOk: CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK,
       showAsRemark: isAnnouncement,
       mandatees,
       pieces: submittedPieces,
