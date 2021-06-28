@@ -1,0 +1,37 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @onClose={{perform this.cancelUpload}}
+    @title={{t
+      "upload-document-for-publication"
+      identifier=@publicationFlow.identification.idName
+    }} />
+  <Auk::Modal::Body>
+    <div class="auk-u-p-4">
+      <Auk::FileUploader
+        @fileQueueName={{this.fileQueueName}}
+        @multiple={{false}}
+        @onUpload={{this.upload}} />
+      {{#if this.piece}}
+        <div class="auk-u-my-4">
+          <div class="auk-o-grid">
+            <div class="auk-o-grid-col-11">
+              <div class="auk-form-group-layout auk-form-group-layout--horizontal">
+                <div class="auk-form-group auk-o-flex--align-start">
+                  <Auk::Label for="namePieceUpload" @required={{true}}>
+                    {{t "name"}}
+                  </Auk::Label>
+                  <Auk::Input type="text" id="nameDocumentUpload"
+                    @value={{mut this.name}} />
+                </div>
+                <div class="auk-form-group">
+                  <Auk::Label>{{t "document-type"}}</Auk::Label>
+                  <Utils::Documents::FileTypePill @piece={{this.piece.file.extension}} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </Auk::Modal::Body>
+</Auk::Modal>
