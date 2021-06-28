@@ -10,6 +10,7 @@ export default class PublicationActivity extends Model {
 
   // Relations.
   @belongsTo('publication-subcase') subcase;
+  @belongsTo('request-activity') requestActivity;
 
   @hasMany('piece', {
     serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)

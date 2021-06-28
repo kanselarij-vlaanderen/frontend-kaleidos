@@ -12,7 +12,7 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
         generatedPieces: includeFile,
       },
       publicationActivity: {
-        proofingActivity: includeFile,
+        generatedPieces: includeFile,
       },
       usedPieces: includeFile,
     });

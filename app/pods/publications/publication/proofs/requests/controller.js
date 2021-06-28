@@ -23,7 +23,7 @@ class Row {
     if (this.proofingActivity) {
       return ProofingActivity.modelName;
     } else if (this.publicationActivity) {
-      return this.publicationActivity.modelName;
+      return PublicationActivity.modelName;
     }
     throw new Error('unknown request');
   }
@@ -61,6 +61,7 @@ export default class PublicationsPublicationProofsRequestsController extends Con
 
   async initRows(model) {
     this.rows = await Promise.all(model.map(async(requestActivity) => {
+      console.log('req', requestActivity);
       const [proofingActivity, publicationActivity] = await Promise.all([
         requestActivity.proofingActivity,
         requestActivity.publicationActivity
