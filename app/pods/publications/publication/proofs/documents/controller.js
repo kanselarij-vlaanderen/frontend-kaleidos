@@ -168,8 +168,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       }
 
       const filePromises = attachments.mapBy('file');
-      const attachmentFiles = await Promise.all(filePromises);
-      const mailFolder = await this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+      const attachmentFilesPromise = Promise.all(filePromises);
+      const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+      const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
       const email = this.store.createRecord('email', {
         from: CONFIG.EMAIL.DEFAULT_FROM,
         to: CONFIG.EMAIL.TO.publishpreviewEmail,
