@@ -60,7 +60,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.SOURCE_DOCUMENTS));
     const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PROOFING_ACTIVITIES_GENERATED_PIECES)));
     const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PUBLICATION_ACTIVITIES_GENERATED_PIECES)));
-    this.rows = flatten([sourceDocRows, proofDocRows, pubDocRows]);
+    this.rows = [sourceDocRows, proofDocRows, pubDocRows].flat(Number.MAX_VALUE);
   }
 
   #initSort() {
@@ -192,15 +192,4 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   openPieceUploadModal() {
     // TODO
   }
-}
-
-function flatten(arrayOfArrays, flatArray = []) {
-  for (const arrayOrValue of arrayOfArrays) {
-    if (Array.isArray(arrayOrValue)) {
-      flatten(arrayOrValue, flatArray);
-    } else {
-      flatArray.push(arrayOrValue);
-    }
-  }
-  return flatArray;
 }

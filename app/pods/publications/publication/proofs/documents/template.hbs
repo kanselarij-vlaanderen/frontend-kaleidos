@@ -6,7 +6,10 @@
           <Auk::Button
             id={{id}}
             @skin="secondary" @layout="icon-right" @icon="chevron-down"
+            @disabled={{true}}>
+            {{!-- TODO: enable this KAS-2475
             @disabled={{not this.canOpenRequestModal}}>
+            --}}
             {{t "new-request"}}
           </Auk::Button>
           {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
