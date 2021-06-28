@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { dasherize } from '@ember/string';
+import { buildIncludeString } from 'frontend-kaleidos/utils/ember-data-utils';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async generateTestData(pubSubcase) {
@@ -117,33 +117,4 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.initRows(model);
     controller.isOpenRequestModal = false;
   }
-}
-
-function buildIncludeString(includeObject) {
-  const builder = [];
-  function buildIncludeStringForRelation(includeObject, propertyPath) {
-    for (const childKey in includeObject) {
-      const childPropertyVal = includeObject[childKey];
-      if (!childPropertyVal) {
-        continue;
-      }
-
-      const childKeyDasherized = dasherize(childKey);
-      let childPropertyPath;
-      if (propertyPath) {
-        childPropertyPath = `${propertyPath}.${childKeyDasherized}`;
-      } else {
-        childPropertyPath = childKeyDasherized;
-      }
-      builder.push(childPropertyPath);
-
-      if (typeof childPropertyVal === 'object') {
-        buildIncludeStringForRelation(childPropertyVal, childPropertyPath);
-      }
-    }
-  }
-  buildIncludeStringForRelation(includeObject);
-
-  const includeString = builder.join(',');
-  return includeString;
 }

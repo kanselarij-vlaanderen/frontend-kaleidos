@@ -1,1 +1,52 @@
-{{t "requests"}}
+<div class="auk-u-m-4">
+  {{#each this.rows as |row|}}
+    <div class="auk-u-mb-4">
+      <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
+        <accordionPanel.Header
+          @title={{row.panelTitle}}
+          as |header|>
+          <header.Actions as |actions|>
+            <actions.Item>
+              <Auk::Button
+                @layout="icon-only" @icon="more"
+                @disabled={{true}}>
+                {{t "view-more"}}
+              </Auk::Button>
+            </actions.Item>
+          </header.Actions>
+        </accordionPanel.Header>
+        <accordionPanel.Body>
+          <div class="auk-o-grid">
+            <div class="auk-o-grid-col-6">
+              <div class="auk-u-mb-2">
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
+                <p>{{row.requestActivity.email.subject}}</p>
+              </div>
+              <div class="auk-u-mb-2">
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
+                <div class="auk-box">
+                  <p style="white-space:pre-line;">
+                    {{row.requestActivity.email.message}}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="auk-o-grid-col-6">
+              <div class="auk-u-mb-6">
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
+                <Utils::Documents::List
+                  @pieces={{row.pieces}} />
+              </div>
+            </div>
+          </div>
+        </accordionPanel.Body>
+      </Auk::AccordionPanel>
+    </div>
+  {{else}}
+    <Auk::Panel>
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-proofing-activities-yet"}} />
+      </Auk::Panel::Body>
+    </Auk::Panel>
+  {{/each}}
+</div>
