@@ -30,6 +30,7 @@ export default Model.extend({
         break;
       }
       // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
+      // In that case no set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
       // We still want to change modified data in this case
       case undefined: {
         await this.preEditOrSaveCheck();
