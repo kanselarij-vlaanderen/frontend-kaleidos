@@ -11,12 +11,12 @@ export default class SettingsEmailController extends Controller {
   @tracked emailToTranslationRequest = this.model.translationRequestToEmail;
 
   @action
-  saveSettings() {
+  async saveSettings() {
     this.model.proofRequestToEmail = this.emailToProofRequest;
     this.model.translationRequestToEmail = this.emailToTranslationRequest;
 
     // TODO saves nothing
-    this.model.save();
+    await this.model.save();
   }
 
   get isDisabled() {

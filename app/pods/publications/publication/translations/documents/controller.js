@@ -100,9 +100,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const files = yield Promise.all(filePromises);
 
     const folder = yield this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettings =  this.store.queryOne('email-notification-setting', {
-      'page[size]': 1,
-    });
+    // TODO Query one krijgt undefined bij filter
+    const mailSettings = yield this.store.queryOne('email-notification-setting', {});
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
