@@ -137,7 +137,6 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const generatedPieces = proofingActivity.generatedPieces;
     generatedPieces.pushObject(piece);
     proofingActivity.endDate = now;
-
     await proofingActivity.save();
   }
 }
