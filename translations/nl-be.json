@@ -882,5 +882,7 @@
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris..."
+  "select-mandatee": "Selecteer mandataris...",
+  "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
+  "email-to-proofrequest": "Email ontvanger voor drukproeven"
 }
