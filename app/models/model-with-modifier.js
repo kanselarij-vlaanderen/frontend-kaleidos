@@ -22,6 +22,7 @@ export default ModelWithToasts.extend({
 
     switch (dirtyType) {
       case 'created': {
+        this.setModified();
         break;
       }
 
@@ -30,21 +31,23 @@ export default ModelWithToasts.extend({
       }
       case undefined: {
         await this.preEditOrSaveCheck();
+        this.setModified();
         break;
       }
       case 'updated': {
         await this.preEditOrSaveCheck();
         this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
+        this.setModified();
         break;
       }
     }
 
-    if (['created', 'updated'].includes(dirtyType)) {
-      this.set('modified', new Date());
-      this.set('modifiedBy', this.currentSession.user);
-    }
-
     return parentSave.call(this, ...arguments);
+  },
+
+  setModified() {
+    this.set('modified', new Date());
+    this.set('modifiedBy', this.currentSession.user);
   },
 
   async preEditOrSaveCheck() {
