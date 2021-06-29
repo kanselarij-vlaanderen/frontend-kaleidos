@@ -13,13 +13,14 @@ function currentTimestamp() {
   return Cypress.moment().unix();
 }
 
+// TODO KAS-2693 do we want to keep this test ? takes up 10 minutes and does not add value/coverage
+
 context('Full test', () => {
   Cypress.moment();
   let testId;
 
   before(() => {
     cy.server();
-    // cy.resetCache();
     cy.login('Admin');
   });
 
@@ -28,17 +29,10 @@ context('Full test', () => {
 
     const agendaDate = Cypress.moment().add(2, 'weeks')
       .day(3); // Next friday
-
-    // #region create the meeting/agenda
     const location = `${testId}Zaal cypress in de wetstraat`;
-
     cy.createAgenda('Ministerraad', agendaDate, location);
-    // cy.openAgendaForDate(agendaDate);
 
-    // #endregion
-
-    // #region create the 1st case and subcase
-
+    // create the 1st case and subcase
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
     const newSubcase1TitleShort = `${case1TitleShort} procedure`;
@@ -59,10 +53,7 @@ context('Full test', () => {
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
-    // #endregion
-
-    // #region create the 2nd case and subcase
-
+    // create the 2nd case and subcase
     const case2TitleShort = `${testId}Cypress test dossier 2`;
     const type2 = 'Nota';
     const newSubcase2TitleShort = `${case2TitleShort} procedure`;
@@ -80,10 +71,7 @@ context('Full test', () => {
 
     cy.proposeSubcaseForAgenda(agendaDate);
 
-    // #endregion
-
-    // #region create the 3d case and subcase
-
+    // create the 3d case and subcase
     const caseTitle3Short = `${testId}Cypress test dossier 3`;
     const type3 = 'Mededeling';
     const newSubcase3TitleShort = `${caseTitle3Short} procedure`;
@@ -100,9 +88,8 @@ context('Full test', () => {
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
-    // #endregion
 
-    // #region check and approve the agenda > A
+    // check and approve the agenda > A
     cy.openAgendaForDate(agendaDate);
 
     cy.setFormalOkOnItemWithIndex(0);

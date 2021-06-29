@@ -27,22 +27,24 @@ context('NewsletterInfo: Switching the finished switch', () => {
   it('Should check the box "in kort bestek"', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
+    // TODO KAS-2693
     cy.get(utils.vlCheckbox.label).eq(0)
       .scrollIntoView()
       .click();
-    cy.get('@patchNewsletterInfo');
+    cy.wait('@patchNewsletterInfo');
   });
 
   it('Should check the box "in kort bestek" and uncheck it afterward', () => {
     cy.route('PATCH', '/newsletter-infos/*').as('patchNewsletterInfo');
     goToKortBestek();
+    // TODO KAS-2693
     cy.get(utils.vlCheckbox.label).eq(0)
       .scrollIntoView()
       .click();
-    cy.get('@patchNewsletterInfo');
+    cy.wait('@patchNewsletterInfo');
     cy.get(utils.vlCheckbox.label).eq(0)
       .scrollIntoView()
       .click();
-    cy.get('@patchNewsletterInfo');
+    cy.wait('@patchNewsletterInfo');
   });
 });

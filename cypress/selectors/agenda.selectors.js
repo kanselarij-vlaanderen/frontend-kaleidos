@@ -31,6 +31,7 @@ const selectors = {
   },
 
   // access-level-pill
+  // TODO KAS-2693 move to utils
   accessLevelPill: {
     // Clicking the pill in this component toggles edit mode
     pill: '[data-test-access-level-pill]',

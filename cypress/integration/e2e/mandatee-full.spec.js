@@ -45,6 +45,7 @@ context('Full test for creating mandatees', () => {
       timeout: 30000,
     });
     // TODO use input fields directly (after au refactor)
+    // TODO KAS-2693
     cy.get(mandatee.createMandatee.titleContainer).within(() => {
       cy.get(utils.vlFormInput).type(ministerTitle);
     });
@@ -88,11 +89,6 @@ context('Full test for creating mandatees', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    // cy.addSubcase('Nota',
-    //   subcaseTitle2,
-    //   'Cypress test voor het testen van toegevoegde agendapunten',
-    //   'In voorbereiding',
-    //   'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda(KIND, agendaDate, 'locatie');
 
     cy.openAgendaForDate(agendaDate);
@@ -107,6 +103,7 @@ context('Full test for creating mandatees', () => {
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
     // TODO is there a better way to get this by name?
+    // TODO KAS-2693 use find and row selector
     cy.contains(ministerNickName).parents('tr')
       .within(() => {
         cy.get(settings.ministers.mandatee.edit).click();
@@ -121,8 +118,8 @@ context('Full test for creating mandatees', () => {
     cy.setDateInFlatpickr(enddateForMandatee);
 
     cy.get(mandatee.editMandatee.save).click();
-    cy.wait(3000);
-    // TODO Fix grammar einddatum
+    cy.wait(3000); // TODO KAS-2693 await patch call
+    // TODO KAS-2693 Fix grammar einddatum
     cy.get(utils.vlModalVerify.save).contains('Eindatum aanpassen');
     cy.get(utils.vlModalVerify.cancel).click();
     cy.get(mandatee.editMandatee.cancel).click();

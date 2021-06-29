@@ -57,14 +57,14 @@ context('Propagation to other graphs', () => {
     cy.addDocumentToTreatment(file);
     cy.get(utils.vlModalFooter.save).click();
 
-    // TODO We are clicking the pill inside the document card of treatment report
+    // TODO KAS-2693 We are clicking the pill inside the document card of treatment report
     cy.get(agenda.accessLevelPill.pill).click();
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
     cy.get(agenda.accessLevelPill.save).click();
 
-    // TODO verify if this is needed, default treatments for agendaitem is approved anyway
+    // TODO KAS-2693 verify if this is needed, default treatments for agendaitem is approved anyway
     cy.get(agenda.agendaitemDecision.edit).click();
     cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
       cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
@@ -102,7 +102,7 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    // TODO make sure we wait for dataloading
+    // TODO KAS-2693 make sure we wait for dataloading
     cy.get(document.documentCard.titleHeader).eq(0)
       .contains(file.fileName);
     cy.get(agenda.agendaitemNav.documentsTab).click();

@@ -285,6 +285,7 @@ context('Subcase tests', () => {
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
+    // TODO KAS-2693
     cy.get(route.newsletter.dataTable).find('.ki-pencil')
       .first()
       .click();
@@ -324,7 +325,7 @@ context('Subcase tests', () => {
     // cy.wait('@pieces');
 
     // dont open links in new windows.
-    // TODO why go to agendaitem, then subcase, then agendaitem?
+    // TODO KAS-2693 why go to agendaitem, then subcase, then agendaitem?
     cy.get('a').invoke('removeAttr', 'target');
     cy.get(newsletter.buttonToolbar.linkToAgendaitem).eq(0)
       .click();
