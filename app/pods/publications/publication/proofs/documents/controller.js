@@ -40,7 +40,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }];
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} key name, prepended with minus if descending */
-  qpSortingString = '';
+  qpSortingString;
 
   @tracked rows;
   @tracked publicationFlow;
@@ -98,8 +98,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   #sort(sortingString) {
+    // default sort
     let property = 'piece.created';
-    let isDescending = false;
+    let isDescending = true;
+
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
@@ -131,9 +133,12 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   async onSaveRequest(requestProperties) {
-    await this.saveRequest(requestProperties);
-    this.rows.forEach((row) => row.isSelected = false);
-    this.isRequestModalOpen = false;
+    try {
+      await this.saveRequest(requestProperties);
+    } finally {
+      this.rows.forEach((row) => row.isSelected = false);
+      this.isRequestModalOpen = false;
+    }
   }
 
   async saveRequest(requestProperties) {

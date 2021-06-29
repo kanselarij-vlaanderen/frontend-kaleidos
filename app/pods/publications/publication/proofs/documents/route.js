@@ -103,17 +103,12 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     return publicationSubcase;
   }
 
-  async afterModel(model) {
-    // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
-    this.publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = model;
-  }
-
   async setupController(controller, model) {
     super.setupController(...arguments);
 
-    controller.publicationSubcase = this.publicationSubcase;
-    controller.publicationFlow = this.publicationFlow;
+    controller.publicationSubcase = model;
+    // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
+    controller.publicationFlow = this.modelFor('publications.publication');
     controller.initRows(model);
     controller.isOpenRequestModal = false;
   }

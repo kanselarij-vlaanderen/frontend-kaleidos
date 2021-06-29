@@ -26,16 +26,13 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
     return requestActivities;
   }
 
-  afterModel() {
-    // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
-    this.publicationFlow = this.modelFor('publications.publication');
-  }
-
   setupController(controller, model) {
     super.setupController.apply(this, arguments);
 
     controller.initRows(model);
-    controller.publicationFlow = this.publicationFlow;
+    // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
+    controller.publicationFlow = this.modelFor('publications.publication');
+    controller.selectedRow = undefined;
     controller.isUploadModalOpen = false;
   }
 }

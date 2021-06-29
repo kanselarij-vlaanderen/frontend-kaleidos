@@ -29,7 +29,7 @@ class Row {
 
   get panelTitle() {
     let requestTypeTranslationKey;
-    // testing with `instanceof` returns true for every Model
+    // testing with `instanceof` returns true for every Model type
     switch (this.targetActivityType) {
       case ProofingActivity.modelName:
         requestTypeTranslationKey = 'proofing-request';
@@ -53,7 +53,6 @@ class Row {
   }
 
   get pieces() {
-    console.log('here');
     const pieces = [
       ...this.requestActivity.usedPieces.toArray(),
       ...(this.proofingActivity?.generatedPieces.toArray() ?? []),
@@ -79,7 +78,6 @@ export default class PublicationsPublicationProofsRequestsController extends Con
 
   async initRows(model) {
     this.rows = await Promise.all(model.map(async(requestActivity) => {
-      console.log('req', requestActivity);
       const [proofingActivity, publicationActivity] = await Promise.all([
         requestActivity.proofingActivity,
         requestActivity.publicationActivity
@@ -102,15 +100,19 @@ export default class PublicationsPublicationProofsRequestsController extends Con
   }
 
   @action
-  async closeUploadModal() {
+  closeUploadModal() {
     this.selectedRow = undefined;
     this.isUploadModalOpen = false;
   }
 
   @action
   async saveProof(proofProperties) {
-    await this.#saveProof(proofProperties);
-    this.isUploadModalOpen = false;
+    try {
+      await this.#saveProof(proofProperties);
+    } finally {
+      this.selectedRow = undefined;
+      this.isUploadModalOpen = false;
+    }
   }
 
   async #saveProof(proofProperties) {
@@ -134,6 +136,8 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const proofingActivity = this.selectedRow.proofingActivity;
     const generatedPieces = proofingActivity.generatedPieces;
     generatedPieces.pushObject(piece);
+    proofingActivity.endDate = now;
+
     await proofingActivity.save();
   }
 }
