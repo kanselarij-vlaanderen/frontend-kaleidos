@@ -29,6 +29,8 @@ export default Model.extend({
       case 'deleted': {
         break;
       }
+      // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
+      // We still want to change modified data in this case
       case undefined: {
         await this.preEditOrSaveCheck();
         this.setModified();

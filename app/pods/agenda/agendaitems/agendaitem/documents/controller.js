@@ -181,7 +181,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
     // save formal ok change on agendaitem
     // If the concurrency check failed you can overwrite the pieces list with stale data, effectively losing piece links to agendaitem
-    // TODO KAS-2425 Do we need to make this an API call to a service? (setting formally ok and saving)
+    // TODO KAS-2425 Do we need to make this an API call to a service? (setting only formally ok status)
     setNotYetFormallyOk(this.agendaitem);
     yield this.agendaitem.save();
     // Link piece to agendaitem
