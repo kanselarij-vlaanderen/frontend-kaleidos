@@ -187,9 +187,4 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       await Promise.all(saves);
     }
   }
-
-  @action
-  openPieceUploadModal() {
-    // TODO
-  }
 }
