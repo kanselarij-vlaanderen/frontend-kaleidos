@@ -15,6 +15,7 @@ export default class SettingsEmailController extends Controller {
     this.model.proofRequestToEmail = this.emailToProofRequest;
     this.model.translationRequestToEmail = this.emailToTranslationRequest;
 
+    // TODO saves nothing
     this.model.save();
   }
 
