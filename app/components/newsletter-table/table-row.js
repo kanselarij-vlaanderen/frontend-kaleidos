@@ -6,6 +6,8 @@ import { task } from 'ember-concurrency';
 
 export default class TableRowNewsletterTable extends Component {
   @service newsletterService;
+  @service intl;
+  @service toaster;
 
   @tracked isEditing = false;
   @tracked newsletterInfo;
@@ -40,8 +42,9 @@ export default class TableRowNewsletterTable extends Component {
   })) saveNewsletterInfoTask;
 
   @action
-  setInNewsletter(value) {
+  async setInNewsletter(value) {
     this.newsletterInfo.inNewsletter = value;
-    this.saveNewsletterInfoTask.perform();
+    await this.saveNewsletterInfoTask.perform();
+    this.toaster.success(this.intl.t('successfully-saved'));
   }
 }

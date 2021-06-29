@@ -137,7 +137,7 @@ export default Component.extend({
         this.toaster.error();
       } finally {
         this.set('isLoading', false);
-        this.successfullyAdded();
+        this.successfullyAdded(newMeeting);
       }
     },
 
