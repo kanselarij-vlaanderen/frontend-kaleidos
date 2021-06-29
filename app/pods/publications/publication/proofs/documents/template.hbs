@@ -2,32 +2,30 @@
   <Auk::Toolbar @size="large" as |Group|>
     <Group @position="right" as |Item|>
       <Item>
-        {{#let (unique-id) as |id|}}
-          <Auk::Button
-            id={{id}}
-            @skin="secondary" @layout="icon-right" @icon="chevron-down"
-            @disabled={{not this.canOpenRequestModal}}>
-            {{t "new-request"}}
-          </Auk::Button>
-          {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-          <EmberPopover @side="bottom-start"
-            @tooltipClass="auk-popover"
-            @targetId={{id}}>
-            <Auk::Dropdown
-              as |dropdown|>
-              <dropdown.Item
-                {{on "click" (fn this.openRequestModal 'new')}}>
-                {{t "initial-request"}}
-              </dropdown.Item>
-              <dropdown.Item>
-                {{t "extra-request"}}
-              </dropdown.Item>
-              <dropdown.Item>
-                {{t "final-request"}}
-              </dropdown.Item>
-            </Auk::Dropdown>
-          </EmberPopover>
-        {{/let}}
+        <Auk::Button
+          id="proofDocumentsActionMenu"
+          @skin="secondary" @layout="icon-right" @icon="chevron-down"
+          @disabled={{not this.canOpenRequestModal}}>
+          {{t "new-request"}}
+        </Auk::Button>
+        {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
+        <EmberPopover @side="bottom-start"
+          @tooltipClass="auk-popover"
+          @targetId="proofDocumentsActionMenu">
+          <Auk::Dropdown
+            as |dropdown|>
+            <dropdown.Item
+              {{on "click" (fn this.openRequestModal 'new')}}>
+              {{t "initial-request"}}
+            </dropdown.Item>
+            <dropdown.Item>
+              {{t "extra-request"}}
+            </dropdown.Item>
+            <dropdown.Item>
+              {{t "final-request"}}
+            </dropdown.Item>
+          </Auk::Dropdown>
+        </EmberPopover>
       </Item>
       <Item>
         <Auk::Button
@@ -130,7 +128,7 @@
                       {{t "view-more"}}
                     </Auk::Button>
                     {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-                    <EmberPopover @side="bottom-start"
+                    <EmberPopover @side="bottom-end"
                       @tooltipClass="auk-popover"
                       @targetId={{id}}>
                       <Auk::Dropdown

@@ -1,37 +1,61 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @onClose={{perform this.cancelUpload}}
+    @onClose={{@onCancel}}
     @title={{t
-      "upload-document-for-publication"
-      identifier=@publicationFlow.identification.idName
+      "upload-proof-for-publication-x-identification"
+      identification=@publicationFlow.identification.idName
     }} />
   <Auk::Modal::Body>
-    <div class="auk-u-p-4">
+    <Utils::LoadableContent @isLoading={{this.onSave.isRunning}} @reserveSpace={{true}}>
       <Auk::FileUploader
-        @fileQueueName={{this.fileQueueName}}
         @multiple={{false}}
-        @onUpload={{this.upload}} />
-      {{#if this.piece}}
+        @onUpload={{this.onUploadFile}} />
+      {{#if this.file}}
         <div class="auk-u-my-4">
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-                <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label for="namePieceUpload" @required={{true}}>
+                <div class="auk-form-group auk-o-flex--align-start {{if this.validators.message.showError "auk-form-group--error"}}">
+                  <Auk::Label for="proofUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
-                  <Auk::Input type="text" id="nameDocumentUpload"
-                    @value={{mut this.name}} />
+                  <Auk::Input type="text" id="proofUploadName"
+                    @value={{mut this.name}}
+                    {{on "input" this.validators.name.enableError}} />
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label>{{t "document-type"}}</Auk::Label>
-                  <Utils::Documents::FileTypePill @piece={{this.piece.file.extension}} />
+                  <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       {{/if}}
-    </div>
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::ButtonLink
+            disabled={{not this.canCancel}}
+            {{on "click" @onCancel}}>
+            {{t "cancel"}}
+          </Auk::ButtonLink>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @disabled={{not this.canSave}}
+            @loading={{this.onSave.isRunning}}
+            {{on "click" (perform this.onSave)}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
 </Auk::Modal>

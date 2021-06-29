@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import moment from 'moment';
 import ProofingActivity from 'frontend-kaleidos/models/proofing-activity';
@@ -9,11 +10,9 @@ class Row {
   intl;
 
   requestActivity;
-  // resolved relationships to prevent await in getter (await requestActivity.proofingActivity)
+  // resolved relationships to prevent await in getters (await requestActivity.proofingActivity)
   proofingActivity;
   publicationActivity;
-
-  @tracked pieces;
 
   constructor(params) {
     Object.assign(this, params);
@@ -30,7 +29,7 @@ class Row {
 
   get panelTitle() {
     let requestTypeTranslationKey;
-    // testing with `instanceof` resolves true for every Model
+    // testing with `instanceof` returns true for every Model
     switch (this.targetActivityType) {
       case ProofingActivity.modelName:
         requestTypeTranslationKey = 'proofing-request';
@@ -52,12 +51,31 @@ class Row {
     });
     return modalTitle;
   }
+
+  get pieces() {
+    console.log('here');
+    const pieces = [
+      ...this.requestActivity.usedPieces.toArray(),
+      ...(this.proofingActivity?.generatedPieces.toArray() ?? []),
+      ...(this.publicationActivity?.generatedPieces.toArray() ?? [])
+    ];
+    pieces.sortBy('created');
+    return pieces;
+  }
+
+  get canOpenUploadModal() {
+    return this.targetActivityType === ProofingActivity.modelName;
+  }
 }
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
   @service intl;
 
+  selectedRow;
+
   @tracked rows;
+  @tracked publicationFlow;
+  @tracked isUploadModalOpen;
 
   async initRows(model) {
     this.rows = await Promise.all(model.map(async(requestActivity) => {
@@ -67,22 +85,55 @@ export default class PublicationsPublicationProofsRequestsController extends Con
         requestActivity.publicationActivity
       ]);
 
-      let pieces = [
-        ...requestActivity.usedPieces.toArray(),
-        ...(proofingActivity?.generatedPieces.toArray() ?? []),
-        ...(publicationActivity?.generatedPieces.toArray() ?? [])
-      ];
-      pieces = pieces.flat(Number.POSITIVE_INFINITY);
-      pieces.sortBy('created');
-
       const row = new Row({
         intl: this.intl,
         requestActivity: requestActivity,
         proofingActivity: proofingActivity,
         publicationActivity: publicationActivity,
-        pieces: pieces,
       });
       return row;
     }));
+  }
+
+  @action
+  openUploadModal(row) {
+    this.selectedRow = row;
+    this.isUploadModalOpen = true;
+  }
+
+  @action
+  async closeUploadModal() {
+    this.selectedRow = undefined;
+    this.isUploadModalOpen = false;
+  }
+
+  @action
+  async saveProof(proofProperties) {
+    await this.#saveProof(proofProperties);
+    this.isUploadModalOpen = false;
+  }
+
+  async #saveProof(proofProperties) {
+    const now = new Date();
+
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: proofProperties.file,
+      confidential: false,
+      name: proofProperties.name,
+      documentContainer: documentContainer,
+    });
+    await piece.save();
+
+    const proofingActivity = this.selectedRow.proofingActivity;
+    const generatedPieces = proofingActivity.generatedPieces;
+    generatedPieces.pushObject(piece);
+    await proofingActivity.save();
   }
 }

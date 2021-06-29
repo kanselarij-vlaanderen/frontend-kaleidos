@@ -7,11 +7,32 @@
           as |header|>
           <header.Actions as |actions|>
             <actions.Item>
-              <Auk::Button
-                @layout="icon-only" @icon="more"
-                @disabled={{true}}>
-                {{t "view-more"}}
-              </Auk::Button>
+              {{#let (unique-id) as |id|}}
+                <Auk::Button id={{id}}
+                  @layout="icon-only" @icon="more">
+                  {{t "view-more"}}
+                </Auk::Button>
+                {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
+                <EmberPopover
+                  @side="bottom-end" @tooltipClass="auk-popover"
+                  @targetId={{id}}>
+                  <Auk::Dropdown
+                    as |dropdown|>
+                    {{#if row.canOpenUploadModal}}
+                      <dropdown.Item
+                        {{on "click" (fn this.openUploadModal row)}}>
+                        {{t "upload-documents"}}
+                      </dropdown.Item>
+                    {{/if}}
+                    <dropdown.Item disabled={{true}}>
+                      {{t "download-all-documents"}}
+                    </dropdown.Item>
+                    <dropdown.Item disabled={{true}}>
+                      {{t "cancel-request"}}
+                    </dropdown.Item>
+                  </Auk::Dropdown>
+                </EmberPopover>
+              {{/let}}
             </actions.Item>
           </header.Actions>
         </accordionPanel.Header>
@@ -25,7 +46,7 @@
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
                 <div class="auk-box">
-                  {{!-- on 1 line to prevent whitespace to be rendered s--}}
+                  {{!-- on 1 line to prevent whitespace to be rendered --}}
                   <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
                 </div>
               </div>
@@ -48,3 +69,10 @@
     </Auk::Panel>
   {{/each}}
 </div>
+
+{{#if this.isUploadModalOpen}}
+  <Publications::Publication::Proofs::UploadModal
+    @publicationFlow={{this.publicationFlow}}
+    @onSave={{this.saveProof}}
+    @onCancel={{this.closeUploadModal}} />
+{{/if}}
