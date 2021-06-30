@@ -183,6 +183,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     // If the concurrency check failed you can overwrite the pieces list with stale data, effectively losing piece links to agendaitem
     // TODO KAS-2425 Do we need to make this an API call to a service? (setting only formally ok status)
     setNotYetFormallyOk(this.agendaitem);
+    // Failsafe, if we got to a situation where the user has old pieces data when saving new pieces, we refresh the relation to avoid stale data
+    // The improved concurrency check should be enough, but as long as we save here, the risk of saving old data exists
+    yield this.agendaitem.hasMany('pieces').reload();
     yield this.agendaitem.save();
     // Link piece to agendaitem
     for (const piece of pieces) {
