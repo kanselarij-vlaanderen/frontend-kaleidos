@@ -568,15 +568,41 @@
           "agenda-reopen-confirmation"
           designAgenda = this.currentAgenda.agendaName
           approvedAgenda = (await this.lastApprovedAgendaName)
-        }} />
+        }}
+      />
+      {{#if this.loadPiecesToDelete.isRunning}}
+        <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+          <Auk::Loader @message={{t "loading"}} />
+        </div>
+      {{/if}}
+      {{#if this.piecesToDeleteReopenPreviousAgenda}}
+        <Auk::Alert
+          @skin="warning"
+          @message={{t "agenda-reopen-pieces-delete"}}
+        />
+        <Auk::List class="auk-list auk-list--bordered">
+          {{#each this.piecesToDeleteReopenPreviousAgenda as |piece|}}
+            <Auk::List::Item>
+              <WebComponents::VlDocument
+                @piece={{piece}}
+              />
+            </Auk::List::Item>
+          {{/each}}
+        </Auk::List>
+      {{/if}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "cancelReopenPreviousAgenda"}}>
       <Auk::Button
         data-test-agenda-header-reopen-previous-version-confirm
         @skin="danger-primary"
+        @disabled={{this.loadPiecesToDelete.isRunning}}
         {{on "click" (action "confirmReopenPreviousAgenda")}}
       >
-        {{t "agenda-reopen-previous-version"}}
+        {{#if this.piecesToDeleteReopenPreviousAgenda}}
+          {{t "agenda-reopen-previous-version-with-delete"}}
+        {{else}}
+          {{t "agenda-reopen-previous-version"}}
+        {{/if}}
       </Auk::Button>
     </Auk::Modal::Footer>
   </Auk::Modal>

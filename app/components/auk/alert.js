@@ -1,13 +1,15 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
 /**
  *
- * @argument skin {String}: value can be (empty, default), "succes", "warning", "error", "loading" (not yet implemented in our code below)
+ * @argument skin {String}: value can be (empty, default), "success", "warning", "error", "loading" (not yet implemented in our code below)
  * @argument icon {String}
  * @argument size {String}
  * @argument title {String}
  * @argument message {String}: Determines the text of the alert. This is the secondary text if a title is present.
  * @argument isClosable {Boolean}: Determines whether the alert is closable.
+ * @argument onClose {Function}: optional action to execute when pressing the "close"-x
  */
 export default class Alert extends Component {
   get skin() {
@@ -28,5 +30,12 @@ export default class Alert extends Component {
       }
     }
     return 'circle-info';
+  }
+
+  @action
+  close() {
+    if (this.args.onClose) {
+      this.args.onClose();
+    }
   }
 }

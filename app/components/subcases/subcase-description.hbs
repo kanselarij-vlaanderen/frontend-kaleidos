@@ -157,7 +157,7 @@
         {{web-components/vl-radio-button-list
           title=(t "subcase-type")
           optionList=(await caseTypes)
-          selectedModel=remarkType
+          selectedModel=(await remarkType)
           modelChanged=(action "selectRemarkType")
         }}
       </div>

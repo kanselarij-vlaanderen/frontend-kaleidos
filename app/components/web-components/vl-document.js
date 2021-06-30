@@ -114,6 +114,7 @@ export default class VlDocument extends Component {
     this.piece.set('confidential', confidential);
     // TODO make sure not to overwrite things
     await this.piece.save();
+    this.toaster.success(this.intl.t('successfully-saved'));
   }
 
   @action
