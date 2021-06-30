@@ -1,0 +1,23 @@
+<span class="auk-u-ml">
+  {{#if condition}}
+    <Auk::StatusPill @status="done">
+      <div class="auk-icon auk-icon--default">
+        <i class="ki ki-check"></i>
+      </div>
+    </Auk::StatusPill>
+  {{else}}
+    {{#if condition}}
+      <Auk::StatusPill>
+        <div class="auk-icon auk-icon--default auk-icon--clock">
+          <i class="ki ki-clock"></i>
+        </div>
+      </Auk::StatusPill>
+    {{else}}
+      <Auk::StatusPill @status="not-started">
+        <div class="auk-icon auk-icon--default auk-icon--not-started">
+          <i class="ki ki-not-started"></i>
+        </div>
+      </Auk::StatusPill>
+    {{/if}}
+  {{/if}}
+</span>
