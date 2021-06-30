@@ -1,6 +1,8 @@
 /* global context, before, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
+import utils from '../../../selectors/utils.selectors';
+
 context('Table Row Click tests', () => {
   before(() => {
     cy.resetCache();
@@ -73,11 +75,7 @@ context('Table Row Click tests', () => {
     // TODO filtering can fail (showing all agendas) but this message will always show when filtered. Count the agendas
     cy.get('.vl-alert__content').should('exist')
       .contains('Deze data is gefilterd.');
-    // TODO should('exist') is overkill, if it doesn't exist, we can't cy.get it anyway
-    cy.get('.auk-button.auk-button--danger-primary').should('exist')
-      .contains('Reset filter');
-    cy.get('.auk-button.auk-button--danger-primary').contains('Reset filter')
-      .click();
+    cy.get(utils.changesAlert.close).click();
     // TODO this assert proves nothing, this table row never exists. Check the number of agenda's before filter, and after resetting filter
     cy.get('td').contains('No data')
       .should('not.exist');
