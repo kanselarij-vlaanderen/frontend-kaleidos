@@ -157,6 +157,11 @@
                       {{/if}}
                     </td>
                   {{/if}}
+                  {{#if this.tableColumnDisplayOptions.translations}}
+                    <td class="auk-u-text-nowrap">
+                      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{row.translationSubcase}}/>
+                    </td>
+                  {{/if}}
                   {{#if this.tableColumnDisplayOptions.lastEdited}}
                     <td>
                       {{moment-format row.modified "DD-MM-YYYY"}}<br/>

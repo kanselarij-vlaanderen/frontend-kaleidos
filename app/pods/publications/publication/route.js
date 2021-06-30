@@ -15,6 +15,7 @@ export default class PublicationRoute extends Route {
         'numac-numbers',
         'publication-subcase',
         'translation-subcase',
+        'translation-subcase.request-activities',
         'contact-persons',
         'mandatees',
         'mandatees.person'
