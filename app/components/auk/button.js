@@ -12,6 +12,7 @@ import { assert } from '@ember/debug';
  * @argument loading {Boolean}: Show the button in a loading state. Overrides most other arguments.
  * @argument size {String}
  * @argument block {Boolean}
+ * @argument route {String}: If a route argument is provided, this component is formed as an extension of the LinkTo component. Thus most LinkTo arguments (route, models, preventDefault, query and bubbles) can be used here.
  */
 export default class Button extends Component {
   // Workaround for linkTo not accepting @model and @models parameter, regardless if one is null
