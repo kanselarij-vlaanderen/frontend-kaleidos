@@ -8,7 +8,6 @@ import utils from '../../../selectors/utils.selectors';
 context('Should upload nota, see the warning, close warning, edit KB and see no warning when revisiting', () => {
   before(() => {
     cy.server();
-    cy.resetCache();
   });
 
   beforeEach(() => {

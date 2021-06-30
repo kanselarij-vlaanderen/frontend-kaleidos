@@ -30,13 +30,9 @@ const selectors = {
     save: '[data-test-agendaitem-decision-edit-save]',
   },
 
-  // access-level-pill
-  // TODO KAS-2693 move to utils
-  accessLevelPill: {
-    // Clicking the pill in this component toggles edit mode
-    pill: '[data-test-access-level-pill]',
-    save: '[data-test-access-level-pill-save]',
-    cancel: '[data-test-access-level-pill-cancel]',
+  // decision-result-pill
+  decisionResultPill: {
+    pill: '[data-test-decision-result-pill]',
   },
 
   // agenda-detail/sidebar

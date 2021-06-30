@@ -4,13 +4,15 @@
 import dependency from '../../../selectors/dependency.selectors';
 import newsletter from '../../../selectors/newsletter.selectors';
 
-context('KB: Edit content of news-item', () => {
+context('newsletter tests, both in agenda detail view and newsletter route', () => {
   before(() => {
     cy.server();
     cy.login('Admin');
   });
 
-  it('Should be unexistent to start with, be created, edited, theme selected and saved', () => {
+  // tests in newsletter route
+
+  it('Should create a newsletter and check the updated row information', () => {
     const decisionText = 'Dit is een leuke beslissing';
     const subcaseNameToCheck = 'Eerste stap';
     cy.visit('/vergadering/5DD7CDA58C70A70008000001/kort-bestek');
@@ -30,5 +32,6 @@ context('KB: Edit content of news-item', () => {
 
     cy.get(newsletter.tableRow.newsletterTitle).contains(subcaseNameToCheck);
     cy.get(newsletter.tableRow.newsletterTitle).contains(decisionText);
+    // TODO KAS-2693 there is no proof that adding theme actually worked
   });
 });

@@ -57,23 +57,18 @@ context('Propagation to other graphs', () => {
     cy.addDocumentToTreatment(file);
     cy.get(utils.vlModalFooter.save).click();
 
-    // TODO KAS-2693 We are clicking the pill inside the document card of treatment report
-    cy.get(agenda.accessLevelPill.pill).click();
-    cy.get(dependency.emberPowerSelect.trigger).click();
+    // Change the rights of the treatment report
+    cy.get(document.documentCard.card).within(() => {
+      cy.get(document.accessLevelPill.pill).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
       .click();
-    cy.get(agenda.accessLevelPill.save).click();
+    cy.get(document.accessLevelPill.save).click();
 
-    // TODO KAS-2693 verify if this is needed, default treatments for agendaitem is approved anyway
-    cy.get(agenda.agendaitemDecision.edit).click();
-    cy.get(agenda.agendaitemDecisionEdit.resultContainer).within(() => {
-      cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-        .click();
-    });
-    cy.get(dependency.emberPowerSelect.option).contains('Goedgekeurd')
-      .scrollIntoView()
-      .click();
-    cy.get(agenda.agendaitemDecisionEdit.save).click();
+    // check of treatment status is approved
+    cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
+
     cy.releaseDecisions();
     cy.wait(60000);
     cy.logoutFlow();
@@ -102,7 +97,6 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    // TODO KAS-2693 make sure we wait for dataloading
     cy.get(document.documentCard.titleHeader).eq(0)
       .contains(file.fileName);
     cy.get(agenda.agendaitemNav.documentsTab).click();
@@ -116,7 +110,6 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(60000);
-
     cy.logoutFlow();
   });
 
@@ -127,7 +120,6 @@ context('Propagation to other graphs', () => {
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 2);
-
     cy.logoutFlow();
   });
 });

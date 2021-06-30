@@ -37,6 +37,7 @@ const selectors = {
   // component table-row
   tableRow: {
     newsletterRow: '[data-test-table-row-newsletter-row]',
+    newsletterTitle: '[data-test-table-row-newsletter-row-title]',
   },
 
   // component button-toolbar

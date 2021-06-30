@@ -10,7 +10,6 @@ context('Show no warning in Newsletterinfo', () => {
 
   before(() => {
     cy.server();
-    cy.resetCache();
   });
 
   beforeEach(() => {
