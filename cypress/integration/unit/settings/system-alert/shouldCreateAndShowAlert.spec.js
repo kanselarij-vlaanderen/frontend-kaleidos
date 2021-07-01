@@ -28,8 +28,9 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(settings.systemAlertForm.message).type('System alert message');
 
     cy.route('GET', '/alerts?**').as('getAlerts');
-    cy.get(utils.vlModalFooter.save).click();
-    // TODO await post ?
+    cy.route('POST', '/alerts').as('postAlerts');
+    cy.get(utils.vlModalFooter.save).click()
+      .wait('@postAlerts');
     cy.wait('@getAlerts', {
       timeout: ALERT_POLL_INTERVAL + 60000,
     }); // Wait for a polling-cycle to pass
