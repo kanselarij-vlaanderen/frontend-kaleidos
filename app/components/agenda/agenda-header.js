@@ -41,6 +41,7 @@ export default Component.extend(FileSaverMixin, {
   isShowingAgendaActions: false,
   onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
   onApproveAgenda: null, // argument. Function to execute after approving an agenda.
+  onApproveAllAgendaitems: null, // argument. Function to execute after setting formal ok on all agendaitems.
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
@@ -508,16 +509,44 @@ export default Component.extend(FileSaverMixin, {
   /**
    * ensureAgendaDataIsRecent
    *
-   * This method will reload the agendaitems of the current agenda and show a loader while in progress
+   * This method will reload the agendaitems of the current agenda
    * Any new agendaitem or changed formallity is picked up by this, preventing the triggering the relevant agenda actions with stale date
    * created by concurrent edits of agendaitem formally ok status by other uses
    *
    */
   async ensureAgendaDataIsRecent() {
-    // TODO This loader breaks a lot of tests because it is unexpected
-    // this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
+    // WARN: This reload will:
+    // - Refresh the amount of agendaitems there are (if new were added)
+    // - Reload the agendaitems attributes (titles, formal ok status (uri), etc)
+    // - Reload the agendaitems concurrency (modified attribute)
+    // This reload will NOT:
+    // - Reload the relationships of agendaitems
+    // Making it possible to save agendaitems with old relationships
+    this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
     await this.currentAgenda.hasMany('agendaitems').reload();
-    // this.toggleLoadingOverlayWithMessage(null);
+    // WARN: When reloading this data, only the agendaitems that are not "formally ok" have to be fully reloaded
+    // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
+    const agendaitemsNotOk = await this.currentAgenda.get('allAgendaitemsNotOk');
+    for (const agendaitem of agendaitemsNotOk) {
+      await this.ensureAgendaitemDataIsRecent(agendaitem);
+    }
+    this.toggleLoadingOverlayWithMessage(null);
+  },
+
+  /**
+   * ensureAgendaitemDataIsRecent
+   *
+   * This method will reload the agendaitem and several relations
+   * Making it possible to save a new change to an agendaitem without the user refreshing the entire page (like formal ok status)
+   *
+   */
+  async ensureAgendaitemDataIsRecent(agendaitem) {
+    await agendaitem.reload();
+    await agendaitem.hasMany('pieces').reload();
+    await agendaitem.hasMany('treatments').reload();
+    await agendaitem.hasMany('mandatees').reload();
+    await agendaitem.hasMany('approvals').reload();
+    await agendaitem.hasMany('linkedPieces').reload();
   },
 
   /**
@@ -586,9 +615,14 @@ export default Component.extend(FileSaverMixin, {
       this.toggleLoadingOverlayWithMessage(this.intl.t('approve-all-agendaitems-message'));
       const allAgendaitemsNotOk = await this.currentAgenda.get('allAgendaitemsNotOk');
       for (const agendaitem of allAgendaitemsNotOk) {
-        await setAgendaitemFormallyOk(agendaitem);
+        try {
+          await setAgendaitemFormallyOk(agendaitem);
+        } catch {
+          await agendaitem.rollbackAttributes();
+        }
       }
       this.toggleLoadingOverlayWithMessage(null);
+      this.onApproveAllAgendaitems();
     },
 
     async unlockAgenda() {
