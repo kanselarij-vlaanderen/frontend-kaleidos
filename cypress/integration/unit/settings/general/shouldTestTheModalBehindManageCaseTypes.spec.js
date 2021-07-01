@@ -14,7 +14,8 @@ context('Manage ISE codes tests', () => {
     cy.get(utils.mHeader.settings).click();
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.overview.manageCaseTypes).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible')
+      .should('contain', 'Beheer ISE-codes');
   });
 
   it('Should open the model behind manage case types and close it', () => {

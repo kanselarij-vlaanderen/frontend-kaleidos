@@ -5,6 +5,7 @@ const selectors = {
     option: '.ember-power-select-option',
     optionSearchMessage: '.ember-power-select-option--search-message',
     searchInput: '.ember-power-select-search-input',
+    selectedItem: '.ember-power-select-selected-item',
   },
 
   // flatPickr

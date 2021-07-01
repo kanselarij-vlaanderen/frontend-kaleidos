@@ -33,7 +33,8 @@ context('Settings page tests', () => {
 
   it('Should open the model behind manage goverment domains', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible');
+    cy.get(utils.vlModal.dialogWindow).should('be.visible')
+      .should('contain', 'Beheer ISE-codes');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
@@ -41,14 +42,6 @@ context('Settings page tests', () => {
     cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(utils.vlModal.close).click();
     cy.get(utils.vlModal.dialogWindow).should('not.be.visible');
-  });
-
-  // TODO this test is duplicated by the next two
-  it('Should open the dropdown in the modal', () => {
-    cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible');
-    cy.get(dependency.emberPowerSelect.trigger).click();
-    cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
   });
 
   it('Should open the dropdown in the modal and see each item', () => {
@@ -73,7 +66,7 @@ context('Settings page tests', () => {
       .should('contain.text', govermentDomains[0]);
     cy.get(dependency.emberPowerSelect.option).eq(0)
       .click();
-    cy.get('.ember-power-select-selected-item').should('contain.text', govermentDomains[0])
+    cy.get(dependency.emberPowerSelect.selectedItem).should('contain.text', govermentDomains[0])
       .wait(200);
     cy.get(settings.modelManager.add).should('be.visible');
     cy.get(settings.modelManager.edit).should('be.visible');
@@ -90,17 +83,20 @@ context('Settings page tests', () => {
   });
 
   it('Should open the modal and add a new item in the list', () => {
+    cy.route('POST', '/government-domains').as('postDomains');
+
     cy.get(settings.overview.manageGovermentDomains).click();
     cy.get(settings.modelManager.add).click();
     cy.get(utils.vlFormInput).type('Andere zaken');
     cy.get(utils.vlModalFooter.save).click();
+    cy.wait('@postDomains');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length + 1);
-    // Should clean the database after to get rid of the added elements and so that the other tests can run smooth.
-    // cy.resetCache(); //TODO this does nothing
   });
 
   it('Should open the modal, select the new domain and edit it', () => {
+    cy.route('PATCH', '/government-domains/**').as('patchDomains');
+
     cy.get(settings.overview.manageGovermentDomains).click();
     cy.get(utils.vlModal.dialogWindow).should('be.visible');
     cy.get(dependency.emberPowerSelect.trigger).click();
@@ -113,7 +109,7 @@ context('Settings page tests', () => {
     cy.get(utils.vlFormInput).clear();
     cy.get(utils.vlFormInput).type('Test Input');
     cy.get(utils.vlModalFooter.save).click();
-    // TODO await patch call
+    cy.wait('@patchDomains');
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).should('have.length.greaterThan', 0);
     cy.get(dependency.emberPowerSelect.option).should('contain.text', 'Test Input');

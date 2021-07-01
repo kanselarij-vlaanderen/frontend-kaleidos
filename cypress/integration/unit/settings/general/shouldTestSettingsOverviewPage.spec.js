@@ -34,41 +34,49 @@ context('Settings overview page tests', () => {
 
   it('Should open the model behind manage goverment domains and close it', () => {
     cy.openSettingsModal(settings.overview.manageGovermentDomains);
+    cy.get(utils.vlModal.container).should('contain', 'Beleidsdomeinen beheren');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage goverment fields and close it', () => {
     cy.openSettingsModal(settings.overview.manageGovermentFields);
+    cy.get(utils.vlModal.container).should('contain', 'Beleidsvelden beheren');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage ISE codes and close it', () => {
     cy.openSettingsModal(settings.overview.manageIseCodes);
+    cy.get(utils.vlModal.container).should('contain', 'Beheer ISE-codes');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage alerts and close it', () => {
     cy.openSettingsModal(settings.overview.manageAlerts);
+    cy.get(utils.vlModal.container).should('contain', 'Systeemberichten beheer');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage document types and close it', () => {
     cy.openSettingsModal(settings.overview.manageDocumentTypes);
+    cy.get(utils.vlModal.container).should('contain', 'Document-types beheer');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage case types and close it', () => {
     cy.openSettingsModal(settings.overview.manageCaseTypes);
+    cy.get(utils.vlModal.container).should('contain', 'Dossier-types beheer');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage subcase types and close it', () => {
     cy.openSettingsModal(settings.overview.manageSubcaseTypes);
+    cy.get(utils.vlModal.container).should('contain', 'Procedurestap types beheer');
     cy.closeSettingsModal();
   });
 
   it('Should open the model behind manage signatures and close it', () => {
     cy.openSettingsModal(settings.overview.manageSignatures);
+    cy.get(utils.vlModal.container).should('contain', 'Handtekeningen beheren');
     cy.closeSettingsModal();
   });
 
@@ -88,111 +96,90 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.table).contains('Wendy')
       .parents('tr')
       .within(() => {
-        cy.get(settings.vlDeleteUser.delete).should('exist')
-          .should('be.visible')
-          .click();
+        cy.get(settings.vlDeleteUser.delete).click();
       });
     cy.route('GET', '/users/*').as('getUsers');
-    cy.get(utils.vlModalVerify.save).should('exist')
-      .should('be.visible')
-      .click();
-    cy.wait('@getUsers').then(() => {
-      cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
-    });
+    cy.get(utils.vlModalVerify.save).click();
+    cy.wait('@getUsers');
+    cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
     cy.get(settings.usersIndex.searchInput).clear();
     cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
-      .within(() => {
-        cy.contains('overheid');
-      });
-    // TODO we do not click the upload button, this works anyway?
+      .find(settings.usersIndex.row.group)
+      .contains('overheid');
+    cy.get(utils.simpleFileUploader).click();
     cy.uploadUsersFile('files', 'updateUserGroup', 'csv');
     cy.get(settings.usersIndex.searchInput).type('Greta');
     cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
-    cy.get('tbody > tr').should('have.length', '1');
+    cy.get(settings.usersIndex.table).should('have.length', '1');
     cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
-      .within(() => {
-        cy.contains('kanselarij');
-      });
+      .find(settings.usersIndex.row.group)
+      .contains('kanselarij');
   });
 
   it('Should test the search of a user when typing', () => {
-    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
-      .click();
+    cy.route('GET', '/users?filter=Minister**').as('filterUsersMinister');
+
+    cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.usersIndex.searchInput).should('exist')
-      .should('be.visible')
-      .type('Minister');
-    // TODO, this next should can work regardless of search working on the unfiltered tabel
-    // wait for search api call, count the number of rows
-    cy.get(settings.usersIndex.table).should('contain', 'Minister');
+    cy.get(settings.usersIndex.searchInput).type('Minister')
+      .wait('@filterUsersMinister');
+    cy.get(settings.usersIndex.row.firstname).should('have.length', '1')
+      .should('contain', 'Minister');
   });
 
   it('Should trigger search when clicking on search icon', () => {
-    cy.route('GET', '/users?filter=**').as('filterUsers');
+    cy.route('GET', '/users?filter=Minister**').as('filterUsersMinister');
 
-    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
-      .click();
+    cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.usersIndex.searchInput).should('exist')
-      .should('be.visible')
-      .type('Minister');
-    cy.get(settings.usersIndex.table).should('contain', 'Minister');
+    cy.get(settings.usersIndex.searchInput).type('Minister')
+      .wait('@filterUsersMinister');
+    cy.get(settings.usersIndex.row.firstname).should('contain', 'Minister');
     cy.get(settings.usersIndex.searchButton).click()
-      .then(() => {
-        cy.wait('@filterUsers');
-        cy.get(settings.usersIndex.table).should('contain', 'Minister');
-      });
+      .wait('@filterUsersMinister');
+    cy.get(settings.usersIndex.row.firstname).should('contain', 'Minister');
   });
 
   it('Should navigate to detailview from user', () => {
-    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
-      .click();
+    cy.route('GET', '/users?filter=Minister**').as('filterUsersMinister');
+
+    cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.get(settings.usersIndex.searchInput).should('exist')
-      .should('be.visible')
-      .type('Minister');
-    cy.route('GET', '/users?filter=**').as('filterUsers');
-    cy.get(settings.usersIndex.table).should('contain', 'Minister');
+    cy.get(settings.usersIndex.searchInput).type('Minister')
+      .wait('@filterUsersMinister');
+    cy.get(settings.usersIndex.row.firstname).should('contain', 'Minister');
     cy.get(settings.usersIndex.searchButton).click()
-      .then(() => {
-        cy.wait('@filterUsers');
-        cy.get(settings.goToUserDetail).should('exist')
-          .should('be.visible')
-          .click();
-      });
+      .wait('@filterUsersMinister');
+    cy.get(settings.goToUserDetail).click();
     cy.contains('Gebruiker: Minister Test');
     cy.contains('Algemene informatie');
   });
 
   it('Should change the group of the user from the detailpage', () => {
     cy.route('GET', '/users?**').as('getUsers');
-    cy.route('GET', '/users?filter=**').as('filterUsers');
+    cy.route('GET', '/users?filter=Minister**').as('filterUsersMinister');
+    cy.route('PATCH', '/users/*').as('patchUsers');
 
-    cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
-      .click();
+    cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
-    cy.wait('@getUsers').then(() => {
-      cy.get(settings.usersIndex.searchInput).should('exist')
-        .should('be.visible')
-        .type('Minister');
-      cy.get(settings.usersIndex.table).should('contain', 'Minister');
-      cy.wait(3000); // TODO this wait is not needed ?
-      cy.get(settings.goToUserDetail).click();
-      cy.contains('Gebruiker: Minister Test');
-      cy.contains('Algemene informatie');
-      cy.get(dependency.emberPowerSelect.trigger).click();
-      cy.get(dependency.emberPowerSelect.option).contains('kabinet')
-        .click();
-      cy.wait(5000); // TODO await PATCH call instead
-      cy.get(auk.backButton).should('exist')
-        .should('be.visible')
-        .click();
-      cy.wait(3000); // TODO why wait ?
-      cy.contains('kabinet');
-    });
+    cy.wait('@getUsers');
+    cy.get(settings.usersIndex.searchInput).type('Minister')
+      .wait('@filterUsersMinister');
+    cy.get(settings.usersIndex.row.firstname).contains('Minister')
+      .parents('tr')
+      .find(settings.goToUserDetail)
+      .click();
+    cy.contains('Gebruiker: Minister Test');
+    cy.contains('Algemene informatie');
+    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(dependency.emberPowerSelect.option).contains('kabinet')
+      .click();
+    cy.wait('@patchUsers');
+    cy.get(auk.backButton).click();
+    cy.contains('kabinet');
   });
 });

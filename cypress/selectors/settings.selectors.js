@@ -11,6 +11,10 @@ const selectors = {
     searchInput: '[data-test-route-settings-users-search-input]',
     searchButton: '[data-test-route-settings-users-search-button]',
     table: '[data-test-route-settings-users-table]',
+    row: {
+      firstname: '[data-test-route-settings-users-row-first-name]',
+      group: '[data-test-route-settings-users-row-group]',
+    },
   },
 
   // route settings/overview
