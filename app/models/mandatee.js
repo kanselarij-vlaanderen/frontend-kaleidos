@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
 import { inject as service } from '@ember/service';
+import { lower as lowerCaseAlphabet } from 'alphabet';
 
 const {
   Model, attr, hasMany, belongsTo,
@@ -30,7 +30,7 @@ export default Model.extend({
     inverse: null,
   }),
   publicationFlows: hasMany('publication-flow', {
-    inverse: null,
+    serialize: false,
   }),
   requestedSubcases: hasMany('subcase', {
     inverse: null,
@@ -49,11 +49,12 @@ export default Model.extend({
 
   /**
    * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
+   * TODO: clean up hacky map-to-alphabet sorting
    */
   priorityAlpha: computed('priority', function() {
     const priority = this.get('priority');
     if (typeof priority === 'number') {
-      const alphaNumeric = CONFIG.alphabet[priority - 1];
+      const alphaNumeric = lowerCaseAlphabet[priority - 1];
       return alphaNumeric;
     }
     const errorMessage = this.intl.t('mandatee-without-priority-message', {

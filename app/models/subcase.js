@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
@@ -95,18 +95,8 @@ export default ModelWithModifier.extend({
 
   agendaitemsOnDesignAgendaToEdit: computed('id', 'agendaActivities', async function() {
     return await this.store.query('agendaitem', {
-      filter: {
-        'agenda-activity': {
-          subcase: {
-            id: this.get('id'),
-          },
-        },
-        agenda: {
-          status: {
-            id: CONFIG.agendaStatusDesignAgenda.id,
-          },
-        },
-      },
+      'filter[agenda-activity][subcase][:id:]': this.get('id'),
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
   }),
 
@@ -143,11 +133,11 @@ export default ModelWithModifier.extend({
         const treatmentIds = treatments.map((treatment) => treatment.get('id')).join(',');
         const approvedTreatment = await this.store.queryOne('agenda-item-treatment', {
           'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
+          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD,
         });
         const acknowledgedTreatment = await this.store.queryOne('agenda-item-treatment', {
           'filter[id]': treatmentIds,
-          'filter[decision-result-code][:uri:]': CONFIG.DECISION_RESULT_CODE_URIS.KENNISNAME,
+          'filter[decision-result-code][:uri:]': CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME,
         });
         return !!approvedTreatment || !!acknowledgedTreatment;
       }
@@ -165,12 +155,12 @@ export default ModelWithModifier.extend({
   }),
 
   remarkType: computed('showAsRemark', function() {
-    let id = '';
+    let uri = '';
     if (this.showAsRemark) {
-      id = CONFIG.remarkId;
+      uri = CONSTANTS.CASE_TYPES.REMARK;
     } else {
-      id = CONFIG.notaCaseTypeID;
+      uri = CONSTANTS.CASE_TYPES.NOTA;
     }
-    return this.store.findRecord('case-type', id);
+    return this.store.findRecordByUri('case-type', uri);
   }),
 });

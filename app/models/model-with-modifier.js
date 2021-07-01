@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import ModelWithToasts from 'frontend-kaleidos/models/model-with-toasts';
+import Model from '@ember-data/model';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
@@ -9,7 +9,7 @@ const {
   attr, belongsTo,
 } = DS;
 
-export default ModelWithToasts.extend({
+export default Model.extend({
   currentSession: service(),
   intl: service(),
   toaster: service(),
@@ -34,7 +34,6 @@ export default ModelWithToasts.extend({
       }
       case 'updated': {
         await this.preEditOrSaveCheck();
-        this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
         break;
       }
     }

@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class IndexNewsletterRoute extends Route {
   @service currentSession;
@@ -24,7 +25,7 @@ export default class IndexNewsletterRoute extends Route {
         'filter[is-approval]': false,
         include: 'treatments.newsletter-info',
         sort: params.sort,
-        'page[size]': 300,
+        'page[size]': PAGE_SIZE.AGENDAITEMS,
       });
 
     return Promise.all(agendaitems.map(async(agendaitem) => {

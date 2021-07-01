@@ -1,8 +1,9 @@
 // sass-lint:disable max-line-length
 
-$font-location: "https://d1l6j3bn1os9t0.cloudfront.net/3.latest/fonts/flanders/" !default;
+$font-location: "/fonts/flanders-art/" !default;
 $flanders-family: "flanders-sans";
 $flanders-serif-family: "flanders-serif";
+$file-name-base: "flanders-art";
 
 @mixin font-face($family, $location, $name, $weight: normal, $style: normal) {
   @font-face {
@@ -15,12 +16,12 @@ $flanders-serif-family: "flanders-serif";
 }
 
 
-@include font-face($flanders-family, $font-location, $flanders-family + "-light", 300, normal);
-@include font-face($flanders-family, $font-location, $flanders-family + "-regular", 400, normal);
-@include font-face($flanders-family, $font-location, $flanders-family + "-medium", 500, normal);
-@include font-face($flanders-family, $font-location, $flanders-family + "-bold", 700, normal);
+@include font-face($flanders-family, $font-location, $file-name-base + "-sans-light", 300, normal);
+@include font-face($flanders-family, $font-location, $file-name-base + "-sans-regular", 400, normal);
+@include font-face($flanders-family, $font-location, $file-name-base + "-sans-medium", 500, normal);
+@include font-face($flanders-family, $font-location, $file-name-base + "-sans-bold", 700, normal);
 
-@include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-light", 300, normal);
-@include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-regular", 400, normal);
-@include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-medium", 500, normal);
-@include font-face($flanders-serif-family, $font-location, $flanders-serif-family + "-bold", 700, normal);
+@include font-face($flanders-serif-family, $font-location, $file-name-base + "-serif-light", 300, normal);
+@include font-face($flanders-serif-family, $font-location, $file-name-base + "-serif-regular", 400, normal);
+@include font-face($flanders-serif-family, $font-location, $file-name-base + "-serif-medium", 500, normal);
+@include font-face($flanders-serif-family, $font-location, $file-name-base + "-serif-bold", 700, normal);

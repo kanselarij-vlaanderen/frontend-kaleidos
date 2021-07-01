@@ -88,7 +88,7 @@ export default Component.extend({
     },
 
     async openDocument(agendaitem) {
-      const nota = await agendaitem.get('nota');
+      const nota = await agendaitem.get('notaOrVisienota');
       if (!nota) {
         return;
       }

@@ -2,10 +2,11 @@
 // / <reference types="Cypress" />
 
 import 'cypress-file-upload';
-import document from '../../selectors/document.selectors';
 
 import agenda from '../../selectors/agenda.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import document from '../../selectors/document.selectors';
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 // ***********************************************
 
@@ -301,7 +302,7 @@ function addDocumentsToAgendaitem(agendaitemTitle, files) {
   openAgendaitemDocumentTab(agendaitemTitle, false);
 
   // Open the modal, add files
-  cy.contains('Documenten toevoegen').click();
+  cy.get(route.agendaitemDocuments.add).click();
   addNewDocumentsInUploadModal(files, 'agendaitems');
 
   // Click save

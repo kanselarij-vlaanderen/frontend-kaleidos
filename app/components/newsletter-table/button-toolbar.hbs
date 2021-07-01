@@ -10,7 +10,7 @@
       </div>
     </span>
   </button>
-  {{#if (is-pending (await @agendaitem.nota))}}
+  {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
         {{t "nota-loading-text"}}
@@ -20,8 +20,8 @@
     <button
       type="button"
       class="auk-button auk-button--borderless auk-button--icon"
-      disabled={{not (await @agendaitem.nota)}}
-      style={{if (not (await @agendaitem.nota)) "opacity:0.3;"}}
+      disabled={{not (await @agendaitem.notaOrVisienota)}}
+      style={{if (not (await @agendaitem.notaOrVisienota)) "opacity:0.3;"}}
       {{on "click" this.openNota}}
     >
       <span class="auk-button__content">
@@ -29,7 +29,7 @@
           <i class="ki ki-document"></i>
         </div>
         <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-          {{if (await @agendaitem.nota) (t "open-note") (t "no-nota")}}
+          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
         </EmberTooltip>
       </span>
     </button>

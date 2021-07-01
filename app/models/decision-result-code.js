@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 import { computed } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const {
   Model, attr,
@@ -11,6 +11,6 @@ export default Model.extend({
   label: attr('string'),
   priority: attr('number'),
   isPostponed: computed('uri', function() {
-    return this.uri === CONFIG.DECISION_RESULT_CODE_URIS.UITGESTELD;
+    return this.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD;
   }),
 });

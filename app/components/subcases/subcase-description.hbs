@@ -20,7 +20,7 @@
     <ul class="vlc-status-timeline">
       {{#each (await subcase.phases) as |phase|}}
         <li class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
-        >
+        data-test-subcase-description-timeline-item>
           <div class="vlc-status-timeline__dot"></div>
           {{#if (is-pending phase)}}
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -157,7 +157,7 @@
         {{web-components/vl-radio-button-list
           title=(t "subcase-type")
           optionList=(await caseTypes)
-          selectedModel=remarkType
+          selectedModel=(await remarkType)
           modelChanged=(action "selectRemarkType")
         }}
       </div>

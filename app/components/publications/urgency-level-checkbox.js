@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
@@ -11,7 +11,7 @@ export default class UrgencyLevelCheckboxComponent extends Component {
 
   @action
   toggleUrgency(value) {
-    const uri = value ? CONFIG.URGENCY_LEVELS.spoedprocedure : CONFIG.URGENCY_LEVELS.standaard;
+    const uri = value ? CONSTANTS.URGENCY_LEVELS.SPEEDPROCEDURE : CONSTANTS.URGENCY_LEVELS.STANDARD;
     const urgencyLevel = this.urgencyLevels.find((level) => level.uri === uri);
     this.args.onChange(urgencyLevel);
   }
