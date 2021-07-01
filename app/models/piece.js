@@ -55,13 +55,13 @@ export default Model.extend({
   translationSubcase: belongsTo('translation-subcase'),
   publicationSubcase: belongsTo('publication-subcase'),
 
-  proofingActivityUsedBy: hasMany('proofing-activity', {
+  proofingActivitiesUsedBy: hasMany('proofing-activity', {
     inverse: 'usedPieces',
   }),
   proofingActivityGeneratedBy: belongsTo('proofing-activity', {
     inverse: 'generatedPieces',
   }),
-  publicationActivityUsedBy: hasMany('publication-activity', {
+  publicationActivitiesUsedBy: hasMany('publication-activity', {
     inverse: 'usedPieces',
   }),
   publicationActivityGeneratedBy: belongsTo('publication-activity', {
