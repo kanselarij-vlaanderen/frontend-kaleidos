@@ -41,6 +41,7 @@ export default Component.extend(FileSaverMixin, {
   isShowingAgendaActions: false,
   onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
   onApproveAgenda: null, // argument. Function to execute after approving an agenda.
+  onApproveAllAgendaitems: null, // argument. Function to execute after setting formal ok on all agendaitems.
   isApprovingAllAgendaitems: false,
   showLoadingOverlay: false,
   loadingOverlayMessage: null,
@@ -514,6 +515,14 @@ export default Component.extend(FileSaverMixin, {
    *
    */
   async ensureAgendaDataIsRecent() {
+    // WARN: This reload will:
+    // - Refresh the amount of agendaitems there are (if new were added)
+    // - Reload the agendaitems attributes (titles, formal ok status (uri), etc)
+    // - Reload the agendaitems concurrency (modified attribute)
+    // This reload will NOT:
+    // - Reload the relationships of agendaitems
+    // Making it possible to save agendaitems with old relationships
+    this.toggleLoadingOverlayWithMessage(this.intl.t('agendaitems-loading-text'));
     await this.currentAgenda.hasMany('agendaitems').reload();
     // WARN: When reloading this data, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
@@ -521,6 +530,7 @@ export default Component.extend(FileSaverMixin, {
     for (const agendaitem of agendaitemsNotOk) {
       await this.ensureAgendaitemDataIsRecent(agendaitem);
     }
+    this.toggleLoadingOverlayWithMessage(null);
   },
 
   /**
@@ -612,6 +622,7 @@ export default Component.extend(FileSaverMixin, {
         }
       }
       this.toggleLoadingOverlayWithMessage(null);
+      this.onApproveAllAgendaitems();
     },
 
     async unlockAgenda() {
