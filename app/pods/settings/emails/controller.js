@@ -2,8 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-
-
+import { isBlank } from '@ember/utils';
 export default class SettingsEmailController extends Controller {
   @service store;
 
@@ -18,6 +17,6 @@ export default class SettingsEmailController extends Controller {
   }
 
   get isDisabled() {
-    return this.emailToProofRequest === '' || this.emailToProofRequest === '' ;
+    return isBlank(this.emailToProofRequest) || isBlank(this.emailToTranslationRequest) ;
   }
 }
