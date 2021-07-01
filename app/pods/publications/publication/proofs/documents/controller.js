@@ -140,17 +140,16 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  async onSaveRequest(requestProperties) {
+  async saveRequest(requestProperties) {
     try {
-      await this.saveRequest(requestProperties);
-    } catch (err) {
+      await this.#saveRequest(requestProperties);
+    } finally {
       this.isRequestModalOpen = false;
-      throw err;
     }
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async saveRequest(requestProperties) {
+  async #saveRequest(requestProperties) {
     const now = new Date();
     const {
       stage,

@@ -18,7 +18,7 @@ function translationRequestEmail(params) {
 }
 
 async function proofRequestEmail(params) {
-  if (params.stage === 'new') {
+  if (params.stage === 'initial') {
     const identification = params.publicationFlow.identification.get('idName');
 
     const subject = `Publicatieaanvraag VO-dossier: ${identification}`;
