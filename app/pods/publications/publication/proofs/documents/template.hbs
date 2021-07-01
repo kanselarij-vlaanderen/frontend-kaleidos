@@ -19,7 +19,7 @@
             <Auk::Dropdown
               as |dropdown|>
               <dropdown.Item
-                {{on "click" (fn this.openRequestModal 'new')}}>
+                {{on "click" (fn this.openRequestModal "new")}}>
                 {{t "initial-request"}}
               </dropdown.Item>
               <dropdown.Item>
@@ -51,24 +51,24 @@
           <tr>
             <th class="auk-table-checkbox-col">
               <Auk::Checkbox @checked={{this.areAllSelected}}
-                {{on 'input' this.toggleSelectionAll}} />
+                {{on "input" this.toggleSelectionAll}} />
             </th>
             <th>
-              {{t 'name-document'}}
+              {{t "name-document"}}
             </th>
             <th>
-              {{t 'file-extension'}}
+              {{t "file-extension"}}
             </th>
-            <Utils::ThSortable @label={{t 'received-at'}}
+            <Utils::ThSortable @label={{t "received-at"}}
               @onChange={{this.changeSorting}}
               @currentSorting={{this.sortingString}}
               @field="ontvangen-op" />
-            <Utils::ThSortable @label={{t 'uploaded-at'}}
+            <Utils::ThSortable @label={{t "uploaded-at"}}
               @onChange={{this.changeSorting}}
               @currentSorting={{this.sortingString}}
               @field="geupload-op" />
             <th class="auk-u-text-align--center">
-              {{t 'corrected'}}
+              {{t "corrected"}}
             </th>
             <th>
               {{!-- Actions--}}
@@ -80,7 +80,7 @@
             <tr>
               <td class="auk-table-checkbox-col">
                 <Auk::Checkbox @checked={{row.isSelected}}
-                  {{on 'input' (fn this.toggleSelection row)}} />
+                  {{on "input" (fn this.toggleSelection row)}} />
               </td>
               <td>
                 {{row.piece.name}}
