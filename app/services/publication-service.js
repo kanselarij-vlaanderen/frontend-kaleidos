@@ -34,7 +34,6 @@ export default class PublicationService extends Service {
    * @private
    */
   async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
-    // TODO 2456
     const now = new Date();
     let case_;
     let agendaItemTreatment;
@@ -92,6 +91,9 @@ export default class PublicationService extends Service {
       openingDate: now,
       modified: now,
     });
+    if (isViaCouncilOfMinisters && viaCouncilOfMinisterOptions.mandatees) {
+      publicationFlow.mandatees = viaCouncilOfMinisterOptions.mandatees;
+    }
     await publicationFlow.save();
     const translationSubcase = this.store.createRecord('translation-subcase', {
       created: now,
