@@ -54,12 +54,6 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     this.message = email.message;
   }
 
-  get modalTitle() {
-    const title = this.intl.t('request-proof');
-    const initial = this.intl.t('initial');
-    return `${title} (${initial})`;
-  }
-
   get canSave() {
     return Object.values(this.validations).every((validation) => validation.isValid);
   }

@@ -1,6 +1,6 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title={{this.modalTitle}}
+    @title="{{t "request-proof"}} ({{t @stage}})"
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.onSave.isRunning}} @reserveSpace={{true}}>

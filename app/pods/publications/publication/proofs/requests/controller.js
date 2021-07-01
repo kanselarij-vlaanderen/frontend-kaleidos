@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import moment from 'moment';
 import ProofingActivity from 'frontend-kaleidos/models/proofing-activity';
 import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
 
@@ -27,29 +26,15 @@ class Row {
     throw new Error('unknown request');
   }
 
-  get panelTitle() {
-    let requestTypeTranslationKey;
+  get requestType() {
     // testing with `instanceof` returns true for every Model type
     switch (this.targetActivityType) {
       case ProofingActivity.modelName:
-        requestTypeTranslationKey = 'proofing-request';
-        break;
+        return 'proofing-request';
       case PublicationActivity.modelName:
-        requestTypeTranslationKey = 'publication-request';
-        break;
+        return 'publication-request';
       default: throw new Error('unknown request');
     }
-    const requestName = this.intl.t(requestTypeTranslationKey);
-
-    const dateString = moment(this.requestActivity.startDate).format('D MMMM');
-    const timeString = moment(this.requestActivity.startDate).format('H:mm');
-
-    const modalTitle = this.intl.t('x-request-x-timestamp', {
-      request: requestName,
-      date: dateString,
-      time: timeString,
-    });
-    return modalTitle;
   }
 
   get pieces() {

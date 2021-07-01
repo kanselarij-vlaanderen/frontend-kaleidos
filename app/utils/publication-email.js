@@ -38,8 +38,8 @@ Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden
     const idName = identification.get('idName');
     const numacNumber = publicationFlow.numacNumbers.firstObject?.get('idName') ?? '?';
     const publicationSubcase = await publicationFlow.publicationSubcase;
-    const targetPublicationDate = publicationSubcase.targetEndDate;
-    const targetPublicationDateString = targetPublicationDate ? moment(targetPublicationDate).format('DD/MM/YYYY') : '?';
+    const targetDate = publicationSubcase.targetEndDate;
+    const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '?';
 
     const subject = `Finale publicatie voor publicatie BS-werknr: ${numacNumber}, VO-dossier: ${idName}`;
     const message = `Geachte,
@@ -51,7 +51,7 @@ VO-dossier: ${idName}
 Korte Titel: ${publicationFlow.shortTitle}
 Lange Titel: ${publicationFlow.longTitle}
 
-De gewenste datum van publicatie is: ${targetPublicationDateString}
+De gewenste datum van publicatie is: ${targetDateString}
 
 Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaande email adres.
 
@@ -62,6 +62,7 @@ Met vriendelijke groeten,`;
       message: message,
     };
   }
+
   throw new Error(`unknown stage: ${params.stage}`);
 }
 

@@ -2,8 +2,9 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
+import CONFIG from 'frontend-kaleidos/config/config';
+
 
 const PIECE_RELATED_ENTITIES = {
   SOURCE_DOCUMENTS: 1,
@@ -12,11 +13,17 @@ const PIECE_RELATED_ENTITIES = {
 };
 
 const COLUMN_MAP = {
-  'ontvangen-op': 'piece.receivedDate',
-  'geupload-op': 'piece.created',
+  'ontvangen-op': (row) => row.piece.receivedDate,
+  'geupload-op': (row) => row.piece.created,
 };
 
-// row is used because ember-data fetches relationships to publicationSubcase/proofingActivity/publicationActivity
+const REQUEST_STAGES = {
+  NEW: 'initial',
+  EXTRA: 'extra',
+  FINAL: 'final',
+};
+
+// row is necessary because ember-data fetches relationships to publicationSubcase/proofingActivity/publicationActivity
 // (because piece is not the queried model, but an included one)
 class Row {
   @tracked isSelected = false;
@@ -101,16 +108,17 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   #sort(sortingString) {
     // default sort
-    let property = 'piece.created';
+    let property = (row) => row.piece.created;
     let isDescending = true;
 
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey]?.property || property;
+      property = COLUMN_MAP[sortKey] || property;
     }
 
-    this.rows.sortBy(property);
+    // sortBy does not work with nested keys
+    this.rows.sort((row1, row2) => property(row1) - property(row2));
     if (isDescending) {
       this.rows.reverse();
     }
@@ -135,62 +143,82 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   async onSaveRequest(requestProperties) {
     try {
       await this.saveRequest(requestProperties);
-    } finally {
-      this.rows.forEach((row) => row.isSelected = false);
+    } catch (err) {
       this.isRequestModalOpen = false;
-      this.transitionToRoute('publications.publication.proofs.requests');
+      throw err;
     }
+    this.transitionToRoute('publications.publication.proofs.requests');
   }
 
   async saveRequest(requestProperties) {
-    if (requestProperties.stage === 'new') {
-      const now = new Date();
-      const {
-        publicationSubcase,
-        attachments,
-      } = requestProperties;
+    const now = new Date();
+    const {
+      stage,
+      publicationSubcase,
+      attachments,
+    } = requestProperties;
 
-      const requestActivity = this.store.createRecord('request-activity', {
-        startDate: now,
-        title: requestProperties.subject,
-        publicationSubcase: publicationSubcase,
-        usedPieces: attachments,
-      });
-      await requestActivity.save();
+    // REQUEST ACTIVITY
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      title: requestProperties.subject,
+      publicationSubcase: publicationSubcase,
+      usedPieces: attachments,
+    });
+    await requestActivity.save();
 
-      const proofingActivity = this.store.createRecord('proofing-activity', {
-        startDate: now,
-        title: requestProperties.subject,
-        subcase: publicationSubcase,
-        requestActivity: requestActivity,
-        usedPieces: attachments,
-      });
-      const proofingActivitySave = proofingActivity.save();
-      const saves = [proofingActivitySave];
-
-      if (!requestProperties.publicationSubcase.startDate) {
-        requestProperties.publicationSubcase.startDate = now;
-        const publicationSubcaseSave = publicationSubcase.save();
-        saves.push(publicationSubcaseSave);
-      }
-
-      const filePromises = attachments.mapBy('file');
-      const attachmentFilesPromise = Promise.all(filePromises);
-      const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
-      const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
-      const email = this.store.createRecord('email', {
-        from: CONFIG.EMAIL.DEFAULT_FROM,
-        to: CONFIG.EMAIL.TO.publishpreviewEmail,
-        folder: mailFolder,
-        subject: requestProperties.subject,
-        message: requestProperties.message,
-        attachments: attachmentFiles,
-        requestActivity: requestActivity,
-      });
-      const emailSave = email.save();
-      saves.push(emailSave);
-
-      await Promise.all(saves);
+    // RESULT ACTIVITY
+    const activityProperties = {
+      startDate: now,
+      title: requestProperties.subject,
+      subcase: publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: attachments,
+    };
+    let activity;
+    if (stage === REQUEST_STAGES.NEW) {
+      activity = this.store.createRecord('proofing-activity', activityProperties);
+    } else if (stage === REQUEST_STAGES.FINAL) {
+      activity = this.store.createRecord('publication-activity', activityProperties);
+    } else {
+      throw new Error(`unknown request stage: ${stage}`);
     }
+    const activitySave = activity.save();
+    const saves = [activitySave];
+
+    // PUBLICATION SUBCASE
+    if (!requestProperties.publicationSubcase.startDate) {
+      requestProperties.publicationSubcase.startDate = now;
+      const publicationSubcaseSave = publicationSubcase.save();
+      saves.push(publicationSubcaseSave);
+    }
+
+    // EMAIL
+    const filePromises = attachments.mapBy('file');
+    const attachmentFilesPromise = Promise.all(filePromises);
+    const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONFIG.PUBLICATION_EMAIL.OUTBOX);
+    const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
+
+    let recipientEmail;
+    if (stage === REQUEST_STAGES.NEW) {
+      recipientEmail = UTILS_CONFIG.EMAIL.TO.publishpreviewEmail;
+    } else if (stage === REQUEST_STAGES.FINAL) {
+      recipientEmail = UTILS_CONFIG.EMAIL.TO.publishEmail;
+    } else {
+      throw new Error(`unknown request stage: ${stage}`);
+    }
+    const email = this.store.createRecord('email', {
+      from: UTILS_CONFIG.EMAIL.DEFAULT_FROM,
+      to: recipientEmail,
+      folder: mailFolder,
+      subject: requestProperties.subject,
+      message: requestProperties.message,
+      attachments: attachmentFiles,
+      requestActivity: requestActivity,
+    });
+    const emailSave = email.save();
+    saves.push(emailSave);
+
+    await Promise.all(saves);
   }
 }
