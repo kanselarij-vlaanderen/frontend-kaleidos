@@ -45,7 +45,7 @@
 </Auk::Navbar>
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    {{#if this.rows}}
+    {{#if @model}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
@@ -76,36 +76,36 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.rows as |row|}}
+          {{#each @model as |piece|}}
             <tr>
               <td class="auk-table-checkbox-col">
-                <Auk::Checkbox @checked={{row.isSelected}}
-                  {{on "input" (fn this.toggleSelection row)}} />
+                <Auk::Checkbox @checked={{includes piece this.selection}}
+                  {{on "input" (fn this.toggleSelection piece)}} />
               </td>
               <td>
-                {{row.piece.name}}
+                {{piece.name}}
               </td>
               <td>
-                <Utils::Documents::FileTypePill @extension={{row.piece.file.extension}} />
-              </td>
-              <td>
-                <p>
-                  {{moment-format row.piece.receivedDate}}
-                </p>
-                <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format row.piece.receivedDate "HH:mm"}}
-                </p>
+                <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td>
                 <p>
-                  {{moment-format row.piece.created}}
+                  {{moment-format piece.receivedDate}}
                 </p>
                 <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format row.piece.created "HH:mm"}}
+                  {{moment-format piece.receivedDate "HH:mm"}}
+                </p>
+              </td>
+              <td>
+                <p>
+                  {{moment-format piece.created}}
+                </p>
+                <p class="auk-u-muted auk-u-text-small">
+                  {{moment-format piece.created "HH:mm"}}
                 </p>
               </td>
               <td class="auk-u-text-align--center">
-                {{#if row.isCorrected}}
+                {{#if TODO}} {{!-- todo --}}
                   <Auk::Icon @name="check" @skin="success-dark" />
                 {{else}}
                   {{t "dash"}}
@@ -115,13 +115,13 @@
                 <WebComponents::AuButtonToolbar>
                   <Auk::Button
                     @skin="borderless" @layout="icon-only" @icon="download"
-                    @href={{row.piece.file.namedDownloadLink}}
-                    download={{await row.piece.downloadFilename}}>
+                    @href={{piece.file.namedDownloadLink}}
+                    download={{await piece.downloadFilename}}>
                     {{t "download"}}
                   </Auk::Button>
                   <Auk::Button
                     @skin="borderless" @layout="icon-only" @icon="book"
-                    @href={{row.piece.viewDocumentURL}}
+                    @href={{piece.viewDocumentURL}}
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>

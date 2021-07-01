@@ -5,32 +5,10 @@ import { tracked } from '@glimmer/tracking';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
-const PIECE_RELATED_ENTITIES = {
-  SOURCE_DOCUMENTS: 1,
-  PROOFING_ACTIVITIES_GENERATED_PIECES: 2,
-  PUBLICATION_ACTIVITIES_GENERATED_PIECES: 3,
-};
-
 const COLUMN_MAP = {
-  'ontvangen-op': 'piece.receivedDate',
-  'geupload-op': 'piece.created',
+  'ontvangen-op': 'receivedDate',
+  'geupload-op': 'created',
 };
-
-class Row {
-  @tracked isSelected = false;
-  @tracked piece;
-  @tracked type;
-
-  constructor(piece, type) {
-    this.piece = piece;
-    this.type = type;
-  }
-
-  get isCorrected() {
-    // TODO
-    return false;
-  }
-}
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
@@ -46,47 +24,42 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked publicationFlow;
   @tracked publicationSubcase;
 
-  @tracked isRequestModalOpen = false;
-  @tracked requestStage;
+  @tracked selection;
   /** @type {string} key name. prepended with minus if descending */
   @tracked sortingString = undefined;
 
-  initRows(publicationSubcase) {
-    this.#createRows(publicationSubcase);
-    this.#initSort();
-  }
+  @tracked isRequestModalOpen = false;
+  @tracked requestStage;
 
-  #createRows(publicationSubcase) {
-    const sourceDocRows = publicationSubcase.sourceDocuments.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.SOURCE_DOCUMENTS));
-    const proofDocRows = publicationSubcase.proofingActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PROOFING_ACTIVITIES_GENERATED_PIECES)));
-    const pubDocRows = publicationSubcase.publicationActivities.map((it) => it.generatedPieces.map((piece) => new Row(piece, PIECE_RELATED_ENTITIES.PUBLICATION_ACTIVITIES_GENERATED_PIECES)));
-    this.rows = [sourceDocRows, proofDocRows, pubDocRows].flat(Number.MAX_VALUE);
-  }
-
-  #initSort() {
+  initSort() {
     this.sortingString = this.qpSortingString;
     this.#sort(this.sortingString);
   }
 
   get areAllSelected() {
-    return this.rows.every((row) => row.isSelected);
+    return this.model.length === this.selection.length;
   }
 
   get selection() {
-    return this.rows.filter((row) => row.isSelected).map((row) => row.piece);
+    return this.model.filter((row) => row.isSelected).map((row) => row.piece);
   }
 
   @action
   toggleSelectionAll() {
-    const newValue = !this.areAllSelected;
-    for (const row of this.rows) {
-      row.isSelected = newValue;
+    if (this.areAllSelected) {
+      this.selection.clear();
+    } else {
+      this.selection = this.model.toArray();
     }
   }
 
   @action
   toggleSelection(row) {
-    row.isSelected = !row.isSelected;
+    if (!this.selection.includes(row)) {
+      this.selection.pushObject(row);
+    } else {
+      this.selection.removeObject(row);
+    }
   }
 
   @action
@@ -94,11 +67,12 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
     this.#sort(sortingString);
-    this.rows.arrayContentDidChange();
+    // sort is not tracked by ember
+    this.model.arrayContentDidChange();
   }
 
   #sort(sortingString) {
-    let property = 'piece.created';
+    let property = 'created';
     let isDescending = false;
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
@@ -106,14 +80,14 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey]?.property || property;
     }
 
-    this.rows.sortBy(property);
+    this.model.sortBy(property);
     if (isDescending) {
-      this.rows.reverse();
+      this.model.reverse();
     }
   }
 
   get canOpenRequestModal() {
-    return this.rows.any((row) => row.isSelected);
+    return this.selection.length > 0;
   }
 
   @action
