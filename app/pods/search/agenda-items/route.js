@@ -1,6 +1,9 @@
 /* eslint-disable class-methods-use-this */
 import Route from '@ember/routing/route';
-import { isEmpty } from '@ember/utils';
+import {
+  isEmpty,
+  isPresent
+} from '@ember/utils';
 import moment from 'moment';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
@@ -124,7 +127,7 @@ export default class AgendaitemSearchRoute extends Route {
   afterModel(model) {
     const keyword = this.paramsFor('search').searchText;
     let count;
-    if (model && model.meta && typeof model.meta.count === 'undefined') {
+    if (model && model.meta && isPresent(model.meta.count)) {
       count = model.meta.count;
     } else {
       count = false;
