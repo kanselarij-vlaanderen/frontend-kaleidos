@@ -21,7 +21,8 @@
             <dropdown.Item>
               {{t "extra-request"}}
             </dropdown.Item>
-            <dropdown.Item>
+            <dropdown.Item
+              {{on "click" (fn this.openRequestModal "final")}}>
               {{t "final-request"}}
             </dropdown.Item>
           </Auk::Dropdown>

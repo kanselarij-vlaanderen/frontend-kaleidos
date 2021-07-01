@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 
 export default class PublicationsPublicationProofsRequestsRoute extends Route {
-  model() {
+  async model() {
     const publicationSubcase = this.modelFor('publications.publication.proofs');
     const requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': publicationSubcase.id,
@@ -19,7 +19,14 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
       sort: '-start-date',
     });
 
-    return requestActivities;
+    return await requestActivities;
+  }
+
+  async afterModel(model) {
+    await Promise.all(model.map(async(reqAct) => {
+      await reqAct.publicationActivity;
+      await reqAct.proofingActivity;
+    }));
   }
 
   setupController(controller, model) {

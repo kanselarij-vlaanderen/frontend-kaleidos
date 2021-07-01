@@ -16,6 +16,8 @@ const COLUMN_MAP = {
   'geupload-op': 'piece.created',
 };
 
+// row is used because ember-data fetches relationships to publicationSubcase/proofingActivity/publicationActivity
+// (because piece is not the queried model, but an included one)
 class Row {
   @tracked isSelected = false;
   @tracked piece;
@@ -120,10 +122,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   openRequestModal(stage) {
-    if (stage === 'new') {
-      this.requestStage = stage;
-      this.isRequestModalOpen = true;
-    }
+    this.requestStage = stage;
+    this.isRequestModalOpen = true;
   }
 
   @action
@@ -138,6 +138,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } finally {
       this.rows.forEach((row) => row.isSelected = false);
       this.isRequestModalOpen = false;
+      this.transitionToRoute('publications.publication.proofs.requests');
     }
   }
 

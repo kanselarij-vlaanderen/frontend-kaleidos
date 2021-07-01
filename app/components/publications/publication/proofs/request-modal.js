@@ -32,8 +32,6 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   @service intl;
 
   @tracked subject = undefined;
-  @tracked shortTitle = undefined;
-  @tracked longTitle = undefined;
   @tracked message = undefined;
   @tracked selectedAttachments = [];
   validations = {};
@@ -47,12 +45,13 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     this.validations.subject = new Validation(() => !isBlank(this.subject));
     this.validations.message = new Validation(() => !isBlank(this.message));
     this.selectedAttachments = [...this.args.attachments];
-    const identification = this.args.publicationFlow.identification;
-    const idName = identification.get('idName');
-    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
-    this.message = proofRequestEmail({
-      identifier: idName,
+
+    const email = await proofRequestEmail({
+      stage: this.args.stage,
+      publicationFlow: this.args.publicationFlow,
     });
+    this.subject = email.subject;
+    this.message = email.message;
   }
 
   get modalTitle() {
