@@ -34,6 +34,7 @@ export default class PublicationService extends Service {
    * @private
    */
   async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
+    // TODO 2456
     const now = new Date();
     let case_;
     let agendaItemTreatment;

@@ -62,6 +62,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
 
   @task
   *saveNewPublication(publicationProperties) {
+    // TODO 2456
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
       agendaItemTreatment: this.agendaItemTreatment,
