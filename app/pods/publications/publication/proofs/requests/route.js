@@ -1,25 +1,21 @@
 import Route from '@ember/routing/route';
-import { buildIncludeString } from 'frontend-kaleidos/utils/ember-data-utils';
 
 export default class PublicationsPublicationProofsRequestsRoute extends Route {
   model() {
-    const includeFile = {
-      file: true,
-    };
-    const includeString = buildIncludeString({
-      email: true,
-      proofingActivity: {
-        generatedPieces: includeFile,
-      },
-      publicationActivity: {
-        generatedPieces: includeFile,
-      },
-      usedPieces: includeFile,
-    });
     const publicationSubcase = this.modelFor('publications.publication.proofs');
     const requestActivities = this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': publicationSubcase.id,
-      include: includeString,
+      include: [
+        'email',
+        'proofing-activity',
+        'proofing-activity.generated-pieces',
+        'proofing-activity.generated-pieces.file',
+        'publication-activity',
+        'publication-activity.generated-pieces',
+        'publication-activity.generated-pieces.file',
+        'used-pieces',
+        'used-pieces.file'
+      ],
       sort: '-start-date',
     });
 
