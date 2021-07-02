@@ -11,8 +11,7 @@ import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 class Validation {
   @tracked isErrorEnabled;
 
-  constructor(
-    check) {
+  constructor(check) {
     this.check = check;
   }
 
@@ -26,7 +25,7 @@ class Validation {
   }
 
   get showError() {
-    return this.isErrorEnabled && !this.check();
+    return this.isErrorEnabled && !this.isValid;
   }
 }
 
