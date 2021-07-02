@@ -60,13 +60,12 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <button type="button" class="auk-button auk-button--tertiary"
+        <Auk::Button
+          @skin="tertiary"
           {{action this.cancelEditing}}
         >
-          <span class="auk-button__content">
-            {{t "cancel"}}
-          </span>
-        </button>
+          {{t "cancel"}}
+        </Auk::Button>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         {{web-components/vl-save-button

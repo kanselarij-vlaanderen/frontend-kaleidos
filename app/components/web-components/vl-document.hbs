@@ -23,54 +23,37 @@
         />
       {{/unless}}
       {{#if this.file}}
-        <button
-          type="button"
-          class="auk-button auk-button--borderless auk-button--icon"
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="book"
           {{on "click" this.showPieceViewer}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-book"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "view-document-details"}}
-            </div>
-          </span>
-        </button>
-        <a
-          class="auk-button auk-button--borderless auk-button--icon"
-          href={{await this.piece.downloadFileLink}}
+          {{t "view-document-details"}}
+        </Auk::Button>
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="download"
+          @href={{await this.piece.downloadFileLink}}
           {{!-- download --}}
           {{! 'download' attribute doesn't specify a filename, as this gets overruled by
           the filename received in the "Content-Disposition HTTP header" }}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-download"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "download"}}
-            </div>
-          </span>
-        </a>
+          {{t "download"}}
+        </Auk::Button>
       {{/if}}
 
       {{#if (and this.currentSession.isEditor @enableDelete)}}
-        <button
-          type="button"
-          class="auk-button auk-button--warning-borderless auk-button--icon"
-          data-test-vl-document-delete-piece
+        <Auk::Button
+          @skin="danger-borderless"
+          @layout="icon-only"
+          @icon="delete"
           {{on "click" (fn this.deletePiece piece)}}
+          data-test-vl-document-delete-piece
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-delete"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "delete"}}
-            </div>
-          </span>
-        </button>
+          {{t "delete"}}
+        </Auk::Button>
       {{/if}}
     </div>
     {{#if this.currentSession.isEditor}}
