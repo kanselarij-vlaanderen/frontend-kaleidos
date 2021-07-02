@@ -2,7 +2,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 const COLUMN_MAP = {
@@ -143,7 +143,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
       const filePromises = attachments.mapBy('file');
       const attachmentFilesPromise = Promise.all(filePromises);
-      const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONSTANTS.MAIL_FOLDERS.OUTBOX);
+      const mailFolderPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
       const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
       const email = this.store.createRecord('email', {
         from: CONFIG.EMAIL.DEFAULT_FROM,
