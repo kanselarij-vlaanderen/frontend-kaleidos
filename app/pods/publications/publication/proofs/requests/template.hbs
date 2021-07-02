@@ -5,7 +5,7 @@
         <accordionPanel.Header
           @title={{t
             "x-request-type-x-timestamp"
-            request-type=(t row.requestType)
+            request-type=(t row.requestTypeTranslationKey)
             date=(moment-format row.requestActivity.startDate "D MMMM")
             time=(moment-format row.requestActivity.startDate "H:mm")
           }}
@@ -30,7 +30,7 @@
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
                 <div class="auk-box">
-                  {{!-- on 1 line to prevent whitespace to be rendered s--}}
+                  {{!-- on 1 line to prevent whitespace to be rendered --}}
                   <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
                 </div>
               </div>
@@ -38,8 +38,14 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
-                <Utils::Documents::List @pieces={{row.pieces}} />
+                <Utils::Documents::List @pieces={{row.attachments}} />
               </div>
+              {{#if row.receivedPieces}}
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "received-documents"}}</p>
+                  <Utils::Documents::List @pieces={{row.receivedPieces}} />
+                </div>
+              {{/if}}
             </div>
           </div>
         </accordionPanel.Body>
