@@ -67,7 +67,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
-      agendaitem: this.args.agendaitem,
       agendaItemTreatment: this.agendaItemTreatment,
     });
     this.referenceDocument.publicationFlow = publicationFlow;
