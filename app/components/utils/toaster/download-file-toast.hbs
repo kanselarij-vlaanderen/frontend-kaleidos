@@ -9,15 +9,17 @@
   >
     <div class="vl-alert__message auk-u-text-capitalize">
       <p>{{t "agenda-documents-download-ready"}}</p>
-      <a class="auk-button auk-button--borderless vlc-toaster-button"
-          href={{@options.downloadLink}}
-          download
-          {{on "click" @options.onClose}}
+      <Auk::Button
+        @skin="borderless"
+        @layout="icon-only"
+        @icon=""
+        @href={{@options.downloadLink}}
+        download
+        class="vlc-toaster-button"
+        {{on "click" @options.onClose}}
       >
-        <span class="auk-button__content">
-          {{t "download"}}
-        </span>
-      </a>
+        {{t "download"}}
+      </Auk::Button>
     </div>
   </WebComponents::VlAlert>
 </ClickOutside>

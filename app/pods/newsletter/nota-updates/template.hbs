@@ -56,30 +56,23 @@
                 </p>
               </td>
               <td class="auk-u-text-align--right">
-                <button type="button" class="auk-button auk-button--borderless auk-button--icon"
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="book"
                   {{on "click" (fn this.showPieceViewer row.documentId)}}
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-book"></i>
-                    </div>
-                  </span>
-                </button>
-                <LinkTo
-                  class="auk-button auk-button--borderless auk-button--icon"
+                />
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="nav-right"
                   @route="agenda.agendaitems.agendaitem.documents"
                   @models={{array
                     (await row.meetingId)
                     (await row.agendaId)
                     (await row.agendaitemId)
                   }}
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-nav-right"></i>
-                    </div>
-                  </span>
-                </LinkTo>
+                />
               </td>
             </c.body>
           </table.content>

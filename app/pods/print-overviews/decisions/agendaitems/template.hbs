@@ -18,18 +18,13 @@
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="center">
               <Auk::Toolbar::Item>
-                <button type="button" class="auk-button auk-button--secondary"
+                <Auk::Button
+                  @skin="secondary"
+                  @icon="add"
                   {{action "addTreatment" agendaitemRow}}
                 >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-add"></i>
-                    </div>
-                    <div class="auk-button__label">
-                      {{t "add-decision"}}
-                    </div>
-                  </span>
-                </button>
+                  {{t "add-decision"}}
+                </Auk::Button>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>

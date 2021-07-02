@@ -5,6 +5,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseId = this.modelFor('publications.publication.proofs').id;
 
+    // 3 requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
+    // and made an extra request per piece
     const sourcePiecesRequest = this.store.query('piece', {
       'filter[publication-subcase][:id:]': publicationSubcaseId,
       include: [
@@ -14,11 +16,11 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     });
 
     const usedPiecesRequest = this.store.query('piece', {
-      'filter[proofing-activities-used-by][subcase][:id:]': publicationSubcaseId,
+      'filter[proofing-activity-generated-by][subcase][:id:]': publicationSubcaseId,
       include: [
         'file',
-        'proofing-activities-used-by',
-        'proofing-activities-used-by.subcase'
+        'proofing-activity-generated-by',
+        'proofing-activity-generated-by.subcase'
       ].join(','),
     });
 

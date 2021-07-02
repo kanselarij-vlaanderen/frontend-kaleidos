@@ -3,7 +3,10 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency-decorators';
+import {
+  keepLatestTask,
+  task
+} from 'ember-concurrency-decorators';
 import {
   all,
   timeout
@@ -53,7 +56,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   async enablePieceEdit() {
-    await this.agendaitem.preEditOrSaveCheck();
+    await this.ensureFreshData.perform();
     this.isEnabledPieceEdit = true;
   }
 
@@ -64,7 +67,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @action
   async openPieceUploadModal() {
-    await this.agendaitem.preEditOrSaveCheck();
+    await this.ensureFreshData.perform();
     this.isOpenPieceUploadModal = true;
   }
 
@@ -140,9 +143,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     yield piece.destroyRecord();
   }
 
-  @action
-  async ensureFreshData() {
-    await this.agendaitem.preEditOrSaveCheck();
+  @keepLatestTask
+  *ensureFreshData() {
+    yield this.agendaitem.preEditOrSaveCheck();
   }
 
   @action
@@ -161,6 +164,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
   @task
   *updateRelatedAgendaitemsAndSubcase(pieces) {
+    yield this.ensureFreshData.perform(); // some other user could have saved agendaitem before we pressed save
+    // Failsafe, if we got to a situation where the user has old pieces data when saving new pieces, we refresh the relation to avoid stale data
+    // The improved concurrency check should be enough, but as long as we save here, the risk of saving old data exists
+    yield this.agendaitem.hasMany('pieces').reload();
+    // Link pieces to subcase with activity
     const agendaActivity = yield this.agendaitem.agendaActivity;
     if (agendaActivity) {
       // There is no agendaActivity/subcase on isApproval agendaitems
@@ -175,9 +183,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       submissionActivity.save(); // submission-act isn't needed further here. No yield. Can run in background.
     }
 
-    // Link piece to agendaitem
+    // save formal ok change on agendaitem
+    // If the concurrency check failed you can overwrite the pieces list with stale data, effectively losing piece links to agendaitem
+    // TODO KAS-2425 Do we need to make this an API call to a service? (setting only formally ok status)
     setNotYetFormallyOk(this.agendaitem);
     yield this.agendaitem.save();
+
+    // Link piece to agendaitem
     for (const piece of pieces) {
       yield addPieceToAgendaitem(this.agendaitem, piece);
     }

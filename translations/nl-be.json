@@ -549,7 +549,7 @@
   "agenda-reopen-previous-version-message": "De vorige agenda versie wordt geopend. Dit kan even duren.",
   "agenda-approve-and-close-message": "De agenda wordt goedgekeurd en daarna afgesloten. Dit kan even duren.",
   "agenda-add-message": "Nieuwe ontwerpagenda aanmaken. Dit kan even duren.",
-  "approve-all-agendaitems-message": "Agendaitems formeel goedkeuren. Dit kan even duren.",
+  "approve-all-agendaitems-message": "Agendapunten formeel goedkeuren. Dit kan even duren.",
   "explanation": "Toelichting",
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
@@ -818,6 +818,8 @@
   "publications-table-last-edited" : "Laatst gewijzigd",
   "publications-table-last-edited-by" : "Laatst gewijzigd door",
   "publications-table-last-edited-by-small" : "Laatst gew. door",
+  "publications-table-translations" : "Vertalingen",
+  "publications-table-translations-small" : "Vert.",
   "publications-table-last-edited-small" : "Laatst gewijzigd",
   "publications-table-numacnummer-bs" : "Werknummer Belgisch Staatblad",
   "publications-table-numacnummer-bs-small" : "Numac",
@@ -901,5 +903,7 @@
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
   "select-mandatee": "Selecteer mandataris...",
-  "message": "Bericht"
+  "message": "Bericht",
+  "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
+  "email-to-proofrequest": "Email ontvanger voor drukproeven"
 }

@@ -3,11 +3,12 @@
     {{message}}
   </p>
   <div class="button-container">
-    <button data-test-changes-alert-close type="button" class="auk-button auk-button--warning-primary"
-      {{action "clearAction"}}>
-      <span class="auk-button__content">
-        {{buttonText}}
-      </span>
-    </button>
+    <Auk::Button
+      @skin="tertiary"
+      {{action "clearAction"}}
+      data-test-changes-alert-close
+    >
+      {{buttonText}}
+    </Auk::Button>
   </div>
 </div>
