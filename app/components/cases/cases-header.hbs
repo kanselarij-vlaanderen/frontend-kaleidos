@@ -11,20 +11,14 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           {{#if currentSession.isEditor}}
-            <button type="button"
-              data-test-cases-header-add-case
-              class="auk-button auk-button--primary"
-              {{action "toggleAddingCase"}}
+          <Auk::Button
+            @skin="primary"
+            @icon="add"
+            {{action "toggleAddingCase"}}
+            data-test-cases-header-add-case
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default ">
-                  <i class="ki ki-add"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "add-case"}}
-                </div>
-              </span>
-            </button>
+                {{t "add-case"}}
+          </Auk::Button>
           {{/if}}
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>

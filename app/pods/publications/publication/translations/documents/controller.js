@@ -4,12 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import CONFIG from 'frontend-kaleidos/utils/config';
-import { inject as service } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
-  @service store;
-
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceUploadModal = false;
@@ -101,9 +97,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const files = yield Promise.all(filePromises);
 
     const folder = yield this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettings = yield this.store.queryOne('email-notification-setting');
     const mail = yield this.store.createRecord('email', {
-      to: CONFIG.EMAIL.TO.translationsEmail,
-      from: CONFIG.EMAIL.DEFAULT_FROM,
+      to: mailSettings.translationRequestToEmail,
+      from: mailSettings.defaultFromEmail,
       folder: folder,
       attachments: files,
       requestActivity: requestActivity,
