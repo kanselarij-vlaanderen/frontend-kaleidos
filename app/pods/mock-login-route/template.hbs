@@ -58,6 +58,12 @@
           <p class="auk-u-mb-4">Kies een type gebruiker om mee aan te melden:</p>
           <div class="auk-panel auk-u-mb-8">
             <MockLogin as |login|>
+              {{#if login.errorMessage}}
+                <Auk::Alert
+                  @skin="error"
+                  @message={{login.errorMessage}}
+                />
+              {{/if}}
               {{#if this.model.length}}
                 <ul class="auk-list auk-list--view" data-test-mock-login-list>
                   <login.each-account @accounts={{this.model}} as |account|>
