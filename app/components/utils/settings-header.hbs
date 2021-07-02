@@ -1,13 +1,15 @@
-<div class="auk-toolbar-complex">
-  <div class="auk-toolbar-complex__left">
-    {{#if showBackButton}}
-      {{utils/back-button}}
-    {{/if}}
-    <div class="auk-toolbar-complex__item">
-      <h4 class="auk-toolbar-complex__title">{{title}}</h4>
+<Auk::Navbar @skin="gray-100">
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left">
+      {{#if showBackButton}}
+        {{utils/back-button}}
+      {{/if}}
+      <div class="auk-toolbar-complex__item">
+        <h4 class="auk-toolbar-complex__title">{{title}}</h4>
+      </div>
+    </div>
+    <div class="auk-toolbar-complex__right">
+      {{yield}}
     </div>
   </div>
-  <div class="auk-toolbar-complex__right">
-    {{yield}}
-  </div>
-</div>
+</Auk::Navbar>

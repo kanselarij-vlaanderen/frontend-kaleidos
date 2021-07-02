@@ -1,4 +1,4 @@
-<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-200">
+<Auk::Navbar @skin="gray-200">
   <div class="auk-toolbar-complex">
     <div class="auk-toolbar-complex__left" data-sidebar-expanded-only="">
       <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-</div>
+</Auk::Navbar>
 <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
   {{#each (await agendas) as |agenda|}}
     <li class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">

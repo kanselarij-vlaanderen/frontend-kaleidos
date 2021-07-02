@@ -2,7 +2,7 @@
   (t "search")
 }}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
-  <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
+  <Auk::Navbar @skin="gray-100">
     <div class="auk-toolbar-complex auk-toolbar-complex--auto">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </Auk::Navbar>
 
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8 auk-u-mt-4">
@@ -125,7 +125,7 @@
         </div>
       </div>
 
-      <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--white auk-u-p-0 auk-u-mb-6">
+      <Auk::Navbar class="auk-u-p-0 auk-u-mb-6">
         <div class="auk-toolbar-complex">
           <div class="auk-toolbar-complex__left">
             <div class="auk-toolbar-complex__item">
@@ -157,7 +157,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </Auk::Navbar>
 
       {{outlet}}
     </div>

@@ -5,8 +5,6 @@ import { action } from '@ember/object';
 export default class CasesHeader extends Component {
   @service currentSession;
 
-  classNames = ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100'];
-
   isAddingCase = false;
 
   @action

@@ -1,90 +1,28 @@
-<div class="auk-toolbar-complex">
-  <div class="auk-toolbar-complex__left">
-    <div class="auk-toolbar-complex__item">
-      <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-        <div class="auk-o-flex auk-o-flex--vertical-center">
-          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{subcase.shortTitle}}</h4>
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <div class="auk-toolbar-complex">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
+        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
+          <div class="auk-o-flex auk-o-flex--vertical-center">
+            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{subcase.shortTitle}}</h4>
+          </div>
+          <Subcases::SubcaseDetailNav/>
         </div>
-        <Subcases::SubcaseDetailNav/>
       </div>
     </div>
-  </div>
-  <div class="auk-toolbar-complex__right">
-    {{#if currentSession.isEditor}}
-      <div class="auk-toolbar-complex__item">
-        {{#if (or (is-pending canPropose) isLoading)}}
-          <div class="auk-loader" role="alert" aria-busy="true"></div>
-        {{else if (await canPropose)}}
-          <button type="button"
-            data-test-subcase-header-action-propose-for-agenda
-            class="auk-button auk-button--primary">
-            <span class="auk-button__content">
-              {{t "propose-for-agenda"}}
-            </span>
-          </button>
-          {{#attach-popover
-            renderInPlace=true
-            class="ember-attacher-popper"
-            hideOn="clickout click"
-            showOn="click"
-            animation="shift"
-            placement="bottom"
-          as |attacher|
-          }}
-            <ul class="vlc-dropdown-menu">
-              {{#each
-                (await meetings)
-              as |meeting|
-              }}
-                <li class="vlc-dropdown-menu__item">
-                  <button type="button" class="auk-button-link"
-                    {{action attacher.hide}}
-                    {{action "proposeForAgenda" subcase meeting}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "agenda-for"}}
-                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                      {{concat " - " meeting.numberRepresentation}}
-                    </span>
-                  </button>
-                </li>
-              {{/each}}
-              {{#if (gt (await meetings.length) 0)}}
-                <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-              {{/if}}
-              <li class="vlc-dropdown-menu__item">
-                <button type="button" class="auk-button-link"
-                  {{action attacher.hide}}
-                  {{action "proposeForOtherAgenda" subcase}}
-                >
-                  <span class="auk-button__content">
-                    {{t "other-agenda"}}
-                  </span>
-                </button>
-              </li>
-            </ul>
-          {{/attach-popover}}
-        {{/if}}
-      </div>
-      <div class="auk-toolbar-complex__item">
-        <button type="button"
-          data-test-subcase-header-actions-dropdown
-          class="auk-button auk-button--secondary"
-          {{action "showMultipleOptions" bubbles=false}}
-        >
-          <span class="auk-button__content">
-            {{#if isShowingOptions}}
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-chevron-up"></i>
-              </div>
-            {{else}}
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-chevron-down"></i>
-              </div>
-            {{/if}}
-            <div class="auk-button__label">
-              {{t "actions"}}
-            </div>
+    <div class="auk-toolbar-complex__right">
+      {{#if currentSession.isEditor}}
+        <div class="auk-toolbar-complex__item">
+          {{#if (or (is-pending canPropose) isLoading)}}
+            <div class="auk-loader" role="alert" aria-busy="true"></div>
+          {{else if (await canPropose)}}
+            <button type="button"
+              data-test-subcase-header-action-propose-for-agenda
+              class="auk-button auk-button--primary">
+              <span class="auk-button__content">
+                {{t "propose-for-agenda"}}
+              </span>
+            </button>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper"
@@ -95,82 +33,146 @@
             as |attacher|
             }}
               <ul class="vlc-dropdown-menu">
-                {{#if (await canDelete)}}
+                {{#each
+                  (await meetings)
+                as |meeting|
+                }}
                   <li class="vlc-dropdown-menu__item">
-                    <a href="" class="auk-button-link"
-                      data-test-subcase-header-action-delete-subcase
+                    <button type="button" class="auk-button-link"
                       {{action attacher.hide}}
-                      {{action "requestDeleteSubcase" subcase}}
+                      {{action "proposeForAgenda" subcase meeting}}
                     >
                       <span class="auk-button__content">
-                        {{t "delete-subcase"}}
+                        {{t "agenda-for"}}
+                        {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                        {{concat " - " meeting.numberRepresentation}}
                       </span>
-                    </a>
+                    </button>
                   </li>
+                {{/each}}
+                {{#if (gt (await meetings.length) 0)}}
+                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
                 {{/if}}
                 <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                    data-test-subcase-header-action-move-subcase
-                    class="auk-button-link auk-button-link--block"
+                  <button type="button" class="auk-button-link"
                     {{action attacher.hide}}
-                    {{action "triggerMoveSubcaseDialog" }}
+                    {{action "proposeForOtherAgenda" subcase}}
                   >
                     <span class="auk-button__content">
-                      {{t "move-subcase"}}
+                      {{t "other-agenda"}}
                     </span>
-                  </a>
+                  </button>
                 </li>
               </ul>
             {{/attach-popover}}
-          </span>
-        </button>
-      </div>
-    {{/if}}
+          {{/if}}
+        </div>
+        <div class="auk-toolbar-complex__item">
+          <button type="button"
+            data-test-subcase-header-actions-dropdown
+            class="auk-button auk-button--secondary"
+            {{action "showMultipleOptions" bubbles=false}}
+          >
+            <span class="auk-button__content">
+              {{#if isShowingOptions}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-chevron-up"></i>
+                </div>
+              {{else}}
+                <div class="auk-icon auk-icon--default">
+                  <i class="ki ki-chevron-down"></i>
+                </div>
+              {{/if}}
+              <div class="auk-button__label">
+                {{t "actions"}}
+              </div>
+              {{#attach-popover
+                renderInPlace=true
+                class="ember-attacher-popper"
+                hideOn="clickout click"
+                showOn="click"
+                animation="shift"
+                placement="bottom"
+              as |attacher|
+              }}
+                <ul class="vlc-dropdown-menu">
+                  {{#if (await canDelete)}}
+                    <li class="vlc-dropdown-menu__item">
+                      <a href="" class="auk-button-link"
+                        data-test-subcase-header-action-delete-subcase
+                        {{action attacher.hide}}
+                        {{action "requestDeleteSubcase" subcase}}
+                      >
+                        <span class="auk-button__content">
+                          {{t "delete-subcase"}}
+                        </span>
+                      </a>
+                    </li>
+                  {{/if}}
+                  <li class="vlc-dropdown-menu__item">
+                    <a href=""
+                      data-test-subcase-header-action-move-subcase
+                      class="auk-button-link auk-button-link--block"
+                      {{action attacher.hide}}
+                      {{action "triggerMoveSubcaseDialog" }}
+                    >
+                      <span class="auk-button__content">
+                        {{t "move-subcase"}}
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              {{/attach-popover}}
+            </span>
+          </button>
+        </div>
+      {{/if}}
+    </div>
   </div>
-</div>
-{{#if promptDeleteCase}}
-  {{web-components/vl-modal-verify
-    title="Leeg dossier verwijderen?"
-    verifyButtonText="Verwijderen"
-    message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
-    cancel=(action "cancelDeleteCase")
-    verify=(perform this.deleteCase this.caseToDelete)
-    isLoading=this.deleteCase.isRunning
-  }}
-{{/if}}
-
-{{#if isAssigningToOtherCase}}
-  {{#web-components/vl-modal
-    closeModal=(action "cancel")
-    isOverlay=true
-    title=(t "move-subcase-to-other-case")
-  }}
-    {{utils/case-search
-      onSelect=(action "moveSubcase")
+  {{#if promptDeleteCase}}
+    {{web-components/vl-modal-verify
+      title="Leeg dossier verwijderen?"
+      verifyButtonText="Verwijderen"
+      message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
+      cancel=(action "cancelDeleteCase")
+      verify=(perform this.deleteCase this.caseToDelete)
+      isLoading=this.deleteCase.isRunning
     }}
-  {{/web-components/vl-modal}}
-{{/if}}
+  {{/if}}
 
-{{#if isAssigningToOtherAgenda}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "propose-for-agenda")
-    closeModal=(action "cancel")
-  }}
-    {{subcases/assign-to-meeting-form
-      subcase=selectedSubcase
-      proposeForAgenda=(action "proposeForAgenda")
-      cancel=(action "cancel")
+  {{#if isAssigningToOtherCase}}
+    {{#web-components/vl-modal
+      closeModal=(action "cancel")
+      isOverlay=true
+      title=(t "move-subcase-to-other-case")
+    }}
+      {{utils/case-search
+        onSelect=(action "moveSubcase")
+      }}
+    {{/web-components/vl-modal}}
+  {{/if}}
+
+  {{#if isAssigningToOtherAgenda}}
+    {{#web-components/vl-modal
+      isOverlay=true
+      title=(t "propose-for-agenda")
       closeModal=(action "cancel")
     }}
-  {{/web-components/vl-modal}}
-{{/if}}
-{{#if isDeletingSubcase}}
-  {{web-components/vl-modal-verify
-    isLoading=isLoading
-    title=(t "delete-subcase")
-    message=(t "delete-subcase-confirmation")
-    cancel=(action "cancel")
-    verify=(action "deleteSubcase")
-  }}
-{{/if}}
+      {{subcases/assign-to-meeting-form
+        subcase=selectedSubcase
+        proposeForAgenda=(action "proposeForAgenda")
+        cancel=(action "cancel")
+        closeModal=(action "cancel")
+      }}
+    {{/web-components/vl-modal}}
+  {{/if}}
+  {{#if isDeletingSubcase}}
+    {{web-components/vl-modal-verify
+      isLoading=isLoading
+      title=(t "delete-subcase")
+      message=(t "delete-subcase-confirmation")
+      cancel=(action "cancel")
+      verify=(action "deleteSubcase")
+    }}
+  {{/if}}
+</Auk::Navbar>

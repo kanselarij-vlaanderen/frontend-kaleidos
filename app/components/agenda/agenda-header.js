@@ -23,8 +23,6 @@ import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default Component.extend(FileSaverMixin, {
-  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100', 'auk-navbar--auto'],
-
   store: service(),
   // These 2 can be very confusing, session-service is for meetings, current-session is for checking admin etc.
   sessionService: service('session-service'),

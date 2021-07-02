@@ -1,5 +1,5 @@
 {{page-title (t "agenda-title")}}
-<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
+<Auk::Navbar @skin="gray-100">
   <div class="auk-toolbar-complex auk-toolbar-complex--auto">
     <div class="auk-toolbar-complex__left">
       <div class="auk-toolbar-complex__item">
@@ -30,7 +30,7 @@
       {{/if}}
     </div>
   </div>
-</div>
+</Auk::Navbar>
 {{outlet}}
 {{#if this.isCreatingNewSession}}
   {{#web-components/vl-modal
