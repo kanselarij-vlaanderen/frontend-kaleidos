@@ -311,6 +311,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
+  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
   cy.get(utils.vlModalVerify.save).click();
   cy.wait('@patchAgendaitems');
@@ -384,6 +385,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
+  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).within(() => {
       cy.get(agenda.agendaHeader.confirm.approveAgenda).click();
@@ -428,6 +430,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
   // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
+  cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
     cy.get(auk.modal.container).within(() => {
       cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();

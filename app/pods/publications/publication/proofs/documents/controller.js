@@ -2,8 +2,8 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import * as CONFIG from 'frontend-kaleidos/config/config';
+import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
 
 const COLUMN_MAP = {
   'ontvangen-op': 'receivedDate',
@@ -20,7 +20,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString = '';
 
-  @tracked rows;
   @tracked publicationFlow;
   @tracked publicationSubcase;
 
@@ -106,6 +105,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } finally {
       this.isRequestModalOpen = false;
     }
+    this.selection = [];
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
@@ -143,11 +143,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
       const filePromises = attachments.mapBy('file');
       const attachmentFilesPromise = Promise.all(filePromises);
-      const mailFolderPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+      const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONFIG.PUBLICATION_EMAIL.OUTBOX);
       const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
       const email = this.store.createRecord('email', {
-        from: CONFIG.EMAIL.DEFAULT_FROM,
-        to: CONFIG.EMAIL.TO.publishpreviewEmail,
+        from: UTILS_CONFIG.EMAIL.DEFAULT_FROM,
+        to: UTILS_CONFIG.EMAIL.TO.publishpreviewEmail,
         folder: mailFolder,
         subject: requestProperties.subject,
         message: requestProperties.message,

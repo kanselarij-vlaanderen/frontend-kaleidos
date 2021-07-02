@@ -22,28 +22,33 @@ export default Model.extend({
 
     switch (dirtyType) {
       case 'created': {
+        this.setModified();
         break;
       }
-
       case 'deleted': {
         break;
       }
+      // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
+      // No set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
+      // We still want to change modified data to reflect that a change has happened (so other users can't save without refreshing page)
       case undefined: {
         await this.preEditOrSaveCheck();
+        this.setModified();
         break;
       }
       case 'updated': {
         await this.preEditOrSaveCheck();
+        this.setModified();
         break;
       }
     }
 
-    if (['created', 'updated'].includes(dirtyType)) {
-      this.set('modified', new Date());
-      this.set('modifiedBy', this.currentSession.user);
-    }
-
     return parentSave.call(this, ...arguments);
+  },
+
+  setModified() {
+    this.set('modified', new Date());
+    this.set('modifiedBy', this.currentSession.user);
   },
 
   async preEditOrSaveCheck() {
