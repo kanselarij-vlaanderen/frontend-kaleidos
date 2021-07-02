@@ -1,9 +1,9 @@
 {{page-title (t "settings")}}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
   <Auk::Navbar @skin="gray-100">
-    <div class="auk-toolbar-complex">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <ul class="auk-tabs">
             <li class="auk-tabs__tab" data-test-route-settings-general-settings>
               {{#link-to
@@ -27,9 +27,9 @@
               {{/link-to}}
             </li>
           </ul>
-        </div>
-      </div>
-    </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     <div>
