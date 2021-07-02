@@ -17,23 +17,23 @@
           {{t "email-to-translationrequest"}}
         </Auk::Label>
         <Auk::Input
-                type="text"
-                @value={{ mut this.emailToTranslationRequest }}
-                @block={{true}}
+          type="text"
+          @value={{mut this.emailToTranslationRequest}}
+          @block={{true}}
         />
 
         <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
           {{t "email-to-proofrequest"}}
         </Auk::Label>
         <Auk::Input
-                type="text"
-                @value={{mut this.emailToProofRequest }}
-                @block={{true}}
+          type="text"
+          @value={{mut this.emailToProofRequest}}
+          @block={{true}}
         />
         <Auk::Button
-                class="auk-u-mt-2 auk-u-mb-1"
-                @skin="primary"
-                @disabled={{this.isDisabled}}
+          class="auk-u-mt-2 auk-u-mb-1"
+          @skin="primary"
+          @disabled={{this.isDisabled}}
           {{on "click" this.saveSettings}}
         >
           {{t "save"}}
