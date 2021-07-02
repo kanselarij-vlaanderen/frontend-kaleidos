@@ -1,15 +1,15 @@
 <Auk::Navbar @skin="gray-100">
   {{#if (not isAddingCase)}}
-    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <h1 class="auk-toolbar__title" data-test-cases-header-title>
             {{t "cases"}}
           </h1>
-        </div>
-      </div>
-      <div class="auk-toolbar-complex__right">
-        <div class="auk-toolbar-complex__item">
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           {{#if currentSession.isEditor}}
             <button type="button"
               data-test-cases-header-add-case
@@ -26,9 +26,9 @@
               </span>
             </button>
           {{/if}}
-        </div>
-      </div>
-    </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   {{else}}
     <WebComponents::VlModal
       @isOverlay={{true}}

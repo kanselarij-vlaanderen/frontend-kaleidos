@@ -1,7 +1,7 @@
 <Auk::Navbar @skin="gray-100" @auto={{true}}>
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-toolbar-complex__title" data-test-agenda-header-title>
@@ -15,12 +15,12 @@
           <Sessions::SessionAgendaNav
             @currentAgenda={{currentAgenda}} />
         </div>
-      </div>
-    </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
     {{#if currentSessionService.isViewer}}
-      <div class="auk-toolbar-complex__right">
+      <Auk::Toolbar::Group @position="right">
         {{#if currentSessionService.isEditor}}
-          <div class="auk-toolbar-complex__item">
+          <Auk::Toolbar::Item>
             <button type="button"
               data-test-agenda-header-show-agenda-options
               class="auk-button auk-button--primary"
@@ -138,9 +138,9 @@
                 {{/attach-popover}}
               </span>
             </button>
-          </div>
+          </Auk::Toolbar::Item>
         {{/if}}
-        <div class="auk-toolbar-complex__item">
+        <Auk::Toolbar::Item>
           <button type="button"
             data-test-agenda-header-show-action-options
             class="auk-button auk-button--secondary"
@@ -357,10 +357,10 @@
               {{/attach-popover}}
             </span>
           </button>
-        </div>
-      </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
     {{/if}}
-  </div>
+  </Auk::Toolbar>
 
   {{#if isAddingAgendaitems}}
     <Agenda::Agendaitem::CreateAgendaitem
