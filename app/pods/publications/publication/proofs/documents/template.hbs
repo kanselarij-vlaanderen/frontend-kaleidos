@@ -28,6 +28,16 @@
           </Auk::Dropdown>
         </EmberPopover>
       </Item>
+      {{#if this.currentSession.isOvrb}}
+        <Item>
+          <Auk::Button
+            @skin="secondary"
+            @icon="add"
+            {{on "click" this.openUploadModal}}>
+            {{t "upload-documents"}}
+          </Auk::Button>
+        </Item>
+      {{/if}}
     </Group>
   </Auk::Toolbar>
 </Auk::Navbar>

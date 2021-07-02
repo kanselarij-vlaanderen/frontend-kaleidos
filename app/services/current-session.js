@@ -45,6 +45,15 @@ export default class CurrentSessionService extends Service {
     return this.groupUri && this.groupUri !== USER;
   }
 
+  isMemberOf(groups) {
+    const groupUris = groups.map((groupName) => {
+      const key = groupName.toUpperCase();
+      return CONSTANTS.ACCOUNT_GROUPS[key];
+    });
+    console.log(groupUris, groups);
+    return groupUris.includes(this.groupUri);
+  }
+
   get isAdmin() {
     return [ADMIN].includes(this.groupUri);
   }

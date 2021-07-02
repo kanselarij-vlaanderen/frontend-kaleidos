@@ -1,6 +1,7 @@
 /* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as CONFIG from 'frontend-kaleidos/config/config';
 import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
@@ -22,6 +23,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       as: 'volgorde',
     },
   }];
+
+  @service currentSession;
+
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString;
@@ -95,6 +99,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   openRequestModal(stage) {
     this.requestStage = stage;
     this.isRequestModalOpen = true;
+  }
+
+  openUploadModal() {
+
   }
 
   @action
