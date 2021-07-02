@@ -99,18 +99,22 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  onCancelRequest() {
+  cancelRequest() {
     this.isRequestModalOpen = false;
   }
 
   @action
-  async onSaveRequest(requestProperties) {
-    await this.saveRequest(requestProperties);
-    this.rows.forEach((row) => row.isSelected = false);
-    this.isRequestModalOpen = false;
+  async saveRequest(requestProperties) {
+    try {
+      await this.#saveRequest(requestProperties);
+    } finally {
+      this.isRequestModalOpen = false;
+    }
+    this.selection = [];
+    this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async saveRequest(requestProperties) {
+  async #saveRequest(requestProperties) {
     if (requestProperties.stage === 'new') {
       const now = new Date();
       const {
