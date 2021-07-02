@@ -2,8 +2,9 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import moment from 'moment';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default Component.extend({
   store: inject(),
@@ -33,7 +34,7 @@ export default Component.extend({
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
-      'page[size]': 500,
+      'page[size]': PAGE_SIZE.CASES,
       include: 'pieces', // Make sure we have all pieces, unpaginated
     });
     const pieces = [];
@@ -115,11 +116,7 @@ export default Component.extend({
 
     typeChanged(id) {
       const type = this.store.peekRecord('case-type', id);
-      if (type.get('id') === CONFIG.remarkId) {
-        this.set('showAsRemark', true);
-      } else {
-        this.set('showAsRemark', false);
-      }
+      this.set('showAsRemark', type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK);
     },
 
     toggleIsEditing() {
