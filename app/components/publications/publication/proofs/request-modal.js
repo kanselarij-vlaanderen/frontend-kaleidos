@@ -61,7 +61,7 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   }
 
   get canSave() {
-    return Object.entries(this.validations).every(([, validation]) => validation.isValid);
+    return Object.values(this.validations).every((validation) => validation.isValid);
   }
 
   @task
