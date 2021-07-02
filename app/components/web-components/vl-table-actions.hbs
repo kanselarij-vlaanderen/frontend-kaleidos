@@ -3,8 +3,7 @@
     @skin="borderless"
     @layout="icon-only"
     @icon="pencil"
-  >
-  </Auk::Button>
+  />
   {{#if (not (is-pending (await row.nota)))}}
     <div class="auk-u-position-relative auk-u-inline-block">
       <Auk::Button
@@ -13,8 +12,7 @@
         @icon="document"
         @disabled={{not (await row.nota)}}
         {{action "openDocument" row bubbles=false}}
-      >
-      </Auk::Button>
+      />
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
         {{#if (not (await row.nota))}}
           {{t "no-nota"}}
@@ -43,6 +41,5 @@
     @bubbles={{false}}
     target="_blank"
     data-test-link-to-subcase-overview={{true}}
-  >
-  </Auk::Button>
+  />
 </div>

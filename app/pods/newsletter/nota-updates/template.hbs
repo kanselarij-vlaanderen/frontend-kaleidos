@@ -61,8 +61,7 @@
                   @layout="icon-only"
                   @icon="book"
                   {{on "click" (fn this.showPieceViewer row.documentId)}}
-                >
-                </Auk::Button>
+                />
                 <Auk::Button
                   @skin="borderless"
                   @layout="icon-only"
@@ -73,8 +72,7 @@
                     (await row.agendaId)
                     (await row.agendaitemId)
                   }}
-                >
-                </Auk::Button>
+                />
               </td>
             </c.body>
           </table.content>

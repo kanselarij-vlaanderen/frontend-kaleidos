@@ -37,8 +37,7 @@
           @icon="cross"
           {{on "click" (perform this.cancelChangeAccessLevel)}}
           data-test-access-level-pill-cancel
-        >
-        </Auk::Button>
+        />
       {{/if}}
     {{/if}}
     <div class="auk-toolbar-complex__item">
@@ -49,8 +48,7 @@
           @icon={{if @confidential "lock-closed" "lock-open"}}
           @disabled={{not this.session.isEditor}}
           {{on "click" (perform this.changeConfidentiality)}}
-        >
-        </Auk::Button>
+        />
         {{#if @confidential}}
           <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
             <p>

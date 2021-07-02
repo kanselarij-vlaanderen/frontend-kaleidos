@@ -65,8 +65,7 @@
                     @layout="icon-only"
                     @icon="more"
                     data-test-document-card-actions
-                  >
-                  </Auk::Button>
+                  />
                   <AttachPopover
                     @renderInPlace={{true}}
                     @class="ember-attacher-popper"
@@ -130,15 +129,13 @@
                   @layout="icon-only"
                   @icon="check"
                   {{on "click" (perform this.savePieceName)}}
-                >
-                </Auk::Button>
+                />
                 <Auk::Button
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="cross"
                   {{on "click" this.cancelEditPieceName}}
-                >
-                </Auk::Button>
+                />
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-title-header>

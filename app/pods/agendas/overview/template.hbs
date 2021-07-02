@@ -50,8 +50,7 @@
                 @icon="search"
                 data-test-route-agendas-overview-filter-button
                 {{on "click" (fn (action "setDateFilter") dateFilter)}}
-              >
-              </Auk::Button>
+              />
             </div>
           </div>
         </div>
@@ -139,8 +138,7 @@
                         @icon="nav-right"
                         @route="agenda.agendaitems"
                         @models={{array meeting.id (await meeting.latestAgenda.id)}}
-                      >
-                      </Auk::Button>
+                      />
                     </td>
                   {{/if}}
                 {{/c.body}}

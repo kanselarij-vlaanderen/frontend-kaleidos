@@ -4,8 +4,7 @@
     @layout="icon-only"
     @icon="pencil"
     {{on "click" @onEdit}}
-  >
-  </Auk::Button>
+  />
   {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
@@ -20,8 +19,7 @@
         @icon="document"
         @disabled={{not (await @agendaitem.notaOrVisienota)}}
         {{on "click" this.openNota}}
-      >
-      </Auk::Button>
+      />
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
         {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
       </EmberTooltip>
@@ -39,6 +37,5 @@
     }}
     target="_blank"
     data-test-link-to-subcase-overview
-  >
-  </Auk::Button>
+  />
 </div>

@@ -108,8 +108,7 @@
                         @icon="settings"
                         {{action "toggleProperty" "isResigningMandatee" mandatee}}
                         data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
-                      >
-                      </Auk::Button>
+                      />
                       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
                         {{t "resign"}}
                       </EmberTooltip>
@@ -122,8 +121,7 @@
                       @icon="delete"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
                       data-test-route-settings-ministers-mandatee-delete={{index}}
-                    >
-                    </Auk::Button>
+                    />
                   </Auk::Toolbar::Item>
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
