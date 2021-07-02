@@ -16,11 +16,11 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     });
 
     const usedPiecesRequest = this.store.query('piece', {
-      'filter[proofing-activities-used-by][subcase][:id:]': publicationSubcaseId,
+      'filter[proofing-activity-generated-by][subcase][:id:]': publicationSubcaseId,
       include: [
         'file',
-        'proofing-activities-used-by',
-        'proofing-activities-used-by.subcase'
+        'proofing-activity-generated-by',
+        'proofing-activity-generated-by.subcase'
       ].join(','),
     });
 
