@@ -23,62 +23,6 @@ p {
 }
 
 
-/* Button
-   ========================================================================== */
-
-.auk-button--warning-primary {
-  color: $au-gray-800;
-  background: $au-yellow-500;
-  &:hover,
-  &:active {
-    background: $au-yellow-300;
-  }
-}
-
-// .auk-button--muted-borderless {
-//   color: $au-gray-600;
-//   background: none;
-//   &:hover,
-//   &:active {
-//     color: $au-gray-800;
-//   }
-// }
-
-.auk-button--warning-borderless {
-  color: $au-red-500;
-  background: none;
-  &:hover,
-  &:active {
-    color: $au-red-700;
-  }
-}
-
-// .auk-button[disabled] {
-//   cursor: auto;
-// }
-
-// .auk-button--primary[disabled] {
-//   background: $au-gray-400;
-// }
-
-// .auk-button--secondary[disabled] {
-//   box-shadow: inset 0 0 0 0.2rem $au-gray-400;
-//   color: $au-gray-400;
-// }
-
-// .auk-button--tertiary[disabled] {
-//   box-shadow: inset 0 0 0 0.1rem $au-gray-200;
-//   color: $au-gray-400;
-
-// }
-
-// .auk-button--borderless[disabled],
-// .auk-button--muted-borderless[disabled] {
-//   color: $au-gray-400;
-//   background: none;
-// }
-
-
 /* Button in input
    ========================================================================== */
 
