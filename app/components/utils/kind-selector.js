@@ -8,7 +8,7 @@ export default Component.extend({
   isLoading: null,
   hideLabel: null,
 
-  options: computed(() => CONFIG.kinds.map((meetingType) => EmberObject.create(meetingType))),
+  options: computed(() => CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
 
   selectedkind: computed('options', 'kind', function() {
     return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');

@@ -16,9 +16,11 @@ import {
   fetchArchivingJobForAgenda,
   fileDownloadUrlFromJob
 } from 'frontend-kaleidos/utils/zip-agenda-files';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import moment from 'moment';
 import { A } from '@ember/array';
+import { task } from 'ember-concurrency';
+import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 export default Component.extend(FileSaverMixin, {
   classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100', 'auk-navbar--auto'],
@@ -47,6 +49,7 @@ export default Component.extend(FileSaverMixin, {
   showConfirmForClosingMeeting: false,
   showConfirmForDeletingSelectedAgenda: false,
   showConfirmForReopeningPreviousAgenda: false,
+  piecesToDeleteReopenPreviousAgenda: null,
 
   currentAgendaitems: alias('sessionService.currentAgendaitems'),
   currentSession: alias('sessionService.currentSession'),
@@ -165,7 +168,7 @@ export default Component.extend(FileSaverMixin, {
     session.set('agenda', null);
     await session.save();
     const lastApprovedAgenda = await this.get('lastApprovedAgenda');
-    const approved = await this.store.findRecord('agendastatus', CONFIG.agendaStatusApproved.id);
+    const approved = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
     lastApprovedAgenda.set('status', approved); // will only have an effect in case of status "closed"
     await lastApprovedAgenda.save();
     this.get('agendaService')
@@ -212,7 +215,7 @@ export default Component.extend(FileSaverMixin, {
     const currentMeeting = this.currentSession;
     const currentDesignAgenda = this.currentAgenda;
     // We set the status of the agenda to approved (instead of in service)
-    const approvedStatus = await this.store.findRecord('agendastatus', CONFIG.agendaStatusApproved.id);
+    const approvedStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
     currentDesignAgenda.set(
       'modified',
       moment()
@@ -272,7 +275,7 @@ export default Component.extend(FileSaverMixin, {
         // New agenda: new agendaitems that have been moved must be resorted to the bottom of the lists (note && announcements) on new agenda
         const agendaitemsFromNewAgenda = await newAgenda.get('agendaitems');
         const newAgendaitemsToReorder = A([]);
-        const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+        const newAgendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromNewAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK || agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK));
         for (const agendaitem of newAgendaitemsWithStatusDifferentFromFormallyOk) {
           const previousVersion = await agendaitem.get('previousVersion');
           if (!previousVersion) {
@@ -312,7 +315,7 @@ export default Component.extend(FileSaverMixin, {
       const currentMeeting = this.get('currentSession');
       const agendaToApproveAndClose = this.currentAgenda;
       // We have to change the current agenda from design to closed status, skipping the approval status
-      const closedStatus = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id);
+      const closedStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.CLOSED);
       agendaToApproveAndClose.set(
         'modified',
         moment()
@@ -329,7 +332,7 @@ export default Component.extend(FileSaverMixin, {
       await currentMeeting.save();
 
       const agendaitemsFromApprovedAgenda = await agendaToApproveAndClose.get('agendaitems');
-      const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromApprovedAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONFIG.notYetFormallyOk || agendaitem.get('formallyOk') === CONFIG.formallyNok));
+      const agendaitemsWithStatusDifferentFromFormallyOk = agendaitemsFromApprovedAgenda.filter((agendaitem) => (agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK || agendaitem.get('formallyOk') === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_OK));
       if (agendaitemsWithStatusDifferentFromFormallyOk.length > 0) {
         const isEditor = this.currentSessionService.isEditor;
         const agendaitemsToRemove = A([]);
@@ -391,7 +394,7 @@ export default Component.extend(FileSaverMixin, {
         currentMeeting.set('agenda', lastApprovedAgenda);
         await currentMeeting.save();
 
-        const closed = await this.store.findRecord('agendastatus', CONFIG.agendaStatusClosed.id);
+        const closed = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.CLOSED);
         lastApprovedAgenda.set('status', closed);
         await lastApprovedAgenda.save();
       }
@@ -477,9 +480,17 @@ export default Component.extend(FileSaverMixin, {
       currentMeeting.set('agenda', previousAgenda);
       await currentMeeting.save();
 
-      const designAgendaStatus = await this.store.findRecord('agendastatus', CONFIG.agendaStatusDesignAgenda.id); // Async call
+      const designAgendaStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.DESIGN); // Async call
       previousAgenda.set('status', designAgendaStatus);
       await previousAgenda.save();
+
+      // delete all the new documents from the designagenda
+      if (this.piecesToDeleteReopenPreviousAgenda) {
+        await all(this.piecesToDeleteReopenPreviousAgenda.map(async(piece) => {
+          await this.fileService.deletePiece(piece);
+        }));
+        this.set('piecesToDeleteReopenPreviousAgenda', null);
+      }
 
       await this.agendaService.deleteAgenda(designAgenda);
       // After the agenda has been deleted, we want to update the agendaitems of activity
@@ -508,6 +519,30 @@ export default Component.extend(FileSaverMixin, {
     await this.currentAgenda.hasMany('agendaitems').reload();
     // this.toggleLoadingOverlayWithMessage(null);
   },
+
+  /**
+   * loadPiecesToDelete
+   *
+   * This task will get all pieces that are new on the current designAgenda
+   * Excluding the pieces from new agendaitems, they don't have to be deleted
+   * Used in reopenPreviousAgenda action
+   */
+  loadPiecesToDelete: task(function *() {
+    const agendaitems = yield this.currentAgenda.get('agendaitems');
+    const previousAgenda = yield this.get('lastApprovedAgenda');
+    const pieces = [];
+    const agendaitemNewPieces = agendaitems.map(async(agendaitem) => {
+      const previousVersion = await agendaitem.get('previousVersion');
+      if (previousVersion) {
+        const newPieces = await this.agendaService.changedPieces(this.currentAgenda.id, previousAgenda.id, agendaitem.id);
+        if (newPieces.length > 0) {
+          pieces.push(...newPieces);
+        }
+      }
+    });
+    yield all(agendaitemNewPieces);
+    this.set('piecesToDeleteReopenPreviousAgenda', sortPieces(pieces));
+  }),
 
   actions: {
     print() {
@@ -541,7 +576,8 @@ export default Component.extend(FileSaverMixin, {
       this.set('isApprovingAllAgendaitems', false);
     },
 
-    showApproveAllAgendaitemsWarning() {
+    async showApproveAllAgendaitemsWarning() {
+      await this.ensureAgendaDataIsRecent();
       this.set('isApprovingAllAgendaitems', true);
     },
 
@@ -713,6 +749,7 @@ export default Component.extend(FileSaverMixin, {
 
     async openConfirmReopenPreviousAgenda() {
       await this.get('lastApprovedAgenda').then((agenda) => agenda); // The computed is not loaded before the message with params is sent to the modal, so wait here
+      this.loadPiecesToDelete.perform();
       this.set('showConfirmForReopeningPreviousAgenda', true);
     },
 
@@ -722,6 +759,7 @@ export default Component.extend(FileSaverMixin, {
     },
 
     cancelReopenPreviousAgenda() {
+      this.set('piecesToDeleteReopenPreviousAgenda', null);
       this.set('showConfirmForReopeningPreviousAgenda', false);
     },
 

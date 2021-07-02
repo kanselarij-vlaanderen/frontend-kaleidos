@@ -33,7 +33,9 @@
   "agenda-title": "Agenda’s",
   "agenda-reopen": "Agenda heropenen",
   "agenda-reopen-confirmation": "Bent u zeker dat u de huidige {designAgenda} met alle wijzigingen wil verwijderen en goedgekeurde {approvedAgenda} terug wilt openen?",
+  "agenda-reopen-pieces-delete": "Om deze actie correct af te ronden, moeten de nieuwe documenten op deze ontwerpagenda worden verwijderd om inconsistenties te vermijden",
   "agenda-reopen-previous-version": "Vorige versie heropenen",
+  "agenda-reopen-previous-version-with-delete": "Documenten verwijderen en vorige versie heropenen",
   "agenda-release-decisions": "Beslissingen vrijgeven",
   "agenda-release-documents": "Documenten vrijgeven",
   "agenda-version": "Agenda versie",
@@ -889,9 +891,12 @@
   "initial": "initieel",
   "x-request-x-timestamp": "{request} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
+  "message": "Bericht",
+  "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
+  "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
+  "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag.",
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris...",
-  "message": "Bericht"
+  "select-mandatee": "Selecteer mandataris..."
 }

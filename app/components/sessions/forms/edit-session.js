@@ -23,7 +23,7 @@ export default Component.extend({
   didInsertElement() {
     this._super(...arguments);
     this.set('selectedKindUri', this.get('meeting.kind'));
-    this.set('kind', EmberObject.create(CONFIG.kinds.find((kind) => kind.uri === this.get('selectedKindUri'))));
+    this.set('kind', EmberObject.create(CONFIG.MINISTERRAAD_TYPES.TYPES.find((minsterraad) => minsterraad.uri === this.get('selectedKindUri'))));
     this.set('startDate', this.get('meeting.plannedStart'));
     this.set('extraInfo', this.get('meeting.extraInfo'));
     this.set('meetingNumber', this.get('meeting.number'));
@@ -45,7 +45,7 @@ export default Component.extend({
         isDigital, extraInfo, selectedKindUri, meeting, meetingNumber, numberRepresentation,
       } = this;
       this.set('isLoading', true);
-      const kindUriToAdd = selectedKindUri || CONFIG.defaultKindUri;
+      const kindUriToAdd = selectedKindUri || CONFIG.MINISTERRAAD_TYPES.DEFAULT;
       const date = this.formatter.formatDate(null);
       const startDate = this.get('startDate') || date;
 

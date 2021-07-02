@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';
 
 export default class AgendaAgendaitemsRoute extends Route {
@@ -34,7 +34,7 @@ export default class AgendaAgendaitemsRoute extends Route {
         'title', // Display group header per agendaitems group
         'priority' // Sorting agendaitems on minister protocol order
       ].join(','),
-      'page[size]': CONFIG.MAX_PAGE_SIZE.AGENDAITEMS,
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'show-as-remark,priority',
     });
 
