@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import {
   computed, set
 } from '@ember/object';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { inject } from '@ember/service';
 import { cached } from 'frontend-kaleidos/decorators/cached';
 import {
@@ -70,11 +70,8 @@ export default Component.extend({
     },
 
     selectRemarkType(id) {
-      if (id === CONFIG.remarkId) {
-        this.set('showAsRemark', true);
-      } else {
-        this.set('showAsRemark', false);
-      }
+      const type = this.store.peekRecord('case-type', id);
+      this.set('showAsRemark', type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK);
     },
 
     async saveChanges() {

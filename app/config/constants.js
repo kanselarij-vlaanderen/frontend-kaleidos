@@ -22,20 +22,6 @@ export default {
     FR: 'http://publications.europa.eu/resource/authority/language/FRA',
     DE: 'http://publications.europa.eu/resource/authority/language/DEU',
   },
-  // PUBLICATIONS
-  PUBLICATION_STATUSES: {
-    PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
-    PUBLISHED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
-    PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
-    WITHDRAWN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
-  },
-  SCHEMA_AGENCIES: {
-    NUMAC: 'Belgisch Staatsblad',
-    OVRB: 'ovrb',
-  },
-  MAIL_FOLDERS: {
-    OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
-  },
   DOCUMENT_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/9e5b1230-f3ad-438f-9c68-9d7b1b2d875d',
     VISIENOTA: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/52d8ce45-1954-48e7-9402-ac5ee3edbbc4',
@@ -43,8 +29,41 @@ export default {
     DECREET: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/e4f73ddc-1ed6-4878-b9ed-ace55c0a8d64',
     DECISION_VR: 'http://kanselarij.vo.data.gift/id/concept/document-type-codes/4c7cfaf9-1d5f-4fdf-b7e9-b7ce5167e31a',
   },
-  DOSSIER_TYPES: {
+  // TODO: despite the naming, these are actually agendaitem-types (nota, mededeling) that get converted to booleans like `showAsRemark` and get assigned to subcases as well.
+  CASE_TYPES: {
     NOTA: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/1b6a6975-28e7-46b5-83fe-da37bb967db2',
     REMARK: 'http://kanselarij.vo.data.gift/id/dossier-type-codes/305E9678-8106-4C14-9BD6-60AE2032D794',
+  },
+  // AGENDA
+  ACCEPTANCE_STATUSSES: {
+    NOT_YET_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+    NOT_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
+    OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
+  },
+  DECISION_RESULT_CODE_URIS: {
+    GOEDGEKEURD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/56312c4b-9d2a-4735-b0b1-2ff14bb524fd',
+    UITGESTELD: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/a29b3ffd-0839-45cb-b8f4-e1760f7aacaa',
+    KENNISNAME: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/9f342a88-9485-4a83-87d9-245ed4b504bf',
+    INGETROKKEN: 'http://kanselarij.vo.data.gift/id/concept/beslissings-resultaat-codes/453a36e8-6fbd-45d3-b800-ec96e59f273b',
+  },
+  AGENDA_STATUSSES: {
+    CLOSED: 'http://kanselarij.vo.data.gift/id/agendastatus/f06f2b9f-b3e5-4315-8892-501b00650101',
+    APPROVED: 'http://kanselarij.vo.data.gift/id/agendastatus/ff0539e6-3e63-450b-a9b7-cc6463a0d3d1',
+    DESIGN: 'http://kanselarij.vo.data.gift/id/agendastatus/2735d084-63d1-499f-86f4-9b69eb33727f',
+  },
+  // PUBLICATIONS
+  PUBLICATION_STATUSES: {
+    PENDING: 'http://themis.vlaanderen.be/id/concept/publicatie-status/fa62e050-3960-440d-bed9-1c3d3e9923a8',
+    PUBLISHED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/2f8dc814-bd91-4bcf-a823-baf1cdc42475',
+    PAUSED: 'http://themis.vlaanderen.be/id/concept/publicatie-status/bc294fde-45c8-11eb-b378-0242ac130002',
+    WITHDRAWN: 'http://themis.vlaanderen.be/id/concept/publicatie-status/9b9b0b5e-45c8-11eb-b378-0242ac130002',
+  },
+  URGENCY_LEVELS: {
+    SPEEDPROCEDURE: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/b2b9c588-e91d-4ce0-a1a1-11b522e8a9bf',
+    STANDARD: 'http://themis.vlaanderen.be/id/concept/urgentieniveau/5a48d953-3d88-4eb6-b784-ddb3070c831d',
+  },
+  SCHEMA_AGENCIES: {
+    NUMAC: 'Belgisch Staatsblad',
+    OVRB: 'ovrb',
   },
 };

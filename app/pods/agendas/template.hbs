@@ -15,7 +15,7 @@
           <button data-test-route-agendas-new-meeting
             type="button"
             class="auk-button auk-button--primary"
-            {{action "createNewSession"}}
+            {{on "click" this.openNewSessionModal}}
           >
             <span class="auk-button__content">
               <div class="auk-icon auk-icon--default">
@@ -32,16 +32,15 @@
   </div>
 </div>
 {{outlet}}
-{{#if creatingNewSession}}
+{{#if this.isCreatingNewSession}}
   {{#web-components/vl-modal
     isOverlay=true
     title=(t "new-agenda")
-    closeModal=(action "cancelNewSessionForm")
+    closeModal=this.closeNewSessionModal
   }}
     {{sessions/forms/new-session
-      successfullyAdded=(action "successfullyAdded")
-      cancelForm=(action "cancelNewSessionForm")
-      formattedMeetingIdentifier=formattedMeetingIdentifier
+      successfullyAdded=this.successfullyAdded
+      cancelForm=this.closeNewSessionModal
     }}
   {{/web-components/vl-modal}}
 {{/if}}

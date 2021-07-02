@@ -1,65 +1,70 @@
 import Controller from '@ember/controller';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
-import {
-  computed, get
-} from '@ember/object';
+import { action } from '@ember/object';
 
-export default Controller.extend({
-  sessionService: inject(),
-  agendaService: inject(),
-  router: inject(),
-  currentSession: inject(),
-  isLoading: false,
+export default class AgendaController extends Controller {
+  @service sessionService;
+  @service agendaService;
+  @service router;
+  @service currentSession;
 
-  shouldHideNav: computed('router.currentRouteName', function() {
-    return this.get('router.currentRouteName') === 'agenda.compare';
-  }),
+  @tracked isLoading = false;
 
-  showPrintButton: computed('router.currentRouteName', function() {
-    return get(this, 'router.currentRouteName') === 'agenda.print';
-  }),
+  @alias('sessionService.currentAgendaitems') currentAgendaitems;
 
-  currentAgendaitems: alias('sessionService.currentAgendaitems'),
+  get shouldHideNav() {
+    return this.router.currentRouteName === 'agenda.compare';
+  }
 
-  actions: {
-    selectAgenda(agenda) {
-      this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
-    },
+  get showPrintButton() {
+    return this.router.currentRouteName === 'agenda.print';
+  }
 
-    navigateToDecisions(currentSessionId, currentAgendaId) {
-      this.transitionToRoute(
-        'print-overviews.decisions.agendaitems',
-        currentSessionId,
-        currentAgendaId
-      );
-    },
+  @action
+  selectAgenda(agenda) {
+    this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
+  }
 
-    navigateToPressAgenda(currentSessionId, currentAgendaId) {
-      this.transitionToRoute(
-        'print-overviews.press-agenda.agendaitems',
-        currentSessionId,
-        currentAgendaId
-      );
-    },
+  @action
+  navigateToDecisions(currentSessionId, currentAgendaId) {
+    this.transitionToRoute(
+      'print-overviews.decisions.agendaitems',
+      currentSessionId,
+      currentAgendaId
+    );
+  }
 
-    navigateToNewsletter(currentSessionId) {
-      this.transitionToRoute(
-        'newsletter',
-        currentSessionId
-      );
-    },
+  @action
+  navigateToPressAgenda(currentSessionId, currentAgendaId) {
+    this.transitionToRoute(
+      'print-overviews.press-agenda.agendaitems',
+      currentSessionId,
+      currentAgendaId
+    );
+  }
 
-    navigateToAgenda(selectedAgendaId) {
-      this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
-    },
+  @action
+  navigateToNewsletter(currentSessionId) {
+    this.transitionToRoute(
+      'newsletter',
+      currentSessionId
+    );
+  }
 
-    loadingAgendaitems() {
-      this.toggleProperty('isLoading');
-    },
+  @action
+  navigateToAgenda(selectedAgendaId) {
+    this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, selectedAgendaId);
+  }
 
-    refresh() {
-      this.send('reloadModel');
-    },
-  },
-});
+  @action
+  loadingAgendaitems() {
+    this.isLoading = !this.isLoading;
+  }
+
+  @action
+  refresh() {
+    this.send('reloadModel');
+  }
+}

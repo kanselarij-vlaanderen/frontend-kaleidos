@@ -1,6 +1,5 @@
 import Store from 'ember-data/store';
 
-
 export default class ExtendedStoreService extends Store {
   /*
    * Executes regulare "query"-method. Queries for only one result and returns that if any.

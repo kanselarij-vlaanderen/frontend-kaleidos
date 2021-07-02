@@ -7,6 +7,7 @@ import {
   groupAgendaitemsByGroupname,
   sortByPriority
 } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PrintNewsletterRoute extends Route {
   queryParams = {
@@ -27,7 +28,7 @@ export default class PrintNewsletterRoute extends Route {
       'filter[is-approval]': false,
       include: 'mandatees,treatments.newsletter-info',
       sort: 'priority',
-      'page[size]': 300,
+      'page[size]': PAGE_SIZE.AGENDAITEMS,
     });
     let notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
     let announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);

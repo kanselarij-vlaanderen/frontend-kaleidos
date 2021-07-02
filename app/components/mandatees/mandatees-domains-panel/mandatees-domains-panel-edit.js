@@ -54,6 +54,10 @@ export default class MandateesMandateesDomainsPanelEditComponent extends Compone
     this.mandateesBuffer = this.mandateesBuffer.filter((item) => item !== mandatee);
     // eslint-disable-next-line no-self-assign
     this.mandateesBuffer = this.mandateesBuffer; // Trigger plain-array tracking
+    // Once removed from related mandatees, a mandatee can no longer be a submitter either
+    if (this.submitterBuffer === mandatee) {
+      this.submitterBuffer = null;
+    }
     // Fields modifications
     let mandateeFields = await this.store.query('government-field', {
       'filter[ise-code][mandatees][:id:]': mandatee.id,
