@@ -1,5 +1,3 @@
-/* eslint-disable no-dupe-class-members */
-// !! NOT READY FOR REVIEW (KAS-2475)
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -47,9 +45,9 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   async #init() {
     this.validations.subject = new Validation(() => !isBlank(this.subject));
     this.validations.message = new Validation(() => !isBlank(this.message));
-    this.selectedAttachments = [...this.args.attachments];
-    const identification = this.args.publicationFlow.identification;
-    const idName = identification.get('idName');
+    this.selectedAttachments = [...this.args.attachments]; // Copy array
+    const identification = await this.args.publicationFlow.identification;
+    const idName = identification.idName;
     this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
     this.message = proofRequestEmail({
       identifier: idName,
@@ -69,7 +67,7 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   @task
   *onSave() {
     if (!this.canSave) {
-      return;
+      return; // In theory, this can't happen, since button should be disabled
     }
 
     const properties = {
