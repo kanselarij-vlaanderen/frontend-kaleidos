@@ -20,7 +20,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString = '';
 
-  @tracked rows;
   @tracked publicationFlow;
   @tracked publicationSubcase;
 
