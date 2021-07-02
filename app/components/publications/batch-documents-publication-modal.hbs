@@ -1,7 +1,10 @@
 <Auk::Modal @size="full-screen-padded">
   <Auk::Modal::Header @title={{ t "documents" }} @onClose={{@onClose}} />
   <Auk::Modal::Body @noPadding={{true}}>
-    <Utils::LoadableContent @isLoading={{or this.loadPieces.isRunning this.loadCase.isRunning}}>
+    <Utils::LoadableContent @isLoading={{or
+      (or this.loadPieces.isRunning this.loadCase.isRunning)
+      (or this.loadMandatees.isRunning this.loadAgendaItemTreatment.isRunning)
+    }}>
       {{!-- template-lint-disable table-groups --}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>

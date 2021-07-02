@@ -23,9 +23,9 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
-    this.loadCase();
-    this.loadAgendaItemTreatment();
-    this.loadMandatees();
+    this.loadCase.perform();
+    this.loadAgendaItemTreatment.perform();
+    this.loadMandatees.perform();
   }
 
   @task
@@ -38,18 +38,21 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  async loadCase() {
-    this.case = await this.store.queryOne('case', {
+  @task
+  *loadCase() {
+    this.case = yield this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
     });
   }
 
-  async loadMandatees() {
-    this.mandatees = await  this.args.agendaitem.mandatees;
+  @task
+  *loadMandatees() {
+    this.mandatees = yield this.args.agendaitem.mandatees;
   }
 
-  async loadAgendaItemTreatment() {
-    this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
+  @task
+  *loadAgendaItemTreatment() {
+    this.agendaItemTreatment = yield this.store.queryOne('agenda-item-treatment', {
       'filter[agendaitem][:id:]': this.args.agendaitem.id,
       sort: '-start-date',
     });
