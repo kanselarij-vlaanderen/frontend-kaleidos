@@ -35,22 +35,6 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = pieces.flatMap((piece) => piece.toArray());
 
     return pieces;
-    // // findRecord with 'include' triggers extra requests
-    // const publicationSubcase = await this.store.queryOne('publication-subcase', {
-    //   'filter[:id:]': publicationSubcaseFromParent.id,
-    //   include: [
-    //     'source-documents',
-    //     'source-documents.file',
-    //     'proofing-activities',
-    //     'proofing-activities.generated-pieces',
-    //     'proofing-activities.generated-pieces.file',
-    //     'publication-activities',
-    //     'publication-activities.generated-pieces',
-    //     'publication-activities.generated-pieces.file'
-    //   ].join(','),
-    // });
-
-    // return publicationSubcase;
   }
 
   async afterModel(model) {
