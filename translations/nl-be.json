@@ -549,7 +549,7 @@
   "agenda-reopen-previous-version-message": "De vorige agenda versie wordt geopend. Dit kan even duren.",
   "agenda-approve-and-close-message": "De agenda wordt goedgekeurd en daarna afgesloten. Dit kan even duren.",
   "agenda-add-message": "Nieuwe ontwerpagenda aanmaken. Dit kan even duren.",
-  "approve-all-agendaitems-message": "Agendaitems formeel goedkeuren. Dit kan even duren.",
+  "approve-all-agendaitems-message": "Agendapunten formeel goedkeuren. Dit kan even duren.",
   "explanation": "Toelichting",
   "error-delete-agenda": "Er ging iets mis tijdens het verwijderen van de agenda. Contacteer de administrator of probeer het opnieuw.",
   "no-themes-selected": "Geen thema's geselecteerd",
