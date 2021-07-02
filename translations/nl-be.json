@@ -892,12 +892,12 @@
   "x-request-x-timestamp": "{request} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
+  "message": "Bericht",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
   "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
   "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag.",
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris...",
-  "message": "Bericht"
+  "select-mandatee": "Selecteer mandataris..."
 }

@@ -13,9 +13,9 @@ export default class ProofingActivity extends Model {
   @belongsTo('request-activity') requestActivity;
 
   @hasMany('piece', {
-    serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)
+    inverse: 'proofingActivitiesUsedBy',
   }) usedPieces;
   @hasMany('piece', {
-    serialize: true, // Only the hasMany side is defined in backend (override ember defaulting to belongsTo-side serializing)
+    inverse: 'proofingActivityGeneratedBy',
   }) generatedPieces;
 }
