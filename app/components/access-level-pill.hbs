@@ -8,6 +8,7 @@
           @skin={{this.pillSkin}}
           class="auk-u-cursor-pointer"
           data-test-access-level-pill
+          {{on "click" this.toggleEdit}}
         >
           {{this.accessLevelLabel}}
         </Auk::Pill>
