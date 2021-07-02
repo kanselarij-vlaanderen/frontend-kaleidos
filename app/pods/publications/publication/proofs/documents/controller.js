@@ -2,7 +2,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/constants';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 const COLUMN_MAP = {

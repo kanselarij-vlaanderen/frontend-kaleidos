@@ -3,7 +3,12 @@
     <div class="auk-u-mb-4">
       <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
         <accordionPanel.Header
-          @title={{row.panelTitle}}
+          @title={{t
+            "x-request-type-x-timestamp"
+            request-type=(t row.requestType)
+            date=(moment-format row.requestActivity.startDate "D MMMM")
+            time=(moment-format row.requestActivity.startDate "H:mm")
+          }}
           as |header|>
           <header.Actions as |actions|>
             <actions.Item>

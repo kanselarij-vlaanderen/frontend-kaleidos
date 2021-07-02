@@ -889,7 +889,7 @@
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",
-  "x-request-x-timestamp": "{request} op {date} om {time}",
+  "x-request-type-x-timestamp": "{request-type} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
   "message": "Bericht",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
