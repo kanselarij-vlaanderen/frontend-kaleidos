@@ -101,6 +101,11 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   }
 
   @action
+  cancelLazyLoad() {
+    this.lazyLoadSideData.cancelAll();
+  }
+
+  @action
   toggleShowingAllDocuments() {
     this.isShowingAllDocuments = !this.isShowingAllDocuments;
   }

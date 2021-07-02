@@ -48,7 +48,6 @@ export default class PublicationService extends Service {
         created: now,
       });
       await case_.save();
-
       agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });

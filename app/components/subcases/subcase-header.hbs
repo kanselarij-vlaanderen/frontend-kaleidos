@@ -15,13 +15,12 @@
         {{#if (or (is-pending canPropose) isLoading)}}
           <div class="auk-loader" role="alert" aria-busy="true"></div>
         {{else if (await canPropose)}}
-          <button type="button"
+          <Auk::Button
+            @skin="primary"
             data-test-subcase-header-action-propose-for-agenda
-            class="auk-button auk-button--primary">
-            <span class="auk-button__content">
-              {{t "propose-for-agenda"}}
-            </span>
-          </button>
+          >
+            {{t "propose-for-agenda"}}
+          </Auk::Button>
           {{#attach-popover
             renderInPlace=true
             class="ember-attacher-popper"
@@ -67,63 +66,53 @@
         {{/if}}
       </div>
       <div class="auk-toolbar-complex__item">
-        <button type="button"
-          data-test-subcase-header-actions-dropdown
-          class="auk-button auk-button--secondary"
-          {{action "showMultipleOptions" bubbles=false}}
-        >
-          <span class="auk-button__content">
-            {{#if isShowingOptions}}
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-chevron-up"></i>
-              </div>
-            {{else}}
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-chevron-down"></i>
-              </div>
-            {{/if}}
-            <div class="auk-button__label">
-              {{t "actions"}}
-            </div>
-            {{#attach-popover
-              renderInPlace=true
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#if (await canDelete)}}
-                  <li class="vlc-dropdown-menu__item">
-                    <a href="" class="auk-button-link"
-                      data-test-subcase-header-action-delete-subcase
-                      {{action attacher.hide}}
-                      {{action "requestDeleteSubcase" subcase}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "delete-subcase"}}
-                      </span>
-                    </a>
-                  </li>
-                {{/if}}
+        <div class="auk-u-position-relative auk-u-inline-block">
+          <Auk::Button
+            @skin="secondary"
+            @icon={{if isShowingOptions "chevron-up" "chevron-down"}}
+            {{action "showMultipleOptions" bubbles=false}}
+            data-test-subcase-header-actions-dropdown
+          >
+            {{t "actions"}}
+          </Auk::Button>
+          {{#attach-popover
+            renderInPlace=true
+            class="ember-attacher-popper"
+            hideOn="clickout click"
+            showOn="click"
+            animation="shift"
+            placement="bottom"
+          as |attacher|
+          }}
+            <ul class="vlc-dropdown-menu">
+              {{#if (await canDelete)}}
                 <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                    data-test-subcase-header-action-move-subcase
-                    class="auk-button-link auk-button-link--block"
+                  <a href="" class="auk-button-link"
+                    data-test-subcase-header-action-delete-subcase
                     {{action attacher.hide}}
-                    {{action "triggerMoveSubcaseDialog" }}
+                    {{action "requestDeleteSubcase" subcase}}
                   >
                     <span class="auk-button__content">
-                      {{t "move-subcase"}}
+                      {{t "delete-subcase"}}
                     </span>
                   </a>
                 </li>
-              </ul>
-            {{/attach-popover}}
-          </span>
-        </button>
+              {{/if}}
+              <li class="vlc-dropdown-menu__item">
+                <a href=""
+                  data-test-subcase-header-action-move-subcase
+                  class="auk-button-link auk-button-link--block"
+                  {{action attacher.hide}}
+                  {{action "triggerMoveSubcaseDialog" }}
+                >
+                  <span class="auk-button__content">
+                    {{t "move-subcase"}}
+                  </span>
+                </a>
+              </li>
+            </ul>
+          {{/attach-popover}}
+        </div>
       </div>
     {{/if}}
   </div>

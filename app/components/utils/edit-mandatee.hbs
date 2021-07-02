@@ -56,14 +56,13 @@
   <div class="auk-toolbar-complex">
     <div class="auk-toolbar-complex__left">
       <div class="auk-toolbar-complex__item">
-        <button data-test-edit-mandatee-cancel
-                type="button" class="auk-button auk-button--borderless"
+        <Auk::Button
+          @skin="borderless"
           {{action "closeModal"}}
+          data-test-edit-mandatee-cancel
         >
-          <span class="auk-button__content">
-            {{t "cancel"}}
-          </span>
-        </button>
+          {{t "cancel"}}
+        </Auk::Button>
       </div>
     </div>
     <div class="auk-toolbar-complex__right">

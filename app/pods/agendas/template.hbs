@@ -12,20 +12,14 @@
     <div class="auk-toolbar-complex__right">
       {{#if currentSession.isEditor}}
         <div class="auk-toolbar-complex__item">
-          <button data-test-route-agendas-new-meeting
-            type="button"
-            class="auk-button auk-button--primary"
+          <Auk::Button
+            @skin="primary"
+            @icon="add"
+            data-test-route-agendas-new-meeting
             {{on "click" this.openNewSessionModal}}
           >
-            <span class="auk-button__content">
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "new-agenda"}}
-              </div>
-            </span>
-          </button>
+            {{t "new-agenda"}}
+          </Auk::Button>
         </div>
       {{/if}}
     </div>
