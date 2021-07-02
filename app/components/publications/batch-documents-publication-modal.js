@@ -39,9 +39,6 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.case = await this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
     });
-    // We want case to have the lastest title & short title from agenda
-    this.case.title = this.args.agendaitem.title;
-    this.case.shortTitle = this.args.agendaitem.shortTitle;
   }
 
   async loadAgendaItemTreatment() {
