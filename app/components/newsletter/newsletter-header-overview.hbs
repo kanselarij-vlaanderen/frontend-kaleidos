@@ -78,14 +78,14 @@
         <div class="auk-toolbar-complex__item">
           {{#if currentSession.isEditor}}
           {{/if}}
-        <div class="auk-u-position-relative auk-u-inline-block">
-          <Auk::Button
-            @skin="secondary"
-            @icon={{if (not isShowingOptions) "chevron-down" "chevron-up"}}
-            {{action "showMultipleOptions"}}
-          >
+          <div class="auk-u-position-relative auk-u-inline-block">
+            <Auk::Button
+              @skin="secondary"
+              @icon={{if (not isShowingOptions) "chevron-down" "chevron-up"}}
+              {{action "showMultipleOptions"}}
+            >
               {{t "actions"}}
-          </Auk::Button>
+            </Auk::Button>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper vlc-hide-on-print"
@@ -201,7 +201,7 @@
                 {{/if}}
               </ul>
             {{/attach-popover}}
-        </div>
+          </div>
         </div>
       </div>
     </div>

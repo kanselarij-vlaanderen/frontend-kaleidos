@@ -16,12 +16,12 @@
           {{#if (or (is-pending canPropose) isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else if (await canPropose)}}
-          <Auk::Button
-            @skin="primary"
-            data-test-subcase-header-action-propose-for-agenda
-          >
+            <Auk::Button
+              @skin="primary"
+              data-test-subcase-header-action-propose-for-agenda
+            >
               {{t "propose-for-agenda"}}
-          </Auk::Button>
+            </Auk::Button>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper"
@@ -67,15 +67,15 @@
           {{/if}}
         </div>
         <div class="auk-toolbar-complex__item">
-        <div class="auk-u-position-relative auk-u-inline-block">
-          <Auk::Button
-            @skin="secondary"
-            @icon={{if isShowingOptions "chevron-up" "chevron-down"}}
-            {{action "showMultipleOptions" bubbles=false}}
-            data-test-subcase-header-actions-dropdown
-          >
+          <div class="auk-u-position-relative auk-u-inline-block">
+            <Auk::Button
+              @skin="secondary"
+              @icon={{if isShowingOptions "chevron-up" "chevron-down"}}
+              {{action "showMultipleOptions" bubbles=false}}
+              data-test-subcase-header-actions-dropdown
+            >
               {{t "actions"}}
-          </Auk::Button>
+            </Auk::Button>
             {{#attach-popover
               renderInPlace=true
               class="ember-attacher-popper"
@@ -113,7 +113,7 @@
                 </li>
               </ul>
             {{/attach-popover}}
-        </div>
+          </div>
         </div>
       {{/if}}
     </div>

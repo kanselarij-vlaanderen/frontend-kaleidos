@@ -40,21 +40,21 @@
         />
       {{/if}}
     {{/if}}
-      <div class="auk-u-position-relative auk-u-inline-block">
-        <Auk::Button
-          @skin={{if @confidential "danger-borderless" "muted-borderless"}}
-          @layout="icon-only"
-          @icon={{if @confidential "lock-closed" "lock-open"}}
-          @disabled={{not this.session.isEditor}}
-          {{on "click" (perform this.changeConfidentiality)}}
-        />
-        {{#if @confidential}}
-          <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          </EmberTooltip>
-        {{/if}}
-      </div>
+    <div class="auk-u-position-relative auk-u-inline-block">
+      <Auk::Button
+        @skin={{if @confidential "danger-borderless" "muted-borderless"}}
+        @layout="icon-only"
+        @icon={{if @confidential "lock-closed" "lock-open"}}
+        @disabled={{not this.session.isEditor}}
+        {{on "click" (perform this.changeConfidentiality)}}
+      />
+      {{#if @confidential}}
+        <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        </EmberTooltip>
+      {{/if}}
+    </div>
   {{/if}}
 </div>
