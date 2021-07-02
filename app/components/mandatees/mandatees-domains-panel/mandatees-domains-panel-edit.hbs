@@ -94,41 +94,39 @@
       </table>
     </div>
   </div>
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <Auk::Button
-        @skin="tertiary"
-        @icon="add"
-        {{on "click" this.startCreatingMandatee}}
-        data-test-mandatee-panel-edit-add-mandatee
-      >
-        {{t "add-minister"}}
-      </Auk::Button>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary"
-              {{on "click" @onCancel}}
-              data-test-mandatee-panel-edit-cancel
-            >
-              {{t "cancel"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            <WebComponents::VlSaveButton
-              data-test-mandatee-panel-edit-save={{true}}
-              @text={{t "save"}}
-              @isLoading={{this.save.isRunning}}
-              @saveAction={{perform this.save}}
-            />
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </div>
-  </div>
+  <Auk::Toolbar @auto={{true}} style="border: dotted 3px purple;">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="tertiary"
+          @icon="add"
+          {{on "click" this.startCreatingMandatee}}
+          data-test-mandatee-panel-edit-add-mandatee
+        >
+          {{t "add-minister"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="tertiary"
+          {{on "click" @onCancel}}
+          data-test-mandatee-panel-edit-cancel
+        >
+          {{t "cancel"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <WebComponents::VlSaveButton
+          data-test-mandatee-panel-edit-save={{true}}
+          @text={{t "save"}}
+          @isLoading={{this.save.isRunning}}
+          @saveAction={{perform this.save}}
+        />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>
 {{#if this.isShowingEditMandateeModal}}
   <Mandatees::MandateesDomainsSelectorModal
