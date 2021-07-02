@@ -5,6 +5,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseId = this.modelFor('publications.publication.proofs').id;
 
+    // 3 requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
+    // and made an extra request per piece
     const sourcePiecesRequest = this.store.query('piece', {
       'filter[publication-subcase][:id:]': publicationSubcaseId,
       include: [
