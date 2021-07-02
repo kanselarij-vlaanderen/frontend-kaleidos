@@ -2,8 +2,8 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import * as CONFIG from 'frontend-kaleidos/config/config';
 import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
-import CONFIG from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
   'ontvangen-op': 'receivedDate',
@@ -11,7 +11,7 @@ const COLUMN_MAP = {
 };
 
 const REQUEST_STAGES = {
-  NEW: 'initial',
+  INITIAL: 'initial',
   EXTRA: 'extra',
   FINAL: 'final',
 };
@@ -26,7 +26,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString;
 
-  @tracked rows;
   @tracked publicationFlow;
   @tracked publicationSubcase;
 
@@ -44,10 +43,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   get areAllSelected() {
     return this.model.length === this.selection.length;
-  }
-
-  get selection() {
-    return this.model.filter((row) => row.isSelected).map((row) => row.piece);
   }
 
   @action
@@ -79,7 +74,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   #sort(sortingString) {
     let property = 'created';
-    let isDescending = false;
+    let isDescending = true;
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
@@ -103,7 +98,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  onCancelRequest() {
+  cancelRequest() {
     this.isRequestModalOpen = false;
   }
 
@@ -114,6 +109,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } finally {
       this.isRequestModalOpen = false;
     }
+    this.selection = [];
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
@@ -143,7 +139,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       usedPieces: attachments,
     };
     let activity;
-    if (stage === REQUEST_STAGES.NEW) {
+    if (stage === REQUEST_STAGES.INITIAL) {
       activity = this.store.createRecord('proofing-activity', activityProperties);
     } else if (stage === REQUEST_STAGES.FINAL) {
       activity = this.store.createRecord('publication-activity', activityProperties);
@@ -165,9 +161,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const attachmentFilesPromise = Promise.all(filePromises);
     const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONFIG.PUBLICATION_EMAIL.OUTBOX);
     const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
-
     let recipientEmail;
-    if (stage === REQUEST_STAGES.NEW) {
+    if (stage === REQUEST_STAGES.INITIAL) {
       recipientEmail = UTILS_CONFIG.EMAIL.TO.publishpreviewEmail;
     } else if (stage === REQUEST_STAGES.FINAL) {
       recipientEmail = UTILS_CONFIG.EMAIL.TO.publishEmail;

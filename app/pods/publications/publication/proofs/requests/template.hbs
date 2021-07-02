@@ -3,10 +3,9 @@
     <div class="auk-u-mb-4">
       <Auk::AccordionPanel @isDefaultActive={{true}} as |accordionPanel|>
         <accordionPanel.Header
-          @title=
-          {{t
+          @title={{t
             "x-request-type-x-timestamp"
-            request-type=(t row.requestType)
+            request-type=(t row.requestTypeTranslationKey)
             date=(moment-format row.requestActivity.startDate "D MMMM")
             time=(moment-format row.requestActivity.startDate "H:mm")
           }}
@@ -60,8 +59,14 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
-                <Utils::Documents::List @pieces={{row.pieces}} />
+                <Utils::Documents::List @pieces={{row.attachments}} />
               </div>
+              {{#if row.receivedPieces}}
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "received-documents"}}</p>
+                  <Utils::Documents::List @pieces={{row.receivedPieces}} />
+                </div>
+              {{/if}}
             </div>
           </div>
         </accordionPanel.Body>
