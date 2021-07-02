@@ -39,6 +39,9 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.case = await this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
     });
+    // We want case to have the lastest title & short title from agenda
+    this.case.title = this.args.agendaitem.title;
+    this.case.shortTitle = this.args.agendaitem.shortTitle;
   }
 
   async loadAgendaItemTreatment() {
@@ -64,6 +67,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   *saveNewPublication(publicationProperties) {
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
+      agendaitem: this.args.agendaitem,
       agendaItemTreatment: this.agendaItemTreatment,
     });
     this.referenceDocument.publicationFlow = publicationFlow;

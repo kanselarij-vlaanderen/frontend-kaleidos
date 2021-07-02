@@ -47,14 +47,12 @@ export default class PublicationService extends Service {
         title: publicationProperties.longTitle,
         created: now,
       });
-      await case_.save();
-
       agendaItemTreatment = this.store.createRecord('agenda-item-treatment', {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });
       await agendaItemTreatment.save();
     }
-
+    await case_.save();
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
 
     const structuredIdentifier = this.store.createRecord('structured-identifier', {
