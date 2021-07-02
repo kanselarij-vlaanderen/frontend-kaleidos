@@ -46,7 +46,7 @@
 
 {{#if this.isOpenNewPublicationModal}}
   <Publications::NewPublicationModal
-    @case={{this.case}}
+    @agendaitem={{@agendaitem}}
     @agendaItemTreatment={{this.agendaItemTreatment}}
     @onSave={{perform this.saveNewPublication}}
     @onCancel={{this.cancelNewPublication}} />

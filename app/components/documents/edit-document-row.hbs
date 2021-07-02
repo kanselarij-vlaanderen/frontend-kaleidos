@@ -39,15 +39,12 @@
     }}
   </td>
   <td class="auk-u-text-align--right">
-    <button type="button" class="auk-button auk-button--borderless"
+    <Auk::Button
+      @skin="borderless"
+      @icon="delete"
       {{on "click" this.softDelete}}
     >
-      <span class="auk-button__content">
-        <i class="ki-delete" aria-hidden="true"></i>
-        <div class="auk-u-sr-only">
-          {{t "delete"}}
-        </div>
-      </span>
-    </button>
+      {{t "delete"}}
+    </Auk::Button>
   </td>
 </tr>

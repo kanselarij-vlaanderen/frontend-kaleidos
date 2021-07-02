@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
 /**
- * @argument { undefined|Case } case: for a publication that passes the Council of Ministers
+ * @argument { undefined|AgendaItem } agendaitem: for a publication that passes the Council of Ministers
  * @argument { undefined|AgendaItemTreatment } agendaItemTreatment: for a publication that passes the Council of Ministers
  * @argument { () => void } onCancel
  * @argument { (publicationProperties: {
@@ -36,14 +36,14 @@ export default class NewPublicationModal extends Component {
     super(...arguments);
     this.initPublicationNumber.perform();
     if (this.isViaCouncilOfMinisters) {
-      this.shortTitle = this.args.case.shortTitle;
-      this.longTitle = this.args.case.title;
+      this.shortTitle = this.args.agendaitem.shortTitle;
+      this.longTitle = this.args.agendaitem.title;
       this.decisionDate = this.args.agendaItemTreatment.startDate;
     }
   }
 
   get isViaCouncilOfMinisters() {
-    return !!this.args.case;
+    return !!this.args.agendaitem;
   }
 
   get isPublicationNumberValid() {

@@ -10,62 +10,45 @@
         {{name}}
       </h6>
       {{#if view}}
-        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="book"
           {{action "view"}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-book"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "show-piece"}}
-            </div>
-          </span>
-        </button>
+          {{t "show-piece"}}
+        </Auk::Button>
       {{/if}}
       {{#if download}}
-        <button type="button" class="auk-button auk-button--borderless auk-button--icon"
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="download"
           {{action "download"}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-download"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "download"}}
-            </div>
-          </span>
-        </button>
+          {{t "download"}}
+        </Auk::Button>
       {{else if downloadLink}}
-        <a class="auk-button auk-button--borderless auk-button--icon"
-          href={{downloadLink}}
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="download"
+          @href={{downloadLink}}
           download={{if downloadName downloadName name}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-download"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "download"}}
-            </div>
-          </span>
-        </a>
+          {{t "download"}}
+        </Auk::Button>
       {{/if}}
       {{#if delete}}
-        <button type="button"
-          data-test-vl-uploaded-document-delete-piece
-          class="auk-button auk-button--borderless auk-button--icon"
+        <Auk::Button
+          @skin="danger-borderless"
+          @layout="icon-only"
+          @icon="delete"
           {{action "delete"}}
+          data-test-vl-uploaded-document-delete-piece
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-delete"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "delete"}}
-            </div>
-          </span>
-        </button>
+          {{t "delete"}}
+        </Auk::Button>
       {{/if}}
     </div>
     <div class="vl-document__metadata metadata">

@@ -73,17 +73,13 @@
                 {{moment-format row.sessionDates "DD-MM-YYYY"}}
               </td>
               <td class="auk-u-text-align--right">
-                <LinkTo
-                  class="auk-button auk-button--borderless auk-button--icon"
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="nav-right"
                   @route="cases.case.subcases"
                   @model={{row.id}}
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-nav-right"></i>
-                    </div>
-                  </span>
-                </LinkTo>
+                />
               </td>
             </c.body>
           </table.content>
