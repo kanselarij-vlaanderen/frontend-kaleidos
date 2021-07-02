@@ -177,23 +177,23 @@
         {{web-components/vl-form-input value=subcaseName}}
       </div>
     </div>
-    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-      <div class="auk-toolbar-complex__right">
-        <div class="auk-toolbar-complex__item">
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           <a href="" class="auk-button-link" {{action "cancelEditing"}}>
             <span class="auk-button__content">
               {{t "cancel"}}
             </span>
           </a>
-        </div>
-        <div class="auk-toolbar-complex__item">
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
           {{web-components/vl-save-button
             text=(t "save")
             isLoading=isLoading
             saveAction=(action "saveChanges")
           }}
-        </div>
-      </div>
-    </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </div>
 {{/if}}

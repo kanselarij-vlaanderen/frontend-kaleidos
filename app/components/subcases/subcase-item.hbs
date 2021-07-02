@@ -16,9 +16,9 @@
       </div>
     {{/if}}
   </div>
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <div class="auk-u-mb-2">
           {{#if (not (is-pending @subcase))}}
             <LinkTo
@@ -60,9 +60,9 @@
             {{/if}}
           {{/each}}
         </ul>
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
   {{yield @subcase}}
   {{#if this.hasDocumentsToShow}}
     <div class="js-vl-accordion">
