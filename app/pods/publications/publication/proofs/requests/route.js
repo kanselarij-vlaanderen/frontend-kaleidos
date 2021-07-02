@@ -7,15 +7,15 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
       'filter[publication-subcase][:id:]': publicationSubcase.id,
       include: [
         'email',
+        'used-pieces',
+        'used-pieces.file',
         'proofing-activity',
         'proofing-activity.generated-pieces',
         'proofing-activity.generated-pieces.file',
         'publication-activity',
         'publication-activity.generated-pieces',
-        'publication-activity.generated-pieces.file',
-        'used-pieces',
-        'used-pieces.file'
-      ],
+        'publication-activity.generated-pieces.file'
+      ].join(','),
       sort: '-start-date',
     });
 
@@ -23,7 +23,7 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
   }
 
   setupController(controller, model) {
-    super.setupController.apply(this, arguments);
+    super.setupController(...arguments);
 
     controller.initRows(model);
     // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'

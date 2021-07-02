@@ -1,14 +1,9 @@
+/* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import moment from 'moment';
-import ProofingActivity from 'frontend-kaleidos/models/proofing-activity';
-import PublicationActivity from 'frontend-kaleidos/models/publication-activity';
 
 class Row {
-  intl;
-
   requestActivity;
   // resolved relationships to prevent await in getters (await requestActivity.proofingActivity)
   proofingActivity;
@@ -18,79 +13,57 @@ class Row {
     Object.assign(this, params);
   }
 
-  get targetActivityType() {
+  get requestTypeTranslationKey() {
     if (this.proofingActivity) {
-      return ProofingActivity.modelName;
+      return 'proofing-request';
     } else if (this.publicationActivity) {
-      return PublicationActivity.modelName;
+      return 'publication-request';
     }
     throw new Error('unknown request');
   }
 
-  get panelTitle() {
-    let requestTypeTranslationKey;
-    // testing with `instanceof` returns true for every Model type
-    switch (this.targetActivityType) {
-      case ProofingActivity.modelName:
-        requestTypeTranslationKey = 'proofing-request';
-        break;
-      case PublicationActivity.modelName:
-        requestTypeTranslationKey = 'publication-request';
-        break;
-      default: throw new Error('unknown request');
-    }
-    const requestName = this.intl.t(requestTypeTranslationKey);
-
-    const dateString = moment(this.requestActivity.startDate).format('D MMMM');
-    const timeString = moment(this.requestActivity.startDate).format('H:mm');
-
-    const modalTitle = this.intl.t('x-request-x-timestamp', {
-      request: requestName,
-      date: dateString,
-      time: timeString,
-    });
-    return modalTitle;
+  get attachments() {
+    return this.requestActivity.usedPieces.sortBy('created');
   }
 
-  get pieces() {
-    const pieces = [
-      ...this.requestActivity.usedPieces.toArray(),
-      ...(this.proofingActivity?.generatedPieces.toArray() ?? []),
-      ...(this.publicationActivity?.generatedPieces.toArray() ?? [])
-    ];
-    pieces.sortBy('created');
-    return pieces;
+  get resultActivity() {
+    if (this.proofingActivity) {
+      return this.proofingActivity;
+    } else if (this.publicationActivity) {
+      return this.publicationActivity;
+    }
+    throw new Error('unknown activity');
+  }
+
+  get receivedPieces() {
+    return this.resultActivity.generatedPieces.sortBy('created');
   }
 
   get canOpenUploadModal() {
-    return this.targetActivityType === ProofingActivity.modelName;
+    return !!this.proofingActivity;
   }
 }
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
-  @service intl;
-
-  selectedRow;
-
   @tracked rows;
   @tracked publicationFlow;
   @tracked isUploadModalOpen;
 
   async initRows(model) {
-    this.rows = await Promise.all(model.map(async(requestActivity) => {
-      const [proofingActivity, publicationActivity] = await Promise.all([
-        requestActivity.proofingActivity,
-        requestActivity.publicationActivity
-      ]);
+    this.rows = await Promise.all(model.map(this.#createRow));
+  }
 
-      const row = new Row({
-        intl: this.intl,
-        requestActivity: requestActivity,
-        proofingActivity: proofingActivity,
-        publicationActivity: publicationActivity,
-      });
-      return row;
-    }));
+  async #createRow(requestActivity) {
+    const [proofingActivity, publicationActivity] = await Promise.all([
+      requestActivity.proofingActivity,
+      requestActivity.publicationActivity
+    ]);
+
+    return new Row({
+      requestActivity: requestActivity,
+      proofingActivity: proofingActivity,
+      publicationActivity: publicationActivity,
+    });
   }
 
   @action
