@@ -4,11 +4,8 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { inject as service } from '@ember/service';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
-  @service store;
-
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceUploadModal = false;

@@ -9,19 +9,13 @@
     <p>
       {{@message}}
     </p>
-    <button
-      type="button"
-      class="auk-button auk-button--borderless"
+    <Auk::Button
+      @skin="borderless"
+      @layout="icon-only"
+      @icon="redo"
       {{action @options.onUndo}}
     >
-      <span class="auk-button__content">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-redo"></i>
-        </div>
-        <div class="auk-button__label">
-          {{t "undo"}}
-        </div>
-      </span>
-    </button>
+      {{t "undo"}}
+    </Auk::Button>
   </div>
 </WebComponents::VlAlert>

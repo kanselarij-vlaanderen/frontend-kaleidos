@@ -11,7 +11,10 @@ export default class PublicationActivity extends Model {
   // Relations.
   @belongsTo('publication-subcase') subcase;
 
-  @hasMany('piece') usedPieces;
-  // TODO this should be decision according to model, which is a type of piece but not implemented
-  @hasMany('piece') generatedPieces;
+  @hasMany('piece', {
+    inverse: 'publicationActivitiesUsedBy',
+  }) usedPieces;
+  @hasMany('piece', {
+    inverse: 'publicationActivityGeneratedBy',
+  }) generatedPieces;
 }
