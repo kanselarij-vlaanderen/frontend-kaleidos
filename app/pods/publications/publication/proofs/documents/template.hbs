@@ -28,7 +28,7 @@
           </Auk::Dropdown>
         </EmberPopover>
       </Item>
-      {{#if this.currentSession.isOvrb}}
+      {{#if (auth "ovrb")}}
         <Item>
           <Auk::Button
             @skin="secondary"

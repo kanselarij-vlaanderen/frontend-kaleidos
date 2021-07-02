@@ -1,7 +1,7 @@
 /* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as CONFIG from 'frontend-kaleidos/config/config';
 import UTILS_CONFIG from 'frontend-kaleidos/utils/config';

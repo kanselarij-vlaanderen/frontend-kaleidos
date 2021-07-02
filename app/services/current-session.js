@@ -46,11 +46,19 @@ export default class CurrentSessionService extends Service {
   }
 
   isMemberOf(groups) {
-    const groupUris = groups.map((groupName) => {
+    const GROUP_MAP = {
+      OVRB: ['OVRB', 'ADMIN'],
+      ADMIN: ['ADMIN'],
+      OVERHEID: ['OVERHEID'],
+      PUBLIC: ['ADMIN', 'KANSELARIJ', 'KABINET', 'OVERHEID', 'USER'],
+      VIEWER: ['ADMIN', 'KANSELARIJ', 'KABINET', 'OVERHEID'],
+      EDITOR: ['ADMIN', 'KANSELARIJ'],
+    };
+    const groupKeys = groups.flatMap((groupName) => {
       const key = groupName.toUpperCase();
-      return CONSTANTS.ACCOUNT_GROUPS[key];
+      return GROUP_MAP[key];
     });
-    console.log(groupUris, groups);
+    const groupUris = groupKeys.map((key) => CONSTANTS.ACCOUNT_GROUPS[key]);
     return groupUris.includes(this.groupUri);
   }
 
