@@ -1,0 +1,16 @@
+<Auk::Navbar>
+  <Auk::Toolbar @size="large">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Tabs>
+        <Auk::Tab @route="publications.publication.proofs.documents">
+          {{t "documents"}}
+        </Auk::Tab>
+        <Auk::Tab @route="publications.publication.proofs.requests">
+          {{t "requests"}}
+        </Auk::Tab>
+      </Auk::Tabs>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+{{outlet}}

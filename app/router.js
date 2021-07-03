@@ -54,9 +54,7 @@ Router.map(function() {
     this.route('government-domains', () => {});
     this.route('government-fields', () => {});
     this.route('ise-codes', () => {});
-    this.route('emails', { path: '/emailberichten', }, function() {
-      this.route('debug');
-    });
+    this.route('emails', { path: '/emailberichten', });
     this.route('document-types', () => {});
     this.route('case-types', () => {});
     this.route('subcase-types', () => {});
@@ -156,7 +154,10 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('publishpreview', { path: '/drukproeven', });
+        this.route('proofs', { path: '/drukproeven', }, function() {
+          this.route('documents', { path: '/documenten', });
+          this.route('requests', { path: '/aanvragen', });
+        });
         this.route('signatures', { path: '/handtekeningen', });
       });
     });
