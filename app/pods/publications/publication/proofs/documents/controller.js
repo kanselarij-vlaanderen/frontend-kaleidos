@@ -39,10 +39,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     return this.model.length === this.selection.length;
   }
 
-  get selection() {
-    return this.model.filter((row) => row.isSelected).map((row) => row.piece);
-  }
-
   @action
   toggleSelectionAll() {
     if (this.areAllSelected) {
