@@ -68,6 +68,12 @@ export default [
     sortKey: 'publication-subcase.end-date',
   },
   {
+    keyName: 'translations',
+    translationKey: 'publications-table-translations',
+    translationKeySmall: 'publications-table-translations-small',
+    showByDefault: true,
+  },
+  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',

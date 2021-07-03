@@ -1,1 +1,45 @@
-{{outlet}}
+{{ page-title (t "manage-emails")}}
+
+<div class="auk-u-m-8">
+  <div class="auk-u-mb-3">
+    <Auk::Panel>
+      <Auk::Panel::Header>
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
+              <h4 class="auk-panel__title">{{t "manage-emails"}}</h4>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Panel::Header>
+      <Auk::Panel::Body>
+        <Auk::Label class="auk-u-mb-1">
+          {{t "email-to-translationrequest"}}
+        </Auk::Label>
+        <Auk::Input
+          type="text"
+          @value={{mut this.emailToTranslationRequest}}
+          @block={{true}}
+        />
+
+        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+          {{t "email-to-proofrequest"}}
+        </Auk::Label>
+        <Auk::Input
+          type="text"
+          @value={{mut this.emailToProofRequest}}
+          @block={{true}}
+        />
+        <Auk::Button
+          class="auk-u-mt-2 auk-u-mb-1"
+          @skin="primary"
+          @disabled={{this.isDisabled}}
+          {{on "click" this.saveSettings}}
+        >
+          {{t "save"}}
+        </Auk::Button>
+
+      </Auk::Panel::Body>
+    </Auk::Panel>
+  </div>
+</div>

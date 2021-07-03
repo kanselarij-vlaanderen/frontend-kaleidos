@@ -819,6 +819,8 @@
   "publications-table-last-edited" : "Laatst gewijzigd",
   "publications-table-last-edited-by" : "Laatst gewijzigd door",
   "publications-table-last-edited-by-small" : "Laatst gew. door",
+  "publications-table-translations" : "Vertalingen",
+  "publications-table-translations-small" : "Vert.",
   "publications-table-last-edited-small" : "Laatst gewijzigd",
   "publications-table-numacnummer-bs" : "Werknummer Belgisch Staatblad",
   "publications-table-numacnummer-bs-small" : "Numac",
@@ -894,5 +896,7 @@
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris..."
+  "select-mandatee": "Selecteer mandataris...",
+  "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
+  "email-to-proofrequest": "Email ontvanger voor drukproeven"
 }

@@ -86,17 +86,13 @@
                 {{/if}}
               </td>
               <td class="auk-u-text-align--center">
-                <LinkTo
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="nav-right"
                   @route="newsletter"
                   @model={{this.meeting.id}}
-                  class="auk-button auk-button--borderless auk-button--icon"
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-nav-right"></i>
-                    </div>
-                  </span>
-                </LinkTo>
+                />
               </td>
             {{/c.body}}
           {{/table.content}}
