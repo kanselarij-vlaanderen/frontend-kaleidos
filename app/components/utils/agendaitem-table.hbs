@@ -24,14 +24,11 @@ as |tab|
   {{/tab.body}}
 {{/light-table}}
 {{#if isScrolling}}
-  <button type="button" class="auk-button auk-button--secondary auk-button--icon">
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-add"></i>
-      </div>
-      <div class="auk-u-sr-only">
-        {{t "back"}}
-      </div>
-    </span>
-  </button>
+  <Auk::Button
+    @skin="secondary"
+    @layout="icon-only"
+    @icon="add"
+  >
+    {{t "back"}}
+  </Auk::Button>
 {{/if}}

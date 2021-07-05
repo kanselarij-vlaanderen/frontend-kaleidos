@@ -2,8 +2,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import * as CONFIG from 'frontend-kaleidos/config/config';
-import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
   'ontvangen-op': 'receivedDate',
@@ -143,12 +142,13 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
       const filePromises = attachments.mapBy('file');
       const attachmentFilesPromise = Promise.all(filePromises);
-      const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONFIG.PUBLICATION_EMAIL.OUTBOX);
-      const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
+      const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+      const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+      const [attachmentFiles, outbox, mailSettings] = await Promise.all([attachmentFilesPromise, outboxPromise, mailSettingsPromise]);
       const email = this.store.createRecord('email', {
-        from: UTILS_CONFIG.EMAIL.DEFAULT_FROM,
-        to: UTILS_CONFIG.EMAIL.TO.publishpreviewEmail,
-        folder: mailFolder,
+        to: mailSettings.proofRequestToEmail,
+        from: mailSettings.defaultFromEmail,
+        folder: outbox,
         subject: requestProperties.subject,
         message: requestProperties.message,
         attachments: attachmentFiles,

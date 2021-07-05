@@ -18,19 +18,16 @@
           A disabled state would be better to avoid flashing a new button in view once loaded. --}}
           {{#if (and @subcase this.loadCase.isIdle)}}
             <Auk::Toolbar::Item>
-              <LinkTo
-                class="auk-button auk-button--tertiary"
-                data-test-agendaitem-titles-link-to-subcase={{true}}
+              <Auk::Button
+                @skin="tertiary"
+                @layout="icon-right"
+                @icon="chevron-right"
                 @route="cases.case.subcases.subcase.overview"
                 @models={{array this.case.id @subcase.id}}
+                data-test-agendaitem-titles-link-to-subcase={{true}}
               >
-                <span class="auk-button__content">
-                  <span class="auk-button__label">{{t "to-subcase"}}</span>
-                  <div class="auk-icon auk-icon--default auk-icon--chevron-right">
-                    <i class="ki ki-chevron-right"></i>
-                  </div>
-                </span>
-              </LinkTo>
+                {{t "to-subcase"}}
+              </Auk::Button>
             </Auk::Toolbar::Item>
           {{/if}}
           {{#if this.currentSession.isEditor}}
