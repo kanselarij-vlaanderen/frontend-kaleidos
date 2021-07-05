@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationDocumentsRoute extends Route {
   async model() {
@@ -6,7 +7,7 @@ export default class PublicationsPublicationDocumentsRoute extends Route {
     const pieces = await this.store.query('piece', {
       'filter[publication-flow][:id:]': parentParams.publication_id,
       // TODO: paginatie uitklaren in design
-      'page[size]': 200,
+      'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     });
     return pieces;
   }

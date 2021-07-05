@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 // / <reference types="Cypress" />
 
-import settings from '../../selectors/settings.selectors';
-import mandatee from '../../selectors/mandatee.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
+import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Full test for creating mandatees', () => {
@@ -44,35 +44,27 @@ context('Full test for creating mandatees', () => {
     cy.wait('@getIseCodes', {
       timeout: 30000,
     });
-    // TODO use input fields directly (after au refactor)
-    cy.get(mandatee.createMandatee.titleContainer).within(() => {
-      cy.get(utils.vlFormInput).type(ministerTitle);
-    });
-    cy.get(mandatee.createMandatee.nicknameContainer).within(() => {
-      cy.get(utils.vlFormInput).type(ministerNickName);
-    });
-    cy.get(mandatee.personSelector.personDropdown).within(() => {
-      cy.get(dependency.emberPowerSelect.trigger)
-        .scrollIntoView()
-        .click();
-    });
+    // We could use input fields directly (after au refactor)
+    cy.get(mandatee.createMandatee.titleContainer).find(utils.vlFormInput)
+      .type(ministerTitle);
+    cy.get(mandatee.createMandatee.nicknameContainer).find(utils.vlFormInput)
+      .type(ministerNickName);
+    cy.get(mandatee.personSelector.personDropdown).find(dependency.emberPowerSelect.trigger)
+      .scrollIntoView()
+      .click();
     cy.get(dependency.emberPowerSelect.option).contains('Liesbeth Homans')
       .scrollIntoView()
       .click();
 
-    cy.get(mandatee.createMandatee.iseCodeContainer).within(() => {
-      cy.get(dependency.emberPowerSelect.trigger)
-        .scrollIntoView()
-        .click();
-    });
+    cy.get(mandatee.createMandatee.iseCodeContainer).find(dependency.emberPowerSelect.trigger)
+      .scrollIntoView()
+      .click();
 
     cy.get(dependency.emberPowerSelect.option).contains('Aanvullend net')
       .click();
-    cy.get(mandatee.createMandatee.iseCodeContainer).within(() => {
-      cy.get(dependency.emberPowerSelect.trigger)
-        .scrollIntoView()
-        .click();
-    });
+    cy.get(mandatee.createMandatee.iseCodeContainer).find(dependency.emberPowerSelect.trigger)
+      .scrollIntoView()
+      .click();
 
     cy.get(utils.vlDatepicker).eq(0)
       .click();
@@ -88,11 +80,6 @@ context('Full test for creating mandatees', () => {
       'Cypress test voor het testen van toegevoegde documenten',
       'In voorbereiding',
       'Principiële goedkeuring m.h.o. op adviesaanvraag');
-    // cy.addSubcase('Nota',
-    //   subcaseTitle2,
-    //   'Cypress test voor het testen van toegevoegde agendapunten',
-    //   'In voorbereiding',
-    //   'Principiële goedkeuring m.h.o. op adviesaanvraag');
     cy.createAgenda(KIND, agendaDate, 'locatie');
 
     cy.openAgendaForDate(agendaDate);
@@ -106,44 +93,32 @@ context('Full test for creating mandatees', () => {
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    // TODO is there a better way to get this by name?
-    cy.contains(ministerNickName).parents('tr')
-      .within(() => {
-        cy.get(settings.ministers.mandatee.edit).click();
-      });
-    // TODO make this agendaDate minus x days or weeks, no set date
-    const enddateForMandatee = Cypress.moment('2020-03-02').set({
+    cy.contains(ministerNickName).parents(settings.ministers.sortableGroupRow)
+      .find(settings.ministers.mandatee.edit)
+      .click();
+    const enddateForMandatee = Cypress.moment().set({
       hour: 10, minute: 10,
     });
 
     cy.get(utils.vlDatepicker).eq(1)
       .click();
     cy.setDateInFlatpickr(enddateForMandatee);
-
     cy.get(mandatee.editMandatee.save).click();
-    cy.wait(3000);
-    // TODO Fix grammar einddatum
-    cy.get(utils.vlModalVerify.save).contains('Eindatum aanpassen');
+    cy.get(utils.vlModalVerify.save).contains('Einddatum aanpassen');
     cy.get(utils.vlModalVerify.cancel).click();
     cy.get(mandatee.editMandatee.cancel).click();
     cy.visit('/');
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.settings.manageMinisters).click();
     cy.url().should('include', 'instellingen/ministers');
-    // TODO is there a better way to get this by name?
-    cy.contains(ministerNickName).parents('tr')
-      .within(() => {
-        cy.get(settings.ministers.mandatee.resign).click();
-      });
-    cy.wait(3000);
-    // TODO Fix grammar of popup ?
+    cy.contains(ministerNickName).parents(settings.ministers.sortableGroupRow)
+      .find(settings.ministers.mandatee.resign)
+      .click();
     cy.get(mandatee.manageMandatee.changesAlert).should('be.visible');
     cy.get(utils.vlModalFooter.cancel).click();
-    // TODO is there a better way to get this by name?
-    cy.contains(ministerNickName).parents('tr')
-      .within(() => {
-        cy.get(settings.ministers.mandatee.delete).click();
-      });
+    cy.contains(ministerNickName).parents(settings.ministers.sortableGroupRow)
+      .find(settings.ministers.mandatee.delete)
+      .click();
     cy.get(utils.vlModalVerify.save).click();
   });
 });

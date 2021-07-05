@@ -2,20 +2,14 @@
   {{page-title (t "manage-ministers")}}
   <div class="auk-o-flex auk-o-flex--justify-between">
     <h4 class="auk-h3"></h4>
-    <button data-test-route-settings-ministers-add
-      type="button"
-      class="auk-button auk-button--primary"
+    <Auk::Button
+      @skin="primary"
+      @icon="add"
       {{action "toggleIsAdding"}}
+      data-test-route-settings-ministers-add
     >
-      <span class="auk-button__content">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-add"></i>
-        </div>
-        <div class="auk-button__label">
-          {{t "create-mandatee"}}
-        </div>
-      </span>
-    </button>
+      {{t "create-mandatee"}}
+    </Auk::Button>
   </div>
   {{#if (await model)}}
   {{!-- "tbody" tagname in the "sortable-group"-helper --}}
@@ -97,46 +91,37 @@
               <Auk::Toolbar>
                 <Auk::Toolbar::Group @position="center">
                   <Auk::Toolbar::Item>
-                    <button data-test-route-settings-ministers-mandatee-edit={{index}}
-                      type="button"
-                      class="auk-button auk-button--borderless auk-button--icon"
+                    <Auk::Button
+                      @skin="borderless"
+                      @layout="icon-only"
+                      @icon="pencil"
                       {{action "toggleProperty" "isEditingMandatee" mandatee}}
+                      data-test-route-settings-ministers-mandatee-edit={{index}}
                     >
-                      <span class="auk-button__content">
-                        <div class="auk-icon auk-icon--default">
-                          <i class="ki ki-pencil"></i>
-                        </div>
-                      </span>
-                    </button>
+                    </Auk::Button>
                   </Auk::Toolbar::Item>
                   <Auk::Toolbar::Item>
-                    <button type="button"
-                      data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
-                      class="auk-button auk-button--borderless auk-button--icon"
-                      {{action "toggleProperty" "isResigningMandatee" mandatee}}
-                    >
-                      <span class="auk-button__content">
-                        <div class="auk-icon auk-icon--default">
-                          <i class="ki ki-settings"></i>
-                        </div>
-                        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-                          {{t "resign"}}
-                        </EmberTooltip>
-                      </span>
-                    </button>
+                    <div class="auk-u-position-relative auk-u-inline-block">
+                      <Auk::Button
+                        @skin="borderless"
+                        @layout="icon-only"
+                        @icon="settings"
+                        {{action "toggleProperty" "isResigningMandatee" mandatee}}
+                        data-test-mandatee-route-settings-ministers-mandatee-resign={{index}}
+                      />
+                      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+                        {{t "resign"}}
+                      </EmberTooltip>
+                    </div>
                   </Auk::Toolbar::Item>
                   <Auk::Toolbar::Item>
-                    <button type="button"
-                      data-test-route-settings-ministers-mandatee-delete={{index}}
-                      class="auk-button auk-button--borderless auk-button--icon auk-u-text-error"
+                    <Auk::Button
+                      @skin="danger-borderless"
+                      @layout="icon-only"
+                      @icon="delete"
                       {{action "toggleProperty" "isDeletingMandatee" mandatee}}
-                    >
-                      <span class="auk-button__content">
-                        <div class="auk-icon auk-icon--default">
-                          <i class="ki ki-delete"></i>
-                        </div>
-                      </span>
-                    </button>
+                      data-test-route-settings-ministers-mandatee-delete={{index}}
+                    />
                   </Auk::Toolbar::Item>
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>

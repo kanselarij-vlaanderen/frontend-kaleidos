@@ -46,11 +46,10 @@ context('Subcase tests', () => {
   const agendaDate = Cypress.moment().add(2, 'weeks')
     .day(4); // Next friday
   // const caseTitle = 'Cypress test: subcases - 1594024946'; // The case is in the default data set with id 5F02E3F87DE3FC0008000002
-  const SubcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
+  const subcaseTitleShort = `Cypress test: add subcase - ${currentTimestamp()}`;
 
   before(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
@@ -67,10 +66,10 @@ context('Subcase tests', () => {
     const subcaseType = 'In voorbereiding';
     const subcaseName = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
     cy.visit('/dossiers/5F02E3F87DE3FC0008000002/deeldossiers');
-    cy.addSubcase(type, SubcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
+    cy.addSubcase(type, subcaseTitleShort, subcaseTitleLong, subcaseType, subcaseName);
     cy.openSubcase(0);
 
-    cy.changeSubcaseAccessLevel(false, true, 'Intern Overheid', SubcaseTitleShort, 'Cypress test nieuwere lange titel');
+    cy.changeSubcaseAccessLevel(false, true, 'Intern Overheid', subcaseTitleShort, 'Cypress test nieuwere lange titel');
     cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs'); // TODO: awaits @iseCodes that doesn't come
     cy.addSubcaseMandatee(2, 0, 0);
 
@@ -95,7 +94,7 @@ context('Subcase tests', () => {
     cy.get(cases.subcaseDescription.requestedBy).contains(/Hilde Crevits/);
 
     cy.openAgendaForDate(agendaDate);
-    cy.openAgendaitemDossierTab(SubcaseTitleShort);
+    cy.openAgendaitemDossierTab(subcaseTitleShort);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('exist');
   });
 
@@ -225,14 +224,14 @@ context('Subcase tests', () => {
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
-  it('Changes to agenda item Themas propagate properly', () => {
+  it.only('Changes to agenda item Themas propagate properly', () => {
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);
     cy.wait('@getAgenda');
 
     // Are there Themes in this agenda? Should be none
-    cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
     cy.route('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
@@ -275,18 +274,16 @@ context('Subcase tests', () => {
     cy.wait('@getMeetingsfilter');
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
-    // cy.route('GET', '/agendas**').as('getAgendas');
     cy.route('GET', '/agendaitems**').as('getAgendaitems');
     cy.get(route.newsletters.dataTable).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
-    // cy.wait('@getAgendas');
     cy.wait('@getAgendaitems');
 
     // open the themes editor.
     cy.route('GET', '**/themes').as('getKortBestekThemes');
-    cy.get(route.newsletter.dataTable).find('.ki-pencil')
-      .first()
+    cy.get(newsletter.tableRow.newsletterRow).eq(0)
+      .find(newsletter.buttonToolbar.edit)
       .click();
     cy.wait('@getKortBestekThemes');
 
@@ -317,26 +314,18 @@ context('Subcase tests', () => {
       .click();
 
     // Save this stuff.
-    // cy.route('GET', '**/pieces?page*size*=9999').as('pieces');
     cy.route('PATCH', '/newsletter-infos/**').as('newsletterInfosPatch');
     cy.get(newsletter.editItem.save).click()
       .wait('@newsletterInfosPatch');
-    // cy.wait('@pieces');
 
-    // dont open links in new windows.
-    // TODO why go to agendaitem, then subcase, then agendaitem?
-    cy.get('a').invoke('removeAttr', 'target');
-    cy.get(newsletter.buttonToolbar.linkToAgendaitem).eq(0)
-      .click();
-
-    cy.wait(1000);
-    cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
-    // "Go to agendaitem
+    // go to agendaitem
     cy.route('GET', '/meetings/**').as('getMeetingsRequest');
-    cy.get(cases.subcaseDescription.agendaLink).click();
+    cy.get(newsletter.buttonToolbar.linkToAgendaitem).eq(0)
+      .invoke('removeAttr', 'target') // dont open links in new windows by removing target (breaks cypress test).
+      .click();
     cy.wait('@getMeetingsRequest');
 
-    cy.openAgendaitemKortBestekTab(SubcaseTitleShort);
+    cy.openAgendaitemKortBestekTab(subcaseTitleShort);
 
     cy.get(newsletter.agendaitemNewsItem.themes).contains('Sport');
     cy.get(newsletter.agendaitemNewsItem.themes).contains('Overheid');

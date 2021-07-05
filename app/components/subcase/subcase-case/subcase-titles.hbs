@@ -41,9 +41,12 @@
 {{#if (not subcase.showAsRemark)}}
   <div class="auk-u-mb-2">
     {{#if (await subcase.subcaseName)}}
-      <span class={{await pillClass}}>
+      <Auk::Pill
+        @skin={{await pillSkin}}
+        class="auk-u-text-capitalize"
+      >
         {{await subcase.subcaseName}}
-      </span>
+      </Auk::Pill>
     {{/if}}
   </div>
 {{/if}}

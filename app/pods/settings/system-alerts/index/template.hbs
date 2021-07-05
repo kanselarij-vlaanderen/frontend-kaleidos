@@ -21,72 +21,45 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <LinkTo
-            @tagName="button"
-            @type="button"
-            class="auk-button auk-button--borderless"
+          <Auk::Button
+            @skin="borderless"
             @route="settings.overview"
           >
-            <span class="auk-button__content">
-              {{t "cancel"}}
-            </span>
-          </LinkTo>
+            {{t "cancel"}}
+          </Auk::Button>
         </div>
       </div>
       <div class="auk-toolbar-complex__right">
         <div class="auk-toolbar-complex__item">
-          <LinkTo
-            data-test-route-settings-system-alerts-index-add
-            @tagName="button"
-            @type="button"
-            class="auk-button auk-button--tertiary"
+          <Auk::Button
+            @skin="tertiary"
+            @icon="add"
             @route="settings.system-alerts.new"
+            data-test-route-settings-system-alerts-index-add
           >
-            <span class="auk-button__content">
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "message"}}
-                {{t "add"}}
-              </div>
-            </span>
-          </LinkTo>
+            {{t "message"}}
+            {{t "add"}}
+          </Auk::Button>
           {{#if this.selectedAlert}}
-            <LinkTo
-              data-test-route-settings-system-alerts-index-edit
-              @tagName="button"
-              @type="button"
-              class="auk-button auk-button--tertiary"
+            <Auk::Button
+              @skin="tertiary"
+              @icon="pencil"
               @route="settings.system-alerts.edit"
               @model={{this.selectedAlert.id}}
+              data-test-route-settings-system-alerts-index-edit
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "message"}}
-                  {{t "edit"}}
-                </div>
-              </span>
-            </LinkTo>
-            <button
-              data-test-route-settings-system-alerts-index-remove
-              type="button"
-              class="auk-button auk-button--tertiary"
+              {{t "message"}}
+              {{t "edit"}}
+            </Auk::Button>
+            <Auk::Button
+              @skin="tertiary"
+              @icon="delete"
               {{on "click" (perform remove this.selectedAlert)}}
+              data-test-route-settings-system-alerts-index-remove
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-delete"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "message"}}
-                  {{t "delete"}}
-                </div>
-              </span>
-            </button>
+              {{t "message"}}
+              {{t "delete"}}
+            </Auk::Button>
           {{/if}}
         </div>
       </div>
