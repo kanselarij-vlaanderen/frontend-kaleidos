@@ -21,38 +21,40 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
-
-  @tracked selection;
-  /** @type {string} key name. prepended with minus if descending */
+  @tracked selectedPieces = [];
   @tracked sortingString = undefined;
-
-  @tracked isRequestModalOpen = false;
-  @tracked requestStage;
+  @tracked isProofRequestModalOpen = false;
+  @tracked proofRequestStage;
 
   initSort() {
     this.sortingString = this.qpSortingString;
-    this.#sort(this.sortingString);
+    this.sort(this.sortingString);
   }
 
-  get areAllSelected() {
-    return this.model.length === this.selection.length;
+  get areAllPiecesSelected() {
+    return this.model.length === this.selectedPieces.length;
+  }
+
+  get canOpenProofRequestModal() {
+    return this.selectedPieces.length > 0;
   }
 
   @action
-  toggleSelectionAll() {
-    if (this.areAllSelected) {
-      this.selection.clear();
+  togglePieceSelection(selectedPiece) {
+    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+    if (isPieceSelected) {
+      this.selectedPieces.removeObject(selectedPiece);
     } else {
-      this.selection = this.model.toArray();
+      this.selectedPieces.pushObject(selectedPiece);
     }
   }
 
   @action
-  toggleSelection(row) {
-    if (!this.selection.includes(row)) {
-      this.selection.pushObject(row);
+  toggleAllPiecesSelection() {
+    if (this.areAllPiecesSelected) {
+      this.selectedPieces = [];
     } else {
-      this.selection.removeObject(row);
+      this.selectedPieces = [...this.model];
     }
   }
 
@@ -60,12 +62,12 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   changeSorting(sortingString) {
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
-    this.#sort(sortingString);
+    this.sort(sortingString);
     // sort is not tracked by ember
     this.model.arrayContentDidChange();
   }
 
-  #sort(sortingString) {
+  sort(sortingString) {
     let property = 'created';
     let isDescending = false;
     if (sortingString) {
@@ -80,36 +82,32 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
   }
 
-  get canOpenRequestModal() {
-    return this.selection.length > 0;
-  }
-
   @action
-  openRequestModal(stage) {
-    if (stage === 'new') {
-      this.requestStage = stage;
-      this.isRequestModalOpen = true;
+  openProofRequestModal(stage) {
+    if (stage === 'initial') {
+      this.proofRequestStage = stage;
+      this.isProofRequestModalOpen = true;
     }
   }
 
   @action
-  cancelRequest() {
-    this.isRequestModalOpen = false;
+  closeProofRequestModal() {
+    this.isProofRequestModalOpen = false;
   }
 
   @action
-  async saveRequest(requestProperties) {
+  async saveProofRequest(requestProperties) {
     try {
-      await this.#saveRequest(requestProperties);
+      await this.persistProofRequest(requestProperties);
     } finally {
-      this.isRequestModalOpen = false;
+      this.isProofRequestModalOpen = false;
     }
-    this.selection = [];
+    this.selectedPieces = [];
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async #saveRequest(requestProperties) {
-    if (requestProperties.stage === 'new') {
+  async persistProofRequest(requestProperties) {
+    if (requestProperties.stage === 'initial') {
       const now = new Date();
       const {
         publicationSubcase,

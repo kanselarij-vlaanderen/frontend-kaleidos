@@ -1,72 +1,74 @@
 <Auk::Modal>
   <Auk::Modal::Header
-          @resizeable={{false}}
-          @title=
-            {{t
-              "request-translations-for-publication"
-              publicationNumber=@translationSubcase.publicationFlow.identification.idName
-            }}
-          @onClose={{@onCancel}}
-  />
+    @title={{t
+      "request-translations-for-publication"
+      publicationNumber=@publicationFlow.identification.idName
+    }}
+    @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group" style="max-width: 30rem;">
-        <Auk::Label for="dateSet">{{t "translation-due-date"}}</Auk::Label>
-        <Auk::Datepicker id="dateSet"
-          @date={{this.translationDueDate}}
-          @onChange={{this.setTranslationDueDate}}/>
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label for="subjectTransl">
-          {{t 'subject'}}
-        </Auk::Label>
-        <Auk::Input type="text" id="subjectTransld"
-          @value={{mut this.subject}}
-          class="auk-input auk-input--block" />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label for="messageTransl" @isRequired={{true}}>
-          {{t 'message'}}
-        </Auk::Label>
-        <Auk::Textarea id="messageTransld" @rows="6" @value={{mut this.message}} />
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>
-          {{t 'files'}}
-        </Auk::Label>
-
-        <Auk::List @isBordered="true" class="auk-list--view">
-          {{#each @selectedPieces as |piece|}}
-            <Auk::List::Item @skin="gray-100">
-              <div class="auk-u-ml-2">
-                <Auk::Icon @name="document" @skin="muted-dark" />
-              </div>
-              <div class="auk-u-mx-2">
-                <span>{{piece.name}}</span>
-                <div class="auk-u-muted auk-u-text-small">
-                  {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+    <Utils::LoadableContent @isLoading={{this.onSave.isRunning}} @reserveSpace={{true}}>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        {{!-- Due date --}}
+        <div class="auk-form-group" style="max-width: 30rem;">
+          <Auk::Label for="translationRequestDueDate">{{t "translation-due-date"}}</Auk::Label>
+          <Auk::Datepicker id="translationRequestDueDate"
+            @date={{this.translationDueDate}}
+            @onChange={{this.setTranslationDueDate}} />
+        </div>
+        {{!-- Subject --}}
+        <div class="auk-form-group">
+          <Auk::Label for="translationRequestSubject">
+            {{t 'subject'}}
+          </Auk::Label>
+          <Auk::Input type="text" id="translationRequestSubject"
+            @value={{mut this.subject}}
+            class="auk-input auk-input--block" />
+        </div>
+        {{!-- Message --}}
+        <div class="auk-form-group">
+          <Auk::Label for="translationRequestMessage" @required={{true}}>
+            {{t 'message'}}
+          </Auk::Label>
+          <Auk::Textarea id="translationRequestMessage" @rows="6"
+            @value={{mut this.message}} />
+        </div>
+        {{!-- Attachments --}}
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "attachments"}}
+          </Auk::Label>
+          <Auk::List @isBordered="true" class="auk-list--view">
+            {{#each @attachments as |piece|}}
+              <Auk::List::Item @skin="gray-100">
+                <div class="auk-u-ml-2">
+                  <Auk::Icon @name="document" @skin="muted-dark" />
                 </div>
-              </div>
-              <Auk::Button
-                @layout="icon-only"
-                @icon="book"
-                @skin="borderless"
-                @href={{piece.viewDocumentURL}}
-                target="_blank"
-              />
-            </Auk::List::Item>
-          {{/each}}
-        </Auk::List>
+                <div class="auk-u-mx-2">
+                  <span>{{piece.name}}</span>
+                  <div class="auk-u-muted auk-u-text-small">
+                    {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+                  </div>
+                </div>
+                <Auk::Button
+                  @layout="icon-only"
+                  @icon="book"
+                  @skin="borderless"
+                  @href={{piece.viewDocumentURL}}
+                  target="_blank"
+                />
+              </Auk::List::Item>
+            {{/each}}
+          </Auk::List>
+        </div>
       </div>
-    </div>
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
       @skin="primary"
-      @disabled={{this.saveIsDisabled}}
-      @loading={{this.saveRequest.isRunning}}
-      {{on "click" (perform this.saveRequest)}}
-    >
+      @disabled={{not this.canSave}}
+      @loading={{this.onSave.isRunning}}
+      {{on "click" (perform this.onSave)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

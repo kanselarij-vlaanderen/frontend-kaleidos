@@ -31,9 +31,7 @@
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label>{{t "document-type"}}</Auk::Label>
-                  <Auk::Pill @skin="white">
-                    {{this.translationDocument.file.extension}}
-                  </Auk::Pill>
+                  <Utils::Documents::FileTypePill @extension={{this.translationDocument.file.extension}} />
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label for="dateSet">{{t "received-at"}}</Auk::Label>
