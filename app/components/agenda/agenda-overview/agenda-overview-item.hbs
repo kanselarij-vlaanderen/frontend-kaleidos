@@ -157,12 +157,14 @@
               {{/if}}
             </div>
             {{#if this.subcase.confidential}}
-              <span class="vlc-agenda-items__confidentiality-button auk-pill auk-pill--danger" data-test-agenda-overview-item-confidentiality-locked>
-                <div class="auk-icon auk-icon--default vlc-agenda-items__icons">
-                  <i class="ki ki-lock-closed"></i>
-                </div>
+              <Auk::Pill
+                @skin="danger"
+                @icon="lock-closed"
+                class="auk-u-ml-2"
+                data-test-agenda-overview-item-confidentiality-locked
+              >
                 {{t "confidential"}}
-              </span>
+              </Auk::Pill>
             {{/if}}
           </div>
         </div>

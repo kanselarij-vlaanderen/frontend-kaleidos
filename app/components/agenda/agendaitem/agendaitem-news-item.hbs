@@ -45,13 +45,13 @@
   <hr/>
   <div class="auk-u-mb-4 auk-u-mt-2">
     {{#if @newsletterInfo.finished}}
-      <div class="auk-pill auk-pill--success">
+      <Auk::Pill @skin="success">
         {{t "finished"}}
-      </div>
+      </Auk::Pill>
     {{else}}
-      <div class="auk-pill auk-pill--warning">
+      <Auk::Pill @skin="warning">
         {{t "not-finished"}}
-      </div>
+      </Auk::Pill>
     {{/if}}
   </div>
 </div>

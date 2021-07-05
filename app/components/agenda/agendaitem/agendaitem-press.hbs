@@ -28,13 +28,13 @@
   <hr/>
   <div class="auk-u-mt-2">
     {{#if agendaitem.forPress}}
-      <div class="auk-pill auk-pill--success">
+      <Auk::Pill @skin="success">
         {{t "for-press"}}
-      </div>
+      </Auk::Pill>
     {{else}}
-      <div class="auk-pill auk-pill--warning">
+      <Auk::Pill @skin="warning">
         {{t "not-public-press"}}
-      </div>
+      </Auk::Pill>
     {{/if}}
   </div>
 {{else}}

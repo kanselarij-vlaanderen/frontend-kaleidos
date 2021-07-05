@@ -36,18 +36,13 @@
     <div class="auk-toolbar-complex__right">
       <div class="auk-toolbar-complex__item">
         {{#if shouldShowPrintButton}}
-          <button type="button" class="auk-button auk-button--tertiary"
+          <Auk::Button
+            @skin="tertiary"
+            @icon="printer-view"
             {{action "print"}}
           >
-            <span class="auk-button__content">
-              <div class="auk-icon auk-icon--default">
-                <i class="ki ki-printer-view"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "print"}}
-              </div>
-            </span>
-          </button>
+            {{t "print"}}
+          </Auk::Button>
         {{/if}}
       </div>
     </div>

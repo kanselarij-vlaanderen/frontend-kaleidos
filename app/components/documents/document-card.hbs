@@ -59,61 +59,58 @@
             </div>
             <div class="auk-toolbar-complex__item">
               {{#if this.currentSession.isEditor}}
-                <button
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  data-test-document-card-actions
-                  type="button"
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-more"></i>
-                    </div>
-                    <AttachPopover
-                      @renderInPlace={{true}}
-                      @class="ember-attacher-popper"
-                      @hideOn="clickout click"
-                      @showOn="click"
-                      @animation="shift"
-                      @placement="bottom"
-                      as |attacher|
-                    >
-                      <ul class="vlc-dropdown-menu">
-                        <li class="vlc-dropdown-menu__item">
-                          <button class="auk-button-link auk-button-link--block" type="button"
-                            data-test-document-upload-new-piece
-                            {{on "click" attacher.hide}}
-                            {{on "click" (fn this.openUploadModal)}}
-                          >
-                            <span class="auk-button__content">
-                              {{t "new-version"}}
-                            </span>
-                          </button>
-                        </li>
-                        <li class="vlc-dropdown-menu__item">
-                          <button class="auk-button-link auk-button-link--block" type="button"
-                            {{on "click" attacher.hide}}
-                            {{on "click" this.enableEditPieceName}}
-                          >
-                            <span class="auk-button__content">
-                              {{t "document-title-edit"}}
-                            </span>
-                          </button>
-                        </li>
-                        <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                        <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
-                          <button class="auk-button-link auk-button-link--block auk-u-text-error" data-test-document-card-delete type="button"
-                            {{on "click" attacher.hide}}
-                            {{on "click" this.deleteDocumentContainer}}
-                          >
-                            <span class="auk-button__content">
-                              {{t "document-delete"}}
-                            </span>
-                          </button>
-                        </li>
-                      </ul>
-                    </AttachPopover>
-                  </span>
-                </button>
+                <div class="auk-u-position-relative auk-u-inline-block">
+                  <Auk::Button
+                    @skin="borderless"
+                    @layout="icon-only"
+                    @icon="more"
+                    data-test-document-card-actions
+                  />
+                  <AttachPopover
+                    @renderInPlace={{true}}
+                    @class="ember-attacher-popper"
+                    @hideOn="clickout click"
+                    @showOn="click"
+                    @animation="shift"
+                    @placement="bottom"
+                    as |attacher|
+                  >
+                    <ul class="vlc-dropdown-menu">
+                      <li class="vlc-dropdown-menu__item">
+                        <button class="auk-button-link auk-button-link--block" type="button"
+                          data-test-document-upload-new-piece
+                          {{on "click" attacher.hide}}
+                          {{on "click" (fn this.openUploadModal)}}
+                        >
+                          <span class="auk-button__content">
+                            {{t "new-version"}}
+                          </span>
+                        </button>
+                      </li>
+                      <li class="vlc-dropdown-menu__item">
+                        <button class="auk-button-link auk-button-link--block" type="button"
+                          {{on "click" attacher.hide}}
+                          {{on "click" this.enableEditPieceName}}
+                        >
+                          <span class="auk-button__content">
+                            {{t "document-title-edit"}}
+                          </span>
+                        </button>
+                      </li>
+                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                      <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                        <button class="auk-button-link auk-button-link--block auk-u-text-error" data-test-document-card-delete type="button"
+                          {{on "click" attacher.hide}}
+                          {{on "click" this.deleteDocumentContainer}}
+                        >
+                          <span class="auk-button__content">
+                            {{t "document-delete"}}
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  </AttachPopover>
+                </div>
               {{/if}}
             </div>
           </div>
@@ -127,34 +124,18 @@
                   @type="text"
                   @value={{this.pieceNameBuffer}}
                 />
-                <button
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  type="button"
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="check"
                   {{on "click" (perform this.savePieceName)}}
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-check"></i>
-                    </div>
-                    <div class="auk-u-sr-only">
-                      {{t "more-options"}}
-                    </div>
-                  </span>
-                </button>
-                <button
-                  class="auk-button auk-button--borderless auk-button--icon"
-                  type="button"
+                />
+                <Auk::Button
+                  @skin="borderless"
+                  @layout="icon-only"
+                  @icon="cross"
                   {{on "click" this.cancelEditPieceName}}
-                >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-cross"></i>
-                    </div>
-                    <div class="auk-u-sr-only">
-                      {{t "more-options"}}
-                    </div>
-                  </span>
-                </button>
+                />
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-title-header>
