@@ -7,7 +7,7 @@
     </Auk::Toolbar::Item>
     {{#if (await this.subcase.confidential)}}
       <Auk::Toolbar::Item>
-        <Auk::Pill @skin="danger" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
+        <Auk::Pill data-test-route-agenda---agendaitem-index-confidential @skin="danger" @icon="lock-closed">{{t "confidential"}}</Auk::Pill>
       </Auk::Toolbar::Item>
     {{/if}}
   </Auk::Toolbar::Group>
