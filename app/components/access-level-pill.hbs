@@ -4,13 +4,14 @@
   {{else}}
     {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
-        <span
-          class={{this.pillClass}}
+        <Auk::Pill
+          @skin={{this.pillSkin}}
+          class="auk-u-cursor-pointer"
           data-test-access-level-pill
           {{on "click" this.toggleEdit}}
         >
           {{this.accessLevelLabel}}
-        </span>
+        </Auk::Pill>
       {{else}}
         <div style="width:75%">
           <Utils::ModelSelector
