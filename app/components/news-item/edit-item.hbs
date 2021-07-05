@@ -2,29 +2,21 @@
   <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end auk-u-mb-2 auk-o-flex--justify-end">
     {{#if (not (is-pending agendaitem.notaOrVisienota))}}
       {{#if (not (await agendaitem.notaOrVisienota))}}
-        <button type="button" class="auk-button auk-button--secondary" disabled>
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-document"></i>
-            </div>
-            <div class="auk-button__label">
-              {{t "no-nota"}}
-            </div>
-          </span>
-        </button>
+        <Auk::Button
+          @skin="secondary"
+          @icon="document"
+          @disabled={{true}}
+        >
+          {{t "no-nota"}}
+        </Auk::Button>
       {{else}}
-        <button type="button" class="auk-button auk-button--secondary"
+        <Auk::Button
+          @skin="secondary"
+          @icon="document"
           {{action "openDocument" agendaitem bubbles=false}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-document"></i>
-            </div>
-            <div class="auk-button__label">
-              {{t "open-note"}}
-            </div>
-          </span>
-        </button>
+          {{t "open-note"}}
+        </Auk::Button>
       {{/if}}
     {{else}}
       <div class="auk-loader" role="alert" aria-busy="true">

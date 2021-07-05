@@ -27,14 +27,12 @@
           </div>
           <div class="auk-toolbar-complex__item">
             {{#if currentSession.isEditor}}
-              <button class="auk-button auk-button--muted-borderless auk-button--icon"
-                type="button"
+              <Auk::Button
+                @skin="danger-borderless"
+                @layout="icon-only"
+                @icon="link-broken"
                 {{on "click" this.deletePieceLink}}
-              >
-                <span class="auk-button__content">
-                  <Auk::Icon @name="link-broken" @skin="danger" />
-                </span>
-              </button>
+              />
             {{/if}}
           </div>
         </div>
