@@ -21,8 +21,8 @@
             {{t 'subject'}}
           </Auk::Label>
           <Auk::Input type="text" id="translationRequestSubject"
-            @value={{mut this.subject}}
-            class="auk-input auk-input--block" />
+            @block={{true}}
+            @value={{mut this.subject}} />
         </div>
         {{!-- Message --}}
         <div class="auk-form-group">
