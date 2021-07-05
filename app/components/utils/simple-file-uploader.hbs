@@ -3,13 +3,15 @@
   @accept=".csv"
   @onfileadd={{action "uploadFile"}} as |queue|>
 
-  {{!-- refactored the strucutre below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
+  {{!-- refactored the structure below a bit to remove redundant nesting (vl-refactor), but is still unintuitive --}}
   {{#if queue.files.length}}
-    <button type="button" class="auk-button auk-button--secondary" disabled>
-      <span class="auk-button__content">
-        {{t "import-users-text"}}
-      </span>
-    </button>
+    <Auk::Button
+      @skin="secondary"
+      @icon="import"
+      @disabled={{true}}
+    >
+      {{t "import-users-text"}}
+    </Auk::Button>
   {{else}}
     <span class="auk-button auk-button--secondary auk-u-block" data-test-simple-file-uploader>
       <span class="auk-button__content">

@@ -5,6 +5,7 @@ export default class ExtendedStoreService extends Store {
    * Executes regulare "query"-method. Queries for only one result and returns that if any.
    */
   async queryOne(modelName, query, options) {
+    query = query || {}; // eslint-disable-line no-param-reassign
     if (!(query['page[size]'] || (query.page && query.page.size))) {
       query['page[size]'] = 1;
     }

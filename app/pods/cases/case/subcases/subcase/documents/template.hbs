@@ -40,17 +40,13 @@
   {{/if}}
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary"
-        {{on "click" this.openPieceUploadModal}}>
-        <span class="auk-button__content">
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-add"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "documents-add"}}
-          </div>
-        </span>
-      </button>
+      <Auk::Button
+        @skin="tertiary"
+        @icon="add"
+        {{on "click" this.openPieceUploadModal}}
+      >
+        {{t "documents-add"}}
+      </Auk::Button>
     </div>
   {{/if}}
 </div>

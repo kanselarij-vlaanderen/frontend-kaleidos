@@ -1,40 +1,26 @@
 <div class="auk-o-flex--justify-between">
-  <button type="button" class="auk-button auk-button--borderless auk-button--icon">
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-pencil"></i>
-      </div>
-    </span>
-  </button>
+  <Auk::Button
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="pencil"
+  />
   {{#if (not (is-pending (await row.nota)))}}
-    {{#if (not (await row.nota))}}
-      <button type="button" class="auk-button auk-button--borderless auk-button--icon"
-        style="opacity:0.3;"
+    <div class="auk-u-position-relative auk-u-inline-block">
+      <Auk::Button
+        @skin="borderless"
+        @layout="icon-only"
+        @icon="document"
+        @disabled={{not (await row.nota)}}
         {{action "openDocument" row bubbles=false}}
-      >
-        <span class="auk-button__content">
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-            {{t "no-nota"}}
-          </EmberTooltip>
-        </span>
-      </button>
-    {{else}}
-      <button type="button" class="auk-button auk-button--borderless auk-button--icon"
-        {{action "openDocument" row bubbles=false}}
-      >
-        <span class="auk-button__content">
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-document"></i>
-          </div>
-          <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-            {{t "open-note"}}
-          </EmberTooltip>
-        </span>
-      </button>
-    {{/if}}
+      />
+      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+        {{#if (not (await row.nota))}}
+          {{t "no-nota"}}
+        {{else}}
+          {{t "open-note"}}
+        {{/if}}
+      </EmberTooltip>
+    </div>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
@@ -42,20 +28,18 @@
       </EmberTooltip>
     </div>
   {{/if}}
-  {{#link-to
-    "agenda.agendaitems.agendaitem"
-    (await latestMeetingId)
-    (await latestAgendaId)
-    (await latestAgendaitemId)
-    data-test-link-to-subcase-overview=true
+  <Auk::Button
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="nav-right"
+    @route="agenda.agendaitems.agendaitem"
+    @models={{array
+      (await latestMeetingId)
+      (await latestAgendaId)
+      (await latestAgendaitemId)
+    }}
+    @bubbles={{false}}
     target="_blank"
-    bubbles=false
-    class="auk-button auk-button--borderless auk-button--icon"
-  }}
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-nav-right"></i>
-      </div>
-    </span>
-  {{/link-to}}
+    data-test-link-to-subcase-overview={{true}}
+  />
 </div>
