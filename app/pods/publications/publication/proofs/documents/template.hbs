@@ -103,7 +103,7 @@
                 </p>
               </td>
               <td class="auk-u-text-align--center">
-                {{#if TODO}} {{!-- todo --}}
+                {{#if piece.publicationSubcaseCorrectionFor}}
                   <Auk::Icon @name="check" @skin="success-dark" />
                 {{else}}
                   {{t "dash"}}
@@ -166,4 +166,11 @@
     @attachments={{this.selection}}
     @onSave={{this.saveRequest}}
     @onCancel={{this.cancelRequest}} />
+{{/if}}
+
+{{#if this.isUploadModalOpen}}
+  <Publications::Publication::Proofs::UploadModal
+    @publicationFlow={{this.publicationFlow}}
+    @onSave={{this.saveCorrection}}
+    @onCancel={{this.cancelUpload}} />
 {{/if}}

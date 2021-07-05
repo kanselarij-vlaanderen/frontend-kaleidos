@@ -5,13 +5,13 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseId = this.modelFor('publications.publication.proofs').id;
 
-    // 3 requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
+    // multiple requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
     // and made an extra request per piece
     const sourcePiecesRequest = this.store.query('piece', {
-      'filter[publication-subcase][:id:]': publicationSubcaseId,
+      'filter[publication-subcase-source-for][:id:]': publicationSubcaseId,
       include: [
         'file',
-        'publication-subcase'
+        'publication-subcase-source-for'
       ].join(','),
     });
 
@@ -33,7 +33,15 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ].join(','),
     });
 
-    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest]);
+    const correctionDocumentsRequest = this.store.query('piece', {
+      'filter[publication-subcase-correction-for][:id:]': publicationSubcaseId,
+      include: [
+        'file',
+        'publication-subcase-correction-for'
+      ].join(','),
+    });
+
+    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest, correctionDocumentsRequest]);
     pieces = pieces.flatMap((piece) => piece.toArray());
 
     return pieces;
@@ -52,6 +60,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.publicationFlow = this.publicationFlow;
     controller.selection = [];
     controller.initSort();
-    controller.isOpenRequestModal = false;
+    controller.isRequestModalOpen = false;
+    controller.isUploadModalOpen = false;
   }
 }

@@ -38,6 +38,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked sortingString = undefined;
 
   @tracked isRequestModalOpen = false;
+  @tracked isUploadModalOpen = false;
   @tracked requestStage;
 
   initSort() {
@@ -72,23 +73,25 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
     this.#sort(sortingString);
-    // sort is not tracked by ember
-    this.model.arrayContentDidChange();
   }
 
   #sort(sortingString) {
     let property = 'created';
-    let isDescending = true;
+    let isDescending = false;
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey] || property;
+      property = COLUMN_MAP[sortKey] ?? property;
     }
 
-    this.model.sortBy(property);
+    // this.model.sortBy(property) does not work properly
+    this.model.sort((piece1, piece2) => piece1[property] - piece2[property]);
     if (isDescending) {
       this.model.reverse();
     }
+
+    // sort is not tracked by ember
+    this.model.arrayContentDidChange();
   }
 
   get canOpenRequestModal() {
@@ -99,10 +102,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   openRequestModal(stage) {
     this.requestStage = stage;
     this.isRequestModalOpen = true;
-  }
-
-  openUploadModal() {
-
   }
 
   @action
@@ -119,6 +118,31 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
     this.selection = [];
     this.transitionToRoute('publications.publication.proofs.requests');
+  }
+
+  @action
+  openUploadModal() {
+    this.isUploadModalOpen = true;
+  }
+
+  @action
+  cancelUpload() {
+    this.isUploadModalOpen = false;
+  }
+
+  @action
+  async saveCorrection(pieceProperties) {
+    let piece;
+    try {
+      piece = await this.#saveCorrection({
+        piece: pieceProperties,
+        publicationSubcase: this.publicationSubcase,
+      });
+    } finally {
+      this.isUploadModalOpen = false;
+    }
+    this.model.pushObject(piece);
+    this.#sort(this.sortingString);
   }
 
   async #saveRequest(requestProperties) {
@@ -190,5 +214,34 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     saves.push(emailSave);
 
     await Promise.all(saves);
+  }
+
+  async #saveCorrection(correctionProperties) {
+    const {
+      piece: {
+        file, name,
+      },
+      publicationSubcase: publicationSubcase,
+    } = correctionProperties;
+
+    const now = new Date();
+
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: file,
+      confidential: false,
+      name: name,
+      documentContainer: documentContainer,
+      publicationSubcaseCorrectionFor: publicationSubcase,
+    });
+    await piece.save();
+
+    return piece;
   }
 }
