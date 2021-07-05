@@ -76,7 +76,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey]?.property || property;
     }
 
-    this.model.sortBy(property);
+    // this.model.sortBy(property) does not work properly
+    this.model.sort((piece1, piece2) => piece1[property] - piece2[property]);
     if (isDescending) {
       this.model.reverse();
     }
