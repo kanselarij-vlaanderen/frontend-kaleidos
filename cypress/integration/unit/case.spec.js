@@ -1,9 +1,9 @@
 /* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
-import cases from '../../../selectors/case.selectors';
-import route from '../../../selectors/route.selectors';
-import utils from '../../../selectors/utils.selectors';
+import cases from '../../selectors/case.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Create case as Admin user', () => {
   beforeEach(() => {

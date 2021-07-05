@@ -34,6 +34,7 @@
   </td>
   <td class="lt-cell align-left">
     <WebComponents::VlCheckbox
+      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
       @value={{this.newsletterInfo.inNewsletter}}
       @toggle={{this.setInNewsletter}}
       @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}
