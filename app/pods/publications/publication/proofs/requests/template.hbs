@@ -58,12 +58,14 @@
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "files"}}</p>
+                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
                 <Utils::Documents::List @pieces={{row.attachments}} />
               </div>
               {{#if row.receivedPieces}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "received-documents"}}</p>
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">
+                    {{t "received-documents"}}
+                  </p>
                   <Utils::Documents::List @pieces={{row.receivedPieces}} />
                 </div>
               {{/if}}
@@ -73,11 +75,7 @@
       </Auk::AccordionPanel>
     </div>
   {{else}}
-    <Auk::Panel>
-      <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-proofing-activities-yet"}} />
-      </Auk::Panel::Body>
-    </Auk::Panel>
+    <Auk::EmptyState @message={{t "no-proofing-activities-yet"}} @bordered={{true}} />
   {{/each}}
 </div>
 

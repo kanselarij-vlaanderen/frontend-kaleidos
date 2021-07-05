@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 
-class Validation {
+class Validator {
   @tracked isErrorEnabled;
 
   constructor(check) {
@@ -23,29 +23,35 @@ class Validation {
   }
 
   get showError() {
-    return this.isErrorEnabled && !this.isValid;
+    return this.isErrorEnabled && !this.check();
+  }
+
+  static areValid(validatorsObject) {
+    return Object.values(validatorsObject).every((validator) => validator.isValid);
   }
 }
 
 export default class PublicationsPublicationProofsRequestModalComponent extends Component {
   @service intl;
 
-  @tracked subject = undefined;
-  @tracked shortTitle = undefined;
-  @tracked longTitle = undefined;
-  @tracked message = undefined;
+  @tracked subject;
+  @tracked message;
   @tracked selectedAttachments = [];
-  validations = {};
+  validators = {};
 
   constructor() {
     super(...arguments);
-    this.#init();
+
+    this.validators = {
+      subject: new Validator(() => !isBlank(this.subject)),
+      message: new Validator(() => !isBlank(this.message)),
+    };
+    this.selectedAttachments = [...this.args.attachments]; // Copy array
+    this.initEmailFields();
   }
 
-  async #init() {
-    this.validations.subject = new Validation(() => !isBlank(this.subject));
-    this.validations.message = new Validation(() => !isBlank(this.message));
-    this.selectedAttachments = [...this.args.attachments]; // Copy array
+  async initEmailFields() {
+    // should resolve immediately (already fetched)
     const identification = await this.args.publicationFlow.identification;
     const idName = identification.idName;
     this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
@@ -54,14 +60,17 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     });
   }
 
-  get modalTitle() {
-    const title = this.intl.t('request-proof');
-    const initial = this.intl.t('initial');
-    return `${title} (${initial})`;
+  get canSave() {
+    return Validator.areValid(this.validators);
   }
 
-  get canSave() {
-    return Object.values(this.validations).every((validation) => validation.isValid);
+  @action
+  toggleAttachmentSelection(attachment) {
+    if (this.selectedAttachments.includes(attachment)) {
+      this.selectedAttachments.removeObject(attachment);
+    } else {
+      this.selectedAttachments.pushObject(attachment);
+    }
   }
 
   @task
@@ -79,14 +88,5 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     };
 
     yield this.args.onSave(properties);
-  }
-
-  @action
-  toggleAttachmentSelection(attachment) {
-    if (this.selectedAttachments.includes(attachment)) {
-      this.selectedAttachments.removeObject(attachment);
-    } else {
-      this.selectedAttachments.pushObject(attachment);
-    }
   }
 }
