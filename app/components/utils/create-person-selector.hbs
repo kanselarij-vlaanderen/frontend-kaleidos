@@ -17,20 +17,15 @@
       {{await (model-property-to-show model propertyToShow)}}
     {{/power-select}}
     <div class="auk-u-mr-2"></div>
-    <button data-test-person-selector-action-create-person
-      type="button"
-      class="auk-button auk-button--secondary auk-button--icon"
+    <Auk::Button
+      @skin="secondary"
+      @layout="icon-only"
+      @icon="add"
       {{action "toggleIsCreatingPerson"}}
+      data-test-person-selector-action-create-person
     >
-      <span class="auk-button__content">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-add"></i>
-        </div>
-        <div class="auk-u-sr-only">
-          {{t "create"}}
-        </div>
-      </span>
-    </button>
+      {{t "create"}}
+    </Auk::Button>
   </div>
 {{else}}
   <div class="auk-form-group">

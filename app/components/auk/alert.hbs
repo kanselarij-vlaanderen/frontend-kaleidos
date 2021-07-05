@@ -9,6 +9,14 @@
     </div>
   </div>
   {{#if @isClosable}}
-    <Auk::Button @skin="muted-borderless" @icon="close" @layout="icon-only" @size={{@size}}>{{t "cancel"}}</Auk::Button>
+    <Auk::Button
+      @skin="muted-borderless"
+      @icon="close"
+      @layout="icon-only"
+      @size={{@size}}
+      {{on "click" this.close}}
+    >
+      {{t "cancel"}}
+    </Auk::Button>
   {{/if}}
 </div>

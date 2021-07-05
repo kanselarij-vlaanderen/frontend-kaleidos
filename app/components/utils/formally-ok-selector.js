@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { task } from 'ember-concurrency-decorators';
 
 export default class UtilsFormallyOkSelector extends Component {
@@ -14,7 +15,7 @@ export default class UtilsFormallyOkSelector extends Component {
   constructor() {
     super(...arguments);
     this.options = CONFIG.formallyOkOptions;
-    this.defaultOption = this.options.find((option) => option.uri === CONFIG.notYetFormallyOk);
+    this.defaultOption = this.options.find((option) => option.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
   }
 
   get formallyOkStatus() {

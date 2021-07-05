@@ -58,6 +58,12 @@
           <p class="auk-u-mb-4">Kies een type gebruiker om mee aan te melden:</p>
           <div class="auk-panel auk-u-mb-8">
             <MockLogin as |login|>
+              {{#if login.errorMessage}}
+                <Auk::Alert
+                  @skin="error"
+                  @message={{login.errorMessage}}
+                />
+              {{/if}}
               {{#if this.model.length}}
                 <ul class="auk-list auk-list--view" data-test-mock-login-list>
                   <login.each-account @accounts={{this.model}} as |account|>
@@ -65,14 +71,11 @@
                       <div class="auk-u-mx-2">
                         <span>{{account.user.firstName}} {{account.user.lastName}}</span>
                       </div>
-                      <div class="auk-button auk-button--borderless auk-button--icon">
-                        <span class="auk-button__content">
-                          <div class="auk-icon auk-icon--default auk-icon--chevron-right ">
-                            <i class="ki ki-chevron-right"></i>
-                          </div>
-                          <div class="auk-u-sr-only">Detail</div>
-                        </span>
-                      </div>
+                      <Auk::Button
+                        @skin="borderless"
+                        @layout="icon-only"
+                        @icon="chevron-right"
+                      />
                     </Auk::List::Item>
                   </login.each-account>
                 </ul>

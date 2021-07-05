@@ -5,20 +5,14 @@
     </div>
     <div class="auk-toolbar-complex__{{if agendaMenuCollapsed "center" "right"}}">
       <div class="auk-toolbar-complex__item {{if agendaMenuCollapsed "auk-o-flex auk-o-flex--horizontal-center"}}">
-        <button
-          class="auk-button auk-button--borderless auk-button--icon"
-          type="button"
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="chevron-{{if agendaMenuCollapsed "right" "left"}}"
           {{action "collapseSideMenu"}}
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--chevron-{{if agendaMenuCollapsed "right" "left"}} auk-icon--default">
-              <i class="ki ki-chevron-{{if agendaMenuCollapsed "right" "left"}}"></i>
-            </div>
-            <span class="auk-u-sr-only">
-              {{t "toggle"}}
-            </span>
-          </span>
-        </button>
+          {{t "toggle"}}
+        </Auk::Button>
       </div>
     </div>
   </div>

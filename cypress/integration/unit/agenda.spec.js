@@ -52,6 +52,7 @@ context('Agenda tests', () => {
     cy.approveDesignAgenda(false);
     cy.get(auk.modal.body).find(auk.alert.message);
     cy.get(agenda.agendaHeader.confirm.approveAgenda);
+    cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.setFormalOkOnItemWithIndex(0);

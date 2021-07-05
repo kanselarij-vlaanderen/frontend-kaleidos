@@ -21,7 +21,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
 
   before(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Ministerraad', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();
@@ -374,6 +373,9 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
   });
 
   it('should create newsletter-info for the agendaitems to check the sorting', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    cy.route('POST', '/newsletter-infos').as(`postNewsletterInfo${randomInt}`);
+    cy.route('PATCH', '/newsletter-infos/*').as(`patchNewsletterInfo${randomInt}`);
     cy.openAgendaForDate(agendaDate);
     cy.clickReverseTab('Detail');
     cy.get(agenda.agendaDetailSidebar.subitem).as('agendaitems');
@@ -383,45 +385,43 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('be.visible')
       .click();
 
+    // TODO KAS-2693 awaits
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
-    cy.wait(2000);
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait(3000);
+    cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(2)
       .click();
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
-    cy.wait(2000);
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait(3000);
+    cy.wait(`@postNewsletterInfo${randomInt}`);
     cy.get('@agendaitems').eq(3)
       .click();
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();
-    cy.wait(2000);
     cy.get(utils.vlModalVerify.save).click();
-    cy.wait(3000);
+    cy.wait(`@postNewsletterInfo${randomInt}`);
 
     cy.get(agenda.agendaHeader.showActionOptions).click();
     cy.get(agenda.agendaHeader.actions.navigateToNewsletter).click();
     cy.get(newsletter.tableRow.newsletterRow).eq(0)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
-        cy.wait(1000);
+        cy.wait(`@patchNewsletterInfo${randomInt}`);
       });
     cy.get(newsletter.tableRow.newsletterRow).eq(1)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
-        cy.wait(1000);
+        cy.wait(`@patchNewsletterInfo${randomInt}`);
       });
     cy.get(newsletter.tableRow.newsletterRow).eq(2)
       .within(() => {
         cy.get(utils.vlCheckbox.label).click();
-        cy.wait(1000);
+        cy.wait(`@patchNewsletterInfo${randomInt}`);
       });
 
     cy.clickReverseTab('Definitief');
