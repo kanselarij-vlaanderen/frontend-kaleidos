@@ -119,9 +119,14 @@
         <div class="auk-form-group">
           <Auk::Label>{{t 'decision-date'}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
-            <span class="auk-u-muted">
-              {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
-            </span>
+            <Auk::ButtonLink {{on "click" this.navigateToAgendaItem }}>
+              {{#if this.treatment.startDate}}
+                {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
+              {{else}}
+                {{t "to-agenda"}}
+              {{/if}}
+              <i class="ki ki-chevron-right"></i>
+            </Auk::ButtonLink>
           {{else}}
             <Auk::Datepicker
               @date={{this.treatment.startDate}}

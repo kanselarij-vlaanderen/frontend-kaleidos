@@ -18,6 +18,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    *  on create and delete no changedKeys are passed
    */
   @service store;
+  @service router;
   @service intl;
   @service toaster;
   @service publicationService;
@@ -152,6 +153,14 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     const withdrawn = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.WITHDRAWN);
     await this.setPublicationStatus(withdrawn);
     this.showConfirmWithdraw = false;
+  }
+
+  @action
+  async navigateToAgendaItem() {
+    const agendaItem = await this.treatment.agendaitem;
+    const agenda = await agendaItem.agenda;
+    const meeting  = await agenda.createdFor;
+    this.router.transitionTo('agenda.agendaitems.agendaitem.documents', meeting.id, agenda.id, agendaItem.id);
   }
 
   @restartableTask
