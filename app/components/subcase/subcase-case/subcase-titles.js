@@ -10,17 +10,16 @@ export default class SubcaseTitles extends Component {
   subcase = null;
 
   @computed('subcase.approved')
-  get pillClass() {
-    return this.getPillClass();
+  get pillSkin() {
+    return this.getPillSkin();
   }
 
-  async getPillClass() {
-    const baseClass = 'auk-pill auk-u-text-capitalize';
+  async getPillSkin() {
     const approved = await this.subcase.get('approved');
     if (approved) {
-      return `${baseClass} auk-pill--success`;
+      return 'success';
     }
-    return `${baseClass} auk-pill--default`;
+    return 'default';
   }
 
   @action
