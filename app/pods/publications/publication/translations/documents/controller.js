@@ -6,23 +6,25 @@ import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
-  @tracked showPieceUploadModal = false;
-  @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
+  @tracked isPieceUploadModalOpen = false;
+  @tracked isTranslationRequestModalOpen = false;
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
   }
 
-  get isRequestingDisabled() {
-    return this.selectedPieces.length === 0 // no files are selected
-      || this.translationSubcase.isFinished;
+  get canOpenTranslationRequestModal() {
+    console.log(this.selectedPieces, this.translationSubcase);
+    return this.selectedPieces.length > 0 // files are selected
+      && !this.translationSubcase.isFinished;
   }
 
-  get isUploadDisabled() {
-    return this.translationSubcase.isFinished;
+  get canOpenPieceUploadModal() {
+    return !this.translationSubcase.isFinished;
   }
 
   @action
@@ -44,24 +46,14 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     }
   }
 
-  @task
-  *saveSourceDocument(translationDocument) {
-    const piece = translationDocument.piece;
-    piece.translationSubcase = this.translationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = translationDocument.pagesAmount;
-    piece.words = translationDocument.wordsAmount;
-    piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+  @action
+  openTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = true;
+  }
 
-    if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcase = this.publicationSubcase;
-    }
-
-    yield piece.save();
-    this.showPieceUploadModal = false;
-    this.send('refresh');
+  @action
+  closeTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = false;
   }
 
   @task
@@ -110,28 +102,37 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     yield mail.save();
 
     this.selectedPieces = [];
-    this.showTranslationRequestModal = false;
+    this.isTranslationRequestModalOpen = false;
     this.transitionToRoute('publications.publication.translations.requests');
   }
 
-
   @action
   openPieceUploadModal() {
-    this.showPieceUploadModal = true;
+    this.isPieceUploadModalOpen = true;
   }
 
   @action
   closePieceUploadModal() {
-    this.showPieceUploadModal = false;
+    this.isPieceUploadModalOpen = false;
   }
 
-  @action
-  openTranslationRequestModal() {
-    this.showTranslationRequestModal = true;
-  }
+  @task
+  *saveSourceDocument(translationDocument) {
+    const piece = translationDocument.piece;
+    piece.translationSubcase = this.translationSubcase;
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.save();
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
 
-  @action
-  closeTranslationRequestModal() {
-    this.showTranslationRequestModal = false;
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    }
+
+    yield piece.save();
+    this.isPieceUploadModalOpen = false;
+    this.send('refresh');
   }
 }
