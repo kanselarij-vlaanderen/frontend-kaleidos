@@ -11,11 +11,10 @@
   <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
-        <Input
-          data-test-route-settings-users-search-input=""
-          class="auk-input"
-          type="search"
+        <Auk::Input
+          @type="search"
           @value={{this.filter}}
+          data-test-route-settings-users-search-input
         />
         <Auk::Button
           @skin="secondary"

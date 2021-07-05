@@ -36,14 +36,13 @@
           </div>
           <div class="auk-toolbar-complex__right">
             <div class="auk-toolbar-complex__item" data-test-route-agendas-overview-filter-container data-children-count="1">
-              {{input
-                type="text"
-                id=id
-                data-test-route-agendas-overview-filter-input=true
-                class="auk-input"
-                value=dateFilter
-                placeholder="bv. 01/2020"
-              }}
+              <Auk::Input
+                @type="text"
+                @value={{dateFilter}}
+                @placeholder="bv. 01/2020"
+                id={{id}}
+                data-test-route-agendas-overview-filter-input={{true}}
+              />
               <Auk::Button
                 @skin="secondary"
                 @layout="icon-only"

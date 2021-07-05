@@ -1,11 +1,14 @@
 <div class="auk-modal__body">
   <div class="auk-u-p-4">
     <div class="auk-o-flex auk-o-flex--vertical-center">
-      <Input
+      <Auk::Input
+        @type="text"
         @value={{searchText}}
         @placeholder={{t "search-placeholder"}}
-        @class="auk-input vlc-u-box-model-maximize-width"
-        @input={{action "updateSearchText"}} />
+        @block={{true}}
+        {{on "input" (action "updateSearchText")}}
+        class="auk-u-maximize-width"
+      />
     </div>
 
     {{#if isLoading}}

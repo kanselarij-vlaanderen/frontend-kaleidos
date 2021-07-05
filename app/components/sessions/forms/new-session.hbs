@@ -33,12 +33,14 @@
         <Auk::Label>{{t "meeting-number"}}</Auk::Label>
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
-            {{web-components/vl-form-input
-              type="number"
-              value=meetingNumber
-              input=(action "meetingNumberChangedAction" meetingNumber)
+            <Auk::Input
+              @type="number"
+              @value={{meetingNumber}}
+              @key-up={{action "meetingNumberChangedAction" meetingNumber}}
+              id="subjectTransld"
               class="auk-input--w-medium auk-u-mr-2"
-            }}
+              {{on "change" (action "meetingNumberChangedAction" meetingNumber)}}
+            />
           {{/unless}}
           <div class="auk-o-flex__item">
             <div

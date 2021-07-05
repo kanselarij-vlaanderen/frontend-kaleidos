@@ -1,7 +1,7 @@
 <Auk::List @bordered={{true}}>
   {{#each (await @agendaitems) as |agendaitem|}}
     <Auk::List::Item @skin="gray-100">
-      <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-input--block">
+      <div class="auk-u-ml-3 auk-u-mt-2 auk-u-mr-4 auk-u-block auk-u-maximize-width">
         {{t
           "number-point-title"
           number=agendaitem.number
