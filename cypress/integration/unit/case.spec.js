@@ -29,9 +29,11 @@ context('Create case as Admin user', () => {
       cy.contains(caseTitle);
     });
     // case confidentiality is passed on to subcase
-    cy.addSubcase('Nota', 'Check confidential', '', null, null);
-    cy.openSubcase(0);
-    cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+    cy.addSubcase('Nota', 'Check confidential', '', null, null).then((result) => {
+      cy.openSubcase(0);
+      cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
+      cy.url().should('contain', `/deeldossiers/${result.subcaseId}`);
+    });
   });
 
   it('Hitting cancel or close should hide the model and not remember state', () => {
@@ -60,7 +62,6 @@ context('Create case as Admin user', () => {
 
   it('Copy of remark subcase should not result in a new remark subcase', () => {
     const newShortTitle = 'Dit is de korte titel';
-    cy.route('POST', '/subcases').as('createNewSubcase');
     cy.visit('/dossiers');
     cy.createCase(false, newShortTitle);
     cy.addSubcase('Mededeling', newShortTitle, '', null, null);
@@ -71,6 +72,7 @@ context('Create case as Admin user', () => {
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
     cy.navigateBack();
     // ensure type is the same after copy to new subcase
+    cy.route('POST', '/subcases').as('createNewSubcase');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();
     cy.get(cases.newSubcase.clonePreviousSubcase).click();
     cy.wait('@createNewSubcase');
