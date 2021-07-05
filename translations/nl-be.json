@@ -818,6 +818,8 @@
   "publications-table-last-edited" : "Laatst gewijzigd",
   "publications-table-last-edited-by" : "Laatst gewijzigd door",
   "publications-table-last-edited-by-small" : "Laatst gew. door",
+  "publications-table-translations" : "Vertalingen",
+  "publications-table-translations-small" : "Vert.",
   "publications-table-last-edited-small" : "Laatst gewijzigd",
   "publications-table-numacnummer-bs" : "Werknummer Belgisch Staatblad",
   "publications-table-numacnummer-bs-small" : "Numac",
@@ -894,12 +896,14 @@
   "x-request-type-x-timestamp": "{request-type} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
-  "message": "Bericht",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
   "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
   "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag.",
   "add-mandatee": "Mandataris toevoegen",
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
-  "select-mandatee": "Selecteer mandataris..."
+  "select-mandatee": "Selecteer mandataris...",
+  "message": "Bericht",
+  "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
+  "email-to-proofrequest": "Email ontvanger voor drukproeven"
 }

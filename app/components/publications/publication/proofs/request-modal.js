@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-class-members */
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -24,7 +23,7 @@ class Validation {
   }
 
   get showError() {
-    return this.isErrorEnabled && !this.check();
+    return this.isErrorEnabled && !this.isValid;
   }
 }
 
@@ -44,14 +43,13 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   async #init() {
     this.validations.subject = new Validation(() => !isBlank(this.subject));
     this.validations.message = new Validation(() => !isBlank(this.message));
-    this.selectedAttachments = [...this.args.attachments];
-
-    const email = await proofRequestEmail({
-      stage: this.args.stage,
-      publicationFlow: this.args.publicationFlow,
+    this.selectedAttachments = [...this.args.attachments]; // Copy array
+    const identification = await this.args.publicationFlow.identification;
+    const idName = identification.idName;
+    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
+    this.message = proofRequestEmail({
+      identifier: idName,
     });
-    this.subject = email.subject;
-    this.message = email.message;
   }
 
   get canSave() {
@@ -61,7 +59,7 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   @task
   *onSave() {
     if (!this.canSave) {
-      return;
+      return; // In theory, this can't happen, since button should be disabled
     }
 
     const properties = {
