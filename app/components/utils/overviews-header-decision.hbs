@@ -6,30 +6,17 @@
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-toolbar-complex__title" data-test-overviews-header-decision-title>{{await title}}</h4>
           </div>
-          <ul class="auk-tabs auk-tabs--reversed" role="tablist">
-            <li class="auk-tabs__tab auk-tabs__hierarchical-back">
-              <a href="#" {{action "navigateBackToAgenda"}}>
-                <span class="auk-tabs__tab-inner">
-                  <div class="auk-icon auk-icon--hierarchical-back auk-icon--default">
-                    <i class="ki ki-hierarchical-back"></i>
-                  </div>
-                </span>
-              </a>
-            </li>
+          <Auk::Tabs @reversed={{true}}>
+            <Auk::Tab {{action "navigateBackToAgenda"}} @isHierarchicalBack={{true}}/>
             {{#if currentSession.isEditor}}
-              <li class="auk-tabs__tab">
-                {{#link-to
-                  routeModelAgendaitems
-                  (await model.id)
-                  activeClass="active"
-                }}
-                  <span class="auk-tabs__tab-inner">
-                    {{t "overview"}}
-                  </span>
-                {{/link-to}}
-              </li>
+              <Auk::Tab
+                @route={{routeModelAgendaitems}}
+                @model={{await model.id}}
+              >
+                {{t "overview"}}
+              </Auk::Tab>
             {{/if}}
-          </ul>
+          </Auk::Tabs>
         </div>
       </div>
     </div>

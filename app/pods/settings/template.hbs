@@ -4,29 +4,26 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <ul class="auk-tabs">
-            <li class="auk-tabs__tab" data-test-route-settings-general-settings>
-              {{#link-to
-                "settings.overview"
-              }}
-                <span class="auk-tabs__tab-inner">{{t "general-settings"}}</span>
-              {{/link-to}}
-            </li>
-            <li class="auk-tabs__tab" data-test-route-settings-manage-ministers>
-              {{#link-to
-                "settings.ministers"
-              }}
-                <span class="auk-tabs__tab-inner">{{t "manage-ministers"}}</span>
-              {{/link-to}}
-            </li>
-            <li class="auk-tabs__tab" data-test-route-settings-manage-users>
-              {{#link-to
-                "settings.users"
-              }}
-                <span class="auk-tabs__tab-inner">{{t "manage-users"}}</span>
-              {{/link-to}}
-            </li>
-          </ul>
+          <Auk::Tabs>
+            <Auk::Tab
+              @route="settings.overview"
+              data-test-route-settings-general-settings
+            >
+              {{t "general-settings"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="settings.ministers"
+              data-test-route-settings-manage-ministers
+            >
+              {{t "manage-ministers"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="settings.users"
+              data-test-route-settings-manage-users
+            >
+              {{t "manage-users"}}
+            </Auk::Tab>
+          </Auk::Tabs>
         </div>
       </div>
     </div>

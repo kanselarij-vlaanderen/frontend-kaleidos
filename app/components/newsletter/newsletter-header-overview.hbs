@@ -10,65 +10,37 @@
             {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
           </h4>
         </div>
-        <ul class="auk-tabs auk-tabs--reversed" role="tablist">
-          <li class="auk-tabs__tab auk-tabs__hierarchical-back">
-            <LinkTo @route="newsletters">
-              <span class="auk-tabs__tab-inner">
-                <div class="auk-icon auk-icon--hierarchical-back auk-icon--default">
-                  <i class="ki ki-hierarchical-back"></i>
-                </div>
-              </span>
-            </LinkTo>
-          </li>
+        <Auk::Tabs @reversed={{true}}>
+          <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
           {{#if currentSession.isEditor}}
-            <li class="auk-tabs__tab">
-              <LinkTo
-                @route="newsletter.index"
-                @model={{await agenda.createdFor.id}}
-                @activeClass="active"
-              >
-                <span class="auk-tabs__tab-inner">
-                  {{t "overview"}}
-                </span>
-              </LinkTo>
-            </li>
-            <li class="auk-tabs__tab">
-              <LinkTo
-                @route="newsletter.print"
-                @model={{await agenda.createdFor.id}}
-                @query={{hash showDraft=true}}
-                @activeClass="active"
-              >
-                <span class="auk-tabs__tab-inner">
-                  {{t "design"}}
-                </span>
-              </LinkTo>
-            </li>
-            <li class="auk-tabs__tab">
-              <LinkTo
-                @route="newsletter.print"
-                @model={{await agenda.createdFor.id}}
-                @query={{hash showDraft=false}}
-                @activeClass="active"
-              >
-                <span class="auk-tabs__tab-inner">
-                  {{t "definite"}}
-                </span>
-              </LinkTo>
-            </li>
-            <li class="auk-tabs__tab">
-              <LinkTo
-                data-test-newsletter-header-overview-nota-updates
-                @route="newsletter.nota-updates"
-                @activeClass="active"
-              >
-                <span class="auk-tabs__tab-inner">
-                  {{t "newsletter-update-notas"}}
-                </span>
-              </LinkTo>
-            </li>
+            <Auk::Tab
+              @route="newsletter.index"
+              @model={{await agenda.createdFor.id}}
+            >
+              {{t "overview"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="newsletter.print"
+              @model={{await agenda.createdFor.id}}
+              @query={{hash showDraft=true}}
+            >
+              {{t "design"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="newsletter.print"
+              @model={{await agenda.createdFor.id}}
+              @query={{hash showDraft=false}}
+            >
+              {{t "definite"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="newsletter.nota-updates"
+              data-test-newsletter-header-overview-nota-updates
+            >
+              {{t "newsletter-update-notas"}}
+            </Auk::Tab>
           {{/if}}
-        </ul>
+        </Auk::Tabs>
       </div>
     </div>
   </div>
