@@ -18,7 +18,6 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   get canOpenTranslationRequestModal() {
-    console.log(this.selectedPieces, this.translationSubcase);
     return this.selectedPieces.length > 0 // files are selected
       && !this.translationSubcase.isFinished;
   }
