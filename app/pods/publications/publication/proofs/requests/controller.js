@@ -1,6 +1,9 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 
+// row object in order to be able to call properties
+// of proofingActivity and publicationActivity similarly in the template
+// e.g. {{row.resultActivity.email.subject}}
 class Row {
   requestActivity;
   // resolved relationships to prevent await in getter (await requestActivity.proofingActivity)
@@ -42,10 +45,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
   @tracked rows;
 
   async initRows(model) {
-    this.rows = await Promise.all(model.map(this.#createRow));
+    this.rows = await Promise.all(model.map(this.createRow));
   }
 
-  async #createRow(requestActivity) {
+  async createRow(requestActivity) {
     const [proofingActivity, publicationActivity] = await Promise.all([
       requestActivity.proofingActivity,
       requestActivity.publicationActivity
