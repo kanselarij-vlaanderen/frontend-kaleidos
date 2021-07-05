@@ -224,7 +224,7 @@ context('Subcase tests', () => {
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('be.checked');
   });
 
-  it.only('Changes to agenda item Themas propagate properly', () => {
+  it('Changes to agenda item Themas propagate properly', () => {
     // Open agenda
     cy.route('GET', '/agendas/**').as('getAgenda');
     cy.openAgendaForDate(agendaDate);
