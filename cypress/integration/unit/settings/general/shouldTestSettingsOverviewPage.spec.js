@@ -14,7 +14,7 @@ context('Settings overview page tests', () => {
     cy.url().should('include', 'instellingen/overzicht');
   });
 
-  // TODO test 2-9 testing opening modals is not enough, how can we be sure that the right one has been opened ?
+  // TODO-settings test 2-9 are duplicated in their own specs
 
   it('Should open settings page and see all fields from the general settings tab', () => {
     cy.get(settings.settings.generalSettings).should('be.visible');
@@ -81,27 +81,26 @@ context('Settings overview page tests', () => {
   });
 
   it('Upload a CSV and delete a user', () => {
-    cy.visit('/');
-    cy.get(utils.mHeader.settings).click();
-    cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.settings.manageUsers).contains('Gebruikersbeheer')
       .click();
     cy.url().should('include', 'instellingen/gebruikers');
+    // Importeer csv met Wendy en Greta
     cy.get(utils.simpleFileUploader).click();
     cy.uploadUsersFile('files', 'importUsers', 'csv');
+    // Zoek en verwijder Wendy
     cy.get(settings.usersIndex.searchInput).type('Wendy');
     cy.route('GET', '/users?filter=**').as('filterUsers');
     cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsers');
     cy.get(settings.usersIndex.table).contains('Wendy')
       .parents('tr')
-      .within(() => {
-        cy.get(settings.vlDeleteUser.delete).click();
-      });
+      .find(settings.vlDeleteUser.delete) // only 1 row
+      .click();
     cy.route('GET', '/users/*').as('getUsers');
     cy.get(utils.vlModalVerify.save).click();
     cy.wait('@getUsers');
     cy.get(settings.usersIndex.table).should('not.have.value', 'Wendy');
+    // Zoek Greta en pas de groep aan met nieuwe import
     cy.get(settings.usersIndex.searchInput).clear();
     cy.get(settings.usersIndex.table).contains('Greta')
       .parents('tr')
@@ -122,7 +121,6 @@ context('Settings overview page tests', () => {
 
   it('Should test the search of a user when typing', () => {
     cy.route('GET', '/users?filter=Minister**').as('filterUsersMinister');
-
     cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
     cy.get(settings.usersIndex.searchInput).type('Minister')
@@ -155,8 +153,10 @@ context('Settings overview page tests', () => {
     cy.get(settings.usersIndex.searchButton).click()
       .wait('@filterUsersMinister');
     cy.get(settings.goToUserDetail).click();
-    cy.contains('Gebruiker: Minister Test');
-    cy.contains('Algemene informatie');
+    cy.get(settings.settingsHeader.title).contains('Gebruiker: Minister Test');
+    cy.get(settings.user.generalInfo).contains('Algemene informatie');
+    cy.get(settings.user.technicalInfo).contains('Technische informatie');
+    // TODO-users check all fields for a user ?
   });
 
   it('Should change the group of the user from the detailpage', () => {
@@ -171,15 +171,18 @@ context('Settings overview page tests', () => {
       .wait('@filterUsersMinister');
     cy.get(settings.usersIndex.row.firstname).contains('Minister')
       .parents('tr')
-      .find(settings.goToUserDetail)
-      .click();
-    cy.contains('Gebruiker: Minister Test');
-    cy.contains('Algemene informatie');
+      .within(() => {
+        cy.get(settings.usersIndex.row.group).contains('minister');
+        cy.get(settings.goToUserDetail).click();
+      });
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.option).contains('kabinet')
       .click();
     cy.wait('@patchUsers');
     cy.get(auk.backButton).click();
-    cy.contains('kabinet');
+    cy.get(settings.usersIndex.row.firstname).contains('Minister')
+      .parents('tr')
+      .find(settings.usersIndex.row.group)
+      .contains('kabinet');
   });
 });

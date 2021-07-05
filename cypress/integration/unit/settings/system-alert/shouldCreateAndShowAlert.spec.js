@@ -63,7 +63,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     }); // Wait for a polling-cycle to pass
     cy.get(settings.systemAlert).should('exist');
 
-    cy.get('[data-test-vl-modal-dialogwindow] .auk-form-group').click();
+    cy.get(settings.systemAlertsIndex.alerts).find(dependency.emberPowerSelect.trigger)
+      .click();
     cy.get(dependency.emberPowerSelect.option).click();
     cy.route('GET', '/alerts**').as('getAlerts');
     cy.get(settings.systemAlertsIndex.remove).click();

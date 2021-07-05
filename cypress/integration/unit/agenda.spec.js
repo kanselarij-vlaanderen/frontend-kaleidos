@@ -16,7 +16,6 @@ context('Agenda tests', () => {
 
   before(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
     cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
     cy.logoutFlow();

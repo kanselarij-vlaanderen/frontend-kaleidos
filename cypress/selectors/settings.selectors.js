@@ -17,6 +17,17 @@ const selectors = {
     },
   },
 
+  // route settings/users/user/index
+  user: {
+    generalInfo: '[data-test-route-settings---user-general-info]',
+    technicalInfo: '[data-test-route-settings---user-technical-info]',
+  },
+
+  // component settings-header (only used for users route headers)
+  settingsHeader: {
+    title: '[data-test-settings-header-title]',
+  },
+
   // route settings/overview
   overview: {
     manageEmails: '[data-test-route-settings-overview-manage-emails]',
@@ -49,6 +60,7 @@ const selectors = {
 
   // route settings/system-alerts/index/template
   systemAlertsIndex: {
+    alerts: '[data-test-route-settings-system-alerts-index-alerts-dropdown]',
     add: '[data-test-route-settings-system-alerts-index-add]',
     remove: '[data-test-route-settings-system-alerts-index-remove]',
     // TODO unused selector (remove?)

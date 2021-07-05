@@ -34,7 +34,7 @@ context('Settings page tests', () => {
   it('Should open the model behind manage goverment domains', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
     cy.get(utils.vlModal.dialogWindow).should('be.visible')
-      .should('contain', 'Beheer ISE-codes');
+      .should('contain', 'Beleidsdomeinen beheren');
   });
 
   it('Should open the model behind manage goverment domains and close it', () => {
@@ -46,8 +46,8 @@ context('Settings page tests', () => {
 
   it('Should open the dropdown in the modal and see each item', () => {
     cy.get(settings.overview.manageGovermentDomains).click();
-    cy.get(utils.vlModal.dialogWindow).should('be.visible');
-    cy.get(dependency.emberPowerSelect.trigger).click();
+    cy.get(utils.vlModal.dialogWindow).find(dependency.emberPowerSelect.trigger)
+      .click();
     cy.get(dependency.emberPowerSelect.option).should('have.length', govermentDomains.length);
 
     for (let index = 0; index < govermentDomains.length; index++) {
@@ -71,7 +71,6 @@ context('Settings page tests', () => {
     cy.get(settings.modelManager.add).should('be.visible');
     cy.get(settings.modelManager.edit).should('be.visible');
     cy.get(settings.modelManager.delete).should('be.visible');
-    cy.get(utils.vlModal.close).should('be.visible');
   });
 
   it('Should open the dropdown in the modal and selecting the each element should show advanced modal with that element in the dropdown span', () => {
@@ -115,5 +114,5 @@ context('Settings page tests', () => {
     cy.get(dependency.emberPowerSelect.option).should('contain.text', 'Test Input');
     cy.get(dependency.emberPowerSelect.option).should('not.contain.text', 'Andere zaken');
   });
-  // TODO delete this new domain
+  // TODO-settings delete this new domain
 });

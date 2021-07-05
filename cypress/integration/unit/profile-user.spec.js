@@ -1,15 +1,16 @@
 /* global context, it, cy,beforeEach */
 // / <reference types="Cypress" />
 
-import utils from '../../../selectors/utils.selectors';
-import route from '../../../selectors/route.selectors';
+import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
 
-context('Testing the toolbar as user user', () => {
+context('Testing the application as user user', () => {
   beforeEach(() => {
     cy.server();
     cy.login('User');
-    cy.visit('/');
   });
+
+  // M-header toolbar tests
 
   it('Should have publications, meeting, Case and search in toolbar', () => {
     cy.get(utils.mHeader.publications).should('exist');
