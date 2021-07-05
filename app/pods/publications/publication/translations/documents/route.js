@@ -30,8 +30,9 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     pieces = pieces.flatMap((pieces) => pieces.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = A([...pieces]);
-    pieces.sortBy('created').reverse();
-
+    // this.model.sortBy('created') does not work properly
+    // descending sort on created
+    pieces.sort((piece1, piece2) => piece2.created - piece1.created);
     return pieces;
   }
 
