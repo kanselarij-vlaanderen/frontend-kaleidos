@@ -141,10 +141,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       }
 
       const filePromises = attachments.mapBy('file');
-      const attachmentFiles = await Promise.all(filePromises);
-
-      const outbox = await this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-      const mailSettings = await this.store.queryOne('email-notification-setting');
+      const attachmentFilesPromise = Promise.all(filePromises);
+      const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+      const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+      const [attachmentFiles, outbox, mailSettings] = await Promise.all([attachmentFilesPromise, outboxPromise, mailSettingsPromise]);
       const email = this.store.createRecord('email', {
         to: mailSettings.proofRequestToEmail,
         from: mailSettings.defaultFromEmail,
