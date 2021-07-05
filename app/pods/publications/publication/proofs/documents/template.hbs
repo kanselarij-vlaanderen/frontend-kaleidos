@@ -5,15 +5,13 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button id="proofDocumentsActionMenu"
-            @icon="chevron-down"
-            @layout="icon-right"
-            @skin="secondary"
+            @icon="chevron-down" @layout="icon-right" @skin="secondary"
             @disabled={{not this.canOpenProofRequestModal}}>
             {{t "new-request"}}
           </Auk::Button>
           {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
           <EmberPopover
-            @side="bottom-end"
+            @side="bottom-start"
             @tooltipClass="auk-popover"
             @targetId="proofDocumentsActionMenu">
             <Auk::Dropdown
