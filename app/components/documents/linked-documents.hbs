@@ -13,19 +13,14 @@
   {{/unless}}
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">
-      <button type="button" class="auk-button auk-button--tertiary"
-        data-test-linked-documents-add
+      <Auk::Button
+        @skin="tertiary"
+        @icon="add"
         {{on "click" this.openLinkedPieceModal}}
+        data-test-linked-documents-add
       >
-        <span class="auk-button__content">
-          <div class="auk-icon auk-icon--default">
-            <i class="ki ki-add"></i>
-          </div>
-          <div class="auk-button__label">
-            {{t "document-link-old"}}
-          </div>
-        </span>
-      </button>
+        {{t "document-link-old"}}
+      </Auk::Button>
     </div>
   {{/if}}
 </div>

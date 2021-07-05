@@ -12,7 +12,7 @@ import {
   timeout
 } from 'ember-concurrency';
 import moment from 'moment';
-import config from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
@@ -179,13 +179,12 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @task
   *getAgendaActivity() {
-    const agendaActivities = yield this.store.query('agenda-activity', {
+    const agendaActivity = yield this.store.queryOne('agenda-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[agendaitems][agenda][created-for][is-final]': false,
-      'page[size]': 1,
     });
 
-    return agendaActivities.firstObject;
+    return agendaActivity;
   }
 
   @task
@@ -203,18 +202,16 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
 
   @task
   *updateSubmissionActivity(pieces) {
-    const submissionActivities = yield this.store.query('submission-activity', {
+    const submissionActivity = yield this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': this.subcase.id,
       'filter[:has-no:agenda-activity]': true,
-      'page[size]': 1,
     });
 
-    if (submissionActivities.length) { // Adding pieces to existing submission activity
-      let submissionActivity = submissionActivities.firstObject;
+    if (submissionActivity) { // Adding pieces to existing submission activity
       const submissionPieces = yield submissionActivity.pieces;
       submissionPieces.pushObjects(pieces);
 
-      submissionActivity = yield submissionActivity.save();
+      yield submissionActivity.save();
       return submissionActivity;
     }
 
@@ -228,7 +225,7 @@ export default class CasesCaseSubcasesSubcaseDocumentsController extends Control
     // and related to an agenda in the design status
     const agendaitems = yield this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.subcase.get('id'),
-      'filter[agenda][status][:id:]': config.agendaStatusDesignAgenda.id,
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
 
     // agendaitems can only have more than 1 item

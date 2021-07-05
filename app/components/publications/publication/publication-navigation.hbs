@@ -27,10 +27,11 @@
   >
     <div class="auk-o-flex auk-o-flex--center">
       <span>{{t "translations"}}</span>
+      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{@publicationFlow.translationSubcase}}/>
     </div>
   </Auk::Tab>
   <Auk::Tab
-    @route="publications.publication.publishpreview"
+    @route="publications.publication.proofs"
     data-test-publication-case-nav-publishpreview
   >
     <div class="auk-o-flex auk-o-flex--center">

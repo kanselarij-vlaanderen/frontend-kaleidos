@@ -16,16 +16,12 @@
       </Auk::Panel::Header>
       <Auk::Panel::Body>
         <pre>{{t "manage-emails-tokens"}}</pre>
-        <LinkTo
-          @tagName="button"
-          @type="button"
-          class="auk-button auk-button--tertiary"
+        <Auk::Button
+          @skin="tertiary"
           @route="settings.emails.debug"
         >
-          <span class="auk-button__content">
-            {{t "send-test-mail"}}
-          </span>
-        </LinkTo>
+          {{t "send-test-mail"}}
+        </Auk::Button>
 
         {{!-- Footer of the mail --}}
         <Auk::Label class="auk-u-mt-2 auk-u-mb-1">

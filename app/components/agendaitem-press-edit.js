@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import CONFIG from 'frontend-kaleidos/utils/config';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
 export default Component.extend({
@@ -22,7 +22,7 @@ export default Component.extend({
       } else {
         agendaitemToUpdate = await agendaitem;
       }
-      agendaitemToUpdate.set('formallyOk', CONFIG.notYetFormallyOk);
+      agendaitemToUpdate.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
       await agendaitemToUpdate.save().then(() => {
         updateModifiedProperty(agenda);
         if (this.isTableRow) {

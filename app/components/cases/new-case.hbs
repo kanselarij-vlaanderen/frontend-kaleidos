@@ -30,13 +30,13 @@
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
-          <button type="button" data-test-new-case-cancel
-                  class="auk-button auk-button--borderless"
-            {{action "closeAction"}}>
-            <span class="auk-button__content">
-              {{t "cancel"}}
-            </span>
-          </button>
+          <Auk::Button
+            @skin="borderless"
+            {{action "closeAction"}}
+            data-test-new-case-cancel
+          >
+            {{t "cancel"}}
+          </Auk::Button>
         </div>
       </div>
       <div class="auk-toolbar-complex__right">

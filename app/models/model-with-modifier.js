@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import ModelWithToasts from 'frontend-kaleidos/models/model-with-toasts';
+import Model from '@ember-data/model';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
@@ -9,7 +9,7 @@ const {
   attr, belongsTo,
 } = DS;
 
-export default ModelWithToasts.extend({
+export default Model.extend({
   currentSession: service(),
   intl: service(),
   toaster: service(),
@@ -22,29 +22,33 @@ export default ModelWithToasts.extend({
 
     switch (dirtyType) {
       case 'created': {
+        this.setModified();
         break;
       }
-
       case 'deleted': {
         break;
       }
+      // This case can occur when uploading documents on agendaitem that is already "not yet formally ok"
+      // No set of formal ok status occurs on the agendaitem (not dirty), but we have added documents using PUT calls
+      // We still want to change modified data to reflect that a change has happened (so other users can't save without refreshing page)
       case undefined: {
         await this.preEditOrSaveCheck();
+        this.setModified();
         break;
       }
       case 'updated': {
         await this.preEditOrSaveCheck();
-        this.toaster.success(this.intl.t('successfully-saved'), this.intl.t('successfully-created-title'));
+        this.setModified();
         break;
       }
     }
 
-    if (['created', 'updated'].includes(dirtyType)) {
-      this.set('modified', new Date());
-      this.set('modifiedBy', this.currentSession.user);
-    }
-
     return parentSave.call(this, ...arguments);
+  },
+
+  setModified() {
+    this.set('modified', new Date());
+    this.set('modifiedBy', this.currentSession.user);
   },
 
   async preEditOrSaveCheck() {

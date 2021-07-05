@@ -61,6 +61,7 @@ context('Agenda tests', () => {
       cy.get(auk.alert.message).should('exist');
     });
     cy.get(agenda.agendaHeader.confirm.approveAgenda).contains('Goedkeuren');
+    cy.get(auk.loader).should('not.exist');
     cy.get(auk.modal.footer.cancel).contains('Annuleren')
       .click();
     // instead of confirming the opened modal, we cancel and let the command handle it

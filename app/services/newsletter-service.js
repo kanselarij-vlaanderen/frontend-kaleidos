@@ -1,5 +1,4 @@
 import Service, { inject as service } from '@ember/service';
-
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import moment from 'moment';
 
@@ -119,12 +118,11 @@ export default Service.extend({
           const activity = await agendaitem.get('agendaActivity');
           const subcase = await activity.get('subcase');
           const _case = await subcase.get('case');
-          const previousNewsItem = (await this.store.query('newsletter-info', {
+          const previousNewsItem = await this.store.queryOne('newsletter-info', {
             'filter[agenda-item-treatment][subcase][case][:id:]': _case.id,
             'filter[agenda-item-treatment][agendaitem][show-as-remark]': false, // Don't copy over news item from announcement
             sort: '-agenda-item-treatment.agendaitem.agenda-activity.start-date',
-            'page[size]': 1,
-          })).firstObject;
+          });
           if (previousNewsItem) {
             news.set('richtext', previousNewsItem.richtext);
             news.set('title', previousNewsItem.title);

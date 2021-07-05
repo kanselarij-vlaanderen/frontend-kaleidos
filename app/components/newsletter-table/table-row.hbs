@@ -2,7 +2,7 @@
   <td class="lt-cell align-left">
     {{@agendaitem.priority}}
   </td>
-  <td class="lt-cell align-left auk-table__col--7">
+  <td data-test-table-row-newsletter-row-title class="lt-cell align-left auk-table__col--7">
     {{#if this.hasNewsletterInfo}}
       <div class="auk-u-mb-2">
         <p class="auk-u-text-bold">
@@ -34,6 +34,7 @@
   </td>
   <td class="lt-cell align-left">
     <WebComponents::VlCheckbox
+      data-test-table-row-newsletter-row-checkbox-in-newsletter={{true}}
       @value={{this.newsletterInfo.inNewsletter}}
       @toggle={{this.setInNewsletter}}
       @disabled={{or (not this.hasNewsletterInfo) this.saveNewsletterInfoTask.isRunning}}

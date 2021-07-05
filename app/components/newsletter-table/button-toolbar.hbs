@@ -1,16 +1,11 @@
 <div class="auk-o-flex--justify-between">
-  <button
-    data-test-newsletter-table-button-toolbar-edit
-    type="button"
-    class="auk-button auk-button--borderless auk-button--icon"
+  <Auk::Button
+    data-test-newsletter-table-button-toolbar-edit={{true}}
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="pencil"
     {{on "click" @onEdit}}
-  >
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-pencil"></i>
-      </div>
-    </span>
-  </button>
+  />
   {{#if (is-pending (await @agendaitem.notaOrVisienota))}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
@@ -18,38 +13,30 @@
       </EmberTooltip>
     </div>
   {{else}}
-    <button
-      type="button"
-      class="auk-button auk-button--borderless auk-button--icon"
-      disabled={{not (await @agendaitem.notaOrVisienota)}}
-      style={{if (not (await @agendaitem.notaOrVisienota)) "opacity:0.3;"}}
-      {{on "click" this.openNota}}
-    >
-      <span class="auk-button__content">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-document"></i>
-        </div>
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
-        </EmberTooltip>
-      </span>
-    </button>
+    <div class="auk-u-position-relative auk-u-inline-block">
+      <Auk::Button
+        @skin="borderless"
+        @layout="icon-only"
+        @icon="document"
+        @disabled={{not (await @agendaitem.notaOrVisienota)}}
+        {{on "click" this.openNota}}
+      />
+      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+        {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
+      </EmberTooltip>
+    </div>
   {{/if}}
-  <LinkTo
-    data-test-newsletter-table-button-toolbar-link-to-agendaitem
-    class="auk-button auk-button--borderless auk-button--icon"
-    target="_blank"
+  <Auk::Button
+    data-test-newsletter-table-button-toolbar-link-to-agendaitem={{true}}
+    @skin="borderless"
+    @layout="icon-only"
+    @icon="nav-right"
     @route="agenda.agendaitems.agendaitem"
     @models={{array
       (await latestMeetingId)
       (await latestAgendaId)
       (await latestAgendaitemId)
     }}
-  >
-    <span class="auk-button__content">
-      <div class="auk-icon auk-icon--default">
-        <i class="ki ki-nav-right"></i>
-      </div>
-    </span>
-  </LinkTo>
+    target="_blank"
+  />
 </div>

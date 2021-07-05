@@ -34,21 +34,14 @@
         {{/if}}
         {{#if this.currentSession.isEditor}}
           <div class="auk-u-mb-4">
-            <button
-              type="button"
-              class="auk-button auk-button--tertiary"
+            <Auk::Button
+              @skin="tertiary"
+              @icon="add"
               data-test-route-agenda-documents-add-documents
               {{on "click" this.openPieceUploadModal}}
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-add"></i>
-                </div>
-                <div class="auk-button__label">
-                  {{t "documents-add"}}
-                </div>
-              </span>
-            </button>
+              {{t "documents-add"}}
+            </Auk::Button>
           </div>
         {{/if}}
       </div>

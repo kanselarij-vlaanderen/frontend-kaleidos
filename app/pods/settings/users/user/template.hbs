@@ -37,7 +37,16 @@
           <dl>
             <div class="auk-key-value-item auk-key-value-item--horizontal">
               <dt class="auk-key-value-item__label">{{t 'manage-users-group'}}</dt>
-              <dd class="auk-key-value-item__value">{{web-components/light-table/vl-group-column user=model}}</dd>
+              <dd class="auk-key-value-item__value">
+                <Utils::ModelSelector
+                  @modelName="account-group"
+                  @searchField="name"
+                  @propertyToShow="name"
+                  @sortField="name"
+                  @selectedItems={{this.model.group}}
+                  @selectModel={{this.setAndSaveGroup}}
+                />
+              </dd>
             </div>
           </dl>
         </Auk::Panel::Body>

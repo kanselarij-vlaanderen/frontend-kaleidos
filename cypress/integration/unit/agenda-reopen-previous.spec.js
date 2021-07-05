@@ -46,6 +46,7 @@ context('Agenda reopen previous tests', () => {
     cy.get(auk.alert.message).contains('Agenda A', {
       timeout: 5000,
     });
+    cy.get(auk.loader).should('not.exist'); // data loading task might be running, disabling the next button
     cy.get(agenda.agendaHeader.confirm.reopenPreviousVersion).contains(designAgendaDeleteModalTitleAndVerify)
       .click();
     cy.wait('@getAgendas');

@@ -33,7 +33,7 @@
     @mandatees={{this.mandatees}}
     @submitter={{this.submitter}}
     @fields={{this.governmentFields}}
-    @allowEditing={{true}}
+    @allowEditing={{this.currentSession.isEditor}}
     @onSave={{this.saveMandateeData}}
   />
   {{#unless this.subcase.showAsRemark}}

@@ -27,22 +27,16 @@ as |dropzone|
   <div class="auk-file-upload__content">
     <div class="auk-u-mb-2">
       {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
-        <button
-          class="auk-button auk-button--tertiary auk-file-upload__action-button"
-          type="button"
+        <Auk::Button
+          @skin="tertiary"
+          @icon="paperclip"
+          class="auk-file-upload__action-button"
           tabindex="-1"
           {{on "click" this.clickInput}}
           {{on "key-up" this.clickInputOnEnter}}
         >
-          <span class="auk-button__content">
-            <span class="auk-icon auk-icon--default auk-icon--paperclip">
-              <i class="ki ki-paperclip"></i>
-            </span>
-            <span class="auk-button__label">
-              {{t "upload-files" numFiles=(if @multiple "multiple" "one")}}
-            </span>
-          </span>
-        </button>
+          {{t "upload-files" numFiles=(if @multiple "multiple" "one")}}
+        </Auk::Button>
       {{else if this.uploadIsRunning}}
         {{t "uploading-files" numFiles=this.fileQueue.files.length}}
       {{else if this.uploadIsCompleted}}

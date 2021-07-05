@@ -12,6 +12,7 @@ export default class RequestActivity extends Model {
   @belongsTo('translation-subcase') translationSubcase;
   @belongsTo('publication-subcase') publicationSubcase;
   @belongsTo('translation-activity') translationActivity;
+  @belongsTo('proofing-activity') proofingActivity;
 
   @belongsTo('email') email;
 

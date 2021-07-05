@@ -16,5 +16,10 @@ const selectors = {
     inputNumInputCurYear: '.open  input.numInput.cur-year',
     flatpickrDay: '.open  .flatpickr-day',
   },
+
+  // RDFA editor
+  rdfa: {
+    editorInner: '.say-editor__inner',
+  },
 };
 export default selectors;
