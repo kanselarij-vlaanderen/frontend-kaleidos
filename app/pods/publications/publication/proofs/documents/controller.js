@@ -41,8 +41,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     return this.model.length === this.selectedPieces.length;
   }
 
-  get canOpenProofRequestModal() {
-    return this.selectedPieces.length > 0;
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0;
   }
 
   @action
