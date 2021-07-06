@@ -57,15 +57,5 @@ context('Agenda reopen previous tests', () => {
     cy.contains(designAgendaCTitle).should('not.exist');
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.reopenPreviousVersion).should('not.exist');
-    // TODO the rest of this test is not needed and does not add any value
-    cy.contains(designAgendaBTitle).should('not.exist');
-    cy.deleteAgenda();
-    cy.get(agenda.agendaHeader.showActionOptions).click();
-    cy.get(agenda.agendaHeader.actions.createNewDesignAgenda).click();
-    cy.wait('@getAgendas');
-    cy.contains(designAgendaATitle).should('not.exist');
-    cy.contains(designAgendaBTitle).should('exist');
-    cy.get(agenda.agendaHeader.showAgendaOptions).click();
-    cy.get(agenda.agendaHeader.agendaActions.reopenPreviousVersion).should('exist');
   });
 });

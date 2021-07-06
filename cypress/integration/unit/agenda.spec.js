@@ -37,32 +37,22 @@ context('Agenda tests', () => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-      cy.get(auk.modal.body).within(() => {
-        // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-        cy.get(auk.alert.container).should('exist');
-        cy.get(auk.alert.message).should('exist');
-      });
-      cy.get(agenda.agendaHeader.confirm.deleteAgenda).contains('Agenda verwijderen');
-      cy.get(auk.modal.footer.cancel).contains('Annuleren')
-        .click();
+      cy.get(auk.modal.body).find(auk.alert.message);
+      cy.get(agenda.agendaHeader.confirm.deleteAgenda);
+      cy.get(auk.modal.footer.cancel).click();
       // instead of confirming the opened modal, we cancel and let the command handle it
       cy.deleteAgenda(result.meetingId, true);
-      // TODO assert we go back to agendas overview
+      cy.url().should('include', '/overzicht');
     });
   });
 
   it('should get different message when trying to approve with formal not ok items', () => {
     cy.openAgendaForDate(agendaDate); // 1 item with "not yet formally ok"
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).within(() => {
-      // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-      cy.get(auk.alert.container).should('exist');
-      cy.get(auk.alert.message).should('exist');
-    });
-    cy.get(agenda.agendaHeader.confirm.approveAgenda).contains('Goedkeuren');
+    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.confirm.approveAgenda);
     cy.get(auk.loader).should('not.exist');
-    cy.get(auk.modal.footer.cancel).contains('Annuleren')
-      .click();
+    cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
@@ -79,7 +69,8 @@ context('Agenda tests', () => {
     cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda(false);
-    // TODO check if there is no au-alert in the new popup
+    cy.get(auk.modal.body).find(auk.alert.message)
+      .should('not.exist');
   });
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
@@ -116,6 +107,7 @@ context('Agenda tests', () => {
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
+    // TODO split constant and append whitespace
     const newSubcase1TitleShort = 'dit is de korte titel\n\n';
     const subcase1TitleLong = 'dit is de lange titel\n\n';
     const subcase1Type = 'In voorbereiding';
@@ -141,35 +133,33 @@ context('Agenda tests', () => {
 
     cy.openAgendaForDate(dateToCreateAgenda);
     // overview
-    cy.contains('dit is de korte titel');
+    // TODO agendaitem exists and lange titel
+    cy.get(agenda.agendaOverviewItem.subitem).contains('dit is de korte titel');
     cy.contains('dit is de lange titel');
-    cy.contains('dit is de korte titel').click();
+    cy.get(agenda.agendaOverviewItem.subitem).contains('dit is de korte titel')
+      .click();
     // detail view
-    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
-      .should('be.visible')
-      .click();
+    cy.get(agenda.agendaitemTitlesView.edit).click();
     // TODO replace with confidentiality selector
-    cy.get(utils.vlToggle.label).should('exist')
+    cy.get(agenda.agendaitemTitlesEdit.confidential).find(utils.vlToggle.label)
       .click();
 
-    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
-    cy.get(agenda.agendaitemTitlesEdit.shorttitle).type('dit is de korte titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear()
+      .type('dit is de korte titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEdit.title).clear();
-    cy.get(agenda.agendaitemTitlesEdit.title).type('dit is de lange titel\n\n');
+    cy.get(agenda.agendaitemTitlesEdit.title).clear()
+      .type('dit is de lange titel\n\n');
 
-    cy.get(agenda.agendaitemTitlesEdit.explanation).clear();
-    cy.get(agenda.agendaitemTitlesEdit.explanation).type('Dit is de opmerking');
+    cy.get(agenda.agendaitemTitlesEdit.explanation).clear()
+      .type('Dit is de opmerking');
 
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).should('exist')
-      .should('be.visible')
-      .click();
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
     cy.get(agenda.agendaitemTitlesView.edit).scrollIntoView();
-    cy.contains('dit is de korte titel');
-    cy.contains('dit is de lange titel');
-    cy.contains('Dit is de opmerking');
-    // TODO KAS-2142 setting confidentiality and cancelling does not roll back
-    cy.get(auk.pill).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.shortTitle).contains('dit is de korte titel');
+    cy.get(agenda.agendaitemTitlesView.title).contains('dit is de lange titel');
+    cy.get(agenda.agendaitemTitlesView.explanation).contains('Dit is de opmerking');
+    // TODO-BUG setting confidentiality and cancelling does not roll back
+    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
   });
 
   it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
@@ -261,19 +251,16 @@ context('Agenda tests', () => {
       cy.approveDesignAgenda();
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-      // TODO check the message?
-      cy.get(auk.modal.body).within(() => {
-        cy.get(auk.alert.container).should('exist');
-      });
+      cy.get(auk.modal.body).find(auk.alert.message);
 
       // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
 
-      cy.get(agenda.agendaHeader.confirm.lockAgenda).contains('Agenda afsluiten')
-        .click();
+      cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
       // cy.wait('@agendasCreatedFor');
       cy.wait('@patchAgendas');
-      // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
+      // NOTE: instead of waiting for the data to load, we wait for an object we know has to exist
+      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     });
   });
@@ -286,8 +273,8 @@ context('Agenda tests', () => {
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const newSubcase1TitleShort = 'dit is de korte titel';
+    const subcase1TitleLong = 'dit is de lange titel';
     const subcase1Type = 'In voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
@@ -314,7 +301,7 @@ context('Agenda tests', () => {
       cy.setFormalOkOnItemWithIndex(1);
     });
     cy.approveAndCloseDesignAgenda(false);
-    // TODO tekst beter afcheken
+    cy.get(auk.modal.body).find(auk.alert.message);
     // cy.get(auk.modal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
 
     cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
@@ -335,13 +322,15 @@ context('Agenda tests', () => {
     cy.wait('@patchSubcases');
     cy.wait('@agendaActivities');
 
-    // TODO is deze not exists wel goed ?
+    cy.get(agenda.agendaOverview.showChanges);
     cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
-    // cy.get('.auk-loader', {
+    // cy.get(auk.loader, {
     //   timeout: 60000,
     // }).should('not.exist');
-    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase1TitleShort);
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase2TitleShort)
+      .should('not.exist');
   });
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve the agenda', () => {
@@ -352,8 +341,8 @@ context('Agenda tests', () => {
 
     const case1TitleShort = `${testId}Cypress test dossier 1`;
     const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
+    const newSubcase1TitleShort = 'dit is de korte titel';
+    const subcase1TitleLong = 'dit is de lange titel';
     const subcase1Type = 'In voorbereiding';
     const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
 
@@ -385,12 +374,9 @@ context('Agenda tests', () => {
     cy.route('GET', '/agendaitems/**/agenda-activity').as('agendaActivity');
     cy.route('GET', '/agendaitems/**/treatments').as('treatments');
 
-    // TODO tekst checken ?
-    cy.get(auk.modal.container).within(() => {
-      cy.get(auk.alert.message).should('exist');
-      cy.get(agenda.agendaHeader.confirm.approveAgenda)
-        .click();
-    });
+    cy.get(auk.modal.container).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.confirm.approveAgenda)
+      .click();
 
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -426,9 +412,12 @@ context('Agenda tests', () => {
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase1TitleShort);
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcase2TitleShort)
+      .should('not.exist');
     // Closing an agenda should remove any design agenda
-    cy.contains('Agenda B').should('not.exist');
+    cy.get(agenda.agendaSideNav.agendaName).contains('Agenda B')
+      .should('not.exist');
   });
 });
 

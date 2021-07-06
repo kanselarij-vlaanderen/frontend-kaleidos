@@ -108,6 +108,12 @@ const selectors = {
     title: ['data-test-agenda-header-title'],
   },
 
+  // agenda-side-nav
+  agendaSideNav: {
+    agenda: '[data-test-agenda-side-nav-agenda]',
+    agendaName: '[data-test-agenda-side-nav-agenda-name]',
+  },
+
   // compare-agenda-list
   compareAgenda: {
     showChanges: '[data-test-compare-show-changes]',
@@ -121,6 +127,10 @@ const selectors = {
 
   // agendaitem-titles-view
   agendaitemTitlesView: {
+    title: '[data-test-agendaitem-titles-title]',
+    shortTitle: '[data-test-agendaitem-titles-short-title]',
+    explanation: '[data-test-agendaitem-titles-explanation]',
+    confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
   },
