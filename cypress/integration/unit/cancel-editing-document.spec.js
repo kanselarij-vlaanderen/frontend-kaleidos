@@ -216,17 +216,16 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
 
     // Cancel/save access-level in document card
     // TODO use test selector
-    cy.get('.vlc-document-card__content > .auk-toolbar-complex > .vlc-document-card-toolbar__right').as('accessLevelToolbar')
-      .within(() => {
-        cy.get('.auk-pill').contains('Intern Overheid')
-          .click();
-        cy.get(dependency.emberPowerSelect.trigger).click();
-      });
+    cy.get(document.documentCard.toolbar).within(() => {
+      cy.get('.auk-pill').contains('Intern Overheid')
+        .click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
+    });
     cy.get(dependency.emberPowerSelect.option).should('exist')
       .then(() => {
         cy.contains('Publiek').click();
       });
-    cy.get('@accessLevelToolbar').within(() => {
+    cy.get(document.documentCard.toolbar).within(() => {
       cy.get('.ki-cross').click();
       cy.get('.auk-pill').contains('Intern Overheid')
         .click();
@@ -236,7 +235,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
       .then(() => {
         cy.contains('Publiek').click();
       });
-    cy.get('@accessLevelToolbar').within(() => {
+    cy.get(document.documentCard.toolbar).within(() => {
       cy.get('.ki-check').click();
       // TODO patch happens
       cy.get('.auk-pill').contains('Publiek')
