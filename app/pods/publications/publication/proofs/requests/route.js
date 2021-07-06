@@ -1,9 +1,10 @@
 import Route from '@ember/routing/route';
+import { Row } from './controller';
 
 export default class PublicationsPublicationProofsRequestsRoute extends Route {
-  model() {
+  async model() {
     const publicationSubcase = this.modelFor('publications.publication.proofs');
-    const requestActivities = this.store.query('request-activity', {
+    const requestActivities = await this.store.query('request-activity', {
       'filter[publication-subcase][:id:]': publicationSubcase.id,
       include: [
         'email',
@@ -19,16 +20,30 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
       sort: '-start-date',
     });
 
-    return requestActivities;
+    // rows are created here to prevent rendering before resolution
+    const model = await Promise.all(requestActivities.map(this.createRow));
+    return model;
   }
 
-  setupController(controller, model) {
+  setupController(controller) {
     super.setupController(...arguments);
 
-    controller.initRows(model);
     // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
     controller.publicationFlow = this.modelFor('publications.publication');
     controller.selectedRow = undefined;
     controller.isUploadModalOpen = false;
+  }
+
+  async createRow(requestActivity) {
+    const [proofingActivity, publicationActivity] = await Promise.all([
+      requestActivity.proofingActivity,
+      requestActivity.publicationActivity
+    ]);
+
+    return new Row({
+      requestActivity: requestActivity,
+      proofingActivity: proofingActivity,
+      publicationActivity: publicationActivity,
+    });
   }
 }
