@@ -31,9 +31,7 @@ class Validator {
   }
 }
 
-export default class PublicationsPublicationProofsRequestModalComponent extends Component {
-  @service intl;
-
+export default class PublicationsPublicationProofsProofRequestModalComponent extends Component {
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];

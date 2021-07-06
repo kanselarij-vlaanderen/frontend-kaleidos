@@ -23,9 +23,9 @@
                   @targetId={{id}}>
                   <Auk::Dropdown
                     as |dropdown|>
-                    {{#if row.canOpenUploadModal}}
+                    {{#if row.canOpenProofUploadModal}}
                       <dropdown.Item
-                        {{on "click" (fn this.openUploadModal row)}}>
+                        {{on "click" (fn this.openProofUploadModal row)}}>
                         {{t "upload-documents"}}
                       </dropdown.Item>
                     {{/if}}
@@ -59,14 +59,14 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{row.attachments}} />
+                <Utils::Documents::List @pieces={{sort-by 'created' row.requestActivity.usedPieces}} />
               </div>
-              {{#if row.receivedPieces}}
+              {{#if row.resultActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{row.receivedPieces}} />
+                  <Utils::Documents::List @pieces={{sort-by 'created' row.resultActivity.generatedPieces}} />
                 </div>
               {{/if}}
             </div>
@@ -80,8 +80,8 @@
 </div>
 
 {{#if this.isUploadModalOpen}}
-  <Publications::Publication::Proofs::UploadModal
+  <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{this.saveProof}}
-    @onCancel={{this.closeUploadModal}} />
+    @onSave={{this.saveProofUpload}}
+    @onCancel={{this.closeProofUploadModal}} />
 {{/if}}

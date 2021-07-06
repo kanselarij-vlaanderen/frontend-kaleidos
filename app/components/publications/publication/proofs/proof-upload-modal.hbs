@@ -1,21 +1,23 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @onClose={{@onCancel}}
     @title={{t
       "upload-proof-for-publication-x-identification"
       identification=@publicationFlow.identification.idName
-    }} />
+    }}
+    @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.onSave.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent @isLoading={{this.saveProof.isRunning}} @reserveSpace={{true}}>
+
       <Auk::FileUploader
         @multiple={{false}}
         @onUpload={{this.onUploadFile}} />
+      {{!-- File details --}}
       {{#if this.file}}
         <div class="auk-u-my-4">
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-                <div class="auk-form-group auk-o-flex--align-start {{if this.validators.name.showError "auk-form-group--error"}}">
+                <div class="auk-form-group {{if this.validators.name.showError "auk-form-group--error"}}">
                   <Auk::Label for="proofUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
@@ -24,7 +26,7 @@
                     {{on "input" this.validators.name.enableError}} />
                 </div>
                 <div class="auk-form-group">
-                  <Auk::Label>{{t "document-type"}}</Auk::Label>
+                  <Auk::Label>{{t "file-type"}}</Auk::Label>
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
               </div>
@@ -32,6 +34,7 @@
           </div>
         </div>
       {{/if}}
+
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
@@ -39,7 +42,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::ButtonLink
-            disabled={{not this.canCancel}}
+            disabled={{this.isCancelDisabled}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
           </Auk::ButtonLink>
@@ -49,9 +52,9 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary"
-            @disabled={{not this.canSave}}
-            @loading={{this.onSave.isRunning}}
-            {{on "click" (perform this.onSave)}}>
+            @disabled={{this.isSaveDisabled}}
+            @loading={{this.saveProof.isRunning}}
+            {{on "click" (perform this.saveProof)}}>
             {{t "save"}}
           </Auk::Button>
         </Auk::Toolbar::Item>

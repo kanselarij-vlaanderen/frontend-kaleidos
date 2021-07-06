@@ -42,14 +42,14 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-6">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{activity.usedPieces}} />
+                <Utils::Documents::List @pieces={{sort-by 'created' activity.usedPieces}} />
               </div>
               {{#if activity.translationActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{activity.translationActivity.generatedPieces}} />
+                  <Utils::Documents::List @pieces={{sort-by 'created' activity.translationActivity.generatedPieces}} />
                 </div>
               {{/if}}
             </div>
@@ -64,7 +64,7 @@
 
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModal
-    @translationSubcase={{this.translationSubcase}}
+    @publicationFlow={{this.publicationFlow}}
     @onSave={{perform this.saveTranslationUpload}}
     @onCancel={{this.closeTranslationUploadModal}} />
 {{/if}}

@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
@@ -30,10 +29,7 @@ class Validator {
   }
 }
 
-export default class PublicationsPublicationProofsUploadDocumentModalComponent extends Component {
-  @service('file-queue') fileQueueService;
-
-  // isSaved;
+export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
   validators
   @tracked file;
   @tracked name;
@@ -41,10 +37,26 @@ export default class PublicationsPublicationProofsUploadDocumentModalComponent e
   constructor() {
     super(...arguments);
 
-    this.#initValidation();
+    this.initValidation();
   }
 
-  #initValidation() {
+  get isCancelDisabled() {
+    return this.saveProof.isRunning;
+  }
+
+  get isSaveDisabled() {
+    return !this.file || !Validator.areValid(this.validators);
+  }
+
+  @task
+  *saveProof() {
+    yield this.args.onSave({
+      file: this.file,
+      name: this.name,
+    });
+  }
+
+  initValidation() {
     this.validators = {
       name: new Validator(() => !isBlank(this.name)),
     };
@@ -54,21 +66,5 @@ export default class PublicationsPublicationProofsUploadDocumentModalComponent e
   onUploadFile(file) {
     this.file = file;
     this.name = file.filenameWithoutExtension;
-  }
-
-  get canCancel() {
-    return !this.onSave.isRunning;
-  }
-
-  get canSave() {
-    return Validator.areValid(this.validators) && !this.onSave.isRunning;
-  }
-
-  @task
-  *onSave() {
-    yield this.args.onSave({
-      file: this.file,
-      name: this.name,
-    });
   }
 }
