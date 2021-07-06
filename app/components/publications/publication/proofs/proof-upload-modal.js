@@ -19,10 +19,6 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     this.initValidation();
   }
 
-  get isCancelDisabled() {
-    return this.saveProof.isRunning;
-  }
-
   get isSaveDisabled() {
     return !this.file || !this.validators.areValid;
   }
