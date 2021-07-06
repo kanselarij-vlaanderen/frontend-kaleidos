@@ -6,7 +6,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary" @icon="mail"
-            @disabled={{not this.canOpenTranslationRequestModal}}
+            @disabled={{this.isRequestingDisabled}}
             {{on "click" this.openTranslationRequestModal}}>
             {{t "request-translations"}}
           </Auk::Button>
@@ -14,7 +14,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="secondary" @icon="add"
-            @disabled={{not this.canOpenPieceUploadModal}}
+            @disabled={{this.isUploadDisabled}}
             {{on "click" this.openPieceUploadModal}}>
             {{t "upload-translation-file"}}
           </Auk::Button>

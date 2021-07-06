@@ -36,10 +36,10 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
     return this.args.attachments.length;
   }
 
-  get canSave() {
-    return this.translationDueDate !== null
-      && this.subject !== null
-      && this.message !== null;
+  get isSaveDisabled() {
+    return this.translationDueDate === null
+      || this.subject === null
+      || this.message === null;
   }
 
   @task
@@ -68,14 +68,12 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   @task
-  *onSave() {
-    if (this.args.onSave) {
-      yield this.args.onSave({
-        selectedPieces: this.args.attachments,
-        translationDueDate: this.translationDueDate,
-        subject: this.subject,
-        message: this.message,
-      });
-    }
+  *saveRequest() {
+    yield this.args.onSave({
+      attachments: this.args.attachments,
+      translationDueDate: this.translationDueDate,
+      subject: this.subject,
+      message: this.message,
+    });
   }
 }
