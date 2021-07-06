@@ -3,31 +3,10 @@ import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
-
-class Validator {
-  @tracked isErrorEnabled;
-
-  constructor(check) {
-    this.check = check;
-  }
-
-  get isValid() {
-    return this.check();
-  }
-
-  @action
-  enableError() {
-    this.isErrorEnabled = true;
-  }
-
-  get showError() {
-    return this.isErrorEnabled && !this.check();
-  }
-
-  static areValid(validatorsObject) {
-    return Object.values(validatorsObject).every((validator) => validator.isValid);
-  }
-}
+import {
+  ValidatorSet,
+  Validator
+} from 'frontend-kaleidos/utils/validators';
 
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
   validators
@@ -45,7 +24,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   }
 
   get isSaveDisabled() {
-    return !this.file || !Validator.areValid(this.validators);
+    return !this.file || !this.validators.areValid;
   }
 
   @task
@@ -56,15 +35,15 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     });
   }
 
-  initValidation() {
-    this.validators = {
-      name: new Validator(() => !isBlank(this.name)),
-    };
-  }
-
   @action
   onUploadFile(file) {
     this.file = file;
     this.name = file.filenameWithoutExtension;
+  }
+
+  initValidation() {
+    this.validators = new ValidatorSet({
+      name: new Validator(() => !isBlank(this.name)),
+    });
   }
 }
