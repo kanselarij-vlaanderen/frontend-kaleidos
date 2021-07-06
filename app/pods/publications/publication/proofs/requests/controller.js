@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 // row object in order to be able to call properties
 // of proofingActivity and publicationActivity similarly in the template
 // e.g. {{row.resultActivity.email.subject}}
-class Row {
+export class Row {
   requestActivity;
   // resolved relationships to prevent await in getters (await requestActivity.proofingActivity)
   proofingActivity;
@@ -40,26 +40,8 @@ class Row {
 }
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
-  @tracked rows;
   @tracked publicationFlow;
   @tracked isUploadModalOpen;
-
-  async initRows(model) {
-    this.rows = await Promise.all(model.map(this.createRow));
-  }
-
-  async createRow(requestActivity) {
-    const [proofingActivity, publicationActivity] = await Promise.all([
-      requestActivity.proofingActivity,
-      requestActivity.publicationActivity
-    ]);
-
-    return new Row({
-      requestActivity: requestActivity,
-      proofingActivity: proofingActivity,
-      publicationActivity: publicationActivity,
-    });
-  }
 
   @action
   openProofUploadModal(row) {
