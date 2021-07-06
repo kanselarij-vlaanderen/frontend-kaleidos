@@ -2,8 +2,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import * as CONFIG from 'frontend-kaleidos/config/config';
-import UTILS_CONFIG from 'frontend-kaleidos/utils/config';
+import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
   'ontvangen-op': 'receivedDate',
@@ -28,38 +27,40 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
-
-  @tracked selection;
-  /** @type {string} key name. prepended with minus if descending */
+  @tracked selectedPieces = [];
   @tracked sortingString = undefined;
-
-  @tracked isRequestModalOpen = false;
-  @tracked requestStage;
+  @tracked isProofRequestModalOpen = false;
+  @tracked proofRequestStage;
 
   initSort() {
     this.sortingString = this.qpSortingString;
-    this.#sort(this.sortingString);
+    this.sort(this.sortingString);
   }
 
-  get areAllSelected() {
-    return this.model.length === this.selection.length;
+  get areAllPiecesSelected() {
+    return this.model.length === this.selectedPieces.length;
+  }
+
+  get canOpenProofRequestModal() {
+    return this.selectedPieces.length > 0;
   }
 
   @action
-  toggleSelectionAll() {
-    if (this.areAllSelected) {
-      this.selection.clear();
+  togglePieceSelection(selectedPiece) {
+    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+    if (isPieceSelected) {
+      this.selectedPieces.removeObject(selectedPiece);
     } else {
-      this.selection = this.model.toArray();
+      this.selectedPieces.pushObject(selectedPiece);
     }
   }
 
   @action
-  toggleSelection(row) {
-    if (!this.selection.includes(row)) {
-      this.selection.pushObject(row);
+  toggleAllPiecesSelection() {
+    if (this.areAllPiecesSelected) {
+      this.selectedPieces = [];
     } else {
-      this.selection.removeObject(row);
+      this.selectedPieces = [...this.model];
     }
   }
 
@@ -67,12 +68,12 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   changeSorting(sortingString) {
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
-    this.#sort(sortingString);
+    this.sort(sortingString);
     // sort is not tracked by ember
     this.model.arrayContentDidChange();
   }
 
-  #sort(sortingString) {
+  sort(sortingString) {
     let property = 'created';
     let isDescending = true;
     if (sortingString) {
@@ -81,104 +82,89 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey] || property;
     }
 
-    this.model.sortBy(property);
+    // this.model.sortBy(property) does not work properly
+    this.model.sort((piece1, piece2) => piece1[property] - piece2[property]);
     if (isDescending) {
       this.model.reverse();
     }
   }
 
-  get canOpenRequestModal() {
-    return this.selection.length > 0;
-  }
-
   @action
-  openRequestModal(stage) {
-    this.requestStage = stage;
+  openProofRequestModal(stage) {
+    this.proofRequestStage = stage;
     this.isRequestModalOpen = true;
   }
 
   @action
-  cancelRequest() {
-    this.isRequestModalOpen = false;
+  closeProofRequestModal() {
+    this.isProofRequestModalOpen = false;
   }
 
   @action
-  async saveRequest(requestProperties) {
+  async saveProofRequest(requestProperties) {
     try {
-      await this.#saveRequest(requestProperties);
+      await this.performSaveProofRequest(requestProperties);
     } finally {
-      this.isRequestModalOpen = false;
+      this.isProofRequestModalOpen = false;
     }
-    this.selection = [];
+    this.selectedPieces = [];
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async #saveRequest(requestProperties) {
+  async performSaveProofRequest(proofRequest) {
     const now = new Date();
-    const {
-      stage,
-      publicationSubcase,
-      attachments,
-    } = requestProperties;
 
     // REQUEST ACTIVITY
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
-      title: requestProperties.subject,
-      publicationSubcase: publicationSubcase,
-      usedPieces: attachments,
+      title: proofRequest.subject,
+      publicationSubcase: proofRequest.publicationSubcase,
+      usedPieces: proofRequest.attachments,
     });
     await requestActivity.save();
 
     // RESULT ACTIVITY
     const activityProperties = {
       startDate: now,
-      title: requestProperties.subject,
-      subcase: publicationSubcase,
+      title: proofRequest.subject,
+      subcase: proofRequest.publicationSubcase,
       requestActivity: requestActivity,
-      usedPieces: attachments,
+      usedPieces: proofRequest.attachments,
     };
     let activity;
-    if (stage === REQUEST_STAGES.INITIAL) {
+    if (proofRequest.stage === REQUEST_STAGES.INITIAL) {
       activity = this.store.createRecord('proofing-activity', activityProperties);
-    } else if (stage === REQUEST_STAGES.FINAL) {
+    } else if (proofRequest.stage === REQUEST_STAGES.FINAL) {
       activity = this.store.createRecord('publication-activity', activityProperties);
     } else {
-      throw new Error(`unknown request stage: ${stage}`);
+      throw new Error(`unknown request stage: ${proofRequest.stage}`);
     }
     const activitySave = activity.save();
     const saves = [activitySave];
 
     // PUBLICATION SUBCASE
-    if (!requestProperties.publicationSubcase.startDate) {
-      requestProperties.publicationSubcase.startDate = now;
-      const publicationSubcaseSave = publicationSubcase.save();
+    if (!proofRequest.publicationSubcase.startDate) {
+      proofRequest.publicationSubcase.startDate = now;
+      const publicationSubcaseSave = proofRequest.publicationSubcase.save();
       saves.push(publicationSubcaseSave);
     }
 
     // EMAIL
-    const filePromises = attachments.mapBy('file');
-    const attachmentFilesPromise = Promise.all(filePromises);
-    const mailFolderPromise = this.store.findRecordByUri('mail-folder', CONFIG.PUBLICATION_EMAIL.OUTBOX);
-    const [attachmentFiles, mailFolder] = await Promise.all([attachmentFilesPromise, mailFolderPromise]);
-    let recipientEmail;
-    if (stage === REQUEST_STAGES.INITIAL) {
-      recipientEmail = UTILS_CONFIG.EMAIL.TO.publishpreviewEmail;
-    } else if (stage === REQUEST_STAGES.FINAL) {
-      recipientEmail = UTILS_CONFIG.EMAIL.TO.publishEmail;
-    } else {
-      throw new Error(`unknown request stage: ${stage}`);
-    }
-    const email = this.store.createRecord('email', {
-      from: UTILS_CONFIG.EMAIL.DEFAULT_FROM,
-      to: recipientEmail,
-      folder: mailFolder,
-      subject: requestProperties.subject,
-      message: requestProperties.message,
-      attachments: attachmentFiles,
+    const filePromises = proofRequest.attachments.mapBy('file');
+    const filesPromise = Promise.all(filePromises);
+    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+    const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: proofRequest.subject,
+      message: proofRequest.message,
+      attachments: files,
       requestActivity: requestActivity,
     });
-    const emailSave = email.save();
+    const emailSave = mail.save();
     saves.push(emailSave);
 
     await Promise.all(saves);

@@ -5,36 +5,32 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
     const publicationSubcaseId = this.modelFor('publications.publication.proofs').id;
 
+    const queryProperties = {
+      include: [
+        'file'
+      ].join(','),
+      'page[size]': 100,
+    };
+
     // 3 requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
     // and made an extra request per piece
-    const sourcePiecesRequest = this.store.query('piece', {
+    const sourceDocumentsRequest = this.store.query('piece', {
       'filter[publication-subcase][:id:]': publicationSubcaseId,
-      include: [
-        'file',
-        'publication-subcase'
-      ].join(','),
+      ...queryProperties,
     });
 
     const usedPiecesRequest = this.store.query('piece', {
       'filter[proofing-activity-generated-by][subcase][:id:]': publicationSubcaseId,
-      include: [
-        'file',
-        'proofing-activity-generated-by',
-        'proofing-activity-generated-by.subcase'
-      ].join(','),
+      ...queryProperties,
     });
 
     const generatedPiecesRequest = this.store.query('piece', {
       'filter[publication-activity-generated-by][subcase][:id:]': publicationSubcaseId,
-      include: [
-        'file',
-        'publication-activity-generated-by',
-        'publication-activity-generated-by.subcase'
-      ].join(','),
+      ...queryProperties,
     });
 
-    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest]);
-    pieces = pieces.flatMap((piece) => piece.toArray());
+    let pieces = await Promise.all([sourceDocumentsRequest, usedPiecesRequest, generatedPiecesRequest]);
+    pieces = pieces.flatMap((pieces) => pieces.toArray());
 
     return pieces;
   }
@@ -48,10 +44,10 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async setupController(controller) {
     super.setupController(...arguments);
 
-    controller.publicationSubcase = this.publicationSubcase;
     controller.publicationFlow = this.publicationFlow;
-    controller.selection = [];
+    controller.publicationSubcase = this.publicationSubcase;
+    controller.selectedPieces = [];
     controller.initSort();
-    controller.isOpenRequestModal = false;
+    controller.isOpenProofRequestModal = false;
   }
 }

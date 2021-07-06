@@ -3,6 +3,9 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+// row object in order to be able to call properties
+// of proofingActivity and publicationActivity similarly in the template
+// e.g. {{row.resultActivity.email.subject}}
 class Row {
   requestActivity;
   // resolved relationships to prevent await in getters (await requestActivity.proofingActivity)
@@ -11,19 +14,6 @@ class Row {
 
   constructor(params) {
     Object.assign(this, params);
-  }
-
-  get requestTypeTranslationKey() {
-    if (this.proofingActivity) {
-      return 'proofing-request';
-    } else if (this.publicationActivity) {
-      return 'publication-request';
-    }
-    throw new Error('unknown request');
-  }
-
-  get attachments() {
-    return this.requestActivity.usedPieces.sortBy('created');
   }
 
   get resultActivity() {
@@ -35,11 +25,16 @@ class Row {
     throw new Error('unknown activity');
   }
 
-  get receivedPieces() {
-    return this.resultActivity.generatedPieces.sortBy('created');
+  get requestTypeTranslationKey() {
+    if (this.proofingActivity) {
+      return 'proofing-request';
+    } else if (this.publicationActivity) {
+      return 'publication-request';
+    }
+    throw new Error('unknown request');
   }
 
-  get canOpenUploadModal() {
+  get canOpenProofUploadModal() {
     return !!this.proofingActivity;
   }
 }
@@ -50,10 +45,10 @@ export default class PublicationsPublicationProofsRequestsController extends Con
   @tracked isUploadModalOpen;
 
   async initRows(model) {
-    this.rows = await Promise.all(model.map(this.#createRow));
+    this.rows = await Promise.all(model.map(this.createRow));
   }
 
-  async #createRow(requestActivity) {
+  async createRow(requestActivity) {
     const [proofingActivity, publicationActivity] = await Promise.all([
       requestActivity.proofingActivity,
       requestActivity.publicationActivity
@@ -67,28 +62,28 @@ export default class PublicationsPublicationProofsRequestsController extends Con
   }
 
   @action
-  openUploadModal(row) {
+  openProofUploadModal(row) {
     this.selectedRow = row;
     this.isUploadModalOpen = true;
   }
 
   @action
-  closeUploadModal() {
+  closeProofUploadModal() {
     this.selectedRow = undefined;
     this.isUploadModalOpen = false;
   }
 
   @action
-  async saveProof(proofProperties) {
+  async saveProofUpload(proofProperties) {
     try {
-      await this.#saveProof(proofProperties);
+      await this.performSaveProofUpload(proofProperties);
     } finally {
       this.selectedRow = undefined;
       this.isUploadModalOpen = false;
     }
   }
 
-  async #saveProof(proofProperties) {
+  async performSaveProofUpload(proofUpload) {
     const now = new Date();
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -96,20 +91,21 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     });
     await documentContainer.save();
 
+    const proofingActivity = this.selectedRow.proofingActivity;
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      file: proofProperties.file,
       confidential: false,
-      name: proofProperties.name,
+      name: proofUpload.name,
+      file: proofUpload.file,
       documentContainer: documentContainer,
+      proofingActivityGeneratedBy: proofingActivity,
     });
-    await piece.save();
+    const pieceSave = piece.save();
 
-    const proofingActivity = this.selectedRow.proofingActivity;
-    const generatedPieces = proofingActivity.generatedPieces;
-    generatedPieces.pushObject(piece);
     proofingActivity.endDate = now;
-    await proofingActivity.save();
+    const proofingActivitySave = proofingActivity.save();
+
+    await Promise.all([pieceSave, proofingActivitySave]);
   }
 }
