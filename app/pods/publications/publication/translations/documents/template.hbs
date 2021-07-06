@@ -90,6 +90,23 @@
                         @href={{piece.viewDocumentURL}}
                         target="_blank"
                   />
+                  <Auk::Button
+                          @skin="borderless"
+                          @layout="icon-only"
+                          @icon="more"
+                  />
+                  <AttachPopover
+                          @class="ember-attacher-popper"
+                          @hideOn="clickout click"
+                          @showOn="click"
+                          @animation="shift"
+                          @placement="bottom">
+                    <Auk::Dropdown>
+                      <Auk::Dropdown::Item @skin="primary">
+                        {{t "edit-translation-details"}}
+                      </Auk::Dropdown::Item>
+                    </Auk::Dropdown>
+                  </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
