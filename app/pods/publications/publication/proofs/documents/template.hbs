@@ -1,84 +1,82 @@
-<Auk::Navbar @border="none">
-  <Auk::Toolbar @size="large" as |Group|>
-    <Group @position="right" as |Item|>
-      <Item>
-        <Auk::Button
-          id="proofDocumentsActionMenu"
-          @skin="secondary" @layout="icon-right" @icon="chevron-down"
-          @disabled={{not this.canOpenRequestModal}}>
-          {{t "new-request"}}
-        </Auk::Button>
-        {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-        <EmberPopover @side="bottom-start"
-          @tooltipClass="auk-popover"
-          @targetId="proofDocumentsActionMenu">
-          <Auk::Dropdown
-            as |dropdown|>
-            <dropdown.Item
-              {{on "click" (fn this.openRequestModal "initial")}}>
-              {{t "initial-request"}}
-            </dropdown.Item>
-            <dropdown.Item>
-              {{t "extra-request"}}
-            </dropdown.Item>
-            <dropdown.Item
-              {{on "click" (fn this.openRequestModal "final")}}>
-              {{t "final-request"}}
-            </dropdown.Item>
-          </Auk::Dropdown>
-        </EmberPopover>
-      </Item>
-      {{#if (auth "ovrb")}}
-        <Item>
-          <Auk::Button
-            @skin="secondary"
-            @icon="add"
-            {{on "click" this.openUploadModal}}>
-            {{t "upload-documents"}}
-          </Auk::Button>
-        </Item>
-      {{/if}}
-    </Group>
-  </Auk::Toolbar>
-</Auk::Navbar>
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    {{#if @model}}
+    {{!-- TODO correct positioning according to design --}}
+    <Auk::Toolbar @size="large">
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button id="proofDocumentsActionMenu"
+            @icon="chevron-down" @layout="icon-right" @skin="secondary"
+            @disabled={{this.isRequestingDisabled}}>
+            {{t "new-request"}}
+          </Auk::Button>
+          {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
+          <EmberPopover
+            @side="bottom-start"
+            @tooltipClass="auk-popover"
+            @targetId="proofDocumentsActionMenu">
+            <Auk::Dropdown
+              as |dropdown|>
+              <dropdown.Item
+                {{on "click" (fn this.openProofRequestModal "initial")}}>
+                {{t "initial-request"}}
+              </dropdown.Item>
+              <dropdown.Item>
+                {{t "extra-request"}}
+              </dropdown.Item>
+              <dropdown.Item
+                {{on "click" (fn this.openProofRequestModal "final")}}>
+                {{t "final-request"}}
+              </dropdown.Item>
+            </Auk::Dropdown>
+          </EmberPopover>
+        </Auk::Toolbar::Item>
+
+        {{#if this.currentSession.isOvrb}}
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="secondary" @icon="add"
+              {{on "click" this.openUploadModal}}>
+              {{t "upload-documents"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        {{/if}}
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+
+    {{#if this.model}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
             <th class="auk-table-checkbox-col">
-              <Auk::Checkbox @checked={{this.areAllSelected}}
-                {{on "input" this.toggleSelectionAll}} />
+              <Auk::Checkbox
+                @checked={{this.areAllPiecesSelected}}
+                {{on "input" this.toggleAllPiecesSelection}} />
             </th>
-            <th>
-              {{t "name-document"}}
-            </th>
-            <th>
-              {{t "file-extension"}}
-            </th>
-            <Utils::ThSortable @label={{t "received-at"}}
-              @onChange={{this.changeSorting}}
+            <th>{{t "name-document"}}</th>
+            <th>{{t "file-type"}}</th>
+            <Utils::ThSortable
+              @label={{t "received-at"}}
+              @field="ontvangen-op"
               @currentSorting={{this.sortingString}}
-              @field="ontvangen-op" />
-            <Utils::ThSortable @label={{t "uploaded-at"}}
-              @onChange={{this.changeSorting}}
+              @onChange={{this.changeSorting}} />
+            <Utils::ThSortable
+              @label={{t "uploaded-at"}}
+              @field="geupload-op"
               @currentSorting={{this.sortingString}}
-              @field="geupload-op" />
+              @onChange={{this.changeSorting}} />
             <th class="auk-u-text-align--center">
               {{t "corrected"}}
             </th>
-            <th>
-              {{!-- Actions--}}
-            </th>
+            <th>{{!-- Actions--}}</th>
           </tr>
         </thead>
         <tbody>
-          {{#each @model as |piece|}}
+          {{#each this.model as |piece|}}
             <tr>
               <td class="auk-table-checkbox-col">
-                <Auk::Checkbox @checked={{includes piece this.selection}}
-                  {{on "input" (fn this.toggleSelection piece)}} />
+                <Auk::Checkbox
+                  @checked={{includes piece this.selectedPieces}}
+                  {{on "input" (fn this.togglePieceSelection piece)}} />
               </td>
               <td>
                 {{piece.name}}
@@ -123,28 +121,27 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  {{#let (unique-id) as |id|}}
-                    <Auk::Button
-                      @layout="icon-only" @skin="borderless" @icon="more"
-                      @event="click"
-                      id={{id}}>
-                      {{t "view-more"}}
-                    </Auk::Button>
-                    {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-                    <EmberPopover @side="bottom-end"
-                      @tooltipClass="auk-popover"
-                      @targetId={{id}}>
-                      <Auk::Dropdown
-                        as |dropdown|>
-                        <dropdown.Item>
-                          {{t "edit-proof-details"}}
-                        </dropdown.Item>
-                        <dropdown.Item @skin="danger">
-                          {{t "delete"}}
-                        </dropdown.Item>
-                      </Auk::Dropdown>
-                    </EmberPopover>
-                  {{/let}}
+                  <Auk::Button
+                    @layout="icon-only" @skin="borderless" @icon="more"
+                    @event="click"
+                    id="proofDocumentsRowActionMenu{{piece.id}}">
+                    {{t "view-more"}}
+                  </Auk::Button>
+                  {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
+                  <EmberPopover
+                    @side="bottom-end"
+                    @tooltipClass="auk-popover"
+                    @targetId="proofDocumentsRowActionMenu{{piece.id}}">
+                    <Auk::Dropdown
+                      as |dropdown|>
+                      <dropdown.Item>
+                        {{t "edit-proof-details"}}
+                      </dropdown.Item>
+                      <dropdown.Item @skin="danger">
+                        {{t "delete"}}
+                      </dropdown.Item>
+                    </Auk::Dropdown>
+                  </EmberPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
@@ -152,25 +149,24 @@
         </tbody>
       </table>
     {{else}}
-      <Auk::EmptyState @bordered={{true}}
-        @message={{t "no-documents-yet" }} />
+      <Auk::EmptyState @bordered={{true}} @message={{t "no-documents-yet" }} />
     {{/if}}
   </div>
 </div>
 
-{{#if this.isRequestModalOpen}}
-  <Publications::Publication::Proofs::RequestModal
-    @stage={{this.requestStage}}
+{{#if this.isUploadModalOpen}}
+  <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @publicationSubcase={{this.publicationSubcase}}
-    @attachments={{this.selection}}
-    @onSave={{this.saveRequest}}
-    @onCancel={{this.cancelRequest}} />
+    @onSave={{this.saveCorrectionDocument}}
+    @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
-{{#if this.isUploadModalOpen}}
-  <Publications::Publication::Proofs::UploadModal
+{{#if this.isProofRequestModalOpen}}
+  <Publications::Publication::Proofs::ProofRequestModal
+    @stage={{this.proofRequestStage}}
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{this.saveCorrection}}
-    @onCancel={{this.cancelUpload}} />
+    @publicationSubcase={{this.publicationSubcase}}
+    @attachments={{this.selectedPieces}}
+    @onSave={{this.saveProofRequest}}
+    @onCancel={{this.closeProofRequestModal}} />
 {{/if}}

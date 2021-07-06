@@ -11,7 +11,7 @@
             <Auk::Input type="text" id="name" @value={{@piece.name}} />
           </div>
           <div class="auk-form-group">
-            <Auk::Label for="extension">{{t "file-extension"}}</Auk::Label>
+            <Auk::Label for="extension">{{t "file-type"}}</Auk::Label>
             <Auk::Pill>{{await @piece.file.extension}}</Auk::Pill>
           </div>
           <div class="auk-form-group">

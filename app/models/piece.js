@@ -51,6 +51,8 @@ export default Model.extend({
   meeting: belongsTo('meeting', {
     inverse: null,
   }),
+
+  // PUBLICATION FLOW
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
   publicationSubcaseSourceFor: belongsTo('publication-subcase', {
@@ -59,7 +61,12 @@ export default Model.extend({
   publicationSubcaseCorrectionFor: belongsTo('publication-subcase', {
     inverse: 'correctionDocuments',
   }),
-
+  translationActivitiesUsedBy: hasMany('translation-activity', {
+    inverse: 'usedPieces',
+  }),
+  translationActivityGeneratedBy: belongsTo('translation-activity', {
+    inverse: 'generatedPieces',
+  }),
   proofingActivitiesUsedBy: hasMany('proofing-activity', {
     inverse: 'usedPieces',
   }),

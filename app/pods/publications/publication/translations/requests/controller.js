@@ -2,13 +2,12 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { all as allTasks } from 'ember-concurrency';
 
 export default class PublicationsPublicationTranslationsRequestController extends Controller {
-  @service store;
-
-  @tracked publicationSubcase;
+  @tracked publicationFlow;
   @tracked translationSubcase;
+  @tracked publicationSubcase;
   @tracked selectedRequestActivity;
   @tracked showTranslationUploadModal = false;
 
@@ -18,24 +17,36 @@ export default class PublicationsPublicationTranslationsRequestController extend
 
   @task
   *saveTranslationUpload(translationUpload) {
-    const piece = translationUpload.piece;
-    const translationActivity = yield this.selectedRequestActivity.translationActivity;
+    const now = new Date();
 
-    const documentContainer = yield piece.documentContainer;
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
     yield documentContainer.save();
 
-    piece.name = translationUpload.name;
-    piece.receivedDate = translationUpload.receivedAtDate;
-    piece.language = yield translationActivity.language;
+    const translationActivity = yield this.selectedRequestActivity.translationActivity;
+    // triggers call
+    const language = yield translationActivity.language;
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      receivedDate: translationUpload.receivedAtDate,
+      confidential: false,
+      name: translationUpload.name,
+      file: translationUpload.file,
+      documentContainer: documentContainer,
+      language: language,
+      translationActivityGeneratedBy: translationActivity,
+    });
     if (translationUpload.isSourceForProofPrint) {
       piece.publicationSubcase = this.publicationSubcase;
     }
-    yield piece.save();
+    const pieceSave = piece.save();
 
     translationActivity.endDate = translationUpload.receivedAtDate;
-    const generatedPieces = yield translationActivity.generatedPieces;
-    generatedPieces.pushObject(piece);
-    yield translationActivity.save();
+    const translationActivitySave = translationActivity.save();
+
+    yield allTasks([translationActivitySave, pieceSave]);
 
     this.showTranslationUploadModal = false;
   }

@@ -1,68 +1,62 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @resizeable={{false}}
     @title={{t
       "upload-translation-document"
-      identifier=@translationSubcase.publicationFlow.identification.idName
+      identifier=@publicationFlow.identification.idName
     }}
-    @onClose={{perform this.cancelTranslation}}
-  />
+    @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <div class="auk-u-p-4">
+    <Utils::LoadableContent @isLoading={{this.saveTranslation.isRunning}} @reserveSpace={{true}}>
+
       <Auk::FileUploader
-              @fileQueueName={{this.fileQueueName}}
-              @multiple={{false}}
-              @onUpload={{this.uploadPiece}}
-      />
-      {{#if this.translationDocument}}
+        @multiple={{false}}
+        @onUpload={{this.onUploadFile}} />
+      {{!-- File details --}}
+      {{#if this.file}}
         <div class="auk-u-my-4">
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label for="nameDocumentUpload" @isRequired={{true}}>
+                  <Auk::Label for="translationUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
-                  <Auk::Input
-                    type="text"
-                    id="nameDocumentUpload"
-                    @value={{mut this.name}}
-                  />
+                  <Auk::Input type="text" id="translationUploadName"
+                    @value={{mut this.name}} />
                 </div>
                 <div class="auk-form-group">
-                  <Auk::Label>{{t "document-type"}}</Auk::Label>
-                  <Auk::Pill @skin="white">
-                    {{this.translationDocument.file.extension}}
-                  </Auk::Pill>
+                  <Auk::Label>{{t "file-type"}}</Auk::Label>
+                  <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
                 <div class="auk-form-group">
-                  <Auk::Label for="dateSet">{{t "received-at"}}</Auk::Label>
-                  <Auk::Datepicker id="dateSet"
-                                               @date={{this.receivedAtDate}}
-                                               @onChange={{this.setReceivedAtDate}}/>
+                  <Auk::Label for="translationUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
+                  <Auk::Datepicker id="translationUploadReceivedAtDate"
+                    @date={{this.receivedAtDate}}
+                    @onChange={{this.setReceivedAtDate}} />
                 </div>
                 <div class="auk-form-group auk-o-flex--align-start">
-                  <Auk::Label for="proof-print">
+                  <Auk::Label for="translationUploadForProofPrint">
                     {{t "for-proof-print"}}
                   </Auk::Label>
-                  <Auk::Checkbox @name="proof-print" @checked={{this.isSourceForProofPrint}}
-                      {{on "input" this.toggleProofprint}} />
+                  <Auk::Checkbox id="translationUploadForProofPrint"
+                    @checked={{this.isSourceForProofPrint}}
+                    {{on "input" this.toggleProofprint}} />
                 </div>
               </div>
             </div>
           </div>
         </div>
       {{/if}}
-    </div>
+
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{perform this.cancelTranslation}}
-  >
+    @onCancel={{@onCancel}}>
     <Auk::Button
       @skin="primary"
-      @disabled={{this.saveIsDisabled}}
-      {{on "click" (perform this.saveTranslation)}}
-    >
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.saveTranslation.isRunning}}
+      {{on "click" (perform this.saveTranslation)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

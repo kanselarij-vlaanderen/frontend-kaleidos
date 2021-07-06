@@ -1,19 +1,25 @@
 <div class="vlc-procedure-step {{if @isMinimal "vlc-procedure-step--minimal"}}">
   <div class="vlc-procedure-step__badge-wrapper">
     {{#if (is-pending @subcase.approved)}}
-      <div class="auk-badge auk-badge--default auk-badge--medium"></div>
+      <Auk::Badge
+        @size="medium"
+      />
     {{else if (await @subcase.approved)}}
-      <div data-test-subcase-item-approved class="auk-badge auk-badge--success auk-badge--default auk-badge--medium vlc-procedure-step__badge">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-check"></i>
-        </div>
-      </div>
+      <Auk::Badge
+        @skin="success"
+        @size="medium"
+        @icon="check"
+        class="vlc-procedure-step__badge"
+        data-test-subcase-item-approved
+      />
     {{else}}
-      <div data-test-subcase-item-not-approved class="auk-badge auk-badge--warning auk-badge--medium vlc-procedure-step__badge">
-        <div class="auk-icon auk-icon--default">
-          <i class="ki ki-sitemap"></i>
-        </div>
-      </div>
+      <Auk::Badge
+        @skin="warning"
+        @size="medium"
+        @icon="sitemap"
+        class="vlc-procedure-step__badge"
+        data-test-subcase-item-not-approved
+      />
     {{/if}}
   </div>
   <div class="auk-toolbar-complex auk-toolbar-complex--auto">
