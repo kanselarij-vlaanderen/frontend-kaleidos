@@ -24,7 +24,7 @@
                 {{t "extra-request"}}
               </dropdown.Item>
               <dropdown.Item
-                {{on "click" (fn this.openRequestModal "final")}}>
+                {{on "click" (fn this.openProofRequestModal "final")}}>
                 {{t "final-request"}}
               </dropdown.Item>
             </Auk::Dropdown>
@@ -33,8 +33,7 @@
 
         <Auk::Toolbar::Item>
           <Auk::Button
-            @skin="secondary" @icon="add"
-            {{on "click" this.openPieceUploadModal}}>
+            @skin="secondary" @icon="add">
             {{t "upload-documents"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
