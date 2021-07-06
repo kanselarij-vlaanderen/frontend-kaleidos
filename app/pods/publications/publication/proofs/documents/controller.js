@@ -92,7 +92,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   openProofRequestModal(stage) {
     this.proofRequestStage = stage;
-    this.isRequestModalOpen = true;
+    this.isProofRequestModalOpen = true;
   }
 
   @action
