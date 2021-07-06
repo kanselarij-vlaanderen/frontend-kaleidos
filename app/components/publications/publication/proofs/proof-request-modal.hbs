@@ -24,8 +24,8 @@
             {{on "input" this.validators.message.enableError}} />
         </div>
         {{!-- Attachments --}}
-        <div class="auk-form-group">
-          <Auk::Label>{{t "attachments"}}</Auk::Label>
+        <div class="auk-form-group {{if this.validators.attachments.showError "auk-form-group--error"}}">
+          <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
           <Auk::CheckboxList>
             {{#each @attachments as |piece|}}
               <Auk::Checkbox

@@ -1,76 +1,60 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { isBlank } from '@ember/utils';
+import {
+  isBlank,
+  isEmpty
+} from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
+import {
+  ValidatorSet,
+  Validator
+} from 'frontend-kaleidos/utils/validators';
 
-class ValidatorSet {
-  constructor(validators) {
-    Object.assign(this, validators);
-  }
-
-  get areValid() {
-    return Object.values(this).every((validator) => validator.isValid);
-  }
-}
-
-class Validator {
-  @tracked isErrorEnabled;
-
-  constructor(check) {
-    this.check = check;
-  }
-
-  get isValid() {
-    return this.check();
-  }
-
-  @action
-  enableError() {
-    this.isErrorEnabled = true;
-  }
-
-  get showError() {
-    return this.isErrorEnabled && !this.check();
-  }
-}
-
+/**
+ * @argument {PublicationFlow} publicationFlow includes: identification
+ */
 export default class PublicationsPublicationProofsRequestModalComponent extends Component {
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];
-  validators = {};
+  validators;
 
   constructor() {
     super(...arguments);
 
-    this.validators = new ValidatorSet({
-      subject: new Validator(() => !isBlank(this.subject)),
-      message: new Validator(() => !isBlank(this.message)),
-      attachments: new Validator(() => !!this.selectedAttachments.length),
-    });
     this.selectedAttachments = [...this.args.attachments]; // Copy array
     this.initEmailFields();
+    this.initValidators();
   }
 
   get isSaveDisabled() {
     return !this.validators.areValid;
   }
 
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => !isBlank(this.subject)),
+      message: new Validator(() => !isBlank(this.message)),
+      attachments: new Validator(() => !isEmpty(this.selectedAttachments)),
+    });
+  }
+
   async initEmailFields() {
     // should resolve immediately (already fetched)
     const identification = await this.args.publicationFlow.identification;
     const idName = identification.idName;
-    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
+    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`;
     this.message = proofRequestEmail({
       identifier: idName,
     });
   }
 
-
   @action
   toggleAttachmentSelection(attachment) {
+    this.validators.attachments.enableError();
+
     if (this.selectedAttachments.includes(attachment)) {
       this.selectedAttachments.removeObject(attachment);
     } else {
