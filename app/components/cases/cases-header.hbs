@@ -1,29 +1,28 @@
 <Auk::Navbar @skin="gray-100">
-  {{#if (not isAddingCase)}}
-    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
-          <h1 class="auk-toolbar__title" data-test-cases-header-title>
-            {{t "cases"}}
-          </h1>
-        </div>
-      </div>
-      <div class="auk-toolbar-complex__right">
-        <div class="auk-toolbar-complex__item">
-          {{#if currentSession.isEditor}}
-            <Auk::Button
-              @skin="primary"
-              @icon="add"
-              {{action "toggleAddingCase"}}
-              data-test-cases-header-add-case
-            >
-              {{t "add-case"}}
-            </Auk::Button>
-          {{/if}}
-        </div>
+  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
+    <div class="auk-toolbar-complex__left">
+      <div class="auk-toolbar-complex__item">
+        <h1 class="auk-toolbar__title" data-test-cases-header-title>
+          {{t "cases"}}
+        </h1>
       </div>
     </div>
-  {{else}}
+    <div class="auk-toolbar-complex__right">
+      <div class="auk-toolbar-complex__item">
+        {{#if currentSession.isEditor}}
+          <Auk::Button
+            @skin="primary"
+            @icon="add"
+            {{on "click" (action "toggleAddingCase")}}
+            data-test-cases-header-add-case
+          >
+            {{t "add-case"}}
+          </Auk::Button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+  {{#if isAddingCase}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @closeModal={{action "toggleAddingCase"}}
