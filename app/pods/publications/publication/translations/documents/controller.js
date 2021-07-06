@@ -17,13 +17,13 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     return this.model.length === this.selectedPieces.length;
   }
 
-  get canOpenTranslationRequestModal() {
-    return this.selectedPieces.length > 0 // files are selected
-      && !this.translationSubcase.isFinished;
+  get isRequestingDisabled() {
+    return this.selectedPieces.length === 0 // no files are selected
+      || this.translationSubcase.isFinished;
   }
 
-  get canOpenPieceUploadModal() {
-    return !this.translationSubcase.isFinished;
+  get isUploadDisabled() {
+    return this.translationSubcase.isFinished;
   }
 
   @action
@@ -67,12 +67,12 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     const requestActivity = yield this.store.createRecord('request-activity', {
       startDate: now,
       translationSubcase: this.translationSubcase,
-      usedPieces: translationRequest.selectedPieces,
+      usedPieces: translationRequest.attachments,
     });
     yield requestActivity.save();
     const french = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.FR);
 
-    const pieces = translationRequest.selectedPieces;
+    const pieces = translationRequest.attachments;
     const translationActivity = yield this.store.createRecord('translation-activity', {
       startDate: now,
       dueDate: translationRequest.translationDueDate,
@@ -84,7 +84,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     });
     yield translationActivity.save();
 
-    const filePromises = translationRequest.selectedPieces.mapBy('file');
+    const filePromises = translationRequest.attachments.mapBy('file');
     const files = yield Promise.all(filePromises);
 
     const folder = yield this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);

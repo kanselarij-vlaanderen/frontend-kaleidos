@@ -1,10 +1,19 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import { isBlank } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
+
+class ValidatorSet {
+  constructor(validators) {
+    Object.assign(this, validators);
+  }
+
+  get areValid() {
+    return Object.values(this).every((validator) => validator.isValid);
+  }
+}
 
 class Validator {
   @tracked isErrorEnabled;
@@ -25,15 +34,9 @@ class Validator {
   get showError() {
     return this.isErrorEnabled && !this.check();
   }
-
-  static areValid(validatorsObject) {
-    return Object.values(validatorsObject).every((validator) => validator.isValid);
-  }
 }
 
 export default class PublicationsPublicationProofsRequestModalComponent extends Component {
-  @service intl;
-
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];
@@ -42,12 +45,17 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   constructor() {
     super(...arguments);
 
-    this.validators = {
+    this.validators = new ValidatorSet({
       subject: new Validator(() => !isBlank(this.subject)),
       message: new Validator(() => !isBlank(this.message)),
-    };
+      attachments: new Validator(() => !!this.selectedAttachments.length),
+    });
     this.selectedAttachments = [...this.args.attachments]; // Copy array
     this.initEmailFields();
+  }
+
+  get isSaveDisabled() {
+    return !this.validators.areValid;
   }
 
   async initEmailFields() {
@@ -60,9 +68,6 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
     });
   }
 
-  get canSave() {
-    return Validator.areValid(this.validators);
-  }
 
   @action
   toggleAttachmentSelection(attachment) {
@@ -74,19 +79,13 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   }
 
   @task
-  *onSave() {
-    if (!this.canSave) {
-      return; // In theory, this can't happen, since button should be disabled
-    }
-
-    const properties = {
+  *saveRequest() {
+    yield this.args.onSave({
       stage: this.args.stage,
       subject: this.subject,
       message: this.message,
       attachments: [...this.selectedAttachments],
       publicationSubcase: this.args.publicationSubcase,
-    };
-
-    yield this.args.onSave(properties);
+    });
   }
 }

@@ -6,7 +6,7 @@
     }}
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.onSave.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         {{!-- Due date --}}
         <div class="auk-form-group" style="max-width: 30rem;">
@@ -66,9 +66,9 @@
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
       @skin="primary"
-      @disabled={{not this.canSave}}
-      @loading={{this.onSave.isRunning}}
-      {{on "click" (perform this.onSave)}}>
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.saveRequest.isRunning}}
+      {{on "click" (perform this.saveRequest)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>
