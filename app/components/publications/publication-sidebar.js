@@ -155,14 +155,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.showConfirmWithdraw = false;
   }
 
-  @action
-  async navigateToAgendaItem() {
-    const agendaItem = await this.treatment.agendaitem;
-    const agenda = await agendaItem.agenda;
-    const meeting  = await agenda.createdFor;
-    this.router.transitionTo('agenda.agendaitems.agendaitem.documents', meeting.id, agenda.id, agendaItem.id);
-  }
-
   @restartableTask
   *setPublicationNumber(event) {
     this.publicationNumber = event.target.value;
