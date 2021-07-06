@@ -15,7 +15,6 @@ context('Add files to an agenda', () => { // At the meeting-level
 
   beforeEach(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
     cy.route('GET', '/pieces?filter\\[meeting\\]\\[:id:\\]=*').as('loadPieces');
   });

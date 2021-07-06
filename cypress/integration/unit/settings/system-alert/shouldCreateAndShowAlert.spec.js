@@ -10,7 +10,6 @@ const ALERT_POLL_INTERVAL = 70000;
 context('Settings: Create a system-alert and verify if it gets shown and closes', () => {
   before(() => {
     cy.server();
-    cy.resetCache();
   });
 
   beforeEach(() => {
