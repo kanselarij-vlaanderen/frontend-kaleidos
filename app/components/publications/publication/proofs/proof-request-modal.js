@@ -1,71 +1,60 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { isBlank } from '@ember/utils';
+import {
+  isBlank,
+  isEmpty
+} from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
+import {
+  ValidatorSet,
+  Validator
+} from 'frontend-kaleidos/utils/validators';
 
-class Validator {
-  @tracked isErrorEnabled;
-
-  constructor(check) {
-    this.check = check;
-  }
-
-  get isValid() {
-    return this.check();
-  }
-
-  @action
-  enableError() {
-    this.isErrorEnabled = true;
-  }
-
-  get showError() {
-    return this.isErrorEnabled && !this.check();
-  }
-
-  static areValid(validatorsObject) {
-    return Object.values(validatorsObject).every((validator) => validator.isValid);
-  }
-}
-
+/**
+ * @argument {PublicationFlow} publicationFlow includes: identification
+ */
 export default class PublicationsPublicationProofsRequestModalComponent extends Component {
-  @service intl;
-
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];
-  validators = {};
+  validators;
 
   constructor() {
     super(...arguments);
 
-    this.validators = {
-      subject: new Validator(() => !isBlank(this.subject)),
-      message: new Validator(() => !isBlank(this.message)),
-    };
     this.selectedAttachments = [...this.args.attachments]; // Copy array
     this.initEmailFields();
+    this.initValidators();
+  }
+
+  get isSaveDisabled() {
+    return !this.validators.areValid;
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      subject: new Validator(() => !isBlank(this.subject)),
+      message: new Validator(() => !isBlank(this.message)),
+      attachments: new Validator(() => !isEmpty(this.selectedAttachments)),
+    });
   }
 
   async initEmailFields() {
     // should resolve immediately (already fetched)
     const identification = await this.args.publicationFlow.identification;
     const idName = identification.idName;
-    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`,
+    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`;
     this.message = proofRequestEmail({
       identifier: idName,
     });
   }
 
-  get canSave() {
-    return Validator.areValid(this.validators);
-  }
-
   @action
   toggleAttachmentSelection(attachment) {
+    this.validators.attachments.enableError();
+
     if (this.selectedAttachments.includes(attachment)) {
       this.selectedAttachments.removeObject(attachment);
     } else {
@@ -74,19 +63,13 @@ export default class PublicationsPublicationProofsRequestModalComponent extends 
   }
 
   @task
-  *onSave() {
-    if (!this.canSave) {
-      return; // In theory, this can't happen, since button should be disabled
-    }
-
-    const properties = {
+  *saveRequest() {
+    yield this.args.onSave({
       stage: this.args.stage,
       subject: this.subject,
       message: this.message,
       attachments: [...this.selectedAttachments],
       publicationSubcase: this.args.publicationSubcase,
-    };
-
-    yield this.args.onSave(properties);
+    });
   }
 }
