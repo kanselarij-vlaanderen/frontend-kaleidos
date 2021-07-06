@@ -36,10 +36,10 @@
             <Auk::Input
               @type="number"
               @value={{meetingNumber}}
-              @key-up={{action "meetingNumberChangedAction" meetingNumber}}
               id="subjectTransld"
               class="auk-input--w-medium auk-u-mr-2"
               {{on "change" (action "meetingNumberChangedAction" meetingNumber)}}
+              {{on "keyup" (action "meetingNumberChangedAction" meetingNumber)}}
             />
           {{/unless}}
           <div class="auk-o-flex__item">
