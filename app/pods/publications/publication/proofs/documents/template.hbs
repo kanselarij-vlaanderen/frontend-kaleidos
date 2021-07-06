@@ -6,7 +6,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button id="proofDocumentsActionMenu"
             @icon="chevron-down" @layout="icon-right" @skin="secondary"
-            @disabled={{not this.canOpenProofRequestModal}}>
+            @disabled={{this.isRequestingDisabled}}>
             {{t "new-request"}}
           </Auk::Button>
           {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
