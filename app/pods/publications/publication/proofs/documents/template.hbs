@@ -20,7 +20,8 @@
                 {{on "click" (fn this.openProofRequestModal "initial")}}>
                 {{t "initial-request"}}
               </dropdown.Item>
-              <dropdown.Item>
+              <dropdown.Item
+                {{on "click" (fn this.openProofRequestModal "extra")}}>
                 {{t "extra-request"}}
               </dropdown.Item>
               <dropdown.Item
