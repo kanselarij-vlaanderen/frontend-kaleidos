@@ -42,9 +42,7 @@ as |dropzone|
       {{else if this.uploadIsCompleted}}
         <div class="auk-o-flex auk-o-flex--vertical-align">
           <div class="auk-u-mr">
-            <div class="auk-icon auk-icon--default auk-icon--success-dark">
-              <i class="ki ki-check"></i>
-            </div>
+            <Auk::Icon @name="check" @skin="success-dark" />
           </div>
           <p>{{t "uploaded-files" numFiles=this.uploadedFileLength}}</p>
         </div>

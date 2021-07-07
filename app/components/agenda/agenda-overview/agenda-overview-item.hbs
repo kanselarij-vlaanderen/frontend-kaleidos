@@ -118,8 +118,8 @@
             >
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
-                  <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                    <i class="ki ki-not-visible"></i>
+                  <div class="auk-u-position-relative auk-u-inline-block">
+                    <Auk::Icon @name="not-visible" @skin="muted" class="auk-u-ml-2" />
                     <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
@@ -130,14 +130,12 @@
                   {{!-- TODO: this icon is merely here as an invisible placeholder.
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
                     This should be tackled differently through modified design --}}
-                  <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter" style="color: white;">
-                    <i class="ki ki-not-visible"></i>
-                  </div>
+                  <Auk::Icon @name="not-visible" @skin="invisible" class="auk-u-ml-2" />
                 {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}
-                <div class="auk-icon auk-icon--default vlc-u-opacity-50 auk-u-ml-2 opacity-lighter">
-                  <i class="ki ki-circle-question"></i>
+                <div class="auk-u-position-relative auk-u-inline-block">
+                  <Auk::Icon @name="circle-question" @skin="muted" class="auk-u-ml-2" />
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "loading"}}
@@ -146,8 +144,8 @@
                 </div>
               {{/if}}
               {{#if @isNew}}
-                <div class="auk-icon auk-icon--default vlc-agenda-item__icons--margin">
-                  <i class="ki ki-calendar-new"></i>
+                <div class="auk-u-position-relative auk-u-inline-block">
+                  <Auk::Icon @name="calendar-new" class="auk-u-ml-2" />
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
