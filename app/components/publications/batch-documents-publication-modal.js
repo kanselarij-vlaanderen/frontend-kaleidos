@@ -17,12 +17,15 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
   @tracked referenceDocument;
   @tracked case;
   @tracked agendaItemTreatment;
+  @tracked mandatees;
+
 
   constructor() {
     super(...arguments);
     this.loadPieces.perform();
-    this.loadCase();
-    this.loadAgendaItemTreatment();
+    this.loadCase.perform();
+    this.loadAgendaItemTreatment.perform();
+    this.loadMandatees.perform();
   }
 
   @task
@@ -35,14 +38,21 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     });
   }
 
-  async loadCase() {
-    this.case = await this.store.queryOne('case', {
+  @task
+  *loadCase() {
+    this.case = yield this.store.queryOne('case', {
       'filter[subcases][agenda-activities][agendaitems][:id:]': this.args.agendaitem.id,
     });
   }
 
-  async loadAgendaItemTreatment() {
-    this.agendaItemTreatment = await this.store.queryOne('agenda-item-treatment', {
+  @task
+  *loadMandatees() {
+    this.mandatees = yield this.args.agendaitem.mandatees;
+  }
+
+  @task
+  *loadAgendaItemTreatment() {
+    this.agendaItemTreatment = yield this.store.queryOne('agenda-item-treatment', {
       'filter[agendaitem][:id:]': this.args.agendaitem.id,
       sort: '-start-date',
     });
@@ -65,6 +75,7 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     const publicationFlow = yield this.publicationService.createNewPublicationFromMinisterialCouncil(publicationProperties, {
       case: this.case,
       agendaItemTreatment: this.agendaItemTreatment,
+      mandatees: this.mandatees,
     });
     this.referenceDocument.publicationFlow = publicationFlow;
     yield this.referenceDocument.save();
