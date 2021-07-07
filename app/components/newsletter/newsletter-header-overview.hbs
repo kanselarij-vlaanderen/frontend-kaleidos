@@ -204,34 +204,34 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-
-  {{#if isVerifying}}
-    <WebComponents::VlModalVerify
-      @title={{t "send-campaign"}}
-      @buttonType="warning"
-      @isLoading={{isLoading}}
-      @verifyButtonText={{t "send-campaign"}}
-      @message={{t "send-campaign-warning"}}
-      @cancel={{action "toggleIsVerifying"}}
-      @verify={{action "sendCampaign"}} />
-  {{/if}}
-  {{#if (or testCampaignIsLoading newsletterHTML)}}
-    <WebComponents::VlModal
-      @isOverlay={{true}}
-      @title={{t "send-test-campaign"}}
-      @closeModal={{action "clearNewsletterHTML"}} >
-      <div class="auk-modal__body">
-        <div class="auk-u-p-4">
-          {{#if testCampaignIsLoading}}
-            <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
-          {{else}}
-            {{sanitize-html raw=true value=newsletterHTML}}
-          {{/if}}
-        </div>
-      </div>
-    </WebComponents::VlModal>
-  {{/if}}
-  {{#if isLoading}}
-    <WebComponents::LoadingOverlay />
-  {{/if}}
 </Auk::Navbar>
+
+{{#if isVerifying}}
+  <WebComponents::VlModalVerify
+    @title={{t "send-campaign"}}
+    @buttonType="warning"
+    @isLoading={{isLoading}}
+    @verifyButtonText={{t "send-campaign"}}
+    @message={{t "send-campaign-warning"}}
+    @cancel={{action "toggleIsVerifying"}}
+    @verify={{action "sendCampaign"}} />
+{{/if}}
+{{#if (or testCampaignIsLoading newsletterHTML)}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @title={{t "send-test-campaign"}}
+    @closeModal={{action "clearNewsletterHTML"}} >
+    <div class="auk-modal__body">
+      <div class="auk-u-p-4">
+        {{#if testCampaignIsLoading}}
+          <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
+        {{else}}
+          {{sanitize-html raw=true value=newsletterHTML}}
+        {{/if}}
+      </div>
+    </div>
+  </WebComponents::VlModal>
+{{/if}}
+{{#if isLoading}}
+  <WebComponents::LoadingOverlay />
+{{/if}}
