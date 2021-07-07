@@ -31,11 +31,11 @@
           </EmberPopover>
         </Auk::Toolbar::Item>
 
-        {{#if this.currentSession.isOvrb}}
+        {{#if this.canUploadPiece}}
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="secondary" @icon="add"
-              {{on "click" this.openUploadModal}}>
+              {{on "click" this.openPieceUploadModal}}>
               {{t "upload-documents"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
@@ -154,7 +154,7 @@
   </div>
 </div>
 
-{{#if this.isUploadModalOpen}}
+{{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
     @onSave={{this.saveCorrectionDocument}}
@@ -165,7 +165,6 @@
   <Publications::Publication::Proofs::ProofRequestModal
     @stage={{this.proofRequestStage}}
     @publicationFlow={{this.publicationFlow}}
-    @publicationSubcase={{this.publicationSubcase}}
     @attachments={{this.selectedPieces}}
     @onSave={{this.saveProofRequest}}
     @onCancel={{this.closeProofRequestModal}} />

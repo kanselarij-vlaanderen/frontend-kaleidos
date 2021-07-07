@@ -50,6 +50,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     return this.selectedPieces.length === 0;
   }
 
+  get canUploadPiece() {
+    return this.currentSession.isOvrb;
+  }
+
   @action
   togglePieceSelection(selectedPiece) {
     const isPieceSelected = this.selectedPieces.includes(selectedPiece);
@@ -123,18 +127,15 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  cancelPieceUploadModal() {
+  closePieceUploadModal() {
     this.isPieceUploadModalOpen = false;
   }
 
   @action
-  async saveCorrectionDocument(pieceProperties) {
+  async saveCorrectionDocument(proofDocument) {
     let piece;
     try {
-      piece = await this.performSaveCorrectionDocument({
-        piece: pieceProperties,
-        publicationSubcase: this.publicationSubcase,
-      });
+      piece = await this.performSaveCorrectionDocument(proofDocument);
     } finally {
       this.isPieceUploadModalOpen = false;
     }
@@ -201,14 +202,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     await Promise.all(saves);
   }
 
-  async performSaveCorrectionDocument(correctionProperties) {
-    const {
-      piece: {
-        file, name,
-      },
-      publicationSubcase: publicationSubcase,
-    } = correctionProperties;
-
+  async performSaveCorrectionDocument(proofDocument) {
     const now = new Date();
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -219,11 +213,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      file: file,
+      file: proofDocument.file,
       confidential: false,
-      name: name,
+      name: proofDocument.name,
       documentContainer: documentContainer,
-      publicationSubcaseCorrectionFor: publicationSubcase,
+      publicationSubcaseCorrectionFor: this.publicationSubcase,
     });
     await piece.save();
 
