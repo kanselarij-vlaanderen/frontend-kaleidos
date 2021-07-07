@@ -445,7 +445,7 @@
         <Auk::Button
           data-test-agenda-header-approve-agenda-confirm
           @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
-          {{on "click" this.confirmApproveAgenda}}
+          {{action "confirmApproveAgenda"}}
         >
           {{t "approve"}}
         </Auk::Button>
@@ -486,7 +486,7 @@
         <Auk::Button
           data-test-agenda-header-approve-and-close-agenda-confirm
           @skin={{if (await this.currentAgenda.canBeApproved) "primary" "danger-primary"}}
-          {{on "click" this.confirmApproveAgendaAndCloseMeeting}}
+          {{action "confirmApproveAgendaAndCloseMeeting"}}
         >
           {{t "approve-and-close"}}
         </Auk::Button>
@@ -520,7 +520,7 @@
             "danger-primary"
             "primary"
           }}
-          {{on "click" this.confirmCloseMeeting}}
+          {{action "confirmCloseMeeting"}}
         >
           {{t "agenda-close"}}
         </Auk::Button>
@@ -549,7 +549,7 @@
         <Auk::Button
           data-test-agenda-header-delete-agenda-confirm
           @skin="danger-primary"
-          {{on "click"this.confirmDeleteSelectedAgenda}}
+          {{action "confirmDeleteSelectedAgenda"}}
         >
           {{t "agenda-delete"}}
         </Auk::Button>
@@ -598,7 +598,7 @@
           data-test-agenda-header-reopen-previous-version-confirm
           @skin="danger-primary"
           @disabled={{this.loadPiecesToDelete.isRunning}}
-          {{on "click" this.confirmReopenPreviousAgenda}}
+          {{action "confirmReopenPreviousAgenda"}}
         >
           {{#if this.piecesToDeleteReopenPreviousAgenda}}
             {{t "agenda-reopen-previous-version-with-delete"}}
