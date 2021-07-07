@@ -18,7 +18,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
    *  on create and delete no changedKeys are passed
    */
   @service store;
-  @service router;
   @service intl;
   @service toaster;
   @service publicationService;
