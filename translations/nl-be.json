@@ -861,6 +861,7 @@
   "paused-on": "Gepauzeerd op",
   "help": "Help",
   "upload-translation-document": "Vertaaldocument uploaden voor publicatie {identifier}",
+  "edit-translation-document": "Vertaaldocument {docname} bewerken voor publicatie {identifier}",
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",

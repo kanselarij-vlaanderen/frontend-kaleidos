@@ -9,8 +9,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceUploadModal = false;
+  @tracked showPieceEditModal = false;
   @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
+  @tracked toEditDocument;
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
@@ -114,6 +116,24 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.transitionToRoute('publications.publication.translations.requests');
   }
 
+  @task
+  *saveEditSourceDocument(translationDocument) {
+    const piece = this.toEditDocument;
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcase = this.publicationSubcase;
+    } else {
+      piece.publicationSubcase = null;
+    }
+
+    yield piece.save();
+    this.closePieceEditModal();
+    this.send('refresh');
+  }
+
 
   @action
   openPieceUploadModal() {
@@ -123,6 +143,18 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @action
   closePieceUploadModal() {
     this.showPieceUploadModal = false;
+  }
+
+  @action
+  openPieceEditModal(toEditDocument) {
+    this.toEditDocument = toEditDocument;
+    this.showPieceEditModal = true;
+  }
+
+  @action
+  closePieceEditModal() {
+    this.toEditDocument = null;
+    this.showPieceEditModal = false;
   }
 
   @action

@@ -102,7 +102,7 @@
                           @animation="shift"
                           @placement="bottom">
                     <Auk::Dropdown>
-                      <Auk::Dropdown::Item @skin="primary">
+                      <Auk::Dropdown::Item @skin="primary" {{on "click" (fn this.openPieceEditModal piece)}}>
                         {{t "edit-translation-details"}}
                       </Auk::Dropdown::Item>
                     </Auk::Dropdown>
@@ -128,6 +128,14 @@
     @translationSubcase={{this.translationSubcase}}
     @onSave={{perform this.saveSourceDocument}}
     @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
+
+{{#if this.showPieceEditModal}}
+  <Publications::Publication::Translations::DocumentsEditModal
+          @translationSubcase={{this.translationSubcase}}
+          @sourceDocument={{this.toEditDocument}}
+          @onSave={{perform this.saveEditSourceDocument}}
+          @onCancel={{this.closePieceEditModal}} />
 {{/if}}
 
 {{#if this.showTranslationRequestModal}}
