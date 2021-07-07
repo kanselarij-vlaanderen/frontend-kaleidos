@@ -124,11 +124,10 @@
               @layout="icon-right" @icon="nav-right"
               @route="agenda.agendaitems.agendaitem"
               @models={{array
-                (await this.treatment.agendaitem.agenda.createdFor.id)
-                (await this.treatment.agendaitem.agenda.id)
-                (await this.treatment.agendaitem.id)
+                this.treatment.agendaitem.agenda.createdFor.id
+                this.treatment.agendaitem.agenda.id
+                this.treatment.agendaitem.id
               }}
-
             >
               {{#if this.treatment.startDate}}
                 {{moment-format this.treatment.startDate "DD-MM-YYYY"}}
