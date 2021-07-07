@@ -1,3 +1,3 @@
 import Component from '@glimmer/component';
 
-export default Component.extend({});
+export default class SettingsHeader extends Component {}

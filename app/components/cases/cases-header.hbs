@@ -11,10 +11,10 @@
       <div class="auk-toolbar-complex__item">
         {{#if currentSession.isEditor}}
           <Auk::Button
+            data-test-cases-header-add-case
             @skin="primary"
             @icon="add"
-            {{on "click" (action "toggleAddingCase")}}
-            data-test-cases-header-add-case
+            {{on "click" this.toggleAddingCase}}
           >
             {{t "add-case"}}
           </Auk::Button>
@@ -25,9 +25,9 @@
   {{#if isAddingCase}}
     <WebComponents::VlModal
       @isOverlay={{true}}
-      @closeModal={{action "toggleAddingCase"}}
+      @closeModal={{this.toggleAddingCase}}
       @title={{t "new-case"}} >
-      <Cases::NewCase @close={{action "closeAction"}} />
+      <Cases::NewCase @close={{this.closeAction}} />
     </WebComponents::VlModal>
   {{/if}}
 </Auk::Navbar>
