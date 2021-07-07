@@ -107,39 +107,37 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async persistProofRequest(requestProperties) {
-    if (requestProperties.stage === 'initial') {
+  async persistProofRequest(proofRequest) {
+    if (proofRequest.stage === 'initial') {
       const now = new Date();
-      const {
-        publicationSubcase,
-        attachments,
-      } = requestProperties;
+
+      const saves = [];
+
+      if (!this.publicationSubcase.startDate) {
+        this.publicationSubcase.startDate = now;
+        const publicationSubcaseSave = this.publicationSubcase.save();
+        saves.push(publicationSubcaseSave);
+      }
 
       const requestActivity = this.store.createRecord('request-activity', {
         startDate: now,
-        title: requestProperties.subject,
-        publicationSubcase: publicationSubcase,
-        usedPieces: attachments,
+        title: proofRequest.subject,
+        publicationSubcase: this.publicationSubcase,
+        usedPieces: proofRequest.attachments,
       });
       await requestActivity.save();
 
       const proofingActivity = this.store.createRecord('proofing-activity', {
         startDate: now,
-        title: requestProperties.subject,
-        subcase: publicationSubcase,
+        title: proofRequest.subject,
+        subcase: this.publicationSubcase,
         requestActivity: requestActivity,
-        usedPieces: attachments,
+        usedPieces: proofRequest.attachments,
       });
       const proofingActivitySave = proofingActivity.save();
-      const saves = [proofingActivitySave];
+      saves.push(proofingActivitySave);
 
-      if (!requestProperties.publicationSubcase.startDate) {
-        requestProperties.publicationSubcase.startDate = now;
-        const publicationSubcaseSave = publicationSubcase.save();
-        saves.push(publicationSubcaseSave);
-      }
-
-      const filePromises = attachments.mapBy('file');
+      const filePromises = proofRequest.attachments.mapBy('file');
       const attachmentFilesPromise = Promise.all(filePromises);
       const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
       const mailSettingsPromise = this.store.queryOne('email-notification-setting');
@@ -148,8 +146,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
         to: mailSettings.proofRequestToEmail,
         from: mailSettings.defaultFromEmail,
         folder: outbox,
-        subject: requestProperties.subject,
-        message: requestProperties.message,
+        subject: proofRequest.subject,
+        message: proofRequest.message,
         attachments: attachmentFiles,
         requestActivity: requestActivity,
       });
