@@ -7,7 +7,6 @@ const selectors = {
     actions: '[data-test-document-card-actions]',
     delete: '[data-test-document-card-delete]',
     uploadPiece: '[data-test-document-upload-new-piece]',
-    toolbar: '[data-test-document-card-toolbar]',
   },
 
   // vl-document
