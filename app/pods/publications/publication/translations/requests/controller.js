@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { all as allTasks } from 'ember-concurrency';
 
 export default class PublicationsPublicationTranslationsRequestController extends Controller {
   @tracked publicationFlow;
@@ -46,7 +45,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
     translationActivity.endDate = translationUpload.receivedAtDate;
     const translationActivitySave = translationActivity.save();
 
-    yield allTasks([translationActivitySave, pieceSave]);
+    yield Promise.all([translationActivitySave, pieceSave]);
 
     this.showTranslationUploadModal = false;
   }
