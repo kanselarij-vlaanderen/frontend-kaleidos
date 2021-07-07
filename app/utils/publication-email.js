@@ -19,10 +19,11 @@ function translationRequestEmail(params) {
 
 async function proofRequestEmail(params) {
   if (params.stage === 'initial') {
-    const identification = params.publicationFlow.identification.get('idName');
+    const identification = await params.publicationFlow.identification;
+    const idName = identification.idName;
 
-    const subject = `Publicatieaanvraag VO-dossier: ${identification}`;
-    const message =  `Wij voorzien een publicatie voor VO-dossier ${identification}.
+    const subject = `Publicatieaanvraag VO-dossier: ${idName}`;
+    const message =  `Wij voorzien een publicatie voor VO-dossier ${idName}.
 
 Graag registreren we het Numac-nummer dat u hiervoor voorziet, en de geplande datum voor publicatie.
 
@@ -34,9 +35,13 @@ Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden
     };
   } else if (params.stage === 'final') {
     const publicationFlow = params.publicationFlow;
+
     const identification = await publicationFlow.identification;
-    const idName = identification.get('idName');
-    const numacNumber = publicationFlow.numacNumbers.firstObject?.get('idName') ?? '?';
+    const idName = identification.idName;
+
+    const numacNumbers = await publicationFlow.numacNumbers;
+    const numacNumber = numacNumbers.firstObject?.idName ?? '?';
+
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const targetDate = publicationSubcase.targetEndDate;
     const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '?';
@@ -44,7 +49,7 @@ Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden
     const subject = `Finale publicatie voor publicatie BS-werknr: ${numacNumber}, VO-dossier: ${idName}`;
     const message = `Geachte,
 
-Graag gaan we over tot het publiceren van de verbeterde drukproef in bijlage voor het dossier:
+Graag gaan we over tot het publiceren van de finale publicatie in bijlage voor het dossier:
 
 BS-werknummer: ${numacNumber}
 VO-dossier: ${idName}
