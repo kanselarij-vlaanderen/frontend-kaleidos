@@ -22,12 +22,12 @@
 </div>
 <div class="auk-panel-layout__main-content">
   <div class="auk-scroll-wrapper">
-    <div class="auk-navbar auk-navbar--bordered-bottom">
+    <Auk::Navbar>
       <Agenda::Agendaitem::AgendaitemNav
         @agendaitem={{this.model}}
         @meetingIsConcluded={{this.meeting.isFinal}}
       />
-    </div>
+    </Auk::Navbar>
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
       <div class="auk-u-m-4">
         <div class="auk-u-mb-3">
