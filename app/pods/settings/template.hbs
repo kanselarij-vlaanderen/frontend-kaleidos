@@ -1,6 +1,6 @@
 {{page-title (t "settings")}}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
-  <div class="auk-navbar auk-navbar--bordered-bottom">
+  <Auk::Navbar @skin="gray-100">
     <div class="auk-toolbar-complex">
       <div class="auk-toolbar-complex__left">
         <div class="auk-toolbar-complex__item">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     <div>
       {{outlet}}

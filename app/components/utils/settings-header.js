@@ -1,5 +1,3 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 
-export default Component.extend({
-  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100'],
-});
+export default class SettingsHeader extends Component {}

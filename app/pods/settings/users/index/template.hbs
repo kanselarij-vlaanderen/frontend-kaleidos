@@ -18,11 +18,11 @@
           @value={{this.filter}}
         />
         <Auk::Button
+          data-test-route-settings-users-search-button
           @skin="secondary"
           @layout="icon-only"
           @icon="search"
-          {{on "click" (action "refreshRoute")}}
-          data-test-route-settings-users-search-button
+          {{on "click" this.refreshRoute}}
         />
       </div>
     </div>
