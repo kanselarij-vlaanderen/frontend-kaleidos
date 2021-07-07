@@ -1,17 +1,17 @@
 {{page-title (t "agenda-title")}}
 <Auk::Navbar @skin="gray-100">
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <h2 class="auk-toolbar__title"
             data-test-route-agendas-title>
           {{t "agenda-title"}}
         </h2>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{#if currentSession.isEditor}}
-        <div class="auk-toolbar-complex__item">
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary"
             @icon="add"
@@ -20,10 +20,10 @@
           >
             {{t "new-agenda"}}
           </Auk::Button>
-        </div>
+        </Auk::Toolbar::Item>
       {{/if}}
-    </div>
-  </div>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 {{outlet}}
 {{#if this.isCreatingNewSession}}
