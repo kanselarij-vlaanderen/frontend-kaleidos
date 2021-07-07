@@ -118,50 +118,51 @@
       {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-  {{#if promptDeleteCase}}
-    {{web-components/vl-modal-verify
-      title="Leeg dossier verwijderen?"
-      verifyButtonText="Verwijderen"
-      message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
-      cancel=(action "cancelDeleteCase")
-      verify=(perform this.deleteCase this.caseToDelete)
-      isLoading=this.deleteCase.isRunning
-    }}
-  {{/if}}
-
-  {{#if isAssigningToOtherCase}}
-    {{#web-components/vl-modal
-      closeModal=(action "cancel")
-      isOverlay=true
-      title=(t "move-subcase-to-other-case")
-    }}
-      {{utils/case-search
-        onSelect=(action "moveSubcase")
-      }}
-    {{/web-components/vl-modal}}
-  {{/if}}
-
-  {{#if isAssigningToOtherAgenda}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "propose-for-agenda")
-      closeModal=(action "cancel")
-    }}
-      {{subcases/assign-to-meeting-form
-        subcase=selectedSubcase
-        proposeForAgenda=(action "proposeForAgenda")
-        cancel=(action "cancel")
-        closeModal=(action "cancel")
-      }}
-    {{/web-components/vl-modal}}
-  {{/if}}
-  {{#if isDeletingSubcase}}
-    {{web-components/vl-modal-verify
-      isLoading=isLoading
-      title=(t "delete-subcase")
-      message=(t "delete-subcase-confirmation")
-      cancel=(action "cancel")
-      verify=(action "deleteSubcase")
-    }}
-  {{/if}}
 </Auk::Navbar>
+
+{{#if promptDeleteCase}}
+  {{web-components/vl-modal-verify
+    title="Leeg dossier verwijderen?"
+    verifyButtonText="Verwijderen"
+    message=(concat "Dossier '" this.caseToDelete.shortTitle "' heeft geen procedurestappen meer. Wilt u het dossier verwijderen?")
+    cancel=(action "cancelDeleteCase")
+    verify=(perform this.deleteCase this.caseToDelete)
+    isLoading=this.deleteCase.isRunning
+  }}
+{{/if}}
+
+{{#if isAssigningToOtherCase}}
+  {{#web-components/vl-modal
+    closeModal=(action "cancel")
+    isOverlay=true
+    title=(t "move-subcase-to-other-case")
+  }}
+    {{utils/case-search
+      onSelect=(action "moveSubcase")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+
+{{#if isAssigningToOtherAgenda}}
+  {{#web-components/vl-modal
+    isOverlay=true
+    title=(t "propose-for-agenda")
+    closeModal=(action "cancel")
+  }}
+    {{subcases/assign-to-meeting-form
+      subcase=selectedSubcase
+      proposeForAgenda=(action "proposeForAgenda")
+      cancel=(action "cancel")
+      closeModal=(action "cancel")
+    }}
+  {{/web-components/vl-modal}}
+{{/if}}
+{{#if isDeletingSubcase}}
+  {{web-components/vl-modal-verify
+    isLoading=isLoading
+    title=(t "delete-subcase")
+    message=(t "delete-subcase-confirmation")
+    cancel=(action "cancel")
+    verify=(action "deleteSubcase")
+  }}
+{{/if}}

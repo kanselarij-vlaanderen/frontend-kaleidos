@@ -3,7 +3,7 @@
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <h1 class="auk-toolbar__title" data-test-cases-header-title>
+          <h1 data-test-cases-header-title class="auk-toolbar__title">
             {{t "cases"}}
           </h1>
         </Auk::Toolbar::Item>
@@ -12,10 +12,10 @@
         <Auk::Toolbar::Item>
           {{#if currentSession.isEditor}}
             <Auk::Button
+              data-test-cases-header-add-case
               @skin="primary"
               @icon="add"
-              {{action "toggleAddingCase"}}
-              data-test-cases-header-add-case
+              {{on "click" this.toggleAddingCase}}
             >
               {{t "add-case"}}
             </Auk::Button>
@@ -26,9 +26,9 @@
   {{else}}
     <WebComponents::VlModal
       @isOverlay={{true}}
-      @closeModal={{action "toggleAddingCase"}}
+      @closeModal={{this.toggleAddingCase}}
       @title={{t "new-case"}} >
-      <Cases::NewCase @close={{action "closeAction"}} />
+      <Cases::NewCase @close={{this.closeAction}} />
     </WebComponents::VlModal>
   {{/if}}
 </Auk::Navbar>
