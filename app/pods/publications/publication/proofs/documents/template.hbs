@@ -36,6 +36,7 @@
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="secondary" @icon="add"
+              @disabled={{this.isUploadDisabled}}
               {{on "click" this.openPieceUploadModal}}>
               {{t "upload-documents"}}
             </Auk::Button>

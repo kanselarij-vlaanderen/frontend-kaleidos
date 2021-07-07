@@ -15,7 +15,7 @@
         <Auk::Checkbox
           @label={{t "finished"}}
           @checked={{this.model.endDate}}
-          disabled />
+          {{on "input" this.toggleFinishProof}} />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

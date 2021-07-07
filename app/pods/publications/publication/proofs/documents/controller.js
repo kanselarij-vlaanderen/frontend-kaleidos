@@ -47,11 +47,16 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   get isRequestingDisabled() {
-    return this.selectedPieces.length === 0;
+    return this.selectedPieces.length === 0
+      || this.publicationSubcase.isFinished;
   }
 
   get canUploadPiece() {
     return this.currentSession.isOvrb;
+  }
+
+  get isUploadDisabled() {
+    return this.publicationSubcase.isFinished;
   }
 
   @action

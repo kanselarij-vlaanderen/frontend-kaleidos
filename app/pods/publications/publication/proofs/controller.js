@@ -4,16 +4,12 @@ import { action } from '@ember/object';
 export default class PublicationsPublicationProofController extends Controller {
   @action
   async toggleFinishProof(event) {
-    const translationIsFinished = event.target.checked;
-    if (translationIsFinished) {
-      const now = new Date();
-      this.model.endDate = now;
-      this.model.save();
-      this.publicationFlow.closingDate = now;
-      this.model.save();
+    const proofIsFinished = event.target.checked;
+    if (proofIsFinished) {
+      this.model.endDate = new Date();
     } else {
       this.model.endDate = null;
-      this.model.save();
     }
+    this.model.save();
   }
 }
