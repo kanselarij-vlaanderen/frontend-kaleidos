@@ -114,11 +114,20 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   async performSaveProofRequest(proofRequest) {
     const now = new Date();
 
+    const saves = [];
+
+    // PUBLICATION SUBCASE
+    if (!this.publicationSubcase.startDate) {
+      this.publicationSubcase.startDate = now;
+      const publicationSubcaseSave = this.publicationSubcase.save();
+      saves.push(publicationSubcaseSave);
+    }
+
     // REQUEST ACTIVITY
     const requestActivity = this.store.createRecord('request-activity', {
       startDate: now,
       title: proofRequest.subject,
-      publicationSubcase: proofRequest.publicationSubcase,
+      publicationSubcase: this.publicationSubcase,
       usedPieces: proofRequest.attachments,
     });
     await requestActivity.save();
@@ -127,7 +136,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const activityProperties = {
       startDate: now,
       title: proofRequest.subject,
-      subcase: proofRequest.publicationSubcase,
+      subcase: this.publicationSubcase,
       requestActivity: requestActivity,
       usedPieces: proofRequest.attachments,
     };
@@ -140,14 +149,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       throw new Error(`unknown request stage: ${proofRequest.stage}`);
     }
     const activitySave = activity.save();
-    const saves = [activitySave];
-
-    // PUBLICATION SUBCASE
-    if (!proofRequest.publicationSubcase.startDate) {
-      proofRequest.publicationSubcase.startDate = now;
-      const publicationSubcaseSave = proofRequest.publicationSubcase.save();
-      saves.push(publicationSubcaseSave);
-    }
+    saves.push(activitySave);
 
     // EMAIL
     const filePromises = proofRequest.attachments.mapBy('file');
