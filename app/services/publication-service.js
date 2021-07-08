@@ -35,12 +35,15 @@ export default class PublicationService extends Service {
    */
   async createNewPublication(publicationProperties, viaCouncilOfMinisterOptions, notViaCouncilOfMinistersOptions) {
     const now = new Date();
+
     let case_;
     let agendaItemTreatment;
+    let mandatees;
     const isViaCouncilOfMinisters = !!viaCouncilOfMinisterOptions;
     if (isViaCouncilOfMinisters) {
       case_ = viaCouncilOfMinisterOptions.case;
       agendaItemTreatment = viaCouncilOfMinisterOptions.agendaItemTreatment;
+      mandatees = viaCouncilOfMinisterOptions.mandatees;
     } else {
       case_ = this.store.createRecord('case', {
         shortTitle: publicationProperties.shortTitle,
@@ -52,6 +55,7 @@ export default class PublicationService extends Service {
         startDate: notViaCouncilOfMinistersOptions.decisionDate,
       });
       await agendaItemTreatment.save();
+      mandatees = [];
     }
 
     const toPublishStatus = await this.store.findRecordByUri('publication-status', CONSTANTS.PUBLICATION_STATUSES.PENDING);
@@ -82,6 +86,7 @@ export default class PublicationService extends Service {
       identification: identifier,
       case: case_,
       agendaItemTreatment: agendaItemTreatment,
+      mandatees: mandatees,
       status: toPublishStatus,
       statusChange: statusChange,
       shortTitle: publicationProperties.shortTitle,
