@@ -54,7 +54,12 @@ export default Model.extend({
   publicationFlow: belongsTo('publication-flow'),
   translationSubcase: belongsTo('translation-subcase'),
   publicationSubcase: belongsTo('publication-subcase'),
-
+  translationActivitiesUsedBy: hasMany('translation-activity', {
+    inverse: 'usedPieces',
+  }),
+  translationActivityGeneratedBy: belongsTo('translation-activity', {
+    inverse: 'generatedPieces',
+  }),
   proofingActivitiesUsedBy: hasMany('proofing-activity', {
     inverse: 'usedPieces',
   }),

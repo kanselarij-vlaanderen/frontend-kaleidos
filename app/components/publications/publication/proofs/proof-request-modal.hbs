@@ -1,0 +1,50 @@
+<Auk::Modal>
+  <Auk::Modal::Header
+    @title="{{t "request-proof"}} ({{t @stage}})"
+    @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        {{!-- Subject --}}
+        <div class="auk-form-group {{if this.validators.subject.showError "auk-form-group--error"}}">
+          <Auk::Label for="proofRequestSubject" @required={{true}}>
+            {{t "subject"}}
+          </Auk::Label>
+          <Auk::Input id="proofRequestSubject" @block={{true}}
+            @value={{mut this.subject}}
+            {{on "input" this.validators.subject.enableError}} />
+        </div>
+        {{!-- Message --}}
+        <div class="auk-form-group {{if this.validators.message.showError "auk-form-group--error"}}">
+          <Auk::Label for="proofRequestMessage" @required={{true}}>
+            {{t "translation-mail-header"}}
+          </Auk::Label>
+          <Auk::Textarea id="proofRequestMessage" @rows="6"
+            @value={{mut this.message}}
+            {{on "input" this.validators.message.enableError}} />
+        </div>
+        {{!-- Attachments --}}
+        <div class="auk-form-group {{if this.validators.attachments.showError "auk-form-group--error"}}">
+          <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
+          <Auk::CheckboxList>
+            {{#each @attachments as |piece|}}
+              <Auk::Checkbox
+                @label={{piece.name}}
+                @checked={{includes piece this.selectedAttachments}}
+                {{on "input" (fn this.toggleAttachmentSelection piece)}} />
+            {{/each}}
+          </Auk::CheckboxList>
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.saveRequest.isRunning}}
+      {{on "click" (perform this.saveRequest)}}>
+      {{t "request-action"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
