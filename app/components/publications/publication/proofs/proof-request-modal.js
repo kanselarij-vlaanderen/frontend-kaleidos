@@ -45,12 +45,12 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   async initEmailFields() {
     // should resolve immediately (already fetched)
-    const identification = await this.args.publicationFlow.identification;
-    const idName = identification.idName;
-    this.subject = `Publicatieaanvraag VO-dossier: ${idName}`;
-    this.message = proofRequestEmail({
-      identifier: idName,
+    const email = await proofRequestEmail({
+      stage: this.args.stage,
+      publicationFlow: this.args.publicationFlow,
     });
+    this.subject = email.subject;
+    this.message = email.message;
   }
 
   @action

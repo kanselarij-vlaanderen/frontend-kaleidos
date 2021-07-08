@@ -23,7 +23,8 @@
               <dropdown.Item>
                 {{t "extra-request"}}
               </dropdown.Item>
-              <dropdown.Item>
+              <dropdown.Item
+                {{on "click" (fn this.openProofRequestModal "final")}}>
                 {{t "final-request"}}
               </dropdown.Item>
             </Auk::Dropdown>

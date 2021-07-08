@@ -9,6 +9,12 @@ const COLUMN_MAP = {
   'geupload-op': 'created',
 };
 
+const REQUEST_STAGES = {
+  INITIAL: 'initial',
+  EXTRA: 'extra',
+  FINAL: 'final',
+};
+
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
     qpSortingString: {
@@ -73,7 +79,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey]?.property || property;
+      property = COLUMN_MAP[sortKey] || property;
     }
 
     // this.model.sortBy(property) does not work properly
@@ -85,10 +91,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   openProofRequestModal(stage) {
-    if (stage === 'initial') {
-      this.proofRequestStage = stage;
-      this.isProofRequestModalOpen = true;
-    }
+    this.proofRequestStage = stage;
+    this.isProofRequestModalOpen = true;
   }
 
   @action
@@ -99,7 +103,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   async saveProofRequest(requestProperties) {
     try {
-      await this.persistProofRequest(requestProperties);
+      await this.performSaveProofRequest(requestProperties);
     } finally {
       this.isProofRequestModalOpen = false;
     }
@@ -107,54 +111,64 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
-  async persistProofRequest(proofRequest) {
-    if (proofRequest.stage === 'initial') {
-      const now = new Date();
+  async performSaveProofRequest(proofRequest) {
+    const now = new Date();
 
-      const saves = [];
+    const saves = [];
 
-      if (!this.publicationSubcase.startDate) {
-        this.publicationSubcase.startDate = now;
-        const publicationSubcaseSave = this.publicationSubcase.save();
-        saves.push(publicationSubcaseSave);
-      }
-
-      const requestActivity = this.store.createRecord('request-activity', {
-        startDate: now,
-        title: proofRequest.subject,
-        publicationSubcase: this.publicationSubcase,
-        usedPieces: proofRequest.attachments,
-      });
-      await requestActivity.save();
-
-      const proofingActivity = this.store.createRecord('proofing-activity', {
-        startDate: now,
-        title: proofRequest.subject,
-        subcase: this.publicationSubcase,
-        requestActivity: requestActivity,
-        usedPieces: proofRequest.attachments,
-      });
-      const proofingActivitySave = proofingActivity.save();
-      saves.push(proofingActivitySave);
-
-      const filePromises = proofRequest.attachments.mapBy('file');
-      const attachmentFilesPromise = Promise.all(filePromises);
-      const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-      const mailSettingsPromise = this.store.queryOne('email-notification-setting');
-      const [attachmentFiles, outbox, mailSettings] = await Promise.all([attachmentFilesPromise, outboxPromise, mailSettingsPromise]);
-      const email = this.store.createRecord('email', {
-        to: mailSettings.proofRequestToEmail,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: proofRequest.subject,
-        message: proofRequest.message,
-        attachments: attachmentFiles,
-        requestActivity: requestActivity,
-      });
-      const emailSave = email.save();
-      saves.push(emailSave);
-
-      await Promise.all(saves);
+    // PUBLICATION SUBCASE
+    if (!this.publicationSubcase.startDate) {
+      this.publicationSubcase.startDate = now;
+      const publicationSubcaseSave = this.publicationSubcase.save();
+      saves.push(publicationSubcaseSave);
     }
+
+    // REQUEST ACTIVITY
+    const requestActivity = this.store.createRecord('request-activity', {
+      startDate: now,
+      title: proofRequest.subject,
+      publicationSubcase: this.publicationSubcase,
+      usedPieces: proofRequest.attachments,
+    });
+    await requestActivity.save();
+
+    // RESULT ACTIVITY
+    const activityProperties = {
+      startDate: now,
+      title: proofRequest.subject,
+      subcase: this.publicationSubcase,
+      requestActivity: requestActivity,
+      usedPieces: proofRequest.attachments,
+    };
+    let activity;
+    if (proofRequest.stage === REQUEST_STAGES.INITIAL) {
+      activity = this.store.createRecord('proofing-activity', activityProperties);
+    } else if (proofRequest.stage === REQUEST_STAGES.FINAL) {
+      activity = this.store.createRecord('publication-activity', activityProperties);
+    } else {
+      throw new Error(`unknown request stage: ${proofRequest.stage}`);
+    }
+    const activitySave = activity.save();
+    saves.push(activitySave);
+
+    // EMAIL
+    const filePromises = proofRequest.attachments.mapBy('file');
+    const filesPromise = Promise.all(filePromises);
+    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+    const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
+    const mail = this.store.createRecord('email', {
+      to: mailSettings.proofRequestToEmail,
+      from: mailSettings.defaultFromEmail,
+      folder: outbox,
+      subject: proofRequest.subject,
+      message: proofRequest.message,
+      attachments: files,
+      requestActivity: requestActivity,
+    });
+    const emailSave = mail.save();
+    saves.push(emailSave);
+
+    await Promise.all(saves);
   }
 }

@@ -85,14 +85,15 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     yield translationActivity.save();
 
     const filePromises = translationRequest.attachments.mapBy('file');
-    const files = yield Promise.all(filePromises);
+    const filesPromise = yield Promise.all(filePromises);
 
-    const folder = yield this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
-    const mailSettings = yield this.store.queryOne('email-notification-setting');
+    const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
+    const mailSettingsPromise = this.store.queryOne('email-notification-setting');
+    const [files, outbox, mailSettings] = yield Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
     const mail = yield this.store.createRecord('email', {
       to: mailSettings.translationRequestToEmail,
       from: mailSettings.defaultFromEmail,
-      folder: folder,
+      folder: outbox,
       attachments: files,
       requestActivity: requestActivity,
       subject: translationRequest.subject,

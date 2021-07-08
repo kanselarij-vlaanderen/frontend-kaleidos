@@ -891,10 +891,11 @@
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",
+  "extra": "extra",
+  "final": "finaal",
   "x-request-type-x-timestamp": "{request-type} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
-  "message": "Bericht",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
   "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
   "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag.",
@@ -902,6 +903,7 @@
   "no-mandatees-added": "Er zijn nog geen mandatarissen toegevoegd.",
   "no-mandatees-found": "Geen mandatarissen gevonden.",
   "select-mandatee": "Selecteer mandataris...",
+  "message": "Bericht",
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
   "email-to-proofrequest": "Email ontvanger voor drukproeven"
 }
