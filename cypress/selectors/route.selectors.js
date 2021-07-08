@@ -23,6 +23,7 @@ const selectors = {
 
   // agendas/overview/template.hbs
   agendasOverview: {
+    dataTable: '[data-test-route-agendas-overview-data-table]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
@@ -59,6 +60,11 @@ const selectors = {
   /**
     ROUTE CASES
   */
+
+  // cases/overview/template
+  casesOverview: {
+    dataTable: '[data-test-route-cases-overview-data-table]',
+  },
 
   // cases/case/subcase/subcase/overview/template
   subcaseOverview: {

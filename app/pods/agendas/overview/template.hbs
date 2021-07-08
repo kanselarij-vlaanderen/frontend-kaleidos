@@ -57,6 +57,7 @@
         <div class="auk-u-mb-8">
           {{#if (await model)}}
             {{#data-table
+              data-test-route-agendas-overview-data-table=true
               content=(await model)
               class="auk-table auk-table--striped auk-table--no-scroll"
               page=page
