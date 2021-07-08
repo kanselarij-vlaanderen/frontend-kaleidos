@@ -13,7 +13,8 @@
             <span class="auk-u-muted auk-body-1 ">- {{await currentSession.kindToShow.label}}</span>
           </div>
           <Sessions::SessionAgendaNav
-            @currentAgenda={{currentAgenda}} />
+            @currentAgenda={{currentAgenda}}
+            @currentMeeting={{currentSession}}/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
