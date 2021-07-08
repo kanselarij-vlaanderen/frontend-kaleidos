@@ -23,20 +23,20 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
   }
 
   get totalPages() {
-    const pages = this.args.selectedPieces.mapBy('pages').filter((page) => page >= 0);
+    const pages = this.args.attachments.mapBy('pages').filter((page) => page >= 0);
     return pages.length ? add(pages) : 0;
   }
 
   get totalWords() {
-    const words = this.args.selectedPieces.mapBy('words').filter((word) => word >= 0);
+    const words = this.args.attachments.mapBy('words').filter((word) => word >= 0);
     return words.length ? add(words) : 0;
   }
 
   get totalDocuments() {
-    return this.args.selectedPieces.length;
+    return this.args.attachments.length;
   }
 
-  get saveIsDisabled() {
+  get isSaveDisabled() {
     return this.translationDueDate === null
       || this.subject === null
       || this.message === null;
@@ -44,7 +44,8 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @task
   *setEmailFields() {
-    const publicationFlow = yield this.args.translationSubcase.publicationFlow;
+    const publicationFlow = this.args.publicationFlow;
+    // should resolve immediately (already fetched)
     const identification = yield publicationFlow.identification;
 
     const mailParams = {
@@ -68,13 +69,11 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
 
   @task
   *saveRequest() {
-    if (this.args.onSave) {
-      yield this.args.onSave({
-        selectedPieces: this.args.selectedPieces,
-        translationDueDate: this.translationDueDate,
-        subject: this.subject,
-        message: this.message,
-      });
-    }
+    yield this.args.onSave({
+      attachments: this.args.attachments,
+      translationDueDate: this.translationDueDate,
+      subject: this.subject,
+      message: this.message,
+    });
   }
 }
