@@ -1,7 +1,7 @@
-<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100 auk-navbar--auto">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-toolbar-complex__title">{{await title}}</h4>
@@ -32,10 +32,10 @@
             {{/if}}
           </Auk::Tabs>
         </div>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         {{#if shouldShowPrintButton}}
           <Auk::Button
             @skin="tertiary"
@@ -45,7 +45,7 @@
             {{t "print"}}
           </Auk::Button>
         {{/if}}
-      </div>
-    </div>
-  </div>
-</div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>

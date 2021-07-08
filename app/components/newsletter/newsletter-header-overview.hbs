@@ -1,52 +1,52 @@
-<div class="auk-toolbar-complex">
-  <div class="auk-toolbar-complex__left">
-    <div class="auk-toolbar-complex__item">
-      <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
-        <div class="auk-o-flex auk-o-flex--vertical-center">
-          <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
-            {{t "newsletter-overview-pdf-name"}}
-            -
-            {{await agenda.createdFor.kindToShow.label}}
-            {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
-          </h4>
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
+          <div class="auk-o-flex auk-o-flex--vertical-center">
+            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize" data-test-newsletter-header-overview-title>
+              {{t "newsletter-overview-pdf-name"}}
+              -
+              {{await agenda.createdFor.kindToShow.label}}
+              {{moment-format agenda.createdFor.plannedStart "DD MMMM YYYY"}}
+            </h4>
+          </div>
+          <Auk::Tabs @reversed={{true}}>
+            <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
+            {{#if currentSession.isEditor}}
+              <Auk::Tab
+                @route="newsletter.index"
+                @model={{await agenda.createdFor.id}}
+              >
+                {{t "overview"}}
+              </Auk::Tab>
+              <Auk::Tab
+                @route="newsletter.print"
+                @model={{await agenda.createdFor.id}}
+                @query={{hash showDraft=true}}
+              >
+                {{t "design"}}
+              </Auk::Tab>
+              <Auk::Tab
+                @route="newsletter.print"
+                @model={{await agenda.createdFor.id}}
+                @query={{hash showDraft=false}}
+              >
+                {{t "definite"}}
+              </Auk::Tab>
+              <Auk::Tab
+                @route="newsletter.nota-updates"
+                data-test-newsletter-header-overview-nota-updates
+              >
+                {{t "newsletter-update-notas"}}
+              </Auk::Tab>
+            {{/if}}
+          </Auk::Tabs>
         </div>
-        <Auk::Tabs @reversed={{true}}>
-          <Auk::Tab @route="newsletters" @isHierarchicalBack={{true}}/>
-          {{#if currentSession.isEditor}}
-            <Auk::Tab
-              @route="newsletter.index"
-              @model={{await agenda.createdFor.id}}
-            >
-              {{t "overview"}}
-            </Auk::Tab>
-            <Auk::Tab
-              @route="newsletter.print"
-              @model={{await agenda.createdFor.id}}
-              @query={{hash showDraft=true}}
-            >
-              {{t "design"}}
-            </Auk::Tab>
-            <Auk::Tab
-              @route="newsletter.print"
-              @model={{await agenda.createdFor.id}}
-              @query={{hash showDraft=false}}
-            >
-              {{t "definite"}}
-            </Auk::Tab>
-            <Auk::Tab
-              @route="newsletter.nota-updates"
-              data-test-newsletter-header-overview-nota-updates
-            >
-              {{t "newsletter-update-notas"}}
-            </Auk::Tab>
-          {{/if}}
-        </Auk::Tabs>
-      </div>
-    </div>
-  </div>
-  <div class="auk-toolbar-complex__right">
-    <div class="auk-toolbar-complex__item">
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         {{#if currentSession.isEditor}}
         {{/if}}
         <div class="auk-u-position-relative auk-u-inline-block">
@@ -173,10 +173,11 @@
             </ul>
           {{/attach-popover}}
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
 {{#if isVerifying}}
   <WebComponents::VlModalVerify
     @title={{t "send-campaign"}}

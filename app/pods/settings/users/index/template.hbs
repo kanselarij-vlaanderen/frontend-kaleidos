@@ -8,25 +8,25 @@
   </Auk::Toolbar>
 {{/utils/settings-header}}
 <div class="auk-u-m-8">
-  <div class="vlc-input-field-group vlc-input-field-group--gmeeting">
-    <div class="auk-toolbar-complex">
-      <div class="auk-toolbar-complex__left">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <Input
-          data-test-route-settings-users-search-input=""
+          data-test-route-settings-users-search-input
           class="auk-input"
           type="search"
           @value={{this.filter}}
         />
         <Auk::Button
+          data-test-route-settings-users-search-button
           @skin="secondary"
           @layout="icon-only"
           @icon="search"
-          {{on "click" (action "refreshRoute")}}
-          data-test-route-settings-users-search-button
+          {{on "click" this.refreshRoute}}
         />
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 
   {{#if (await model)}}
     {{#data-table

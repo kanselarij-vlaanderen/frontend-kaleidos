@@ -6,16 +6,16 @@
       @clearAction={{this.toggleIsEditingOverview}}
     />
   {{/if}}
-  <div class="auk-toolbar-complex vlc-agenda-items-section-header">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar class="vlc-agenda-items-section-header">
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <h3 class="auk-h3 auk-u-m-0 vlc-agenda-items-section-header__title">
           {{t "agendaitems-subtitle"}}
         </h3>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         <Auk::ButtonLink
           data-test-agenda-overview-show-changes={{true}}
           class="vlc-agenda-items-section-header__link"
@@ -23,8 +23,8 @@
         >
           {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
         </Auk::ButtonLink>
-      </div>
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
         {{#if
           (and
             this.currentSessionService.isEditor
@@ -43,9 +43,9 @@
             </div>
           {{/unless}}
         {{/if}}
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
   {{#if (not @isLoadingNotaGroups)}}
     {{#if @notaGroups.length}}
       <div>

@@ -1,9 +1,9 @@
 {{page-title (t "settings")}}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
-  <div class="auk-navbar auk-navbar--bordered-bottom">
-    <div class="auk-toolbar-complex">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
+  <Auk::Navbar @skin="gray-100">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <Auk::Tabs>
             <Auk::Tab
               @route="settings.overview"
@@ -24,10 +24,10 @@
               {{t "manage-users"}}
             </Auk::Tab>
           </Auk::Tabs>
-        </div>
-      </div>
-    </div>
-  </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
   <div class="auk-scroll-wrapper__body">
     <div>
       {{outlet}}
