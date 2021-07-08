@@ -262,6 +262,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(this.publicationFlow, 'remark');
   }
 
+  @restartableTask
+  *setProofprintCorrector(event) {
+    const newValue = event.target.value;
+    this.publicationSubcase.proofPrintCorrector = newValue;
+    yield timeout(1000);
+    this.notifyChanges(this.publicationSubcase, 'proofPrintCorrector');
+  }
   /**
    *
    * @param {Model} model

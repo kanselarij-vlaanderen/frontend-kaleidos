@@ -50,6 +50,15 @@
           {{/if}}
         </div>
 
+        {{!-- Spoedprocedure --}}
+        {{#if this.publicationStatus.isPending}}
+          <div class="auk-form-group">
+            <Publications::UrgencyLevelCheckbox
+                    @urgencyLevel={{this.publicationFlow.urgencyLevel}}
+                    @onChange={{this.setUrgencyLevel}} />
+          </div>
+        {{/if}}
+
         {{!-- Status --}}
         <Publications::PublicationStatusSelector
             @publicationStatus={{this.publicationStatus}}
@@ -95,15 +104,18 @@
           </div>
         {{/unless}}
 
-        {{!-- Spoedprocedure --}}
-        {{#if this.publicationStatus.isPending}}
+        {{!-- Drukproef verbeteraar --}}
+        {{#unless this.loadPublicationSubcase.isRunning}}
           <div class="auk-form-group">
-            <Publications::UrgencyLevelCheckbox
-                    @urgencyLevel={{this.publicationFlow.urgencyLevel}}
-                    @onChange={{this.setUrgencyLevel}} />
+            <Auk::Label>
+              {{t "proofprint-corrector"}}
+            </Auk::Label>
+            <Auk::Input
+                  value={{this.publicationSubcase.proofPrintCorrector}}
+              {{on "input" (perform this.setProofprintCorrector)}}
+            />
           </div>
-        {{/if}}
-
+        {{/unless}}
         {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>

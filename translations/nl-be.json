@@ -899,5 +899,6 @@
   "no-mandatees-found": "Geen mandatarissen gevonden.",
   "select-mandatee": "Selecteer mandataris...",
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
-  "email-to-proofrequest": "Email ontvanger voor drukproeven"
+  "email-to-proofrequest": "Email ontvanger voor drukproeven",
+  "proofprint-corrector": "Drukproef verbeteraar"
 }
