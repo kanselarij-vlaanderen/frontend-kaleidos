@@ -206,23 +206,10 @@
                     </span>
                   </a>
                 </li>
-              {{/if}}
-              <li class="vlc-dropdown-menu__item">
-                <a href=""
-                    data-test-agenda-header-download-documents
-                    class="auk-button-link auk-button-link--block"
-                  {{action attacher.hide}}
-                  {{action "downloadAllDocuments"}}
-                >
-                  <span class="auk-button__content">
-                    {{t "download-all-documents"}}
-                  </span>
-                </a>
-              </li>
-              {{#if currentAgenda.isDesignAgenda}}
-                <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                      data-test-agenda-header-approve-all-agendaitems
+                {{#if showPrintButton}}
+                  <li class="vlc-dropdown-menu__item">
+                    <LinkTo
+                      @route="agenda.agendaitems"
                       class="auk-button-link auk-button-link--block"
                       data-test-agenda-header-navigate-to-agenda-view
                     >
