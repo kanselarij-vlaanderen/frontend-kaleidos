@@ -67,16 +67,16 @@ context('Tests of pieces on agendaitems', () => {
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1TER', 0);
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-2BIS', 0);
       cy.get(document.documentCard.card).should('have.length', 2);
-      cy.get(document.documentCard.titleHeader).eq(0)
+      cy.get(document.documentCard.name.value).eq(0)
         .contains('VR 2020 1212 DOC.0001-1BIS');
-      cy.get(document.documentCard.titleHeader).eq(1)
+      cy.get(document.documentCard.name.value).eq(1)
         .contains('VR 2020 1212 DOC.0001-2');
       cy.openDetailOfAgendaitem(part1Title);
       cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
       cy.clickReverseTab('Documenten');
       cy.deleteSinglePiece('VR 2020 1212 DOC.0001-1BIS', 0);
       cy.get(document.documentCard.card).should('have.length', 2);
-      cy.get(document.documentCard.titleHeader).eq(0)
+      cy.get(document.documentCard.name.value).eq(0)
         .contains('VR 2020 1212 DOC.0001-1');
       cy.clickReverseTab('Overzicht');
       cy.get(cases.subcaseDescription.agendaLink).click();

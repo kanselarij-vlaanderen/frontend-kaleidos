@@ -231,7 +231,7 @@ context('Tests for KAS-1076', () => {
     cy.addNewPieceToAgendaitem(SubcaseTitleShort, file.newFileName, file);
 
     // Verify agendaitem is updated
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}BIS`);
 
     // Verify formally ok is reset
@@ -240,7 +240,7 @@ context('Tests for KAS-1076', () => {
 
     // Verify subcase is updated
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}BIS`);
 
     // PART 2, adding new document
@@ -250,14 +250,14 @@ context('Tests for KAS-1076', () => {
       .should('have.length', 0);
     cy.addDocumentsToAgendaitem(SubcaseTitleShort, [file]);
     // Verify agendaitem is updated
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}`);
     // Verify formally ok is reset
     cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
     // Verify subcase is updated
     cy.visit('/dossiers/5EBA9548751CF7000800000D/deeldossiers/5EBA9556751CF7000800000F/documenten');
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}`);
   });
 
@@ -278,13 +278,13 @@ context('Tests for KAS-1076', () => {
     cy.addNewPieceToSubcase('test pdf', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}BIS`);
 
     cy.visitAgendaWithLink('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}BIS`);
     cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);
@@ -296,13 +296,13 @@ context('Tests for KAS-1076', () => {
 
     cy.visit('/dossiers/5EBA95CA751CF70008000018/deeldossiers/5EBA95E1751CF7000800001A/documenten');
     cy.addDocumentsToSubcase([file]);
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}`);
 
     cy.visitAgendaWithLink('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten');
     cy.openDetailOfAgendaitem(SubcaseTitleShort);
     cy.openAgendaitemDocumentTab(SubcaseTitleShort, true);
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(`${file.newFileName}`);
     cy.get(agenda.agendaDetailSidebarItem.status).contains('Nog niet formeel OK')
       .should('have.length', 1);

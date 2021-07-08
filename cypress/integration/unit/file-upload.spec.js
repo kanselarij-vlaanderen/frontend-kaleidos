@@ -33,7 +33,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     }], 'meeting');
 
     // Check the name of the document we just uploaded
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains('test pdf');
 
     // Add a new version and check its name
@@ -43,7 +43,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // cy.wait('@loadPieces');
     cy.get(document.documentCard.card).eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/BIS/);
+        cy.get(document.documentCard.name.value).contains(/BIS/);
       });
 
     // Add a new version and check its name
@@ -53,7 +53,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // cy.wait('@loadPieces');
     cy.get(document.documentCard.card).eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/TER/);
+        cy.get(document.documentCard.name.value).contains(/TER/);
       });
   });
 
@@ -95,31 +95,31 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.get(document.documentCard.card).as('docCards');
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/1e/);
+        cy.get(document.documentCard.name.value).contains(/1e/);
       });
     cy.get('@docCards').eq(1)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/2e/);
+        cy.get(document.documentCard.name.value).contains(/2e/);
       });
     cy.get('@docCards').eq(2)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/3e/);
+        cy.get(document.documentCard.name.value).contains(/3e/);
       });
     cy.get('@docCards').eq(3)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/4e/);
+        cy.get(document.documentCard.name.value).contains(/4e/);
       });
     cy.get('@docCards').eq(4)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/5e/);
+        cy.get(document.documentCard.name.value).contains(/5e/);
       });
     cy.get('@docCards').eq(5)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/6e/);
+        cy.get(document.documentCard.name.value).contains(/6e/);
       });
     cy.get('@docCards').eq(6)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/7e/);
+        cy.get(document.documentCard.name.value).contains(/7e/);
       });
   });
 
@@ -138,7 +138,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Remove a document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/1e/);
+        cy.get(document.documentCard.name.value).contains(/1e/);
         cy.get(document.documentCard.actions).click();
         cy.get(document.documentCard.delete).click();
       });
@@ -166,7 +166,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     // Delete another document
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/2e/);
+        cy.get(document.documentCard.name.value).contains(/2e/);
         cy.get(document.documentCard.versionHistory).click();
         cy.get(document.vlDocument.piece).should('have.length', 1);
         cy.get(document.vlDocument.delete).click(); // no eq(0) needed when this is the only vl-document

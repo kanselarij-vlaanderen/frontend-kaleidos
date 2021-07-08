@@ -97,7 +97,7 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(file.fileName);
     cy.get(agenda.agendaitemNav.documentsTab).click();
     cy.get(document.documentCard.card).should('have.length', 0);

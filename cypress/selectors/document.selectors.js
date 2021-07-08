@@ -2,7 +2,12 @@ const selectors = {
   // component document-card
   documentCard: {
     card: '[data-test-document-card]',
-    titleHeader: '[data-test-document-card-title-header]',
+    name: {
+      value: '[data-test-document-card-name-value]',
+      input: '[data-test-document-card-name-input]',
+      save: '[data-test-document-card-name-save]',
+      cancel: '[data-test-document-card-name-cancel]',
+    },
     versionHistory: '[data-test-document-card-version-history]',
     actions: '[data-test-document-card-actions]',
     delete: '[data-test-document-card-delete]',
@@ -12,11 +17,19 @@ const selectors = {
   // vl-document
   vlDocument: {
     piece: '[data-test-vl-document-piece]',
+    name: '[data-test-vl-document-name]',
     delete: '[data-test-vl-document-delete-piece]',
+  },
+
+  // batch-document-edit
+  batchDocumentEdit: {
+    cancel: '[data-test-batch-document-edit-cancel]',
+    save: '[data-test-batch-document-edit-save]',
   },
 
   // edit-document-row
   editDocumentRow: {
+    row: '[data-test-edit-document-row]',
     type: '[data-test-edit-document-row-type]',
     accessLevel: '[data-test-edit-document-row-access-level]',
   },

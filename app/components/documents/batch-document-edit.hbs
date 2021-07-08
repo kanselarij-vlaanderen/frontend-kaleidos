@@ -44,13 +44,14 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <button type="button" class="auk-button-link" {{on "click" (perform this.cancelEditPieces)}}>
-              <span class="auk-button__content">
+              <span data-test-batch-document-edit-cancel class="auk-button__content">
                 {{t "cancel"}}
               </span>
             </button>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
             <WebComponents::VlSaveButton
+              data-test-batch-document-edit-save={{true}}
               @text={{t "save"}}
               @isLoading={{this.saveEditPieces.isRunning}}
               @saveAction={{perform this.saveEditPieces}} />

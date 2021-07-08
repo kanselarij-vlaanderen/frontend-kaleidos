@@ -120,17 +120,20 @@
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
                 <Input
+                  data-test-document-card-name-input={{true}}
                   class="auk-input auk-input--block"
                   @type="text"
                   @value={{this.pieceNameBuffer}}
                 />
                 <Auk::Button
+                  data-test-document-card-name-save={{true}}
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="check"
                   {{on "click" (perform this.savePieceName)}}
                 />
                 <Auk::Button
+                  data-test-document-card-name-cancel={{true}}
                   @skin="borderless"
                   @layout="icon-only"
                   @icon="cross"
@@ -138,7 +141,7 @@
                 />
               </div>
             {{else}}
-              <h6 class="auk-h4" data-test-document-card-title-header>
+              <h6 class="auk-h4" data-test-document-card-name-value>
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
