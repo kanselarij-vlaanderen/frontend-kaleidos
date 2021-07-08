@@ -32,8 +32,7 @@
 
         <Auk::Toolbar::Item>
           <Auk::Button
-            @skin="secondary" @icon="add"
-            {{on "click" this.openPieceUploadModal}}>
+            @skin="secondary" @icon="add">
             {{t "upload-documents"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
@@ -50,7 +49,7 @@
                 {{on "input" this.toggleAllPiecesSelection}} />
             </th>
             <th>{{t "name-document"}}</th>
-            <th>{{t "file-extension"}}</th>
+            <th>{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}
               @field="ontvangen-op"
@@ -126,7 +125,7 @@
                   </Auk::Button>
                   {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
                   <EmberPopover
-                    @side="bottom-start"
+                    @side="bottom-end"
                     @tooltipClass="auk-popover"
                     @targetId="proofDocumentsRowActionMenu{{piece.id}}">
                     <Auk::Dropdown

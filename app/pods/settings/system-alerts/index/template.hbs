@@ -37,7 +37,7 @@
             @route="settings.system-alerts.new"
             data-test-route-settings-system-alerts-index-add
           >
-            {{t "message"}}
+            {{t "system-message"}}
             {{t "add"}}
           </Auk::Button>
           {{#if this.selectedAlert}}
@@ -48,7 +48,7 @@
               @model={{this.selectedAlert.id}}
               data-test-route-settings-system-alerts-index-edit
             >
-              {{t "message"}}
+              {{t "system-message"}}
               {{t "edit"}}
             </Auk::Button>
             <Auk::Button
@@ -57,7 +57,7 @@
               {{on "click" (perform remove this.selectedAlert)}}
               data-test-route-settings-system-alerts-index-remove
             >
-              {{t "message"}}
+              {{t "system-message"}}
               {{t "delete"}}
             </Auk::Button>
           {{/if}}

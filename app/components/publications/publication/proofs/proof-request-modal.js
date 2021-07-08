@@ -3,8 +3,7 @@ import { action } from '@ember/object';
 import {
   isBlank,
   isEmpty
-} from '@ember/utils';
-import { tracked } from '@glimmer/tracking';
+} from '@ember/utils';import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import {
@@ -13,9 +12,12 @@ import {
 } from 'frontend-kaleidos/utils/validators';
 
 /**
+ * @argument attachments
  * @argument {PublicationFlow} publicationFlow includes: identification
+ * @argument onSave
+ * @argument onCancel
  */
-export default class PublicationsPublicationProofsRequestModalComponent extends Component {
+export default class PublicationsPublicationProofsProofRequestModalComponent extends Component {
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];

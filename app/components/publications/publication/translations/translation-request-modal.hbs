@@ -13,7 +13,7 @@
           <Auk::Label for="translationRequestDueDate">{{t "translation-due-date"}}</Auk::Label>
           <Auk::Datepicker id="translationRequestDueDate"
             @date={{this.translationDueDate}}
-            @onChange={{this.setTranslationDueDate}}/>
+            @onChange={{this.setTranslationDueDate}} />
         </div>
         {{!-- Subject --}}
         <div class="auk-form-group">
@@ -27,7 +27,7 @@
         {{!-- Message --}}
         <div class="auk-form-group">
           <Auk::Label for="translationRequestMessage" @required={{true}}>
-            {{t 'translation-mail-header'}}
+            {{t 'message'}}
           </Auk::Label>
           <Auk::Textarea id="translationRequestMessage" @rows="6"
             @value={{mut this.message}} />
