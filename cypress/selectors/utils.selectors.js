@@ -23,6 +23,11 @@ const selectors = {
     title: '[data-test-overviews-header-decision-title]',
   },
 
+  // utils/overviews-header-print
+  overviewsHeaderPrint: {
+    title: '[data-test-overviews-header-print-title]',
+  },
+
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',
