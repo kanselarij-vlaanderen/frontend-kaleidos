@@ -41,10 +41,19 @@ export class Row {
 
 export default class PublicationsPublicationProofsRequestsController extends Controller {
   @tracked publicationFlow;
+  @tracked publicationSubcase;
   @tracked isUploadModalOpen;
+
+  get isUploadDisabled() {
+    return this.publicationSubcase.isFinished;
+  }
 
   @action
   openProofUploadModal(row) {
+    // Workaround for Dropdown::Item not having a (button with a) disabled state.
+    if (this.isUploadDisabled) {
+      return;
+    }
     this.selectedRow = row;
     this.isUploadModalOpen = true;
   }
