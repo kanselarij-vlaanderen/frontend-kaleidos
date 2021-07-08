@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
@@ -11,7 +12,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
         'file',
         'publication-subcase'
       ].join(','),
-      'page[size]': 500, // no pagination
+      'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
 
     // multiple requests: single request on translation-subcase did not detect inverse relations of piece to the publication-subcase
