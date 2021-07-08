@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { A } from '@ember/array';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   // model returns publicationSubcase instead of pieces: single request
@@ -40,6 +41,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
 
     let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest, correctionDocumentsRequest]);
     pieces = pieces.flatMap((piece) => piece.toArray());
+    pieces = new Set(pieces); // using set to ensure a collection of unique pieces
+    pieces = A([...pieces]);
 
     return pieces;
   }
