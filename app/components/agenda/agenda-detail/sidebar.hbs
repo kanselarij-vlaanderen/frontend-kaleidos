@@ -1,22 +1,22 @@
-<div class="auk-toolbar-complex vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
-  <div class="auk-toolbar-complex__left">
-    <div class="auk-toolbar-complex__item">
+<Auk::Toolbar class="vlc-agenda-detail-sidebar-section-header vlc-agenda-detail-sidebar-section-header--border-bottom">
+  <Auk::Toolbar::Group @position="left">
+    <Auk::Toolbar::Item>
       <h3 class="auk-h3 auk-u-m-0 vlc-agenda-detail-sidebar-section-header__title">
         {{t "agendaitems-subtitle"}}
       </h3>
-    </div>
-  </div>
-  <div class="auk-toolbar-complex__right">
-    <div class="auk-toolbar-complex__item">
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+  <Auk::Toolbar::Group @position="right">
+    <Auk::Toolbar::Item>
       <Auk::ButtonLink
         class="vlc-agenda-items-section-header__link"
         {{on "click" @toggleShowModifiedOnly}}
       >
         {{if @showModifiedOnly (t "show-all") (t "show-changes")}}
       </Auk::ButtonLink>
-    </div>
-  </div>
-</div>
+    </Auk::Toolbar::Item>
+  </Auk::Toolbar::Group>
+</Auk::Toolbar>
 <div>
   {{#if (not @isLoadingNotaGroups)}}
     {{#each @notaGroups as |agendaitemGroup index|}}

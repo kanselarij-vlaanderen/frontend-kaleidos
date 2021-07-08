@@ -1,38 +1,34 @@
-{{#if (not isAddingCase)}}
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        <h1 class="auk-toolbar__title" data-test-cases-header-title>
-          {{t "cases"}}
-        </h1>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
-        {{#if currentSession.isEditor}}
-          <button type="button"
-            data-test-cases-header-add-case
-            class="auk-button auk-button--primary"
-            {{action "toggleAddingCase"}}
-          >
-            <span class="auk-button__content">
-              <div class="auk-icon auk-icon--default ">
-                <i class="ki ki-add"></i>
-              </div>
-              <div class="auk-button__label">
-                {{t "add-case"}}
-              </div>
-            </span>
-          </button>
-        {{/if}}
-      </div>
-    </div>
-  </div>
-{{else}}
-  <WebComponents::VlModal
-    @isOverlay={{true}}
-    @closeModal={{action "toggleAddingCase"}}
-    @title={{t "new-case"}} >
-    <Cases::NewCase @close={{action "closeAction"}} />
-  </WebComponents::VlModal>
-{{/if}}
+<Auk::Navbar @skin="gray-100">
+  {{#if (not isAddingCase)}}
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h1 data-test-cases-header-title class="auk-toolbar__title">
+            {{t "cases"}}
+          </h1>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{#if currentSession.isEditor}}
+            <Auk::Button
+              data-test-cases-header-add-case
+              @skin="primary"
+              @icon="add"
+              {{on "click" this.toggleAddingCase}}
+            >
+              {{t "add-case"}}
+            </Auk::Button>
+          {{/if}}
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  {{else}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @closeModal={{this.toggleAddingCase}}
+      @title={{t "new-case"}} >
+      <Cases::NewCase @close={{this.closeAction}} />
+    </WebComponents::VlModal>
+  {{/if}}
+</Auk::Navbar>

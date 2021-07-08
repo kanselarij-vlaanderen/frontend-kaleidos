@@ -11,20 +11,14 @@
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
-                <button type="button"
-                  data-test-new-subcase-clone-previous-subcase
-                  class="auk-button auk-button--secondary"
+                <Auk::Button
+                  @skin="secondary"
+                  @icon="copy-paste"
                   {{action "copyFullSubcase"}}
+                  data-test-new-subcase-clone-previous-subcase
                 >
-                  <span class="auk-button__content">
-                    <div class="auk-icon auk-icon--default">
-                      <i class="ki ki-copy-paste"></i>
-                    </div>
-                    <div class="auk-button__label">
-                      {{t "clone-previous-subcase"}}
-                    </div>
-                  </span>
-                </button>
+                  {{t "clone-previous-subcase"}}
+                </Auk::Button>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
           </Auk::Toolbar>
@@ -67,19 +61,14 @@
               selectedItems=selectedSubcaseName
               selectModel=(action "selectModel")
             }}
-            <button type="button"
-              class="auk-button auk-button--secondary auk-button--icon"
+            <Auk::Button
+              @skin="secondary"
+              @layout="icon-only"
+              @icon="pencil"
               {{action "toggleIsEditing"}}
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-pencil"></i>
-                </div>
-                <div class="auk-u-sr-only">
-                  {{t "edit"}}
-                </div>
-              </span>
-            </button>
+              {{t "edit"}}
+            </Auk::Button>
           {{else}}
             {{input
               type="text"
@@ -87,40 +76,33 @@
               class="auk-input auk-input--block"
               value=subcaseName
             }}
-            <button class="auk-button auk-button--secondary auk-button--icon"
-              type="button"
+            <Auk::Button
+              @skin="secondary"
+              @layout="icon-only"
+              @icon="cross"
               {{action "toggleIsEditing"}}
             >
-              <span class="auk-button__content">
-                <div class="auk-icon auk-icon--default">
-                  <i class="ki ki-cross"></i>
-                </div>
-                <div class="auk-u-sr-only">
-                  {{t "cancel"}}
-                </div>
-              </span>
-            </button>
+              {{t "cancel"}}
+            </Auk::Button>
           {{/if}}
         </div>
       </div>
     </div>
   </div>
   <div class="auk-modal__footer auk-modal__footer--bordered">
-    <div class="auk-toolbar-complex">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
-          <button type="button"
-            class="auk-button auk-button--borderless"
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
             {{action "closeModal"}}
           >
-            <span class="auk-button__content">
-              {{t "cancel"}}
-            </span>
-          </button>
-        </div>
-      </div>
-      <div class="auk-toolbar-complex__right">
-        <div class="auk-toolbar-complex__item">
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           {{web-components/vl-save-button
             text=(t "new-subcase")
             type="submit"
@@ -128,8 +110,8 @@
             loadingText=(t "creating-subcase")
             isLoading=isLoading
           }}
-        </div>
-      </div>
-    </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </div>
 </form>

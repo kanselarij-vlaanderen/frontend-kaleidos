@@ -17,28 +17,26 @@
   </div>
 </div>
 <div class="auk-modal__footer auk-modal__footer--bordered">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
-        <button type="button" class="auk-button auk-button--borderless"
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="borderless"
           {{action "cancel"}}
         >
-          <span class="auk-button__content">
-            {{t "cancel"}}
-          </span>
-        </button>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
-        <button type="button" class="auk-button auk-button--primary"
+          {{t "cancel"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="primary"
           {{action "assignToMeeting" subcase}}
         >
-          <span class="auk-button__content">
-            {{t "propose"}}
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
+          {{t "propose"}}
+        </Auk::Button>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>

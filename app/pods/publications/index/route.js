@@ -80,6 +80,7 @@ export default class PublicationsIndexRoute extends Route {
         'numac-numbers',
         'publication-subcase',
         'translation-subcase',
+        'translation-subcase.request-activities',
         'agenda-item-treatment'
       ].join(','),
     });

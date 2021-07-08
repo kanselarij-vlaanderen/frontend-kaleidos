@@ -4,13 +4,14 @@
   {{else}}
     {{#if (not @confidential)}}
       {{#if (not this.isEditing)}}
-        <span
-          class={{this.pillClass}}
+        <Auk::Pill
+          @skin={{this.pillSkin}}
+          class="auk-u-cursor-pointer"
           data-test-access-level-pill
           {{on "click" this.toggleEdit}}
         >
           {{this.accessLevelLabel}}
-        </span>
+        </Auk::Pill>
       {{else}}
         <div style="width:75%">
           <Utils::ModelSelector
@@ -22,56 +23,39 @@
             @selectedItems={{@accessLevel}}
             @selectModel={{this.changeAccessLevel}} />
         </div>
-        <button
-          type="button"
-          class="auk-button auk-button--borderless auk-button--icon"
-          data-test-access-level-pill-save
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="check"
           {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+          data-test-access-level-pill-save
         >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-check"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "more-options"}}
-            </div>
-          </span>
-        </button>
-        <button
-          type="button"
-          class="auk-button auk-button--borderless auk-button--icon"
-          data-test-access-level-pill-cancel
+          {{t "more-options"}}
+        </Auk::Button>
+        <Auk::Button
+          @skin="borderless"
+          @layout="icon-only"
+          @icon="cross"
           {{on "click" (perform this.cancelChangeAccessLevel)}}
-        >
-          <span class="auk-button__content">
-            <div class="auk-icon auk-icon--default">
-              <i class="ki ki-cross"></i>
-            </div>
-            <div class="auk-u-sr-only">
-              {{t "more-options"}}
-            </div>
-          </span>
-        </button>
+          data-test-access-level-pill-cancel
+        />
       {{/if}}
     {{/if}}
-    <button
-      type="button"
-      class="auk-button auk-button--muted-borderless auk-button--icon auk-toolbar-complex__item"
-      disabled={{not this.session.isEditor}}
-      {{on "click" (perform this.changeConfidentiality)}}
-    >
-      <span class="auk-button__content">
-        {{#if @confidential}}
-          <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
-            <p>
-              {{t "document-is-confidential"}}
-            </p>
-          </EmberTooltip>
-          <Auk::Icon @name="lock-closed" @skin="danger" />
-        {{else}}
-          <Auk::Icon @name="lock-open" />
-        {{/if}}
-      </span>
-    </button>
+    <div class="auk-u-position-relative auk-u-inline-block">
+      <Auk::Button
+        @skin={{if @confidential "danger-borderless" "muted-borderless"}}
+        @layout="icon-only"
+        @icon={{if @confidential "lock-closed" "lock-open"}}
+        @disabled={{not this.session.isEditor}}
+        {{on "click" (perform this.changeConfidentiality)}}
+      />
+      {{#if @confidential}}
+        <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
+          <p>
+            {{t "document-is-confidential"}}
+          </p>
+        </EmberTooltip>
+      {{/if}}
+    </div>
   {{/if}}
 </div>

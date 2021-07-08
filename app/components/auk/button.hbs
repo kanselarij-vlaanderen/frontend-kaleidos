@@ -7,9 +7,26 @@
   >
     <Auk::Loader />
   </button>
+{{else if @route}}
+  <LinkTo
+    type="button"
+    class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
+    disabled={{@disabled}}
+    @route={{@route}}
+    @models={{this.models}}
+    @preventDefault={{@preventDefault}}
+    @query={{@query}}
+    @bubbles={{@bubbles}}
+    ...attributes
+  >
+    <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
+      {{yield}}
+    </Auk::Button::InnerLayout>
+  </LinkTo>
 {{else if @href}}
   {{!-- TODO: document in writing what the difference is between a "Auk::Button" with @href and a "Auk::ButtonLink" with @href --}}
   <a
+    type="button"
     class="auk-button {{this.skin}} {{this.size}} {{this.layout}} {{this.disabled}} {{this.block}}"
     href={{@href}}
     disabled={{@disabled}}
