@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   // model returns publicationSubcase instead of pieces: single request
@@ -9,7 +10,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       include: [
         'file'
       ].join(','),
-      'page[size]': 100,
+      'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
 
     // multiple requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
