@@ -173,7 +173,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       usedPieces: proofRequest.attachments,
     };
     let activity;
-    if (proofRequest.stage === REQUEST_STAGES.INITIAL) {
+    if (proofRequest.stage === REQUEST_STAGES.INITIAL
+      || proofRequest.stage === REQUEST_STAGES.EXTRA) {
       activity = this.store.createRecord('proofing-activity', activityProperties);
     } else if (proofRequest.stage === REQUEST_STAGES.FINAL) {
       activity = this.store.createRecord('publication-activity', activityProperties);

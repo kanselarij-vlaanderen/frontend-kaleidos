@@ -33,6 +33,38 @@ Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden
       subject: subject,
       message: message,
     };
+  } else if (params.stage === 'extra') {
+    const publicationFlow = params.publicationFlow;
+    const identification = await publicationFlow.identification;
+    const idName = identification.idName;
+
+    const numacNumbers = await publicationFlow.numacNumbers;
+    const numacNumber = numacNumbers.firstObject?.idName ?? '?';
+
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const targetDate = publicationSubcase.targetEndDate;
+    const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '?';
+
+    const subject = `Verbeterde drukproef voor publicatie BS-werknr: ${numacNumber}, VO-dossier: ${idName}`;
+    const message = `Geachte,
+
+Graag gaan we over tot het publiceren van de verbeterde drukproef in bijlage voor het dossier:
+
+BS-werknummer: ${numacNumber}
+VO-dossier: ${idName}
+Korte Titel: ${publicationFlow.shortTitle}
+Lange Titel: ${publicationFlow.longTitle}
+
+De gewenste datum van publicatie is: ${targetDateString}
+
+Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaande email adres.
+
+Met vriendelijke groeten,`;
+
+    return {
+      subject: subject,
+      message: message,
+    };
   } else if (params.stage === 'final') {
     const publicationFlow = params.publicationFlow;
 
