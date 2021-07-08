@@ -8,7 +8,18 @@ export default Route.extend({
     } = params;
     // eslint-disable-next-line camelcase
     if (agenda_id) {
-      return this.store.findRecord('agenda', agenda_id);
+      const agenda = this.store.findRecord('agenda', agenda_id);
+      this.agenda = agenda;
+      return agenda;
     }
+  },
+
+  async afterModel() {
+    await this.agenda.get('createdFor');
+  },
+
+  setupController(controller) {
+    this._super(...arguments);
+    controller.set('meeting', this.agenda.get('createdFor'));
   },
 });

@@ -7,6 +7,7 @@ export default Controller.extend({
   titleTranslationKey: 'decisions-of-kind',
   titlePrintKey: 'decisions-pdf-name',
   routeModel: 'print-overviews.decisions',
+  meeting: null,
   intl: inject(),
 
   title: computed('model.createdFor', 'titleTranslationKey', async function() {
@@ -26,12 +27,4 @@ export default Controller.extend({
       kind: kindLabel,
     };
   }),
-
-  actions: {
-    async navigateBackToAgenda() {
-      const currentSessionId = await this.get('model.createdFor.id');
-      const selectedAgendaid = await this.get('model.id');
-      this.transitionToRoute('agenda.agendaitems', currentSessionId, selectedAgendaid);
-    },
-  },
 });

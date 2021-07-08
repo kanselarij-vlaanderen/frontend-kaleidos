@@ -3,7 +3,7 @@
   title=(await title)
   model=(await model)
   routeModelPrefix=routeModel
-  navigateBackToAgenda=(action "navigateBackToAgenda")
+  modelsForHierarchicalBack=(array meeting.id model.id)
 }}
 <div class="auk-scroll-wrapper__body">
   {{outlet}}

@@ -8,6 +8,7 @@ export default Component.extend({
   currentSession: inject(),
   title: null,
   routeModelPrefix: null,
+  modelsForHierarchicalBack: null,
 
   shouldShowPrintButton: computed('routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes(`${this.routeModelPrefix}.overview`);
@@ -24,10 +25,6 @@ export default Component.extend({
   actions: {
     print() {
       window.print();
-    },
-
-    navigateBackToAgenda() {
-      this.navigateBackToAgenda();
     },
   },
 });

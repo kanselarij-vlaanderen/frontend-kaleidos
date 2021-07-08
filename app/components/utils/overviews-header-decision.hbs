@@ -7,7 +7,7 @@
             <h4 class="auk-toolbar-complex__title" data-test-overviews-header-decision-title>{{await title}}</h4>
           </div>
           <Auk::Tabs @reversed={{true}}>
-            <Auk::Tab {{action "navigateBackToAgenda"}} @isHierarchicalBack={{true}}/>
+            <Auk::Tab @models={{modelsForHierarchicalBack}} @route={{"agenda.agendaitems"}} @isHierarchicalBack={{true}}/>
             {{#if currentSession.isEditor}}
               <Auk::Tab
                 @route={{routeModelAgendaitems}}
