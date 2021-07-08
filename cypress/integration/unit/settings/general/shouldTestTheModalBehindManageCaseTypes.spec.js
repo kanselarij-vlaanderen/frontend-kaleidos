@@ -4,7 +4,7 @@
 import settings from '../../../../selectors/settings.selectors';
 import utils from '../../../../selectors/utils.selectors';
 
-context('Manage ISE codes tests', () => {
+context('Manage case types tests', () => {
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
@@ -15,7 +15,7 @@ context('Manage ISE codes tests', () => {
     cy.url().should('include', 'instellingen/overzicht');
     cy.get(settings.overview.manageCaseTypes).click();
     cy.get(utils.vlModal.dialogWindow).should('be.visible')
-      .should('contain', 'Beheer ISE-codes');
+      .should('contain', 'Dossier-types beheer');
   });
 
   it('Should open the model behind manage case types and close it', () => {

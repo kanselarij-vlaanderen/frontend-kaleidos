@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach, afterEach, Cypress */
+/* global context, it, cy,beforeEach, afterEach, Cypress */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -10,11 +10,6 @@ function currentTimestamp() {
 }
 
 context('Tests of pieces on agendaitems', () => {
-  before(() => {
-    cy.server();
-    cy.resetCache();
-  });
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');

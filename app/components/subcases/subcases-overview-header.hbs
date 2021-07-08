@@ -22,10 +22,10 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
+            data-test-subcase-overview-header-create-subcase
             @skin="primary"
             @icon="add"
             {{on "click" this.toggleIsAddingSubcase}}
-            data-test-subcase-overview-header-create-subcase
           >
             {{t "create-subcase"}}
           </Auk::Button>

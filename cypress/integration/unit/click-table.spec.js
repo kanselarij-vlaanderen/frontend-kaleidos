@@ -1,14 +1,10 @@
-/* global context, before, it, cy,beforeEach, afterEach */
+/* global context, it, cy,beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Table Row Click tests', () => {
-  before(() => {
-    cy.resetCache();
-  });
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');
