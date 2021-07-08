@@ -125,17 +125,18 @@
                 {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
                       to go back and forth between search results for the different types while keeping the
                       page-number. --}}
+                {{!-- We aliased 'page' to 'pagina', so we have to use the alias here to avoid ember error --}}
                 <Auk::Tab
                   @route="search.agenda-items"
                   @current-when="search.agenda-items"
-                  @query={{hash page=0}}
+                  @query={{hash pagina=0}}
                 >
                   {{t "agendaitems"}}
                 </Auk::Tab>
                 <Auk::Tab
                   @route="search.cases"
                   @current-when="search.cases"
-                  @query={{hash page=0}}
+                  @query={{hash pagina=0}}
                 >
                   {{t "cases"}}
                 </Auk::Tab>
