@@ -53,9 +53,9 @@
   </div>
 </div>
 <div class="auk-modal__footer auk-modal__footer--bordered">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <Auk::Button
           @skin="borderless"
           {{action "closeModal"}}
@@ -63,17 +63,17 @@
         >
           {{t "cancel"}}
         </Auk::Button>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         {{web-components/vl-save-button
           text=(t "save")
           isLoading=isLoading
           data-test-edit-mandatee-save=true
           saveAction=(action "triggerPopUp" mandateeToEdit)
         }}
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>

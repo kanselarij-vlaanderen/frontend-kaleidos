@@ -19,9 +19,9 @@
       {{/if}}
 
       <div class="auk-u-mb-8">
-        <div class="auk-toolbar-complex">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <h2 class="auk-h3">
                 {{t "history"}}
                 {{#if (or from to)}}
@@ -32,10 +32,10 @@
                   )
                 {{/if}}
               </h2>
-            </div>
-          </div>
-          <div class="auk-toolbar-complex__right">
-            <div class="auk-toolbar-complex__item" data-test-route-agendas-overview-filter-container data-children-count="1">
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item data-test-route-agendas-overview-filter-container data-children-count="1">
               {{input
                 type="text"
                 id=id
@@ -51,9 +51,9 @@
                 data-test-route-agendas-overview-filter-button
                 {{on "click" (fn (action "setDateFilter") dateFilter)}}
               />
-            </div>
-          </div>
-        </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
         <div class="auk-u-mb-8">
           {{#if (await model)}}
             {{#data-table

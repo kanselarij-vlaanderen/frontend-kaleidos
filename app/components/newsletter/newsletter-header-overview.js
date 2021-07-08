@@ -5,8 +5,6 @@ import moment from 'moment';
 import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
 export default Component.extend({
-  classNames: ['auk-navbar', 'auk-navbar--bordered-bottom', 'auk-navbar--gray-100', 'auk-navbar--auto'],
-
   intl: service(),
   store: service(),
   session: service(),
