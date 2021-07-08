@@ -54,6 +54,11 @@ const selectors = {
     message: '.auk-empty-state__content',
   },
 
+  tab: {
+    active: '.auk-tabs__tab--active',
+    activeHref: '.auk-tabs__tab--active > *',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',
