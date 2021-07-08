@@ -31,12 +31,15 @@
           </EmberPopover>
         </Auk::Toolbar::Item>
 
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="secondary" @icon="add">
-            {{t "upload-documents"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
+        {{#if this.canUploadPiece}}
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="secondary" @icon="add"
+              {{on "click" this.openPieceUploadModal}}>
+              {{t "upload-documents"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        {{/if}}
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
 
@@ -98,7 +101,7 @@
                 </p>
               </td>
               <td class="auk-u-text-align--center">
-                {{#if TODO}} {{!-- todo --}}
+                {{#if piece.publicationSubcaseCorrectionFor}}
                   <Auk::Icon @name="check" @skin="success-dark" />
                 {{else}}
                   {{t "dash"}}
@@ -150,6 +153,13 @@
     {{/if}}
   </div>
 </div>
+
+{{#if this.isPieceUploadModalOpen}}
+  <Publications::Publication::Proofs::ProofUploadModal
+    @publicationFlow={{this.publicationFlow}}
+    @onSave={{this.saveCorrectionDocument}}
+    @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
 
 {{#if this.isProofRequestModalOpen}}
   <Publications::Publication::Proofs::ProofRequestModal

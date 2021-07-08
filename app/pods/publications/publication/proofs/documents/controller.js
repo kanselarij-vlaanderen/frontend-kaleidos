@@ -1,6 +1,7 @@
 /* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
@@ -21,6 +22,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       as: 'volgorde',
     },
   }];
+
+  @service currentSession;
+
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   /** @type {string} key name, prepended with minus if descending */
   qpSortingString;
@@ -30,6 +34,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked selectedPieces = [];
   @tracked sortingString = undefined;
   @tracked isProofRequestModalOpen = false;
+  @tracked isPieceUploadModalOpen = false;
   @tracked proofRequestStage;
 
   initSort() {
@@ -43,6 +48,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   get isRequestingDisabled() {
     return this.selectedPieces.length === 0;
+  }
+
+  get canUploadPiece() {
+    return this.currentSession.isOvrb;
   }
 
   @action
@@ -69,17 +78,15 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
     this.sort(sortingString);
-    // sort is not tracked by ember
-    this.model.arrayContentDidChange();
   }
 
   sort(sortingString) {
     let property = 'created';
-    let isDescending = true;
+    let isDescending = false;
     if (sortingString) {
       isDescending = sortingString.startsWith('-');
       const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey] || property;
+      property = COLUMN_MAP[sortKey] ?? property;
     }
 
     // this.model.sortBy(property) does not work properly
@@ -87,6 +94,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     if (isDescending) {
       this.model.reverse();
     }
+
+    // sort is not tracked by ember
+    this.model.arrayContentDidChange();
   }
 
   @action
@@ -109,6 +119,28 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
     this.selectedPieces = [];
     this.transitionToRoute('publications.publication.proofs.requests');
+  }
+
+  @action
+  openPieceUploadModal() {
+    this.isPieceUploadModalOpen = true;
+  }
+
+  @action
+  closePieceUploadModal() {
+    this.isPieceUploadModalOpen = false;
+  }
+
+  @action
+  async saveCorrectionDocument(proofDocument) {
+    let piece;
+    try {
+      piece = await this.performSaveCorrectionDocument(proofDocument);
+    } finally {
+      this.isPieceUploadModalOpen = false;
+    }
+    this.model.pushObject(piece);
+    this.sort(this.sortingString);
   }
 
   async performSaveProofRequest(proofRequest) {
@@ -170,5 +202,27 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     saves.push(emailSave);
 
     await Promise.all(saves);
+  }
+
+  async performSaveCorrectionDocument(proofDocument) {
+    const now = new Date();
+
+    const documentContainer = this.store.createRecord('document-container', {
+      created: now,
+    });
+    await documentContainer.save();
+
+    const piece = this.store.createRecord('piece', {
+      created: now,
+      modified: now,
+      file: proofDocument.file,
+      confidential: false,
+      name: proofDocument.name,
+      documentContainer: documentContainer,
+      publicationSubcaseCorrectionFor: this.publicationSubcase,
+    });
+    await piece.save();
+
+    return piece;
   }
 }

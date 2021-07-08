@@ -12,10 +12,10 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       'page[size]': 100,
     };
 
-    // 3 requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
+    // multiple requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
     // and made an extra request per piece
-    const sourceDocumentsRequest = this.store.query('piece', {
-      'filter[publication-subcase][:id:]': publicationSubcaseId,
+    const sourcePiecesRequest = this.store.query('piece', {
+      'filter[publication-subcase-source-for][:id:]': publicationSubcaseId,
       ...queryProperties,
     });
 
@@ -29,8 +29,16 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ...queryProperties,
     });
 
-    let pieces = await Promise.all([sourceDocumentsRequest, usedPiecesRequest, generatedPiecesRequest]);
-    pieces = pieces.flatMap((pieces) => pieces.toArray());
+    const correctionDocumentsRequest = this.store.query('piece', {
+      'filter[publication-subcase-correction-for][:id:]': publicationSubcaseId,
+      include: [
+        'file',
+        'publication-subcase-correction-for'
+      ].join(','),
+    });
+
+    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest, correctionDocumentsRequest]);
+    pieces = pieces.flatMap((piece) => piece.toArray());
 
     return pieces;
   }
@@ -38,7 +46,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async afterModel() {
     // publicationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
     this.publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = this.modelFor('publications.publication.proofs');
+    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
 
   async setupController(controller) {
@@ -48,6 +56,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
     controller.initSort();
-    controller.isOpenProofRequestModal = false;
+    controller.isPieceUploadModalOpen = false;
+    controller.isProofRequestModalOpen = false;
   }
 }
