@@ -1,0 +1,18 @@
+<Auk::List @isBordered="true" class="auk-list--view">
+  {{#each @pieces as |piece|}}
+    <Auk::List::Item @skin="gray-100">
+      <div class="auk-u-ml-2">
+        <Auk::Icon @name="document" @skin="muted-dark"/>
+      </div>
+      <div class="auk-u-mx-2">
+        <span class="auk-u-text-bold">{{piece.name}}</span>
+        <div class="auk-u-muted auk-u-text-small">
+          {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
+        </div>
+      </div>
+      <Auk::Button
+        @skin="borderless" @layout="icon-only" @icon="book"
+        @href={{piece.viewDocumentURL}} target="_blank" />
+    </Auk::List::Item>
+  {{/each}}
+</Auk::List>
