@@ -109,6 +109,11 @@ const selectors = {
     dataTable: '[data-test-route-newsletter-data-table]',
   },
 
+  // newsletter/nota-updates/template
+  notaUpdates: {
+    dataTable: '[data-test-route-newsletter-nota-updates-data-table]',
+  },
+
   /**
     ROUTE NEWSLETTERS
   */

@@ -3,6 +3,7 @@
     <div>
       {{!-- Indien er geen resultaten gevonden worden, komt dit doordat er geen documenten als type 'nota' bij agendapunten staan --}}
         <DataTable
+          data-test-route-newsletter-nota-updates-data-table={{true}}
           @content={{this.model}}
           @sizeOptions={{null}}
           @noDataMessage={{t "no-results-found"}}
