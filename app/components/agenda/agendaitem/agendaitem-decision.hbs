@@ -2,16 +2,12 @@
   <div data-test-agendaitem-decision-container class="auk-u-mb-4 auk-content">
     <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--justify-end">
       {{#if this.currentSession.isEditor}}
-        <a
-          data-test-agendaitem-decision-edit
-          href="javascript://"
-          class="auk-button-link"
+        <Auk::ButtonLink
           {{on "click" this.openEditingWindow}}
+          data-test-agendaitem-decision-edit
         >
-          <span class="auk-button__content">
-            {{t "edit"}}
-          </span>
-        </a>
+          {{t "edit"}}
+        </Auk::ButtonLink>
         {{#if @allowDelete}}
           <div class="auk-u-position-relative auk-u-inline-block">
             <Auk::Button

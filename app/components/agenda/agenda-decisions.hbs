@@ -51,13 +51,9 @@
                     {{else if session.isEditor}}
                       <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end">
                         {{#if allowEditing}}
-                          <a href="" class="auk-button-link"
-                            {{action "toggleIsEditing" treatment}}
-                          >
-                            <span class="auk-button__content">
-                              {{t "edit"}}
-                            </span>
-                          </a>
+                          <Auk::ButtonLink {{action "toggleIsEditing" treatment}}>
+                            {{t "edit"}}
+                          </Auk::ButtonLink>
                         {{/if}}
                       </div>
                     {{/if}}

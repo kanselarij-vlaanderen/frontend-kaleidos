@@ -12,16 +12,9 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{!-- TODO: replace by link-styled button once css available --}}
-        <a
-          href="javascript://"
-          class="auk-button-link"
-          {{on "click" this.cancelEdit}}
-        >
-          <span class="auk-button__content">
-            {{t "cancel"}}
-          </span>
-        </a>
+        <Auk::ButtonLink {{on "click" this.cancelEdit}}>
+          {{t "cancel"}}
+        </Auk::ButtonLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         <WebComponents::VlSaveButton
