@@ -44,14 +44,18 @@ export default class CompareAgendaList extends Component {
     if (this.agendaOne && this.agendaTwo) {
       this.isLoadingComparison = true;
 
-      const sortedAgendas = await this.sessionService.currentSession.sortedAgendas;
+      const meeting = this.sessionService.currentSession;
+      const sortedAgendas = await this.store.query('agenda', {
+        'filter[created-for][:id:]': meeting.id,
+        sort: '-serialnumber',
+      });
       const agendaOneIndex = sortedAgendas.indexOf(this.agendaOne);
       const agendaTwoIndex = sortedAgendas.indexOf(this.agendaTwo);
 
       if (agendaOneIndex < agendaTwoIndex) {
-        await this.agendaService.agendaWithChanges(this.agendaOne.get('id'), this.agendaTwo.get('id'));
+        await this.agendaService.agendaWithChanges(this.agendaOne.id, this.agendaTwo.id);
       } else {
-        await this.agendaService.agendaWithChanges(this.agendaTwo.get('id'), this.agendaOne.get('id'));
+        await this.agendaService.agendaWithChanges(this.agendaTwo.id, this.agendaOne.id);
       }
 
       this.combinedAgendaitems = await this.createComparisonList(this.agendaitemsLeft, this.agendaitemsRight);

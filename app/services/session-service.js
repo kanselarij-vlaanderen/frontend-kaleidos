@@ -56,18 +56,21 @@ export default Service.extend({
     return [];
   }),
 
-  async findPreviousAgendaOfSession(session, agenda) {
-    const agendas = await session.get('sortedAgendas');
+  async findPreviousAgendaOfSession(meeting, agenda) {
+    const agendas = await this.store.query('agenda', {
+      'filter[created-for][:id:]': meeting.id,
+      sort: '-serialnumber',
+    });
+
+    let previousAgenda = null;
     if (agendas) {
       const foundIndex = agendas.indexOf(agenda);
-      const agendasLength = agendas.get('length');
-      if (foundIndex + 1 !== agendasLength) {
-        const previousAgenda = agendas.objectAt(foundIndex + 1);
-        return previousAgenda;
+      if (foundIndex < agendas.length) {
+        previousAgenda = agendas.objectAt(foundIndex + 1);
       }
-      return null;
     }
-    return null;
+
+    return previousAgenda;
   },
 
   async deleteSession(session) {
