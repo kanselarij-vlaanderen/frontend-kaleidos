@@ -23,7 +23,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     });
 
     const generatedPiecesQuery = this.store.query('piece', {
-      'filter[translation-activity-generated-by][:id:]': this.translationSubcase.id,
+      'filter[translation-activity-generated-by][subcase][:id:]': this.translationSubcase.id,
       ...queryProperties,
     });
 
