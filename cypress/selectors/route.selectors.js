@@ -60,6 +60,11 @@ const selectors = {
     confidentialityCheckBox: '[data-test-cases---subcase-overview-confidentiality-checkbox] input',
   },
 
+  subcaseDocuments: {
+    batchEdit: '[data-test-route-cases---subcase-documents-batch-edit]',
+    add: '[data-test-route-cases---subcase-documents-add]',
+  },
+
   /**
     ROUTE SEARCH
   */

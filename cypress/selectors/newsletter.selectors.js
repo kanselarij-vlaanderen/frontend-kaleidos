@@ -37,6 +37,14 @@ const selectors = {
   // component table-row
   tableRow: {
     newsletterRow: '[data-test-table-row-newsletter-row]',
+    newsletterTitle: '[data-test-table-row-newsletter-row-title]',
+    inNewsletterCheckbox: '[data-test-table-row-newsletter-row-checkbox-in-newsletter]',
+  },
+
+  // component button-toolbar
+  buttonToolbar: {
+    edit: '[data-test-newsletter-table-button-toolbar-edit]',
+    linkToAgendaitem: '[data-test-newsletter-table-button-toolbar-link-to-agendaitem]',
   },
 
   // component item-content

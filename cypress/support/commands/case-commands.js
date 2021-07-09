@@ -51,18 +51,19 @@ function createCase(confidential, shortTitle) {
   });
 
   let caseId;
-
+  cy.log('/createCase');
   cy.wait('@createNewCase', {
     timeout: 20000,
   })
     .then((res) => {
       caseId = res.responseBody.data.id;
-      cy.visit(`/dossiers/${caseId}/deeldossiers`);
+      // cy.visit(`/dossiers/${caseId}/deeldossiers`);
     }) // TODO after a successfull post, the get sometimes fails
     .then(() => new Cypress.Promise((resolve) => {
-      resolve(caseId);
+      resolve({
+        caseId,
+      });
     }));
-  cy.log('/createCase');
 }
 
 /**
@@ -164,7 +165,7 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   });
 
   let subcaseId;
-
+  cy.log('/addSubcase');
   cy.wait('@addSubcase-createNewSubcase', {
     timeout: 20000,
   })
@@ -172,9 +173,10 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
       subcaseId = res.responseBody.data.id;
     })
     .then(() => new Cypress.Promise((resolve) => {
-      resolve(subcaseId);
+      resolve({
+        subcaseId,
+      });
     }));
-  cy.log('/addSubcase');
 }
 
 /**

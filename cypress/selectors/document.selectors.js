@@ -34,6 +34,14 @@ const selectors = {
     searchButton: '[data-test-add-existing-piece-search-button]',
   },
 
+  // access-level-pill (currently only used in 3 document related components)
+  accessLevelPill: {
+    // Clicking the pill in this component toggles edit mode
+    pill: '[data-test-access-level-pill]',
+    save: '[data-test-access-level-pill-save]',
+    cancel: '[data-test-access-level-pill-cancel]',
+  },
+
   // linked-documents
   linkedDocuments: {
     add: '[data-test-linked-documents-add]',

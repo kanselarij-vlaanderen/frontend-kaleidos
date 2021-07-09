@@ -150,7 +150,7 @@ context('Agenda tests', () => {
       .should('be.visible')
       .click();
     // TODO replace with confidentiality selector
-    cy.get(utils.vlToggle).should('exist')
+    cy.get(utils.vlToggle.label).should('exist')
       .click();
 
     cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
