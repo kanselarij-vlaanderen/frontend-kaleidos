@@ -1,0 +1,13 @@
+{{#unless this.loadData.isRunning}}
+  <span class="auk-u-ml">
+    {{#if @publicationSubcase.endDate}}
+      <Auk::StatusPill @status="done"/>
+    {{else}}
+      {{#if (gt this.requests.length 0)}}
+        <Auk::StatusPill/>
+      {{else}}
+        <Auk::StatusPill @status="not-started"/>
+      {{/if}}
+    {{/if}}
+  </span>
+{{/unless}}
