@@ -10,7 +10,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     const queryProperties = {
       include: [
         'file',
-        'publication-subcase'
+        'publication-subcase-source-for'
       ].join(','),
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
