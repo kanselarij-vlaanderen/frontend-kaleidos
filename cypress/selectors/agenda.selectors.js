@@ -43,6 +43,7 @@ const selectors = {
 
   // agenda-detail/sidebar-item
   agendaDetailSidebarItem: {
+    shortTitle: '[data-test-agenda-detail-sidebar-item-short-title]',
     confidential: '[data-test-agenda-detail-sidebar-item-confidential]',
     status: '[data-test-agenda-detail-sidebar-item-status]',
     // Test tag is not possible, CSS is added conditionally
@@ -56,7 +57,8 @@ const selectors = {
 
   // agenda-overview-item
   agendaOverviewItem: {
-    subitem: '[data-test-agenda-overview-item-sub-item]',
+    subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
+    title: '[data-test-agenda-overview-item-title]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
     confidentialityIcon: '[data-test-agenda-overview-item-confidentiality-locked]',
     status: '[data-test-agenda-overview-item-status]',
@@ -108,6 +110,12 @@ const selectors = {
     title: ['data-test-agenda-header-title'],
   },
 
+  // agenda-side-nav
+  agendaSideNav: {
+    agenda: '[data-test-agenda-side-nav-agenda]',
+    agendaName: '[data-test-agenda-side-nav-agenda-name]',
+  },
+
   // compare-agenda-list
   compareAgenda: {
     showChanges: '[data-test-compare-show-changes]',
@@ -121,6 +129,10 @@ const selectors = {
 
   // agendaitem-titles-view
   agendaitemTitlesView: {
+    title: '[data-test-agendaitem-titles-title]',
+    shortTitle: '[data-test-agendaitem-titles-short-title]',
+    explanation: '[data-test-agendaitem-titles-explanation]',
+    confidential: '[data-test-agendaitem-titles-confidential]',
     linkToSubcase: '[data-test-agendaitem-titles-link-to-subcase]',
     edit: '[data-test-agendaitem-titles-edit]',
   },
@@ -154,11 +166,18 @@ const selectors = {
 
   // new-session
   newSession: {
+    meetingNumber: '[data-test-new-session-meeting-number]',
     numberRep: {
       edit: '[data-test-new-session-number-representation-edit]',
       input: '[data-test-new-session-number-representation-input]',
       save: '[data-test-new-session-number-representation-save]',
     },
+  },
+
+  // edit-session
+  editSession: {
+    meetingNumber: '[data-test-edit-session-meeting-number]',
+    numberRep: '[data-test-edit-session-number-representation]',
   },
 };
 export default selectors;

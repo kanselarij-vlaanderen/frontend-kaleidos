@@ -51,6 +51,11 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
+  // agenda/agendaitems/agendaitem/index/template.hbs
+  agendaitemIndex: {
+    confidential: '[data-test-route-agenda---agendaitem-index-confidential]',
+  },
+
   /**
     ROUTE CASES
   */
@@ -71,6 +76,7 @@ const selectors = {
 
   // search/template
   search: {
+    title: '[data-test-route-search-title]',
     input: '[data-test-route-search-input]',
     trigger: '[data-test-route-search-trigger]',
     // TODO unused selector:
@@ -93,6 +99,25 @@ const selectors = {
   // newsletters/template
   newsletters: {
     dataTable: '[data-test-route-newsletters-data-table]',
+  },
+
+  /**
+    ROUTE PUBLICATIONS
+  */
+
+  // publications/template
+  publications: {
+    title: '[data-test-route-publications-title]',
+    // TODO: there are more selectors in this route
+  },
+
+  /**
+    ROUTE ACCOUNTLESS-USERS
+  */
+
+  // accountless-users/template
+  accountlessUsers: {
+    title: '[data-test-route-accountless-users-title]',
   },
 
 };

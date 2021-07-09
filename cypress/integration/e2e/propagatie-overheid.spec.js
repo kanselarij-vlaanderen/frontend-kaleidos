@@ -15,7 +15,6 @@ function currentTimestamp() {
 
 context('Propagation to other graphs', () => {
   before(() => {
-    cy.resetCache();
     cy.server();
   });
   const agendaDate = Cypress.moment().add(1, 'weeks')
