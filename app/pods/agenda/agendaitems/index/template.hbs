@@ -8,19 +8,23 @@
       @onSearch={{this.searchAgendaitems}}
     />
     <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
-      <Agenda::AgendaOverview
-        @notaGroups={{this.notaGroups}}
-        @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
-        @announcements={{this.model.announcements}}
-        @newItems={{this.model.newItems}}
-        @currentAgenda={{this.agenda}}
-        @previousAgenda={{this.previousAgenda}}
-        @onReorderAgendaitems={{perform this.assignNewPriorities}}
-        @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
-        @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
-      />
-      {{#if this.assignNewPriorities.isRunning}}
-        <WebComponents::LoadingOverlay />
+      {{#if this.loadDocuments.isRunning}}
+        <Auk::Loader @message={{this.documentLoadingMessage}} />
+      {{else}}
+        <Agenda::AgendaOverview
+          @notaGroups={{this.notaGroups}}
+          @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
+          @announcements={{this.model.announcements}}
+          @newItems={{this.model.newItems}}
+          @currentAgenda={{this.agenda}}
+          @previousAgenda={{this.previousAgenda}}
+          @onReorderAgendaitems={{perform this.assignNewPriorities}}
+          @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
+          @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+        />
+        {{#if this.assignNewPriorities.isRunning}}
+          <WebComponents::LoadingOverlay />
+        {{/if}}
       {{/if}}
     </div>
   </div>

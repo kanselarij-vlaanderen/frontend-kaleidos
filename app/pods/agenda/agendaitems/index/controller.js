@@ -13,7 +13,10 @@ import {
   setAgendaitemsPriority,
   AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { animationFrame } from 'ember-concurrency';
+import {
+  all,
+  animationFrame
+} from 'ember-concurrency';
 import { guidFor } from '@ember/object/internals';
 
 export default class AgendaitemsAgendaController extends Controller {
@@ -34,6 +37,8 @@ export default class AgendaitemsAgendaController extends Controller {
   @tracked meeting;
   @tracked agenda;
   @tracked previousAgenda;
+  @tracked documentLoadCount = 0;
+  @tracked totalCount = 0;
 
   @controller('agenda.agendaitems') agendaitemsController;
 
@@ -43,6 +48,10 @@ export default class AgendaitemsAgendaController extends Controller {
 
   get element() {
     return document.getElementById(this.id);
+  }
+
+  get documentLoadingMessage() {
+    return `Documenten van ${this.documentLoadCount}/${this.totalCount} agendapunten geladen`;
   }
 
   @action
@@ -74,6 +83,30 @@ export default class AgendaitemsAgendaController extends Controller {
       }
     }
     return agendaitemGroups;
+  }
+
+  @task
+  *loadDocuments() {
+    const agendaitems = [...this.model.notas, ...this.model.announcements];
+    this.documentLoadCount = 0;
+    this.totalCount = agendaitems.length;
+    yield all(agendaitems.map(async(agendaitem) => {
+      await this.store.findRecord('agendaitem', agendaitem.id, {
+        reload: true, // without forced reload the async operation will resolve too early
+        include: [
+          'pieces',
+          'pieces.document-container'
+        ].join(','),
+        'fields[pieces]': [
+          'name', // Display and sorting pieces per agendaitem
+          'document-container', // Deduplicating multiple pieces per container
+          'created', // Fallback sorting pieces per agendaitem
+          'confidential' // Display lock icon on document-badge
+        ].join(','),
+        'fields[document-containers]': '',
+      });
+      this.documentLoadCount++;
+    }));
   }
 
   @action
