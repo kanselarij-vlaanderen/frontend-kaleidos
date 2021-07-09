@@ -1,28 +1,17 @@
-import DS from 'ember-data';
-import { computed } from '@ember/object';
+import Model, {
+  attr, hasMany, belongsTo
+} from '@ember-data/model';
 
-const {
-  Model, attr, hasMany, belongsTo,
-} = DS;
+export default class Person extends Model {
+  @attr('string') firstName;
+  @attr('string') lastName;
+  @attr('string') alternativeName;
 
-export default Model.extend({
-  lastName: attr('string'),
-  alternativeName: attr('string'),
-  firstName: attr('string'),
+  @belongsTo('signature') signature;
+  @belongsTo('contact-person') contactPerson;
+  @hasMany('mandatee') mandatees;
 
-  mandatees: hasMany('mandatee', {
-    inverse: null,
-  }),
-  mandatee: belongsTo('mandatee', {
-    inverse: null,
-  }),
-  signature: belongsTo('signature'),
-
-  fullName: computed('firstName', 'lastName', function() {
-    return [this.firstName, this.lastName].filter((str) => !!str).join(' ');
-  }),
-
-  nameToDisplay: computed('mandatee', 'alternativeName', 'firstName', 'lastName', function() {
+  get nameToDisplay() {
     const {
       alternativeName, firstName, lastName,
     } = this;
@@ -32,5 +21,5 @@ export default Model.extend({
       return `${firstName} ${lastName}`;
     }
     return '';
-  }),
-});
+  }
+}
