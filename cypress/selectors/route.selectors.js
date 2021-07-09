@@ -89,6 +89,17 @@ const selectors = {
     datepickerButton: '[data-test-route-search-datepicker-button]',
   },
 
+  // search/agendaitems
+  searchAgendaitems: {
+    dataTable: '[data-test-route-search-agendaitems-data-table]',
+  },
+
+  // search/cases
+  searchCases: {
+    toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
+    dataTable: '[data-test-route-search-cases-data-table]',
+  },
+
   /**
     ROUTE NEWSLETTER
   */

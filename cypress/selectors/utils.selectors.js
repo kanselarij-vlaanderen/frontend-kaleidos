@@ -34,6 +34,11 @@ const selectors = {
     close: '[data-test-changes-alert-close]',
   },
 
+  // number-pagination
+  numberPagination: {
+    container: '[data-test-number-pagination-container]',
+  },
+
   /** Section VL-components **/
 
   // vl-checkbox
