@@ -34,6 +34,7 @@
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
             <Auk::Input
+              data-test-new-session-meeting-number={{true}}
               @type="number"
               @value={{meetingNumber}}
               id="subjectTransld"
