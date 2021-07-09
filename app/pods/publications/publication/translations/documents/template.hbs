@@ -67,9 +67,7 @@
               </td>
               <td class="auk-u-text-align--center">
                 {{#if piece.publicationSubcase}}
-                  <div class="auk-icon auk-icon--default auk-icon--success-dark">
-                    <i class="ki ki-check"></i>
-                  </div>
+                  <Auk::Icon @name="check" @skin="success-dark" />
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
