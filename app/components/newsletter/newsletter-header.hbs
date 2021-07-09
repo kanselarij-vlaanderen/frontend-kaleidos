@@ -1,11 +1,11 @@
 <Auk::Navbar @skin="gray-100">
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <h1 class="auk-toolbar__title" data-test-newsletter-header-title>
           {{t "newsletter"}}
         </h1>
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>

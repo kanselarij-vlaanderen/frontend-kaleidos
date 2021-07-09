@@ -1,10 +1,10 @@
 <Auk::Navbar @skin="gray-200">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left" data-sidebar-expanded-only="">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left" data-sidebar-expanded-only="">
       <h2 class="auk-toolbar-complex__title--small">{{t "nav-title"}}</h2>
-    </div>
-    <div class="auk-toolbar-complex__{{if agendaMenuCollapsed "center" "right"}}">
-      <div class="auk-toolbar-complex__item {{if agendaMenuCollapsed "auk-o-flex auk-o-flex--horizontal-center"}}">
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position={{if agendaMenuCollapsed "center" "right"}}>
+      <Auk::Toolbar::Item class={{if agendaMenuCollapsed "auk-o-flex auk-o-flex--horizontal-center"}}>
         <Auk::Button
           @skin="borderless"
           @layout="icon-only"
@@ -13,19 +13,19 @@
         >
           {{t "toggle"}}
         </Auk::Button>
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>
 <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
   {{#each (await agendas) as |agenda|}}
-    <li class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">
+    <li data-test-agenda-side-nav-agenda class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">
       <a
         href="#"
         {{action "setCurrentAgenda" agenda}}
       >
         <div class="auk-sidebar__label">
-          <span data-sidebar-expanded-only="">{{await agenda.agendaName}}</span>
+          <span data-test-agenda-side-nav-agenda-name data-sidebar-expanded-only="">{{await agenda.agendaName}}</span>
           <span data-sidebar-collapsed-only="">
             {{#if (not agenda.isDesignAgenda)}}
               {{agenda.name}}

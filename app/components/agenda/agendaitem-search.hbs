@@ -1,7 +1,7 @@
 <Auk::Navbar @skin="gray-100" class="vlc-hide-on-print">
-  <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item vlc-u-box-model-maximize-width">
+  <Auk::Toolbar @auto={{true}}>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item class="vlc-u-box-model-maximize-width">
         <div class="auk-form-group">
           <Auk::Input
             @icon="search"
@@ -14,10 +14,10 @@
             {{on "input" this.debouncedSearch}}
           />
         </div>
-      </div>
+      </Auk::Toolbar::Item>
       {{#if this.debouncedSearchTask.isRunning}}
         <div class="auk-loader" role="alert" aria-busy="true"></div>
       {{/if}}
-    </div>
-  </div>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>

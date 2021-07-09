@@ -1,21 +1,19 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
+    {{!-- TODO correct positioning according to design --}}
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-            @icon="mail"
-            @skin="secondary"
+            @skin="secondary" @icon="mail"
             @disabled={{this.isRequestingDisabled}}
-            {{on "click" this.openTranslationRequestModal}}
-          >
+            {{on "click" this.openTranslationRequestModal}}>
             {{t "request-translations"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <Auk::Button
-            @icon="add"
-            @skin="secondary"
+            @skin="secondary" @icon="add"
             @disabled={{this.isUploadDisabled}}
             {{on "click" this.openPieceUploadModal}}>
             {{t "upload-translation-file"}}
@@ -25,45 +23,49 @@
     </Auk::Toolbar>
 
     {{#if this.model}}
-      <table class="auk-table">
+      <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
             <th class="auk-table-checkbox-col">
-              <Auk::Checkbox @mode="table"
-                {{on "click" this.toggleAllPiecesSelection}}
-                @checked={{this.areAllPiecesSelected}}  />
+              <Auk::Checkbox
+                @checked={{this.areAllPiecesSelected}}
+                {{on "click" this.toggleAllPiecesSelection}} />
             </th>
             <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
-            <th class="auk-u-text-nowrap">{{t "file-extension"}}</th>
+            <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
             <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
             <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
-            <th class="auk-u-text-align--center">{{t "for-publishpreview"}}</th>
-            <th></th>
+            <th class="auk-u-text-nowrap auk-u-text-align--center">
+              {{t "for-publishpreview"}}
+            </th>
+            <th>{{!-- Actions--}}</th>
           </tr>
         </thead>
         <tbody>
           {{#each this.model as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
-                <Auk::Checkbox @mode="table"
-                  {{on "click" (fn this.togglePieceSelection piece)}}
-                  @checked={{includes piece this.selectedPieces}}  />
+                <Auk::Checkbox
+                  @checked={{includes piece this.selectedPieces}}
+                  {{on "click" (fn this.togglePieceSelection piece)}} />
               </td>
               <td class="auk-u-text-nowrap">
                 {{piece.name}}
               </td>
               <td >
-                <Auk::Pill @skin="white">
-                  {{piece.file.extension}}
-                </Auk::Pill>
+                <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td class="auk-u-text-nowrap">
-                {{moment-format piece.receivedDate}}
+                <p>{{moment-format piece.receivedDate}}</p>
+                <p class="auk-u-muted auk-u-text-small">
+                  {{moment-format piece.receivedDate "HH:mm"}}
+                </p>
               </td>
               <td class="auk-u-text-nowrap">
-                {{moment-format piece.created}}
-                <br>
-                <span class="auk-u-muted auk-u-text-small">{{moment-format piece.created "HH:mm"}}</span>
+                <p>{{moment-format piece.created}}</p>
+                <p class="auk-u-muted auk-u-text-small">
+                  {{moment-format piece.created "HH:mm"}}
+                </p>
               </td>
               <td class="auk-u-text-align--center">
                 {{#if piece.publicationSubcase}}
@@ -75,19 +77,17 @@
               <td>
                 <WebComponents::AuButtonToolbar>
                   <Auk::Button
-                        @layout="icon-only"
-                        @icon="download"
-                        @skin="borderless"
-                        @href={{piece.file.namedDownloadLink}}
-                        download
-                  />
+                    @skin="borderless" @layout="icon-only" @icon="download"
+                    @href={{piece.file.namedDownloadLink}}
+                    download={{await piece.downloadFilename}}>
+                    {{t "download"}}
+                  </Auk::Button>
                   <Auk::Button
-                        @layout="icon-only"
-                        @icon="book"
-                        @skin="borderless"
-                        @href={{piece.viewDocumentURL}}
-                        target="_blank"
-                  />
+                    @skin="borderless" @layout="icon-only" @icon="book"
+                    @href={{piece.viewDocumentURL}}
+                    target="_blank">
+                    {{t "read"}}
+                  </Auk::Button>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
@@ -95,26 +95,23 @@
         </tbody>
       </table>
     {{else}}
-      <Auk::Panel>
-        <Auk::Panel::Body>
-          <Auk::EmptyState @message={{t "no-translations-yet" }} />
-        </Auk::Panel::Body>
-      </Auk::Panel>
+      <Auk::EmptyState @bordered={{true}} @message={{t "no-translations-yet" }} />
     {{/if}}
   </div>
 </div>
 
-{{#if this.showPieceUploadModal}}
+{{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Translations::DocumentsUploadModal
     @translationSubcase={{this.translationSubcase}}
     @onSave={{perform this.saveSourceDocument}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
-{{#if this.showTranslationRequestModal}}
+{{#if this.isTranslationRequestModalOpen}}
   <Publications::Publication::Translations::TranslationRequestModal
-          @translationSubcase={{this.translationSubcase}}
-          @selectedPieces={{this.selectedPieces}}
-          @onSave={{perform this.saveTranslationRequest}}
-          @onCancel={{this.closeTranslationRequestModal}} />
+    @translationSubcase={{this.translationSubcase}}
+    @publicationFlow={{this.publicationFlow}}
+    @attachments={{this.selectedPieces}}
+    @onSave={{perform this.saveTranslationRequest}}
+    @onCancel={{this.closeTranslationRequestModal}} />
 {{/if}}

@@ -1,15 +1,15 @@
 <Auk::Navbar @skin="gray-100">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
       {{#if @showBackButton}}
         <Utils::back-button/>
       {{/if}}
-      <div class="auk-toolbar-complex__item">
-        <h4 class="auk-toolbar-complex__title">{{@title}}</h4>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
+      <Auk::Toolbar::Item>
+        <h4 data-test-settings-header-title class="auk-toolbar-complex__title">{{@title}}</h4>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
       {{yield}}
-    </div>
-  </div>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </Auk::Navbar>

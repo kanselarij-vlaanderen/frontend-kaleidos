@@ -17,7 +17,6 @@ context('Add files to an agenda', () => {
 
   before(() => {
     cy.server();
-    cy.resetCache();
   });
 
   beforeEach(() => {

@@ -46,12 +46,12 @@
     </Auk::Panel::Header>
     <Auk::Panel::Body>
       <div class="auk-content">
-        <h4>
+        <h4 data-test-agendaitem-titles-short-title>
           {{@agendaitem.shortTitle}}
         </h4>
         {{#if @agendaitem.title}}
           <div class="auk-u-mb-2">
-            <span class="auk-o-flex--inline auk-u-text-pre-line">
+            <span data-test-agendaitem-titles-title class="auk-o-flex--inline auk-u-text-pre-line">
               {{@agendaitem.title}}
             </span>
           </div>
@@ -104,7 +104,7 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <pre class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
+              <pre data-test-agendaitem-titles-explanation class="auk-o-flex--inline auk-u-text-pre-line auk-u-italic">
                {{t "remark-title"}}: {{@agendaitem.explanation}}
               </pre>
             </Auk::Toolbar::Item>

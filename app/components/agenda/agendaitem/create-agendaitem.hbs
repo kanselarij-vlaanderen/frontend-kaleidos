@@ -23,9 +23,9 @@
       <div class="auk-u-p-4">
         <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2">
           <div class="auk-o-grid-col-8">
-            <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-              <div class="auk-toolbar-complex__left custom-table-search">
-                <div class="auk-toolbar-complex__item" style="width:100%;">
+            <Auk::Toolbar @auto={{true}}>
+              <Auk::Toolbar::Group @position="left">
+                <Auk::Toolbar::Item class="auk-u-maximize-width">
                   <div class="vl-input-field--inline" data-test-vl-create-agendaitem-search>
                     {{input
                       value=filterParam
@@ -43,9 +43,9 @@
                       onclick={{perform searchTask}}
                     />
                   </div>
-                </div>
-              </div>
-            </div>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            </Auk::Toolbar>
           </div>
           <div class="auk-o-grid-col-4">
             <div class="auk-form-group">

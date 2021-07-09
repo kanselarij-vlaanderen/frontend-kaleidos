@@ -12,17 +12,17 @@
         {{/if}}
       </div>
       <div class="vlc-document-card__content">
-        <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
+        <Auk::Toolbar @auto={{true}}>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <p class="vlc-subline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.label}}
                 {{/unless}}
               </p>
-            </div>
-          </div>
-          <div class="vlc-document-card-toolbar__right">
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+          <Auk::Toolbar::Group @position="right">
             {{#if
               (and
                 this.shouldShowPublications
@@ -42,7 +42,7 @@
                 </LinkTo>
               {{/if}}
             {{/if}}
-            <div class="auk-toolbar-complex__item auk-o-flex">
+            <Auk::Toolbar::Item class="auk-o-flex">
               {{#unless this.loadPieceRelatedData.isRunning}}
                 <AccessLevelPill
                   @accessLevel={{this.accessLevel}}
@@ -53,8 +53,8 @@
                   @onChangeConfidentiality={{this.changeConfidentiality}}
                 />
               {{/unless}}
-            </div>
-            <div class="auk-toolbar-complex__item">
+            </Auk::Toolbar::Item>
+            <Auk::Toolbar::Item>
               {{#if this.currentSession.isEditor}}
                 <div class="auk-u-position-relative auk-u-inline-block">
                   <Auk::Button
@@ -109,16 +109,16 @@
                   </AttachPopover>
                 </div>
               {{/if}}
-            </div>
-          </div>
-        </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
         <div class="auk-o-flex">
           <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
-                <Input
-                  class="auk-input auk-input--block"
+                <Auk::Input
                   @type="text"
+                  @block={{true}}
                   @value={{this.pieceNameBuffer}}
                 />
                 <Auk::Button
