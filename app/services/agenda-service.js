@@ -1,7 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { singularize } from 'ember-inflector';
 import { notifyPropertyChange } from '@ember/object';
-import { bind } from '@ember/runloop';
 import { ajax } from 'frontend-kaleidos/utils/ajax';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
