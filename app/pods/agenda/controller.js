@@ -23,11 +23,6 @@ export default class AgendaController extends Controller {
   }
 
   @action
-  selectAgenda(agenda) {
-    this.transitionToRoute('agenda.agendaitems', this.model.meeting.id, agenda.get('id'));
-  }
-
-  @action
   navigateToDecisions(currentSessionId, currentAgendaId) {
     this.transitionToRoute(
       'print-overviews.decisions.agendaitems',

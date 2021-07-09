@@ -1,34 +1,31 @@
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { keepLatestTask } from 'ember-concurrency-decorators';
 
-export default Component.extend({
-  sessionService: inject(),
-  classNames: ['auk-sidebar', 'auk-sidebar--gray-200', 'auk-sidebar--left', 'auk-sidebar--small', 'auk-sidebar--collapsible', 'auk-scroll-wrapper'],
+export default class AgendaSideNavComponent extends Component {
+  @service store;
 
-  attributeBindings: ['getCollapsedAttribute:data-collapsed'],
+  @tracked isCollapsedSidebar = false;
+  @tracked agendas = [];
 
-  getCollapsedAttribute: computed('agendaMenuCollapsed', function() {
-    return this.get('agendaMenuCollapsed').toString();
-  }),
+  constructor() {
+    super(...arguments);
+    this.loadAgendas.perform();
+  }
 
-  agendaMenuCollapsed: false,
+  @keepLatestTask
+  *loadAgendas() {
+    this.agendas = yield this.store.query('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-serialnumber',
+      include: 'status',
+    });
+  }
 
-  currentAgenda: alias('sessionService.currentAgenda'),
-  currentSession: alias('sessionService.currentSession'),
-
-  actions: {
-    collapseSideMenu() {
-      this.toggleProperty('agendaMenuCollapsed');
-    },
-
-    compareAgendas() {
-      this.compareAgendas();
-    },
-
-    setCurrentAgenda(agenda) {
-      this.selectAgenda(agenda);
-    },
-  },
-});
+  @action
+  toggleSidebar() {
+    this.isCollapsedSidebar = !this.isCollapsedSidebar;
+  }
+}
