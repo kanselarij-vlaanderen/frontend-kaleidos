@@ -162,6 +162,11 @@
                       <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{row.translationSubcase}}/>
                     </td>
                   {{/if}}
+                  {{#if this.tableColumnDisplayOptions.proofs}}
+                    <td class="auk-u-text-nowrap">
+                      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{row.publicationSubcase}}/>
+                    </td>
+                  {{/if}}
                   {{#if this.tableColumnDisplayOptions.lastEdited}}
                     <td>
                       {{moment-format row.modified "DD-MM-YYYY"}}<br/>
