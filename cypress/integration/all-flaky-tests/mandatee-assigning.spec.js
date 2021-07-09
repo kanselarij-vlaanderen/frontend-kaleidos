@@ -385,7 +385,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .should('be.visible')
       .click();
 
-    // TODO KAS-2693 awaits
     cy.get(newsletter.newsItem.create).should('be.visible')
       .click();
     cy.get(newsletter.editItem.save).click();

@@ -70,7 +70,7 @@ context('Subcase tests', () => {
     cy.openSubcase(0);
 
     cy.changeSubcaseAccessLevel(false, true, 'Intern Overheid', subcaseTitleShort, 'Cypress test nieuwere lange titel');
-    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs'); // TODO: awaits @iseCodes that doesn't come
+    cy.addSubcaseMandatee(1, 0, 0, 'Vlaams minister voor onderwijs');
     cy.addSubcaseMandatee(2, 0, 0);
 
     cy.proposeSubcaseForAgenda(agendaDate);
