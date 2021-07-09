@@ -97,19 +97,20 @@ export default Service.extend({
     }
   },
 
-  agendaWithChanges(currentAgendaID, agendaToCompareID) {
-    return ajax({
-      method: 'GET',
-      url: `/agenda-sort/agenda-with-changes?agendaToCompare=${agendaToCompareID}&selectedAgenda=${currentAgendaID}`,
-    })
-      .then(bind(this, (result) => {
-        this.set('addedPieces', result.addedDocuments);
-        this.set('addedAgendaitems', result.addedAgendaitems);
-        return result;
-      }))
-      .catch(() => {
+  async agendaWithChanges(currentAgendaID, agendaToCompareID) {
+    const endpoint = new URL('/agenda-sort/agenda-with-changes', window.location.origin);
+    const queryParams = new URLSearchParams(Object.entries({
+      agendaToCompare: agendaToCompareID,
+      selectedAgenda: currentAgendaID,
+    }));
+    endpoint.search = queryParams.toString();
 
-      });
+    const response = await fetch(endpoint);
+    if (response.ok) {
+      const result = await response.json();
+      this.set('addedPieces', result.addedDocuments);
+      this.set('addedAgendaitems', result.addedAgendaitems);
+    }
   },
 
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
