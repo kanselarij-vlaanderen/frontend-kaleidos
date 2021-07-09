@@ -11,10 +11,9 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Input
+        <Auk::Input
           data-test-route-settings-users-search-input
-          class="auk-input"
-          type="search"
+          @type="search"
           @value={{this.filter}}
         />
         <Auk::Button

@@ -42,14 +42,14 @@
                 </AttachPopover>
               </span>
             </div>
-            <Input
-              data-test-route-search-input=""
-              class="auk-input auk-input--block"
-              type="text"
-              id="dossierId"
+            <Auk::Input
+              @type="text"
+              @block={{true}}
               @placeholder={{t "search-placeholder"}}
               @value={{this.searchTextBuffer}}
               @enter={{fn this.search}}
+              id="dossierId"
+              data-test-route-search-input
             />
           </div>
         </div>
@@ -95,12 +95,12 @@
             <Auk::Label for="ministerName">
               {{t "minister"}}
             </Auk::Label>
-            <Input
-              type="text"
-              class="auk-input auk-input--block"
-              id="ministerName"
+            <Auk::Input
+              @type="text"
+              @block={{true}}
               @value={{this.mandateesBuffer}}
               @enter={{fn this.search}}
+              id="ministerName"
             />
           </div>
         </div>

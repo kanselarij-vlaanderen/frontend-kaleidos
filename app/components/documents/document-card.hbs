@@ -119,10 +119,10 @@
           <div class="auk-o-flex auk-o-flex--vertical vlc-u-box-model-maximize-width">
             {{#if this.isEditingPiece}}
               <div class="auk-o-flex auk-o-flex--vertical-center">
-                <Input
+                <Auk::Input
                   data-test-document-card-name-input={{true}}
-                  class="auk-input auk-input--block"
                   @type="text"
+                  @block={{true}}
                   @value={{this.pieceNameBuffer}}
                 />
                 <Auk::Button

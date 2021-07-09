@@ -3,8 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import {
-  task,
-  lastValue
+  lastValue, task
 } from 'ember-concurrency-decorators';
 
 export default class AgendaitemTitles extends Component {
@@ -23,8 +22,10 @@ export default class AgendaitemTitles extends Component {
 
   @task
   *loadCase() {
-    const _case = yield this.args.subcase.case;
-    return _case;
+    if (this.args.subcase) {
+      return yield this.args.subcase.case;
+    }
+    return null;
   }
 
   @action
