@@ -27,16 +27,23 @@ export default class AgendaAgendaitemsRoute extends Route {
     // Could be optimized not to make below query again when only query params changed
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
-      include: [
-        'mandatees'
-      ].join(','),
-      'fields[mandatees]': [
-        'title', // Display group header per agendaitems group
-        'priority' // Sorting agendaitems on minister protocol order
-      ].join(','),
       'page[size]': PAGE_SIZE.AGENDAITEMS,
       sort: 'show-as-remark,priority',
     });
+
+    // Ensure mandatee data for each agendaitem is loaded
+    await Promise.all(agendaitems.map((agendaitem) => {
+      this.store.findRecord('agendaitem', agendaitem.id, {
+        reload: true, // without reload the async operation will be resolved too early by ember-data's cache
+        include: [
+          'mandatees'
+        ].join(','),
+        'fields[mandatees]': [
+          'title', // Display group header per agendaitems group
+          'priority' // Sorting agendaitems on minister protocol order
+        ].join(','),
+      });
+    }));
 
     const previousAgenda = await agenda.previousVersion;
     let newItems;

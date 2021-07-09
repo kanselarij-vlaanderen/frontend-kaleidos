@@ -92,7 +92,7 @@ export default class AgendaitemsAgendaController extends Controller {
     this.totalCount = agendaitems.length;
     yield all(agendaitems.map(async(agendaitem) => {
       await this.store.findRecord('agendaitem', agendaitem.id, {
-        reload: true, // without forced reload the async operation will resolve too early
+        reload: true, // without reload the async operation will be resolved too early by ember-data's cache
         include: [
           'pieces',
           'pieces.document-container'
