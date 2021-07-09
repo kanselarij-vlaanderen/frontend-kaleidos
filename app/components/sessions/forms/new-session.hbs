@@ -30,14 +30,14 @@
     {{/if}}
     <div class="auk-u-mb-2">
       <div class="auk-form-group">
-        <Auk::Label>{{t "meeting-number"}}</Auk::Label>
+        <Auk::Label for="meetingNumberInput">{{t "meeting-number"}}</Auk::Label>
         <div class="auk-o-flex">
           {{#unless this.isAnnexMeeting}}
             <Auk::Input
               data-test-new-session-meeting-number={{true}}
               @type="number"
               @value={{meetingNumber}}
-              id="subjectTransld"
+              id="meetingNumberInput"
               class="auk-input--w-medium auk-u-mr-2"
               {{on "change" (action "meetingNumberChangedAction" meetingNumber)}}
               {{on "keyup" (action "meetingNumberChangedAction" meetingNumber)}}
