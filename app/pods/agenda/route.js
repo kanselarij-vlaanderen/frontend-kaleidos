@@ -16,22 +16,25 @@ export default class AgendaRoute extends Route {
     const meeting = await this.store.findRecord('meeting', meetingId, {
       reload: true,
     });
-    this.set('sessionService.currentSession', meeting);
 
     const agendaId = params.agenda_id;
     const agenda = await this.store.findRecord('agenda', agendaId, {
       reload: true,
     });
-    this.set('sessionService.currentAgenda', agenda);
 
-    await this.updateSelectedAgenda(meeting, agenda);
     return {
       meeting,
       agenda,
     };
   }
 
+  async afterModel(model) {
+    await this.updateSelectedAgenda(model.meeting, model.agenda);
+  }
+
   async updateSelectedAgenda(meeting, agenda) {
+    this.set('sessionService.currentSession', meeting);
+    this.set('sessionService.currentAgenda', agenda);
     this.set('agendaService.addedAgendaitems', []);
     this.set('agendaService.addedPieces', []);
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
