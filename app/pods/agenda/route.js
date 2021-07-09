@@ -14,11 +14,14 @@ export default class AgendaRoute extends Route {
   async model(params) {
     const meetingId = params.meeting_id;
     const meeting = await this.store.findRecord('meeting', meetingId, {
-      include: 'agendas,agendas.status', reload: true,
+      reload: true,
     });
     this.set('sessionService.currentSession', meeting);
+
     const agendaId = params.agenda_id;
-    const agenda = await meeting.get('agendas').findBy('id', agendaId);
+    const agenda = await this.store.findRecord('agenda', agendaId, {
+      reload: true,
+    });
     this.set('sessionService.currentAgenda', agenda);
 
     await this.updateSelectedAgenda(meeting, agenda);
@@ -33,7 +36,7 @@ export default class AgendaRoute extends Route {
     this.set('agendaService.addedPieces', []);
     const previousAgenda = await this.sessionService.findPreviousAgendaOfSession(meeting, agenda);
     if (previousAgenda) {
-      await this.agendaService.agendaWithChanges(agenda.get('id'), previousAgenda.get('id'));
+      await this.agendaService.agendaWithChanges(agenda.id, previousAgenda.id);
     }
   }
 
