@@ -13,7 +13,7 @@ export default class PrintNewsletterRoute extends Route {
   queryParams = {
     showDraft: {
       refreshModel: true,
-      as: 'klad',
+      // as: 'klad',
     },
   }
 

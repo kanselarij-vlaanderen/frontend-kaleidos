@@ -20,19 +20,17 @@
               >
                 {{t "overview"}}
               </Auk::Tab>
-              {{!-- We use 'klad' here because 'showdraft' has been aliased in the route--}}
-              {{!-- Using 'showDraft' results in an ember error, hinting to use 'klad' instead --}}
               <Auk::Tab
                 @route="newsletter.print"
                 @model={{meeting.id}}
-                @query={{hash klad=true}}
+                @query={{hash showDraft=true}}
               >
                 {{t "design"}}
               </Auk::Tab>
               <Auk::Tab
                 @route="newsletter.print"
                 @model={{meeting.id}}
-                @query={{hash klad=false}}
+                @query={{hash showDraft=false}}
               >
                 {{t "definite"}}
               </Auk::Tab>
