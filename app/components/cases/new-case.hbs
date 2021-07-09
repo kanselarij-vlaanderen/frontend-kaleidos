@@ -14,7 +14,10 @@
       <div class="auk-u-mb-4">
         <div class="auk-form-group">
           <Auk::Label>{{t "confidential"}}</Auk::Label>
-          {{web-components/vl-toggle value=confidential}}
+          {{web-components/vl-toggle
+            data-test-new-case-toggle-confidential=true
+            value=confidential
+          }}
         </div>
       </div>
       <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
@@ -39,6 +42,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           {{web-components/vl-save-button
+            data-test-new-case-save=true
             text=(t "create-case")
             type="submit"
             isLoading=isLoading

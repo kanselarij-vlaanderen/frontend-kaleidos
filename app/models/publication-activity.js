@@ -10,6 +10,7 @@ export default class PublicationActivity extends Model {
 
   // Relations.
   @belongsTo('publication-subcase') subcase;
+  @belongsTo('request-activity') requestActivity;
 
   @hasMany('piece', {
     inverse: 'publicationActivitiesUsedBy',

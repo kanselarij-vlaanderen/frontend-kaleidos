@@ -15,7 +15,7 @@
       </div>
       <div class="auk-form-group {{if this.validations.message.showError "auk-form-group--error"}}">
         <Auk::Label for="proofRequestMessage" @required={{true}}>
-          {{t "translation-mail-header"}}
+          {{t "message"}}
         </Auk::Label>
         <Auk::Textarea id="proofRequestMessage" @rows="6"
           @value={{mut this.message}}

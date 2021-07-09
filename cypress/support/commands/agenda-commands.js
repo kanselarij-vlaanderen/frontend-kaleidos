@@ -713,6 +713,25 @@ function clickAgendaitemTab(selector) {
     .click();
 }
 
+/**
+ * @description Checks if the agenda exists in the agenda/side-nav component by  (ex. "Ontwerpagenda A")
+ * @name agendaNameExists
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} serialnumber The serialnumber (1 letter) of the agenda, capitalized (ex. "A")
+ * @param {Boolean} design Whether or not the agenda is a design agenda (default true, most used in test)
+ */
+function agendaNameExists(serialnumber, design = true) {
+  let agendaName;
+  if (design) {
+    agendaName = `Ontwerpagenda ${serialnumber}`;
+  } else {
+    agendaName = `Agenda ${serialnumber}`;
+  }
+  cy.get(agenda.agendaSideNav.agendaName).contains(agendaName);
+  // TODO-command this can fail on collapsed sidenav
+}
+
 Cypress.Commands.add('createAgenda', createAgenda);
 Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
@@ -732,3 +751,4 @@ Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab)
 Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
+Cypress.Commands.add('agendaNameExists', agendaNameExists);

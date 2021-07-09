@@ -1,4 +1,4 @@
-/* global context, before, beforeEach, afterEach, it, cy */
+/* global context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -6,10 +6,6 @@ import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 
 context('Agendaitem changes tests', () => {
-  before(() => {
-    cy.resetCache();
-  });
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');

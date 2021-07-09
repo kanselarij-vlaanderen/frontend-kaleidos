@@ -14,12 +14,13 @@ export default class PublicationsPublicationTranslationsRequestRoute extends Rou
   }
 
   async afterModel() {
-    const publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = await publicationFlow.publicationSubcase;
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
+    controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
   }

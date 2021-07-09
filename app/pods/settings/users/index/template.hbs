@@ -11,10 +11,9 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Input
+        <Auk::Input
           data-test-route-settings-users-search-input
-          class="auk-input"
-          type="search"
+          @type="search"
           @value={{this.filter}}
         />
         <Auk::Button
@@ -74,7 +73,7 @@
           <th class="auk-table__col--1"></th>
         {{/c.header}}
         {{#c.body as |user|}}
-          <td>
+          <td data-test-route-settings-users-row-first-name>
             {{user.firstName}}
           </td>
           <td>
@@ -86,7 +85,7 @@
           <td>
             {{if user.organization.identifier user.organization.identifier "-"}}
           </td>
-          <td>
+          <td data-test-route-settings-users-row-group>
             {{#if user.group}}
               {{user.group.name}}
             {{else}}

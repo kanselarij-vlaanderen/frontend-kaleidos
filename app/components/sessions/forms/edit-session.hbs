@@ -15,6 +15,7 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "meeting-number"}}</Auk::Label>
         {{web-components/vl-form-input
+          data-test-edit-session-meeting-number=true
           type="number"
           value=meetingNumber
           input=(action "meetingNumberChangedAction" meetingNumber)
@@ -27,6 +28,7 @@
           {{t "meeting-number-visual-representation"}}
         </Auk::Label>
         {{web-components/vl-form-input
+          data-test-edit-session-number-representation=true
           value=numberRepresentation
         }}
       </div>
