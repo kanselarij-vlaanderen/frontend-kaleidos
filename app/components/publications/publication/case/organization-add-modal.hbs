@@ -1,0 +1,40 @@
+<Auk::Modal
+  @size="medium"
+  data-test-add-organisationModal>
+  <Auk::Modal::Header
+    @title={{t "add-organization"}}
+    @onClose={{this.closeOrganizationAddModal}}
+  />
+  <Auk::Modal::Body>
+    <Auk::Input
+      @block={{true}}
+      type="text"
+      id="defaultInput"
+      @value={{this.inputOrganization}}
+    />
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            {{on "click" this.closeOrganizationAddModal}}
+          >
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary" @icon="add" @size="small"
+            {{on "click" this.addOrganisation}}
+            data-test-add-organization-submit-button>
+            {{t "add"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>

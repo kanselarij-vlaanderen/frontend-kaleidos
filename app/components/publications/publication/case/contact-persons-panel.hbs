@@ -1,0 +1,74 @@
+<div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <h4 class="auk-panel__title">
+              {{t "contacts"}}
+            </h4>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <Auk::Button
+              @skin="tertiary" @icon="add"
+              data-test-add-contactperson
+              {{on "click" this.openEditModal}}>
+              {{t "add-contact"}}
+            </Auk::Button>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    {{#if @publicationFlow.contactPersons}}
+      <Auk::Panel::Body @noPadding={{true}}>
+        <table class="auk-table" data-test-contact-persons>
+          <thead>
+            <tr>
+              <th>{{t "name"}}</th>
+              <th>{{t "email"}}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each @publicationFlow.contactPersons as |contactPerson|}}
+              <tr>
+                <td>
+                  <Auk::Avatar @icon="user">
+                    <div>{{contactPerson.person.nameToDisplay}}</div>
+                    {{#if contactPerson.person.organization}}
+                      <div class="auk-u-muted auk-u-text-small">
+                        {{contactPerson.person.organization.name}}
+                      </div>
+                    {{/if}}
+                  </Auk::Avatar>
+                </td>
+                <td>
+                  {{#if contactPerson.email}}
+                    <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                  {{/if}}
+                </td>
+                <td class="auk-u-text-align--right">
+                  <Auk::Button
+                    @layout="icon-only" @icon="delete" @skin="danger-borderless"
+                    {{on "click" (fn this.delete contactPerson)}} />
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </Auk::Panel::Body>
+    {{else}}
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-added-contact-persons"}} />
+      </Auk::Panel::Body>
+    {{/if}}
+  </Auk::Panel>
+</div>
+
+{{#if this.isOpenEditModal}}
+  <Publications::Publication::Case::ContactPersonEditModal
+    @onCancel={{this.closeEditModal}}
+    @onSave={{this.save}} />
+{{/if}}

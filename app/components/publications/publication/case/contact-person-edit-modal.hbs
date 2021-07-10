@@ -1,0 +1,90 @@
+<Auk::Modal @size="medium"
+  data-test-add-contactpersonmodal>
+  <Auk::Modal::Header
+    @title={{t "add-contact"}}
+    @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class='auk-form-group auk-form-group--grid'>
+          <div class={{if this.validators.firstName.showError "auk-form-group--error"}}>
+            <Auk::Label for="contactPersonEditFirstName" @required={{true}}>
+              {{t "first-name"}}
+            </Auk::Label>
+            <Auk::Input type="text" id="contactPersonEditFirstName"
+              @block={{true}}
+              @value={{mut this.firstName}}
+              {{on "input" this.validators.firstName.enableError}} />
+          </div>
+          <div class={{if this.validators.lastName.showError "auk-form-group--error"}}>
+            <Auk::Label for="contactPersonEditLastName" @required={{true}}>
+              {{t "last-name"}}
+            </Auk::Label>
+            <Auk::Input type="text" id="contactPersonEditLastName"
+              @block={{true}}
+              @value={{mut this.lastName}}
+              {{on "input" this.validators.lastName.enableError}} />
+          </div>
+        </div>
+        <div class='auk-form-group'>
+          <Auk::Label for="contactPersonEditEmail">{{t "email"}}</Auk::Label>
+          <Auk::Input type="text" id="contactPersonEditEmail"
+            @block={{true}}
+            @value={{mut this.email}} />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label>
+            {{t "organization"}}
+          </Auk::Label>
+          <div class="auk-o-flex">
+            <PowerSelect
+              @options={{this.organizations}}
+              @selected={{mut this.organization}}
+              @searchField="name"
+              @noMatchesMessage={{t "organizations-empty-result"}}
+              @placeholder={{t "search-organization"}}
+              @onchange={{this.setOrganization}}
+              as |organization|>
+              {{ organization.name }}
+            </PowerSelect>
+            <Auk::Button
+              @layout="icon-only" @icon="add"
+              class="auk-u-ml-2"
+              {{on "click" this.openOrganizationAddModal}}>
+              {{t "add-organization"}}
+            </Auk::Button>
+          </div>
+        </div>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="borderless" {{on "click" @onCancel}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary" @icon="add" @size="small"
+            {{on "click" (perform this.onSave)}}
+            @disabled={{not this.canSave}}
+            @loading={{this.onSave.isRunning}}
+            data-test-add-contactperson-submit-button>
+            {{t "add"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+
+{{#if this.isOpenLinkOrganizationModal}}
+  <Publications::Publication::Case::AddOrganizationModal
+    @onCancel={{this.closeLinkOrganizationModal}}
+    @onSave={{this.saveOrganization}} />
+{{/if}}

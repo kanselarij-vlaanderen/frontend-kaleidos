@@ -33,11 +33,10 @@
             {{#each (sort-by "priority" @publicationFlow.mandatees) as |mandatee|}}
               <tr>
                 <td>
-                  <div class="auk-o-flex auk-o-flex--vertical-center">
-                    <Auk::Badge @icon="user" />
-                    <span class="auk-u-mx-2">{{mandatee.person.nameToDisplay}}</span>
+                  <Auk::Avatar @icon="user">
+                    {{mandatee.person.nameToDisplay}}
                     {{!-- Beleidsdomeinen en beleidsvelden / worden momenteel niet gebruikt in productie / werkt met isecodes --}}
-                  </div>
+                  </Auk::Avatar>
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button

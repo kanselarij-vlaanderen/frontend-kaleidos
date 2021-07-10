@@ -8,4 +8,5 @@ export default class ContactPerson extends Model {
   @attr('string') telephone;
 
   @belongsTo('person') person;
+  @belongsTo('publication-flow') publicationFlow;
 }

@@ -16,15 +16,6 @@ export default class CaseRoute extends Route {
       },
     });
     this.isViaCouncilOfMinisters = !!subcase;
-
-    // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
-    // TODO need a better filter, add a boolean to model maybe ?
-    const organizations = await this.store.query('organization', {
-      page: {
-        size: 200,
-      },
-    });
-    this.organizations = organizations.filter((org) => org.name);
   }
 
   setupController(controller) {

@@ -10,6 +10,7 @@ export default class Person extends Model {
   @belongsTo('signature') signature;
   @belongsTo('contact-person') contactPerson;
   @hasMany('mandatee') mandatees;
+  @belongsTo('organization') organization;
 
   get nameToDisplay() {
     const {
