@@ -33,6 +33,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @service sessionService;
   @service agendaService;
   @service router;
+  @service intl;
 
   @lastValue('groupNotasOnGroupName') notaGroups = [];
   @tracked meeting;
@@ -59,7 +60,10 @@ export default class AgendaAgendaitemsController extends Controller {
   }
 
   get documentLoadingMessage() {
-    return `Documenten van ${this.documentLoadCount}/${this.totalCount} agendapunten geladen`;
+    return this.intl.t('agendaitems-document-loading-progress-message', {
+      count: this.documentLoadCount,
+      total: this.totalCount,
+    });
   }
 
   @action
