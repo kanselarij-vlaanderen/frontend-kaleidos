@@ -13,12 +13,14 @@ function currentTimestamp() {
 context('Agenda tests', () => {
   const agendaDate = Cypress.moment().add(1, 'weeks')
     .day(5); // Next friday
+  const typeNota = 'Nota';
+  const agendaKind = 'Ministerraad';
+  const agendaPlace = 'Cypress Room';
 
   before(() => {
     cy.server();
-    cy.resetCache();
     cy.login('Admin');
-    cy.createAgenda('Elektronische procedure', agendaDate, 'Zaal oxford bij Cronos Leuven');
+    cy.createAgenda(agendaKind, agendaDate, agendaPlace);
     cy.logoutFlow();
   });
 
@@ -31,67 +33,62 @@ context('Agenda tests', () => {
     cy.logout();
   });
 
-  it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
-    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
-      .day(5); // Friday in two weeks
-    cy.createAgenda('Elektronische procedure', agendaDateSingleTest, 'Zaal oxford bij Cronos Leuven').then((result) => {
-      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.get(agenda.agendaHeader.showAgendaOptions).click();
-      cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-      cy.get(auk.modal.body).within(() => {
-        // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-        cy.get(auk.alert.container).should('exist');
-        cy.get(auk.alert.message).should('exist');
-      });
-      cy.get(agenda.agendaHeader.confirm.deleteAgenda).contains('Agenda verwijderen');
-      cy.get(auk.modal.footer.cancel).contains('Annuleren')
-        .click();
-      // instead of confirming the opened modal, we cancel and let the command handle it
-      cy.deleteAgenda(result.meetingId, true);
-      // TODO assert we go back to agendas overview
-    });
-  });
+  // TODO-agendaHeader test all agenda actions in different agenda status, what is showing in the pop-up etc...
 
   it('should get different message when trying to approve with formal not ok items', () => {
     cy.openAgendaForDate(agendaDate); // 1 item with "not yet formally ok"
     cy.approveDesignAgenda(false);
-    cy.get(auk.modal.body).within(() => {
-      // We could verify the exact text here, but text can change often so opted not to and just verify the existance of a message.
-      cy.get(auk.alert.container).should('exist');
-      cy.get(auk.alert.message).should('exist');
-    });
-    cy.get(agenda.agendaHeader.confirm.approveAgenda).contains('Goedkeuren');
+    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(agenda.agendaHeader.confirm.approveAgenda);
     cy.get(auk.loader).should('not.exist');
-    cy.get(auk.modal.footer.cancel).contains('Annuleren')
-      .click();
+    cy.get(auk.modal.footer.cancel).click();
     // instead of confirming the opened modal, we cancel and let the command handle it
     cy.setFormalOkOnItemWithIndex(0);
     cy.approveDesignAgenda();
   });
 
   it('should add an agendaitem to an agenda', () => {
+    const agendaitemName = 'Derde stap'; // This agendaitem exists in the default test data
     cy.openAgendaForDate(agendaDate);
-    cy.addAgendaitemToAgenda(false);
-    // TODO don't select a random subcase
-    // TODO assert that agendaitem was added in view without refresh
+    cy.addAgendaitemToAgenda(agendaitemName);
+    cy.agendaitemExists(agendaitemName);
   });
 
   it('Ontwerpagenda goedkeuren en afsluiten...', () => {
     cy.openAgendaForDate(agendaDate);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda(false);
-    // TODO check if there is no au-alert in the new popup
+    cy.get(auk.modal.body).find(auk.alert.message)
+      .should('not.exist');
+  });
+
+  // The next tests create their own agenda
+
+  it('should create a new agenda and then delete the last agenda (and automatically the meeting)', () => {
+    const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
+      .day(5); // Friday in two weeks
+    cy.createAgenda(agendaKind, agendaDateSingleTest, agendaPlace).then((result) => {
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.get(agenda.agendaHeader.showAgendaOptions).click();
+      cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
+      cy.get(auk.modal.body).find(auk.alert.message);
+      cy.get(agenda.agendaHeader.confirm.deleteAgenda);
+      cy.get(auk.modal.footer.cancel).click();
+      // instead of confirming the opened modal, we cancel and let the command handle it
+      cy.deleteAgenda(result.meetingId, true);
+      cy.url().should('include', '/overzicht');
+    });
   });
 
   it('Should be able to close a session with only 1 approved agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(5); // Friday in three weeks
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar').then((result) => {
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.openAgendaForDate(dateToCreateAgenda);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
-      cy.deleteAgenda(result.meetingId);
+      cy.deleteAgenda();
       cy.closeAgenda();
     });
   });
@@ -99,299 +96,216 @@ context('Agenda tests', () => {
   it('Should not be able to close a session with only a design agenda, cfr. KAS-1551', () => {
     const dateToCreateAgenda = Cypress.moment().add(4, 'weeks')
       .day(5); // Friday in four weeks
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Daar');
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace);
     cy.openAgendaForDate(dateToCreateAgenda);
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.lockAgenda).should('not.exist');
   });
 
   it('should edit nota on agendaitem and trim whitespaces', () => {
-    const testId = `testId=${currentTimestamp()}: `;
-
-    const PLACE = 'Brussel';
-    const KIND = 'Ministerraad';
-    const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
+    const testId = `${currentTimestamp()}`;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(1);
-    cy.createAgenda(KIND, dateToCreateAgenda, PLACE);
-    cy.openAgendaForDate(dateToCreateAgenda);
 
-    const case1TitleShort = `${testId}Cypress test dossier 1`;
-    const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
-    const subcase1Type = 'In voorbereiding';
-    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitleShort = `Cypress agenda spec edit & trim whitespace - ${testId}`;
+    const subcaseTitleShort = `Agenda spec edit & trim whitespace korte titel - ${testId}`;
+    const subcaseTitleLong = `Agenda spec edit & trim whitespace lange titel - ${testId}`;
+    const explanation = 'Dit is de opmerking';
+    const whitespace = '\n';
 
-    const case2TitleShort = `${testId}Cypress test dossier 2`;
-    const type2 = 'Nota';
-    const newSubcase2TitleShort = `${testId} korte titel`;
-    const subcase2TitleLong = `${testId} lange titel`;
-    const subcase2Type = 'In voorbereiding';
-    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.createCase(false, case1TitleShort);
-    cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
-    cy.openSubcase(0);
-    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-
-    // TODO, case 2 is not used for further testing in this spec, maybe other specs use this subcase?
-    cy.createCase(false, case2TitleShort);
-    cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
-    cy.openSubcase(0);
-    cy.proposeSubcaseForAgenda(dateToCreateAgenda);
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
+      cy.createCase(false, caseTitleShort);
+      cy.addSubcase(typeNota, subcaseTitleShort + whitespace, subcaseTitleLong + whitespace);
+      cy.openSubcase(0);
+      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.addAgendaitemToAgenda(subcaseTitleShort);
+    });
 
     cy.openAgendaForDate(dateToCreateAgenda);
-    // overview
-    cy.contains('dit is de korte titel');
-    cy.contains('dit is de lange titel');
-    cy.contains('dit is de korte titel').click();
+
+    // after creating, whitespace is removed
+    cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort);
+    cy.get(agenda.agendaOverviewItem.subitem).contains(subcaseTitleShort + whitespace)
+      .should('not.exist');
+    cy.get(agenda.agendaOverviewItem.title).contains(subcaseTitleLong);
+    cy.openDetailOfAgendaitem(subcaseTitleShort);
     // detail view
-    cy.get(agenda.agendaitemTitlesView.edit).should('exist')
-      .should('be.visible')
+    cy.get(agenda.agendaitemTitlesView.edit).click();
+    cy.get(agenda.agendaitemTitlesEdit.confidential).find(utils.vlToggle.label)
       .click();
-    // TODO replace with confidentiality selector
-    cy.get(utils.vlToggle).should('exist')
-      .click();
+    // When typing, the name in de sidebar item also changes, showing the whitespaces before saving
 
-    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear();
-    cy.get(agenda.agendaitemTitlesEdit.shorttitle).type('dit is de korte titel\n\n');
+    // short title
+    // check sidebar and input field before change
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).should('not.contain', whitespace + subcaseTitleShort + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).should('not.have.value', whitespace + subcaseTitleShort + whitespace);
+    // The new short title with whitespace before and after
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).clear()
+      .type(whitespace + subcaseTitleShort + whitespace);
+    // Before save, the whitespaces are visible in input field and sidebar
+    cy.get(agenda.agendaitemTitlesEdit.shorttitle).should('have.value', whitespace + subcaseTitleShort + whitespace);
+    cy.get(agenda.agendaDetailSidebarItem.shortTitle).should('contain', whitespace + subcaseTitleShort + whitespace);
 
-    cy.get(agenda.agendaitemTitlesEdit.title).clear();
-    cy.get(agenda.agendaitemTitlesEdit.title).type('dit is de lange titel\n\n');
+    // long title
+    cy.get(agenda.agendaitemTitlesEdit.title).should('not.have.value', whitespace + subcaseTitleLong + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.title).clear()
+      .type(whitespace + subcaseTitleLong + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.title).should('have.value', whitespace + subcaseTitleLong + whitespace);
 
-    cy.get(agenda.agendaitemTitlesEdit.explanation).clear();
-    cy.get(agenda.agendaitemTitlesEdit.explanation).type('Dit is de opmerking');
-
-    cy.get(agenda.agendaitemTitlesEdit.actions.save).should('exist')
-      .should('be.visible')
-      .click();
+    // explanation
+    cy.get(agenda.agendaitemTitlesEdit.explanation).clear()
+      .type(whitespace + explanation + whitespace);
+    cy.get(agenda.agendaitemTitlesEdit.explanation).should('have.value', whitespace + explanation + whitespace);
+    cy.route('PATCH', '/agendas/*').as('patchAgendas');
+    cy.get(agenda.agendaitemTitlesEdit.actions.save).click();
+    cy.wait('@patchAgendas');
+    // after saving, agendaitem-titles show trimmed values
     cy.get(agenda.agendaitemTitlesView.edit).scrollIntoView();
-    cy.contains('dit is de korte titel');
-    cy.contains('dit is de lange titel');
-    cy.contains('Dit is de opmerking');
-    // TODO KAS-2142 setting confidentiality and cancelling does not roll back
-    cy.get(auk.pill).contains('Vertrouwelijk');
+    cy.get(agenda.agendaitemTitlesView.shortTitle).as('shortTitle');
+    cy.get('@shortTitle').should('contain.text', subcaseTitleShort); // this is an exact match
+    cy.get('@shortTitle').should('not.contain.text', whitespace + subcaseTitleShort);
+    cy.get(agenda.agendaitemTitlesView.title).as('longTitle');
+    // This should technicaly fail but we simulate whitespace before of the actual value for readability
+    cy.get('@longTitle').contains(subcaseTitleLong);
+    // explanation is not trimmed
+    cy.get(agenda.agendaitemTitlesView.explanation).contains(`Opmerking: ${whitespace + explanation + whitespace}`);
+    // TODO-BUG setting confidentiality and cancelling does not roll back
+    cy.get(route.agendaitemIndex.confidential).contains('Vertrouwelijk');
   });
 
-  it('It should be able to make a new agenda with a meetingID and another meeting will automatically get the next meetingID assigned in the UI', () => {
-    const agendaDate = Cypress.moment().add(1, 'week')
+  it('It should be automatically get the next meetingID assigned in the UI', () => {
+    const agendaDateSingle = Cypress.moment().add(1, 'week')
       .day(6);
-    // TODO does agenda 1 already exist? Are there multiple agenda's with ID 1 after this?
-    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', 1);
-    cy.createAgenda('Ministerraad', agendaDate, 'Brussel', null, 'VV AA 1999/2BIS').then((result) => {
+    // TODO-bug the existing agendas sometimes get NaN, why? We have to make this agenda with number 1 to ensure numbering works
+    cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, 1);
+    cy.createAgenda(agendaKind, agendaDateSingle, agendaPlace, null, 'VV AA 1999/2BIS').then((result) => {
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      // Check the values in edit session view
       cy.get(agenda.agendaHeader.showActionOptions).click();
       cy.get(agenda.agendaHeader.actions.toggleEditingSession).click();
-      // TODO data tag
-      cy.get('input[type="number"]').should('have.value', result.meetingNumber);
-      cy.get(utils.vlFormInput).eq(1)
-        .should('have.value', `${result.meetingNumberRep}`);
-      cy.visit('/');
+      cy.get(agenda.editSession.meetingNumber).find(auk.input)
+        .should('have.value', result.meetingNumber);
+      cy.get(agenda.editSession.numberRep).find(utils.vlFormInput)
+        .should('have.value', result.meetingNumberRep);
+      cy.get(utils.vlModalFooter.cancel).click();
+      // Check if the next automatic number is correct
+      cy.get(utils.mHeader.agendas).click();
       cy.get(route.agendas.action.newMeeting).click();
-      cy.wait(500);
-      cy.get('input[type="number"]').should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
+      cy.wait(500); // await call not possible
+      cy.get(agenda.newSession.meetingNumber)
+        .should('have.value', (parseInt(result.meetingNumber, 10) + 1).toString());
     });
   });
 
   it('Should add agendaitems to an agenda and set all of them to formally OK', () => {
-    const testId = `testId=${currentTimestamp()}: `;
-    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks');
+    const testId = `${currentTimestamp()}`;
+    const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
+      .day(1);
 
-    const case1TitleShort = `${testId}Cypress test dossier 1`;
-    const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
-    const subcase1Type = 'In voorbereiding';
-    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitleShort = `Cypress agenda spec formal ok: set formality - ${testId}`;
+    const newSubcaseTitleShort = `Agenda spec formal ok: set formality - ${testId}`;
+    const subcaseTitleLong = `Agenda spec formal ok: set formality - ${testId}`;
 
-    const case2TitleShort = `${testId}Cypress test dossier 2`;
-    const type2 = 'Nota';
-    const newSubcase2TitleShort = `${testId} korte titel`;
-    const subcase2TitleLong = `${testId} lange titel`;
-    const subcase2Type = 'In voorbereiding';
-    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
-      cy.createCase(false, case1TitleShort);
-      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
+      cy.createCase(false, caseTitleShort);
+      cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-
-      cy.createCase(false, case2TitleShort);
-      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
-      cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.setAllItemsFormallyOk(3);
+      cy.addAgendaitemToAgenda(newSubcaseTitleShort);
+      cy.setAllItemsFormallyOk(2);
     });
   });
 
   it('Should add agendaitems to an agenda and set all of them to formally OK and close the agenda', () => {
-    const testId = `testId=${currentTimestamp()}: `;
+    const testId = `${currentTimestamp()}`;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
-      .day(1)
-      .subtract(3, 'day');
+      .day(1);
 
-    const case1TitleShort = `${testId}Cypress test dossier 1`;
-    const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
-    const subcase1Type = 'In voorbereiding';
-    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitleShort = `Cypress agenda spec formal ok: close agenda - ${testId}`;
+    const newSubcaseTitleShort = `Agenda spec formal ok: close agenda korte titel - ${testId}`;
+    const subcaseTitleLong = `Agenda spec formal ok: close agenda lange titel - ${testId}`;
 
-    const case2TitleShort = `${testId}Cypress test dossier 2`;
-    const type2 = 'Nota';
-    const newSubcase2TitleShort = `${testId} korte titel`;
-    const subcase2TitleLong = `${testId} lange titel`;
-    const subcase2Type = 'In voorbereiding';
-    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
-      cy.createCase(false, case1TitleShort);
-      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
+      cy.createCase(false, caseTitleShort);
+      cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-
-      cy.createCase(false, case2TitleShort);
-      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
-      cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-
-      cy.setAllItemsFormallyOk(3);
+      cy.addAgendaitemToAgenda(newSubcaseTitleShort);
+      cy.setAllItemsFormallyOk(2);
       cy.approveDesignAgenda();
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-      // TODO check the message?
-      cy.get(auk.modal.body).within(() => {
-        cy.get(auk.alert.container).should('exist');
-      });
-
-      // cy.route('GET', '/agendas/*/created-for').as('agendasCreatedFor');
+      cy.get(auk.modal.body).find(auk.alert.message);
       cy.route('PATCH', '/agendas/*').as('patchAgendas');
-
-      cy.get(agenda.agendaHeader.confirm.lockAgenda).contains('Agenda afsluiten')
-        .click();
-      // cy.wait('@agendasCreatedFor');
+      cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
       cy.wait('@patchAgendas');
-      // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
+      cy.get(auk.loader).should('not.exist');
+      cy.get(agenda.agendaOverview.showChanges);
       cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     });
   });
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve and close the agenda', () => {
-    const testId = `testId=${currentTimestamp()}: `;
+    const testId = `${currentTimestamp()}`;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
-      .day(1)
-      .subtract(1, 'day');
+      .day(1);
 
-    const case1TitleShort = `${testId}Cypress test dossier 1`;
-    const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
-    const subcase1Type = 'In voorbereiding';
-    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitleShort = `Cypress agenda spec formal ok: approve & close agenda - ${testId}`;
+    const newSubcaseTitleShort = `Agenda spec formal ok: approve & close agenda korte titel - ${testId}`;
+    const subcaseTitleLong = `Agenda spec formal ok: approve & close agenda lange titel - ${testId}`;
 
-    const case2TitleShort = `${testId}Cypress test dossier 2`;
-    const type2 = 'Nota';
-    const newSubcase2TitleShort = `${testId} korte titel`;
-    const subcase2TitleLong = `${testId} lange titel`;
-    const subcase2Type = 'In voorbereiding';
-    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
-      cy.createCase(false, case1TitleShort);
-      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
+      cy.createCase(false, caseTitleShort);
+      cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-
-      cy.createCase(false, case2TitleShort);
-      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
-      cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-
+      cy.addAgendaitemToAgenda(newSubcaseTitleShort);
       cy.setFormalOkOnItemWithIndex(0);
-      cy.setFormalOkOnItemWithIndex(1);
     });
+    // Check the approve and close pop-up, the "not yet formally ok" agendaitem will be mentioned for removal
     cy.approveAndCloseDesignAgenda(false);
-    // TODO tekst beter afcheken
-    // cy.get(auk.modal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
-
-    cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
-    cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
-    cy.route('GET', '/agendaitems/*/agenda').as('agenda');
-    cy.route('GET', '/subcases?filter*').as('subcasesFilter');
+    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).contains(newSubcaseTitleShort);
     cy.route('PATCH', '/subcases/*').as('patchSubcases');
-    cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
-
-
     cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
-
-    // TODO gebeuren al deze patches nog ?
-    cy.wait('@agendaActivitiesAgendaItems');
-    cy.wait('@agendaitems');
-    cy.wait('@agenda');
-    cy.wait('@subcasesFilter');
     cy.wait('@patchSubcases');
-    cy.wait('@agendaActivities');
-
-    // TODO is deze not exists wel goed ?
-    cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
-    // TODO hoe weten we dat assert goed werkt tenzij we wachten tot de actie afgerond is
-    // cy.get('.auk-loader', {
-    //   timeout: 60000,
-    // }).should('not.exist');
-    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(auk.modal.container, {
+      timeout: 60000,
+    }).should('not.exist');
+    // Check that the agendaitem was deleted because of confirming action with agendaitems to delete
+    cy.get(auk.loader).should('not.exist');
+    // TODO-BUG after action "approve and close" the agendaitems are not refreshed and the deleted one is still showing (clicking = error)
+    cy.reload(); // TODO-BUG DELETE after bug fix
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
+    cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort)
+      .should('not.exist');
   });
 
   it('Should add agendaitems to an agenda and set one of them to formally NOK and approve the agenda', () => {
-    const testId = `testId=${currentTimestamp()}: `;
+    const testId = `${currentTimestamp()}`;
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
-      .day(1)
-      .subtract(2, 'day');
+      .day(1);
 
-    const case1TitleShort = `${testId}Cypress test dossier 1`;
-    const type1 = 'Nota';
-    const newSubcase1TitleShort = 'dit is de korte titel\n\n';
-    const subcase1TitleLong = 'dit is de lange titel\n\n';
-    const subcase1Type = 'In voorbereiding';
-    const subcase1Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
+    const caseTitleShort = `Cypress agenda spec formal ok: approve agenda - ${testId}`;
+    const newSubcaseTitleShort = `Agenda spec formal ok: approve agenda korte titel - ${testId}`;
+    const subcaseTitleLong = `Agenda spec formal ok: approve agenda lange titel - ${testId}`;
 
-    const case2TitleShort = `${testId}Cypress test dossier 2`;
-    const type2 = 'Nota';
-    const newSubcase2TitleShort = `${testId} korte titel`;
-    const subcase2TitleLong = `${testId} lange titel`;
-    const subcase2Type = 'In voorbereiding';
-    const subcase2Name = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-
-    cy.createAgenda('Elektronische procedure', dateToCreateAgenda, 'Zaal oxford bij Cronos Leuven').then((result) => {
-      cy.createCase(false, case1TitleShort);
-      cy.addSubcase(type1, newSubcase1TitleShort, subcase1TitleLong, subcase1Type, subcase1Name);
+    cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
+      cy.createCase(false, caseTitleShort);
+      cy.addSubcase(typeNota, newSubcaseTitleShort, subcaseTitleLong);
       cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
-
-      cy.createCase(false, case2TitleShort);
-      cy.addSubcase(type2, newSubcase2TitleShort, subcase2TitleLong, subcase2Type, subcase2Name);
-      cy.openSubcase(0);
-      cy.proposeSubcaseForAgenda(dateToCreateAgenda);
       cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-
+      cy.addAgendaitemToAgenda(newSubcaseTitleShort);
       cy.setFormalOkOnItemWithIndex(0);
-      cy.setFormalOkOnItemWithIndex(1);
     });
 
     cy.approveDesignAgenda(false);
 
-    cy.route('GET', '/agendaitems/**/agenda-activity').as('agendaActivity');
-    cy.route('GET', '/agendaitems/**/treatments').as('treatments');
-
-    // TODO tekst checken ?
-    cy.get(auk.modal.container).within(() => {
-      cy.get(auk.alert.message).should('exist');
-      cy.get(agenda.agendaHeader.confirm.approveAgenda)
-        .click();
-    });
+    cy.get(auk.modal.body).find(auk.alert.message);
+    cy.get(auk.modal.body).contains(newSubcaseTitleShort);
+    cy.get(agenda.agendaHeader.confirm.approveAgenda)
+      .click();
 
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -400,36 +314,21 @@ context('Agenda tests', () => {
     cy.get(agenda.agendaHeader.showAgendaOptions).click();
     cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
 
-    // TODO do we need all these awaits ? what calls happen ?
-    // cy.get(auk.modal.container).contains('(Ontwerp)agenda bevat agendapunt die niet formeel ok zijn.');
-    // cy.route('GET', '/agenda-activities/*/agendaitems').as('agendaActivitiesAgendaItems');
-    // cy.route('GET', '/agendas/*/agendaitems').as('agendaitems');
-    // cy.route('GET', '/agendaitems/*/agenda').as('agenda');
-    // cy.route('GET', '/subcases?filter*').as('subcasesFilter');
-    // cy.route('PATCH', '/subcases/*').as('patchSubcases');
-    // cy.route('GET', '/subcases/*/agenda-activities').as('agendaActivities');
-
-
     cy.get(agenda.agendaHeader.confirm.lockAgenda)
       .click();
 
-    // cy.wait('@agendaActivitiesAgendaItems');
-    // cy.wait('@agendaitems');
-    // cy.wait('@agenda');
-    // cy.wait('@subcasesFilter');
-    // cy.wait('@patchSubcases');
-    // cy.wait('@agendaActivities');
-
-    // cy.contains('Doorgaan')
-    //   .click();
-
-    // cy.get(agenda.agendaOverview.formallyOkEdit).should('not.exist');
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
-    cy.contains(newSubcase2TitleShort).should('not.exist');
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
+    cy.get(agenda.agendaOverviewItem.subitem).contains('Goedkeuring van het verslag');
+    cy.get(agenda.agendaOverviewItem.subitem).contains(newSubcaseTitleShort)
+      .should('not.exist');
     // Closing an agenda should remove any design agenda
-    cy.contains('Agenda B').should('not.exist');
+    // By checking the lenght of agendas and confirming "Agenda A", not other agenda exists
+    cy.get(agenda.agendaSideNav.agenda).should('have.length', 1);
+    cy.agendaNameExists('A', false);
   });
 });
 

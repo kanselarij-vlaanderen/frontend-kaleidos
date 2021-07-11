@@ -6,7 +6,7 @@
       </h4>
       {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
         <div class="auk-u-ml-2">
-          <button class="auk-button-link" type="button"
+          <button data-test-route-cases---subcase-documents-batch-edit class="auk-button-link" type="button"
             {{on "click" this.enablePieceEdit}}>
             <span class="auk-button__content">
               {{t "edit"}}
@@ -41,6 +41,7 @@
   {{#if this.currentSession.isEditor}}
     <div class="auk-u-mb-4">
       <Auk::Button
+        data-test-route-cases---subcase-documents-add={{true}}
         @skin="tertiary"
         @icon="add"
         {{on "click" this.openPieceUploadModal}}

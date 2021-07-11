@@ -48,7 +48,10 @@ const selectors = {
   },
 
   // vl-toggle
-  vlToggle: '[data-test-vl-toggle]',
+  vlToggle: {
+    label: '[data-test-vl-toggle-label]',
+    input: '[data-test-vl-toggle-input]',
+  },
 
   // vl-datepicker
   vlDatepicker: '[data-test-vl-datepicker]',

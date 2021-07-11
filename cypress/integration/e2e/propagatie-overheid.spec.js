@@ -2,8 +2,11 @@
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
+import cases from '../../selectors/case.selectors';
 import document from '../../selectors/document.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 function currentTimestamp() {
@@ -12,7 +15,6 @@ function currentTimestamp() {
 
 context('Propagation to other graphs', () => {
   before(() => {
-    cy.resetCache();
     cy.server();
   });
   const agendaDate = Cypress.moment().add(1, 'weeks')
@@ -54,36 +56,23 @@ context('Propagation to other graphs', () => {
     cy.addDocumentToTreatment(file);
     cy.get(utils.vlModalFooter.save).click();
 
-    // TODO We are clicking the pill inside the document card of treatment report
-    cy.get(agenda.accessLevelPill.pill).click();
-    cy.existsAndVisible(dependency.emberPowerSelect.trigger).click();
-    cy.existsAndVisible(dependency.emberPowerSelect.option).contains('Intern Overheid')
-      .click();
-    cy.get(agenda.accessLevelPill.save).click();
-
-    // TODO verify if this is needed, default treatments for agendaitem is approved anyway
-    cy.contains('Wijzigen').click();
-    cy.get('.auk-box').as('editDecision');
-    cy.get('@editDecision').within(() => {
-      cy.get(agenda.agendaitemDecisionEdit.resultContainer).should('exist')
-        .should('be.visible')
-        .within(() => {
-          cy.get(dependency.emberPowerSelect.trigger).scrollIntoView()
-            .click();
-        });
+    // Change the rights of the treatment report
+    cy.get(document.documentCard.card).within(() => {
+      cy.get(document.accessLevelPill.pill).click();
+      cy.get(dependency.emberPowerSelect.trigger).click();
     });
-    cy.get(dependency.emberPowerSelect.option).should('exist')
-      .then(() => {
-        cy.contains('Goedgekeurd').scrollIntoView()
-          .click();
-      });
-    cy.contains('Opslaan').click();
+    cy.get(dependency.emberPowerSelect.option).contains('Intern Overheid')
+      .click();
+    cy.get(document.accessLevelPill.save).click();
+
+    // check of treatment status is approved
+    cy.get(agenda.decisionResultPill.pill).contains('Goedgekeurd');
+
     cy.releaseDecisions();
     cy.wait(60000);
     cy.logoutFlow();
   });
 
-  // TODO TEST AS MINISTER, we need seperate tests to verify wat/when other profiles can see data
   it('Test as Minister', () => {
     cy.server();
     cy.login('Minister');
@@ -91,29 +80,26 @@ context('Propagation to other graphs', () => {
     cy.openSubcase(0);
     cy.url().should('contain', '/deeldossiers/');
     cy.url().should('contain', '/overzicht');
-    cy.contains('Wijzigen').should('not.exist');
-    cy.contains('Acties').should('not.exist');
-    cy.contains('Indienen voor agendering').should('not.exist'); // TODO this subcase is already on agenda so the button does not exist regardless of profile
+    cy.get(cases.subcaseDescription.edit).should('not.exist');
+    cy.get(cases.subcaseTitlesView.edit).should('not.exist');
+    cy.get(cases.subcaseHeader.actionsDropdown).should('not.exist');
+    cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
     cy.clickReverseTab('Documenten');
-    cy.contains('Wijzigen').should('not.exist');
-    cy.contains('Documenten toevoegen').should('not.exist');
-    cy.contains('Reeds bezorgde documenten koppelen').should('not.exist');
+    cy.get(route.subcaseDocuments.batchEdit).should('not.exist');
+    cy.get(route.subcaseDocuments.add).should('not.exist');
+    cy.get(document.linkedDocuments.add).should('not.exist');
   });
+
   it('Test as Overheid', () => {
     cy.server();
     cy.login('Overheid');
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.decisionTab).click();
-    cy.get(document.documentCard.card).eq(0)
-      .within(() => {
-        cy.get('.auk-h4 > span').contains(file.fileName);
-      });
+    cy.get(document.documentCard.titleHeader).eq(0)
+      .contains(file.fileName);
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards')
-        .should('have.length', 0);
-    });
+    cy.get(document.documentCard.card).should('have.length', 0);
     cy.logoutFlow();
   });
 
@@ -123,7 +109,6 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.releaseDocuments();
     cy.wait(60000);
-
     cy.logoutFlow();
   });
 
@@ -133,11 +118,7 @@ context('Propagation to other graphs', () => {
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(subcaseTitle1, false);
     cy.get(agenda.agendaitemNav.documentsTab).click();
-    cy.get('.auk-scroll-wrapper__body').within(() => {
-      cy.get(document.documentCard.card).as('docCards')
-        .should('have.length', 2);
-    });
-
+    cy.get(document.documentCard.card).should('have.length', 2);
     cy.logoutFlow();
   });
 });

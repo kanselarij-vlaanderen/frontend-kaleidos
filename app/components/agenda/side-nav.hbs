@@ -19,13 +19,13 @@
 </Auk::Navbar>
 <ul class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical">
   {{#each (await agendas) as |agenda|}}
-    <li class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">
+    <li data-test-agenda-side-nav-agenda class="auk-sidebar__item auk-sidebar__item--styled {{active-class agenda currentAgenda class="auk-sidebar__item--active"}}">
       <a
         href="#"
         {{action "setCurrentAgenda" agenda}}
       >
         <div class="auk-sidebar__label">
-          <span data-sidebar-expanded-only="">{{await agenda.agendaName}}</span>
+          <span data-test-agenda-side-nav-agenda-name data-sidebar-expanded-only="">{{await agenda.agendaName}}</span>
           <span data-sidebar-collapsed-only="">
             {{#if (not agenda.isDesignAgenda)}}
               {{agenda.name}}
