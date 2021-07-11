@@ -1,1 +1,57 @@
-{{outlet}}
+{{#if this.isAgendaitemDetailRoute}}
+  <div class="auk-panel-layout__agenda-items">
+    <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
+      <div class="auk-scroll-wrapper">
+        <Agenda::AgendaitemSearch
+          @searchText={{readonly this.filter}}
+          @onSearch={{this.searchAgendaitems}}
+        />
+        <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
+          <Agenda::AgendaDetail::Sidebar
+            @notaGroups={{this.notaGroups}}
+            @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
+            @announcements={{this.model.announcements}}
+            @newItems={{this.model.newItems}}
+            @currentAgenda={{this.agenda}}
+            @showModifiedOnly={{this.showModifiedOnly}}
+            @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+            @activeItem={{this.selectedAgendaitem}}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  {{outlet}}
+{{else}}
+  <div
+    id={{this.id}}
+    class="auk-panel-layout__main-content auk-u-bg-alt"
+    >
+    <div class="auk-scroll-wrapper">
+      <Agenda::AgendaitemSearch
+        @searchText={{readonly this.filter}}
+        @onSearch={{this.searchAgendaitems}}
+      />
+      <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
+        {{#if this.loadDocuments.isRunning}}
+          <Auk::Loader @message={{this.documentLoadingMessage}} />
+        {{else}}
+          <Agenda::AgendaOverview
+            @notaGroups={{this.notaGroups}}
+            @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
+            @announcements={{this.model.announcements}}
+            @newItems={{this.model.newItems}}
+            @currentAgenda={{this.agenda}}
+            @previousAgenda={{this.previousAgenda}}
+            @onReorderAgendaitems={{perform this.assignNewPriorities}}
+            @showModifiedOnly={{this.showModifiedOnly}}
+            @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
+          />
+          {{#if this.assignNewPriorities.isRunning}}
+            <WebComponents::LoadingOverlay />
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+{{/if}}

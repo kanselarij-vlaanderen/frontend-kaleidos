@@ -1,25 +1,3 @@
-<div class="auk-panel-layout__agenda-items">
-  <div class="auk-sidebar auk-sidebar--gray-100 auk-sidebar--left auk-u-maximize-width">
-    <div class="auk-scroll-wrapper">
-      <Agenda::AgendaitemSearch
-        @searchText={{readonly this.agendaitemsController.filter}}
-        @onSearch={{this.searchAgendaitems}}
-      />
-      <div class="auk-scroll-wrapper__body auk-scroll-wrapper__body--vertical vlc-hide-on-print">
-        <Agenda::AgendaDetail::Sidebar
-          @notaGroups={{this.notaGroups}}
-          @isLoadingNotaGroups={{this.groupNotasOnGroupName.isRunning}}
-          @announcements={{this.announcements}}
-          @newItems={{this.newItems}}
-          @currentAgenda={{this.agenda}}
-          @showModifiedOnly={{this.agendaitemsController.showModifiedOnly}}
-          @toggleShowModifiedOnly={{this.toggleShowModifiedOnly}}
-          @activeItem={{this.model}}
-        />
-      </div>
-    </div>
-  </div>
-</div>
 <div class="auk-panel-layout__main-content">
   <div class="auk-scroll-wrapper">
     <Auk::Navbar>

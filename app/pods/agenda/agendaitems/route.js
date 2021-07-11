@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';
+import { animationFrame } from 'ember-concurrency';
 
 export default class AgendaAgendaitemsRoute extends Route {
   queryParams = {
@@ -14,9 +15,11 @@ export default class AgendaAgendaitemsRoute extends Route {
       refreshModel: true,
       as: 'toon_enkel_gewijzigd',
     },
+    anchor: {
+      refreshModel: false,
+    },
   };
 
-  @service sessionService;
   @service agendaService;
 
   async model(params) {
@@ -24,6 +27,7 @@ export default class AgendaAgendaitemsRoute extends Route {
       agenda,
       meeting,
     } = this.modelFor('agenda');
+
     // Could be optimized not to make below query again when only query params changed
     let agendaitems = await this.store.query('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
@@ -83,8 +87,13 @@ export default class AgendaAgendaitemsRoute extends Route {
     });
   }
 
-  async setupController(controller) {
+  afterModel(model, transition) { // eslint-disable-line no-unused-vars
+    this.transition = transition; // set on the route for use in setupController, since the provided "transition" argument there always comes back "undefined"
+  }
+
+  async setupController(controller, model) {
     super.setupController(...arguments);
+    const isTransitionToIndex = this.transition.to.name === 'agenda.agendaitems.index';
     const {
       agenda,
       meeting,
@@ -92,6 +101,18 @@ export default class AgendaAgendaitemsRoute extends Route {
     controller.meeting = meeting;
     controller.agenda = agenda;
     controller.previousAgenda = this.previousAgenda;
+
+    const promises = [
+      controller.groupNotasOnGroupName.perform(model.notas)
+    ];
+    if (isTransitionToIndex) {
+      // Documents are only shown in agendaitems overview and not in agendaitems sidebar
+      promises.push(controller.loadDocuments.perform());
+    }
+    await Promise.all(promises);
+
+    await animationFrame(); // make sure rendering has happened before trying to scroll
+    controller.scrollToAnchor();
   }
 
   @action
