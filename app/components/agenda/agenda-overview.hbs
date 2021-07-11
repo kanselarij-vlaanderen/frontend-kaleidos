@@ -50,8 +50,7 @@
     {{#if @notaGroups.length}}
       <div>
         <ul
-          {{sortable-group onChange=@onReorderAgendaitems}}
-          {{did-update (perform this.groupNotasOnGroupName @notas) @notas}}>
+          {{sortable-group onChange=@onReorderAgendaitems}}>
           {{#each @notaGroups as |agendaitemGroup index|}}
             {{#unless (and (eq index 0) (is-empty agendaitemGroup.sortedMandatees))}}
               <Agenda::AgendaOverview::AgendaitemGroupHeader @mandatees={{agendaitemGroup.sortedMandatees}}/>
