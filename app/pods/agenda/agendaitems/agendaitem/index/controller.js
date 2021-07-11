@@ -12,7 +12,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service currentSession;
 
   @controller('agenda.agendaitems') agendaitemsController;
-  @controller('agenda.agendaitems.agendaitem') agendaitemController;
   @tracked agenda;
   @tracked subcase;
   @tracked governmentFields;
@@ -74,6 +73,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     this.iseCodes = correspondingIseCodes;
     this.submitter = mandateeData.submitter;
     await saveChanges(this.model, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, true);
-    this.agendaitemController.groupNotasOnGroupName.perform(this.agendaitemController.notas);
+    this.agendaitemsController.groupNotasOnGroupName.perform(this.agendaitemsController.model.notas);
   }
 }
