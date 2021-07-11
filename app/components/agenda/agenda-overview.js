@@ -17,7 +17,6 @@ export default class AgendaOverview extends AgendaSidebar {
   dragHandleClass = '.ki-drag-handle-2';
 
   @tracked isEditingOverview = null;
-  @tracked showLoader = null;
 
   get isDraggingEnabled() {
     return this.currentSessionService.isEditor && this.isDesignAgenda;

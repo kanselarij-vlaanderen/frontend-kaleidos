@@ -9,8 +9,6 @@ export default class AgendaSidebar extends Component {
    * @argument announcements
    * @argument newItems: items to be marked as "new on this agenda"
    */
-  @tracked isShowingChanges = false;
-  @tracked groupedNotas;
   @tracked isDesignAgenda;
 
   constructor() {
