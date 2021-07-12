@@ -21,7 +21,7 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if @publicationFlow.contactPersons}}
+    {{#if this.contactPersons}}
       <Auk::Panel::Body @noPadding={{true}}>
         <table class="auk-table" data-test-contact-persons>
           <thead>
@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody>
-            {{#each @publicationFlow.contactPersons as |contactPerson|}}
+            {{#each this.contactPersons as |contactPerson|}}
               <tr>
                 <td>
                   <Auk::Avatar @icon="user">

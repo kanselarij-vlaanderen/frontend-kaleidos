@@ -19,6 +19,6 @@ export default class Person extends Model {
     if (alternativeName) {
       return alternativeName;
     }
-    return [firstName, lastName].filter((nm) => nm).join(' ');
+    return [firstName, lastName].filter((it) => it).join(' ');
   }
 }

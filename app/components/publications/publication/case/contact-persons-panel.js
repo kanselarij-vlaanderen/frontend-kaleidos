@@ -10,6 +10,13 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @service store;
 
   @tracked isOpenEditModal = false;
+  @tracked contactPersons;
+
+  constructor() {
+    super(...arguments);
+
+    this.updateContactPersons();
+  }
 
   @action
   openEditModal() {
@@ -49,6 +56,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
     });
     await contactPerson.save();
 
+    this.updateContactPersons();
     this.isOpenEditModal = false;
   }
 
@@ -56,9 +64,16 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   async delete(contactPerson) {
     const publicationFlow = this.args.publicationFlow;
     publicationFlow.contactPersons.removeObject(contactPerson);
+    this.updateContactPersons();
     const person = await contactPerson.person;
     const destroyContactPerson = contactPerson.destroyRecord();
     const destroyPerson = person.destroyRecord();
     await Promise.all([destroyContactPerson, destroyPerson]);
+  }
+
+  updateContactPersons() {
+    this.contactPersons = this.args.publicationFlow.contactPersons.toArray();
+    // .get() because await is not supported by sort
+    this.contactPersons.sort((cp1, cp2) => (cp1.get('person').get('lastName') < cp2.get('person').get('lastName') ? -1 : 1));
   }
 }
