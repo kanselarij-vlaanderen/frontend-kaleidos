@@ -13,7 +13,7 @@ const selectors = {
     firstNameInput: '#firstNameInput',
     lastNameInput: '#lastNameInput',
     emailInput: '#emailInput',
-    organisationInput: '#organisationInput',
+    organisationInput: '#organizationNameInput',
     threedotsButton: '[data-test-contact-persons] button i',
     deleteContactpersonButton: '[data-test-delete-contactperson]',
   },
