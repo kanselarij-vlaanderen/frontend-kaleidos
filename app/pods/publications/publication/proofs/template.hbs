@@ -10,6 +10,14 @@
         </Auk::Tab>
       </Auk::Tabs>
     </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
+        <Auk::Checkbox
+          @label={{t "finished"}}
+          @checked={{this.model.endDate}}
+          {{on "input" this.toggleFinishProof}} />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
 

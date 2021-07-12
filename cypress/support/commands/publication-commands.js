@@ -56,6 +56,7 @@ function createPublication(shortTitle, longTitle) {
         });
       }));
   });
+  // TODO-publication this cypress promise needs to be the last command executed, move cy.log higher
   // Check if we transitioned to dossier page of the publication-flow
   cy.get(publication.publicationCase.casePanel);
   cy.log('/createPublication');

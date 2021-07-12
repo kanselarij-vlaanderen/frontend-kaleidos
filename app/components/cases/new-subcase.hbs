@@ -70,12 +70,12 @@
               {{t "edit"}}
             </Auk::Button>
           {{else}}
-            {{input
-              type="text"
+            <Auk::Input
+              @type="text"
+              @block={{true}}
+              @value={{subcaseName}}
               id="subcaseNameId"
-              class="auk-input auk-input--block"
-              value=subcaseName
-            }}
+            />
             <Auk::Button
               @skin="secondary"
               @layout="icon-only"

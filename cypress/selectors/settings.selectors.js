@@ -11,6 +11,21 @@ const selectors = {
     searchInput: '[data-test-route-settings-users-search-input]',
     searchButton: '[data-test-route-settings-users-search-button]',
     table: '[data-test-route-settings-users-table]',
+    row: {
+      firstname: '[data-test-route-settings-users-row-first-name]',
+      group: '[data-test-route-settings-users-row-group]',
+    },
+  },
+
+  // route settings/users/user/index
+  user: {
+    generalInfo: '[data-test-route-settings---user-general-info]',
+    technicalInfo: '[data-test-route-settings---user-technical-info]',
+  },
+
+  // component settings-header (only used for users route headers)
+  settingsHeader: {
+    title: '[data-test-settings-header-title]',
   },
 
   // route settings/overview
@@ -45,6 +60,7 @@ const selectors = {
 
   // route settings/system-alerts/index/template
   systemAlertsIndex: {
+    alerts: '[data-test-route-settings-system-alerts-index-alerts-dropdown]',
     add: '[data-test-route-settings-system-alerts-index-add]',
     remove: '[data-test-route-settings-system-alerts-index-remove]',
     // TODO unused selector (remove?)

@@ -8,12 +8,15 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
-    cancel: '[data-test-new-case-cancel]',
     shorttitleError: '[data-test-new-case-shorttitle-error]',
+    toggleConfidential: '[data-test-new-case-toggle-confidential]',
+    cancel: '[data-test-new-case-cancel]',
+    save: '[data-test-new-case-save]',
   },
 
   // subcase-overview-header
   subcaseOverviewHeader: {
+    titleContainer: '[data-test-subcase-overview-header-title-container]',
     createSubcase: '[data-test-subcase-overview-header-create-subcase]',
   },
 
@@ -33,6 +36,7 @@ const selectors = {
     agendaLink: '[data-test-subcase-description-agenda-link] a',
     // TODO unused selector
     modified: '[data-test-subcase-description-modified]',
+    edit: '[data-test-subcase-description-edit]',
   },
 
   // subcase-item

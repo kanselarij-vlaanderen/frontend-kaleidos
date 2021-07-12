@@ -35,7 +35,7 @@ export default Component.extend({
       }).then((meetings) => {
       if (meetings.length) {
         const meetingsFromThisYear = meetings.filter((meeting) => meeting.plannedStart && meeting.plannedStart.getFullYear() === this.currentYear);
-        const meetingIds = meetingsFromThisYear.map((meeting) => meeting.number);
+        const meetingIds = meetingsFromThisYear.map((meeting) => meeting.number).filter((meetingId) => meetingId !== undefined);
         let id = 0;
         // FIX voor de eerste agenda van het jaar -> Anders math.max infinity
         if (meetingIds.length !== 0) {
