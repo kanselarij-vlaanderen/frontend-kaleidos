@@ -49,7 +49,6 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
     });
     this.organizations = organizations.filter((org) => org.name);
     this.organizations = organizations.sortBy('name');
-    console.log(this.organizations);
   }
 
   @task

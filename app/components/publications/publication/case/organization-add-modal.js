@@ -12,6 +12,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
 
   validators;
   @tracked name = '';
+  @tracked identifier = '';
 
   constructor() {
     super(...arguments);
@@ -27,6 +28,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
   onSave() {
     const organization = this.store.createRecord('organization', {
       name: this.name,
+      identifier: this.identifier,
     });
     this.args.onSave(organization);
   }

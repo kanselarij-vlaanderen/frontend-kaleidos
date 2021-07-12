@@ -12,19 +12,16 @@
           @block={{true}}
           @value={{this.name}} />
       </div>
+      <div class="auk-form-group">
+        <Auk::Label for="organizationIdentifierInput" @required={{true}}>{{t "identifier"}}</Auk::Label>
+        <Auk::Input type="text" id="organizationIdentifierInput"
+          @block={{true}}
+          @value={{this.identifier}} />
+      </div>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
-            {{on "click" @onCancel}}>
-            {{t "cancel"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
