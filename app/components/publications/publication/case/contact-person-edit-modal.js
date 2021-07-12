@@ -13,7 +13,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
 
   @tracked isOpenOrganizationAddModal = false;
 
-  @tracked organizations;
+  @tracked _organizations;
 
   @tracked firstName = '';
   @tracked lastName = '';
@@ -24,6 +24,10 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
     super(...arguments);
     this.loadOrganizations.perform();
     this.initValidators();
+  }
+
+  get organizations() {
+    return this._organizations?.sortBy('name');
   }
 
   get isLoading() {
@@ -47,8 +51,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
         size: 200,
       },
     });
-    this.organizations = organizations.filter((org) => org.name);
-    this.organizations = this.organizations.sortBy('name');
+    this._organizations = organizations.filter((org) => org.name);
   }
 
   @task
@@ -80,8 +83,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
   @action
   addOrganization(organization) {
     this.organization = organization;
-    this.organizations.pushObject(organization);
-    this.organizations = this.organizations.sortBy('name');
+    this._organizations.pushObject(organization);
     this.isOpenOrganizationAddModal = false;
   }
 
