@@ -14,7 +14,13 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   get contactPersons() {
     const contactPersons = this.args.publicationFlow.contactPersons.toArray();
     // .get() because await is not supported by sort
-    contactPersons.sort((cp1, cp2) => (cp1.get('person').get('lastName') < cp2.get('person').get('lastName') ? -1 : 1));
+    contactPersons.sort((it1, it2) => {
+      const lastName1 = it1.get('person').get('lastName')
+        .toLowerCase();
+      const lastName2 = it2.get('person').get('lastName')
+        .toLowerCase();
+      return lastName1 < lastName2 ? -1 : 1;
+    });
     return contactPersons;
   }
 

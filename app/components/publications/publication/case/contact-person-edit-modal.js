@@ -48,7 +48,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
       },
     });
     this.organizations = organizations.filter((org) => org.name);
-    this.organizations = organizations.sortBy('name');
+    this.organizations = this.organizations.sortBy('name');
   }
 
   @task
@@ -81,7 +81,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
   addOrganization(organization) {
     this.organization = organization;
     this.organizations.pushObject(organization);
-    this.organizations.sortBy('name');
+    this.organizations = this.organizations.sortBy('name');
     this.isOpenOrganizationAddModal = false;
   }
 
