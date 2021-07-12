@@ -30,6 +30,10 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
     return this.loadOrganizations.isRunning || this.onSave.isRunning;
   }
 
+  get canCancel() {
+    return !this.onSave.isRunning;
+  }
+
   get canSave() {
     return !this.loadOrganizations.isRunning && this.validators.areValid;
   }

@@ -44,6 +44,7 @@
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
               @onchange={{this.setOrganization}}
+              @allowClear={{true}}
               as |organization|>
               {{ organization.name }}
             </PowerSelect>
@@ -62,7 +63,9 @@
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button @skin="borderless" {{on "click" @onCancel}}>
+          <Auk::Button @skin="borderless"
+            @disabled={{not this.canCancel}}
+            {{on "click" @onCancel}}>
             {{t "cancel"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
