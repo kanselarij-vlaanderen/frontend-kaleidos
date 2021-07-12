@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
@@ -30,8 +29,8 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     let pieces = await Promise.all([sourceDocumentsQuery, generatedPiecesQuery]);
     pieces = pieces.flatMap((pieces) => pieces.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
-    pieces = A([...pieces]);
-    pieces.sortBy('created').reverseObjects(); // descending sort on created
+    pieces = [...pieces];
+    pieces = pieces.sortBy('created').reverseObjects();
 
     return pieces;
   }
