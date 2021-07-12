@@ -63,7 +63,7 @@ export default class PublicationsIndexRoute extends Route {
         ':id:': statusIds.join(','),
       };
     }
-    return this.store.query('publication-flow', {
+    const publicationFlowsPromise = this.store.query('publication-flow', {
       filter: filter,
       sort: params.sort,
       page: {
@@ -84,15 +84,28 @@ export default class PublicationsIndexRoute extends Route {
         'agenda-item-treatment'
       ].join(','),
     });
+
+    return publicationFlowsPromise;
   }
 
+  // Ember event: no awaiting by Ember
   @action
-  loading(transition) {
+  async loading(transition) {
     const controller = this.controllerFor('publications.index');
     controller.isLoadingModel = true;
-    transition.promise.finally(() => {
+    try {
+      const publicationFlows = await transition.promise;
+
+      this.store.query('publication-flow', {
+        'filter[:id:]': publicationFlows.map((it) => it.id).join(','),
+        include: [
+          'publication-subcase',
+          'publication-subcase.publication-activities'
+        ].join(','),
+      });
+    } finally {
       controller.isLoadingModel = false;
-    });
+    }
   }
 
   @action
