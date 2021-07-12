@@ -21,6 +21,5 @@ export default class CaseRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
-    controller.organizations = this.organizations;
   }
 }

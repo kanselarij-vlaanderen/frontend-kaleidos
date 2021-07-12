@@ -16,6 +16,8 @@ export default class PublicationRoute extends Route {
         'publication-subcase',
         'translation-subcase',
         'contact-persons',
+        'contact-persons.person',
+        'contact-persons.person.organization',
         'mandatees',
         'mandatees.person'
       ].join(','),

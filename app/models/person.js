@@ -9,8 +9,8 @@ export default class Person extends Model {
 
   @belongsTo('signature') signature;
   @belongsTo('contact-person') contactPerson;
-  @hasMany('mandatee') mandatees;
   @belongsTo('organization') organization;
+  @hasMany('mandatee') mandatees;
 
   get nameToDisplay() {
     const {
@@ -18,9 +18,7 @@ export default class Person extends Model {
     } = this;
     if (alternativeName) {
       return alternativeName;
-    } if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
     }
-    return '';
+    return [firstName, lastName].filter((nm) => nm).join(' ');
   }
 }

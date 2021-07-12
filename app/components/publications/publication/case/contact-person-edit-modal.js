@@ -11,7 +11,7 @@ import {
 export default class PublicationsPublicationCaseContactPersonEditModalComponent extends Component {
   @service store;
 
-  @tracked isOpenAddOrganizationModal = false;
+  @tracked isOpenOrganizationAddModal = false;
 
   @tracked organizations;
 
@@ -69,6 +69,13 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
 
   @action
   closeOrganizationAddModal() {
+    this.isOpenOrganizationAddModal = false;
+  }
+
+  @action
+  addOrganization(organization) {
+    this.organization = organization;
+    this.organizations.pushObject(organization);
     this.isOpenOrganizationAddModal = false;
   }
 

@@ -6,7 +6,7 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
-        <div class='auk-form-group auk-form-group--grid'>
+        <div class="auk-form-group auk-form-group--grid">
           <div class={{if this.validators.firstName.showError "auk-form-group--error"}}>
             <Auk::Label for="contactPersonEditFirstName" @required={{true}}>
               {{t "first-name"}}
@@ -26,7 +26,7 @@
               {{on "input" this.validators.lastName.enableError}} />
           </div>
         </div>
-        <div class='auk-form-group'>
+        <div class="auk-form-group">
           <Auk::Label for="contactPersonEditEmail">{{t "email"}}</Auk::Label>
           <Auk::Input type="text" id="contactPersonEditEmail"
             @block={{true}}
@@ -83,8 +83,8 @@
   </Auk::Modal::Footer>
 </Auk::Modal>
 
-{{#if this.isOpenLinkOrganizationModal}}
-  <Publications::Publication::Case::AddOrganizationModal
-    @onCancel={{this.closeLinkOrganizationModal}}
-    @onSave={{this.saveOrganization}} />
+{{#if this.isOpenOrganizationAddModal}}
+  <Publications::Publication::Case::OrganizationAddModal
+    @onCancel={{this.closeOrganizationAddModal}}
+    @onSave={{this.addOrganization}} />
 {{/if}}

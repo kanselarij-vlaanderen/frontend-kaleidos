@@ -3,15 +3,16 @@
   data-test-add-organisationModal>
   <Auk::Modal::Header
     @title={{t "add-organization"}}
-    @onClose={{this.closeOrganizationAddModal}}
-  />
+    @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <Auk::Input
-      @block={{true}}
-      type="text"
-      id="defaultInput"
-      @value={{this.inputOrganization}}
-    />
+    <div class="auk-form-group-layout auk-form-group-layout--standard">
+      <div class="auk-form-group">
+        <Auk::Label for="organizationAddName" @required={{true}}>{{t "name"}}</Auk::Label>
+        <Auk::Input type="text" id="organizationAddName"
+          @block={{true}}
+          @value={{this.name}} />
+      </div>
+    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar>
@@ -19,8 +20,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
-            {{on "click" this.closeOrganizationAddModal}}
-          >
+            {{on "click" @onCancel}}>
             {{t "cancel"}}
           </Auk::Button>
         </Auk::Toolbar::Item>
@@ -29,7 +29,8 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary" @icon="add" @size="small"
-            {{on "click" this.addOrganisation}}
+            @disabled={{not this.canSave}}
+            {{on "click" this.onSave}}
             data-test-add-organization-submit-button>
             {{t "add"}}
           </Auk::Button>
