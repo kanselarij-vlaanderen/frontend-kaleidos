@@ -74,6 +74,12 @@ export default [
     showByDefault: true,
   },
   {
+    keyName: 'proofs',
+    translationKey: 'publications-table-publish-proofs',
+    translationKeySmall: 'publications-table-publish-proofs-small',
+    showByDefault: true,
+  },
+  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',
