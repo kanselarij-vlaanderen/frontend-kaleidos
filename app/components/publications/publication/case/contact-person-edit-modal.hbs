@@ -8,27 +8,27 @@
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group auk-form-group--grid">
           <div class={{if this.validators.firstName.showError "auk-form-group--error"}}>
-            <Auk::Label for="contactPersonEditFirstName" @required={{true}}>
+            <Auk::Label for="firstNameInput" @required={{true}}>
               {{t "first-name"}}
             </Auk::Label>
-            <Auk::Input type="text" id="contactPersonEditFirstName"
+            <Auk::Input type="text" id="firstNameInput"
               @block={{true}}
               @value={{this.firstName}}
               {{on "input" this.validators.firstName.enableError}} />
           </div>
           <div class={{if this.validators.lastName.showError "auk-form-group--error"}}>
-            <Auk::Label for="contactPersonEditLastName" @required={{true}}>
+            <Auk::Label for="lastNameInput" @required={{true}}>
               {{t "last-name"}}
             </Auk::Label>
-            <Auk::Input type="text" id="contactPersonEditLastName"
+            <Auk::Input type="text" id="lastNameInput"
               @block={{true}}
               @value={{this.lastName}}
               {{on "input" this.validators.lastName.enableError}} />
           </div>
         </div>
         <div class="auk-form-group">
-          <Auk::Label for="contactPersonEditEmail">{{t "email"}}</Auk::Label>
-          <Auk::Input type="text" id="contactPersonEditEmail"
+          <Auk::Label for="emailInput">{{t "email"}}</Auk::Label>
+          <Auk::Input type="text" id="emailInput"
             @block={{true}}
             @value={{this.email}} />
         </div>
