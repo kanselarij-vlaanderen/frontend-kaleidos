@@ -5,6 +5,7 @@ const selectors = {
     option: '.ember-power-select-option',
     optionSearchMessage: '.ember-power-select-option--search-message',
     searchInput: '.ember-power-select-search-input',
+    selectedItem: '.ember-power-select-selected-item',
   },
 
   // flatPickr
@@ -14,6 +15,11 @@ const selectors = {
     numInputWrapper: '.open  .numInputWrapper',
     inputNumInputCurYear: '.open  input.numInput.cur-year',
     flatpickrDay: '.open  .flatpickr-day',
+  },
+
+  // RDFA editor
+  rdfa: {
+    editorInner: '.say-editor__inner',
   },
 };
 export default selectors;

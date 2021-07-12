@@ -1,48 +1,55 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
     this.translationSubcase = this.modelFor('publications.publication.translations');
 
-    // Workaround pagination by using include for the documents of a translation subcase
-    // As such, we're sure all documents are loaded client-side by Ember Data
-    this.store.findRecord('translation-subcase', this.translationSubcase.id, {
+    const queryProperties = {
       include: [
-        'source-documents',
-        'translation-activities.generated-pieces'
+        'file',
+        'publication-subcase'
       ].join(','),
+      'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
+    };
+
+    // multiple requests: single request on translation-subcase did not detect inverse relations of piece to the publication-subcase
+    //  and did an extra request per piece
+    const sourceDocumentsQuery = this.store.query('piece', {
+      'filter[translation-subcase][:id:]': this.translationSubcase.id,
+      ...queryProperties,
     });
 
-    const allDocuments = new Set(); // using set to ensure a collection of unique documents
+    const generatedPiecesQuery = this.store.query('piece', {
+      'filter[translation-activity-generated-by][:id:]': this.translationSubcase.id,
+      ...queryProperties,
+    });
 
-    const sourceDocuments = await this.translationSubcase.sourceDocuments;
-    sourceDocuments.forEach((doc) => allDocuments.add(doc));
+    let pieces = await Promise.all([sourceDocumentsQuery, generatedPiecesQuery]);
+    pieces = pieces.flatMap((pieces) => pieces.toArray());
+    pieces = new Set(pieces); // using set to ensure a collection of unique pieces
+    pieces = A([...pieces]);
+    pieces.sortBy('created').reverseObjects(); // descending sort on created
 
-    const translationActivities = await this.translationSubcase.translationActivities;
-    await Promise.all(
-      translationActivities.map(async(activity) => {
-        const translatedDocuments = await activity.generatedPieces;
-        translatedDocuments.forEach((doc) => allDocuments.add(doc));
-      })
-    );
-
-    const sortedDocuments = A([...allDocuments]).sortBy('created');
-    sortedDocuments.reverse();
-    return sortedDocuments;
+    return pieces;
   }
 
   async afterModel() {
-    const publicationFlow = this.modelFor('publications.publication');
-    this.publicationSubcase = await publicationFlow.publicationSubcase;
+    // translationSubcase.publicationFlow causes network request while, but the request is already made in 'publications.publication'
+    this.publicationFlow = this.modelFor('publications.publication');
+    this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
 
   setupController(controller) {
     super.setupController(...arguments);
+    controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
+    controller.isPieceUploadModalOpen = false;
+    controller.isTranslationRequestModalOpen = false;
   }
 
   @action

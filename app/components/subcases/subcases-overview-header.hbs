@@ -1,42 +1,39 @@
-<div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
-  {{!-- TODO: is this double wrapped toolbar here on purpose? --}}
+<Auk::Navbar @skin="gray-100">
   <Auk::Toolbar>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group>
+    <Auk::Toolbar::Group>
+      <Auk::Toolbar::Item>
+        <Auk::Button
+          @skin="borderless"
+          @icon="chevron-left"
+          @layout="icon-only"
+          {{on "click" @backLink}}
+        />
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item>
+        <div data-test-subcase-overview-header-title-container class="auk-u-my">
+          <span class="auk-overline auk-u-block">
+            {{t "case"}}
+          </span>
+          <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    {{#if currentSession.isEditor}}
+      <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-            @skin="borderless"
-            @icon="chevron-left"
-            @layout="icon-only"
-            {{on "click" @backLink}}
-          />
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
-          <div class="auk-u-my">
-            <span class="auk-overline auk-u-block">
-              {{t "case"}}
-            </span>
-            <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
-          </div>
+            data-test-subcase-overview-header-create-subcase
+            @skin="primary"
+            @icon="add"
+            {{on "click" this.toggleIsAddingSubcase}}
+          >
+            {{t "create-subcase"}}
+          </Auk::Button>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      {{#if currentSession.isEditor}}
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="primary"
-              @icon="add"
-              {{on "click" this.toggleIsAddingSubcase}}
-              data-test-subcase-overview-header-create-subcase
-            >
-              {{t "create-subcase"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      {{/if}}
-    </Auk::Toolbar>
+    {{/if}}
   </Auk::Toolbar>
-</div>
+</Auk::Navbar>
 
 
 {{!-- MODAL --}}

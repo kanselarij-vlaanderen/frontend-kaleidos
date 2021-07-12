@@ -1,5 +1,6 @@
 <div class="auk-o-flex--justify-between">
   <Auk::Button
+    data-test-newsletter-table-button-toolbar-edit={{true}}
     @skin="borderless"
     @layout="icon-only"
     @icon="pencil"
@@ -26,6 +27,7 @@
     </div>
   {{/if}}
   <Auk::Button
+    data-test-newsletter-table-button-toolbar-link-to-agendaitem={{true}}
     @skin="borderless"
     @layout="icon-only"
     @icon="nav-right"
@@ -36,6 +38,5 @@
       (await latestAgendaitemId)
     }}
     target="_blank"
-    data-test-link-to-subcase-overview
   />
 </div>

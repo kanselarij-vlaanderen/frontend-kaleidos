@@ -2,17 +2,17 @@
   (t "search")
 }}
 <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
-  <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--gray-100">
-    <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
-          <h2 class="auk-toolbar__title">
+  <Auk::Navbar @skin="gray-100">
+    <Auk::Toolbar @auto={{true}}>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h2 data-test-route-search-title class="auk-toolbar__title">
             {{capitalize (t "search")}}
           </h2>
-        </div>
-      </div>
-    </div>
-  </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
 
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-8 auk-u-mt-4">
@@ -42,14 +42,14 @@
                 </AttachPopover>
               </span>
             </div>
-            <Input
-              data-test-route-search-input=""
-              class="auk-input auk-input--block"
-              type="text"
-              id="dossierId"
+            <Auk::Input
+              @type="text"
+              @block={{true}}
               @placeholder={{t "search-placeholder"}}
               @value={{this.searchTextBuffer}}
               @enter={{fn this.search}}
+              id="dossierId"
+              data-test-route-search-input
             />
           </div>
         </div>
@@ -95,12 +95,12 @@
             <Auk::Label for="ministerName">
               {{t "minister"}}
             </Auk::Label>
-            <Input
-              type="text"
-              class="auk-input auk-input--block"
-              id="ministerName"
+            <Auk::Input
+              @type="text"
+              @block={{true}}
               @value={{this.mandateesBuffer}}
               @enter={{fn this.search}}
+              id="ministerName"
             />
           </div>
         </div>
@@ -117,10 +117,10 @@
         </div>
       </div>
 
-      <div class="auk-navbar auk-navbar--bordered-bottom auk-navbar--white auk-u-p-0 auk-u-mb-6">
-        <div class="auk-toolbar-complex">
-          <div class="auk-toolbar-complex__left">
-            <div class="auk-toolbar-complex__item">
+      <Auk::Navbar class="auk-u-p-0 auk-u-mb-6">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="left">
+            <Auk::Toolbar::Item>
               <ul class="auk-tabs">
                 {{!-- Page-number reset when clicking a search type. It is assumed that users don't want
                       to go back and forth between search results for the different types while keeping the
@@ -146,10 +146,10 @@
                   </LinkTo>
                 </li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
+      </Auk::Navbar>
 
       {{outlet}}
     </div>

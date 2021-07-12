@@ -91,38 +91,8 @@ function currentTimestamp() {
   return Cypress.moment().unix();
 }
 
-/**
- * @description check if element exists and is visible
- * @memberOf Cypress.Chainable#
- * @name existsAndVisible
- * @function
- * @returns {Chainable<JQuery<any>>} returns a chainable element
- * @param {String} element - The element where the action has to be made on
- */
-function existsAndVisible(element) {
-  return cy.get(element)
-    .should('exist')
-    .should('be.visible');
-}
-
-/**
- * @description check if element exists and is not visible
- * @memberOf Cypress.Chainable#
- * @name existsAndInvisible
- * @function
- * @returns {Chainable<JQuery<any>>} returns a chainable element
- * @param {String} element - The element where the action has to be made on
- */
-function existsAndInvisible(element) {
-  return cy.get(element)
-    .should('exist')
-    .should('not.be.visible');
-}
-
 Cypress.Commands.add('selectDate', selectDate);
 Cypress.Commands.add('validateDropdownElements', validateDropdownElements);
 
 Cypress.Commands.add('currentMoment', currentMoment);
 Cypress.Commands.add('currentTimestamp', currentTimestamp);
-Cypress.Commands.add('existsAndVisible', existsAndVisible);
-Cypress.Commands.add('existsAndInvisible', existsAndInvisible);

@@ -14,7 +14,10 @@
       <div class="auk-u-mb-4">
         <div class="auk-form-group">
           <Auk::Label>{{t "confidential"}}</Auk::Label>
-          {{web-components/vl-toggle value=confidential}}
+          {{web-components/vl-toggle
+            data-test-new-case-toggle-confidential=true
+            value=confidential
+          }}
         </div>
       </div>
       <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
@@ -24,9 +27,9 @@
     </div>
   </div>
   <div class="auk-modal__footer auk-modal__footer--bordered">
-    <div class="auk-toolbar-complex">
-      <div class="auk-toolbar-complex__left">
-        <div class="auk-toolbar-complex__item">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
             {{action "closeAction"}}
@@ -34,17 +37,18 @@
           >
             {{t "cancel"}}
           </Auk::Button>
-        </div>
-      </div>
-      <div class="auk-toolbar-complex__right">
-        <div class="auk-toolbar-complex__item">
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
           {{web-components/vl-save-button
+            data-test-new-case-save=true
             text=(t "create-case")
             type="submit"
             isLoading=isLoading
           }}
-        </div>
-      </div>
-    </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </div>
 </form>

@@ -110,11 +110,11 @@
               <span class="auk-u-muted auk-body-1 ">- Ministerraad</span>
             </div>
             <Auk::Tabs @reversed={{true}}>
-              <Auk::Tab @icon="hierarchical-back" class="auk-tabs__hierarchical-back"></Auk::Tab>
-              <Auk::Tab>Overzicht</Auk::Tab>
-              <Auk::Tab>Detail</Auk::Tab>
-              <Auk::Tab>Vergelijk</Auk::Tab>
-              <Auk::Tab>Documenten</Auk::Tab>
+              <Auk::Tab @icon="hierarchical-back" class="auk-tabs__hierarchical-back" @route="styleguide.accordion"></Auk::Tab>
+              <Auk::Tab @route="styleguide.accordion">Overzicht</Auk::Tab>
+              <Auk::Tab @route="styleguide.accordion">Detail</Auk::Tab>
+              <Auk::Tab @route="styleguide.accordion">Vergelijk</Auk::Tab>
+              <Auk::Tab @route="styleguide.accordion">Documenten</Auk::Tab>
             </Auk::Tabs>
           </div>
         </Auk::Toolbar::Item>

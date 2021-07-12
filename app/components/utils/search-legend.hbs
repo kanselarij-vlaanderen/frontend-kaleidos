@@ -1,12 +1,12 @@
 <div class="auk-popover__header">
-  <div class="auk-toolbar-complex">
-    <div class="auk-toolbar-complex__left">
-      <div class="auk-toolbar-complex__item">
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
         <h4 class="auk-toolbar__title">{{t "search-legend-title"}}</h4>
-      </div>
-    </div>
-    <div class="auk-toolbar-complex__right">
-      <div class="auk-toolbar-complex__item">
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    <Auk::Toolbar::Group @position="right">
+      <Auk::Toolbar::Item>
         <button class="auk-button-link auk-button-link--muted" type="button" {{action "close"}}>
           <span class="auk-button__content">
             <div class="auk-icon auk-icon--close auk-icon--default">
@@ -15,9 +15,9 @@
             <span class="auk-u-sr-only">{{t "close"}}</span>
           </span>
         </button>
-      </div>
-    </div>
-  </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
 </div>
 <div class="auk-popover__body">
   <table class="auk-table">

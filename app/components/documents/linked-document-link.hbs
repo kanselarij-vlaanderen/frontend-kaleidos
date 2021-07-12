@@ -4,16 +4,16 @@
       <Auk::Badge @icon="document" @size="large"/>
     </div>
     <div class="vlc-document-card__content">
-      <div class="auk-toolbar-complex auk-toolbar-complex--auto">
-        <div class="auk-toolbar-complex__left">
-          <div class="auk-toolbar-complex__item">
+      <Auk::Toolbar @auto={{true}}>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
             <p class="vlc-subline" data-test-linked-document-link-type-label>
               {{@documentContainer.type.label}}
             </p>
-          </div>
-        </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
         <div class="vlc-document-card-toolbar__right">
-          <div class="auk-toolbar-complex__item">
+          <Auk::Toolbar::Item>
             {{#if this.lastPiece}}
               <AccessLevelPill
                 @accessLevel={{this.accessLevel}}
@@ -24,8 +24,8 @@
                 @onChangeConfidentiality={{this.changeConfidentiality}}
               />
             {{/if}}
-          </div>
-          <div class="auk-toolbar-complex__item">
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
             {{#if currentSession.isEditor}}
               <Auk::Button
                 @skin="danger-borderless"
@@ -34,9 +34,9 @@
                 {{on "click" this.deletePieceLink}}
               />
             {{/if}}
-          </div>
+          </Auk::Toolbar::Item>
         </div>
-      </div>
+      </Auk::Toolbar>
       <h6 class="auk-h4">
         {{this.lastPiece.name}}
       </h6>
