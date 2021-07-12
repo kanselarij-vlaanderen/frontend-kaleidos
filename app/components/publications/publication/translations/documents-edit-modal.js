@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
+import { isBlank } from '@ember/utils';
 
 export default class PublicationsTranslationDocumentEditModalComponent extends Component {
   @tracked name = this.args.sourceDocument.name;
@@ -21,12 +22,7 @@ export default class PublicationsTranslationDocumentEditModalComponent extends C
   }
 
   get saveIsDisabled() {
-    return this.name === null;
-  }
-
-  @action
-  cancelEditSourceDocument() {
-    this.args.onCancel();
+    return isBlank(this.name);
   }
 
   @task

@@ -1,12 +1,11 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @resizeable={{false}}
     @title={{t
       "edit-translation-document"
       docname=this.name
       identifier=@translationSubcase.publicationFlow.identification.idName
     }}
-    @onClose={{perform this.cancelEditSourceDocument}}
+    @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
     <div class="auk-u-my-4">
@@ -70,7 +69,7 @@
                     {{on "input" this.toggleProofprint}} />
                 </Auk::CheckboxList>
               {{else }}
-                <div class="auk-loader" role="alert" aria-busy="true"></div>
+                <Auk::Loader @message={{t "loading"}} />
               {{/unless}}
             </div>
           </div>
@@ -79,7 +78,7 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-          @onCancel={{perform this.cancelEditSourceDocument}}
+          @onCancel={{@onCancel}}
   >
     <Auk::Button
             @skin="primary"

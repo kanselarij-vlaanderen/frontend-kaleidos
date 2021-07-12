@@ -167,14 +167,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.showTranslationRequestModal = true;
   }
 
-
-@action
-openTranslationRequestModal() {
-  this.isTranslationRequestModalOpen = true;
-}
-
-@action
-closeTranslationRequestModal() {
-  this.isTranslationRequestModalOpen = false;
-}
+  @action
+  closeTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = false;
+  }
 }
