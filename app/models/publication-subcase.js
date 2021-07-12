@@ -29,8 +29,4 @@ export default class PublicationSubcase extends Model {
   get isFinished() {
     return isPresent(this.endDate);
   }
-  get proofPrintCorrectorInitials() {
-    return this.proofPrintCorrector.split(' ').map((name, counter, array) => (counter === 0 || counter + 1 === array.length ? name[0] : null))
-      .join('');
-  }
 }

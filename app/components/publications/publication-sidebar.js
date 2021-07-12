@@ -263,7 +263,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @restartableTask
-  *setProofprintCorrector(event) {
+  *setProofPrintCorrector(event) {
     const newValue = event.target.value;
     this.publicationSubcase.proofPrintCorrector = newValue;
     yield timeout(1000);
