@@ -13,7 +13,7 @@
             </Auk::Label>
             <Auk::Input type="text" id="contactPersonEditFirstName"
               @block={{true}}
-              @value={{mut this.firstName}}
+              @value={{this.firstName}}
               {{on "input" this.validators.firstName.enableError}} />
           </div>
           <div class={{if this.validators.lastName.showError "auk-form-group--error"}}>
@@ -22,7 +22,7 @@
             </Auk::Label>
             <Auk::Input type="text" id="contactPersonEditLastName"
               @block={{true}}
-              @value={{mut this.lastName}}
+              @value={{this.lastName}}
               {{on "input" this.validators.lastName.enableError}} />
           </div>
         </div>
@@ -30,7 +30,7 @@
           <Auk::Label for="contactPersonEditEmail">{{t "email"}}</Auk::Label>
           <Auk::Input type="text" id="contactPersonEditEmail"
             @block={{true}}
-            @value={{mut this.email}} />
+            @value={{this.email}} />
         </div>
         <div class="auk-form-group">
           <Auk::Label>
@@ -39,7 +39,7 @@
           <div class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
-              @selected={{mut this.organization}}
+              @selected={{this.organization}}
               @searchField="name"
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
@@ -63,7 +63,8 @@
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button @skin="borderless"
+          <Auk::Button
+            @skin="borderless"
             @disabled={{not this.canCancel}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}

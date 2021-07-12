@@ -54,7 +54,8 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @action
   async delete(contactPerson) {
-    this.args.publicationFlow.contactPersons.removeObject(contactPerson);
+    const publicationFlow = this.args.publicationFlow;
+    publicationFlow.contactPersons.removeObject(contactPerson);
     const person = await contactPerson.person;
     const destroyContactPerson = contactPerson.destroyRecord();
     const destroyPerson = person.destroyRecord();
