@@ -7,12 +7,7 @@
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <button class="auk-button-link auk-button-link--muted" type="button" {{action "close"}}>
-          <span class="auk-button__content">
-            <Auk::Icon @name="close" />
-            <span class="auk-u-sr-only">{{t "close"}}</span>
-          </span>
-        </button>
+        <Auk::ButtonLink @icon="close" @layout="icon-only" @skin="muted" {{action "close"}}/>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
