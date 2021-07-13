@@ -17,18 +17,20 @@
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-                <div class="auk-form-group auk-o-flex--align-start">
+                <div class="auk-form-group auk-o-flex--align-start
+                  {{if this.validators.name.showError "auk-form-group--error"}}">
                   <Auk::Label for="translationUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
                   <Auk::Input type="text" id="translationUploadName"
-                    @value={{mut this.name}} />
+                    @value={{mut this.name}}
+                    {{on 'input' this.validators.name.enableError}} />
                 </div>
                 <div class="auk-form-group">
                   <Auk::Label>{{t "file-type"}}</Auk::Label>
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
-                <div class="auk-form-group">
+                <div class="auk-form-group {{if this.validators.name.showError "auk-form-group--error"}}">
                   <Auk::Label for="translationUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
                   <Auk::Datepicker id="translationUploadReceivedAtDate"
                     @date={{this.receivedAtDate}}

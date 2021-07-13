@@ -4,8 +4,7 @@ import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import {
-  ValidatorSet,
-  Validator
+  ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
 
 /**
@@ -15,7 +14,8 @@ import {
  * @argument onCancel
  */
 export default class PublicationsPublicationProofsProofUploadModalComponent extends Component {
-  validators
+  validators;
+
   @tracked file;
   @tracked name = '';
   @tracked receivedAtDate = new Date();

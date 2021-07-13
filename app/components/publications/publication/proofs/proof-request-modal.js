@@ -7,11 +7,11 @@ import {
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import {
-  ValidatorSet,
-  Validator
+  ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
 
 /**
+ * @argument {'initial'|'extra'|'final'} stage
  * @argument attachments
  * @argument {PublicationFlow} publicationFlow includes: identification
  * @argument onSave
