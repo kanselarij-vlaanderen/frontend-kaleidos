@@ -13,7 +13,7 @@
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary" @icon="add"
-              {{on "click" this.openEditModal}}
+              {{on "click" this.openAddModal}}
               data-test-add-contactperson>
               {{t "add-contact"}}
             </Auk::Button>
@@ -68,8 +68,8 @@
   </Auk::Panel>
 </div>
 
-{{#if this.isOpenEditModal}}
-  <Publications::Publication::Case::ContactPersonEditModal
-    @onCancel={{this.closeEditModal}}
+{{#if this.isOpenAddModal}}
+  <Publications::Publication::Case::ContactPersonAddModal
+    @onCancel={{this.closeAddModal}}
     @onSave={{this.save}} />
 {{/if}}

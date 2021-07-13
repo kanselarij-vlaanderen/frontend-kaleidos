@@ -9,7 +9,7 @@ import { tracked } from '@glimmer/tracking';
 export default class PublicationsPublicationCaseContactPersonsPanelComponent extends Component {
   @service store;
 
-  @tracked isOpenEditModal = false;
+  @tracked isOpenAddModal = false;
 
   get contactPersons() {
     const contactPersons = this.args.publicationFlow.contactPersons.toArray();
@@ -25,13 +25,13 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   }
 
   @action
-  openEditModal() {
-    this.isOpenEditModal = true;
+  openAddModal() {
+    this.isOpenAddModal = true;
   }
 
   @action
-  closeEditModal() {
-    this.isOpenEditModal = false;
+  closeAddModal() {
+    this.isOpenAddModal = false;
   }
 
   @action
@@ -62,7 +62,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
     });
     await contactPerson.save();
 
-    this.isOpenEditModal = false;
+    this.isOpenAddModal = false;
   }
 
   @action
