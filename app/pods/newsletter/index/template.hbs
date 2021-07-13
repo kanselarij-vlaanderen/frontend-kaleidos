@@ -12,13 +12,14 @@
           />
           <th class="lt-column align-left auk-table__col--7">{{t "title-and-content"}}</th>
           <th class="lt-column align-left">{{t "minister"}}</th>
+          {{!-- Note: We are sorting on two keys below. In-newsletter property changes order,
+                      while we want priority to stay ordered ascending --}}
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatments.newsletterInfo,treatments.newsletterInfo.inNewsletter"
+            @field="treatments.newsletterInfo.inNewsletter,priority"
             @label={{t "show-in-newsletter"}}
           />
-          {{! TODO fix sort }}
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
