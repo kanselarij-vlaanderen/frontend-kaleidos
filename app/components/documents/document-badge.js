@@ -7,17 +7,13 @@ export default class DocumentsDocumentBadge extends Component {
    * @argument isHighlighted: boolean indicating wether to highlight the piece
    */
 
-  get documentIconClass() {
-    const parts = [];
+  get documentIconName() {
     if (this.args.isHighlighted) {
-      parts.push('ki-document-added');
+      return 'document-added';
     }
     if (this.args.piece.confidential) {
-      parts.push('ki-lock-closed');
+      return 'lock-closed';
     }
-    if (parts.length) {
-      return parts.join(' ');
-    }
-    return 'ki-document';
+    return 'document';
   }
 }

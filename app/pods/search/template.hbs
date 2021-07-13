@@ -24,12 +24,12 @@
                 {{capitalize (t "keyword")}}
               </Auk::Label>
               <span>
-                <i
-                  class="ki-circle-info auk-u-cursor-pointer auk-icon--muted"
-                  aria-hidden="true"
+                <Auk::Icon
+                  @name="circle-info"
+                  @skin="muted"
+                  class="auk-u-cursor-pointer"
                   {{on "click" this.openPopover}}
-                >
-                </i>
+                />
                 <AttachPopover
                   @class="auk-popover"
                   @showOn="click"

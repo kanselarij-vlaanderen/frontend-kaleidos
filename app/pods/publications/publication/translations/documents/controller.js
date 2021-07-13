@@ -9,7 +9,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
+  @tracked showPieceUploadModal = false;
+  @tracked showPieceEditModal = false;
+  @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
+  @tracked toEditDocument;
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
 
@@ -45,15 +49,26 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     }
   }
 
-  @action
-  openTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = true;
+  @task
+  *saveSourceDocument(translationDocument) {
+    const piece = translationDocument.piece;
+    piece.translationSubcase = this.translationSubcase;
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.save();
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
+    }
+
+    yield piece.save();
+    this.isPieceUploadModalOpen = false;
+    this.send('refresh');
   }
 
-  @action
-  closeTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = false;
-  }
 
   @task
   *saveTranslationRequest(translationRequest) {
@@ -106,6 +121,25 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.transitionToRoute('publications.publication.translations.requests');
   }
 
+  @task
+  *saveEditSourceDocument(translationDocument) {
+    const piece = this.toEditDocument;
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
+    } else {
+      piece.publicationSubcaseSourceFor = null;
+    }
+
+    yield piece.save();
+    this.closePieceEditModal();
+    this.send('refresh');
+  }
+
+
   @action
   openPieceUploadModal() {
     this.isPieceUploadModalOpen = true;
@@ -116,23 +150,25 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.isPieceUploadModalOpen = false;
   }
 
-  @task
-  *saveSourceDocument(translationDocument) {
-    const piece = translationDocument.piece;
-    piece.translationSubcase = this.translationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = translationDocument.pagesAmount;
-    piece.words = translationDocument.wordsAmount;
-    piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+  @action
+  openPieceEditModal(toEditDocument) {
+    this.toEditDocument = toEditDocument;
+    this.showPieceEditModal = true;
+  }
 
-    if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
+  @action
+  closePieceEditModal() {
+    this.toEditDocument = null;
+    this.showPieceEditModal = false;
+  }
 
-    yield piece.save();
-    this.isPieceUploadModalOpen = false;
-    this.send('refresh');
+  @action
+  openTranslationRequestModal() {
+    this.showTranslationRequestModal = true;
+  }
+
+  @action
+  closeTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = false;
   }
 }
