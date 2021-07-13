@@ -6,7 +6,7 @@
     <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         {{!-- Subject --}}
-        <div class="auk-form-group {{if this.validators.subject.showError "auk-form-group--error"}}">
+        <div class="auk-form-group {{this.validators.subject.errorClass}}">
           <Auk::Label for="proofRequestSubject" @required={{true}}>
             {{t "subject"}}
           </Auk::Label>
@@ -15,7 +15,7 @@
             {{on "input" this.validators.subject.enableError}} />
         </div>
         {{!-- Message --}}
-        <div class="auk-form-group {{if this.validators.message.showError "auk-form-group--error"}}">
+        <div class="auk-form-group {{this.validators.errorClass}}">
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>
@@ -24,7 +24,7 @@
             {{on "input" this.validators.message.enableError}} />
         </div>
         {{!-- Attachments --}}
-        <div class="auk-form-group {{if this.validators.attachments.showError "auk-form-group--error"}}">
+        <div class="auk-form-group {{this.validators.attachments.errorClass}}">
           <Auk::Label @required={{true}}>{{t "attachments"}}</Auk::Label>
           <Auk::CheckboxList>
             {{#each @attachments as |piece|}}

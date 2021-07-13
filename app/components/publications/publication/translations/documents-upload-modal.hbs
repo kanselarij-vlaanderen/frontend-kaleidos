@@ -18,7 +18,7 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-11">
             <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-              <div class="auk-form-group auk-o-flex--align-start {{if this.validators.name.showError "auk-form-group--error"}}">
+              <div class="auk-form-group auk-o-flex--align-start {{this.validators.name.errorClass}}">
                 <Auk::Label for="nameDocumentUpload" @required={{true}}>
                   {{t "name"}}
                 </Auk::Label>

@@ -17,7 +17,7 @@
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
-                <div class="auk-form-group {{if this.validators.name.showError "auk-form-group--error"}}">
+                <div class="auk-form-group {{this.validators.name.errorClass}}">
                   <Auk::Label for="proofUploadName" @required={{true}}>
                     {{t "name"}}
                   </Auk::Label>
@@ -30,7 +30,7 @@
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
                 {{#if (eq @source "proof")}}
-                  <div class="auk-form-group {{if this.validators.receivedAtDate.showError "auk-form-group--error"}}">
+                  <div class="auk-form-group {{this.validators.receivedAtDate.errorClass}}">
                     <Auk::Label for="proofUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
                     <Auk::Datepicker id="proofUploadReceivedAtDate"
                       @date={{this.receivedAtDate}}
