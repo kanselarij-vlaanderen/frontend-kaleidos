@@ -8,7 +8,7 @@ import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
 
-export default class PublicationsPublicationCaseContactPersonEditModalComponent extends Component {
+export default class PublicationsPublicationCaseContactPersonAddModalComponent extends Component {
   @service store;
 
   @tracked isOpenOrganizationAddModal = false;
