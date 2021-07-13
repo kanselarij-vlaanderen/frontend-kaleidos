@@ -17,7 +17,7 @@ export default class PublicationsTranslationDocumentEditModalComponent extends C
 
   @task
   *loadData() {
-    const subcase = yield this.args.sourceDocument.publicationSubcase;
+    const subcase = yield this.args.sourceDocument.publicationSubcaseSourceFor;
     this.isSourceForProofPrint = !!subcase ;
   }
 

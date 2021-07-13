@@ -129,9 +129,9 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     piece.name = translationDocument.name;
 
     if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcase = this.publicationSubcase;
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
     } else {
-      piece.publicationSubcase = null;
+      piece.publicationSubcaseSourceFor = null;
     }
 
     yield piece.save();
