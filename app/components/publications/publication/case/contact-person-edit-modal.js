@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { isBlank } from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import {
@@ -89,8 +89,8 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
 
   initValidators() {
     this.validators = new ValidatorSet({
-      firstName: new Validator(() => !isBlank(this.firstName)),
-      lastName: new Validator(() => !isBlank(this.lastName)),
+      firstName: new Validator(() => isPresent(this.firstName)),
+      lastName: new Validator(() => isPresent(this.lastName)),
     });
   }
 }

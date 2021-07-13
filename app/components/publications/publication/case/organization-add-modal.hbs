@@ -6,14 +6,21 @@
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group">
-        <Auk::Label for="organizationNameInput" @required={{true}}>{{t "name"}}</Auk::Label>
+      <div class="auk-form-group {{if this.validators.name.showError "auk-form-group--error"}}">
+        <Auk::Label for="organizationNameInput"
+          @required={{true}}>
+          {{t "name"}}
+        </Auk::Label>
         <Auk::Input type="text" id="organizationNameInput"
           @block={{true}}
-          @value={{this.name}} />
+          @value={{this.name}}
+          {{on "input" this.validators.name.enableError}} />
       </div>
       <div class="auk-form-group">
-        <Auk::Label for="organizationIdentifierInput" @required={{true}}>{{t "identifier"}}</Auk::Label>
+        <Auk::Label for="organizationIdentifierInput"
+          @required={{true}}>
+          {{t "identifier"}}
+        </Auk::Label>
         <Auk::Input type="text" id="organizationIdentifierInput"
           @block={{true}}
           @value={{this.identifier}} />

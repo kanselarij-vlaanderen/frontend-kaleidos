@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { isBlank } from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -11,6 +11,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
   @service store;
 
   validators;
+
   @tracked name = '';
   @tracked identifier = '';
 
@@ -35,7 +36,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
 
   initValidators() {
     this.validators = new ValidatorSet({
-      name: new Validator(() => !isBlank(this.name)),
+      name: new Validator(() => isPresent(this.name)),
     });
   }
 }
