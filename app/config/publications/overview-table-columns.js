@@ -74,11 +74,24 @@ export default [
     showByDefault: true,
   },
   {
+    keyName: 'proofs',
+    translationKey: 'publications-table-publish-proofs',
+    translationKeySmall: 'publications-table-publish-proofs-small',
+    showByDefault: true,
+  },
+  {
     keyName: 'lastEdited',
     translationKey: 'publications-table-last-edited',
     translationKeySmall: 'publications-table-last-edited-small',
     showByDefault: true,
     sortKey: 'modified',
+  },
+  {
+    keyName: 'proofPrintCorrector',
+    translationKey: 'publications-table-preview-translator',
+    translationKeySmall: 'publications-table-preview-translator-small',
+    showByDefault: true,
+    sortKey: 'publication-subcase.proof-print-corrector',
   },
   {
     keyName: 'status',

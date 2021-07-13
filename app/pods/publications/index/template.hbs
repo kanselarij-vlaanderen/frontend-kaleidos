@@ -162,12 +162,29 @@
                       <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{row.translationSubcase}}/>
                     </td>
                   {{/if}}
+                  {{#if this.tableColumnDisplayOptions.proofs}}
+                    <td class="auk-u-text-nowrap">
+                      <Publications::Publication::Proofs::ProofsProgressBadge @publicationSubcase={{row.publicationSubcase}}/>
+                    </td>
+                  {{/if}}
                   {{#if this.tableColumnDisplayOptions.lastEdited}}
                     <td>
                       {{moment-format row.modified "DD-MM-YYYY"}}<br/>
                       <span class="auk-u-text-small auk-u-muted">
                         {{moment-format row.modified "HH:mm"}}
                       </span>
+                    </td>
+                  {{/if}}
+                  {{#if this.tableColumnDisplayOptions.proofPrintCorrector}}
+                    <td class="auk-u-text-nowrap">
+                      {{#if row.publicationSubcase.proofPrintCorrector}}
+                        <Auk::Avatar @icon="user" @size="small">
+                          <p>{{row.publicationSubcase.proofPrintCorrector}}</p>
+                        </Auk::Avatar>
+                      {{else}}
+                        {{t "dash"}}
+                      {{/if}}
+
                     </td>
                   {{/if}}
                   {{#if this.tableColumnDisplayOptions.status}}

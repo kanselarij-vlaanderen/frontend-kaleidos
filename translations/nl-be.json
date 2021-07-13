@@ -828,16 +828,14 @@
   "publications-table-publication-date-small" : "Pub. BS",
   "publications-table-publication-number" : "Publicatienummer",
   "publications-table-publication-number-small" : "Pubnr.",
-  "publications-table-publish-preview-requests" : "Drukproef status",
-  "publications-table-publish-preview-requests-small" : "Proef",
+  "publications-table-publish-proofs" : "Drukproef status",
+  "publications-table-publish-proofs-small" : "Proef",
   "publications-table-regulation-type" : "Type Regelgeving",
   "publications-table-regulation-type-small" : "Type Reg.",
   "publications-table-publication-target-date" : "Gevraagde publicatiedatum",
   "publications-table-publication-target-date-small" : "Gevr. Pub.",
   "publications-table-speed-procedure" : "Spoedprocedure",
   "publications-table-speed-procedure-small" : "Sp.",
-  "publications-table-translate-requests" : "Vertaling status",
-  "publications-table-translate-requests-small" : "Vert.",
   "publications-table-translation-due-date": "Uiterste vertaaldatum",
   "publications-table-translation-due-date-small": "Uit. Vert.",
   "publications-table-preview-translator": "Drukproef verbeteraar",
@@ -906,5 +904,6 @@
   "select-mandatee": "Selecteer mandataris...",
   "message": "Bericht",
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
-  "email-to-proofrequest": "Email ontvanger voor drukproeven"
+  "email-to-proofrequest": "Email ontvanger voor drukproeven",
+  "proofprint-corrector": "Drukproef verbeteraar"
 }
