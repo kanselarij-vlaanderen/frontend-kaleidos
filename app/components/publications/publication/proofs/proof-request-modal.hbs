@@ -15,7 +15,7 @@
             {{on "input" this.validators.subject.enableError}} />
         </div>
         {{!-- Message --}}
-        <div class="auk-form-group {{this.validators.errorClass}}">
+        <div class="auk-form-group {{this.validators.message.errorClass}}">
           <Auk::Label for="proofRequestMessage" @required={{true}}>
             {{t "message"}}
           </Auk::Label>

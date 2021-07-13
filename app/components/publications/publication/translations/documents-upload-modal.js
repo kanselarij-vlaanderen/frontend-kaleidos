@@ -20,13 +20,13 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  validators;
-
   @tracked translationDocument = null;
   @tracked name = '';
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
   @tracked isSourceForProofPrint = false;
+
+  validators;
 
   constructor() {
     super(...arguments);
@@ -97,8 +97,6 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
 
   @action
   toggleProofprint() {
-    console.log(this.validators.name);
-
     this.isSourceForProofPrint = !this.isSourceForProofPrint;
   }
 
