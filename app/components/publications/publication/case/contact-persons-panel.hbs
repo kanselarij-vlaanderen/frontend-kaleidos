@@ -51,6 +51,7 @@
                 </td>
                 <td class="auk-u-text-align--right">
                   <Auk::Button
+                    data-test-delete-contactperson
                     @layout="icon-only" @icon="delete" @skin="danger-borderless"
                     {{on "click" (fn this.delete contactPerson)}} />
                 </td>

@@ -14,7 +14,6 @@ const selectors = {
     lastNameInput: '#lastNameInput',
     emailInput: '#emailInput',
     organisationInput: '#organizationNameInput',
-    threedotsButton: '[data-test-contact-persons] button i',
     deleteContactpersonButton: '[data-test-delete-contactperson]',
   },
   publicationCase: {
