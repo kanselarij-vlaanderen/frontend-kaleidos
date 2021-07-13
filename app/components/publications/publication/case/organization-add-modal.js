@@ -29,7 +29,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
   onSave() {
     const organization = this.store.createRecord('organization', {
       name: this.name,
-      identifier: this.identifier,
+      identifier: isPresent(this.identifier) ? this.identifier : undefined,
     });
     this.args.onSave(organization);
   }

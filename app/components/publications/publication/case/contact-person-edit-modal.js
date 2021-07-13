@@ -59,7 +59,7 @@ export default class PublicationsPublicationCaseContactPersonEditModalComponent 
     const contactPersonProperties = {
       firstName: this.firstName,
       lastName: this.lastName,
-      email: this.email || undefined,
+      email: isPresent(this.email) ? this.email : undefined,
       organization: this.organization,
     };
     yield this.args.onSave(contactPersonProperties);
