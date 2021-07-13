@@ -74,7 +74,7 @@
         <div class="auk-key-value-item__label">
           {{t "is-on-agenda"}}
         </div>
-        <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link>
+        <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link-container>
           {{#if
             (or
                (is-pending isRetracted)
@@ -90,6 +90,7 @@
                 {{t "postponed-subcase"}}
               {{/if}}
               <Auk::ButtonLink
+                data-test-subcase-description-agenda-link
                 @route="agenda.agendaitems.agendaitem"
                 @models={{array
                   (await latestMeetingId)
