@@ -29,6 +29,14 @@
                   <Auk::Label>{{t "file-type"}}</Auk::Label>
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
+                {{#if (eq @source "proof")}}
+                  <div class="auk-form-group {{if this.validators.receivedAtDate.showError "auk-form-group--error"}}">
+                    <Auk::Label for="proofUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
+                    <Auk::Datepicker id="proofUploadReceivedAtDate"
+                      @date={{this.receivedAtDate}}
+                      @onChange={{this.setReceivedAtDate}} />
+                  </div>
+                {{/if}}
               </div>
             </div>
           </div>

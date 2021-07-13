@@ -159,6 +159,7 @@
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
+    @source="correction"
     @onSave={{this.saveCorrectionDocument}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}

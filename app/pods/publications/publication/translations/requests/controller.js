@@ -38,7 +38,7 @@ export default class PublicationsPublicationTranslationsRequestController extend
       translationActivityGeneratedBy: translationActivity,
     });
     if (translationUpload.isSourceForProofPrint) {
-      piece.publicationSubcase = this.publicationSubcase;
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
     }
     const pieceSave = piece.save();
 

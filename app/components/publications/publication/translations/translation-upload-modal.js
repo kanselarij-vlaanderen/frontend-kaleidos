@@ -10,7 +10,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
   @tracked receivedAtDate = new Date();
 
   get isSaveDisabled() {
-    return this.file === null || this.receivedAtDate === null;
+    return this.file === null || this.receivedAtDate === undefined;
   }
 
   @action
@@ -36,6 +36,10 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
 
   @action
   setReceivedAtDate(selectedDates) {
-    this.receivedAtDate = selectedDates[0];
+    if (selectedDates.length) {
+      this.receivedAtDate = selectedDates[0];
+    } else {
+      this.receivedAtDate = undefined;
+    }
   }
 }

@@ -86,6 +86,7 @@ export default class PublicationsPublicationProofsRequestsController extends Con
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
+      receivedDate: proofUpload.receivedAtDate,
       confidential: false,
       name: proofUpload.name,
       file: proofUpload.file,
