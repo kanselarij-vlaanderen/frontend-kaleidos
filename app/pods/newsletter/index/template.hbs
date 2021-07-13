@@ -15,9 +15,10 @@
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
-            @field="treatments.newsletterInfo.inNewsletter"
+            @field="treatments.newsletterInfo,treatments.newsletterInfo.inNewsletter"
             @label={{t "show-in-newsletter"}}
           />
+          {{! TODO fix sort }}
           <ThSortable
             @class="lt-column align-left"
             @currentSorting={{this.sort}}
