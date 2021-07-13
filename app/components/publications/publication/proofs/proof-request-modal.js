@@ -1,9 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  isBlank,
-  isEmpty
-} from '@ember/utils';import { tracked } from '@glimmer/tracking';
+import { isPresent } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import {
@@ -21,6 +19,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
   @tracked subject;
   @tracked message;
   @tracked selectedAttachments = [];
+
   validators;
 
   constructor() {
@@ -37,9 +36,9 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
   initValidators() {
     this.validators = new ValidatorSet({
-      subject: new Validator(() => !isBlank(this.subject)),
-      message: new Validator(() => !isBlank(this.message)),
-      attachments: new Validator(() => !isEmpty(this.selectedAttachments)),
+      subject: new Validator(() => isPresent(this.subject)),
+      message: new Validator(() => isPresent(this.message)),
+      attachments: new Validator(() => isPresent(this.selectedAttachments)),
     });
   }
 
