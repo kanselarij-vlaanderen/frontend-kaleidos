@@ -87,6 +87,13 @@ export default [
     sortKey: 'modified',
   },
   {
+    keyName: 'proofPrintCorrector',
+    translationKey: 'publications-table-preview-translator',
+    translationKeySmall: 'publications-table-preview-translator-small',
+    showByDefault: true,
+    sortKey: 'publication-subcase.proof-print-corrector',
+  },
+  {
     keyName: 'status',
     translationKey: 'publications-table-status',
     translationKeySmall: 'publications-table-status-small',
