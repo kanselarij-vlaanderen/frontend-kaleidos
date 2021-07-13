@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
@@ -14,7 +15,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service('file-queue') fileQueueService;
 
   @tracked translationDocument = null;
-  @tracked name = null;
+  @tracked name = '';
   @tracked pagesAmount = null;
   @tracked wordsAmount = null;
   @tracked isSourceForProofPrint = false;
@@ -35,7 +36,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   get saveIsDisabled() {
-    return this.translationDocument === null || this.name === null;
+    return this.translationDocument === null || !isPresent(this.name);
   }
 
   @action

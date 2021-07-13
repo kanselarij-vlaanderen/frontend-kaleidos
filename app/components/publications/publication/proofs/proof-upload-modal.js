@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  isNone, isPresent
-} from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import {
@@ -49,18 +47,19 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
 
   @action
   setReceivedAtDate(selectedDates) {
+    this.validators.receivedAtDate.enableError();
+
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
     } else {
       this.receivedAtDate = undefined;
-      this.validators.receivedAtDate.enableError();
     }
   }
 
   initValidation() {
     this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.name)),
-      receivedAtDate: new Validator(() => !isNone(this.receivedAtDate)),
+      receivedAtDate: new Validator(() => isPresent(this.receivedAtDate)),
     });
   }
 }

@@ -1,16 +1,18 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
   @tracked file = null;
-  @tracked name = null;
+  @tracked name = '';
   @tracked isSourceForProofPrint = false;
   @tracked receivedAtDate = new Date();
 
   get isSaveDisabled() {
-    return this.file === null || this.receivedAtDate === undefined;
+    return this.file === null
+      || !isPresent(this.name) || !isPresent(this.receivedAtDate);
   }
 
   @action
