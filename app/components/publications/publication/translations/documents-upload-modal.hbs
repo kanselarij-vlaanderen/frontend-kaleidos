@@ -19,15 +19,14 @@
           <div class="auk-o-grid-col-11">
             <div class="auk-form-group-layout auk-form-group-layout--horizontal">
               <div class="auk-form-group auk-o-flex--align-start {{if this.validators.name.showError "auk-form-group--error"}}">
-                <Auk::Label for="nameDocumentUpload" @required={{true}}
-                  {{on "input" this.validators.name.enableError}}>
+                <Auk::Label for="nameDocumentUpload" @required={{true}}>
                   {{t "name"}}
                 </Auk::Label>
                 <Auk::Input
                   type="text"
                   id="nameDocumentUpload"
                   @value={{mut this.name}}
-                  {{on "click" this.validators.name.enableError}}
+                  {{on "input" this.validators.name.enableError}}
                 />
               </div>
               <div class="auk-form-group">
