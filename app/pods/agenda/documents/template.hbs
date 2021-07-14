@@ -9,12 +9,9 @@
             </h4>
             {{#if (and this.currentSession.isEditor this.model.length)}}
               <div class="auk-u-ml-2">
-                <button class="auk-button-link" type="button"
-                  {{on "click" this.enablePieceEdit}}>
-                  <span class="auk-button__content">
-                    {{t "edit"}}
-                  </span>
-                </button>
+                <Auk::ButtonLink {{on "click" this.enablePieceEdit}}>
+                  {{t "edit"}}
+                </Auk::ButtonLink>
               </div>
             {{/if}}
           </div>

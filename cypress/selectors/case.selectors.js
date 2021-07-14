@@ -32,8 +32,8 @@ const selectors = {
     requestedBy: '[data-test-subcase-description-requested-by]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
-    // TODO make selector for link and different selector for the whole field?
-    agendaLink: '[data-test-subcase-description-agenda-link] a',
+    agendaLink: '[data-test-subcase-description-agenda-link]',
+    agendaLinkContainer: '[data-test-subcase-description-agenda-link-container]',
     // TODO unused selector
     modified: '[data-test-subcase-description-modified]',
     edit: '[data-test-subcase-description-edit]',

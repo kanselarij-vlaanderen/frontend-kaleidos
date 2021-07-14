@@ -12,6 +12,7 @@ export default class PublicationSubcase extends Model {
   @attr('datetime') endDate; // publicatiedatum
   @attr('datetime') created;
   @attr('datetime') modified;
+  @attr proofPrintCorrector;
 
   @belongsTo('publication-flow') publicationFlow;
 

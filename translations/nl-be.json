@@ -859,6 +859,7 @@
   "paused-on": "Gepauzeerd op",
   "help": "Help",
   "upload-translation-document": "Vertaaldocument uploaden voor publicatie {identifier}",
+  "edit-translation-document": "Vertaaldocument {docname} bewerken voor publicatie {identifier}",
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
@@ -904,5 +905,6 @@
   "select-mandatee": "Selecteer mandataris...",
   "message": "Bericht",
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
-  "email-to-proofrequest": "Email ontvanger voor drukproeven"
+  "email-to-proofrequest": "Email ontvanger voor drukproeven",
+  "proofprint-corrector": "Drukproef verbeteraar"
 }

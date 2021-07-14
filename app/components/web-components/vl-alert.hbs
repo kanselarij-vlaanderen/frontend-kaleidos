@@ -10,16 +10,12 @@
     </div>
   {{else}}
     <div class="vl-alert__icon">
-      <div class='auk-icon'>
-        <i class="{{this.iconClass}} vl-alert__icon-padding-bottom--small" aria-hidden="true"></i>
-      </div>
+      <Auk::Icon @name={{this.iconName}} class="auk-u-pb" />
     </div>
   {{/if}}
   {{#if @closeable}}
     <button data-test-vl-alert-close class="vl-alert__close" type="button" {{action "close"}}>
-      <div class='auk-icon'>
-        <i class="ki-cross" aria-hidden="true"></i>
-      </div>
+      <Auk::Icon @name="cross" />
       <div class="auk-u-sr-only">
         {{t "close"}}
       </div>
