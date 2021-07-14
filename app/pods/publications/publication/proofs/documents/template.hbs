@@ -123,27 +123,6 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
-                    @layout="icon-only" @skin="borderless" @icon="more"
-                    @event="click"
-                    id="proofDocumentsRowActionMenu{{piece.id}}">
-                    {{t "view-more"}}
-                  </Auk::Button>
-                  {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-                  <EmberPopover
-                    @side="bottom-end"
-                    @tooltipClass="auk-popover"
-                    @targetId="proofDocumentsRowActionMenu{{piece.id}}">
-                    <Auk::Dropdown
-                      as |dropdown|>
-                      <dropdown.Item>
-                        {{t "edit-proof-details"}}
-                      </dropdown.Item>
-                      <dropdown.Item @skin="danger">
-                        {{t "delete"}}
-                      </dropdown.Item>
-                    </Auk::Dropdown>
-                  </EmberPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
