@@ -9,9 +9,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
-  @tracked showPieceUploadModal = false;
   @tracked showPieceEditModal = false;
-  @tracked showTranslationRequestModal = false;
   @tracked selectedPieces = [];
   @tracked toEditDocument;
   @tracked isPieceUploadModalOpen = false;
@@ -164,7 +162,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   @action
   openTranslationRequestModal() {
-    this.showTranslationRequestModal = true;
+    this.isTranslationRequestModalOpen = true;
   }
 
   @action
