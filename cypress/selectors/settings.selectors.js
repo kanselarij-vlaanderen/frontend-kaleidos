@@ -44,13 +44,13 @@ const selectors = {
   // route settings/ministers
   ministers: {
     add: '[data-test-route-settings-ministers-add]',
-    // TODO unused selectors
+    // TODO-selector unused selectors
     sortableGroup: '[data-test-route-settings-ministers-sortable-group]',
     sortableGroupRow: '[data-test-route-settings-ministers-sortable-group-row]',
     mandatee: {
       edit: '[data-test-route-settings-ministers-mandatee-edit]',
       delete: '[data-test-route-settings-ministers-mandatee-delete]',
-      // TODO unused selectors
+      // TODO-selector unused selectors
       fullDisplayName: '[data-test-route-settings-ministers-mandatee-full-display-name]',
       nickname: '[data-test-route-settings-ministers-mandatee-nickname]',
       priority: '[data-test-route-settings-ministers-mandatee-priority]',
@@ -63,7 +63,7 @@ const selectors = {
     alerts: '[data-test-route-settings-system-alerts-index-alerts-dropdown]',
     add: '[data-test-route-settings-system-alerts-index-add]',
     remove: '[data-test-route-settings-system-alerts-index-remove]',
-    // TODO unused selector (remove?)
+    // TODO-selector unused selector (remove?)
     edit: '[data-test-route-settings-system-alerts-index-edit]',
   },
 
@@ -71,7 +71,7 @@ const selectors = {
   systemAlertForm: {
     title: '[data-test-system-alert-form-title] input',
     message: '[data-test-system-alert-form-message] textarea',
-    // TODO unused selectors (remove?)
+    // TODO-selector unused selectors (remove?)
     fromDate: '[data-test-system-alert-form-from-date] input',
     toDate: '[data-test-system-alert-form-to-date] input',
   },
@@ -85,7 +85,7 @@ const selectors = {
   },
 
   // component next-button
-  // TODO this component is just a linkTo, refactor to au component
+  // TODO-selector this component is just a linkTo, refactor to au component
   goToUserDetail: '[data-test-next-button-user-detail]',
 
   // component model-manager
@@ -98,7 +98,7 @@ const selectors = {
   // component manage-government-fields
   manageGovernmentFields: {
     add: '[data-test-manage-government-fields-add]',
-    // TODO unused selector
+    // TODO-selector unused selector
     edit: '[data-test-manage-government-fields-edit]',
     delete: '[data-test-manage-government-fields-delete]',
   },
@@ -106,7 +106,7 @@ const selectors = {
   // component manage-ise-codes
   manageIseCodes: {
     add: '[data-test-manage-ise-code-add]',
-    // TODO unused selector
+    // TODO-selector unused selector
     edit: '[data-test-manage-ise-code-edit]',
     delete: '[data-test-manage-ise-code-delete]',
   },

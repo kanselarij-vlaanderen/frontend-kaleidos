@@ -42,7 +42,7 @@ const selectors = {
 
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
-    // TODO unused selector
+    // TODO-selector unused selector
     addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
   },
 
@@ -85,7 +85,7 @@ const selectors = {
     title: '[data-test-route-search-title]',
     input: '[data-test-route-search-input]',
     trigger: '[data-test-route-search-trigger]',
-    // TODO unused selector:
+    // TODO-selector unused selector:
     datepickerButton: '[data-test-route-search-datepicker-button]',
   },
 
@@ -121,6 +121,9 @@ const selectors = {
   // newsletters/template
   newsletters: {
     dataTable: '[data-test-route-newsletters-data-table]',
+    row: {
+      title: '[data-test-route-newsletters-data-table-row-title]',
+    },
   },
 
   /**
@@ -130,8 +133,18 @@ const selectors = {
   // publications/template
   publications: {
     title: '[data-test-route-publications-title]',
-    // TODO: there are more selectors in this route
+    // TODO-selector: there are more selectors in this route
   },
+
+  /**
+    ROUTE LOGIN
+  */
+
+  // login/template
+  login: {
+    acmidmButton: '[data-test-route-login-acmidm-container] button',
+  },
+
 
   /**
     ROUTE ACCOUNTLESS-USERS
@@ -140,6 +153,7 @@ const selectors = {
   // accountless-users/template
   accountlessUsers: {
     title: '[data-test-route-accountless-users-title]',
+    message: '[data-test-route-accountless-users-message]',
   },
 
 };

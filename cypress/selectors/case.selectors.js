@@ -34,16 +34,16 @@ const selectors = {
     meetingPlannedStart: '[data-test-subcase-description-meeting-planned-start]',
     agendaLink: '[data-test-subcase-description-agenda-link]',
     agendaLinkContainer: '[data-test-subcase-description-agenda-link-container]',
-    // TODO unused selector
+    // TODO-selector unused selector
     modified: '[data-test-subcase-description-modified]',
     edit: '[data-test-subcase-description-edit]',
   },
 
   // subcase-item
-  // TODO better names
+  // TODO-selector better names
   subcaseItem: {
     approved: '[data-test-subcase-item-approved]',
-    // TODO unused selector
+    // TODO-selector unused selector
     notApproved: '[data-test-subcase-item-not-approved]',
   },
 
@@ -72,7 +72,7 @@ const selectors = {
     confidential: '[data-test-subcase-titles-edit-confidential]',
     actions: {
       save: '[data-test-subcase-titles-edit-save]',
-      // TODO unused selector
+      // TODO-selector unused selector
       cancel: '[data-test-subcase-titles-edit-cancel]',
     },
   },

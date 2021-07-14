@@ -63,14 +63,14 @@ context('Different session kinds should show different titles', () => {
 
   it('should show the correct translations for all kinds of sessions in newsletter overview', () => {
     cy.visit('/kort-bestek?size=100');
-    cy.get(route.newsletters.dataTable)
-      .children()
+    cy.get(route.newsletters.dataTable).find('tbody')
+      .children('tr')
       .as('rows');
     cy.get('@rows').within(() => {
       // TODO-PVV agenda
-      cy.contains('Kort bestek voor de ministerraad van');
-      cy.contains('Kort bestek voor de ministerraad via elektronische procedure van');
-      cy.contains('Kort bestek voor de bijzondere ministerraad van');
+      cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad van');
+      cy.get(route.newsletters.row.title).contains('Kort bestek voor de ministerraad via elektronische procedure van');
+      cy.get(route.newsletters.row.title).contains('Kort bestek voor de bijzondere ministerraad van');
     });
   });
 

@@ -189,7 +189,7 @@ context('Add files to an agenda', () => {
     cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@patchTreatment');
 
-    // TODO right now, changing the status of the treatment does not change the retracted attribute of agendaitem
+    // NOTE: right now, changing the status of the treatment does not change the retracted attribute of agendaitem
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
     // perhaps in the future this will be a feature
     cy.openDetailOfAgendaitem(SubcaseTitleShort);

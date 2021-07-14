@@ -19,7 +19,8 @@ context('Table Row Click tests', () => {
   it('should open an agenda after clicking a row', () => {
     cy.route('GET', '/agendas/**/agendaitems').as('getAgendas');
 
-    cy.get(route.agendasOverview.dataTable).children()
+    cy.get(route.agendasOverview.dataTable).find('tbody')
+      .children('tr')
       .as('rows')
       .eq(0)
       .click();
@@ -33,7 +34,8 @@ context('Table Row Click tests', () => {
     cy.wait('@getCases', {
       timeout: 12000,
     });
-    cy.get(route.casesOverview.dataTable).children()
+    cy.get(route.casesOverview.dataTable).find('tbody')
+      .children('tr')
       .as('rows')
       .eq(0)
       .click();
@@ -47,7 +49,8 @@ context('Table Row Click tests', () => {
     cy.wait('@getMeetings', {
       timeout: 12000,
     });
-    cy.get(route.newsletters.dataTable).children()
+    cy.get(route.newsletters.dataTable).find('tbody')
+      .children('tr')
       .as('rows')
       .eq(0)
       .click();
@@ -58,12 +61,13 @@ context('Table Row Click tests', () => {
       .should('contain', '/kort-bestek');
   });
 
-  it.only('should filter the agenda-page and remove the active filter afterwards', () => {
+  it('should filter the agenda-page and remove the active filter afterwards', () => {
     cy.route('GET', '/meetings?**').as('getMeetings');
     cy.wait('@getMeetings', {
       timeout: 30000,
     });
-    cy.get(route.agendasOverview.dataTable).children()
+    cy.get(route.agendasOverview.dataTable).find('tbody')
+      .children('tr')
       .should('not.have.length', 0);
     cy.get(route.agendasOverview.filter.input).click()
       .type('02/2019');
@@ -71,7 +75,8 @@ context('Table Row Click tests', () => {
     cy.get(utils.vlAlert.message).contains('Er zijn nog geen historische agenda\'s');
     cy.get(utils.changesAlert.alert).contains('Deze data is gefilterd.');
     cy.get(utils.changesAlert.close).click();
-    cy.get(route.agendasOverview.dataTable).children()
+    cy.get(route.agendasOverview.dataTable).find('tbody')
+      .children('tr')
       .should('not.have.length', 0);
   });
 });

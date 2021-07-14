@@ -184,7 +184,7 @@ context('Add files to an agenda', () => { // At the meeting-level
     cy.wait('@deletePiece', {
       timeout: 20000,
     });
-    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO code-fix: the deletion of document in vl-document component
+    // cy.wait('@deleteDocumentContainer', { timeout: 20000 }); // TODO-bug the deletion of document in vl-document component
     cy.wait('@loadPieces');
 
     // Nothing should be left
