@@ -48,8 +48,6 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
-    controller.isPieceUploadModalOpen = false;
-    controller.isTranslationRequestModalOpen = false;
   }
 
   @action

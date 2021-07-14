@@ -59,7 +59,5 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
     controller.initSort();
-    controller.isPieceUploadModalOpen = false;
-    controller.isProofRequestModalOpen = false;
   }
 }
