@@ -31,13 +31,21 @@ export default class PublicationsRoute extends Route {
       'page[size]': PAGE_SIZE.CODE_LISTS,
       sort: 'priority',
     });
+    const governmentFieldsPromise = this.store.query('government-field', {
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+    });
+    const governmentsDomainsPromise = this.store.query('government-domain', {
+      'page[size]': PAGE_SIZE.CODE_LISTS,
+    });
 
     return Promise.all([
       publicationStatusPromise,
       regulationTypePromise,
       urgencyLevelPromise,
       documentTypePromise,
-      publicationModePromise
+      publicationModePromise,
+      governmentFieldsPromise,
+      governmentsDomainsPromise
     ]);
   }
 }
