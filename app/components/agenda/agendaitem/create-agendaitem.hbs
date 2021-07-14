@@ -5,108 +5,104 @@
   title=(t "add-agendaitems")
 }}
   {{#if (or (is-pending model) loading)}}
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        {{#if (is-pending model)}}
-          {{web-components/vl-loader
-            text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
-          }}
-        {{else}}
-          {{web-components/vl-loader
-            text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
-          }}
-        {{/if}}
-      </div>
-    </div>
+    <Auk::Modal::Body>
+      {{#if (is-pending model)}}
+        {{web-components/vl-loader
+          text=(concat (t "cases-loading-text") " " (t "please-be-patient"))
+        }}
+      {{else}}
+        {{web-components/vl-loader
+          text=(concat (t "agendaitems-creating-text") " " (t "please-be-patient"))
+        }}
+      {{/if}}
+    </Auk::Modal::Body>
   {{else}}
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2">
-          <div class="auk-o-grid-col-8">
-            <Auk::Toolbar @auto={{true}}>
-              <Auk::Toolbar::Group @position="left">
-                <Auk::Toolbar::Item class="auk-u-maximize-width">
-                  <div class="vl-input-field--inline" data-test-vl-create-agendaitem-search>
-                    {{input
-                      value=filterParam
-                      id="searchId"
-                      placeholder="Zoeken.."
-                      key-press=(perform searchTask)
-                      disabled=showPostponed
-                      class="vl-input-field vl-input-field__input"
-                    }}
-                    <Auk::Button
-                      @skin="primary"
-                      @layout="icon-only"
-                      @icon="search"
-                      class="vl-input-field__submit"
-                      onclick={{perform searchTask}}
-                    />
-                  </div>
-                </Auk::Toolbar::Item>
-              </Auk::Toolbar::Group>
-            </Auk::Toolbar>
-          </div>
-          <div class="auk-o-grid-col-4">
-            <div class="auk-form-group">
-              <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
-              {{web-components/vl-checkbox
-                data-test-postponed-checkbox=true
-                value=showPostponed
-                toggle=(action "checkShowPostponedValue")
-              }}
-            </div>
-          </div>
-          <div class="auk-o-grid-col-3">
-            {{#if searchTask.isRunning}}
-              <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
-                <Auk::Loader @message={{t "loading"}} />
-              </div>
-            {{else}}
-              {{#data-table
-                content=model
-                sort=sortParam
-                page=pageParam
-                size=sizeParam
-                isLoading=findAll.isRunning
-                noDataMessage=(t "no-results-found")
-                onClickRow=(action "selectPostponed")
-              as |table|
-              }}
-                {{#table.content
-                as |c|
-                }}
-                  {{#c.header}}
-                    <th></th>
-                    {{th-sortable
-                      field="shortTitle"
-                      currentSorting=sortParam
-                      label=(t "short-title-case")
-                    }}
-                    <th></th>
-                  {{/c.header}}
-                  {{#c.body as |subcase|}}
-                    <td class="auk-table__col--1">
-                      {{web-components/vl-checkbox
-                        value=subcase.selected
-                        toggle=(action "selectAvailableSubcase" subcase)
-                      }}
-                    </td>
-                    <td class="auk-table__col--11">
-                      {{subcase.shortTitle}}
-                      <br>
-                      <p class="auk-u-muted">
-                        {{subcase.subcaseName}}
-                      </p>
-                    </td>
-                  {{/c.body}}
-                {{/table.content}}
-              {{/data-table}}
-            {{/if}}
+    <Auk::Modal::Body>
+      <div class="auk-o-grid auk-o-flex--align-end auk-u-mb-2">
+        <div class="auk-o-grid-col-8">
+          <Auk::Toolbar @auto={{true}}>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item class="auk-u-maximize-width">
+                <div class="vl-input-field--inline" data-test-vl-create-agendaitem-search>
+                  {{input
+                    value=filterParam
+                    id="searchId"
+                    placeholder="Zoeken.."
+                    key-press=(perform searchTask)
+                    disabled=showPostponed
+                    class="vl-input-field vl-input-field__input"
+                  }}
+                  <Auk::Button
+                    @skin="primary"
+                    @layout="icon-only"
+                    @icon="search"
+                    class="vl-input-field__submit"
+                    onclick={{perform searchTask}}
+                  />
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </div>
+        <div class="auk-o-grid-col-4">
+          <div class="auk-form-group">
+            <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
+            {{web-components/vl-checkbox
+              data-test-postponed-checkbox=true
+              value=showPostponed
+              toggle=(action "checkShowPostponedValue")
+            }}
           </div>
         </div>
+        <div class="auk-o-grid-col-3">
+          {{#if searchTask.isRunning}}
+            <div class="auk-o-flex auk-o-flex--center auk-u-mt-4">
+              <Auk::Loader @message={{t "loading"}} />
+            </div>
+          {{else}}
+            {{#data-table
+              content=model
+              sort=sortParam
+              page=pageParam
+              size=sizeParam
+              isLoading=findAll.isRunning
+              noDataMessage=(t "no-results-found")
+              onClickRow=(action "selectPostponed")
+            as |table|
+            }}
+              {{#table.content
+              as |c|
+              }}
+                {{#c.header}}
+                  <th></th>
+                  {{th-sortable
+                    field="shortTitle"
+                    currentSorting=sortParam
+                    label=(t "short-title-case")
+                  }}
+                  <th></th>
+                {{/c.header}}
+                {{#c.body as |subcase|}}
+                  <td class="auk-table__col--1">
+                    {{web-components/vl-checkbox
+                      value=subcase.selected
+                      toggle=(action "selectAvailableSubcase" subcase)
+                    }}
+                  </td>
+                  <td class="auk-table__col--11">
+                    {{subcase.shortTitle}}
+                    <br>
+                    <p class="auk-u-muted">
+                      {{subcase.subcaseName}}
+                    </p>
+                  </td>
+                {{/c.body}}
+              {{/table.content}}
+            {{/data-table}}
+          {{/if}}
+        </div>
       </div>
-    </div>
+    </Auk::Modal::Body>
     {{web-components/vl-modal-footer
       isLoading=isLoading
       disableSave=noItemsSelected
