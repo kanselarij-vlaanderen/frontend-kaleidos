@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 
 export default class PublicationsPublicationProofController extends Controller {
   @action
-  async toggleFinishProof(event) {
+  toggleFinishProof(event) {
     const proofIsFinished = event.target.checked;
     if (proofIsFinished) {
       this.model.endDate = new Date();
