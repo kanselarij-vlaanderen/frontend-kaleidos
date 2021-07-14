@@ -37,12 +37,9 @@
                   {{#if (eq definite "false")}}
                     {{#if currentSession.isEditor}}
                       <div class="auk-u-ml-2">
-                        <a href="" class="auk-button-link"
-                          {{action "toggleIsEditing" agendaitem}}>
-                          <span class="auk-button__content">
-                            {{t "edit"}}
-                          </span>
-                        </a>
+                        <Auk::ButtonLink {{action "toggleIsEditing" agendaitem}}>
+                          {{t "edit"}}
+                        </Auk::ButtonLink>
                       </div>
                     {{/if}}
                   {{/if}}

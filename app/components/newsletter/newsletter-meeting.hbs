@@ -5,11 +5,9 @@
   {{#if allowEditing}}
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
-        <a href="" class="auk-button-link" {{action "toggleIsEditing"}}>
-          <span class="auk-button__content">
-            {{t "edit"}}
-          </span>
-        </a>
+        <Auk::ButtonLink {{action "toggleIsEditing"}}>
+          {{t "edit"}}
+        </Auk::ButtonLink>
       </div>
     {{/if}}
   {{/if}}
