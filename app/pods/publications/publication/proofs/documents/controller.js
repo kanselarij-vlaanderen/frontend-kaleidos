@@ -94,13 +94,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
-    this.model.sortBy(property);
+    // .sortBy() copies array
+    this.model = this.model.sortBy(property);
     if (isDescending) {
-      this.model.reverse();
+      this.model.reverseObjects();
     }
-
-    // sort is not tracked by ember
-    this.model.arrayContentDidChange();
   }
 
   @action

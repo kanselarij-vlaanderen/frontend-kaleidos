@@ -7,24 +7,19 @@
     <div class="skeletal-loader" role="alert" aria-busy="true"></div>
   {{else if isClickable}}
     <a href="" {{action "showPieceViewer" @piece}}>
-      <div class="auk-icon auk-icon--default">
-        <i class="ki
-          {{if
-            (and (not (await this.checkAdded)) (not @piece.confidential))
-            "ki-document"
-          }}
-          {{if (await this.checkAdded) "ki-document-added"}}
-          {{if (await @piece.confidential) "ki-lock-closed"}}"
-        >
-        </i>
-      </div>
+      <Auk::Icon @name=
+        {{if
+          (and (not (await this.checkAdded)) (not @piece.confidential))
+          "document"
+        }}
+        {{if (await this.checkAdded) "document-added"}}
+        {{if (await @piece.confidential) "lock-closed"}}
+      />
       {{await @piece.name}}
     </a>
   {{else}}
     <span>
-      <div class="auk-icon auk-icon--default">
-        <i class="ki {{if (await this.checkAdded) "ki-document-added" "ki-document"}}"></i>
-      </div>
+      <Auk::Icon @name={{if (await this.checkAdded) "document-added" "document"}} />
       {{await @piece.name}}
     </span>
   {{/if}}

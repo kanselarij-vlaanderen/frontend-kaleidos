@@ -175,6 +175,18 @@
                       </span>
                     </td>
                   {{/if}}
+                  {{#if this.tableColumnDisplayOptions.proofPrintCorrector}}
+                    <td class="auk-u-text-nowrap">
+                      {{#if row.publicationSubcase.proofPrintCorrector}}
+                        <Auk::Avatar @icon="user" @size="small">
+                          <p>{{row.publicationSubcase.proofPrintCorrector}}</p>
+                        </Auk::Avatar>
+                      {{else}}
+                        {{t "dash"}}
+                      {{/if}}
+
+                    </td>
+                  {{/if}}
                   {{#if this.tableColumnDisplayOptions.status}}
                     <td class="auk-u-text-nowrap">
                       {{#if row.status }}

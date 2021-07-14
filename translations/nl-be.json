@@ -853,6 +853,7 @@
   "paused-on": "Gepauzeerd op",
   "help": "Help",
   "upload-translation-document": "Vertaaldocument uploaden voor publicatie {identifier}",
+  "edit-translation-document": "Vertaaldocument {docname} bewerken voor publicatie {identifier}",
   "look-at-documentation": "Bekijk documentatie website",
   "contact-us": "Contacteer ons",
   "email-servicedesk": "kaleidos.servicedesk@vlaanderen.be",
@@ -887,7 +888,7 @@
   "extra": "extra",
   "final": "finaal",
   "x-request-type-x-timestamp": "{request-type} op {date} om {time}",
-  "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd",
+  "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd.",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
   "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
@@ -899,5 +900,6 @@
   "message": "Bericht",
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
   "email-to-proofrequest": "Email ontvanger voor drukproeven",
-  "identifier": "Identificator"
+  "identifier": "Identificator",
+  "proofprint-corrector": "Drukproef verbeteraar"
 }
