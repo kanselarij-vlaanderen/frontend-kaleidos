@@ -34,10 +34,7 @@
                 <LinkTo class="auk-pill auk-pill--default auk-u-mr-2"
                   @route="publications.publication"
                   @model={{this.piece.publicationFlow.id}}>
-                  <div class="auk-icon auk-icon--default auk-icon--link"
-                    style="display: none;">
-                    <i class="ki ki-link"></i>
-                  </div>
+                  <Auk::Icon @name="link" style="display: none;" />
                   <span class="auk-status-pill__label"
                     style="padding: 0;">
                     {{this.piece.publicationFlow.identification.idName}}
