@@ -1,24 +1,14 @@
-import DS from 'ember-data';
-import { computed } from '@ember/object';
+import Model, {
+  attr, hasMany, belongsTo
+} from '@ember-data/model';
+export default class IseCode extends Model {
+  @attr('string') name;
+  @attr('string') code;
+  @belongsTo('government-field') field;
+  @hasMany('mandatee') mandatees;
+  @hasMany('subcase') subcases;
 
-const {
-  Model, attr, belongsTo, hasMany,
-} = DS;
-
-export default Model.extend({
-  name: attr('string'),
-  code: attr('string'),
-  field: belongsTo('government-field', {
-    inverse: null,
-  }),
-  mandatees: hasMany('mandatee', {
-    inverse: null,
-  }),
-  subcase: hasMany('subcase', {
-    inverse: null,
-  }),
-
-  nameToShow: computed('name', 'code', function() {
+  get nameToShow() {
     return `${this.name} - ${this.code}`;
-  }),
-});
+  }
+}
