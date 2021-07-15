@@ -45,11 +45,9 @@
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        <a href="" class="auk-button-link" {{action "resetValuesAndCancelCreation"}}>
-          <span class="auk-button__content">
-            {{t "cancel"}}
-          </span>
-        </a>
+        <Auk::ButtonLink {{action "resetValuesAndCancelCreation"}}>
+          {{t "cancel"}}
+        </Auk::ButtonLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
         {{web-components/vl-save-button

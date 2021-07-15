@@ -20,11 +20,9 @@
       }}
         <div class="auk-o-flex auk-o-flex--justify-between">
           <div class="auk-u-ml-2">
-            <a href="" class="auk-button-link" {{action "startEditing"}}>
-              <span class="auk-button__content">
-                {{t "edit"}}
-              </span>
-            </a>
+            <Auk::ButtonLink {{action "startEditing"}}>
+              {{t "edit"}}
+            </Auk::ButtonLink>
           </div>
         </div>
       {{/if}}
