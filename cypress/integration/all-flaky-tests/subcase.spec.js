@@ -235,7 +235,7 @@ context('Subcase tests', () => {
     cy.route('GET', '**/themes').as('getAgendaitemThemes');
     cy.get(newsletter.newsItem.create).click();
     cy.wait('@getAgendaitemThemes');
-    cy.contains('Annuleren').click();
+    cy.get(newsletter.editItem.cancel).click();
 
     // open themes ediging pane.
     cy.route('GET', '**/themes').as('getAgendaitemThemes');
@@ -275,7 +275,9 @@ context('Subcase tests', () => {
 
     cy.route('GET', '/meetings/**').as('getMeetingsDetail');
     cy.route('GET', '/agendaitems**').as('getAgendaitems');
-    cy.get(route.newsletters.dataTable).contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
+    cy.get(route.newsletters.dataTable).find('tbody')
+      .children('tr')
+      .contains(`van ${Cypress.moment(agendaDate).format('DD.MM.YYYY')}`)
       .click();
     cy.wait('@getMeetingsDetail');
     cy.wait('@getAgendaitems');
