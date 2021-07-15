@@ -61,12 +61,12 @@
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
                 <Utils::Documents::List @pieces={{sort-by 'created' row.requestActivity.usedPieces}} />
               </div>
-              {{#if row.resultActivity.generatedPieces}}
+              {{#if row.proofingActivity.generatedPieces}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{sort-by 'created' row.resultActivity.generatedPieces}} />
+                  <Utils::Documents::List @pieces={{sort-by 'created' row.proofingActivity.generatedPieces}} />
                 </div>
               {{/if}}
             </div>
