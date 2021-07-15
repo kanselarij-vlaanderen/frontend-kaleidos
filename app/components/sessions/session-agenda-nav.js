@@ -29,11 +29,9 @@ export default class SessionsSessionAgendaNavComponent extends Component {
     }
     return null;
   }
+
   get modelsForDetailRoute() {
-    if (this.isInAgendaItemDetailRoute) {
-      return null;
-    }
-    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.firstAgendaitem.id];
+    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem.id];
   }
 
   get isInAgendaItemDetailRoute() {
