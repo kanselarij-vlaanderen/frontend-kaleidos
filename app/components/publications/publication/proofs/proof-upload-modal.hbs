@@ -39,6 +39,10 @@
                       @date={{this.receivedAtDate}}
                       @onChange={{this.setReceivedAtDate}} />
                   </div>
+                  <div class="auk-form-group">
+                    <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
+                    <Auk::Checkbox id="proofUploadIsCorrected" @checked={{true}} disabled />
+                  </div>
                 {{/if}}
                 {{#if @isCorrectionDocument}}
                   <div class="auk-form-group">
