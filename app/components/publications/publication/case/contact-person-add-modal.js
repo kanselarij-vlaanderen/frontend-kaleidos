@@ -43,15 +43,23 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   @task
-  *loadOrganizations() {
+  *loadOrganizations(searchTerm) {
+    const query = {};
+    if (searchTerm) {
+      query['filter[name]'] = searchTerm;
+    } else {
+      query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
+    }
+
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
     // TODO need a better filter, add a boolean to model maybe ?
     const organizations = yield this.store.query('organization', {
+      ...query,
       page: {
         size: 200,
       },
     });
-    this._organizations = organizations.filter((org) => org.name);
+    return organizations;
   }
 
   @task
@@ -63,6 +71,11 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
       organization: this.organization,
     };
     yield this.args.onSave(contactPersonProperties);
+  }
+
+  @action
+  searchOrganization(searchTerm) {
+    this.loadOrganizations.perform(searchTerm);
   }
 
   @action

@@ -12,16 +12,8 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @tracked isOpenAddModal = false;
 
   get contactPersons() {
-    const contactPersons = this.args.publicationFlow.contactPersons.toArray();
-    // .get() because await is not supported by sort
-    contactPersons.sort((it1, it2) => {
-      const lastName1 = it1.get('person').get('lastName')
-        .toLowerCase();
-      const lastName2 = it2.get('person').get('lastName')
-        .toLowerCase();
-      return lastName1 < lastName2 ? -1 : 1;
-    });
-    return contactPersons;
+    return this.args.publicationFlow.contactPersons.sortBy(
+      'person.lastName', 'person.firstName');
   }
 
   @action
