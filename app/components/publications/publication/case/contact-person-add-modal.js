@@ -41,10 +41,10 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     if (searchTerm) {
       query['filter[name]'] = searchTerm;
     } else {
+      // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
+      // TODO need a better filter, add a boolean to model maybe ?
       query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
     }
-    // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
-    // TODO need a better filter, add a boolean to model maybe ?
     const organizations = yield this.store.query('organization', {
       ...query,
       'page[size]': PAGE_SIZE.SELECT,
