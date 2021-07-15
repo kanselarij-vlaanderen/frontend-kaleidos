@@ -104,10 +104,6 @@ export default class PublicationsIndexController extends Controller {
     this.send('refreshModel');
   }
 
-  get isPublicationsFiltered() {
-    return this.publicationFilter.hasFilter();
-  }
-
   @action
   prevPage() {
     if (this.page > 0) {

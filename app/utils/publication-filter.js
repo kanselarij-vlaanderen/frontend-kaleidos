@@ -45,7 +45,7 @@ class PublicationFilter {
     };
   }
 
-  hasFilter() {
+  get isFiltered() {
     return !this.ministerFilterOption
       || !this.notMinisterFilterOption
       || !this.pausedFilterOption
