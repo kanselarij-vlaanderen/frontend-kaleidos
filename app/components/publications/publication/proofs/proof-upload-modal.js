@@ -9,7 +9,8 @@ import {
 
 /**
  * @argument {PublicationFlow} publicationFlow
- * @argument {'proof'|'correction'} source
+ * @argument {boolean} isReceivedDocument
+ * @argument {boolean} isCorrectionDocument
  * @argument onSave
  * @argument onCancel
  */

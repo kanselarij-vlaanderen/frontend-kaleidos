@@ -64,7 +64,8 @@
 {{#if this.isUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @source="proof"
+    @isCorrectionDocument={{false}}
+    @isReceivedDocument={{true}}
     @onSave={{this.saveProofUpload}}
     @onCancel={{this.closeProofUploadModal}} />
 {{/if}}

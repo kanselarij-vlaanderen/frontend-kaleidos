@@ -1,7 +1,10 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t
-      "upload-proof-for-publication-x-identification"
+      (if
+        @isCorrectionDocument
+        "upload-corrected-proof-for-publication-x-identification"
+        "upload-proof-for-publication-x-identification")
       identification=@publicationFlow.identification.idName
     }}
     @onClose={{@onCancel}} />
@@ -29,12 +32,18 @@
                   <Auk::Label>{{t "file-type"}}</Auk::Label>
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
-                {{#if (eq @source "proof")}}
+                {{#if @isReceivedDocument}}
                   <div class="auk-form-group {{this.validators.receivedAtDate.errorClass}}">
                     <Auk::Label for="proofUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
                     <Auk::Datepicker id="proofUploadReceivedAtDate"
                       @date={{this.receivedAtDate}}
                       @onChange={{this.setReceivedAtDate}} />
+                  </div>
+                {{/if}}
+                {{#if @isCorrectionDocument}}
+                  <div class="auk-form-group">
+                    <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
+                    <Auk::Checkbox id="proofUploadIsCorrected" @checked={{true}} disabled />
                   </div>
                 {{/if}}
               </div>

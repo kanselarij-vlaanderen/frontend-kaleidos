@@ -87,12 +87,11 @@
                 <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td>
-                <p>
+                {{#if piece.receivedDate}}
                   {{moment-format piece.receivedDate}}
-                </p>
-                <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format piece.receivedDate "HH:mm"}}
-                </p>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 <p>
@@ -138,7 +137,8 @@
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @source="correction"
+    @isCorrectionDocument={{true}}
+    @isReceivedDocument={{false}}
     @onSave={{this.saveCorrectionDocument}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
