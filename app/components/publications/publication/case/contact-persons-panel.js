@@ -35,10 +35,6 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
       organization,
     } = contactPersonProperties;
 
-    if (organization?.isNew) {
-      await organization.save();
-    }
-
     const person = this.store.createRecord('person', {
       firstName: firstName,
       lastName: lastName,
@@ -59,8 +55,6 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @action
   async delete(contactPerson) {
-    const publicationFlow = this.args.publicationFlow;
-    publicationFlow.contactPersons.removeObject(contactPerson);
     const person = await contactPerson.person;
     const destroyContactPerson = contactPerson.destroyRecord();
     const destroyPerson = person.destroyRecord();

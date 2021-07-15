@@ -9,6 +9,8 @@ export const PAGE_SIZE = {
   PIECES: 500,
   ACTIVITIES: 500,
   CASES: 500,
+
+  SELECT: 10,
 };
 
 export const PUBLICATION_EMAIL = {

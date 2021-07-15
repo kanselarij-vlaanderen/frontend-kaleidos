@@ -4,7 +4,7 @@
     @title={{t "add-contact"}}
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
+    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       <div class="auk-form-group-layout auk-form-group-layout--standard">
         <div class="auk-form-group auk-form-group--grid">
           <div class={{this.validators.firstName.errorClass}}>
@@ -40,7 +40,7 @@
             <PowerSelect
               @options={{this.organizations}}
               @selected={{this.organization}}
-              @searchField="name"
+              @search={{perform this.searchOrganizations}}
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
               @onchange={{this.setOrganization}}
@@ -65,7 +65,7 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="borderless"
-            @disabled={{not this.canCancel}}
+            disabled={{this.save.isRunning}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
           </Auk::Button>
@@ -75,9 +75,9 @@
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary" @icon="add" @size="small"
-            {{on "click" (perform this.onSave)}}
-            @disabled={{not this.canSave}}
-            @loading={{this.onSave.isRunning}}
+            {{on "click" (perform this.save)}}
+            disabled={{not this.validators.areValid}}
+            @loading={{this.save.isRunning}}
             data-test-add-contactperson-submit-button>
             {{t "add"}}
           </Auk::Button>

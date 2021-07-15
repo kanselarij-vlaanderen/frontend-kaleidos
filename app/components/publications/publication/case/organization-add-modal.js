@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { isPresent } from '@ember/utils';
-import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
@@ -21,16 +21,13 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
     this.initValidators();
   }
 
-  get canSave() {
-    return this.validators.areValid;
-  }
-
-  @action
-  onSave() {
+  @task
+  *save() {
     const organization = this.store.createRecord('organization', {
       name: this.name,
       identifier: isPresent(this.identifier) ? this.identifier : undefined,
     });
+    yield organization.save();
     this.args.onSave(organization);
   }
 

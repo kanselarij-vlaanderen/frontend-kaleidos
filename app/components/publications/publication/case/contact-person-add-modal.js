@@ -3,17 +3,19 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
+import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
+import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
 export default class PublicationsPublicationCaseContactPersonAddModalComponent extends Component {
   @service store;
 
   @tracked isOpenOrganizationAddModal = false;
 
-  @tracked _organizations;
+  @tracked organizations;
 
   @tracked firstName = '';
   @tracked lastName = '';
@@ -22,24 +24,15 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
 
   constructor() {
     super(...arguments);
-    this.loadOrganizations.perform();
+
     this.initValidators();
+    this.initOrganizations();
   }
 
-  get organizations() {
-    return this._organizations?.sortBy('name');
-  }
-
-  get isLoading() {
-    return this.loadOrganizations.isRunning || this.onSave.isRunning;
-  }
-
-  get canCancel() {
-    return !this.onSave.isRunning;
-  }
-
-  get canSave() {
-    return !this.loadOrganizations.isRunning && this.validators.areValid;
+  @task
+  *searchOrganizations(searchTerm) {
+    yield timeout(300);
+    return this.loadOrganizations.perform(searchTerm);
   }
 
   @task
@@ -50,20 +43,18 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     } else {
       query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
     }
-
     // TODO This is not ideal, there are currently +- 60 organizations that come from ACM-IDM, they don't have a name
     // TODO need a better filter, add a boolean to model maybe ?
     const organizations = yield this.store.query('organization', {
       ...query,
-      page: {
-        size: 200,
-      },
+      'page[size]': PAGE_SIZE.SELECT,
+      sort: 'name',
     });
     return organizations;
   }
 
   @task
-  *onSave() {
+  *save() {
     const contactPersonProperties = {
       firstName: this.firstName,
       lastName: this.lastName,
@@ -71,11 +62,6 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
       organization: this.organization,
     };
     yield this.args.onSave(contactPersonProperties);
-  }
-
-  @action
-  searchOrganization(searchTerm) {
-    this.loadOrganizations.perform(searchTerm);
   }
 
   @action
@@ -96,8 +82,11 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   @action
   addOrganization(organization) {
     this.organization = organization;
-    this._organizations.pushObject(organization);
     this.isOpenOrganizationAddModal = false;
+  }
+
+  async initOrganizations() {
+    this.organizations = await this.loadOrganizations.perform('');
   }
 
   initValidators() {

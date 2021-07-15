@@ -5,35 +5,48 @@
     @title={{t "add-organization"}}
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
-    <div class="auk-form-group-layout auk-form-group-layout--standard">
-      <div class="auk-form-group {{this.validators.name.errorClass}}">
-        <Auk::Label for="organizationNameInput"
-          @required={{true}}>
-          {{t "name"}}
-        </Auk::Label>
-        <Auk::Input type="text" id="organizationNameInput"
-          @block={{true}}
-          @value={{this.name}}
-          {{on "input" this.validators.name.enableError}} />
+    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+      <div class="auk-form-group-layout auk-form-group-layout--standard">
+        <div class="auk-form-group {{this.validators.name.errorClass}}">
+          <Auk::Label for="organizationNameInput"
+            @required={{true}}>
+            {{t "name"}}
+          </Auk::Label>
+          <Auk::Input type="text" id="organizationNameInput"
+            @block={{true}}
+            @value={{this.name}}
+            {{on "input" this.validators.name.enableError}} />
+        </div>
+        <div class="auk-form-group">
+          <Auk::Label for="organizationIdentifierInput">
+            {{t "identifier"}} ({{t "ovo-code"}})
+          </Auk::Label>
+          <Auk::Input type="text" id="organizationIdentifierInput"
+            @block={{true}}
+            @value={{this.identifier}} />
+        </div>
       </div>
-      <div class="auk-form-group">
-        <Auk::Label for="organizationIdentifierInput">
-          {{t "identifier"}}
-        </Auk::Label>
-        <Auk::Input type="text" id="organizationIdentifierInput"
-          @block={{true}}
-          @value={{this.identifier}} />
-      </div>
-    </div>
+    </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
             @skin="primary" @icon="add" @size="small"
-            @disabled={{not this.canSave}}
-            {{on "click" this.onSave}}
+            disabled={{not this.validators.areValid}}
+            @loading={{this.save.isRunning}}
+            {{on "click" (perform this.save)}}
             data-test-add-organization-submit-button>
             {{t "add"}}
           </Auk::Button>
