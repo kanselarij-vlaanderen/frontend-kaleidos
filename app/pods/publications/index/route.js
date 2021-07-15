@@ -96,6 +96,10 @@ export default class PublicationsIndexRoute extends Route {
     try {
       const publicationFlows = await transition.promise;
 
+      console.log(publicationFlows);
+      if (!publicationFlows.map) {
+        return;
+      }
       this.store.query('publication-flow', {
         'filter[:id:]': publicationFlows.map((it) => it.id).join(','),
         include: [

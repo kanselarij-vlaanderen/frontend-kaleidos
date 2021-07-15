@@ -26,11 +26,6 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ...queryProperties,
     });
 
-    const generatedPiecesRequest = this.store.query('piece', {
-      'filter[publication-activity-generated-by][subcase][:id:]': publicationSubcaseId,
-      ...queryProperties,
-    });
-
     const correctionDocumentsRequest = this.store.query('piece', {
       'filter[publication-subcase-correction-for][:id:]': publicationSubcaseId,
       include: [
@@ -39,7 +34,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ].join(','),
     });
 
-    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, generatedPiecesRequest, correctionDocumentsRequest]);
+    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, correctionDocumentsRequest]);
     pieces = pieces.flatMap((piece) => piece.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = A([...pieces]);
