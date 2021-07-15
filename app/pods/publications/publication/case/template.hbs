@@ -9,8 +9,63 @@
     <Publications::Publication::Case::MandateesPanel
       @publicationFlow={{@model}} />
 
+    {{!--  GOVERNMENT FIELDS/DOMAINS PANEL  --}}
+    <div class="auk-u-mb-3" >
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  {{t "government-domains-government-fields"}}
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              <Auk::Toolbar::Item>
+                <Auk::Button
+                        @skin="tertiary"
+                        @layout="icon-only"
+                        @icon="edit"
+                />
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        {{#if (not @model.governmentFields) }}
+          <Auk::Panel::Body>
+            <Auk::EmptyState @message={{t "no-added-government-fields"}} />
+          </Auk::Panel::Body>
+        {{else}}
+          <Auk::Panel::Body @noPadding={{true}}>
+            <table class="auk-table" >
+              <thead>
+                <tr>
+                  <th>{{t "government-domain"}}</th>
+                  <th>{{t "government-fields"}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each @model.governmentFields as | field |}}
+                  <tr>
+                    <td>
+                      <div class="auk-o-flex auk-o-flex--vertical-center">
+                        <div class="auk-u-muted ">
+                          {{field.label}}
+                        </div>
+                      </div>
+                    </td>
+                    <td class="auk-u-text-align--right">
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </Auk::Panel::Body>
+        {{/if}}
+      </Auk::Panel>
+    </div>
     {{!--  CONTACTPERSON PANEL  --}}
-
     <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
       <Auk::Panel>
         <Auk::Panel::Header>
