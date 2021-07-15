@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { A } from '@ember/array';
 
+import { Model } from './controller';
+
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   // model returns publicationSubcase instead of pieces: single request
   async model() {
@@ -16,17 +18,17 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
 
     // multiple requests: single request on publication-subcase did not detect inverse relations of piece to the publication-subcase
     // and made an extra request per piece
-    const sourcePiecesRequest = this.store.query('piece', {
+    const sourcePiecesPromise = this.store.query('piece', {
       'filter[publication-subcase-source-for][:id:]': publicationSubcaseId,
       ...queryProperties,
     });
 
-    const usedPiecesRequest = this.store.query('piece', {
+    const usedPiecesPromise = this.store.query('piece', {
       'filter[proofing-activity-generated-by][subcase][:id:]': publicationSubcaseId,
       ...queryProperties,
     });
 
-    const correctionDocumentsRequest = this.store.query('piece', {
+    const correctionDocumentsPromise = this.store.query('piece', {
       'filter[publication-subcase-correction-for][:id:]': publicationSubcaseId,
       include: [
         'file',
@@ -34,12 +36,22 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ].join(','),
     });
 
-    let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, correctionDocumentsRequest]);
+    const decisionsPromise = this.store.query('decision', {
+      'filter[publication-activity][subcase][:id:]': publicationSubcaseId,
+      sort: 'publication-date',
+    });
+
+    // disable lint: decisions is constant, but pieces is variable
+    // eslint-disable-next-line prefer-const
+    let [decisions, ...pieces] = await Promise.all([decisionsPromise, sourcePiecesPromise, usedPiecesPromise, correctionDocumentsPromise]);
     pieces = pieces.flatMap((pieces) => pieces.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = A([...pieces]);
 
-    return pieces;
+    return new Model({
+      pieces: pieces,
+      decisions: decisions,
+    });
   }
 
   async afterModel() {

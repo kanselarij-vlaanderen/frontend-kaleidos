@@ -45,7 +45,7 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
 
-    {{#if this.model}}
+    {{#if this.model.pieces}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
@@ -73,7 +73,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.model as |piece|}}
+          {{#each this.model.pieces as |piece|}}
             <tr>
               <td class="auk-table-checkbox-col">
                 <Auk::Checkbox
@@ -152,6 +152,43 @@
       </table>
     {{else}}
       <Auk::EmptyState @bordered={{true}} @message={{t "no-documents-yet" }} />
+    {{/if}}
+  </div>
+  <div class="auk-u-mb-4">
+    <h3 class="auk-h3">{{t "published-decisions"}}</h3>
+    {{#if this.model.decisions}}
+      <table class="auk-table auk-table--styled auk-table--bordered">
+        <thead>
+          <tr>
+            <th>{{t "title"}}</th>
+            <th>{{t "publication-date"}}</th>
+            <th>{{!-- actions --}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each this.model.decisions as |decision|}}
+            <tr>
+              <td>
+                {{decision.title}}
+              </td>
+              <td>
+                {{moment-format decision.publicationDate}}
+              </td>
+              <td>
+                <WebComponents::AuButtonToolbar>
+                  <Auk::ButtonLink
+                    @href={{decision.uri}}
+                    @layout="icon-only" @icon="external-link"
+                    @target="_blank">
+                  </Auk::ButtonLink>
+                </WebComponents::AuButtonToolbar>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <Auk::EmptyState @bordered={{true}} @message={{t "no-decisions-published-yet" }} />
     {{/if}}
   </div>
 </div>
