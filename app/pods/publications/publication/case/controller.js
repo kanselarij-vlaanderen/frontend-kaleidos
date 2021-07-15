@@ -5,6 +5,7 @@ import {
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
 
 export default class CaseController extends Controller {
   @service publicationService;
@@ -14,6 +15,7 @@ export default class CaseController extends Controller {
   @tracked showLoader = false;
   @tracked contactPersons;
   @tracked personModalOpen = false;
+  @tracked governmentFieldsModalOpen = false;
   @tracked organizations;
   @tracked showAddOrganisationModal = false;
   @tracked inputOrganization = '';
@@ -126,5 +128,22 @@ export default class CaseController extends Controller {
     this.showLoader = true;
     await contactPerson.destroyRecord();
     this.showLoader = false;
+  }
+
+  @task
+  *saveGovernmentFields(governmentFields) {
+    this.model.governmentFields = governmentFields;
+    yield this.model.save();
+    this.governmentFieldsModalOpen = false;
+  }
+
+  @action
+  showGovernmentFieldsModal() {
+    this.governmentFieldsModalOpen = true;
+  }
+
+  @action
+  closeGovernmentFieldsModal() {
+    this.governmentFieldsModalOpen = false;
   }
 }

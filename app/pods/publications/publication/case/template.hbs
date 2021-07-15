@@ -27,6 +27,7 @@
                         @skin="tertiary"
                         @layout="icon-only"
                         @icon="edit"
+                  {{on "click" this.showGovernmentFieldsModal }}
                 />
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
@@ -285,4 +286,11 @@
       </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
+{{/if}}
+
+{{#if governmentFieldsModalOpen}}
+  <Publications::Publication::Case::LinkGovernmentFieldsModal
+          @publicationFlow={{this.publicationFlow}}
+          @onSave={{perform this.saveGovernmentFields}}
+          @onCancel={{this.closeGovernmentFieldsModal}}/>
 {{/if}}

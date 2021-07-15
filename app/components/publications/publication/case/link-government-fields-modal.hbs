@@ -1,0 +1,18 @@
+<Auk::Modal
+        @size="small">
+  <Auk::Modal::Header
+          @title={{t "add-government-domains-government-fields"}}
+          @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+    <Auk::Button
+            @skin="primary"
+            @loading={{this.saveGovernmentFields.isRunning}}
+      {{on "click" (perform this.GovernmentFields)}}>
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+
