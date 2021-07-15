@@ -35,7 +35,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     });
 
     let pieces = await Promise.all([sourcePiecesRequest, usedPiecesRequest, correctionDocumentsRequest]);
-    pieces = pieces.flatMap((piece) => piece.toArray());
+    pieces = pieces.flatMap((pieces) => pieces.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = A([...pieces]);
 
