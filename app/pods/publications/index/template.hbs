@@ -26,13 +26,15 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 {{#if this.isPublicationsFiltered}}
-  <Auk::Toolbar class="auk-toolbar-complex--border-bottom auk-toolbar-complex--gray-100 auk-u-px-4">
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Button @skin="tertiary"  {{on "click" this.resetPublicationsFilter}}>
-        {{t "clear-filter-plural"}}
-      </Auk::Button>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
+  <Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Button @skin="tertiary"  {{on "click" this.resetPublicationsFilter}}>
+          {{t "clear-filter-plural"}}
+        </Auk::Button>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
 {{/if}}
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">

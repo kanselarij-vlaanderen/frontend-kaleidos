@@ -105,12 +105,7 @@ export default class PublicationsIndexController extends Controller {
   }
 
   get isPublicationsFiltered() {
-    return !this.publicationFilter.ministerFilterOption
-    || !this.publicationFilter.notMinisterFilterOption
-    || !this.publicationFilter.pausedFilterOption
-    || !this.publicationFilter.publishedFilterOption
-    || !this.publicationFilter.toPublishFilterOption
-    || !this.publicationFilter.withdrawnFilterOption;
+    return this.publicationFilter.hasFilter();
   }
 
   @action
