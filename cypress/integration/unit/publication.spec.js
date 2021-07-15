@@ -18,8 +18,8 @@ context('Publications tests', () => {
     cy.logout();
   });
 
-  // TODO tests that duplicate publication numbers are not possible unless a suffix is given, combination of number+suffix should be unique
-  // TODO both during creation as in sidebar
+  // TODO-publication tests that duplicate publication numbers are not possible unless a suffix is given, combination of number+suffix should be unique
+  // TODO-publication both during creation as in sidebar
   // Be careful when using fixed numbers in tests, with automatic numbering implemented, some of them were already used
 
   const publicationOverviewUrl = '/publicaties';
@@ -55,10 +55,10 @@ context('Publications tests', () => {
         timeout: 5000,
       }).should('not.exist');
       // both number and shortTitle should show error when empty
-      // TODO this does not indicate where the errors should be, make selectors for both errors and get those
+      // TODO-publication this does not indicate where the errors should be, make selectors for both errors and get those
       cy.get(auk.label.error).should('have.length', 2);
       // Create publication with number and title
-      // TODO with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
+      // TODO-publication with automatic number suggestion, this test could fail if testdata already contains a publication with number 1
       cy.get(publication.newPublicationModal.publicationNumberInput).click()
         .clear()
         .type('100');
@@ -77,7 +77,7 @@ context('Publications tests', () => {
     cy.wait('@createNewPublicationFlow', {
       timeout: 20000,
     });
-    // TODO new way of creating publication-number with structured identifier can be checked with routes
+    // TODO-publication new way of creating publication-number with structured identifier can be checked with routes
     // post case
     // post structured identifier
     // post identifier
@@ -85,13 +85,13 @@ context('Publications tests', () => {
   });
 
   it('should clear input data when closing and reopening modal to create new publication', () => {
-    // TODO also test if errors are correctly reset after cancel / new creation
+    // TODO-publication also test if errors are correctly reset after cancel / new creation
     cy.visit(publicationOverviewUrl);
     const number = 999;
     cy.get(publication.newPublicationButton).click();
     cy.get(auk.modal.container).as('publicationModal');
     cy.get('@publicationModal').within(() => {
-      // TODO check if suffix and long title are cleared
+      // TODO-publication check if suffix and long title are cleared
       cy.get(publication.newPublicationModal.publicationNumberInput)
         .click()
         .clear()
@@ -100,11 +100,11 @@ context('Publications tests', () => {
         .click()
         .type(someText);
     });
-    // TODO also test close button
+    // TODO-publication also test close button
     cy.get(publication.newPublicationModal.cancelButton).click();
     cy.get(publication.newPublicationButton).click();
     cy.get('@publicationModal').within(() => {
-      // TODO check the other fields
+      // TODO-publication check the other fields
       cy.get(publication.newPublicationModal.publicationNumberInput).should('not.contain', number);
       cy.contains(someText).should('not.exist');
     });
@@ -159,7 +159,7 @@ context('Publications tests', () => {
       });
     cy.wait('@getNewPublicationDetail');
 
-    // TODO test long title
+    // TODO-publication test long title
     cy.get(publication.editInscriptionButton).click();
     cy.get(publication.inscriptionShortTitleTextarea).click()
       .clear()
@@ -196,7 +196,7 @@ context('Publications tests', () => {
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
-    // TODO get auk.emptyState met selector
+    // TODO-publication get auk.emptyState met selector
     cy.contains('Er zijn nog geen contactpersonen toegevoegd').should('exist');
 
     // Add contactperson.

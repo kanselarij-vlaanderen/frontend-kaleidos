@@ -10,13 +10,13 @@ const selectors = {
 
   /** Section for non AUK components (but have auk-like selectors) **/
 
-  // TODO na refactoring naar auk::Tab herbekijken
+  // TODO-selector na refactoring naar auk::Tab herbekijken
   // subcase-detail-nav
   subcaseDetailNav: {
     tabNavBack: '[data-test-auk-tab-hierarchical-back]',
   },
 
-  // TODO this component is basically a link-to, refactor to au-component
+  // TODO-selector this component is basically a link-to, refactor to au-component
   // back-button
   backButton: '[data-test-auk-back-button]',
 
@@ -37,7 +37,7 @@ const selectors = {
     body: '.auk-modal__body',
     header: {
       title: '.auk-modal__header .auk-toolbar__title',
-      // TODO unused selectors
+      // TODO-selector unused selectors
       close: '.auk-modal__header .auk-button .auk-icon .ki-close',
       minimize: '.auk-modal__header .auk-button .auk-icon .ki-minimize',
       expand: '.auk-modal__header .auk-button .auk-icon .ki-expand',
@@ -48,7 +48,7 @@ const selectors = {
     },
   },
 
-  // TODO unused selectors
+  // TODO-selector unused selectors
   emptyState: {
     container: '.auk-empty-state',
     message: '.auk-empty-state__content',
@@ -56,9 +56,10 @@ const selectors = {
 
   /** Section single selector AUK components **/
 
+  checkbox: '.auk-checkbox',
   loader: '.auk-loader',
   pill: '.auk-pill',
-  // TODO unused selectors
+  // TODO-selector unused selectors
   input: '.auk-input',
   textarea: '.auk-textarea',
 };

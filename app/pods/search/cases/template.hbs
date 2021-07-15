@@ -8,6 +8,7 @@
         <Auk::Label>{{t "type"}}</Auk::Label>
         <WebComponents::VlCheckbox
           data-test-decisions-only-check
+          data-test-route-search-cases-toggle-decisions={{true}}
           @value={{this.decisionsOnly}}
           @label={{t "search-in-decisions-only"}}
           @toggle={{this.toggleDecisionsOnly}}
@@ -27,6 +28,7 @@
     <div>
       {{#if this.model.length}}
         <DataTable
+          data-test-route-search-cases-data-table={{true}}
           @content={{await this.model}}
           @page={{this.page}}
           @noDataMessage={{t "no-results-found"}}
