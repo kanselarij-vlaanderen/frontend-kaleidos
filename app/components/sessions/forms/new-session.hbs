@@ -49,14 +49,12 @@
             >
               {{formattedMeetingIdentifier}}
             </div>
-            <button type="button" class="auk-button-link"
+            <Auk::ButtonLink
               data-test-new-session-number-representation-edit
               {{action "editFormattedMeetingIdentifier"}}
             >
-              <span class="auk-button__content">
-                <small>{{t "edit"}}</small>
-              </span>
-            </button>
+              <small>{{t "edit"}}</small>
+            </Auk::ButtonLink>
           </div>
         </div>
       </div>
