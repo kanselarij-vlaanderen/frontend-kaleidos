@@ -17,7 +17,7 @@ export default class LinkGovernmentFieldsModal extends Component {
   }
 
   @task
-  *saveRequest() {
+  *saveGovernmentFields() {
     yield this.args.onSave(
       this.selectedGovernmentFields
     );
