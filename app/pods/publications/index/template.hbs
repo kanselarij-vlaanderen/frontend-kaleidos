@@ -25,8 +25,8 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
-{{#if this.publicationsFilter.isFiltered}}
-  <Auk::Navbar class="auk-publication-overview-navbar" @skin="gray-100" @auto={{true}}>
+{{#if this.isPublicationsFiltered}}
+  <Auk::Navbar @skin="gray-100" @auto={{true}}>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="right">
         <Auk::Button @skin="tertiary"  {{on "click" this.resetPublicationsFilter}}>
