@@ -16,7 +16,7 @@
                 <Auk::Button
                   @disabled={{this.isUploadDisabled}}
                   @skin="primary"
-                  {{on "click" (fn openProofUploadModal row)}}>
+                  {{on "click" (fn this.openProofUploadModal row)}}>
                   {{t "upload-received-proof-document"}}
                 </Auk::Button>
               {{/if}}
