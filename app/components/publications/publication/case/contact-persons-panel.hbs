@@ -47,6 +47,8 @@
                 <td>
                   {{#if contactPerson.email}}
                     <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                  {{else}}
+                    {{t "dash"}}
                   {{/if}}
                 </td>
                 <td class="auk-u-text-align--right">
