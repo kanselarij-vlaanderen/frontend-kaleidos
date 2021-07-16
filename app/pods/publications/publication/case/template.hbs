@@ -9,6 +9,9 @@
     <Publications::Publication::Case::MandateesPanel
       @publicationFlow={{@model}} />
 
+    <Publications::Publication::Case::GovernmentFieldsPanel
+      @publicationFlow={{@model}} />
+
     {{!--  CONTACTPERSON PANEL  --}}
     <div class="auk-u-mb-3" data-test-publication-case-panel-contactperson>
       <Auk::Panel>
@@ -229,11 +232,4 @@
       </Auk::Toolbar>
     </Auk::Modal::Footer>
   </Auk::Modal>
-{{/if}}
-
-{{#if governmentFieldsModalOpen}}
-  <Publications::Publication::Case::LinkGovernmentFieldsModal
-          @publicationFlow={{this.publicationFlow}}
-          @onSave={{perform this.saveGovernmentFields}}
-          @onCancel={{this.closeGovernmentFieldsModal}}/>
 {{/if}}

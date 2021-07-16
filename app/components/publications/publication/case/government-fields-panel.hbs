@@ -12,16 +12,16 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-                    @skin="tertiary"
-                    @layout="icon-only"
-                    @icon="edit"
-              {{on "click" this.showGovernmentFieldsModal }}
+              @skin="tertiary"
+              @layout="icon-only"
+              @icon="edit"
+              {{on "click" this.showLinkModal }}
             />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#if (not @model.governmentFields) }}
+    {{#unless @publicationFlow.governmentFields }}
       <Auk::Panel::Body>
         <Auk::EmptyState @message={{t "no-added-government-fields"}} />
       </Auk::Panel::Body>
@@ -36,7 +36,7 @@
           </thead>
           <tbody>
           {{!--TODO Work out tabel as in ticket --}}
-            {{#each @model.governmentFields as | field |}}
+            {{#each @publicationFlow.governmentFields as |field|}}
               <tr>
                 <td>
                   <div class="auk-o-flex auk-o-flex--vertical-center">
@@ -52,6 +52,13 @@
           </tbody>
         </table>
       </Auk::Panel::Body>
-    {{/if}}
+    {{/unless}}
   </Auk::Panel>
 </div>
+
+{{#if isOpenLinkModal}}
+  <Publications::Publication::Case::LinkGovernmentFieldsModal
+      @publicationFlow={{this.publicationFlow}}
+      @onSave={{perform this.saveGovernmentFields}}
+      @onCancel={{this.closeLinkModal}}/>
+{{/if}}
