@@ -53,7 +53,7 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     this.validators.receivedAtDate.enableError();
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
-    } else {
+    } else { // this case occurs when users manually empty the date input-field
       this.receivedAtDate = undefined;
     }
   }
