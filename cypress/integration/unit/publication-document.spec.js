@@ -14,6 +14,6 @@ context('Publications documents tests', () => {
   });
 
   xit('placeholder for future tests', () => {
-    // TODO adding documents to publication will be refactored and current tests became absolete.
+    // TODO-publication adding documents to publication will be refactored and current tests became absolete.
   });
 });
