@@ -38,7 +38,7 @@ const selectors = {
   // create-person-selector
   personSelector: {
     personDropdown: '[data-test-person-selector-dropdown-container]',
-    // TODO make test to create new person with these selectors
+    // TODO-selector make test to create new person with these selectors
     createPerson: '[data-test-person-selector-action-create-person]',
     firstnameContainer: '[data-test-person-selector-firstname]',
     lastnameContainer: '[data-test-person-selector-lastname]',

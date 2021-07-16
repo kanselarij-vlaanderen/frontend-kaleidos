@@ -6,36 +6,34 @@
   }}
 {{/if}}
 {{#if isResigning}}
-  <div class="auk-modal__body">
-    <div class="auk-u-p-4">
-      {{#if showVerificationPopup}}
-        {{changes-alert
-          data-test-manage-mandatee-changes-alert=true
-          message=(t "show-active-minister-alert")
-          buttonText=(t "close")
-          clearAction=(action "close")
-        }}
-      {{/if}}
-      <div class="auk-form-group">
-        <Auk::Label>{{t "end-date"}}</Auk::Label>
-        {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>{{t "new-person"}}</Auk::Label>
-        {{utils/create-person-selector
-          selectedItems=selectedPerson
-          selectModel=(action "personSelected")
-        }}
-      </div>
-
-      {{#if selectedPerson}}
-        <div class="auk-form-group">
-          <Auk::Label>{{t "start-date"}}</Auk::Label>
-          {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
-        </div>
-      {{/if}}
+  <Auk::Modal::Body>
+    {{#if showVerificationPopup}}
+      {{changes-alert
+        data-test-manage-mandatee-changes-alert=true
+        message=(t "show-active-minister-alert")
+        buttonText=(t "close")
+        clearAction=(action "close")
+      }}
+    {{/if}}
+    <div class="auk-form-group">
+      <Auk::Label>{{t "end-date"}}</Auk::Label>
+      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
     </div>
-  </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "new-person"}}</Auk::Label>
+      {{utils/create-person-selector
+        selectedItems=selectedPerson
+        selectModel=(action "personSelected")
+      }}
+    </div>
+
+    {{#if selectedPerson}}
+      <div class="auk-form-group">
+        <Auk::Label>{{t "start-date"}}</Auk::Label>
+        {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+      </div>
+    {{/if}}
+  </Auk::Modal::Body>
   {{web-components/vl-modal-footer
     isLoading=isLoading
     cancelButtonText=(t "cancel")
