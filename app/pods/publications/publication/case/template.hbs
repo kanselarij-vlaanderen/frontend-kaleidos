@@ -2,14 +2,14 @@
   <div class="auk-u-mb-4">
     {{page-title (capitalize (t "case")) }}
 
-    <Publications::Publication::Case::InscriptionPanel
+    <Publications::Publication::Case::Inscription::InscriptionPanel
       @publicationFlow={{@model}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}} />
 
-    <Publications::Publication::Case::MandateesPanel
+    <Publications::Publication::Case::Mandatees::MandateesPanel
       @publicationFlow={{@model}} />
 
-    <Publications::Publication::Case::GovernmentFieldsPanel
+    <Publications::Publication::Case::GovernmentFields::GovernmentFieldsPanel
       @publicationFlow={{@model}} />
 
     {{!--  CONTACTPERSON PANEL  --}}
