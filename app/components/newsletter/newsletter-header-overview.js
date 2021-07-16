@@ -15,6 +15,7 @@ export default Component.extend({
 
   isShowingOptions: null,
   agenda: null,
+  meeting: null,
   isVerifying: null,
 
   shouldShowPrintButton: computed('routing.currentRouteName', function() {

@@ -1,16 +1,37 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import {
+  task,
+  lastValue
+} from 'ember-concurrency-decorators';
 
 export default class SessionsSessionAgendaNavComponent extends Component {
   /**
    * @argument currentAgenda
+   * @argument currentMeeting
    */
   @service router;
   @service sessionService;
   @service currentSession;
 
-  get firstAgendaitemOfAgenda() {
-    return this.args.currentAgenda.firstAgendaitem;
+  @lastValue('loadFirstAgendaitem') firstAgendaitem;
+
+  constructor() {
+    super(...arguments);
+    this.loadFirstAgendaitem.perform();
+  }
+
+  @task
+  *loadFirstAgendaitem() {
+    if (this.args.currentAgenda) {
+      const firstAgendaitem = yield this.args.currentAgenda.firstAgendaitem;
+      return firstAgendaitem;
+    }
+    return null;
+  }
+
+  get modelsForDetailRoute() {
+    return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem.id];
   }
 
   get isInAgendaItemDetailRoute() {
