@@ -12,8 +12,8 @@ import {
 export default class PublicationsTranslationTranslationUploadModalComponent extends Component {
   validators;
 
-  @tracked file = null;
-  @tracked name = '';
+  @tracked file;
+  @tracked name;
   @tracked isSourceForProofPrint = false;
   @tracked receivedAtDate = new Date();
 

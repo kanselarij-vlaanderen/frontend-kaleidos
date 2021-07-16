@@ -20,10 +20,10 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  @tracked translationDocument = null;
-  @tracked name = '';
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
+  @tracked translationDocument;
+  @tracked name;
+  @tracked pagesAmount;
+  @tracked wordsAmount;
   @tracked isSourceForProofPrint = false;
 
   validators;

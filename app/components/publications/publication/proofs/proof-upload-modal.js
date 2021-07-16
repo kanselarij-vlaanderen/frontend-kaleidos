@@ -18,7 +18,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
   validators;
 
   @tracked file;
-  @tracked name = '';
+  @tracked name;
   @tracked receivedAtDate = new Date();
 
   constructor() {
