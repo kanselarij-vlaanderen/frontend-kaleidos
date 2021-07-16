@@ -98,6 +98,13 @@ export default class PublicationsIndexController extends Controller {
   }
 
   @action
+  resetPublicationsFilter() {
+    this.publicationFilter.reset();
+    localStorage.setItem('publicationFilter', this.publicationFilter.toString());
+    this.send('refreshModel');
+  }
+
+  @action
   prevPage() {
     if (this.page > 0) {
       this.set('page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
