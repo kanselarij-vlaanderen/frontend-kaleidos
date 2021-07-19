@@ -12,11 +12,10 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <Auk::Button
-              @skin="tertiary"
-              @layout="icon-only"
-              @icon="edit"
-              {{on "click" this.showLinkModal }}
-            />
+              @skin="tertiary" @icon="edit"
+              {{on "click" this.showEditModal }}>
+              {{t "edit-government-fields"}}
+            </Auk::Button>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -35,17 +34,13 @@
             </tr>
           </thead>
           <tbody>
-          {{!--TODO Work out tabel as in ticket --}}
-            {{#each @publicationFlow.governmentFields as |field|}}
+            {{#each (await this.rows) as |row|}}
               <tr>
                 <td>
-                  <div class="auk-o-flex auk-o-flex--vertical-center">
-                    <div class="auk-u-muted ">
-                      {{field.label}}
-                    </div>
-                  </div>
+                  {{row.governmentDomain.label}}
                 </td>
-                <td class="auk-u-text-align--right">
+                <td>
+                  {{join ", " (map-by "label" row.governmentFields)}}
                 </td>
               </tr>
             {{/each}}
@@ -56,9 +51,9 @@
   </Auk::Panel>
 </div>
 
-{{#if isOpenLinkModal}}
-  <Publications::Publication::Case::GovernmentFields::LinkGovernmentFieldsModal
-      @publicationFlow={{this.publicationFlow}}
-      @onSave={{perform this.saveGovernmentFields}}
-      @onCancel={{this.closeLinkModal}}/>
+{{#if isOpenEditModal}}
+  <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
+      @governmentFields={{this.governmentFields}}
+      @onSave={{this.save}}
+      @onCancel={{this.closeEditModal}}/>
 {{/if}}

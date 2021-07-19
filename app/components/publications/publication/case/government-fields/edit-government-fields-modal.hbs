@@ -1,0 +1,41 @@
+<Auk::Modal
+    @size="small">
+  <Auk::Modal::Header
+    @title={{t "add-government-domains-government-fields"}}
+    @onClose={{@onCancel}} />
+  <Auk::Modal::Body>
+    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+      <Auk::Label>{{t "government-domains-government-fields"}}</Auk::Label>
+      <DomainFieldIse::DomainsFieldsSelectorForm
+        @availableFields={{this.governmentFields}}
+        @selectedFields={{this.selectedGovernmentFields}}
+        @onSelectFields={{this.select}}
+        @onUnSelectFields={{this.deselect}} />
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}} @size="large">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="borderless"
+            @disabled={{this.save.isRunning}}
+            {{on "click" @onCancel}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @loading={{this.save.isRunning}}
+            {{on "click" (perform this.save)}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Modal::Footer>
+</Auk::Modal>
+

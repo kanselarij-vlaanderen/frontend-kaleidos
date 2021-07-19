@@ -1,40 +1,20 @@
-<Auk::CheckboxList>
+<Auk::CheckboxList {{did-update (perform this.calculateDomainSelections) @selectedFields}}>
   {{#each this.domainSelections as |domainSelection index|}}
-    <Auk::Checkbox @checked={{doma}}>
-      {{#unless (eq index 0)}}
-        <hr class="auk-u-my-2">
-      {{/unless}}
+    {{#unless (eq index 0)}}
+      <hr class="auk-u-my-2">
+    {{/unless}}
+    <Auk::Checkbox
+      @checked={{domainSelection.isSelected}}
+      {{on "input" (fn this.toggleDomainSelection domainSelection)}}>
+      {{domainSelection.domain.label}}
+      <Auk::CheckboxList class="auk-u-mt">
+        {{#each domainSelection.availableFields as |field|}}
+          <Auk::Checkbox
+            @checked={{includes field domainSelection.selectedFields}}
+            @label={{field.label}}
+            {{on "input" (fn this.toggleFieldSelection field)}} />
+        {{/each}}
+      </Auk::CheckboxList>
     </Auk::Checkbox>
   {{/each}}
 </Auk::CheckboxList>
-
-<div {{did-update (perform this.calculateDomainSelections) @selectedFields}}>
-  {{#each this.domainSelections as |domainSelection index|}}
-    <ul class="vlc-checkbox-tree">
-      <li>
-        {{#unless (eq index 0)}}
-          <div class="auk-hr">
-            <hr/>
-          </div>
-        {{/unless}}
-        <WebComponents::VlCheckbox
-          @value={{domainSelection.isSelected}}
-          @label={{domainSelection.domain.label}}
-          @toggle={{fn this.toggleDomainSelection domainSelection}}
-        />
-        <ul>
-          {{#each domainSelection.availableFields as |field|}}
-            <li>
-              <WebComponents::VlCheckbox
-                @value={{includes field domainSelection.selectedFields}}
-                @label={{field.label}}
-                @toggle={{fn this.toggleFieldSelection field}}
-              />
-              {{field.name}}
-            </li>
-          {{/each}}
-        </ul>
-      </li>
-    </ul>
-  {{/each}}
-</div>

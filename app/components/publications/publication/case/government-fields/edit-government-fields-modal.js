@@ -1,25 +1,35 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
 
-export default class LinkGovernmentFieldsModal extends Component {
+export default class EditGovernmentFieldsModal extends Component {
   @service store;
   @tracked governmentFields;
-  @tracked governmentDomains;
   @tracked selectedGovernmentFields;
 
   constructor() {
     super(...arguments);
-    this.governmentDomains = this.store.peekAll('government-domain').sortBy('position');
     this.governmentFields = this.store.peekAll('government-field').sortBy('position');
+    this.selectedGovernmentFields = this.args.governmentFields;
   }
 
   @task
-  *saveGovernmentFields() {
+  *save() {
     yield this.args.onSave(
       this.selectedGovernmentFields
     );
+  }
+
+  @action
+  select(selectedFields) {
+    this.selectedGovernmentFields.pushObjects(selectedFields);
+  }
+
+  @action
+  deselect(selectedFields) {
+    this.selectedGovernmentFields.removeObjects(selectedFields);
   }
 }

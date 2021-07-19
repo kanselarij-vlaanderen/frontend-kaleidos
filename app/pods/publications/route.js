@@ -33,9 +33,7 @@ export default class PublicationsRoute extends Route {
     });
     const governmentFieldsPromise = this.store.query('government-field', {
       'page[size]': PAGE_SIZE.CODE_LISTS,
-    });
-    const governmentsDomainsPromise = this.store.query('government-domain', {
-      'page[size]': PAGE_SIZE.CODE_LISTS,
+      include: 'domain',
     });
 
     return Promise.all([
@@ -44,8 +42,7 @@ export default class PublicationsRoute extends Route {
       urgencyLevelPromise,
       documentTypePromise,
       publicationModePromise,
-      governmentFieldsPromise,
-      governmentsDomainsPromise
+      governmentFieldsPromise
     ]);
   }
 }
