@@ -137,6 +137,28 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
+  @task
+  *deletePiece(piece) {
+    if (piece.isDeleted) {
+      return;
+    }
+
+    // prevent piece from being used/rendered while delete is pending
+    this.model.removeObject(piece);
+    this.selectedPieces.removeObject(piece);
+
+    const filePromise = piece.file;
+    const documentContainerPromise = piece.documentContainer;
+    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+
+    const destroyPiece = piece.destroyRecord();
+    const destroyFile = file.destroyRecord();
+    const destroyDocumentContainer = documentContainer.destroyRecord();
+
+    yield Promise.all([destroyPiece, destroyFile, destroyDocumentContainer]);
+
+    this.send('refresh');
+  }
 
   @action
   openPieceUploadModal() {
