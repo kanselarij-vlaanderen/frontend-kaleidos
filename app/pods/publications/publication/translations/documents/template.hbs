@@ -61,10 +61,10 @@
                   @checked={{includes piece this.selectedPieces}}
                   {{on "click" (fn this.togglePieceSelection piece)}} />
               </td>
-              <td class="auk-u-text-nowrap">
+              <td>
                 {{piece.name}}
               </td>
-              <td >
+              <td>
                 <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td class="auk-u-text-nowrap">
