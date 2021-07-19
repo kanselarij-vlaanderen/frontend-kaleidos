@@ -43,12 +43,29 @@
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
                 <Utils::Documents::List @pieces={{sort-by "created" row.requestActivity.usedPieces}} />
               </div>
-              {{#if row.proofingActivity.generatedPieces}}
+              {{#if row.proofingActivity}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
                   <Utils::Documents::List @pieces={{sort-by 'created' row.proofingActivity.generatedPieces}} />
+                </div>
+              {{else}}
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "decisions"}}</p>
+
+                  <Auk::List>
+                    {{#each
+                      (sort-by
+                        "publicationDate"
+                        row.publicationActivity.decisions)
+                    as |decision|
+                    }}
+                      <Auk::List::Item>
+                        {{moment-format decision.publicationDate}}
+                      </Auk::List::Item>
+                    {{/each}}
+                  </Auk::List>
                 </div>
               {{/if}}
             </div>

@@ -13,7 +13,8 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
         'proofing-activity',
         'proofing-activity.generated-pieces',
         'proofing-activity.generated-pieces.file',
-        'publication-activity'
+        'publication-activity',
+        'publication-activity.decisions'
       ].join(','),
       sort: '-start-date',
     });
