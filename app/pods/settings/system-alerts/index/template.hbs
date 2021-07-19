@@ -3,22 +3,20 @@
   @title={{t "manage-alerts"}}
   @closeModal={{action "cancel"}}
 >
-  <div class="auk-modal__body">
-    <div class="auk-u-p-4">
-      <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
-        {{#power-select
-          options=this.model
-          selected=this.selectedAlert
-          onchange=(action "selectAlert")
-        as |alert|
-        }}
-          {{alert.title}}
-        {{/power-select}}
-      </div>
+  <Auk::Modal::Body>
+    <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
+      {{#power-select
+        options=this.model
+        selected=this.selectedAlert
+        onchange=(action "selectAlert")
+      as |alert|
+      }}
+        {{alert.title}}
+      {{/power-select}}
     </div>
-  </div>
-  <div class="auk-modal__footer auk-modal__footer--bordered">
-    <Auk::Toolbar>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @custom={{true}}>
+    <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <Auk::Button
@@ -61,5 +59,5 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
-  </div>
+  </Auk::Modal::Footer>
 </WebComponents::VlModal>

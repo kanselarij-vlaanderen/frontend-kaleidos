@@ -4,96 +4,76 @@
   closeModal=(action "close")
 }}
   {{#if (and (not isAdding) (not isEditing))}}
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        <div class="auk-form-group">
-          {{utils/model-selector
-            modelName="government-field"
-            searchField="label"
-            propertyToShow="label"
-            sortField="label"
-            selectedItems=item
-            selectModel=(action "selectModel")
-          }}
-        </div>
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        {{utils/model-selector
+          modelName="government-field"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=item
+          selectModel=(action "selectModel")
+        }}
       </div>
-    </div>
-    <div class="auk-modal__footer auk-modal__footer--bordered">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="borderless"
-              {{action "close"}}
-            >
-              {{t "cancel"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="tertiary"
-              @icon="add"
-              {{action "toggleIsAdding"}}
-              data-test-manage-government-fields-add
-            >
-              {{t "add"}}
-            </Auk::Button>
-            {{#if item}}
-              <Auk::Button
-                @skin="tertiary"
-                @icon="pencil"
-                {{action "toggleIsEditing"}}
-                data-test-manage-government-fields-edit
-              >
-                {{t "edit"}}
-              </Auk::Button>
-              <Auk::Button
-                @skin="tertiary"
-                @icon="delete"
-                {{action "removeModel"}}
-                data-test-manage-government-fields-delete
-              >
-                {{t "delete"}}
-              </Auk::Button>
-            {{/if}}
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </div>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{action "close"}}>
+      <Auk::Button
+        @skin="tertiary"
+        @icon="add"
+        {{action "toggleIsAdding"}}
+        data-test-manage-government-fields-add
+      >
+        {{t "add"}}
+      </Auk::Button>
+      {{#if item}}
+        <Auk::Button
+          @skin="tertiary"
+          @icon="pencil"
+          {{action "toggleIsEditing"}}
+          data-test-manage-government-fields-edit
+        >
+          {{t "edit"}}
+        </Auk::Button>
+        <Auk::Button
+          @skin="tertiary"
+          @icon="delete"
+          {{action "removeModel"}}
+          data-test-manage-government-fields-delete
+        >
+          {{t "delete"}}
+        </Auk::Button>
+      {{/if}}
+    </Auk::Modal::Footer>
   {{/if}}
   {{#if isAdding}}
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        <div class="auk-form-group">
-          <Auk::Label>{{t "government-field"}}</Auk::Label>
-          {{web-components/vl-form-input value=label}}
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "government-domain"}}</Auk::Label>
-          {{utils/model-selector
-            modelName="government-domain"
-            searchField="label"
-            propertyToShow="label"
-            sortField="label"
-            selectedItems=domain
-            selectModel=(action "chooseDomain")
-          }}
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "ise-code"}}</Auk::Label>
-          {{utils/model-selector
-            modelName="ise-code"
-            searchField="name"
-            propertyToShow="nameToShow"
-            sortField="name"
-            selectedItems=iseCode
-            selectModel=(action "chooseIseCode")
-          }}
-        </div>
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "government-field"}}</Auk::Label>
+        {{web-components/vl-form-input value=label}}
       </div>
-    </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "government-domain"}}</Auk::Label>
+        {{utils/model-selector
+          modelName="government-domain"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=domain
+          selectModel=(action "chooseDomain")
+        }}
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "ise-code"}}</Auk::Label>
+        {{utils/model-selector
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="nameToShow"
+          sortField="name"
+          selectedItems=iseCode
+          selectModel=(action "chooseIseCode")
+        }}
+      </div>
+    </Auk::Modal::Body>
     {{web-components/vl-modal-footer
       isLoading=isLoading
       cancelButtonText=(t "cancel")
@@ -103,36 +83,34 @@
     }}
   {{/if}}
   {{#if isEditing}}
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        <div class="auk-form-group">
-          <Auk::Label>{{t "government-field"}}</Auk::Label>
-          {{web-components/vl-form-input value=label}}
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "government-domain"}}</Auk::Label>
-          {{utils/model-selector
-            modelName="government-domain"
-            searchField="label"
-            propertyToShow="label"
-            sortField="label"
-            selectedItems=domain
-            selectModel=(action "chooseDomain")
-          }}
-        </div>
-        <div class="auk-form-group">
-          <Auk::Label>{{t "ise-code"}}</Auk::Label>
-          {{utils/model-selector
-            modelName="ise-code"
-            searchField="name"
-            propertyToShow="name"
-            sortField="name"
-            selectedItems=iseCode
-            selectModel=(action "chooseIseCode")
-          }}
-        </div>
+    <Auk::Modal::Body>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "government-field"}}</Auk::Label>
+        {{web-components/vl-form-input value=label}}
       </div>
-    </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "government-domain"}}</Auk::Label>
+        {{utils/model-selector
+          modelName="government-domain"
+          searchField="label"
+          propertyToShow="label"
+          sortField="label"
+          selectedItems=domain
+          selectModel=(action "chooseDomain")
+        }}
+      </div>
+      <div class="auk-form-group">
+        <Auk::Label>{{t "ise-code"}}</Auk::Label>
+        {{utils/model-selector
+          modelName="ise-code"
+          searchField="name"
+          propertyToShow="name"
+          sortField="name"
+          selectedItems=iseCode
+          selectModel=(action "chooseIseCode")
+        }}
+      </div>
+    </Auk::Modal::Body>
     {{web-components/vl-modal-footer
       isLoading=isLoading
       cancelButtonText=(t "cancel")

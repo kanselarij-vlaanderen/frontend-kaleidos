@@ -19,6 +19,7 @@ const selectors = {
   editItem: {
     rdfaEditor: '[data-test-newsletter-edit-item-rdfa-editor]',
     save: '[data-test-newsletter-edit-item-save]',
+    cancel: '[data-test-newsletter-edit-item-cancel]',
     checkedThemes: '[data-test-newsletter-edit-item-themes-selector] input:checked',
     themesSelector: '[data-test-newsletter-edit-item-themes-selector]',
   },

@@ -56,10 +56,11 @@
                 <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td class="auk-u-text-nowrap">
-                <p>{{moment-format piece.receivedDate}}</p>
-                <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format piece.receivedDate "HH:mm"}}
-                </p>
+                {{#if piece.receivedDate}}
+                  {{moment-format piece.receivedDate}}
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td class="auk-u-text-nowrap">
                 <p>{{moment-format piece.created}}</p>

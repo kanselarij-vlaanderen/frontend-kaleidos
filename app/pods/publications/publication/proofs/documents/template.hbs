@@ -38,7 +38,7 @@
               @skin="secondary" @icon="add"
               @disabled={{this.isUploadDisabled}}
               {{on "click" this.openPieceUploadModal}}>
-              {{t "upload-documents"}}
+              {{t "upload-corrected-proof-document"}}
             </Auk::Button>
           </Auk::Toolbar::Item>
         {{/if}}
@@ -87,12 +87,11 @@
                 <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
               </td>
               <td>
-                <p>
+                {{#if piece.receivedDate}}
                   {{moment-format piece.receivedDate}}
-                </p>
-                <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format piece.receivedDate "HH:mm"}}
-                </p>
+                {{else}}
+                  {{t "dash"}}
+                {{/if}}
               </td>
               <td>
                 <p>
@@ -123,27 +122,6 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
-                    @layout="icon-only" @skin="borderless" @icon="more"
-                    @event="click"
-                    id="proofDocumentsRowActionMenu{{piece.id}}">
-                    {{t "view-more"}}
-                  </Auk::Button>
-                  {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-                  <EmberPopover
-                    @side="bottom-end"
-                    @tooltipClass="auk-popover"
-                    @targetId="proofDocumentsRowActionMenu{{piece.id}}">
-                    <Auk::Dropdown
-                      as |dropdown|>
-                      <dropdown.Item>
-                        {{t "edit-proof-details"}}
-                      </dropdown.Item>
-                      <dropdown.Item @skin="danger">
-                        {{t "delete"}}
-                      </dropdown.Item>
-                    </Auk::Dropdown>
-                  </EmberPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
@@ -196,6 +174,8 @@
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
+    @isCorrectionDocument={{true}}
+    @isReceivedDocument={{false}}
     @onSave={{this.saveCorrectionDocument}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
