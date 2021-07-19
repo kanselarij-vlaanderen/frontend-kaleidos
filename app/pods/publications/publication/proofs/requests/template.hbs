@@ -58,7 +58,7 @@
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "published-decisions"}}</p>
                   <Auk::List class="auk-list--view">
                     {{#each row.decisions as |decision|}}
-                      <Auk::List::Item @skin="gray-100">
+                      <Auk::List::Item>
                         <div class="auk-u-ml-2">
                           <div class="auk-u-text-bold">{{decision.title}}</div>
                           <div class="auk-u-muted auk-u-text-small">
@@ -69,6 +69,8 @@
                           @skin="borderless" @layout="icon-only" @icon="external-link"
                           @href={{decision.uri}} target="_blank" />
                       </Auk::List::Item>
+                    {{else}}
+                      <div class="auk-u-muted">{{t "no-decisions-published-yet"}}</div>
                     {{/each}}
                   </Auk::List>
                 </div>
