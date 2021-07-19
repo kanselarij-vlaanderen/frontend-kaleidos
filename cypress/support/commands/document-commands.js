@@ -385,15 +385,15 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
 
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
-  // TODO pdf is uploaded but all pages are blank, encoding issue? Irrelevant for test
+  // note: double encoding is needed or pdf will be blank (cy.fixture also needs encoding)
 
-  cy.fixture(filePath).then((fileContent) => {
+  cy.fixture(filePath, 'base64').then((fileContent) => {
     cy.get('[type=file]').upload(
       {
         fileContent,
         fileName: fileFullName,
         mimeType,
-        encoding: 'utf-8',
+        encoding: 'base64',
       },
       {
         uploadType: 'input',

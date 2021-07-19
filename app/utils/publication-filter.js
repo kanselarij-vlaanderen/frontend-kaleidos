@@ -44,6 +44,15 @@ class PublicationFilter {
       withdrawnFilterOption: this.withdrawnFilterOption,
     };
   }
+
+  get isFiltered() {
+    return !this.ministerFilterOption
+      || !this.notMinisterFilterOption
+      || !this.pausedFilterOption
+      || !this.publishedFilterOption
+      || !this.toPublishFilterOption
+      || !this.withdrawnFilterOption;
+  }
 }
 
 export default PublicationFilter;

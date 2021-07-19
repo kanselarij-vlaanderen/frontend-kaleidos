@@ -43,12 +43,16 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::ButtonLink {{on "click" (perform this.cancelEditPieces)}}>
+            <Auk::ButtonLink 
+              data-test-batch-document-edit-cancel
+              {{on "click" (perform this.cancelEditPieces)}}
+            >
               {{t "cancel"}}
             </Auk::ButtonLink>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
             <WebComponents::VlSaveButton
+              data-test-batch-document-edit-save={{true}}
               @text={{t "save"}}
               @isLoading={{this.saveEditPieces.isRunning}}
               @saveAction={{perform this.saveEditPieces}} />

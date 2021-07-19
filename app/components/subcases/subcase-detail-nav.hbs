@@ -1,44 +1,16 @@
-<ul class="auk-tabs auk-tabs--reversed" role="tablist">
-  <li class="auk-tabs__tab auk-tabs__hierarchical-back">
-    <LinkTo
-      @route="cases.case.subcases.overview"
-      data-test-auk-tab-hierarchical-back
-    >
-      <span class="auk-tabs__tab-inner">
-        <div class="auk-icon auk-icon--hierarchical-back auk-icon--default">
-          <i class="ki ki-hierarchical-back"></i>
-        </div>
-      </span>
-    </LinkTo>
-  </li>
-  <li class="auk-tabs__tab">
-    <LinkTo
-      @route="cases.case.subcases.subcase.overview"
-      @activeClass="active"
-    >
-      <span class="auk-tabs__tab-inner">
-        {{t "overview"}}
-      </span>
-    </LinkTo>
-  </li>
-  <li class="auk-tabs__tab">
-    <LinkTo
-      @route="cases.case.subcases.subcase.documents"
-      @activeClass="active"
-    >
-      <span class="auk-tabs__tab-inner">
-        {{t "documents"}}
-      </span>
-    </LinkTo>
-  </li>
-  <li class="auk-tabs__tab">
-    <LinkTo
-      @route="cases.case.subcases.subcase.decision"
-      @activeClass="active"
-    >
-      <span class="auk-tabs__tab-inner">
-        {{capitalize (t "decision")}}
-      </span>
-    </LinkTo>
-  </li>
-</ul>
+<Auk::Tabs @reversed={{true}}>
+  <Auk::Tab
+    @route="cases.case.subcases.overview"
+    @isHierarchicalBack={{true}}
+    data-test-auk-tab-hierarchical-back
+  />
+  <Auk::Tab @route="cases.case.subcases.subcase.overview">
+    {{t "overview"}}
+  </Auk::Tab>
+  <Auk::Tab @route="cases.case.subcases.subcase.documents">
+    {{t "documents"}}
+  </Auk::Tab>
+  <Auk::Tab @route="cases.case.subcases.subcase.decision">
+    {{capitalize (t "decision")}}
+  </Auk::Tab>
+</Auk::Tabs>
