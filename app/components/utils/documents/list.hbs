@@ -1,5 +1,5 @@
-<Auk::List @isBordered="true" class="auk-list--view">
-  {{#each @pieces as |piece|}}
+<Auk::List @isBordered={{true}} class="auk-list--view">
+  {{#each (sort-by 'created' @pieces) as |piece|}}
     <Auk::List::Item @skin="gray-100">
       <div class="auk-u-ml-2">
         <Auk::Icon @name="document" @skin="muted-dark"/>
@@ -14,5 +14,7 @@
         @skin="borderless" @layout="icon-only" @icon="book"
         @href={{piece.viewDocumentURL}} target="_blank" />
     </Auk::List::Item>
+  {{else}}
+    <div class="auk-u-muted">{{@emptyMessage}}</div>
   {{/each}}
 </Auk::List>

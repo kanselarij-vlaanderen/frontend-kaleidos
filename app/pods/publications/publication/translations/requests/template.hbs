@@ -42,14 +42,18 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-6">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{sort-by 'created' activity.usedPieces}} />
+                <Utils::Documents::List
+                  @pieces={{activity.usedPieces}}
+                  @emptyMessage={{t "no-documents-received-yet"}} />
               </div>
-              {{#if activity.translationActivity.generatedPieces}}
+              {{#if activity.translationActivity}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{sort-by 'created' activity.translationActivity.generatedPieces}} />
+                  <Utils::Documents::List
+                    @emptyMessage={{t "no-documents-received-yet"}}
+                    @pieces={{activity.translationActivity.generatedPieces}} />
                 </div>
               {{/if}}
             </div>
@@ -58,7 +62,7 @@
       </Auk::AccordionPanel>
     </div>
   {{else}}
-    <Auk::EmptyState @message={{t "no-proofing-activities-yet"}} @bordered={{true}} />
+    <Auk::EmptyState @message={{t "no-translation-activities-yet"}} @bordered={{true}} />
   {{/each}}
 </div>
 

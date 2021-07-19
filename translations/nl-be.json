@@ -897,6 +897,7 @@
   "final": "finaal",
   "x-request-type-x-timestamp": "{request-type} op {date} om {time}",
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd.",
+  "no-documents-received-yet": "Nog geen documenten ontvangen.",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
   "upload-corrected-proof-for-publication-x-identification": "Verbeterde drukproef uploaden voor publicatie {identification}",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",

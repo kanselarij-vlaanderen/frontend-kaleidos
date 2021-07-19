@@ -41,28 +41,33 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "attachments"}}</p>
-                <Utils::Documents::List @pieces={{sort-by "created" row.requestActivity.usedPieces}} />
+                <Utils::Documents::List
+                  @pieces={{row.requestActivity.usedPieces}}
+                  @emptyMessage={{t "no-documents-received-yet"}} />
               </div>
               {{#if row.proofingActivity}}
                 <div class="auk-u-mb-2">
                   <p class="auk-u-text-bold auk-u-muted auk-u-mb">
                     {{t "received-documents"}}
                   </p>
-                  <Utils::Documents::List @pieces={{sort-by 'created' row.proofingActivity.generatedPieces}} />
+                  <Utils::Documents::List @pieces={{row.proofingActivity.generatedPieces}}
+                    @emptyMessage={{t "no-documents-received-yet"}} />
                 </div>
               {{else}}
                 <div class="auk-u-mb-2">
-                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "decisions"}}</p>
-
-                  <Auk::List>
-                    {{#each
-                      (sort-by
-                        "publicationDate"
-                        row.publicationActivity.decisions)
-                    as |decision|
-                    }}
-                      <Auk::List::Item>
-                        {{moment-format decision.publicationDate}}
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "published-decisions"}}</p>
+                  <Auk::List class="auk-list--view">
+                    {{#each row.decisions as |decision|}}
+                      <Auk::List::Item @skin="gray-100">
+                        <div class="auk-u-ml-2">
+                          <div class="auk-u-text-bold">{{decision.title}}</div>
+                          <div class="auk-u-muted auk-u-text-small">
+                            {{moment-format decision.publicationDate}}
+                          </div>
+                        </div>
+                        <Auk::Button
+                          @skin="borderless" @layout="icon-only" @icon="external-link"
+                          @href={{decision.uri}} target="_blank" />
                       </Auk::List::Item>
                     {{/each}}
                   </Auk::List>

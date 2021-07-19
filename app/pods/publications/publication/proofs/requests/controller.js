@@ -34,6 +34,10 @@ export class Row {
     throw new Error('unknown request');
   }
 
+  get decisions() {
+    return this.publicationActivity.decisions.sortBy('publicationDate');
+  }
+
   get canOpenProofUploadModal() {
     return !!this.proofingActivity;
   }
