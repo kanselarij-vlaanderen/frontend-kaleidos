@@ -22,7 +22,7 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
 
-    {{#if this.model}}
+    {{#if this.pieces}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
@@ -31,10 +31,22 @@
                 @checked={{this.areAllPiecesSelected}}
                 {{on "click" this.toggleAllPiecesSelection}} />
             </th>
-            <th class="auk-u-text-nowrap">{{t "name-document"}}</th>
+            <Utils::ThSortable
+               @label={{t "name-document"}}
+               @field="naam"
+               @currentSorting={{this.sortingString}}
+               @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
-            <th class="auk-u-text-nowrap">{{t "received-at"}}</th>
-            <th class="auk-u-text-nowrap">{{t "uploaded-at"}}</th>
+            <Utils::ThSortable
+              @label={{t "received-at"}}
+              @field="ontvangen-op"
+              @currentSorting={{this.sortingString}}
+              @onChange={{this.changeSorting}} />
+            <Utils::ThSortable
+              @label={{t "uploaded-at"}}
+              @field="geupload-op"
+              @currentSorting={{this.sortingString}}
+              @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap auk-u-text-align--center">
               {{t "for-publishpreview"}}
             </th>
@@ -42,7 +54,7 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.model as |piece|}}
+          {{#each this.pieces as |piece|}}
             <tr class="auk-table__row">
               <td class="auk-table-checkbox-col">
                 <Auk::Checkbox

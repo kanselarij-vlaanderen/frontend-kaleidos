@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
+  naam: 'name',
   'ontvangen-op': 'receivedDate',
   'geupload-op': 'created',
 };
@@ -15,16 +16,6 @@ const REQUEST_STAGES = {
   EXTRA: 'extra',
   FINAL: 'final',
 };
-
-// necessary for tracking pieces
-export class Model {
-  @tracked pieces;
-  @tracked decisions;
-
-  constructor(models) {
-    Object.assign(this, models);
-  }
-}
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
@@ -47,9 +38,23 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isPieceUploadModalOpen = false;
   @tracked proofRequestStage;
 
-  initSort() {
-    this.sortingString = this.qpSortingString;
-    this.sort(this.sortingString);
+  get pieces() {
+    let property = 'created';
+    let isDescending = false;
+    if (this.sortingString) {
+      isDescending = this.sortingString.startsWith('-');
+      const sortKey = this.sortingString.substr(isDescending);
+      property = COLUMN_MAP[sortKey] ?? property;
+    }
+
+    let pieces = this.model.pieces;
+    // .sortBy() copies array
+    pieces = pieces.sortBy(property);
+    if (isDescending) {
+      pieces = pieces.reverseObjects();
+    }
+
+    return pieces;
   }
 
   get areAllPiecesSelected() {
@@ -92,23 +97,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   changeSorting(sortingString) {
     this.sortingString = sortingString;
     this.set('qpSortingString', sortingString);
-    this.sort(sortingString);
-  }
-
-  sort(sortingString) {
-    let property = 'created';
-    let isDescending = false;
-    if (sortingString) {
-      isDescending = sortingString.startsWith('-');
-      const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey] ?? property;
-    }
-
-    // .sortBy() copies array
-    this.model.pieces = this.model.pieces.sortBy(property);
-    if (isDescending) {
-      this.model.pieces.reverseObjects();
-    }
   }
 
   @action
@@ -124,12 +112,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   async saveProofRequest(requestProperties) {
-    try {
-      await this.performSaveProofRequest(requestProperties);
-    } finally {
-      this.isProofRequestModalOpen = false;
-    }
+    await this.performSaveProofRequest(requestProperties);
     this.selectedPieces = [];
+    this.isProofRequestModalOpen = false;
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
@@ -145,14 +130,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   async saveCorrectionDocument(proofDocument) {
-    let piece;
-    try {
-      piece = await this.performSaveCorrectionDocument(proofDocument);
-    } finally {
-      this.isPieceUploadModalOpen = false;
-    }
-    this.model.pieces.pushObject(piece);
-    this.sort(this.sortingString);
+    await this.performSaveCorrectionDocument(proofDocument);
+    this.isPieceUploadModalOpen = false;
+    this.refresh();
   }
 
   async performSaveProofRequest(proofRequest) {

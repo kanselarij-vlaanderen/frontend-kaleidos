@@ -5,15 +5,51 @@ import { action } from '@ember/object';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+const COLUMN_MAP = {
+  naam: 'name',
+  'ontvangen-op': 'receivedDate',
+  'geupload-op': 'created',
+};
+
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  queryParams = [{
+    qpSortingString: {
+      as: 'volgorde',
+    },
+  }];
+
+  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} key name, prepended with minus if descending */
+  qpSortingString;
+
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceEditModal = false;
   @tracked selectedPieces = [];
+  @tracked sortingString = undefined;
   @tracked toEditDocument;
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
+
+  get pieces() {
+    let property = 'created';
+    let isDescending = false;
+    if (this.sortingString) {
+      isDescending = this.sortingString.startsWith('-');
+      const sortKey = this.sortingString.substr(isDescending);
+      property = COLUMN_MAP[sortKey] ?? property;
+    }
+
+    let pieces = this.model;
+    // .sortBy() copies array
+    pieces = pieces.sortBy(property);
+    if (isDescending) {
+      pieces = pieces.reverseObjects();
+    }
+
+    return pieces;
+  }
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
@@ -26,6 +62,12 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   get isUploadDisabled() {
     return this.translationSubcase.isFinished;
+  }
+
+  @action
+  changeSorting(sortingString) {
+    this.sortingString = sortingString;
+    this.set('qpSortingString', sortingString);
   }
 
   @action
