@@ -23,6 +23,7 @@ const selectors = {
 
   // agendas/overview/template.hbs
   agendasOverview: {
+    dataTable: '[data-test-route-agendas-overview-data-table]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
@@ -41,7 +42,7 @@ const selectors = {
 
   // agenda/agendaitems/agendaitem/decisions/template.hbs
   agendaitemDecisions: {
-    // TODO unused selector
+    // TODO-selector unused selector
     addTreatment: '[data-test-route-agenda---decisions-add-treatment]',
   },
 
@@ -59,6 +60,11 @@ const selectors = {
   /**
     ROUTE CASES
   */
+
+  // cases/overview/template
+  casesOverview: {
+    dataTable: '[data-test-route-cases-overview-data-table]',
+  },
 
   // cases/case/subcase/subcase/overview/template
   subcaseOverview: {
@@ -79,8 +85,19 @@ const selectors = {
     title: '[data-test-route-search-title]',
     input: '[data-test-route-search-input]',
     trigger: '[data-test-route-search-trigger]',
-    // TODO unused selector:
+    // TODO-selector unused selector:
     datepickerButton: '[data-test-route-search-datepicker-button]',
+  },
+
+  // search/agendaitems
+  searchAgendaitems: {
+    dataTable: '[data-test-route-search-agendaitems-data-table]',
+  },
+
+  // search/cases
+  searchCases: {
+    toggleDecisions: '[data-test-route-search-cases-toggle-decisions]',
+    dataTable: '[data-test-route-search-cases-data-table]',
   },
 
   /**
@@ -92,6 +109,11 @@ const selectors = {
     dataTable: '[data-test-route-newsletter-data-table]',
   },
 
+  // newsletter/nota-updates/template
+  notaUpdates: {
+    dataTable: '[data-test-route-newsletter-nota-updates-data-table]',
+  },
+
   /**
     ROUTE NEWSLETTERS
   */
@@ -99,6 +121,9 @@ const selectors = {
   // newsletters/template
   newsletters: {
     dataTable: '[data-test-route-newsletters-data-table]',
+    row: {
+      title: '[data-test-route-newsletters-data-table-row-title]',
+    },
   },
 
   /**
@@ -108,8 +133,18 @@ const selectors = {
   // publications/template
   publications: {
     title: '[data-test-route-publications-title]',
-    // TODO: there are more selectors in this route
+    // TODO-selector: there are more selectors in this route
   },
+
+  /**
+    ROUTE LOGIN
+  */
+
+  // login/template
+  login: {
+    acmidmButton: '[data-test-route-login-acmidm-container] button',
+  },
+
 
   /**
     ROUTE ACCOUNTLESS-USERS
@@ -118,6 +153,7 @@ const selectors = {
   // accountless-users/template
   accountlessUsers: {
     title: '[data-test-route-accountless-users-title]',
+    message: '[data-test-route-accountless-users-message]',
   },
 
 };
