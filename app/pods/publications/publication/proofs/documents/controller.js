@@ -132,7 +132,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   async saveCorrectionDocument(proofDocument) {
     await this.performSaveCorrectionDocument(proofDocument);
     this.isPieceUploadModalOpen = false;
-    this.refresh();
+    this.send('refresh');
   }
 
   async performSaveProofRequest(proofRequest) {
