@@ -1,6 +1,9 @@
 /* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
@@ -19,36 +22,35 @@ const REQUEST_STAGES = {
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
-    qpSortingString: {
+    sort: {
       as: 'volgorde',
     },
   }];
 
   @service currentSession;
 
-  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  /** @type {string} key name, prepended with minus if descending */
-  qpSortingString;
+  // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} kebab-cased key name, prepended with minus if descending */
+  sort;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
   @tracked selectedPieces = [];
-  @tracked sortingString = undefined;
   @tracked isProofRequestModalOpen = false;
   @tracked isPieceUploadModalOpen = false;
   @tracked proofRequestStage;
 
+  @computed('sort') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;
-    if (this.sortingString) {
-      isDescending = this.sortingString.startsWith('-');
-      const sortKey = this.sortingString.substr(isDescending);
+    if (this.sort) {
+      isDescending = this.sort.startsWith('-');
+      const sortKey = this.sort.substr(isDescending);
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
     let pieces = this.model.pieces;
-    // .sortBy() copies array
     pieces = pieces.sortBy(property);
     if (isDescending) {
       pieces = pieces.reverseObjects();
@@ -94,9 +96,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  changeSorting(sortingString) {
-    this.sortingString = sortingString;
-    this.set('qpSortingString', sortingString);
+  changeSorting(sort) {
+    this.set('sort', sort);
   }
 
   @action

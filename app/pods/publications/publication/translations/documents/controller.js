@@ -1,7 +1,10 @@
 import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import {
+  action,
+  computed
+} from '@ember/object';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -13,36 +16,35 @@ const COLUMN_MAP = {
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
   queryParams = [{
-    qpSortingString: {
+    sort: {
       as: 'volgorde',
     },
   }];
 
-  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  /** @type {string} key name, prepended with minus if descending */
-  qpSortingString;
+  // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} kebab-cased key name, prepended with minus if descending */
+  sort;
 
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceEditModal = false;
   @tracked selectedPieces = [];
-  @tracked sortingString = undefined;
   @tracked toEditDocument;
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
 
+  @computed('sort') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;
-    if (this.sortingString) {
-      isDescending = this.sortingString.startsWith('-');
-      const sortKey = this.sortingString.substr(isDescending);
+    if (this.sort) {
+      isDescending = this.sort.startsWith('-');
+      const sortKey = this.sort.substr(isDescending);
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
     let pieces = this.model;
-    // .sortBy() copies array
     pieces = pieces.sortBy(property);
     if (isDescending) {
       pieces = pieces.reverseObjects();
@@ -65,9 +67,8 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  changeSorting(sortingString) {
-    this.sortingString = sortingString;
-    this.set('qpSortingString', sortingString);
+  changeSorting(sort) {
+    this.set('sort', sort);
   }
 
   @action

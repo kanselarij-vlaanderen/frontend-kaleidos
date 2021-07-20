@@ -54,7 +54,6 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
-    controller.sortingString = controller.qpSortingString;
   }
 
   @action

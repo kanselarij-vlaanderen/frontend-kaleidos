@@ -34,18 +34,18 @@
             <Utils::ThSortable
                @label={{t "name-document"}}
                @field="naam"
-               @currentSorting={{this.sortingString}}
+               @currentSorting={{this.sort}}
                @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap">{{t "file-type"}}</th>
             <Utils::ThSortable
               @label={{t "received-at"}}
               @field="ontvangen-op"
-              @currentSorting={{this.sortingString}}
+              @currentSorting={{this.sort}}
               @onChange={{this.changeSorting}} />
             <Utils::ThSortable
               @label={{t "uploaded-at"}}
               @field="geupload-op"
-              @currentSorting={{this.sortingString}}
+              @currentSorting={{this.sort}}
               @onChange={{this.changeSorting}} />
             <th class="auk-u-text-nowrap auk-u-text-align--center">
               {{t "for-publishpreview"}}
