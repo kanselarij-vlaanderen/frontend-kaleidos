@@ -904,5 +904,8 @@
   "email-to-translationrequest": "Email ontvanger voor vertalingsaanvragen",
   "email-to-proofrequest": "Email ontvanger voor drukproeven",
   "identifier": "Identificator",
-  "proofprint-corrector": "Drukproef verbeteraar"
+  "proofprint-corrector": "Drukproef verbeteraar",
+  "belgian-official-gazette": "Belgisch Staatsblad",
+  "published-decisions": "Gepubliceerde besluiten",
+  "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd."
 }
