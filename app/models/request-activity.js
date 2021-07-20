@@ -17,7 +17,5 @@ export default class RequestActivity extends Model {
 
   @belongsTo('email') email;
 
-  @hasMany('piece', {
-    inverse: 'requestActivitiesUsedBy',
-  }) usedPieces;
+  @hasMany('piece') usedPieces;
 }
