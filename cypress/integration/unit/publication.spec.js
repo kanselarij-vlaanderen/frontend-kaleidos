@@ -210,24 +210,22 @@ context('Publications tests', () => {
       .type(contactperson.eml);
 
     // Click submit.
+    cy.route('POST', '/persons').as('postPerson');
     cy.route('POST', '/contact-persons').as('postContactPerson');
-    cy.route('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.contactperson.submitButton).click();
+    cy.wait('@postPerson');
     cy.wait('@postContactPerson');
-    cy.wait('@patchPublicationFlow');
 
     cy.contains(contactperson.fin).should('exist');
     cy.contains(contactperson.lan).should('exist');
     cy.contains(contactperson.eml).should('exist');
 
-    // Open dropdown menu.
-    cy.get(publication.contactperson.threedotsButton).click();
-    cy.wait(10);
-
-    // Click Delete
+    // Delete contact person
     cy.route('DELETE', '/contact-persons/**').as('deleteContactPerson');
+    cy.route('DELETE', '/persons/**').as('deletePerson');
     cy.get(publication.contactperson.deleteContactpersonButton).click();
     cy.wait('@deleteContactPerson');
+    cy.wait('@deletePerson');
 
     // assert deleted content
     cy.contains(contactperson.fin).should('not.exist');
