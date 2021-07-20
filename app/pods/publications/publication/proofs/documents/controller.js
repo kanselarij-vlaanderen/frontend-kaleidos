@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
 import {
   action,
