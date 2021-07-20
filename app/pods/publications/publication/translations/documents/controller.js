@@ -50,7 +50,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @task
   *saveSourceDocument(translationDocument) {
     const piece = translationDocument.piece;
-    piece.translationSubcase = this.translationSubcase;
+    piece.translationSubcaseSourceFor = this.translationSubcase;
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     piece.pages = translationDocument.pagesAmount;
@@ -137,9 +137,17 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
+  @action
+  isDeleteDisabled(piece) {
+    return this.translationSubcase.isFinished
+      // can be translation or publication related
+      || piece.requestActivitiesUsedBy.length > 0;
+  }
+
   @task
-  *deletePiece(piece) {
-    if (piece.isDeleted) {
+  *delete(piece) {
+    // Workaround for Dropdown::Item not having a (button with a) disabled state.
+    if (this.isDeleteDisabled(piece)) {
       return;
     }
 

@@ -27,12 +27,27 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     this.initValidation();
   }
 
+  get isLoading() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
   get isSaveDisabled() {
-    return !this.file || !this.validators.areValid;
+    return !this.file || this.file.isDeleted || !this.validators.areValid;
+  }
+
+  // necessary because cancel-button is not disabled
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    if (this.file) {
+      yield this.file.destroyRecord();
+    }
+    this.args.onCancel();
   }
 
   @task
-  *saveProof() {
+  *save() {
     yield this.args.onSave({
       file: this.file,
       name: this.name,

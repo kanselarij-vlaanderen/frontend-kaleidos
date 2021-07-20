@@ -7,12 +7,11 @@
         "upload-proof-for-publication-x-identification")
       identification=@publicationFlow.identification.idName
     }}
-    @onClose={{@onCancel}} />
+    @onClose={{perform this.cancel}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.saveProof.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
 
       <Auk::FileUploader
-        @multiple={{false}}
         @onUpload={{this.onUploadFile}} />
       {{!-- File details --}}
       {{#if this.file}}
@@ -56,12 +55,12 @@
 
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer @onCancel={{perform this.cancel}}>
     <Auk::Button
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
-      @loading={{this.saveProof.isRunning}}
-      {{on "click" (perform this.saveProof)}}>
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

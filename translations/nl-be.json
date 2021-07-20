@@ -890,6 +890,7 @@
   "view-more": "Bekijk meer",
   "read": "Lees",
   "request-proof": "Drukproef aanvragen",
+  "request-proof-x-stage-for-publication-x-identification": "Drukproef aanragen ({stage}) voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",

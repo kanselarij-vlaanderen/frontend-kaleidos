@@ -19,7 +19,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     // It seems when using a single request on publication-subcase with an include query param
     // for pieces (via the different paths) ember-data does not catch the inverse relation
     // from piece to publication-subcase. This results in an additional request per piece
-    // when piece.publicationSubcase is used in the template.
+    // when piece.publicationSubcaseCorrectionFor is used in the template.
 
     // Source documents uploaded on the publication subcase
     const sourceDocumentsPromise = this.store.query('piece', {

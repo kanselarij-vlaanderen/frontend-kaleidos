@@ -8,8 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
 import {
-  ValidatorSet,
-  Validator
+  ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
 
 export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
@@ -65,7 +64,10 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     this.name = file.filenameWithoutExtension;
   }
 
-  @task
+  // necessary because cancel-button is not disabled
+  @task({
+    drop: true,
+  })
   *cancelTranslation() {
     if (this.translationDocument) {
       yield this.deleteUploadedPiece.perform(this.translationDocument);

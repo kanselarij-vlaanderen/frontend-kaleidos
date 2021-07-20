@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import {
-  isPresent, isBlank
-} from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import {
@@ -23,8 +21,12 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     this.initValidation();
   }
 
+  get isLoading() {
+    return this.save.isRunning || this.cancel.isRunning;
+  }
+
   get isSaveDisabled() {
-    return isBlank(this.file) || !this.validators.areValid;
+    return !this.file || this.file.isDeleted || !this.validators.areValid;
   }
 
   @action
@@ -33,8 +35,18 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     this.name = file.filenameWithoutExtension;
   }
 
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    if (this.file) {
+      yield this.file.destroyRecord();
+    }
+    this.args.onCancel();
+  }
+
   @task
-  *saveTranslation() {
+  *save() {
     yield this.args.onSave({
       file: this.file,
       name: this.name,
