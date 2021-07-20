@@ -30,7 +30,7 @@ const selectors = {
     translations: '[data-test-publication-case-nav-translations]',
     publishpreview: '[data-test-publication-case-nav-publishpreview]',
   },
-  // TODO replace deze bij het maken van publication translation testen
+  // TODO-selector replace deze bij het maken van publication translation testen
   tableCell: '.auk-table__cell--accent',
   flowTitle: '[data-test-publication-flow-title]',
 

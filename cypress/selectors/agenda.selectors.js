@@ -19,7 +19,7 @@ const selectors = {
   agendaitemDecision: {
     uploadFile: '[data-test-agendaitem-decision-upload-file]',
     edit: '[data-test-agendaitem-decision-edit]',
-    // TODO unused selectors
+    // TODO-selector unused selectors
     container: '[data-test-agendaitem-decision-container]',
     delete: '[data-test-agendaitem-decision-delete]',
   },
@@ -37,7 +37,7 @@ const selectors = {
 
   // agenda-detail/sidebar
   agendaDetailSidebar: {
-    // TODO subItem only works for nota's, not announcement
+    // TODO-selector subItem only works for nota's, not announcement
     subitem: '[data-test-agenda-detail-sidebar-sub-item]',
   },
 
@@ -100,13 +100,13 @@ const selectors = {
       releaseDecisions: '[data-test-agenda-header-release-decisions]',
       releaseDocuments: '[data-test-agenda-header-release-documents]',
       approveAllAgendaitems: '[data-test-agenda-header-approve-all-agendaitems]',
-      // TODO unused selectors
+      // TODO-selector unused selectors
       navigateToAgendaView: ['data-test-agenda-header-navigate-to-agenda-view'],
       navigateToPressagenda: '[data-test-agenda-header-navigate-to-pressagenda]',
       selectSignature: '[data-test-agenda-header-select-signature]',
       printAgenda: ['data-test-agenda-header-print-agenda'],
     },
-    // TODO unused selector
+    // TODO-selector unused selector
     title: ['data-test-agenda-header-title'],
   },
 

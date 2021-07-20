@@ -23,10 +23,20 @@ const selectors = {
     title: '[data-test-overviews-header-decision-title]',
   },
 
+  // utils/overviews-header-print
+  overviewsHeaderPrint: {
+    title: '[data-test-overviews-header-print-title]',
+  },
+
   // changes-alert
   changesAlert: {
     alert: '[data-test-changes-alert]',
     close: '[data-test-changes-alert-close]',
+  },
+
+  // number-pagination
+  numberPagination: {
+    container: '[data-test-number-pagination-container]',
   },
 
   /** Section VL-components **/
@@ -74,7 +84,7 @@ const selectors = {
   // vl-alert
   vlAlert: {
     close: '[data-test-vl-alert-close]',
-    // TODO unused selectors
+    // TODO-selector unused selectors
     container: '[data-test-vl-alert]',
     title: '[data-test-vl-alert-title]',
     message: '[data-test-vl-alert-message]',

@@ -1,12 +1,12 @@
-<Auk::Toolbar>
+<Auk::Toolbar @size="large">
   <Auk::Toolbar::Group @position="left">
     <Auk::Toolbar::Item>
-      <Auk::Button
-      @skin="borderless"
-      {{action "cancelAction"}}
-      data-test-vl-modal-footer-cancel>
+      <Auk::ButtonLink
+        {{action "cancelAction"}}
+        data-test-vl-modal-footer-cancel
+      >
         {{cancelButtonText}}
-      </Auk::Button>
+      </Auk::ButtonLink>
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
   <Auk::Toolbar::Group @position="right">

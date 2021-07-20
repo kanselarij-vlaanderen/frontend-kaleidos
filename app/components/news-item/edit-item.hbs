@@ -74,11 +74,9 @@
 <Auk::Toolbar>
   <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
-      <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-        <span class="auk-button__content">
-          {{t "cancel"}}
-        </span>
-      </a>
+      <Auk::ButtonLink data-test-newsletter-edit-item-cancel {{action "cancelEditing"}}>
+        {{t "cancel"}}
+      </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
       {{web-components/vl-save-button
