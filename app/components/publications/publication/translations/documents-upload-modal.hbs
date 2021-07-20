@@ -82,16 +82,28 @@
 
     {{/if}}
   </Auk::Modal::Body>
-  <Auk::Modal::Footer
-    @onCancel={{perform this.cancelTranslation}}
-  >
-    <Auk::Button
-      @skin="primary"
-      @disabled={{this.saveIsDisabled}}
-      @loading={{this.saveTranslation.isRunning}}
-      {{on "click" (perform this.saveTranslation)}}
-    >
-      {{t "save"}}
-    </Auk::Button>
+  <Auk::Modal::Footer @custom={{true}} @size="large">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="borderless"
+            @disabled={{this.cancelIsDisabled}}
+            {{on "click" (perform this.cancelTranslation)}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @disabled={{this.saveIsDisabled}}
+            @loading={{this.saveTranslation.isRunning}}
+            {{on "click" (perform this.saveTranslation)}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>

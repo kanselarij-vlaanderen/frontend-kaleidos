@@ -31,15 +31,23 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     return this.cancel.isRunning || this.save.isRunning;
   }
 
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
   get isSaveDisabled() {
     return !this.file || this.file.isDeleted || !this.validators.areValid;
   }
 
-  // necessary because cancel-button is not disabled
   @task({
     drop: true,
   })
   *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
     if (this.file) {
       yield this.file.destroyRecord();
     }

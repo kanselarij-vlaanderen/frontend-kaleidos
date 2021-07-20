@@ -25,6 +25,10 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     return this.save.isRunning || this.cancel.isRunning;
   }
 
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
   get isSaveDisabled() {
     return !this.file || this.file.isDeleted || !this.validators.areValid;
   }
@@ -39,6 +43,11 @@ export default class PublicationsTranslationTranslationUploadModalComponent exte
     drop: true,
   })
   *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
     if (this.file) {
       yield this.file.destroyRecord();
     }

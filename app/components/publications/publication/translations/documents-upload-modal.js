@@ -1,9 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {
-  isPresent, isBlank
-} from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
@@ -43,8 +41,12 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     return this.fileQueueService.find(this.fileQueueName);
   }
 
+  get cancelIsDisabled() {
+    return this.cancelTranslation.isRunning || this.saveTranslation.isRunning;
+  }
+
   get saveIsDisabled() {
-    return isBlank(this.translationDocument) || !this.validators.areValid;
+    return !this.translationDocument || !this.validators.areValid || this.cancelTranslation.isRunning;
   }
 
   @action
@@ -64,11 +66,15 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     this.name = file.filenameWithoutExtension;
   }
 
-  // necessary because cancel-button is not disabled
   @task({
     drop: true,
   })
   *cancelTranslation() {
+    // necessary because close-button is not disabled when saving
+    if (this.saveTranslation.isRunning) {
+      return;
+    }
+
     if (this.translationDocument) {
       yield this.deleteUploadedPiece.perform(this.translationDocument);
     }
