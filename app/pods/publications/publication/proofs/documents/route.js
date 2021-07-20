@@ -39,6 +39,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ...queryProperties,
     });
 
+    // Decisions published in BS as a result of a publication-activity
     const decisionsPromise = this.store.query('decision', {
       'filter[publication-activity][subcase][:id:]': this.publicationSubcase.id,
       sort: 'publication-date',
@@ -48,8 +49,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     // eslint-disable-next-line prefer-const
     let [decisions, ...pieces] = await Promise.all([
       decisionsPromise,
-      correctionDocumentsPromise,
       sourceDocumentsPromise,
+      correctionDocumentsPromise,
       receivedProofingDocumentsPromise
     ]);
     pieces = pieces.flatMap((pieces) => pieces.toArray());
