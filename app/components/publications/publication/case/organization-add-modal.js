@@ -12,8 +12,8 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
 
   validators;
 
-  @tracked name = '';
-  @tracked identifier = '';
+  @tracked name;
+  @tracked identifier;
 
   constructor() {
     super(...arguments);

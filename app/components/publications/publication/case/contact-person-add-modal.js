@@ -17,9 +17,9 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
 
   @tracked organizations;
 
-  @tracked firstName = '';
-  @tracked lastName = '';
-  @tracked email = '';
+  @tracked firstName;
+  @tracked lastName;
+  @tracked email;
   @tracked organization;
 
   constructor() {
