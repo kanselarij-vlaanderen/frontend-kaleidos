@@ -9,6 +9,10 @@ export default class IseCode extends Model {
   @hasMany('subcase') subcases;
 
   get nameToShow() {
-    return `${this.name} - ${this.code}`;
+    let name = this.name;
+    if (this.code) {
+      name += ` - ${this.code}`;
+    }
+    return name;
   }
 }
