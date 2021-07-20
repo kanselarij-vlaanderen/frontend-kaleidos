@@ -13,9 +13,7 @@ export default class PublicationsPublicationProofsRequestsRoute extends Route {
         'proofing-activity',
         'proofing-activity.generated-pieces',
         'proofing-activity.generated-pieces.file',
-        'publication-activity',
-        'publication-activity.generated-pieces',
-        'publication-activity.generated-pieces.file'
+        'publication-activity'
       ].join(','),
       sort: '-start-date',
     });

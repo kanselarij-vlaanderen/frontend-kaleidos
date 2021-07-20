@@ -16,6 +16,16 @@ const REQUEST_STAGES = {
   FINAL: 'final',
 };
 
+// necessary for tracking pieces
+export class Model {
+  @tracked pieces;
+  @tracked decisions;
+
+  constructor(models) {
+    Object.assign(this, models);
+  }
+}
+
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
     qpSortingString: {
@@ -43,7 +53,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   get areAllPiecesSelected() {
-    return this.model.length === this.selectedPieces.length;
+    return this.model.pieces.length === this.selectedPieces.length;
   }
 
   get isRequestingDisabled() {
@@ -74,7 +84,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     if (this.areAllPiecesSelected) {
       this.selectedPieces = [];
     } else {
-      this.selectedPieces = [...this.model];
+      this.selectedPieces = [...this.model.pieces];
     }
   }
 
@@ -95,9 +105,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
 
     // .sortBy() copies array
-    this.model = this.model.sortBy(property);
+    this.model.pieces = this.model.pieces.sortBy(property);
     if (isDescending) {
-      this.model.reverseObjects();
+      this.model.pieces.reverseObjects();
     }
   }
 
@@ -141,7 +151,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     } finally {
       this.isPieceUploadModalOpen = false;
     }
-    this.model.pushObject(piece);
+    this.model.pieces.pushObject(piece);
     this.sort(this.sortingString);
   }
 

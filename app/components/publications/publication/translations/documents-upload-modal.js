@@ -1,9 +1,16 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import {
+  isPresent, isBlank
+} from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
+import {
+  ValidatorSet,
+  Validator
+} from 'frontend-kaleidos/utils/validators';
 
 export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
   /**
@@ -13,17 +20,20 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  @tracked translationDocument = null;
-  @tracked name = null;
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
+  @tracked translationDocument;
+  @tracked name;
+  @tracked pagesAmount;
+  @tracked wordsAmount;
   @tracked isSourceForProofPrint = false;
+
+  validators;
 
   constructor() {
     super(...arguments);
     if (this.fileQueueService.find(this.fileQueueName)) {
       this.fileQueueService.create(this.fileQueueName);
     }
+    this.initValidators();
   }
 
   get fileQueueName() {
@@ -35,7 +45,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   get saveIsDisabled() {
-    return this.translationDocument === null || this.name === null;
+    return isBlank(this.translationDocument) || !this.validators.areValid;
   }
 
   @action
@@ -88,5 +98,11 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @action
   toggleProofprint() {
     this.isSourceForProofPrint = !this.isSourceForProofPrint;
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      name: new Validator(() => isPresent(this.name)),
+    });
   }
 }

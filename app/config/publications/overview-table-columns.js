@@ -65,7 +65,7 @@ export default [
     translationKey: 'publications-table-publication-date',
     translationKeySmall: 'publications-table-publication-date-small',
     showByDefault: true,
-    sortKey: 'publication-subcase.end-date',
+    sortKey: 'publication-subcase.publication-activities.decisions.publication-date',
   },
   {
     keyName: 'translations',
