@@ -52,27 +52,27 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}} @size="large">
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <Auk::Button @skin="borderless"
-              @disabled={{this.isCancelDisabled}}
-              {{on "click" (perform this.cancel)}}>
-              {{t "cancel"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="primary"
-              @disabled={{this.isSaveDisabled}}
-              @loading={{this.save.isRunning}}
-              {{on "click" (perform this.save)}}>
-              {{t "save"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Button @skin="borderless"
+            @disabled={{this.isCancelDisabled}}
+            {{on "click" (perform this.cancel)}}>
+            {{t "cancel"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @skin="primary"
+            @disabled={{this.isSaveDisabled}}
+            @loading={{this.save.isRunning}}
+            {{on "click" (perform this.save)}}>
+            {{t "save"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
   </Auk::Modal::Footer>
 </Auk::Modal>
