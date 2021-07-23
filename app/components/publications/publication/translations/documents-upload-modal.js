@@ -41,12 +41,12 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     return this.fileQueueService.find(this.fileQueueName);
   }
 
-  get cancelIsDisabled() {
-    return this.cancelTranslation.isRunning || this.saveTranslation.isRunning;
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
   }
 
-  get saveIsDisabled() {
-    return !this.translationDocument || !this.validators.areValid || this.cancelTranslation.isRunning;
+  get isSaveDisabled() {
+    return !this.translationDocument || !this.validators.areValid || this.cancel.isRunning;
   }
 
   @action
@@ -69,9 +69,9 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @task({
     drop: true,
   })
-  *cancelTranslation() {
+  *cancel() {
     // necessary because close-button is not disabled when saving
-    if (this.saveTranslation.isRunning) {
+    if (this.save.isRunning) {
       return;
     }
 
@@ -91,7 +91,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   @task
-  *saveTranslation() {
+  *save() {
     if (this.args.onSave) {
       yield this.args.onSave({
         piece: this.translationDocument,
