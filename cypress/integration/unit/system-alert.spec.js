@@ -1,17 +1,13 @@
-/* global context, it, cy,before,beforeEach */
+/* global context, it, cy, beforeEach */
 // / <reference types="Cypress" />
 
-import dependency from '../../../../selectors/dependency.selectors';
-import utils from '../../../../selectors/utils.selectors';
-import settings from '../../../../selectors/settings.selectors';
+import dependency from '../../selectors/dependency.selectors';
+import utils from '../../selectors/utils.selectors';
+import settings from '../../selectors/settings.selectors';
 
 const ALERT_POLL_INTERVAL = 70000;
 
 context('Settings: Create a system-alert and verify if it gets shown and closes', () => {
-  before(() => {
-    cy.server();
-  });
-
   beforeEach(() => {
     cy.server();
     cy.login('Admin');

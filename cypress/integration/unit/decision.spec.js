@@ -85,7 +85,7 @@ context('Add files to an agenda', () => {
     cy.addNewPieceToSignedDocumentContainer('test', {
       folder: 'files', fileName: 'test', fileExtension: 'pdf',
     });
-    cy.get(document.documentCard.titleHeader).eq(0)
+    cy.get(document.documentCard.name.value).eq(0)
       .contains(/BIS/);
 
     // Delete the TER piece, the BIS should then become the report
@@ -95,7 +95,7 @@ context('Add files to an agenda', () => {
     cy.get('@docCards').should('have.length', 1);
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/TER/);
+        cy.get(document.documentCard.name.value).contains(/TER/);
         cy.get(document.documentCard.versionHistory).click();
         cy.get(document.vlDocument.piece).should('have.length', 3);
         cy.get(document.vlDocument.delete).eq(0) // this is the TER piece
@@ -117,7 +117,7 @@ context('Add files to an agenda', () => {
     // Delete the document-container + all pieces
     cy.get('@docCards').eq(0)
       .within(() => {
-        cy.get(document.documentCard.titleHeader).contains(/BIS/);
+        cy.get(document.documentCard.name.value).contains(/BIS/);
         cy.get(document.documentCard.actions).click();
         cy.get(document.documentCard.delete).click();
       });
@@ -189,7 +189,7 @@ context('Add files to an agenda', () => {
     cy.get(agenda.agendaitemDecisionEdit.save).click()
       .wait('@patchTreatment');
 
-    // TODO right now, changing the status of the treatment does not change the retracted attribute of agendaitem
+    // NOTE: right now, changing the status of the treatment does not change the retracted attribute of agendaitem
     // so clicking "uitstellen" should be followed by manually setting the "uitgesteld" status on treatment
     // perhaps in the future this will be a feature
     cy.openDetailOfAgendaitem(SubcaseTitleShort);

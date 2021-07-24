@@ -25,6 +25,17 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 </Auk::Navbar>
+{{#if this.publicationFilter.isFiltered}}
+  <Auk::Navbar @skin="gray-100" @auto={{true}}>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Button @skin="tertiary"  {{on "click" this.resetPublicationsFilter}}>
+          {{t "clear-filter-plural"}}
+        </Auk::Button>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+{{/if}}
 <div class="auk-scroll-wrapper">
   <div class="auk-scroll-wrapper__body">
     <div class="auk-u-m-4">
@@ -64,151 +75,10 @@
                 <td colspan={{add this.tableColumns.length 1}}>{{t "loading"}}</td>
               </tr>
             {{else}}
-              {{#each this.model as |row|}}
-                <tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication row)}}>
-                  {{#if this.tableColumnDisplayOptions.shortTitle}}
-                    <td class="auk-table__col--6">
-                      <Auk::AbbreviatedText @text={{row.shortTitle}} @maxLength={{150}}/>
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.comment}}
-                    <td class="auk-u-text-align--center">
-                      {{#if row.remark}}
-                        <Auk::Icon @skin="muted" @name="comment" />
-                        <EmberTooltip @tooltipClass="auk-tooltip" @side="left">
-                          <p>
-                            {{row.remark}}
-                          </p>
-                        </EmberTooltip>
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.decisionDate}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.agendaItemTreatment.startDate}}
-                        {{moment-format row.agendaItemTreatment.startDate "DD-MM-YYYY"}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.speedProcedure}}
-                    <td class="auk-u-text-align--center">
-                      {{#if row.urgencyLevel.isUrgent}}
-                        <Auk::Icon @skin="warning" @name="alert-triangle" />
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.publicationNumber}}
-                    <td>
-                      {{#if row.identification.idName}}
-                        {{row.identification.idName}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.regulationType}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.regulationType}}
-                        {{row.regulationType.label}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.numacNumber}}
-                    <td style="min-width: 180px">
-                      {{#if row.numacNumbers.length}}
-                        {{join ', ' (map-by 'idName' row.numacNumbers)}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.publicationTargetDate}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.publicationSubcase.targetEndDate}}
-                        {{moment-format row.publicationSubcase.targetEndDate "DD-MM-YYYY"}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.translationDueDate}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.translationSubcase.dueDate}}
-                        {{moment-format row.translationSubcase.dueDate "DD-MM-YYYY"}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.publicationDate}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.publicationSubcase.endDate}}
-                        {{moment-format row.publicationSubcase.endDate "DD-MM-YYYY"}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.translations}}
-                    <td class="auk-u-text-nowrap">
-                      <Publications::Publication::Translations::TranslationProgressBadge @translationSubcase={{row.translationSubcase}}/>
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.lastEdited}}
-                    <td>
-                      {{moment-format row.modified "DD-MM-YYYY"}}<br/>
-                      <span class="auk-u-text-small auk-u-muted">
-                        {{moment-format row.modified "HH:mm"}}
-                      </span>
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.status}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.status }}
-                        <span class="{{if row.status.isPublished "auk-u-text-success"}}
-                          {{if row.status.isWithdrawn "auk-u-text-error"}} " >
-                          {{row.status.label}}
-                        </span>
-
-                        {{#if (or row.status.isWithdrawn row.status.isPaused) }}
-                          <br>
-                          <span class="auk-u-text-small auk-u-muted">
-                            {{moment-format row.publicationStatusChange.startedAt "DD-MM-YYYY HH:mm"}}
-                          </span>
-                        {{/if}}
-                      {{else}}
-                        {{t "dash"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  {{#if this.tableColumnDisplayOptions.source}}
-                    <td class="auk-u-text-nowrap">
-                      {{#if row.case.subcases }}
-                        {{t "via-cabinet"}}
-                      {{else}}
-                        {{t "not-via-cabinet"}}
-                      {{/if}}
-                    </td>
-                  {{/if}}
-                  <td>
-                    <Auk::Button
-                      @skin="borderless"
-                      @layout="icon-only"
-                      @icon="chevron-right"
-                      @route="publications.publication"
-                      @model={{row.id}}
-                      data-test-publications-button-go-to-publication
-                    />
-                  </td>
-                </tr>
+              {{#each this.model as |publicationFlow|}}
+                <Publications::PublicationsTableRow
+                  @publicationFlow={{publicationFlow}}
+                  @tableColumnDisplayOptions={{this.tableColumnDisplayOptions}} />
               {{/each}}
             {{/if}}
           </tbody>

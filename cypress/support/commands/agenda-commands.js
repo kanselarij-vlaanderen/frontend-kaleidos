@@ -557,7 +557,7 @@ function agendaitemExists(agendaitemName) {
   cy.get(auk.loader, {
     timeout: 20000,
   }).should('not.exist');
-  cy.get('.active').then((element) => {
+  cy.get(auk.tab.activeHref).then((element) => {
     const selectedReverseTab = element[0].text;
     if (selectedReverseTab.includes('Details')) {
       cy.get(agenda.agendaDetailSidebar.subitem)

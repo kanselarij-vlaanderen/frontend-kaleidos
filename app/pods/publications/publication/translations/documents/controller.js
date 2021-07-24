@@ -1,17 +1,57 @@
 import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import {
+  action,
+  computed
+} from '@ember/object';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
+const COLUMN_MAP = {
+  naam: 'name',
+  'ontvangen-op': 'receivedDate',
+  'geupload-op': 'created',
+};
+
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  queryParams = [{
+    sort: {
+      as: 'volgorde',
+    },
+  }];
+
+  // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} kebab-cased key name, prepended with minus if descending */
+  sort;
+
   @tracked publicationFlow;
   @tracked translationSubcase;
   @tracked publicationSubcase;
+  @tracked showPieceEditModal = false;
   @tracked selectedPieces = [];
+  @tracked toEditDocument;
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
+
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
+  get pieces() {
+    let property = 'created';
+    let isDescending = false;
+    if (this.sort) {
+      isDescending = this.sort.startsWith('-');
+      const sortKey = this.sort.substr(isDescending);
+      property = COLUMN_MAP[sortKey] ?? property;
+    }
+
+    let pieces = this.model;
+    pieces = pieces.sortBy(property);
+    if (isDescending) {
+      pieces = pieces.reverseObjects();
+    }
+
+    return pieces;
+  }
 
   get areAllPiecesSelected() {
     return this.model.length === this.selectedPieces.length;
@@ -24,6 +64,11 @@ export default class PublicationsPublicationTranslationsDocumentController exten
 
   get isUploadDisabled() {
     return this.translationSubcase.isFinished;
+  }
+
+  @action
+  changeSorting(sort) {
+    this.set('sort', sort);
   }
 
   @action
@@ -45,15 +90,26 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     }
   }
 
-  @action
-  openTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = true;
+  @task
+  *saveSourceDocument(translationDocument) {
+    const piece = translationDocument.piece;
+    piece.translationSubcase = this.translationSubcase;
+    const documentContainer = yield piece.documentContainer;
+    yield documentContainer.save();
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
+    }
+
+    yield piece.save();
+    this.isPieceUploadModalOpen = false;
+    this.send('refresh');
   }
 
-  @action
-  closeTranslationRequestModal() {
-    this.isTranslationRequestModalOpen = false;
-  }
 
   @task
   *saveTranslationRequest(translationRequest) {
@@ -106,6 +162,25 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.transitionToRoute('publications.publication.translations.requests');
   }
 
+  @task
+  *saveEditSourceDocument(translationDocument) {
+    const piece = this.toEditDocument;
+    piece.pages = translationDocument.pagesAmount;
+    piece.words = translationDocument.wordsAmount;
+    piece.name = translationDocument.name;
+
+    if (translationDocument.isSourceForProofPrint) {
+      piece.publicationSubcaseSourceFor = this.publicationSubcase;
+    } else {
+      piece.publicationSubcaseSourceFor = null;
+    }
+
+    yield piece.save();
+    this.closePieceEditModal();
+    this.send('refresh');
+  }
+
+
   @action
   openPieceUploadModal() {
     this.isPieceUploadModalOpen = true;
@@ -116,23 +191,25 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.isPieceUploadModalOpen = false;
   }
 
-  @task
-  *saveSourceDocument(translationDocument) {
-    const piece = translationDocument.piece;
-    piece.translationSubcase = this.translationSubcase;
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.save();
-    piece.pages = translationDocument.pagesAmount;
-    piece.words = translationDocument.wordsAmount;
-    piece.name = translationDocument.name;
-    piece.language = yield this.store.findRecordByUri('language', CONSTANTS.LANGUAGES.NL);
+  @action
+  openPieceEditModal(toEditDocument) {
+    this.toEditDocument = toEditDocument;
+    this.showPieceEditModal = true;
+  }
 
-    if (translationDocument.isSourceForProofPrint) {
-      piece.publicationSubcaseSourceFor = this.publicationSubcase;
-    }
+  @action
+  closePieceEditModal() {
+    this.toEditDocument = null;
+    this.showPieceEditModal = false;
+  }
 
-    yield piece.save();
-    this.isPieceUploadModalOpen = false;
-    this.send('refresh');
+  @action
+  openTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = true;
+  }
+
+  @action
+  closeTranslationRequestModal() {
+    this.isTranslationRequestModalOpen = false;
   }
 }

@@ -3,6 +3,7 @@
 
 import dependency from '../../selectors/dependency.selectors';
 import newsletter from '../../selectors/newsletter.selectors';
+import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
@@ -65,6 +66,14 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const file = {
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     };
+    // TODO-newsletter this route does not work
+    // cy.route('GET', '/pieces?fields**').as('getPieces');
+    cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
+    // cy.wait('@getPieces');
+    cy.get(route.notaUpdates.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains('Geen resultaten gevonden');
     cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
     // there is no changes alert before we add the BIS
     cy.get(newsletter.agendaitemNewsItem.themes); // when themes component is loaded, we can check the changes Alert
@@ -86,5 +95,11 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.openAgendaitemDocumentTab(subcaseTitle1);
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.alert).should('not.be.visible');
+    cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
+    // cy.wait('@getPieces');
+    cy.get(route.notaUpdates.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains(subcaseTitle1);
   });
 });

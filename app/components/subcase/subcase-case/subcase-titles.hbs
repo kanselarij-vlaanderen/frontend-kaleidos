@@ -9,16 +9,12 @@
     </h2>
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
-        <a
+        <Auk::ButtonLink
           data-test-subcase-titles-edit
-          href=""
-          class="auk-button-link"
           {{action "toggleIsEditingAction"}}
         >
-          <span class="auk-button__content">
-            {{t "edit"}}
-          </span>
-        </a>
+          {{t "edit"}}
+        </Auk::ButtonLink>
       </div>
     {{/if}}
   </div>

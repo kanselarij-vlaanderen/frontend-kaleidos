@@ -1,117 +1,99 @@
 <form onsubmit={{action "createSubCase"}}>
-  <div class="auk-modal__body">
-    <div class="auk-u-p-4">
-      <div class="auk-o-flex auk-o-flex--justify-between">
-        {{web-components/vl-radio-button-list
-          title=(t "subcase-type")
-          optionList=(await caseTypes)
-          modelChanged=(action "typeChanged")
-        }}
-        <div class="auk-o-flex auk-o-flex--vertical-center">
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="right">
-              <Auk::Toolbar::Item>
-                <Auk::Button
-                  @skin="secondary"
-                  @icon="copy-paste"
-                  {{action "copyFullSubcase"}}
-                  data-test-new-subcase-clone-previous-subcase
-                >
-                  {{t "clone-previous-subcase"}}
-                </Auk::Button>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </div>
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-        {{textarea
-          rows="2"
-          class="auk-textarea"
-          value=shortTitle
-        }}
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-        {{textarea rows="4" class="auk-textarea" value=title}}
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="subcase-type"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=type
-          selectModel=(action "selectType")
-        }}
-      </div>
-      <div class="auk-form-group">
-        <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        <div class="auk-o-flex auk-o-flex--vertical-center">
-          {{#if (not isEditing)}}
-            {{utils/model-selector
-              class="vlc-u-box-model-maximize-width"
-              modelName="shortcut"
-              searchField="label"
-              propertyToShow="label"
-              sortField="label"
-              filter=filter
-              selectedItems=selectedSubcaseName
-              selectModel=(action "selectModel")
-            }}
-            <Auk::Button
-              @skin="secondary"
-              @layout="icon-only"
-              @icon="pencil"
-              {{action "toggleIsEditing"}}
-            >
-              {{t "edit"}}
-            </Auk::Button>
-          {{else}}
-            <Auk::Input
-              @type="text"
-              @block={{true}}
-              @value={{subcaseName}}
-              id="subcaseNameId"
-            />
-            <Auk::Button
-              @skin="secondary"
-              @layout="icon-only"
-              @icon="cross"
-              {{action "toggleIsEditing"}}
-            >
-              {{t "cancel"}}
-            </Auk::Button>
-          {{/if}}
-        </div>
+  <Auk::Modal::Body>
+    <div class="auk-o-flex auk-o-flex--justify-between">
+      {{web-components/vl-radio-button-list
+        title=(t "subcase-type")
+        optionList=(await caseTypes)
+        modelChanged=(action "typeChanged")
+      }}
+      <div class="auk-o-flex auk-o-flex--vertical-center">
+        <Auk::Toolbar>
+          <Auk::Toolbar::Group @position="right">
+            <Auk::Toolbar::Item>
+              <Auk::Button
+                @skin="secondary"
+                @icon="copy-paste"
+                {{action "copyFullSubcase"}}
+                data-test-new-subcase-clone-previous-subcase
+              >
+                {{t "clone-previous-subcase"}}
+              </Auk::Button>
+            </Auk::Toolbar::Item>
+          </Auk::Toolbar::Group>
+        </Auk::Toolbar>
       </div>
     </div>
-  </div>
-  <div class="auk-modal__footer auk-modal__footer--bordered">
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+      {{textarea
+        rows="2"
+        class="auk-textarea"
+        value=shortTitle
+      }}
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+      {{textarea rows="4" class="auk-textarea" value=title}}
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
+      {{utils/model-selector
+        modelName="subcase-type"
+        searchField="label"
+        sortField="label"
+        propertyToShow="label"
+        selectedItems=type
+        selectModel=(action "selectType")
+      }}
+    </div>
+    <div class="auk-form-group">
+      <Auk::Label>{{t "subcase-name"}}</Auk::Label>
+      <div class="auk-o-flex auk-o-flex--vertical-center">
+        {{#if (not isEditing)}}
+          {{utils/model-selector
+            class="vlc-u-box-model-maximize-width"
+            modelName="shortcut"
+            searchField="label"
+            propertyToShow="label"
+            sortField="label"
+            filter=filter
+            selectedItems=selectedSubcaseName
+            selectModel=(action "selectModel")
+          }}
           <Auk::Button
-            @skin="borderless"
-            {{action "closeModal"}}
+            @skin="secondary"
+            @layout="icon-only"
+            @icon="pencil"
+            {{action "toggleIsEditing"}}
+          >
+            {{t "edit"}}
+          </Auk::Button>
+        {{else}}
+          <Auk::Input
+            @type="text"
+            @block={{true}}
+            @value={{subcaseName}}
+            id="subcaseNameId"
+          />
+          <Auk::Button
+            @skin="secondary"
+            @layout="icon-only"
+            @icon="cross"
+            {{action "toggleIsEditing"}}
           >
             {{t "cancel"}}
           </Auk::Button>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            text=(t "new-subcase")
-            type="submit"
-            class="auk-button auk-button--primary"
-            loadingText=(t "creating-subcase")
-            isLoading=isLoading
-          }}
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
-  </div>
+        {{/if}}
+      </div>
+    </div>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer @onCancel={{action "closeModal"}}>
+    {{web-components/vl-save-button
+      text=(t "new-subcase")
+      type="submit"
+      class="auk-button auk-button--primary"
+      loadingText=(t "creating-subcase")
+      isLoading=isLoading
+    }}
+  </Auk::Modal::Footer>
 </form>
