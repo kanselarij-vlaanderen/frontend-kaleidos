@@ -1,4 +1,5 @@
-<Auk::CheckboxList {{did-update (perform this.calculateDomainSelections) @selectedFields}}>
+<Auk::CheckboxList {{did-update (perform this.calculateDomainSelections) @selectedFields}}
+  data-test-domains-fields-selector-form>
   {{#each this.domainSelections as |domainSelection index|}}
     {{#unless (eq index 0)}}
       <hr class="auk-u-my-2">
@@ -12,7 +13,8 @@
           <Auk::Checkbox
             @checked={{includes field domainSelection.selectedFields}}
             @label={{field.label}}
-            {{on "input" (fn this.toggleFieldSelection field)}} />
+            {{on "input" (fn this.toggleFieldSelection field)}}
+            data-test-domains-fields-selector-form-field />
         {{/each}}
       </Auk::CheckboxList>
     </Auk::Checkbox>

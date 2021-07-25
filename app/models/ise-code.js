@@ -5,8 +5,12 @@ export default class IseCode extends Model {
   @attr('string') name;
   @attr('string') code;
   @belongsTo('government-field') field;
-  @hasMany('mandatee') mandatees;
-  @hasMany('subcase') subcases;
+  @hasMany('mandatee', {
+    inverse: null,
+  }) mandatees;
+  @hasMany('subcase', {
+    inverse: null,
+  }) subcases;
 
   get nameToShow() {
     let name = this.name;
