@@ -13,6 +13,7 @@
 
       <Auk::FileUploader
         @onUpload={{this.onUploadFile}} />
+
       {{!-- File details --}}
       {{#if this.file}}
         <div class="auk-u-my-4">
@@ -43,7 +44,7 @@
                   <div class="auk-form-group">
                     <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
                     <Auk::Checkbox id="proofUploadIsCorrected"
-                      @checked={{true}}
+                      @checked={{@isCorrected}}
                       @disabled={{true}} />
                   </div>
                 {{/if}}
