@@ -36,6 +36,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked publicationSubcase;
   @tracked selectedPieces = [];
   @tracked isProofRequestModalOpen = false;
+  @tracked proofRequestStage;
   @tracked isPieceUploadModalOpen = false;
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;

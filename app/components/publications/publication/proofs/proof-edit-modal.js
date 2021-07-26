@@ -1,7 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { isPresent } from '@ember/utils';
+import {
+  isNone, isPresent
+} from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import {
@@ -20,29 +22,35 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   @tracked file = this.args.piece.file;
   @tracked name = this.args.piece.name;
   @tracked receivedAtDate = this.args.piece.receivedDate;
+  @tracked publicationSubcaseCorrectionFor;
 
   validators;
 
   constructor() {
     super(...arguments);
 
-    this.initValidation();
+    this.init();
   }
 
   get isCorrected() {
-    return !!this.args.piece.publicationSubcaseCorrectionFor;
+    return isPresent(this.publicationSubcaseCorrectionFor);
   }
 
   get isReceived() {
-    return !this.args.piece.publicationSubcaseCorrectionFor;
+    return isNone(this.publicationSubcaseCorrectionFor);
   }
 
   get isCancelDisabled() {
-    return !this.save.isRunning;
+    return this.save.isRunning;
   }
 
   get isSaveDisabled() {
     return !this.validators.areValid;
+  }
+
+  @task
+  *loadData() {
+    this.publicationSubcaseCorrectionFor = yield this.args.piece.publicationSubcaseCorrectionFor;
   }
 
   @task
@@ -63,11 +71,18 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
     }
   }
 
+  async init() {
+    // load publicationSubcaseCorrectionFor to avoid to async in getters and template
+    // it should resolve immediately because it is already included
+    await this.loadData.perform();
+    this.initValidation();
+  }
+
   initValidation() {
     const validators = {
       name: new Validator(() => isPresent(this.name)),
     };
-    if (this.isRecieved) {
+    if (this.isReceived) {
       validators.receivedAtDate = new Validator(() => isPresent(this.receivedAtDate));
     }
 
