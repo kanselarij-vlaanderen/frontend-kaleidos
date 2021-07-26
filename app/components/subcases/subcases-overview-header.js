@@ -6,48 +6,61 @@ import { tracked } from '@glimmer/tracking';
 export default class SubCasesOverviewHeader extends Component {
   // Services
   @service currentSession;
+  @service router;
 
   // Tracked.
-  @tracked isAddingSubcase = false;
+  @tracked showAddSubcaseModal = false;
+  @tracked showEditCaseModal = false;
+
   @tracked title = null;
   @tracked shortTitle = null;
 
+
   get caseTitleFromCase() {
-    const _case = this.args.model.case;
-    const shortTitle = _case.shortTitle;
+    const shortTitle = this.args.case.shortTitle;
     if (shortTitle) {
       return shortTitle;
     }
-    return _case.title;
-  }
-
-  // This is needed to give the input-helpers a proper string instead of
-  // a promise object based on the previous subcase or known case
-  async setKnownPropertiesOfCase() {
-    const caze = await this.args.model.case;
-    const latestSubcase = await caze.get('latestSubcase');
-    if (latestSubcase) {
-      this.title = latestSubcase.get('title');
-      this.shortTitle = latestSubcase.get('shortTitle');
-    } else {
-      this.title = caze.title;
-      this.shortTitle = caze.shortTitle;
-    }
+    return this.args.case.title;
   }
 
   @action
-  async toggleIsAddingSubcase() {
-    await this.setKnownPropertiesOfCase();
-    this.isAddingSubcase = true;
+  goBackToCases() {
+    this.router.transitionTo('cases');
   }
 
   @action
-  refresh() {
-    this.args.refresh();
+  openAddSubcaseModal() {
+    this.showAddSubcaseModal = true;
   }
 
   @action
-  close() {
-    this.isAddingSubcase = false;
+  closeAddSubcaseModal() {
+    this.showAddSubcaseModal = false;
+  }
+
+  @action
+  openEditCaseModal() {
+    this.showEditCaseModal = true;
+  }
+
+  @action
+  closeEditCaseModal() {
+    this.showEditCaseModal = false;
+  }
+
+  @action
+  async saveEditCase(caseData) {
+    const caze = this.args.case;
+    caze.shortTitle = caseData.shortTitle;
+    caze.confidential = caseData.confidential;
+    await this.args.onSaveCase(caze);
+    this.closeEditCaseModal();
+  }
+
+  @action
+  async saveAddSubcase(subCaseData) {
+    await this.args.onSaveSubcase(subCaseData.subcase);
+    this.closeAddSubcaseModal();
   }
 }

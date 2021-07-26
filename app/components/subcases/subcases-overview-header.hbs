@@ -6,7 +6,7 @@
           @skin="borderless"
           @icon="chevron-left"
           @layout="icon-only"
-          {{on "click" @backLink}}
+          {{on "click" this.goBackToCases}}
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
@@ -22,10 +22,19 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
+                  @skin="primary"
+                  @icon="edit"
+            {{on "click" this.openEditCaseModal}}
+          >
+            {{t "edit-case"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <Auk::Button
             data-test-subcase-overview-header-create-subcase
             @skin="primary"
             @icon="add"
-            {{on "click" this.toggleIsAddingSubcase}}
+            {{on "click" this.openAddSubcaseModal}}
           >
             {{t "create-subcase"}}
           </Auk::Button>
@@ -38,19 +47,18 @@
 
 {{!-- MODAL --}}
 
-{{#if isAddingSubcase}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    large=true
-    closeModal=(action "close")
-    title=(t "create-subcase")
-  }}
-    {{cases/new-subcase
-      title=this.title
-      shortTitle=this.shortTitle
-      case=(await @model.case)
-      closeModal=(action "close")
-      refresh=(action "refresh")
-    }}
-  {{/web-components/vl-modal}}
+{{#if this.showAddSubcaseModal}}
+  <Cases::NewSubcase
+          @onClose={{this.closeAddSubcaseModal}}
+          @onSave={{this.saveAddSubcase}}
+          @case={{@case}}
+  />
+{{/if}}
+
+{{#if this.showEditCaseModal}}
+  <Cases::EditCaseWithConfidential
+          @onClose={{this.closeEditCaseModal}}
+          @onSave={{this.saveEditCase}}
+          @case={{@case}}
+  />
 {{/if}}

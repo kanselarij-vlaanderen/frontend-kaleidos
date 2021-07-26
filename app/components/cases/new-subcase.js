@@ -1,35 +1,60 @@
-import Component from '@ember/component';
-import { computed } from '@ember/object';
-import { inject } from '@ember/service';
-import moment from 'moment';
+import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
 
-export default Component.extend({
-  store: inject(),
-  newsletterService: inject(),
-  confidentiality: null,
-  title: null,
-  shortTitle: null,
-  filter: Object.freeze({
+export default class NewSubcase extends Component {
+  @service store;
+
+  @tracked filter = Object.freeze({
     type: 'subcase-name',
-  }),
+  });
+  @tracked caseTypes;
+  @tracked title;
+  @tracked shortTitle;
+  @tracked pieces;
 
-  confidential: computed('case', function() {
-    return this.get('case.confidential');
-  }),
+  @tracked showAsRemark;
+  @tracked selectedSubcaseName;
+  @tracked subcaseName;
+  @tracked type;
+  @tracked isEditing = false;
 
-  caseTypes: computed('store', async function() {
-    return await this.store.query('case-type', {
+
+  constructor() {
+    super(...arguments);
+    this.loadCaseTypes.perform();
+    this.loadTitleData.perform();
+  }
+
+  @task
+  *loadCaseTypes() {
+    this.caseTypes = yield this.store.query('case-type', {
       sort: '-label',
       filter: {
         deprecated: false,
       },
     });
-  }),
+  }
 
-  fetchSubcasePieces: async function(subcase) {
+  @task
+  *loadTitleData() {
+    const latestSubcase = yield this.args.case.latestSubcase;
+    if (latestSubcase) {
+      this.title = latestSubcase.title;
+      this.shortTitle = latestSubcase.shortTitle;
+    } else {
+      this.title = this.args.case.title;
+      this.shortTitle = this.args.case.shortTitle;
+    }
+  }
+
+  @action
+  async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
     const submissionActivities = await this.store.query('submission-activity', {
@@ -44,109 +69,93 @@ export default Component.extend({
       pieces.push(...submissionPieces);
     }
     return pieces;
-  },
+  }
 
-  async copySubcaseProperties(subcase, latestSubcase, copyFullSubcase = false) {
-    const pieces = await this.fetchSubcasePieces(latestSubcase);
-    if (copyFullSubcase) {
-      const subcaseName = await latestSubcase.get('subcaseName');
-      const linkedPieces = await latestSubcase.get('linkedPieces');
-      const accessLevel = await latestSubcase.get('accessLevel');
-      subcase.set('linkedPieces', linkedPieces);
-      subcase.set('subcaseName', subcaseName);
-      subcase.set('accessLevel', accessLevel);
-      subcase.set('showAsRemark', latestSubcase.showAsRemark);
-      const submissionActivity = this.store.createRecord('submission-activity', {
-        startDate: new Date(),
-        pieces,
-      });
-      await submissionActivity.save();
-      subcase.get('submissionActivities').pushObject(submissionActivity);
-    } else {
-      subcase.set('linkedPieces', pieces);
-    }
-    const mandatees = await latestSubcase.get('mandatees');
-    subcase.set('mandatees', mandatees);
-    const iseCodes = await latestSubcase.get('iseCodes');
-    subcase.set('iseCodes', iseCodes);
-    const requestedBy = await latestSubcase.get('requestedBy');
-    subcase.set('requestedBy', requestedBy);
-    return await subcase.save();
-  },
+  @action
+  async createSubcase(fullCopy) {
+    const latestSubcase = await this.args.case.latestSubcase;
+    const date = new Date();
 
-  createSubcaseObject(newCase, newDate) {
-    const {
-      type, title, shortTitle, confidential, showAsRemark,
-    } = this;
-    return this.store.createRecord('subcase', {
-      type,
-      shortTitle: trimText(shortTitle),
-      title: trimText(title),
-      confidential,
-      showAsRemark: showAsRemark || false,
-      case: newCase,
-      created: newDate,
-      modified: newDate,
+    let subcase = await this.store.createRecord('subcase', {
+      type: this.type,
+      shortTitle: trimText(this.shortTitle),
+      title: trimText(this.title),
+      confidential: this.args.case.confidential,
+      showAsRemark: this.showAsRemark || false,
+      case: this.args.case,
+      created: date,
+      modified: date,
       isArchived: false,
       agendaActivities: [],
     });
-  },
-
-  async copySubcase(fullCopy = false) {
-    const caze = await this.store.findRecord('case', this.case.id);
-    const latestSubcase = await caze.get('latestSubcase');
-    const date = moment().utc()
-      .toDate();
-    let subcase = await this.createSubcaseObject(caze, date);
-    subcase.set('subcaseName', this.subcaseName);
+    subcase.subcaseName = this.subcaseName;
 
     if (latestSubcase) { // Previous "versions" of this subcase exist
       subcase = await this.copySubcaseProperties(subcase, latestSubcase, fullCopy);
-    } else { // This is a plain new subcase
-      subcase = await subcase.save();
     }
-    await caze.hasMany('subcases').reload();
     return subcase;
-  },
+  }
 
-  actions: {
-    closeModal() {
-      this.closeModal();
-    },
+  @action
+  async copySubcaseProperties(subcase, latestSubcase, fullCopy) {
+    const pieces = await this.loadSubcasePieces(latestSubcase);
+    if (fullCopy) {
+      subcase.linkedPieces = await latestSubcase.linkedPieces;
+      subcase.subcaseName = latestSubcase.subcaseName;
+      subcase.accessLevel = await latestSubcase.accessLevel;
+      subcase.showAsRemark = latestSubcase.showAsRemark;
+      const submissionActivity = this.store.createRecord('submission-activity', {
+        startDate: new Date(),
+        pieces: pieces,
+      });
+      await submissionActivity.save();
+      subcase.submissionActivities.pushObject(submissionActivity);
+    } else {
+      subcase.linkedPieces = pieces;
+    }
+    subcase.mandatees = await latestSubcase.mandatees;
+    subcase.iseCodes = await latestSubcase.iseCodes;
+    subcase.requestedBy = await latestSubcase.requestedBy;
+    return subcase;
+  }
 
-    typeChanged(id) {
-      const type = this.store.peekRecord('case-type', id);
-      this.set('showAsRemark', type.get('uri') ===  CONSTANTS.CASE_TYPES.REMARK);
-    },
+  @task
+  *copyFullSubcase() {
+    const subcase = yield this.createSubcase(true);
+    yield this.args.onSave(
+      {
+        subcase: subcase,
+      });
+  }
 
-    toggleIsEditing() {
-      this.toggleProperty('isEditing');
-    },
+  @task
+  *saveSubcase() {
+    const subcase = yield this.createSubcase(false);
+    yield this.args.onSave(
+      {
+        subcase: subcase,
+      });
+  }
 
-    async copyFullSubcase() {
-      this.set('isLoading', true);
-      const subcase = await this.copySubcase(true);
-      this.set('item', subcase);
-      this.set('isLoading', false);
-      this.refresh();
-    },
+  @action
+  selectType(type) {
+    this.type = type;
+  }
 
-    async createSubCase(event) {
-      event.preventDefault();
-      this.set('isLoading', true);
-      const subcase = await this.copySubcase(false);
-      this.set('item', subcase);
-      this.set('isLoading', false);
-      this.refresh();
-    },
+  @action
+  selectModel(items) {
+    this.selectedSubcaseName = items;
+    this.subcaseName = items.get('label');
+  }
 
-    selectType(type) {
-      this.set('type', type);
-    },
+  @action
+  typeChanged(id) {
+    const type = this.store.peekRecord('case-type', id);
+    this.showAsRemark = (type.get('uri') === CONSTANTS.CASE_TYPES.REMARK);
+  }
 
-    selectModel(items) {
-      this.set('selectedSubcaseName', items);
-      this.set('subcaseName', items.get('label'));
-    },
-  },
-});
+  @action
+  toggleIsEditing() {
+    this.isEditing = !this.isEditing;
+  }
+}
