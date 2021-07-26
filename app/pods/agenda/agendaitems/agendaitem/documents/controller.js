@@ -34,7 +34,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
-  @tracked subcase;
+  @tracked agendaActivity;
 
   @tracked isOpenPublicationModal = false;
 
@@ -48,7 +48,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   get isShownOpenPublicationModal() {
     const hasPublicationsEnabled = isPresent(ENV.APP.ENABLE_PUBLICATIONS_TAB);
     const canPublish = this.currentSession.isOvrb;
-    const hasCase = !!this.subcase;
+    const hasCase = !!this.agendaActivity;
     return hasPublicationsEnabled && canPublish && hasCase;
   }
 
