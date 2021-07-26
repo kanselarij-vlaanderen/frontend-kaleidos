@@ -34,7 +34,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
 
-  @computed('sort') // TODO: remove @computed once this.sort is marked as @tracked
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;
