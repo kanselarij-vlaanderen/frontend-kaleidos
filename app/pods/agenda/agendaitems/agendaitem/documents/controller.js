@@ -16,7 +16,9 @@ import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { isEmpty } from '@ember/utils';
+import {
+  isEmpty, isPresent
+} from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
@@ -32,12 +34,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked agendaitem;
   @tracked currentAgenda;
   @tracked previousAgenda;
+  @tracked subcase;
 
   @tracked isOpenPublicationModal = false;
-
-  get hasPublicationsEnabled() {
-    return !isEmpty(ENV.APP.ENABLE_PUBLICATIONS_TAB);
-  }
 
   get governmentCanViewDocuments() {
     const isOverheid = this.currentSession.isOverheid;
@@ -46,9 +45,16 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return !(isOverheid && !documentsAreReleased);
   }
 
-  // get isShownOpenPublicationModal() {
-  //   return this.hasPublicationsEnabled &&
-  // }
+  get isShownOpenPublicationModal() {
+    const hasPublicationsEnabled = isPresent(ENV.APP.ENABLE_PUBLICATIONS_TAB);
+    const canPublish = this.currentSession.isOvrb;
+    const hasCase = !!this.subcase;
+    return hasPublicationsEnabled && canPublish && hasCase;
+  }
+
+  get isDisabledOpenPublicationModal() {
+    return isEmpty(this.model.pieces);
+  }
 
   @task
   *loadNewPieces() {
