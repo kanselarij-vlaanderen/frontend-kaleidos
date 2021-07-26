@@ -1,11 +1,14 @@
-/* eslint-disable no-dupe-class-members */
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action,
+  computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
+  naam: 'name',
   'ontvangen-op': 'receivedDate',
   'geupload-op': 'created',
 };
@@ -16,42 +19,44 @@ const REQUEST_STAGES = {
   FINAL: 'final',
 };
 
-// necessary for tracking pieces
-export class Model {
-  @tracked pieces;
-  @tracked decisions;
-
-  constructor(models) {
-    Object.assign(this, models);
-  }
-}
-
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
-    qpSortingString: {
+    sort: {
       as: 'volgorde',
     },
   }];
 
   @service currentSession;
 
-  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  /** @type {string} key name, prepended with minus if descending */
-  qpSortingString;
+  // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  /** @type {string} kebab-cased key name, prepended with minus if descending */
+  sort;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
   @tracked selectedPieces = [];
-  @tracked sortingString = undefined;
-  @tracked isOpenProofRequestModal = false;
-  @tracked proofRequestStage;
-  @tracked isOpenPieceUploadModal = false;
-  @tracked isOpenPieceEditModal = false;
+  @tracked isProofRequestModalOpen = false;
+  @tracked isPieceUploadModalOpen = false;
+  @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
 
-  initSort() {
-    this.sortingString = this.qpSortingString;
-    this.sort(this.sortingString);
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
+  get pieces() {
+    let property = 'created';
+    let isDescending = false;
+    if (this.sort) {
+      isDescending = this.sort.startsWith('-');
+      const sortKey = this.sort.substr(isDescending);
+      property = COLUMN_MAP[sortKey] ?? property;
+    }
+
+    let pieces = this.model.pieces;
+    pieces = pieces.sortBy(property);
+    if (isDescending) {
+      pieces = pieces.reverseObjects();
+    }
+
+    return pieces;
   }
 
   get areAllPiecesSelected() {
@@ -91,26 +96,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  changeSorting(sortingString) {
-    this.sortingString = sortingString;
-    this.set('qpSortingString', sortingString);
-    this.sort(sortingString);
-  }
-
-  sort(sortingString) {
-    let property = 'created';
-    let isDescending = false;
-    if (sortingString) {
-      isDescending = sortingString.startsWith('-');
-      const sortKey = sortingString.substr(isDescending);
-      property = COLUMN_MAP[sortKey] ?? property;
-    }
-
-    // .sortBy() copies array
-    this.model.pieces = this.model.pieces.sortBy(property);
-    if (isDescending) {
-      this.model.pieces.reverseObjects();
-    }
+  changeSorting(sort) {
+    this.set('sort', sort);
   }
 
   @action
@@ -126,12 +113,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   async saveProofRequest(requestProperties) {
-    try {
-      await this.performSaveProofRequest(requestProperties);
-    } finally {
-      this.isProofRequestModalOpen = false;
-    }
+    await this.performSaveProofRequest(requestProperties);
     this.selectedPieces = [];
+    this.isProofRequestModalOpen = false;
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
@@ -141,15 +125,27 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
+  closePieceUploadModal() {
+    this.isPieceUploadModalOpen = false;
+  }
+
+  @action
+  async saveCorrectionDocument(proofDocument) {
+    await this.performSaveCorrectionDocument(proofDocument);
+    this.isPieceUploadModalOpen = false;
+    this.send('refresh');
+  }
+
+  @action
   openPieceEditModal(piece) {
     this.pieceToEdit = piece;
-    this.isOpenPieceEditModal = true;
+    this.isPieceEditModalOpen = true;
   }
 
   @action
   closePieceEditModal() {
     this.pieceToEdit = null;
-    this.isOpenPieceEditModal = false;
+    this.isPieceEditModalOpen = false;
   }
 
   @action
@@ -161,23 +157,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
     this.closePieceEditModal();
     this.send('refresh');
-  }
-
-  @action
-  closePieceUploadModal() {
-    this.isPieceUploadModalOpen = false;
-  }
-
-  @action
-  async saveCorrectionDocument(proofDocument) {
-    let piece;
-    try {
-      piece = await this.performSaveCorrectionDocument(proofDocument);
-    } finally {
-      this.isPieceUploadModalOpen = false;
-    }
-    this.model.pieces.pushObject(piece);
-    this.sort(this.sortingString);
   }
 
   async performSaveProofRequest(proofRequest) {

@@ -1,7 +1,6 @@
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-
-import { Model } from './controller';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
@@ -39,6 +38,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
       ...queryProperties,
     });
 
+    // Decisions published in BS as a result of a publication-activity
     const decisionsPromise = this.store.query('decision', {
       'filter[publication-activity][subcase][:id:]': this.publicationSubcase.id,
       sort: 'publication-date',
@@ -48,18 +48,18 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     // eslint-disable-next-line prefer-const
     let [decisions, ...pieces] = await Promise.all([
       decisionsPromise,
-      correctionDocumentsPromise,
       sourceDocumentsPromise,
+      correctionDocumentsPromise,
       receivedProofingDocumentsPromise
     ]);
     pieces = pieces.flatMap((pieces) => pieces.toArray());
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    return new Model({
+    return {
       pieces: pieces,
       decisions: decisions,
-    });
+    };
   }
 
   afterModel() {
@@ -74,6 +74,10 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieces = [];
-    controller.initSort();
+  }
+
+  @action
+  refresh() {
+    super.refresh();
   }
 }
