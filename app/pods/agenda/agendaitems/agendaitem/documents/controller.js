@@ -46,6 +46,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return !(isOverheid && !documentsAreReleased);
   }
 
+  // get isShownOpenPublicationModal() {
+  //   return this.hasPublicationsEnabled &&
+  // }
+
   @task
   *loadNewPieces() {
     if (this.previousAgenda) {
