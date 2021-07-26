@@ -19,7 +19,7 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
 
   @tracked file = this.args.piece.file;
   @tracked name = this.args.piece.name;
-  @tracked receivedAtDate = this.args.piece.receivedAtDate;
+  @tracked receivedAtDate = this.args.piece.receivedDate;
 
   validators;
 
@@ -67,7 +67,7 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
     const validators = {
       name: new Validator(() => isPresent(this.name)),
     };
-    if (this.args.isRecieved) {
+    if (this.isRecieved) {
       validators.receivedAtDate = new Validator(() => isPresent(this.receivedAtDate));
     }
 

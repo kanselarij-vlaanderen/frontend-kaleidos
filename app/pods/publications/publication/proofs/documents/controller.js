@@ -43,9 +43,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked publicationSubcase;
   @tracked selectedPieces = [];
   @tracked sortingString = undefined;
-  @tracked isProofRequestModalOpen = false;
-  @tracked isPieceUploadModalOpen = false;
+  @tracked isOpenProofRequestModal = false;
   @tracked proofRequestStage;
+  @tracked isOpenPieceUploadModal = false;
+  @tracked isOpenPieceEditModal = false;
+  @tracked pieceToEdit;
 
   initSort() {
     this.sortingString = this.qpSortingString;
@@ -136,6 +138,29 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   openPieceUploadModal() {
     this.isPieceUploadModalOpen = true;
+  }
+
+  @action
+  openPieceEditModal(piece) {
+    this.pieceToEdit = piece;
+    this.isOpenPieceEditModal = true;
+  }
+
+  @action
+  closePieceEditModal() {
+    this.pieceToEdit = null;
+    this.isOpenPieceEditModal = false;
+  }
+
+  @action
+  async saveEditPiece(modalResult) {
+    const piece = this.pieceToEdit;
+    piece.name = modalResult.name;
+    piece.receivedDate = modalResult.receivedAtDate;
+    await piece.save();
+
+    this.closePieceEditModal();
+    this.send('refresh');
   }
 
   @action

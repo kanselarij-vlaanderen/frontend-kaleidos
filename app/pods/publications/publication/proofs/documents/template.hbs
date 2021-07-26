@@ -122,6 +122,23 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
+                  <Auk::Button
+                    @skin="borderless"
+                    @layout="icon-only"
+                    @icon="more" />
+                  <AttachPopover
+                    @class="ember-attacher-popper"
+                    @hideOn="clickout click"
+                    @showOn="click"
+                    @animation="shift"
+                    @placement="bottom">
+                    <Auk::Dropdown>
+                      <Auk::Dropdown::Item
+                        {{on "click" (fn this.openPieceEditModal piece)}}>
+                        {{t "edit-proof-details"}}
+                      </Auk::Dropdown::Item>
+                    </Auk::Dropdown>
+                  </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
@@ -174,10 +191,19 @@
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @isCorrectionDocument={{true}}
-    @isReceivedDocument={{false}}
+    @isCorrected={{true}}
+    @isReceived={{false}}
     @onSave={{this.saveCorrectionDocument}}
     @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
+
+
+{{#if this.isOpenPieceEditModal}}
+  <Publications::Publication::Proofs::ProofEditModal
+    @publicationFlow={{this.publicationFlow}}
+    @piece={{this.pieceToEdit}}
+    @onSave={{this.saveEditPiece}}
+    @onCancel={{this.closePieceEditModal}} />
 {{/if}}
 
 {{#if this.isProofRequestModalOpen}}
