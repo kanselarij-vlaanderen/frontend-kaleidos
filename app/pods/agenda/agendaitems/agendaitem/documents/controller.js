@@ -16,9 +16,7 @@ import {
   addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
 } from 'frontend-kaleidos/utils/documents';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
-import {
-  isEmpty, isPresent
-} from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
@@ -48,12 +46,9 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   get isShownOpenPublicationModal() {
     const hasPublicationsEnabled = isPresent(ENV.APP.ENABLE_PUBLICATIONS_TAB);
     const canPublish = this.currentSession.isOvrb;
-    const hasCase = !!this.agendaActivity;
-    return hasPublicationsEnabled && canPublish && hasCase;
-  }
-
-  get isDisabledOpenPublicationModal() {
-    return isEmpty(this.model.pieces);
+    const hasCase = isPresent(this.agendaActivity);
+    const hasPieces = isPresent(this.model.pieces);
+    return hasPublicationsEnabled && canPublish && hasCase && hasPieces;
   }
 
   @task
