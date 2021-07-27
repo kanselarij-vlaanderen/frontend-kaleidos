@@ -1,15 +1,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {
-  isPresent, isBlank
-} from '@ember/utils';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
 import {
-  ValidatorSet,
-  Validator
+  ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
 
 export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
@@ -44,8 +41,12 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     return this.fileQueueService.find(this.fileQueueName);
   }
 
-  get saveIsDisabled() {
-    return isBlank(this.translationDocument) || !this.validators.areValid;
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
+  get isSaveDisabled() {
+    return !this.translationDocument || !this.validators.areValid || this.cancel.isRunning;
   }
 
   @action
@@ -65,8 +66,15 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     this.name = file.filenameWithoutExtension;
   }
 
-  @task
-  *cancelTranslation() {
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
     if (this.translationDocument) {
       yield this.deleteUploadedPiece.perform(this.translationDocument);
     }
@@ -83,7 +91,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   @task
-  *saveTranslation() {
+  *save() {
     if (this.args.onSave) {
       yield this.args.onSave({
         piece: this.translationDocument,
