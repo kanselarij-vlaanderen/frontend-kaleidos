@@ -24,17 +24,15 @@
           </Auk::Button>
         </Auk::Toolbar::Item>
       {{/if}}
-      {{#if this.hasPublicationsEnabled}}
-        {{#if (and this.currentSession.isOvrb this.model.pieces)}}
-          <Auk::Toolbar::Item>
-            <Auk::Button
-              @icon="copy"
-              {{on "click" this.openPublicationModal}}
-            >
-              {{t "agendaitem-documents-documents-for-publication"}}
-            </Auk::Button>
-          </Auk::Toolbar::Item>
-        {{/if}}
+      {{#if this.isShownOpenPublicationModal}}
+        <Auk::Toolbar::Item>
+          <Auk::Button
+            @icon="copy"
+            {{on "click" this.openPublicationModal}}
+          >
+            {{t "agendaitem-documents-documents-for-publication"}}
+          </Auk::Button>
+        </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
