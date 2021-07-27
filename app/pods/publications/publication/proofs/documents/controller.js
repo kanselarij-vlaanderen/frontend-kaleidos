@@ -39,7 +39,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isPieceUploadModalOpen = false;
   @tracked proofRequestStage;
 
-  @computed('sort') // TODO: remove @computed once this.sort is marked as @tracked
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;

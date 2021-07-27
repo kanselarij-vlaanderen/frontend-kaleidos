@@ -34,7 +34,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
 
-  @computed('sort') // TODO: remove @computed once this.sort is marked as @tracked
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;
@@ -93,7 +93,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @task
   *saveSourceDocument(translationDocument) {
     const piece = translationDocument.piece;
-    piece.translationSubcase = this.translationSubcase;
+    piece.translationSubcaseSourceFor = this.translationSubcase;
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.save();
     piece.pages = translationDocument.pagesAmount;
@@ -180,6 +180,36 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
+  @action
+  isDeleteDisabled(piece) {
+    return this.translationSubcase.isFinished
+      // can be translation or publication related
+      || piece.requestActivitiesUsedBy.length > 0;
+  }
+
+  @task
+  *delete(piece) {
+    // Workaround for Dropdown::Item not having a (button with a) disabled state.
+    if (this.isDeleteDisabled(piece)) {
+      return;
+    }
+
+    // prevent piece from being used/rendered while delete is pending
+    this.model.removeObject(piece);
+    this.selectedPieces.removeObject(piece);
+
+    const filePromise = piece.file;
+    const documentContainerPromise = piece.documentContainer;
+    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+
+    const destroyPiece = piece.destroyRecord();
+    const destroyFile = file.destroyRecord();
+    const destroyDocumentContainer = documentContainer.destroyRecord();
+
+    yield Promise.all([destroyPiece, destroyFile, destroyDocumentContainer]);
+
+    this.send('refresh');
+  }
 
   @action
   openPieceUploadModal() {
