@@ -34,7 +34,7 @@ export default class PublicationsIndexController extends Controller {
   @tracked isLoadingModel = false;
   @tracked showTableDisplayOptions = false;
   @tracked isShowPublicationModal = false;
-  @tracked isShowPublicationFilterModal = false;c
+  @tracked isShowPublicationFilterModal = false;
 
   @tracked publicationFilter = new PublicationFilter(JSON.parse(localStorage.getItem('publicationFilter')) || {});
 
