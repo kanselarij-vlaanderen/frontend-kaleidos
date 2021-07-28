@@ -33,9 +33,12 @@
           <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
-                <Auk::Button @skin="borderless" {{action "cancel"}} data-test-vl-modal-verify-cancel>
+                <Auk::ButtonLink
+                  {{action "cancel"}}
+                  data-test-vl-modal-verify-cancel
+                >
                   {{t "cancel"}}
-                </Auk::Button>
+                </Auk::ButtonLink>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             {{#if showVerify}}
