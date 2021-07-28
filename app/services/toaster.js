@@ -12,9 +12,9 @@ export default class ToasterService extends Service {
   @tracked toasts = A([]);
 
   // TODO: Below "newToasts" & "oldToasts" getters are a temporary to be able to render "old toasts" that
-  // don't have new design yet according to their old design, while already implementing new design for those types that support it.
+  // don't have an equivalent in new design yet, while already implementing new design for those types that support it.
   get newToasts() {
-    return this.toasts.filter((toast) => ['success', 'warning', 'error'].includes(toast.type));
+    return this.toasts.filter((toast) => ['success', 'warning', 'error'].includes(toast.options.type));
   }
 
   get oldToasts() {
