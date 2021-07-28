@@ -104,10 +104,8 @@ export default class ToasterService extends Service {
 
   @action
   clear(toast) {
-    if (toast) {
-      if (this.toasts.includes(toast)) {
-        this.toasts.removeObject(toast);
-      }
+    if (toast && this.toasts.includes(toast)) {
+      return this.toasts.removeObject(toast);
     }
     this.toasts.clear();
   }
