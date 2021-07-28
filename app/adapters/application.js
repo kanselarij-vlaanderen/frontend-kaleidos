@@ -6,6 +6,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
   @service toaster;
 
+  MAX_AJAX_RETRIES = 5;
+
   // eslint-disable-next-line no-unused-vars
   async ajax(url, method) {
     try {
@@ -29,15 +31,13 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
 }
 
 // from https://github.com/lblod/frontend-gelinkt-notuleren/blob/5d3c17e9c084e13ea8354c81bf378a27043d7e59/app/adapters/application.js
-async function retryOnError(ajax, ajaxArgs, retryCount = 0) {
-  const MAX_RETRIES = 5;
-
+async function retryOnError(ajax, ajaxArgs, maxRetries = 5, retryCount = 0) {
   try {
     return await ajax(...ajaxArgs);
   } catch (error) {
-    if (retryCount < MAX_RETRIES) {
+    if (retryCount < maxRetries) {
       await sleep(250 * (retryCount + 1));
-      return retryOnError(ajax, ajaxArgs, retryCount + 1);
+      return retryOnError(ajax, ajaxArgs, maxRetries, retryCount + 1);
     }
     throw error;
   }
