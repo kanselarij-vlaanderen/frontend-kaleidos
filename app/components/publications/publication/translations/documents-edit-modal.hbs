@@ -77,13 +77,11 @@
       </div>
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer
-          @onCancel={{@onCancel}}
-  >
+  <Auk::Modal::Footer @onCancel={{@onCancel}}>
     <Auk::Button
-            @skin="primary"
-            @disabled={{this.saveIsDisabled}}
-            @loading={{this.saveEditDocument.isRunning}}
+      @skin="primary"
+      @disabled={{this.saveIsDisabled}}
+      @loading={{this.saveEditDocument.isRunning}}
       {{on "click" (perform this.saveEditDocument)}}
     >
       {{t "save"}}
