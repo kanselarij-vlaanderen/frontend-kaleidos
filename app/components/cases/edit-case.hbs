@@ -28,34 +28,15 @@
       <Auk::Textarea @rows="2" @value={{this.shortTitle}} />
     </div>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-                  @skin="borderless"
-                  disabled={{this.save.isRunning}}
-            {{on "click" @onClose}}
-          >
-            {{t "cancel"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          {{#if this.save.isRunning}}
-            <Utils::SimpleSpinner/>
-          {{else}}
-            <Auk::Button
-                    @skin="primary"
-                    disabled={{or this.save.isRunning this.isSaveDisabled}}
-              {{on "click" (perform this.save)}}
-            >
-              {{t "save"}}
-            </Auk::Button>
-          {{/if}}
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer
+          @cancelDisabled={{this.save.isRunning}}
+          @onCancel={{@onClose}}>
+    <Auk::Button
+            @skin="primary"
+            @disabled={{this.isSaveDisabled}}
+            @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
+      {{t "save"}}
+    </Auk::Button>
   </Auk::Modal::Footer>
 </Auk::Modal>
