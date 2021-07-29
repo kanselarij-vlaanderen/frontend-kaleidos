@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { keepLatestTask } from 'ember-concurrency-decorators';
 
 class Row {
   @tracked governmentDomain;
@@ -18,36 +19,39 @@ class Row {
 
 export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent extends Component {
   @tracked isOpenEditModal;
+  @tracked rows = [];
+
+  constructor() {
+    super(...arguments);
+    this.groupGovernmentFieldsByDomain.perform();
+  }
 
   get governmentFields() {
     return this.args.publicationFlow.governmentFields.toArray();
   }
 
-  get rows() {
-    const governmentFields = this.args.publicationFlow.governmentFields.toArray();
+  @keepLatestTask
+  *groupGovernmentFieldsByDomain() {
+    const governmentFields = yield this.args.publicationFlow.governmentFields;
 
-    const fieldsByDomain = groupBy(governmentFields, 'domain').then((fieldsByDomain) => {
-      const rows = [...fieldsByDomain.entries()]
-        .map(([domain, fields]) => new Row({
-          governmentDomain: domain,
-          governmentFields: fields,
-        }))
-        .sortBy('governmentDomain.label');
-
-      return rows;
-    });
-
-    return fieldsByDomain;
+    const fieldsByDomain = yield groupBy(governmentFields.toArray(), 'domain');
+    this.rows = [...fieldsByDomain.entries()]
+      .map(([domain, fields]) => new Row({
+        governmentDomain: domain,
+        governmentFields: fields,
+      }))
+      .sortBy('governmentDomain.label');
   }
 
   @action
   async save(newGovernmentFields) {
     const publicationFlow = this.args.publicationFlow;
-    const governmentFields = publicationFlow.governmentFields;
+    const governmentFields = await publicationFlow.governmentFields;
 
     governmentFields.clear();
     governmentFields.pushObjects(newGovernmentFields);
     await publicationFlow.save();
+    this.groupGovernmentFieldsByDomain.perform();
 
     this.isOpenEditModal = false;
   }
