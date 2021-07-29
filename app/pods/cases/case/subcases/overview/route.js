@@ -1,23 +1,25 @@
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
 import { action } from '@ember/object';
 
-export default class CaseSubcasesOverviewRoute extends Route {
+export default class CasesCaseSubcasesOverviewRoute extends Route {
   async model() {
-    const caze = this.modelFor('cases.case');
-    const subcases = await this.store.query('subcase', {
+    return await this.store.query('subcase', {
       filter: {
         case: {
-          id: caze.get('id'),
+          id: this.case.id,
         },
       },
       sort: '-created',
     });
+  }
 
-    return hash({
-      subcases,
-      case: caze,
-    });
+  async beforeModel() {
+    this.case = this.modelFor('cases.case');
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.case = this.case;
   }
 
   @action
