@@ -1,18 +1,27 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
 
-export default Component.extend({
+export default class EditCase extends Component {
+  @tracked shortTitle = this.args.case.shortTitle;
+  @tracked isConfidential = this.args.case.confidential;
 
-  actions: {
-    toggleIsEditing() {
-      this.cancelEditing();
-    },
+  get isSaveDisabled() {
+    return this.shortTitle === null || this.shortTitle.trim().length === 0;
+  }
 
-    saveChanges() {
-      this.set('isLoading', true);
-      this.caseToEdit.save().then(() => {
-        this.cancelEditing();
-        this.set('isLoading', false);
+  @action
+  toggleConfidential() {
+    this.isConfidential = !this.isConfidential;
+  }
+
+  @task
+  *save() {
+    yield this.args.onSave(
+      {
+        shortTitle: this.shortTitle,
+        confidential: this.isConfidential,
       });
-    },
-  },
-});
+  }
+}

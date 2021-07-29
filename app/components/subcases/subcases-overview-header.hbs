@@ -56,9 +56,10 @@
 {{/if}}
 
 {{#if this.showEditCaseModal}}
-  <Cases::EditCaseWithConfidential
+  <Cases::EditCase
           @onClose={{this.closeEditCaseModal}}
           @onSave={{this.saveEditCase}}
+          @editConfidential={{true}}
           @case={{@case}}
   />
 {{/if}}

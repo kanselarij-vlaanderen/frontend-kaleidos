@@ -75,7 +75,7 @@
                     <li class="vlc-dropdown-menu__item">
                       <button type="button" class="auk-button-link"
                         {{action attacher.hide}}
-                        {{action "editRow" row}}
+                        {{on "click" (fn this.openEditCaseModal row)}}
                       >
                         <span class="auk-button__content">
                           {{t "edit-case"}}
@@ -120,17 +120,13 @@
     {{/data-table}}
   </div>
 </div>
-{{#if isEditingRow}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    title=(t "edit-case")
-    closeModal=(action "cancelEditing")
-  }}
-    {{cases/edit-case
-      caseToEdit=caseToEdit
-      cancelEditing=(action "cancelEditing")
-    }}
-  {{/web-components/vl-modal}}
+{{#if this.showEditCaseModal}}
+  <Cases::EditCase
+          @onClose={{this.closeEditCaseModal}}
+          @onSave={{this.saveEditCase}}
+          @editConfidential={{false}}
+          @case={{this.caseToEdit}}
+  />
 {{/if}}
 {{#if isArchivingCase}}
   {{web-components/vl-modal-verify

@@ -1,8 +1,14 @@
 import Controller from '@ember/controller';
-import { inject } from '@ember/service';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
-export default Controller.extend({
-  queryParams: [
+export default class CasesCaseSubcasesOverview extends Controller {
+  // Services
+  @service currentSession;
+  @service router;
+
+  queryParams = [
     {
       page: {
         type: 'number',
@@ -23,80 +29,93 @@ export default Controller.extend({
         type: 'boolean',
       },
     }
-  ],
-  sizeOptions: Object.freeze([5, 10, 20, 50, 100, 200]),
-  page: 0,
-  size: 20,
+  ];
+  sizeOptions = Object.freeze([5, 10, 20, 50, 100, 200]);
+  page = 0;
+  size = 20;
 
-  currentSession: inject(),
-  sort: '-created',
-  selectedCase: null,
-  isEditingRow: false,
-  isNotArchived: false,
-  isArchivingCase: false,
-  showArchived: false,
+  sort = '-created';
+  @tracked selectedCase = null;
+  @tracked caseToEdit = null;
+  @tracked showEditCaseModal = false;
+  @tracked isNotArchived = false;
+  @tracked isArchivingCase = false;
+  showArchived = false;
 
-  actions: {
-    selectSize(size) {
-      this.set('size', size);
-    },
+  @action
+  selectSize(size) {
+    this.size = size;
+  }
 
-    editRow(caze) {
-      this.set('caseToEdit', caze);
-      this.toggleProperty('isEditingRow');
-    },
+  @action
+  openEditCaseModal(caze) {
+    this.caseToEdit = caze;
+    this.showEditCaseModal = true;
+  }
 
-    cancelEditing() {
-      this.toggleProperty('isEditingRow');
-    },
+  @action
+  closeEditCaseModal() {
+    this.showEditCaseModal = false;
+    this.caseToEdit = null;
+  }
 
-    async archiveCase() {
-      const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
-      caseModel.set('isArchived', true);
-      const subcases = await caseModel.subcases;
-      await Promise.all(subcases.map(async(subcase) => {
-        subcase.set('isArchived', true);
-        const savedSubcase = await subcase.save();
-        return savedSubcase;
-      }));
-      caseModel.save().then(() => {
-        this.set('selectedCase', null);
+  @action
+  async saveEditCase(caseData) {
+    this.caseToEdit.shortTitle = caseData.shortTitle;
+    await this.caseToEdit.save();
+    this.closeEditCaseModal();
+  }
+
+  @action
+  async archiveCase() {
+    const caseModel = await this.store.findRecord('case', this.get('selectedCase.id'));
+    caseModel.isArchived = true;
+    const subcases = await caseModel.subcases;
+    await Promise.all(subcases.map(async(subcase) => {
+      subcase.isArchived = true;
+      return await subcase.save();
+    }));
+    caseModel.save()
+      .then(() => {
+        this.selectedCase = null;
         this.send('refreshModel');
-        this.set('isArchivingCase', false);
+        this.isArchivingCase = false;
       });
-    },
+  }
 
-    async unarchiveCase(caze) {
-      caze.set('isArchived', false);
-      const subcases = await caze.subcases;
-      await Promise.all(subcases.map(async(subcase) => {
-        subcase.set('isArchived', false);
-        const savedSubcase = await subcase.save();
-        return savedSubcase;
-      }));
-      await caze.save();
-    },
+  @action
+  async unarchiveCase(caze) {
+    caze.isArchived = false;
+    const subcases = await caze.subcases;
+    await Promise.all(subcases.map(async(subcase) => {
+      subcase.isArchived = false;
+      return await subcase.save();
+    }));
+    await caze.save();
+  }
 
-    requestArchiveCase(caze) {
-      this.set('selectedCase', caze);
-      this.set('isArchivingCase', true);
-    },
+  @action
+  requestArchiveCase(caze) {
+    this.selectedCase = caze;
+    this.isArchivingCase = true;
+  }
 
-    cancelArchiveCase() {
-      this.set('isArchivingCase', false);
-      this.set('selectedCase', null);
-    },
+  @action
+  cancelArchiveCase() {
+    this.isArchivingCase = false;
+    this.selectedCase = null;
+  }
 
-    close(caze) {
-      if (!caze) {
-        return;
-      }
-      this.transitionToRoute('cases.case.subcases', caze.id);
-    },
+  @action
+  close(caze) {
+    if (!caze) {
+      return;
+    }
+    this.router.transitionTo('cases.case.subcases', caze.id);
+  }
 
-    navigateToCase(_case) {
-      this.transitionToRoute('cases.case.subcases', _case.id);
-    },
-  },
-
-});
+  @action
+  navigateToCase(_case) {
+    this.router.transitionTo('cases.case.subcases', _case.id);
+  }
+}
