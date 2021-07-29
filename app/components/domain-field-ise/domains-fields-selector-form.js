@@ -45,10 +45,18 @@ export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Co
     const uniqueDomains = [...new Set(domainsFromFields)].sortBy('label');
     const domainSelections = [];
     for (const domain of uniqueDomains) {
-      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.domain)); // in 2 steps, async filter logic
-      const selectedFieldsForDomain = this.selectedFields.filter((_, index) => selectedFieldsDomains[index] === domain); // eslint-disable-line
+      // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
+      // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
+      // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
+      const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.domain));
+      // eslint-disable-next-line no-unused-vars, id-length
+      const selectedFieldsForDomain = this.selectedFields.filter((_, index) => selectedFieldsDomains[index] === domain);
+
+      // Similar filter logic applied in 2 steps as above for the available fields
       const availableFieldsDomains = yield Promise.all(this.availableFields.map((field) => field.domain));
-      const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain); // eslint-disable-line
+      // eslint-disable-next-line no-unused-vars, id-length
+      const availableFieldsForDomain = this.availableFields.filter((_, index) => availableFieldsDomains[index] === domain);
+
       domainSelections.push(new DomainSelection(domain, availableFieldsForDomain, selectedFieldsForDomain));
     }
     this.domainSelections = domainSelections;
