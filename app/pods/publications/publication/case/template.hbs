@@ -3,16 +3,16 @@
     {{page-title (capitalize (t "case")) }}
 
     <Publications::Publication::Case::Inscription::InscriptionPanel
-      @publicationFlow={{this.model}}
+      @publicationFlow={{@model}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}} />
 
     <Publications::Publication::Case::Mandatees::MandateesPanel
-      @publicationFlow={{this.model}} />
+      @publicationFlow={{@model}} />
 
     <Publications::Publication::Case::GovernmentFields::GovernmentFieldsPanel
       @publicationFlow={{@model}} />
 
     <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
-      @publicationFlow={{this.model}} />
+      @publicationFlow={{@model}} />
   </div>
 </div>
