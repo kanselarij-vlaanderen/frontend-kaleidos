@@ -19,7 +19,6 @@ import {
 export default class PublicationsPublicationProofsProofEditModalComponent extends Component {
   @service currentSession;
 
-  @tracked file = this.args.piece.file;
   @tracked name = this.args.piece.name;
   @tracked receivedAtDate = this.args.piece.receivedDate;
   @tracked publicationSubcaseCorrectionFor;
@@ -29,7 +28,8 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
   constructor() {
     super(...arguments);
 
-    this.init();
+    this.loadData.perform();
+    this.initValidation();
   }
 
   get isCorrected() {
@@ -48,15 +48,20 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
     return !this.validators.areValid;
   }
 
+  get isLoading() {
+    return this.loadData.isRunning || this.save.isRunning;
+  }
+
   @task
   *loadData() {
+    // load publicationSubcaseCorrectionFor to avoid to async in getters and template
+    // it should resolve immediately because it is already included
     this.publicationSubcaseCorrectionFor = yield this.args.piece.publicationSubcaseCorrectionFor;
   }
 
   @task
   *save() {
     yield this.args.onSave({
-      file: this.file,
       name: this.name,
       receivedAtDate: this.receivedAtDate,
     });
@@ -68,24 +73,18 @@ export default class PublicationsPublicationProofsProofEditModalComponent extend
 
     if (selectedDates.length) {
       this.receivedAtDate = selectedDates[0];
+    } else { // this case occurs when users manually empty the date input-field
+      // trigger date-picker update
+      // eslint-disable-next-line no-self-assign
+      this.receivedAtDate = this.receivedAtDate;
     }
-  }
-
-  async init() {
-    // load publicationSubcaseCorrectionFor to avoid to async in getters and template
-    // it should resolve immediately because it is already included
-    await this.loadData.perform();
-    this.initValidation();
   }
 
   initValidation() {
-    const validators = {
+    this.validators = new ValidatorSet({
       name: new Validator(() => isPresent(this.name)),
-    };
-    if (this.isReceived) {
-      validators.receivedAtDate = new Validator(() => isPresent(this.receivedAtDate));
-    }
-
-    this.validators = new ValidatorSet(validators);
+      // if loading: false, if isReceived: true, if isCorrected: check presence
+      receivedAtDate: new Validator(() => !this.loadData.isRunning && (!this.isReceived || isPresent(this.receivedAtDate))),
+    });
   }
 }
