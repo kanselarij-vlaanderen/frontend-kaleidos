@@ -3,6 +3,7 @@
   @position="right"
   @skin="gray-100"
   @isCollapsed={{not @isOpen}}
+  class={{if @isOpen "auk-scroll-wrapper"}}
 >
   <Auk::Navbar @skin="gray-100">
     <Auk::Toolbar>
@@ -253,12 +254,12 @@
       {{t "discharge-publication-flow-confirm"}}
     </Auk::Modal::Body>
     <Auk::Modal::Footer @custom={{true}}>
-      <Auk::Toolbar>
+      <Auk::Toolbar @size="large">
         <Auk::Toolbar::Group @position="left" n>
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="borderless" {{on "click" this.cancelWithdraw}}>
+            <Auk::ButtonLink {{on "click" this.cancelWithdraw}}>
               {{t "cancel"}}
-            </Auk::Button>
+            </Auk::ButtonLink>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
