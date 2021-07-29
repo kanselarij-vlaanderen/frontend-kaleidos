@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 
-export default class CaseSubcasesOverviewController extends Controller {
+export default class CasesCaseSubcasesOverviewController extends Controller {
   @service toaster;
   @service intl;
 
