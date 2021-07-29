@@ -51,10 +51,7 @@ export default class SubCasesOverviewHeader extends Component {
 
   @action
   async saveEditCase(caseData) {
-    const caze = this.args.case;
-    caze.shortTitle = caseData.shortTitle;
-    caze.confidential = caseData.confidential;
-    await this.args.onSaveCase(caze);
+    await this.args.onSaveCase(caseData);
     this.closeEditCaseModal();
   }
 

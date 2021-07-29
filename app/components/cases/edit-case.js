@@ -18,10 +18,8 @@ export default class EditCase extends Component {
 
   @task
   *save() {
-    yield this.args.onSave(
-      {
-        shortTitle: this.shortTitle,
-        confidential: this.isConfidential,
-      });
+    this.args.case.shortTitle = this.shortTitle;
+    this.args.case.confidential = this.isConfidential;
+    yield this.args.onSave(this.args.case);
   }
 }

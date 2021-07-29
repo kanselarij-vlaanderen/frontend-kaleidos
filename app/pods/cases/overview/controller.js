@@ -61,8 +61,7 @@ export default class CasesCaseSubcasesOverview extends Controller {
 
   @action
   async saveEditCase(caseData) {
-    this.caseToEdit.shortTitle = caseData.shortTitle;
-    await this.caseToEdit.save();
+    await caseData.save();
     this.closeEditCaseModal();
   }
 
