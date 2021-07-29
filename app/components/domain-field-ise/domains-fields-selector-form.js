@@ -55,7 +55,7 @@ export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Co
   }
 
   @action
-  async toggleDomainSelection(domainSelection, event) {
+  toggleDomainSelection(domainSelection, event) {
     const flag = event.target.checked;
     const domainFields = domainSelection.availableFields;
     const fieldsToToggle = domainFields.filter((domainField) => domainSelection.selectedFields.includes(domainField) !== flag);
