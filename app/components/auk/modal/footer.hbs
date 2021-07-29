@@ -5,12 +5,11 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
-            @disabled={{@cancelDisabled}}
+          <Auk::ButtonLink
+            disabled={{@cancelDisabled}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
-          </Auk::Button>
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
