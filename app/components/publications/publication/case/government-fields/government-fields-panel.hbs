@@ -19,13 +19,9 @@
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
     </Auk::Panel::Header>
-    {{#unless @publicationFlow.governmentFields }}
-      <Auk::Panel::Body>
-        <Auk::EmptyState @message={{t "no-added-government-fields"}} />
-      </Auk::Panel::Body>
-    {{else}}
+    {{#if @publicationFlow.governmentFields}}
       <Auk::Panel::Body @noPadding={{true}}>
-        <table class="auk-table" >
+        <table class="auk-table">
           <thead>
             <tr>
               <th>{{t "government-domain"}}</th>
@@ -46,7 +42,11 @@
           </tbody>
         </table>
       </Auk::Panel::Body>
-    {{/unless}}
+    {{else}}
+      <Auk::Panel::Body>
+        <Auk::EmptyState @message={{t "no-added-government-fields"}} />
+      </Auk::Panel::Body>
+    {{/if}}
   </Auk::Panel>
 </div>
 
