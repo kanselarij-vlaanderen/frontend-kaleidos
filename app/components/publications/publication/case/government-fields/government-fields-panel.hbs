@@ -13,9 +13,8 @@
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="tertiary" @icon="edit"
-              {{on "click" this.showEditModal }}>
-              {{t "edit-government-fields"}}
-            </Auk::Button>
+              @layout="icon-only"
+              {{on "click" this.showEditModal}} />
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
