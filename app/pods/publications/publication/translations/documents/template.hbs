@@ -113,8 +113,15 @@
                           @animation="shift"
                           @placement="bottom">
                     <Auk::Dropdown>
-                      <Auk::Dropdown::Item @skin="primary" {{on "click" (fn this.openPieceEditModal piece)}}>
+                      <Auk::Dropdown::Item
+                        {{on "click" (fn this.openPieceEditModal piece)}}>
                         {{t "edit-translation-details"}}
+                      </Auk::Dropdown::Item>
+                      {{!-- TODO: make @disabled work for dropdown item --}}
+                      <Auk::Dropdown::Item @skin="danger"
+                        @disabled={{compute this.isDeleteDisabled piece}}
+                        {{on "click" (perform this.delete piece)}}>
+                        {{t "delete"}}
                       </Auk::Dropdown::Item>
                     </Auk::Dropdown>
                   </AttachPopover>
