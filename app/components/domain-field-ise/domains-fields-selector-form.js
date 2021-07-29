@@ -42,7 +42,7 @@ export default class DomainFieldIseDomainsFieldsSelectorFormComponent extends Co
   @task
   *calculateDomainSelections() {
     const domainsFromFields = yield Promise.all(this.availableFields.map((field) => field.domain));
-    const uniqueDomains = [...new Set(domainsFromFields)];
+    const uniqueDomains = [...new Set(domainsFromFields)].sortBy('label');
     const domainSelections = [];
     for (const domain of uniqueDomains) {
       const selectedFieldsDomains = yield Promise.all(this.selectedFields.map((field) => field.domain)); // in 2 steps, async filter logic
