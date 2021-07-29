@@ -50,7 +50,7 @@
   </Auk::Panel>
 </div>
 
-{{#if isOpenEditModal}}
+{{#if this.isOpenEditModal}}
   <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
       @governmentFields={{this.governmentFields}}
       @onSave={{this.save}}
