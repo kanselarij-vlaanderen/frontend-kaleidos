@@ -4,15 +4,15 @@ import { tracked } from '@glimmer/tracking';
 
 class Row {
   @tracked governmentDomain;
-  @tracked _governmentFields;
+  @tracked governmentFields;
 
   constructor(properties) {
     this.governmentDomain = properties.governmentDomain;
-    this._governmentFields = properties.governmentFields;
+    this.governmentFields = properties.governmentFields;
   }
 
-  get governmentFields() {
-    return this._governmentFields.sortBy('label');
+  get sortedGovernmentFields() {
+    return this.governmentFields.sortBy('label');
   }
 }
 

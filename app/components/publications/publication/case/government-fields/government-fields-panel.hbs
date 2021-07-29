@@ -35,7 +35,7 @@
                   {{row.governmentDomain.label}}
                 </td>
                 <td>
-                  {{join ", " (map-by "label" row.governmentFields)}}
+                  {{join ", " (map-by "label" row.sortedGovernmentFields)}}
                 </td>
               </tr>
             {{/each}}
