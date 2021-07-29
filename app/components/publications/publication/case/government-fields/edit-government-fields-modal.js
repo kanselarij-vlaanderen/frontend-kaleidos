@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 
-
 export default class EditGovernmentFieldsModal extends Component {
   @service store;
   @tracked governmentFields;
@@ -13,7 +12,7 @@ export default class EditGovernmentFieldsModal extends Component {
   constructor() {
     super(...arguments);
     this.governmentFields = this.store.peekAll('government-field').sortBy('position');
-    this.selectedGovernmentFields = this.args.governmentFields;
+    this.selectedGovernmentFields = this.args.governmentFields.slice(0); // making a copy
   }
 
   @task

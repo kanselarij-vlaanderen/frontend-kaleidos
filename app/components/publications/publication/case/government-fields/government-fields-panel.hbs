@@ -52,7 +52,7 @@
 
 {{#if this.isOpenEditModal}}
   <Publications::Publication::Case::GovernmentFields::EditGovernmentFieldsModal
-      @governmentFields={{this.governmentFields}}
+      @governmentFields={{@publicationFlow.governmentFields}}
       @onSave={{this.save}}
       @onCancel={{this.closeEditModal}}/>
 {{/if}}

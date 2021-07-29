@@ -26,10 +26,6 @@ export default class PublicationsPublicationCaseGovernmentDomainsPanelComponent 
     this.groupGovernmentFieldsByDomain.perform();
   }
 
-  get governmentFields() {
-    return this.args.publicationFlow.governmentFields.toArray();
-  }
-
   @keepLatestTask
   *groupGovernmentFieldsByDomain() {
     const governmentFields = yield this.args.publicationFlow.governmentFields;
