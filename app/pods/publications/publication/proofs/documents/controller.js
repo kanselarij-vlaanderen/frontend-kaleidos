@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -68,7 +70,7 @@ const REQUEST_STAGES = {
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
-    qpSort: {
+    sort: {
       as: 'volgorde',
     },
   }];
@@ -76,10 +78,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @service currentSession;
 
   // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-  // other idea was to use @computed on `get pieceRows()`, but the nested property `model.pieceRows` did not trigger updates.
-  qpSort;
   /** @type {string} kebab-cased key name, prepended with minus if descending */
-  @tracked sort;
+  sort;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
@@ -90,6 +90,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isPieceEditModalOpen = false;
   @tracked pieceRowToEdit;
 
+  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
   get pieceRows() {
     let property = 'created';
     let isDescending = false;
@@ -150,8 +151,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   changeSorting(sort) {
-    this.set('qpSort', sort);
-    this.sort = sort;
+    this.set('sort', sort);
   }
 
   @action
