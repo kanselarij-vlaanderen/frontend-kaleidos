@@ -4,22 +4,25 @@ import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 
 export default class EditCase extends Component {
-  @tracked shortTitle = this.args.case.shortTitle;
-  @tracked isConfidential = this.args.case.confidential;
+
 
   get isSaveDisabled() {
-    return this.shortTitle === null || this.shortTitle.trim().length === 0;
+    return this.args.case.shortTitle === null || this.args.case.shortTitle.trim().length === 0;
   }
 
   @action
   toggleConfidential() {
-    this.isConfidential = !this.isConfidential;
+    this.args.case.confidential = !this.args.case.confidential ;
   }
 
   @task
   *save() {
-    this.args.case.shortTitle = this.shortTitle;
-    this.args.case.confidential = this.isConfidential;
     yield this.args.onSave(this.args.case);
+  }
+
+  @action
+  onClose() {
+    this.args.case.rollbackAttributes();
+    this.args.onClose();
   }
 }

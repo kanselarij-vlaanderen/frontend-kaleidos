@@ -1,36 +1,28 @@
 <Auk::Modal>
   <Auk::Modal::Header
           @title={{t "edit-case"}}
-          @onClose={{@onClose}}
+          @onClose={{this.onClose}}
   />
   <Auk::Modal::Body>
-    {{#if hasError}}
-      <Auk::Alert
-              @skin="error"
-              @icon="alert-triangle"
-              @title={{t "modal-error-alert-title"}}
-              @message={{t "modal-error-alert-message"}}
-      />
-    {{/if}}
     {{#if @editConfidential}}
       <div class="auk-u-mb-4">
         <div class="auk-form-group">
           <Auk::Label>{{t "confidential"}}</Auk::Label>
           <Auk::CheckboxList>
-            <Auk::Checkbox @name="isConfidential" @checked={{this.isConfidential}}
+            <Auk::Checkbox @name="isConfidential" @checked={{@case.confidential}}
               {{on "input" this.toggleConfidential}} />
           </Auk::CheckboxList>
         </div>
       </div>
     {{/if}}
-    <div class="auk-form-group {{getClassForShortTitle}}">
+    <div class="auk-form-group ">
       <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      <Auk::Textarea @rows="2" @value={{this.shortTitle}} />
+      <Auk::Textarea @rows="2" @value={{mut @case.shortTitle}} />
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
           @cancelDisabled={{this.save.isRunning}}
-          @onCancel={{@onClose}}>
+          @onCancel={{this.onClose}}>
     <Auk::Button
             @skin="primary"
             @disabled={{this.isSaveDisabled}}
