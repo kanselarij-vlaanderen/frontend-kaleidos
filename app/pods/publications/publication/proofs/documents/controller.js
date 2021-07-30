@@ -5,10 +5,9 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
-// use: track changes to pieceRows (in deletePiece)
 export class Model {
-  @tracked pieceRows;
-  @tracked decisions;
+  pieceRows;
+  decisions;
 
   // no async constructor() in JS
   static async create(pieces, decisions, publicationSubcase, currentSession) {
@@ -20,6 +19,8 @@ export class Model {
 }
 
 // use:
+// - isDeleteDisabled property
+// - file property avoids error when piece (and file) are deleted
 export class PieceRow {
   @service currentSession;
 
