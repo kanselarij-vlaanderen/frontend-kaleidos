@@ -9,11 +9,12 @@
             @disabled={{this.isRequestingDisabled}}>
             {{t "new-request"}}
           </Auk::Button>
-          {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-          <EmberPopover
-            @side="bottom-start"
-            @tooltipClass="auk-popover"
-            @targetId="proofDocumentsActionMenu">
+          <AttachPopover
+            @class="ember-attacher-popper"
+            @hideOn="clickout click"
+            @showOn="click"
+            @animation="shift"
+            @placement="bottom">
             <Auk::Dropdown
               as |dropdown|>
               <dropdown.Item
@@ -29,17 +30,33 @@
                 {{t "final-request"}}
               </dropdown.Item>
             </Auk::Dropdown>
-          </EmberPopover>
+          </AttachPopover>
         </Auk::Toolbar::Item>
 
         {{#if this.canUploadPiece}}
           <Auk::Toolbar::Item>
             <Auk::Button
-              @skin="secondary" @icon="add"
-              @disabled={{this.isUploadDisabled}}
-              {{on "click" this.openPieceUploadModal}}>
+              @icon="chevron-down" @layout="icon-right" @skin="secondary"
+              @disabled={{this.isUploadDisabled}}>
               {{t "upload-corrected-proof-document"}}
             </Auk::Button>
+            <AttachPopover
+              @class="ember-attacher-popper"
+              @showOn="click"
+              @hideOn="clickout click"
+              @animation="shift"
+              @placement="bottom">
+              <Auk::Dropdown>
+                <Auk::Dropdown::Item
+                  {{on "click" this.openSourceUploadModal}}>
+                  {{t "upload-source-proof-document"}}
+                </Auk::Dropdown::Item>
+                <Auk::Dropdown::Item
+                  {{on "click" (fn this.openCorrectionEditModal)}}>
+                  {{t "upload-corrected-proof-document"}}
+                </Auk::Dropdown::Item>
+              </Auk::Dropdown>
+            </AttachPopover>
           </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
@@ -127,9 +144,7 @@
                     {{t "read"}}
                   </Auk::Button>
                   <Auk::Button
-                    @skin="borderless"
-                    @layout="icon-only"
-                    @icon="more" />
+                    @skin="borderless" @layout="icon-only" @icon="more" />
                   <AttachPopover
                     @class="ember-attacher-popper"
                     @hideOn="clickout click"
@@ -192,16 +207,27 @@
   </div>
 </div>
 
-{{#if this.isPieceUploadModalOpen}}
+{{#if this.isCorrectionUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
     @isCorrected={{true}}
     @isReceived={{false}}
+    @isSource={{false}}
     @onSave={{this.saveCorrectionDocument}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
-{{#if this.isPieceEditModalOpen}}
+{{#if this.isSourceUploadModalOpen}}
+  <Publications::Publication::Proofs::ProofUploadModal
+    @publicationFlow={{this.publicationFlow}}
+    @isCorrected={{false}}
+    @isReceived={{false}}
+    @isSource={{true}}
+    @onSave={{this.saveCorrectionDocument}}
+    @onCancel={{this.closePieceUploadModal}} />
+{{/if}}
+
+{{#if this.isEditModalOpen}}
   <Publications::Publication::Proofs::ProofEditModal
     @publicationFlow={{this.publicationFlow}}
     @piece={{this.pieceToEdit}}

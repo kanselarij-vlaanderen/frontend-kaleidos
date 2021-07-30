@@ -37,7 +37,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked selectedPieces = [];
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
-  @tracked isPieceUploadModalOpen = false;
+  @tracked isCorrectionUploadModalOpen = false;
+  @tracked isSourceUploadModalOpen = false;
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
 
@@ -121,19 +122,36 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  openPieceUploadModal() {
-    this.isPieceUploadModalOpen = true;
+  openCorrectionUploadModal() {
+    this.isCorrectionUploadModalOpen = true;
   }
 
   @action
-  closePieceUploadModal() {
-    this.isPieceUploadModalOpen = false;
+  closeCorrectionUploadModal() {
+    this.isCorrectionUploadModalOpen = false;
   }
 
   @action
   async saveCorrectionDocument(proofDocument) {
     await this.performSaveCorrectionDocument(proofDocument);
-    this.isPieceUploadModalOpen = false;
+    this.isCorrectionUploadModalOpen = false;
+    this.send('refresh');
+  }
+
+  @action
+  openSourceUploadModal() {
+    this.isSourceUploadModalOpen = true;
+  }
+
+  @action
+  closeSourceUploadModal() {
+    this.isSourceUploadModalOpen = false;
+  }
+
+  @action
+  async saveSourceDocument(proofDocument) {
+    await this.performSaveSourceDocument(proofDocument);
+    this.isSourceUploadModalOpen = false;
     this.send('refresh');
   }
 
@@ -223,8 +241,23 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   async performSaveCorrectionDocument(proofDocument) {
-    const now = new Date();
+    return this.performSavePieceBase({
+      name: proofDocument.name,
+      file: proofDocument.file,
+      publicationSubcaseCorrectionFor: this.publicationSubcase,
+    });
+  }
 
+  async performSaveSourceDocument(proofDocument) {
+    return this.performSavePieceBase({
+      name: proofDocument.name,
+      file: proofDocument.file,
+      publicationSubcaseSourceFor: this.publicationSubcase,
+    });
+  }
+
+  async performSavePieceBase(pieceProperties) {
+    const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
@@ -233,11 +266,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      file: proofDocument.file,
       confidential: false,
-      name: proofDocument.name,
       documentContainer: documentContainer,
-      publicationSubcaseCorrectionFor: this.publicationSubcase,
+      ...pieceProperties,
     });
     await piece.save();
 
