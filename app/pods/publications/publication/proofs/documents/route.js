@@ -76,7 +76,6 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieceRows = [];
-    // controller.sort = controller.qpSort;
   }
 
   @action
