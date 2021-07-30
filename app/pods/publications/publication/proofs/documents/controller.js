@@ -5,43 +5,45 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
-// used to be able to track changes to pieceRows (in deletePiece)
+// use: track changes to pieceRows (in deletePiece)
 export class Model {
   @tracked pieceRows;
   @tracked decisions;
 
   // no async constructor() in JS
-  static async create(pieces, decisions, publicationSubcase) {
+  static async create(pieces, decisions, publicationSubcase, currentSession) {
     const model = new Model();
-    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, publicationSubcase)));
+    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, publicationSubcase, currentSession)));
     model.decisions = decisions;
     return model;
   }
 }
 
+// use:
 export class PieceRow {
+  @service currentSession;
+
   @tracked piece;
+  @tracked file;
 
   publicationSubcase;
   requestActivitiesUsedBy;
 
-  static createRows(pieces) {
-    return Promise.all(pieces.map(this.create));
-  }
-
   // no async constructor() in JS
-  static async create(piece, publicationSubcase) {
+  static async create(piece, publicationSubcase, currentSession) {
     const row = new PieceRow();
-    console.log(piece);
-    row.piece = await piece;
+    row.piece = piece;
+    row.file = await piece.file;
     row.publicationSubcase = publicationSubcase;
     // avoid awaiting in getter
     row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
+    row.currentSession = currentSession;
     return row;
   }
 
   get isDeleteDisabled() {
-    return this.publicationSubcase.isFinished
+    return !this.currentSession.isOvrb
+      || this.publicationSubcase.isFinished
       // can be translation or publication related
       || this.requestActivitiesUsedBy.length > 0;
   }
@@ -214,8 +216,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     }
 
     // prevent piece from being used/rendered while delete is pending (extension dissapears and throws error)
-    this.model.pieceRows.removeObject(pieceRow);
-    this.selectedPieceRows.removeObject(pieceRow);
+    // this.model.pieceRows.removeObject(pieceRow);
+    // this.selectedPieceRows.removeObject(pieceRow);
 
     const piece = pieceRow.piece;
     const filePromise = piece.file;

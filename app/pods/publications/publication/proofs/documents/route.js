@@ -1,9 +1,12 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { Model } from './controller';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
+  @service currentSession;
+
   async model() {
     this.publicationSubcase = this.modelFor('publications.publication.proofs');
 
@@ -58,7 +61,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    return Model.create(pieces, decisions, this.publicationSubcase);
+    return Model.create(pieces, decisions, this.publicationSubcase, this.currentSession);
   }
 
   afterModel() {

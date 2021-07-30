@@ -89,7 +89,7 @@
                   {{piece.name}}
                 </td>
                 <td>
-                  <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
+                  <Utils::Documents::FileTypePill @extension={{pieceRow.file.extension}} />
                 </td>
                 <td>
                   {{#if piece.receivedDate}}
@@ -117,7 +117,7 @@
                   <WebComponents::AuButtonToolbar>
                     <Auk::Button
                       @skin="borderless" @layout="icon-only" @icon="download"
-                      @href={{piece.file.namedDownloadLink}}
+                      @href={{pieceRow.file.namedDownloadLink}}
                       download={{await piece.downloadFilename}}>
                       {{t "download"}}
                     </Auk::Button>
