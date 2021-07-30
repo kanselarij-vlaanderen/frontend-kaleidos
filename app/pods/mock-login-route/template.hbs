@@ -31,18 +31,18 @@
           @placement="bottom-end"
         >
           <Auk::Menu>
-            <Auk::Dropdown::Item
+            <Auk::Menu::Item
               @route="manual"
               target="_blank"
             >
               {{t "look-at-documentation"}}
-            </Auk::Dropdown::Item>
-            <Auk::Dropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+            </Auk::Menu::Item>
+            <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
-            </Auk::Dropdown::Item>
+            </Auk::Menu::Item>
           </Auk::Menu>
         </AttachPopover>
       </Auk::Toolbar::Item>

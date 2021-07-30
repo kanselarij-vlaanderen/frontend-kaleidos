@@ -21,23 +21,23 @@
         <Auk::Menu>
           {{#if this.isPostPonable}}
             {{#if @agendaitem.retracted}}
-              <Auk::Dropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+              <Auk::Menu::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
                 {{t "not-postpone"}}
-              </Auk::Dropdown::Item>
+              </Auk::Menu::Item>
             {{else}}
-              <Auk::Dropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+              <Auk::Menu::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
                 {{t "postpone"}}
-              </Auk::Dropdown::Item>
+              </Auk::Menu::Item>
             {{/if}}
           {{/if}}
           {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-            <Auk::Dropdown::Item
+            <Auk::Menu::Item
               @skin="danger"
               data-test-agendaitem-controls-action-delete
               {{on "click" this.toggleIsVerifying}}
             >
               {{t "delete"}}
-            </Auk::Dropdown::Item>
+            </Auk::Menu::Item>
           {{/if}}
         </Auk::Menu>
       </AttachPopover>

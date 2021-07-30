@@ -136,10 +136,9 @@
                     @animation="shift"
                     @placement="bottom">
                     <Auk::Menu>
-                      <Auk::Dropdown::Item
-                        {{on "click" (fn this.openPieceEditModal piece)}}>
+                      <Auk::Menu::Item {{on "click" (fn this.openPieceEditModal piece)}}>
                         {{t "edit-proof-details"}}
-                      </Auk::Dropdown::Item>
+                      </Auk::Menu::Item>
                     </Auk::Menu>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>

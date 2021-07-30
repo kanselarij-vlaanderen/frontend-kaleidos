@@ -75,18 +75,18 @@
           @placement="bottom-end"
         >
           <Auk::Menu>
-            <Auk::Dropdown::Item
+            <Auk::Menu::Item
               @route="manual"
               target="_blank"
             >
               {{t "look-at-documentation"}}
-            </Auk::Dropdown::Item>
-            <Auk::Dropdown::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
+            </Auk::Menu::Item>
+            <Auk::Menu::Item @href="mailto:kaleidos.servicedesk@vlaanderen.be">
               <div>
                 <span>{{t "contact-us"}}</span>
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
-            </Auk::Dropdown::Item>
+            </Auk::Menu::Item>
           </Auk::Menu>
         </AttachPopover>
       </Auk::Toolbar::Item>
@@ -109,16 +109,16 @@
                  @placement="bottom-end"
                >
             <Auk::Menu>
-              <Auk::Dropdown::Item @textOnly={{true}}>
+              <Auk::Menu::Item @textOnly={{true}}>
                 <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
                   <p class="auk-u-muted auk-u-text-small">{{this.currentSession.group.name}}</p>
                 </Auk::Avatar>
-              </Auk::Dropdown::Item>
+              </Auk::Menu::Item>
               <Auk::Dropdown::Divider />
-              <Auk::Dropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
+              <Auk::Menu::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
-              </Auk::Dropdown::Item>
+              </Auk::Menu::Item>
             </Auk::Menu>
           </AttachPopover>
         {{else}}
