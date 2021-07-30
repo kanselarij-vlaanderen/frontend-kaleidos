@@ -122,19 +122,13 @@ export default class CasesNewSubcase extends Component {
   @task
   *copyFullSubcase() {
     const subcase = yield this.createSubcase(true);
-    yield this.args.onSave(
-      {
-        subcase: subcase,
-      });
+    yield this.args.onSave(subcase);
   }
 
   @task
   *saveSubcase() {
     const subcase = yield this.createSubcase(false);
-    yield this.args.onSave(
-      {
-        subcase: subcase,
-      });
+    yield this.args.onSave(subcase);
   }
 
   @action

@@ -57,7 +57,7 @@ export default class SubCasesOverviewHeader extends Component {
 
   @action
   async saveAddSubcase(subCaseData) {
-    await this.args.onSaveSubcase(subCaseData.subcase);
+    await this.args.onSaveSubcase(subCaseData);
     this.closeAddSubcaseModal();
   }
 }
