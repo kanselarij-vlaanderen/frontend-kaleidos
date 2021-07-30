@@ -6,6 +6,7 @@ import { action } from '@ember/object';
  *
  * @argument {String} placement. See EmberAttacher doc for options
  * @argument {String} skin. See Auk::Button for options
+ * @argument {Boolean} disabled. See Auk::Button
  * @argument {String} label. Label for the trigger button
  */
 export default class DropdownMenuComponent extends Component {
