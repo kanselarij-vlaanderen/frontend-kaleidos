@@ -20,7 +20,7 @@
               <Auk::Button
                       @skin="secondary"
                       @icon="copy-paste"
-                {{on "click"  (perform this.copyFullSubcase)}}
+                {{on "click" (perform this.copyFullSubcase)}}
                       data-test-new-subcase-clone-previous-subcase
               >
                 {{t "clone-previous-subcase"}}
@@ -30,7 +30,7 @@
         </Auk::Toolbar>
       </div>
     </div>
-    {{#unless  this.loadTitleData.isRunning}}
+    {{#unless this.loadTitleData.isRunning}}
       <div class="auk-form-group">
         <Auk::Label>{{t "name-subcase"}}</Auk::Label>
         <Auk::Textarea @rows="2" @value={{this.shortTitle}} />
@@ -113,7 +113,7 @@
             <Auk::Button
                     @skin="primary"
                     disabled={{this.save.isRunning}}
-              {{on "click"  (perform this.saveSubcase)}}
+              {{on "click" (perform this.saveSubcase)}}
             >
               {{t "new-subcase"}}
             </Auk::Button>

@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 
-export default class NewSubcase extends Component {
+export default class CasesNewSubcase extends Component {
   @service store;
 
   @tracked filter = Object.freeze({
@@ -16,7 +16,6 @@ export default class NewSubcase extends Component {
   @tracked caseTypes;
   @tracked title;
   @tracked shortTitle;
-  @tracked pieces;
 
   @tracked showAsRemark;
   @tracked selectedSubcaseName;
@@ -37,6 +36,9 @@ export default class NewSubcase extends Component {
       sort: '-label',
       filter: {
         deprecated: false,
+      },
+      page: {
+        size: PAGE_SIZE.CODE_LISTS,
       },
     });
   }
