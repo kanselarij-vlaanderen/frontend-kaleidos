@@ -23,115 +23,95 @@
         {{#if currentSessionService.isEditor}}
           <Auk::Toolbar::Item>
             <div class="auk-u-position-relative auk-u-inline-block">
-              <Auk::Button
+              <DropdownMenu
                 @skin="primary"
-                @layout="icon-right"
-                @icon={{if (not isShowingAgendaActions) "chevron-down" "chevron-up"}}
-                {{action "showAgendaActions"}}
-                data-test-agenda-header-show-agenda-options
-              >
-                {{t "agenda-actions"}}
-              </Auk::Button>
-              {{#attach-popover
-                renderInPlace=true
-                class="ember-attacher-popper vlc-hide-on-print"
-                hideOn="clickout click"
-                showOn="click"
-                animation="shift"
-                placement="bottom"
-              as |attacher|
-              }}
-                <ul class="vlc-dropdown-menu">
-                  {{#if currentSessionService.isEditor}}
-                    {{#if currentAgenda.isDesignAgenda}}
-                      <li class="vlc-dropdown-menu__item">
-                        <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block"
-                          {{action attacher.hide}}
-                          {{action "openConfirmApproveAgenda"}}
-                        >
-                          <span class="auk-button__content">
-                            {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
-                          </span>
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                      <li class="vlc-dropdown-menu__item">
-                        <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block"
-                          {{action attacher.hide}}
-                          {{action "openConfirmApproveAgendaAndCloseMeeting"}}
-                        >
-                          <span class="auk-button__content">
-                            {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
-                          </span>
-                        </button>
-                      </li>
-                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                    {{/if}}
-                    {{#if (not currentSession.isFinal)}}
-                      {{#if (await isSessionClosable)}}
-                        <li class="vlc-dropdown-menu__item">
-                          <a href=""
-                            data-test-agenda-header-lock-agenda
-                            class="auk-button-link auk-button-link--block auk-u-text-error"
-                            {{action "openConfirmCloseMeeting"}}
-                            {{action attacher.hide}}
-                          >
-                            <span class="auk-button__content">
-                              {{t "agenda-close"}}
-                            </span>
-                          </a>
-                        </li>
-                        <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                      {{/if}}
-                    {{else}}
-                      <li class="vlc-dropdown-menu__item">
+                @label={{t "agenda-actions"}}
+                class="vlc-hide-on-print"
+                data-test-agenda-header-show-agenda-options={{true}}
+              as |Menu|>
+                {{#if currentSessionService.isEditor}}
+                  {{#if currentAgenda.isDesignAgenda}}
+                    <Menu.Item>
+                      <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block"
+                        {{action "openConfirmApproveAgenda"}}
+                      >
+                        <span class="auk-button__content">
+                          {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                        </span>
+                      </button>
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item>
+                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block"
+                        {{action "openConfirmApproveAgendaAndCloseMeeting"}}
+                      >
+                        <span class="auk-button__content">
+                          {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
+                        </span>
+                      </button>
+                    </Menu.Item>
+                    <Menu.Divider />
+                  {{/if}}
+                  {{#if (not currentSession.isFinal)}}
+                    {{#if (await isSessionClosable)}}
+                      <Menu.Item>
                         <a href=""
-                          data-test-agenda-header-unlock-agenda
-                          class="auk-button-link auk-button-link--block"
-                          {{action "unlockAgenda"}}
-                          {{action attacher.hide}}
+                          data-test-agenda-header-lock-agenda
+                          class="auk-button-link auk-button-link--block auk-u-text-error"
+                          {{action "openConfirmCloseMeeting"}}
                         >
                           <span class="auk-button__content">
-                            {{t "agenda-reopen"}}
+                            {{t "agenda-close"}}
                           </span>
                         </a>
-                      </li>
-                      <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
+                      </Menu.Item>
+                      <Menu.Divider />
                     {{/if}}
-                  {{/if}}
-                  {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
-                  {{#if (await canDeleteSelectedAgenda)}}
-                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger">
+                  {{else}}
+                    <Menu.Item>
                       <a href=""
-                        data-test-agenda-header-delete-agenda
-                        class="auk-button-link auk-u-text-error"
-                        {{action "openConfirmDeleteSelectedAgenda"}}
-                        {{action attacher.hide}}
+                        data-test-agenda-header-unlock-agenda
+                        class="auk-button-link auk-button-link--block"
+                        {{action "unlockAgenda"}}
                       >
                         <span class="auk-button__content">
-                          {{t "agenda-delete"}}
+                          {{t "agenda-reopen"}}
                         </span>
                       </a>
-                    </li>
+                    </Menu.Item>
+                    <Menu.Divider />
                   {{/if}}
-                  {{#if (await canReopenPreviousAgenda)}}
-                    <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                    <li class="vlc-dropdown-menu__item vlc-dropdown-menu__item--action-danger"
+                {{/if}}
+                {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
+                {{#if (await canDeleteSelectedAgenda)}}
+                  <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
+                    <a href=""
+                      data-test-agenda-header-delete-agenda
+                      class="auk-button-link auk-u-text-error"
+                      {{action "openConfirmDeleteSelectedAgenda"}}
+                    >
+                      <span class="auk-button__content">
+                        {{t "agenda-delete"}}
+                      </span>
+                    </a>
+                  </Menu.Item>
+                {{/if}}
+                {{#if (await canReopenPreviousAgenda)}}
+                  <Menu.Divider />
+                  <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
+                    >
+                    <a href=""
+                        data-test-agenda-header-reopen-previous-version
+                        class="auk-button-link auk-button-link--block auk-u-text-error"
+                        {{action "openConfirmReopenPreviousAgenda"}}
                       >
-                      <a href=""
-                          data-test-agenda-header-reopen-previous-version
-                          class="auk-button-link auk-button-link--block auk-u-text-error"
-                          {{action "openConfirmReopenPreviousAgenda"}}
-                          {{action attacher.hide}}
-                        >
-                        <span class="auk-button__content">
-                          {{t "agenda-reopen-previous-version"}}
-                        </span>
-                      </a>
-                    </li>
-                  {{/if}}
-                </ul>
-              {{/attach-popover}}
+                      <span class="auk-button__content">
+                        {{t "agenda-reopen-previous-version"}}
+                      </span>
+                    </a>
+                  </Menu.Item>
+                {{/if}}
+              </DropdownMenu>
             </div>
           </Auk::Toolbar::Item>
         {{/if}}
