@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { Model } from './controller';
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
@@ -9,7 +10,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     const queryProperties = {
       include: [
         'file',
-        'publication-subcase-correction-for'
+        'publication-subcase-correction-for',
+        'request-activities-used-by'
       ].join(','),
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
@@ -56,10 +58,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    return {
-      pieces: pieces,
-      decisions: decisions,
-    };
+    return Model.create(pieces, decisions, this.publicationSubcase);
   }
 
   afterModel() {
@@ -73,7 +72,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
 
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
-    controller.selectedPieces = [];
+    controller.selectedPieceRows = [];
+    controller.sort = controller.qpSort;
   }
 
   @action

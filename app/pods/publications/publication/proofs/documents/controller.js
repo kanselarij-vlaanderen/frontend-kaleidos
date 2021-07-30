@@ -1,11 +1,51 @@
 import Controller from '@ember/controller';
-import {
-  action,
-  computed
-} from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
+
+// used to be able to track changes to pieceRows (in deletePiece)
+export class Model {
+  @tracked pieceRows;
+  @tracked decisions;
+
+  // no async constructor() in JS
+  static async create(pieces, decisions, publicationSubcase) {
+    const model = new Model();
+    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, publicationSubcase)));
+    model.decisions = decisions;
+    return model;
+  }
+}
+
+export class PieceRow {
+  @tracked piece;
+
+  publicationSubcase;
+  requestActivitiesUsedBy;
+
+  static createRows(pieces) {
+    return Promise.all(pieces.map(this.create));
+  }
+
+  // no async constructor() in JS
+  static async create(piece, publicationSubcase) {
+    const row = new PieceRow();
+    console.log(piece);
+    row.piece = await piece;
+    row.publicationSubcase = publicationSubcase;
+    // avoid awaiting in getter
+    row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
+    return row;
+  }
+
+  get isDeleteDisabled() {
+    return this.publicationSubcase.isFinished
+      // can be translation or publication related
+      || this.requestActivitiesUsedBy.length > 0;
+  }
+}
 
 const COLUMN_MAP = {
   naam: 'name',
@@ -21,28 +61,29 @@ const REQUEST_STAGES = {
 
 export default class PublicationsPublicationProofsDocumentsController extends Controller {
   queryParams = [{
-    sort: {
+    qpSort: {
       as: 'volgorde',
     },
   }];
 
   @service currentSession;
 
-  // @tracked sort; // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  // TODO: don't do tracking on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+  // other idea was to use @computed on `get pieceRows()`, but the nested property `model.pieceRows` did not trigger updates.
+  qpSort;
   /** @type {string} kebab-cased key name, prepended with minus if descending */
-  sort;
+  @tracked sort;
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
-  @tracked selectedPieces = [];
+  @tracked selectedPieceRows = [];
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
   @tracked isPieceUploadModalOpen = false;
   @tracked isPieceEditModalOpen = false;
-  @tracked pieceToEdit;
+  @tracked pieceRowToEdit;
 
-  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
-  get pieces() {
+  get pieceRows() {
     let property = 'created';
     let isDescending = false;
     if (this.sort) {
@@ -51,21 +92,25 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
-    let pieces = this.model.pieces;
-    pieces = pieces.sortBy(property);
+    let pieceRows = this.model.pieceRows;
+    pieceRows = pieceRows.sortBy(`piece.${property}`);
     if (isDescending) {
-      pieces = pieces.reverseObjects();
+      pieceRows = pieceRows.reverseObjects();
     }
 
-    return pieces;
+    return pieceRows;
   }
 
   get areAllPiecesSelected() {
-    return this.model.pieces.length === this.selectedPieces.length;
+    return this.model.pieceRows.length === this.selectedPieceRows.length;
+  }
+
+  get selectedPieces() {
+    return this.selectedPieceRows.map((row) => row.piece);
   }
 
   get isRequestingDisabled() {
-    return this.selectedPieces.length === 0
+    return this.selectedPieceRows.length === 0
       || this.publicationSubcase.isFinished;
   }
 
@@ -78,27 +123,28 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  togglePieceSelection(selectedPiece) {
-    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+  togglePieceSelection(pieceRow) {
+    const isPieceSelected = this.selectedPieceRows.includes(pieceRow);
     if (isPieceSelected) {
-      this.selectedPieces.removeObject(selectedPiece);
+      this.selectedPieceRows.removeObject(pieceRow);
     } else {
-      this.selectedPieces.pushObject(selectedPiece);
+      this.selectedPieceRows.pushObject(pieceRow);
     }
   }
 
   @action
   toggleAllPiecesSelection() {
     if (this.areAllPiecesSelected) {
-      this.selectedPieces = [];
+      this.selectedPieceRows = [];
     } else {
-      this.selectedPieces = [...this.model.pieces];
+      this.selectedPieceRows = [...this.model.pieceRows];
     }
   }
 
   @action
   changeSorting(sort) {
-    this.set('sort', sort);
+    this.set('qpSort', sort);
+    this.sort = sort;
   }
 
   @action
@@ -115,7 +161,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   async saveProofRequest(requestProperties) {
     await this.performSaveProofRequest(requestProperties);
-    this.selectedPieces = [];
+    this.selectedPieceRows = [];
     this.isProofRequestModalOpen = false;
     this.transitionToRoute('publications.publication.proofs.requests');
   }
@@ -138,25 +184,50 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  openPieceEditModal(piece) {
-    this.pieceToEdit = piece;
+  openPieceEditModal(pieceRow) {
+    this.pieceRowToEdit = pieceRow;
     this.isPieceEditModalOpen = true;
   }
 
   @action
   closePieceEditModal() {
-    this.pieceToEdit = null;
+    this.pieceRowToEdit = null;
     this.isPieceEditModalOpen = false;
   }
 
   @action
   async saveEditPiece(modalResult) {
-    const piece = this.pieceToEdit;
+    const piece = this.pieceRowToEdit.piece;
     piece.name = modalResult.name;
     piece.receivedDate = modalResult.receivedAtDate;
     await piece.save();
 
     this.closePieceEditModal();
+    this.send('refresh');
+  }
+
+  @task
+  *deletePiece(pieceRow) {
+    // Workaround for Dropdown::Item not having a (button with a) disabled state.
+    if (pieceRow.isDeleteDisabled) {
+      return;
+    }
+
+    // prevent piece from being used/rendered while delete is pending (extension dissapears and throws error)
+    this.model.pieceRows.removeObject(pieceRow);
+    this.selectedPieceRows.removeObject(pieceRow);
+
+    const piece = pieceRow.piece;
+    const filePromise = piece.file;
+    const documentContainerPromise = piece.documentContainer;
+    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+
+    const destroyPiece = piece.destroyRecord();
+    const destroyFile = file.destroyRecord();
+    const destroyDocumentContainer = documentContainer.destroyRecord();
+
+    yield Promise.all([destroyPiece, destroyFile, destroyDocumentContainer]);
+
     this.send('refresh');
   }
 

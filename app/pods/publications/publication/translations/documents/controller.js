@@ -141,7 +141,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     yield translationActivity.save();
 
     const filePromises = translationRequest.attachments.mapBy('file');
-    const filesPromise = yield Promise.all(filePromises);
+    const filesPromise = Promise.all(filePromises);
 
     const outboxPromise = this.store.findRecordByUri('mail-folder', PUBLICATION_EMAIL.OUTBOX);
     const mailSettingsPromise = this.store.queryOne('email-notification-setting');
