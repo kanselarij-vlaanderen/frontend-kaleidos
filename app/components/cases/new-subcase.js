@@ -18,11 +18,10 @@ export default class CasesNewSubcase extends Component {
   @tracked shortTitle;
 
   @tracked showAsRemark;
-  @tracked selectedSubcaseName;
+  @tracked selectedShortcut;
   @tracked subcaseName;
   @tracked type;
   @tracked isEditing = false;
-
 
   constructor() {
     super(...arguments);
@@ -55,7 +54,6 @@ export default class CasesNewSubcase extends Component {
     }
   }
 
-  @action
   async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
@@ -145,9 +143,9 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  selectModel(items) {
-    this.selectedSubcaseName = items;
-    this.subcaseName = items.get('label');
+  selectSubcaseName(subcaseName) {
+    this.selectedShortcut = subcaseName;
+    this.subcaseName = subcaseName.label;
   }
 
   @action

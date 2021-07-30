@@ -9,7 +9,7 @@
 
         <WebComponents::VlRadioButtonList
                 @title={{t "subcase-type"}}
-                @optionList={{caseTypes}}
+                @optionList={{this.caseTypes}}
                 @modelChanged={{this.typeChanged}}
         />
 
@@ -60,8 +60,8 @@
                     @propertyToShow="label"
                     @sortField="label"
                     @filter={{this.filter}}
-                    @selectedItems={{this.selectedSubcaseName}}
-                    @selectModel={{this.selectModel}}
+                    @selectedItems={{this.selectedShortcut}}
+                    @selectModel={{this.selectSubcaseName}}
             />
             <Auk::Button
                     @skin="secondary"
@@ -75,7 +75,7 @@
             <Auk::Input
                     @type="text"
                     @block={{true}}
-                    @value={{subcaseName}}
+                    @value={{this.subcaseName}}
                     id="subcaseNameId"
             />
             <Auk::Button
@@ -92,34 +92,15 @@
     </Utils::LoadableContent>
 
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar>
-      <Auk::Toolbar::Group @position="left">
-        <Auk::Toolbar::Item>
-          <Auk::Button
-                  @skin="borderless"
-                  disabled={{this.save.isRunning}}
-            {{on "click" @onClose}}
-          >
-            {{t "cancel"}}
-          </Auk::Button>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          {{#if (or this.saveSubcase.isRunning this.copyFullSubcase.isRunning) }}
-            <Utils::SimpleSpinner/>
-          {{else}}
-            <Auk::Button
-                    @skin="primary"
-                    disabled={{this.save.isRunning}}
-              {{on "click" (perform this.saveSubcase)}}
-            >
-              {{t "new-subcase"}}
-            </Auk::Button>
-          {{/if}}
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    </Auk::Toolbar>
+  <Auk::Modal::Footer
+          @cancelDisabled={{this.save.isRunning}}
+          @onCancel={{this.onClose}}>
+    <Auk::Button
+            @skin="primary"
+            @disabled={{this.save.isRunning}}
+            @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}
+      {{on "click" (perform this.saveSubcase)}}>
+      {{t "save"}}
+    </Auk::Button>
   </Auk::Modal::Footer>
 </Auk::Modal>
