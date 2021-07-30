@@ -1,0 +1,25 @@
+<Auk::Button
+  @skin={{@skin}}
+  @layout="icon-right"
+  @icon={{this.icon}}
+  ...attributes
+  {{on "click" this.toggleDropdown}}
+>
+  {{@label}}
+</Auk::Button>
+<AttachPopover
+  @renderInPlace={{true}}
+  @class="ember-attacher-popper"
+  @hideOn="clickout"
+  @showOn=""
+  @onChange={{this.setDropdownStatus}}
+  @isShown={{this.isOpen}}
+  @animation="shift"
+  @placement={{this.placement}}
+>
+  <Auk::Menu
+    {{on "click" this.toggleDropdown}}
+  as |Menu|>
+    {{yield Menu}}
+  </Auk::Menu>
+</AttachPopover>
