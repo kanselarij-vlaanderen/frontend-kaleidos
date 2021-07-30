@@ -1,5 +1,12 @@
 import moment from 'moment';
 
+const emailFooter = '\n'
+  + 'Met vriendelijke groeten,\n'
+  + 'Team Ondersteuning Vlaamse Regering\n'
+  + '\n'
+  + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\n'
+  + 'publicatiesBS@vlaanderen.be\n'
+  + 'Koolstraat 35, 1000 Brussel';
 function translationRequestEmail(params) {
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
   const message = 'Collega,\n'
@@ -12,12 +19,10 @@ function translationRequestEmail(params) {
       .format('DD-MM-YYYY')}\n`
     + `Aantal pagina’s: ${params.totalPages}\n`
     + `Aantal woorden: ${params.totalWords}\n`
-    + `Aantal documenten: ${params.totalDocuments}\n`
-    + '\n'
-    + 'Met vriendelijke groeten,\n';
+    + `Aantal documenten: ${params.totalDocuments}\n`;
   return {
     subject: subject,
-    message: message,
+    message: message + emailFooter,
   };
 }
 
@@ -45,9 +50,7 @@ async function proofRequestEmail(params) {
       + `Lange Titel: ${publicationFlow.longTitle}\n`
       + `VO-dossier: ${idName}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n'
-      + '\n'
-      + 'Met vriendelijke groeten,\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
   } else if (params.stage === 'extra') {
     subject = `BS-werknr: ${numacNumber} VO-dossier: ${idName} – Aanvraag nieuwe drukproef`;
     message = 'Geachte,\n'
@@ -55,11 +58,9 @@ async function proofRequestEmail(params) {
       + 'Graag een nieuwe drukproef voor:\n'
       + `BS-werknummer: ${numacNumber}\n`
       + `Lange Titel: ${publicationFlow.longTitle}\n`
-      + `VO-dossier:: ${idName}\n`
+      + `VO-dossier: ${idName}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n'
-      + '\n'
-      + 'Met vriendelijke groeten,\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
   } else if (params.stage === 'final') {
     subject = `Verbeterde drukproef BS-werknr: ${numacNumber} VO-dossier: ${idName}`;
     message = 'Beste,\n'
@@ -71,13 +72,11 @@ async function proofRequestEmail(params) {
       + '\n'
       + `De gewenste datum van publicatie is: ${targetDateString}\n`
       + '\n'
-      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n'
-      + '\n'
-      + 'Met vriendelijke groeten,\n';
+      + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
   }
   return {
     subject: subject,
-    message: message,
+    message: message + emailFooter,
   };
 }
 
