@@ -1,20 +1,29 @@
 import moment from 'moment';
 
 function translationRequestEmail(params) {
-  return 'Collega,\n'
+  const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
+  const message = 'Collega,\n'
     + '\n'
-    + 'In bijlage document(en) die wij indienen voor vertaling.\n'
-    + '\n'
-    + 'Het betreft:\n'
+    + 'Hierbij ter vertaling:\n'
     + '\n'
     + `VO-dossier: ${params.identifier}\n`
     + `Titel: ${params.title}\n`
-    + `Uiterste vertaaldatum: ${moment(params.dueDate).format('DD-MM-YYYY')}\n`
+    + `Uiterste vertaaldatum: ${moment(params.dueDate)
+      .format('DD-MM-YYYY')}\n`
     + `Aantal pagina’s: ${params.totalPages}\n`
     + `Aantal woorden: ${params.totalWords}\n`
     + `Aantal documenten: ${params.totalDocuments}\n`
     + '\n'
-    + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand e-mailadres.';
+    + 'Met vriendelijke groeten,\n'
+    + 'Team Ondersteuning Vlaamse Regering \n'
+    + '\n'
+    + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\n'
+    + 'publicatiesBS@vlaanderen.be\n'
+    + 'Koolstraat 35, 1000 Brussel\n' ;
+  return {
+    subject: subject,
+    message: message,
+  };
 }
 
 async function proofRequestEmail(params) {
@@ -23,7 +32,7 @@ async function proofRequestEmail(params) {
     const idName = identification.idName;
 
     const subject = `Publicatieaanvraag VO-dossier: ${idName}`;
-    const message =  `Wij voorzien een publicatie voor VO-dossier ${idName}.
+    const message = `Wij voorzien een publicatie voor VO-dossier ${idName}.
 
 Graag registreren we het Numac-nummer dat u hiervoor voorziet, en de geplande datum voor publicatie.
 
@@ -43,7 +52,8 @@ Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden
 
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const targetDate = publicationSubcase.targetEndDate;
-    const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '?';
+    const targetDateString = targetDate ? moment(targetDate)
+      .format('DD/MM/YYYY') : '?';
 
     const subject = `Verbeterde drukproef voor publicatie BS-werknr: ${numacNumber}, VO-dossier: ${idName}`;
     const message = `Geachte,
@@ -76,7 +86,8 @@ Met vriendelijke groeten,`;
 
     const publicationSubcase = await publicationFlow.publicationSubcase;
     const targetDate = publicationSubcase.targetEndDate;
-    const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '?';
+    const targetDateString = targetDate ? moment(targetDate)
+      .format('DD/MM/YYYY') : '?';
 
     const subject = `Finale publicatie voor publicatie BS-werknr: ${numacNumber}, VO-dossier: ${idName}`;
     const message = `Geachte,
