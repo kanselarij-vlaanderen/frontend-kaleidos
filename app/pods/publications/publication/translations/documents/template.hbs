@@ -112,7 +112,7 @@
                           @showOn="click"
                           @animation="shift"
                           @placement="bottom">
-                    <Auk::Dropdown>
+                    <Auk::Menu>
                       <Auk::Dropdown::Item
                         {{on "click" (fn this.openPieceEditModal piece)}}>
                         {{t "edit-translation-details"}}
@@ -123,7 +123,7 @@
                         {{on "click" (perform this.delete piece)}}>
                         {{t "delete"}}
                       </Auk::Dropdown::Item>
-                    </Auk::Dropdown>
+                    </Auk::Menu>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>

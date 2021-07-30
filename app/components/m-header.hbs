@@ -74,7 +74,7 @@
           @animation="shift"
           @placement="bottom-end"
         >
-          <Auk::Dropdown>
+          <Auk::Menu>
             <Auk::Dropdown::Item
               @route="manual"
               target="_blank"
@@ -87,7 +87,7 @@
                 <span class="auk-u-muted auk-u-text-small">{{t "email-servicedesk"}}</span>
               </div>
             </Auk::Dropdown::Item>
-          </Auk::Dropdown>
+          </Auk::Menu>
         </AttachPopover>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="auk-u-mr-3">
@@ -108,7 +108,7 @@
                  @animation="shift"
                  @placement="bottom-end"
                >
-            <Auk::Dropdown>
+            <Auk::Menu>
               <Auk::Dropdown::Item @textOnly={{true}}>
                 <Auk::Avatar @icon="user" @name={{this.currentSession.user.fullName}}>
                   <p>{{this.currentSession.user.fullName}}</p>
@@ -119,7 +119,7 @@
               <Auk::Dropdown::Item {{on "click" this.logout}} data-test-m-header-user-action-logout>
                 {{t "sign-out"}}
               </Auk::Dropdown::Item>
-            </Auk::Dropdown>
+            </Auk::Menu>
           </AttachPopover>
         {{else}}
           <Auk::ButtonLink

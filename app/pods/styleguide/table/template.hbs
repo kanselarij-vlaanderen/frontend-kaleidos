@@ -55,11 +55,11 @@
             <Auk::Button @skin="borderless" @layout="icon-only" id={{@index}} @icon="more">Acties</Auk::Button>
 
             <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId={{@index}} as |popover|>
-              <Auk::Dropdown>
+              <Auk::Menu>
                 <Auk::Dropdown::Item @route="styleguide.table">Actie</Auk::Dropdown::Item>
                 <Auk::Dropdown::Item @route="styleguide.table">Actie</Auk::Dropdown::Item>
                 <Auk::Dropdown::Item @route="styleguide.table">Actie</Auk::Dropdown::Item>
-              </Auk::Dropdown>
+              </Auk::Menu>
             </EmberPopover>
           </WebComponents::AuButtonToolbar>
         </td>

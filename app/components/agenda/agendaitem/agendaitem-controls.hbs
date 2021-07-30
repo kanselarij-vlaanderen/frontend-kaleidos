@@ -18,7 +18,7 @@
               @animation="shift"
               @placement="bottom"
       >
-        <Auk::Dropdown>
+        <Auk::Menu>
           {{#if this.isPostPonable}}
             {{#if @agendaitem.retracted}}
               <Auk::Dropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
@@ -39,7 +39,7 @@
               {{t "delete"}}
             </Auk::Dropdown::Item>
           {{/if}}
-        </Auk::Dropdown>
+        </Auk::Menu>
       </AttachPopover>
     </WebComponents::AuButtonToolbar>
   {{else}}

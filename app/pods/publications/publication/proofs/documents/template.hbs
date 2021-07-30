@@ -14,8 +14,7 @@
             @side="bottom-start"
             @tooltipClass="auk-popover"
             @targetId="proofDocumentsActionMenu">
-            <Auk::Dropdown
-              as |dropdown|>
+            <Auk::Menu as |dropdown|>
               <dropdown.Item
                 {{on "click" (fn this.openProofRequestModal "initial")}}>
                 {{t "initial-request"}}
@@ -28,7 +27,7 @@
                 {{on "click" (fn this.openProofRequestModal "final")}}>
                 {{t "final-request"}}
               </dropdown.Item>
-            </Auk::Dropdown>
+            </Auk::Menu>
           </EmberPopover>
         </Auk::Toolbar::Item>
 
@@ -136,12 +135,12 @@
                     @showOn="click"
                     @animation="shift"
                     @placement="bottom">
-                    <Auk::Dropdown>
+                    <Auk::Menu>
                       <Auk::Dropdown::Item
                         {{on "click" (fn this.openPieceEditModal piece)}}>
                         {{t "edit-proof-details"}}
                       </Auk::Dropdown::Item>
-                    </Auk::Dropdown>
+                    </Auk::Menu>
                   </AttachPopover>
                 </WebComponents::AuButtonToolbar>
               </td>
