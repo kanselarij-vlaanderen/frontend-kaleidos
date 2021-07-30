@@ -42,11 +42,15 @@ export class PieceRow {
     return row;
   }
 
+  get isShownDelete() {
+    const hasPermission = this.currentSession.isOvrb;
+    // can be translation or publication related
+    const hasRequests = this.requestActivitiesUsedBy.length > 0;
+    return hasPermission && !hasRequests;
+  }
+
   get isDeleteDisabled() {
-    return !this.currentSession.isOvrb
-      || this.publicationSubcase.isFinished
-      // can be translation or publication related
-      || this.requestActivitiesUsedBy.length > 0;
+    return this.publicationSubcase.isFinished;
   }
 }
 
@@ -215,10 +219,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     if (pieceRow.isDeleteDisabled) {
       return;
     }
-
-    // prevent piece from being used/rendered while delete is pending (extension dissapears and throws error)
-    // this.model.pieceRows.removeObject(pieceRow);
-    // this.selectedPieceRows.removeObject(pieceRow);
 
     const piece = pieceRow.piece;
     const filePromise = piece.file;

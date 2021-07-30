@@ -5,6 +5,7 @@ import {
   action,
   computed
 } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -15,6 +16,8 @@ const COLUMN_MAP = {
 };
 
 export default class PublicationsPublicationTranslationsDocumentController extends Controller {
+  @service currentSession;
+
   queryParams = [{
     sort: {
       as: 'volgorde',
@@ -181,10 +184,16 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  isDeleteDisabled(piece) {
-    return this.translationSubcase.isFinished
-      // can be translation or publication related
-      || piece.requestActivitiesUsedBy.length > 0;
+  isShownDelete(piece) {
+    const hasPermission = this.currentSession.isOvrb;
+    // can be translation or publication related
+    const isLinkedToRequests = piece.requestActivitiesUsedBy.length > 0;
+    return hasPermission && !isLinkedToRequests;
+  }
+
+  @action
+  isDeleteDisabled() {
+    return this.translationSubcase.isFinished;
   }
 
   @task

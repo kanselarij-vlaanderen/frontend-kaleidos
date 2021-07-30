@@ -142,12 +142,14 @@
                           {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                           {{t "edit-proof-details"}}
                         </Auk::Dropdown::Item>
-                        {{!-- TODO: make @disabled work for dropdown item --}}
-                        <Auk::Dropdown::Item @skin="danger"
-                          @disabled={{pieceRow.isDeleteDisabled}}
-                          {{on "click" (perform this.deletePiece pieceRow)}}>
-                          {{t "delete"}}
-                        </Auk::Dropdown::Item>
+                        {{#if pieceRow.isShownDelete}}
+                          {{!-- TODO: make @disabled work for dropdown item --}}
+                          <Auk::Dropdown::Item @skin="danger"
+                            @disabled={{pieceRow.isDeleteDisabled}}
+                            {{on "click" (perform this.deletePiece pieceRow)}}>
+                            {{t "delete"}}
+                          </Auk::Dropdown::Item>
+                        {{/if}}
                       </Auk::Dropdown>
                     </AttachPopover>
                   </WebComponents::AuButtonToolbar>
