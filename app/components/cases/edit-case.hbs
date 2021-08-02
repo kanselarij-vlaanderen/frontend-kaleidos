@@ -4,17 +4,6 @@
           @onClose={{this.onClose}}
   />
   <Auk::Modal::Body>
-    {{#if @editConfidential}}
-      <div class="auk-u-mb-4">
-        <div class="auk-form-group">
-          <Auk::Label>{{t "confidential"}}</Auk::Label>
-          <Auk::CheckboxList>
-            <Auk::Checkbox @name="isConfidential" @checked={{@case.confidential}}
-              {{on "input" this.toggleConfidential}} />
-          </Auk::CheckboxList>
-        </div>
-      </div>
-    {{/if}}
     <div class="auk-form-group ">
       <Auk::Label>{{t "short-title-case"}}</Auk::Label>
       <Auk::Textarea @rows="2" @value={{mut @case.shortTitle}} />

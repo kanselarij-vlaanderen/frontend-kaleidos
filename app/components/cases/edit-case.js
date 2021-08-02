@@ -8,11 +8,6 @@ export default class EditCase extends Component {
     return isBlank(this.args.case.shortTitle);
   }
 
-  @action
-  toggleConfidential() {
-    this.args.case.confidential = !this.args.case.confidential ;
-  }
-
   @task
   *save() {
     yield this.args.onSave(this.args.case);
