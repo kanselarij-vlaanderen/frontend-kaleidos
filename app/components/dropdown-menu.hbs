@@ -1,7 +1,7 @@
 <Auk::Button
   @skin={{@skin}}
   @disabled={{@disabled}}
-  @layout="icon-right"
+  @layout={{if @label "icon-right" "icon-only"}}
   @icon={{this.icon}}
   ...attributes
   {{on "click" this.toggleDropdown}}
