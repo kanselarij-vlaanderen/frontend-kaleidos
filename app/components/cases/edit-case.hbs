@@ -1,7 +1,7 @@
 <Auk::Modal>
   <Auk::Modal::Header
-          @title={{t "edit-case"}}
-          @onClose={{this.onClose}}
+    @title={{t "edit-case"}}
+    @onClose={{this.close}}
   />
   <Auk::Modal::Body>
     <div class="auk-form-group ">
@@ -10,12 +10,12 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-          @cancelDisabled={{this.save.isRunning}}
-          @onCancel={{this.onClose}}>
+    @cancelDisabled={{this.save.isRunning}}
+    @onCancel={{this.close}}>
     <Auk::Button
-            @skin="primary"
-            @disabled={{this.isSaveDisabled}}
-            @loading={{this.save.isRunning}}
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
       {{on "click" (perform this.save)}}>
       {{t "save"}}
     </Auk::Button>

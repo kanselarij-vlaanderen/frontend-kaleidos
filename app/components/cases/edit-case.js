@@ -14,7 +14,7 @@ export default class EditCase extends Component {
   }
 
   @action
-  onClose() {
+  close() {
     this.args.case.rollbackAttributes();
     this.args.onClose();
   }
