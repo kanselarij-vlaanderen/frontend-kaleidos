@@ -1,6 +1,10 @@
 <Auk::Modal>
   <Auk::Modal::Header
-    @title="{{t "request-proof"}} ({{t @stage}})"
+    @title="{{t
+      "request-proof-x-stage-for-publication-x-identification"
+      stage=(t @stage)
+      identification=@publicationFlow.identification.idName
+    }}"
     @onClose={{@onCancel}} />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.saveRequest.isRunning}} @reserveSpace={{true}}>

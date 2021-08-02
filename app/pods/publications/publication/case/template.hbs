@@ -1,15 +1,18 @@
+{{page-title (capitalize (t "case")) }}
+
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    {{page-title (capitalize (t "case")) }}
-
-    <Publications::Publication::Case::InscriptionPanel
-      @publicationFlow={{this.model}}
+    <Publications::Publication::Case::Inscription::InscriptionPanel
+      @publicationFlow={{@model}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}} />
 
-    <Publications::Publication::Case::MandateesPanel
-      @publicationFlow={{this.model}} />
+    <Publications::Publication::Case::Mandatees::MandateesPanel
+      @publicationFlow={{@model}} />
 
-    <Publications::Publication::Case::ContactPersonsPanel
-      @publicationFlow={{this.model}} />
+    <Publications::Publication::Case::GovernmentFields::GovernmentFieldsPanel
+      @publicationFlow={{@model}} />
+
+    <Publications::Publication::Case::ContactPersons::ContactPersonsPanel
+      @publicationFlow={{@model}} />
   </div>
 </div>

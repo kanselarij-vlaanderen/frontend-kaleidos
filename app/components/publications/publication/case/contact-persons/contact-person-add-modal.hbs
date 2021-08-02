@@ -63,12 +63,11 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
+          <Auk::ButtonLink
             disabled={{this.save.isRunning}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
-          </Auk::Button>
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
@@ -88,7 +87,7 @@
 </Auk::Modal>
 
 {{#if this.isOpenOrganizationAddModal}}
-  <Publications::Publication::Case::OrganizationAddModal
+  <Publications::Publication::Case::ContactPersons::OrganizationAddModal
     @onCancel={{this.closeOrganizationAddModal}}
     @onSave={{this.addOrganization}} />
 {{/if}}

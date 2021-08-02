@@ -36,8 +36,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked publicationSubcase;
   @tracked selectedPieces = [];
   @tracked isProofRequestModalOpen = false;
-  @tracked isPieceUploadModalOpen = false;
   @tracked proofRequestStage;
+  @tracked isPieceUploadModalOpen = false;
+  @tracked isPieceEditModalOpen = false;
+  @tracked pieceToEdit;
 
   @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
@@ -132,6 +134,29 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   async saveCorrectionDocument(proofDocument) {
     await this.performSaveCorrectionDocument(proofDocument);
     this.isPieceUploadModalOpen = false;
+    this.send('refresh');
+  }
+
+  @action
+  openPieceEditModal(piece) {
+    this.pieceToEdit = piece;
+    this.isPieceEditModalOpen = true;
+  }
+
+  @action
+  closePieceEditModal() {
+    this.pieceToEdit = null;
+    this.isPieceEditModalOpen = false;
+  }
+
+  @action
+  async saveEditPiece(modalResult) {
+    const piece = this.pieceToEdit;
+    piece.name = modalResult.name;
+    piece.receivedDate = modalResult.receivedAtDate;
+    await piece.save();
+
+    this.closePieceEditModal();
     this.send('refresh');
   }
 

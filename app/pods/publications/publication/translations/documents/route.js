@@ -9,7 +9,8 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     const queryProperties = {
       include: [
         'file',
-        'publication-subcase-source-for'
+        'publication-subcase-source-for',
+        'request-activities-used-by'
       ].join(','),
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
@@ -18,11 +19,11 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     // It seems when using a single request on translation-subcase with an include query param
     // for pieces (via the different paths) ember-data does not catch the inverse relation
     // from piece to translation-subcase. This results in an additional request per piece
-    // when piece.translationSubcase is used in the template.
+    // when piece.translationSubcaseSourceFor is used in the template.
 
     // Source documents uploaded on the translation subcase
     const sourceDocumentsQuery = this.store.query('piece', {
-      'filter[translation-subcase][:id:]': this.translationSubcase.id,
+      'filter[translation-subcase-source-for][:id:]': this.translationSubcase.id,
       ...queryProperties,
     });
 

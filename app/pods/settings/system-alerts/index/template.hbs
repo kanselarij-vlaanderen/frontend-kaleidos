@@ -19,12 +19,9 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
-            @route="settings.overview"
-          >
+          <Auk::ButtonLink @route="settings.overview">
             {{t "cancel"}}
-          </Auk::Button>
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">

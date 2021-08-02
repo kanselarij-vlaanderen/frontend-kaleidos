@@ -179,6 +179,7 @@
   "general-newsletter": "Algemeen kort bestek",
   "government-domain": "Beleidsdomein",
   "government-field": "Beleidsveld",
+  "government-fields": "Beleidsvelden",
   "history": "Historiek",
   "in-function-of": "In functie van",
   "in-newsletter": "In kort bestek",
@@ -717,6 +718,8 @@
   "publication-inscription": "Opschrift",
   "ministers-policy-fields": "Ministers en beleidsvelden",
   "policy-domain-policy-fields": "Beleidsdomein & beleidsveld",
+  "government-domains-government-fields": "Beleidsdomeinen & beleidsvelden",
+  "add-government-domains-government-fields": "Beleidsdomeinen & beleidsvelden toevoegen",
   "delete-minister": "Verwijderen van minister",
   "delete-contact": "Verwijderen van contactpersoon",
   "organization": "Organisatie",
@@ -726,6 +729,7 @@
   "contacts": "Contactpersonen",
   "add-contact-persons": "Contactpersonen toevoegen",
   "no-added-contact-persons": "Er zijn nog geen contactpersonen toegevoegd",
+  "no-added-government-fields": "Er zijn nog geen beleidsvelden toegevoegd",
   "logo-flanders": "Logo Vlaanderen",
   "publication-target-end-date": "Gevraagde publicatiedatum",
   "translation-due-date": "Uiterste vertaaldatum",
@@ -884,6 +888,7 @@
   "view-more": "Bekijk meer",
   "read": "Lees",
   "request-proof": "Drukproef aanvragen",
+  "request-proof-x-stage-for-publication-x-identification": "Drukproef aanvragen ({stage}) voor publicatie {identification}",
   "proofing-request": "Drukproefaanvraag",
   "publication-request": "Publicatieaanvraag",
   "initial": "initieel",
@@ -893,6 +898,8 @@
   "no-proofing-activities-yet": "Er zijn nog geen drukproeven aangevraagd.",
   "upload-proof-for-publication-x-identification": "Drukproef uploaden voor publicatie {identification}",
   "upload-corrected-proof-for-publication-x-identification": "Verbeterde drukproef uploaden voor publicatie {identification}",
+  "edit-proof-for-publication-x-identification": "Drukproef bewerken voor publicatie {identification}",
+  "edit-corrected-proof-for-publication-x-identification": "Drukproef bewerken voor publicatie {identification}",
   "successfully-modified-formally-ok-status": "Status aangepast naar \"{status}\"",
   "invalid-net-req-answer": "Ongeldig antwoord op netwerk-aanvraag ontvangen.",
   "couldnt-answer-net-req": "Geen antwoord ontvangen op netwerk-aanvraag.",
@@ -907,5 +914,7 @@
   "proofprint-corrector": "Drukproef verbeteraar",
   "belgian-official-gazette": "Belgisch Staatsblad",
   "published-decisions": "Gepubliceerde besluiten",
-  "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd."
+  "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
+  "search-error": "Er ging iets mis bij het zoeken"
+
 }
