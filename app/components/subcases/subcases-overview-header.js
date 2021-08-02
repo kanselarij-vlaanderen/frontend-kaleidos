@@ -22,11 +22,6 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  goBackToCases() {
-    this.router.transitionTo('cases');
-  }
-
-  @action
   openAddSubcaseModal() {
     this.showAddSubcaseModal = true;
   }
