@@ -22,8 +22,8 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <Auk::Button
-                  @skin="primary"
-                  @icon="edit"
+            @skin="primary"
+            @icon="edit"
             {{on "click" this.openEditCaseModal}}
           >
             {{t "edit-case"}}
@@ -49,17 +49,17 @@
 
 {{#if this.showAddSubcaseModal}}
   <Cases::NewSubcase
-          @onClose={{this.closeAddSubcaseModal}}
-          @onSave={{this.saveAddSubcase}}
-          @case={{@case}}
+    @onClose={{this.closeAddSubcaseModal}}
+    @onSave={{this.addSubcase}}
+    @case={{@case}}
   />
 {{/if}}
 
 {{#if this.showEditCaseModal}}
   <Cases::EditCase
-          @onClose={{this.closeEditCaseModal}}
-          @onSave={{this.saveEditCase}}
-          @editConfidential={{true}}
-          @case={{@case}}
+    @onClose={{this.closeEditCaseModal}}
+    @onSave={{this.saveCase}}
+    @editConfidential={{true}}
+    @case={{@case}}
   />
 {{/if}}

@@ -10,7 +10,7 @@ export default class CasesCaseSubcasesOverviewController extends Controller {
   @tracked case;
 
   @task
-  *saveSubcase(subcase) {
+  *addSubcase(subcase) {
     yield subcase.save();
     this.send('reloadModel');
   }

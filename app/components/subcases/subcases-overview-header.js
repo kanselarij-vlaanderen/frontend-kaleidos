@@ -4,17 +4,14 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SubCasesOverviewHeader extends Component {
-  // Services
   @service currentSession;
   @service router;
 
-  // Tracked.
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
 
   @tracked title = null;
   @tracked shortTitle = null;
-
 
   get caseTitleFromCase() {
     const shortTitle = this.args.case.shortTitle;
@@ -50,14 +47,14 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   @action
-  async saveEditCase(caseData) {
+  async saveCase(caseData) {
     await this.args.onSaveCase(caseData);
     this.closeEditCaseModal();
   }
 
   @action
-  async saveAddSubcase(subCaseData) {
-    await this.args.onSaveSubcase(subCaseData);
+  async addSubcase(subcase) {
+    await this.args.onAddSubcase(subcase);
     this.closeAddSubcaseModal();
   }
 }
