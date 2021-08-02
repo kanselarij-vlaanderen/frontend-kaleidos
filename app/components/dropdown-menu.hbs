@@ -11,6 +11,7 @@
 <AttachPopover
   @renderInPlace={{true}}
   @class="ember-attacher-popper"
+  {{!-- Apart from "hide on clickout" all open/close logic is handled by our own implementation --}}
   @hideOn="clickout"
   @showOn=""
   @onChange={{this.setDropdownStatus}}
