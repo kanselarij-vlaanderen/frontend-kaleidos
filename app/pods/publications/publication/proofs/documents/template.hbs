@@ -120,22 +120,14 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
+                  <DropdownMenu
                     @skin="borderless"
-                    @layout="icon-only"
-                    @icon="more" />
-                  <AttachPopover
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="bottom">
-                    <Auk::Menu>
-                      <Auk::Menu::Item {{on "click" (fn this.openPieceEditModal piece)}}>
-                        {{t "edit-proof-details"}}
-                      </Auk::Menu::Item>
-                    </Auk::Menu>
-                  </AttachPopover>
+                    @icon="more"
+                  as |Menu|>
+                    <Menu.Item {{on "click" (fn this.openPieceEditModal piece)}}>
+                      {{t "edit-proof-details"}}
+                    </Menu.Item>
+                  </DropdownMenu>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
