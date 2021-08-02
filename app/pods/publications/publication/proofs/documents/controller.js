@@ -47,8 +47,9 @@ export class PieceRow {
   get isShownDelete() {
     const hasPermission = this.currentSession.isOvrb;
     // can be translation or publication related
-    const hasRequests = this.requestActivitiesUsedBy.length > 0;
-    return hasPermission && !hasRequests;
+    const isUsed = this.requestActivitiesUsedBy.length > 0 || !!this.piece.receivedDate;
+    const isShownDelete = hasPermission && !isUsed;
+    return isShownDelete;
   }
 
   get isDeleteDisabled() {
