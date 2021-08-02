@@ -101,31 +101,22 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
-                          @skin="borderless"
-                          @layout="icon-only"
-                          @icon="more"
-                  />
-                  <AttachPopover
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="bottom">
-                    <Auk::Menu>
-                      <Auk::Menu::Item {{on "click" (fn this.openPieceEditModal piece)}}>
-                        {{t "edit-translation-details"}}
-                      </Auk::Menu::Item>
-                      {{!-- TODO: make @disabled work for dropdown item --}}
-                      <Auk::Menu::Item
-                        @skin="danger"
-                        @disabled={{compute this.isDeleteDisabled piece}}
-                        {{on "click" (perform this.delete piece)}}
-                      >
-                        {{t "delete"}}
-                      </Auk::Menu::Item>
-                    </Auk::Menu>
-                  </AttachPopover>
+                  <DropdownMenu
+                    @skin="borderless"
+                    @icon="more"
+                  as |Menu|>
+                    <Menu.Item {{on "click" (fn this.openPieceEditModal piece)}}>
+                      {{t "edit-translation-details"}}
+                    </Menu.Item>
+                    {{!-- TODO: make @disabled work for dropdown item --}}
+                    <Menu.Item
+                      @skin="danger"
+                      @disabled={{compute this.isDeleteDisabled piece}}
+                      {{on "click" (perform this.delete piece)}}
+                    >
+                      {{t "delete"}}
+                    </Menu.Item>
+                  </DropdownMenu>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
