@@ -187,7 +187,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   isShownDelete(piece) {
     const hasPermission = this.currentSession.isOvrb;
     // can be translation or publication related
-    const isUsed = piece.requestActivitiesUsedBy.length > 0 || !!piece.receivedDate;
+    const isUsedInRequest = piece.requestActivitiesUsedBy.length > 0;
+    // receivedDate is set if and only if it is a received pieced
+    const isReceived = !!piece.receivedDate;
+    const isUsed = isUsedInRequest || isReceived;
     const isShownDelete = hasPermission && !isUsed;
     return isShownDelete;
   }
