@@ -38,7 +38,7 @@
             <Auk::Button
               @icon="chevron-down" @layout="icon-right" @skin="secondary"
               @disabled={{this.isUploadDisabled}}>
-              {{t "upload-corrected-proof-document"}}
+              {{t "upload-proof-document"}}
             </Auk::Button>
             <AttachPopover
               @class="ember-attacher-popper"
@@ -52,7 +52,7 @@
                   {{t "upload-source-proof-document"}}
                 </Auk::Dropdown::Item>
                 <Auk::Dropdown::Item
-                  {{on "click" (fn this.openCorrectionEditModal)}}>
+                  {{on "click" this.openCorrectionUploadModal}}>
                   {{t "upload-corrected-proof-document"}}
                 </Auk::Dropdown::Item>
               </Auk::Dropdown>
@@ -207,31 +207,20 @@
   </div>
 </div>
 
-{{#if this.isCorrectionUploadModalOpen}}
+{{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @isCorrected={{true}}
-    @isReceived={{false}}
-    @isSource={{false}}
-    @onSave={{this.saveCorrectionDocument}}
+    @isSource={{this.isPieceUploadSource}}
+    @isCorrected={{this.isPieceUploadCorrected}}
+    @onSave={{this.savePieceUpload}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
-{{#if this.isSourceUploadModalOpen}}
-  <Publications::Publication::Proofs::ProofUploadModal
-    @publicationFlow={{this.publicationFlow}}
-    @isCorrected={{false}}
-    @isReceived={{false}}
-    @isSource={{true}}
-    @onSave={{this.saveCorrectionDocument}}
-    @onCancel={{this.closePieceUploadModal}} />
-{{/if}}
-
-{{#if this.isEditModalOpen}}
+{{#if this.isPieceEditModalOpen}}
   <Publications::Publication::Proofs::ProofEditModal
     @publicationFlow={{this.publicationFlow}}
     @piece={{this.pieceToEdit}}
-    @onSave={{this.saveEditPiece}}
+    @onSave={{this.savePieceEdit}}
     @onCancel={{this.closePieceEditModal}} />
 {{/if}}
 

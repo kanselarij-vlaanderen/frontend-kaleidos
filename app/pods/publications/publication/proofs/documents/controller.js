@@ -37,8 +37,9 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked selectedPieces = [];
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
-  @tracked isCorrectionUploadModalOpen = false;
-  @tracked isSourceUploadModalOpen = false;
+  @tracked isPieceUploadModalOpen = false;
+  @tracked isPieceUploadSource;
+  @tracked isPieceUploadCorrected;
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
 
@@ -122,36 +123,30 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  openCorrectionUploadModal() {
-    this.isCorrectionUploadModalOpen = true;
-  }
-
-  @action
-  closeCorrectionUploadModal() {
-    this.isCorrectionUploadModalOpen = false;
-  }
-
-  @action
-  async saveCorrectionDocument(proofDocument) {
-    await this.performSaveCorrectionDocument(proofDocument);
-    this.isCorrectionUploadModalOpen = false;
-    this.send('refresh');
-  }
-
-  @action
   openSourceUploadModal() {
-    this.isSourceUploadModalOpen = true;
+    this.isPieceUploadModalOpen = true;
+    this.isPieceUploadSource = true;
   }
 
   @action
-  closeSourceUploadModal() {
-    this.isSourceUploadModalOpen = false;
+  openCorrectionUploadModal() {
+    this.isPieceUploadModalOpen = true;
+    this.isPieceUploadCorrected = true;
   }
 
   @action
-  async saveSourceDocument(proofDocument) {
-    await this.performSaveSourceDocument(proofDocument);
-    this.isSourceUploadModalOpen = false;
+  closePieceUploadModal() {
+    this.isPieceUploadModalOpen = false;
+
+    this.isPieceUploadSource = false;
+    this.isPieceUploadCorrected = false;
+  }
+
+  @action
+  async savePieceUpload(proofDocument) {
+    await this.performSavePieceUpload(proofDocument, this.isPieceUploadSource, this.isPieceUploadCorrected);
+
+    this.closePieceUploadModal();
     this.send('refresh');
   }
 
@@ -168,7 +163,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  async saveEditPiece(modalResult) {
+  async savePieceEdit(modalResult) {
     const piece = this.pieceToEdit;
     piece.name = modalResult.name;
     piece.receivedDate = modalResult.receivedAtDate;
@@ -240,36 +235,30 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     await Promise.all(saves);
   }
 
-  async performSaveCorrectionDocument(proofDocument) {
-    return this.performSavePieceBase({
-      name: proofDocument.name,
-      file: proofDocument.file,
-      publicationSubcaseCorrectionFor: this.publicationSubcase,
-    });
-  }
-
-  async performSaveSourceDocument(proofDocument) {
-    return this.performSavePieceBase({
-      name: proofDocument.name,
-      file: proofDocument.file,
-      publicationSubcaseSourceFor: this.publicationSubcase,
-    });
-  }
-
-  async performSavePieceBase(pieceProperties) {
+  async performSavePieceUpload(uploadProperties, isSource, isCorrection) {
     const now = new Date();
+
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
     });
     await documentContainer.save();
 
-    const piece = this.store.createRecord('piece', {
+    const pieceProperties = {
       created: now,
       modified: now,
+      name: uploadProperties.name,
       confidential: false,
+      file: uploadProperties.file,
       documentContainer: documentContainer,
-      ...pieceProperties,
-    });
+    };
+    if (isSource) {
+      pieceProperties.publicationSubcaseSourceFor = this.publicationSubcase;
+    } else if (isCorrection) {
+      pieceProperties.publicationSubcaseCorrectionFor = this.publicationSubcase;
+    } else {
+      throw new Error('no relationship specified');
+    }
+    const piece = this.store.createRecord('piece', pieceProperties);
     await piece.save();
 
     return piece;
