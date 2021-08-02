@@ -219,6 +219,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
+  cancelPieceEdit() {
+    this.isEnabledPieceEdit = false;
+  }
+
+  @action
   openPublicationModal() {
     this.isOpenPublicationModal = true;
   }

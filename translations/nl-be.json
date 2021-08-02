@@ -456,6 +456,7 @@
   "notification": "Notificatie",
   "no-notification-yet": "Nog geen notificatie beschikbaar",
   "no-results-found": "Geen resultaten gevonden",
+  "no-result": "Geen resultaat",
   "fill-in-search-term": "Gelieve een zoekterm in te vullen.",
   "no-results-found-modify-term": "Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.",
   "add-notification": "Notificatie toevoegen",
@@ -916,5 +917,4 @@
   "published-decisions": "Gepubliceerde besluiten",
   "no-decisions-published-yet": "Er zijn nog geen besluiten gepubliceerd.",
   "search-error": "Er ging iets mis bij het zoeken"
-
 }

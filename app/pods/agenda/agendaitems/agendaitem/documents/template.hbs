@@ -76,6 +76,20 @@
   </div>
 {{/if}}
 
+{{#if this.isEnabledPieceEdit}}
+  <Documents::BatchDocumentsEditModal
+    @pieces={{this.model.pieces}}
+    @onCancel={{this.cancelPieceEdit}} />
+{{/if}}
+
+{{#if this.isOpenPublicationModal}}
+  <Publications::BatchDocumentsPublicationModal
+    @pieces={{this.model.pieces}}
+    @agendaitem={{this.agendaitem}}
+    @onClose={{this.closePublicationModal}}
+    />
+{{/if}}
+
 {{#if this.isOpenPieceUploadModal}}
   <WebComponents::VlModal
     @closeModal={{perform this.cancelUploadPieces}}
@@ -107,14 +121,6 @@
       @saveAction={{perform this.savePieces}}
       @disableSave={{eq this.newPieces.length 0}} />
   </WebComponents::VlModal>
-{{/if}}
-
-{{#if this.isOpenPublicationModal}}
-  <Publications::BatchDocumentsPublicationModal
-    @pieces={{this.model.pieces}}
-    @agendaitem={{this.agendaitem}}
-    @onClose={{this.closePublicationModal}}
-    />
 {{/if}}
 
 <Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}}/>
