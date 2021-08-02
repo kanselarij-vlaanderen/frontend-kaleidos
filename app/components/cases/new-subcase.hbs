@@ -1,16 +1,16 @@
 <Auk::Modal>
   <Auk::Modal::Header
-          @title={{t "create-subcase"}}
-          @onClose={{@onClose}}
+    @title={{t "create-subcase"}}
+    @onClose={{@onClose}}
   />
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{or this.loadCaseTypes.isRunning this.loadTitleData.isRunning}} @reserveSpace={{true}}>
       <div class="auk-o-flex auk-o-flex--justify-between">
 
         <WebComponents::VlRadioButtonList
-                @title={{t "subcase-type"}}
-                @optionList={{this.caseTypes}}
-                @modelChanged={{this.typeChanged}}
+          @title={{t "subcase-type"}}
+          @optionList={{this.caseTypes}}
+          @modelChanged={{this.typeChanged}}
         />
 
         <div class="auk-o-flex auk-o-flex--vertical-center">
@@ -18,10 +18,10 @@
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 <Auk::Button
-                        @skin="secondary"
-                        @icon="copy-paste"
+                  @skin="secondary"
+                  @icon="copy-paste"
                   {{on "click" (perform this.copyFullSubcase)}}
-                        data-test-new-subcase-clone-previous-subcase
+                  data-test-new-subcase-clone-previous-subcase
                 >
                   {{t "clone-previous-subcase"}}
                 </Auk::Button>
@@ -41,12 +41,12 @@
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
         <Utils::ModelSelector
-                @modelName="subcase-type"
-                @searchField="label"
-                @propertyToShow="label"
-                @sortField="label"
-                @selectedItems={{this.type}}
-                @selectModel={{this.selectType}}
+          @modelName="subcase-type"
+          @searchField="label"
+          @propertyToShow="label"
+          @sortField="label"
+          @selectedItems={{this.type}}
+          @selectModel={{this.selectType}}
         />
       </div>
       <div class="auk-form-group">
@@ -54,34 +54,34 @@
         <div class="auk-o-flex auk-o-flex--vertical-center">
           {{#if (not this.isEditing)}}
             <Utils::ModelSelector
-                    class="vlc-u-box-model-maximize-width"
-                    @modelName="shortcut"
-                    @searchField="label"
-                    @propertyToShow="label"
-                    @sortField="label"
-                    @filter={{this.filter}}
-                    @selectedItems={{this.selectedShortcut}}
-                    @selectModel={{this.selectSubcaseName}}
+              class="vlc-u-box-model-maximize-width"
+              @modelName="shortcut"
+              @searchField="label"
+              @propertyToShow="label"
+              @sortField="label"
+              @filter={{this.filter}}
+              @selectedItems={{this.selectedShortcut}}
+              @selectModel={{this.selectSubcaseName}}
             />
             <Auk::Button
-                    @skin="secondary"
-                    @layout="icon-only"
-                    @icon="pencil"
+              @skin="secondary"
+              @layout="icon-only"
+              @icon="pencil"
               {{on "click" this.toggleIsEditing}}
             >
               {{t "edit"}}
             </Auk::Button>
           {{else}}
             <Auk::Input
-                    @type="text"
-                    @block={{true}}
-                    @value={{this.subcaseName}}
-                    id="subcaseNameId"
+              @type="text"
+              @block={{true}}
+              @value={{this.subcaseName}}
+              id="subcaseNameId"
             />
             <Auk::Button
-                    @skin="secondary"
-                    @layout="icon-only"
-                    @icon="cross"
+              @skin="secondary"
+              @layout="icon-only"
+              @icon="cross"
               {{on "click" this.toggleIsEditing}}
             >
               {{t "cancel"}}
@@ -90,15 +90,14 @@
         </div>
       </div>
     </Utils::LoadableContent>
-
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-          @cancelDisabled={{this.save.isRunning}}
-          @onCancel={{this.onClose}}>
+    @cancelDisabled={{this.save.isRunning}}
+    @onCancel={{@onClose}}>
     <Auk::Button
-            @skin="primary"
-            @disabled={{this.save.isRunning}}
-            @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}
+      @skin="primary"
+      @disabled={{this.save.isRunning}}
+      @loading={{or this.saveSubcase.isRunning this.copyFullSubcase.isRunning}}
       {{on "click" (perform this.saveSubcase)}}>
       {{t "save"}}
     </Auk::Button>

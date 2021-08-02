@@ -137,9 +137,9 @@ export default class CasesNewSubcase extends Component {
   }
 
   @action
-  selectSubcaseName(subcaseName) {
-    this.selectedShortcut = subcaseName;
-    this.subcaseName = subcaseName.label;
+  selectSubcaseName(shortcut) {
+    this.selectedShortcut = shortcut;
+    this.subcaseName = shortcut.label;
   }
 
   @action
