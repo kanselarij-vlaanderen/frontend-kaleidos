@@ -14,7 +14,7 @@
           <span class="auk-overline auk-u-block">
             {{t "case"}}
           </span>
-          <Auk::AbbreviatedText @text={{this.caseTitleFromCase}} @maxLength={{250}} />
+          <Auk::AbbreviatedText @text={{or @case.shortTitle @case.title}} @maxLength={{250}} />
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>

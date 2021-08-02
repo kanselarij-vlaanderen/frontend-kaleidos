@@ -5,21 +5,9 @@ import { tracked } from '@glimmer/tracking';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
-  @service router;
 
   @tracked showAddSubcaseModal = false;
   @tracked showEditCaseModal = false;
-
-  @tracked title = null;
-  @tracked shortTitle = null;
-
-  get caseTitleFromCase() {
-    const shortTitle = this.args.case.shortTitle;
-    if (shortTitle) {
-      return shortTitle;
-    }
-    return this.args.case.title;
-  }
 
   @action
   openAddSubcaseModal() {
