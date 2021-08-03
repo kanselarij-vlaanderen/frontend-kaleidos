@@ -1,18 +1,22 @@
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
+import { tracked } from '@glimmer/tracking';
 
-export default Controller.extend({
-  queryParams: ['refresh'],
+export default class CasesCaseSubcasesOverviewController extends Controller {
+  @service toaster;
+  @service intl;
 
-  isShowingOptions: false,
-  isShowingProcess: false,
-  refresh: false,
+  @tracked case;
 
-  actions: {
-    backLinkAction() {
-      this.transitionToRoute('cases');
-    },
-    refresh() {
-      this.toggleProperty('refresh');
-    },
-  },
-});
+  @task
+  *addSubcase(subcase) {
+    yield subcase.save();
+    this.send('reloadModel');
+  }
+
+  @task
+  *saveCase(caze) {
+    yield caze.save();
+  }
+}
