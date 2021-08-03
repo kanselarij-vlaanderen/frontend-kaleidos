@@ -4,32 +4,26 @@
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button id="proofDocumentsActionMenu"
-            @icon="chevron-down" @layout="icon-right" @skin="secondary"
-            @disabled={{this.isRequestingDisabled}}>
-            {{t "new-request"}}
-          </Auk::Button>
-          {{!-- TODO: figure out how to properly use EmberPopover/AttachPopover (click+styling) --}}
-          <EmberPopover
-            @side="bottom-start"
-            @tooltipClass="auk-popover"
-            @targetId="proofDocumentsActionMenu">
-            <Auk::Dropdown
-              as |dropdown|>
-              <dropdown.Item
-                {{on "click" (fn this.openProofRequestModal "initial")}}>
-                {{t "initial-request"}}
-              </dropdown.Item>
-              <dropdown.Item
-                {{on "click" (fn this.openProofRequestModal "extra")}}>
-                {{t "extra-request"}}
-              </dropdown.Item>
-              <dropdown.Item
-                {{on "click" (fn this.openProofRequestModal "final")}}>
-                {{t "final-request"}}
-              </dropdown.Item>
-            </Auk::Dropdown>
-          </EmberPopover>
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "new-request"}}
+            @position="bottom-start"
+            @disabled={{this.isRequestingDisabled}}
+            data-test-agenda-header-show-action-options={{true}}
+          as |Menu|>
+            <Menu.Item
+              {{on "click" (fn this.openProofRequestModal "initial")}}>
+              {{t "initial-request"}}
+            </Menu.Item>
+            <Menu.Item
+              {{on "click" (fn this.openProofRequestModal "extra")}}>
+              {{t "extra-request"}}
+            </Menu.Item>
+            <Menu.Item
+              {{on "click" (fn this.openProofRequestModal "final")}}>
+              {{t "final-request"}}
+            </Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
 
         {{#if this.canUploadPiece}}
@@ -126,23 +120,14 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
+                  <DropdownMenu
                     @skin="borderless"
-                    @layout="icon-only"
-                    @icon="more" />
-                  <AttachPopover
-                    @class="ember-attacher-popper"
-                    @hideOn="clickout click"
-                    @showOn="click"
-                    @animation="shift"
-                    @placement="bottom">
-                    <Auk::Dropdown>
-                      <Auk::Dropdown::Item
-                        {{on "click" (fn this.openPieceEditModal piece)}}>
-                        {{t "edit-proof-details"}}
-                      </Auk::Dropdown::Item>
-                    </Auk::Dropdown>
-                  </AttachPopover>
+                    @icon="more"
+                  as |Menu|>
+                    <Menu.Item {{on "click" (fn this.openPieceEditModal piece)}}>
+                      {{t "edit-proof-details"}}
+                    </Menu.Item>
+                  </DropdownMenu>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
