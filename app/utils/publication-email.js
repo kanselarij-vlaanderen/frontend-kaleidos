@@ -1,12 +1,12 @@
 import moment from 'moment';
 
-const emailFooter = '\n'
-  + 'Met vriendelijke groeten,\n'
+const footer = 'Met vriendelijke groeten,\n'
   + 'Team Ondersteuning Vlaamse Regering\n'
   + '\n'
   + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\n'
   + 'publicatiesBS@vlaanderen.be\n'
   + 'Koolstraat 35, 1000 Brussel';
+
 function translationRequestEmail(params) {
   const subject = `Vertaalaanvraag VO-dossier: ${params.identifier}`;
   const message = 'Collega,\n'
@@ -22,7 +22,7 @@ function translationRequestEmail(params) {
     + `Aantal documenten: ${params.totalDocuments}\n`;
   return {
     subject: subject,
-    message: message + emailFooter,
+    message: [message, footer].join('\n'),
   };
 }
 
@@ -76,7 +76,7 @@ async function proofRequestEmail(params) {
   }
   return {
     subject: subject,
-    message: message + emailFooter,
+    message: [message, footer].join('\n'),
   };
 }
 
