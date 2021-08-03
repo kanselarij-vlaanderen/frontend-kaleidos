@@ -1,18 +1,18 @@
 {{page-title (t "subcases")}}
-{{subcases/subcases-overview-header
-  model=model
-  isShowingProcess=isShowingProcess
-  backLink=(action "backLinkAction")
-  refresh=(action "refresh")
-}}
+
+<Subcases::SubcasesOverviewHeader
+  @case={{this.case}}
+  @onAddSubcase={{perform this.addSubcase}}
+  @onSaveCase={{perform this.saveCase}}
+/>
 <div class="auk-scroll-wrapper__body">
-  {{#if (gt (await model.subcases.length) 0)}}
-
-    <Subcases::SubcasesProcess @subcases={{await model.subcases}}/>
-
+  {{#if this.model}}
+    <Subcases::SubcasesProcess @subcases={{this.model}}/>
   {{else}}
     <div class="auk-u-m-8">
-      {{web-components/vl-alert message=(t "no-subcases")}}
+      <Auk::EmptyState
+        @message={{t "no-subcases"}}
+      />
     </div>
   {{/if}}
 </div>
