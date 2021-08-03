@@ -36,7 +36,6 @@
     "edition": "octane"
   },
   "devDependencies": {
-    "alphabet": "^1.0.0",
     "@ember/optional-features": "^1.3.0",
     "@ember/render-modifiers": "^1.0.2",
     "@glimmer/component": "^1.0.0",
@@ -51,6 +50,7 @@
     "@lblod/ember-vo-webuniversum-data-table": "git+https://github.com/kanselarij-vlaanderen/ember-vo-webuniversum-data-table.git#abdfb0a93473ee910ebc9223b90b6d9487ed35c9",
     "@ljharb/eslint-config": "^17.1.0",
     "@typescript-eslint/parser": "^3.8.0",
+    "alphabet": "^1.0.0",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "cypress": "^4.12.1",
