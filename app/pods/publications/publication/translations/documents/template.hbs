@@ -101,32 +101,23 @@
                     target="_blank">
                     {{t "read"}}
                   </Auk::Button>
-                  <Auk::Button
-                          @skin="borderless"
-                          @layout="icon-only"
-                          @icon="more"
-                  />
-                  <AttachPopover
-                          @class="ember-attacher-popper"
-                          @hideOn="clickout click"
-                          @showOn="click"
-                          @animation="shift"
-                          @placement="bottom">
-                    <Auk::Dropdown>
-                      <Auk::Dropdown::Item
-                        {{on "click" (fn this.openPieceEditModal piece)}}>
-                        {{t "edit-translation-details"}}
-                      </Auk::Dropdown::Item>
-                      {{#if (compute this.isShownDelete piece)}}
-                        {{!-- TODO: make @disabled work for dropdown item --}}
-                        <Auk::Dropdown::Item @skin="danger"
-                          @disabled={{compute this.isDeleteDisabled piece}}
-                          {{on "click" (perform this.delete piece)}}>
-                          {{t "delete"}}
-                        </Auk::Dropdown::Item>
-                      {{/if}}
-                    </Auk::Dropdown>
-                  </AttachPopover>
+                  <DropdownMenu
+                    @skin="borderless"
+                    @icon="more"
+                  as |Menu|>
+                    <Menu.Item
+                      {{on "click" (fn this.openPieceEditModal piece)}}>
+                      {{t "edit-translation-details"}}
+                    </Menu.Item>
+                    {{#if (compute this.isShownDelete piece)}}
+                      {{!-- TODO: make @disabled work for dropdown item --}}
+                      <Menu.Item @skin="danger"
+                        @disabled={{compute this.isDeleteDisabled piece}}
+                        {{on "click" (perform this.delete piece)}}>
+                        {{t "delete"}}
+                      </Menu.Item>
+                    {{/if}}
+                  </DropdownMenu>
                 </WebComponents::AuButtonToolbar>
               </td>
             </tr>
