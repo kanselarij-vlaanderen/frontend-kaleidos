@@ -32,12 +32,7 @@ async function proofRequestEmail(params) {
   const publicationFlow = params.publicationFlow;
 
   const numacNumbers = await publicationFlow.numacNumbers;
-  const numacNumber = numacNumbers.firstObject?.idName ?? '?';
-
-  const publicationSubcase = await publicationFlow.publicationSubcase;
-  const targetDate = publicationSubcase.targetEndDate;
-  const targetDateString = targetDate ? moment(targetDate)
-    .format('DD/MM/YYYY') : '?';
+  const numacNumber = numacNumbers.map((number) => number.idName).join(', ') || '-';
 
   let subject;
   let message;
@@ -62,6 +57,10 @@ async function proofRequestEmail(params) {
       + '\n'
       + 'Vragen bij dit dossier kunnen met vermelding van publicatienummer gericht worden aan onderstaand email adres.\n';
   } else if (params.stage === 'final') {
+    const publicationSubcase = await publicationFlow.publicationSubcase;
+    const targetDate = publicationSubcase.targetEndDate;
+    const targetDateString = targetDate ? moment(targetDate).format('DD/MM/YYYY') : '-';
+
     subject = `Verbeterde drukproef BS-werknr: ${numacNumber} VO-dossier: ${idName}`;
     message = 'Beste,\n'
       + '\n'
