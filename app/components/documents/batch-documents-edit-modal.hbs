@@ -20,7 +20,7 @@
         </thead>
         <tbody>
 
-          {{!-- Batch edit --}}
+          {{!-- Batch edit row --}}
           <tr class="auk-table--batch-edit">
             <td></td>
             <td>
@@ -39,7 +39,10 @@
                 @onchange={{fn this.setDocumentType this.selectedRows}}
                 @allowClear={{true}}
                 as |documentType|>
-                {{documentType.label}}
+                {{!-- nowrap: don't let height depend on selected record --}}
+                <div style="whitespace: nowrap;">
+                  {{documentType.label}}
+                </div>
               </PowerSelect>
             </td>
             <td>
@@ -52,11 +55,17 @@
                 @noMatchesMessage={{t "no-result"}}
                 @onchange={{fn this.setAccessLevel this.selectedRows}}
                 as |accessLevel|>
-                {{accessLevel.label}}
+                {{!-- nowrap: don't let height depend on selected record --}}
+                <div style="whitespace: nowrap;">
+                  {{accessLevel.label}}
+                </div>
               </PowerSelect>
             </td>
             <td class="auk-table-checkbox-col">
-
+              <Auk::Checkbox
+                @checked={{this.batchConfidential}}
+                @disabled={{not this.selectedRows}}
+                {{on "input" (fn this.onInputConfidential this.selectedRows)}} />
             </td>
             <td>
               <WebComponents::AuButtonToolbar>
@@ -75,7 +84,7 @@
             </td>
           </tr>
 
-          {{!-- Pieces --}}
+          {{!-- Piece rows --}}
           {{#each this.rows as |row|}}
             <tr>
               <td class="auk-table-checkbox-col" style={{if row.isToBeDeleted "opacity: 0.5;"}}>
@@ -98,7 +107,10 @@
                   @onchange={{fn this.setDocumentType (array row)}}
                   @allowClear={{true}}
                   as |documentType|>
-                  {{documentType.label}}
+                  {{!-- nowrap: don't let height depend on selected record --}}
+                  <div style="whitespace: nowrap;">
+                    {{documentType.label}}
+                  </div>
                 </PowerSelect>
               </td>
               <td style={{if row.isToBeDeleted "opacity: 0.5;"}}>
@@ -110,13 +122,16 @@
                   @noMatchesMessage={{t "no-result"}}
                   @onchange={{fn this.setAccessLevel (array row)}}
                   as |accessLevel|>
-                  {{accessLevel.label}}
+                  {{!-- nowrap: don't let height depend on selected record --}}
+                  <div style="whitespace: nowrap;">
+                    {{accessLevel.label}}
+                  </div>
                 </PowerSelect>
               </td>
               <td style={{if row.isToBeDeleted "opacity: 0.5"}} class="auk-table-checkbox-col">
                 <Auk::Checkbox
                   @value={{row.confidential}}
-                  {{on "input" (fn this.setConfidential (array row))}} />
+                  {{on "input" (fn this.onInputConfidential (array row))}} />
               </td>
               <td>
                 <WebComponents::AuButtonToolbar>

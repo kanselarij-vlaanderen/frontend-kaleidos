@@ -150,7 +150,15 @@ export default class BatchDocumentsModal extends Component {
     return firstProperty;
   }
 
+  get batchConfidential() {
+    if (this.selectedRows.length === 0) {
+      return false;
+    }
+    return this.selectedRows.every((row) => row.confidential);
+  }
+
   get batchIsToBeDeleted() {
+    // some-check: always indicate dangerous action
     return this.selectedRows.some((row) => row.isToBeDeleted);
   }
 
@@ -190,13 +198,14 @@ export default class BatchDocumentsModal extends Component {
   }
 
   @action
-  setConfidential(rows, event) {
+  onInputConfidential(rows, event) {
     // // allow call with row as parameter
     // if (!Array.isArray(rows)) {
     //   rows = [rows];
     // }
 
     const checked = event.target.checked;
+    console.log(checked);
     for (const row of rows) {
       row.confidential = checked;
     }
