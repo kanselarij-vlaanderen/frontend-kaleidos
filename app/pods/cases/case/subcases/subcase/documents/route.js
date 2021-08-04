@@ -12,7 +12,7 @@ export default class DocumentsSubcaseSubcasesRoute extends Route {
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
       'page[size]': PAGE_SIZE.ACTIVITIES,
-      include: 'pieces', // Make sure we have all pieces, unpaginated
+      include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
 
     const pieces = [];
