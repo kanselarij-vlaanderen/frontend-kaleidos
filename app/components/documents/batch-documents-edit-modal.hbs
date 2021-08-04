@@ -10,58 +10,141 @@
                 @checked={{this.areAllSelected}}
                 {{on "input" this.toggleAllSelection}} />
             </th>
+            {{!-- fixed width: don't depend on selected record in PowerSelect --}}
             <th>{{t "name-document"}}</th>
-            <th>{{t "document-type"}}</th>
-            <th>{{t "publicity"}}</th>
-            <th>{{t "confidential"}}</th>
+            <th style="width: 20%">{{t "document-type"}}</th>
+            <th style="width: 20%">{{t "publicity"}}</th>
+            <th class="auk-table-checkbox-col">{{t "confidential"}}</th>
             <th>{{!-- Actions --}}</th>
           </tr>
         </thead>
         <tbody>
+
+          {{!-- Batch edit --}}
+          <tr class="auk-table--batch-edit">
+            <td></td>
+            <td>
+              {{#if this.selectedRows}}
+                {{t "x-documents-selected" count=this.selectedRows.length}}
+              {{/if}}
+            </td>
+            <td>
+              <PowerSelect
+                @options={{this.documentTypes}}
+                @selected={{this.batchDocumentType}}
+                @disabled={{not this.selectedRows}}
+                @search={{perform this.searchDocumentTypes}}
+                @placeholder={{if this.batchDocumentType (t "different") (t "none")}}
+                @noMatchesMessage={{t "no-result"}}
+                @onchange={{fn this.setDocumentType this.selectedRows}}
+                @allowClear={{true}}
+                as |documentType|>
+                {{documentType.label}}
+              </PowerSelect>
+            </td>
+            <td>
+              <PowerSelect
+                @options={{this.accessLevels}}
+                @selected={{this.batchAccessLevel}}
+                @disabled={{not this.selectedRows}}
+                @search={{perform this.searchAccessLevels}}
+                @placeholder={{t "none"}}
+                @noMatchesMessage={{t "no-result"}}
+                @onchange={{fn this.setAccessLevel this.selectedRows}}
+                as |accessLevel|>
+                {{accessLevel.label}}
+              </PowerSelect>
+            </td>
+            <td class="auk-table-checkbox-col">
+
+            </td>
+            <td>
+              <WebComponents::AuButtonToolbar>
+                {{#unless this.batchIsToBeDeleted}}
+                  <Auk::Button
+                    @icon="delete" @layout="icon-only" @skin="danger-borderless"
+                    @disabled={{not this.selectedRows}}
+                    {{on "click" (fn this.setToBeDeleted this.selectedRows true)}} />
+                {{else}}
+                  <Auk::Button
+                    @icon="redo" @layout="icon-only" @skin="borderless"
+                    @disabled={{not this.selectedRows}}
+                    {{on "click" (fn this.setToBeDeleted this.selectedRows false)}} />
+                {{/unless}}
+              </WebComponents::AuButtonToolbar>
+            </td>
+          </tr>
+
+          {{!-- Pieces --}}
           {{#each this.rows as |row|}}
             <tr>
-              <td>
+              <td class="auk-table-checkbox-col" style={{if row.isToBeDeleted "opacity: 0.5;"}}>
                 <Auk::Checkbox
                   @checked={{includes piece this.selectedRows}}
-                  {{on 'input' this.toggleSelection}} />
+                  {{on 'input' (fn this.toggleSelection row)}} />
               </td>
-              <td>
+              <td style={{if row.isToBeDeleted "opacity: 0.5;"}}>
                 <Auk::Input type="text"
                   @block={{true}}
                   @value={{mut row.name}} />
               </td>
-              <td>
+              <td style={{if row.isToBeDeleted "opacity: 0.5;"}}>
                 <PowerSelect
                   @options={{this.documentTypes}}
                   @selected={{row.documentType}}
                   @search={{perform this.searchDocumentTypes}}
                   @placeholder={{t "none"}}
                   @noMatchesMessage={{t "no-result"}}
-                  @onchange={{fn this.setDocumentType row}}
+                  @onchange={{fn this.setDocumentType (array row)}}
                   @allowClear={{true}}
                   as |documentType|>
                   {{documentType.label}}
                 </PowerSelect>
               </td>
-              <td>
-               <PowerSelect
+              <td style={{if row.isToBeDeleted "opacity: 0.5;"}}>
+                <PowerSelect
                   @options={{this.accessLevels}}
                   @selected={{row.accessLevel}}
                   @search={{perform this.searchAccessLevels}}
                   @placeholder={{t "none"}}
                   @noMatchesMessage={{t "no-result"}}
-                  @onchange={{fn this.setAccessLevel row}}
-                  @allowClear={{true}}
+                  @onchange={{fn this.setAccessLevel (array row)}}
                   as |accessLevel|>
                   {{accessLevel.label}}
                 </PowerSelect>
               </td>
-              <td>{{row.confidential}}</td>
-              <td>delete</td>
+              <td style={{if row.isToBeDeleted "opacity: 0.5"}} class="auk-table-checkbox-col">
+                <Auk::Checkbox
+                  @value={{row.confidential}}
+                  {{on "input" (fn this.setConfidential (array row))}} />
+              </td>
+              <td>
+                <WebComponents::AuButtonToolbar>
+                  {{#unless row.isToBeDeleted}}
+                    <Auk::Button
+                      @icon="delete" @layout="icon-only" @skin="danger-borderless"
+                      {{on "click" (fn this.setToBeDeleted (array row) true)}} />
+                  {{else}}
+                    <Auk::Button
+                      @icon="redo" @layout="icon-only" @skin="borderless"
+                      {{on "click" (fn this.setToBeDeleted (array row) false)}} />
+                  {{/unless}}
+                </WebComponents::AuButtonToolbar>
+              </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
     </Utils::LoadableContent>
   </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}>
+    <Auk::Button
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
+      {{t "save"}}
+    </Auk::Button>
+  </Auk::Modal::Footer>
 </Auk::Modal>
