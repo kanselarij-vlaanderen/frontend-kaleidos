@@ -1,0 +1,67 @@
+<tr>
+  <td class="auk-table-checkbox-col" style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+    <Auk::Checkbox
+      @checked={{@isSelected}}
+      {{on "input" (fn @onSelect @row)}} />
+  </td>
+  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+    <Auk::Input type="text"
+      @block={{true}}
+      @value={{mut @row.name}}
+      @onChange={{noop}} />
+  </td>
+  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+    {{!-- <PowerSelect
+      @options={{this.documentTypes}}
+      @selected={{@row.documentType}}
+      @search={{perform this.searchDocumentTypes}}
+      @placeholder={{t "none"}}
+      @noMatchesMessage={{t "no-result"}}
+      @onchange={{fn this.setDocumentType (array @row)}}
+      @allowClear={{true}}
+      as |documentType|>
+      <!-- nowrap: don't let height depend on selected record -->
+      <div style="white-space: nowrap;">
+        {{documentType.label}}
+      </div>
+    </PowerSelect> --}}
+  </td>
+  <td style={{if @row.isToBeDeleted "opacity: 0.5;"}}>
+    <Documents::BatchDocumentsModal::Edit::AccessLevelSelector
+      @source={{@accessLevelSource}}
+      @selected={{@row.accessLevel}}
+      @onChange={{@row.setAccessLevel}} />
+
+    {{!-- <PowerSelect
+      @options={{this.accessLevels}}
+      @selected={{@row.accessLevel}}
+      @search={{perform this.searchAccessLevels}}
+      @placeholder={{t "none"}}
+      @noMatchesMessage={{t "no-result"}}
+      @onchange={{fn this.setAccessLevel (array row)}}
+      as |accessLevel|>
+      <!-- nowrap: don't let height depend on selected record -->
+      <div style="white-space: nowrap;">
+        {{accessLevel.label}}
+      </div>
+    </PowerSelect> --}}
+  </td>
+  <td style={{if @row.isToBeDeleted "opacity: 0.5"}} class="auk-table-checkbox-col">
+    <Auk::Checkbox
+      @value={{@row.confidential}}
+      {{on "input" this.onInputConfidential}} />
+  </td>
+  <td>
+    <WebComponents::AuButtonToolbar>
+      {{#unless @row.isToBeDeleted}}
+        <Auk::Button
+          @icon="delete" @layout="icon-only" @skin="danger-borderless"
+          {{on "click" (fn @row.setToBeDeleted true)}} />
+      {{else}}
+        <Auk::Button
+          @icon="redo" @layout="icon-only" @skin="borderless"
+          {{on "click" (fn @row.setToBeDeleted false)}} />
+      {{/unless}}
+    </WebComponents::AuButtonToolbar>
+  </td>
+</tr>

@@ -69,7 +69,7 @@
 {{/if}}
 
 {{#if this.isEnabledPieceEdit}}
-  <Documents::BatchDocumentsEditModal
+  <Documents::BatchDocumentsModal::Edit::Modal
     @pieces={{this.model.pieces}}
     @onCancel={{this.cancelPieceEdit}} />
 {{/if}}

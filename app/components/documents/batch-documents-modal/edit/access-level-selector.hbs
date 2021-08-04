@@ -1,0 +1,13 @@
+<PowerSelect
+  @options={{@source.options}}
+  @selected={{@selected}}
+  @search={{perform @source.search}}
+  @placeholder={{t "none"}}
+  @noMatchesMessage={{t "no-result"}}
+  @onchange={{@onChange}}
+  as |accessLevel|>
+  {{!-- nowrap: don't let height of row depend on selected record --}}
+  <div style="white-space: nowrap;">
+    {{accessLevel.label}}
+  </div>
+</PowerSelect>

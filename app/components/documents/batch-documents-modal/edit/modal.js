@@ -5,16 +5,9 @@ import { tracked } from '@glimmer/tracking';
 import { timeout } from 'ember-concurrency';
 import { task } from 'ember-concurrency-decorators';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-
-class Row {
-  piece;
-
-  @tracked name;
-  @tracked documentType;
-  @tracked accessLevel;
-  @tracked confidential;
-  @tracked isToBeDeleted = false;
-}
+import { Row } from './row-piece';
+import { AccessLevelsDataSource } from './access-level-selector';
+import { DocumentTypesDataSource } from './document-type-selector';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
@@ -25,6 +18,7 @@ export default class BatchDocumentsModal extends Component {
   @tracked rows;
   @tracked selectedRows = [];
   @tracked documentTypes;
+  @tracked accessLevelSource;
   @tracked accessLevels;
 
   constructor() {
@@ -60,8 +54,11 @@ export default class BatchDocumentsModal extends Component {
   @task
   *loadData() {
     yield Promise.all([
-      this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
-      this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
+      AccessLevelsDataSource.create(this.store).then((source) => this.accessLevelSource = source),
+      DocumentTypesDataSource.create(this.store).then((source) => this.documentTypes = source)
+      // this.loadDocumentTypes.perform().then((documentTypes) => this.documentTypes = documentTypes),
+
+      // this.loadAccessLevels.perform().then((accessLevels) => this.accessLevels = accessLevels)
     ]);
   }
 
@@ -129,45 +126,9 @@ export default class BatchDocumentsModal extends Component {
     }
   }
 
-  get batchDocumentType() {
-    return this.getBatchSelectedValue((row) => row.documentType);
-  }
-
-  get batchAccessLevel() {
-    return this.getBatchSelectedValue((row) => row.accessLevel);
-  }
-
-  getBatchSelectedValue(getProperty) {
-    if (this.selectedRows.length === 0) {
-      return undefined;
-    }
-    const [firstRow, ...otherRows] = this.selectedRows;
-    const firstProperty = getProperty(firstRow);
-    const areRowsEqual = otherRows.every((row) => getProperty(row) === firstProperty);
-    if (!areRowsEqual) {
-      return undefined;
-    }
-    return firstProperty;
-  }
-
-  get batchConfidential() {
-    if (this.selectedRows.length === 0) {
-      return false;
-    }
-    return this.selectedRows.every((row) => row.confidential);
-  }
-
-  get batchIsToBeDeleted() {
-    // some-check: always indicate dangerous action
-    return this.selectedRows.some((row) => row.isToBeDeleted);
-  }
-
   @task
   *searchDocumentTypes(searchTerm) {
     yield timeout(300);
-    if (!searchTerm) {
-      return this.documentTypes;
-    }
     return yield this.queryDocumentTypes.perform(searchTerm);
   }
 
@@ -179,9 +140,6 @@ export default class BatchDocumentsModal extends Component {
   @task
   *searchAccessLevels(searchTerm) {
     yield timeout(300);
-    if (!searchTerm) {
-      return this.accessLevels;
-    }
     return yield this.queryAccessLevels.perform(searchTerm);
   }
 
@@ -205,7 +163,6 @@ export default class BatchDocumentsModal extends Component {
     // }
 
     const checked = event.target.checked;
-    console.log(checked);
     for (const row of rows) {
       row.confidential = checked;
     }

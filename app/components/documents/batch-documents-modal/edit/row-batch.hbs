@@ -1,0 +1,62 @@
+<tr class="auk-table--batch-edit">
+  <td></td>
+  <td>
+    {{#if this.selectedRows}}
+      {{t "x-documents-selected" count=this.selectedRows.length}}
+    {{/if}}
+  </td>
+  <td>
+    <PowerSelect
+      @options={{this.documentTypes}}
+      @selected={{this.batchDocumentType}}
+      @disabled={{not this.selectedRows}}
+      @search={{perform this.searchDocumentTypes}}
+      @placeholder={{if this.batchDocumentType (t "different") (t "none")}}
+      @noMatchesMessage={{t "no-result"}}
+      @onchange={{fn this.setDocumentType this.selectedRows}}
+      @allowClear={{true}}
+      as |documentType|>
+      {{!-- nowrap: don't let height of row depend on selected record --}}
+      <div style="white-space: nowrap;">
+        {{documentType.label}}
+      </div>
+    </PowerSelect>
+  </td>
+  <td>
+    <PowerSelect
+      @options={{this.accessLevels}}
+      @selected={{this.batchAccessLevel}}
+      @disabled={{not this.selectedRows}}
+      @search={{perform this.searchAccessLevels}}
+      @placeholder={{t "none"}}
+      @noMatchesMessage={{t "no-result"}}
+      @onchange={{fn this.setAccessLevel}}
+      as |accessLevel|>
+      {{!-- nowrap: don't let height of row depend on selected record --}}
+      <div style="white-space: nowrap;">
+        {{accessLevel.label}}
+      </div>
+    </PowerSelect>
+  </td>
+  <td class="auk-table-checkbox-col">
+    <Auk::Checkbox
+      @checked={{this.batchConfidential}}
+      @disabled={{not this.selectedRows}}
+      {{on "input" (fn this.onInputConfidential this.selectedRows)}} />
+  </td>
+  <td>
+    <WebComponents::AuButtonToolbar>
+      {{#unless this.batchIsToBeDeleted}}
+        <Auk::Button
+          @icon="delete" @layout="icon-only" @skin="danger-borderless"
+          @disabled={{not this.selectedRows}}
+          {{on "click" (fn this.setToBeDeleted this.selectedRows true)}} />
+      {{else}}
+        <Auk::Button
+          @icon="redo" @layout="icon-only" @skin="borderless"
+          @disabled={{not this.selectedRows}}
+          {{on "click" (fn this.setToBeDeleted this.selectedRows false)}} />
+      {{/unless}}
+    </WebComponents::AuButtonToolbar>
+  </td>
+</tr>
