@@ -117,6 +117,7 @@
             />
           </div>
         {{/unless}}
+
         {{!-- Werknummer BS == numac nummer --}}
         <div class="auk-form-group">
           <Auk::Label>{{t "numac-number"}}</Auk::Label>
@@ -195,7 +196,11 @@
         {{/if}}
 
         {{!-- Uiterste publicatiedatum --}}
-        {{#unless this.publicationStatus.isWithdrawn}}
+        {{#unless
+          (or
+            this.publicationStatus.isPublished
+            this.publicationStatus.isWithdrawn)
+        }}
           <div class="auk-form-group">
             <Auk::Label>{{t 'publication-due-date'}}</Auk::Label>
             <Auk::Datepicker
@@ -216,9 +221,19 @@
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
-            <div class="auk-u-muted">
-              {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-            </div>
+            {{#if this.loadDecision.isRunning}}
+              <div class="auk-u-muted">
+                ...
+              </div>
+            {{else if this.decision.publicationDate}}
+              <div class="auk-u-muted">
+                {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+              </div>
+            {{else}}
+              <div class="auk-u-muted auk-u-italic">
+                {{t "not-known"}}
+              </div>
+            {{/if}}
           </div>
         {{/if}}
 

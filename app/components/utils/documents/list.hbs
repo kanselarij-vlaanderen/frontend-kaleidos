@@ -14,5 +14,7 @@
         @skin="borderless" @layout="icon-only" @icon="book"
         @href={{piece.viewDocumentURL}} target="_blank" />
     </Auk::List::Item>
+  {{else}}
+    <div class="auk-u-muted auk-u-italic">{{t "no-documents-available"}}</div>
   {{/each}}
 </Auk::List>
