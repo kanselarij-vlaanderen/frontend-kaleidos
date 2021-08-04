@@ -71,17 +71,9 @@ export default class PublicationsIndexRoute extends Route {
         size: params.size,
       },
       include: [
-        'case',
-        'status',
-        'identification.structured-identifier',
-        'urgency-level',
-        'regulation-type',
-        'publication-status-change',
-        'numac-numbers',
         'publication-subcase',
         'translation-subcase',
-        'translation-subcase.request-activities',
-        'agenda-item-treatment'
+        'case'
       ].join(','),
     });
   }
