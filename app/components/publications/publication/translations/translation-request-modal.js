@@ -57,8 +57,9 @@ export default class PublicationsTranslationRequestModalComponent extends Compon
       totalDocuments: this.totalDocuments,
     };
 
-    this.message = translationRequestEmail(mailParams);
-    this.subject = `Vertalingsaanvraag VO-dossier: ${identification.idName}`;
+    const mailTemplate = translationRequestEmail(mailParams);
+    this.message = mailTemplate.message;
+    this.subject = mailTemplate.subject;
   }
 
   @action
