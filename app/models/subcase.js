@@ -1,3 +1,4 @@
+import { belongsTo, hasMany, attr } from '@ember-data/model';
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
@@ -6,7 +7,7 @@ import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
 const {
-  attr, hasMany, belongsTo, PromiseArray,
+  PromiseArray
 } = DS;
 
 export default ModelWithModifier.extend({

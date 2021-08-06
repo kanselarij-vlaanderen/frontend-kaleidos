@@ -1,8 +1,9 @@
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 
 const {
-  Model, attr, hasMany, belongsTo, PromiseArray,
+  PromiseArray
 } = DS;
 
 export default Model.extend({

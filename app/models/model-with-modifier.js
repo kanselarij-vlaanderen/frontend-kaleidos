@@ -1,13 +1,8 @@
-import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import moment from 'moment';
-import Model from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
-
-const {
-  attr, belongsTo,
-} = DS;
 
 export default Model.extend({
   currentSession: service(),

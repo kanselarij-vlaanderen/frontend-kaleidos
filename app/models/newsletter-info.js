@@ -1,12 +1,8 @@
-import DS from 'ember-data';
+import { belongsTo, hasMany, attr } from '@ember-data/model';
 import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
-
-const {
-  attr, hasMany, belongsTo,
-} = DS;
 
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),

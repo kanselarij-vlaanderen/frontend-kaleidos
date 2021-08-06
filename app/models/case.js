@@ -1,10 +1,11 @@
+import Model, { hasMany, attr } from '@ember-data/model';
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
 
 const {
-  Model, attr, hasMany, PromiseObject,
+  PromiseObject
 } = DS;
 
 export default Model.extend({

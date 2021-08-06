@@ -1,9 +1,5 @@
-import DS from 'ember-data';
+import Model, { hasMany, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
-
-const {
-  Model, attr, hasMany,
-} = DS;
 
 export default Model.extend({
   campaignId: attr('string'),

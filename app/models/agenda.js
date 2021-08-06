@@ -1,15 +1,9 @@
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import DS from 'ember-data';
 import { computed } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 import { A } from '@ember/array';
-
-const {
-  Model,
-  attr,
-  belongsTo,
-  hasMany,
-} = DS;
 
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),

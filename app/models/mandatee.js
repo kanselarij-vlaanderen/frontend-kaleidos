@@ -1,11 +1,7 @@
-import DS from 'ember-data';
+import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { lower as lowerCaseAlphabet } from 'alphabet';
-
-const {
-  Model, attr, hasMany, belongsTo,
-} = DS;
 
 export default Model.extend({
   toaster: service(),

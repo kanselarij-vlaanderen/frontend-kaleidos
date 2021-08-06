@@ -1,10 +1,6 @@
-import DS from 'ember-data';
+import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
-
-const {
-  Model, attr, belongsTo, hasMany,
-} = DS;
 
 export default Model.extend({
   intl: inject(),
