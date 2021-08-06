@@ -49,5 +49,13 @@ module.exports = {
         'node/no-unpublished-require': 'off',
       },
     },
+    // auk component "library"
+    {
+      files: ['app/components/auk/**/*.js'],
+      rules: {
+        // We use the components .js-file to document its arguments interface by means of a jsdoc comment
+        'ember/no-empty-glimmer-component-classes': 'off',
+      },
+    },
   ],
 };
