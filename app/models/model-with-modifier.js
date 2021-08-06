@@ -49,7 +49,7 @@ export default Model.extend({
   },
 
   async preEditOrSaveCheck() {
-    if (!await this.saveAllowed()) {
+    if (!(await this.saveAllowed())) {
       const {
         oldModelData, oldModelModifiedMoment,
       } = await this.getOldModelData();

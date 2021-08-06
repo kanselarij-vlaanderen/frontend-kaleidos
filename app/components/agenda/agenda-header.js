@@ -102,7 +102,7 @@ export default Component.extend(FileSaverMixin, {
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
-    return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
+    return (await this.get('currentSession.sortedAgendas.firstObject.id')) === (await this.currentAgenda.get('id'));
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
@@ -120,7 +120,7 @@ export default Component.extend(FileSaverMixin, {
    */
   canReopenPreviousAgenda: computed('currentSession', 'currentAgenda', 'isSessionClosable', 'currentAgendaIsLast', async function() {
     const isSessionClosable = await this.isSessionClosable;
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
 
     if (!this.currentSession.isFinal && isSessionClosable && this.currentAgenda.isDesignAgenda && isAdminAndLastAgenda) {
       return true;
@@ -135,7 +135,7 @@ export default Component.extend(FileSaverMixin, {
    * @returns boolean
    */
   canDeleteSelectedAgenda: computed('currentAgenda', 'currentAgendaIsLast', async function() {
-    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && await this.currentAgendaIsLast; // TODO why are these together ?
+    const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
     if (this.currentAgenda.isDesignAgenda || isAdminAndLastAgenda) {
       return true;
     }
