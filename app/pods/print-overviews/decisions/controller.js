@@ -4,6 +4,7 @@ import { inject } from '@ember/service';
 import { getPrintOverviewTitle } from 'frontend-kaleidos/utils/print-overview-util';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   titleTranslationKey: 'decisions-of-kind',

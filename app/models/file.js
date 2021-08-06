@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   piece: belongsTo('piece'),

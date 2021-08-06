@@ -19,6 +19,8 @@ const {
   PromiseObject
 } = DS;
 
+// TODO: octane-refactor
+/* eslint-disable ember/no-get */
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   agendaService: inject(),

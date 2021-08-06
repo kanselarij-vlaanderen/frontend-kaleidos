@@ -5,6 +5,7 @@ import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   currentSession: service(),

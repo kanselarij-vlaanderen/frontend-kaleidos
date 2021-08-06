@@ -9,6 +9,7 @@ const {
 } = DS;
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Service.extend({
   store: inject(),

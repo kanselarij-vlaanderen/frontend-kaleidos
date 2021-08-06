@@ -6,6 +6,7 @@ import LoadableModel from 'ember-data-storefront/mixins/loadable-model';
 import { A } from '@ember/array';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Model.extend(LoadableModel, {
   name: computed.alias('serialnumber'),

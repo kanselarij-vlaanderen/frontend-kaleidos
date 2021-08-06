@@ -3,6 +3,7 @@ import { inject } from '@ember/service';
 import { hash } from 'rsvp';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   sessionService: inject(),

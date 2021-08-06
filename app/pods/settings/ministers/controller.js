@@ -4,6 +4,7 @@ import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 
 // TODO: octane-refactor
+/* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   currentSession: service(),
