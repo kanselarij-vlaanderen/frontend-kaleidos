@@ -63,6 +63,15 @@
       {{/if}}
     </td>
   {{/if}}
+  {{#if @tableColumnDisplayOptions.openingDate}}
+    <td style="auk-u-text-nowrap">
+      {{#if @publicationFlow.openingDate}}
+        {{moment-format @publicationFlow.openingDate "DD-MM-YYYY"}}
+      {{else}}
+        {{t "dash"}}
+      {{/if}}
+    </td>
+  {{/if}}
   {{#if @tableColumnDisplayOptions.publicationTargetDate}}
     <td class="auk-u-text-nowrap">
       {{#if @publicationFlow.publicationSubcase.targetEndDate}}

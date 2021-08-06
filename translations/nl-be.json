@@ -823,6 +823,8 @@
   "publications-table-last-edited-small" : "Laatst gewijzigd",
   "publications-table-numacnummer-bs" : "Werknummer Belgisch Staatblad",
   "publications-table-numacnummer-bs-small" : "Numac",
+  "publications-table-opening-date" : "Datum ontvangst",
+  "publications-table-opening-date-small" : "Ontv.",
   "publications-table-publication-date" : "Publicatiedatum",
   "publications-table-publication-date-small" : "Pub. BS",
   "publications-table-publication-number" : "Publicatienummer",
