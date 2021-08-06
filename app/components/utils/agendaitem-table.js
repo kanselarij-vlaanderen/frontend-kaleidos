@@ -1,4 +1,6 @@
 /* eslint-disable class-methods-use-this */
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import {
   action, computed
@@ -10,6 +12,8 @@ import Table from 'ember-light-table';
 import { restartableTask } from 'ember-concurrency-decorators';
 import { timeout } from 'ember-concurrency';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class AgendaitemTable extends Component {
   @service store;
 

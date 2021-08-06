@@ -2,8 +2,12 @@
 // BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/templates/components/number-pagination.hbs
 
 import { computed } from '@ember/object';
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['data-table-pagination'],
 
@@ -50,6 +54,8 @@ export default Component.extend({
     // eslint-disable-next-line no-unused-vars
     return Array.from(new Array(nbOfPages), (val, index) => this.get('firstPage') + index);
   }),
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     changePage(link) {
       this.set('page', link.number || 0);

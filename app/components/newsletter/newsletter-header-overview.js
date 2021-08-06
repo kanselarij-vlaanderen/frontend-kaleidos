@@ -1,9 +1,13 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 import SendingOldCampaignError from 'frontend-kaleidos/errors/sending-old-campaign-error';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: service(),
   store: service(),
@@ -48,6 +52,8 @@ export default Component.extend({
     }
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     print() {
       window.print();

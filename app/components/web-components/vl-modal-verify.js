@@ -1,7 +1,11 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: inject(),
   message: null,
@@ -15,6 +19,8 @@ export default Component.extend({
     return this.intl.t(this.get('buttonText'));
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
     this.get('element').querySelector('[role="dialog"]')
       .focus();
@@ -37,6 +43,8 @@ export default Component.extend({
     }
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     verify() {
       this.verify();

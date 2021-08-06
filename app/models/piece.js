@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import sanitize from 'sanitize-filename';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   name: attr('string'),
   pages: attr('number'),

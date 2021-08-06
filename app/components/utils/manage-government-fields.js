@@ -1,7 +1,11 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { cached } from 'frontend-kaleidos/decorators/cached';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-mb-4'],
   modelName: null,
@@ -14,6 +18,8 @@ export default Component.extend({
   isEditing: false,
   store: inject(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     chooseIseCode(iseCode) {
       this.set('iseCode', iseCode);

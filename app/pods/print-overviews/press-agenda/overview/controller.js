@@ -3,6 +3,8 @@ import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
   intl: inject(),
   queryParams: ['definite'],

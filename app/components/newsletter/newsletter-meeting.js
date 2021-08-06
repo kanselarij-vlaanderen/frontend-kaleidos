@@ -1,8 +1,12 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-mb-8'],
   isEditing: false,
@@ -26,6 +30,8 @@ export default Component.extend({
     return `${this.get('intl').t('newsletter-of')} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async toggleIsEditing() {
       const meeting = await this.get('meeting');

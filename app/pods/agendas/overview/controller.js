@@ -4,6 +4,8 @@ import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-param
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend(DefaultQueryParamsMixin, {
   sessionService: inject(),
   intl: inject(),
@@ -45,6 +47,8 @@ export default Controller.extend(DefaultQueryParamsMixin, {
     return true;
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     setDateFilter(date) {
       const newDate = date.split('/').join('-');

@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import {
@@ -22,6 +24,8 @@ import { A } from '@ember/array';
 import { task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend(FileSaverMixin, {
   store: service(),
   // These 2 can be very confusing, session-service is for meetings, current-session is for checking admin etc.
@@ -569,6 +573,8 @@ export default Component.extend(FileSaverMixin, {
     this.set('piecesToDeleteReopenPreviousAgenda', sortPieces(pieces));
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     print() {
       window.print();

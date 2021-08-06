@@ -1,9 +1,13 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
 import {
   action, computed
 } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class SubcaseTitles extends Component {
   classNames = ['auk-u-mb-8'];
   @service currentSession;

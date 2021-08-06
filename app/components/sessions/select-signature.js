@@ -1,6 +1,10 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   meeting: null,
 
@@ -8,6 +12,8 @@ export default Component.extend({
     return this.meeting.get('signature');
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectSignature(signature) {
       this.set('selectedSignature', signature);

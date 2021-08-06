@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
@@ -6,6 +8,8 @@ import { computed } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend(DataTableRouteMixin, {
   availableSubcases: null,
   showPostponed: null,
@@ -132,6 +136,8 @@ export default Component.extend(DataTableRouteMixin, {
     this.setFocus();
   }).restartable(),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-component-lifecycle-hooks
   async didInsertElement() {
     this._super(...arguments);
     this.set('availableSubcases', []);
@@ -139,6 +145,8 @@ export default Component.extend(DataTableRouteMixin, {
     this.findAll.perform();
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectSize(size) {
       this.size = size;

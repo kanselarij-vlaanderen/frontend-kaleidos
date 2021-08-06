@@ -1,6 +1,10 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-mb-8'],
   selectedMeeting: null,
@@ -24,6 +28,8 @@ export default Component.extend({
     return false;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectAgenda(meeting) {
       this.selectAgenda(meeting);

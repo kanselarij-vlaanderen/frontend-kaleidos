@@ -5,6 +5,8 @@ import {
   observer, computed
 } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend(Evented, {
   RUNNING: Object.freeze('http://vocab.deri.ie/cogs#Running'),
   SUCCESS: Object.freeze('http://vocab.deri.ie/cogs#Success'),

@@ -1,6 +1,8 @@
 import Route from '@ember/routing/route';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend(DataTableRouteMixin, {
   modelName: 'user',
 
@@ -22,6 +24,8 @@ export default Route.extend(DataTableRouteMixin, {
     return options;
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     refresh() {
       this._super(...arguments);

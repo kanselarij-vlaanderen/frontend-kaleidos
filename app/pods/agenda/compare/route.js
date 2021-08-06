@@ -2,6 +2,8 @@ import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import { hash } from 'rsvp';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend({
   sessionService: inject(),
   agendaService: inject(),

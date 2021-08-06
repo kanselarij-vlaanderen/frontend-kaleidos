@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import {
   computed, set
@@ -9,6 +11,8 @@ import {
   saveChanges as saveSubcaseDescription, cancelEdit
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   store: inject(),
   currentSession: inject(),
@@ -48,6 +52,8 @@ export default Component.extend({
     return this.subcase.get('latestAgendaitem').then((agendaitem) => agendaitem?.retracted);
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     toggleIsEditing() {
       this.toggleProperty('isEditing');

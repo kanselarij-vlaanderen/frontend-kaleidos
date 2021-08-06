@@ -1,3 +1,5 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import {
   action, computed
@@ -5,6 +7,8 @@ import {
 import { inject as service } from '@ember/service';
 import { updateModifiedProperty } from 'frontend-kaleidos/utils/modification-utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/require-tagless-components
 export default class AgendaitemPress extends Component {
   @service currentSession;
 

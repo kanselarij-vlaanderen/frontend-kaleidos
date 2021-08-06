@@ -1,8 +1,12 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   isClickable: null,
   piece: null,
@@ -26,6 +30,8 @@ export default Component.extend({
     return false;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async showPieceViewer(piece) {
       window.open(`/document/${(await piece).get('id')}`);

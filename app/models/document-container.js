@@ -11,6 +11,8 @@ const {
   PromiseObject
 } = DS;
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   store: inject(),
   agendaService: inject(),

@@ -1,6 +1,8 @@
 import Model, { belongsTo, attr } from '@ember-data/model';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   firstName: attr('string'),
   lastName: attr('string'),

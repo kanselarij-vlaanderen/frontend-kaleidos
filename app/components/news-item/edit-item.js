@@ -1,7 +1,11 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   intl: inject(),
   classNames: ['auk-box'],
@@ -59,6 +63,8 @@ export default Component.extend({
     return this.editorInstance.htmlContent;
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async trySaveChanges() {
       const themes = await this.get('themes');

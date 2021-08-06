@@ -9,6 +9,8 @@ function equalContentArrays(array1, array2) {
   return false;
 }
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend({
 
   notaGroups: computed('model.notas.@each.sortedMandatees', function() {

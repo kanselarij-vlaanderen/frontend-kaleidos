@@ -1,6 +1,10 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   hasNota: computed('row', async function() {
     const nota = await this.row.get('nota');
@@ -25,6 +29,8 @@ export default Component.extend({
     return await this.row.get('id');
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async openDocument(row) {
       const nota = await row.get('nota');

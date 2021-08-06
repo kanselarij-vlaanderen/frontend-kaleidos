@@ -1,8 +1,12 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
 // TODO this component is no longer used. It was used to link documents to a decision (agendaItemTreatment), might be broken as-is
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   agendaitem: null,
   decision: null,
@@ -29,6 +33,8 @@ export default Component.extend({
     }));
   }),
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     async selectForPublication() {
       this.selectPiece(await this.get('lastPieces')); // TODO selectpiece() ? see comment at line 5

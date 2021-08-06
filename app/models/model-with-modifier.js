@@ -4,6 +4,8 @@ import Model, { belongsTo, attr } from '@ember-data/model';
 import fetch from 'fetch';
 import ModifiedOldDataError from '../errors/modified-old-data-error';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   currentSession: service(),
   intl: service(),

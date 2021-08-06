@@ -4,6 +4,8 @@ import config from './config/environment';
 import ENV from 'frontend-kaleidos/config/environment';
 import { isEmpty } from '@ember/utils';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 const Router = EmberRouter.extend({
   location: config.locationType,
   rootURL: config.rootURL,

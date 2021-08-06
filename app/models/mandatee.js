@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { lower as lowerCaseAlphabet } from 'alphabet';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   toaster: service(),
   intl: service(),

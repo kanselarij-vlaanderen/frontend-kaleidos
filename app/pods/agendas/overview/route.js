@@ -3,6 +3,8 @@ import moment from 'moment';
 import { inject } from '@ember/service';
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Route.extend(DataTableRouteMixin, {
   agendaService: inject(),
   modelName: 'meeting',
@@ -29,6 +31,8 @@ export default Route.extend(DataTableRouteMixin, {
     return options;
   },
 
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/no-actions-hash
   actions: {
     refreshRoute() {
       this._super(...arguments);

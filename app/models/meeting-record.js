@@ -6,6 +6,8 @@ const {
   PromiseArray
 } = DS;
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Model.extend({
   created: attr('datetime'),
   modified: attr('datetime'),

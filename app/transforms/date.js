@@ -1,6 +1,8 @@
 import DS from 'ember-data';
 import moment from 'moment';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default DS.DateTransform.extend({
   serialize(date) {
     if (date instanceof Date && !isNaN(date)) {

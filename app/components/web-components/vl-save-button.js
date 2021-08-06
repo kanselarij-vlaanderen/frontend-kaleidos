@@ -1,9 +1,15 @@
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 
+// TODO: octane-refactor
+// eslint-disable-next-line ember/no-classic-classes
 export default Component.extend({
   intl: inject(),
+  // TODO: octane-refactor
+  // eslint-disable-next-line ember/require-tagless-components
   tagName: 'button',
   type: 'button',
   attributeBindings: ['isLoading:disabled'],
