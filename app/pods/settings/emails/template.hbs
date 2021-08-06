@@ -44,7 +44,8 @@
           class="auk-u-mt-2 auk-u-mb-1"
           @skin="primary"
           @disabled={{this.isDisabled}}
-          {{on "click" this.saveSettings}}
+          @loading={{this.saveSettings.isRunning}}
+          {{on "click" (perform this.saveSettings)}}
         >
           {{t "save"}}
         </Auk::Button>

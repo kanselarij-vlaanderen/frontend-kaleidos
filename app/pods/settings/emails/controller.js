@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import { task } from 'ember-concurrency-decorators';
 
 import {
   isPresent, isBlank
@@ -13,12 +13,14 @@ export default class SettingsEmailController extends Controller {
   @tracked emailToProofRequest = this.model.proofRequestToEmail;
   @tracked emailCcProofRequest = this.model.proofRequestCcEmail;
 
-  @action
-  async saveSettings() {
+  @task
+  *saveSettings() {
     this.model.translationRequestToEmail = this.emailToTranslationRequest;
     this.model.proofRequestToEmail = this.emailToProofRequest;
     this.model.proofRequestCcEmail = isPresent(this.emailCcProofRequest) ? this.emailCcProofRequest : undefined;
-    await this.model.save();
+    yield this.model.save();
+
+    this.transitionToRoute('settings.overview');
   }
 
   get isDisabled() {
