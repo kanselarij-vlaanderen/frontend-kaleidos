@@ -209,6 +209,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
     const mail = this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       subject: proofRequest.subject,
