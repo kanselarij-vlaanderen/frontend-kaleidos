@@ -196,18 +196,18 @@
         {{/if}}
 
         {{!-- Uiterste publicatiedatum --}}
-        {{#unless
-          (or
-            this.publicationStatus.isPublished
-            this.publicationStatus.isWithdrawn)
-        }}
+        {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
             <Auk::Label>{{t 'publication-due-date'}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
             />
-            {{#if (is-after this.publicationSubcase.dueDate precision="days")}}
+            {{#if
+              (and
+                (not this.publicationStatus.isPublished)
+                (is-after this.publicationSubcase.dueDate precision="days"))
+            }}
               <Auk::FormHelpText
                 @text={{t "date-expired"}}
                 @skin="warning"
