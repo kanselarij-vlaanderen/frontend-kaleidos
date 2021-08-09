@@ -2,7 +2,6 @@
 import Component from '@glimmer/component';
 import EmberObject, { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompareAgendaList extends Component {
@@ -16,7 +15,9 @@ export default class CompareAgendaList extends Component {
   @service store;
   @service sessionService;
   @service agendaService;
-  @alias('agendaService.addedAgendaitems') addedAgendaitems;
+  get addedAgendaitems() {
+    return this.agendaService.addedAgendaitems;
+  }
 
   agendaToCompare = null;
   currentAgenda = null;

@@ -6,7 +6,6 @@ import {
   action, get
 } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
 
 export default class FileUploader extends Component {
   @service store;
@@ -22,9 +21,11 @@ export default class FileUploader extends Component {
   @tracked isLoading = null;
   @tracked blockInterface = false;
 
-  @tracked filesInQueue = alias('fileQueue.files');
 
   uploadedFileAction = this.args.uploadedFileAction;
+  get filesInQueue() {
+    return this.fileQueue.files;
+  }
 
   @action
   insertElementInDom() {

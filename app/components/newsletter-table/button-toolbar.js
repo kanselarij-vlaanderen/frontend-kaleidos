@@ -1,4 +1,6 @@
 import Component from '@glimmer/component';
+// TODO: refactor to make computeds sync.
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action,
   computed

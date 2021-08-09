@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
+// eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action,
   computed

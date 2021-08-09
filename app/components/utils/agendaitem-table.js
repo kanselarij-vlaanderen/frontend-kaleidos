@@ -3,6 +3,7 @@
 /* eslint-disable ember/no-get */
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
+/* eslint-disable ember/no-computed-properties-in-native-classes */
 import {
   action, computed
 } from '@ember/object';
