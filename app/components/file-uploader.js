@@ -14,12 +14,11 @@ export default class FileUploader extends Component {
   @tracked uploadedFileLength = null;
 
   multipleFiles = this.args.multipleFiles;
+  uploadedFileAction = this.args.uploadedFileAction;
 
   @tracked isLoading = null;
   @tracked blockInterface = false;
 
-
-  uploadedFileAction = this.args.uploadedFileAction;
   get filesInQueue() {
     return this.fileQueue.files;
   }
