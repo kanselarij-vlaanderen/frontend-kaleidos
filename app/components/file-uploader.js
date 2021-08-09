@@ -9,10 +9,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FileUploader extends Component {
   @service store;
-
   @service fileQueue;
-
-  tagName = 'span';
 
   @tracked uploadedFileLength = null;
 
