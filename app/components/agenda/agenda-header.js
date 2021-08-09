@@ -8,7 +8,6 @@ import {
 } from '@ember/object/computed';
 import { computed } from '@ember/object';
 import { debug } from '@ember/debug';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { all } from 'rsvp';
 import {
   setAgendaitemFormallyOk,
@@ -27,7 +26,7 @@ import { sortPieces } from 'frontend-kaleidos/utils/documents';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend(FileSaverMixin, {
+export default Component.extend({
   store: service(),
   // These 2 can be very confusing, session-service is for meetings, current-session is for checking admin etc.
   sessionService: service('session-service'),
