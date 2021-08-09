@@ -4,14 +4,13 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import DataTableRouteMixin from 'ember-data-table/mixins/route';
 import { computed } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
-export default Component.extend(DataTableRouteMixin, {
+export default Component.extend({
   availableSubcases: null,
   showPostponed: null,
   noItemsSelected: true,
@@ -25,7 +24,6 @@ export default Component.extend(DataTableRouteMixin, {
   agendaService: inject(),
   sessionService: inject(),
 
-  modelName: 'subcase',
   page: 0,
   size: 10,
   filter: '',
