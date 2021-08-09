@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import moment from 'moment';
+// eslint-disable-next-line ember/no-mixins
 import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';

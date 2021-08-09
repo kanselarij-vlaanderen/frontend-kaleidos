@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import moment from 'moment';
 import { inject } from '@ember/service';
+// eslint-disable-next-line ember/no-mixins
 import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
 // TODO: octane-refactor
