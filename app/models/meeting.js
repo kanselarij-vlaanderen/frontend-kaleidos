@@ -84,7 +84,7 @@ export default Model.extend({
     return this.isFinal && !this.releasedDocuments;
   }),
 
-  latestAgenda: computed('agendas.@each', function() {
+  latestAgenda: computed('agendas.[]', function() {
     return DS.PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();

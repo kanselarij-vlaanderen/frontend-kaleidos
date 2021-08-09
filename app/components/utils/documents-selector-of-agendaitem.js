@@ -13,7 +13,7 @@ export default Component.extend({
   decision: null,
   store: inject(),
 
-  lastPieces: computed('agendaitem.pieces.@each', 'decision.pieces.@each', async function() {
+  lastPieces: computed('agendaitem.pieces.[]', 'decision.pieces.[]', async function() {
     const {
       decision, agendaitem,
     } = this;

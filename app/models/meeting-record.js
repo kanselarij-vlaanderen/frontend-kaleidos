@@ -20,7 +20,7 @@ export default Model.extend({
     inverse: null,
   }),
 
-  sortedAttendees: computed('attendees.@each', function() {
+  sortedAttendees: computed('attendees.[]', function() {
     return PromiseArray.create({
       promise: this.get('attendees').then((attendees) => attendees.sortBy('priority')),
     });

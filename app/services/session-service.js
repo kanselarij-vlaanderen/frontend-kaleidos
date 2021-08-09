@@ -12,7 +12,7 @@ export default Service.extend({
   router: inject(),
   currentSession: null,
 
-  agendas: computed('currentSession.agendas.@each', function() {
+  agendas: computed('currentSession.agendas.[]', function() {
     if (!this.get('currentSession')) {
       return [];
     }
@@ -24,7 +24,7 @@ export default Service.extend({
     });
   }),
 
-  currentAgendaitems: computed('currentAgenda.agendaitems.@each', function() {
+  currentAgendaitems: computed('currentAgenda.agendaitems.[]', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       return this.store.query('agendaitem', {
@@ -40,7 +40,7 @@ export default Service.extend({
     return [];
   }),
 
-  announcements: computed('currentAgenda.announcements.@each', function() {
+  announcements: computed('currentAgenda.announcements.[]', function() {
     const currentAgenda = this.get('currentAgenda');
     if (currentAgenda) {
       const announcements = this.store.query('announcement', {

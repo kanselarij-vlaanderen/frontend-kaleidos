@@ -151,7 +151,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  sortedMandatees: computed('mandatees.@each', function() {
+  sortedMandatees: computed('mandatees.[]', function() {
     return this.get('mandatees').sortBy('priority');
   }),
 
@@ -161,7 +161,7 @@ export default ModelWithModifier.extend({
     return EmberObject.create(foundOption);
   }),
 
-  checkAdded: computed('id', 'addedAgendaitems.@each', 'agenda.createdFor.agendas.@each', async function() {
+  checkAdded: computed('id', 'addedAgendaitems.[]', 'agenda.createdFor.agendas.[]', async function() {
     const wasAdded = (this.addedAgendaitems && this.addedAgendaitems.includes(this.id));
     return wasAdded;
   }),
@@ -174,12 +174,12 @@ export default ModelWithModifier.extend({
     return checkAdded || hasAddedPieces;
   }),
 
-  hasAddedPieces: computed('documentContainers.@each', 'addedPieces.@each', async function() {
+  hasAddedPieces: computed('documentContainers.[]', 'addedPieces.[]', async function() {
     const documentContainers = await this.get('documentContainers');
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  sortedApprovals: computed('approvals.@each', async function() {
+  sortedApprovals: computed('approvals.[]', async function() {
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {

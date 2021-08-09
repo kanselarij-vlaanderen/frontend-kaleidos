@@ -63,7 +63,7 @@ export default Component.extend({
    * The session is closable when there are more than 1 agendas OR when there is only 1 agenda that is not a design agenda
    * @return {boolean}
    */
-  isSessionClosable: computed('agendas.@each', async function() {
+  isSessionClosable: computed('agendas.[]', async function() {
     const agendas = await this.get('agendas');
     if (agendas && agendas.length > 1) {
       return true;
@@ -80,7 +80,7 @@ export default Component.extend({
    *
    * From all agendas, get the last agenda that is not a design agenda
    */
-  lastApprovedAgenda: computed('agendas.@each', async function() {
+  lastApprovedAgenda: computed('agendas.[]', async function() {
     const agendas = await this.get('agendas');
     // this.agendas are already sorted on reverse serialNumbers
     const lastApprovedAgenda = agendas
@@ -101,7 +101,7 @@ export default Component.extend({
     return lastApprovedAgenda.agendaName;
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
+  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.[]', async function() {
     return (await this.get('currentSession.sortedAgendas.firstObject.id')) === (await this.currentAgenda.get('id'));
   }),
 

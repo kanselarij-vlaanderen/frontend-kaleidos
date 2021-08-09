@@ -63,7 +63,7 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function() {
+  lastAgendaitemPriority: computed('agendaitems.[]', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
       if (filteredAgendaitems.length === 0) {
@@ -73,7 +73,7 @@ export default Model.extend(LoadableModel, {
     });
   }),
 
-  lastAnnouncementPriority: computed('agendaitems.@each', function() {
+  lastAnnouncementPriority: computed('agendaitems.[]', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
       if (announcements.length === 0) {
@@ -83,7 +83,7 @@ export default Model.extend(LoadableModel, {
     });
   }),
 
-  firstAgendaitem: computed('agendaitems.@each', function() {
+  firstAgendaitem: computed('agendaitems.[]', function() {
     return PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });

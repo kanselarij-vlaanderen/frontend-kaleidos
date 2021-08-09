@@ -23,7 +23,7 @@ export default Model.extend({
     return A(this.get('pieces').toArray()).sort((pieceA, pieceB) => compareFunction(new VRDocumentName(pieceA.get('name')), new VRDocumentName(pieceB.get('name'))));
   }),
 
-  latestSubcase: computed('subcases.@each', function() {
+  latestSubcase: computed('subcases.[]', function() {
     return PromiseObject.create({
       promise: this.store.queryOne('subcase', {
         filter: {

@@ -88,7 +88,7 @@ export default Component.extend({
     this.findAll.perform();
   },
 
-  model: computed('items.@each', function() {
+  model: computed('items.[]', function() {
     (this.get('items') || []).map((item) => item.set('selected', false));
     return this.items;
   }),
