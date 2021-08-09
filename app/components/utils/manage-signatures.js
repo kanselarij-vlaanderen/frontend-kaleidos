@@ -4,7 +4,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { computed } from '@ember/object';
-import DS from 'ember-data';
+import { PromiseObject } from '@ember-data/store/-private';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -14,7 +14,7 @@ export default Component.extend({
   isEditing: false,
 
   defaultSignature: computed('store', function() {
-    return DS.PromiseObject.create({
+    return PromiseObject.create({
       promise: this.store.query('signature', {
         filter: {
           'is-active': true,

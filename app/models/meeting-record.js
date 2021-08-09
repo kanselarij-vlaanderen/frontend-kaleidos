@@ -1,10 +1,6 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
-
-const {
-  PromiseArray
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */

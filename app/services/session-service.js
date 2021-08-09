@@ -1,12 +1,8 @@
 import Service, { inject } from '@ember/service';
 import { computed } from '@ember/object';
 
-import DS from 'ember-data';
+import { PromiseArray } from '@ember-data/store/-private';
 import { all } from 'rsvp';
-
-const {
-  PromiseArray,
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */

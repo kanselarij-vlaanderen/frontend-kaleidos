@@ -1,5 +1,5 @@
 import { hasMany, belongsTo, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -13,11 +13,6 @@ import { A } from '@ember/array';
 import {
   sortDocumentContainers, getPropertyLength
 } from 'frontend-kaleidos/utils/documents';
-
-const {
-  PromiseArray,
-  PromiseObject
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */

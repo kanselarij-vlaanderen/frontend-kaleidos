@@ -1,5 +1,5 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 // LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
@@ -84,7 +84,7 @@ export default Model.extend(LoadableModel, {
   }),
 
   firstAgendaitem: computed('agendaitems.@each', function() {
-    return DS.PromiseObject.create({
+    return PromiseObject.create({
       promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
     });
   }),

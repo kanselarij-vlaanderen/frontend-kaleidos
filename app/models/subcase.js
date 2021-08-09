@@ -1,14 +1,10 @@
 import { belongsTo, hasMany, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseArray } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { alias } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
-
-const {
-  PromiseArray
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */

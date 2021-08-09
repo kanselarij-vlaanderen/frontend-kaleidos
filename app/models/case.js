@@ -1,12 +1,8 @@
 import Model, { hasMany, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
 import { A } from '@ember/array';
-
-const {
-  PromiseObject
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */

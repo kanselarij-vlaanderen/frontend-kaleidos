@@ -1,15 +1,10 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import DS from 'ember-data';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
 import { alias } from '@ember/object/computed';
 import { warn } from '@ember/debug';
-
-const {
-  PromiseArray,
-  PromiseObject
-} = DS;
 
 // TODO: octane-refactor
 /* eslint-disable ember/no-get */
