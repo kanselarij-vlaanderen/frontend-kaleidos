@@ -144,7 +144,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   async savePieceUpload(proofDocument) {
-    await this.performSavePieceUpload(proofDocument, this.isPieceUploadSource, this.isPieceUploadCorrected);
+    await this.performSavePieceUpload(proofDocument, this.isPieceUploadCorrected);
 
     this.closePieceUploadModal();
     this.send('refresh');
@@ -235,7 +235,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     await Promise.all(saves);
   }
 
-  async performSavePieceUpload(uploadProperties, isSource, isCorrection) {
+  async performSavePieceUpload(uploadProperties, isCorrection) {
     const now = new Date();
 
     const documentContainer = this.store.createRecord('document-container', {
