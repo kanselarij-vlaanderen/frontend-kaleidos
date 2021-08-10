@@ -18,6 +18,7 @@ export default Model.extend({
   created: attr('datetime'),
   treatmentApproval: computed('report.lastPiece.name', function() {
     return this.intl.t('signed-document-decision', {
+      // eslint-disable-next-line ember/no-get
       name: this.get('report.lastPiece.name'),
     });
   }),
