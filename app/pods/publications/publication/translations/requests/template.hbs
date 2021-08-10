@@ -44,9 +44,9 @@
                   </div>
                 </div>
               {{else}}
-                <div>
-                  <p class="auk-u-muted auk-u-italic auk-u-text-align--center">{{t "no-email-available"}}</p>
-                </div>
+                <Auk::EmptyState
+                        @message={{t "no-email-available"}}
+                />
               {{/if}}
             </div>
             <div class="auk-o-grid-col-6">
