@@ -35,6 +35,7 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
+    this._super(...arguments);
     if (!this.disableFocus) {
       const focusableNodes = this.getFocusableNodes();
       if (focusableNodes.length > 1) {

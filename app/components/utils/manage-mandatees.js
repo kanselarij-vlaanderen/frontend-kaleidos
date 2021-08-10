@@ -23,6 +23,7 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-component-lifecycle-hooks
   async didInsertElement() {
+    this._super(...arguments);
     const today = moment();
     this.showVerificationPopup = await this.mandateeService.mandateeIsCompetentOnFutureAgendaitem(today, this.mandateeToEdit.id);
   },

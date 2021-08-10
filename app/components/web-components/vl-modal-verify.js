@@ -23,6 +23,7 @@ export default Component.extend({
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-component-lifecycle-hooks
   didInsertElement() {
+    this._super(...arguments);
     this.get('element').querySelector('[role="dialog"]')
       .focus();
   },
