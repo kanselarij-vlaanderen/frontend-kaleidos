@@ -4,7 +4,7 @@
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { computed, set } from '@ember/object';
 import {
   task, timeout
 } from 'ember-concurrency';
@@ -148,7 +148,7 @@ export default Component.extend({
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
     selectSize(size) {
-      this.size = size;
+      set(this, 'size', size);
     },
 
     close() {

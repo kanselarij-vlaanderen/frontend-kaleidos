@@ -2,9 +2,7 @@ import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import {
-  action, get
-} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class FileUploader extends Component {
@@ -54,6 +52,6 @@ export default class FileUploader extends Component {
 
   @action
   uploadFile(file) {
-    get(this, 'uploadFileTask').perform(file);
+    this.uploadFileTask.perform(file);
   }
 }

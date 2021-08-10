@@ -2,7 +2,6 @@
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { task } from 'ember-concurrency';
-import { get } from '@ember/object';
 import { inject } from '@ember/service';
 import { A } from '@ember/array';
 
@@ -30,7 +29,7 @@ export default Component.extend({
   // eslint-disable-next-line ember/no-actions-hash
   actions: {
     uploadFile(file) {
-      get(this, 'uploadFile').perform(file);
+      this.uploadFile.perform(file);
     },
 
     uploadedFile(uploadedFile) {
