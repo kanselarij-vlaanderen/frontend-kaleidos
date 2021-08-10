@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 
+// TODO: octane refactor
 export default ModelWithModifier.extend({
   modelName: alias('constructor.modelName'),
   intl: inject(),
@@ -32,6 +33,7 @@ export default ModelWithModifier.extend({
   }),
 
   newsletterProposal: computed('agendaItemTreatment.{[],@each.subcase}', async function() {
+    // eslint-disable-next-line ember/no-get
     const treatments = await this.get('agendaItemTreatment');
     const treatment = treatments.firstObject;
     if (treatment) {
