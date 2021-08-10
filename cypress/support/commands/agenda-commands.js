@@ -35,98 +35,71 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.visit('');
   cy.get(route.agendas.action.newMeeting).click();
 
-  cy.get('.auk-modal').as('dialog')
-    .within(() => {
-      cy.get('.auk-form-group').as('newAgendaForm')
-        .should('have.length', 4);
-    });
-
   // Set the kind
-  cy.get('@newAgendaForm').eq(0)
-    .within(() => {
-      cy.get(dependency.emberPowerSelect.trigger).click();
-    });
+  cy.get(agenda.newSession.kind).click();
   cy.get(dependency.emberPowerSelect.option, {
     timeout: 5000,
-  }).should('exist')
-    .then(() => {
-      cy.wait(500); // TODO Experiment for dropdown flakyness, see if waiting before helps
-      cy.contains(kind).scrollIntoView()
-        .trigger('mouseover')
-        .click({
-          force: true,
-        });
-      // TODO Experiment for dropdown flakyness
-      // Does the ember-power-select-option fix itself if we wait long enough ?
-      cy.get(dependency.emberPowerSelect.option, {
-        timeout: 15000,
-      }).should('not.be.visible');
-    // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
+  }).wait(500) // Experiment for dropdown flakyness, see if waiting before helps
+    .contains(kind)
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click({
+      force: true,
     });
+  // Experiment for dropdown flakyness
+  // Does the ember-power-select-option fix itself if we wait long enough ?
+  cy.get(dependency.emberPowerSelect.option, {
+    timeout: 15000,
+  }).should('not.be.visible');
+  // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
 
   // Set the start date
-  cy.get('@newAgendaForm').eq(1)
-    .within(() => {
-      cy.get(utils.vlDatepicker).click();
-    });
+  cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
+    .click();
   cy.setDateAndTimeInFlatpickr(date);
 
   // Set the meetingNumber
-  cy.get('@newAgendaForm').eq(2)
-    .within(() => {
-      if (meetingNumber) {
-        cy.get('.auk-input').click({
-          force: true,
-        })
-          .clear()
-          .type(meetingNumber);
-      } else {
-        // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
-        cy.get('.auk-input').click({
-          force: true,
-        })
-          .invoke('val')
-          // eslint-disable-next-line
-          .then((sometext) => meetingNumber = sometext);
-      }
-    });
+  if (meetingNumber) {
+    cy.get(agenda.newSession.meetingNumber).click()
+      .clear()
+      .type(meetingNumber);
+  }
+  // } else {
+  // TODO KAS-2739 check
+  //   // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
+  //   cy.get('.auk-input').click({
+  //     force: true,
+  //   })
+  //     .invoke('val')
+  //     // eslint-disable-next-line
+  //     .then((sometext) => meetingNumber = sometext);
+  // }
 
   // Set the meetingNumber representation
   let meetingNumberRep;
 
   if (meetingNumberVisualRepresentation) {
     cy.get(agenda.newSession.numberRep.edit).click();
-    cy.get(agenda.newSession.numberRep.input).within(() => {
-      cy.get(utils.vlFormInput)
-        .click()
-        .clear()
-        .type(meetingNumberVisualRepresentation);
-    });
+    cy.get(agenda.newSession.numberRep.input).find(utils.vlFormInput)
+      .click()
+      .clear()
+      .type(meetingNumberVisualRepresentation);
     cy.get(agenda.newSession.numberRep.save).click();
   }
   // Get the value from the meetingNumber representation
   cy.get(agenda.newSession.numberRep.edit).click();
-  cy.get(agenda.newSession.numberRep.input).within(() => {
-    cy.get(utils.vlFormInput)
-      .click()
-      .invoke('val')
-      .then((sometext) => {
-        meetingNumberRep = sometext;
-      });
-  });
-
-  // Set the location
-  cy.get('@newAgendaForm').eq(3)
-    .within(() => {
-      cy.get('.auk-input').click({
-        force: true,
-      })
-        .type(location);
+  cy.get(agenda.newSession.numberRep.input).find(utils.vlFormInput)
+    .click()
+    .invoke('val')
+    .then((sometext) => {
+      meetingNumberRep = sometext;
     });
 
-  cy.get('@dialog').within(() => {
-    cy.get(utils.vlModalFooter.save).click();
-  });
+  // Set the location
+  cy.get(agenda.newSession.meetingLocation).click()
+    .type(location);
+
+  cy.get(utils.vlModalFooter.save).click();
 
   let meetingId;
   let agendaId;
@@ -179,22 +152,21 @@ function visitAgendaWithLink(link) {
 function openAgendaForDate(agendaDate) {
   cy.log('openAgendaForDate');
   const searchDate = `${agendaDate.date()}/${agendaDate.month() + 1}/${agendaDate.year()}`;
-  // cy.route('GET', '/meetings/**').as('getMeetings');
   cy.route('GET', '/meetings?filter**').as('getFilteredMeetings');
 
   cy.visit('');
-  // cy.wait('@getMeetings', { timeout: 20000 });
-  cy.get(route.agendasOverview.filter.container, {
-    timeout: 10000,
-  }).should('exist')
-    .within(() => {
-      cy.get(route.agendasOverview.filter.input).type(searchDate);
-      cy.get(route.agendasOverview.filter.button).click();
-    });
+  cy.get(route.agendasOverview.filter.container).within(() => {
+    cy.get(route.agendasOverview.filter.input).type(searchDate);
+    cy.get(route.agendasOverview.filter.button).click();
+  });
   cy.wait('@getFilteredMeetings', {
     timeout: 20000,
   });
-  cy.get('.data-table > tbody > :nth-child(1) > .auk-u-text-align--center > .auk-button > .auk-button__content > .auk-icon').click();
+  cy.get(route.agendasOverview.dataTable).find('tbody')
+    .children('tr')
+    .eq(0)
+    .get(route.agendasOverview.navigationButton)
+    .click();
 
   cy.url().should('include', '/vergadering');
   cy.url().should('include', '/agenda');
@@ -238,9 +210,8 @@ function deleteAgenda(meetingId, lastAgenda) {
 
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
-  cy.get(auk.modal.container).within(() => {
-    cy.get(agenda.agendaHeader.confirm.deleteAgenda).click();
-  });
+  cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.deleteAgenda)
+    .click();
   if (lastAgenda) {
     cy.wait('@deleteNewsletter', {
       timeout: 20000,
@@ -261,7 +232,6 @@ function deleteAgenda(meetingId, lastAgenda) {
   }).should('not.exist');
 
   cy.log('/deleteAgenda');
-  // TODO should patches happen when deleting a design agenda ?
 }
 
 /**
@@ -272,29 +242,24 @@ function deleteAgenda(meetingId, lastAgenda) {
  */
 function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = false, formalityStatus = 'Formeel OK') {
   cy.log('setFormalOkOnItemWithIndex');
-  // TODO set only some items to formally ok with list as parameter
   if (!fromWithinAgendaOverview) {
     cy.clickReverseTab('Overzicht');
   }
   cy.get(agenda.agendaOverview.formallyOkEdit).click();
-  cy.wait(2000); // TODO await data loading after clicking this button?
+  // cy.wait(2000); // TODO await data loading after clicking this button?
 
-  cy.get('.vlc-agenda-items__sub-item').as('agendaitems');
-  cy.get('@agendaitems').eq(indexOfItem)
+  cy.get(agenda.agendaOverview.agendaitem).eq(indexOfItem)
     .scrollIntoView()
-    .within(() => {
-      cy.get(agenda.agendaOverviewItem.formallyOk).click();
-    });
+    .find(agenda.agendaOverviewItem.formallyOk)
+    .click();
   const int = Math.floor(Math.random() * Math.floor(10000));
   cy.route('PATCH', '/agendaitems/**').as(`patchAgendaitem_${int}`);
   cy.get(dependency.emberPowerSelect.option)
     .contains(formalityStatus)
     .click();
-  cy.wait(`@patchAgendaitem_${int}`)
-    .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
-  // .get(dependency.emberPowerSelect.option).should('not.exist');
-  cy.get('.vlc-agenda-items .vl-alert button')
-    .click();
+  cy.wait(`@patchAgendaitem_${int}`);
+  // .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
+  cy.get(utils.changesAlert.close).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
 
@@ -306,13 +271,13 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
  */
 function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('setAllItemsFormallyOk');
+  const verifyText = `Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`;
   cy.route('GET', '/agendaitems/*/modified-by').as('getModifiedByOfAgendaitems');
-  // TODO set only some items to formally ok with list as parameter
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.route('PATCH', '/agendaitems/**').as('patchAgendaitems');
   cy.get(agenda.agendaHeader.actions.approveAllAgendaitems).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
-  cy.contains(`Bent u zeker dat u ${amountOfFormallyOks} agendapunten formeel wil goedkeuren`);
+  cy.get(utils.vlModalVerify.container).should('contain', verifyText);
   cy.get(utils.vlModalVerify.save).click();
   cy.wait('@patchAgendaitems');
   cy.wait('@getModifiedByOfAgendaitems');
@@ -327,6 +292,7 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
  * @function
  * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
  */
+// TODO-coapproval unused method for an unused feature, refactor later
 function approveCoAgendaitem(agendaitemShortTitle) {
   cy.log('approveCoAgendaitem');
   cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
@@ -378,18 +344,13 @@ function approveCoAgendaitem(agendaitemShortTitle) {
  */
 function approveDesignAgenda(shouldConfirm = true) {
   cy.log('approveDesignAgenda');
-  // cy.route('PATCH', '/agendas/**').as('patchAgenda');
-  // cy.route('GET', '/agendaitems/**/subcase').as('getAgendaitems');
-  // cy.route('GET', '/agendas/**').as('getAgendas');
 
-  // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).within(() => {
-      cy.get(agenda.agendaHeader.confirm.approveAgenda).click();
-    });
+    cy.get(auk.modal.container).setFormalOkOnItemWithIndex(agenda.agendaHeader.confirm.approveAgenda)
+      .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -399,17 +360,7 @@ function approveDesignAgenda(shouldConfirm = true) {
       timeout: 60000,
     }).should('not.exist');
   }
-  // .wait('@patchAgenda', {
-  //   timeout: 12000,
-  // })
-  // .wait('@getAgendaitems', { timeout: 12000 })
-  // .wait('@getAgendas', {
-  //   timeout: 12000,
-  // });
 
-  // cy.get(auk.modal.container, {
-  //   timeout: 60000,
-  // }).should('not.exist');
   cy.log('/approveDesignAgenda');
 }
 
@@ -424,17 +375,13 @@ function approveDesignAgenda(shouldConfirm = true) {
  */
 function approveAndCloseDesignAgenda(shouldConfirm = true) {
   cy.log('approveAndCloseDesignAgenda');
-  cy.route('PATCH', '/agendas/**').as('patchAgendaAndCloseAgenda');
-  cy.route('GET', '/agendas/**').as('getAgendasInCloseDesignAgenda');
 
-  // TODO add boolean for when not all items are formally ok, click through the confirmation modal
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.approveAndCloseAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).within(() => {
-      cy.get(agenda.agendaHeader.confirm.approveAndCloseAgenda).click();
-    });
+    cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.approveAndCloseAgenda)
+      .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
       timeout: 60000,
@@ -451,7 +398,7 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
  * @param {String} caseTitle - The title of the case
  * @param {boolean} postponed - The remark
  */
-function addAgendaitemToAgenda(caseTitle, postponed) {
+function addAgendaitemToAgenda(caseTitle, postponed = false) {
   cy.log('addAgendaitemToAgenda');
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
@@ -459,56 +406,55 @@ function addAgendaitemToAgenda(caseTitle, postponed) {
   cy.route('PATCH', '/subcases/**').as('patchSubcase');
   cy.route('PATCH', '/agendas/**').as('patchAgenda');
 
-  cy.contains('Pagina is aan het laden').should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.get(agenda.agendaHeader.showActionOptions).click();
-  cy.get(agenda.agendaHeader.actions.addAgendaitems)
-    .should('be.visible')
-    .click();
+  cy.get(agenda.agendaHeader.actions.addAgendaitems).click();
   cy.wait('@getSubcasesFiltered', {
     timeout: 20000,
   });
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.get('.auk-modal').as('dialog')
-    .within(() => {
-      if (postponed) {
-        cy.get('[data-test-postponed-checkbox]')
-          .within(() => {
-            cy.get('.vl-toggle__label').click();
-          });
-      }
-      cy.get('.auk-loader', {
+  cy.get(utils.vlModal.dialogWindow).within(() => {
+    if (postponed) {
+      cy.get(agenda.createAgendaitem.postponedCheckbox).click();
+    }
+    cy.get(auk.loader, {
+      timeout: 12000,
+    }).should('not.exist');
+    if (caseTitle) {
+      cy.get(agenda.createAgendaitem.input).clear()
+        .type(caseTitle, {
+          force: true,
+        });
+      cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
+      cy.wait('@getSubcasesFiltered', {
+        timeout: 12000,
+      });
+      cy.get(auk.loader, {
         timeout: 12000,
       }).should('not.exist');
-      if (caseTitle) {
-        cy.get('.vl-input-field').clear()
-          .type(caseTitle, {
-            force: true,
-          });
-        cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-        cy.wait('@getSubcasesFiltered', {
-          timeout: 12000,
-        });
-        cy.get('.auk-loader', {
-          timeout: 12000,
-        }).should('not.exist');
-        cy.get('table > tbody > tr').as('rows');
-      } else {
-        cy.get('table > tbody > tr').as('rows');
-        cy.get('@rows', {
-          timeout: 12000,
-        }).should('not.have.length', 1);
-      }
-      cy.get('.auk-loader').should('not.exist');
+      cy.get(agenda.createAgendaitem.dataTable).find('tbody')
+        .children('tr')
+        .as('rows');
+    } else {
+      // TODO KAS-2739 remove else
+      cy.get(agenda.createAgendaitem.dataTable).find('tbody')
+        .children('tr')
+        .as('rows');
       cy.get('@rows', {
         timeout: 12000,
-      }).eq(0)
-        .click()
-        .get('[type="checkbox"]')
-        .should('be.checked');
-      cy.get(utils.vlModalFooter.save).click();
-    });
+      }).should('not.have.length', 1);
+    }
+    // cy.get(auk.loader).should('not.exist');
+    cy.get('@rows', {
+      timeout: 12000,
+    }).eq(0)
+      .click()
+      .get(utils.vlCheckbox.checkbox)
+      .should('be.checked');
+    cy.get(utils.vlModalFooter.save).click();
+  });
 
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
@@ -538,7 +484,9 @@ function toggleShowChanges() {
   cy.clickReverseTab('Overzicht');
   cy.get(auk.loader).should('not.exist'); // data is not loading
   cy.get(agenda.agendaOverview.showChanges).click();
-  cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
+  // TODO KAS-2739 can we await call?
+  // cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
+  cy.get(auk.loader).should('not.exist');
   cy.log('/toggleShowChanges');
 }
 
@@ -597,24 +545,24 @@ function agendaitemExists(agendaitemName) {
 function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
   cy.log('openDetailOfAgendaitem');
   cy.agendaitemExists(agendaitemName);
+  // TODO KAS-2739 this can be sidebar or overview item
   cy.contains(agendaitemName)
     .scrollIntoView()
     .click();
+  // TODO KAS-2739 search for loader in detail tabs
   cy.wait(1000);
   cy.url().should('include', 'agendapunten');
   cy.get(agenda.agendaitemNav.activeTab).then((element) => {
     const selectedTab = element[0].text;
     if (!selectedTab.includes('Dossier')) {
-      cy.wait(3000); // TODO wait to ensure the page and tabs are loaded, find a better to check this
+      cy.wait(3000); // TODO KAS-2739 wait to ensure the page and tabs are loaded, find a better to check this
       cy.get(agenda.agendaitemNav.caseTab).click();
     }
     if (isAdmin) {
       cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
-      cy.contains('Naar procedurestap', {
-        timeout: 12000,
-      });
+      cy.get(agenda.agendaitemTitlesView.linkToSubcase);
     } else {
-      cy.wait(3000); // TODO wait to ensure the page is loaded, find a better way to check this for other profiles
+      cy.wait(3000); // TODO KAS-2739 wait to ensure the page is loaded, find a better way to check this for other profiles
     }
   });
   cy.log('/openDetailOfAgendaitem');
@@ -628,11 +576,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
  * @param {string} agendaName - name of the agenda item
  */
 function changeSelectedAgenda(agendaName) {
-  cy.get('.auk-sidebar__item').children()
-    .contains(agendaName, {
-      timeout: 12000,
-    })
-    .should('exist')
+  cy.get(agenda.agendaSideNav.agendaName).contains(agendaName)
     .click();
   cy.get(auk.loader).should('not.exist'); // await calls after switch covered by checking for loader
 }
@@ -646,10 +590,17 @@ function changeSelectedAgenda(agendaName) {
  */
 function closeAgenda() {
   cy.log('closeAgenda');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+  cy.route('PATCH', '/agendas/**').as('patchAgenda');
+
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.lockAgenda).click();
-  cy.get(auk.modal.container).within(() => {
-    cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
+  cy.get(agenda.agendaHeader.confirm.lockAgenda).click();
+  cy.wait('@patchMeetings', {
+    timeout: 20000,
+  });
+  cy.wait('@patchAgenda', {
+    timeout: 20000,
   });
   // as long as the modal exists, the action is not completed
   cy.get(auk.modal.container, {
@@ -666,17 +617,17 @@ function closeAgenda() {
  */
 function releaseDecisions() {
   cy.log('releaseDecisions');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDecisions).click({
     force: true,
   });
-  cy.get(utils.vlModalVerify.container).within(() => {
-    cy.get('.auk-button').contains('Vrijgeven')
-      .click();
-  });
-  cy.get(utils.vlModalVerify.container, {
+  cy.get(utils.vlModalVerify.save).contains('Vrijgeven')
+    .click();
+  cy.wait('@patchMeetings', {
     timeout: 20000,
-  }).should('not.exist');
+  });
   cy.log('/releaseDecisions');
 }
 
@@ -688,15 +639,15 @@ function releaseDecisions() {
  */
 function releaseDocuments() {
   cy.log('releaseDocuments');
+  cy.route('PATCH', '/meetings/**').as('patchMeetings');
+
   cy.get(agenda.agendaHeader.showActionOptions).click();
   cy.get(agenda.agendaHeader.actions.releaseDocuments).click();
-  cy.get(utils.vlModalVerify.container).within(() => {
-    cy.get('.auk-button').contains('Vrijgeven')
-      .click();
-  });
-  cy.get(utils.vlModalVerify.container, {
+  cy.get(utils.vlModalVerify.save).contains('Vrijgeven')
+    .click();
+  cy.wait('@patchMeetings', {
     timeout: 20000,
-  }).should('not.exist');
+  });
   cy.log('/releaseDocuments');
 }
 
@@ -708,9 +659,9 @@ function releaseDocuments() {
  * @function
  * @param {String} selector The name of the tab to click on, case sensitive
  */
+// TODO KAS-2739 pointless command
 function clickAgendaitemTab(selector) {
-  cy.get(selector).should('be.visible')
-    .click();
+  cy.get(selector).click();
 }
 
 /**

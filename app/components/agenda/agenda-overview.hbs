@@ -59,6 +59,7 @@
             {{#each agendaitemGroup.agendaitems as |agendaitem|}}
               <li
                 class="vlc-agenda-items__sub-item"
+                data-test-agenda-overview-agendaitem={{true}}
                 {{sortable-item
                   model=agendaitem
                   distance="30"

@@ -68,6 +68,7 @@ const selectors = {
   agendaOverview: {
     showChanges: '[data-test-agenda-overview-show-changes]',
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
+    agendaitem: '[data-test-agenda-overview-agendaitem]',
   },
 
   // agenda-header
@@ -166,7 +167,10 @@ const selectors = {
 
   // new-session
   newSession: {
+    kind: '[data-test-new-session-kind]',
     meetingNumber: '[data-test-new-session-meeting-number]',
+    meetingLocation: '[data-test-new-session-meeting-location]',
+    datepicker: '[data-test-new-session-datepicker]',
     numberRep: {
       edit: '[data-test-new-session-number-representation-edit]',
       input: '[data-test-new-session-number-representation-input]',
@@ -178,6 +182,13 @@ const selectors = {
   editSession: {
     meetingNumber: '[data-test-edit-session-meeting-number]',
     numberRep: '[data-test-edit-session-number-representation]',
+  },
+
+  // create-agendaitem
+  createAgendaitem: {
+    input: '[data-test-create-agendaitem-input]',
+    postponedCheckbox: '[data-test-create-agendaitem-postponed-checkbox]',
+    dataTable: '[data-test-create-agendaitem-data-table]',
   },
 };
 export default selectors;
