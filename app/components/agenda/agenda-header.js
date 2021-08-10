@@ -101,7 +101,7 @@ export default Component.extend({
     return lastApprovedAgenda.agendaName;
   }),
 
-  currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.[]', async function() {
+  currentAgendaIsLast: computed('currentAgenda', 'currentSession.{agendas.[],sortedAgendas.firstObject.id}', async function() {
     return (await this.get('currentSession.sortedAgendas.firstObject.id')) === (await this.currentAgenda.get('id'));
   }),
 
@@ -118,7 +118,7 @@ export default Component.extend({
    * TODO check if we want to be able to reopen an approved agenda without a design agenda present
    * @returns boolean
    */
-  canReopenPreviousAgenda: computed('currentSession', 'currentAgenda', 'isSessionClosable', 'currentAgendaIsLast', async function() {
+  canReopenPreviousAgenda: computed('currentAgenda.isDesignAgenda', 'currentAgendaIsLast', 'currentSession.isFinal', 'currentSessionService.isAdmin', 'isSessionClosable', async function() {
     const isSessionClosable = await this.isSessionClosable;
     const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
 
@@ -134,7 +134,7 @@ export default Component.extend({
    * - if the currentAgenda is approved, only admin can delete the agenda if it's the latest one
    * @returns boolean
    */
-  canDeleteSelectedAgenda: computed('currentAgenda', 'currentAgendaIsLast', async function() {
+  canDeleteSelectedAgenda: computed('currentAgenda.isDesignAgenda', 'currentAgendaIsLast', 'currentSessionService.isAdmin', async function() {
     const isAdminAndLastAgenda = this.currentSessionService.isAdmin && (await this.currentAgendaIsLast); // TODO why are these together ?
     if (this.currentAgenda.isDesignAgenda || isAdminAndLastAgenda) {
       return true;

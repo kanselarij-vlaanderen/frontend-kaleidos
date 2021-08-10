@@ -25,10 +25,10 @@ export default Component.extend({
       return value;
     },
   }),
-  firstPage: computed('links', function() {
+  firstPage: computed('links.first.number', function() {
     return this.get('links.first.number') || 1;
   }),
-  lastPage: computed('links', function() {
+  lastPage: computed('links.last.number', function() {
     const max = this.get('links.last.number') || -1;
     return max ? max + 1 : max;
   }),

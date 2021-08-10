@@ -57,7 +57,7 @@ export default Component.extend({
     }
   },
 
-  richtext: computed('editorInstance.htmlContent', function() {
+  richtext: computed('editorInstance.htmlContent', 'editorInstanceAvailable', function() {
     if (!this.editorInstanceAvailable) {
       throw new Error("Can't get rich text since editor-instance isn't available!");
     }

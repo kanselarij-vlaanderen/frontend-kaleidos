@@ -49,7 +49,7 @@ export default Model.extend(LoadableModel, {
     return this.get('isDesignAgenda');
   },
 
-  agendaName: computed('serialnumber', 'status', function() {
+  agendaName: computed('serialnumber', 'status.isDesignAgenda', function() {
     const isDesignAgenda = this.get('status.isDesignAgenda');
     const agendaName = this.serialnumber || '';
     let prefix;

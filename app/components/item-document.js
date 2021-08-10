@@ -14,7 +14,7 @@ export default Component.extend({
 
   addedPieces: alias('agendaService.addedPieces'),
 
-  checkAdded: computed('piece', async function() {
+  checkAdded: computed('addedPieces.length', 'piece', async function() {
     // TODO this is dependant on documentContainer, ideally we want to get rid of this.
     // addedPieces is actually addedDocumentContainers..
     if (this.addedPieces && this.addedPieces.length > 0) {

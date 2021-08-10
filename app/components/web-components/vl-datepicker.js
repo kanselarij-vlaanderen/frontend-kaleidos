@@ -22,7 +22,7 @@ export default Component.extend({
     return dateObjectsToEnable.map((object) => this.formatter.formatDate(object.get(datePropertyToUse)));
   }),
 
-  selectedDate: computed('date', function() {
+  selectedDate: computed('date', 'defaultHour', 'defaultMinute', function() {
     const date = this.get('date');
     if (date) {
       return this.formatter.formatDate(date.get('firstObject'));

@@ -10,7 +10,7 @@ export default Model.extend({
   agendaitems: hasMany('agendaitems'), // TODO ember-data model name should be singular?
   submissionActivities: hasMany('submission-activity'),
 
-  latestAgendaitem: computed('agendaitems.[]', async function() {
+  latestAgendaitem: computed('agendaitems.[]', 'subcase', async function() {
     const subcase = await this.get('subcase');
     const meeting = await subcase.get('requestedForMeeting');
     const latestAgenda = await meeting.get('latestAgenda');

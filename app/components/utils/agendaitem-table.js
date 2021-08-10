@@ -81,7 +81,7 @@ export default class AgendaitemTable extends Component {
     }
   }
 
-  @computed('model.[]')
+  @computed('columns', 'enableSync', 'model.[]', 'sort')
   get table() {
     const table = Table.create({
       columns: this.columns,

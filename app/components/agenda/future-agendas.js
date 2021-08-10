@@ -10,7 +10,7 @@ export default Component.extend({
   classNames: ['auk-u-mb-8'],
   selectedMeeting: null,
 
-  items: computed('meetings', 'type', 'nearestMeeting', function() {
+  items: computed('meetings', 'nearestMeeting.firstObject', 'type', function() {
     if (this.type === 'future') {
       const nearestMeeting = this.get('nearestMeeting.firstObject');
       if (!nearestMeeting) {

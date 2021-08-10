@@ -14,7 +14,7 @@ export default Component.extend({
   routeModelPrefix: null,
   modelsForHierarchicalBack: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function() {
+  shouldShowPrintButton: computed('routeModelPrefix', 'routing.currentRouteName', function() {
     return this.routing.get('currentRouteName').includes(`${this.routeModelPrefix}.overview`);
   }),
 

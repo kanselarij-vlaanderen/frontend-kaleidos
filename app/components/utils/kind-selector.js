@@ -14,7 +14,7 @@ export default Component.extend({
 
   options: computed(() => CONFIG.MINISTERRAAD_TYPES.TYPES.map((meetingType) => EmberObject.create(meetingType))),
 
-  selectedkind: computed('options', 'kind', function() {
+  selectedkind: computed('kind.uri', 'options', function() {
     return this.options.find((kind) => this.kind && kind.uri === this.kind.uri) || this.options.get('firstObject');
   }),
 

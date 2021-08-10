@@ -16,7 +16,7 @@ export default Model.extend({
   }),
   modified: attr('datetime'),
   created: attr('datetime'),
-  treatmentApproval: computed('report', function() {
+  treatmentApproval: computed('report.lastPiece.name', function() {
     return this.intl.t('signed-document-decision', {
       name: this.get('report.lastPiece.name'),
     });
