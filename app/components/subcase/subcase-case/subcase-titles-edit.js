@@ -1,5 +1,5 @@
 // TODO: octane-refactor
-/* eslint-disable ember/no-get */
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';

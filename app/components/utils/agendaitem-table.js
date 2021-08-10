@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 // TODO: octane-refactor
-/* eslint-disable ember/no-get */
+/* eslint-disable ember/no-get, ember/classic-decorator-no-classic-methods */
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 /* eslint-disable ember/no-computed-properties-in-native-classes */
