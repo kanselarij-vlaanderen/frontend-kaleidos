@@ -38,7 +38,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
   @tracked isPieceUploadModalOpen = false;
-  @tracked isPieceUploadSource;
   @tracked isPieceUploadCorrected;
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
@@ -125,7 +124,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   openSourceUploadModal() {
     this.isPieceUploadModalOpen = true;
-    this.isPieceUploadSource = true;
   }
 
   @action
@@ -137,8 +135,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   closePieceUploadModal() {
     this.isPieceUploadModalOpen = false;
-
-    this.isPieceUploadSource = false;
     this.isPieceUploadCorrected = false;
   }
 
@@ -175,7 +171,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   async performSaveProofRequest(proofRequest) {
     const now = new Date();
-
     const saves = [];
 
     // PUBLICATION SUBCASE

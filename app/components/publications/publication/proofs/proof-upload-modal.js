@@ -12,7 +12,6 @@ import {
  * only one of these has to be true
  * @argument {boolean} isReceived
  * @argument {boolean} isCorrected
- * @argument {boolean} isSource
  *
  * @argument onSave
  * @argument onCancel
