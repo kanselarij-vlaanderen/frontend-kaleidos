@@ -15,6 +15,8 @@
         @href={{piece.viewDocumentURL}} target="_blank" />
     </Auk::List::Item>
   {{else}}
-    <div class="auk-u-muted auk-u-italic">{{t "no-documents-available"}}</div>
+    <Auk::EmptyState
+            @message={{this.emptyMessage}}
+    />
   {{/each}}
 </Auk::List>
