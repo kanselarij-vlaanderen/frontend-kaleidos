@@ -8,14 +8,14 @@ import { inject } from '@ember/service';
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
 export default Component.extend({
   classNames: ['auk-u-bg-alt'],
-  routing: inject('-routing'),
+  router: inject(),
   currentSession: inject(),
   title: null,
   routeModelPrefix: null,
   modelsForHierarchicalBack: null,
 
-  shouldShowPrintButton: computed('routeModelPrefix', 'routing.currentRouteName', function() {
-    return this.routing.get('currentRouteName').includes(`${this.routeModelPrefix}.overview`);
+  shouldShowPrintButton: computed('routeModelPrefix', 'router.currentRouteName', function() {
+    return this.router.currentRouteName.includes(`${this.routeModelPrefix}.overview`);
   }),
 
   routeModelAgendaitems: computed('routeModelPrefix', function() {

@@ -13,7 +13,7 @@ export default Component.extend({
   intl: service(),
   store: service(),
   session: service(),
-  routing: service('-routing'),
+  router: service(),
   toaster: service(),
   newsletterService: service(),
   currentSession: service(),
@@ -22,8 +22,8 @@ export default Component.extend({
   meeting: null,
   isVerifying: null,
 
-  shouldShowPrintButton: computed('routing.currentRouteName', function() {
-    return this.routing.get('currentRouteName').includes('newsletter.print');
+  shouldShowPrintButton: computed('router.currentRouteName', function() {
+    return this.router.currentRouteName.includes('newsletter.print');
   }),
 
   async validatedCampaign(campaignId) {
