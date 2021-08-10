@@ -1,6 +1,7 @@
 import Model, { hasMany, belongsTo, attr } from '@ember-data/model';
 import { PromiseObject } from '@ember-data/store/-private';
 import { computed } from '@ember/object';
+import { reads } from '@ember/object/computed';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 // LoadableModel is still depended upon here and there. Should refactor out in the more general direction the codebase handles these load operations.
 // eslint-disable-next-line ember/no-mixins
@@ -35,13 +36,9 @@ export default Model.extend(LoadableModel, {
     inverse: 'previousVersion',
     serialize: false,
   }),
-  isDesignAgenda: computed('status.isDesignAgenda', function() {
-    return this.get('status.isDesignAgenda');
-  }),
+  isDesignAgenda: reads('status.isDesignAgenda'),
 
-  isApproved: computed('status.isApproved', function() {
-    return this.get('status.isApproved');
-  }),
+  isApproved: reads('status.isApproved'),
 
   async asyncCheckIfDesignAgenda() {
     await this.get('status');

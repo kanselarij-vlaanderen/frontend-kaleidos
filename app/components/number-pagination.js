@@ -1,8 +1,8 @@
 // BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/components/number-pagination.js
 // BRON: https://github.com/mu-semtech/ember-data-table/blob/master/addon/templates/components/number-pagination.hbs
 /* eslint-disable ember/no-get */
-
 import { computed } from '@ember/object';
+import { gt } from '@ember/object/computed';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
@@ -40,9 +40,7 @@ export default Component.extend({
     const currrentPage = this.get('currentPage');
     return lastPage === currrentPage;
   }),
-  hasMultiplePages: computed('lastPage', function() {
-    return this.get('lastPage') > 0;
-  }),
+  hasMultiplePages: gt('lastPage', 0),
   startItem: computed('size', 'currentPage', function() {
     const startitem = this.get('size') * (this.get('currentPage') - 1);
     return startitem + 1;

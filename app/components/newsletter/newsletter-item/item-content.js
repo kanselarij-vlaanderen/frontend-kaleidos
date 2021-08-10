@@ -2,7 +2,7 @@
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
 import { inject } from '@ember/service';
-import { computed } from '@ember/object';
+import { not } from '@ember/object/computed';
 
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes, ember/require-tagless-components
@@ -17,9 +17,7 @@ export default Component.extend({
   newsletterInfo: null,
   showIndex: true,
 
-  isFlandersArt: computed('allowEditing', function() {
-    return !this.allowEditing;
-  }),
+  isFlandersArt: not('allowEditing'),
 
   // TODO: octane-refactor
   // eslint-disable-next-line ember/no-actions-hash

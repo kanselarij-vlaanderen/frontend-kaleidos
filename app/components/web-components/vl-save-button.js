@@ -1,7 +1,7 @@
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-components
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import { not } from '@ember/object/computed';
 import { inject } from '@ember/service';
 
 // TODO: octane-refactor
@@ -15,9 +15,7 @@ export default Component.extend({
   attributeBindings: ['isLoading:disabled'],
   classNameBindings: ['isLoading::auk-button', 'isLoading::auk-button--primary', 'isLoading:auk-button-loading'],
 
-  focus: computed('isLoading', function() {
-    return !this.isLoading;
-  }),
+  focus: not('isLoading'),
 
   click() {
     if (this.type === 'button') {
