@@ -13,7 +13,7 @@ export default Controller.extend({
   meeting: null,
   intl: inject(),
 
-  title: computed('model.createdFor', 'titleTranslationKey', async function() {
+  title: computed('model.createdFor.plannedStart', 'titleTranslationKey', 'titleTranslationParams', async function() {
     const date = this.get('model.createdFor.plannedStart');
     if (this.titleTranslationParams) {
       const translatedTitleWithParams = this.intl.t(this.titleTranslationKey, this.titleTranslationParams);

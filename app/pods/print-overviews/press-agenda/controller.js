@@ -12,7 +12,7 @@ export default Controller.extend({
   routeModel: 'print-overviews.press-agenda',
   intl: inject(),
 
-  title: computed('model.createdFor', 'titleTranslationKey', async function() {
+  title: computed('model.createdFor.plannedStart', 'titleTranslationKey', async function() {
     const date = this.get('model.createdFor.plannedStart');
     const translatedTitle = this.intl.t(this.titleTranslationKey);
     return getPrintOverviewTitle(translatedTitle, date);

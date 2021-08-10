@@ -12,7 +12,7 @@ export default Controller.extend({
   queryParams: ['definite'],
 
   meeting: alias('model.currentAgenda.createdFor'),
-  title: computed('meeting', function() {
+  title: computed('meeting.{plannedStart,kindToShow.altLabel}', function() {
     const date = this.get('meeting.plannedStart');
     const kindLabel = this.get('meeting.kindToShow.altLabel');
     return `${this.intl.t('decisions-of-kind', {
@@ -20,7 +20,7 @@ export default Controller.extend({
     })} ${moment(date).format('dddd DD-MM-YYYY')}`;
   }),
 
-  documentTitle: computed('meeting', 'definite', function() {
+  documentTitle: computed('meeting.{plannedStart,kindToShow.altLabel}', 'definite', function() {
     const date = this.get('meeting.plannedStart');
     const kindLabel = this.get('meeting.kindToShow.altLabel');
     let prefix = '';
