@@ -59,7 +59,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort, false);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
 
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)
@@ -208,7 +208,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.openAgendaForDate(agendaDate);
     cy.addAgendaitemToAgenda(subcaseTitleShort, false);
     cy.openDetailOfAgendaitem(subcaseTitleShort);
-    cy.clickAgendaitemTab(agenda.agendaitemNav.documentsTab);
+    cy.get(agenda.agendaitemNav.documentsTab).click();
 
     cy.get(document.documentCard.card).eq(0)
       .find(document.documentCard.name.value)

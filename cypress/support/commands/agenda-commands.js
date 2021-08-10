@@ -68,17 +68,13 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     cy.get(agenda.newSession.meetingNumber).click()
       .clear()
       .type(meetingNumber);
+  } else {
+    // 1 test in agenda.spec uses this value
+    cy.get(agenda.newSession.meetingNumber).click()
+      .invoke('val')
+      // eslint-disable-next-line
+      .then((sometext) => meetingNumber = sometext);
   }
-  // } else {
-  // TODO KAS-2739 check
-  //   // TODO, this can be without else, now meetingNumber sent back in promise = parameter in function call
-  //   cy.get('.auk-input').click({
-  //     force: true,
-  //   })
-  //     .invoke('val')
-  //     // eslint-disable-next-line
-  //     .then((sometext) => meetingNumber = sometext);
-  // }
 
   // Set the meetingNumber representation
   let meetingNumberRep;
@@ -251,7 +247,10 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     cy.clickReverseTab('Overzicht');
   }
   cy.get(agenda.agendaOverview.formallyOkEdit).click();
-  // cy.wait(2000); // TODO await data loading after clicking this button?
+  // Data loading occurs here
+  cy.get(auk.loader, {
+    timeout: 20000,
+  }).should('not.exist');
 
   cy.get(agenda.agendaOverviewItem.container).eq(indexOfItem)
     .scrollIntoView()
@@ -263,7 +262,6 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
     .contains(formalityStatus)
     .click();
   cy.wait(`@patchAgendaitem_${int}`);
-  // .wait(1000); // sorry ik zou hier moeten wachten op access-levels maar net zoveel keer als dat er items zijn ...
   cy.get(utils.changesAlert.close).click();
   cy.log('/setFormalOkOnItemWithIndex');
 }
@@ -396,14 +394,14 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
 }
 
 /**
- * @description Add a new case to the agenda
+ * @description Add a new subcase to the agenda
  * @name addAgendaitemToAgenda
  * @memberOf Cypress.Chainable#
  * @function
- * @param {String} caseTitle - The title of the case
- * @param {boolean} postponed - The remark
+ * @param {String} subcaseTitle - The title of the case, Mandatory
+ * @param {boolean} postponed - DO NOT USE, Feature no longer works properly but still exists, default false
  */
-function addAgendaitemToAgenda(caseTitle, postponed = false) {
+function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   cy.log('addAgendaitemToAgenda');
   cy.route('GET', '/subcases?**sort**').as('getSubcasesFiltered');
   cy.route('POST', '/agendaitems').as('createNewAgendaitem');
@@ -427,31 +425,23 @@ function addAgendaitemToAgenda(caseTitle, postponed = false) {
     cy.get(auk.loader, {
       timeout: 12000,
     }).should('not.exist');
-    if (caseTitle) {
-      cy.get(agenda.createAgendaitem.input).clear()
-        .type(caseTitle, {
-          force: true,
-        });
-      cy.route('GET', `/subcases?filter**filter[short-title]=${caseTitle}**`).as('getSubcasesFiltered');
-      cy.wait('@getSubcasesFiltered', {
-        timeout: 12000,
+    // type the subcase title from parameters to search
+    cy.get(agenda.createAgendaitem.input).clear()
+      .type(subcaseTitle, {
+        force: true,
       });
-      cy.get(auk.loader, {
-        timeout: 12000,
-      }).should('not.exist');
-      cy.get(agenda.createAgendaitem.dataTable).find('tbody')
-        .children('tr')
-        .as('rows');
-    } else {
-      // TODO KAS-2739 remove else
-      cy.get(agenda.createAgendaitem.dataTable).find('tbody')
-        .children('tr')
-        .as('rows');
-      cy.get('@rows', {
-        timeout: 12000,
-      }).should('not.have.length', 1);
-    }
-    // cy.get(auk.loader).should('not.exist');
+    cy.route('GET', `/subcases?filter**filter[short-title]=${subcaseTitle}**`).as('getSubcasesFiltered');
+    cy.wait('@getSubcasesFiltered', {
+      timeout: 12000,
+    });
+    cy.get(auk.loader, {
+      timeout: 12000,
+    }).should('not.exist');
+    // select the found row (title should always match only 1 result to avoid using the wrong subcase)
+    cy.get(agenda.createAgendaitem.dataTable).find('tbody')
+      .children('tr')
+      .as('rows');
+
     cy.get('@rows', {
       timeout: 12000,
     }).eq(0)
@@ -489,8 +479,7 @@ function toggleShowChanges() {
   cy.clickReverseTab('Overzicht');
   cy.get(auk.loader).should('not.exist'); // data is not loading
   cy.get(agenda.agendaOverview.showChanges).click();
-  // TODO KAS-2739 can we await call?
-  // cy.wait(1500); // the changes are not loaded yet, cypress does not find the get call to agenda-sort
+  // data loading is triggered so we check for the loader
   cy.get(auk.loader).should('not.exist');
   cy.log('/toggleShowChanges');
 }
@@ -501,7 +490,7 @@ function toggleShowChanges() {
  * @name agendaitemExists
  * @memberOf Cypress.Chainable#
  * @function
- * @param {string} agendaitemName - boolean to check if a refresh needs to happen.
+ * @param {string} agendaitemName - title of the agendaitem
  */
 function agendaitemExists(agendaitemName) {
   cy.log('agendaitemExists');
@@ -512,17 +501,16 @@ function agendaitemExists(agendaitemName) {
   }).should('not.exist');
   cy.get(auk.tab.activeHref).then((element) => {
     const selectedReverseTab = element[0].text;
-    if (selectedReverseTab.includes('Details')) {
+    if (selectedReverseTab.includes('Detail')) {
       cy.get(agenda.agendaDetailSidebar.subitem)
         .contains(agendaitemName, {
           timeout: 12000,
         })
-        .should('exist');
+        .as('foundAgendaitem');
     } else {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
-        cy.get(agenda.agendaOverviewItem.subitem); // changing from detail to overview = new url, this check will only work after the url has changed
-        // The following is to check for data loading but could succeed before the correct url was loaded
+        cy.get(agenda.agendaOverviewItem.subitem);
         // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
         cy.get(auk.loader, {
@@ -533,10 +521,13 @@ function agendaitemExists(agendaitemName) {
         .contains(agendaitemName, {
           timeout: 24000,
         })
-        .should('exist');
+        .as('foundAgendaitem');
     }
   });
   cy.log('/agendaitemExists');
+  // By getting the aliased agendaitem as last action in the command, we can chain off this in future commands
+  // Used mainly for the command "openDetailOfAgendaitem"
+  cy.get('@foundAgendaitem');
 }
 
 /**
@@ -549,25 +540,33 @@ function agendaitemExists(agendaitemName) {
  */
 function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
   cy.log('openDetailOfAgendaitem');
-  cy.agendaitemExists(agendaitemName);
-  // TODO KAS-2739 this can be sidebar or overview item
-  cy.contains(agendaitemName)
+  /*
+    NOTE: We are chaining from the previous command to make sure we have the same element
+    without repeating the selection process since this can be a sidebar or an overview item
+  */
+  cy.agendaitemExists(agendaitemName)
     .scrollIntoView()
     .click();
-  // TODO KAS-2739 search for loader in detail tabs
-  cy.wait(1000);
+  cy.get(auk.loader, {
+    timeout: 60000,
+  }).should('not.exist');
   cy.url().should('include', 'agendapunten');
   cy.get(agenda.agendaitemNav.activeTab).then((element) => {
     const selectedTab = element[0].text;
+    // TODO KAS-2739 always going to case tab might be slowing testing down, can we do better ?
     if (!selectedTab.includes('Dossier')) {
-      cy.wait(3000); // TODO KAS-2739 wait to ensure the page and tabs are loaded, find a better to check this
       cy.get(agenda.agendaitemNav.caseTab).click();
+      // after changing the tab, we have to wait for data to load
+      cy.get(auk.loader).should('not.exist');
     }
+
     if (isAdmin) {
-      cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
+      // This is used for approval items and other profiles who don't have a link to a subcase
+      // cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
     } else {
-      cy.wait(3000); // TODO KAS-2739 wait to ensure the page is loaded, find a better way to check this for other profiles
+      // TODO KAS-2739, with data loading above, this should no longer be needed
+      // cy.wait(3000); // TODO KAS-2739 wait to ensure the page is loaded, find a better way to check this for other profiles
     }
   });
   cy.log('/openDetailOfAgendaitem');
@@ -583,7 +582,10 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
 function changeSelectedAgenda(agendaName) {
   cy.get(agenda.agendaSideNav.agendaName).contains(agendaName)
     .click();
-  cy.get(auk.loader).should('not.exist'); // await calls after switch covered by checking for loader
+  // await calls after switch covered by checking for loader
+  cy.get(auk.loader, {
+    timeout: 60000,
+  }).should('not.exist');
 }
 
 /**
@@ -657,19 +659,6 @@ function releaseDocuments() {
 }
 
 /**
- * @description Clicks on the specified agendaitem tab for navigating
- * @name clickAgendaitemTab
- * @if class="auk-tabs"
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} selector The name of the tab to click on, case sensitive
- */
-// TODO KAS-2739 pointless command
-function clickAgendaitemTab(selector) {
-  cy.get(selector).click();
-}
-
-/**
  * @description Checks if the agenda exists in the agenda/side-nav component by  (ex. "Ontwerpagenda A")
  * @name agendaNameExists
  * @memberOf Cypress.Chainable#
@@ -704,7 +693,6 @@ Cypress.Commands.add('closeAgenda', closeAgenda);
 Cypress.Commands.add('releaseDecisions', releaseDecisions);
 Cypress.Commands.add('releaseDocuments', releaseDocuments);
 Cypress.Commands.add('openAgendaitemKortBestekTab', openAgendaitemKortBestekTab);
-Cypress.Commands.add('clickAgendaitemTab', clickAgendaitemTab);
 Cypress.Commands.add('approveAndCloseDesignAgenda', approveAndCloseDesignAgenda);
 Cypress.Commands.add('setAllItemsFormallyOk', setAllItemsFormallyOk);
 Cypress.Commands.add('agendaNameExists', agendaNameExists);
