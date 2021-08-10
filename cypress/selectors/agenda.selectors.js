@@ -57,6 +57,7 @@ const selectors = {
 
   // agenda-overview-item
   agendaOverviewItem: {
+    container: '[data-test-agenda-overview-item-container]',
     subitem: '[data-test-agenda-overview-item-sub-item]', // this contains short title
     title: '[data-test-agenda-overview-item-title]',
     formallyOk: '[data-test-agenda-overview-item-formally-ok]',
@@ -68,7 +69,6 @@ const selectors = {
   agendaOverview: {
     showChanges: '[data-test-agenda-overview-show-changes]',
     formallyOkEdit: '[data-test-agenda-overview-formally-ok-edit]',
-    agendaitem: '[data-test-agenda-overview-agendaitem]',
   },
 
   // agenda-header

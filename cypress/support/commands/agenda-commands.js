@@ -57,6 +57,11 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
     .click();
   cy.setDateAndTimeInFlatpickr(date);
+  // At this point, the flatpickr is still open and covers the other fields
+  // To negate this, we click once with force:true on the next input field to close it
+  cy.get(agenda.newSession.meetingNumber).click({
+    force: true,
+  });
 
   // Set the meetingNumber
   if (meetingNumber) {
@@ -165,7 +170,7 @@ function openAgendaForDate(agendaDate) {
   cy.get(route.agendasOverview.dataTable).find('tbody')
     .children('tr')
     .eq(0)
-    .get(route.agendasOverview.navigationButton)
+    .find(route.agendasOverview.navigationButton)
     .click();
 
   cy.url().should('include', '/vergadering');
@@ -248,7 +253,7 @@ function setFormalOkOnItemWithIndex(indexOfItem, fromWithinAgendaOverview = fals
   cy.get(agenda.agendaOverview.formallyOkEdit).click();
   // cy.wait(2000); // TODO await data loading after clicking this button?
 
-  cy.get(agenda.agendaOverview.agendaitem).eq(indexOfItem)
+  cy.get(agenda.agendaOverviewItem.container).eq(indexOfItem)
     .scrollIntoView()
     .find(agenda.agendaOverviewItem.formallyOk)
     .click();
@@ -349,7 +354,7 @@ function approveDesignAgenda(shouldConfirm = true) {
   cy.get(agenda.agendaHeader.agendaActions.approveAgenda).click();
   cy.get(auk.loader).should('not.exist'); // new loader when refreshing data
   if (shouldConfirm) {
-    cy.get(auk.modal.container).setFormalOkOnItemWithIndex(agenda.agendaHeader.confirm.approveAgenda)
+    cy.get(auk.modal.container).find(agenda.agendaHeader.confirm.approveAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
