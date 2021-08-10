@@ -50,7 +50,7 @@ export default Model.extend({
    * Using this to sort will map the priority number to the alphabet, giving a correct alphabetical sort with numbers higher than 9.
    * TODO: clean up hacky map-to-alphabet sorting
    */
-  priorityAlpha: computed('priority', function() {
+  priorityAlpha: computed('priority', 'fullDisplayName', function() {
     const priority = this.get('priority');
     if (typeof priority === 'number') {
       const alphaNumeric = lowerCaseAlphabet[priority - 1];

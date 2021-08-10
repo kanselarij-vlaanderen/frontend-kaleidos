@@ -16,7 +16,7 @@ export default Model.extend(Evented, {
   status: attr(),
   timeStarted: attr(),
   timeEnded: attr(),
-  hasEnded: computed('status', function() {
+  hasEnded: computed('status', 'FAILED', 'SUCCESS', function() {
     return this.status === this.SUCCESS || this.status === this.FAILED;
   }),
 

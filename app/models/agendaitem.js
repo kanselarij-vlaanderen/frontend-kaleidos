@@ -5,7 +5,7 @@ import { inject } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import {
-  alias, deprecatingAlias
+  alias, deprecatingAlias, reads
 } from '@ember/object/computed';
 import ModelWithModifier from 'frontend-kaleidos/models/model-with-modifier';
 import VRDocumentName, { compareFunction } from 'frontend-kaleidos/utils/vr-document-name';
@@ -72,7 +72,7 @@ export default ModelWithModifier.extend({
   }),
 
 
-  documentContainers: computed('pieces.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', 'id', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
@@ -100,9 +100,7 @@ export default ModelWithModifier.extend({
     until: 'unknown',
   }),
 
-  isDesignAgenda: computed('agenda.isDesignAgenda', function() {
-    return this.get('agenda.isDesignAgenda');
-  }),
+  isDesignAgenda: reads('agenda.isDesignAgenda'),
 
   // get piece names to show on agendaview when not in the viewport to assist lazy loading
   pieceNames: computed('pieces', async function() {
@@ -179,7 +177,7 @@ export default ModelWithModifier.extend({
     return documentContainers && documentContainers.some((documentContainers) => documentContainers.checkAdded);
   }),
 
-  sortedApprovals: computed('approvals.[]', async function() {
+  sortedApprovals: computed('approvals.[]', 'id', async function() {
     return PromiseArray.create({
       promise: this.store.query('approval', {
         filter: {
@@ -192,7 +190,7 @@ export default ModelWithModifier.extend({
     });
   }),
 
-  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', async function() {
+  newsletterInfo: computed('treatments.@each.newsletterInfo', 'treatments', 'id', async function() {
     const newsletterInfos = await this.store.query('newsletter-info', {
       'filter[agenda-item-treatment][agendaitem][:id:]': this.get('id'),
     });

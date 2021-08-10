@@ -54,7 +54,7 @@ export default Model.extend({
   }),
 
   // This computed does not seem to be used anywhere
-  documentContainers: computed('pieces.@each.name', function() {
+  documentContainers: computed('pieces.@each.name', 'id', 'store', function() {
     return PromiseArray.create({
       promise: this.get('pieces').then((pieces) => {
         if (pieces && pieces.get('length') > 0) {
@@ -107,7 +107,7 @@ export default Model.extend({
     return await agenda.get('agendaName');
   }),
 
-  defaultSignature: computed('signature', async function() {
+  defaultSignature: computed('signature', 'store', async function() {
     const signature = await this.get('signature');
     if (!signature) {
       return DS.PromiseObject.create({

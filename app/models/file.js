@@ -13,7 +13,7 @@ export default Model.extend({
   }),
 
   filename: attr('string'),
-  filenameWithoutExtension: computed('filename', {
+  filenameWithoutExtension: computed('filename', 'extension', {
     get() {
       const ext = this.get('extension');
       // eslint-disable-next-line no-useless-escape
