@@ -1,18 +1,21 @@
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { task } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
+import { isBlank } from '@ember/utils';
 
-export default Component.extend({
+export default class EditCase extends Component {
+  get isSaveDisabled() {
+    return isBlank(this.args.case.shortTitle);
+  }
 
-  actions: {
-    toggleIsEditing() {
-      this.cancelEditing();
-    },
+  @task
+  *save() {
+    yield this.args.onSave(this.args.case);
+  }
 
-    saveChanges() {
-      this.set('isLoading', true);
-      this.caseToEdit.save().then(() => {
-        this.cancelEditing();
-        this.set('isLoading', false);
-      });
-    },
-  },
-});
+  @action
+  close() {
+    this.args.case.rollbackAttributes();
+    this.args.onClose();
+  }
+}
