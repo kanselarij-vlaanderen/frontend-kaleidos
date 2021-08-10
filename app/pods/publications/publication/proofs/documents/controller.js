@@ -2,7 +2,8 @@ import Controller from '@ember/controller';
 // eslint-disable-next-line ember/no-computed-properties-in-native-classes
 import {
   action,
-  computed
+  computed,
+  set
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -42,7 +43,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
 
-  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
+  @computed('sort', 'model.pieces') // TODO: remove @computed once this.sort is marked as @tracked
   get pieces() {
     let property = 'created';
     let isDescending = false;
@@ -99,7 +100,8 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @action
   changeSorting(sort) {
-    this.set('sort', sort);
+    // TODO: remove setter once "sort" is tracked
+    set(this, 'sort', sort);
   }
 
   @action
