@@ -5,11 +5,12 @@
     </h3>
     {{#if currentSession.isEditor}}
       <div class="auk-u-ml-2">
-        <a data-test-subcase-description-edit href="" class="auk-button-link" {{action "toggleIsEditing"}}>
-          <span class="auk-button__content">
-            {{t "edit"}}
-          </span>
-        </a>
+        <Auk::ButtonLink
+          data-test-subcase-description-edit
+          {{action "toggleIsEditing"}}
+        >
+          {{t "edit"}}
+        </Auk::ButtonLink>
       </div>
     {{/if}}
   </div>
@@ -73,7 +74,7 @@
         <div class="auk-key-value-item__label">
           {{t "is-on-agenda"}}
         </div>
-        <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link>
+        <div class="auk-key-value-item__value" data-test-subcase-description-agenda-link-container>
           {{#if
             (or
                (is-pending isRetracted)
@@ -88,17 +89,17 @@
               }}
                 {{t "postponed-subcase"}}
               {{/if}}
-              {{#link-to
-                "agenda.agendaitems.agendaitem"
-                (await latestMeetingId)
-                (await latestAgendaId)
-                (await latestAgendaitemId)
-                class="auk-button-link"
-              }}
-                <span class="auk-button__content">
-                  {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
-                </span>
-              {{/link-to}}
+              <Auk::ButtonLink
+                data-test-subcase-description-agenda-link
+                @route="agenda.agendaitems.agendaitem"
+                @models={{array
+                  (await latestMeetingId)
+                  (await latestAgendaId)
+                  (await latestAgendaitemId)
+                }}
+              >
+                {{moment-format (await subcase.onAgendaInfo)  "DD MMMM YYYY"}}
+              </Auk::ButtonLink>
             {{else}}
               {{t "not-yet-on-agenda"}}
             {{/if}}
@@ -180,11 +181,9 @@
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <a href="" class="auk-button-link" {{action "cancelEditing"}}>
-            <span class="auk-button__content">
-              {{t "cancel"}}
-            </span>
-          </a>
+          <Auk::ButtonLink {{action "cancelEditing"}}>
+            {{t "cancel"}}
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           {{web-components/vl-save-button

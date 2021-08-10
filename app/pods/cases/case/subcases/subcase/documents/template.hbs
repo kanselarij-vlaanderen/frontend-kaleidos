@@ -6,12 +6,12 @@
       </h4>
       {{#if (and this.currentSession.isEditor this.model.pieces.length)}}
         <div class="auk-u-ml-2">
-          <button data-test-route-cases---subcase-documents-batch-edit class="auk-button-link" type="button"
-            {{on "click" this.enablePieceEdit}}>
-            <span class="auk-button__content">
-              {{t "edit"}}
-            </span>
-          </button>
+          <Auk::ButtonLink
+            data-test-route-cases---subcase-documents-batch-edit
+            {{on "click" this.enablePieceEdit}}
+          >
+            {{t "edit"}}
+          </Auk::ButtonLink>
         </div>
       {{/if}}
     </div>
@@ -58,25 +58,23 @@
     @isOverlay={{true}}
     @large={{true}}
     @title={{t "document-add"}} >
-    <div class="auk-modal__body">
-      <div class="auk-u-p-4">
-        {{#if this.savePieces.isRunning}}
-          <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
-        {{else}}
-          <FileUploader
-            @multipleFiles={{true}}
-            @uploadedFileAction={{this.uploadPiece}} />
-          <div class="upload-container">
-            {{#each this.newPieces as |piece|}}
-              <Documents::UploadedDocument
-                @piece={{piece}}
-                @allowDocumentContainerEdit={{true}}
-                @onDelete={{perform this.deletePiece piece}} />
-            {{/each}}
-          </div>
-        {{/if}}
-      </div>
-    </div>
+    <Auk::Modal::Body>
+      {{#if this.savePieces.isRunning}}
+        <WebComponents::VlLoader @text={{t "documents-loading-text"}} />
+      {{else}}
+        <FileUploader
+          @multipleFiles={{true}}
+          @uploadedFileAction={{this.uploadPiece}} />
+        <div class="upload-container">
+          {{#each this.newPieces as |piece|}}
+            <Documents::UploadedDocument
+              @piece={{piece}}
+              @allowDocumentContainerEdit={{true}}
+              @onDelete={{perform this.deletePiece piece}} />
+          {{/each}}
+        </div>
+      {{/if}}
+    </Auk::Modal::Body>
     <WebComponents::VlModalFooter
       @isLoading={{this.savePieces.isRunning}}
       @cancelButtonText={{t "cancel"}}

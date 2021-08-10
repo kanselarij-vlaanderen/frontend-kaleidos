@@ -36,7 +36,7 @@
               <th class="auk-table__col--1"></th>
             {{/c.header}}
             {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
-              <td>
+              <td data-test-route-newsletters-data-table-row-title>
                 {{#if (is-pending meeting)}}
                   <div
                     class="skeletal-loader"

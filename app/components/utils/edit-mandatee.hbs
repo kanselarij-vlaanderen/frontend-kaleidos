@@ -7,62 +7,59 @@
     verifyButtonText=(t "change-mandatee-change-end-date")
   }}
 {{/if}}
-<div class="auk-modal__body">
-  <div class="auk-u-p-4">
-    <div class="auk-form-group">
-      <Auk::Label>{{t "title"}}</Auk::Label>
-      {{web-components/vl-form-input value=title}}
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "nick-name"}}</Auk::Label>
-      {{web-components/vl-form-input value=nickName}}
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "add-people"}}</Auk::Label>
-      {{utils/create-person-selector
-        selectedItems=mandateeToEdit.person
-        selectModel=(action "personSelected")
-      }}
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "start-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        selectedDate=startDate
-        dateChanged=(action "selectStartDate")
-      }}
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "end-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        selectedDate=endDate
-        dateChanged=(action "selectEndDate")
-      }}
-    </div>
-    <div class="auk-form-group">
-      <Auk::Label>{{t "ise-code"}}</Auk::Label>
-      {{utils/model-selector
-        modelName="ise-code"
-        searchField="name"
-        propertyToShow="nameToShow"
-        sortField="name"
-        multiSelect=true
-        selectedItems=iseCodes
-        selectModel=(action "chooseIseCodes")
-      }}
-    </div>
+<Auk::Modal::Body>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "title"}}</Auk::Label>
+    {{web-components/vl-form-input value=title}}
   </div>
-</div>
-<div class="auk-modal__footer auk-modal__footer--bordered">
-  <Auk::Toolbar>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "nick-name"}}</Auk::Label>
+    {{web-components/vl-form-input value=nickName}}
+  </div>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "add-people"}}</Auk::Label>
+    {{utils/create-person-selector
+      selectedItems=mandateeToEdit.person
+      selectModel=(action "personSelected")
+    }}
+  </div>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "start-date"}}</Auk::Label>
+    {{web-components/vl-datepicker
+      selectedDate=startDate
+      dateChanged=(action "selectStartDate")
+    }}
+  </div>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "end-date"}}</Auk::Label>
+    {{web-components/vl-datepicker
+      selectedDate=endDate
+      dateChanged=(action "selectEndDate")
+    }}
+  </div>
+  <div class="auk-form-group">
+    <Auk::Label>{{t "ise-code"}}</Auk::Label>
+    {{utils/model-selector
+      modelName="ise-code"
+      searchField="name"
+      propertyToShow="nameToShow"
+      sortField="name"
+      multiSelect=true
+      selectedItems=iseCodes
+      selectModel=(action "chooseIseCodes")
+    }}
+  </div>
+</Auk::Modal::Body>
+<Auk::Modal::Footer @custom={{true}}>
+  <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::Button
-          @skin="borderless"
+        <Auk::ButtonLink
           {{action "closeModal"}}
           data-test-edit-mandatee-cancel
         >
           {{t "cancel"}}
-        </Auk::Button>
+        </Auk::ButtonLink>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
@@ -76,4 +73,4 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-</div>
+</Auk::Modal::Footer>

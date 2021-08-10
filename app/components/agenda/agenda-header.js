@@ -34,9 +34,7 @@ export default Component.extend(FileSaverMixin, {
   jobMonitor: service(),
   toaster: service(),
 
-  isShowingOptions: false,
   isAddingAgendaitems: false,
-  isShowingAgendaActions: false,
   onCreateAgendaitem: null, // argument. Function to execute after creating an agenda-item.
   onApproveAgenda: null, // argument. Function to execute after approving an agenda.
   onApproveAllAgendaitems: null, // argument. Function to execute after setting formal ok on all agendaitems.
@@ -626,14 +624,6 @@ export default Component.extend(FileSaverMixin, {
     async unlockAgenda() {
       // TODO bevestiging ?
       await this.createDesignAgenda();
-    },
-
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
-    },
-
-    showAgendaActions() {
-      this.toggleProperty('isShowingAgendaActions');
     },
 
     addAgendaitemsAction() {

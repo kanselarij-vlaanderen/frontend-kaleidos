@@ -48,8 +48,8 @@
               data-test-create-publication-modal-suffix-input
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
-            <div class="auk-icon auk-icon--default auk-icon--muted auk-u-mx" >
-              <i class="ki ki-circle-info"></i>
+            <div class="auk-u-position-relative auk-u-inline-block">
+              <Auk::Icon @name="circle-info" @skin="muted" class="auk-u-mx" />
               <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
                 <p>
                   {{t "new-publication-tooltip"}}
@@ -109,17 +109,16 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar>
+    <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
+          <Auk::ButtonLink
             disabled={{this.save.isRunning}}
             data-test-publication-button-cancel
             {{on "click" @onCancel}}
           >
             {{t "cancel"}}
-          </Auk::Button>
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">

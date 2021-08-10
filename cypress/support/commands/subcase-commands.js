@@ -255,12 +255,12 @@ function addSubcaseMandatee(mandateeNumber, fieldNumber, domainNumber, mandateeS
     timeout: 20000,
   });
   if (fieldNumber >= 0) {
-    cy.get('.vlc-checkbox-tree', {
+    cy.get(utils.domainsFieldsSelectorForm.container, {
       timeout: 30000,
     }).should('exist')
       .eq(fieldNumber)
       .within(() => {
-        cy.get(utils.vlCheckbox.label).eq(domainNumber)
+        cy.get(utils.domainsFieldsSelectorForm.field).eq(domainNumber)
           .click();
       });
   }

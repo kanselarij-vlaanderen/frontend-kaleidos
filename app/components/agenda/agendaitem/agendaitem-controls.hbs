@@ -3,44 +3,32 @@
     (and (not (is-pending this.isDeletable)) (not (is-pending this.isPostPonable)))
   }}
     <WebComponents::AuButtonToolbar>
-      <Auk::Button
-        data-test-agendaitem-controls-actions
-        @layout="icon-right"
-        @icon="chevron-down"
-      >
-        {{t "actions"}}
-      </Auk::Button>
-      <AttachPopover
-              @renderInPlace={{true}}
-              @class="ember-attacher-popper"
-              @hideOn="clickout click"
-              @showOn="click"
-              @animation="shift"
-              @placement="bottom"
-      >
-        <Auk::Dropdown>
-          {{#if this.isPostPonable}}
-            {{#if @agendaitem.retracted}}
-              <Auk::Dropdown::Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
-                {{t "not-postpone"}}
-              </Auk::Dropdown::Item>
-            {{else}}
-              <Auk::Dropdown::Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
-                {{t "postpone"}}
-              </Auk::Dropdown::Item>
-            {{/if}}
+      <DropdownMenu
+        @label={{t "actions"}}
+        class="vlc-hide-on-print"
+        data-test-agendaitem-controls-actions={{true}}
+      as |Menu|>
+        {{#if this.isPostPonable}}
+          {{#if @agendaitem.retracted}}
+            <Menu.Item {{on "click" (fn this.advanceAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-advance>
+              {{t "not-postpone"}}
+            </Menu.Item>
+          {{else}}
+            <Menu.Item {{on "click" (fn this.postponeAgendaitem @agendaitem)}} data-test-agendaitem-controls-action-postpone>
+              {{t "postpone"}}
+            </Menu.Item>
           {{/if}}
-          {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
-            <Auk::Dropdown::Item
-              @skin="danger"
-              data-test-agendaitem-controls-action-delete
-              {{on "click" this.toggleIsVerifying}}
-            >
-              {{t "delete"}}
-            </Auk::Dropdown::Item>
-          {{/if}}
-        </Auk::Dropdown>
-      </AttachPopover>
+        {{/if}}
+        {{#if (or this.currentSession.isAdmin (await this.isDeletable))}}
+          <Menu.Item
+            @skin="danger"
+            data-test-agendaitem-controls-action-delete
+            {{on "click" this.toggleIsVerifying}}
+          >
+            {{t "delete"}}
+          </Menu.Item>
+        {{/if}}
+      </DropdownMenu>
     </WebComponents::AuButtonToolbar>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true"></div>

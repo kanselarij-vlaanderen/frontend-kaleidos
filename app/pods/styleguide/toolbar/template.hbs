@@ -110,7 +110,7 @@
               <span class="auk-u-muted auk-body-1 ">- Ministerraad</span>
             </div>
             <Auk::Tabs @reversed={{true}}>
-              <Auk::Tab @icon="hierarchical-back" class="auk-tabs__hierarchical-back" @route="styleguide.accordion"></Auk::Tab>
+              <Auk::Tab @route="styleguide.accordion" @isHierarchicalBack={{true}}/>
               <Auk::Tab @route="styleguide.accordion">Overzicht</Auk::Tab>
               <Auk::Tab @route="styleguide.accordion">Detail</Auk::Tab>
               <Auk::Tab @route="styleguide.accordion">Vergelijk</Auk::Tab>
@@ -126,11 +126,11 @@
         <Auk::Toolbar::Item>
           <Auk::Button @icon="chevron-down" @layout="icon-right" id="toolbar-complex-dropdown" aria-haspopup="true" aria-controls="toolbar-complex-actions">Acties</Auk::Button>
           <EmberPopover @side="bottom-start" @tooltipClass="auk-popover" @targetId="toolbar-complex-dropdown" as |popover|>
-            <Auk::Dropdown id="toolbar-complex-actions" aria-labelledby="toolbar-">
-              <Auk::Dropdown::Item>Action item</Auk::Dropdown::Item>
-              <Auk::Dropdown::Item>Action item</Auk::Dropdown::Item>
-              <Auk::Dropdown::Item>Action item</Auk::Dropdown::Item>
-            </Auk::Dropdown>
+            <Auk::Menu id="toolbar-complex-actions" aria-labelledby="toolbar-">
+              <Auk::Menu::Item>Action item</Auk::Menu::Item>
+              <Auk::Menu::Item>Action item</Auk::Menu::Item>
+              <Auk::Menu::Item>Action item</Auk::Menu::Item>
+            </Auk::Menu>
           </EmberPopover>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>

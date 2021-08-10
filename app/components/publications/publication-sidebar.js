@@ -29,6 +29,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   @tracked regulationTypes;
   @tracked publicationNumber;
   @tracked publicationNumberSuffix;
+  @tracked decision;
 
   @lastValue('loadPublicationStatus') publicationStatus;
   @lastValue('loadPublicationStatusChange') publicationStatusChange;
@@ -44,6 +45,7 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.loadTranslationSubcase.perform();
     this.loadAgendaitemTreatment.perform();
     this.loadStructuredIdentifier.perform();
+    this.loadDecision.perform();
     this.publicationModes = this.store.peekAll('publication-mode').sortBy('position');
     this.regulationTypes =  this.store.peekAll('regulation-type').sortBy('position');
   }
@@ -64,8 +66,16 @@ export default class PublicationsPublicationSidebarComponent extends Component {
 
   @task
   *loadPublicationSubcase() {
+    return yield this.publicationFlow.publicationSubcase;
+  }
+
+  @task
+  *loadDecision() {
     const publicationSubcase = yield this.publicationFlow.publicationSubcase;
-    return publicationSubcase;
+    this.decision = yield this.store.queryOne('decision', {
+      'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
+      sort: 'publication-activity.start-date,publication-date',
+    });
   }
 
   @task
@@ -231,12 +241,6 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
-  setPublicationDate(selectedDates) {
-    this.publicationSubcase.endDate = selectedDates[0];
-    this.notifyChanges(this.publicationSubcase, 'endDate');
-  }
-
-  @action
   setTranslationDueDate(selectedDates) {
     this.translationSubcase.dueDate = selectedDates[0];
     this.notifyChanges(this.translationSubcase, 'dueDate');
@@ -262,6 +266,13 @@ export default class PublicationsPublicationSidebarComponent extends Component {
     this.notifyChanges(this.publicationFlow, 'remark');
   }
 
+  @restartableTask
+  *setProofPrintCorrector(event) {
+    const newValue = event.target.value;
+    this.publicationSubcase.proofPrintCorrector = newValue;
+    yield timeout(1000);
+    this.notifyChanges(this.publicationSubcase, 'proofPrintCorrector');
+  }
   /**
    *
    * @param {Model} model

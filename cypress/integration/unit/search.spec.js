@@ -1,4 +1,4 @@
-/* global context, before, it, cy,beforeEach, afterEach, Cypress, it */
+/* global context, it, cy, beforeEach, afterEach, Cypress, it */
 // / <reference types="Cypress" />
 import agenda from '../../selectors/agenda.selectors';
 import auk from '../../selectors/auk.selectors';
@@ -17,10 +17,6 @@ context('Search tests', () => {
   const dateToCreateAgenda = Cypress.moment().add(2, 'weeks')
     .day(1)
     .subtract(1, 'day');
-
-  before(() => {
-    cy.resetCache();
-  });
 
   beforeEach(() => {
     cy.server();
@@ -43,7 +39,7 @@ context('Search tests', () => {
     });
   };
 
-  it.only('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
+  it('Should change the amount of elements to every value in selectbox in agendapunten search view', () => {
     cy.visit('zoeken/agendapunten');
     searchFunction(options);
   });
@@ -130,13 +126,13 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.wait('@searchCall');
 
-      cy.get(route.searchAgendaitems.dataTable).contains(newSubcase2TitleShort);
+      cy.get(route.searchAgendaitems.dataTable).find('tbody')
+        .children('tr')
+        .contains(newSubcase2TitleShort);
     });
 
     cy.get(utils.mHeader.settings).click();
-    // cy.wait(1000);
     cy.get(utils.mHeader.search).click();
-    // cy.wait(1000);
     cy.get(route.search.input).should('have.value', '');
   });
 
@@ -147,9 +143,7 @@ context('Search tests', () => {
     cy.get(route.search.trigger).click();
     cy.wait(500);
     cy.get(utils.mHeader.settings).click();
-    // cy.wait(1000);
     cy.get(utils.mHeader.search).click();
-    // cy.wait(1000);
     cy.get(route.search.input).should('have.value', '');
   });
 
@@ -177,7 +171,9 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.wait('@casesSearchCall');
 
-      cy.get(route.searchCases.dataTable).contains(case1TitleShort);
+      cy.get(route.searchCases.dataTable).find('tbody')
+        .children('tr')
+        .contains(case1TitleShort);
     });
   });
 
@@ -199,7 +195,9 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.wait('@decisionsSearchCall');
 
-      cy.get(route.searchCases.dataTable).contains(caseTitleShort);
+      cy.get(route.searchCases.dataTable).find('tbody')
+        .children('tr')
+        .contains(caseTitleShort);
     });
   });
 

@@ -13,8 +13,7 @@ const selectors = {
     firstNameInput: '#firstNameInput',
     lastNameInput: '#lastNameInput',
     emailInput: '#emailInput',
-    organisationInput: '#organisationInput',
-    threedotsButton: '[data-test-contact-persons] button i',
+    organisationInput: '#organizationNameInput',
     deleteContactpersonButton: '[data-test-delete-contactperson]',
   },
   publicationCase: {
@@ -31,7 +30,7 @@ const selectors = {
     translations: '[data-test-publication-case-nav-translations]',
     publishpreview: '[data-test-publication-case-nav-publishpreview]',
   },
-  // TODO replace deze bij het maken van publication translation testen
+  // TODO-selector replace deze bij het maken van publication translation testen
   tableCell: '.auk-table__cell--accent',
   flowTitle: '[data-test-publication-flow-title]',
 

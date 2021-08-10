@@ -15,7 +15,5 @@ export default class PublicationActivity extends Model {
   @hasMany('piece', {
     inverse: 'publicationActivitiesUsedBy',
   }) usedPieces;
-  @hasMany('piece', {
-    inverse: 'publicationActivityGeneratedBy',
-  }) generatedPieces;
+  @hasMany('decision') decisions;
 }

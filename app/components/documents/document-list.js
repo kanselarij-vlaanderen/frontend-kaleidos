@@ -29,33 +29,35 @@ export default class DocumentsDocumentListComponent extends Component {
 
   get latestDocuments() {
     const latestDocs = [];
-    for (const docs of this.documentsByContainer.values()) {
-      latestDocs.push(docs[0]);
+    if (this.documentsByContainer) {
+      for (const docs of this.documentsByContainer.values()) {
+        latestDocs.push(docs[0]);
+      }
     }
     return latestDocs;
   }
 
   @task
   *groupDocumentsByContainer() {
-    this.documentsByContainer = new Map();
+    const documentsByContainer = new Map();
     // support ember-data record array
-    yield Promise.all(this.documents.map(async(doc) => {
-      const container = await doc.documentContainer;
-      if (this.documentsByContainer.has(container)) {
-        this.documentsByContainer.get(container).push(doc);
+    for (const doc of this.documents) {
+      const container = yield doc.documentContainer;
+      if (documentsByContainer.has(container)) {
+        documentsByContainer.get(container).push(doc);
       } else {
-        this.documentsByContainer.set(container, [doc]);
+        documentsByContainer.set(container, [doc]);
       }
-    }));
+    }
 
     // this.documentsByContainer == { container1: [piece], container2: [piece, piece]}
 
-    for (const key of this.documentsByContainer.keys()) {
-      const documents = this.documentsByContainer.get(key);
+    for (const key of documentsByContainer.keys()) {
+      const documents = documentsByContainer.get(key);
       const sortedDocuments = sortPieces(documents);
-      this.documentsByContainer.set(key, sortedDocuments);
+      documentsByContainer.set(key, sortedDocuments);
     }
     // eslint-disable-next-line
-    this.documentsByContainer = this.documentsByContainer; // re-assign array to trigger getter
+    this.documentsByContainer = documentsByContainer; // re-assign array to trigger getter
   }
 }

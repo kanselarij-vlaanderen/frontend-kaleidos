@@ -15,6 +15,11 @@ const selectors = {
     },
   },
 
+  domainsFieldsSelectorForm: {
+    container: '[data-test-domains-fields-selector-form]',
+    field: '[data-test-domains-fields-selector-form-field]~span',
+  },
+
   // simple-file-uploader
   simpleFileUploader: '[data-test-simple-file-uploader]',
 
@@ -84,7 +89,7 @@ const selectors = {
   // vl-alert
   vlAlert: {
     close: '[data-test-vl-alert-close]',
-    // TODO unused selectors
+    // TODO-selector unused selectors
     container: '[data-test-vl-alert]',
     title: '[data-test-vl-alert-title]',
     message: '[data-test-vl-alert-message]',

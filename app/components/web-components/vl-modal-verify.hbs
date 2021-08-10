@@ -29,13 +29,16 @@
         <p>{{message}}</p>
       </Auk::Modal::Body>
       {{#if showActions}}
-        <div class="auk-modal__footer auk-modal__footer--bordered">
-          <Auk::Toolbar>
+        <Auk::Modal::Footer @custom={{true}}>
+          <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item>
-                <Auk::Button @skin="borderless" {{action "cancel"}} data-test-vl-modal-verify-cancel>
+                <Auk::ButtonLink
+                  {{action "cancel"}}
+                  data-test-vl-modal-verify-cancel
+                >
                   {{t "cancel"}}
-                </Auk::Button>
+                </Auk::ButtonLink>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
             {{#if showVerify}}
@@ -54,7 +57,7 @@
               </Auk::Toolbar::Group>
             {{/if}}
           </Auk::Toolbar>
-        </div>
+        </Auk::Modal::Footer>
       {{/if}}
     </div>
     <div class="auk-modal__push"></div>

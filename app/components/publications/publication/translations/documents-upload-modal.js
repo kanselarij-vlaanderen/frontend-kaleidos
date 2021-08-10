@@ -1,9 +1,13 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { guidFor } from '@ember/object/internals';
+import {
+  ValidatorSet, Validator
+} from 'frontend-kaleidos/utils/validators';
 
 export default class PublicationsTranslationDocumentUploadModalComponent extends Component {
   /**
@@ -13,17 +17,20 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @service store;
   @service('file-queue') fileQueueService;
 
-  @tracked translationDocument = null;
-  @tracked name = null;
-  @tracked pagesAmount = null;
-  @tracked wordsAmount = null;
+  @tracked translationDocument;
+  @tracked name;
+  @tracked pagesAmount;
+  @tracked wordsAmount;
   @tracked isSourceForProofPrint = false;
+
+  validators;
 
   constructor() {
     super(...arguments);
     if (this.fileQueueService.find(this.fileQueueName)) {
       this.fileQueueService.create(this.fileQueueName);
     }
+    this.initValidators();
   }
 
   get fileQueueName() {
@@ -34,8 +41,12 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     return this.fileQueueService.find(this.fileQueueName);
   }
 
-  get saveIsDisabled() {
-    return this.translationDocument === null || this.name === null;
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
+  get isSaveDisabled() {
+    return !this.translationDocument || !this.validators.areValid || this.cancel.isRunning;
   }
 
   @action
@@ -55,8 +66,15 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
     this.name = file.filenameWithoutExtension;
   }
 
-  @task
-  *cancelTranslation() {
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
     if (this.translationDocument) {
       yield this.deleteUploadedPiece.perform(this.translationDocument);
     }
@@ -73,7 +91,7 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   }
 
   @task
-  *saveTranslation() {
+  *save() {
     if (this.args.onSave) {
       yield this.args.onSave({
         piece: this.translationDocument,
@@ -88,5 +106,11 @@ export default class PublicationsTranslationDocumentUploadModalComponent extends
   @action
   toggleProofprint() {
     this.isSourceForProofPrint = !this.isSourceForProofPrint;
+  }
+
+  initValidators() {
+    this.validators = new ValidatorSet({
+      name: new Validator(() => isPresent(this.name)),
+    });
   }
 }

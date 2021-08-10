@@ -1,4 +1,4 @@
-/* global context, before, it, cy, beforeEach, afterEach */
+/* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import utils from '../../selectors/utils.selectors';
@@ -6,11 +6,6 @@ import utils from '../../selectors/utils.selectors';
 context('Test print overviews', () => {
   const beslissingen = '/overzicht/5DD7CDA58C70A70008000001/beslissingen/5DD7CDA58C70A70008000002/agendapunten';
   const persAgenda = '/overzicht/5DD7CDA58C70A70008000001/persagenda/5DD7CDA58C70A70008000002/agendapunten';
-
-  before(() => {
-    cy.server();
-    cy.login('Admin');
-  });
 
   beforeEach(() => {
     cy.server();
@@ -20,8 +15,6 @@ context('Test print overviews', () => {
   afterEach(() => {
     cy.logout();
   });
-
-  // TODO assert something? also use the actions from the actions menu from agenda to ensure both visit and action go to the same place?
 
   it('should visit beslissingen print overview', () => {
     cy.visit(beslissingen);
