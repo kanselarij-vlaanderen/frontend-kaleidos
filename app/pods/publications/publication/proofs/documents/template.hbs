@@ -9,7 +9,6 @@
             @label={{t "new-request"}}
             @position="bottom-start"
             @disabled={{this.isRequestingDisabled}}
-            data-test-agenda-header-show-action-options={{true}}
           as |Menu|>
             <Menu.Item
               {{on "click" (fn this.openProofRequestModal "initial")}}>

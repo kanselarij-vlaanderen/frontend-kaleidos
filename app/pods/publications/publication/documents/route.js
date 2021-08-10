@@ -8,7 +8,8 @@ export default class PublicationsPublicationDocumentsRoute extends Route {
       'filter[publication-flow][:id:]': parentParams.publication_id,
       // TODO: paginatie uitklaren in design
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
+      include: 'document-container',
     });
-    return pieces;
+    return pieces.toArray();
   }
 }
