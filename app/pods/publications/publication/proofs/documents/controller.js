@@ -251,12 +251,11 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       file: uploadProperties.file,
       documentContainer: documentContainer,
     };
-    if (isSource) {
-      pieceProperties.publicationSubcaseSourceFor = this.publicationSubcase;
-    } else if (isCorrection) {
+
+    if (isCorrection) {
       pieceProperties.publicationSubcaseCorrectionFor = this.publicationSubcase;
     } else {
-      throw new Error('no relationship specified');
+      pieceProperties.publicationSubcaseSourceFor = this.publicationSubcase;
     }
     const piece = this.store.createRecord('piece', pieceProperties);
     await piece.save();
