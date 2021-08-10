@@ -8,6 +8,7 @@ import { computed } from '@ember/object';
 // TODO: octane-refactor
 // eslint-disable-next-line ember/no-classic-classes
 export default Controller.extend(DefaultQueryParamsMixin, {
+  store: inject(),
   sessionService: inject(),
   intl: inject(),
   agendaService: inject(),
