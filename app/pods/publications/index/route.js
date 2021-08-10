@@ -80,6 +80,8 @@ export default class PublicationsIndexRoute extends Route {
 
   @action
   loading(transition) {
+    // see snippet in https://api.emberjs.com/ember/3.27/classes/Route/events/loading?anchor=loading
+    // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controllerFor('publications.index');
     controller.isLoadingModel = true;
     transition.promise.finally(() => {
