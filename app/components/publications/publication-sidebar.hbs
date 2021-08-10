@@ -221,19 +221,17 @@
         {{#if this.publicationStatus.isPublished}}
           <div class="auk-form-group">
             <Auk::Label>{{t "publication-date"}}</Auk::Label>
-            {{#if this.loadDecision.isRunning}}
-              <div class="auk-u-muted">
-                ...
-              </div>
-            {{else if this.decision.publicationDate}}
-              <div class="auk-u-muted">
-                {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
-              </div>
-            {{else}}
-              <div class="auk-u-muted auk-u-italic">
-                {{t "not-known"}}
-              </div>
-            {{/if}}
+            {{#unless this.loadDecision.isRunning}}
+              {{#if this.decision.publicationDate}}
+                <div class="auk-u-muted">
+                  {{moment-format this.decision.publicationDate "DD-MM-YYYY"}}
+                </div>
+              {{else}}
+                <div class="auk-u-muted auk-u-italic">
+                  {{t "not-known"}}
+                </div>
+              {{/if}}
+            {{/unless}}
           </div>
         {{/if}}
 
