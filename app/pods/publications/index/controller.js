@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import tableColumns from 'frontend-kaleidos/config/publications/overview-table-columns';
@@ -107,24 +107,25 @@ export default class PublicationsIndexController extends Controller {
   @action
   prevPage() {
     if (this.page > 0) {
-      this.set('page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+      set(this, 'page', this.page - 1); // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
     }
   }
 
   @action
   nextPage() {
-    this.set('page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    set(this, 'page', this.page + 1);  // TODO: setter instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
   }
 
   @action
   setSizeOption(size) {
     // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
-    this.set('size', size);
-    this.set('page', 0);
+    set(this, 'size', size);
+    set(this, 'page', 0);
   }
 
   @action
   sortTable(sortField) {
-    this.set('sort', sortField);
+    // TODO: setters instead of @tracked on qp's before updating to Ember 3.22+ (https://github.com/emberjs/ember.js/issues/18715)
+    set(this, 'sort', sortField);
   }
 }
