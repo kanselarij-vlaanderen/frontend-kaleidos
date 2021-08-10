@@ -124,7 +124,7 @@ export default ModelWithModifier.extend({
     return null;
   }),
 
-  approved: computed('treatments', 'treatments.@each.decisionResultCode', async function() {
+  approved: computed('treatments', 'treatments.@each.decisionResultCode', 'requestedForMeeting', async function() {
     const meeting = await this.get('requestedForMeeting');
     if (meeting.isFinal) {
       const treatments = await this.get('treatments');
@@ -144,7 +144,7 @@ export default ModelWithModifier.extend({
     return false;
   }),
 
-  subcasesFromCase: computed('case.subcases.[]', function() {
+  subcasesFromCase: computed('case.subcases.[]', 'id', function() {
     return PromiseArray.create({
       //  We want to sort descending on date the subcase was concluded.
       //  In practice, sorting on created will be close
