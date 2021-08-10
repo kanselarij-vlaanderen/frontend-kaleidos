@@ -22,8 +22,8 @@ export default class AgendasController extends Controller.extend(DefaultQueryPar
   }
 
   @action
-  async successfullyAdded() {
-    this.set('isCreatingNewSession', false);
+  successfullyAdded() {
+    this.isCreatingNewSession = false;
     this.send('refreshRoute');
     this.transitionToRoute('agendas.overview');
   }
