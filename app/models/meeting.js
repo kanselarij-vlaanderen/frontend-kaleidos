@@ -1,5 +1,5 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { PromiseArray } from '@ember-data/store/-private';
+import { PromiseArray, PromiseObject } from '@ember-data/store/-private';
 import EmberObject, { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import CONFIG from 'frontend-kaleidos/utils/config';
@@ -85,7 +85,7 @@ export default Model.extend({
   }),
 
   latestAgenda: computed('agendas.[]', function() {
-    return DS.PromiseObject.create({
+    return PromiseObject.create({
       promise: this.get('agendas').then((agendas) => {
         const sortedAgendas = agendas.sortBy('agendaName').reverse();
         return sortedAgendas.get('firstObject');
@@ -110,7 +110,7 @@ export default Model.extend({
   defaultSignature: computed('signature', 'store', async function() {
     const signature = await this.get('signature');
     if (!signature) {
-      return DS.PromiseObject.create({
+      return PromiseObject.create({
         promise: this.store
           .query('signature', {
             filter: {
