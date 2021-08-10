@@ -10,6 +10,6 @@ export default class PublicationsPublicationDocumentsRoute extends Route {
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
       include: 'document-container',
     });
-    return pieces;
+    return pieces.toArray();
   }
 }
