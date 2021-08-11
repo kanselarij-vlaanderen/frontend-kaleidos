@@ -5,58 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
-export class Model {
-  pieceRows;
-  decisions;
-
-  // no async constructor() in JS
-  static async create(pieces, decisions, currentSession) {
-    const model = new Model();
-    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, currentSession)));
-    model.decisions = decisions;
-    return model;
-  }
-}
-
-// use:
-// - isDeleteDisabled property
-// - file property avoids error when piece (and file) are deleted
-export class PieceRow {
-  @service currentSession;
-
-  @tracked piece;
-  @tracked file;
-
-  publicationSubcase;
-  requestActivitiesUsedBy;
-
-  // no async constructor() in JS
-  static async create(piece, currentSession) {
-    const row = new PieceRow();
-    row.piece = piece;
-    row.file = await piece.file;
-    row.publicationSubcase = this.publicationSubcase;
-    // avoid awaiting in getter
-    row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
-    row.currentSession = currentSession;
-    return row;
-  }
-
-  get isShownDelete() {
-    const hasPermission = this.currentSession.isOvrb;
-    // can be translation or publication related
-    const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
-    // receivedDate is set if and only if it is a received pieced
-    const isReceived = !!this.piece.receivedDate;
-    const isUsed = isUsedInRequest || isReceived;
-    return hasPermission && !isUsed;
-  }
-
-  get isDeleteDisabled() {
-    return this.publicationSubcase.isFinished;
-  }
-}
-
 const COLUMN_MAP = {
   naam: 'name',
   'ontvangen-op': 'receivedDate',

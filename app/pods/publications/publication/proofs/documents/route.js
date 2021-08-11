@@ -2,7 +2,47 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
-import { Model } from './controller';
+import { hash } from 'rsvp';
+import { tracked } from '@glimmer/tracking';
+
+// use:
+// - isDeleteDisabled property
+// - file property avoids error when piece (and file) are deleted
+export class PieceRow {
+  @service currentSession;
+
+  @tracked piece;
+  @tracked file;
+
+  publicationSubcase;
+  requestActivitiesUsedBy;
+
+  // no async constructor() in JS
+  static async create(piece, publicationSubcase, currentSession) {
+    const row = new PieceRow();
+    row.piece = piece;
+    row.file = await piece.file;
+    row.publicationSubcase = publicationSubcase;
+    // avoid awaiting in getter
+    row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
+    row.currentSession = currentSession;
+    return row;
+  }
+
+  get isShownDelete() {
+    const hasPermission = this.currentSession.isOvrb;
+    // can be translation or publication related
+    const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
+    // receivedDate is set if and only if it is a received pieced
+    const isReceived = !!this.piece.receivedDate;
+    const isUsed = isUsedInRequest || isReceived;
+    return hasPermission && !isUsed;
+  }
+
+  get isDeleteDisabled() {
+    return this.publicationSubcase.isFinished;
+  }
+}
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   @service currentSession;
@@ -61,7 +101,11 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    return Model.create(pieces, decisions, this.publicationSubcase, this.currentSession);
+    const pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, this.publicationSubcase, this.currentSession)));
+    return hash({
+      pieceRows: pieceRows,
+      decisions: decisions,
+    });
   }
 
   afterModel() {
