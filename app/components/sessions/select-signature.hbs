@@ -9,12 +9,12 @@
       @searchField="name"
       @propertyToShow="name"
       @sortField="name"
-      @selectedItems={{selectedSignature}}
+      @selectedItems={{this.selectedSignature}}
       @selectModel={{action "selectSignature"}}
     />
   </Auk::Modal::Body>
   <WebComponents::VlModalFooter
-    @isLoading={{isLoading}}
+    @isLoading={{this.isLoading}}
     @cancelButtonText={{t "cancel"}}
     @saveButtonText={{t "save"}}
     @cancelAction={{action "closeDialog"}}

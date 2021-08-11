@@ -6,21 +6,21 @@
           <div class="auk-o-flex auk-o-flex--vertical-center">
             <h4 class="auk-toolbar-complex__title" data-test-agenda-header-title>
               {{t "agenda-of"}}
-              {{moment-format currentSession.plannedStart "DD MMMM YYYY"}}
+              {{moment-format this.currentSession.plannedStart "DD MMMM YYYY"}}
               {{t "at"}}
-              {{moment-format currentSession.plannedStart "HH:mm"}}
+              {{moment-format this.currentSession.plannedStart "HH:mm"}}
             </h4>
-            <span class="auk-u-muted auk-body-1 ">- {{await currentSession.kindToShow.label}}</span>
+            <span class="auk-u-muted auk-body-1 ">- {{await this.currentSession.kindToShow.label}}</span>
           </div>
           <Sessions::SessionAgendaNav
-            @currentAgenda={{currentAgenda}}
-            @currentMeeting={{currentSession}}/>
+            @currentAgenda={{this.currentAgenda}}
+            @currentMeeting={{this.currentSession}} />
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
-    {{#if currentSessionService.isViewer}}
+    {{#if this.currentSessionService.isViewer}}
       <Auk::Toolbar::Group @position="right">
-        {{#if currentSessionService.isEditor}}
+        {{#if this.currentSessionService.isEditor}}
           <Auk::Toolbar::Item>
             <div class="auk-u-position-relative auk-u-inline-block">
               <DropdownMenu
@@ -29,31 +29,29 @@
                 class="vlc-hide-on-print"
                 data-test-agenda-header-show-agenda-options={{true}}
               as |Menu|>
-                {{#if currentSessionService.isEditor}}
-                  {{#if currentAgenda.isDesignAgenda}}
+                {{#if this.currentSessionService.isEditor}}
+                  {{#if this.currentAgenda.isDesignAgenda}}
                     <Menu.Item>
-                      <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block"
-                        {{action "openConfirmApproveAgenda"}}
+                      <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block" {{action "openConfirmApproveAgenda"}}
                       >
                         <span class="auk-button__content">
-                          {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                          {{t "approve-design-agenda" serialnumber=this.currentAgenda.serialnumber}}
                         </span>
                       </button>
                     </Menu.Item>
                     <Menu.Divider />
                     <Menu.Item>
-                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block"
-                        {{action "openConfirmApproveAgendaAndCloseMeeting"}}
+                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block" {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                       >
                         <span class="auk-button__content">
-                          {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
+                          {{t "approve-agenda-and-close" serialnumber=this.currentAgenda.serialnumber}}
                         </span>
                       </button>
                     </Menu.Item>
                     <Menu.Divider />
                   {{/if}}
-                  {{#if (not currentSession.isFinal)}}
-                    {{#if (await isSessionClosable)}}
+                  {{#if (not this.currentSession.isFinal)}}
+                    {{#if (await this.isSessionClosable)}}
                       <Menu.Item>
                         <a href=""
                           data-test-agenda-header-lock-agenda
@@ -83,7 +81,7 @@
                   {{/if}}
                 {{/if}}
                 {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
-                {{#if (await canDeleteSelectedAgenda)}}
+                {{#if (await this.canDeleteSelectedAgenda)}}
                   <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
                     <a href=""
                       data-test-agenda-header-delete-agenda
@@ -96,7 +94,7 @@
                     </a>
                   </Menu.Item>
                 {{/if}}
-                {{#if (await canReopenPreviousAgenda)}}
+                {{#if (await this.canReopenPreviousAgenda)}}
                   <Menu.Divider />
                   <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
                     <a href=""
@@ -122,7 +120,7 @@
               class="vlc-hide-on-print"
               data-test-agenda-header-show-action-options={{true}}
             as |Menu|>
-              {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+              {{#if (and this.currentSessionService.isEditor this.currentAgenda.isDesignAgenda)}}
                 <Menu.Item>
                   <a href="javascript://"
                       data-test-agenda-header-add-agendaitems
@@ -169,7 +167,7 @@
                   </span>
                 </a>
               </Menu.Item>
-              {{#if showPrintButton}}
+              {{#if this.showPrintButton}}
                 <Menu.Item>
                   <LinkTo
                     @route="agenda.agendaitems"
@@ -205,7 +203,7 @@
                   </LinkTo>
                 </Menu.Item>
               {{/if}}
-              {{#if currentSessionService.isEditor}}
+              {{#if this.currentSessionService.isEditor}}
                 <Menu.Divider />
                 <Menu.Item>
                   <a href=""
@@ -241,7 +239,7 @@
                   </span>
                 </a>
               </Menu.Item>
-              {{#if currentAgenda.isDesignAgenda}}
+              {{#if this.currentAgenda.isDesignAgenda}}
                 <Menu.Item>
                   <a href=""
                       data-test-agenda-header-approve-all-agendaitems
@@ -254,10 +252,10 @@
                   </a>
                 </Menu.Item>
               {{/if}}
-              {{#if currentSessionService.isEditor}}
+              {{#if this.currentSessionService.isEditor}}
                 <Menu.Divider />
                 <Menu.Item>
-                  {{#if currentSession.canReleaseDecisions}}
+                  {{#if this.currentSession.canReleaseDecisions}}
                     <a href=""
                         data-test-agenda-header-release-decisions
                         class="auk-button-link auk-button-link--block auk-u-text-error"
@@ -267,7 +265,7 @@
                         {{t "agenda-release-decisions"}}
                       </span>
                     </a>
-                  {{else if currentSession.canReleaseDocuments}}
+                  {{else if this.currentSession.canReleaseDocuments}}
                     <a href=""
                         data-test-agenda-header-release-documents
                         class="auk-button-link auk-button-link--block auk-u-text-error"
@@ -281,15 +279,15 @@
                 </Menu.Item>
                 {{#if
                   (and
-                    (not (await designAgendaPresent))
-                    (not (await currentSession.isFinal))
+                    (not (await this.designAgendaPresent))
+                    (not (await this.currentSession.isFinal))
                   )
                 }}
                   <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
                     <a href=""
                         data-test-agenda-header-create-new-design
                         class="auk-button-link auk-button-link--block"
-                      {{action "createNewDesignAgendaAction" currentSession}}
+                        {{action "createNewDesignAgendaAction" this.currentSession}}
                     >
                       <span class="auk-button__content">
                         {{t "agenda-add"}}
@@ -305,17 +303,17 @@
     {{/if}}
   </Auk::Toolbar>
 
-  {{#if isAddingAgendaitems}}
+  {{#if this.isAddingAgendaitems}}
     <Agenda::Agendaitem::CreateAgendaitem
-      @isAddingAgendaitems={{isAddingAgendaitems}}
+      @isAddingAgendaitems={{this.isAddingAgendaitems}}
       @onCreate={{this.onCreateAgendaitem}} />
   {{/if}}
-  {{#if isAssigningSignature}}
+  {{#if this.isAssigningSignature}}
     <Sessions::SelectSignature
-      @meeting={{currentSession}}
+      @meeting={{this.currentSession}}
       @closeDialog={{action "selectSignature"}} />
   {{/if}}
-  {{#if releasingDocuments}}
+  {{#if this.releasingDocuments}}
     <WebComponents::VlModalVerify
       @title={{t "agenda-release-documents"}}
       @buttonType="warning"
@@ -325,7 +323,7 @@
       @verify={{action "confirmReleaseDocuments"}}
     />
   {{/if}}
-  {{#if releasingDecisions}}
+  {{#if this.releasingDecisions}}
     <WebComponents::VlModalVerify
       @title={{t "agenda-release-decisions"}}
       @buttonType="warning"
@@ -334,19 +332,19 @@
       @cancel={{action "cancel"}}
       @verify={{action "confirmReleaseDecisions"}} />
   {{/if}}
-  {{#if editingSession}}
+  {{#if this.editingSession}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @title={{t "edit-session"}}
       @closeModal={{action "cancelEditSessionForm"}} >
       <Sessions::Forms::EditSession
-        @meeting={{currentSession}}
+        @meeting={{this.currentSession}}
         @successfullyEdited={{action "successfullyEdited"}}
         @cancelForm={{action "cancelEditSessionForm"}} />
     </WebComponents::VlModal>
   {{/if}}
 
-  {{#if isApprovingAllAgendaitems}}
+  {{#if this.isApprovingAllAgendaitems}}
     <WebComponents::VlModalVerify
       @title={{t "approve-all-agendaitems"}}
       @buttonType="warning"
@@ -360,7 +358,7 @@
     />
   {{/if}}
 
-  {{#if showLoadingOverlay}}
+  {{#if this.showLoadingOverlay}}
     <WebComponents::LoadingOverlay @size="medium" @message={{this.loadingOverlayMessage}} />
   {{/if}}
 
@@ -369,7 +367,7 @@
   {{#if this.showConfirmForApprovingAgenda}}
     <Auk::Modal @size={{if (await this.currentAgenda.canBeApproved) "small" "large"}}>
       <Auk::Modal::Header
-        @title={{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+        @title={{t "approve-design-agenda" serialnumber=this.currentAgenda.serialnumber}}
         @onClose={{action "cancelApproveAgenda"}}
       />
       <Auk::Modal::Body>

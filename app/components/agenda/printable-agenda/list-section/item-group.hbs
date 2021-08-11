@@ -1,8 +1,8 @@
 <div class="auk-u-mt-4">
   <Agenda::PrintableAgenda::ListSection::ItemGroup::ItemGroupHeader
-    @mandatees={{items.firstObject.sortedMandatees}}
+    @mandatees={{this.items.firstObject.sortedMandatees}}
   />
-  {{#each items as |agendaitem|}}
+  {{#each this.items as |agendaitem|}}
     <div value={{agendaitem.priority}}>
       <Agenda::PrintableAgenda::ListSection::ItemGroup::Item
         @item={{agendaitem}}

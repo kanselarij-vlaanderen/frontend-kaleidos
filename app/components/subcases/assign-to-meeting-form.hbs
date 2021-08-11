@@ -1,13 +1,13 @@
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "propose-for"}}</Auk::Label>
-    {{#if (is-pending dateObjectsToEnable)}}
+    {{#if (is-pending this.dateObjectsToEnable)}}
       <WebComponents::VlLoader
         @text={{concat (t "sessions-loading-text") " " (t "please-be-patient")}}
       />
     {{else}}
       <WebComponents::VlDatepicker
-        @dateObjectsToEnable={{await dateObjectsToEnable}}
+        @dateObjectsToEnable={{await this.dateObjectsToEnable}}
         @datePropertyToUse="plannedStart"
         @dateChanged={{action "selectStartDate"}}
       />
@@ -15,7 +15,7 @@
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @onCancel={{action "cancel"}}>
-  <Auk::Button @skin="primary" {{action "assignToMeeting" subcase}}>
+  <Auk::Button @skin="primary" {{action "assignToMeeting" this.subcase}}>
     {{t "propose"}}
   </Auk::Button>
 </Auk::Modal::Footer>

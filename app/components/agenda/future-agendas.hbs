@@ -1,8 +1,8 @@
 <h2 class="auk-h3">
-  {{title}}
+  {{this.title}}
 </h2>
-{{#if (not (is-pending hasActiveAgendas))}}
-  {{#if (await hasActiveAgendas)}}
+{{#if (not (is-pending this.hasActiveAgendas))}}
+  {{#if (await this.hasActiveAgendas)}}
     <table class="data-table auk-table auk-table--striped"
            data-test-future-agenda-table>
       <thead>
@@ -50,7 +50,7 @@
         </tr>
       </thead>
       <tbody class="auk-table--interaction-cursor" data-test-future-agenda-table-body>
-        {{#each (await items) as |meeting|}}
+        {{#each (await this.items) as |meeting|}}
           <LinkTo
             @route="agenda.agendaitems"
             @models={{array meeting.id meeting.latestAgenda.id}}
@@ -109,7 +109,7 @@
     </table>
   {{else}}
     <div>
-      <WebComponents::VlAlert @message={{emptyText}} />
+      <WebComponents::VlAlert @message={{this.emptyText}} />
     </div>
   {{/if}}
 {{else}}

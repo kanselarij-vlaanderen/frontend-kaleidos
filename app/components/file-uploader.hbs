@@ -3,7 +3,7 @@
     @name="files"
     @for="upload-photo"
     @class="vl-upload__element__label"
-    @multiple={{multipleFiles}}
+    @multiple={{this.multipleFiles}}
     @onfileadd={{action "uploadFile"}}
   >
     <em>
@@ -33,9 +33,9 @@
         {{/if}}
       {{else if queue.files.length}}
         <div class="progress-container">
-          {{uploadedFileLength}}
+          {{this.uploadedFileLength}}
           {{t "files-of"}}
-          {{fileQueue.files.length}}
+          {{this.fileQueue.files.length}}
           {{t "uploading"}}
         </div>
       {{else if dropzone.supported}}

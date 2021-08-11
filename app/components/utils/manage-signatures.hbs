@@ -1,27 +1,27 @@
-{{#if (not isAdding)}}
+{{#if (not this.isAdding)}}
   <Auk::Modal::Body>
     <Utils::ModelSelector
       @modelName="signature"
       @searchField="name"
       @propertyToShow="name"
       @sortField="name"
-      @selectedItems={{await selectedSignature}}
+      @selectedItems={{await this.selectedSignature}}
       @selectModel={{action "selectSignature"}}
     />
     <div class="auk-u-mb-3"/>
     <div>
       {{t "signature-default"}}
-      {{await defaultSignature.name}}
+      {{await this.defaultSignature.name}}
     </div>
   </Auk::Modal::Body>
-  {{#if isEditing}}
+  {{#if this.isEditing}}
     <Utils::EditSignature
-      @signatureToEdit={{await selectedSignature}}
+      @signatureToEdit={{await this.selectedSignature}}
       @closeModal={{action "toggleIsEditing"}}
     />
   {{else}}
     <Auk::Modal::Footer @onCancel={{action "closeModal"}}>
-      {{#if selectedSignature}}
+      {{#if this.selectedSignature}}
         <Auk::Button
           @skin="tertiary"
           @icon="pencil"

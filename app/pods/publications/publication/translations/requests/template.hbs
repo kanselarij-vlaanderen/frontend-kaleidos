@@ -14,7 +14,7 @@
               <Auk::Button
                 @disabled={{this.isUploadDisabled}}
                 @skin="primary"
-                {{on "click" (fn openTranslationUploadModal activity)}}>
+                {{on "click" (fn this.openTranslationUploadModal activity)}}>
                 {{t "upload-translation"}}
               </Auk::Button>
             </actions.Item>

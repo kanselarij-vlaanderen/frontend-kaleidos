@@ -1,9 +1,9 @@
-{{page-title (await title) replace=true}}
+{{page-title (await this.title) replace=true}}
 <Utils::OverviewsHeaderDecision
-  @title={{await title}}
-  @model={{await model}}
-  @routeModelPrefix={{routeModel}}
-  @modelsForHierarchicalBack={{array meeting.id model.id}}
+  @title={{await this.title}}
+  @model={{await this.model}}
+  @routeModelPrefix={{this.routeModel}}
+  @modelsForHierarchicalBack={{array this.meeting.id this.model.id}}
 />
 <div class="auk-scroll-wrapper__body">
   {{outlet}}

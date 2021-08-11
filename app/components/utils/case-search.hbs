@@ -2,7 +2,7 @@
   <div class="auk-o-flex auk-o-flex--vertical-center">
     <Auk::Input
       @type="text"
-      @value={{searchText}}
+      @value={{this.searchText}}
       @placeholder={{t "search-placeholder"}}
       @block={{true}}
       {{on "input" (action "updateSearchText")}}
@@ -10,7 +10,7 @@
     />
   </div>
 
-  {{#if isLoading}}
+  {{#if this.isLoading}}
     <WebComponents::VlLoader @text={{t "please-be-patient"}} />
   {{else}}
     <table class="auk-table auk-table--striped">
@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody class="auk-table--interaction-cursor">
-        {{#each (await results) as |row|}}
+        {{#each (await this.results) as |row|}}
           <tr>
             <td onclick={{action "selectCase" row}}>
               <p>
@@ -45,10 +45,10 @@
     </table>
     <div class="auk-u-mb-3"></div>
     <Auk::Pagination
-      @page={{page}}
-      @size={{size}}
-      @nbOfItems={{results.length}}
-      @total={{results.meta.count}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @nbOfItems={{this.results.length}}
+      @total={{this.results.meta.count}}
       @onNextPage={{action 'nextPage'}}
       @onPreviousPage={{action 'prevPage'}}
     />

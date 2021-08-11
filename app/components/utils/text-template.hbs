@@ -1,15 +1,15 @@
 <div class="auk-form-group">
   <Auk::Label>{{t "text-templates"}}</Auk::Label>
   <PowerSelect
-    @options={{items}}
-    @selected={{selectedItems}}
-    @disabled={{readOnly}}
-    @searchField={{searchField}}
-    @placeholder={{placeholder}}
-    @searchMessage={{searchMessage}}
-    @loadingMessage={{loadingMessage}}
-    @noMatchesMessage={{noMatchesMessage}}
-    @search={{perform searchTask}}
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @searchMessage={{this.searchMessage}}
+    @loadingMessage={{this.loadingMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
+    @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "selectModel"}}
     as |model|

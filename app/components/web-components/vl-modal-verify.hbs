@@ -6,10 +6,10 @@
         <Auk::Toolbar>
           <Auk::Toolbar::Group @position="left">
             <Auk::Toolbar::Item>
-              <h2 class="auk-toolbar__title">{{title}}</h2>
+              <h2 class="auk-toolbar__title">{{this.title}}</h2>
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
-          {{#if showCloseButton}}
+          {{#if this.showCloseButton}}
             <Auk::Toolbar::Group @position="right">
               <Auk::Toolbar::Item>
                 <Auk::Button
@@ -26,9 +26,9 @@
         </Auk::Toolbar>
       </div>
       <Auk::Modal::Body>
-        <p>{{message}}</p>
+        <p>{{this.message}}</p>
       </Auk::Modal::Body>
-      {{#if showActions}}
+      {{#if this.showActions}}
         <Auk::Modal::Footer @custom={{true}}>
           <Auk::Toolbar @size="large">
             <Auk::Toolbar::Group @position="left">
@@ -41,17 +41,17 @@
                 </Auk::ButtonLink>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
-            {{#if showVerify}}
+            {{#if this.showVerify}}
               <Auk::Toolbar::Group @position="right">
                 <Auk::Toolbar::Item>
                   <Auk::Button
-                    @skin={{buttonSkin}}
-                    @icon={{if showIcon "delete"}}
+                    @skin={{this.buttonSkin}}
+                    @icon={{if this.showIcon "delete"}}
                     {{action "verify"}}
                     {{!-- isLoading=isLoading --}}
                     data-test-vl-modal-verify-save
                   >
-                    {{verifyButtonText}}
+                    {{this.verifyButtonText}}
                   </Auk::Button>
                 </Auk::Toolbar::Item>
               </Auk::Toolbar::Group>

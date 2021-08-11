@@ -1,5 +1,5 @@
 {{#light-table
-  table
+  this.table
   tableClassNames="auk-table auk-table auk-table--hover auk-table--striped"
 as |tab|
 }}
@@ -16,14 +16,14 @@ as |tab|
     as |body|
   >
     <body.expanded-row as |row|>{{yield row}}</body.expanded-row>
-    {{#if isLoading}}
+    {{#if this.isLoading}}
       <body.loader>
         <WebComponents::VlLoader @text={{t "agendaitems-loading-text"}} />
       </body.loader>
     {{/if}}
   </tab.body>
 {{/light-table}}
-{{#if isScrolling}}
+{{#if this.isScrolling}}
   <Auk::Button
     @skin="secondary"
     @layout="icon-only"

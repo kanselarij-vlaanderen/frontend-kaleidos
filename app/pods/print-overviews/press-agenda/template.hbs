@@ -1,9 +1,9 @@
-{{page-title (await title)}}
+{{page-title (await this.title)}}
 <Utils::OverviewsHeaderPrint
-  @title={{await title}}
-  @model={{await model}}
-  @routeModelPrefix={{routeModel}}
-  @modelsForHierarchicalBack={{array meeting.id model.id}}
+  @title={{await this.title}}
+  @model={{await this.model}}
+  @routeModelPrefix={{this.routeModel}}
+  @modelsForHierarchicalBack={{array this.meeting.id this.model.id}}
 />
 <div class="auk-scroll-wrapper__body">
   {{outlet}}

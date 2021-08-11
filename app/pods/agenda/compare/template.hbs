@@ -10,7 +10,7 @@
             data-test-compare-show-changes
             {{action "toggleChangesOnly"}}
           >
-            {{#if (not isShowingChanges)}}
+            {{#if (not this.isShowingChanges)}}
               {{t "show-changes"}}
             {{else}}
               {{t "show-all"}}
@@ -21,9 +21,9 @@
     </div>
 
     <Agenda::CompareAgendaList
-      @currentAgenda={{await model.currentAgenda}}
-      @agendaToCompare={{await model.agendaToCompare}}
-      @isShowingChanges={{isShowingChanges}}
+      @currentAgenda={{await this.model.currentAgenda}}
+      @agendaToCompare={{await this.model.agendaToCompare}}
+      @isShowingChanges={{this.isShowingChanges}}
     />
   </div>
 </div>

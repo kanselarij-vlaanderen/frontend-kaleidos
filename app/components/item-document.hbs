@@ -5,7 +5,7 @@
 }}">
   {{#if (is-pending @piece)}}
     <div class="skeletal-loader" role="alert" aria-busy="true"></div>
-  {{else if isClickable}}
+  {{else if this.isClickable}}
     <a href="" {{action "showPieceViewer" @piece}}>
       <Auk::Icon @name=
         {{if

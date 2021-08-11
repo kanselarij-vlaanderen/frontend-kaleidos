@@ -3,7 +3,7 @@
     <Auk::Label>{{t "confidential"}}</Auk::Label>
     <WebComponents::VlToggle
       data-test-subcase-titles-edit-confidential={{true}}
-      @value={{subcase.confidential}}
+      @value={{this.subcase.confidential}}
     />
   </div>
 </div>
@@ -15,9 +15,9 @@
     @allowClear={{true}}
     @searchField="label"
     @propertyToShow="label"
-    @readOnly={{subcase.confidential}}
+    @readOnly={{this.subcase.confidential}}
     @sortField="label"
-    @selectedItems={{await subcase.accessLevel}}
+    @selectedItems={{await this.subcase.accessLevel}}
     @selectModel={{action "setAccessLevel"}}
   />
 </div>
@@ -29,9 +29,8 @@
       data-test-subcase-titles-edit-shorttitle={{true}}
       @rows="2"
       class="auk-textarea"
-      @value={{subcase.shortTitle}}
-    />
-  </div>
+      @value={{this.subcase.shortTitle}}
+    />  </div>
 </div>
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
@@ -40,9 +39,8 @@
       data-test-subcase-titles-edit-title={{true}}
       @rows="4"
       class="auk-textarea"
-      @value={{subcase.title}}
-    />
-  </div>
+      @value={{this.subcase.title}}
+    />  </div>
 </div>
 
 <Auk::Toolbar>
@@ -60,7 +58,7 @@
       <WebComponents::VlSaveButton
         data-test-subcase-titles-edit-save={{true}}
         @text={{t "save"}}
-        @isLoading={{isLoading}}
+        @isLoading={{this.isLoading}}
         @saveAction={{action "saveChanges"}}
       />
     </Auk::Toolbar::Item>

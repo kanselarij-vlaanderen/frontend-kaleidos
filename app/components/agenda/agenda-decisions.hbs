@@ -1,7 +1,7 @@
 <div class="auk-container auk-container--center">
   <div class="auk-u-mt-8 no-print">
     <h3 class="auk-h2">
-      {{await title}}
+      {{await this.title}}
       <br/>
     </h3>
   </div>
@@ -18,7 +18,7 @@
             />
 
             <p class="auk-u-text-bold auk-u-text-capitalized">
-              {{await title}}
+              {{await this.title}}
             </p>
             <div class="auk-hr">
               <hr/>
@@ -46,11 +46,11 @@
                         @isEditing={{treatment.isEditing}}
                         @agendaItemTreatment={{treatment}}
                         @subcase={{await agendaitem.agendaActivity.subcase}}
-                        @isTableRow={{isTableRow}}
+                        @isTableRow={{this.isTableRow}}
                         @agendaitem={{agendaitem}} />
-                    {{else if session.isEditor}}
+                    {{else if this.session.isEditor}}
                       <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end">
-                        {{#if allowEditing}}
+                        {{#if this.allowEditing}}
                           <Auk::ButtonLink {{action "toggleIsEditing" treatment}}>
                             {{t "edit"}}
                           </Auk::ButtonLink>
@@ -72,8 +72,8 @@
               </p>
             </div>
           </div>
-          {{#if (not allowEditing)}}
-            <WebComponents::VlSignature @signature={{meeting.defaultSignature}} />
+          {{#if (not this.allowEditing)}}
+            <WebComponents::VlSignature @signature={{this.meeting.defaultSignature}} />
           {{/if}}
         </div>
       {{/each}}

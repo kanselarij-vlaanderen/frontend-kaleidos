@@ -1,32 +1,31 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{agendaitem.titlePress}} />
+    <WebComponents::VlFormInput @value={{this.agendaitem.titlePress}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "content"}}</Auk::Label>
     <Textarea class="auk-textarea"
       @rows="10"
-      @value={{agendaitem.textPress}}
-    />
-  </div>
+      @value={{this.agendaitem.textPress}}
+    />  </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "for-press"}}</Auk::Label>
-    <WebComponents::VlToggle @value={{agendaitem.forPress}} />
+    <WebComponents::VlToggle @value={{this.agendaitem.forPress}} />
   </div>
 </div>
 <Auk::Toolbar>
   <Auk::Toolbar::Group @position="right">
     <Auk::Toolbar::Item>
-      <Auk::ButtonLink {{action "cancelEditing" agendaitem}}>
+      <Auk::ButtonLink {{action "cancelEditing" this.agendaitem}}>
         {{t "cancel"}}
       </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
       <WebComponents::VlSaveButton
         @text={{t "save"}}
-        @isLoading={{isLoading}}
-        @saveAction={{action "saveChanges" agendaitem}}
+        @isLoading={{this.isLoading}}
+        @saveAction={{action "saveChanges" this.agendaitem}}
       />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>

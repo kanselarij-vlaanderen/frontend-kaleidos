@@ -1,17 +1,17 @@
 <WebComponents::VlModal
   @isOverlay={{true}}
-  @title={{modalTitle}}
+  @title={{this.modalTitle}}
   @closeModal={{action "close"}}
 >
-  {{#if (and (not isAdding) (not isEditing))}}
+  {{#if (and (not this.isAdding) (not this.isEditing))}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Utils::ModelSelector
-          @modelName={{modelName}}
+          @modelName={{this.modelName}}
           @searchField="label"
           @propertyToShow="label"
           @sortField="label"
-          @selectedItems={{item}}
+          @selectedItems={{this.item}}
           @selectModel={{action "selectModel"}}
         />
       </div>
@@ -25,7 +25,7 @@
       >
         {{t "add"}}
       </Auk::Button>
-      {{#if item}}
+      {{#if this.item}}
         <Auk::Button
           @skin="tertiary"
           @icon="pencil"
@@ -45,30 +45,30 @@
       {{/if}}
     </Auk::Modal::Footer>
   {{/if}}
-  {{#if isAdding}}
+  {{#if this.isAdding}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{title}} />
+        <WebComponents::VlFormInput @value={{this.title}} />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "add"}}
       @cancelAction={{action "toggleIsAdding"}}
       @saveAction={{action "createModel"}}
     />
   {{/if}}
-  {{#if isEditing}}
+  {{#if this.isEditing}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "title"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{title}} />
+        <WebComponents::VlFormInput @value={{this.title}} />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "save"}}
       @cancelAction={{action "toggleIsEditing"}}

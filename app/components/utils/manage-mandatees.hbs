@@ -1,13 +1,13 @@
-{{#if isEditing}}
+{{#if this.isEditing}}
   <Utils::EditMandatee
-    @mandateeToEdit={{await mandateeToEdit}}
+    @mandateeToEdit={{await this.mandateeToEdit}}
     @closeModal={{action "toggleIsEditing"}}
     @mandateesUpdated={{action "mandateesUpdated"}}
   />
 {{/if}}
-{{#if isResigning}}
+{{#if this.isResigning}}
   <Auk::Modal::Body>
-    {{#if showVerificationPopup}}
+    {{#if this.showVerificationPopup}}
       <ChangesAlert
         data-test-manage-mandatee-changes-alert={{true}}
         @message={{t "show-active-minister-alert"}}
@@ -22,12 +22,12 @@
     <div class="auk-form-group">
       <Auk::Label>{{t "new-person"}}</Auk::Label>
       <Utils::CreatePersonSelector
-        @selectedItems={{selectedPerson}}
+        @selectedItems={{this.selectedPerson}}
         @selectModel={{action "personSelected"}}
       />
     </div>
 
-    {{#if selectedPerson}}
+    {{#if this.selectedPerson}}
       <div class="auk-form-group">
         <Auk::Label>{{t "start-date"}}</Auk::Label>
         <WebComponents::VlDatepicker
@@ -37,7 +37,7 @@
     {{/if}}
   </Auk::Modal::Body>
   <WebComponents::VlModalFooter
-    @isLoading={{isLoading}}
+    @isLoading={{this.isLoading}}
     @cancelButtonText={{t "cancel"}}
     @saveButtonText={{t "save-resignation"}}
     @cancelAction={{action "toggleIsResigning"}}

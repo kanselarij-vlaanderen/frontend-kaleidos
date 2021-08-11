@@ -4,30 +4,29 @@
       <Auk::Toolbar::Item>
         <div class="auk-o-flex auk-o-flex--vertical auk-u-mt-2">
           <div class="auk-o-flex auk-o-flex--vertical-center">
-            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{subcase.shortTitle}}</h4>
+            <h4 class="auk-toolbar-complex__title auk-u-text-capitalize">{{this.subcase.shortTitle}}</h4>
           </div>
           <Subcases::SubcaseDetailNav/>
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
-      {{#if currentSession.isEditor}}
+      {{#if this.currentSession.isEditor}}
         <Auk::Toolbar::Item>
-          {{#if (or (is-pending canPropose) isLoading)}}
+          {{#if (or (is-pending this.canPropose) this.isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
-          {{else if (await canPropose)}}
+          {{else if (await this.canPropose)}}
             <DropdownMenu
               @skin="primary"
               @label={{t "propose-for-agenda"}}
               data-test-subcase-header-action-propose-for-agenda={{true}}
             as |Menu|>
               {{#each
-                (await meetings)
+                (await this.meetings)
               as |meeting|
               }}
                 <Menu.Item>
-                  <button type="button" class="auk-button-link"
-                    {{action "proposeForAgenda" subcase meeting}}
+                  <button type="button" class="auk-button-link" {{action "proposeForAgenda" this.subcase meeting}}
                   >
                     <span class="auk-button__content">
                       {{t "agenda-for"}}
@@ -37,12 +36,11 @@
                   </button>
                 </Menu.Item>
               {{/each}}
-              {{#if (gt (await meetings.length) 0)}}
+              {{#if (gt (await this.meetings.length) 0)}}
                 <Menu.Divider />
               {{/if}}
               <Menu.Item>
-                <button type="button" class="auk-button-link"
-                  {{action "proposeForOtherAgenda" subcase}}
+                <button type="button" class="auk-button-link" {{action "proposeForOtherAgenda" this.subcase}}
                 >
                   <span class="auk-button__content">
                     {{t "other-agenda"}}
@@ -59,11 +57,9 @@
               @label={{t "actions"}}
               data-test-subcase-header-actions-dropdown={{true}}
             as |Menu|>
-              {{#if (await canDelete)}}
+              {{#if (await this.canDelete)}}
                 <Menu.Item>
-                  <a href="" class="auk-button-link"
-                    data-test-subcase-header-action-delete-subcase
-                    {{action "requestDeleteSubcase" subcase}}
+                  <a href="" class="auk-button-link" data-test-subcase-header-action-delete-subcase {{action "requestDeleteSubcase" this.subcase}}
                   >
                     <span class="auk-button__content">
                       {{t "delete-subcase"}}
@@ -90,7 +86,7 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-{{#if promptDeleteCase}}
+{{#if this.promptDeleteCase}}
   <WebComponents::VlModalVerify
     @title="Leeg dossier verwijderen?"
     @verifyButtonText="Verwijderen"
@@ -105,7 +101,7 @@
   />
 {{/if}}
 
-{{#if isAssigningToOtherCase}}
+{{#if this.isAssigningToOtherCase}}
   <WebComponents::VlModal
     @closeModal={{action "cancel"}}
     @isOverlay={{true}}
@@ -115,23 +111,23 @@
   </WebComponents::VlModal>
 {{/if}}
 
-{{#if isAssigningToOtherAgenda}}
+{{#if this.isAssigningToOtherAgenda}}
   <WebComponents::VlModal
     @isOverlay={{true}}
     @title={{t "propose-for-agenda"}}
     @closeModal={{action "cancel"}}
   >
     <Subcases::AssignToMeetingForm
-      @subcase={{selectedSubcase}}
+      @subcase={{this.selectedSubcase}}
       @proposeForAgenda={{action "proposeForAgenda"}}
       @cancel={{action "cancel"}}
       @closeModal={{action "cancel"}}
     />
   </WebComponents::VlModal>
 {{/if}}
-{{#if isDeletingSubcase}}
+{{#if this.isDeletingSubcase}}
   <WebComponents::VlModalVerify
-    @isLoading={{isLoading}}
+    @isLoading={{this.isLoading}}
     @title={{t "delete-subcase"}}
     @message={{t "delete-subcase-confirmation"}}
     @cancel={{action "cancel"}}

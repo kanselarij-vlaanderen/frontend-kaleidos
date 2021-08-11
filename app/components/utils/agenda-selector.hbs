@@ -1,25 +1,25 @@
-{{#if (not multiSelect)}}
+{{#if (not this.multiSelect)}}
   <PowerSelect
-    @options={{agendas}}
-    @selected={{selectedAgenda}}
-    @disabled={{readOnly}}
+    @options={{this.agendas}}
+    @selected={{this.selectedAgenda}}
+    @disabled={{this.readOnly}}
     @searchEnabled={{false}}
-    @placeholder={{placeholder}}
+    @placeholder={{this.placeholder}}
     @onchange={{action "selectModel"}}
     as |model|
   >
-    {{model-property-to-show model propertyToShow}}
+    {{model-property-to-show model this.propertyToShow}}
   </PowerSelect>
 {{else}}
   <PowerSelectMultiple
-    @options={{agendas}}
+    @options={{this.agendas}}
     @searchEnabled={{false}}
-    @selected={{selectedAgenda}}
-    @disabled={{readOnly}}
-    @placeholder={{placeholder}}
+    @selected={{this.selectedAgenda}}
+    @disabled={{this.readOnly}}
+    @placeholder={{this.placeholder}}
     @onchange={{action "selectModel"}}
     as |model|
   >
-    {{model-property-to-show model propertyToShow}}
+    {{model-property-to-show model this.propertyToShow}}
   </PowerSelectMultiple>
 {{/if}}

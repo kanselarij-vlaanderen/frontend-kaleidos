@@ -11,11 +11,11 @@
   @navigateToPressAgenda={{action "navigateToPressAgenda"}}
   @navigateToDecisions={{action "navigateToDecisions"}}
   @navigateToNewsletter={{action "navigateToNewsletter"}}
-  @showPrintButton={{showPrintButton}}
+  @showPrintButton={{this.showPrintButton}}
 />
-{{#if (not isLoading)}}
+{{#if (not this.isLoading)}}
   <div class="auk-panel-layout">
-    {{#unless shouldHideNav}}
+    {{#unless this.shouldHideNav}}
       <div class="auk-panel-layout__sidebar auk-panel-layout__agenda-history">
         <Agenda::SideNav
           @agendas={{this.model.meeting.sortedAgendas}}

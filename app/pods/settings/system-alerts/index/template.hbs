@@ -47,7 +47,7 @@
             <Auk::Button
               @skin="tertiary"
               @icon="delete"
-              {{on "click" (perform remove this.selectedAlert)}}
+              {{on "click" (perform this.remove this.selectedAlert)}}
               data-test-route-settings-system-alerts-index-remove
             >
               {{t "delete"}}

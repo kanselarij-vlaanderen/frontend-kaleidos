@@ -1,18 +1,18 @@
 {{page-title (t "newsletter")}}
 <Newsletter::NewsletterHeader />
-{{#if (gt model.length 0)}}
+{{#if (gt this.model.length 0)}}
   <div class="vlc-u-box-model-maximize-height auk-scroll-wrapper">
     <div class="auk-scroll-wrapper__body">
       <div class="auk-u-m-8">
         <DataTable
           data-test-route-newsletters-data-table={{true}}
-          @content={{model}}
+          @content={{this.model}}
           @class="auk-table auk-table--striped"
-          @page={{page}}
-          @size={{size}}
-          @sort={{sort}}
+          @page={{this.page}}
+          @size={{this.size}}
+          @sort={{this.sort}}
           @enableSizes={{true}}
-          @isLoading={{isLoadingModel}}
+          @isLoading={{this.isLoadingModel}}
           @noDataMessage={{t "no-results-found"}}
           @onClickRow={{action "navigateToNewsletter"}}
           as |table|
@@ -21,7 +21,7 @@
             <c.header>
               <ThSortable
                 @class="auk-table__col--5 auk-table__header-title"
-                @currentSorting={{sort}}
+                @currentSorting={{this.sort}}
                 @field="planned-start,number-representation"
                 @label={{t "newsletter"}}
               />

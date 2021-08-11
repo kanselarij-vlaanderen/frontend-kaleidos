@@ -3,20 +3,20 @@
     <Auk::Label>{{t "title"}}</Auk::Label>
     <WebComponents::VlFormInput
       data-test-create-mandatee-title-container={{true}}
-      @value={{title}}
+      @value={{this.title}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
     <WebComponents::VlFormInput
       data-test-create-mandatee-nickname-container={{true}}
-      @value={{nickName}}
+      @value={{this.nickName}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>
     <Utils::CreatePersonSelector
-      @selectedItems={{selectedPerson}}
+      @selectedItems={{this.selectedPerson}}
       @selectModel={{action "personSelected"}}
     />
   </div>
@@ -29,7 +29,7 @@
       @propertyToShow="name"
       @sortField="name"
       @multiSelect={{true}}
-      @selectedItems={{iseCodes}}
+      @selectedItems={{this.iseCodes}}
       @selectModel={{action "chooseIseCodes"}}
     />
   </div>
@@ -39,7 +39,7 @@
   </div>
 </Auk::Modal::Body>
 <WebComponents::VlModalFooter
-  @isLoading={{isLoading}}
+  @isLoading={{this.isLoading}}
   @cancelButtonText={{t "cancel"}}
   @saveButtonText={{t "create-mandatee"}}
   @cancelAction={{action "closeModal"}}

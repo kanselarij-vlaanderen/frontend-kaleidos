@@ -49,7 +49,7 @@
           @skin="danger-borderless"
           @layout="icon-only"
           @icon="delete"
-          {{on "click" (fn this.deletePiece piece)}}
+          {{on "click" (fn this.deletePiece this.piece)}}
           data-test-vl-document-delete-piece
         >
           {{t "delete"}}

@@ -1,12 +1,12 @@
 <div class="auk-u-m-8">
   <Utils::AgendaitemTable
-    @model={{model}}
-    @sort={{sort}}
-    @page={{page}}
+    @model={{this.model}}
+    @sort={{this.sort}}
+    @page={{this.page}}
     @filter={{filter}}
-    @size={{size}}
-    @include={{include}}
-    @columns={{columns}}
+    @size={{this.size}}
+    @include={{this.include}}
+    @columns={{this.columns}}
     as |row|
   >
     <AgendaitemPressEdit @isTableRow={{true}} @agendaitem={{row}} />

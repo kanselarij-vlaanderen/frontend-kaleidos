@@ -1,11 +1,11 @@
 <Auk::Modal::Body>
-  <Utils::KindSelector @kind={{kind}} @setAction={{action "setKind"}} />
+  <Utils::KindSelector @kind={{this.kind}} @setAction={{action "setKind"}} />
   <div class="auk-u-mb-2">
     <div class="auk-form-group">
       <Auk::Label>{{t "start-date"}}</Auk::Label>
       <WebComponents::VlDatepicker
         @enableTime={{true}}
-        @date={{date}}
+        @date={{this.date}}
         @dateChanged={{action "selectStartDate"}}
       />
     </div>
@@ -16,8 +16,8 @@
       <WebComponents::VlFormInput
         data-test-edit-session-meeting-number={{true}}
         @type="number"
-        @value={{meetingNumber}}
-        @input={{action "meetingNumberChangedAction" meetingNumber}}
+        @value={{this.meetingNumber}}
+        @input={{action "meetingNumberChangedAction" this.meetingNumber}}
       />
     </div>
   </div>
@@ -28,7 +28,7 @@
       </Auk::Label>
       <WebComponents::VlFormInput
         data-test-edit-session-number-representation={{true}}
-        @value={{numberRepresentation}}
+        @value={{this.numberRepresentation}}
       />
     </div>
   </div>
@@ -37,12 +37,12 @@
       <Auk::Label>
         {{t "meeting-location"}}
       </Auk::Label>
-      <WebComponents::VlFormInput @value={{extraInfo}} />
+      <WebComponents::VlFormInput @value={{this.extraInfo}} />
     </div>
   </div>
 </Auk::Modal::Body>
 <WebComponents::VlModalFooter
-  @isLoading={{isLoading}}
+  @isLoading={{this.isLoading}}
   @cancelButtonText={{t "cancel"}}
   @saveButtonText={{t "edit"}}
   @cancelAction={{action "cancelForm"}}

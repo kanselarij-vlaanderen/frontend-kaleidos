@@ -1,21 +1,21 @@
-{{#if allowEditing}}
+{{#if this.allowEditing}}
   <div class="auk-u-mb-2">
     <div class="auk-o-flex auk-o-flex--justify-between">
       <h3>
         {{#if this.showIndex}}
           {{this.itemIndex}}.
         {{/if}}
-        {{#if (not newsletterInfo)}}
-          {{agendaitem.shortTitle}}
+        {{#if (not this.newsletterInfo)}}
+          {{this.agendaitem.shortTitle}}
         {{else}}
-          {{newsletterInfo.title}}
+          {{this.newsletterInfo.title}}
         {{/if}}
       </h3>
       {{!-- No possibility to create a new newsletterInfo when not existent yet --}}
       {{#if
         (and
-          currentSession.isEditor
-          newsletterInfo
+          this.currentSession.isEditor
+          this.newsletterInfo
         )
       }}
         <div class="auk-o-flex auk-o-flex--justify-between">
@@ -27,59 +27,59 @@
         </div>
       {{/if}}
     </div>
-    {{#if (not newsletterInfo)}}
+    {{#if (not this.newsletterInfo)}}
       <p>
-        {{agendaitem.title}}
+        {{this.agendaitem.title}}
       </p>
     {{/if}}
   </div>
 {{else}}
   <div>
     <h3>
-      {{#if (not newsletterInfo)}}
-        {{agendaitem.shortTitle}}
+      {{#if (not this.newsletterInfo)}}
+        {{this.agendaitem.shortTitle}}
       {{else}}
-        {{newsletterInfo.title}}
+        {{this.newsletterInfo.title}}
       {{/if}}
     </h3>
-    {{#if (not newsletterInfo)}}
+    {{#if (not this.newsletterInfo)}}
       <p>
-        {{agendaitem.title}}
+        {{this.agendaitem.title}}
       </p>
     {{/if}}
   </div>
 {{/if}}
 <div class="auk-u-mb-2">
   <p data-test-newsletter-item-content-print-item-proposal>
-    {{await newsletterInfo.newsletterProposal}}
+    {{await this.newsletterInfo.newsletterProposal}}
   </p>
 </div>
 <div class="auk-u-mb-2">
-  {{#if (not agendaitem.showAsRemark)}}
-    {{#if (not newsletterInfo.richtext)}}
+  {{#if (not this.agendaitem.showAsRemark)}}
+    {{#if (not this.newsletterInfo.richtext)}}
       <p class="auk-u-italic auk-u-muted">
         {{t "no-newsletter-info"}}
       </p>
     {{else}}
-      <SanitizeHtml @raw={{true}} @value={{newsletterInfo.richtext}} />
+      <SanitizeHtml @raw={{true}} @value={{this.newsletterInfo.richtext}} />
     {{/if}}
   {{/if}}
 </div>
-{{#if allowEditing}}
-  {{#if (await newsletterInfo.remark)}}
+{{#if this.allowEditing}}
+  {{#if (await this.newsletterInfo.remark)}}
     <p class="auk-u-muted auk-u-text-capitalize auk-u-text-small">
-      {{t "remark"}}: {{await newsletterInfo.remark}}
+      {{t "remark"}}: {{await this.newsletterInfo.remark}}
     </p>
   {{/if}}
 {{/if}}
 {{#if
-  (gt (await newsletterInfo.themes.length) 0)
+  (gt (await this.newsletterInfo.themes.length) 0)
 }}
   <div class="auk-u-mb-2">
     <div class="auk-u-mt-2">
       <Auk::PillList>
         {{#each
-          (await newsletterInfo.themes)
+          (await this.newsletterInfo.themes)
         as |theme|
         }}
           <Auk::Pill>{{theme.label}}</Auk::Pill>
@@ -87,7 +87,7 @@
       </Auk::PillList>
     </div>
   </div>
-{{else if (and allowEditing newsletterInfo.richtext)}}
+{{else if (and this.allowEditing this.newsletterInfo.richtext)}}
   <div class="auk-u-mb-2">
     <p class="auk-u-muted auk-u-text-capitalize">
       {{t "no-themes-agendaitem"}}

@@ -17,12 +17,12 @@
         </Agenda::PrintableAgenda::ListSection>
       {{/if}}
 
-      {{#if (gt announcements.length 0)}}
+      {{#if (gt this.announcements.length 0)}}
         <Agenda::PrintableAgenda::ListSection
           @letter="B"
           @title={{t "announcements-subtitle"}}
         >
-          {{#each announcements as |announcement|}}
+          {{#each this.announcements as |announcement|}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item @item={{announcement}} />
           {{/each}}
         </Agenda::PrintableAgenda::ListSection>

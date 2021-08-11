@@ -1,7 +1,7 @@
 <div class="auk-o-flex">
   <WebComponents::LightTable::VlDeleteUser
-    @row={{row}}
-    @refreshRoute={{tableActions.refreshRoute}}
+    @row={{this.row}}
+    @refreshRoute={{this.tableActions.refreshRoute}}
   />
-  <Settings::User::NextButton @row={{row}} @goToRoute={{goToRoute}} />
+  <Settings::User::NextButton @row={{this.row}} @goToRoute={{this.goToRoute}} />
 </div>

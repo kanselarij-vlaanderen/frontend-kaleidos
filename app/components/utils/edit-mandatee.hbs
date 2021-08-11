@@ -1,4 +1,4 @@
-{{#if showVerificationPopup}}
+{{#if this.showVerificationPopup}}
   <WebComponents::VlModalVerify
     @title={{t "change-mandatee-change-end-date"}}
     @message={{t "change-mandatee-end-date"}}
@@ -10,30 +10,30 @@
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{title}} />
+    <WebComponents::VlFormInput @value={{this.title}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{nickName}} />
+    <WebComponents::VlFormInput @value={{this.nickName}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>
     <Utils::CreatePersonSelector
-      @selectedItems={{mandateeToEdit.person}}
+      @selectedItems={{this.mandateeToEdit.person}}
       @selectModel={{action "personSelected"}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "start-date"}}</Auk::Label>
     <WebComponents::VlDatepicker
-      @selectedDate={{startDate}}
+      @selectedDate={{this.startDate}}
       @dateChanged={{action "selectStartDate"}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "end-date"}}</Auk::Label>
     <WebComponents::VlDatepicker
-      @selectedDate={{endDate}}
+      @selectedDate={{this.endDate}}
       @dateChanged={{action "selectEndDate"}}
     />
   </div>
@@ -45,7 +45,7 @@
       @propertyToShow="nameToShow"
       @sortField="name"
       @multiSelect={{true}}
-      @selectedItems={{iseCodes}}
+      @selectedItems={{this.iseCodes}}
       @selectModel={{action "chooseIseCodes"}}
     />
   </div>
@@ -63,8 +63,8 @@
       <Auk::Toolbar::Item>
         <WebComponents::VlSaveButton
           @text={{t "save"}}
-          @isLoading={{isLoading}}
-          @saveAction={{action "triggerPopUp" mandateeToEdit}}
+          @isLoading={{this.isLoading}}
+          @saveAction={{action "triggerPopUp" this.mandateeToEdit}}
           data-test-edit-mandatee-save={{true}}
         />
       </Auk::Toolbar::Item>

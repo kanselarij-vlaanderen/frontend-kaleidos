@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each model as |item|}}
+        {{#each this.model as |item|}}
           <NewsletterTable::TableRow
             @agendaitem={{item.agendaitem}}
             @newsletterInfo={{item.newsletterInfo}}

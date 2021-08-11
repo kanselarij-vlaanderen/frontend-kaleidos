@@ -1,13 +1,13 @@
 <div class="auk-u-m-8">
   <div class=""></div>
   <Utils::AgendaitemTable
-    @model={{await model}}
-    @sort={{sort}}
-    @page={{page}}
+    @model={{await this.model}}
+    @sort={{this.sort}}
+    @page={{this.page}}
     @filter={{filter}}
-    @include={{include}}
-    @size={{size}}
-    @columns={{columns}}
+    @include={{this.include}}
+    @size={{this.size}}
+    @columns={{this.columns}}
     as |agendaitemRow|
   >
     {{#if (is-pending agendaitemRow.treatments)}}

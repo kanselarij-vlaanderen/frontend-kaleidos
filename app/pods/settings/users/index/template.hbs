@@ -27,15 +27,15 @@
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
 
-  {{#if (await model)}}
+  {{#if (await this.model)}}
     <DataTable
       data-test-route-settings-users-table={{true}}
-      @content={{await model}}
+      @content={{await this.model}}
       @class="auk-table auk-table--striped"
-      @isLoading={{isLoadingModel}}
-      @page={{page}}
-      @size={{size}}
-      @sort={{sort}}
+      @isLoading={{this.isLoadingModel}}
+      @page={{this.page}}
+      @size={{this.size}}
+      @sort={{this.sort}}
       @noDataMessage={{t "no-results-found"}}
       as |table|
     >
@@ -43,13 +43,13 @@
         <c.header>
           <ThSortable
             @class="auk-table__col--3 auk-table__header-title"
-            @currentSorting={{sort}}
+            @currentSorting={{this.sort}}
             @field="first-name"
             @label={{t "first-name"}}
           />
           <ThSortable
             @class="auk-table__col--2 auk-table__header-title"
-            @currentSorting={{sort}}
+            @currentSorting={{this.sort}}
             @field="last-name"
             @label={{t "last-name"}}
           />
@@ -60,13 +60,13 @@
           </th>
           <ThSortable
             @class="auk-table__col--2 auk-table__header-title"
-            @currentSorting={{sort}}
+            @currentSorting={{this.sort}}
             @field="organization.identifier"
             @label={{t "ovo-code"}}
           />
           <ThSortable
             @class="auk-table__col--2 auk-table__header-title"
-            @currentSorting={{sort}}
+            @currentSorting={{this.sort}}
             @field="group.name"
             @label={{t "group"}}
           />
@@ -96,7 +96,7 @@
             {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
             <WebComponents::LightTable::VlcUserTableActionbar
               @row={{user}}
-              @goToRoute={{goToRoute}}
+              @goToRoute={{this.goToRoute}}
             />
           </td>
         </c.body>

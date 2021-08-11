@@ -11,7 +11,7 @@
       {{t "create-mandatee"}}
     </Auk::Button>
   </div>
-  {{#if (await model)}}
+  {{#if (await this.model)}}
   {{!-- "tbody" tagname in the "sortable-group"-helper --}}
   {{!-- template-lint-disable table-groups  --}}
     <table class="auk-table auk-table--striped">
@@ -59,8 +59,8 @@
       <SortableGroup
         data-test-route-settings-ministers-sortable-group
         @tagName="tbody"
-        @model={{model}}
-        @onChange={{action "reorderItems" model}}
+        @model={{this.model}}
+        @onChange={{action "reorderItems" this.model}}
       as |sortableGroup|
       >
         {{#each sortableGroup.model as |mandatee index|}}
@@ -132,60 +132,60 @@
     </table>
   {{!-- template-lint-enable table-groups --}}
   {{/if}}
-  {{#if isEditingMandatee}}
+  {{#if this.isEditingMandatee}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @title={{t "manage-ministers"}}
-      @closeModal={{action "toggleProperty" "isEditingMandatee" mandateeToEdit}}
+      @closeModal={{action "toggleProperty" "isEditingMandatee" this.mandateeToEdit}}
     >
       <Utils::ManageMandatees
-        @mandateeToEdit={{mandateeToEdit}}
+        @mandateeToEdit={{this.mandateeToEdit}}
         @mandateesUpdated={{action "mandateesUpdated"}}
-        @isEditing={{isEditingMandatee}}
+        @isEditing={{this.isEditingMandatee}}
         @closeModal={{action
           "toggleProperty"
           "isEditingMandatee"
-          mandateeToEdit
+          this.mandateeToEdit
         }}
       />
     </WebComponents::VlModal>
   {{/if}}
-  {{#if isResigningMandatee}}
+  {{#if this.isResigningMandatee}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @title={{t "manage-ministers"}}
       @closeModal={{action
         "toggleProperty"
         "isResigningMandatee"
-        mandateeToEdit
+        this.mandateeToEdit
       }}
     >
       <Utils::ManageMandatees
-        @mandateeToEdit={{mandateeToEdit}}
+        @mandateeToEdit={{this.mandateeToEdit}}
         @mandateesUpdated={{action "mandateesUpdated"}}
-        @isResigning={{isResigningMandatee}}
+        @isResigning={{this.isResigningMandatee}}
         @closeModal={{action
           "toggleProperty"
           "isResigningMandatee"
-          mandateeToEdit
+          this.mandateeToEdit
         }}
       />
     </WebComponents::VlModal>
   {{/if}}
-  {{#if isAddingMandatee}}
+  {{#if this.isAddingMandatee}}
     <WebComponents::VlModal
       @isOverlay={{true}}
       @title={{t "manage-ministers"}}
       @closeModal={{action "toggleIsAdding"}}
     >
       <Utils::CreateMandatee
-        @model={{model}}
+        @model={{this.model}}
         @closeModal={{action "toggleIsAdding"}}
         @mandateesUpdated={{action "mandateesUpdated"}}
       />
     </WebComponents::VlModal>
   {{/if}}
-  {{#if isDeletingMandatee}}
+  {{#if this.isDeletingMandatee}}
     <WebComponents::VlModalVerify
       @title={{t "warning-title"}}
       @verifyButtonText={{t "delete"}}

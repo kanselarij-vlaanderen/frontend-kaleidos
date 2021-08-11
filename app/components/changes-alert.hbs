@@ -1,6 +1,6 @@
 <div data-test-changes-alert class="auk-o-flex auk-o-flex--justify-between vlc-u-box-model-maximize-width">
   <p class="vl-alert__content">
-    {{message}}
+    {{this.message}}
   </p>
   <div class="button-container">
     <Auk::Button
@@ -8,7 +8,7 @@
       {{action "clearAction"}}
       data-test-changes-alert-close
     >
-      {{buttonText}}
+      {{this.buttonText}}
     </Auk::Button>
   </div>
 </div>

@@ -2,29 +2,29 @@
   <div class="auk-form-group">
     <Auk::Label>{{t "new-person"}}</Auk::Label>
     <Utils::CreatePersonSelector
-      @selectedItems={{selectedPerson}}
+      @selectedItems={{this.selectedPerson}}
       @selectModel={{action "personSelected"}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{signatureToEdit.name}} />
+    <WebComponents::VlFormInput @value={{this.signatureToEdit.name}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "signature-function"}}</Auk::Label>
-    <WebComponents::VlFormInput @value={{signatureToEdit.function}} />
+    <WebComponents::VlFormInput @value={{this.signatureToEdit.function}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "signature-file"}}</Auk::Label>
-    {{#if (not uploadedFile)}}
+    {{#if (not this.uploadedFile)}}
       <FileUploader
         @multipleFiles={{false}}
         @uploadedFileAction={{action "getUploadedFile"}}
       />
     {{else}}
       <div class="auk-o-flex auk-o-flex--center auk-preview-container">
-        <img src="{{downloadUrl}}" alt="{{t "no-signature-yet"}}"/>
-        <a href="" {{action "removeFile" uploadedFile}}>
+        <img src="{{this.downloadUrl}}" alt="{{t "no-signature-yet"}}" />
+        <a href="" {{action "removeFile" this.uploadedFile}}>
           {{fa-icon "remove"}}
         </a>
       </div>
@@ -32,7 +32,7 @@
   </div>
 </Auk::Modal::Body>
 <WebComponents::VlModalFooter
-  @isLoading={{isLoading}}
+  @isLoading={{this.isLoading}}
   @cancelButtonText={{t "cancel"}}
   @saveButtonText={{t "save"}}
   @cancelAction={{action "closeModal"}}

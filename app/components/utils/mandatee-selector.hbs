@@ -1,10 +1,10 @@
-{{#if (not singleSelect)}}
+{{#if (not this.singleSelect)}}
   <PowerSelectMultiple
-    @options={{items}}
-    @selected={{await selectedMandatees}}
-    @disabled={{readOnly}}
+    @options={{this.items}}
+    @selected={{await this.selectedMandatees}}
+    @disabled={{this.readOnly}}
     @closeOnSelect={{false}}
-    @search={{perform searchTask}}
+    @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "chooseMandatee"}}
   as |mandatee|>
@@ -12,10 +12,10 @@
   </PowerSelectMultiple>
 {{else}}
   <PowerSelect
-    @options={{items}}
-    @selected={{await selectedMandatees}}
-    @disabled={{readOnly}}
-    @search={{perform searchTask}}
+    @options={{this.items}}
+    @selected={{await this.selectedMandatees}}
+    @disabled={{this.readOnly}}
+    @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "chooseMandatee"}}
   as |mandatee|>

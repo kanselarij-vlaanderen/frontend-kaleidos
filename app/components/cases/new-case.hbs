@@ -1,6 +1,6 @@
 <form onsubmit={{action "createCaseAction"}}>
   <Auk::Modal::Body>
-    {{#if hasError}}
+    {{#if this.hasError}}
       <Auk::Alert
         data-test-new-case-shorttitle-error
         @skin="error"
@@ -15,14 +15,13 @@
         <Auk::Label>{{t "confidential"}}</Auk::Label>
         <WebComponents::VlToggle
           data-test-new-case-toggle-confidential={{true}}
-          @value={{confidential}}
+          @value={{this.confidential}}
         />
       </div>
     </div>
-    <div class="auk-form-group {{getClassForShortTitle}}" data-test-new-case-shorttitle>
+    <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>
       <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      <Textarea class="auk-textarea" @rows="2" @value={{shortTitle}} />
-    </div>
+      <Textarea class="auk-textarea" @rows="2" @value={{this.shortTitle}} />    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar @size="large">
@@ -42,7 +41,7 @@
             data-test-new-case-save={{true}}
             @text={{t "create-case"}}
             @type="submit"
-            @isLoading={{isLoading}}
+            @isLoading={{this.isLoading}}
           />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>

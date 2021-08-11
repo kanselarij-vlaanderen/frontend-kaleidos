@@ -1,20 +1,20 @@
-{{#if (not isCreatingPerson)}}
+{{#if (not this.isCreatingPerson)}}
   <div data-test-person-selector-dropdown-container class="auk-o-flex auk-o-flex--vertical-center">
     <PowerSelect
-      @options={{items}}
-      @selected={{selectedItems}}
-      @disabled={{readOnly}}
-      @searchField={{searchField}}
-      @placeholder={{placeholder}}
-      @loadingMessage={{loadingMessage}}
-      @noMatchesMessage={{noMatchesMessage}}
-      @searchMessage={{searchMessage}}
-      @search={{perform searchTask}}
+      @options={{this.items}}
+      @selected={{this.selectedItems}}
+      @disabled={{this.readOnly}}
+      @searchField={{this.searchField}}
+      @placeholder={{this.placeholder}}
+      @loadingMessage={{this.loadingMessage}}
+      @noMatchesMessage={{this.noMatchesMessage}}
+      @searchMessage={{this.searchMessage}}
+      @search={{perform this.searchTask}}
       @oninput={{action "resetValueIfEmpty"}}
       @onchange={{action "selectModel"}}
       as |model|
     >
-      {{await (model-property-to-show model propertyToShow)}}
+      {{await (model-property-to-show model this.propertyToShow)}}
     </PowerSelect>
     <div class="auk-u-mr-2"></div>
     <Auk::Button
@@ -32,14 +32,14 @@
     <Auk::Label>{{t "first-name"}}</Auk::Label>
     <WebComponents::VlFormInput
       data-test-person-selector-firstname={{true}}
-      @value={{firstName}}
+      @value={{this.firstName}}
     />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
     <WebComponents::VlFormInput
       data-test-person-selector-lastname={{true}}
-      @value={{lastName}}
+      @value={{this.lastName}}
     />
   </div>
   <Auk::Toolbar>
@@ -52,7 +52,7 @@
       <Auk::Toolbar::Item>
         <WebComponents::VlSaveButton
           @text={{t "save"}}
-          @isLoading={{isLoading}}
+          @isLoading={{this.isLoading}}
           @saveAction={{action "createPerson"}}
         />
       </Auk::Toolbar::Item>

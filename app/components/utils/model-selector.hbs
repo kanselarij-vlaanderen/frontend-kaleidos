@@ -1,36 +1,36 @@
-{{#if (not multiSelect)}}
+{{#if (not this.multiSelect)}}
   <PowerSelect
-    @options={{items}}
-    @selected={{selectedItems}}
-    @disabled={{readOnly}}
-    @allowClear={{allowClear}}
-    @searchField={{searchField}}
-    @placeholder={{placeholder}}
-    @loadingMessage={{loadingMessage}}
-    @noMatchesMessage={{noMatchesMessage}}
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @allowClear={{this.allowClear}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @loadingMessage={{this.loadingMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
     @searchMessage={{null}}
-    @search={{perform searchTask}}
+    @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "selectModel"}}
-    @searchEnabled={{not hideSearch}}
+    @searchEnabled={{not this.hideSearch}}
   as |model|>
-    {{await (model-property-to-show model propertyToShow)}}
+    {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelect>
 {{else}}
   <PowerSelectMultiple
-    @options={{items}}
-    @selected={{selectedItems}}
-    @disabled={{readOnly}}
-    @searchField={{searchField}}
-    @placeholder={{placeholder}}
-    @loadingMessage={{loadingMessage}}
+    @options={{this.items}}
+    @selected={{this.selectedItems}}
+    @disabled={{this.readOnly}}
+    @searchField={{this.searchField}}
+    @placeholder={{this.placeholder}}
+    @loadingMessage={{this.loadingMessage}}
     @searchMessage={{null}}
-    @noMatchesMessage={{noMatchesMessage}}
+    @noMatchesMessage={{this.noMatchesMessage}}
     @closeOnSelect={{false}}
-    @search={{perform searchTask}}
+    @search={{perform this.searchTask}}
     @oninput={{action "resetValueIfEmpty"}}
     @onchange={{action "selectModel"}}
   as |model|>
-    {{await (model-property-to-show model propertyToShow)}}
+    {{await (model-property-to-show model this.propertyToShow)}}
   </PowerSelectMultiple>
 {{/if}}

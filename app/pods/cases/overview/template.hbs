@@ -1,5 +1,5 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{isAddingCase}} @close={{action "close"}} />
+<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{action "close"}} />
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
     <Auk::Toolbar>
@@ -19,12 +19,13 @@
     </Auk::Toolbar>
     <DataTable
       data-test-route-cases-overview-data-table={{true}}
-      @content={{await model}}
-      @page={{page}}
+      @content={{await this.model}}
+      @page={{this.page}}
       @noDataMessage={{t "no-results-found"}}
-      @size={{size}} @sort={{sort}}
+      @size={{this.size}}
+      @sort={{this.sort}}
       @class="auk-table auk-table--striped"
-      @isLoading={{isLoadingModel}}
+      @isLoading={{this.isLoadingModel}}
       as |table|
     >
       <table.content as |c|>
@@ -54,7 +55,7 @@
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="auk-u-text-align--right">
-            {{#if currentSession.isEditor}}
+            {{#if this.currentSession.isEditor}}
               <div class="auk-u-position-relative auk-u-inline-block">
                 <DropdownMenu
                   @skin="borderless"
@@ -102,7 +103,7 @@
           @case={{this.caseToEdit}}
   />
 {{/if}}
-{{#if isArchivingCase}}
+{{#if this.isArchivingCase}}
   <WebComponents::VlModalVerify
     @title={{t "archive-case"}}
     @message={{t "archive-case-message"}}

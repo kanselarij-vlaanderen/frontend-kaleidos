@@ -33,9 +33,9 @@
     @icon="nav-right"
     @route="agenda.agendaitems.agendaitem"
     @models={{array
-      (await latestMeetingId)
-      (await latestAgendaId)
-      (await latestAgendaitemId)
+      (await this.latestMeetingId)
+      (await this.latestAgendaId)
+      (await this.latestAgendaitemId)
     }}
     target="_blank"
   />

@@ -1,9 +1,9 @@
 <WebComponents::VlModal
   @isOverlay={{true}}
-  @title={{modalTitle}}
+  @title={{this.modalTitle}}
   @closeModal={{action "close"}}
 >
-  {{#if (and (not isAdding) (not isEditing))}}
+  {{#if (and (not this.isAdding) (not this.isEditing))}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Utils::ModelSelector
@@ -11,7 +11,7 @@
           @searchField="label"
           @propertyToShow="label"
           @sortField="label"
-          @selectedItems={{item}}
+          @selectedItems={{this.item}}
           @selectModel={{action "selectModel"}}
         />
       </div>
@@ -25,7 +25,7 @@
       >
         {{t "add"}}
       </Auk::Button>
-      {{#if item}}
+      {{#if this.item}}
         <Auk::Button
           @skin="tertiary"
           @icon="pencil"
@@ -45,11 +45,11 @@
       {{/if}}
     </Auk::Modal::Footer>
   {{/if}}
-  {{#if isAdding}}
+  {{#if this.isAdding}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{label}} />
+        <WebComponents::VlFormInput @value={{this.label}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>
@@ -58,7 +58,7 @@
           @searchField="label"
           @propertyToShow="label"
           @sortField="label"
-          @selectedItems={{domain}}
+          @selectedItems={{this.domain}}
           @selectModel={{action "chooseDomain"}}
         />
       </div>
@@ -69,24 +69,24 @@
           @searchField="name"
           @propertyToShow="nameToShow"
           @sortField="name"
-          @selectedItems={{iseCode}}
+          @selectedItems={{this.iseCode}}
           @selectModel={{action "chooseIseCode"}}
         />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "add"}}
       @cancelAction={{action "toggleIsAdding"}}
       @saveAction={{action "createModel"}}
     />
   {{/if}}
-  {{#if isEditing}}
+  {{#if this.isEditing}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        <WebComponents::VlFormInput @value={{label}} />
+        <WebComponents::VlFormInput @value={{this.label}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>
@@ -95,7 +95,7 @@
           @searchField="label"
           @propertyToShow="label"
           @sortField="label"
-          @selectedItems={{domain}}
+          @selectedItems={{this.domain}}
           @selectModel={{action "chooseDomain"}}
         />
       </div>
@@ -106,13 +106,13 @@
           @searchField="name"
           @propertyToShow="name"
           @sortField="name"
-          @selectedItems={{iseCode}}
+          @selectedItems={{this.iseCode}}
           @selectModel={{action "chooseIseCode"}}
         />
       </div>
     </Auk::Modal::Body>
     <WebComponents::VlModalFooter
-      @isLoading={{isLoading}}
+      @isLoading={{this.isLoading}}
       @cancelButtonText={{t "cancel"}}
       @saveButtonText={{t "save"}}
       @cancelAction={{action "toggleIsEditing"}}
