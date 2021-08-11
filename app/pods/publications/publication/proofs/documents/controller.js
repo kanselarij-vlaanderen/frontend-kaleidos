@@ -1,7 +1,5 @@
 import Controller from '@ember/controller';
-import {
-  action, computed
-} from '@ember/object';
+import { action, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -12,9 +10,9 @@ export class Model {
   decisions;
 
   // no async constructor() in JS
-  static async create(pieces, decisions, publicationSubcase, currentSession) {
+  static async create(pieces, decisions, currentSession) {
     const model = new Model();
-    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, publicationSubcase, currentSession)));
+    model.pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, currentSession)));
     model.decisions = decisions;
     return model;
   }
@@ -33,11 +31,11 @@ export class PieceRow {
   requestActivitiesUsedBy;
 
   // no async constructor() in JS
-  static async create(piece, publicationSubcase, currentSession) {
+  static async create(piece, currentSession) {
     const row = new PieceRow();
     row.piece = piece;
     row.file = await piece.file;
-    row.publicationSubcase = publicationSubcase;
+    row.publicationSubcase = this.publicationSubcase;
     // avoid awaiting in getter
     row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
     row.currentSession = currentSession;
@@ -51,8 +49,7 @@ export class PieceRow {
     // receivedDate is set if and only if it is a received pieced
     const isReceived = !!this.piece.receivedDate;
     const isUsed = isUsedInRequest || isReceived;
-    const isShownDelete = hasPermission && !isUsed;
-    return isShownDelete;
+    return hasPermission && !isUsed;
   }
 
   get isDeleteDisabled() {
