@@ -14,5 +14,9 @@
         @skin="borderless" @layout="icon-only" @icon="book"
         @href={{piece.viewDocumentURL}} target="_blank" />
     </Auk::List::Item>
+  {{else}}
+    <Auk::EmptyState
+            @message={{this.emptyMessage}}
+    />
   {{/each}}
 </Auk::List>
