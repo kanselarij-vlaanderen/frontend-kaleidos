@@ -27,28 +27,21 @@
 
         {{#if this.canUploadPiece}}
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @icon="chevron-down" @layout="icon-right" @skin="secondary"
-              @disabled={{this.isUploadDisabled}}>
-              {{t "upload-proof-document"}}
-            </Auk::Button>
-            <AttachPopover
-              @class="ember-attacher-popper"
-              @showOn="click"
-              @hideOn="clickout click"
-              @animation="shift"
-              @placement="bottom">
-              <Auk::Dropdown>
-                <Auk::Dropdown::Item
-                  {{on "click" this.openSourceUploadModal}}>
-                  {{t "upload-source-proof-document"}}
-                </Auk::Dropdown::Item>
-                <Auk::Dropdown::Item
-                  {{on "click" this.openCorrectionUploadModal}}>
-                  {{t "upload-corrected-proof-document"}}
-                </Auk::Dropdown::Item>
-              </Auk::Dropdown>
-            </AttachPopover>
+            <DropdownMenu
+              @skin="secondary"
+              @label={{t "upload-proof-document"}}
+              @position="bottom-start"
+              @disabled={{this.isUploadDisabled}}
+            as |Menu|>
+              <Menu.Item
+                {{on "click" this.openSourceUploadModal}}>
+                {{t "upload-source-proof-document"}}
+              </Menu.Item>
+              <Menu.Item
+                {{on "click" this.openCorrectionUploadModal}}>
+                {{t "upload-corrected-proof-document"}}
+              </Menu.Item>
+            </DropdownMenu>
           </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
