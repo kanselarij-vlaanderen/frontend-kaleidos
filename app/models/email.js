@@ -6,8 +6,8 @@ export default class Email extends Model {
   // @attr() messageId;
   @attr('string') to; // dont use email, it will translate to mailto:
   @attr('string') from; // dont use email, it will translate to mailto:
-  // @attr('email') cc;
-  // @attr('email') bcc;
+  @attr('string') cc;
+  // @attr('string') bcc;
   @attr('string') subject;
   @attr('string') message;
   // @attr('string') htmlContent; // html-content
