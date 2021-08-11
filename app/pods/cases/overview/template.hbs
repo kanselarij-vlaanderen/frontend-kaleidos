@@ -1,5 +1,5 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{action "close"}} />
+<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} />
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
     <Auk::Toolbar>
@@ -42,7 +42,7 @@
           <th class="auk-table__col--1"></th>
         </c.header>
         <c.body @class="auk-table--interaction-cursor" as |row|>
-          <td onclick={{action "navigateToCase" row}}>
+          <td onclick={{fn this.navigateToCase row}}>
             <p>
               {{#if row.shortTitle}}
                 {{row.shortTitle}}
@@ -51,7 +51,7 @@
               {{/if}}
             </p>
           </td>
-          <td onclick={{action "navigateToCase" row}}>
+          <td onclick={{fn this.navigateToCase row}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="auk-u-text-align--right">
@@ -72,7 +72,7 @@
                   </Menu.Item>
                   <Menu.Item>
                     <a href="" class="auk-button-link auk-button-link--block"
-                      {{action (if row.isArchived "unarchiveCase" "requestArchiveCase") row}}
+                      {{fn (if row.isArchived this.unarchiveCase" this.requestArchiveCase) row}}
                     >
                       <span class="auk-button__content">
                         {{t (if row.isArchived "unarchive-case" "archive-case")}}
@@ -107,7 +107,7 @@
   <WebComponents::VlModalVerify
     @title={{t "archive-case"}}
     @message={{t "archive-case-message"}}
-    @cancel={{action "cancelArchiveCase"}}
-    @verify={{action "archiveCase"}}
+    @cancel={{this.cancelArchiveCase}}
+    @verify={{this.archiveCase}}
   />
 {{/if}}

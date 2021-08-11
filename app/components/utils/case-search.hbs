@@ -5,7 +5,7 @@
       @value={{this.searchText}}
       @placeholder={{t "search-placeholder"}}
       @block={{true}}
-      {{on "input" (action "updateSearchText")}}
+      {{on "input" this.updateSearchText}}
       class="auk-u-maximize-width"
     />
   </div>
@@ -27,7 +27,7 @@
       <tbody class="auk-table--interaction-cursor">
         {{#each (await this.results) as |row|}}
           <tr>
-            <td onclick={{action "selectCase" row}}>
+            <td onclick={{fn this.selectCase row}}>
               <p>
                 {{#if row.shortTitle}}
                   {{row.shortTitle}}
@@ -36,7 +36,7 @@
                 {{/if}}
               </p>
             </td>
-            <td onclick={{action "selectCase" row}}>
+            <td onclick={{fn this.selectCase row}}>
               {{moment-format row.created "DD-MM-YYYY HH:mm"}}
             </td>
           </tr>
@@ -49,8 +49,8 @@
       @size={{this.size}}
       @nbOfItems={{this.results.length}}
       @total={{this.results.meta.count}}
-      @onNextPage={{action 'nextPage'}}
-      @onPreviousPage={{action 'prevPage'}}
+      @onNextPage={{this.nextPage}}
+      @onPreviousPage={{this.prevPage}}
     />
   {{/if}}
 </Auk::Modal::Body>
