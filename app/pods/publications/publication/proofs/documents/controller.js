@@ -176,7 +176,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const destroyFile = file.destroyRecord();
     const destroyDocumentContainer = documentContainer.destroyRecord();
 
-    yield Promise.all([destroyPiece, destroyFile, destroyDocumentContainer]);
+    yield Promise.all([destroyFile, destroyPiece, destroyDocumentContainer]);
 
     this.send('refresh');
   }
