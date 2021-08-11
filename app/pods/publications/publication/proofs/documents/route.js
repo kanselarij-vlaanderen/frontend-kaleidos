@@ -9,43 +9,32 @@ import { tracked } from '@glimmer/tracking';
 // - isDeleteDisabled property
 // - file property avoids error when piece (and file) are deleted
 export class PieceRow {
-  @service currentSession;
-
   @tracked piece;
   @tracked file;
 
-  publicationSubcase;
   requestActivitiesUsedBy;
 
   // no async constructor() in JS
-  static async create(piece, publicationSubcase, currentSession) {
+  static async create(piece) {
     const row = new PieceRow();
     row.piece = piece;
     row.file = await piece.file;
-    row.publicationSubcase = publicationSubcase;
     // avoid awaiting in getter
     row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
-    row.currentSession = currentSession;
     return row;
   }
 
   get isShownDelete() {
-    const hasPermission = this.currentSession.isOvrb;
     // can be translation or publication related
     const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
     // receivedDate is set if and only if it is a received pieced
     const isReceived = !!this.piece.receivedDate;
     const isUsed = isUsedInRequest || isReceived;
-    return hasPermission && !isUsed;
-  }
-
-  get isDeleteDisabled() {
-    return this.publicationSubcase.isFinished;
+    return !isUsed;
   }
 }
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
-  @service currentSession;
 
   async model() {
     this.publicationSubcase = this.modelFor('publications.publication.proofs');
@@ -101,7 +90,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    const pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece, this.publicationSubcase, this.currentSession)));
+    const pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece)));
     return hash({
       pieceRows: pieceRows,
       decisions: decisions,

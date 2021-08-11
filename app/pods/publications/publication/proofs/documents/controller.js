@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
-import { action, computed } from '@ember/object';
+import {
+  action, computed
+} from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency-decorators';
@@ -69,10 +71,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   get isRequestingDisabled() {
     return this.selectedPieceRows.length === 0
       || this.publicationSubcase.isFinished;
-  }
-
-  get canUploadPiece() {
-    return this.currentSession.isOvrb;
   }
 
   get isUploadDisabled() {
@@ -165,7 +163,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @task
   *deletePiece(pieceRow) {
     // Workaround for Dropdown::Item not having a (button with a) disabled state.
-    if (pieceRow.isDeleteDisabled) {
+    if (this.publicationSubcase.isFinished) {
       return;
     }
 

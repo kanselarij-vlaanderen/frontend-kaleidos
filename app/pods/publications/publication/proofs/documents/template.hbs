@@ -25,7 +25,7 @@
           </DropdownMenu>
         </Auk::Toolbar::Item>
 
-        {{#if this.canUploadPiece}}
+        {{#if this.currentSession.isOvrb}}
           <Auk::Toolbar::Item>
             <Auk::Button
               @skin="secondary" @icon="add"
@@ -128,9 +128,9 @@
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                         {{t "edit-proof-details"}}
                       </Menu.Item>
-                      {{#if pieceRow.isShownDelete}}
+                      {{#if (and pieceRow.isShownDelete this.currentSession.isOvrb)}}
                         <Menu.Item @skin="danger"
-                          @disabled={{pieceRow.isDeleteDisabled}}
+                          @disabled={{this.publicationSubcase.isFinished}}
                           {{on "click" (perform this.deletePiece pieceRow)}}>
                           {{t "delete"}}
                         </Menu.Item>
