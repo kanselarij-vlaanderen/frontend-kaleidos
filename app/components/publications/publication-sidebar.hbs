@@ -24,7 +24,7 @@
       {{!--Publicatienummer --}}
       <div class="auk-u-m-3">
         <div class="auk-form-group {{if this.numberIsAlreadyUsed "auk-form-group--error"}}">
-          <Auk::Label>{{t 'publications-number'}}</Auk::Label>
+          <Auk::Label>{{t "publications-number"}}</Auk::Label>
           <Auk::Input
             type="number"
             value={{@publicationFlow.identification.structuredIdentifier.localIdentifier}}
@@ -129,9 +129,23 @@
           </Auk::InputPills>
         </div>
 
-        {{!-- Beslissingsdatum --}}
+        {{!-- Datum ontvangst --}}
         <div class="auk-form-group">
-          <Auk::Label>{{t 'decision-date'}}</Auk::Label>
+          <Auk::Label>{{t "publication-flow-opening-date"}}</Auk::Label>
+          {{#if this.publicationFlow.case.subcases}}
+            <div class="auk-u-muted">
+              {{moment-format this.publicationFlow.openingDate "DD-MM-YYYY"}}
+            </div>
+          {{else}}
+            <Auk::Datepicker
+              @date={{this.publicationFlow.openingDate}}
+              @onChange={{this.setOpeningDate}} />
+          {{/if}}
+        </div>
+
+        {{!-- Datum beslissing --}}
+        <div class="auk-form-group">
+          <Auk::Label>{{t "decision-date"}}</Auk::Label>
           {{#if this.publicationFlow.case.subcases}}
             <Auk::ButtonLink
               target="_blank"
@@ -160,7 +174,7 @@
         {{!-- Uiterste vertaaldatum --}}
         {{#if (or this.publicationStatus.isPending this.publicationStatus.isPaused)}}
           <div class="auk-form-group">
-            <Auk::Label>{{t 'translation-due-date'}}</Auk::Label>
+            <Auk::Label>{{t "translation-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.translationSubcase.dueDate}}
               @onChange={{this.setTranslationDueDate}}
@@ -177,7 +191,7 @@
 
         {{!-- Vertaaldatum --}}
         <div class="auk-form-group">
-          <Auk::Label>{{t 'translation-date'}}</Auk::Label>
+          <Auk::Label>{{t "translation-date"}}</Auk::Label>
           <Auk::Datepicker
             @date={{this.translationSubcase.endDate}}
             @onChange={{this.setTranslationDate}}
@@ -187,7 +201,7 @@
         {{!-- Gevraagde publicatiedatum --}}
         {{#if this.publicationStatus.isPending}}
           <div class="auk-form-group">
-            <Auk::Label>{{t 'publication-target-end-date'}}</Auk::Label>
+            <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.targetEndDate}}
               @onChange={{this.setPublicationTargetEndDate}}
@@ -198,7 +212,7 @@
         {{!-- Uiterste publicatiedatum --}}
         {{#unless this.publicationStatus.isWithdrawn}}
           <div class="auk-form-group">
-            <Auk::Label>{{t 'publication-due-date'}}</Auk::Label>
+            <Auk::Label>{{t "publication-due-date"}}</Auk::Label>
             <Auk::Datepicker
               @date={{this.publicationSubcase.dueDate}}
               @onChange={{this.setPublicationDueDate}}
