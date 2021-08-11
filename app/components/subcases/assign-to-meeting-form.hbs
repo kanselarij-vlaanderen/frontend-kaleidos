@@ -2,23 +2,20 @@
   <div class="auk-form-group">
     <Auk::Label>{{t "propose-for"}}</Auk::Label>
     {{#if (is-pending dateObjectsToEnable)}}
-      {{web-components/vl-loader
-        text=(concat (t "sessions-loading-text") " " (t "please-be-patient"))
-      }}
+      <WebComponents::VlLoader
+        @text={{concat (t "sessions-loading-text") " " (t "please-be-patient")}}
+      />
     {{else}}
-      {{web-components/vl-datepicker
-        dateObjectsToEnable=(await dateObjectsToEnable)
-        datePropertyToUse="plannedStart"
-        dateChanged=(action "selectStartDate")
-      }}
+      <WebComponents::VlDatepicker
+        @dateObjectsToEnable={{await dateObjectsToEnable}}
+        @datePropertyToUse="plannedStart"
+        @dateChanged={{action "selectStartDate"}}
+      />
     {{/if}}
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @onCancel={{action "cancel"}}>
-  <Auk::Button
-    @skin="primary"
-    {{action "assignToMeeting" subcase}}
-  >
+  <Auk::Button @skin="primary" {{action "assignToMeeting" subcase}}>
     {{t "propose"}}
   </Auk::Button>
 </Auk::Modal::Footer>

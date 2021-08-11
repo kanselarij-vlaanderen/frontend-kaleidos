@@ -29,30 +29,27 @@
         <Auk::Loader @message={{t "loading"}} />
       </div>
     {{else}}
-      {{#data-table
-        content=this.pieces
-        sort=this.sort
-        page=this.pageParam
-        size=size
-        noDataMessage=(t "no-results-found")
-        isLoading=this.findAll.isRunning
-        onClickRow=(action "select")
-      as |table|
-      }}
-        {{#table.content
-        as |c|
-        }}
-          {{#c.header}}
+      <DataTable
+        @content={{this.pieces}}
+        @sort={{this.sort}}
+        @page={{this.pageParam}}
+        @size={{size}}
+        @noDataMessage={{t "no-results-found"}}
+        @isLoading={{this.findAll.isRunning}}
+        @onClickRow={{action "select"}}
+      as |table|>
+        <table.content as |c|>
+          <c.header>
             <th></th>
             <th><span class="">{{t "title-document"}}</span></th>
             <th><span class="">{{t "created-on"}}</span></th>
-          {{/c.header}}
-          {{#c.body as |row|}}
+          </c.header>
+          <c.body as |row|>
             <td class="auk-table__col--1">
-              {{web-components/vl-checkbox
-                value=row.selected
-                toggle=(action "select" row)
-              }}
+              <WebComponents::VlCheckbox
+                @value={{row.selected}}
+                @toggle={{action "select" row}}
+              />
             </td>
             <td class="auk-table__col--8">
               {{row.name}}
@@ -60,9 +57,9 @@
             <td class="auk-table__col--3">
               {{moment-format row.created "dd DD/MM/YYYY HH:mm"}}
             </td>
-          {{/c.body}}
-        {{/table.content}}
-      {{/data-table}}
+          </c.body>
+        </table.content>
+      </DataTable>
     {{/if}}
   </div>
 </div>

@@ -8,10 +8,10 @@
   {{t "delete"}}
 </Auk::Button>
 {{#if isVerifying}}
-  {{web-components/vl-modal-verify
-    title=(t "delete-account")
-    message=(t "delete-account-message")
-    cancel=(action "toggleIsVerifying")
-    verify=(action "deleteAccount")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "delete-account"}}
+    @message={{t "delete-account-message"}}
+    @cancel={{action "toggleIsVerifying"}}
+    @verify={{action "deleteAccount"}}
+  />
 {{/if}}

@@ -1,6 +1,6 @@
 <div class="ember-view">
   {{page-title (t "page-title")}}
-  {{head-layout}}
+  <HeadLayout />
   {{#each this.systemAlert.unconfirmedAlerts as |alert|}}
     <Utils::SystemAlert
       @type={{alert.type.label}}

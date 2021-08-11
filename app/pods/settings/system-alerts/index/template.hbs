@@ -5,14 +5,14 @@
 >
   <Auk::Modal::Body>
     <div data-test-route-settings-system-alerts-index-alerts-dropdown class="auk-form-group">
-      {{#power-select
-        options=this.model
-        selected=this.selectedAlert
-        onchange=(action "selectAlert")
-      as |alert|
-      }}
+      <PowerSelect
+        @options={{this.model}}
+        @selected={{this.selectedAlert}}
+        @onchange={{action "selectAlert"}}
+        as |alert|
+      >
         {{alert.title}}
-      {{/power-select}}
+      </PowerSelect>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>

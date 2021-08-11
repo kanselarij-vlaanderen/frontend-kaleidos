@@ -1,17 +1,17 @@
 <div class="auk-u-m-8">
   <div class=""></div>
-  {{#utils/agendaitem-table
-    model=(await model)
-    sort=sort
-    page=page
-    filter=filter
-    include=include
-    size=size
-    columns=columns
-  as |agendaitemRow|
-  }}
+  <Utils::AgendaitemTable
+    @model={{await model}}
+    @sort={{sort}}
+    @page={{page}}
+    @filter={{filter}}
+    @include={{include}}
+    @size={{size}}
+    @columns={{columns}}
+    as |agendaitemRow|
+  >
     {{#if (is-pending agendaitemRow.treatments)}}
-      {{web-components/vl-loader text=(t "decisions-loading-text")}}
+      <WebComponents::VlLoader @text={{t "decisions-loading-text"}} />
     {{else}}
       <div class="auk-u-m-8">
         <div class="auk-u-mb-4">
@@ -30,15 +30,15 @@
           </Auk::Toolbar>
         </div>
         {{#each (await agendaitemRow.treatments) as |treatment|}}
-          {{agenda/agendaitem/agendaitem-decision
-            subcase=(await agendaitemRow.content.agendaActivity.subcase)
-            isTableRow=true
-            treatment=treatment
-            agendaitem=(await agendaitemRow.content)
-          }}
+          <Agenda::Agendaitem::AgendaitemDecision
+            @subcase={{await agendaitemRow.content.agendaActivity.subcase}}
+            @isTableRow={{true}}
+            @treatment={{treatment}}
+            @agendaitem={{await agendaitemRow.content}}
+          />
         {{/each}}
       </div>
     {{/if}}
-  {{/utils/agendaitem-table}}
+  </Utils::AgendaitemTable>
 </div>
 {{outlet}}

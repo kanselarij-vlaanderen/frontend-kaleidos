@@ -1,19 +1,19 @@
-{{#web-components/vl-modal
-  isOverlay=true
-  title=modalTitle
-  closeModal=(action "close")
-}}
+<WebComponents::VlModal
+  @isOverlay={{true}}
+  @title={{modalTitle}}
+  @closeModal={{action "close"}}
+>
   {{#if (and (not isAdding) (not isEditing))}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
-        {{utils/model-selector
-          modelName="government-field"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=item
-          selectModel=(action "selectModel")
-        }}
+        <Utils::ModelSelector
+          @modelName="government-field"
+          @searchField="label"
+          @propertyToShow="label"
+          @sortField="label"
+          @selectedItems={{item}}
+          @selectModel={{action "selectModel"}}
+        />
       </div>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{action "close"}}>
@@ -49,74 +49,74 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        {{web-components/vl-form-input value=label}}
+        <WebComponents::VlFormInput @value={{label}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="government-domain"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=domain
-          selectModel=(action "chooseDomain")
-        }}
+        <Utils::ModelSelector
+          @modelName="government-domain"
+          @searchField="label"
+          @propertyToShow="label"
+          @sortField="label"
+          @selectedItems={{domain}}
+          @selectModel={{action "chooseDomain"}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="ise-code"
-          searchField="name"
-          propertyToShow="nameToShow"
-          sortField="name"
-          selectedItems=iseCode
-          selectModel=(action "chooseIseCode")
-        }}
+        <Utils::ModelSelector
+          @modelName="ise-code"
+          @searchField="name"
+          @propertyToShow="nameToShow"
+          @sortField="name"
+          @selectedItems={{iseCode}}
+          @selectModel={{action "chooseIseCode"}}
+        />
       </div>
     </Auk::Modal::Body>
-    {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "add")
-      cancelAction=(action "toggleIsAdding")
-      saveAction=(action "createModel")
-    }}
+    <WebComponents::VlModalFooter
+      @isLoading={{isLoading}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "add"}}
+      @cancelAction={{action "toggleIsAdding"}}
+      @saveAction={{action "createModel"}}
+    />
   {{/if}}
   {{#if isEditing}}
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
-        {{web-components/vl-form-input value=label}}
+        <WebComponents::VlFormInput @value={{label}} />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-domain"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="government-domain"
-          searchField="label"
-          propertyToShow="label"
-          sortField="label"
-          selectedItems=domain
-          selectModel=(action "chooseDomain")
-        }}
+        <Utils::ModelSelector
+          @modelName="government-domain"
+          @searchField="label"
+          @propertyToShow="label"
+          @sortField="label"
+          @selectedItems={{domain}}
+          @selectModel={{action "chooseDomain"}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="ise-code"
-          searchField="name"
-          propertyToShow="name"
-          sortField="name"
-          selectedItems=iseCode
-          selectModel=(action "chooseIseCode")
-        }}
+        <Utils::ModelSelector
+          @modelName="ise-code"
+          @searchField="name"
+          @propertyToShow="name"
+          @sortField="name"
+          @selectedItems={{iseCode}}
+          @selectModel={{action "chooseIseCode"}}
+        />
       </div>
     </Auk::Modal::Body>
-    {{web-components/vl-modal-footer
-      isLoading=isLoading
-      cancelButtonText=(t "cancel")
-      saveButtonText=(t "save")
-      cancelAction=(action "toggleIsEditing")
-      saveAction=(action "editModel")
-    }}
+    <WebComponents::VlModalFooter
+      @isLoading={{isLoading}}
+      @cancelButtonText={{t "cancel"}}
+      @saveButtonText={{t "save"}}
+      @cancelAction={{action "toggleIsEditing"}}
+      @saveAction={{action "editModel"}}
+    />
   {{/if}}
-{{/web-components/vl-modal}}
+</WebComponents::VlModal>

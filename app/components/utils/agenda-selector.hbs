@@ -1,25 +1,25 @@
 {{#if (not multiSelect)}}
-  {{#power-select
-    options=agendas
-    selected=selectedAgenda
-    disabled=readOnly
-    searchEnabled=false
-    placeholder=placeholder
-    onchange=(action "selectModel")
-  as |model|
-  }}
+  <PowerSelect
+    @options={{agendas}}
+    @selected={{selectedAgenda}}
+    @disabled={{readOnly}}
+    @searchEnabled={{false}}
+    @placeholder={{placeholder}}
+    @onchange={{action "selectModel"}}
+    as |model|
+  >
     {{model-property-to-show model propertyToShow}}
-  {{/power-select}}
+  </PowerSelect>
 {{else}}
-  {{#power-select-multiple
-    options=agendas
-    searchEnabled=false
-    selected=selectedAgenda
-    disabled=readOnly
-    placeholder=placeholder
-    onchange=(action "selectModel")
-  as |model|
-  }}
+  <PowerSelectMultiple
+    @options={{agendas}}
+    @searchEnabled={{false}}
+    @selected={{selectedAgenda}}
+    @disabled={{readOnly}}
+    @placeholder={{placeholder}}
+    @onchange={{action "selectModel"}}
+    as |model|
+  >
     {{model-property-to-show model propertyToShow}}
-  {{/power-select-multiple}}
+  </PowerSelectMultiple>
 {{/if}}

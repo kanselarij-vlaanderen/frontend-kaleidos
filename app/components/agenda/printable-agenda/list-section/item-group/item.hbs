@@ -4,17 +4,14 @@
       {{item.number}}.
     </div>
     <h3 class="auk-u-m-0">
-      {{sanitize-html
-        raw=true
-        value=(if this.item.shortTitle this.item.shortTitle this.item.title)
-      }}
     </h3>{{!-- Fallback for legacy data that doesn't have a short title --}}
+      <SanitizeHtml
+        @raw={{true}}
+        @value={{if this.item.shortTitle this.item.shortTitle this.item.title}}
+      />
   </div>
   <p class="auk-printable-agenda-list__description auk-printable-agenda-list__item-indented">
-    {{sanitize-html
-      raw=true
-      value=this.item.title
-    }}
+    <SanitizeHtml @raw={{true}} @value={{this.item.title}} />
   </p>
 </div>
 {{#if this.item.sortedPieces}}

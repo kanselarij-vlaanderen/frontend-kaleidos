@@ -1,75 +1,72 @@
 {{#if showVerificationPopup}}
-  {{web-components/vl-modal-verify
-    title=(t "change-mandatee-change-end-date")
-    message=(t "change-mandatee-end-date")
-    cancel=(action "cancel")
-    verify=(action "saveChanges")
-    verifyButtonText=(t "change-mandatee-change-end-date")
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "change-mandatee-change-end-date"}}
+    @message={{t "change-mandatee-end-date"}}
+    @cancel={{action "cancel"}}
+    @verify={{action "saveChanges"}}
+    @verifyButtonText={{t "change-mandatee-change-end-date"}}
+  />
 {{/if}}
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input value=title}}
+    <WebComponents::VlFormInput @value={{title}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
-    {{web-components/vl-form-input value=nickName}}
+    <WebComponents::VlFormInput @value={{nickName}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>
-    {{utils/create-person-selector
-      selectedItems=mandateeToEdit.person
-      selectModel=(action "personSelected")
-    }}
+    <Utils::CreatePersonSelector
+      @selectedItems={{mandateeToEdit.person}}
+      @selectModel={{action "personSelected"}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "start-date"}}</Auk::Label>
-    {{web-components/vl-datepicker
-      selectedDate=startDate
-      dateChanged=(action "selectStartDate")
-    }}
+    <WebComponents::VlDatepicker
+      @selectedDate={{startDate}}
+      @dateChanged={{action "selectStartDate"}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "end-date"}}</Auk::Label>
-    {{web-components/vl-datepicker
-      selectedDate=endDate
-      dateChanged=(action "selectEndDate")
-    }}
+    <WebComponents::VlDatepicker
+      @selectedDate={{endDate}}
+      @dateChanged={{action "selectEndDate"}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "ise-code"}}</Auk::Label>
-    {{utils/model-selector
-      modelName="ise-code"
-      searchField="name"
-      propertyToShow="nameToShow"
-      sortField="name"
-      multiSelect=true
-      selectedItems=iseCodes
-      selectModel=(action "chooseIseCodes")
-    }}
+    <Utils::ModelSelector
+      @modelName="ise-code"
+      @searchField="name"
+      @propertyToShow="nameToShow"
+      @sortField="name"
+      @multiSelect={{true}}
+      @selectedItems={{iseCodes}}
+      @selectModel={{action "chooseIseCodes"}}
+    />
   </div>
 </Auk::Modal::Body>
 <Auk::Modal::Footer @custom={{true}}>
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group @position="left">
       <Auk::Toolbar::Item>
-        <Auk::ButtonLink
-          {{action "closeModal"}}
-          data-test-edit-mandatee-cancel
-        >
+        <Auk::ButtonLink {{action "closeModal"}} data-test-edit-mandatee-cancel>
           {{t "cancel"}}
         </Auk::ButtonLink>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{web-components/vl-save-button
-          text=(t "save")
-          isLoading=isLoading
-          data-test-edit-mandatee-save=true
-          saveAction=(action "triggerPopUp" mandateeToEdit)
-        }}
+        <WebComponents::VlSaveButton
+          @text={{t "save"}}
+          @isLoading={{isLoading}}
+          @saveAction={{action "triggerPopUp" mandateeToEdit}}
+          data-test-edit-mandatee-save={{true}}
+        />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

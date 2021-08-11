@@ -1,10 +1,10 @@
 {{page-title (await title) replace=true}}
-{{utils/overviews-header-decision
-  title=(await title)
-  model=(await model)
-  routeModelPrefix=routeModel
-  modelsForHierarchicalBack=(array meeting.id model.id)
-}}
+<Utils::OverviewsHeaderDecision
+  @title={{await title}}
+  @model={{await model}}
+  @routeModelPrefix={{routeModel}}
+  @modelsForHierarchicalBack={{array meeting.id model.id}}
+/>
 <div class="auk-scroll-wrapper__body">
   {{outlet}}
 </div>

@@ -1,8 +1,8 @@
 <div class="auk-modal-backdrop auk-modal-backdrop--visible" data-test-vl-modal-container>
-  {{#click-outside
-    action=(action "clickOutside")
-    except-selector=".flatpickr-calendar"
-  }}
+  <ClickOutside
+    @action={{action "clickOutside"}}
+    @except-selector=".flatpickr-calendar"
+  >
     <div class="auk-modal {{sizeClass}}" role="dialog" data-test-vl-modal-dialogwindow>
       <div class="auk-modal__push"></div>
       <div class="auk-modal__content">
@@ -32,5 +32,5 @@
       </div>
       <div class="auk-modal__push"></div>
     </div>
-  {{/click-outside}}
+  </ClickOutside>
 </div>

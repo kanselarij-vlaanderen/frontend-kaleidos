@@ -133,55 +133,67 @@
   {{!-- template-lint-enable table-groups --}}
   {{/if}}
   {{#if isEditingMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
-    }}
-      {{utils/manage-mandatees
-        mandateeToEdit=mandateeToEdit
-        mandateesUpdated=(action "mandateesUpdated")
-        isEditing=isEditingMandatee
-        closeModal=(action "toggleProperty" "isEditingMandatee" mandateeToEdit)
-      }}
-    {{/web-components/vl-modal}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action "toggleProperty" "isEditingMandatee" mandateeToEdit}}
+    >
+      <Utils::ManageMandatees
+        @mandateeToEdit={{mandateeToEdit}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+        @isEditing={{isEditingMandatee}}
+        @closeModal={{action
+          "toggleProperty"
+          "isEditingMandatee"
+          mandateeToEdit
+        }}
+      />
+    </WebComponents::VlModal>
   {{/if}}
   {{#if isResigningMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
-    }}
-      {{utils/manage-mandatees
-        mandateeToEdit=mandateeToEdit
-        mandateesUpdated=(action "mandateesUpdated")
-        isResigning=isResigningMandatee
-        closeModal=(action "toggleProperty" "isResigningMandatee" mandateeToEdit)
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action
+        "toggleProperty"
+        "isResigningMandatee"
+        mandateeToEdit
       }}
-    {{/web-components/vl-modal}}
+    >
+      <Utils::ManageMandatees
+        @mandateeToEdit={{mandateeToEdit}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+        @isResigning={{isResigningMandatee}}
+        @closeModal={{action
+          "toggleProperty"
+          "isResigningMandatee"
+          mandateeToEdit
+        }}
+      />
+    </WebComponents::VlModal>
   {{/if}}
   {{#if isAddingMandatee}}
-    {{#web-components/vl-modal
-      isOverlay=true
-      title=(t "manage-ministers")
-      closeModal=(action "toggleIsAdding")
-    }}
-      {{utils/create-mandatee
-        model=model
-        closeModal=(action "toggleIsAdding")
-        mandateesUpdated=(action "mandateesUpdated")
-      }}
-    {{/web-components/vl-modal}}
+    <WebComponents::VlModal
+      @isOverlay={{true}}
+      @title={{t "manage-ministers"}}
+      @closeModal={{action "toggleIsAdding"}}
+    >
+      <Utils::CreateMandatee
+        @model={{model}}
+        @closeModal={{action "toggleIsAdding"}}
+        @mandateesUpdated={{action "mandateesUpdated"}}
+      />
+    </WebComponents::VlModal>
   {{/if}}
   {{#if isDeletingMandatee}}
-    {{web-components/vl-modal-verify
-      title=(t "warning-title")
-      verifyButtonText=(t "delete")
-      message=(t "delete-mandatee-message")
-      cancel=(action "cancel")
-      verify=(action "deleteMandatee")
-      mandateesUpdated=(action "mandateesUpdated")
-    }}
+    <WebComponents::VlModalVerify
+      @title={{t "warning-title"}}
+      @verifyButtonText={{t "delete"}}
+      @message={{t "delete-mandatee-message"}}
+      @cancel={{action "cancel"}}
+      @verify={{action "deleteMandatee"}}
+      @mandateesUpdated={{action "mandateesUpdated"}}
+    />
   {{/if}}
   {{outlet}}
 </div>

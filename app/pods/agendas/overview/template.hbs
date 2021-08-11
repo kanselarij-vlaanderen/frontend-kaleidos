@@ -3,19 +3,19 @@
     <div class="auk-u-m-8">
       {{#if (not (or from to))}}
         <div class="auk-u-mb-8">
-          {{agenda/future-agendas
-            meetings=activeAgendas
-            type="active"
-            emptyText=(t "no-active-agenda")
-            title=(t "active-agenda")
-          }}
+          <Agenda::FutureAgendas
+            @meetings={{activeAgendas}}
+            @type="active"
+            @emptyText={{t "no-active-agenda"}}
+            @title={{t "active-agenda"}}
+          />
         </div>
       {{else}}
-        {{changes-alert
-          message=(t "filtered-agendas")
-          buttonText=(t "clear-filter")
-          clearAction=(action "clearFilter")
-        }}
+        <ChangesAlert
+          @message={{t "filtered-agendas"}}
+          @buttonText={{t "clear-filter"}}
+          @clearAction={{action "clearFilter"}}
+        />
       {{/if}}
 
       <div class="auk-u-mb-8">
@@ -55,51 +55,47 @@
         </Auk::Toolbar>
         <div class="auk-u-mb-8">
           {{#if (await model)}}
-            {{#data-table
-              data-test-route-agendas-overview-data-table=true
-              content=(await model)
-              class="auk-table auk-table--striped auk-table--no-scroll"
-              page=page
-              size=size
-              sort=sort
-              isLoading=isLoadingModel
-              noDataMessage=(t "no-results-found")
-              onClickRow=(action "onClickRow")
-            as |table|
-            }}
-              {{#table.content as |c|}}
-                {{#c.header}}
-                  {{th-sortable
-                    class="auk-table__col--3 auk-table__header-title"
-                    currentSorting=sort
-                    field="planned-start,number-representation"
-                    label=(t "agenda")
-                  }}
-                  {{th-sortable
-                    class="auk-table__col--2 auk-table__header-title"
-                    field="agendas"
-                    label=(t "agenda-version")
-                  }}
+            <DataTable
+              data-test-route-agendas-overview-data-table={{true}}
+              @content={{await model}}
+              @class="auk-table auk-table--striped auk-table--no-scroll"
+              @page={{page}}
+              @size={{size}}
+              @sort={{sort}}
+              @isLoading={{isLoadingModel}}
+              @noDataMessage={{t "no-results-found"}}
+              @onClickRow={{action "onClickRow"}}
+              as |table|
+            >
+              <table.content as |c|>
+                <c.header>
+                  <ThSortable @class="auk-table__col--3 auk-table__header-title"
+                    @currentSorting={{sort}}
+                    @field="planned-start,number-representation"
+                    @label={{t "agenda"}}
+                  />
+                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                    @field="agendas"
+                    @label={{t "agenda-version"}}
+                  />
                   <th
                     class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
                   >
                     {{t "latest-modified"}}
                   </th>
-                  {{th-sortable
-                    class="auk-table__col--2 auk-table__header-title"
-                    currentSorting=sort
-                    field="is-final"
-                    label=(t "status")
-                  }}
-                  {{th-sortable
-                    class="auk-table__col--2 auk-table__header-title"
-                    currentSorting=sort
-                    field="kind"
-                    label=(t "kind")
-                  }}
+                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                    @currentSorting={{sort}}
+                    @field="is-final"
+                    @label={{t "status"}}
+                  />
+                  <ThSortable @class="auk-table__col--2 auk-table__header-title"
+                    @currentSorting={{sort}}
+                    @field="kind"
+                    @label={{t "kind"}}
+                  />
                   <th class="auk-table__col--1"></th>
-                {{/c.header}}
-                {{#c.body class="auk-table--interaction-cursor" as |meeting|}}
+                </c.header>
+                <c.body @class="auk-table--interaction-cursor" as |meeting|>
                   {{#if (not meeting.alreadyShown)}}
                     <td>
                       {{t "agenda-for"}}
@@ -141,12 +137,12 @@
                       />
                     </td>
                   {{/if}}
-                {{/c.body}}
-              {{/table.content}}
-            {{/data-table}}
+                </c.body>
+              </table.content>
+            </DataTable>
           {{else}}
             <div>
-              {{web-components/vl-alert message=(t "no-historical-agenda")}}
+              <WebComponents::VlAlert @message={{t "no-historical-agenda"}} />
             </div>
           {{/if}}
         </div>

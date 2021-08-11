@@ -1,28 +1,28 @@
 {{#if (is-pending newsletterInfo)}}
-  {{web-components/vl-loader text=(t "newsletter-info-loading-text")}}
+  <WebComponents::VlLoader @text={{t "newsletter-info-loading-text"}} />
 {{else if (not isEditing)}}
   {{#if (not allowEditing)}}
     {{#if (await newsletterInfo.inNewsletter)}}
-      {{newsletter/newsletter-item/item-content
-        allowEditing=allowEditing
-        onStartEditing=(action "startEditing")
-        itemIndex=itemIndex
-        showIndex=showIndex
-        isEditing=isEditing
-        agendaitem=agendaitem
-        newsletterInfo=newsletterInfo
-      }}
+      <Newsletter::NewsletterItem::ItemContent
+        @allowEditing={{allowEditing}}
+        @onStartEditing={{action "startEditing"}}
+        @itemIndex={{itemIndex}}
+        @showIndex={{showIndex}}
+        @isEditing={{isEditing}}
+        @agendaitem={{agendaitem}}
+        @newsletterInfo={{newsletterInfo}}
+      />
     {{/if}}
   {{else}}
-    {{newsletter/newsletter-item/item-content
-      allowEditing=allowEditing
-      onStartEditing=(action "startEditing")
-      itemIndex=itemIndex
-      showIndex=showIndex
-      isEditing=isEditing
-      agendaitem=agendaitem
-      newsletterInfo=newsletterInfo
-    }}
+    <Newsletter::NewsletterItem::ItemContent
+      @allowEditing={{allowEditing}}
+      @onStartEditing={{action "startEditing"}}
+      @itemIndex={{itemIndex}}
+      @showIndex={{showIndex}}
+      @isEditing={{isEditing}}
+      @agendaitem={{agendaitem}}
+      @newsletterInfo={{newsletterInfo}}
+    />
   {{/if}}
 {{else}}
   <NewsItem::EditItem

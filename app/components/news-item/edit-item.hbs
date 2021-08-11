@@ -34,7 +34,7 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "short-title"}}</Auk::Label>
-    {{web-components/vl-form-input value=newsletterInfo.title}}
+    <WebComponents::VlFormInput @value={{newsletterInfo.title}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
@@ -48,26 +48,26 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "decision-in-newsletter"}}</Auk::Label>
-    {{web-components/vl-rdfa-editor
-      data-test-newsletter-edit-item-rdfa-editor=true
-      isLarge=isExpanded
-      richtext=(await newsletterInfo.richtext)
-      handleRdfaEditorInit=(action "handleRdfaEditorInit")
-    }}
+    <WebComponents::VlRdfaEditor
+      data-test-newsletter-edit-item-rdfa-editor={{true}}
+      @isLarge={{isExpanded}}
+      @richtext={{await newsletterInfo.richtext}}
+      @handleRdfaEditorInit={{action "handleRdfaEditorInit"}}
+    />
   </div>
 
   <div class="auk-form-group auk-u-text-capitalize">
     <Auk::Label>{{t "remark"}}</Auk::Label>
-    {{web-components/vl-form-input value=newsletterInfo.remark}}
+    <WebComponents::VlFormInput @value={{newsletterInfo.remark}} />
   </div>
 
   <div class="auk-form-group">
     <Auk::Label>{{t "finished"}}</Auk::Label>
-    {{web-components/vl-toggle value=newsletterInfo.finished}}
+    <WebComponents::VlToggle @value={{newsletterInfo.finished}} />
   </div>
   <div class="auk-form-group" data-test-newsletter-edit-item-themes-selector>
     <Auk::Label>{{t "themes"}}</Auk::Label>
-    {{utils/themes-selector selectedThemes=(await newsletterInfo.themes)}}
+    <Utils::ThemesSelector @selectedThemes={{await newsletterInfo.themes}} />
   </div>
 
 </div>
@@ -79,23 +79,23 @@
       </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
-      {{web-components/vl-save-button
-        data-test-newsletter-edit-item-save=true
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "trySaveChanges")
-      }}
+      <WebComponents::VlSaveButton
+        data-test-newsletter-edit-item-save={{true}}
+        @text={{t "save"}}
+        @isLoading={{isLoading}}
+        @saveAction={{action "trySaveChanges"}}
+      />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>
 {{#if isTryingToSave}}
-  {{web-components/vl-modal-verify
-    title=(t "no-themes-selected")
-    message=(t "no-themes-selected-message")
-    cancel=(action "cancelSaveChanges")
-    verify=(action "saveChanges")
-    buttonText="save"
-    buttonType="warning"
-    showIcon=false
-  }}
+  <WebComponents::VlModalVerify
+    @title={{t "no-themes-selected"}}
+    @message={{t "no-themes-selected-message"}}
+    @cancel={{action "cancelSaveChanges"}}
+    @verify={{action "saveChanges"}}
+    @buttonText="save"
+    @buttonType="warning"
+    @showIcon={{false}}
+  />
 {{/if}}

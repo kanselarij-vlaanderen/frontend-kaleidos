@@ -37,17 +37,17 @@
   </div>
 </div>
 {{#if isEditing}}
-  {{#web-components/vl-modal
-    isOverlay=true
-    closeModal=(action "close")
-    title=editTitle
-  }}
-    {{newsletter/edit-newsletter
-      newsletter=(await meeting.newsletter)
-      selectedMeeting=meeting
-      close=(action "close")
-    }}
-  {{/web-components/vl-modal}}
+  <WebComponents::VlModal
+    @isOverlay={{true}}
+    @closeModal={{action "close"}}
+    @title={{editTitle}}
+  >
+    <Newsletter::EditNewsletter
+      @newsletter={{await meeting.newsletter}}
+      @selectedMeeting={{meeting}}
+      @close={{action "close"}}
+    />
+  </WebComponents::VlModal>
 {{/if}}
 <div class="auk-hr">
   <hr/>

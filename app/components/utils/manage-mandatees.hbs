@@ -1,44 +1,46 @@
 {{#if isEditing}}
-  {{utils/edit-mandatee
-    mandateeToEdit=(await mandateeToEdit)
-    closeModal=(action "toggleIsEditing")
-    mandateesUpdated= (action "mandateesUpdated")
-  }}
+  <Utils::EditMandatee
+    @mandateeToEdit={{await mandateeToEdit}}
+    @closeModal={{action "toggleIsEditing"}}
+    @mandateesUpdated={{action "mandateesUpdated"}}
+  />
 {{/if}}
 {{#if isResigning}}
   <Auk::Modal::Body>
     {{#if showVerificationPopup}}
-      {{changes-alert
-        data-test-manage-mandatee-changes-alert=true
-        message=(t "show-active-minister-alert")
-        buttonText=(t "close")
-        clearAction=(action "close")
-      }}
+      <ChangesAlert
+        data-test-manage-mandatee-changes-alert={{true}}
+        @message={{t "show-active-minister-alert"}}
+        @buttonText={{t "close"}}
+        @clearAction={{action "close"}}
+      />
     {{/if}}
     <div class="auk-form-group">
       <Auk::Label>{{t "end-date"}}</Auk::Label>
-      {{web-components/vl-datepicker dateChanged=(action "selectEndDate")}}
+      <WebComponents::VlDatepicker @dateChanged={{action "selectEndDate"}} />
     </div>
     <div class="auk-form-group">
       <Auk::Label>{{t "new-person"}}</Auk::Label>
-      {{utils/create-person-selector
-        selectedItems=selectedPerson
-        selectModel=(action "personSelected")
-      }}
+      <Utils::CreatePersonSelector
+        @selectedItems={{selectedPerson}}
+        @selectModel={{action "personSelected"}}
+      />
     </div>
 
     {{#if selectedPerson}}
       <div class="auk-form-group">
         <Auk::Label>{{t "start-date"}}</Auk::Label>
-        {{web-components/vl-datepicker dateChanged=(action "selectNewStartDate")}}
+        <WebComponents::VlDatepicker
+          @dateChanged={{action "selectNewStartDate"}}
+        />
       </div>
     {{/if}}
   </Auk::Modal::Body>
-  {{web-components/vl-modal-footer
-    isLoading=isLoading
-    cancelButtonText=(t "cancel")
-    saveButtonText=(t "save-resignation")
-    cancelAction=(action "toggleIsResigning")
-    saveAction=(action "saveResignation")
-  }}
+  <WebComponents::VlModalFooter
+    @isLoading={{isLoading}}
+    @cancelButtonText={{t "cancel"}}
+    @saveButtonText={{t "save-resignation"}}
+    @cancelAction={{action "toggleIsResigning"}}
+    @saveAction={{action "saveResignation"}}
+  />
 {{/if}}

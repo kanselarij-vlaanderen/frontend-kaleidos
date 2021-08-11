@@ -27,9 +27,7 @@
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else}}
             <div class="vlc-status-timeline__text">
-              {{subcase-timeline-item-text
-                phase=phase
-              }}
+              <SubcaseTimelineItemText @phase={{phase}} />
             </div>
           {{/if}}
         </li>
@@ -155,27 +153,27 @@
   <div class="auk-box">
     <div class="auk-u-mb-4">
       <div class="auk-form-group">
-        {{web-components/vl-radio-button-list
-          title=(t "subcase-type")
-          optionList=(await caseTypes)
-          selectedModel=(await remarkType)
-          modelChanged=(action "selectRemarkType")
-        }}
+        <WebComponents::VlRadioButtonList
+          @title={{t "subcase-type"}}
+          @optionList={{await caseTypes}}
+          @selectedModel={{await remarkType}}
+          @modelChanged={{action "selectRemarkType"}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-type-dropdown"}}</Auk::Label>
-        {{utils/model-selector
-          modelName="subcase-type"
-          searchField="label"
-          sortField="label"
-          propertyToShow="label"
-          selectedItems=type
-          selectModel=(action "selectType")
-        }}
+        <Utils::ModelSelector
+          @modelName="subcase-type"
+          @searchField="label"
+          @sortField="label"
+          @propertyToShow="label"
+          @selectedItems={{type}}
+          @selectModel={{action "selectType"}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "subcase-name"}}</Auk::Label>
-        {{web-components/vl-form-input value=subcaseName}}
+        <WebComponents::VlFormInput @value={{subcaseName}} />
       </div>
     </div>
     <Auk::Toolbar @auto={{true}}>
@@ -186,11 +184,11 @@
           </Auk::ButtonLink>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            saveAction=(action "saveChanges")
-          }}
+          <WebComponents::VlSaveButton
+            @text={{t "save"}}
+            @isLoading={{isLoading}}
+            @saveAction={{action "saveChanges"}}
+          />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

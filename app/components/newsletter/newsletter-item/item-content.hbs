@@ -61,10 +61,7 @@
         {{t "no-newsletter-info"}}
       </p>
     {{else}}
-      {{sanitize-html
-        raw=true
-        value=newsletterInfo.richtext
-      }}
+      <SanitizeHtml @raw={{true}} @value={{newsletterInfo.richtext}} />
     {{/if}}
   {{/if}}
 </div>

@@ -59,11 +59,11 @@
                 {{/if}}
               {{else}}
                 <div class="auk-form-group">
-                  {{web-components/vl-checkbox
-                    value=(not (is-empty mandateeApproval.approval))
-                    label=(t "approval-mandatee")
-                    toggle=(action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval)
-                  }}
+                  <WebComponents::VlCheckbox
+                    @value={{not (is-empty mandateeApproval.approval)}}
+                    @label={{t "approval-mandatee"}}
+                    @toggle={{action "toggleApproved" mandateeApproval.mandatee mandateeApproval.approval}}
+                  />
                 </div>
               {{/if}}
             </td>
@@ -84,11 +84,11 @@
           </Auk::Button>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          {{web-components/vl-save-button
-            text=(t "save")
-            isLoading=isLoading
-            saveAction=(action "saveChanges" agendaitem.approvals)
-          }}
+          <WebComponents::VlSaveButton
+            @text={{t "save"}}
+            @isLoading={{isLoading}}
+            @saveAction={{action "saveChanges" agendaitem.approvals}}
+          />
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>

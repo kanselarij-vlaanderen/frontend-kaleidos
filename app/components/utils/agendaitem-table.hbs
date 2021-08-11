@@ -3,25 +3,25 @@
   tableClassNames="auk-table auk-table auk-table--hover auk-table--striped"
 as |tab|
 }}
-  {{tab.head
-    onColumnClick=(action "onColumnClick")
-    iconSortable="auk-table__header-title__sort-icon ki ki-caret-up-down"
-    iconAscending="auk-table__header-title__sort-icon ki ki-caret-down"
-    iconDescending="auk-table__header-title__sort-icon ki ki-caret-up"
-  }}
-  {{#tab.body
-    canExpand=true
-    multiRowExpansion=false
-    onScrolledToBottom=(action "onScrolledToBottom")
-  as |body|
-  }}
-    {{#body.expanded-row as |row|}}{{yield row}}{{/body.expanded-row}}
+  <tab.head
+    @onColumnClick={{action "onColumnClick"}}
+    @iconSortable="auk-table__header-title__sort-icon ki ki-caret-up-down"
+    @iconAscending="auk-table__header-title__sort-icon ki ki-caret-down"
+    @iconDescending="auk-table__header-title__sort-icon ki ki-caret-up"
+  />
+  <tab.body
+    @canExpand={{true}}
+    @multiRowExpansion={{false}}
+    @onScrolledToBottom={{action "onScrolledToBottom"}}
+    as |body|
+  >
+    <body.expanded-row as |row|>{{yield row}}</body.expanded-row>
     {{#if isLoading}}
-      {{#body.loader}}
-        {{web-components/vl-loader text=(t "agendaitems-loading-text")}}
-      {{/body.loader}}
+      <body.loader>
+        <WebComponents::VlLoader @text={{t "agendaitems-loading-text"}} />
+      </body.loader>
     {{/if}}
-  {{/tab.body}}
+  </tab.body>
 {{/light-table}}
 {{#if isScrolling}}
   <Auk::Button

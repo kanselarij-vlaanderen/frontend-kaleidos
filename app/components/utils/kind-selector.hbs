@@ -8,13 +8,12 @@
       <div class="auk-loader" role="alert" aria-busy="true"></div>
     </div>
   {{else}}
-    {{#power-select
-      options=options
-      selected=selectedkind
-      onchange=(action "setAction")
-    as |option|
-    }}
+    <PowerSelect
+      @options={{options}}
+      @selected={{selectedkind}}
+      @onchange={{action "setAction"}}
+    as |option|>
       {{option.label}}
-    {{/power-select}}
+    </PowerSelect>
   {{/if}}
 </div>

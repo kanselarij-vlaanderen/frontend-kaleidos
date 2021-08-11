@@ -1,12 +1,12 @@
-{{#utils/settings-header title=(t 'manage-users')}}
+<Utils::SettingsHeader @title={{t "manage-users"}}>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">
       <Auk::Toolbar::Item>
-        {{utils/simple-file-uploader uploadedFile=(action "uploaded")}}
+        <Utils::SimpleFileUploader @uploadedFile={{action "uploaded"}} />
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>
-{{/utils/settings-header}}
+</Utils::SettingsHeader>
 <div class="auk-u-m-8">
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="left">
@@ -28,51 +28,51 @@
   </Auk::Toolbar>
 
   {{#if (await model)}}
-    {{#data-table
-      data-test-route-settings-users-table=true
-      content=(await model)
-      class="auk-table auk-table--striped"
-      isLoading=isLoadingModel
-      page=page
-      size=size
-      sort=sort
-      noDataMessage=(t "no-results-found")
-    as |table|
-    }}
-      {{#table.content as |c|}}
-        {{#c.header}}
-          {{th-sortable
-            class="auk-table__col--3 auk-table__header-title"
-            currentSorting=sort
-            field="first-name"
-            label=(t "first-name")
-          }}
-          {{th-sortable
-            class="auk-table__col--2 auk-table__header-title"
-            currentSorting=sort
-            field="last-name"
-            label=(t "last-name")
-          }}
+    <DataTable
+      data-test-route-settings-users-table={{true}}
+      @content={{await model}}
+      @class="auk-table auk-table--striped"
+      @isLoading={{isLoadingModel}}
+      @page={{page}}
+      @size={{size}}
+      @sort={{sort}}
+      @noDataMessage={{t "no-results-found"}}
+      as |table|
+    >
+      <table.content as |c|>
+        <c.header>
+          <ThSortable
+            @class="auk-table__col--3 auk-table__header-title"
+            @currentSorting={{sort}}
+            @field="first-name"
+            @label={{t "first-name"}}
+          />
+          <ThSortable
+            @class="auk-table__col--2 auk-table__header-title"
+            @currentSorting={{sort}}
+            @field="last-name"
+            @label={{t "last-name"}}
+          />
           <th
                   class="auk-table__col--2 auk-table__header-title auk-table__header-title--unsortable"
           >
             {{t "email"}}
           </th>
-          {{th-sortable
-            class="auk-table__col--2 auk-table__header-title"
-            currentSorting=sort
-            field="organization.identifier"
-            label=(t "ovo-code")
-          }}
-          {{th-sortable
-            class="auk-table__col--2 auk-table__header-title"
-            currentSorting=sort
-            field="group.name"
-            label=(t "group")
-          }}
+          <ThSortable
+            @class="auk-table__col--2 auk-table__header-title"
+            @currentSorting={{sort}}
+            @field="organization.identifier"
+            @label={{t "ovo-code"}}
+          />
+          <ThSortable
+            @class="auk-table__col--2 auk-table__header-title"
+            @currentSorting={{sort}}
+            @field="group.name"
+            @label={{t "group"}}
+          />
           <th class="auk-table__col--1"></th>
-        {{/c.header}}
-        {{#c.body as |user|}}
+        </c.header>
+        <c.body as |user|>
           <td data-test-route-settings-users-row-first-name>
             {{user.firstName}}
           </td>
@@ -94,13 +94,13 @@
           </td>
           <td>
             {{!-- TODO: this action-bar component triggers seemingly unnecessary new requests for a user --}}
-            {{web-components/light-table/vlc-user-table-actionbar
-              row=user
-              goToRoute=goToRoute
-            }}
+            <WebComponents::LightTable::VlcUserTableActionbar
+              @row={{user}}
+              @goToRoute={{goToRoute}}
+            />
           </td>
-        {{/c.body}}
-      {{/table.content}}
-    {{/data-table}}
+        </c.body>
+      </table.content>
+    </DataTable>
   {{/if}}
 </div>

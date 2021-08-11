@@ -1,47 +1,47 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "confidential"}}</Auk::Label>
-    {{web-components/vl-toggle
-      data-test-subcase-titles-edit-confidential=true
-      value=subcase.confidential
-    }}
+    <WebComponents::VlToggle
+      data-test-subcase-titles-edit-confidential={{true}}
+      @value={{subcase.confidential}}
+    />
   </div>
 </div>
 <div class="auk-u-mb-2">
   <Auk::Label>{{t "publicity"}}</Auk::Label>
-  {{utils/model-selector
-    data-test-subcase-titles-edit-access-level=true
-    modelName="access-level"
-    allowClear=true
-    searchField="label"
-    propertyToShow="label"
-    readOnly=subcase.confidential
-    sortField="label"
-    selectedItems=(await subcase.accessLevel)
-    selectModel=(action "setAccessLevel")
-  }}
+  <Utils::ModelSelector
+    data-test-subcase-titles-edit-access-level={{true}}
+    @modelName="access-level"
+    @allowClear={{true}}
+    @searchField="label"
+    @propertyToShow="label"
+    @readOnly={{subcase.confidential}}
+    @sortField="label"
+    @selectedItems={{await subcase.accessLevel}}
+    @selectModel={{action "setAccessLevel"}}
+  />
 </div>
 
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "name-subcase"}}</Auk::Label>
-    {{textarea
-      data-test-subcase-titles-edit-shorttitle=true
-      rows="2"
+    <Textarea
+      data-test-subcase-titles-edit-shorttitle={{true}}
+      @rows="2"
       class="auk-textarea"
-      value=subcase.shortTitle
-    }}
+      @value={{subcase.shortTitle}}
+    />
   </div>
 </div>
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title-subcase"}}</Auk::Label>
-    {{textarea
-      data-test-subcase-titles-edit-title=true
-      rows="4"
+    <Textarea
+      data-test-subcase-titles-edit-title={{true}}
+      @rows="4"
       class="auk-textarea"
-      value=subcase.title
-    }}
+      @value={{subcase.title}}
+    />
   </div>
 </div>
 
@@ -57,12 +57,12 @@
       </Auk::Button>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
-      {{web-components/vl-save-button
-        data-test-subcase-titles-edit-save=true
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "saveChanges")
-      }}
+      <WebComponents::VlSaveButton
+        data-test-subcase-titles-edit-save={{true}}
+        @text={{t "save"}}
+        @isLoading={{isLoading}}
+        @saveAction={{action "saveChanges"}}
+      />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>

@@ -5,22 +5,22 @@
       class="auk-form-group"
     >
       <Auk::Label>{{t "start-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        date=(array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ"))
-        dateChanged=(action "selectBeginDate")
-        enableTime=true
-      }}
+      <WebComponents::VlDatepicker
+        @date={{array (moment-format this.alert.beginDate "YYYY-MM-DDTHH:mm:ssZ")}}
+        @dateChanged={{action "selectBeginDate"}}
+        @enableTime={{true}}
+      />
     </div>
     <div
       data-test-system-alert-form-to-date
       class="auk-form-group auk-u-mb-3"
     >
       <Auk::Label>{{t "end-date"}}</Auk::Label>
-      {{web-components/vl-datepicker
-        date=(array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ"))
-        dateChanged=(action "selectEndDate")
-        enableTime=true
-      }}
+      <WebComponents::VlDatepicker
+        @date={{array (moment-format this.alert.endDate "YYYY-MM-DDTHH:mm:ssZ")}}
+        @dateChanged={{action "selectEndDate"}}
+        @enableTime={{true}}
+      />
     </div>
   </div>
   <div
@@ -28,28 +28,24 @@
     class="auk-form-group"
   >
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input value=this.alert.title}}
+    <WebComponents::VlFormInput @value={{this.alert.title}} />
   </div>
   <div
     data-test-system-alert-form-message
     class="auk-form-group"
   >
     <Auk::Label>{{t "system-message"}}</Auk::Label>
-    {{textarea
-      rows="2"
-      class="auk-textarea"
-      value=this.alert.message
-    }}
+    <Textarea @rows="2" class="auk-textarea" @value={{this.alert.message}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "severity"}}</Auk::Label>
-    {{utils/model-selector
-      modelName="alert-type"
-      searchField="label"
-      propertyToShow="label"
-      sortField="label"
-      selectedItems=this.alert.type
-      selectModel=(action "selectType")
-    }}
+    <Utils::ModelSelector
+      @modelName="alert-type"
+      @searchField="label"
+      @propertyToShow="label"
+      @sortField="label"
+      @selectedItems={{this.alert.type}}
+      @selectModel={{action "selectType"}}
+    />
   </div>
 </div>

@@ -1,19 +1,18 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input value=agendaitem.titlePress}}
+    <WebComponents::VlFormInput @value={{agendaitem.titlePress}} />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "content"}}</Auk::Label>
-    {{textarea
-      class="auk-textarea"
-      rows="10"
-      value=agendaitem.textPress
-    }}
+    <Textarea class="auk-textarea"
+      @rows="10"
+      @value={{agendaitem.textPress}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "for-press"}}</Auk::Label>
-    {{web-components/vl-toggle value=agendaitem.forPress}}
+    <WebComponents::VlToggle @value={{agendaitem.forPress}} />
   </div>
 </div>
 <Auk::Toolbar>
@@ -24,11 +23,11 @@
       </Auk::ButtonLink>
     </Auk::Toolbar::Item>
     <Auk::Toolbar::Item>
-      {{web-components/vl-save-button
-        text=(t "save")
-        isLoading=isLoading
-        saveAction=(action "saveChanges" agendaitem)
-      }}
+      <WebComponents::VlSaveButton
+        @text={{t "save"}}
+        @isLoading={{isLoading}}
+        @saveAction={{action "saveChanges" agendaitem}}
+      />
     </Auk::Toolbar::Item>
   </Auk::Toolbar::Group>
 </Auk::Toolbar>

@@ -1,13 +1,13 @@
 {{#if (not isAdding)}}
   <Auk::Modal::Body>
-    {{utils/model-selector
-      modelName="signature"
-      searchField="name"
-      propertyToShow="name"
-      sortField="name"
-      selectedItems=(await selectedSignature)
-      selectModel=(action "selectSignature")
-    }}
+    <Utils::ModelSelector
+      @modelName="signature"
+      @searchField="name"
+      @propertyToShow="name"
+      @sortField="name"
+      @selectedItems={{await selectedSignature}}
+      @selectModel={{action "selectSignature"}}
+    />
     <div class="auk-u-mb-3"/>
     <div>
       {{t "signature-default"}}
@@ -15,10 +15,10 @@
     </div>
   </Auk::Modal::Body>
   {{#if isEditing}}
-    {{utils/edit-signature
-      signatureToEdit=(await selectedSignature)
-      closeModal=(action "toggleIsEditing")
-    }}
+    <Utils::EditSignature
+      @signatureToEdit={{await selectedSignature}}
+      @closeModal={{action "toggleIsEditing"}}
+    />
   {{else}}
     <Auk::Modal::Footer @onCancel={{action "closeModal"}}>
       {{#if selectedSignature}}
@@ -47,5 +47,5 @@
     </Auk::Modal::Footer>
   {{/if}}
 {{else}}
-  {{utils/create-signature closeModal=(action "toggleIsAdding")}}
+  <Utils::CreateSignature @closeModal={{action "toggleIsAdding"}} />
 {{/if}}

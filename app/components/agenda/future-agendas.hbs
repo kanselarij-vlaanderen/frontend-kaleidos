@@ -51,12 +51,11 @@
       </thead>
       <tbody class="auk-table--interaction-cursor" data-test-future-agenda-table-body>
         {{#each (await items) as |meeting|}}
-          {{#link-to
-            "agenda.agendaitems"
-            meeting.id
-            meeting.latestAgenda.id
-            tagName="tr"
-          }}
+          <LinkTo
+            @route="agenda.agendaitems"
+            @models={{array meeting.id meeting.latestAgenda.id}}
+            @tagName="tr"
+          >
             <td>
               {{#if (is-pending meeting)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -104,17 +103,15 @@
                 @bubbles={{false}}
               />
             </td>
-          {{/link-to}}
+          </LinkTo>
         {{/each}}
       </tbody>
     </table>
   {{else}}
     <div>
-      {{web-components/vl-alert message=emptyText}}
+      <WebComponents::VlAlert @message={{emptyText}} />
     </div>
   {{/if}}
 {{else}}
-  {{web-components/vl-loader
-    text=(concat (t "loading-active-agendas") " " (t "please-be-patient"))
-  }}
+  <WebComponents::VlLoader @text={{concat (t "loading-active-agendas") " " (t "please-be-patient")}} />
 {{/if}}

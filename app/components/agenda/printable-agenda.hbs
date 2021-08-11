@@ -1,36 +1,31 @@
 <div class="auk-u-m-8 auk-u-m-0@print">
   <div class="auk-container auk-container--center auk-printable-agenda-list" data-test-printable-agenda-container>
-    {{utils/logo-header}}
-
+    <Utils::LogoHeader />
     <h2 class="auk-h2 auk-u-text-family-serif auk-u-text-align--center" data-test-printable-agenda-header-title>
       {{t "agenda-of"}} {{moment-format this.meeting.plannedStart "dddd DD MMMM YYYY \o\m HH:mm"}} - {{this.meeting.kindToShow.altLabel}}
     </h2>
 
     <div class="auk-content">
       {{#if (gt this.notas.length 0)}}
-        {{#agenda/printable-agenda/list-section
-          letter="A"
-          title=(t "agendaitems")
-        }}
+        <Agenda::PrintableAgenda::ListSection
+          @letter="A"
+          @title={{t "agendaitems"}}
+        >
           {{#each this.notas as |notaGroup|}}
-            {{agenda/printable-agenda/list-section/item-group
-              items=notaGroup
-            }}
+            <Agenda::PrintableAgenda::ListSection::ItemGroup @items={{notaGroup}} />
           {{/each}}
-        {{/agenda/printable-agenda/list-section}}
+        </Agenda::PrintableAgenda::ListSection>
       {{/if}}
 
       {{#if (gt announcements.length 0)}}
-        {{#agenda/printable-agenda/list-section
-          letter="B"
-          title=(t "announcements-subtitle")
-        }}
+        <Agenda::PrintableAgenda::ListSection
+          @letter="B"
+          @title={{t "announcements-subtitle"}}
+        >
           {{#each announcements as |announcement|}}
-            {{agenda/printable-agenda/list-section/item-group/item
-              item=announcement
-            }}
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item @item={{announcement}} />
           {{/each}}
-        {{/agenda/printable-agenda/list-section}}
+        </Agenda::PrintableAgenda::ListSection>
       {{/if}}
     </div>
   </div>

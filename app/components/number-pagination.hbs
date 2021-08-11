@@ -16,15 +16,14 @@
     <div class="vlc-pagination__container">
       <p class="vlc-pagination__fontsize vlc-pagination-nowrap">{{t "amount-per-page"}}</p>
       <div>
-        {{#power-select
-          options=sizeOptions
-          selected=size
-          searchEnabled=false
-          onchange=(action "selectSize")
-        as |sizeValue|
-        }}
+        <PowerSelect
+          @options={{sizeOptions}}
+          @selected={{size}}
+          @searchEnabled={{false}}
+          @onchange={{action "selectSize"}}
+        as |sizeValue|>
           {{sizeValue}}
-        {{/power-select}}
+        </PowerSelect>
       </div>
     </div>
   {{/if}}

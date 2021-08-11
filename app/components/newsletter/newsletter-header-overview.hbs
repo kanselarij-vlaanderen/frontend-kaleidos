@@ -175,7 +175,7 @@
       {{#if testCampaignIsLoading}}
         <WebComponents::VlLoader @text={{t "preview-loading-text"}} />
       {{else}}
-        {{sanitize-html raw=true value=newsletterHTML}}
+        <SanitizeHtml @raw={{true}} @value={{newsletterHTML}} />
       {{/if}}
     </Auk::Modal::Body>
   </WebComponents::VlModal>
