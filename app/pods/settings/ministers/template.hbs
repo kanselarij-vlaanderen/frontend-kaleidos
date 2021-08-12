@@ -53,23 +53,25 @@
               </div>
             </a>
           </th>
-          <th class="auk-table__col--2"></th>
+          {{!--<th class="auk-table__col--2"></th>--}}
         </tr>
       </thead>
-      <SortableGroup
+      <tbody>
+      {{!--<SortableGroup
         data-test-route-settings-ministers-sortable-group
         @tagName="tbody"
         @model={{model}}
         @onChange={{action "reorderItems" model}}
       as |sortableGroup|
-      >
-        {{#each sortableGroup.model as |mandatee index|}}
-          <sortableGroup.item
+      >--}}
+        {{#each this.model as |mandatee index|}}
+          <tr>
+          {{!--<sortableGroup.item
             @tagName="tr"
             @model={{mandatee}}
             data-test-route-settings-ministers-sortable-group-row="index"
             @handle=".mandatee-draggable-row"
-          >
+          >--}}
             <td data-test-route-settings-ministers-mandatee-full-display-name={{index}} class="mandatee-draggable-row">
               {{#if (is-pending mandatee.fullDisplayName)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
@@ -87,7 +89,7 @@
             <td data-test-route-settings-ministers-mandatee-priority={{index}} class="mandatee-draggable-row">
               {{await mandatee.priority}}
             </td>
-            <td class="auk-u-text-align--center">
+            {{!--<td class="auk-u-text-align--center">
               <Auk::Toolbar>
                 <Auk::Toolbar::Group @position="center">
                   <Auk::Toolbar::Item>
@@ -125,14 +127,17 @@
                   </Auk::Toolbar::Item>
                 </Auk::Toolbar::Group>
               </Auk::Toolbar>
-            </td>
-          </sortableGroup.item>
+            </td> --}}
+          </tr>
+          {{!--</sortableGroup.item>--}}
         {{/each}}
-      </SortableGroup>
+      {{!--</SortableGroup>--}}
+    </tbody>
     </table>
   {{!-- template-lint-enable table-groups --}}
   {{/if}}
-  {{#if isEditingMandatee}}
+
+  {{!--{{#if isEditingMandatee}}
     {{#web-components/vl-modal
       isOverlay=true
       title=(t "manage-ministers")
@@ -182,6 +187,7 @@
       verify=(action "deleteMandatee")
       mandateesUpdated=(action "mandateesUpdated")
     }}
-  {{/if}}
+  {{/if}}--}}
+
   {{outlet}}
 </div>
