@@ -20,5 +20,7 @@ export default class Person extends Model {
       return alternativeName;
     }
     return [firstName, lastName].filter((it) => it).join(' ');
+  get fullName() {
+    return `${this.firstName || ''} ${this.lastName || ''}`.trim(); // trim in case one of both is empty
   }
 }
