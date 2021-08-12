@@ -128,7 +128,7 @@
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                         {{t "edit-proof-details"}}
                       </Menu.Item>
-                      {{#if (and canDeletePieces pieceRow.isPieceDeletable)}}
+                      {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
                         <Menu.Item @skin="danger"
                           {{on "click" (perform this.deletePiece pieceRow)}}>
                           {{t "delete"}}

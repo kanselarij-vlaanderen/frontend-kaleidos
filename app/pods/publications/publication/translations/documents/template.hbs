@@ -109,7 +109,7 @@
                       {{on "click" (fn this.openPieceEditModal piece)}}>
                       {{t "edit-translation-details"}}
                     </Menu.Item>
-                    {{#if (and canDeletePieces (compute this.isPieceDeletable piece))}}
+                    {{#if (and this.canDeletePieces (compute this.isPieceDeletable piece))}}
                       <Menu.Item @skin="danger"
                         {{on "click" (perform this.deletePiece piece)}}>
                         {{t "delete"}}
