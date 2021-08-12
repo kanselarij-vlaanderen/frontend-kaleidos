@@ -16,3 +16,5 @@ export const PAGE_SIZE = {
 export const PUBLICATION_EMAIL = {
   OUTBOX: 'http://themis.vlaanderen.be/id/mail-folders/4296e6af-7d4f-423d-ba89-ed4cbbb33ae7',
 };
+
+export const CURRENT_GOVERNMENT_BODY = 'http://themis.vlaanderen.be/id/bestuursorgaan/5fed907ee6670526694a0706';

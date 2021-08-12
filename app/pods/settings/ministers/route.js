@@ -1,23 +1,17 @@
 import Route from '@ember/routing/route';
-import moment from 'moment';
+import { action } from '@ember/object';
+import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
-export default Route.extend({
+export default class SettingsMinistersRoute extends Route {
   model() {
-    return this.store
-      .query('mandatee', {
-        filter: {
-          ':gte:end': moment()
-            .utc()
-            .toDate()
-            .toISOString(),
-        },
-      })
-      .then((mandatees) => mandatees.sortBy('priority'));
-  },
+    return this.store.query('mandatee', {
+      'filter[government-body][:uri:]': CURRENT_GOVERNMENT_BODY,
+      sort: 'priority',
+    });
+  }
 
-  actions: {
-    refreshRoute() {
-      this.refresh();
-    },
-  },
-});
+  @action
+  refreshRoute() {
+    this.refresh();
+  }
+}
