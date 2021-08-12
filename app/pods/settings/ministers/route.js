@@ -16,7 +16,7 @@ export default class SettingsMinistersRoute extends Route {
     return this.store.query('mandatee', {
       'filter[government-body][:uri:]': CURRENT_GOVERNMENT_BODY,
       'filter[mandate][role][:id:]': this.visibleRoles.map((role) => role.id).join(','),
-      include: 'mandate.role',
+      include: 'person,mandate.role',
       sort: 'priority',
     });
   }
