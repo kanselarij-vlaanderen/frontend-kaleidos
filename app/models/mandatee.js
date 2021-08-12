@@ -20,6 +20,7 @@ export default Model.extend({
   dateDecree: attr('datetime'),
 
   person: belongsTo('person'),
+  mandate: belongsTo('mandate'),
 
   iseCodes: hasMany('ise-code', {
     inverse: null,
