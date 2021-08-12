@@ -7,32 +7,30 @@
   @modifier="dropdown"
 >
   {{!-- BEGIN-SNIPPET dropdown-default --}}
-  <div class="auk-u-position-relative auk-u-inline-block">
-    <DropdownMenu
-      @skin="secondary"
-      @label="Button text"
-    as |Menu|>
-      <Menu.Item @route="styleguide.accordion">
-        Accordion
-      </Menu.Item>
-      <Menu.Item @route="styleguide.accordion-panel" @disabled={{true}}>
-        Accordion panel
-      </Menu.Item>
-      <Menu.Item @route="styleguide.avatar">
-        Avatar
-      </Menu.Item>
-      <Menu.Item @route="styleguide.badge">
-        Badge
-      </Menu.Item>
-      <Menu.Item @route="styleguide.brand">
-        Brand
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item @route="styleguide.checkboxes-radio-buttons" @skin="danger">
-        Checkboxes/radio buttons
-      </Menu.Item>
-    </DropdownMenu>
-  </div>
+  <DropdownMenu
+    @skin="secondary"
+    @label="Button text"
+  as |Menu|>
+    <Menu.Item @route="styleguide.accordion">
+      Accordion
+    </Menu.Item>
+    <Menu.Item @route="styleguide.accordion-panel" @disabled={{true}}>
+      Accordion panel
+    </Menu.Item>
+    <Menu.Item @route="styleguide.avatar">
+      Avatar
+    </Menu.Item>
+    <Menu.Item @route="styleguide.badge">
+      Badge
+    </Menu.Item>
+    <Menu.Item @route="styleguide.brand">
+      Brand
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item @route="styleguide.checkboxes-radio-buttons" @skin="danger">
+      Checkboxes/radio buttons
+    </Menu.Item>
+  </DropdownMenu>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 
@@ -43,36 +41,36 @@
   @align="end"
 >
   {{!-- BEGIN-SNIPPET dropdown-text-only-item --}}
-  <div class="auk-u-position-relative auk-u-inline-block">
-    <Auk::ButtonLink
-      @skin="muted"
-      @icon="chevron-down"
-      @layout="icon-right"
-    >
-      Button text
-    </Auk::ButtonLink>
-    <AttachPopover
-      @renderInPlace={{true}}
-      @class="ember-attacher-popper"
-      @hideOn="clickout click"
-      @showOn="click"
-      @animation="shift"
-      @placement="bottom-end"
-    >
-      <Auk::Menu>
-        <Auk::Menu::Item @textOnly={{true}}>
-          <Auk::Avatar @icon="user" @name="Admin">
-            <p>Admin</p>
-            <p class="auk-u-muted auk-u-text-small">Beheerdersgroep</p>
-          </Auk::Avatar>
-        </Auk::Menu::Item>
-        <Auk::Menu::Divider />
-        <Auk::Menu::Item @route="styleguide.checkboxes-radio-buttons">
-          Afmelden
-        </Auk::Menu::Item>
-      </Auk::Menu>
-    </AttachPopover>
-  </div>
+  <Auk::ButtonLink
+    @skin="muted"
+    @icon="chevron-down"
+    @layout="icon-right"
+  >
+    <:default>Button text</:default>
+    <:floater>
+      <AttachPopover
+        @renderInPlace={{true}}
+        @class="ember-attacher-popper"
+        @hideOn="clickout click"
+        @showOn="click"
+        @animation="shift"
+        @placement="bottom-end"
+      >
+        <Auk::Menu>
+          <Auk::Menu::Item @textOnly={{true}}>
+            <Auk::Avatar @icon="user" @name="Admin">
+              <p>Admin</p>
+              <p class="auk-u-muted auk-u-text-small">Beheerdersgroep</p>
+            </Auk::Avatar>
+          </Auk::Menu::Item>
+          <Auk::Menu::Divider />
+          <Auk::Menu::Item @route="styleguide.checkboxes-radio-buttons">
+            Afmelden
+          </Auk::Menu::Item>
+        </Auk::Menu>
+      </AttachPopover>
+    </:floater>
+  </Auk::ButtonLink>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
 

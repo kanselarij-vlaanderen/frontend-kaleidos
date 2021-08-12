@@ -53,37 +53,35 @@
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <DropdownMenu
-              @skin="secondary"
-              @label={{t "actions"}}
-              data-test-subcase-header-actions-dropdown={{true}}
-            as |Menu|>
-              {{#if (await canDelete)}}
-                <Menu.Item>
-                  <a href="" class="auk-button-link"
-                    data-test-subcase-header-action-delete-subcase
-                    {{action "requestDeleteSubcase" subcase}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "delete-subcase"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{/if}}
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "actions"}}
+            data-test-subcase-header-actions-dropdown={{true}}
+          as |Menu|>
+            {{#if (await canDelete)}}
               <Menu.Item>
-                <a href=""
-                  data-test-subcase-header-action-move-subcase
-                  class="auk-button-link auk-button-link--block"
-                  {{action "triggerMoveSubcaseDialog" }}
+                <a href="" class="auk-button-link"
+                  data-test-subcase-header-action-delete-subcase
+                  {{action "requestDeleteSubcase" subcase}}
                 >
                   <span class="auk-button__content">
-                    {{t "move-subcase"}}
+                    {{t "delete-subcase"}}
                   </span>
                 </a>
               </Menu.Item>
-            </DropdownMenu>
-          </div>
+            {{/if}}
+            <Menu.Item>
+              <a href=""
+                data-test-subcase-header-action-move-subcase
+                class="auk-button-link auk-button-link--block"
+                {{action "triggerMoveSubcaseDialog" }}
+              >
+                <span class="auk-button__content">
+                  {{t "move-subcase"}}
+                </span>
+              </a>
+            </Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

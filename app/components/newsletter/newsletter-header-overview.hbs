@@ -49,107 +49,105 @@
       <Auk::Toolbar::Item>
         {{#if currentSession.isEditor}}
         {{/if}}
-        <div class="auk-u-position-relative auk-u-inline-block">
-          <DropdownMenu
-            @skin="secondary"
-            @label={{t "actions"}}
-            class="vlc-hide-on-print"
-          as |Menu|>
-            {{#if currentSession.isEditor}}
-              {{#if
-                (or (is-pending agenda.createdFor.mailCampaign) isLoading)
-              }}
+        <DropdownMenu
+          @skin="secondary"
+          @label={{t "actions"}}
+          class="vlc-hide-on-print"
+        as |Menu|>
+          {{#if currentSession.isEditor}}
+            {{#if
+              (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+            }}
+              <Menu.Item>
+                <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-p-2">
+                  <div
+                    class="auk-loader"
+                    role="alert"
+                    aria-busy="true"
+                  ></div>
+                  {{t "newsletter-loading-text"}}
+                </div>
+              </Menu.Item>
+            {{else if (await agenda.createdFor.mailCampaign)}}
+              {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
                 <Menu.Item>
-                  <div class="auk-loader-wrapper auk-loader-wrapper--small auk-u-p-2">
-                    <div
-                      class="auk-loader"
-                      role="alert"
-                      aria-busy="true"
-                    ></div>
-                    {{t "newsletter-loading-text"}}
-                  </div>
-                </Menu.Item>
-              {{else if (await agenda.createdFor.mailCampaign)}}
-                {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
-                  <Menu.Item>
-                    <a href=""
-                        class="auk-button-link auk-button-link--block"
-                      {{action "sendTestCampaign"}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "send-test-campaign"}}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <a href=""
-                        class="auk-button-link auk-button-link--block"
-                      {{action "toggleIsVerifying"}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "send-campaign"}}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                  <Menu.Divider />
-                {{/if}}
-                <Menu.Item>
-                  <a
-                    class="auk-button-link auk-button-link--block"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={{concat
-                      "/newsletter/xml-newsletter/"
-                      agenda.id
-                    }}
-                    download={{concat
-                      "/newsletter/xml-newsletter/"
-                      agenda.id
-                    }}
+                  <a href=""
+                      class="auk-button-link auk-button-link--block"
+                    {{action "sendTestCampaign"}}
                   >
                     <span class="auk-button__content">
-                      {{t "generate-xml"}}
+                      {{t "send-test-campaign"}}
+                    </span>
+                  </a>
+                </Menu.Item>
+                <Menu.Item>
+                  <a href=""
+                      class="auk-button-link auk-button-link--block"
+                    {{action "toggleIsVerifying"}}
+                  >
+                    <span class="auk-button__content">
+                      {{t "send-campaign"}}
                     </span>
                   </a>
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item>
-                  <a href=""
-                      class="auk-button-link auk-button-link--block auk-u-text-error"
-                    {{action "deleteCampaign"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "delete-campaign"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{else}}
-                <Menu.Item>
-                  <a href=""
-                      class="auk-button-link auk-button-link--block"
-                    {{action "createCampaign"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "create-campaign"}}
-                    </span>
-                  </a>
-                </Menu.Item>
               {{/if}}
-            {{/if}}
-            {{#if shouldShowPrintButton}}
+              <Menu.Item>
+                <a
+                  class="auk-button-link auk-button-link--block"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={{concat
+                    "/newsletter/xml-newsletter/"
+                    agenda.id
+                  }}
+                  download={{concat
+                    "/newsletter/xml-newsletter/"
+                    agenda.id
+                  }}
+                >
+                  <span class="auk-button__content">
+                    {{t "generate-xml"}}
+                  </span>
+                </a>
+              </Menu.Item>
+              <Menu.Divider />
+              <Menu.Item>
+                <a href=""
+                    class="auk-button-link auk-button-link--block auk-u-text-error"
+                  {{action "deleteCampaign"}}
+                >
+                  <span class="auk-button__content">
+                    {{t "delete-campaign"}}
+                  </span>
+                </a>
+              </Menu.Item>
+            {{else}}
               <Menu.Item>
                 <a href=""
                     class="auk-button-link auk-button-link--block"
-                  {{action "print"}}
+                  {{action "createCampaign"}}
                 >
                   <span class="auk-button__content">
-                    {{t "print"}}
+                    {{t "create-campaign"}}
                   </span>
                 </a>
               </Menu.Item>
             {{/if}}
-          </DropdownMenu>
-        </div>
+          {{/if}}
+          {{#if shouldShowPrintButton}}
+            <Menu.Item>
+              <a href=""
+                  class="auk-button-link auk-button-link--block"
+                {{action "print"}}
+              >
+                <span class="auk-button__content">
+                  {{t "print"}}
+                </span>
+              </a>
+            </Menu.Item>
+          {{/if}}
+        </DropdownMenu>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

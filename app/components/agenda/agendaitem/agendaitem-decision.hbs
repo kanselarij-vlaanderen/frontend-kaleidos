@@ -9,25 +9,23 @@
           {{t "edit"}}
         </Auk::ButtonLink>
         {{#if @allowDelete}}
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <DropdownMenu
-              @skin="borderless"
-              @icon="more"
-            as |Menu|>
-              <Menu.Item>
-                <button
-                  data-test-agendaitem-decision-delete
-                  type="button"
-                  class="auk-button-link auk-u-text-error"
-                  {{on "click" (fn this.promptDeleteTreatment @treatment)}}
-                >
-                  <span class="auk-button__content">
-                    {{t "delete-decision"}}
-                  </span>
-                </button>
-              </Menu.Item>
-            </DropdownMenu>
-          </div>
+          <DropdownMenu
+            @skin="borderless"
+            @icon="more"
+          as |Menu|>
+            <Menu.Item>
+              <button
+                data-test-agendaitem-decision-delete
+                type="button"
+                class="auk-button-link auk-u-text-error"
+                {{on "click" (fn this.promptDeleteTreatment @treatment)}}
+              >
+                <span class="auk-button__content">
+                  {{t "delete-decision"}}
+                </span>
+              </button>
+            </Menu.Item>
+          </DropdownMenu>
         {{/if}}
       {{/if}}
     </div>

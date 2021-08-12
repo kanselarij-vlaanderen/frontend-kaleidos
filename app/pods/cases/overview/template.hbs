@@ -56,31 +56,29 @@
           </td>
           <td class="auk-u-text-align--right">
             {{#if currentSession.isEditor}}
-              <div class="auk-u-position-relative auk-u-inline-block">
-                <DropdownMenu
-                  @skin="borderless"
-                  @icon="more"
-                as |Menu|>
-                  <Menu.Item>
-                    <button type="button" class="auk-button-link"
-                      {{on "click" (fn this.openEditCaseModal row)}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "edit-case"}}
-                      </span>
-                    </button>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <a href="" class="auk-button-link auk-button-link--block"
-                      {{action (if row.isArchived "unarchiveCase" "requestArchiveCase") row}}
-                    >
-                      <span class="auk-button__content">
-                        {{t (if row.isArchived "unarchive-case" "archive-case")}}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                </DropdownMenu>
-              </div>
+              <DropdownMenu
+                @skin="borderless"
+                @icon="more"
+              as |Menu|>
+                <Menu.Item>
+                  <button type="button" class="auk-button-link"
+                    {{on "click" (fn this.openEditCaseModal row)}}
+                  >
+                    <span class="auk-button__content">
+                      {{t "edit-case"}}
+                    </span>
+                  </button>
+                </Menu.Item>
+                <Menu.Item>
+                  <a href="" class="auk-button-link auk-button-link--block"
+                    {{action (if row.isArchived "unarchiveCase" "requestArchiveCase") row}}
+                  >
+                    <span class="auk-button__content">
+                      {{t (if row.isArchived "unarchive-case" "archive-case")}}
+                    </span>
+                  </a>
+                </Menu.Item>
+              </DropdownMenu>
             {{/if}}
             <Auk::Button
               @skin="borderless"
