@@ -1,90 +1,65 @@
-/* eslint-disable ember/no-arrow-function-computed-properties */
-import Component from '@ember/component';
-import { inject } from '@ember/service';
-import { computed } from '@ember/object';
-import {
-  task, timeout
-} from 'ember-concurrency';
-import moment from 'moment';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
+import { CURRENT_GOVERNMENT_BODY } from 'frontend-kaleidos/config/config';
 
-export default Component.extend({
-  classNames: ['mandatee-selector-container'],
-  classNameBindings: ['classes'],
-  store: inject(),
-  selectedMandatees: null,
-  singleSelect: false,
-  modelName: 'mandatee',
-  sortField: 'priority',
-  searchField: 'title',
-  includeField: 'person',
+const VISIBLE_ROLES = [
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03de', // Minister-president
+  'http://themis.vlaanderen.be/id/bestuursfunctie/5fed907ce6670526694a03e0' // Minister
+];
 
-  init() {
-    this._super(...arguments);
-    this.findAll.perform();
-  },
+export default class MandateeSelectorComponent extends Component {
+  @service store;
+  @tracked mandatees;
+  @tracked selectedMandatees;
 
-  filter: computed(() => ({
-    ':gte:end': moment().utc()
-      .toDate()
-      .toISOString(),
-  })),
+  defaultQueryOptions = {
+    'filter[government-body][:uri:]': CURRENT_GOVERNMENT_BODY,
+    include: 'person,mandate.role',
+    sort: 'priority',
+  };
 
-  queryOptions: computed('sortField', 'searchField', 'filter', 'modelName', 'includeField', function() {
-    const options = {};
-    const {
-      filter, sortField, includeField,
-    } = this;
-    if (sortField) {
-      options.sort = sortField;
+  constructor() {
+    super(...arguments);
+    this.initialLoad = this.loadVisibleRoles.perform();
+    this.findAllMandatees.perform();
+  }
+
+  get readOnly() {
+    return !!this.args.readOnly;
+  }
+
+  @task
+  *loadVisibleRoles() {
+    const visibleRoles = yield Promise.all(VISIBLE_ROLES.map((role) => this.store.findRecordByUri('role', role)));
+    this.defaultQueryOptions['filter[mandate][role][:id:]'] = visibleRoles.map((role) => role.id).join(',');
+  }
+
+  @task
+  *findAllMandatees() {
+    if (this.initialLoad.isRunning) {
+      yield this.initialLoad;
     }
-    if (filter) {
-      options.filter = filter;
-    }
-    if (includeField) {
-      options.include = includeField;
-    }
-    return options;
-  }),
+    this.mandatees = yield this.store.query('mandatee', this.defaultQueryOptions);
+  }
 
-  findAll: task(function *() {
-    const {
-      modelName, queryOptions,
-    } = this;
-    if (modelName) {
-      const items = yield this.store.query(modelName, queryOptions);
-      this.set('items', items);
-    }
-  }),
-
-  searchTask: task(function *(searchValue) {
+  @task
+  *searchMandatees(title) {
     yield timeout(300);
-    const {
-      queryOptions, searchField, modelName,
-    } = this;
-    if (queryOptions.filter) {
-      queryOptions.filter[searchField] = searchValue;
-    } else {
-      const filter = {};
-      filter[searchField] = searchValue;
-      queryOptions.filter = filter;
-    }
+    const queryOptions = {
+      ...this.defaultQueryOptions,  // clone
+    };
+    queryOptions['filter[title]'] = title;
+    const mandatees = yield this.store.query('mandatee', queryOptions);
+    return mandatees;
+  }
 
-    return this.store.query(modelName, queryOptions);
-  }),
-
-  actions: {
-    async chooseMandatee(mandatees) {
-      this.set('selectedMandatees', mandatees);
-      this.chooseMandatee(mandatees);
-    },
-
-    resetValueIfEmpty(param) {
-      if (param === '') {
-        this.set('queryOptions', {
-          sort: this.sortField,
-        });
-        this.findAll.perform();
-      }
-    },
-  },
-});
+  @action
+  async chooseMandatee(mandatees) {
+    this.selectedMandatees = mandatees;
+    this.args.chooseMandatee(mandatees);
+  }
+}

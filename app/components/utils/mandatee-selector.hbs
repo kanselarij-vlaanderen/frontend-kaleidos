@@ -1,26 +1,13 @@
-{{#if (not singleSelect)}}
-  {{#power-select-multiple
-    options=items
-    selected=(await selectedMandatees)
-    disabled=readOnly
-    closeOnSelect=false
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee")
+<div class="mandatee-selector-container">
+  <PowerSelectMultiple
+    @options={{this.mandatees}}
+    @selected={{await selectedMandatees}}
+    @disabled={{this.readOnly}}
+    @closeOnSelect={{this.singleSelect}}
+    @search={{perform this.searchMandatees}}
+    @onchange={{this.chooseMandatee}}
   as |mandatee|
-  }}
+  >
     {{await mandatee.fullDisplayName}}
-  {{/power-select-multiple}}
-{{else}}
-  {{#power-select
-    options=items
-    selected=(await selectedMandatees)
-    disabled=readOnly
-    search=(perform searchTask)
-    oninput=(action "resetValueIfEmpty")
-    onchange=(action "chooseMandatee")
-  as |mandatee|
-  }}
-    {{await mandatee.fullDisplayName}}
-  {{/power-select}}
-{{/if}}
+  </PowerSelectMultiple>
+</div>
