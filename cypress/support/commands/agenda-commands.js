@@ -36,22 +36,21 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.get(route.agendas.action.newMeeting).click();
 
   // Set the kind
+  // Added wait, mouseover, force clicking and checking for existance of the ember power select option because of flakyness
+  // Sometimes, the dropdown stays after pressing an option
   cy.get(agenda.newSession.kind).click();
   cy.get(dependency.emberPowerSelect.option, {
     timeout: 5000,
-  }).wait(500) // Experiment for dropdown flakyness, see if waiting before helps
+  }).wait(500)
     .contains(kind)
     .scrollIntoView()
     .trigger('mouseover')
     .click({
       force: true,
     });
-  // Experiment for dropdown flakyness
-  // Does the ember-power-select-option fix itself if we wait long enough ?
   cy.get(dependency.emberPowerSelect.option, {
     timeout: 15000,
   }).should('not.be.visible');
-  // Could/Should we verify that the dropdown has closed, and try to repeat the process if not ?
 
   // Set the start date
   cy.get(agenda.newSession.datepicker).find(utils.vlDatepicker)
@@ -287,55 +286,6 @@ function setAllItemsFormallyOk(amountOfFormallyOks) {
   cy.log('/setAllItemsFormallyOk');
 }
 
-
-/**
- * @description Check all approval checkboxes of an agendaitem
- * @name approveCoAgendaitem
- * @memberOf Cypress.Chainable#
- * @function
- * @param {String} agendaitemShortTitle - The short title of the case with coapprovals, must be unique in an agenda.
- */
-// TODO-coapproval unused method for an unused feature, refactor later
-function approveCoAgendaitem(agendaitemShortTitle) {
-  cy.log('approveCoAgendaitem');
-  cy.route('GET', '/government-fields/**/domain').as('getGovernmentFieldDomains');
-  cy.route('PATCH', '/approvals/**').as('patchApprovals');
-  cy.route('PATCH', '/agendas/**').as('patchAgenda');
-
-  cy.contains(agendaitemShortTitle).click();
-  cy.wait('@getGovernmentFieldDomains', {
-    timeout: 50000,
-  });
-  cy.get('.auk-panel-layout__main-content').within(() => {
-    cy.get('.auk-u-mb-8').as('detailBlocks');
-    cy.get('@detailBlocks').eq(4)
-      .within(() => {
-        cy.contains('Acties').should('exist');
-        cy.contains('Wijzigen').click();
-        cy.get('.auk-table > tbody > tr').as('mandatees');
-        cy.get('@mandatees').each((item) => {
-          cy.get(item).within(() => {
-            cy.get('.auk-checkbox', {
-              timeout: 10000,
-            }).should('exist')
-              .click();
-          });
-        });
-
-        cy.get('.auk-toolbar-complex__item > .auk-button')
-          .contains('Opslaan')
-          .click();
-      });
-  });
-  cy.wait('@patchApprovals', {
-    timeout: 10000,
-  });
-  cy.wait('@patchAgenda', {
-    timeout: 10000,
-  });
-  cy.log('/approveCoAgendaitem');
-}
-
 /**
  * @description triggers the action "approve agenda" in agenda view
  * In all cases there will be 1 popup, an auModal, opened for confirmation during this command
@@ -531,7 +481,8 @@ function agendaitemExists(agendaitemName) {
 }
 
 /**
- * @description Checks if an agendaitem with a specific name exists on the open agenda and opens it
+ * @description Checks if an agendaitem with a specific name exists on the open agenda and opens the "Dossier" tab
+ * Will also navigate from "overzicht" to "detail" tab if needed
  * @name openDetailOfAgendaitem
  * @memberOf Cypress.Chainable#
  * @function
@@ -553,7 +504,6 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
   cy.url().should('include', 'agendapunten');
   cy.get(agenda.agendaitemNav.activeTab).then((element) => {
     const selectedTab = element[0].text;
-    // TODO KAS-2739 always going to case tab might be slowing testing down, can we do better ?
     if (!selectedTab.includes('Dossier')) {
       cy.get(agenda.agendaitemNav.caseTab).click();
       // after changing the tab, we have to wait for data to load
@@ -562,11 +512,7 @@ function openDetailOfAgendaitem(agendaitemName, isAdmin = true) {
 
     if (isAdmin) {
       // This is used for approval items and other profiles who don't have a link to a subcase
-      // cy.wait(1000); // "Naar procedurestap" was showing up before dissapearing again, failing any tab click that followed because the tabs were not ready/showing
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
-    } else {
-      // TODO KAS-2739, with data loading above, this should no longer be needed
-      // cy.wait(3000); // TODO KAS-2739 wait to ensure the page is loaded, find a better way to check this for other profiles
     }
   });
   cy.log('/openDetailOfAgendaitem');
@@ -682,7 +628,6 @@ Cypress.Commands.add('openAgendaForDate', openAgendaForDate);
 Cypress.Commands.add('visitAgendaWithLink', visitAgendaWithLink);
 Cypress.Commands.add('deleteAgenda', deleteAgenda);
 Cypress.Commands.add('setFormalOkOnItemWithIndex', setFormalOkOnItemWithIndex);
-Cypress.Commands.add('approveCoAgendaitem', approveCoAgendaitem);
 Cypress.Commands.add('approveDesignAgenda', approveDesignAgenda);
 Cypress.Commands.add('addAgendaitemToAgenda', addAgendaitemToAgenda);
 Cypress.Commands.add('toggleShowChanges', toggleShowChanges);
