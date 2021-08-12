@@ -6,22 +6,26 @@
   ...attributes
   {{on "click" this.toggleDropdown}}
 >
-  {{@label}}
+  <:default>
+    {{@label}}
+  </:default>
+  <:floater>
+    <AttachPopover
+      @renderInPlace={{true}}
+      @class="ember-attacher-popper"
+      {{!-- Apart from "hide on clickout" all open/close logic is handled by our own implementation --}}
+      @hideOn="clickout"
+      @showOn=""
+      @onChange={{this.setDropdownStatus}}
+      @isShown={{this.isOpen}}
+      @animation="shift"
+      @placement={{this.placement}}
+    >
+      <Auk::Menu
+        {{on "click" this.toggleDropdown}}
+      as |Menu|>
+        {{yield Menu}}
+      </Auk::Menu>
+    </AttachPopover>
+  </:floater>
 </Auk::Button>
-<AttachPopover
-  @renderInPlace={{true}}
-  @class="ember-attacher-popper"
-  {{!-- Apart from "hide on clickout" all open/close logic is handled by our own implementation --}}
-  @hideOn="clickout"
-  @showOn=""
-  @onChange={{this.setDropdownStatus}}
-  @isShown={{this.isOpen}}
-  @animation="shift"
-  @placement={{this.placement}}
->
-  <Auk::Menu
-    {{on "click" this.toggleDropdown}}
-  as |Menu|>
-    {{yield Menu}}
-  </Auk::Menu>
-</AttachPopover>
