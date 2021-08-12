@@ -4,5 +4,5 @@ import Model, {
 
 export default class Mandate extends Model {
   @belongsTo('role') role;
-  @belongsTo('mandatee') mandatee;
+  @hasMany('mandatee') mandatee;
 }
