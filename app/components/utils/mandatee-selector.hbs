@@ -1,13 +1,12 @@
 <div class="mandatee-selector-container">
-  <PowerSelectMultiple
-    @options={{this.mandatees}}
-    @selected={{await selectedMandatees}}
-    @disabled={{this.readOnly}}
-    @closeOnSelect={{this.singleSelect}}
-    @search={{perform this.searchMandatees}}
-    @onchange={{this.chooseMandatee}}
-  as |mandatee|
-  >
-    {{await mandatee.fullDisplayName}}
-  </PowerSelectMultiple>
+  {{#component (if @singleSelect "power-select" "power-select-multiple")
+    options=this.mandatees
+    selected=(await selectedMandatees)
+    disabled=this.readOnly
+    closeOnSelect=@singleSelect
+    search=(perform this.searchMandatees)
+    onchange=this.chooseMandatee
+  as |mandatee|}}
+      {{await mandatee.fullDisplayName}}
+  {{/component}}
 </div>
