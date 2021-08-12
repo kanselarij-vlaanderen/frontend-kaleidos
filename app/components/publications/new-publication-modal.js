@@ -25,6 +25,7 @@ export default class NewPublicationModal extends Component {
   @tracked number = null;
   @tracked suffix = null;
   @tracked decisionDate = null;
+  @tracked openingDate;
   @tracked publicationDueDate = null;
   @tracked shortTitle = null;
   @tracked longTitle = null;
@@ -40,6 +41,7 @@ export default class NewPublicationModal extends Component {
       this.longTitle = this.args.agendaitem.title;
       this.decisionDate = this.args.agendaItemTreatment.startDate;
     }
+    this.openingDate = new Date();
   }
 
   get isViaCouncilOfMinisters() {
@@ -88,8 +90,9 @@ export default class NewPublicationModal extends Component {
           suffix: isBlank(this.suffix) ? undefined : this.suffix,
           shortTitle: this.shortTitle,
           longTitle: this.longTitle,
-          publicationDueDate: this.publicationDueDate,
           decisionDate: this.decisionDate,
+          openingDate: this.openingDate,
+          publicationDueDate: this.publicationDueDate,
         });
     }
   }
@@ -101,11 +104,19 @@ export default class NewPublicationModal extends Component {
 
   @action
   setDecisionDate(selectedDates) {
+    // undefined if user clears the date picker
     this.decisionDate = selectedDates[0];
   }
 
   @action
+  setOpeningDate(selectedDates) {
+    // undefined if user clears the date picker
+    this.openingDate = selectedDates[0];
+  }
+
+  @action
   setPublicationDueDate(selectedDates) {
+    // undefined if user clears the date picker
     this.publicationDueDate = selectedDates[0];
   }
 }

@@ -9,8 +9,10 @@ import {
 
 /**
  * @argument {PublicationFlow} publicationFlow
+ * only one of these has to be true
  * @argument {boolean} isReceived
  * @argument {boolean} isCorrected
+ *
  * @argument onSave
  * @argument onCancel
  */
@@ -39,6 +41,7 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     return !this.file || this.file.isDeleted || !this.validators.areValid;
   }
 
+  // prevent double cancel
   @task({
     drop: true,
   })
