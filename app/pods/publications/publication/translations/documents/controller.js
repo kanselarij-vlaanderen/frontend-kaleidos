@@ -69,6 +69,10 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     return this.translationSubcase.isFinished;
   }
 
+  get canDeletePieces() {
+    return this.currentSession.isOvrb && !this.translationSubcase.isFinished;
+  }
+
   @action
   changeSorting(sort) {
     this.set('sort', sort);
@@ -184,29 +188,17 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  isShownDelete(piece) {
-    const hasPermission = this.currentSession.isOvrb;
+  isPieceDeletable(piece) {
     // can be translation or publication related
     const isUsedInRequest = piece.requestActivitiesUsedBy.length > 0;
     // receivedDate is set if and only if it is a received pieced
     const isReceived = !!piece.receivedDate;
     const isUsed = isUsedInRequest || isReceived;
-    const isShownDelete = hasPermission && !isUsed;
-    return isShownDelete;
-  }
-
-  @action
-  isDeleteDisabled() {
-    return this.translationSubcase.isFinished;
+    return !isUsed;
   }
 
   @task
-  *delete(piece) {
-    // Workaround for Dropdown::Item not having a (button with a) disabled state.
-    if (this.isDeleteDisabled(piece)) {
-      return;
-    }
-
+  *deletePiece(piece) {
     // prevent piece from being used/rendered while delete is pending
     this.model.removeObject(piece);
     this.selectedPieces.removeObject(piece);

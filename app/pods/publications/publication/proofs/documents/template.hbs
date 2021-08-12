@@ -128,9 +128,8 @@
                         {{on "click" (fn this.openPieceEditModal pieceRow)}}>
                         {{t "edit-proof-details"}}
                       </Menu.Item>
-                      {{#if (and pieceRow.isShownDelete this.currentSession.isOvrb)}}
+                      {{#if (and canDeletePieces pieceRow.isPieceDeletable)}}
                         <Menu.Item @skin="danger"
-                          @disabled={{this.publicationSubcase.isFinished}}
                           {{on "click" (perform this.deletePiece pieceRow)}}>
                           {{t "delete"}}
                         </Menu.Item>

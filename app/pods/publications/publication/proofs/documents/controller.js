@@ -77,6 +77,10 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     return this.publicationSubcase.isFinished;
   }
 
+  get canDeletePieces() {
+    return this.currentSession.isOvrb && !this.publicationSubcase.isFinished;
+  }
+
   @action
   togglePieceSelection(pieceRow) {
     const isPieceSelected = this.selectedPieceRows.includes(pieceRow);
@@ -162,11 +166,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @task
   *deletePiece(pieceRow) {
-    // Workaround for Dropdown::Item not having a (button with a) disabled state.
-    if (this.publicationSubcase.isFinished) {
-      return;
-    }
-
     const piece = pieceRow.piece;
     const filePromise = piece.file;
     const documentContainerPromise = piece.documentContainer;

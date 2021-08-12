@@ -5,7 +5,7 @@ import { hash } from 'rsvp';
 import { tracked } from '@glimmer/tracking';
 
 // use:
-// - isDeleteDisabled property
+// - isPieceDeletable property
 // - file property avoids error when piece (and file) are deleted
 export class PieceRow {
   @tracked piece;
@@ -23,7 +23,7 @@ export class PieceRow {
     return row;
   }
 
-  get isShownDelete() {
+  get isPieceDeletable() {
     // can be translation or publication related
     const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
     // receivedDate is set if and only if it is a received pieced

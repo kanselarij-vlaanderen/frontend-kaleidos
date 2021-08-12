@@ -109,11 +109,9 @@
                       {{on "click" (fn this.openPieceEditModal piece)}}>
                       {{t "edit-translation-details"}}
                     </Menu.Item>
-                    {{#if (compute this.isShownDelete piece)}}
-                      {{!-- TODO: make @disabled work for dropdown item --}}
+                    {{#if (and canDeletePieces (compute this.isPieceDeletable piece))}}
                       <Menu.Item @skin="danger"
-                        @disabled={{compute this.isDeleteDisabled piece}}
-                        {{on "click" (perform this.delete piece)}}>
+                        {{on "click" (perform this.deletePiece piece)}}>
                         {{t "delete"}}
                       </Menu.Item>
                     {{/if}}
