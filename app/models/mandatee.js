@@ -12,7 +12,17 @@ export default Model.extend({
   intl: service(),
 
   title: attr('string'),
-  nickName: attr('string'),
+  nickName: computed('mandate.role.label', 'person.fullName', async function() {
+    /* This property was changed from a regular attribute to an async computed
+    after the themis mandatary migration in order to keep the "nickName" functionality
+    how it was originally intended. The meaning and usage of this property however
+    probably should be reviewed*/
+    const mandate = await this.mandate;
+    const role = await mandate.get('role');
+    const person = await this.person;
+    return `${role.label} ${person.fullName}`;
+  }),
+
   priority: attr('number'),
   start: attr('datetime'),
   end: attr('datetime'),
