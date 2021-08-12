@@ -27,12 +27,21 @@
 
         {{#if this.canUploadPiece}}
           <Auk::Toolbar::Item>
-            <Auk::Button
-              @skin="secondary" @icon="add"
+            <DropdownMenu
+              @skin="secondary"
+              @label={{t "upload-proof-document"}}
+              @position="bottom-start"
               @disabled={{this.isUploadDisabled}}
-              {{on "click" this.openPieceUploadModal}}>
-              {{t "upload-corrected-proof-document"}}
-            </Auk::Button>
+            as |Menu|>
+              <Menu.Item
+                {{on "click" this.openSourceUploadModal}}>
+                {{t "upload-source-proof-document"}}
+              </Menu.Item>
+              <Menu.Item
+                {{on "click" this.openCorrectionUploadModal}}>
+                {{t "upload-corrected-proof-document"}}
+              </Menu.Item>
+            </DropdownMenu>
           </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
@@ -179,9 +188,8 @@
 {{#if this.isPieceUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @isCorrected={{true}}
-    @isReceived={{false}}
-    @onSave={{this.saveCorrectionDocument}}
+    @isCorrected={{this.isPieceUploadCorrected}}
+    @onSave={{this.savePieceUpload}}
     @onCancel={{this.closePieceUploadModal}} />
 {{/if}}
 
@@ -189,7 +197,7 @@
   <Publications::Publication::Proofs::ProofEditModal
     @publicationFlow={{this.publicationFlow}}
     @piece={{this.pieceToEdit}}
-    @onSave={{this.saveEditPiece}}
+    @onSave={{this.savePieceEdit}}
     @onCancel={{this.closePieceEditModal}} />
 {{/if}}
 

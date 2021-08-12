@@ -94,6 +94,7 @@ export default class PublicationsIndexController extends Controller {
     this.publicationFilter = publicationFilter;
     localStorage.setItem('publicationFilter', this.publicationFilter.toString());
     this.isShowPublicationFilterModal = false;
+    this.set('page', 0);
     this.send('refreshModel');
   }
 
