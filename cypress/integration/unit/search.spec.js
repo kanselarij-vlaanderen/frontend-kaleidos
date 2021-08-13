@@ -33,7 +33,8 @@ context('Search tests', () => {
       cy.get(route.search.trigger).click();
       cy.get(utils.numberPagination.container).find(dependency.emberPowerSelect.trigger)
         .click();
-      cy.selectOptionInSelectByText(option);
+      cy.get(dependency.emberPowerSelect.option).contains(option)
+        .click();
       cy.url().should('include', `aantal=${option}`);
       cy.get(route.search.input).clear();
     });

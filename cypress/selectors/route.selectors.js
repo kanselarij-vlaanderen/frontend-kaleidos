@@ -145,6 +145,15 @@ const selectors = {
     acmidmButton: '[data-test-route-login-acmidm-container] button',
   },
 
+  /**
+    ROUTE MOCK-LOGIN
+   */
+
+  // mock-login-route/template
+  mockLogin: {
+    list: '[data-test-mock-login-list]',
+  },
+
 
   /**
     ROUTE ACCOUNTLESS-USERS
