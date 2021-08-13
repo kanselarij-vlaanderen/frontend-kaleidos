@@ -38,6 +38,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
   @tracked isPieceUploadModalOpen = false;
+  @tracked isPieceUploadCorrected;
   @tracked isPieceEditModalOpen = false;
   @tracked pieceToEdit;
 
@@ -121,19 +122,27 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  openPieceUploadModal() {
+  openSourceUploadModal() {
     this.isPieceUploadModalOpen = true;
+  }
+
+  @action
+  openCorrectionUploadModal() {
+    this.isPieceUploadModalOpen = true;
+    this.isPieceUploadCorrected = true;
   }
 
   @action
   closePieceUploadModal() {
     this.isPieceUploadModalOpen = false;
+    this.isPieceUploadCorrected = false;
   }
 
   @action
-  async saveCorrectionDocument(proofDocument) {
-    await this.performSaveCorrectionDocument(proofDocument);
-    this.isPieceUploadModalOpen = false;
+  async savePieceUpload(proofDocument) {
+    await this.performSavePieceUpload(proofDocument, this.isPieceUploadCorrected);
+
+    this.closePieceUploadModal();
     this.send('refresh');
   }
 
@@ -150,7 +159,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   @action
-  async saveEditPiece(modalResult) {
+  async savePieceEdit(modalResult) {
     const piece = this.pieceToEdit;
     piece.name = modalResult.name;
     piece.receivedDate = modalResult.receivedAtDate;
@@ -162,7 +171,6 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   async performSaveProofRequest(proofRequest) {
     const now = new Date();
-
     const saves = [];
 
     // PUBLICATION SUBCASE
@@ -223,7 +231,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     await Promise.all(saves);
   }
 
-  async performSaveCorrectionDocument(proofDocument) {
+  async performSavePieceUpload(uploadProperties, isCorrection) {
     const now = new Date();
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -231,15 +239,21 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     });
     await documentContainer.save();
 
-    const piece = this.store.createRecord('piece', {
+    const pieceProperties = {
       created: now,
       modified: now,
-      file: proofDocument.file,
+      name: uploadProperties.name,
       confidential: false,
-      name: proofDocument.name,
+      file: uploadProperties.file,
       documentContainer: documentContainer,
-      publicationSubcaseCorrectionFor: this.publicationSubcase,
-    });
+    };
+
+    if (isCorrection) {
+      pieceProperties.publicationSubcaseCorrectionFor = this.publicationSubcase;
+    } else {
+      pieceProperties.publicationSubcaseSourceFor = this.publicationSubcase;
+    }
+    const piece = this.store.createRecord('piece', pieceProperties);
     await piece.save();
 
     return piece;
