@@ -19,8 +19,8 @@ const selectors = {
     hour: '.flatpickr-hour',
     minute: '.flatpickr-minute',
     // date
-    day: '.open  .flatpickr-day',
     days: '.open .flatpickr-days',
+    day: '.flatpickr-day',
     prevMonthDay: '.prevMonthDay',
     nextMonthDay: '.nextMonthDay',
     yearInput: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > input',
