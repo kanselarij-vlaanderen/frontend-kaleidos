@@ -61,36 +61,22 @@
                   @icon="more"
                   data-test-document-card-actions={{true}}
                 as |Menu|>
-                  <Menu.Item>
-                    <button class="auk-button-link auk-button-link--block" type="button"
-                      data-test-document-upload-new-piece
-                      {{on "click" (fn this.openUploadModal)}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "new-version"}}
-                      </span>
-                    </button>
+                  <Menu.Item
+                    data-test-document-upload-new-piece
+                    {{on "click" (fn this.openUploadModal)}}
+                  >
+                    {{t "new-version"}}
                   </Menu.Item>
-                  <Menu.Item>
-                    <button class="auk-button-link auk-button-link--block" type="button"
-                      {{on "click" this.enableEditPieceName}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "document-title-edit"}}
-                      </span>
-                    </button>
+                  <Menu.Item {{on "click" this.enableEditPieceName}}>
+                    {{t "document-title-edit"}}
                   </Menu.Item>
                   <Menu.Divider />
-                  <Menu.Item>
-                    <button
-                      class="auk-button-link auk-button-link--block auk-u-text-error"
-                      data-test-document-card-delete type="button"
-                      {{on "click" this.deleteDocumentContainer}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "document-delete"}}
-                      </span>
-                    </button>
+                  <Menu.Item
+                    @skin="danger"
+                    data-test-document-card-delete
+                    {{on "click" this.deleteDocumentContainer}}
+                  >
+                    {{t "document-delete"}}
                   </Menu.Item>
                 </DropdownMenu>
               {{/if}}
