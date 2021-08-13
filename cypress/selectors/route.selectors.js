@@ -24,6 +24,7 @@ const selectors = {
   // agendas/overview/template.hbs
   agendasOverview: {
     dataTable: '[data-test-route-agendas-overview-data-table]',
+    navigationButton: '[data-test-route-agendas-overview-navigation-button]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
