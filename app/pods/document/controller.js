@@ -4,16 +4,16 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class DocumentController extends Controller {
-  @service router;
-  @tracked transition;
+  // @tracked transition;
 
   @action
   transitionBack() {
     // If no route where you returned from go to the home page
     // if (this.transition) {
-    //   this.router.transitionTo(this.transition);
+    //   this.transitionTo(this.transition);
     // } else {
     // }
-    this.router.transitionTo('agendas');
+    // this.transitionTo('agendas');
+    console.log('transition back');
   }
 }
