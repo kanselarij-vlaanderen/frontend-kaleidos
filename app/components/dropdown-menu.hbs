@@ -22,7 +22,8 @@
       @placement={{this.placement}}
     >
       <Auk::Menu
-        {{on "click" this.toggleDropdown}}
+        {{!-- TODO We do not need this manual toggle when clicking an option, this causes issues (2 "on click" on 1 menu item) --}}
+        {{!-- {{on "click" this.toggleDropdown}} --}}
       as |Menu|>
         {{yield Menu}}
       </Auk::Menu>
