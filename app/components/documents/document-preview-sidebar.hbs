@@ -1,0 +1,56 @@
+<div class="auk-sidebar auk-sidebar--white auk-sidebar--right auk-sidebar--xlarge auk-o-flex auk-o-flex--vertical auk-u-pb-6">
+  {{!-- TABS --}}
+  <Auk::Tabs>
+    <Auk::Tab>
+      {{t "detail"}}
+    </Auk::Tab>
+  </Auk::Tabs>
+
+  {{!-- DETAILS --}}
+  <div class="auk-u-m-4">
+    <div class="auk-key-value-item">
+      <div class="auk-key-value-item__label">{{t "document-name"}}</div>
+      <div class="auk-key-value-item__value">{{@piece.name}}</div>
+    </div>
+    <div class="auk-key-value-item">
+      <div class="auk-key-value-item__label">{{t "document-type"}}</div>
+      <div class="auk-key-value-item__value">{{@piece.documentContainer.type}}</div>
+    </div>
+    <div class="auk-key-value-item">
+      <div class="auk-key-value-item__label">{{t "publicity"}}</div>
+      <div class="auk-key-value-item__value">
+        <span class="auk-color-badge auk-u-mr auk-color-badge--warning"></span>
+        <span>{{true}}</span>
+      </div>
+    </div>
+    <div class="auk-key-value-item">
+      <div class="auk-key-value-item__label">{{t "confidentiality"}}</div>
+      <div class="auk-key-value-item__value">
+        {{#if @piece.confidential}}
+          <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed" />
+        {{else}}
+          <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open" />
+        {{/if}}
+      </div>
+
+    </div>
+    <div class="auk-key-value-item">
+      <div class="auk-key-value-item__label">{{t "file-type"}}</div>
+      <div class="auk-key-value-item__value">
+        <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+      </div>
+    </div>
+  </div>
+
+  {{!-- FOOTER --}}
+  <div class="auk-u-mt-auto">
+    <div class="auk-panel__footer">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </div>
+  </div>
+</div>

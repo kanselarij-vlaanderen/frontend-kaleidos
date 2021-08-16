@@ -93,6 +93,7 @@ Router.map(function() {
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
   this.route('document-viewer', { path: '/document/:piece_id', });
+  this.route('document', { path: '/document/:piece_id', });
 
   this.route('not-supported');
   this.route('help');
