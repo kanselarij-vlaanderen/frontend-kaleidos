@@ -21,10 +21,11 @@
           <Auk::Toolbar @auto={{true}}>
             <Auk::Toolbar::Group @position="left">
               <Auk::Toolbar::Item class="auk-u-maximize-width">
-                <div class="vl-input-field--inline" data-test-vl-create-agendaitem-search>
+                <div class="vl-input-field--inline">
                   <Input
+                    data-test-create-agendaitem-input={{true}}
                     @value={{this.filterParam}}
-                    @id="searchId"
+                    id="searchId"
                     placeholder="Zoeken.."
                     @key-press={{perform this.searchTask}}
                     @disabled={{this.showPostponed}}
@@ -46,9 +47,9 @@
           <div class="auk-form-group">
             <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
             <WebComponents::VlCheckbox
-              data-test-postponed-checkbox={{true}}
-              @value={{this.showPostponed}}
-              @toggle={{action "checkShowPostponedValue"}}
+              data-test-create-agendaitem-postponed-checkbox={{true}}
+              @value=showPostponed
+              @toggle=(action "checkShowPostponedValue")
             />
           </div>
         </div>
@@ -59,6 +60,7 @@
             </div>
           {{else}}
             <DataTable
+              data-test-create-agendaitem-data-table={{true}}
               @content={{this.model}}
               @sort={{this.sortParam}}
               @page={{this.pageParam}}

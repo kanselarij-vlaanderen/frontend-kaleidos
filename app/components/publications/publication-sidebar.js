@@ -253,6 +253,12 @@ export default class PublicationsPublicationSidebarComponent extends Component {
   }
 
   @action
+  setOpeningDate(selectedDates) {
+    this.publicationFlow.openingDate = selectedDates[0];
+    this.notifyChanges(this.publicationFlow, 'openingDate');
+  }
+
+  @action
   setDecisionDate(selectedDates) {
     this.treatment.startDate = selectedDates[0];
     this.notifyChanges(this.treatment, 'startDate');
