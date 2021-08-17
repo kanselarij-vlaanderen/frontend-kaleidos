@@ -1,4 +1,4 @@
-<Auk::Modal @size="full-screen-padded">
+<Auk::Modal @size="full-screen">
   <Auk::Modal::Header
           @title={{@piece.name}}
           @onClose={{@onClose}}
@@ -7,19 +7,23 @@
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
         {{#if @piece.confidential}}
-          <Auk::Alert
-                  @skin="warning"
-                  @title={{t "document-is-confidential"}}
-                  @message={{t "document-not-consultable"}}
-          />
+          <div class="auk-u-p-4">
+            <Auk::Alert
+                    @skin="warning"
+                    @title={{t "document-is-confidential"}}
+                    @message={{t "document-not-consultable"}}
+            />
+          </div>
         {{else if this.fileFormatIsSupported}}
           <PdfView @filePath={{await @piece.downloadFileLink}}/>
         {{else}}
-          <Auk::Alert
-                  @skin="warning"
-                  @title={{t "file-type-unsupported"}}
-                  @message={{t "file-viewer-type-unsupported" fileType=@piece.file.extension}}
-          />
+          <div class="auk-u-p-4">
+            <Auk::Alert
+                    @skin="warning"
+                    @title={{t "file-type-unsupported"}}
+                    @message={{t "file-viewer-type-unsupported" fileType=@piece.file.extension}}
+            />
+          </div>
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">

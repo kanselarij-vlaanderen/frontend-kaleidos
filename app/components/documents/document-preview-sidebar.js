@@ -14,7 +14,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @task
   *loadData() {
-    this.documentType = yield this.args.piece.documentContainer.type;
+    const docContainer = yield this.args.piece.documentContainer;
+    this.documentType = yield docContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
