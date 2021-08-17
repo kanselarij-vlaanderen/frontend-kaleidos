@@ -35,6 +35,7 @@ export default class ThemesSelector extends Component {
     }
   }
 
+  /* eslint-disable ember/no-side-effects */
   get selectedThemesReload() {
     if (this.args.selectedThemes && this.args.selectedThemes.length > 0) {
       this.selectedThemes = this.args.selectedThemes;
@@ -46,6 +47,7 @@ export default class ThemesSelector extends Component {
     }
     return this.themeLabels;
   }
+  /* eslint-enable ember/no-side-effects */
 
   @action
   selectModel(themeLabel) {
