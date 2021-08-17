@@ -120,7 +120,7 @@
                     <Auk::Button
                       @skin="borderless" @layout="icon-only" @icon="download"
                       @href={{pieceRow.file.namedDownloadLink}}
-                      download={{await piece.downloadFilename}}>
+                      download={{pieceRow.file.downloadFilename}}>
                       {{t "download"}}
                     </Auk::Button>
                     <Auk::Button
