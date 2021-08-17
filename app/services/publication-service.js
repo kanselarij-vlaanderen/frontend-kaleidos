@@ -92,7 +92,7 @@ export default class PublicationService extends Service {
       shortTitle: publicationProperties.shortTitle,
       longTitle: publicationProperties.longTitle,
       created: now,
-      openingDate: now,
+      openingDate: publicationProperties.openingDate,
       modified: now,
     });
     await publicationFlow.save();

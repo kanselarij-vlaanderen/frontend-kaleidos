@@ -30,11 +30,22 @@
           @value={{mut this.emailToProofRequest}}
           @block={{true}}
         />
+
+        <Auk::Label class="auk-u-mt-2 auk-u-mb-1">
+          {{t "email-cc-proofrequest"}}
+        </Auk::Label>
+        <Auk::Input
+          type="text"
+          @value={{mut this.emailCcProofRequest}}
+          @block={{true}}
+        />
+
         <Auk::Button
           class="auk-u-mt-2 auk-u-mb-1"
           @skin="primary"
           @disabled={{this.isDisabled}}
-          {{on "click" this.saveSettings}}
+          @loading={{this.saveSettings.isRunning}}
+          {{on "click" (perform this.saveSettings)}}
         >
           {{t "save"}}
         </Auk::Button>

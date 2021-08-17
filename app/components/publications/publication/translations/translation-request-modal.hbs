@@ -34,31 +34,8 @@
         </div>
         {{!-- Attachments --}}
         <div class="auk-form-group">
-          <Auk::Label>
-            {{t "attachments"}}
-          </Auk::Label>
-          <Auk::List @isBordered="true" class="auk-list--view">
-            {{#each @attachments as |piece|}}
-              <Auk::List::Item @skin="gray-100">
-                <div class="auk-u-ml-2">
-                  <Auk::Icon @name="document" @skin="muted-dark" />
-                </div>
-                <div class="auk-u-mx-2">
-                  <span>{{piece.name}}</span>
-                  <div class="auk-u-muted auk-u-text-small">
-                    {{uppercase piece.file.extension}}, {{format-bytesize piece.file.size}}
-                  </div>
-                </div>
-                <Auk::Button
-                  @layout="icon-only"
-                  @icon="book"
-                  @skin="borderless"
-                  @href={{piece.viewDocumentURL}}
-                  target="_blank"
-                />
-              </Auk::List::Item>
-            {{/each}}
-          </Auk::List>
+          <Auk::Label>{{t "attachments"}}</Auk::Label>
+          <Utils::Documents::List @pieces={{@attachments}} />
         </div>
       </div>
     </Utils::LoadableContent>

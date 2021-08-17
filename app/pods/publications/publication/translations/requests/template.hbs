@@ -25,19 +25,29 @@
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
                 <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "translation-due-date"}}</p>
-                <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
+                {{#if this.translationSubcase.dueDate}}
+                  <p>{{moment-format this.translationSubcase.dueDate "DD-MM-YYYY"}}</p>
+                {{else}}
+                  <p class="auk-u-muted auk-u-italic">{{t "not-known"}}</p>
+                {{/if}}
               </div>
-              <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
-                <p>{{activity.email.subject}}</p>
-              </div>
-              <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
-                <div class="auk-box">
-                  {{!-- on 1 line to prevent whitespace to be rendered --}}
-                  <p style="white-space:pre-line;">{{activity.email.message}}</p>
+              {{#if activity.email}}
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
+                  <p>{{activity.email.subject}}</p>
                 </div>
-              </div>
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
+                  <div class="auk-box">
+                    {{!-- on 1 line to prevent whitespace to be rendered --}}
+                    <p style="white-space:pre-line;">{{activity.email.message}}</p>
+                  </div>
+                </div>
+              {{else}}
+                <Auk::EmptyState
+                        @message={{t "no-email-available"}}
+                />
+              {{/if}}
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-6">

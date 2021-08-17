@@ -47,6 +47,13 @@ export default [
     showByDefault: true,
   },
   {
+    keyName: 'openingDate',
+    translationKey: 'publications-table-opening-date',
+    translationKeySmall: 'publications-table-opening-date-small',
+    showByDefault: true,
+    sortKey: 'opening-date',
+  },
+  {
     keyName: 'publicationTargetDate',
     translationKey: 'publications-table-publication-target-date',
     translationKeySmall: 'publications-table-publication-target-date-small',
