@@ -684,9 +684,6 @@ export default Component.extend(FileSaverMixin, {
     async createNewDesignAgendaAction() {
       await this.createDesignAgenda();
     },
-    selectSignature() {
-      this.toggleProperty('isAssigningSignature', false);
-    },
     releaseDecisions() {
       this.set('releasingDecisions', true);
     },

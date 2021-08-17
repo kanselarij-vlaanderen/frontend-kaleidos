@@ -48,14 +48,6 @@
                         @subcase={{await agendaitem.agendaActivity.subcase}}
                         @isTableRow={{isTableRow}}
                         @agendaitem={{agendaitem}} />
-                    {{else if session.isEditor}}
-                      <div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--align-end">
-                        {{#if allowEditing}}
-                          <Auk::ButtonLink {{action "toggleIsEditing" treatment}}>
-                            {{t "edit"}}
-                          </Auk::ButtonLink>
-                        {{/if}}
-                      </div>
                     {{/if}}
                   {{/each}}
                 {{else}}
@@ -72,9 +64,6 @@
               </p>
             </div>
           </div>
-          {{#if (not allowEditing)}}
-            <WebComponents::VlSignature @signature={{meeting.defaultSignature}} />
-          {{/if}}
         </div>
       {{/each}}
     {{/each}}

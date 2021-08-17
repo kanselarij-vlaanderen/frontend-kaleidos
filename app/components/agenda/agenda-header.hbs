@@ -218,17 +218,6 @@
                     </span>
                   </a>
                 </Menu.Item>
-                <Menu.Item>
-                  <a href=""
-                      data-test-agenda-header-select-signature
-                      class="auk-button-link auk-button-link--block"
-                    {{action "selectSignature"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "signature-edit"}}
-                    </span>
-                  </a>
-                </Menu.Item>
               {{/if}}
               <Menu.Item>
                 <a href=""
@@ -309,11 +298,6 @@
     <Agenda::Agendaitem::CreateAgendaitem
       @isAddingAgendaitems={{isAddingAgendaitems}}
       @onCreate={{this.onCreateAgendaitem}} />
-  {{/if}}
-  {{#if isAssigningSignature}}
-    <Sessions::SelectSignature
-      @meeting={{currentSession}}
-      @closeDialog={{action "selectSignature"}} />
   {{/if}}
   {{#if releasingDocuments}}
     <WebComponents::VlModalVerify

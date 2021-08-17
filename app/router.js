@@ -157,7 +157,6 @@ Router.map(function() {
           this.route('documents', { path: '/documenten', });
           this.route('requests', { path: '/aanvragen', });
         });
-        this.route('signatures', { path: '/handtekeningen', });
       });
     });
   }

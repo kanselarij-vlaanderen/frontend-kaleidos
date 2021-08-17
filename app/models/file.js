@@ -9,9 +9,6 @@ const {
 
 export default Model.extend({
   piece: belongsTo('piece'),
-  signature: belongsTo('signature', {
-    inverse: null,
-  }),
 
   filename: attr('string'),
   filenameWithoutExtension: computed('filename', {

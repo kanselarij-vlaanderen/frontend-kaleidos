@@ -6,8 +6,6 @@ import {
 } from '@ember/object';
 
 export default class AgendaDecisions extends Component {
-  isEditing = false;
-
   @service('current-session') session;
 
   @computed('definite')
@@ -18,10 +16,5 @@ export default class AgendaDecisions extends Component {
   @action
   close() {
     this.closeModal();
-  }
-
-  @action
-  toggleIsEditing(treatment) {
-    treatment.toggleProperty('isEditing');
   }
 }
