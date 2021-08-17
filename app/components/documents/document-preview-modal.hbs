@@ -3,14 +3,14 @@
           @title={{@piece.name}}
           @onClose={{@onClose}}
   />
-  <Auk::Modal::Body>
+  <Auk::Modal::Body @noPadding={{true}}>
     <div class="auk-panel-layout">
       <div class="auk-panel-layout__main-content">
         {{#if @piece.confidential}}
           <Auk::Alert
-                  @skin="info"
-                  @title={{t "file-type-unsupported"}}
-                  @message={{t "file-viewer-type-unsupported" fileType=@piece.file.extension}}
+                  @skin="warning"
+                  @title={{t "document-is-confidential"}}
+                  @message={{t "document-not-consultable"}}
           />
         {{else if this.fileFormatIsSupported}}
           <PdfView @filePath={{await @piece.downloadFileLink}}/>
@@ -26,5 +26,7 @@
         <Documents::DocumentPreviewSidebar @piece={{@piece}}/>
       </div>
     </div>
+
   </Auk::Modal::Body>
+
 </Auk::Modal>

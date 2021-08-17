@@ -5,7 +5,6 @@ export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    console.log(this);
     this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
@@ -16,8 +15,8 @@ export default class DocumentRoute extends Route {
     });
   }
 
-  // setupController(controller) {
-  //   super.setupController(...arguments);
-  //   //controller.transition = transition;
-  // }
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.transition = this.transition;
+  }
 }
