@@ -32,7 +32,7 @@ pipeline {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "npm install"
-                sh "npx npm-run-all lint:hbs lint:js"
+                sh "npm run lint:js"
             }
         }
         stage('Checkout project') {
