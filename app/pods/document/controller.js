@@ -10,8 +10,7 @@ export default class DocumentController extends Controller {
   @action
   transitionBack() {
     // If no route where you returned from go to the home page
-    console.log(this.transition);
-    if (this.transition) {
+    if (this.transition.from) {
       this.router.transitionTo(this.transition.from);
     } else {
       this.router.transitionTo('agendas');

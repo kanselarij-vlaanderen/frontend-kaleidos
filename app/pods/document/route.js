@@ -5,7 +5,8 @@ export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, 'login');
+    this.transition = transition;
+    this.simpleAuthSession.requireAuthentication(this.transition, 'login');
   }
 
   async model(params) {
