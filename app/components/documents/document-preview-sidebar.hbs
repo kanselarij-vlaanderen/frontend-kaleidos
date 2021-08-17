@@ -16,12 +16,8 @@
         <div class="auk-key-value-item">
           <div class="auk-key-value-item__label">{{t "publicity"}}</div>
           <div class="auk-key-value-item__value">
-            <Auk::Pill
-                    @skin={{this.accessPillSkin}}
-                    class="auk-u-cursor-pointer"
-            >
-              {{@piece.accessLevel.label}}
-            </Auk::Pill>
+            <Auk::ColorBadge @skin={{this.accessPillSkin}}/>
+            <span>{{@piece.accessLevel.label}}</span>
           </div>
         </div>
       {{/if}}
