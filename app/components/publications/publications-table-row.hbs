@@ -55,6 +55,8 @@
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.numacNumber}}
+    {{!-- TODO: fix inline style. What is this needed for --}}
+    {{!-- template-lint-disable no-inline-styles --}}
     <td style="min-width: 180px">
       {{#if @publicationFlow.numacNumbers.length}}
         {{join ', ' (map-by 'idName' @publicationFlow.numacNumbers)}}
@@ -62,6 +64,7 @@
         {{t "dash"}}
       {{/if}}
     </td>
+    {{!-- template-lint-enable no-inline-styles --}}
   {{/if}}
   {{#if @tableColumnDisplayOptions.openingDate}}
     <td class="auk-u-text-nowrap">
