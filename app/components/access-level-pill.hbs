@@ -13,6 +13,8 @@
           {{this.accessLevelLabel}}
         </Auk::Pill>
       {{else}}
+        {{!-- TODO: fix inline style (consider implementing new auk-generation document card) --}}
+        {{!-- template-lint-disable no-inline-styles  --}}
         <div style="width:75%">
           <Utils::ModelSelector
             @modelName="access-level"
@@ -23,6 +25,7 @@
             @selectedItems={{@accessLevel}}
             @selectModel={{this.changeAccessLevel}} />
         </div>
+        {{!-- template-lint-enable no-inline-styles  --}}
         <Auk::Button
           @skin="borderless"
           @layout="icon-only"

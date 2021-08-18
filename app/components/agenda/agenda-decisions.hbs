@@ -14,11 +14,13 @@
       {{#each group.agendaitems as |agendaitem|}}
         <div class="auk-o-flex auk-o-flex--horizontal-center">
           <div class="print-only auk-u-mt-8">
+            {{!-- TODO: fix inline style (see logo-header component) --}}
+            {{!-- template-lint-disable no-inline-styles --}}
             <img style="margin:-75px 0px -50px 0px; width:200px"
                  src="/assets/logo_vlaamse_regering.svg"
                  alt={{t "flemish-government"}}
             />
-
+            {{!-- template-lint-enable no-inline-styles --}}
             <p class="auk-u-text-bold auk-u-text-capitalized">
               {{await this.title}}
             </p>
@@ -27,6 +29,8 @@
             </div>
           </div>
         </div>
+        {{!-- TODO: fix inline style. This looks print-related. Note that a dedicated agenda print route exists --}}
+        {{!-- template-lint-disable no-inline-styles --}}
         <div style="page-break-after:always;">
           <div class="auk-u-mb-8">
             <div class="auk-u-mb-2">
@@ -78,6 +82,7 @@
             <WebComponents::VlSignature @signature={{this.meeting.defaultSignature}} />
           {{/if}}
         </div>
+        {{!-- template-lint-enable no-inline-styles --}}
       {{/each}}
     {{/each}}
   </div>
