@@ -29,6 +29,7 @@ export default class UploadedDocument extends Component {
   }
 
   get downloadLink() {
+    // eslint-disable-next-line ember/no-get
     return get(this.args.piece.file, 'namedDownloadLink');
   }
 
