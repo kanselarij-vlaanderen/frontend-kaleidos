@@ -1,9 +1,9 @@
 <div class="auk-modal__body">
-  {{#unless @noPadding}}
+  {{#if @noPadding}}
+    {{yield}}
+  {{else}}
     <div class="auk-u-p-4">
       {{yield}}
     </div>
-  {{else}}
-    {{yield}}
-  {{/unless}}
+  {{/if}}
 </div>
