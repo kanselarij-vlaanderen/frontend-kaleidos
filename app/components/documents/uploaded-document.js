@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency-decorators';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
+import { action, get } from '@ember/object';
 
 export default class UploadedDocument extends Component {
   @service store;
@@ -29,7 +29,8 @@ export default class UploadedDocument extends Component {
   }
 
   get downloadLink() {
-    return this.args.piece.file.namedDownloadLink;
+    // eslint-disable-next-line ember/no-get
+    return get(this.args.piece.file, 'namedDownloadLink');
   }
 
   get sortedDocumentTypes() {

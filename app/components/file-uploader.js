@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { enqueueTask } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class FileUploader extends Component {
@@ -17,15 +17,11 @@ export default class FileUploader extends Component {
   @tracked isLoading = null;
   @tracked blockInterface = false;
 
-  get filesInQueue() {
-    return this.fileQueue.files;
-  }
-
   @action
   insertElementInDom() {
     this.isLoading = false;
     this.uploadedFileLength = 0;
-    this.filesInQueue = A([]);
+    set(this, 'fileQueue.files', A([]));
   }
 
   @enqueueTask({
