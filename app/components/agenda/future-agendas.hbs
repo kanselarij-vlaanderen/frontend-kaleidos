@@ -51,11 +51,14 @@
       </thead>
       <tbody class="auk-table--interaction-cursor" data-test-future-agenda-table-body>
         {{#each (await this.items) as |meeting|}}
+          {{!-- Users explicitly want the whole row and not just the arrow at the end to be clickable and link through --}}
+          {{!-- template-lint-disable no-unknown-arguments-for-builtin-components --}}
           <LinkTo
             @route="agenda.agendaitems"
             @models={{array meeting.id meeting.latestAgenda.id}}
             @tagName="tr"
           >
+          {{!-- template-lint-enable no-unknown-arguments-for-builtin-components --}}
             <td>
               {{#if (is-pending meeting)}}
                 <div class="skeletal-loader" role="alert" aria-busy="true"></div>
