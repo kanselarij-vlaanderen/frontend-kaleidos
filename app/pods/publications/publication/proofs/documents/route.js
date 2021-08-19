@@ -10,8 +10,7 @@ import { tracked } from '@glimmer/tracking';
 export class PieceRow {
   @tracked piece;
   @tracked file;
-
-  requestActivitiesUsedBy;
+  @tracked requestActivitiesUsedBy;
 
   // no async constructor() in JS
   static async create(piece) {

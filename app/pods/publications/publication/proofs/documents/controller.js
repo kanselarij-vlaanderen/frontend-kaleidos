@@ -42,7 +42,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @tracked isPieceEditModalOpen = false;
   @tracked pieceRowToEdit;
 
-  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
+  @computed('sort', 'model.pieceRows') // TODO: remove @computed once this.sort is marked as @tracked
   get pieceRows() {
     let property = 'created';
     let isDescending = false;

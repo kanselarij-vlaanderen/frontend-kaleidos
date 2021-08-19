@@ -32,13 +32,13 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   @tracked translationSubcase;
   @tracked publicationSubcase;
   @tracked showPieceEditModal = false;
-  @tracked selectedPieces = [];
-  @tracked toEditDocument;
+  @tracked selectedPieceRows = [];
+  @tracked pieceRowToEdit;
   @tracked isPieceUploadModalOpen = false;
   @tracked isTranslationRequestModalOpen = false;
 
   @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
-  get pieces() {
+  get pieceRows() {
     let property = 'created';
     let isDescending = false;
     if (this.sort) {
@@ -47,21 +47,25 @@ export default class PublicationsPublicationTranslationsDocumentController exten
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
-    let pieces = this.model;
-    pieces = pieces.sortBy(property);
+    let pieceRows = this.model;
+    pieceRows = pieceRows.sortBy(`piece.${property}`);
     if (isDescending) {
-      pieces = pieces.reverseObjects();
+      pieceRows = pieceRows.reverseObjects();
     }
 
-    return pieces;
+    return pieceRows;
   }
 
   get areAllPiecesSelected() {
-    return this.model.length === this.selectedPieces.length;
+    return this.model.length === this.selectedPieceRows.length;
+  }
+
+  get selectedPieces() {
+    return this.selectedPieceRows.map((row) => row.piece);
   }
 
   get isRequestingDisabled() {
-    return this.selectedPieces.length === 0 // no files are selected
+    return this.selectedPieceRows.length === 0 // no files are selected
       || this.translationSubcase.isFinished;
   }
 
@@ -74,27 +78,27 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  changeSorting(sort) {
-    this.set('sort', sort);
-  }
-
-  @action
-  togglePieceSelection(selectedPiece) {
-    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+  togglePieceSelection(selectedPieceRow) {
+    const isPieceSelected = this.selectedPieceRows.includes(selectedPieceRow);
     if (isPieceSelected) {
-      this.selectedPieces.removeObject(selectedPiece);
+      this.selectedPieceRows.removeObject(selectedPieceRow);
     } else {
-      this.selectedPieces.pushObject(selectedPiece);
+      this.selectedPieceRows.pushObject(selectedPieceRow);
     }
   }
 
   @action
   toggleAllPiecesSelection() {
     if (this.areAllPiecesSelected) {
-      this.selectedPieces = [];
+      this.selectedPieceRows = [];
     } else {
-      this.selectedPieces = [...this.model];
+      this.selectedPieceRows = [...this.model];
     }
+  }
+
+  @action
+  changeSorting(sort) {
+    this.set('sort', sort);
   }
 
   @task
@@ -164,14 +168,14 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     });
     yield mail.save();
 
-    this.selectedPieces = [];
+    this.selectedPieceRows = [];
     this.isTranslationRequestModalOpen = false;
     this.transitionToRoute('publications.publication.translations.requests');
   }
 
   @task
   *saveEditSourceDocument(translationDocument) {
-    const piece = this.toEditDocument;
+    const piece = this.pieceRowToEdit.piece;
     piece.pages = translationDocument.pagesAmount;
     piece.words = translationDocument.wordsAmount;
     piece.name = translationDocument.name;
@@ -187,22 +191,9 @@ export default class PublicationsPublicationTranslationsDocumentController exten
     this.send('refresh');
   }
 
-  @action
-  isPieceDeletable(piece) {
-    // can be translation or publication related
-    const isUsedInRequest = piece.requestActivitiesUsedBy.length > 0;
-    // receivedDate is set if and only if it is a received pieced
-    const isReceived = !!piece.receivedDate;
-    const isUsed = isUsedInRequest || isReceived;
-    return !isUsed;
-  }
-
   @task
-  *deletePiece(piece) {
-    // prevent piece from being used/rendered while delete is pending
-    this.model.removeObject(piece);
-    this.selectedPieces.removeObject(piece);
-
+  *deletePiece(pieceRow) {
+    const piece = pieceRow.piece;
     const filePromise = piece.file;
     const documentContainerPromise = piece.documentContainer;
     const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
@@ -227,14 +218,14 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   @action
-  openPieceEditModal(toEditDocument) {
-    this.toEditDocument = toEditDocument;
+  openPieceEditModal(pieceRow) {
+    this.pieceRowToEdit = pieceRow;
     this.showPieceEditModal = true;
   }
 
   @action
   closePieceEditModal() {
-    this.toEditDocument = null;
+    this.pieceRowToEdit = null;
     this.showPieceEditModal = false;
   }
 
