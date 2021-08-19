@@ -43,8 +43,6 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
   }
 
   async afterModel() {
-    // translationSubcase.publicationFlow causes additional network request
-    // while the request is already made in 'publications.publication'
     this.publicationFlow = this.modelFor('publications.publication');
     this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }

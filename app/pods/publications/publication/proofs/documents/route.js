@@ -96,14 +96,11 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   }
 
   afterModel() {
-    // translationSubcase.publicationFlow causes additional network request
-    // while the request is already made in 'publications.publication'
     this.publicationFlow = this.modelFor('publications.publication');
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
-
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
     controller.selectedPieceRows = [];
