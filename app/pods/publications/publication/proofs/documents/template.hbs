@@ -25,25 +25,23 @@
           </DropdownMenu>
         </Auk::Toolbar::Item>
 
-        {{#if this.currentSession.isOvrb}}
-          <Auk::Toolbar::Item>
-            <DropdownMenu
-              @skin="secondary"
-              @label={{t "upload-proof-document"}}
-              @position="bottom-start"
-              @disabled={{this.isUploadDisabled}}
+        <Auk::Toolbar::Item>
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "upload-proof-document"}}
+            @position="bottom-start"
+            @disabled={{this.isUploadDisabled}}
             as |Menu|>
-              <Menu.Item
-                {{on "click" this.openSourceUploadModal}}>
-                {{t "upload-source-proof-document"}}
-              </Menu.Item>
-              <Menu.Item
-                {{on "click" this.openCorrectionUploadModal}}>
-                {{t "upload-corrected-proof-document"}}
-              </Menu.Item>
-            </DropdownMenu>
-          </Auk::Toolbar::Item>
-        {{/if}}
+            <Menu.Item
+              {{on "click" this.openSourceUploadModal}}>
+              {{t "upload-source-proof-document"}}
+            </Menu.Item>
+            <Menu.Item
+              {{on "click" this.openCorrectionUploadModal}}>
+              {{t "upload-corrected-proof-document"}}
+            </Menu.Item>
+          </DropdownMenu>
+        </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
 

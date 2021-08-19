@@ -79,7 +79,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   }
 
   get canDeletePieces() {
-    return this.currentSession.isOvrb && !this.publicationSubcase.isFinished;
+    return !this.publicationSubcase.isFinished;
   }
 
   @action

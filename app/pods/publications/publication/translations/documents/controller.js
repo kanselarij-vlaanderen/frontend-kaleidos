@@ -70,7 +70,7 @@ export default class PublicationsPublicationTranslationsDocumentController exten
   }
 
   get canDeletePieces() {
-    return this.currentSession.isOvrb && !this.translationSubcase.isFinished;
+    return !this.translationSubcase.isFinished;
   }
 
   @action
