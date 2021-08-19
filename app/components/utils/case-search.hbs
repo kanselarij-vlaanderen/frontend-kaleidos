@@ -26,6 +26,8 @@
       </thead>
       <tbody class="auk-table--interaction-cursor">
         {{#each (await this.results) as |row|}}
+          {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
+          {{!-- template-lint-disable no-invalid-interactive --}}
           <tr>
             <td onclick={{fn this.selectCase row}}>
               <p>
@@ -40,6 +42,7 @@
               {{moment-format row.created "DD-MM-YYYY HH:mm"}}
             </td>
           </tr>
+          {{!-- template-lint-enable no-invalid-interactive --}}
         {{/each}}
       </tbody>
     </table>

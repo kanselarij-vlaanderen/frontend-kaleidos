@@ -26,23 +26,27 @@
 
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+    <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
     <Textarea
       data-test-subcase-titles-edit-shorttitle={{true}}
-      @rows="2"
+      aria-labelledby="name-subcase"
+      rows="2"
       class="auk-textarea"
       @value={{this.subcase.shortTitle}}
-    />  </div>
+    />
+  </div>
 </div>
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
-    <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+    <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
     <Textarea
       data-test-subcase-titles-edit-title={{true}}
-      @rows="4"
+      aria-labelledby="name-subcase"
+      rows="4"
       class="auk-textarea"
       @value={{this.subcase.title}}
-    />  </div>
+    />
+  </div>
 </div>
 
 <Auk::Toolbar>

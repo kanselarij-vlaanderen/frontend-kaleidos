@@ -67,7 +67,7 @@
                     <Menu.Item>
                       <button class="auk-button-link auk-button-link--block" type="button"
                         data-test-document-upload-new-piece
-                        {{on "click" (fn this.openUploadModal)}}
+                        {{on "click" this.openUploadModal}}
                       >
                         <span class="auk-button__content">
                           {{t "new-version"}}
@@ -128,9 +128,11 @@
               </div>
             {{else}}
               <h6 class="auk-h4" data-test-document-card-name-value>
+                {{!-- template-lint-disable no-invalid-interactive --}}
                 <span {{on "click" this.enableEditPieceName}}>
                   {{this.piece.name}}
                 </span>
+                {{!-- template-lint-enable no-invalid-interactive --}}
               </h6>
             {{/if}}
             <div class="vlc-document-card-content__meta">

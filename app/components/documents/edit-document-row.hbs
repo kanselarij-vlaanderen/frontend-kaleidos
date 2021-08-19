@@ -17,7 +17,7 @@
       @propertyToShow="label"
       @sortField="priority"
       @selectedItems={{this.documentContainer.type}}
-      @selectModel={{fn this.selectDocumentType}}
+      @selectModel={{this.selectDocumentType}}
     />
   </td>
   <td>
@@ -30,7 +30,7 @@
       @readOnly={{@piece.confidential}}
       @sortField="label"
       @selectedItems={{@piece.accessLevel}}
-      @selectModel={{fn this.selectAccessLevel}}
+      @selectModel={{this.selectAccessLevel}}
     />
   </td>
   <td>

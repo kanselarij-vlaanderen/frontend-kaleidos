@@ -36,8 +36,13 @@
     data-test-system-alert-form-message
     class="auk-form-group"
   >
-    <Auk::Label>{{t "system-message"}}</Auk::Label>
-    <Textarea @rows="2" class="auk-textarea" @value={{this.alert.message}} />
+    <Auk::Label id="system-message">{{t "system-message"}}</Auk::Label>
+    <Textarea
+      rows="2"
+      class="auk-textarea"
+      aria-labelledby="system-message"
+      @value={{this.alert.message}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "severity"}}</Auk::Label>

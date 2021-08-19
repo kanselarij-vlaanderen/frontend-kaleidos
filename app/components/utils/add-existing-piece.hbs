@@ -7,11 +7,11 @@
         <div class="vl-input-field--inline">
           <Input
             data-test-add-existing-piece-search-input=""
+            id="searchId"
+            class="vl-input-field vl-input-field__input"
+            placeholder="Zoeken.."
             @value={{this.filter}}
-            @id="searchId"
-            @placeholder="Zoeken.."
-            @input={{perform this.searchTask}}
-            @class="vl-input-field vl-input-field__input"
+            {{on "input" (perform this.searchTask)}}
           />
           <Auk::Button
             @skin="primary"

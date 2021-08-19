@@ -5,11 +5,11 @@
   <div class="vlc-document-card-item" data-test-vl-document-piece>
     <div class="vlc-document-card-item__title">
       <h6 data-test-vl-document-name class="auk-h4">
-        {{#if (not this.file)}}
+        {{#unless this.file}}
           <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
             {{t "document-not-consultable"}}
           </EmberTooltip>
-        {{/if}}
+        {{/unless}}
         {{this.piece.name}}
       </h6>
       {{#unless this.loadPieceRelatedData.isRunning}}

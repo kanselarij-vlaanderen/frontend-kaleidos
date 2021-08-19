@@ -62,14 +62,14 @@
             <Auk::Label for="proofPrint">
               {{t "for-proof-print"}}
             </Auk::Label>
-            {{#unless this.loadData.isRunning}}
+            {{#if this.loadData.isRunning}}
+              <Auk::Loader @message={{t "loading"}} />
+            {{else}}
               <Auk::CheckboxList>
                 <Auk::Checkbox @name="proofPrint" @checked={{this.isSourceForProofPrint}}
                   {{on "input" this.toggleProofprint}} />
               </Auk::CheckboxList>
-            {{else }}
-              <Auk::Loader @message={{t "loading"}} />
-            {{/unless}}
+            {{/if}}
           </div>
         </div>
       </div>

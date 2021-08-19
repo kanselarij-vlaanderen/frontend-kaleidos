@@ -19,7 +19,7 @@
         data-test-edit-session-meeting-number={{true}}
         @type="number"
         @value={{this.meetingNumber}}
-        @input={{action "meetingNumberChangedAction" this.meetingNumber}}
+        {{on "input" (action "meetingNumberChangedAction" this.meeting)}}
       />
     </div>
   </div>

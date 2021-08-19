@@ -22,8 +22,14 @@
       </div>
     </div>
     <div class="auk-form-group {{this.getClassForShortTitle}}" data-test-new-case-shorttitle>
-      <Auk::Label>{{t "short-title-case"}}</Auk::Label>
-      <Textarea class="auk-textarea" @rows="2" @value={{this.shortTitle}} />    </div>
+      <Auk::Label id="case-short-title">{{t "short-title-case"}}</Auk::Label>
+      <Textarea
+        class="auk-textarea"
+        rows="2"
+        aria-labelledby="case-short-title"
+        @value={{this.shortTitle}}
+      />
+    </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
     <Auk::Toolbar @size="large">

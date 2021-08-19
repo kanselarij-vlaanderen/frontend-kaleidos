@@ -31,7 +31,7 @@
           id="emailFooter"
           @rows="15"
           @value={{await this.footer}}
-          {{on "change" (fn this.setFooterContent)}}
+          {{on "change" this.setFooterContent}}
           data-test-email-content-textarea
         />
       </Auk::Panel::Body>

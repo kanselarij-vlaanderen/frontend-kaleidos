@@ -12,10 +12,11 @@
       </div>
     {{/if}}
     <div class="auk-form-group">
-      <Auk::Label>{{t "name-subcase"}}</Auk::Label>
+      <Auk::Label id="name-subcase">{{t "name-subcase"}}</Auk::Label>
       <Textarea
         data-test-agendaitem-titles-edit-shorttitle={{true}}
-        @rows="2"
+        rows="2"
+        aria-labelledby="name-subcase"
         class="auk-textarea"
         @value={{@agendaitem.shortTitle}}
       />
@@ -23,10 +24,11 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label>{{t "title-subcase"}}</Auk::Label>
+      <Auk::Label id="title-subcase">{{t "title-subcase"}}</Auk::Label>
       <Textarea
         data-test-agendaitem-titles-edit-title={{true}}
-        @rows="4"
+        rows="4"
+        aria-labelledby="title-subcase"
         class="auk-textarea"
         @value={{@agendaitem.title}}
       />
@@ -34,10 +36,11 @@
   </div>
   <div class="auk-u-mb-4">
     <div class="auk-form-group">
-      <Auk::Label>{{t "remark-title"}}</Auk::Label>
+      <Auk::Label id="remark-title">{{t "remark-title"}}</Auk::Label>
       <Textarea
         data-test-agendaitem-titles-edit-explanation={{true}}
-        @rows="2"
+        rows="2"
+        aria-labelledby="remark-title"
         class="auk-textarea"
         @value={{@agendaitem.explanation}}
       />

@@ -24,12 +24,12 @@
                 <div class="vl-input-field--inline">
                   <Input
                     data-test-create-agendaitem-input={{true}}
-                    @value={{this.filterParam}}
                     id="searchId"
-                    placeholder="Zoeken.."
-                    @key-press={{perform this.searchTask}}
-                    @disabled={{this.showPostponed}}
                     class="vl-input-field vl-input-field__input"
+                    placeholder="Zoeken.."
+                    disabled={{this.showPostponed}}
+                    @value={{this.filterParam}}
+                    {{on "keypress" (perform this.searchTask)}}
                   />
                   <Auk::Button
                     @skin="primary"
@@ -48,8 +48,8 @@
             <Auk::Label>{{t "title-postponed-subcases"}}</Auk::Label>
             <WebComponents::VlCheckbox
               data-test-create-agendaitem-postponed-checkbox={{true}}
-              @value=showPostponed
-              @toggle=(action "checkShowPostponedValue")
+              @value={{this.showPostponed}}
+              @toggle={{action "checkShowPostponedValue"}}
             />
           </div>
         </div>

@@ -1,4 +1,8 @@
-<tr class="auk-table--interaction-cursor"  {{on "click" (fn this.navigateToPublication @publicationFlow)}}>
+{{!-- Although not recommended for accessibility-reasons, users explicitly
+request the whole row and not only the arrow at the end to be clickable --}}
+{{!-- template-lint-disable no-invalid-interactive --}}
+<tr class="auk-table--interaction-cursor" {{on "click" (fn this.navigateToPublication @publicationFlow)}}>
+{{!-- template-lint-enable no-invalid-interactive --}}
   {{#if @tableColumnDisplayOptions.shortTitle}}
     <td class="auk-table__col--6">
       <Auk::AbbreviatedText @text={{@publicationFlow.shortTitle}} @maxLength={{150}}/>
