@@ -5,8 +5,7 @@ export default class DocumentRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    this.transition = transition;
-    this.simpleAuthSession.requireAuthentication(this.transition, 'login');
+    this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
   async model(params) {
@@ -14,10 +13,5 @@ export default class DocumentRoute extends Route {
       'filter[:id:]': params.piece_id,
       include: 'file',
     });
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
-    controller.transition = this.transition;
   }
 }
