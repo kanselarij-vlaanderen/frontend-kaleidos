@@ -74,6 +74,7 @@ export default class FileUploader extends Component {
   }
 
   // Replacement for https://github.com/adopted-ember-addons/ember-file-upload/blob/888273b997d0336841daa1fb24287b5f5c5c9d62/addon/components/file-upload/component.js#L149
+  // beware that this taps into a private `ember-file-upload`-method, which makes this susceptible to breaking when version-bumping `ember-file-upload`
   @action
   addFilesToQueue(event) {
     const files = event.target.files;
