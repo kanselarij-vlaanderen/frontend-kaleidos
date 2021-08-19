@@ -211,6 +211,7 @@ export default Component.extend(FileSaverMixin, {
     this.toggleLoadingOverlayWithMessage(this.intl.t('agenda-approving-text'));
     const currentMeeting = this.currentSession;
     const currentDesignAgenda = this.currentAgenda;
+    /*
     // We set the status of the agenda to approved (instead of in service)
     const approvedStatus = await this.store.findRecordByUri('agendastatus', CONSTANTS.AGENDA_STATUSSES.APPROVED);
     currentDesignAgenda.set(
@@ -221,8 +222,10 @@ export default Component.extend(FileSaverMixin, {
     );
     currentDesignAgenda.set('status', approvedStatus);
     currentDesignAgenda.save();
-    const newAgenda = await this.get('agendaService').approveAgendaAndCopyToDesignAgenda(currentMeeting, currentDesignAgenda);
+    */
+    const newAgenda = await this.agendaService.approveAgendaAndCopyToDesignAgenda(currentMeeting, currentDesignAgenda);
     // rename for clarity, agenda is now approved
+    /*
     const approvedAgenda = currentDesignAgenda;
     // TODO What if service fails ?
     if (newAgenda) {
@@ -287,6 +290,7 @@ export default Component.extend(FileSaverMixin, {
         }
       }
     }
+    */
 
     if (this.onApproveAgenda) {
       this.toggleLoadingOverlayWithMessage(null);

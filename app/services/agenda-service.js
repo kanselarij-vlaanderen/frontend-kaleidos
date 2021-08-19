@@ -17,6 +17,8 @@ export default Service.extend({
   addedPieces: null,
   addedAgendaitems: null,
 
+  /* API: session-service */
+
   assignNewSessionNumbers() {
     return ajax({
       method: 'GET',
@@ -38,12 +40,16 @@ export default Service.extend({
     }).then((result) => result.body.agendas);
   },
 
+  /* API: lazy-loading */
+
   async getPieceNames(model) {
     return ajax({
       method: 'GET',
       url: `/lazy-loading/documentNames?uuid=${model.id}`,
     }).then((result) => result.body.documentNames);
   },
+
+  /* API: agenda-approve-service */
 
   async rollbackAgendaitemsNotFormallyOk(agendaToRollback) {
     if (!agendaToRollback) {
@@ -96,6 +102,8 @@ export default Service.extend({
       this.toaster.error(this.intl.t('error-delete-agenda'), this.intl.t('warning-title'));
     }
   },
+
+  /* API: agenda-sort-service */
 
   agendaWithChanges(currentAgendaID, agendaToCompareID) {
     return ajax({
@@ -157,6 +165,8 @@ export default Service.extend({
     }
     return piecesFromStore;
   },
+
+  /* No API */
 
   async computeNextItemNumber(agenda, isAnnouncement) {
     const lastItem = await this.store.queryOne('agendaitem', {
