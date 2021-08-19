@@ -9,14 +9,12 @@ import { tracked } from '@glimmer/tracking';
 // - file property avoids error when piece (and file) are deleted
 export class PieceRow {
   @tracked piece;
-  @tracked file;
   @tracked requestActivitiesUsedBy;
 
   // no async constructor() in JS
   static async create(piece) {
     const row = new PieceRow();
     row.piece = piece;
-    row.file = await piece.file;
     // avoid awaiting in getter
     row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
     return row;
