@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
                 sh "npm install"
-                sh "npm run lint:js"
+                sh "npm run lint"
             }
         }
         stage('Checkout project') {
