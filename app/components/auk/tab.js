@@ -31,10 +31,6 @@ export default class Tab extends Component {
     return [];
   }
 
-  get hasCounter() {
-    return isPresent(this.args.counter); // In order to be able to supply 0
-  }
-
   get icon() {
     if (isPresent(this.args.icon)) {
       return this.args.icon;
