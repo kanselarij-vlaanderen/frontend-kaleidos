@@ -30,7 +30,7 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
           modifier = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
-          modifier = 'danger';
+          modifier = 'error';
           break;
       }
     } else {

@@ -1,5 +1,10 @@
-<div class="auk-sidebar auk-sidebar--white auk-sidebar--right auk-sidebar--xlarge auk-o-flex auk-o-flex--vertical auk-u-pb-6">
-  {{!-- DETAILS --}}
+<Auk::Sidebar
+          @size="xlarge"
+          @position="right"
+          @skin="gray-100"
+          class="auk-u-pb-6"
+  >
+    {{!-- DETAILS --}}
   <div class="auk-u-m-4">
     <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}}/>
     {{#unless this.loadData.isRunning}}
@@ -39,4 +44,4 @@
     </div>
   </div>
   --}}
-</div>
+</Auk::Sidebar>
