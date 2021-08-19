@@ -1,6 +1,5 @@
 <div class="auk-u-m-4">
   <div class="auk-u-mb-4">
-    {{!-- TODO correct positioning according to design --}}
     <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
@@ -22,7 +21,7 @@
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
 
-    {{#if this.pieces}}
+    {{#if this.pieceRows}}
       <table class="auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
@@ -54,72 +53,75 @@
           </tr>
         </thead>
         <tbody>
-          {{#each this.pieces as |piece|}}
-            <tr class="auk-table__row">
-              <td class="auk-table-checkbox-col">
-                <Auk::Checkbox
-                  @checked={{includes piece this.selectedPieces}}
-                  {{on "click" (fn this.togglePieceSelection piece)}} />
-              </td>
-              <td>
-                {{piece.name}}
-              </td>
-              <td>
-                <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
-              </td>
-              <td class="auk-u-text-nowrap">
-                {{#if piece.receivedDate}}
-                  {{moment-format piece.receivedDate}}
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </td>
-              <td class="auk-u-text-nowrap">
-                <p>{{moment-format piece.created}}</p>
-                <p class="auk-u-muted auk-u-text-small">
-                  {{moment-format piece.created "HH:mm"}}
-                </p>
-              </td>
-              <td class="auk-u-text-align--center">
-                {{#if piece.publicationSubcaseSourceFor}}
-                  <Auk::Icon @name="check" @skin="success-dark" />
-                {{else}}
-                  {{t "dash"}}
-                {{/if}}
-              </td>
-              <td>
-                <WebComponents::AuButtonToolbar>
-                  <Auk::Button
-                    @skin="borderless" @layout="icon-only" @icon="download"
-                    @href={{piece.file.namedDownloadLink}}
-                    download={{await piece.downloadFilename}}>
-                    {{t "download"}}
-                  </Auk::Button>
-                  <Auk::Button
-                    @skin="borderless" @layout="icon-only" @icon="book"
-                    @href={{piece.viewDocumentURL}}
-                    target="_blank">
-                    {{t "read"}}
-                  </Auk::Button>
-                  <DropdownMenu
-                    @skin="borderless"
-                    @icon="more"
-                  as |Menu|>
-                    <Menu.Item {{on "click" (fn this.openPieceEditModal piece)}}>
-                      {{t "edit-translation-details"}}
-                    </Menu.Item>
-                    {{!-- TODO: make @disabled work for dropdown item --}}
-                    <Menu.Item
-                      @skin="danger"
-                      @disabled={{compute this.isDeleteDisabled piece}}
-                      {{on "click" (perform this.delete piece)}}
-                    >
-                      {{t "delete"}}
-                    </Menu.Item>
-                  </DropdownMenu>
-                </WebComponents::AuButtonToolbar>
-              </td>
-            </tr>
+          {{#each this.pieceRows as |pieceRow|}}
+            {{#let pieceRow.piece as |piece|}}
+              <tr class="auk-table__row">
+                <td class="auk-table-checkbox-col">
+                  <Auk::Checkbox
+                    @checked={{includes pieceRow this.selectedPieceRows}}
+                    {{on "click" (fn this.togglePieceSelection pieceRow)}} />
+                </td>
+                <td>
+                  {{piece.name}}
+                </td>
+                <td>
+                  {{#if piece.file}}
+                    <Utils::Documents::FileTypePill @extension={{piece.file.extension}} />
+                  {{/if}}
+                </td>
+                <td class="auk-u-text-nowrap">
+                  {{#if piece.receivedDate}}
+                    {{moment-format piece.receivedDate}}
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td class="auk-u-text-nowrap">
+                  <p>{{moment-format piece.created}}</p>
+                  <p class="auk-u-muted auk-u-text-small">
+                    {{moment-format piece.created "HH:mm"}}
+                  </p>
+                </td>
+                <td class="auk-u-text-align--center">
+                  {{#if piece.publicationSubcaseSourceFor}}
+                    <Auk::Icon @name="check" @skin="success-dark" />
+                  {{else}}
+                    {{t "dash"}}
+                  {{/if}}
+                </td>
+                <td>
+                  <WebComponents::AuButtonToolbar>
+                    <Auk::Button
+                      @skin="borderless" @layout="icon-only" @icon="download"
+                      @href={{piece.file.namedDownloadLink}}
+                      download={{piece.file.downloadFilename}}>
+                      {{t "download"}}
+                    </Auk::Button>
+                    <Auk::Button
+                      @skin="borderless" @layout="icon-only" @icon="book"
+                      @href={{piece.viewDocumentURL}}
+                      target="_blank">
+                      {{t "read"}}
+                    </Auk::Button>
+                    <DropdownMenu
+                      @skin="borderless"
+                      @icon="more"
+                      as |Menu|>
+                      <Menu.Item
+                        {{on "click" (fn this.openPieceEditModal pieceRow)}}>
+                        {{t "edit-translation-details"}}
+                      </Menu.Item>
+                      {{#if (and this.canDeletePieces pieceRow.isPieceDeletable)}}
+                        <Menu.Item @skin="danger"
+                          {{on "click" (perform this.deletePiece pieceRow)}}>
+                          {{t "delete"}}
+                        </Menu.Item>
+                      {{/if}}
+                    </DropdownMenu>
+                  </WebComponents::AuButtonToolbar>
+                </td>
+              </tr>
+            {{/let}}
           {{/each}}
         </tbody>
       </table>
@@ -138,10 +140,10 @@
 
 {{#if this.showPieceEditModal}}
   <Publications::Publication::Translations::DocumentsEditModal
-          @translationSubcase={{this.translationSubcase}}
-          @sourceDocument={{this.toEditDocument}}
-          @onSave={{perform this.saveEditSourceDocument}}
-          @onCancel={{this.closePieceEditModal}} />
+    @translationSubcase={{this.translationSubcase}}
+    @sourceDocument={{this.pieceRowToEdit.piece}}
+    @onSave={{perform this.saveEditSourceDocument}}
+    @onCancel={{this.closePieceEditModal}} />
 {{/if}}
 
 {{#if this.isTranslationRequestModalOpen}}
