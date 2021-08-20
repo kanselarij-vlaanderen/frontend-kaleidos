@@ -29,7 +29,7 @@
             <div class="skeletal-loader" role="alert" aria-busy="true"></div>
           {{else}}
             <div class="vlc-status-timeline__text">
-              <SubcaseTimelineItemText @phase={{phase}} />
+              {{subcase-timeline-item-text phase=phase}}
             </div>
           {{/if}}
         </li>
