@@ -69,7 +69,7 @@
                   </Menu.Item>
                   <Menu.Item>
                     <a href="" class="auk-button-link auk-button-link--block"
-                      {{fn (if row.isArchived this.unarchiveCase this.requestArchiveCase) row}}
+                      {{on "click" (fn (if row.isArchived this.unarchiveCase this.requestArchiveCase) row)}}
                     >
                       <span class="auk-button__content">
                         {{t (if row.isArchived "unarchive-case" "archive-case")}}
