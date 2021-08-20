@@ -762,6 +762,7 @@
   "publication-number-required":"Publicatienummer is numeriek en verplicht.",
   "publication-date-after-translation-date":"De publicatiedatum moet altijd op of na de uiterste vertaaldatum liggen.",
   "version": "Versie",
+  "versions": "Versies",
   "only-on-final-agenda": "Enkel op definitieve agenda",
   "date-expired": "Datum verstreken",
   "publication-sidebar-tooltip": "Dit is een interne opmerking voor het OVRB-team.",

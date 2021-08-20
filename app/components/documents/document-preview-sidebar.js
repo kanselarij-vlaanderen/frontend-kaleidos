@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 
 export default class DocumentsDocumentPreviewSidebar extends Component {
   @tracked documentType;
+  @tracked docContainer;
   @tracked accessLevel;
 
   @tracked showDetails = true;
@@ -19,8 +20,8 @@ export default class DocumentsDocumentPreviewSidebar extends Component {
 
   @task
   *loadData() {
-    const docContainer = yield this.args.piece.documentContainer;
-    this.documentType = yield docContainer.type;
+    this.docContainer = yield this.args.piece.documentContainer;
+    this.documentType = yield this.docContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
   }
 
