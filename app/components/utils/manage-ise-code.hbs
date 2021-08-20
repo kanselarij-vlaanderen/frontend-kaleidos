@@ -49,11 +49,17 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        {{web-components/vl-form-input value=name}}
+        <Auk::Input
+          @block={{true}}
+          @value={{name}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ISE-code"}}</Auk::Label>
-        {{web-components/vl-form-input value=code}}
+        <Auk::Input
+          @block={{true}}
+          @value={{code}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>
@@ -79,11 +85,17 @@
     <Auk::Modal::Body>
       <div class="auk-form-group">
         <Auk::Label>{{t "ise-code"}}</Auk::Label>
-        {{web-components/vl-form-input value=name}}
+        <Auk::Input
+          @block={{true}}
+          @value={{name}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "ISE-code"}}</Auk::Label>
-        {{web-components/vl-form-input value=code}}
+        <Auk::Input
+          @block={{true}}
+          @value={{code}}
+        />
       </div>
       <div class="auk-form-group">
         <Auk::Label>{{t "government-field"}}</Auk::Label>

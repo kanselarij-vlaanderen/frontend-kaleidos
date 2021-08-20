@@ -30,17 +30,19 @@
 {{else}}
   <div class="auk-form-group">
     <Auk::Label>{{t "first-name"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-person-selector-firstname=true
-      value=firstName
-    }}
+    <Auk::Input
+      @block={{true}}
+      @value={{firstName}}
+      data-test-person-selector-firstname={{true}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-person-selector-lastname=true
-      value=lastName
-    }}
+    <Auk::Input
+      @block={{true}}
+      @value={{lastName}}
+      data-test-person-selector-lastname={{true}}
+    />
   </div>
   <Auk::Toolbar>
     <Auk::Toolbar::Group @position="right">

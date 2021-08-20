@@ -192,8 +192,10 @@
     <Auk::Modal::Body>
       {{#if this.newPiece}}
         <Auk::Label>{{t "name"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          @value={{this.newPiece.name}}/>
+        <Auk::Input
+          @block={{true}}
+          @value={{this.newPiece.name}}
+        />
         <Documents::UploadedDocument
           @piece={{this.newPiece}}
           @onDelete={{perform this.deleteUploadedPiece}} />

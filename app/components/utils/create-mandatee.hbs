@@ -1,17 +1,19 @@
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-create-mandatee-title-container=true
-      value=title
-    }}
+    <Auk::Input
+      @block={{true}}
+      @value={{title}}
+      data-test-create-mandatee-title-container={{true}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
-    {{web-components/vl-form-input
-      data-test-create-mandatee-nickname-container=true
-      value=nickName
-    }}
+    <Auk::Input
+      @block={{true}}
+      @value={{nickName}}
+      data-test-create-mandatee-nickname-container={{true}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>

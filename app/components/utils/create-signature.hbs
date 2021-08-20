@@ -8,11 +8,17 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "name"}}</Auk::Label>
-    {{web-components/vl-form-input value=name}}
+    <Auk::Input
+      @block={{true}}
+      @value={{name}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "signature-function"}}</Auk::Label>
-    {{web-components/vl-form-input value=function}}
+    <Auk::Input
+      @block={{true}}
+      @value={{function}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "signature-file"}}</Auk::Label>

@@ -1,7 +1,10 @@
 <div class="auk-u-mb-4">
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input value=agendaitem.titlePress}}
+    <Auk::Input
+      @block={{true}}
+      @value={{agendaitem.titlePress}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "content"}}</Auk::Label>

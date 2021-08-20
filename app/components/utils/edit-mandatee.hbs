@@ -10,11 +10,17 @@
 <Auk::Modal::Body>
   <div class="auk-form-group">
     <Auk::Label>{{t "title"}}</Auk::Label>
-    {{web-components/vl-form-input value=title}}
+    <Auk::Input
+      @block={{true}}
+      @value={{title}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "nick-name"}}</Auk::Label>
-    {{web-components/vl-form-input value=nickName}}
+    <Auk::Input
+      @block={{true}}
+      @value={{nickName}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "add-people"}}</Auk::Label>

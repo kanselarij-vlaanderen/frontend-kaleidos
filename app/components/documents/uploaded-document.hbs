@@ -9,8 +9,10 @@
     <div class="metadata-container">
       <div class="auk-form-group">
         <Auk::Label>{{t "document-name"}}</Auk::Label>
-        <WebComponents::VlFormInput
-          @value={{mut @piece.name}} />
+        <Auk::Input
+          @block={{true}}
+          @value={{mut @piece.name}}
+        />
       </div>
       {{#unless this.loadData.isRunning}}
         <div class="auk-form-group">

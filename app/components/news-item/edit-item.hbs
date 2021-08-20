@@ -34,7 +34,10 @@
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "short-title"}}</Auk::Label>
-    {{web-components/vl-form-input value=newsletterInfo.title}}
+    <Auk::Input
+      @block={{true}}
+      @value={{newsletterInfo.title}}
+    />
   </div>
   <div class="auk-form-group">
     <Auk::Label>{{t "mandatee-proposal"}}</Auk::Label>
@@ -58,7 +61,10 @@
 
   <div class="auk-form-group auk-u-text-capitalize">
     <Auk::Label>{{t "remark"}}</Auk::Label>
-    {{web-components/vl-form-input value=newsletterInfo.remark}}
+    <Auk::Input
+      @block={{true}}
+      @value={{newsletterInfo.remark}}
+    />
   </div>
 
   <div class="auk-form-group">
