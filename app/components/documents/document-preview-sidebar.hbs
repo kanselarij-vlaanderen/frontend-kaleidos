@@ -1,15 +1,18 @@
 <Auk::Sidebar
-          @size="xlarge"
-          @position="right"
-          @skin="white"
-          class="auk-u-pb-6"
-  >
-    {{!-- DETAILS --}}
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6"
+>
+  {{!-- DETAILS --}}
   <div class="auk-u-m-4">
-    <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}}/>
+    <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
     {{#unless this.loadData.isRunning}}
       {{#if this.documentType}}
-        <Auk::KeyValue @key={{t "document-type"}} @value={{this.documentType.label}}/>
+        <Auk::KeyValue
+          @key={{t "document-type"}}
+          @value={{this.documentType.label}}
+        />
       {{/if}}
       {{#if @piece.accessLevel}}
         <Auk::KeyValue @key={{t "publicity"}}>
