@@ -1,7 +1,7 @@
 {{#if @icon}}
   <div class="auk-input-with-icon">
     <Input
-      class="auk-input {{this.error}} {{this.block}}"
+      class="auk-input {{this.error}} {{this.block}} {{this.width}}"
       @type={{@type}}
       @enter={{@enter}}
       @value={{@value}}
@@ -20,7 +20,7 @@
   </div>
 {{else}}
   <Input
-    class="auk-input {{this.error}} {{this.block}}"
+    class="auk-input {{this.error}} {{this.block}} {{this.width}}"
     @type={{@type}}
     @enter={{@enter}}
     @value={{@value}}

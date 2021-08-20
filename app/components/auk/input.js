@@ -16,6 +16,14 @@ export default class Input extends Component {
     return null;
   }
 
+  get width() {
+    if (this.args.width) {
+      return `auk-input--w-${this.args.width}`;
+    }
+
+    return null;
+  }
+
   get error() {
     if (this.args.error) {
       return 'auk-input--error';
