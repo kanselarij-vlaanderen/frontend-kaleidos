@@ -8,6 +8,7 @@ const selectors = {
   // new-case
   newCase: {
     shorttitle: '[data-test-new-case-shorttitle]',
+    form: '[data-test-new-case-form]',
     shorttitleError: '[data-test-new-case-shorttitle-error]',
     toggleConfidential: '[data-test-new-case-toggle-confidential]',
     cancel: '[data-test-new-case-cancel]',
@@ -23,6 +24,12 @@ const selectors = {
   // new-subcase
   newSubcase: {
     clonePreviousSubcase: '[data-test-new-subcase-clone-previous-subcase]',
+    type: '[data-test-new-subcase-type]',
+    shorttitle: '[data-test-new-subcase-shorttitle]',
+    longtitle: '[data-test-new-subcase-longtitle]',
+    procedureStep: '[data-test-new-subcase-procedure-step]',
+    procedureName: '[data-test-new-subcase-procedure-name]',
+    save: '[data-test-new-subcase-save]',
   },
 
   // subcase-description

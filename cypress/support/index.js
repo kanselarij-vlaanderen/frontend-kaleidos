@@ -19,19 +19,14 @@
 /// <reference types="Cypress" />
 
 // Import commands.js using ES2015 syntax:
-import './commands/commands'
 import './commands/agenda-commands'
-import './commands/case-commands'
-import './commands/subcase-commands'
-import './commands/document-commands'
-import './commands/utility-commands'
-import './commands/datepicker.commands'
-import './commands/modal.commands'
-import './commands/select.commands'
-import './commands/navigation.commands'
 import './commands/authorizationAuthentication.commands'
-import './commands/reset-database.commands'
+import './commands/case-commands'
+import './commands/document-commands'
 import './commands/publication-commands'
+import './commands/reset-database.commands'
+import './commands/subcase-commands'
+import './commands/utility-commands'
 import 'cypress-wait-until';
 
 Cypress.on('uncaught:exception', (err) => {
