@@ -13,7 +13,6 @@ export default Component.extend({
   newsletterService: service(),
   currentSession: service(),
 
-  isShowingOptions: null,
   agenda: null,
   meeting: null,
   isVerifying: null,
@@ -119,10 +118,6 @@ export default Component.extend({
       await mailCampaign.save();
       await meeting.belongsTo('mailCampaign').reload();
       this.set('isVerifying', false);
-    },
-
-    showMultipleOptions() {
-      this.toggleProperty('isShowingOptions');
     },
 
     async sendTestCampaign() {

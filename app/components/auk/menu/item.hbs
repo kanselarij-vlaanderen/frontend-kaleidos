@@ -1,6 +1,11 @@
 <li class={{@class}}>
   {{#if @href}}
-    <a class="auk-menu__item {{this.skin}}" href={{@href}} ...attributes>
+    <a
+      href={{@href}}
+      class="auk-menu__item {{this.skin}} {{if @disabled "auk-menu__item--disabled"}}"
+      tabindex={{if @disabled "-1" "0"}}
+      ...attributes
+    >
       {{yield}}
     </a>
   {{else if @textOnly}}
@@ -14,11 +19,13 @@
       class="auk-menu__item {{this.skin}}"
       @route={{@route}}
       @models={{this.models}}
+      @disabledClass="auk-menu__item--disabled"
       @disabled={{@disabled}}
       @activeClass={{@activeClass}}
       @current-when={{@current-when}}
       @preventDefault={{@preventDefault}}
       @query={{@query}}
+      tabindex={{if @disabled "-1" "0"}}
       ...attributes
     >
       {{yield}}

@@ -29,15 +29,14 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @custom={{true}}>
-    <Auk::Toolbar>
+    <Auk::Toolbar @size="large">
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button
-            @skin="borderless"
+          <Auk::ButtonLink
             disabled={{this.save.isRunning}}
             {{on "click" @onCancel}}>
             {{t "cancel"}}
-          </Auk::Button>
+          </Auk::ButtonLink>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">

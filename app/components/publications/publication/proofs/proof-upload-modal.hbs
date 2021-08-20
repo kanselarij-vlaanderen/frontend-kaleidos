@@ -2,21 +2,21 @@
   <Auk::Modal::Header
     @title={{t
       (if
-        @isCorrectionDocument
+        @isCorrected
         "upload-corrected-proof-for-publication-x-identification"
         "upload-proof-for-publication-x-identification")
       identification=@publicationFlow.identification.idName
     }}
-    @onClose={{@onCancel}} />
+    @onClose={{perform this.cancel}} />
   <Auk::Modal::Body>
-    <Utils::LoadableContent @isLoading={{this.saveProof.isRunning}} @reserveSpace={{true}}>
+    <Utils::LoadableContent @isLoading={{this.isLoading}} @reserveSpace={{true}}>
 
       <Auk::FileUploader
-        @multiple={{false}}
         @onUpload={{this.onUploadFile}} />
+
       {{!-- File details --}}
       {{#if this.file}}
-        <div class="auk-u-my-4">
+        <div class="auk-u-mt-4">
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-11">
               <div class="auk-form-group-layout auk-form-group-layout--horizontal">
@@ -32,7 +32,7 @@
                   <Auk::Label>{{t "file-type"}}</Auk::Label>
                   <Utils::Documents::FileTypePill @extension={{this.file.extension}} />
                 </div>
-                {{#if @isReceivedDocument}}
+                {{#if @isReceived}}
                   <div class="auk-form-group {{this.validators.receivedAtDate.errorClass}}">
                     <Auk::Label for="proofUploadReceivedAtDate">{{t "received-at"}}</Auk::Label>
                     <Auk::Datepicker id="proofUploadReceivedAtDate"
@@ -40,11 +40,11 @@
                       @onChange={{this.setReceivedAtDate}} />
                   </div>
                 {{/if}}
-                {{#if @isCorrectionDocument}}
+                {{#if @isCorrected}}
                   <div class="auk-form-group">
                     <Auk::Label for="proofUploadIsCorrected">{{t "corrected"}}</Auk::Label>
                     <Auk::Checkbox id="proofUploadIsCorrected"
-                      @checked={{true}}
+                      @checked={{@isCorrected}}
                       @disabled={{true}} />
                   </div>
                 {{/if}}
@@ -56,12 +56,14 @@
 
     </Utils::LoadableContent>
   </Auk::Modal::Body>
-  <Auk::Modal::Footer @onCancel={{@onCancel}}>
+  <Auk::Modal::Footer
+    @cancelDisabled={{this.isCancelDisabled}}
+    @onCancel={{perform this.cancel}}>
     <Auk::Button
       @skin="primary"
       @disabled={{this.isSaveDisabled}}
-      @loading={{this.saveProof.isRunning}}
-      {{on "click" (perform this.saveProof)}}>
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

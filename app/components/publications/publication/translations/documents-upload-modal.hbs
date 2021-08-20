@@ -5,7 +5,7 @@
       "upload-translation-document"
       identifier=@translationSubcase.publicationFlow.identification.idName
     }}
-    @onClose={{perform this.cancelTranslation}}
+    @onClose={{perform this.cancel}}
   />
   <Auk::Modal::Body>
     <Auk::FileUploader
@@ -14,7 +14,7 @@
             @onUpload={{this.uploadPiece}}
     />
     {{#if this.translationDocument}}
-      <div class="auk-u-my-4">
+      <div class="auk-u-mt-4">
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-11">
             <div class="auk-form-group-layout auk-form-group-layout--horizontal">
@@ -31,9 +31,7 @@
               </div>
               <div class="auk-form-group">
                 <Auk::Label>{{t "document-type"}}</Auk::Label>
-                <Auk::Pill @skin="white">
-                  {{this.translationDocument.file.extension}}
-                </Auk::Pill>
+                <Utils::Documents::FileTypePill @extension={{this.translationDocument.file.extension}} />
               </div>
               <div class="auk-form-group auk-o-flex--align-start">
                 <Auk::Label>{{t "translation-burden"}}</Auk::Label>
@@ -83,14 +81,13 @@
     {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{perform this.cancelTranslation}}
-  >
+    @cancelDisabled={{this.isCancelDisabled}}
+    @onCancel={{perform this.cancel}}>
     <Auk::Button
       @skin="primary"
-      @disabled={{this.saveIsDisabled}}
-      @loading={{this.saveTranslation.isRunning}}
-      {{on "click" (perform this.saveTranslation)}}
-    >
+      @disabled={{this.isSaveDisabled}}
+      @loading={{this.save.isRunning}}
+      {{on "click" (perform this.save)}}>
       {{t "save"}}
     </Auk::Button>
   </Auk::Modal::Footer>

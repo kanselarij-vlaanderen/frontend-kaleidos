@@ -1,0 +1,45 @@
+<Auk::Sidebar
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6"
+>
+  {{!-- DETAILS --}}
+  <div class="auk-u-m-4">
+    <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
+    {{#unless this.loadData.isRunning}}
+      {{#if this.documentType}}
+        <Auk::KeyValue
+          @key={{t "document-type"}}
+          @value={{this.documentType.label}}
+        />
+      {{/if}}
+      {{#if @piece.accessLevel}}
+        <Auk::KeyValue @key={{t "publicity"}}>
+          <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
+        </Auk::KeyValue>
+      {{/if}}
+    {{/unless}}
+    <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+    </Auk::KeyValue>
+    <div class="auk-key-value-item">
+      <Auk::KeyValue @key={{t "file-type"}}>
+        <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+      </Auk::KeyValue>
+    </div>
+  </div>
+
+  {{!-- FOOTER
+  <div class="auk-u-mt-auto">
+    <div class="auk-panel__footer">
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      </Auk::Toolbar>
+    </div>
+  </div>
+  --}}
+</Auk::Sidebar>

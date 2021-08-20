@@ -9,8 +9,10 @@ import {
 
 /**
  * @argument {PublicationFlow} publicationFlow
- * @argument {boolean} isReceivedDocument
- * @argument {boolean} isCorrectionDocument
+ * only one of these has to be true
+ * @argument {boolean} isReceived
+ * @argument {boolean} isCorrected
+ *
  * @argument onSave
  * @argument onCancel
  */
@@ -27,12 +29,36 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     this.initValidation();
   }
 
+  get isLoading() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
+  get isCancelDisabled() {
+    return this.cancel.isRunning || this.save.isRunning;
+  }
+
   get isSaveDisabled() {
-    return !this.file || !this.validators.areValid;
+    return !this.file || this.file.isDeleted || !this.validators.areValid;
+  }
+
+  // prevent double cancel
+  @task({
+    drop: true,
+  })
+  *cancel() {
+    // necessary because close-button is not disabled when saving
+    if (this.save.isRunning) {
+      return;
+    }
+
+    if (this.file) {
+      yield this.file.destroyRecord();
+    }
+    this.args.onCancel();
   }
 
   @task
-  *saveProof() {
+  *save() {
     yield this.args.onSave({
       file: this.file,
       name: this.name,

@@ -1,0 +1,111 @@
+{{!-- template-lint-disable  --}}
+<ComponentPageIntro @title="Dropdown" />
+
+<StyleguideSample
+  @title="Default"
+  @snippet="dropdown-default.hbs"
+  @modifier="dropdown"
+>
+  {{!-- BEGIN-SNIPPET dropdown-default --}}
+  <DropdownMenu
+    @skin="secondary"
+    @label="Button text"
+    @placement="bottom-start"
+  as |Menu|>
+    <Menu.Item @route="styleguide.accordion">
+      Accordion
+    </Menu.Item>
+    <Menu.Item @route="styleguide.accordion-panel" @disabled={{true}}>
+      Accordion panel
+    </Menu.Item>
+    <Menu.Item @route="styleguide.avatar">
+      Avatar
+    </Menu.Item>
+    <Menu.Item @route="styleguide.badge">
+      Badge
+    </Menu.Item>
+    <Menu.Item @route="styleguide.brand">
+      Brand
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item @route="styleguide.checkboxes-radio-buttons" @skin="danger">
+      Checkboxes/radio buttons
+    </Menu.Item>
+  </DropdownMenu>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<StyleguideSample
+  @title="Text-only item"
+  @snippet="dropdown-text-only-item.hbs"
+  @modifier="dropdown"
+  @align="end"
+>
+  {{!-- BEGIN-SNIPPET dropdown-text-only-item --}}
+  <Auk::ButtonLink
+    @skin="muted"
+    @icon="chevron-down"
+    @layout="icon-right"
+  >
+    <:default>Button text</:default>
+    <:floater>
+      <AttachPopover
+        @renderInPlace={{true}}
+        @class="ember-attacher-popper"
+        @hideOn="clickout click"
+        @showOn="click"
+        @animation="shift"
+        @placement="bottom-end"
+      >
+        <Auk::Menu>
+          <Auk::Menu::Item @textOnly={{true}}>
+            <Auk::Avatar @icon="user" @name="Admin">
+              <p>Admin</p>
+              <p class="auk-u-muted auk-u-text-small">Beheerdersgroep</p>
+            </Auk::Avatar>
+          </Auk::Menu::Item>
+          <Auk::Menu::Divider />
+          <Auk::Menu::Item @route="styleguide.checkboxes-radio-buttons">
+            Afmelden
+          </Auk::Menu::Item>
+        </Auk::Menu>
+      </AttachPopover>
+    </:floater>
+  </Auk::ButtonLink>
+  {{!-- END-SNIPPET --}}
+</StyleguideSample>
+
+<h3 class="auk-h3">Arguments (item)</h3>
+
+<table class="auk-table">
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Type</th>
+      <th>Possible values</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>@skin</code></td>
+      <td>string</td>
+      <td class="auk-table__col--3"><code>danger</code></td>
+      <td>Determines the skin of the dropdown item.</td>
+    </tr>
+    <tr>
+      <td><code>@disabled</code></td>
+      <td>boolean</td>
+      <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+      <td>Determines if the dropdown item is disabled.</td>
+    </tr>
+    <tr>
+      <td><code>@textOnly</code></td>
+      <td>boolean</td>
+      <td class="auk-table__col--3"><code>false</code> (default) or <code>true</code></td>
+      <td>Determines if the dropdown item is shown as text-only.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The item component also takes the same arguments as a native link-element (<code>@href</code>) or a LinkTo component (<code>@route</code>, <code>@model</code>, <code>@models</code>, etc.), but only if <code>@textOnly</code> is <code>false</code>.</p>

@@ -16,104 +16,52 @@
           {{#if (or (is-pending canPropose) isLoading)}}
             <div class="auk-loader" role="alert" aria-busy="true"></div>
           {{else if (await canPropose)}}
-            <Auk::Button
+            <DropdownMenu
               @skin="primary"
-              data-test-subcase-header-action-propose-for-agenda
-            >
-              {{t "propose-for-agenda"}}
-            </Auk::Button>
-            {{#attach-popover
-              renderInPlace=true
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#each
-                  (await meetings)
-                as |meeting|
-                }}
-                  <li class="vlc-dropdown-menu__item">
-                    <button type="button" class="auk-button-link"
-                      {{action attacher.hide}}
-                      {{action "proposeForAgenda" subcase meeting}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "agenda-for"}}
-                        {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                        {{concat " - " meeting.numberRepresentation}}
-                      </span>
-                    </button>
-                  </li>
-                {{/each}}
-                {{#if (gt (await meetings.length) 0)}}
-                  <li class="vlc-dropdown-menu__separator" aria-hidden="true"></li>
-                {{/if}}
-                <li class="vlc-dropdown-menu__item">
-                  <button type="button" class="auk-button-link"
-                    {{action attacher.hide}}
-                    {{action "proposeForOtherAgenda" subcase}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "other-agenda"}}
-                    </span>
-                  </button>
-                </li>
-              </ul>
-            {{/attach-popover}}
+              @label={{t "propose-for-agenda"}}
+              data-test-subcase-header-action-propose-for-agenda={{true}}
+            as |Menu|>
+              {{#each
+                (await meetings)
+              as |meeting|
+              }}
+                <Menu.Item {{action "proposeForAgenda" subcase meeting}}>
+                  {{t "agenda-for"}}
+                  {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                  {{concat " - " meeting.numberRepresentation}}
+                </Menu.Item>
+              {{/each}}
+              {{#if (gt (await meetings.length) 0)}}
+                <Menu.Divider />
+              {{/if}}
+              <Menu.Item {{action "proposeForOtherAgenda" subcase}}>
+                {{t "other-agenda"}}
+              </Menu.Item>
+            </DropdownMenu>
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <Auk::Button
-              @skin="secondary"
-              @icon={{if isShowingOptions "chevron-up" "chevron-down"}}
-              {{action "showMultipleOptions" bubbles=false}}
-              data-test-subcase-header-actions-dropdown
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "actions"}}
+            data-test-subcase-header-actions-dropdown={{true}}
+          as |Menu|>
+            {{#if (await canDelete)}}
+              <Menu.Item
+                @skin="danger"
+                data-test-subcase-header-action-delete-subcase
+                {{action "requestDeleteSubcase" subcase}}
+              >
+                {{t "delete-subcase"}}
+              </Menu.Item>
+            {{/if}}
+            <Menu.Item
+              data-test-subcase-header-action-move-subcase
+              {{action "triggerMoveSubcaseDialog" }}
             >
-              {{t "actions"}}
-            </Auk::Button>
-            {{#attach-popover
-              renderInPlace=true
-              class="ember-attacher-popper"
-              hideOn="clickout click"
-              showOn="click"
-              animation="shift"
-              placement="bottom"
-            as |attacher|
-            }}
-              <ul class="vlc-dropdown-menu">
-                {{#if (await canDelete)}}
-                  <li class="vlc-dropdown-menu__item">
-                    <a href="" class="auk-button-link"
-                      data-test-subcase-header-action-delete-subcase
-                      {{action attacher.hide}}
-                      {{action "requestDeleteSubcase" subcase}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "delete-subcase"}}
-                      </span>
-                    </a>
-                  </li>
-                {{/if}}
-                <li class="vlc-dropdown-menu__item">
-                  <a href=""
-                    data-test-subcase-header-action-move-subcase
-                    class="auk-button-link auk-button-link--block"
-                    {{action attacher.hide}}
-                    {{action "triggerMoveSubcaseDialog" }}
-                  >
-                    <span class="auk-button__content">
-                      {{t "move-subcase"}}
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            {{/attach-popover}}
-          </div>
+              {{t "move-subcase"}}
+            </Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>

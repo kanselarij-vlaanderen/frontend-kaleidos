@@ -9,36 +9,18 @@
           {{t "edit"}}
         </Auk::ButtonLink>
         {{#if @allowDelete}}
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <Auk::Button
-              @skin="borderless"
-              @layout="icon-only"
-              @icon="more"
-            />
-            <AttachPopover
-              @class="ember-attacher-popper"
-              @hideOn="clickout click"
-              @showOn="click"
-              @animation="shift"
-              @placement="bottom"
-            as |attacher|>
-              <ul class="vlc-dropdown-menu">
-                <li class="vlc-dropdown-menu__item">
-                  <button
-                    data-test-agendaitem-decision-delete
-                    type="button"
-                    class="auk-button-link auk-u-text-error"
-                    {{on "click" attacher.hide}}
-                    {{on "click" (fn this.promptDeleteTreatment @treatment)}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "delete-decision"}}
-                    </span>
-                  </button>
-                </li>
-              </ul>
-            </AttachPopover>
-          </div>
+          <DropdownMenu
+            @skin="borderless"
+            @icon="more"
+          as |Menu|>
+            <Menu.Item
+              @skin="danger"
+              data-test-agendaitem-decision-delete
+              {{on "click" (fn this.promptDeleteTreatment @treatment)}}
+            >
+              {{t "delete-decision"}}
+            </Menu.Item>
+          </DropdownMenu>
         {{/if}}
       {{/if}}
     </div>

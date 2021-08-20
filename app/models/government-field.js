@@ -1,15 +1,11 @@
-import DS from 'ember-data';
-
-const {
-  Model, attr, hasMany, belongsTo,
-} = DS;
-
-export default Model.extend({
-  label: attr('string'),
-  scopeNote: attr('string'),
-  altLabel: attr('string'),
-  iseCodes: hasMany('ise-code'),
-  domain: belongsTo('government-domain', {
-    inverse: null,
-  }),
-});
+import Model, {
+  attr, hasMany, belongsTo
+} from '@ember-data/model';
+export default class GovernmentField extends Model {
+  @attr('string') label;
+  @attr('string') scopeNote;
+  @attr('string') altLabel;
+  @belongsTo('government-domain') domain;
+  @hasMany('ise-code') iseCodes;
+  @hasMany('publication-flow') publicationFlows;
+}

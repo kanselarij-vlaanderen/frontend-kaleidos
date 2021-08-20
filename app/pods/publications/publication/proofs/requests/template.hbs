@@ -26,17 +26,23 @@
         <accordionPanel.Body>
           <div class="auk-o-grid">
             <div class="auk-o-grid-col-6">
-              <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
-                <p>{{row.requestActivity.email.subject}}</p>
-              </div>
-              <div class="auk-u-mb-2">
-                <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
-                <div class="auk-box">
-                  {{!-- on 1 line to prevent whitespace to be rendered --}}
-                  <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
+              {{#if row.requestActivity.email}}
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "subject"}}</p>
+                  <p>{{row.requestActivity.email.subject}}</p>
                 </div>
-              </div>
+                <div class="auk-u-mb-2">
+                  <p class="auk-u-text-bold auk-u-muted auk-u-mb">{{t "message"}}</p>
+                  <div class="auk-box">
+                    {{!-- on 1 line to prevent whitespace to be rendered --}}
+                    <p style="white-space:pre-line;">{{row.requestActivity.email.message}}</p>
+                  </div>
+                </div>
+              {{else}}
+                <Auk::EmptyState
+                        @message={{t "no-email-available"}}
+                />
+              {{/if}}
             </div>
             <div class="auk-o-grid-col-6">
               <div class="auk-u-mb-2">
@@ -64,8 +70,7 @@
 {{#if this.isUploadModalOpen}}
   <Publications::Publication::Proofs::ProofUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @isCorrectionDocument={{false}}
-    @isReceivedDocument={{true}}
+    @isReceived={{true}}
     @onSave={{this.saveProofUpload}}
     @onCancel={{this.closeProofUploadModal}} />
 {{/if}}

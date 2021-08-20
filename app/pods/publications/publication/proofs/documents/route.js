@@ -1,6 +1,34 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { hash } from 'rsvp';
+import { tracked } from '@glimmer/tracking';
+
+// use:
+// - isPieceDeletable property
+// - file property avoids error when piece (and file) are deleted
+export class PieceRow {
+  @tracked piece;
+  @tracked requestActivitiesUsedBy;
+
+  // no async constructor() in JS
+  static async create(piece) {
+    const row = new PieceRow();
+    row.piece = piece;
+    // avoid awaiting in getter
+    row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
+    return row;
+  }
+
+  get isPieceDeletable() {
+    // can be translation or publication related
+    const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
+    // receivedDate is set if and only if it is a received pieced
+    const isReceived = !!this.piece.receivedDate;
+    const isUsed = isUsedInRequest || isReceived;
+    return !isUsed;
+  }
+}
 
 export default class PublicationsPublicationProofsDocumentsRoute extends Route {
   async model() {
@@ -9,7 +37,8 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     const queryProperties = {
       include: [
         'file',
-        'publication-subcase-correction-for'
+        'publication-subcase-correction-for',
+        'request-activities-used-by'
       ].join(','),
       'page[size]': PAGE_SIZE.PUBLICATION_FLOW_PIECES,
     };
@@ -18,7 +47,7 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     // It seems when using a single request on publication-subcase with an include query param
     // for pieces (via the different paths) ember-data does not catch the inverse relation
     // from piece to publication-subcase. This results in an additional request per piece
-    // when piece.publicationSubcase is used in the template.
+    // when piece.publicationSubcaseCorrectionFor is used in the template.
 
     // Source documents uploaded on the publication subcase
     const sourceDocumentsPromise = this.store.query('piece', {
@@ -56,24 +85,22 @@ export default class PublicationsPublicationProofsDocumentsRoute extends Route {
     pieces = new Set(pieces); // using set to ensure a collection of unique pieces
     pieces = [...pieces];
 
-    return {
-      pieces: pieces,
+    const pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece)));
+    return hash({
+      pieceRows: pieceRows,
       decisions: decisions,
-    };
+    });
   }
 
   afterModel() {
-    // translationSubcase.publicationFlow causes additional network request
-    // while the request is already made in 'publications.publication'
     this.publicationFlow = this.modelFor('publications.publication');
   }
 
-  async setupController(controller) {
+  setupController(controller) {
     super.setupController(...arguments);
-
     controller.publicationFlow = this.publicationFlow;
     controller.publicationSubcase = this.publicationSubcase;
-    controller.selectedPieces = [];
+    controller.selectedPieceRows = [];
   }
 
   @action

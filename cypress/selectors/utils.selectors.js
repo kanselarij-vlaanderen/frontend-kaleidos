@@ -15,6 +15,11 @@ const selectors = {
     },
   },
 
+  domainsFieldsSelectorForm: {
+    container: '[data-test-domains-fields-selector-form]',
+    field: '[data-test-domains-fields-selector-form-field]~span',
+  },
+
   // simple-file-uploader
   simpleFileUploader: '[data-test-simple-file-uploader]',
 
