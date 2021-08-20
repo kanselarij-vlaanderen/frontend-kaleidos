@@ -30,24 +30,24 @@
               class="vlc-hide-on-print"
               data-test-agenda-header-show-agenda-options={{true}}
             as |Menu|>
-              {{#if currentSessionService.isEditor}}
-                {{#if currentAgenda.isDesignAgenda}}
+              {{#if this.currentSessionService.isEditor}}
+                {{#if this.currentAgenda.isDesignAgenda}}
                   <Menu.Item
                     data-test-agenda-header-approve-agenda
                     {{action "openConfirmApproveAgenda"}}
                   >
-                    {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
+                    {{t "approve-design-agenda" serialnumber=this.currentAgenda.serialnumber}}
                   </Menu.Item>
                   <Menu.Item
                     data-test-agenda-header-approve-and-close-agenda
                     {{action "openConfirmApproveAgendaAndCloseMeeting"}}
                   >
-                    {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
+                    {{t "approve-agenda-and-close" serialnumber=this.currentAgenda.serialnumber}}
                   </Menu.Item>
                   <Menu.Divider />
                 {{/if}}
-                {{#if (not currentSession.isFinal)}}
-                  {{#if (await isSessionClosable)}}
+                {{#if (not this.currentSession.isFinal)}}
+                  {{#if (await this.isSessionClosable)}}
                     <Menu.Item
                       @skin="danger"
                       data-test-agenda-header-lock-agenda
@@ -68,7 +68,7 @@
                 {{/if}}
               {{/if}}
               {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
-              {{#if (await canDeleteSelectedAgenda)}}
+              {{#if (await this.canDeleteSelectedAgenda)}}
                 <Menu.Item
                   @skin="danger"
                   data-test-agenda-header-delete-agenda
@@ -77,7 +77,7 @@
                   {{t "agenda-delete"}}
                 </Menu.Item>
               {{/if}}
-              {{#if (await canReopenPreviousAgenda)}}
+              {{#if (await this.canReopenPreviousAgenda)}}
                 <Menu.Divider />
                 <Menu.Item
                   @skin="danger"
@@ -97,7 +97,7 @@
             class="vlc-hide-on-print"
             data-test-agenda-header-show-action-options={{true}}
           as |Menu|>
-            {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+            {{#if (and this.currentSessionService.isEditor this.currentAgenda.isDesignAgenda)}}
               <Menu.Item
                 data-test-agenda-header-add-agendaitems
                 {{action "addAgendaitemsAction"}}
@@ -124,7 +124,7 @@
             >
               {{t "printable-press-agenda"}}
             </Menu.Item>
-            {{#if showPrintButton}}
+            {{#if this.showPrintButton}}
               <Menu.Item
                 @route="agenda.agendaitems"
                 data-test-agenda-header-navigate-to-agenda-view
@@ -145,7 +145,7 @@
                 {{t "printable-version"}}
               </Menu.Item>
             {{/if}}
-            {{#if currentSessionService.isEditor}}
+            {{#if this.currentSessionService.isEditor}}
               <Menu.Divider />
               <Menu.Item
                 data-test-agenda-header-toggle-editing-session
@@ -166,7 +166,7 @@
             >
               {{t "download-documents"}}
             </Menu.Item>
-            {{#if currentAgenda.isDesignAgenda}}
+            {{#if this.currentAgenda.isDesignAgenda}}
               <Menu.Item
                 data-test-agenda-header-approve-all-agendaitems
                 {{action "showApproveAllAgendaitemsWarning"}}
@@ -174,20 +174,20 @@
                 {{t "approve-all-agendaitems"}}
               </Menu.Item>
             {{/if}}
-            {{#if currentSessionService.isEditor}}
+            {{#if this.currentSessionService.isEditor}}
               {{#if
                 (or
-                  currentSession.canReleaseDecisions
-                  currentSession.canReleaseDocuments
+                  this.currentSession.canReleaseDecisions
+                  this.currentSession.canReleaseDocuments
                   (and
-                    (not (await designAgendaPresent))
-                    (not (await currentSession.isFinal))
+                    (not (await this.designAgendaPresent))
+                    (not (await this.currentSession.isFinal))
                   )
                 )
               }}
                 <Menu.Divider />
               {{/if}}
-              {{#if currentSession.canReleaseDecisions}}
+              {{#if this.currentSession.canReleaseDecisions}}
                 <Menu.Item
                   @skin="danger"
                   data-test-agenda-header-release-decisions
@@ -195,7 +195,7 @@
                 >
                   {{t "agenda-release-decisions"}}
                 </Menu.Item>
-              {{else if currentSession.canReleaseDocuments}}
+              {{else if this.currentSession.canReleaseDocuments}}
                 <Menu.Item
                   @skin="danger"
                   data-test-agenda-header-release-documents
@@ -206,13 +206,13 @@
               {{/if}}
               {{#if
                 (and
-                  (not (await designAgendaPresent))
-                  (not (await currentSession.isFinal))
+                  (not (await this.designAgendaPresent))
+                  (not (await this.currentSession.isFinal))
                 )
               }}
                 <Menu.Item
                   data-test-agenda-header-create-new-design
-                  {{action "createNewDesignAgendaAction" currentSession}}
+                  {{action "createNewDesignAgendaAction" this.currentSession}}
                 > {{!-- vlc-dropdown-menu__item--action-danger --}}
                   {{t "agenda-add"}}
                 </Menu.Item>

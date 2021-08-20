@@ -56,15 +56,15 @@
           @label={{t "actions"}}
           class="vlc-hide-on-print"
         as |Menu|>
-          {{#if currentSession.isEditor}}
+          {{#if this.currentSession.isEditor}}
             {{#if
-              (or (is-pending agenda.createdFor.mailCampaign) isLoading)
+              (or (is-pending this.agenda.createdFor.mailCampaign) this.isLoading)
             }}
               <Menu.Item @textOnly={{true}}>
                 <Auk::Loader @message={{t "newsletter-loading-text"}} />
               </Menu.Item>
-            {{else if (await agenda.createdFor.mailCampaign)}}
-              {{#if (not (await agenda.createdFor.mailCampaign.isSent))}}
+            {{else if (await this.agenda.createdFor.mailCampaign)}}
+              {{#if (not (await this.agenda.createdFor.mailCampaign.isSent))}}
                 <Menu.Item {{action "sendTestCampaign"}}>
                   {{t "send-test-campaign"}}
                 </Menu.Item>
@@ -76,11 +76,11 @@
               <Menu.Item
                 @href={{concat
                   "/newsletter/xml-newsletter/"
-                  agenda.id
+                  this.agenda.id
                 }}
                 download={{concat
                   "/newsletter/xml-newsletter/"
-                  agenda.id
+                  this.agenda.id
                 }}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -100,7 +100,7 @@
               </Menu.Item>
             {{/if}}
           {{/if}}
-          {{#if shouldShowPrintButton}}
+          {{#if this.shouldShowPrintButton}}
             <Menu.Item {{action "print"}}>
               {{t "print"}}
             </Menu.Item>

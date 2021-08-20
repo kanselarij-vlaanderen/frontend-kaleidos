@@ -65,7 +65,7 @@
                 as |Menu|>
                   <Menu.Item
                     data-test-document-upload-new-piece
-                    {{on "click" (fn this.openUploadModal)}}
+                    {{on "click" this.openUploadModal}}
                   >
                     {{t "new-version"}}
                   </Menu.Item>

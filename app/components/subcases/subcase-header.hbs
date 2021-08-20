@@ -27,7 +27,7 @@
                 (await this.meetings)
               as |meeting|
               }}
-                <Menu.Item {{action "proposeForAgenda" subcase meeting}}>
+                <Menu.Item {{action "proposeForAgenda" this.subcase this.meeting}}>
                   {{t "agenda-for"}}
                   {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
                   {{concat " - " meeting.numberRepresentation}}
@@ -36,7 +36,7 @@
               {{#if (gt (await this.meetings.length) 0)}}
                 <Menu.Divider />
               {{/if}}
-              <Menu.Item {{action "proposeForOtherAgenda" subcase}}>
+              <Menu.Item {{action "proposeForOtherAgenda" this.subcase}}>
                 {{t "other-agenda"}}
               </Menu.Item>
             </DropdownMenu>
@@ -48,11 +48,11 @@
             @label={{t "actions"}}
             data-test-subcase-header-actions-dropdown={{true}}
           as |Menu|>
-            {{#if (await canDelete)}}
+            {{#if (await this.canDelete)}}
               <Menu.Item
                 @skin="danger"
                 data-test-subcase-header-action-delete-subcase
-                {{action "requestDeleteSubcase" subcase}}
+                {{action "requestDeleteSubcase" this.subcase}}
               >
                 {{t "delete-subcase"}}
               </Menu.Item>
