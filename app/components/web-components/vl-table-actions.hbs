@@ -5,22 +5,23 @@
     @icon="pencil"
   />
   {{#if (not (is-pending (await row.nota)))}}
-    <div class="auk-u-position-relative auk-u-inline-block">
-      <Auk::Button
-        @skin="borderless"
-        @layout="icon-only"
-        @icon="document"
-        @disabled={{not (await row.nota)}}
-        {{action "openDocument" row bubbles=false}}
-      />
-      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-        {{#if (not (await row.nota))}}
-          {{t "no-nota"}}
-        {{else}}
-          {{t "open-note"}}
-        {{/if}}
-      </EmberTooltip>
-    </div>
+    <Auk::Button
+      @skin="borderless"
+      @layout="icon-only"
+      @icon="document"
+      @disabled={{not (await row.nota)}}
+      {{action "openDocument" row bubbles=false}}
+    >
+      <:floater>
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{#if (not (await row.nota))}}
+            {{t "no-nota"}}
+          {{else}}
+            {{t "open-note"}}
+          {{/if}}
+        </EmberTooltip>
+      </:floater>
+    </Auk::Button>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
