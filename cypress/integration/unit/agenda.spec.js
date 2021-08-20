@@ -68,7 +68,7 @@ context('Agenda tests', () => {
     const agendaDateSingleTest = Cypress.moment().add(2, 'weeks')
       .day(5); // Friday in two weeks
     cy.createAgenda(agendaKind, agendaDateSingleTest, agendaPlace).then((result) => {
-      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
+      cy.visitAgendaWithLink(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.get(agenda.agendaHeader.showAgendaOptions).click();
       cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
       cy.get(auk.modal.body).find(auk.alert.message);
@@ -84,8 +84,7 @@ context('Agenda tests', () => {
     const dateToCreateAgenda = Cypress.moment().add(3, 'weeks')
       .day(5); // Friday in three weeks
     cy.createAgenda(agendaKind, dateToCreateAgenda, agendaPlace).then((result) => {
-      cy.visit(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
-      cy.openAgendaForDate(dateToCreateAgenda);
+      cy.visitAgendaWithLink(`/vergadering/${result.meetingId}/agenda/${result.agendaId}/agendapunten`);
       cy.setFormalOkOnItemWithIndex(0);
       cy.approveDesignAgenda();
       cy.deleteAgenda();

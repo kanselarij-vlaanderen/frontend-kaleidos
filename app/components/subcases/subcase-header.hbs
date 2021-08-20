@@ -25,65 +25,43 @@
                 (await meetings)
               as |meeting|
               }}
-                <Menu.Item>
-                  <button type="button" class="auk-button-link"
-                    {{action "proposeForAgenda" subcase meeting}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "agenda-for"}}
-                      {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
-                      {{concat " - " meeting.numberRepresentation}}
-                    </span>
-                  </button>
+                <Menu.Item {{action "proposeForAgenda" subcase meeting}}>
+                  {{t "agenda-for"}}
+                  {{moment-format meeting.plannedStart "DD MMMM YYYY"}}
+                  {{concat " - " meeting.numberRepresentation}}
                 </Menu.Item>
               {{/each}}
               {{#if (gt (await meetings.length) 0)}}
                 <Menu.Divider />
               {{/if}}
-              <Menu.Item>
-                <button type="button" class="auk-button-link"
-                  {{action "proposeForOtherAgenda" subcase}}
-                >
-                  <span class="auk-button__content">
-                    {{t "other-agenda"}}
-                  </span>
-                </button>
+              <Menu.Item {{action "proposeForOtherAgenda" subcase}}>
+                {{t "other-agenda"}}
               </Menu.Item>
             </DropdownMenu>
           {{/if}}
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <DropdownMenu
-              @skin="secondary"
-              @label={{t "actions"}}
-              data-test-subcase-header-actions-dropdown={{true}}
-            as |Menu|>
-              {{#if (await canDelete)}}
-                <Menu.Item>
-                  <a href="" class="auk-button-link"
-                    data-test-subcase-header-action-delete-subcase
-                    {{action "requestDeleteSubcase" subcase}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "delete-subcase"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{/if}}
-              <Menu.Item>
-                <a href=""
-                  data-test-subcase-header-action-move-subcase
-                  class="auk-button-link auk-button-link--block"
-                  {{action "triggerMoveSubcaseDialog" }}
-                >
-                  <span class="auk-button__content">
-                    {{t "move-subcase"}}
-                  </span>
-                </a>
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "actions"}}
+            data-test-subcase-header-actions-dropdown={{true}}
+          as |Menu|>
+            {{#if (await canDelete)}}
+              <Menu.Item
+                @skin="danger"
+                data-test-subcase-header-action-delete-subcase
+                {{action "requestDeleteSubcase" subcase}}
+              >
+                {{t "delete-subcase"}}
               </Menu.Item>
-            </DropdownMenu>
-          </div>
+            {{/if}}
+            <Menu.Item
+              data-test-subcase-header-action-move-subcase
+              {{action "triggerMoveSubcaseDialog" }}
+            >
+              {{t "move-subcase"}}
+            </Menu.Item>
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
