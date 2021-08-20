@@ -1,28 +1,27 @@
-{{!-- TODO: octane-refactor --}}
-{{!-- template-lint-disable no-action --}}
 <div class="auk-o-flex--justify-between">
   <Auk::Button
     @skin="borderless"
     @layout="icon-only"
     @icon="pencil"
   />
-  {{#if (not (is-pending (await this.row.nota)))}}
-    <div class="auk-u-position-relative auk-u-inline-block">
-      <Auk::Button
-        @skin="borderless"
-        @layout="icon-only"
-        @icon="document"
-        @disabled={{not (await this.row.nota)}}
-        {{action "openDocument" this.row bubbles=false}}
-      />
-      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-        {{#if (not (await this.row.nota))}}
-          {{t "no-nota"}}
-        {{else}}
-          {{t "open-note"}}
-        {{/if}}
-      </EmberTooltip>
-    </div>
+  {{#if (not (is-pending (await row.nota)))}}
+    <Auk::Button
+      @skin="borderless"
+      @layout="icon-only"
+      @icon="document"
+      @disabled={{not (await row.nota)}}
+      {{action "openDocument" row bubbles=false}}
+    >
+      <:floater>
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{#if (not (await row.nota))}}
+            {{t "no-nota"}}
+          {{else}}
+            {{t "open-note"}}
+          {{/if}}
+        </EmberTooltip>
+      </:floater>
+    </Auk::Button>
   {{else}}
     <div class="auk-loader" role="alert" aria-busy="true">
       <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
@@ -36,9 +35,9 @@
     @icon="nav-right"
     @route="agenda.agendaitems.agendaitem"
     @models={{array
-      (await this.latestMeetingId)
-      (await this.latestAgendaId)
-      (await this.latestAgendaitemId)
+      (await latestMeetingId)
+      (await latestAgendaId)
+      (await latestAgendaitemId)
     }}
     @bubbles={{false}}
     target="_blank"

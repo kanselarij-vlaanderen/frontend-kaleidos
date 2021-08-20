@@ -13,18 +13,19 @@
       </EmberTooltip>
     </div>
   {{else}}
-    <div class="auk-u-position-relative auk-u-inline-block">
-      <Auk::Button
-        @skin="borderless"
-        @layout="icon-only"
-        @icon="document"
-        @disabled={{not (await @agendaitem.notaOrVisienota)}}
-        {{on "click" this.openNota}}
-      />
-      <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
-        {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
-      </EmberTooltip>
-    </div>
+    <Auk::Button
+      @skin="borderless"
+      @layout="icon-only"
+      @icon="document"
+      @disabled={{not (await @agendaitem.notaOrVisienota)}}
+      {{on "click" this.openNota}}
+    >
+      <:floater>
+        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+          {{if (await @agendaitem.notaOrVisienota) (t "open-note") (t "no-nota")}}
+        </EmberTooltip>
+      </:floater>
+    </Auk::Button>
   {{/if}}
   <Auk::Button
     data-test-newsletter-table-button-toolbar-link-to-agendaitem={{true}}

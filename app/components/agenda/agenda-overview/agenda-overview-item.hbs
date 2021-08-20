@@ -118,14 +118,13 @@
             >
               {{#if this.loadNewsletterVisibility.lastSuccessful}}
                 {{#if (not this.newsletterIsVisible)}}
-                  <div class="auk-u-position-relative auk-u-inline-block">
-                    <Auk::Icon @name="not-visible" @skin="muted" class="auk-u-ml-2" />
+                  <Auk::Icon @name="not-visible" @skin="muted" class="auk-u-ml-2">
                     <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                       <p>
                         {{t "not-visible-in-newsletter"}}
                       </p>
                     </EmberTooltip>
-                  </div>
+                  </Auk::Icon>
                 {{else}}
                   {{!-- TODO: this icon is merely here as an invisible placeholder.
                     This keeps element-height the same at all times in order to prevent "jumping" when data is being side-loaded.
@@ -134,24 +133,22 @@
                 {{/if}}
               {{else}}
                 {{!-- TODO: design loading state for newsletter visibility --}}
-                <div class="auk-u-position-relative auk-u-inline-block">
-                  <Auk::Icon @name="circle-question" @skin="muted" class="auk-u-ml-2" />
+                <Auk::Icon @name="circle-question" @skin="muted" class="auk-u-ml-2">
                   <EmberTooltip @side="top" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "loading"}}
                     </p>
                   </EmberTooltip>
-                </div>
+                </Auk::Icon>
               {{/if}}
               {{#if @isNew}}
-                <div class="auk-u-position-relative auk-u-inline-block">
-                  <Auk::Icon @name="calendar-new" class="auk-u-ml-2" />
+                <Auk::Icon @name="calendar-new" class="auk-u-ml-2">
                   <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
                     <p>
                       {{t "added-agendaitem-text"}}
                     </p>
                   </EmberTooltip>
-                </div>
+                </Auk::Icon>
               {{/if}}
             </div>
             {{#if this.subcase.confidential}}

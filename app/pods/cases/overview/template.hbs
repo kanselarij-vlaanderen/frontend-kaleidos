@@ -1,5 +1,5 @@
 {{page-title (t "cases")}}
-<Cases::CasesHeader @isAddingCase={{this.isAddingCase}} @close={{this.close}} />
+{{cases/cases-header isAddingCase=isAddingCase close=(action "close")}}
 <div class="auk-scroll-wrapper__body">
   <div class="auk-u-m-8">
     <Auk::Toolbar>
@@ -7,39 +7,37 @@
         {{#if this.currentSession.isEditor}}
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--vertical-center">
             <Auk::Label class="auk-u-text-nowrap auk-u-mr-2 auk-u-p-0" for="isArchived">{{t "show-archived"}}</Auk::Label>
-            <WebComponents::VlToggle @value={{this.showArchived}} />
+            {{web-components/vl-toggle value=this.showArchived}}
           </Auk::Toolbar::Item>
         {{/if}}
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
-    <DataTable
-      data-test-route-cases-overview-data-table={{true}}
-      @content={{await this.model}}
-      @page={{this.page}}
-      @noDataMessage={{t "no-results-found"}}
-      @size={{this.size}}
-      @sort={{this.sort}}
-      @class="auk-table auk-table--striped"
-      @isLoading={{this.isLoadingModel}}
-      as |table|
-    >
-      <table.content as |c|>
-        <c.header>
+    {{#data-table
+      data-test-route-cases-overview-data-table=true
+      content=(await model)
+      page=page
+      noDataMessage=(t "no-results-found")
+      size=size
+      sort=sort
+      class="auk-table auk-table--striped"
+      isLoading=isLoadingModel
+    as |table|
+    }}
+      {{#table.content as |c|}}
+        {{#c.header}}
           <th class="auk-table__col--9 auk-table__header-title">
             {{t "case-name"}}
           </th>
-          <ThSortable
-            @class="auk-table__col--1 auk-table__header-title"
-            @currentSorting={{this.sort}}
-            @field="created"
-            @label={{t "created-on"}}
-          />
+          {{th-sortable
+            class="auk-table__col--1 auk-table__header-title"
+            currentSorting=this.sort
+            field="created"
+            label=(t "created-on")
+          }}
           <th class="auk-table__col--1"></th>
-        </c.header>
-        {{!-- Users want to be able to click the entire row in order to navigate --}}
-        {{!-- template-lint-disable no-invalid-interactive --}}
-        <c.body @class="auk-table--interaction-cursor" as |row|>
-          <td onclick={{fn this.navigateToCase row}}>
+        {{/c.header}}
+        {{#c.body class="auk-table--interaction-cursor" as |row|}}
+          <td onclick={{action "navigateToCase" row}}>
             <p>
               {{#if row.shortTitle}}
                 {{row.shortTitle}}
@@ -48,36 +46,22 @@
               {{/if}}
             </p>
           </td>
-          <td onclick={{fn this.navigateToCase row}}>
+          <td onclick={{action "navigateToCase" row}}>
             {{moment-format row.created "DD-MM-YYYY HH:mm"}}
           </td>
           <td class="auk-u-text-align--right">
-            {{#if this.currentSession.isEditor}}
-              <div class="auk-u-position-relative auk-u-inline-block">
-                <DropdownMenu
-                  @skin="borderless"
-                  @icon="more"
-                as |Menu|>
-                  <Menu.Item>
-                    <button type="button" class="auk-button-link"
-                      {{on "click" (fn this.openEditCaseModal row)}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "edit-case"}}
-                      </span>
-                    </button>
-                  </Menu.Item>
-                  <Menu.Item>
-                    <a href="" class="auk-button-link auk-button-link--block"
-                      {{on "click" (fn (if row.isArchived this.unarchiveCase this.requestArchiveCase) row)}}
-                    >
-                      <span class="auk-button__content">
-                        {{t (if row.isArchived "unarchive-case" "archive-case")}}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                </DropdownMenu>
-              </div>
+            {{#if currentSession.isEditor}}
+              <DropdownMenu
+                @skin="borderless"
+                @icon="more"
+              as |Menu|>
+                <Menu.Item {{on "click" (fn this.openEditCaseModal row)}}>
+                  {{t "edit-case"}}
+                </Menu.Item>
+                <Menu.Item {{action (if row.isArchived "unarchiveCase" "requestArchiveCase") row}}>
+                  {{t (if row.isArchived "unarchive-case" "archive-case")}}
+                </Menu.Item>
+              </DropdownMenu>
             {{/if}}
             <Auk::Button
               @skin="borderless"
@@ -87,10 +71,9 @@
               @model={{row.id}}
             />
           </td>
-        </c.body>
-        {{!-- template-lint-enable no-invalid-interactive --}}
-      </table.content>
-    </DataTable>
+        {{/c.body}}
+      {{/table.content}}
+    {{/data-table}}
   </div>
 </div>
 {{#if this.showEditCaseModal}}
@@ -101,11 +84,11 @@
           @case={{this.caseToEdit}}
   />
 {{/if}}
-{{#if this.isArchivingCase}}
-  <WebComponents::VlModalVerify
-    @title={{t "archive-case"}}
-    @message={{t "archive-case-message"}}
-    @cancel={{this.cancelArchiveCase}}
-    @verify={{this.archiveCase}}
-  />
+{{#if isArchivingCase}}
+  {{web-components/vl-modal-verify
+    title=(t "archive-case")
+    message=(t "archive-case-message")
+    cancel=(action "cancelArchiveCase")
+    verify=(action "archiveCase")
+  }}
 {{/if}}

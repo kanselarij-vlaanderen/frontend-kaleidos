@@ -24,282 +24,201 @@
       <Auk::Toolbar::Group @position="right">
         {{#if this.currentSessionService.isEditor}}
           <Auk::Toolbar::Item>
-            <div class="auk-u-position-relative auk-u-inline-block">
-              <DropdownMenu
-                @skin="primary"
-                @label={{t "agenda-actions"}}
-                class="vlc-hide-on-print"
-                data-test-agenda-header-show-agenda-options={{true}}
-              as |Menu|>
-                {{#if this.currentSessionService.isEditor}}
-                  {{#if this.currentAgenda.isDesignAgenda}}
-                    <Menu.Item>
-                      <button type="button" data-test-agenda-header-approve-agenda class="auk-button-link auk-button-link--block" {{action "openConfirmApproveAgenda"}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "approve-design-agenda" serialnumber=this.currentAgenda.serialnumber}}
-                        </span>
-                      </button>
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item>
-                      <button  type="button" data-test-agenda-header-approve-and-close-agenda class="auk-button-link auk-button-link--block" {{action "openConfirmApproveAgendaAndCloseMeeting"}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "approve-agenda-and-close" serialnumber=this.currentAgenda.serialnumber}}
-                        </span>
-                      </button>
-                    </Menu.Item>
-                    <Menu.Divider />
-                  {{/if}}
-                  {{#if (not this.currentSession.isFinal)}}
-                    {{#if (await this.isSessionClosable)}}
-                      <Menu.Item>
-                        <a href=""
-                          data-test-agenda-header-lock-agenda
-                          class="auk-button-link auk-button-link--block auk-u-text-error"
-                          {{action "openConfirmCloseMeeting"}}
-                        >
-                          <span class="auk-button__content">
-                            {{t "agenda-close"}}
-                          </span>
-                        </a>
-                      </Menu.Item>
-                      <Menu.Divider />
-                    {{/if}}
-                  {{else}}
-                    <Menu.Item>
-                      <a href=""
-                        data-test-agenda-header-unlock-agenda
-                        class="auk-button-link auk-button-link--block"
-                        {{action "unlockAgenda"}}
-                      >
-                        <span class="auk-button__content">
-                          {{t "agenda-reopen"}}
-                        </span>
-                      </a>
-                    </Menu.Item>
-                    <Menu.Divider />
-                  {{/if}}
-                {{/if}}
-                {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
-                {{#if (await this.canDeleteSelectedAgenda)}}
-                  <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
-                    <a href=""
-                      data-test-agenda-header-delete-agenda
-                      class="auk-button-link auk-u-text-error"
-                      {{action "openConfirmDeleteSelectedAgenda"}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "agenda-delete"}}
-                      </span>
-                    </a>
+            <DropdownMenu
+              @skin="primary"
+              @label={{t "agenda-actions"}}
+              class="vlc-hide-on-print"
+              data-test-agenda-header-show-agenda-options={{true}}
+            as |Menu|>
+              {{#if currentSessionService.isEditor}}
+                {{#if currentAgenda.isDesignAgenda}}
+                  <Menu.Item
+                    data-test-agenda-header-approve-agenda
+                    {{action "openConfirmApproveAgenda"}}
+                  >
+                    {{t "approve-design-agenda" serialnumber=currentAgenda.serialnumber}}
                   </Menu.Item>
-                {{/if}}
-                {{#if (await this.canReopenPreviousAgenda)}}
+                  <Menu.Item
+                    data-test-agenda-header-approve-and-close-agenda
+                    {{action "openConfirmApproveAgendaAndCloseMeeting"}}
+                  >
+                    {{t "approve-agenda-and-close" serialnumber=currentAgenda.serialnumber}}
+                  </Menu.Item>
                   <Menu.Divider />
-                  <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
-                    <a href=""
-                        data-test-agenda-header-reopen-previous-version
-                        class="auk-button-link auk-button-link--block auk-u-text-error"
-                        {{action "openConfirmReopenPreviousAgenda"}}
-                      >
-                      <span class="auk-button__content">
-                        {{t "agenda-reopen-previous-version"}}
-                      </span>
-                    </a>
-                  </Menu.Item>
                 {{/if}}
-              </DropdownMenu>
-            </div>
+                {{#if (not currentSession.isFinal)}}
+                  {{#if (await isSessionClosable)}}
+                    <Menu.Item
+                      @skin="danger"
+                      data-test-agenda-header-lock-agenda
+                      {{action "openConfirmCloseMeeting"}}
+                    >
+                      {{t "agenda-close"}}
+                    </Menu.Item>
+                    <Menu.Divider />
+                  {{/if}}
+                {{else}}
+                  <Menu.Item
+                    data-test-agenda-header-unlock-agenda
+                    {{action "unlockAgenda"}}
+                  >
+                    {{t "agenda-reopen"}}
+                  </Menu.Item>
+                  <Menu.Divider />
+                {{/if}}
+              {{/if}}
+              {{!-- These actions check for isEditor/isAdmin themselves, so we put these outside the previous if statement --}}
+              {{#if (await canDeleteSelectedAgenda)}}
+                <Menu.Item
+                  @skin="danger"
+                  data-test-agenda-header-delete-agenda
+                  {{action "openConfirmDeleteSelectedAgenda"}}
+                > {{!-- vlc-dropdown-menu__item--action-danger --}}
+                  {{t "agenda-delete"}}
+                </Menu.Item>
+              {{/if}}
+              {{#if (await canReopenPreviousAgenda)}}
+                <Menu.Divider />
+                <Menu.Item
+                  @skin="danger"
+                  data-test-agenda-header-reopen-previous-version
+                  {{action "openConfirmReopenPreviousAgenda"}}
+                > {{!-- vlc-dropdown-menu__item--action-danger --}}
+                  {{t "agenda-reopen-previous-version"}}
+                </Menu.Item>
+              {{/if}}
+            </DropdownMenu>
           </Auk::Toolbar::Item>
         {{/if}}
         <Auk::Toolbar::Item>
-          <div class="auk-u-position-relative auk-u-inline-block">
-            <DropdownMenu
-              @skin="secondary"
-              @label={{t "actions"}}
-              class="vlc-hide-on-print"
-              data-test-agenda-header-show-action-options={{true}}
-            as |Menu|>
-              {{#if (and this.currentSessionService.isEditor this.currentAgenda.isDesignAgenda)}}
-                <Menu.Item>
-                  <a href="javascript://"
-                      data-test-agenda-header-add-agendaitems
-                      class="auk-button-link auk-button-link--block"
-                    {{action "addAgendaitemsAction"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "add-to-agenda"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-                <Menu.Divider />
-              {{/if}}
-              <Menu.Item>
-                <a href=""
-                    data-test-agenda-header-navigate-to-decisions
-                    class="auk-button-link auk-button-link--block"
-                  {{action "navigateToDecisions"}}
-                >
-                  <span class="auk-button__content">
-                    {{t "print-decisions"}}
-                  </span>
-                </a>
+          <DropdownMenu
+            @skin="secondary"
+            @label={{t "actions"}}
+            class="vlc-hide-on-print"
+            data-test-agenda-header-show-action-options={{true}}
+          as |Menu|>
+            {{#if (and currentSessionService.isEditor currentAgenda.isDesignAgenda)}}
+              <Menu.Item
+                data-test-agenda-header-add-agendaitems
+                {{action "addAgendaitemsAction"}}
+              >
+                {{t "add-to-agenda"}}
               </Menu.Item>
-              <Menu.Item>
-                <a href=""
-                    data-test-agenda-header-navigate-to-newsletter
-                    class="auk-button-link auk-button-link--block"
-                  {{action "navigateToNewsletter"}}
-                >
-                  <span class="auk-button__content">
-                    {{t "print-newsletter"}}
-                  </span>
-                </a>
+              <Menu.Divider />
+            {{/if}}
+            <Menu.Item
+              data-test-agenda-header-navigate-to-decisions
+              {{action "navigateToDecisions"}}
+            >
+              {{t "print-decisions"}}
+            </Menu.Item>
+            <Menu.Item
+              data-test-agenda-header-navigate-to-newsletter
+              {{action "navigateToNewsletter"}}
+            >
+              {{t "print-newsletter"}}
+            </Menu.Item>
+            <Menu.Item
+              data-test-agenda-header-navigate-to-pressagenda
+              {{action "navigateToPressAgenda"}}
+            >
+              {{t "printable-press-agenda"}}
+            </Menu.Item>
+            {{#if showPrintButton}}
+              <Menu.Item
+                @route="agenda.agendaitems"
+                data-test-agenda-header-navigate-to-agenda-view
+              >
+                {{t "agenda-view"}}
               </Menu.Item>
-              <Menu.Item>
-                <a href=""
-                    data-test-agenda-header-navigate-to-pressagenda
-                    class="auk-button-link auk-button-link--block"
-                  {{action "navigateToPressAgenda"}}
-                >
-                  <span class="auk-button__content">
-                    {{t "printable-press-agenda"}}
-                  </span>
-                </a>
+              <Menu.Item
+                data-test-agenda-header-print-agenda
+                {{action "print"}}
+              >
+                {{t "print"}}
               </Menu.Item>
-              {{#if this.showPrintButton}}
-                <Menu.Item>
-                  <LinkTo
-                    @route="agenda.agendaitems"
-                    class="auk-button-link auk-button-link--block"
-                    data-test-agenda-header-navigate-to-agenda-view
-                  >
-                    <span class="auk-button__content">
-                      {{t "agenda-view"}}
-                    </span>
-                  </LinkTo>
-                </Menu.Item>
-                <Menu.Item>
-                  <a href=""
-                      data-test-agenda-header-print-agenda
-                      class="auk-button-link auk-button-link--block"
-                    {{action "print"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "print"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{else}}
-                <Menu.Item>
-                  <LinkTo
-                    data-test-agenda-header-navigate-to-printable-agenda
-                    class="auk-button-link auk-button-link--block"
-                    @route="agenda.print"
-                  >
-                    <span class="auk-button__content">
-                      {{t "printable-version"}}
-                    </span>
-                  </LinkTo>
-                </Menu.Item>
-              {{/if}}
-              {{#if this.currentSessionService.isEditor}}
-                <Menu.Divider />
-                <Menu.Item>
-                  <a href=""
-                      data-test-agenda-header-toggle-editing-session
-                      class="auk-button-link auk-button-link--block"
-                    {{action "toggleEditingSession"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "edit-session"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-                <Menu.Item>
-                  <a href=""
-                      data-test-agenda-header-select-signature
-                      class="auk-button-link auk-button-link--block"
-                    {{action "selectSignature"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "signature-edit"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{/if}}
-              <Menu.Item>
-                <a href=""
-                    data-test-agenda-header-download-documents
-                    class="auk-button-link auk-button-link--block"
-                  {{action "downloadAllDocuments"}}
-                >
-                  <span class="auk-button__content">
-                    {{t "download-documents"}}
-                  </span>
-                </a>
+            {{else}}
+              <Menu.Item
+                @route="agenda.print"
+                data-test-agenda-header-navigate-to-printable-agenda
+              >
+                {{t "printable-version"}}
               </Menu.Item>
-              {{#if this.currentAgenda.isDesignAgenda}}
-                <Menu.Item>
-                  <a href=""
-                      data-test-agenda-header-approve-all-agendaitems
-                      class="auk-button-link auk-button-link--block"
-                    {{action "showApproveAllAgendaitemsWarning"}}
-                  >
-                    <span class="auk-button__content">
-                      {{t "approve-all-agendaitems"}}
-                    </span>
-                  </a>
-                </Menu.Item>
-              {{/if}}
-              {{#if this.currentSessionService.isEditor}}
-                <Menu.Divider />
-                <Menu.Item>
-                  {{#if this.currentSession.canReleaseDecisions}}
-                    <a href=""
-                        data-test-agenda-header-release-decisions
-                        class="auk-button-link auk-button-link--block auk-u-text-error"
-                      {{action "releaseDecisions"}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "agenda-release-decisions"}}
-                      </span>
-                    </a>
-                  {{else if this.currentSession.canReleaseDocuments}}
-                    <a href=""
-                        data-test-agenda-header-release-documents
-                        class="auk-button-link auk-button-link--block auk-u-text-error"
-                      {{action "releaseDocuments"}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "agenda-release-documents"}}
-                      </span>
-                    </a>
-                  {{/if}}
-                </Menu.Item>
-                {{#if
+            {{/if}}
+            {{#if currentSessionService.isEditor}}
+              <Menu.Divider />
+              <Menu.Item
+                data-test-agenda-header-toggle-editing-session
+                {{action "toggleEditingSession"}}
+              >
+                {{t "edit-session"}}
+              </Menu.Item>
+              <Menu.Item
+                data-test-agenda-header-select-signature
+                {{action "selectSignature"}}
+              >
+                {{t "signature-edit"}}
+              </Menu.Item>
+            {{/if}}
+            <Menu.Item
+              data-test-agenda-header-download-documents
+              {{action "downloadAllDocuments"}}
+            >
+              {{t "download-documents"}}
+            </Menu.Item>
+            {{#if currentAgenda.isDesignAgenda}}
+              <Menu.Item
+                data-test-agenda-header-approve-all-agendaitems
+                {{action "showApproveAllAgendaitemsWarning"}}
+              >
+                {{t "approve-all-agendaitems"}}
+              </Menu.Item>
+            {{/if}}
+            {{#if currentSessionService.isEditor}}
+              {{#if
+                (or
+                  currentSession.canReleaseDecisions
+                  currentSession.canReleaseDocuments
                   (and
-                    (not (await this.designAgendaPresent))
-                    (not (await this.currentSession.isFinal))
+                    (not (await designAgendaPresent))
+                    (not (await currentSession.isFinal))
                   )
-                }}
-                  <Menu.Item> {{!-- vlc-dropdown-menu__item--action-danger --}}
-                    <a href=""
-                        data-test-agenda-header-create-new-design
-                        class="auk-button-link auk-button-link--block"
-                        {{action "createNewDesignAgendaAction" this.currentSession}}
-                    >
-                      <span class="auk-button__content">
-                        {{t "agenda-add"}}
-                      </span>
-                    </a>
-                  </Menu.Item>
-                {{/if}}
+                )
+              }}
+                <Menu.Divider />
               {{/if}}
-            </DropdownMenu>
-          </div>
+              {{#if currentSession.canReleaseDecisions}}
+                <Menu.Item
+                  @skin="danger"
+                  data-test-agenda-header-release-decisions
+                  {{action "releaseDecisions"}}
+                >
+                  {{t "agenda-release-decisions"}}
+                </Menu.Item>
+              {{else if currentSession.canReleaseDocuments}}
+                <Menu.Item
+                  @skin="danger"
+                  data-test-agenda-header-release-documents
+                  {{action "releaseDocuments"}}
+                >
+                  {{t "agenda-release-documents"}}
+                </Menu.Item>
+              {{/if}}
+              {{#if
+                (and
+                  (not (await designAgendaPresent))
+                  (not (await currentSession.isFinal))
+                )
+              }}
+                <Menu.Item
+                  data-test-agenda-header-create-new-design
+                  {{action "createNewDesignAgendaAction" currentSession}}
+                > {{!-- vlc-dropdown-menu__item--action-danger --}}
+                  {{t "agenda-add"}}
+                </Menu.Item>
+              {{/if}}
+            {{/if}}
+          </DropdownMenu>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}

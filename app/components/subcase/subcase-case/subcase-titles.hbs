@@ -46,10 +46,6 @@
 {{/if}}
 <div class="auk-u-mb-2">
   <div class="pill-container auk-o-flex">
-    {{#if (await this.subcase.confidential)}}
-      <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed" />
-    {{else}}
-      <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open" />
-    {{/if}}
+    <Utils::ConfidentialityPill @confidential={{await subcase.confidential}} />
   </div>
 </div>
