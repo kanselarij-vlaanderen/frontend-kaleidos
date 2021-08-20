@@ -23,7 +23,7 @@ export default class AgendaitemAgendaitemsAgendaRoute extends Route {
     super.setupController(...arguments);
     controller.meeting = this.modelFor('agenda').meeting;
 
-    const agendaitemsOverviewController = this.controllerFor('agenda.agendaitems');
-    agendaitemsOverviewController.selectedAgendaitem = model;
+    const parentController = this.controllerFor('agenda.agendaitems');
+    parentController.selectedAgendaitem = model;
   }
 }
