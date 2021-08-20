@@ -13,17 +13,12 @@
       {{/if}}
       {{#if @piece.accessLevel}}
         <Auk::KeyValue @key={{t "publicity"}}>
-          <Auk::ColorBadge @skin={{this.accessPillSkin}}/>
-          <span>{{@piece.accessLevel.label}}</span>
+          <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
         </Auk::KeyValue>
       {{/if}}
     {{/unless}}
     <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-      {{#if @piece.confidential}}
-        <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
-      {{else}}
-        <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open"/>
-      {{/if}}
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
     </Auk::KeyValue>
     <div class="auk-key-value-item">
       <Auk::KeyValue @key={{t "file-type"}}>
