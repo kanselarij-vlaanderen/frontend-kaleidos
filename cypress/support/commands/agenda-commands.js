@@ -206,7 +206,7 @@ function deleteAgenda(meetingId, lastAgenda) {
   // cy.route('POST', '/agenda-approve/deleteAgenda').as('deleteAgenda');
   // Call is made but cypress doesn't see it
   cy.route('DELETE', '/newsletter-infos/**').as('deleteNewsletter');
-  cy.route('GET', '/agendaitems?fields**').as('loadAgendaitems');
+  cy.route('GET', '/agendaitems?filter**').as('loadAgendaitems');
 
   cy.get(agenda.agendaHeader.showAgendaOptions).click();
   cy.get(agenda.agendaHeader.agendaActions.deleteAgenda).click();
@@ -404,7 +404,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
   cy.wait('@createAgendaActivity', {
     timeout: 20000,
   });
-  cy.route('GET', '/agendaitems?fields**').as(`loadAgendaitemFields${randomInt}`);
+  cy.route('GET', '/agendaitems?filter**').as(`loadAgendaitems${randomInt}`);
   cy.wait('@createNewAgendaitem', {
     timeout: 20000,
   })
@@ -414,7 +414,7 @@ function addAgendaitemToAgenda(subcaseTitle, postponed = false) {
     .wait('@patchAgenda', {
       timeout: 20000,
     });
-  cy.wait(`@loadAgendaitemFields${randomInt}`);
+  cy.wait(`@loadAgendaitems${randomInt}`);
   cy.log('/addAgendaitemToAgenda');
 }
 
@@ -461,7 +461,7 @@ function agendaitemExists(agendaitemName) {
       if (!selectedReverseTab.includes('Overzicht')) {
         cy.clickReverseTab('Overzicht');
         cy.get(agenda.agendaOverviewItem.subitem);
-        // data loading could be awaited  '/agendaitem?fields**' or next get() fails, solved bij checking loading modal
+        // data loading could be awaited  '/agendaitem?filter**' or next get() fails, solved bij checking loading modal
         cy.log('data needs to be loaded now, waiting a few seconds');
         cy.get(auk.loader, {
           timeout: 20000,
