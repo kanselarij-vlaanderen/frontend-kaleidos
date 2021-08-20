@@ -36,17 +36,19 @@
     </LinkTo>
   </LinkTo>
 {{else}}
-  <button
-          type="button"
-          class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}} {{if @active "auk-tabs__tab--active"}}"
-          ...attributes
-  >
-    <Auk::Tab::InnerLayout
-            @layout={{@layout}}
-            @icon={{this.icon}}
-            @counter={{@counter}}
+  <li
+    class="auk-tabs__tab {{if @isHierarchicalBack "auk-tabs__hierarchical-back"}} {{if @active "auk-tabs__tab--active"}}">
+    <button
+      type="button"
+      {{on "click" @onClick}}
     >
-      {{yield}}
-    </Auk::Tab::InnerLayout>
-  </button>
+      <Auk::Tab::InnerLayout
+              @layout={{@layout}}
+              @icon={{this.icon}}
+              @counter={{@counter}}
+      >
+        {{yield}}
+      </Auk::Tab::InnerLayout>
+    </button>
+  </li>
 {{/if}}
