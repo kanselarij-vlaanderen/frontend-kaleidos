@@ -50,6 +50,7 @@
           {{#c.body as |row|}}
             <td class="auk-table__col--1">
               {{web-components/vl-checkbox
+                data-test-add-existing-piece-checkbox=true
                 value=row.selected
                 toggle=(action "select" row)
               }}

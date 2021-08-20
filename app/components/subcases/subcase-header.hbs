@@ -19,13 +19,13 @@
             <DropdownMenu
               @skin="primary"
               @label={{t "propose-for-agenda"}}
-              data-test-subcase-header-action-propose-for-agenda={{true}}
+              data-test-subcase-header-show-proposed-agendas={{true}}
             as |Menu|>
               {{#each
                 (await meetings)
               as |meeting|
               }}
-                <Menu.Item>
+                <Menu.Item data-test-subcase-header-propose-for-agenda>
                   <button type="button" class="auk-button-link"
                     {{action "proposeForAgenda" subcase meeting}}
                   >
