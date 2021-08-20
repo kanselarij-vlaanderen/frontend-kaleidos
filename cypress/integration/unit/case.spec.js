@@ -1,6 +1,7 @@
 /* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
@@ -41,23 +42,23 @@ context('Create case as Admin user', () => {
     const shorttitle = 'Gibberish';
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).click();
+    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
+      .click();
     cy.get(cases.newCase.cancel).click();
     // check if data is cleared after cancel
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).within(() => {
-      cy.get(utils.vlToggle.input).should('not.be', 'checked');
-    });
+    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.input)
+      .should('not.be', 'checked');
     cy.get(cases.newCase.shorttitle).type(shorttitle);
-    cy.get(cases.newCase.toggleConfidential).click();
+    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
+      .click();
     cy.get(utils.vlModal.close).click();
     // check if data is cleared after close
     cy.get(cases.casesHeader.addCase).click();
     cy.get(cases.newCase.shorttitle).should('not.contain', shorttitle);
-    cy.get(cases.newCase.toggleConfidential).within(() => {
-      cy.get(utils.vlToggle.input).should('not.be', 'checked');
-    });
+    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.input)
+      .should('not.be', 'checked');
   });
 
   it('Copy of remark subcase should not result in a new remark subcase', () => {
@@ -70,7 +71,7 @@ context('Create case as Admin user', () => {
     cy.get(route.subcaseOverview.confidentialityCheckBox).should('not.be.checked');
     // ensure type is correct
     cy.get(cases.subcaseTitlesView.type).contains('Mededeling');
-    cy.navigateBack();
+    cy.get(auk.tab.hierarchicalBack).click();
     // ensure type is the same after copy to new subcase
     cy.route('POST', '/subcases').as('createNewSubcase');
     cy.get(cases.subcaseOverviewHeader.createSubcase).click();

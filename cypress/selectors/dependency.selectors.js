@@ -14,7 +14,17 @@ const selectors = {
     flatpickrMonthDropdownMonths: '.open  .flatpickr-monthDropdown-months',
     numInputWrapper: '.open  .numInputWrapper',
     inputNumInputCurYear: '.open  input.numInput.cur-year',
-    flatpickrDay: '.open  .flatpickr-day',
+    // time
+    time: '.open .flatpickr-time',
+    hour: '.flatpickr-hour',
+    minute: '.flatpickr-minute',
+    // date
+    days: '.open .flatpickr-days',
+    day: '.flatpickr-day',
+    prevMonthDay: '.prevMonthDay',
+    nextMonthDay: '.nextMonthDay',
+    yearInput: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > .numInputWrapper > input',
+    monthSelect: '.open .flatpickr-months > .flatpickr-month > .flatpickr-current-month > select',
   },
 
   // RDFA editor
