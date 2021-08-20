@@ -1,10 +1,10 @@
 import Controller from '@ember/controller';
 import {
-  action,
-  computed
+  action, computed
 } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency-decorators';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 
 const COLUMN_MAP = {
@@ -34,15 +34,16 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
 
   @tracked publicationFlow;
   @tracked publicationSubcase;
-  @tracked selectedPieces = [];
+  @tracked selectedPieceRows = [];
   @tracked isProofRequestModalOpen = false;
   @tracked proofRequestStage;
   @tracked isPieceUploadModalOpen = false;
+  @tracked isPieceUploadCorrected;
   @tracked isPieceEditModalOpen = false;
-  @tracked pieceToEdit;
+  @tracked pieceRowToEdit;
 
-  @computed('sort', 'model') // TODO: remove @computed once this.sort is marked as @tracked
-  get pieces() {
+  @computed('sort', 'model.pieceRows') // TODO: remove @computed once this.sort is marked as @tracked
+  get pieceRows() {
     let property = 'created';
     let isDescending = false;
     if (this.sort) {
@@ -51,48 +52,52 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
       property = COLUMN_MAP[sortKey] ?? property;
     }
 
-    let pieces = this.model.pieces;
-    pieces = pieces.sortBy(property);
+    let pieceRows = this.model.pieceRows;
+    pieceRows = pieceRows.sortBy(`piece.${property}`);
     if (isDescending) {
-      pieces = pieces.reverseObjects();
+      pieceRows = pieceRows.reverseObjects();
     }
 
-    return pieces;
+    return pieceRows;
   }
 
   get areAllPiecesSelected() {
-    return this.model.pieces.length === this.selectedPieces.length;
+    return this.model.pieceRows.length === this.selectedPieceRows.length;
+  }
+
+  get selectedPieces() {
+    return this.selectedPieceRows.map((row) => row.piece);
   }
 
   get isRequestingDisabled() {
-    return this.selectedPieces.length === 0
+    return this.selectedPieceRows.length === 0
       || this.publicationSubcase.isFinished;
-  }
-
-  get canUploadPiece() {
-    return this.currentSession.isOvrb;
   }
 
   get isUploadDisabled() {
     return this.publicationSubcase.isFinished;
   }
 
+  get canDeletePieces() {
+    return !this.publicationSubcase.isFinished;
+  }
+
   @action
-  togglePieceSelection(selectedPiece) {
-    const isPieceSelected = this.selectedPieces.includes(selectedPiece);
+  togglePieceSelection(pieceRow) {
+    const isPieceSelected = this.selectedPieceRows.includes(pieceRow);
     if (isPieceSelected) {
-      this.selectedPieces.removeObject(selectedPiece);
+      this.selectedPieceRows.removeObject(pieceRow);
     } else {
-      this.selectedPieces.pushObject(selectedPiece);
+      this.selectedPieceRows.pushObject(pieceRow);
     }
   }
 
   @action
   toggleAllPiecesSelection() {
     if (this.areAllPiecesSelected) {
-      this.selectedPieces = [];
+      this.selectedPieceRows = [];
     } else {
-      this.selectedPieces = [...this.model.pieces];
+      this.selectedPieceRows = [...this.model.pieceRows];
     }
   }
 
@@ -115,43 +120,51 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
   @action
   async saveProofRequest(requestProperties) {
     await this.performSaveProofRequest(requestProperties);
-    this.selectedPieces = [];
+    this.selectedPieceRows = [];
     this.isProofRequestModalOpen = false;
     this.transitionToRoute('publications.publication.proofs.requests');
   }
 
   @action
-  openPieceUploadModal() {
+  openSourceUploadModal() {
     this.isPieceUploadModalOpen = true;
+  }
+
+  @action
+  openCorrectionUploadModal() {
+    this.isPieceUploadModalOpen = true;
+    this.isPieceUploadCorrected = true;
   }
 
   @action
   closePieceUploadModal() {
     this.isPieceUploadModalOpen = false;
+    this.isPieceUploadCorrected = false;
   }
 
   @action
-  async saveCorrectionDocument(proofDocument) {
-    await this.performSaveCorrectionDocument(proofDocument);
-    this.isPieceUploadModalOpen = false;
+  async savePieceUpload(proofDocument) {
+    await this.performSavePieceUpload(proofDocument, this.isPieceUploadCorrected);
+
+    this.closePieceUploadModal();
     this.send('refresh');
   }
 
   @action
-  openPieceEditModal(piece) {
-    this.pieceToEdit = piece;
+  openPieceEditModal(pieceRow) {
+    this.pieceRowToEdit = pieceRow;
     this.isPieceEditModalOpen = true;
   }
 
   @action
   closePieceEditModal() {
-    this.pieceToEdit = null;
+    this.pieceRowToEdit = null;
     this.isPieceEditModalOpen = false;
   }
 
   @action
-  async saveEditPiece(modalResult) {
-    const piece = this.pieceToEdit;
+  async savePieceEdit(modalResult) {
+    const piece = this.pieceRowToEdit.piece;
     piece.name = modalResult.name;
     piece.receivedDate = modalResult.receivedAtDate;
     await piece.save();
@@ -160,9 +173,24 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     this.send('refresh');
   }
 
+  @task
+  *deletePiece(pieceRow) {
+    const piece = pieceRow.piece;
+    const filePromise = piece.file;
+    const documentContainerPromise = piece.documentContainer;
+    const [file, documentContainer] = yield Promise.all([filePromise, documentContainerPromise]);
+
+    const destroyPiece = piece.destroyRecord();
+    const destroyFile = file.destroyRecord();
+    const destroyDocumentContainer = documentContainer.destroyRecord();
+
+    yield Promise.all([destroyFile, destroyPiece, destroyDocumentContainer]);
+
+    this.send('refresh');
+  }
+
   async performSaveProofRequest(proofRequest) {
     const now = new Date();
-
     const saves = [];
 
     // PUBLICATION SUBCASE
@@ -209,6 +237,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     const [files, outbox, mailSettings] = await Promise.all([filesPromise, outboxPromise, mailSettingsPromise]);
     const mail = this.store.createRecord('email', {
       to: mailSettings.proofRequestToEmail,
+      cc: mailSettings.proofRequestCcEmail,
       from: mailSettings.defaultFromEmail,
       folder: outbox,
       subject: proofRequest.subject,
@@ -222,7 +251,7 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     await Promise.all(saves);
   }
 
-  async performSaveCorrectionDocument(proofDocument) {
+  async performSavePieceUpload(uploadProperties, isCorrection) {
     const now = new Date();
 
     const documentContainer = this.store.createRecord('document-container', {
@@ -230,15 +259,21 @@ export default class PublicationsPublicationProofsDocumentsController extends Co
     });
     await documentContainer.save();
 
-    const piece = this.store.createRecord('piece', {
+    const pieceProperties = {
       created: now,
       modified: now,
-      file: proofDocument.file,
+      name: uploadProperties.name,
       confidential: false,
-      name: proofDocument.name,
+      file: uploadProperties.file,
       documentContainer: documentContainer,
-      publicationSubcaseCorrectionFor: this.publicationSubcase,
-    });
+    };
+
+    if (isCorrection) {
+      pieceProperties.publicationSubcaseCorrectionFor = this.publicationSubcase;
+    } else {
+      pieceProperties.publicationSubcaseSourceFor = this.publicationSubcase;
+    }
+    const piece = this.store.createRecord('piece', pieceProperties);
     await piece.save();
 
     return piece;

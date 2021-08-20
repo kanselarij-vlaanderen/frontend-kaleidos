@@ -3,8 +3,12 @@
 
 // ***********************************************
 // Functions
+import auk from '../../selectors/auk.selectors';
+import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
+import utils from '../../selectors/utils.selectors';
+
 
 /**
  * @description Goes to the case overview and creates a new case
@@ -20,45 +24,20 @@ function createCase(confidential, shortTitle) {
   cy.route('POST', '/cases').as('createNewCase');
   cy.visit('/dossiers');
 
-  cy.get('.auk-navbar .auk-button')
-    .contains('Nieuw dossier aanmaken')
-    .click();
-
-  cy.get('.auk-modal').as('dialog')
-    .within(() => {
-      cy.get('.auk-form-group').as('newCaseForm')
-        .should('have.length', 2);
-    });
-
-  // Set confidentiality
+  cy.get(cases.casesHeader.addCase).click();
   if (confidential) {
-    cy.get('@newCaseForm').eq(0)
-      .within(() => {
-        cy.get('.vl-toggle__label').click();
-      });
-  }
-
-  // Set short title
-  cy.get('@newCaseForm').eq(1)
-    .within(() => {
-      cy.get('.auk-textarea').click()
-        .type(shortTitle);
-    });
-
-  cy.get('@dialog').within(() => {
-    cy.get('.auk-toolbar-complex__item > .auk-button').contains('Dossier aanmaken')
+    cy.get(cases.newCase.toggleConfidential).find(utils.vlToggle.label)
       .click();
-  });
+  }
+  cy.get(cases.newCase.shorttitle).type(shortTitle);
+  cy.get(cases.newCase.save).click();
 
   let caseId;
   cy.log('/createCase');
-  cy.wait('@createNewCase', {
-    timeout: 20000,
-  })
+  cy.wait('@createNewCase')
     .then((res) => {
       caseId = res.responseBody.data.id;
-      // cy.visit(`/dossiers/${caseId}/deeldossiers`);
-    }) // TODO after a successfull post, the get sometimes fails
+    })
     .then(() => new Cypress.Promise((resolve) => {
       resolve({
         caseId,
@@ -82,93 +61,59 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
   cy.server();
   cy.log('addSubcase');
   cy.route('POST', '/subcases').as('addSubcase-createNewSubcase');
-
+  // TODO KAS-2813 is this wait needed?
   cy.wait(2000);
 
-  cy.get('.auk-navbar .auk-button')
-    .contains('Procedurestap toevoegen')
-    .click();
-
-  cy.get('.auk-form-group').should('have.length', 4);
+  cy.get(cases.subcaseOverviewHeader.createSubcase).click();
 
   // Set the type
   if (type) {
-    cy.get('.auk-radio-list')
-      .within(() => {
-        cy.contains(type).scrollIntoView()
-          .click();
-      });
+    cy.get(cases.newSubcase.type).contains(type)
+      .scrollIntoView()
+      .click();
   }
 
   // Set the short title
   if (newShortTitle) {
-    cy.get('.auk-form-group').eq(0)
-      .within(() => {
-        cy.get('.auk-textarea').click()
-          .clear()
-          .type(newShortTitle);
-      });
+    cy.get(cases.newSubcase.shorttitle).click()
+      .clear()
+      .type(newShortTitle);
   }
 
   // Set the long title
   if (longTitle) {
-    cy.get('.auk-form-group').eq(1)
-      .within(() => {
-        cy.get('.auk-textarea').click()
-          .clear()
-          .type(longTitle);
-      });
+    cy.get(cases.newSubcase.longtitle).click()
+      .clear()
+      .type(longTitle);
   }
 
   // Set the step type
   if (step) {
-    cy.get('.auk-form-group').eq(2)
-      .within(() => {
-        cy.get(dependency.emberPowerSelect.trigger).click();
-      });
-    cy.get(dependency.emberPowerSelect.option, {
-      timeout: 5000,
-    }).should('exist')
-      .then(() => {
-        cy.contains(step).scrollIntoView()
-          .trigger('mouseover')
-          .click();
-        // TODO Experiment for dropdown flakyness
-        cy.get(dependency.emberPowerSelect.option, {
-          timeout: 15000,
-        }).should('not.be.visible');
-      });
+    cy.get(cases.newSubcase.procedureStep).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(step)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click();
+    cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
   }
 
   // Set the step name
   if (stepName) {
-    cy.get('.auk-form-group').eq(3)
-      .within(() => {
-        cy.get(dependency.emberPowerSelect.trigger).click();
-      });
-    cy.get(dependency.emberPowerSelect.option, {
-      timeout: 5000,
-    }).should('exist')
-      .then(() => {
-        cy.contains(stepName).scrollIntoView()
-          .trigger('mouseover')
-          .click();
-        // TODO Experiment for dropdown flakyness
-        cy.get(dependency.emberPowerSelect.option, {
-          timeout: 15000,
-        }).should('not.be.visible');
-      });
+    cy.get(cases.newSubcase.procedureName).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(stepName)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click();
+    cy.get(dependency.emberPowerSelect.option).should('not.be.visible');
   }
 
-  cy.get('.auk-toolbar-complex').within(() => {
-    cy.contains('Procedurestap aanmaken').click();
-  });
+  cy.get(cases.newSubcase.save).click();
 
   let subcaseId;
   cy.log('/addSubcase');
-  cy.wait('@addSubcase-createNewSubcase', {
-    timeout: 20000,
-  })
+  cy.wait('@addSubcase-createNewSubcase')
     .then((res) => {
       subcaseId = res.responseBody.data.id;
     })
@@ -189,14 +134,9 @@ function addSubcase(type, newShortTitle, longTitle, step, stepName) {
 function openCase(caseTitle) {
   cy.log('openCase');
   cy.visit('dossiers?aantal=50');
-  cy.get('.data-table > tbody', {
-    timeout: 20000,
-  }).children()
-    .as('rows');
-  cy.get('@rows').within(() => {
-    cy.contains(caseTitle).parents('tr')
-      .click();
-  });
+  cy.get(route.casesOverview.dataTable).contains(caseTitle)
+    .parents('tr')
+    .click();
   cy.log('/openCase');
 }
 
@@ -210,7 +150,7 @@ function openCase(caseTitle) {
 function searchCase(caseTitle) {
   cy.log('seachCsearchCasease');
   cy.visit('zoeken/dossiers');
-  cy.get('#dossierId').type(caseTitle);
+  cy.get(route.search.input).type(caseTitle);
   const splitCaseTitle =  `${caseTitle.split(' ', 1)}`;
   // this new part is required to translate 'testId=xxxx:' into its encoded form for url
   const encodedCaseTitle = splitCaseTitle.replace('=', '%3D').replace(':', '%3A');
@@ -218,16 +158,11 @@ function searchCase(caseTitle) {
   cy.get(route.search.trigger)
     .click()
     .wait('@getCaseSearchResult');
-  cy.contains('Aan het laden...').should('not.exist');
+  cy.get(auk.loader).should('not.exist');
   cy.url().should('include', `?zoekterm=${encodedCaseTitle}`);
-  cy.get('.data-table > tbody', {
-    timeout: 20000,
-  }).children()
-    .as('rows');
-  cy.get('@rows').within(() => {
-    cy.contains(caseTitle).parents('tr')
-      .click();
-  });
+  cy.get(route.searchCases.dataTable).contains(caseTitle)
+    .parents('tr')
+    .click();
   cy.log('/searchCase');
 }
 

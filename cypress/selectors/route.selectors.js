@@ -24,6 +24,7 @@ const selectors = {
   // agendas/overview/template.hbs
   agendasOverview: {
     dataTable: '[data-test-route-agendas-overview-data-table]',
+    navigationButton: '[data-test-route-agendas-overview-navigation-button]',
     filter: {
       container: '[data-test-route-agendas-overview-filter-container]',
       input: '[data-test-route-agendas-overview-filter-input]',
@@ -143,6 +144,15 @@ const selectors = {
   // login/template
   login: {
     acmidmButton: '[data-test-route-login-acmidm-container] button',
+  },
+
+  /**
+    ROUTE MOCK-LOGIN
+   */
+
+  // mock-login-route/template
+  mockLogin: {
+    list: '[data-test-mock-login-list]',
   },
 
 
