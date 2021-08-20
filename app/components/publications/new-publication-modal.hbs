@@ -48,14 +48,13 @@
               data-test-create-publication-modal-suffix-input
               {{on "change" this.isPublicationNumberAlreadyTaken}}
             />
-            <div class="auk-u-position-relative auk-u-inline-block">
-              <Auk::Icon @name="circle-info" @skin="muted" class="auk-u-mx" />
+            <Auk::Icon @name="circle-info" @skin="muted" class="auk-u-mx">
               <EmberTooltip @tooltipClass="auk-tooltip"  @side="top" >
                 <p>
                   {{t "new-publication-tooltip"}}
                 </p>
               </EmberTooltip>
-            </div>
+            </Auk::Icon>
           </div>
           {{#if this.numberIsAlreadyUsed}}
             <Auk::Label @error={{true}}>

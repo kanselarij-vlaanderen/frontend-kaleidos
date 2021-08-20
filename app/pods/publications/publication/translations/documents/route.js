@@ -1,6 +1,33 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { tracked } from '@glimmer/tracking';
+
+// use:
+// - isPieceDeletable property
+// - file property avoids error when piece (and file) are deleted
+export class PieceRow {
+  @tracked piece;
+  @tracked requestActivitiesUsedBy;
+
+  // no async constructor() in JS
+  static async create(piece) {
+    const row = new PieceRow();
+    row.piece = piece;
+    // avoid awaiting in getter
+    row.requestActivitiesUsedBy = await piece.requestActivitiesUsedBy;
+    return row;
+  }
+
+  get isPieceDeletable() {
+    // can be translation or publication related
+    const isUsedInRequest = this.requestActivitiesUsedBy.length > 0;
+    // receivedDate is set if and only if it is a received pieced
+    const isReceived = !!this.piece.receivedDate;
+    const isUsed = isUsedInRequest || isReceived;
+    return !isUsed;
+  }
+}
 
 export default class PublicationsPublicationTranslationsDocumentRoute extends Route {
   async model() {
@@ -39,12 +66,11 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     pieces = [...pieces];
     pieces = pieces.sortBy('created').reverseObjects();
 
-    return pieces;
+    const pieceRows = await Promise.all(pieces.map((piece) => PieceRow.create(piece)));
+    return pieceRows;
   }
 
   async afterModel() {
-    // translationSubcase.publicationFlow causes additional network request
-    // while the request is already made in 'publications.publication'
     this.publicationFlow = this.modelFor('publications.publication');
     this.publicationSubcase = await this.publicationFlow.publicationSubcase;
   }
@@ -54,7 +80,7 @@ export default class PublicationsPublicationTranslationsDocumentRoute extends Ro
     controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
     controller.publicationSubcase = this.publicationSubcase;
-    controller.selectedPieces = [];
+    controller.selectedPieceRows = [];
   }
 
   @action
