@@ -1,17 +1,15 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 
 export default class DocumentController extends Controller {
   @service router;
-  @tracked transition;
 
   @action
   transitionBack() {
     // If no route where you returned from go to the home page
-    if (this.transition.from) {
-      this.router.transitionTo(this.transition.from);
+    if (history.length > 1) {
+      history.back();
     } else {
       this.router.transitionTo('agendas');
     }

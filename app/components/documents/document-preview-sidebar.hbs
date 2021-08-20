@@ -1,9 +1,9 @@
 <Auk::Sidebar
-          @size="xlarge"
-          @position="right"
-          @skin="gray-100"
-          class="auk-u-pb-6"
-  >
+  @size="xlarge"
+  @position="right"
+  @skin="white"
+  class="auk-u-pb-6"
+>
   <Auk::Tabs>
     <Auk::Tab {{on "click" this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
     <Auk::Tab {{on "click" this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
@@ -12,32 +12,29 @@
 
   {{!-- DETAILS --}}
   {{#if this.showDetails}}
-    <div class="auk-u-m-4">
-      <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}}/>
-      {{#unless this.loadData.isRunning}}
-        {{#if this.documentType}}
-          <Auk::KeyValue @key={{t "document-type"}} @value={{this.documentType.label}}/>
-        {{/if}}
-        {{#if @piece.accessLevel}}
-          <Auk::KeyValue @key={{t "publicity"}}>
-            <Auk::ColorBadge @skin={{this.accessPillSkin}}/>
-            <span>{{@piece.accessLevel.label}}</span>
-          </Auk::KeyValue>
-        {{/if}}
-      {{/unless}}
-      <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
-        {{#if @piece.confidential}}
-          <Auk::Pill @skin="danger" @layout="icon-only" @icon="lock-closed"/>
-        {{else}}
-          <Auk::Pill @skin="success" @layout="icon-only" @icon="lock-open"/>
-        {{/if}}
-      </Auk::KeyValue>
-      <div class="auk-key-value-item">
-        <Auk::KeyValue @key={{t "file-type"}}>
-          <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+    <Auk::KeyValue @key={{t "document-name"}} @value={{@piece.name}} />
+    {{#unless this.loadData.isRunning}}
+      {{#if this.documentType}}
+        <Auk::KeyValue
+          @key={{t "document-type"}}
+          @value={{this.documentType.label}}
+        />
+      {{/if}}
+      {{#if @piece.accessLevel}}
+        <Auk::KeyValue @key={{t "publicity"}}>
+          <Utils::AccessLevelColorBadge @accessLevel={{this.accessLevel}} />
         </Auk::KeyValue>
-      </div>
+      {{/if}}
+    {{/unless}}
+    <Auk::KeyValue @key={{capitalize (t "confidentiality")}}>
+      <Utils::ConfidentialityPill @confidential={{@piece.confidential}} />
+    </Auk::KeyValue>
+    <div class="auk-key-value-item">
+      <Auk::KeyValue @key={{t "file-type"}}>
+        <Utils::Documents::FileTypePill @extension={{@piece.file.extension}} />
+      </Auk::KeyValue>
     </div>
+  </div>
   {{/if}}
 
   {{!-- SIGNATURES --}}

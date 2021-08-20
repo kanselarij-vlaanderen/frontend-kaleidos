@@ -46,5 +46,8 @@
     <Auk::Button::InnerLayout @layout={{@layout}} @icon={{@icon}} @size={{@size}}>
       {{yield}}
     </Auk::Button::InnerLayout>
+    {{#if (has-block "floater")}}
+      {{yield to="floater"}}
+    {{/if}}
   </button>
 {{/if}}

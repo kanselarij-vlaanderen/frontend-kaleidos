@@ -7,13 +7,13 @@ export default class DocumentViewerRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
+    if (!isEmpty(ENV.APP.ENABLE_DOCUMENT_VIEW)) {
+      this.transitionTo('document', transition.to.params.piece_id);
+    }
     this.simpleAuthSession.requireAuthentication(transition, 'login');
   }
 
-  async model(params) {
-    if (!isEmpty(ENV.APP.ENABLE_DOCUMENT_VIEW)) {
-      this.transitionTo('document', params.piece_id);
-    }
+  model(params) {
     return this.store.queryOne('piece', {
       'filter[:id:]': params.piece_id,
       include: 'file',
