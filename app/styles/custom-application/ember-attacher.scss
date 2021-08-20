@@ -10,9 +10,8 @@
 
 .ember-attacher-popper {
   background-color: $page-bg;
-  width: 23rem;
   min-width: 23rem;
-  max-width: 90vw;
+  max-width: 38rem;
   z-index: 11000;
 
   &.ember-attacher-tooltip {
