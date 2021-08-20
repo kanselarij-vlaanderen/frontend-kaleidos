@@ -93,6 +93,10 @@ Router.map(function() {
   });
   this.route('accountless-users', { path: '/onbevoegde-gebruiker', });
   this.route('document-viewer', { path: '/document/:piece_id', });
+  // When ready 'document' will replace 'document-viewer'.
+  // Both co-exist while 'document' is being developed
+  // TODO: replace 'document_2' in path by 'document'
+  this.route('document', { path: '/document_2/:piece_id', });
 
   this.route('not-supported');
   this.route('help');
