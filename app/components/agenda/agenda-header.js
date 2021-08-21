@@ -98,7 +98,7 @@ export default Component.extend(FileSaverMixin, {
   }),
 
   currentAgendaIsLast: computed('currentSession', 'currentAgenda', 'currentSession.agendas.@each', async function() {
-    return await this.get('currentSession.sortedAgendas.firstObject.id') === await this.currentAgenda.get('id');
+    return (await this.get('currentSession.sortedAgendas')).get('firstObject.id') === await this.currentAgenda.get('id');
   }),
 
   designAgendaPresent: filter('currentSession.agendas.@each.isDesignAgenda', (agenda) => agenda.get('isDesignAgenda')),
