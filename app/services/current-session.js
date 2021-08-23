@@ -49,6 +49,14 @@ export default class CurrentSessionService extends Service {
     return [ADMIN].includes(this.groupUri);
   }
 
+  get isKabinet() {
+    return [KABINET].includes(this.groupUri);
+  }
+
+  get isMinister() {
+    return [MINISTER].includes(this.groupUri);
+  }
+
   get isOvrb() {
     return [ADMIN, OVRB].includes(this.groupUri);
   }
