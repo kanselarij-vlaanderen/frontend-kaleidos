@@ -4,11 +4,19 @@
         @skin="white"
         class="auk-u-pb-6"
 >
-  <Auk::Tabs>
-    <Auk::Tab @onClick={{this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
-    <Auk::Tab @onClick={{this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
-    <Auk::Tab @onClick={{this.openVersions}} @active={{this.showVersions}}>{{t "version"}}</Auk::Tab>
-  </Auk::Tabs>
+  <Auk::Navbar>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Tabs>
+            <Auk::Tab @onClick={{this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
+            <Auk::Tab @onClick={{this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
+            <Auk::Tab @onClick={{this.openVersions}} @active={{this.showVersions}}>{{t "version"}}</Auk::Tab>
+          </Auk::Tabs>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
 
   {{!-- DETAILS --}}
   {{#if this.showDetails}}
