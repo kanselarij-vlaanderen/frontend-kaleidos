@@ -64,29 +64,29 @@ export default Model.extend(LoadableModel, {
 
   isFinal: computed.alias('status.isFinal'),
 
-  lastAgendaitemPriority: computed('agendaitems.@each', function() {
+  lastAgendaitemNumber: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const filteredAgendaitems = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark);
       if (filteredAgendaitems.length === 0) {
         return 0;
       }
-      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.priority || 0));
+      return Math.max(...filteredAgendaitems.map((agendaitem) => agendaitem.number || 0));
     });
   }),
 
-  lastAnnouncementPriority: computed('agendaitems.@each', function() {
+  lastAnnouncementNumber: computed('agendaitems.@each', function() {
     return this.get('agendaitems').then((agendaitems) => {
       const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
       if (announcements.length === 0) {
         return 0;
       }
-      return Math.max(...announcements.map((announcement) => announcement.priority || 0));
+      return Math.max(...announcements.map((announcement) => announcement.number || 0));
     });
   }),
 
   firstAgendaitem: computed('agendaitems.@each', function() {
     return DS.PromiseObject.create({
-      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('priority').get('firstObject')),
+      promise: this.get('agendaitems').then((agendaitems) => agendaitems.sortBy('number').get('firstObject')),
     });
   }),
 

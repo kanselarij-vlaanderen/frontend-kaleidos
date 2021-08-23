@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default Route.extend({
   routeNamePrefix: 'press-agenda',
-  sort: 'priority',
+  sort: 'number',
   include: 'agenda-activity,agenda-activity.subcase',
   shouldFilterRemarks: true,
   currentSession: service(),

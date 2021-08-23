@@ -162,10 +162,10 @@ export default Service.extend({
     const lastItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': agenda.id,
       'filter[show-as-remark]': isAnnouncement,
-      sort: '-priority',
+      sort: '-number',
     });
     if (lastItem) {
-      return lastItem.priority + 1;
+      return lastItem.number + 1;
     }
     return 1;
   },
@@ -183,7 +183,7 @@ export default Service.extend({
       sort: '-created', // serialnumber
     });
     const isAnnouncement = subcase.get('showAsRemark');
-    const priorityToAssign = await this.computeNextItemNumber(lastAgenda, isAnnouncement);
+    const numberToAssign = await this.computeNextItemNumber(lastAgenda, isAnnouncement);
 
     // Generate press text
     const mandatees = await subcase.get('mandatees');
@@ -233,7 +233,7 @@ export default Service.extend({
       titlePress: subcase.shortTitle,
       textPress: pressText,
       created: now,
-      priority: priorityToAssign,
+      number: numberToAssign,
       agenda: lastAgenda,
       title: subcase.title,
       shortTitle: subcase.shortTitle,

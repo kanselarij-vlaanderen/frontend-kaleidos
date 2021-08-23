@@ -26,11 +26,11 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   async navigateToNeighbouringItem(agendaitem) {
     // try transitioning to previous or next item
     // TODO: below query can be replaced once agenda-items have relations to previous and next items
-    const previousNumber = agendaitem.priority - 1;
+    const previousNumber = agendaitem.number - 1;
     const neighbouringItem = await this.store.queryOne('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[show-as-remark]': agendaitem.showAsRemark,
-      'filter[:gte:priority]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
+      'filter[:gte:number]': `"${previousNumber}"`, // Needs quotes because of bug in mu-cl-resources
     });
     if (neighbouringItem) {
       this.transitionToRoute('agenda.agendaitems.agendaitem', neighbouringItem.id);
@@ -39,14 +39,14 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     }
   }
 
-  async reassignPrioritiesForAgendaitems() {
+  async reassignNumbersForAgendaitems() {
     const isEditor = this.currentSession.isEditor;
     await reorderAgendaitemsOnAgenda(this.agenda, isEditor);
   }
 
   @action
-  async reassignPrioritiesAndNavigateToNeighbouringAgendaitem() {
-    await this.reassignPrioritiesForAgendaitems();
+  async reassignNumbersAndNavigateToNeighbouringAgendaitem() {
+    await this.reassignNumbersForAgendaitems();
     this.agendaitemsController.send('reloadModel');
     await this.navigateToNeighbouringItem(this.model);
   }

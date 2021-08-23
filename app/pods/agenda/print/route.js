@@ -17,9 +17,9 @@ export default Route.extend({
       },
       include: 'mandatees',
     });
-    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark).sortBy('priority');
+    const notas = agendaitems.filter((agendaitem) => !agendaitem.showAsRemark).sortBy('number');
     await this.ensureDocuments.perform(notas);
-    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark).sortBy('priority');
+    const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark).sortBy('number');
     await this.ensureDocuments.perform(announcements);
 
     return hash({

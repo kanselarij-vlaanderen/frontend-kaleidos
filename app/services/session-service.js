@@ -35,7 +35,7 @@ export default Service.extend({
           },
         },
         include: ['agenda-activity,agenda-activity.subcase,agenda-activity.subcase.case'],
-        sort: 'priority',
+        sort: 'number',
       });
     }
     return [];

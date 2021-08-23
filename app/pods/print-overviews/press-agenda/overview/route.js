@@ -3,7 +3,7 @@ import { inject } from '@ember/service';
 import { hash } from 'rsvp';
 import {
   parseDraftsAndGroupsFromAgendaitems,
-  sortByPriority
+  sortByNumber
 } from 'frontend-kaleidos/utils/agendaitem-utils';
 
 export default Route.extend({
@@ -26,7 +26,7 @@ export default Route.extend({
         },
       },
       include: 'mandatees',
-      sort: 'priority',
+      sort: 'number',
     });
 
     const announcements = agendaitems.filter((agendaitem) => agendaitem.showAsRemark);
@@ -37,13 +37,13 @@ export default Route.extend({
 
     await this.agendaService.groupAgendaitemsOnGroupName(draftAgendaitems);
 
-    const groupsArray = sortByPriority(groupedAgendaitems, this.allowEmptyGroups);
+    const groupsArray = sortByNumber(groupedAgendaitems, this.allowEmptyGroups);
 
     return hash({
       currentAgenda: agenda,
       groups: groupsArray,
-      agendaitems: draftAgendaitems.sortBy('priority'),
-      announcements: announcements.sortBy('priority'),
+      agendaitems: draftAgendaitems.sortBy('number'),
+      announcements: announcements.sortBy('number'),
       meeting: session,
     });
   },

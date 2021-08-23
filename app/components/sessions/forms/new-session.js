@@ -88,7 +88,7 @@ export default Component.extend({
     const agendaitem = this.store.createRecord('agendaitem', {
       created: now,
       agenda,
-      priority: 1,
+      number: 1,
       shortTitle: `Goedkeuring van het verslag van de vergadering van ${moment(
         closestMeeting.plannedstart
       ).format('dddd DD-MM-YYYY')}.`,
