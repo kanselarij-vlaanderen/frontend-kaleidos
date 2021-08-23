@@ -5,9 +5,9 @@
         class="auk-u-pb-6"
 >
   <Auk::Tabs>
-    <Auk::Tab {{on "click" this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
-    <Auk::Tab {{on "click" this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
-    <Auk::Tab {{on "click" this.openVersions}} @active={{this.showVersions}}>{{t "versions"}}</Auk::Tab>
+    <Auk::Tab @onClick={{this.openDetails}} @active={{this.showDetails}}>{{t "detail"}}</Auk::Tab>
+    <Auk::Tab @onClick={{this.openSignatures}} @active={{this.showSignatures}}>{{t "signatures"}}</Auk::Tab>
+    <Auk::Tab @onClick={{this.openVersions}} @active={{this.showVersions}}>{{t "version"}}</Auk::Tab>
   </Auk::Tabs>
 
   {{!-- DETAILS --}}
