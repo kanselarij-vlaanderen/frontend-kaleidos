@@ -14,10 +14,9 @@
     }}
   >
     <span class="vlc-agenda-detail-sidebar-sub-item__numbering">
+      {{!-- For legacy data agenda-item number can be unexistent --}}
       {{#if @agendaitem.number}}
         {{@agendaitem.number}}.
-      {{else}}
-        {{add this.index 1}}.
       {{/if}}
     </span>
     <div class="vlc-agenda-detail-sidebar__text-container">

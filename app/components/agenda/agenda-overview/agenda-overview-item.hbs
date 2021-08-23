@@ -18,7 +18,10 @@
         </div>
       {{/if}}
       <span class="vlc-agenda-items-sub-item__numbering">
-        {{@agendaitem.priority}}.
+        {{!-- For legacy data agenda-item number can be unexistent --}}
+        {{#if @agendaitem.number}}
+          {{@agendaitem.number}}.
+        {{/if}}
       </span>
     </h4>
     <div class="vlc-agenda-items__text">
